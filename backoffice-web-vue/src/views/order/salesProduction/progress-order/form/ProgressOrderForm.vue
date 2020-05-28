@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="6">
           <div class="progress-list-title">
-            <h6>创建进度工单</h6>
+            <h6>编辑进度工单</h6>
           </div>
         </el-col>
       </el-row>
@@ -12,120 +12,57 @@
       <el-form :inline="true">
         <progress-order-receiving-form :formData="formData"/>
         <progress-order-production-info-form :formData="formData" :isRead="false"/>
-        <progress-order-node-form v-if="isBrand()" :formData="formData"/>
-        <el-divider/>
-        <progress-order-production-ask-form v-if="isFactory()" :formData="formData"/>
+        <progress-order-node-form :formData="formData"/>
       </el-form>
     </el-card>
   </div>
 </template>
 
 <script>
-  import ProgressPlanSelectDialog from '../../../../user/progress-plan/components/ProgressPlanSelectDialog';
-  import ProgressSettingForm from '../../../../user/progress-plan/components/ProgressSettingForm';
-  import ProgressOrderReceivingForm from './ProgressOrderReceivingForm';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers(
+    'ProgressOrderModule'
+  );
+
+  import ProgressOrderReceivingForm from '../form/ProgressOrderReceivingForm';
+  import ProgressOrderProductionInfoForm from '../form/ProgressOrderProductionInfoForm';
+  import ProductionProgressOrderInfo from '../../production-order/info/ProductionProgressOrderInfo';
   import ProgressOrderNodeForm from './ProgressOrderNodeForm';
-  import ProgressOrderProductionInfoForm from './ProgressOrderProductionInfoForm';
-  import ProgressOrderProductionAskForm from './ProgressOrderProductionAskForm';
   export default {
-    name: 'ProgressOrderForm',
+    name: 'ProgressOrderDetail',
+    props: ['code'],
     components: {
-      ProgressOrderProductionAskForm,
-      ProgressOrderProductionInfoForm,
       ProgressOrderNodeForm,
-      ProgressOrderReceivingForm,
-      ProgressSettingForm,
-      ProgressPlanSelectDialog},
+      ProductionProgressOrderInfo,
+      ProgressOrderProductionInfoForm,
+      ProgressOrderReceivingForm
+    },
+    computed: {
+      ...mapGetters({
+        formData: 'formData'
+      })
+    },
     methods: {
+      ...mapActions({
+        getOrderDetail: 'getDetail'
+      }),
+      getDetail () {
+        const code = this.code;
+        this.getOrderDetail({code});
+      }
     },
     data () {
       return {
-        basicData: [],
-        machiningTypes: this.$store.state.EnumsModule.machiningTypes,
-        progressPlanVisible: false,
-        formData: {
-          product: {
-            name: '全棉磨毛斜布',
-            colors: [
-              {
-                name: '蓝色',
-                code: 'S01'
-              },
-              {
-                name: '白色',
-                code: 'S02'
-              }
-            ],
-            sizes: [
-              {
-                name: 'S',
-                code: 'C01'
-              },
-              {
-                name: 'XS',
-                code: 'C02'
-              }
-            ],
-            colorSizes: [
-              {
-                colorName: '蓝色',
-                code: 'S01',
-                sizes: [
-                  {
-                    name: 'S',
-                    code: 'C01',
-                    quantity: 100
-                  },
-                  {
-                    name: 'XS',
-                    code: 'C02',
-                    quantity: 100
-                  }
-                ]
-              },
-              {
-                colorName: '白色',
-                code: 'S02',
-                sizes: [
-                  {
-                    name: 'S',
-                    code: 'C01',
-                    quantity: 200
-                  },
-                  {
-                    name: 'XS',
-                    code: 'C02',
-                    quantity: 200
-                  }
-                ]
-              }
-            ]
-          },
-          productionProcessContent: '',
-          expectedDeliveryDate: '',
-          creationPerson: '',
-          skuID: '',
-          order: {
-            name: ''
-          },
-          priority: '',
-          operator: '',
-          progressPlan: {
-            productionProgresses: [
-              {
-                phase: '备料',
-                estimatedDate: 1589957969,
-                delayedDays: 3
-              },
-              {
-                phase: '裁剪',
-                estimatedDate: 1590000000,
-                delayedDays: 18
-              }
-            ]
-          }
-        }
       }
+    },
+    created () {
+      this.getDetail();
     }
   }
 </script>

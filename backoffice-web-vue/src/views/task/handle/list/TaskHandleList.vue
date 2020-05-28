@@ -2,8 +2,8 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="订单编号" prop="code"></el-table-column>
-      <el-table-column label="订单类型" prop="type"></el-table-column>
-      <el-table-column label="创建人" prop="creationPerson"></el-table-column>
+      <el-table-column label="订单类型" prop="typeLabel"></el-table-column>
+      <el-table-column label="创建人" prop="creator.name"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
@@ -24,6 +24,8 @@
           <el-button type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
           <el-divider direction="vertical"/>
           <el-button type="text" size="mini" @click="onUndertake(scope.row)">承接</el-button>
+          <el-divider direction="vertical"/>
+          <el-button type="text" size="mini" @click="onAssignment (scope.row)">分配</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,10 +43,13 @@
     props: ['page'],
     methods: {
       onDetail (row) {
-        this.$emit('onDetail', row.code);
+        this.$emit('onDetail', row);
       },
       onUndertake (row) {
-        this.$emit('onUndertake', row.code);
+        this.$emit('onUndertake', row);
+      },
+      onAssignment (row) {
+        this.$emit('onAssignment', row);
       },
       onPageSizeChanged(val) {
         this.$emit('onAdvancedSearch', 0, val);

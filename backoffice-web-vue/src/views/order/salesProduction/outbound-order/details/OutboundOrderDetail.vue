@@ -10,13 +10,13 @@
       </el-row>
 <!--      <div class="pt-2"></div>-->
       <outbound-order-top-info :slotData="formData"/>
-      <outbound-order-center-table :slot-data="formData"/>
-      <el-row v-if="isFactory()">
-        <outbound-order-receipt-info :slotData="formData"/>
-      </el-row>
-      <el-row v-if="isBrand()">
-        <outbound-order-payment-info :slot-data="formData"/>
-      </el-row>
+      <outbound-order-center-table :slot-data="formData" @onDetail="onDetail"/>
+<!--      <el-row v-if="isFactory()">-->
+<!--        <outbound-order-receipt-info :slotData="formData"/>-->
+<!--      </el-row>-->
+<!--      <el-row v-if="isBrand()">-->
+<!--        <outbound-order-payment-info :slot-data="formData"/>-->
+<!--      </el-row>-->
       <el-row class="basic-form-row" type="flex" align="middle">
         <h6>备注及附件</h6>
       </el-row>
@@ -26,6 +26,9 @@
         </el-col>
       </el-row>
     </el-card>
+    <el-dialog :visible.sync="taskDetailVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <production-task-details v-if="taskDetailVisible" :id="productionTaskId"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -45,10 +48,12 @@
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
   import OutboundOrderReceiptInfo from '../form/OutboundOrderReceiptInfo';
   import OutboundOrderPaymentInfo from '../form/OutboundOrderPaymentInfo';
+  import ProductionTaskDetails from "../../production-task/details/ProductionTaskDetail";
   export default {
     name: 'OutboundOrderDetail',
     props: ['code'],
     components: {
+      ProductionTaskDetails,
       OutboundOrderPaymentInfo,
       OutboundOrderReceiptInfo,
       OutboundOrderCenterTable,
@@ -71,10 +76,16 @@
           return;
         }
         this.$store.state.OutboundOrderModule.formData = Object.assign({}, result);
+      },
+      onDetail (row) {
+        this.taskDetailVisible = true;
+        this.productionTaskId = row.productionTask.id;
       }
     },
     data () {
       return {
+        productionTaskId: '',
+        taskDetailVisible: false
       }
     },
     created() {
@@ -93,6 +104,7 @@
   }
 
   .basic-form-row {
+    margin-top: 20px;
     padding-left: 10px;
   }
 </style>

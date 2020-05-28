@@ -61,9 +61,10 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4">
-                <el-button @click="onProductSelect(index)" size="mini">选择产品/任务</el-button>
+                <el-button @click="onProductSelect(index)" size="mini">选择任务</el-button>
               </el-col>
             </el-row>
+            <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item"/>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="6">
                 <el-form-item label="发单价格" prop="billPrice" :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
@@ -134,34 +135,42 @@
             <my-pay-plan-form :form="formData.payPlan"/>
           </el-col>
         </el-row>
-<!--        <el-row>-->
-<!--          <el-col :span="4">-->
-<!--            <div style="padding-left: 10px">-->
-<!--              <h6>人员设置</h6>-->
-<!--            </div>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
-<!--        <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top">-->
-<!--          <el-col :span="6">-->
-<!--            <el-form-item label="跟单员">-->
-<!--              <el-select v-model="operator" value-key="id">-->
-<!--                <el-option v-for="item in operatorList"-->
-<!--                           :key="item.id"-->
-<!--                           :label="item.name"-->
-<!--                           :value="item">-->
-<!--                </el-option>-->
-<!--              </el-select>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--          <el-col :span="2">-->
-<!--            <el-checkbox v-model="formData.noCheck" style="padding-top: 5px">是否需要审核</el-checkbox>-->
-<!--          </el-col>-->
-<!--          <el-col :span="6">-->
-<!--            <el-form-item label="审核员">-->
-<!--              <el-input :disabled="true" v-model="formData.belongOperator.name"></el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
+        <el-row>
+          <el-col :span="4">
+            <div style="padding-left: 10px">
+              <h6>人员设置</h6>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top">
+          <el-col :span="6">
+            <el-form-item label="跟单员">
+              <el-select v-model="operator" value-key="id" :disabled="true">
+                <el-option v-for="item in operatorList"
+                           :key="item.id"
+                           :label="item.name"
+                           :value="item">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="2">
+            <el-checkbox v-model="formData.isApproval" style="padding-top: 5px">是否需要审核</el-checkbox>
+          </el-col>
+          <template v-for="(item, index) in formData.approvers">
+            <el-col :span="6">
+              <el-form-item label="审核员">
+                <el-select v-model="formData.approvers[index]" value-key="id" :disabled="true">
+                  <el-option v-for="item in operatorList"
+                             :key="item.id"
+                             :label="item.name"
+                             :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </template>
+        </el-row>
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -193,8 +202,9 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="sampleDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <sample-products-select-dialog v-if="sampleDialogVisible" @onSelectSample="onSelectSample"/>
+    <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+<!--      <sample-products-select-dialog v-if="taskDialogVisible" @onSelectSample="onSelectSample"/>-->
+      <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"/>
     </el-dialog>
     <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="getProgressPlan"/>
@@ -208,9 +218,7 @@
   } from 'vuex';
 
   const {
-    mapGetters,
-    mapActions,
-    mapMutations
+    mapActions
   } = createNamespacedHelpers(
     'OutboundOrderModule'
   );
@@ -222,9 +230,13 @@
   import ImagesUpload from '../../../../../components/custom/ImagesUpload';
   import SampleProductsSelectDialog from '../../../../product/sample/components/SampleProductsSelectDialog';
   import ProgressPlanSelectDialog from '../../../../user/progress-plan/components/ProgressPlanSelectDialog';
+  import ProductionTaskSelectDialog from '../../production-task/components/ProductionTaskSelectDialog';
+  import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
   export default {
     name: 'OutboundOrderForm',
     components: {
+      OutboundOrderColorSizeTable,
+      ProductionTaskSelectDialog,
       ProgressPlanSelectDialog,
       SampleProductsSelectDialog,
       ImagesUpload,
@@ -233,20 +245,27 @@
       MyAddressForm,
       SuppliersSelect
     },
-    computed: {
-      ...mapGetters({
-        formData: 'formData'
-      })
-    },
     methods: {
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
-      ...mapMutations({
-        setFormData: 'setFormData'
-      }),
       getProgressPlan (val) {
-        this.formData.progressPlan = val;
+        let item = {}
+        let progressList = val.productionProgresses.map(val => {
+          item.medias = val.medias;
+          item.progressPhase = val.progressPhase;
+          item.quantity = val.quantity;
+          item.sequence = val.sequence;
+          item.completeAmount = val.completeAmount;
+          item.productionProgressOrders = val.productionProgressOrders;
+          return item;
+        })
+        console.log(progressList);
+        this.formData.progressPlan = {
+          name: val.name,
+          remarks: val.remarks,
+          productionProgresses: progressList
+        };
         this.progressPlanVisible = false;
       },
       onBlur (row, attribute) {
@@ -267,6 +286,7 @@
         }
       },
       setPayPlan (payPlan) {
+        this.formData.payPlan.name = payPlan.name;
         this.formData.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
         this.formData.payPlan.payPlanType = payPlan.payPlanType;
         payPlan.payPlanItems.forEach((item) => {
@@ -297,7 +317,7 @@
         });
       },
       onProductSelect (index) {
-        this.sampleDialogVisible = true;
+        this.taskDialogVisible = true;
         this.selectIndex = index;
       },
       addRow () {
@@ -313,10 +333,10 @@
       deleteRow (index) {
         this.formData.entries.splice(index, 1);
       },
-      onSelectSample (data) {
-        this.sampleDialogVisible = false;
-        this.formData.entries[this.selectIndex].product.name = data.name;
-        this.formData.entries[this.selectIndex].product.id = data.id;
+      onSelectTask () {
+        this.taskDialogVisible = false;
+        // this.formData.entries[this.selectIndex].product.name = data.name;
+        // this.formData.entries[this.selectIndex].product.id = data.id;
       },
       toFormValidate (form) {
         return new Promise((resolve, reject) => {
@@ -340,8 +360,10 @@
         })
         const arr = formArr.map(item => this.toFormValidate(item));
         const flag = Promise.all(arr).then((res) => {
+          console.log(res);
           return res.every(item => !!item);
         })
+        console.log(flag);
         if (flag) {
           this._onCreate();
         } else {
@@ -391,14 +413,15 @@
         data.payPlan = payPlanData;
 
         // 人员设置数据处理
-        // if (!this.formData.noCheck) {
-        //   data['belongOperator'] = null;
-        // }
-        // if (this.formData.byAorB === 'PARTYA') {
-        //   data['partAOperator'] = {id: this.operator.id};
-        // } else {
-        //   data['partBOperator'] = {id: this.operator.id};
-        // }
+        if (!this.formData.isApproval) {
+          data['partAOperator'] = null;
+          data['partBOperator'] = null;
+        }
+        if (this.formData.byAorB === 'PARTYA') {
+          data['partAOperator'] = {id: this.operator.id};
+        } else {
+          data['partBOperator'] = {id: this.operator.id};
+        }
 
         if (this.formData.id) {
           const url = this.apis().updateOutboundOrder();
@@ -434,7 +457,7 @@
     },
     data () {
       var checkProgressPlan = (rule, value, callback) => {
-        if (value.id) {
+        if (value.name) {
           return callback();
         } else {
           return callback(new Error('请选择生产节点'));
@@ -455,11 +478,13 @@
           outboundContactPhone: [{required: true, message: '请选择联系方式', trigger: 'change'}],
           progressPlan: [{ type: 'object', validator: checkProgressPlan, trigger: 'change' }]
         },
+        formData: '',
         suppliersSelectVisible: false,
-        sampleDialogVisible: false,
+        taskDialogVisible: false,
         selectIndex: '',
         progressPlanVisible: false,
-        operator: {},
+        operator: this.$store.getters.currentUser,
+        count: 0,
         operatorList: [{
           id: 1,
           name: '张三'
@@ -478,13 +503,24 @@
       }
     },
     created () {
-      this.formData.belongOperator.name = this.$store.getters.currentUser.username;
-      if (this.$route.params.data != null) {
-        this.setFormData(this.$route.params.data);
+      if (this.$route.params.formData != null) {
+        this.formData = this.$route.params.formData;
+        if (this.formData.payPlan.payPlanItems.length > 0) {
+          this.setPayPlan(this.formData.payPlan);
+        }
+      } else {
+        this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
+        this.formData.approvers.push(this.$store.getters.currentUser);
       }
-      if (this.formData.payPlan.payPlanItems.length > 0) {
-        this.setPayPlan(this.formData.payPlan);
-      }
+      this.operatorList.push({
+        id: this.$store.getters.currentUser.id,
+        name: this.$store.getters.currentUser.username
+      });
+    },
+    mounted () {
+      this.$nextTick(() => {
+        this.$refs['form'].clearValidate();
+      })
     },
     destroyed () {
       this.clearFormData();

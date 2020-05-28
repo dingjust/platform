@@ -11,7 +11,7 @@
       <div class="pt-2"></div>
       <production-task-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
         @createOutboundOrder="createOutboundOrder" />
-      <production-task-list :page="page" />
+      <production-task-list :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"/>
     </el-card>
     <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -60,7 +60,7 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch(page, size) {
+      onSearch (page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
         const url = this.apis().getProductionTaskList();
@@ -73,7 +73,7 @@
           size
         });
       },
-      onAdvancedSearch(page, size) {
+      onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getProductionTaskList();
@@ -84,21 +84,43 @@
           size
         });
       },
-      createOutboundOrder() {
+      getSelectTaskList (val) {
+        this.selectTaskList = val;
+      },
+      createOutboundOrder () {
+        let row = {};
+        let entries = [];
+        this.selectTaskList.forEach(item => {
+          row = {
+            productionTask: {id: item.id},
+            billPrice: '',
+            expectedDeliveryDate: '',
+            shippingAddress: {},
+            product: {
+              id: item.productionEntry.product.id,
+              name: item.productionEntry.product.name,
+              thumbnail: item.productionEntry.product.thumbnail
+            },
+            colorSizeEntries: item.productionEntry.colorSizeEntries
+          }
+          entries.push(row);
+          row = {};
+        })
+        this.formData.entries = entries;
         this.outboundOrderTypeSelect = true;
       }
     },
-    data() {
+    data () {
       return {
         outboundOrderTypeSelect: false,
-        formData: this.$store.state.OutboundOrderModule.formData,
+        selectTaskList: [],
+        formData: this.$store.state.OutboundOrderModule.formData
       }
     },
-    created(){
+    created () {
       this.onSearch();
     }
   }
-
 </script>
 
 <style scoped>

@@ -59,6 +59,10 @@ import CapacityModule from './capacity/capacity'
 import ReceiptReportModule from './report/receipt'
 import ProductionProgressReportModule from './report/production_progress'
 
+// 任务
+import TaskHandleModule from './task/task-handle'
+import TaskApprovalModule from './task/task-approval'
+
 // 消息
 import MessageModule from './message/message';
 export {
@@ -116,5 +120,8 @@ export {
   ReceiptReportModule,
   ProductionProgressReportModule,
   // 消息
-  MessageModule
+  MessageModule,
+  // 任务
+  TaskHandleModule,
+  TaskApprovalModule
 }

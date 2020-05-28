@@ -25,18 +25,23 @@ const state = {
       id: ''
     },
     entries: [{
-      productionTaskId: '',
+      productionTask: {
+        id: ''
+      },
       billPrice: '',
       expectedDeliveryDate: '',
       shippingAddress: {},
-      product: {}
+      product: {
+
+      },
+      colorSizeEntries: []
     }],
     machiningType: 'LABOR_AND_MATERIAL',
     invoiceNeeded: false,
     invoiceTaxPoint: 0.03,
     freightPayer: 'PARTYA',
     remarks: '',
-    noCheck: true,
+    isApproval: false,
     progressPlan: {},
     payPlan: {
       payPlanItems: [],
@@ -65,9 +70,10 @@ const state = {
         time: 5
       }
     },
-    belongOperator: {},
-    operator: [],
-    attachments: []
+    attachments: [],
+    partAOperator: '',
+    partBOperator: '',
+    approvers: []
   },
   queryFormData: {
     keyword: '',
@@ -174,18 +180,22 @@ const actions = {
         id: ''
       },
       entries: [{
-        productionTaskId: '',
+        productionTask: {
+          id: ''
+        },
         billPrice: '',
         expectedDeliveryDate: '',
         shippingAddress: {},
-        product: {}
+        product: {
+        },
+        colorSizeEntries: []
       }],
       machiningType: 'LABOR_AND_MATERIAL',
       invoiceNeeded: false,
       invoiceTaxPoint: 0.03,
       freightPayer: 'PARTYA',
       remarks: '',
-      noCheck: true,
+      isApproval: false,
       progressPlan: {},
       payPlan: {
         payPlanItems: [],
@@ -214,9 +224,10 @@ const actions = {
           time: 5
         }
       },
-      belongOperator: {},
-      operator: [],
-      attachments: []
+      attachments: [],
+      partAOperator: '',
+      partBOperator: '',
+      approvers: []
     });
   },
   clearQueryFormData ({dispatch, commit, state}) {

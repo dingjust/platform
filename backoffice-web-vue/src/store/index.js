@@ -58,6 +58,10 @@ import {
   ProductionProgressReportModule,
 
   MessageModule,
+
+  // 任务
+  TaskHandleModule,
+  TaskApprovalModule
 } from './modules';
 
 // 状态管理
@@ -70,7 +74,7 @@ const getters = {};
 
 // mutations
 const mutations = {
-  sideSliderState_get(state, payload) {
+  sideSliderState_get (state, payload) {
     // 类别
     state.sideSliderState = payload;
   }
@@ -78,7 +82,7 @@ const mutations = {
 
 // actions
 const actions = {
-  sideSliderState_set({
+  sideSliderState_set ({
     dispatch,
     commit,
     state
@@ -143,6 +147,9 @@ export default new Vuex.Store({
     ProductionProgressReportModule,
     //
     MessageModule,
+    // 任务
+    TaskHandleModule,
+    TaskApprovalModule
   },
   state,
   getters,

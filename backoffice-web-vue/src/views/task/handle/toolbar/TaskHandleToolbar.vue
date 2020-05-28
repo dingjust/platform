@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true">
       <el-row type="flex">
-        <el-col :span="18">
+        <el-col :span="20">
           <el-form-item label="任务关键词" class="toolbar-form-item">
             <el-input placeholder="输入任务编号、名称" v-model="queryFormData.keyword"></el-input>
           </el-form-item>

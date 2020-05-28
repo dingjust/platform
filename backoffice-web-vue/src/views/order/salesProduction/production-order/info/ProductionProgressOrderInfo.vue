@@ -26,7 +26,8 @@
     props: ['slotData'],
     methods: {
       onEdit () {
-        this.$router.push('/sales/progressOrder/' + this.slotData.code);
+        // this.$router.push('/sales/progressOrder/' + this.slotData.code);
+        this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');
       },
       refreshData () {
         this.$emit('refreshData');

@@ -4,7 +4,8 @@
       <el-table-column label="生产订单号" prop="code"></el-table-column>
       <el-table-column label="工厂">
         <template slot-scope="scope">
-          <span>{{scope.row.cooperator.name}}</span>
+          <span>{{scope.row.cooperator.type == 'ONLINE' ?
+            scope.row.cooperator.partner.name : scope.row.cooperator.name}}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联产品数">
@@ -12,8 +13,15 @@
           <span>{{scope.row.entries.length}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="负责人" prop="belongOperator"></el-table-column>
+      <el-table-column label="跟单员">
+        <template slot-scope="scope">
+          <span>{{scope.row.byAorB == 'PARTYA' ? scope.row.partyAOperator.name : scope.row.partyBOperator.name}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="审批状态" prop="status">
+        <template slot-scope="scope">
+          <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
+        </template>
       </el-table-column>
       <el-table-column label="订单标签" min-width="100"></el-table-column>
       <el-table-column label="操作" min-width="100">

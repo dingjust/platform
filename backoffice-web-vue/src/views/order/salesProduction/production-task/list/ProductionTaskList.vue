@@ -1,6 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight"
+              @selection-change="handleSelectionChange" @row-click="clickRow">
+      <el-table-column type="selection" width="55"/>
       <el-table-column label="生产单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -34,7 +36,7 @@
       </el-table-column>
       <el-table-column label="负责人" prop="productionLeader.name">
       </el-table-column>
-      <el-table-column label="指定工厂" prop="appointFactory.name">        
+      <el-table-column label="指定工厂" prop="appointFactory.name">
       </el-table-column>
       <el-table-column label="创建日期">
         <template slot-scope="scope">
@@ -76,35 +78,35 @@
 <script>
   export default {
     name: 'ProductionTaskList',
-    props: ['page'],
+    props: ['page', 'selectTaskList', 'isSelect'],
     methods: {
-      onDetails(row) {
+      onDetails (row) {
+        if (this.isSelect) {
+          this.$emit('onDetails', row.id);
+          return;
+        }
         this.$router.push('/sales/production/' + row.id);
       },
-      onPageSizeChanged(val) {
-        // this._reset();
-        //
-        // if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
-        //   this.$emit('onAdvancedSearch', val);
-        //   return;
-        // }
-        //
-        // this.$emit('onSearch', 0, val);
+      onPageSizeChanged (val) {
+        this.$emit('onSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
-      onCurrentPageChanged(val) {
-        // if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
-        //   this.$emit('onAdvancedSearch', val - 1);
-        //   return;
-        // }
-        //
-        // this.$emit('onSearch', val - 1);
-        // this.$nextTick(() => {
-        //   this.$refs.resultTable.bodyWrapper.scrollTop = 0
-        // });
+      onCurrentPageChanged (val) {
+        this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
+      handleSelectionChange (val) {
+        this.$emit('getSelectTaskList', val);
+      },
+      clickRow (row) {
+        this.$refs.resultTable.toggleRowSelection(row);
+      }
     }
   }
-
 </script>
 
 <style scoped>

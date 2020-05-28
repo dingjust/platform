@@ -15,15 +15,15 @@
             <h6>合作方式：{{getEnum('machiningTypes', slotData.machiningType)}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>是否开发票：{{slotData.curNeedVoice ? '是' : '否'}}</h6>
+            <h6>是否开发票：{{slotData.invoiceNeeded ? '是' : '否'}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col :span="10">
-            <h6>生产总数：{{slotData.productionTotal}}</h6>
+            <h6>生产总数：{{totalQuantity}}</h6>
           </el-col>
-          <el-col :span="8">
-            <h6>生产总价：{{slotData.priceTotal}}</h6>
+          <el-col :span="14">
+            <h6>生产总价：{{totalPrice}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
@@ -41,15 +41,20 @@
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col>
-            <h6>合作工厂：{{slotData.cooperator.name}}</h6>
+            <h6>合作工厂：{{slotData.cooperator.type == 'ONLINE' ?
+              slotData.cooperator.partner.name : slotData.cooperator.name}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col :span="12">
-            <h6>联系人：{{slotData.cooperator.contactPerson}}</h6>
+<!--            <h6>联系人：{{slotData.cooperator.contactPerson}}</h6>-->
+            <h6>合作工厂：{{slotData.cooperator.type == 'ONLINE' ?
+              slotData.cooperator.partner.contactPerson : slotData.cooperator.contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.cooperator.contactPhone}}</h6>
+<!--            <h6>联系方式：{{slotData.cooperator.contactPhone}}</h6>-->
+            <h6>合作工厂：{{slotData.cooperator.type == 'ONLINE' ?
+              slotData.cooperator.partner.contactPhone : slotData.cooperator.contactPhone}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
@@ -59,18 +64,18 @@
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col :span="12">
-            <h6>品牌跟单员：{{slotData.factoryQC}}</h6>
+            <h6>品牌跟单员：{{}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.factoryQCPhone}}</h6>
+            <h6>联系方式：{{}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col :span="12">
-            <h6>工厂跟单员：{{slotData.brandQC}}</h6>
+            <h6>工厂跟单员：{{}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.brandQCPhone}}</h6>
+            <h6>联系方式：{{}}</h6>
           </el-col>
         </el-row>
       </el-col>
@@ -102,7 +107,41 @@
 <script>
   export default {
     name: 'OutboundOrderTopInfo',
-    props: ['slotData']
+    props: ['slotData'],
+    computed: {
+      totalQuantity: function () {
+        let count = 0
+        this.slotData.entries.forEach(item => {
+          count += item.totalQuantity;
+        })
+        return count;
+      },
+      totalPrice: function () {
+        let count = 0
+        this.slotData.entries.forEach(item => {
+          count += item.totalPrice;
+        })
+        return count;
+      },
+      // getFactoryOperator: function () {
+      //   if (this.$store.getters.currentUser.type == 'FACTORY') {
+      //     return this.slotData.byAorB == 'PARTYA'
+      //       ? this.slotData.partyAOperator.name : this.slotData.partyBOperator.name;
+      //   } else {
+      //     return this.slotData.byAorB == 'PARTYA'
+      //       ? this.slotData.partyBOperator.name : this.slotData.partyAOperator.name;
+      //   }
+      // },
+      // getBrandOperator: function () {
+      //   if (this.$store.getters.currentUser.type == 'BRAND') {
+      //     return this.slotData.byAorB == 'PARTYA'
+      //       ? this.slotData.partyAOperator.name : this.slotData.partyBOperator.name;
+      //   } else {
+      //     return this.slotData.byAorB == 'PARTYA'
+      //       ? this.slotData.partyBOperator.name : this.slotData.partyAOperator.name;
+      //   }
+      // }
+    }
   }
 </script>
 

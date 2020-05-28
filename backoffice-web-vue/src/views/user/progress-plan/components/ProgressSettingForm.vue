@@ -20,8 +20,8 @@
       </el-col>
       <el-col :span="12">
         <div class="progress-container">
-          <el-table ref="systemTable" stripe :data="data" :height="autoHeight">
-            <el-table-column label="节点名称" prop="progressPhase"></el-table-column>
+          <el-table ref="systemTable" stripe :data="phaseData" :height="autoHeight">
+            <el-table-column label="节点名称" prop="name"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" @click="onAppend(scope.row)" :disabled="isDisabled(scope.row)">添加</el-button>
@@ -55,9 +55,25 @@
       }
     },
     methods: {
+      async getPhaseList () {
+        const url = this.apis().getProgressPhaseList();
+        const result = await this.$http.get(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+        }
+        this.phaseData = result.data.content;
+      },
       onAppend (row) {
-        row.delayedDays = 0;
-        this.formData.productionProgresses.push(row);
+        let item = {
+          progressPhase: row.name,
+          sequence: row.sequence,
+          medias: [],
+          delayedDays: 0,
+          quantity: 0,
+          completeAmount: 0,
+          productionProgressOrders: []
+        }
+        this.formData.productionProgresses.push(item);
       },
       onDelete (row) {
         const index = this.formData.productionProgresses.findIndex(val => val.progressPhase == row.progressPhase);
@@ -66,7 +82,7 @@
         }
       },
       isDisabled (row) {
-        return this.formData.productionProgresses.findIndex(val => val.progressPhase == row.progressPhase) > -1;
+        return this.formData.productionProgresses.findIndex(val => val.progressPhase == row.name) > -1;
       },
       isDeleteDisabled (row) {
         if (this.isCreate) {
@@ -80,54 +96,11 @@
     },
     data () {
       return {
-        data: [
-          {
-            medias: [],
-            progressPhase: '备料',
-            quantity: 0,
-            sequence: 0,
-            delayedDays: 0,
-            completeAmount: 0,
-            productionProgressOrders: []
-          },
-          {
-            medias: [],
-            progressPhase: '裁剪',
-            quantity: 0,
-            sequence: 1,
-            delayedDays: 0,
-            completeAmount: 0,
-            productionProgressOrders: []
-          },
-          {
-            medias: [],
-            progressPhase: '车缝',
-            quantity: 0,
-            sequence: 2,
-            delayedDays: 0,
-            completeAmount: 0,
-            productionProgressOrders: []
-          },
-          {
-            medias: [],
-            progressPhase: '后整',
-            quantity: 0,
-            sequence: 3,
-            delayedDays: 0,
-            completeAmount: 0,
-            productionProgressOrders: []
-          },
-          {
-            medias: [],
-            progressPhase: '验货',
-            quantity: 0,
-            sequence: 4,
-            delayedDays: 0,
-            completeAmount: 0,
-            productionProgressOrders: []
-          }
-        ]
+        phaseData: []
       }
+    },
+    created() {
+      this.getPhaseList();
     }
   }
 </script>

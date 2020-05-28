@@ -76,7 +76,10 @@
           type: 'warning'
         }).then(() => {
           this.$router.push({
-            name: '创建外发订单'
+            name: '创建外发订单',
+            params: {
+              formData: Object.assign({}, this.formData)
+            }
           });
         });
       }

@@ -699,6 +699,26 @@ const COMMON_APIS = {
   // 删除节点方案
   deleteProgressPlan (id) {
     return '/b2b/progress/plan/delete/' + id;
+  },
+  // 获取节点列表
+  getProgressPhaseList () {
+    return '/b2b/progress/phase';
+  },
+  // 获取代办列表
+  getToDoList () {
+    return '/b2b/todo/task/list';
+  },
+  // 跟新为已读
+  updateToRead (id) {
+    return '/b2b/todo/task/read/' + id;
+  },
+  // 获取审核列表
+  getAuditList () {
+    return '/b2b/audit/order/order/list';
+  },
+  // 审核任务
+  taskAudit () {
+    return '/b2b/audit/order/order/audit'
   }
 };
 

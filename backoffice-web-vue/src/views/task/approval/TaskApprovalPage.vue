@@ -32,6 +32,17 @@
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers(
+    'TaskApprovalModule'
+  );
+
   import TaskApprovalToolbar from './toolbar/TaskApprovalToolbar';
   import TaskApprovalList from './list/TaskApprovalList';
   export default {
@@ -39,20 +50,43 @@
     components: {TaskApprovalList, TaskApprovalToolbar},
     props: [],
     computed: {
-
+      ...mapGetters({
+        page: 'page',
+        queryFormData: 'queryFormData'
+      }),
+      orderTaskToDoRead: function () {
+        let count = 0;
+        this.page.content.forEach(val => {
+          if (!val.read) {
+            count++;
+          }
+        })
+        return count;
+      }
     },
     methods: {
-      onAdvancedSearch () {
-        this.$message('---------onAdvancedSearch-------------');
+      ...mapActions({
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
+      }),
+      onSearch (page, size) {
+        const keyword = this.queryFormData.keyword;
+        const url = this.apis().getAuditList();
+        this.search({
+          url,
+          keyword,
+          page,
+          size
+        });
+      },
+      onAdvancedSearch (page, size) {
+        const query = this.queryFormData;
+        const url = this.apis().getAuditList();
+        this.searchAdvanced({url, query, page, size});
       },
       onReset () {
-        this.queryFormData.keyword = '';
-        this.queryFormData.charge = '';
-        this.queryFormData.creationtime = '';
-        this.queryFormData.status = '';
       },
       handleClick (tab, event) {
-        this.$message('-------------' + tab.name + '--------------------')
         this.onReset();
         // TODO 根据tab.name查询page数据
         switch (tab.name) {
@@ -60,10 +94,8 @@
         }
       },
       onDetail (code) {
-        this.$message('---------onDetail-------------');
       },
       onApproval (code) {
-        this.$message('---------onApproval-------------');
       }
     },
     data () {
@@ -82,33 +114,11 @@
             code: 'reject',
             name: '已驳回'
           }
-        ],
-        queryFormData: {
-          keyword: '',
-          charge: '',
-          creationtime: '',
-          status: ''
-        },
-        page: {
-          number: 0,
-          size: 10,
-          currentPageNumber: 0,
-          currentPageSize: 10,
-          totalPages: 1,
-          totalElements: 1,
-          content: [{
-            code: 'CO0000000001',
-            type: '销售订单',
-            creationPerson: '马云',
-            creationtime: 1589268308,
-            deliverytime: 1589268308,
-            status: '待承接'
-          }]
-        }
+        ]
       }
     },
     created () {
-
+      this.onSearch();
     },
     mounted () {
 

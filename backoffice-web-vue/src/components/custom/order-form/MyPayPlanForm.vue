@@ -352,6 +352,7 @@
         this.dialogPayPlanFormVisible = false;
       },
       setPayPlan (payPlan) {
+        this.form.name = payPlan.name;
         this.form.isHaveDeposit = payPlan.isHaveDeposit;
         this.form.payPlanType = payPlan.payPlanType;
         payPlan.payPlanItems.forEach((item) => {
@@ -390,7 +391,7 @@
         payPlanType: {
           'PHASEONE': '一期尾款',
           'PHASETWO': '二期尾款',
-          'MONTHLY_SETTLEMENT': '月结',
+          'MONTHLY_SETTLEMENT': '月结'
           // 'Cash_On_Delivery': '货到付款',
           // 'Payment_To_Delivery': '款到发货'
         },
@@ -437,7 +438,7 @@
         // }
       }
     },
-    // watch: {
+    watch: {
     //   vPayPlan: {
     //     handler (newVal, oldVal) {
     //       this.form = newVal;
@@ -449,10 +450,16 @@
     //       this.$emit('update:vPayPlan', newVal);
     //     }
     //   }
-    // },
+      form: {
+        handler (newVal, oldVal) {
+          if (this.form.name && this.form.name != '') {
+            this.currentFinancialPlan = this.form.name;
+          }
+        },
+        deep: true
+      }
+    },
     created () {
-      console.log('-------------------------------')
-      console.log(this.form)
     },
     mounted () {
 

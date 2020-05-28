@@ -1,21 +1,26 @@
 <template>
   <div>
-    <el-row class="progress-row">
+    <el-row class="progress-row" align="middle">
       <el-row>
         <el-col>
           <h6>生产信息</h6>
         </el-col>
       </el-row>
       <el-row type="flex" justify="start" class="progress-basic-row">
-        <el-col :span="6">
-          <el-form-item label="产品名">
-            <el-input :disabled="true"></el-input>
+        <el-col>
+          <el-form-item label="产品名：">
+            <h6 style="margin-bottom: 0px;margin-top: 8px">{{formData.product.name}}</h6>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
-          <el-button>点击选择</el-button>
-        </el-col>
       </el-row>
+<!--        <el-col :span="6">-->
+<!--          <el-form-item label="产品名">-->
+<!--            <el-input :disabled="true"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--        <el-col :span="4">-->
+<!--          <el-button>点击选择</el-button>-->
+<!--        </el-col>-->
     </el-row>
     <el-row class="info-basic-row" type="flex">
       <el-col :span="2" :offset="2">

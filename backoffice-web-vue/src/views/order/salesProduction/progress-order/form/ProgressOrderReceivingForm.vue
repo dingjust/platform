@@ -42,7 +42,11 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="优先级">
-          <el-input></el-input>
+          <el-select>
+            <el-option label="普通" :value="'普通'" />
+            <el-option label="加急" :value="'加急'" />
+            <el-option label="特级" :value="'特级'" />
+          </el-select>
         </el-form-item>
       </el-col>
       <el-col :span="6">

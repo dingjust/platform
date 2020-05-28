@@ -10,29 +10,34 @@
       </el-row>
       <div class="pt-2"></div>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="订单任务" name="ORDER_TASK">
+        <el-tab-pane name="ORDER_TASK">
+          <span slot="label">
+            订单任务
+            <el-badge :value="orderTaskToDoRead" :max="99" :hidden="orderTaskToDoRead == 0" class="item">
+            </el-badge>
+          </span>
           <div class="tab-basic-row">
             <task-handle-toolbar :queryFormData="queryFormData" :statuses="statuses"
                                  @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>
             <task-handle-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                              @onDetail="onDetail" @onUndertake="onUndertake"/>
+                              @onDetail="onDetail" @onUndertake="onUndertake" @onAssignment="onAssignment"/>
           </div>
         </el-tab-pane>
         <el-tab-pane label="采购任务" name="PURCHASE_TASK">
-          <div class="tab-basic-row">
-            <task-handle-toolbar :queryFormData="queryFormData" :statuses="statuses"
-                                 @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>
-            <task-handle-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                              @onDetail="onDetail" @onUndertake="onUndertake"/>
-          </div>
+<!--          <div class="tab-basic-row">-->
+<!--            <task-handle-toolbar :queryFormData="queryFormData" :statuses="statuses"-->
+<!--                                 @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>-->
+<!--            <task-handle-list :page="page" @onAdvancedSearch="onAdvancedSearch"-->
+<!--                              @onDetail="onDetail" @onUndertake="onUndertake"/>-->
+<!--          </div>-->
         </el-tab-pane>
         <el-tab-pane label="报价任务" name="QUOTE_TASK">
-          <div class="tab-basic-row">
-            <task-handle-toolbar :queryFormData="queryFormData" :statuses="statuses"
-                          @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>
-            <task-handle-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                       @onDetail="onDetail" @onUndertake="onUndertake"/>
-          </div>
+<!--          <div class="tab-basic-row">-->
+<!--            <task-handle-toolbar :queryFormData="queryFormData" :statuses="statuses"-->
+<!--                          @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>-->
+<!--            <task-handle-list :page="page" @onAdvancedSearch="onAdvancedSearch"-->
+<!--                       @onDetail="onDetail" @onUndertake="onUndertake"/>-->
+<!--          </div>-->
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -40,6 +45,17 @@
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers(
+    'TaskHandleModule'
+  );
+
   import TaskHandleToolbar from './toolbar/TaskHandleToolbar';
   import TaskHandleList from './list/TaskHandleList';
   export default {
@@ -47,31 +63,69 @@
     components: {TaskHandleList, TaskHandleToolbar},
     props: [],
     computed: {
-
+      ...mapGetters({
+        page: 'page',
+        queryFormData: 'queryFormData'
+      }),
+      orderTaskToDoRead: function () {
+        let count = 0;
+        this.page.content.forEach(val => {
+          if (!val.read) {
+            count++;
+          }
+        })
+        return count;
+      }
     },
     methods: {
-      onAdvancedSearch () {
-        this.$message('---------onAdvancedSearch-------------');
+      ...mapActions({
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
+      }),
+      onSearch (page, size) {
+        const keyword = this.queryFormData.keyword;
+        const url = this.apis().getToDoList();
+        this.search({
+          url,
+          keyword,
+          page,
+          size
+        });
+      },
+      onAdvancedSearch (page, size) {
+        const query = this.queryFormData;
+        const url = this.apis().getToDoList();
+        this.searchAdvanced({url, query, page, size});
       },
       onReset () {
-        this.queryFormData.keyword = '';
-        this.queryFormData.charge = '';
-        this.queryFormData.creationtime = '';
-        this.queryFormData.status = '';
       },
       handleClick (tab, event) {
-        this.$message('-------------' + tab.name + '--------------------')
         this.onReset();
         // TODO 根据tab.name查询page数据
         switch (tab.name) {
 
         }
       },
-      onDetail (code) {
-        this.$message('---------onDetail-------------');
+      onDetail (row) {
+        if (row.type == 'ProductionTask') {
+          if (!row.read) {
+            this.updateRead(row);
+          }
+          this.$router.push('/sales/production/' + row.refItemPk);
+        }
       },
-      onUndertake (code) {
-        this.$message('---------onUndertake-------------');
+      onUndertake (row) {
+        this.$message('--------------------承接-------------------------')
+      },
+      onAssignment () {
+        this.$message('--------------------分配任务-------------------------')
+      },
+      updateRead (row) {
+        const url = this.apis().updateToRead(row.id);
+        const result = this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+        }
       }
     },
     data () {
@@ -86,33 +140,11 @@
             code: 'undertake',
             name: '已承接'
           }
-        ],
-        queryFormData: {
-          keyword: '',
-          charge: '',
-          creationtime: '',
-          status: ''
-        },
-        page: {
-          number: 0,
-          size: 10,
-          currentPageNumber: 0,
-          currentPageSize: 10,
-          totalPages: 1,
-          totalElements: 1,
-          content: [{
-            code: 'CO0000000001',
-            type: '销售订单',
-            creationPerson: '马云',
-            creationtime: 1589268308,
-            deliverytime: 1589268308,
-            status: '待承接'
-          }]
-        }
+        ]
       }
     },
     created () {
-
+      this.onSearch();
     },
     mounted () {
 
@@ -128,5 +160,12 @@
 
   .tab-basic-row {
     margin-left: 10px;
+  }
+
+  .item {
+    margin-top: -5px;
+    margin-right: 0px;
+    position: absolute;
+    z-index: 999;
   }
 </style>
