@@ -510,8 +510,8 @@
         }
       } else {
         this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
-        this.formData.approvers.push(this.$store.getters.currentUser);
       }
+      this.formData.approvers.push(this.$store.getters.currentUser);
       this.operatorList.push({
         id: this.$store.getters.currentUser.id,
         name: this.$store.getters.currentUser.username
