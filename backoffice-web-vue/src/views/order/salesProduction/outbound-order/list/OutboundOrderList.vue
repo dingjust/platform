@@ -4,8 +4,8 @@
       <el-table-column label="生产订单号" prop="code"></el-table-column>
       <el-table-column label="合作商">
         <template slot-scope="scope">
-          <span>{{scope.row.cooperator.type == 'ONLINE' ?
-            scope.row.cooperator.partner.name : scope.row.cooperator.name}}</span>
+          <span>{{scope.row.partyACompany.uid == uid
+            ? scope.row.partyBCompany.name : scope.row.partyACompany.name}}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联产品数">
@@ -20,7 +20,7 @@
       </el-table-column>
       <el-table-column label="审批状态" prop="status">
         <template slot-scope="scope">
-          <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
+          <span>{{getEnum('OutboundOrderStatuses', scope.row.status)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单标签" min-width="100"></el-table-column>
@@ -28,7 +28,7 @@
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetail(scope.row)" class="purchase-list-button">详情</el-button>
-            <el-button type="text" @click="onModify(scope.row)" class="purchase-list-button">修改</el-button>
+            <el-button v-if="isCreate(scope.row)" type="text" @click="onModify(scope.row)" class="purchase-list-button">修改</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -47,7 +47,18 @@
   export default {
     name: 'OutboundOrderList',
     props: ['page'],
+    computed: {
+    },
     methods: {
+      isCreate (row) {
+        const uid = this.$store.getters.currentUser.companyCode;
+        // 判断自身是 PARTYA 还是 PARTYB
+        let AorB = 'PARTYB'
+        if (row.partyACompany.uid == uid) {
+          AorB = 'PARTYA';
+        }
+        return row.createdBy == AorB && row.status == 'NOT_COMMITED';
+      },
       getOperatorName(row) {
         let aName = '';
         let bName = '';
@@ -71,9 +82,15 @@
       onModify(row) {
         this.$emit('onModify', row.code);
       }
+    },
+    data () {
+      return {
+        uid: this.$store.getters.currentUser.companyCode
+      }
+    },
+    created () {
     }
   }
-
 </script>
 
 <style scoped>

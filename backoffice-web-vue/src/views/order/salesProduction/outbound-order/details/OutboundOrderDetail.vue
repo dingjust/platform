@@ -25,6 +25,13 @@
           <el-input type="textarea" autosize v-model="formData.remarks" :autosize="{ minRows: 4, maxRows: 6 }"/>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isReceiver">
+        <el-button class="purchase-order-btn2" @click="onCancel">拒单</el-button>
+        <el-button class="purchase-order-btn" @click="onConfirm">接单</el-button>
+      </el-row>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isCancel">
+        <el-button class="purchase-order-btn2" @click="onCancel" v-if="this.formData.status != ''">取消订单</el-button>
+      </el-row>
     </el-card>
     <el-dialog :visible.sync="taskDetailVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <production-task-details v-if="taskDetailVisible" :id="productionTaskId"/>
@@ -46,7 +53,7 @@
 
   import OutboundOrderTopInfo from '../form/OutboundOrderTopInfo';
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
-  import ProductionTaskDetails from "../../production-task/details/ProductionTaskDetail";
+  import ProductionTaskDetails from '../../production-task/details/ProductionTaskDetail';
   export default {
     name: 'OutboundOrderDetail',
     props: ['code'],
@@ -58,11 +65,29 @@
     computed: {
       ...mapGetters({
         formData: 'formData'
-      })
+      }),
+      isReceiver: function () {
+        const uid = this.$store.getters.currentUser.companyCode;
+        // 判断自身是 PARTYA 还是 PARTYB
+        let AorB = 'PARTYB'
+        if (this.formData.partyACompany.uid == uid) {
+          AorB = 'PARTYA';
+        }
+        return this.formData.createdBy != AorB && this.formData.status == 'PENDING_CONFIRM';
+      },
+      isCancel: function () {
+        const uid = this.$store.getters.currentUser.companyCode;
+        // 判断自身是 PARTYA 还是 PARTYB
+        let AorB = 'PARTYB'
+        if (this.formData.partyACompany.uid == uid) {
+          AorB = 'PARTYA';
+        }
+        return this.formData.createdBy == AorB && this.formData.status != 'CONFIRMED';
+      }
     },
     methods: {
       ...mapActions({
-        clearFormData: 'clearFormData',
+        clearFormData: 'clearFormData'
       }),
       async getDetail () {
         const url = this.apis().getoutboundOrderDetail(this.code);
@@ -76,6 +101,19 @@
       onDetail (row) {
         this.taskDetailVisible = true;
         this.productionTaskId = row.productionTask.id;
+      },
+      onCancel () {
+
+      },
+      async onConfirm () {
+        const url = this.apis().acceptOutboundOrder(this.formData.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('接单成功');
+        await this.getDetail();
       }
     },
     data () {
@@ -84,10 +122,10 @@
         taskDetailVisible: false
       }
     },
-    created() {
+    created () {
       this.getDetail();
     },
-    destroyed() {
+    destroyed () {
       this.clearFormData();
     }
   }
@@ -102,5 +140,17 @@
   .basic-form-row {
     margin-top: 20px;
     padding-left: 10px;
+  }
+
+  .purchase-order-btn2 {
+    /* background: red;
+    color: #fff; */
+    width: 200px;
+  }
+
+  .purchase-order-btn {
+    background: #FFD60C;
+    color: rgba(0, 0, 0, 0.85);
+    width: 200px;
   }
 </style>

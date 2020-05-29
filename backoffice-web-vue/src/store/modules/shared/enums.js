@@ -1547,7 +1547,21 @@ const state = {
       code: 'DISPATCHED',
       name: '已外发'
     },
-  ]
+  ],
+  // 外发订单状态
+  OutboundOrderStatuses: [{
+    code: 'NOT_COMMITED',
+    name: '未提交'
+  }, {
+    code: 'IN_APPROVAL',
+    name: '审核中'
+  }, {
+    code: 'PENDING_CONFIRM',
+    name: '待确认'
+  }, {
+    code: 'CONFIRMED',
+    name: '已确认'
+  }]
 };
 
 const mutations = {};

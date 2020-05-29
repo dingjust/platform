@@ -11,7 +11,13 @@
       </el-row>
       <div class="pt-2"></div>
       <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"/>
-      <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <template v-for="(item, index) in stateList">
+          <el-tab-pane :label="item.name" :name="item.code">
+            <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
+          </el-tab-pane>
+        </template>
+      </el-tabs>
     </el-card>
     <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData"/>
@@ -48,7 +54,10 @@
         keyword: 'keyword',
         queryFormData: 'queryFormData',
         formData: 'formData'
-      })
+      }),
+      stateList: function () {
+        return this.statuses.concat({code: '', name: '全部'}, this.$store.state.EnumsModule.OutboundOrderStatuses);
+      }
     },
     methods: {
       ...mapActions({
@@ -78,6 +87,14 @@
       },
       createOutboundOrder () {
         this.outboundOrderTypeSelect = true;
+      },
+      handleClick (tab, event) {
+        if (tab.name == '') {
+          this.onSearch();
+        } else {
+          this.queryFormData.status = tab.name
+          this.onAdvancedSearch();
+        }
       },
       async onModify (code) {
         const url = this.apis().getoutboundOrderDetail(code);
@@ -109,7 +126,9 @@
     },
     data () {
       return {
-        outboundOrderTypeSelect: false
+        outboundOrderTypeSelect: false,
+        activeName: '',
+        statuses: []
       }
     },
     created () {

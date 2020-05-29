@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-form :inline="true">
       <el-row type="flex" justify="space-between">
-        <el-col :span="18">
+        <el-col :span="20">
           <el-form-item label="">
             <el-input placeholder="方案名称" v-model="queryFormData.keyword"></el-input>
           </el-form-item>
@@ -10,8 +10,9 @@
             <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
             <el-button native-type="reset" @click="queryFormData.keyword=''">重置</el-button>
           </el-button-group>
+          <el-button type="primary" class="toolbar-search_input" @click="onNew">新建节点</el-button>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
           <el-button type="primary" class="toolbar-search_input" @click="onSure">确定</el-button>
         </el-col>
       </el-row>
@@ -34,21 +35,6 @@
           <span>{{scope.row.eable ? '启用' : '禁用'}}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column label="操作" min-width="100">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-row>-->
-<!--            &lt;!&ndash;            <el-button type="text" @click="onDetail(scope.row)" class="cooperator-list-button">查看</el-button>&ndash;&gt;-->
-<!--            &lt;!&ndash;              <el-divider direction="vertical"></el-divider>&ndash;&gt;-->
-<!--            <el-button type="text" @click="onEdit(scope.row)" class="cooperator-list-button">编辑</el-button>-->
-<!--            <el-divider direction="vertical"></el-divider>-->
-<!--            <el-button type="text" @click="onEnable(scope.row)" class="cooperator-list-button">-->
-<!--              {{scope.row.eable ? '禁用' : '启用'}}-->
-<!--            </el-button>-->
-<!--            <el-divider direction="vertical"></el-divider>-->
-<!--            <el-button type="text" @click="onDelete(scope.row)" class="cooperator-list-button">删除</el-button>-->
-<!--          </el-row>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
     </el-table>
     <div class="pt-2"></div>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
@@ -91,6 +77,9 @@
       },
       onSure () {
         this.$emit('getProgressPlan', this.multipleSelection);
+      },
+      onNew () {
+
       }
     },
     data () {

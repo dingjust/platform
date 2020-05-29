@@ -12,34 +12,35 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" :inline="true" :rules="rules" :model="formData">
-        <el-row class="progress-basic-row">
-          <el-form-item label="方案名称" prop="name">
-            <el-input placeholder="输入方案名称" v-model="formData.name"></el-input>
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input placeholder="" v-model="formData.remarks"></el-input>
-          </el-form-item>
-        </el-row>
-        <progress-setting-form :formData="formData"/>
-        <el-row class="progress-basic-row">
-          <el-form-item prop="productionProgresses" label-width="100">
-            <div></div>
-          </el-form-item>
-        </el-row>
-      </el-form>
+      <progress-plan-form-info ref="infoForm" :formData="formData"/>
+<!--      <el-form ref="form" :inline="true" :rules="rules" :model="formData">-->
+<!--        <el-row class="progress-basic-row">-->
+<!--          <el-form-item label="方案名称" prop="name">-->
+<!--            <el-input placeholder="输入方案名称" v-model="formData.name"></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="备注">-->
+<!--            <el-input placeholder="" v-model="formData.remarks"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-row>-->
+<!--        <progress-setting-form :formData="formData"/>-->
+<!--        <el-row class="progress-basic-row">-->
+<!--          <el-form-item prop="productionProgresses" label-width="100">-->
+<!--            <div></div>-->
+<!--          </el-form-item>-->
+<!--        </el-row>-->
+<!--      </el-form>-->
     </el-card>
   </div>
 </template>
 
 <script>
-  import ProgressSettingForm from '../components/ProgressSettingForm';
+  import ProgressPlanFormInfo from './ProgressPlanFormInfo';
   export default {
     name: 'ProgressPlanForm',
-    components: {ProgressSettingForm},
+    components: {ProgressPlanFormInfo},
     methods: {
       onSubmit () {
-        this.$refs['form'].validate(valid => {
+        this.$refs['infoForm'].$refs['form'].validate(valid => {
           if (valid) {
             this._onSubmit();
           } else {
@@ -63,28 +64,28 @@
         }
         this.$message.success(this.formData.id ? '添加节点成功' : '编辑节点成功');
         await this.$router.push('/account/setting/progress-plan');
-      },
-      validateField (name) {
-        this.$refs.form.validateField(name);
       }
+      // validateField (name) {
+      //   this.$refs.form.validateField(name);
+      // }
     },
     data () {
-      var checkProductionProgresses = (rule, value, callback) => {
-        if (this.formData.productionProgresses.length === 0) {
-          return callback(new Error('请选择进度节点'));
-        } else {
-          return callback();
-        }
-      };
+      // var checkProductionProgresses = (rule, value, callback) => {
+      //   if (this.formData.productionProgresses.length === 0) {
+      //     return callback(new Error('请选择进度节点'));
+      //   } else {
+      //     return callback();
+      //   }
+      // };
       return {
-        rules: {
-          'name': [
-            { required: true, message: '必填', trigger: 'blur' }
-          ],
-          'productionProgresses': [
-            { type: 'object', validator: checkProductionProgresses, trigger: 'change' }
-          ]
-        },
+        // rules: {
+        //   'name': [
+        //     { required: true, message: '必填', trigger: 'blur' }
+        //   ],
+        //   'productionProgresses': [
+        //     { type: 'object', validator: checkProductionProgresses, trigger: 'change' }
+        //   ]
+        // },
         formData: {
           name: '',
           remarks: '',
@@ -93,9 +94,9 @@
       }
     },
     watch: {
-      'formData.productionProgresses': function (n, o) {
-        this.validateField('productionProgresses');
-      }
+      // 'formData.productionProgresses': function (n, o) {
+      //   this.validateField('productionProgresses');
+      // }
     },
     created () {
       if (this.$route.params.formData != null) {

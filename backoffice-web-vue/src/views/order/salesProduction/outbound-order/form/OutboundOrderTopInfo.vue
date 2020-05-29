@@ -64,18 +64,18 @@
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col :span="12">
-            <h6>品牌跟单员：{{}}</h6>
+            <h6>甲方跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{}}</h6>
+            <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.contactPhone : ''}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col :span="12">
-            <h6>工厂跟单员：{{}}</h6>
+            <h6>乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{}}</h6>
+            <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.contactPhone : ''}}</h6>
           </el-col>
         </el-row>
       </el-col>
@@ -122,25 +122,28 @@
           count += item.totalPrice;
         })
         return count;
-      },
-      // getFactoryOperator: function () {
-      //   if (this.$store.getters.currentUser.type == 'FACTORY') {
-      //     return this.slotData.byAorB == 'PARTYA'
-      //       ? this.slotData.partyAOperator.name : this.slotData.partyBOperator.name;
-      //   } else {
-      //     return this.slotData.byAorB == 'PARTYA'
-      //       ? this.slotData.partyBOperator.name : this.slotData.partyAOperator.name;
-      //   }
-      // },
-      // getBrandOperator: function () {
-      //   if (this.$store.getters.currentUser.type == 'BRAND') {
-      //     return this.slotData.byAorB == 'PARTYA'
-      //       ? this.slotData.partyAOperator.name : this.slotData.partyBOperator.name;
-      //   } else {
-      //     return this.slotData.byAorB == 'PARTYA'
-      //       ? this.slotData.partyBOperator.name : this.slotData.partyAOperator.name;
-      //   }
-      // }
+      }
+    },
+    methods: {
+      initOperator () {
+        const type = this.currentUser.type;
+        if (type == 'FACTORY') {
+          if (this.currentUser.companyCode == this.slotData.partyACompany.uid) {
+            this.operator.factory = this.slotData.partyACompany.name;
+          }
+        } else {
+
+        }
+      }
+    },
+    data () {
+      return {
+        currentUser: this.$store.getters.currentUser,
+        operator: {}
+      }
+    },
+    created () {
+      this.initOperator();
     }
   }
 </script>

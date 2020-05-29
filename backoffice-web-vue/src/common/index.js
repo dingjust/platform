@@ -676,6 +676,10 @@ const COMMON_APIS = {
   updateOutboundOrder() {
     return '/b2b/orders/outbound/update';
   },
+  // 接单
+  acceptOutboundOrder (code) {
+    return '/b2b/orders/outbound/' + code + '/production';
+  },
   // 获取节点方案列表
   getProgressPlan() {
     return '/b2b/progress/plan';
