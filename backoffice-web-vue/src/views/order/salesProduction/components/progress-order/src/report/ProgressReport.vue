@@ -1,24 +1,25 @@
 <template>
   <div>
-    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
+    <!-- <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <production-progress-order-form :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder"
-                                      v-if="hackSet" @callback="onCallback" />
+        v-if="hackSet" @callback="onCallback" />
     </el-dialog>
     <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
-      <production-progress-order-view :purchaseOrder="order" :progress="slotData" :progressOrder="selectProgressOrder" />
+      :close-on-click-modal="false">
+      <production-progress-order-view :purchaseOrder="order" :progress="slotData"
+        :progressOrder="selectProgressOrder" />
     </el-dialog>
     <el-dialog :visible.sync="materialVisible" width="70%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
-      <production-progress-order-form-material :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder"
-                                             v-if="materialVisible" @callback="onCallback" :isRead="isRead"/>
+      :close-on-click-modal="false">
+      <production-progress-order-form-material :purchaseOrder="order" :progress="slotData"
+        :progressOrder="progressOrder" v-if="materialVisible" @callback="onCallback" :isRead="isRead" />
     </el-dialog>
     <el-dialog :visible.sync="sampleVisible" width="70%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
+      :close-on-click-modal="false">
       <production-progress-order-form-sample :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder"
-                                             v-if="sampleVisible" @callback="onCallback" :isRead="isRead"/>
-    </el-dialog>
+        v-if="sampleVisible" @callback="onCallback" :isRead="isRead" />
+    </el-dialog> -->
     <el-row type="flex" justify="space-between">
       <el-col :span="4">
         <div class="report-list-title">
@@ -35,14 +36,15 @@
           <h6 class="basic-title" style="width: 100px">预计完成时间：</h6>
           <h6 class="basic-title" v-if="!onEditEstimatedDateVisible">{{slotData.estimatedDate | timestampToTime}}</h6>
           <el-date-picker v-if="onEditEstimatedDateVisible" ref="datePicker" style="width: 50%;" :clearable="false"
-                          v-model="slotData.estimatedDate" type="date" placeholder="选择日期"/>
-          <el-button v-if="!readonly" class="edit-time-btn" type="text" @click="onEditEstimatedDate">{{onEditEstimatedDateVisible ? '确定' : '编辑'}}</el-button>
+            v-model="slotData.estimatedDate" type="date" placeholder="选择日期" />
+          <el-button v-if="!readonly" class="edit-time-btn" type="text" @click="onEditEstimatedDate">
+            {{onEditEstimatedDateVisible ? '确定' : '编辑'}}</el-button>
         </el-row>
       </el-col>
       <el-col :span="7">
         <el-row type="flex" align="middle">
           <el-col>
-            <h6 class="basic-title">款号：{{order.product.skuID}}</h6>
+            <h6 class="basic-title">款号：{{belong.skuID}}</h6>
           </el-col>
         </el-row>
       </el-col>
@@ -64,19 +66,21 @@
     </el-row>
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="22">
-<!--        <progress-report-material :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
-<!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
-<!--        <progress-report-sample :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
-<!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
-        <progress-report-common :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"
-                                @onOrder="onOrder" :orderEntriesTotal="order.totalQuantity" :readonly="readonly"/>
+        <!--        <progress-report-material :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
+        <!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
+        <!--        <progress-report-sample :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
+        <!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
+
+        <!-- <progress-report-common :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"
+                                @onOrder="onOrder" :orderEntriesTotal="order.totalQuantity" :readonly="readonly"/> -->
+
         <el-row type="flex" justify="end" align="center" class="show-btn-row">
           <i class="iconfont icon_arrow" v-if="!allOrdersShow" @click="allOrdersShow=true">&#xe714;&nbsp;展开全部单据</i>
           <i class="iconfont icon_arrow" v-if="allOrdersShow" @click="allOrdersShow=false">&#xe713;&nbsp;收回全部单据</i>
         </el-row>
         <el-row v-if="allOrdersShow">
-          <production-progress-orders-table :orders="slotData.productionProgressOrders" @onDetail="onDetail" @onCencel="onCencel"
-                                            :readonly="readonly" @onUpdate="onUpdate" />
+          <production-progress-orders-table :orders="slotData.productionProgressOrders" @onDetail="onDetail"
+            @onCencel="onCencel" :readonly="readonly" @onUpdate="onUpdate" />
         </el-row>
         <el-row type="flex" align="top" class="progress-update-form-row" style="margin-top:20px;">
           <el-col :span="2">
@@ -107,15 +111,15 @@
   import ProgressReportMaterial from './ProgressReportMaterial';
   import ProgressReportSample from './ProgressReportSample';
   import ProgressReportCommon from './ProgressReportCommon';
-  import ProductionProgressOrdersTable from '../info/ProductionProgressOrderTable';
-  import ProductionMediaImageCardShow from '../info/ProductionMediaImageCardShow';
+  import ProductionProgressOrdersTable from '../ProductionProgressOrderTable';
+  import ProductionMediaImageCardShow from '../ProductionMediaImageCardShow';
   import ProductionProgressOrderForm from '../form/ProductionProgressOrderForm';
   import ProductionProgressOrderView from '../form/ProductionProgressOrderView';
   import ProductionProgressOrderFormSample from '../form/ProductionProgressOrderFormSample';
   import ProductionProgressOrderFormMaterial from '../form/ProductionProgressOrderFormMaterial';
   export default {
     name: 'ProgressReport',
-    props: ['slotData', 'order', 'readonly'],
+    props: ['slotData', 'belong', 'readonly'],
     components: {
       ProductionProgressOrderFormMaterial,
       ProductionProgressOrderFormSample,
@@ -125,29 +129,31 @@
       ProductionProgressOrdersTable,
       ProgressReportCommon,
       ProgressReportSample,
-      ProgressReportMaterial},
+      ProgressReportMaterial
+    },
     computed: {
       cooperatorName: function () {
-        if (this.order.cooperator == null) {
-          if (this.isBrand()) {
-            if (this.order.belongTo != null) {
-              return this.order.belongTo.name;
-            } else {
-              return this.order.companyOfSeller;
-            }
-          } else {
-            if (this.order.purchaser != null) {
-              return this.order.purchaser.name;
-            } else {
-              return this.order.companyOfSeller;
-            }
-          }
-        }
-        if (this.order.cooperator.type == 'ONLINE') {
-          return this.order.cooperator.partner.name;
-        } else {
-          return this.order.cooperator.name;
-        }
+        // if (this.order.cooperator == null) {
+        //   if (this.isBrand()) {
+        //     if (this.order.belongTo != null) {
+        //       return this.order.belongTo.name;
+        //     } else {
+        //       return this.order.companyOfSeller;
+        //     }
+        //   } else {
+        //     if (this.order.purchaser != null) {
+        //       return this.order.purchaser.name;
+        //     } else {
+        //       return this.order.companyOfSeller;
+        //     }
+        //   }
+        // }
+        // if (this.order.cooperator.type == 'ONLINE') {
+        //   return this.order.cooperator.partner.name;
+        // } else {
+        //   return this.order.cooperator.name;
+        // }
+        return '合作商.....';
       },
       allMedias: function () {
         var result = [];
@@ -160,7 +166,7 @@
       }
     },
     methods: {
-      onUpdate (progressOrder) {
+      onUpdate(progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
         //   this.progressOrder = progressOrder;
         //   this.materialVisible = true;
@@ -170,11 +176,11 @@
         //   this.sampleVisible = true;
         //   this.isRead = false;
         // } else {
-          this.progressOrder = progressOrder;
-          this.formVisible = true;
+        this.progressOrder = progressOrder;
+        this.formVisible = true;
         // }
       },
-      onDetail (progressOrder) {
+      onDetail(progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
         //   this.progressOrder = progressOrder;
         //   this.materialVisible = true;
@@ -184,11 +190,11 @@
         //   this.sampleVisible = true;
         //   this.isRead = true;
         // } else {
-          this.selectProgressOrder = progressOrder;
-          this.viewVisible = true;
+        this.selectProgressOrder = progressOrder;
+        this.viewVisible = true;
         // }
       },
-      onCencel (id) {
+      onCencel(id) {
         this.$confirm('是否作废该单据?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -197,21 +203,26 @@
           this._onCancel(id);
         });
       },
-      async _onCancel (id) {
-        const url = this.apis().deleteProductionProgressOrder(this.order.id, id);
-        const result = await this.$http.delete(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('作废成功');
-        this.$emit('callback');
+      async _onCancel(id) {
+
+
+        // const url = this.apis().deleteProductionProgressOrder(this.order.id, id);
+
+
+
+        // const result = await this.$http.delete(url);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
+        // this.$message.success('作废成功');
+        // this.$emit('callback');
       },
-      onCallback () {
+      onCallback() {
         this.formVisible = false;
         this.$emit('callback');
       },
-      onOrder () {
+      onOrder() {
         this.progressOrder = {
           medias: [],
           operator: {
@@ -228,10 +239,10 @@
         //   this.sampleVisible = true;
         //   this.isRead = false;
         // } else {
-          this.formVisible = true;
+        this.formVisible = true;
         // }
       },
-      async onSubmit () {
+      async onSubmit() {
         // if (this.compareDate(new Date(), new Date(this.slotData.estimatedDate))) {
         //   this.$message.error('预计完成时间不能小于当前时间');
         //   return false;
@@ -245,14 +256,14 @@
         // this.$message.success('更新成功');
         this.$emit('editSubmit');
       },
-      onEditEstimatedDate () {
+      onEditEstimatedDate() {
         this.onEditEstimatedDateVisible = !this.onEditEstimatedDateVisible;
         this.$nextTick(() => {
           this.$refs.datePicker.focus();
         })
       }
     },
-    data () {
+    data() {
       return {
         formVisible: false,
         progressOrder: {},
@@ -267,16 +278,16 @@
       }
     },
     watch: {
-      formVisible (newValue, oldValue) {
+      formVisible(newValue, oldValue) {
         this.hackSet = false;
         this.$nextTick(() => {
           this.hackSet = true;
         });
       }
     },
-    created () {
-    }
+    created() {}
   }
+
 </script>
 
 <style scoped>
@@ -321,4 +332,5 @@
     width: 150px;
     margin-top: 50px;
   }
+
 </style>

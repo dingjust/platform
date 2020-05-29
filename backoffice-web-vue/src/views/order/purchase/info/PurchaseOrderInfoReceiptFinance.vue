@@ -13,13 +13,14 @@
     <el-row style="margin-top:10px;">
       <el-timeline>
         <el-timeline-item placement="bottom" v-for="(payPlanItem, index) in payPlanItems" :key="index"
-                          :color="index==0?'#FFD60C':'#E4E7ED'"  :hide-timestamp="true">
+          :color="index==0?'#FFD60C':'#E4E7ED'" :hide-timestamp="true">
           <el-row type="flex" justify="space-between" align="middle">
             <el-col :span="2">
               <h6 class="info-log-content">{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
             </el-col>
             <el-col :span="10">
-              <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后
+              <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">
+                {{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后
                 <span v-if="payPlanItem.moneyType === 'MONTHLY_SETTLEMENT'">
                   次月{{payPlanItem.triggerDays == null || payPlanItem.triggerDays <0 ? '月底' : payPlanItem.triggerDays + '号'}}支付剩余全部款项
                 </span>
@@ -33,16 +34,19 @@
                 </span>
                 <span v-else>
                   {{payPlanItem.triggerDays}}天 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}完成付款
-                {{payPlanItem.payPercent * 100}}%作为{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}
+                  {{payPlanItem.payPercent * 100}}%作为{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}
                 </span>
               </h6>
             </el-col>
             <el-col :span="2">
-              <img v-if="payPlanItem.receiptStatus === 'ARREARS'" width="40px" height="15px" src="static/img/arrears.png" />
+              <img v-if="payPlanItem.receiptStatus === 'ARREARS'" width="40px" height="15px"
+                src="static/img/arrears.png" />
               <img v-if="payPlanItem.receiptStatus === 'PAID'" width="40px" height="15px" src="static/img/paid.png" />
             </el-col>
             <el-col :span="4">
-              <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnReceiptAmount != 0">剩余未收￥{{payPlanItem.remainingUnReceiptAmount.toFixed(2)}}</h6>
+              <h6 class="info-log-content" style="color: red"
+                v-if="payPlanItem.remainingUnReceiptAmount != null&&payPlanItem.remainingUnReceiptAmount != 0">
+                剩余未收￥{{payPlanItem.remainingUnReceiptAmount.toFixed(2)}}</h6>
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true && !isTenant()">
@@ -58,15 +62,17 @@
       </el-timeline>
     </el-row>
 
-    <el-dialog :visible.sync="financeReceiptFormVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="financeReceiptFormVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-order-finance-receipt-form :payPlanItem="itemData" :slotData="slotData" :form="formData"
-                                           @close="onClose" @refreshItem="refreshItem" :receiptOrders="receiptOrders"
-                                            @refreshData="refreshData" @clearFormData="clearFormData"/>
+        @close="onClose" @refreshItem="refreshItem" :receiptOrders="receiptOrders" @refreshData="refreshData"
+        @clearFormData="clearFormData" />
     </el-dialog>
 
-    <el-dialog :visible.sync="financeReceiptVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="financeReceiptVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-order-info-receipt :receiptOrders="receiptOrders" @refreshItem="refreshItem"
-                                   @refreshData="refreshData"/>
+        @refreshData="refreshData" />
     </el-dialog>
   </div>
 </template>
@@ -94,8 +100,10 @@
       receiptOrders: function () {
         let result = [];
         for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
-          for (var receipt of payPlanItem.receiptOrders) {
-            result.push(receipt);
+          if (payPlanItem.receiptOrders != null) {
+            for (var receipt of payPlanItem.receiptOrders) {
+              result.push(receipt);
+            }
           }
         }
 
@@ -107,7 +115,7 @@
       }
     },
     methods: {
-      async refreshData () {
+      async refreshData() {
         const url = this.apis().getPurchaseOrder(this.slotData.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -116,7 +124,7 @@
         }
         this.$set(this.slotData, 'payPlan', result.payPlan);
       },
-      async refreshItem () {
+      async refreshItem() {
         const url = this.apis().getPurchaseOrder(this.slotData.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -142,22 +150,22 @@
           }
         }
       },
-      onClose () {
+      onClose() {
         this.financeReceiptFormVisible = false;
         this.refreshData();
       },
-      clearFormData () {
+      clearFormData() {
         this.formData.paymentType = '';
         this.formData.amount = '';
         this.formData.payCertificate = '';
         this.formData.remarks = '';
       },
-      onReceipt (payPlanItem) {
+      onReceipt(payPlanItem) {
         this.financeReceiptFormVisible = !this.financeReceiptFormVisible;
         this.itemData = payPlanItem;
       }
     },
-    data () {
+    data() {
       return {
         financeReceiptFormVisible: false,
         financeReceiptVisible: false,
@@ -170,23 +178,23 @@
         }
       }
     },
-    created () {
-    },
+    created() {},
     watch: {
       // 关闭弹窗时清空表单数据
       financeReceiptFormVisible: {
-        handler (val, oldVal) {
+        handler(val, oldVal) {
           if (val === false) {
             this.formData.paymentType = '',
-            this.formData.amount = '',
-            this.formData.payCertificate = '',
-            this.formData.remarks = ''
+              this.formData.amount = '',
+              this.formData.payCertificate = '',
+              this.formData.remarks = ''
           }
         },
         deep: true
       }
     }
   }
+
 </script>
 <style>
   .info-finance-body {

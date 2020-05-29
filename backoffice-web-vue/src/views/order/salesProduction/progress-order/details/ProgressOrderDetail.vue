@@ -32,11 +32,11 @@
 
   import ProgressOrderReceivingForm from '../form/ProgressOrderReceivingForm';
   import ProgressOrderProductionInfoForm from '../form/ProgressOrderProductionInfoForm';
-  import ProductionProgressOrderInfo from '../../production-order/info/ProductionProgressOrderInfo';
+  import ProgressOrder from '../../components/progress-order';
   export default {
     name: 'ProgressOrderDetail',
     props: ['code'],
-    components: {ProductionProgressOrderInfo, ProgressOrderProductionInfoForm, ProgressOrderReceivingForm},
+    components: {ProgressOrder, ProgressOrderProductionInfoForm, ProgressOrderReceivingForm},
     computed: {
       ...mapGetters({
         formData: 'formData'

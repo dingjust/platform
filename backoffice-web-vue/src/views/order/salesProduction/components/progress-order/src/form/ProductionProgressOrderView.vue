@@ -85,7 +85,7 @@
 </template>
 
 <script>
-  import ProductionMediaImageCardShow from '../info/ProductionMediaImageCardShow';
+  import ProductionMediaImageCardShow from '../ProductionMediaImageCardShow';
   export default {
     name: 'ProductionProgressOrderView',
     props: ['progressOrder', 'purchaseOrder', 'progress'],

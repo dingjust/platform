@@ -1,10 +1,5 @@
 <template>
   <div class="finance-form-body">
-    <!--    <el-row class="info-title-row" type="flex" justify="space-between">-->
-    <!--      <div class="info-title">-->
-    <!--        <h6 class="info-title_text">{{getEnum('productionProgressPhaseTypes', progress.phase)}}报工</h6>-->
-    <!--      </div>-->
-    <!--    </el-row>-->
     <el-row type="flex" justify="space-between">
       <el-col :span="4">
         <div class="report-list-title">
@@ -63,83 +58,75 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="space-between" align="middle">
+        <el-row>
           <table cellspacing="2" width="100%" class="order-table">
             <tr class="order-table-th_row">
               <template v-for="item in titleRow">
                 <th :key="item">{{item}}</th>
               </template>
-              <th v-if="!isRead">操作</th>
             </tr>
-            <tr v-if="tableData.length <= 0">
-              <td colspan="5" style="padding: 8px;color: #909399">暂无数据</td>
-            </tr>
-            <template v-if="tableData != ''" v-for="(item, index) in tableData">
-              <tr :key="index">
-                <td v-if="isRead">{{item.color}}</td>
-                <td v-else>
-                  <el-select v-model="item.color">
-                    <el-option v-for="val in colors"
-                               :key="val"
-                               :label="val"
-                               :value="val"
-                               :disabled="isDisabledColor(val, item)">
-                    </el-option>
-                  </el-select>
-                </td>
-                <td v-if="isRead">{{item.size}}</td>
-                <td v-else>
-                  <el-select v-model="item.size">
-                    <el-option v-for="val in sizes"
-                               :key="val.name"
-                               :label="val.name"
-                               :value="val.name"
-                               :disabled="isDisabledSize(val.name, item)">
-                    </el-option>
-                  </el-select>
-                </td>
-                <td v-if="isRead">{{item.status}}</td>
-                <td v-else>
-                  <el-select v-model="item.status">
-                    <el-option v-for="val in statuses"
-                               :key="val.name"
-                               :label="val.name"
-                               :value="val.name">
-                    </el-option>
-                  </el-select>
-                </td>
-                <td v-if="isRead" width="500">{{item.approvalComments}}</td>
-                <td v-else width="400">
-                  <el-input class="order-table-input" v-model="item.approvalComments"/>
-                </td>
-                <td v-if="!isRead" width="100">
-                  <el-button type="text" @click="onDelete(index)">删除</el-button>
-                </td>
+            <template v-for="(item, materialindex) in materialsEntries">
+              <tr :key="materialindex">
+                <td :rowspan="item.materialsColorEntries.length + 1">{{item.materialsName}}</td>
+                <td :rowspan="item.materialsColorEntries.length + 1">{{item.spec.name}}</td>
+                <td :rowspan="item.materialsColorEntries.length + 1">{{getEnum('MaterialsUnit', item.materialsUnit)}}</td>
+                <td :rowspan="item.materialsColorEntries.length + 1">{{getEnum('MaterialsType', item.materialsType)}}</td>
               </tr>
+              <template v-for="(val, index) in item.materialsColorEntries">
+                <tr>
+                  <td>{{val.materialsColor.name}}</td>
+                  <!-- 实际需求数量 -->
+                  <td v-if="isRead" style="width:120px">
+                    {{val.materialsColor.name}}
+                  </td>
+                  <td v-else style="width:120px">
+                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent v-model="val.quantity" :min="1"
+                              :placeholder="'剩余'"></el-input>
+                  </td>
+                  <!-- 实际收货数量 -->
+                  <td v-if="isRead" style="width:120px">
+                    {{val.materialsColor.name}}
+                  </td>
+                  <td v-else style="width:120px">
+                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent v-model="val.quantity" :min="1"
+                              :placeholder="'剩余'"></el-input>
+                  </td>
+                  <td v-if="index === 0 && isRead" :rowspan="item.materialsColorEntries.length + 1" style="width:120px">
+                    <!-- 物料状态 -->
+                    {{getEnum('MaterialsType', item.materialsType)}}
+                  </td>
+                  <td v-if="index === 0 && !isRead" :rowspan="item.materialsColorEntries.length + 1" style="width:120px">
+                    <el-select v-model="val.status" class="w-100" value-key="code">
+                      <el-option v-for="item in statuses"
+                                 :key="item.code"
+                                 :label="item.name"
+                                 :value="item.code">
+                      </el-option>
+                    </el-select>
+                  </td>
+                </tr>
+              </template>
             </template>
           </table>
         </el-row>
-        <el-row type="flex" align="top" class="progress-update-form-row">
-          <el-button @click="addRow" v-if="!isRead">+ 添加</el-button>
-        </el-row>
-        <el-row type="flex" align="top" class="progress-update-form-row">
-          <el-col :span="2">
-            <h6 class="progress-update-form-text1">上传图片:</h6>
-          </el-col>
-          <el-col :span="22" :offset="1">
-            <images-upload v-if="!isRead" class="order-purchase-upload" :slot-data="progressOrder.medias" />
-            <production-media-image-card-show v-if="isRead" :medias="progressOrder.medias" />
-          </el-col>
-        </el-row>
-        <el-row type="flex" align="top" class="progress-update-form-row">
-          <el-col :span="2">
-            <h6 class="progress-update-form-text1">备注:</h6>
-          </el-col>
-          <el-col :span="22" :offset="1">
-            <el-input type="textarea" :rows="3" placeholder="填写备注" v-model="progressOrder.remarks">
-            </el-input>
-          </el-col>
-        </el-row>
+<!--        <el-row type="flex" align="top" class="progress-update-form-row">-->
+<!--          <el-col :span="2">-->
+<!--            <h6 class="progress-update-form-text1">上传图片:</h6>-->
+<!--          </el-col>-->
+<!--          <el-col :span="22" :offset="1">-->
+<!--            <images-upload v-if="!isRead" class="order-purchase-upload" :slot-data="progressOrder.medias" />-->
+<!--            <production-media-image-card-show v-if="isRead" :medias="progressOrder.medias" />-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row type="flex" align="top" class="progress-update-form-row">-->
+<!--          <el-col :span="2">-->
+<!--            <h6 class="progress-update-form-text1">备注:</h6>-->
+<!--          </el-col>-->
+<!--          <el-col :span="22" :offset="1">-->
+<!--            <el-input type="textarea" :rows="3" placeholder="填写备注" v-model="progressOrder.remarks">-->
+<!--            </el-input>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
           <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
         </el-row>
@@ -150,10 +137,10 @@
 
 <script>
   import ImagesUpload from '@/components/custom/ImagesUpload';
-  import ProductionMediaImageCardShow from '../info/ProductionMediaImageCardShow';
+  import ProductionMediaImageCardShow from '../ProductionMediaImageCardShow';
 
   export default {
-    name: 'ProductionProgressOrderFormSample',
+    name: 'ProductionProgressOrderFormMaterial',
     props: ['progressOrder', 'purchaseOrder', 'progress', 'isRead'],
     components: {
       ProductionMediaImageCardShow,
@@ -296,52 +283,11 @@
         } else {
           return '';
         }
-      },
-      isDisabledColor (colorName, item) {
-        console.log(this.tableData);
-        console.log(item);
-        if (item.size == '') {
-          return false;
-        } else {
-          let sizeRow = [];
-          this.tableData.forEach(val => {
-            if (val.size == item.size) {
-              sizeRow.push(val);
-            }
-          })
-          return sizeRow.findIndex(val => val.color == colorName) > -1;
-        }
-      },
-      isDisabledSize (sizeName, item) {
-        if (item.color == '') {
-          return false;
-        } else {
-          let colorRow = [];
-          this.tableData.forEach(val => {
-            if (val.color == item.color) {
-              colorRow.push(val);
-            }
-          })
-          return colorRow.findIndex(val => val.size == sizeName) > -1;
-        }
-      },
-      addRow () {
-        this.tableData.push({
-          color: '',
-          size: '',
-          status: '',
-          approvalComments: ''
-        });
-      },
-      onDelete (index) {
-        this.tableData.splice(index, 1);
       }
     },
     data () {
       return {
-        titleRow: ['颜色', '尺码', '状态', '审批意见'],
         allOrdersShow: false,
-        tableData: [],
         operator: this.$store.getters.currentUser.username,
         entries: [],
         form: {
@@ -357,25 +303,185 @@
           }]
         },
         statuses: [{
-          code: 'NONE',
-          name: '未审核'
-        },
-        {
-          code: 'AUDITING',
-          name: '审核中'
-        },
-        {
-          code: '"PASSED',
-          name: '审核通过'
+          code: 'ALLCOMPLETE',
+          name: '全部完成'
+        }, {
+          code: 'PARTCOMPLETE',
+          name: '部分完成'
+        }, {
+          code: 'PURCHASING',
+          name: '采购中'
+        }, {
+          code: 'UNPURCAHSE',
+          name: '未采购'
         }],
-        showTabelData: ''
+        showTabelData: '',
+        tableData: [],
+        titleRow: ['物料名称', '物料规格', '物料单位', '物料属性', '物料颜色', '实际需求数量', '实际收货数量', '状态'],
+        materialsEntries: [
+          {
+            'id': 8796093085086,
+            'creationtime': 1589355713000,
+            'modifiedtime': 1589355713000,
+            'title': '主料',
+            'position': '领子',
+            'materialsId': 8800057982977,
+            'materialsCode': 'MTRL00019002',
+            'materialsName': '尼龙布',
+            'unitQuantity': 10,
+            'lossRate': 0.1,
+            'materialsType': 'PLUS_MATERIAL',
+            'materialsUnit': 'SHEET',
+            'materialsColorEntries': [
+              {
+                'id': 8796093085087,
+                'creationtime': 1589355713000,
+                'modifiedtime': 1589355713000,
+                'sampleColor': {
+                  'id': 8796879582515,
+                  'code': '9cfdf2b39bfe42d08c95e6de16005021',
+                  'name': '卡其',
+                  'sequence': 10000,
+                  'active': true,
+                  'customize': true
+                },
+                'materialsColor': {
+                  'id': 8796093445427,
+                  'code': 'C13',
+                  'name': '卡其',
+                  'sequence': 13,
+                  'active': true,
+                  'colorCode': '#CC9933',
+                  'customize': false
+                }
+              },
+              {
+                'id': 8796093117855,
+                'creationtime': 1589355713000,
+                'modifiedtime': 1589355713000,
+                'sampleColor': {
+                  'id': 8796879615283,
+                  'code': 'bd25ea983b074e9c8c8ff58e2808a795',
+                  'name': '橙色',
+                  'sequence': 10000,
+                  'active': true,
+                  'customize': true
+                },
+                'materialsColor': {
+                  'id': 8796094362931,
+                  'code': 'C41',
+                  'name': '橄榄绿',
+                  'sequence': 41,
+                  'active': true,
+                  'colorCode': '#999900',
+                  'customize': false
+                }
+              },
+              {
+                'id': 8796093150623,
+                'creationtime': 1589355713000,
+                'modifiedtime': 1589355713000,
+                'sampleColor': {
+                  'id': 8796879648051,
+                  'code': 'b968dd87d9bb43eeb26638e9f65216f5',
+                  'name': '自定义颜色1',
+                  'sequence': 10000,
+                  'active': true,
+                  'customize': true
+                },
+                'materialsColor': {
+                  'id': 8796093445427,
+                  'code': 'C13',
+                  'name': '卡其',
+                  'sequence': 13,
+                  'active': true,
+                  'colorCode': '#CC9933',
+                  'customize': false
+                }
+              }
+            ],
+            'spec': {
+              'code': 'efab0c2c46d6433dbc9c033732ac3264',
+              'name': '50x50',
+              'customize': true
+            }
+          },
+          {
+            'id': 8796093117854,
+            'creationtime': 1589355713000,
+            'modifiedtime': 1589355713000,
+            'title': '辅料',
+            'position': '下摆',
+            'materialsId': 8800057982977,
+            'materialsCode': 'MTRL00019002',
+            'materialsName': '尼龙布',
+            'unitQuantity': 20,
+            'lossRate': 0.2,
+            'materialsType': 'PLUS_MATERIAL',
+            'materialsUnit': 'SHEET',
+            'materialsColorEntries': [
+              {
+                'id': 8796093183391,
+                'creationtime': 1589355713000,
+                'modifiedtime': 1589355713000,
+                'sampleColor': {
+                  'id': 8796879680819,
+                  'code': '094f963fd9d74b38b6b0236a33246c03',
+                  'name': '卡其',
+                  'sequence': 10000,
+                  'active': true,
+                  'customize': true
+                },
+                'materialsColor': {
+                  'id': 8796093183283,
+                  'code': 'C03',
+                  'name': '黑色',
+                  'sequence': 3,
+                  'active': true,
+                  'colorCode': '#000000',
+                  'customize': false
+                }
+              },
+              {
+                'id': 8796093216159,
+                'creationtime': 1589355713000,
+                'modifiedtime': 1589355713000,
+                'sampleColor': {
+                  'id': 8796879713587,
+                  'code': 'd9e377a6b89b447cb96a0b51c8a5b8ab',
+                  'name': '橙色',
+                  'sequence': 10000,
+                  'active': true,
+                  'customize': true
+                },
+                'materialsColor': {
+                  'id': 8796094362931,
+                  'code': 'C41',
+                  'name': '橄榄绿',
+                  'sequence': 41,
+                  'active': true,
+                  'colorCode': '#999900',
+                  'customize': false
+                }
+              }
+            ],
+            'spec': {
+              'code': '9574903ecd9649c98d3f975d94f3a44c',
+              'name': '30x30',
+              'customize': true
+            }
+          }
+        ]
       }
     },
     created () {
-      if (this.isRead) {
-        this.tableData = this.progressOrder.entries;
-      } else if (!this.isRead && this.progress.productionProgressOrders.length > 0) {
-        this.tableData = Object.assign([], this.progress.productionProgressOrders[this.progress.productionProgressOrders.length - 1].entries);
+      if (!this.isRead && this.progressOrder.entries.length <= 0) {
+        this.progressOrder.entries.push({
+          color: '',
+          size: '',
+          status: '',
+          approvalMsg: ''
+        });
       }
       // // 初始化表格
       // this.entries = [];

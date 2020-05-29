@@ -69,22 +69,22 @@
       }),
       handleClick(tab, event) {
         if (tab.name == 'ALL') {
-          this.queryFormData.statuses = [];
+          this.queryFormData.status = '';
           this.onAdvancedSearch();
         } else {
-          this.queryFormData.statuses = [tab.name];
+          this.queryFormData.status = tab.name;
           this.onAdvancedSearch();
         }
       },
       onSearch(page, size) {
         const keyword = this.keyword;
-        const statuses = this.statuses;
+        const status = this.status;
         const url = this.apis().getProductionTaskList();
         this.setIsAdvancedSearch(false);
         this.search({
           url,
           keyword,
-          statuses,
+          status,
           page,
           size
         });

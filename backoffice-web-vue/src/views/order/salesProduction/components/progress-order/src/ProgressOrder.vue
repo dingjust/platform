@@ -11,7 +11,7 @@
     <el-row type="flex" justify="center" class="pp-basic-row">
       <el-col :span="23">
         <el-card>
-          <production-progress-node :slotData="slotData" @refreshData="refreshData"/>
+          <production-progress-node :slotData="slotData" @refreshData="refreshData" />
         </el-card>
       </el-col>
     </el-row>
@@ -21,19 +21,43 @@
 <script>
   import ProductionProgressNode from './ProductionProgressNode';
   export default {
-    name: 'ProductionProgressOrderInfo',
-    components: {ProductionProgressNode},
-    props: ['slotData'],
+    name: 'ProgressOrder',
+    components: {
+      ProductionProgressNode
+    },
+    props: {
+      slotData: {
+        type: Object,
+        default: () => {
+          return {
+            code: "",
+            creationtime: '',
+            expectedDeliveryDate: '',
+            id: '',
+            machiningType: "",
+            modifiedtime: '',
+            partyACompany: '',
+            partyBCompany: '',
+            personInCharge: '',
+            progresses: [],
+            skuID: "",
+          };
+        }
+      }
+    },
     methods: {
-      onEdit () {
+      onEdit() {
         // this.$router.push('/sales/progressOrder/' + this.slotData.code);
         this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');
       },
-      refreshData () {
+      refreshData() {
         this.$emit('refreshData');
       }
+    },
+    created(){
     }
   }
+
 </script>
 
 <style scoped>
@@ -48,4 +72,5 @@
   .pp-basic-row {
     margin-top: 20px;
   }
+
 </style>

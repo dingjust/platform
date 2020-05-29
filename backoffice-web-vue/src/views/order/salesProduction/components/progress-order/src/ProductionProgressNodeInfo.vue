@@ -1,79 +1,29 @@
 <template>
   <div>
-    <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <progress-report v-if="updateFormVisible" :slotData="selectProgressModel" :readonly="readonly" :order="slotData"
-                       @callback="onCallback" @editSubmit="onEditSubmit"/>
+    <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <progress-report v-if="updateFormVisible" :slotData="selectProgressModel" :readonly="readonly" :belong="slotData"
+        @callback="onCallback" @editSubmit="onEditSubmit" />
     </el-dialog>
     <el-row type="flex" justify="space-between">
-      <template v-for="(item,index) in slotData.progresses">
-        <el-col :span="5" :key="index" class="progress-block" @mouseenter.native="onShowButton(true,index)"
-                @mouseleave.native="onShowButton(false,index)">
-          <el-row type="flex" justify="center" align="middle">
-            <h6 class="progress-status">{{getEnum('productionProgressPhaseTypes', item.phase)}}</h6>
-          </el-row>
-          <el-row type="flex" justify="center" align="middle">
-            <div :class="getLeftLine(index,slotData.progresses)" />
-            <el-col :span="6">
-              <div
-                :class="item.sequence<=currentSequence?'progress-icon-container':isDoing(index,slotData.progresses)?'progress-icon-container_doing':'progress-icon-container_none'">
-                <i class="iconfont2 progress-icon" v-html="phaseIcon[item.phase]"
-                   v-if="!isDoing(index,slotData.progresses)"></i>
-                <h6 v-if="isDoing(index,slotData.progresses)" class="progress-icon-container_text">进行</h6>
-              </div>
-            </el-col>
-            <div :class="getRightLine(index,slotData.progresses)" />
-          </el-row>
-          <el-row type="flex" justify="center" align="middle">
-            <div class="progress-line-horizon_none" />
-            <div :class="item.sequence==currentSequence?'progress-line-vertical':'progress-line-vertical_none'">
-            </div>
-            <div class="progress-line-horizon_none" />
-          </el-row>
-          <!-- <el-row type="flex" justify="center" align="middle" v-if="item.medias!=null&&item.medias.length!=0">
-            <img class="progress-img" :src="item.medias[0].url">
-          </el-row> -->
-          <el-row type="flex" justify="center" align="middle" class="progress-info-row" v-if="item.estimatedDate!=null">
-            <el-col :span="19">
-              <h6 class="progress-info">预计完成日期: {{item.estimatedDate | timestampToTime}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="center" class="progress-info-row" align="middle">
-            <el-col :span="19">
-              <h6 class="progress-info">实际完成日期: {{item.finishDate|timestampToTime}}</h6>
-            </el-col>
-          </el-row>
-          <!-- <el-row type="flex" justify="center" class="progress-info-row" align="middle" v-if="item.remarks!=null">
-            <el-col :span="19">
-              <h6 class="progress-info">备注: {{item.remarks}}</h6>
-            </el-col>
-          </el-row> -->
-          <div class="progress-block-modal" :style="getBlockStyle(index)" v-show="showButtonArray[index]">
-            <el-row type="flex" justify="center" align="middle" class="progress-block-modal-row">
-              <el-button type="primary" plain @click="onEdit(item)" :disabled="readEditShow(item)">
-                {{judgeReadonly(item)?'查看':'编辑'}}
-              </el-button>
-            </el-row>
-          </div>
-          <div style="height:20%;">
-            <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
-                    v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-              <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
-                {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
-            </el-row>
-          </div>
-        </el-col>
-      </template>
+      <el-steps :active="2" align-center>
+        <template v-for="(item,index) in slotData.progresses">
+          <el-step :title="item.progressPhase" :key="index" ></el-step>
+        </template>
+      </el-steps>
     </el-row>
   </div>
 </template>
 
 <script>
-  import {hasPermission} from '@/auth/auth';
+  import {
+    hasPermission
+  } from '@/auth/auth';
 
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import ProgressReport from '../report/ProgressReport';
+  import ProgressReport from './report/ProgressReport';
 
   const {
     mapGetters,
@@ -106,11 +56,11 @@
       ...mapActions({
         refreshDetail: 'refreshDetail'
       }),
-      readEditShow (item) {
+      readEditShow(item) {
         return (!this.judgeReadonly(item) && !hasPermission(this.permission.purchaseOrderOperate)) || this.isTenant();
       },
       /// 判断左边线样式
-      getLeftLine (index, data) {
+      getLeftLine(index, data) {
         if (index == 0) {
           return 'progress-line-horizon_none'
         } else {
@@ -122,7 +72,7 @@
         }
       },
       /// 判断右边线样式
-      getRightLine (index, data) {
+      getRightLine(index, data) {
         if (index == data.length - 1) {
           return 'progress-line-horizon_none'
         } else {
@@ -138,20 +88,20 @@
         }
       },
       /// 判断是否正在进行中
-      isDoing (index, data) {
+      isDoing(index, data) {
         if (this.slotData.status == 'IN_PRODUCTION') {
           return data[index].phase == this.slotData.currentPhase;
         } else {
           return false;
         }
       },
-      onEdit (item) {
+      onEdit(item) {
         this.readonly = this.judgeReadonly(item);
         this.selectProgressModel = item;
         this.selectProgressModel.updateOnly = true;
         this.updateFormVisible = !this.updateFormVisible;
       },
-      async onEditSubmit () {
+      async onEditSubmit() {
         if (this.compareDate(new Date(), new Date(this.selectProgressModel.estimatedDate))) {
           this.$message.error('预计完成时间不能小于当前时间');
           return false;
@@ -166,7 +116,7 @@
         this.$message.success('更新成功');
         this.updateFormVisible = false;
       },
-      async onProgressFinish (item, index) {
+      async onProgressFinish(item, index) {
         item.updateOnly = false;
         const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, item.id);
         const result = await this.$http.put(url, item);
@@ -183,20 +133,20 @@
         //   this.slotData.status = 'WAIT_FOR_OUT_OF_STORE';
         // }
       },
-      onShowButton (value, index) {
+      onShowButton(value, index) {
         this.$set(this.showButtonArray, index, value);
       },
-      getShowVal (index) {
+      getShowVal(index) {
         return this.showButtonArray[index];
       },
-      getBlockStyle (index) {
+      getBlockStyle(index) {
         var width = 100 / this.slotData.progresses.length;
         return {
           'width': width + '%',
           'left': width * index + '%'
         }
       },
-      async onCallback () {
+      async onCallback() {
         await this.refreshDetail();
         this.contentData.progresses.forEach(item => {
           if (item.id == this.selectProgressModel.id) {
@@ -204,15 +154,15 @@
           }
         });
       },
-      judgeReadonly (item) {
-        if (item.sequence >= this.currentSequence && this.slotData.status == 'IN_PRODUCTION' && this.isFactory()) {
+      judgeReadonly(item) {
+        if (item.sequence >= this.currentSequence && this.slotData.status == 'IN_PRODUCTION') {
           return false;
         } else {
           return true;
         }
       }
     },
-    data () {
+    data() {
       return {
         updateFormVisible: false,
         hackSet: true,
@@ -228,10 +178,11 @@
         readonly: false
       };
     },
-    created () {
+    created() {
       this.showButtonArray = this.slotData.progresses.map((val) => false);
     }
   };
+
 </script>
 <style>
   .progress-status {
