@@ -3,27 +3,27 @@
     <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false" v-if="isColorSizeType">
       <production-progress-order-form :belong="belong" :progress="slotData" :progressOrder="progressOrder"
-        :readOnly="onView" v-if="hackSet" @callback="onCallback" />
+        :readOnly="onView" v-if="hackSet" @callback="onCallback" @onClose="onClose" />
     </el-dialog>
     <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
-      v-if="slotData.progressPhase=='裁剪'" :close-on-click-modal="false">
+      v-if="slotData.progressPhase=='备料'" :close-on-click-modal="false">
       <production-progress-order-form-material :belong="belong" :progress="slotData" :progressOrder="progressOrder"
-        v-if="formVisible" @callback="onCallback" :readOnly="onView" />
+        v-if="formVisible" @callback="onCallback" :readOnly="onView" @onClose="onClose" />
+    </el-dialog>
+    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
+      v-if="slotData.progressPhase=='产前样'" :close-on-click-modal="false">
+      <production-progress-order-form-sample :belong="belong" :progress="slotData" :progressOrder="progressOrder"
+        v-if="formVisible" @callback="onCallback" :readOnly="onView" @onClose="onClose" />
     </el-dialog>
     <!-- <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <production-progress-order-view :purchaseOrder="order" :progress="slotData"
         :progressOrder="selectProgressOrder" />
-    </el-dialog>
-    <el-dialog :visible.sync="sampleVisible" width="70%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <production-progress-order-form-sample :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder"
-        v-if="sampleVisible" @callback="onCallback" :isRead="isRead" />
     </el-dialog> -->
     <el-row type="flex" justify="space-between">
-      <el-col :span="4">
+      <el-col :span="6">
         <div class="report-list-title">
-          <h6>{{slotData.currentPhase}}</h6>
+          <h6>{{slotData.progressPhase}}</h6>
         </div>
       </el-col>
       <el-col :span="6">
@@ -66,14 +66,16 @@
     </el-row>
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="22">
-        <!--        <progress-report-material :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
-        <!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
-        <!--        <progress-report-sample :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
-        <!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
-
-        <progress-report-common :orderEntries="belong.colorSizeEntries" :noteEntries="slotData.productionProgressOrders"
-          @onOrder="onOrder" :orderEntriesTotal="0" :readonly="readonly" />
-
+        <el-row type="flex" justify="end">
+          <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
+        </el-row>
+        <progress-report-material v-if="slotData.progressPhase=='备料'"
+          :productionProgressOrders="slotData.productionProgressOrders" />
+        <progress-report-sample v-if="slotData.progressPhase=='产前样'"
+          :productionProgressOrders="slotData.productionProgressOrders" />
+        <progress-report-common v-if="isColorSizeType" :orderEntries="belong.colorSizeEntries"
+          :noteEntries="slotData.productionProgressOrders" @onOrder="onOrder" :orderEntriesTotal="0"
+          :readonly="readonly" />
         <el-row type="flex" justify="end" align="center" class="show-btn-row">
           <i class="iconfont icon_arrow" v-if="!allOrdersShow" @click="allOrdersShow=true">&#xe714;&nbsp;展开全部单据</i>
           <i class="iconfont icon_arrow" v-if="allOrdersShow" @click="allOrdersShow=false">&#xe713;&nbsp;收回全部单据</i>
@@ -137,8 +139,6 @@
         switch (this.slotData.progressPhase) {
           case '备料':
             return false;
-          case '裁剪':
-            return false;
           case '产前样':
             return false;
           default:
@@ -162,14 +162,18 @@
         return result;
       },
       readonly: function () {
-        if (this.belong.status == 'IN_PRODUCTION') {
-          return !(this.belong.currentPhase == this.slotData.progressPhase);
-        } else {
-          return true;
-        }
+        // if (this.belong.status == 'IN_PRODUCTION') {
+        //   return !(this.belong.currentPhase == this.slotData.progressPhase);
+        // } else {
+        //   return true;
+        // }
+        return false;
       }
     },
     methods: {
+      onClose() {
+        this.formVisible = false;
+      },
       onUpdate(progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
         //   this.progressOrder = progressOrder;
@@ -230,7 +234,9 @@
           },
           reportTime: '',
           remarks: '',
-          entries: []
+          entries: [],
+          materialPreparationEntries: [],
+          preProductionSampleEntries: []
         };
         // if (this.order.currentPhase == 'SAMPLE') {
         //   this.materialVisible = true;
@@ -351,6 +357,14 @@
     /* color: ; */
     width: 150px;
     margin-top: 50px;
+  }
+
+  .form-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #FFD60C;
+    border-color: #FFD60C;
+    color: #000;
   }
 
 </style>

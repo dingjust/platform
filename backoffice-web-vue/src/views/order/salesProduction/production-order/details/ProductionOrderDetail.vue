@@ -86,7 +86,6 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$set(result.progressWorkSheet,'materialsSpecEntries',result.materialsSpecEntries);
         this.$store.state.ProductionOrderModule.formData = Object.assign({}, result);
       },
       onCallBack() {

@@ -98,11 +98,12 @@
             </el-input>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
-          <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
-        </el-row>
       </div>
     </el-form>
+    <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
+      <el-button size="mini" v-if="!readOnly" class="update-form-submit" @click="onSubmit">确定</el-button>
+      <el-button size="mini" class="update-form-submit" @click="onClose">关闭</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -111,18 +112,18 @@
 
   export default {
     name: 'ProductionProgressOrderForm',
-    props: ['progressOrder', 'belong', 'progress','readOnly'],
+    props: ['progressOrder', 'belong', 'progress', 'readOnly'],
     components: {
       ImagesUpload
     },
     mixins: [],
     computed: {
-      totalNeed:function(){
-        var result=0;
-        this.belong.colorSizeEntries.forEach(element=>{
-          let num=parseFloat(element.quantity);
-          if(num!=null&&!Number.isNaN(element.quantity)){
-            result+=num;
+      totalNeed: function () {
+        var result = 0;
+        this.belong.colorSizeEntries.forEach(element => {
+          let num = parseFloat(element.quantity);
+          if (num != null && !Number.isNaN(element.quantity)) {
+            result += num;
           }
         });
         return result;
@@ -166,6 +167,9 @@
       }
     },
     methods: {
+      onClose() {
+        this.$emit('onClose')
+      },
       getVariant(color, size, entries) {
         var result = entries.filter(
           item => item.color == color && item.size == size

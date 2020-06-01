@@ -1561,7 +1561,31 @@ const state = {
   }, {
     code: 'CONFIRMED',
     name: '已确认'
-  }]
+  }],
+  //进度工单单据-物料类型状态
+  ProgressReportMaterialStatus: [{
+    code: 'ALL_CANCELLED',
+    name: '全部完成'
+  }, {
+    code: 'PARTIALLY_COMPLETED',
+    name: '部分完成'
+  }, {
+    code: 'PURCHASING',
+    name: '采购中'
+  }, {
+    code: 'NOT_PURCHASED',
+    name: '未采购'
+  }],
+  //进度工单单据-产前样类型状态
+  ProgressReportSampleStatus: [{
+      code: 'IN_APPROVAL',
+      name: '审核中'
+    },
+    {
+      code: 'APPROVED',
+      name: '审核通过'
+    }
+  ],
 };
 
 const mutations = {};

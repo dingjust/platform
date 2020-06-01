@@ -1,8 +1,5 @@
 <template>
   <div class="table-body">
-    <el-row type="flex" justify="end" align="middle" style="margin-bottom:20px;">
-      <el-button size="mini" class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
-    </el-row>
     <el-row>
       <table cellspacing="2" width="100%" class="order-table">
         <tr class="order-table-th_row">
@@ -10,14 +7,14 @@
             <th :key="item">{{item}}</th>
           </template>
         </tr>
-        <tr v-if="tableData.length <= 0">
+        <tr v-if="order.preProductionSampleEntries.length <= 0">
           <td colspan="4" style="padding: 8px;color: #909399">暂无数据</td>
         </tr>
-        <template v-for="(item, index) in tableData">
+        <template v-for="(item, index) in order.preProductionSampleEntries">
           <tr :key="index">
-            <td>{{item.color}}</td>
-            <td>{{item.size}}</td>
-            <td>{{item.status}}</td>
+            <td>{{item.colorText}}</td>
+            <td>{{item.sizeText}}</td>
+            <td>{{item.status!=null?getEnum('ProgressReportSampleStatus', item.status):''}}</td>
             <td width="500">{{item.approvalComments}}</td>
           </tr>
         </template>
@@ -30,58 +27,33 @@
   export default {
     name: 'ProgressReportSample',
     props: {
-      orderEntries: {
+      productionProgressOrders: {
         type: Array,
-        default: []
+        default: () => {
+          return [];
+        }
       },
-      noteEntries: {
-        type: Array,
-        default: []
-      },
-      orderEntriesTotal: {
-        type: Number,
-        default: 0
-      },
-      readonly: {
-        type: Boolean,
-        default: false
-      },
-      isRead: {
-        type: Boolean,
-        default: true
-      }
     },
     computed: {
+      order: function () {
+        return this.productionProgressOrders[this.productionProgressOrders.length - 1];
+      }
     },
     methods: {
-      onOrder () {
+      onOrder() {
         this.$emit('onOrder')
       }
     },
-    data () {
+    data() {
       return {
-        tableData: [],
         titleRow: ['颜色', '尺码', '状态', '审批意见'],
-        statuses: [{
-          code: 'NONE',
-          name: '未审核'
-        },
-        {
-          code: 'AUDITING',
-          name: '审核中'
-        },
-        {
-          code: '"PASSED',
-          name: '审核通过'
-        }]
       }
     },
-    created () {
-      if (this.noteEntries.length > 0) {
-        this.tableData = this.noteEntries[this.noteEntries.length - 1].entries;
-      }
+    created() {
+
     }
   }
+
 </script>
 
 <style scoped>
@@ -136,4 +108,5 @@
     border-color: #ffd60c;
     color: #000;
   }
+
 </style>

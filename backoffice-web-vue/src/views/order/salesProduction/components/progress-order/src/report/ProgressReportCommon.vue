@@ -2,7 +2,6 @@
   <div class="table-body">
     <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
       <span>{{noteVariantTotal}}/{{orderEntriesTotal}}</span>
-      <el-button size="mini" class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
     </el-row>
     <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
       <tr class="order-table-th_row">
@@ -166,11 +165,4 @@
     border-color: #ffd60c;
     color: #000;
   }
-
-  .form-btn {
-    background-color: #FFD60C;
-    border-color: #FFD60C;
-    color: #000;
-  }
-
 </style>
