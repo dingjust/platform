@@ -162,11 +162,11 @@
         return result;
       },
       readonly: function () {
-        // if (this.belong.status == 'IN_PRODUCTION') {
-        //   return !(this.belong.currentPhase == this.slotData.progressPhase);
-        // } else {
-        //   return true;
-        // }
+        if (this.belong.status == 'IN_PRODUCTION') {
+          return !(this.belong.currentPhase == this.slotData.progressPhase);
+        } else {
+          return true;
+        }
         return false;
       }
     },
