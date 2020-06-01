@@ -12,7 +12,7 @@
       <el-form :inline="true">
         <progress-order-receiving-form :formData="formData" :isRead="true"/>
         <progress-order-production-info-form :formData="formData" :isRead="false"/>
-        <production-progress-order-info :slotData="formData" @refreshData="getDetail"/>
+        <progress-order :slotData="formData" @callback="getDetail" />
       </el-form>
     </el-card>
   </div>

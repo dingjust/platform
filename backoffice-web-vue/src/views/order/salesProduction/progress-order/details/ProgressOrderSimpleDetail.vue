@@ -58,8 +58,8 @@
             <el-col :span="getSpan">
               <el-row type="flex" justify="center" align="middle">
 <!--                <h6 v-if="item.delatedDays" style="color: #F56C6C">延误{{item.delatedDays}}天</h6>-->
-                <h6 v-if="item.estimatedDate">预计完成：{{item.estimatedDate | timestampToTime}}</h6>
-<!--                <h6 v-if="item.compleTime && !item.delatedDays">完成时间：{{item.compleTime | timestampToTime}}</h6>-->
+                <h6 v-if="item.finishDate">完成时间：{{item.finishDate | timestampToTime}}</h6>
+                <h6 v-if="item.estimatedDate && !item.finishDate">预计完成：{{item.estimatedDate | timestampToTime}}</h6>
               </el-row>
             </el-col>
           </template>
