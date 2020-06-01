@@ -47,7 +47,6 @@
             data.push(item.size);
           }
         })
-        console.log(data);
         return data;
       }
     }

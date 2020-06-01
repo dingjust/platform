@@ -90,7 +90,7 @@
         <el-row type="flex" justify="center" class="info-order-row" align="middle">
           <el-col :span="24">
             <div class="order-purchase-table-btn_add" @click="addRow">
-              +添加另一款产品
+              +添加另一生产任务
             </div>
           </el-col>
         </el-row>
@@ -250,17 +250,18 @@
         clearFormData: 'clearFormData'
       }),
       getProgressPlan (val) {
-        let item = {}
-        let progressList = val.productionProgresses.map(val => {
+        let item = {};
+        let progressList = [];
+        val.productionProgresses.forEach(val => {
           item.medias = val.medias;
           item.progressPhase = val.progressPhase;
           item.quantity = val.quantity;
           item.sequence = val.sequence;
           item.completeAmount = val.completeAmount;
           item.productionProgressOrders = val.productionProgressOrders;
-          return item;
+          progressList.push(item);
+          item = {}
         })
-        console.log(progressList);
         this.formData.progressPlan = {
           name: val.name,
           remarks: val.remarks,
@@ -326,30 +327,61 @@
           billPrice: '',
           expectedDeliveryDate: '',
           shippingAddress: {},
-          product: {}
+          product: {},
+          colorSizeEntries: []
         };
         this.formData.entries.push(item);
       },
       deleteRow (index) {
         this.formData.entries.splice(index, 1);
       },
-      onSelectTask () {
-        this.taskDialogVisible = false;
-        // this.formData.entries[this.selectIndex].product.name = data.name;
-        // this.formData.entries[this.selectIndex].product.id = data.id;
-      },
-      toFormValidate (form) {
-        return new Promise((resolve, reject) => {
-          form.validate((valid) => {
-            if (valid) {
-              resolve();
-            } else {
-              reject(new Error());
+      onSelectTask (selectTaskList) {
+        let row = {}
+        let index;
+        let entries = [];
+        selectTaskList.forEach(item => {
+          index = this.formData.entries.findIndex(val => val.productionTask.id == item.id);
+          if (index > -1) {
+            entries.push(this.formData.entries[index]);
+          } else {
+            row = {
+              productionTask: {
+                id: item.id
+              },
+              billPrice: '',
+              expectedDeliveryDate: '',
+              shippingAddress: {},
+              product: {
+                id: item.productionEntry.product.id,
+                name: item.productionEntry.product.name,
+                thumbnail: item.productionEntry.product.thumbnail
+              },
+              colorSizeEntries: item.productionEntry.colorSizeEntries
             }
+            entries.push(row);
+            row = {};
+          }
+        })
+        this.formData.entries = entries;
+        this.taskDialogVisible = false;
+      },
+      // 封装Promise对象
+      getFormPromise (form) {
+        return new Promise(resolve => {
+          form.validate(res => {
+            resolve(res);
           })
         })
       },
-      onCreate () {
+      async onCreate () {
+        let validate = await this.validateForms();
+        if (validate) {
+          this._onCreate();
+        } else {
+          this.$message.error('请完善表单信息');
+        }
+      },
+      async validateForms () {
         var formArr = [];
         formArr.push(this.$refs['form']);
         this.$refs['itemForm'].forEach(item => {
@@ -358,17 +390,12 @@
         this.$refs['addressForm'].forEach(item => {
           formArr.push(item.$refs['address']);
         })
-        const arr = formArr.map(item => this.toFormValidate(item));
-        const flag = Promise.all(arr).then((res) => {
-          console.log(res);
-          return res.every(item => !!item);
-        })
-        console.log(flag);
-        if (flag) {
-          this._onCreate();
-        } else {
-          this.$message.error('请完善表单信息');
-        }
+        // const form = this.$refs.form;
+        // const addressForm = this.$refs.addressComp.$refs.address;
+        // 使用Promise.all 并行去校验结果
+        let res = await Promise.all(formArr.map(this.getFormPromise));
+
+        return res.every(item => !!item);
       },
       async _onCreate () {
         var payPlanData = {
@@ -414,28 +441,27 @@
 
         // 人员设置数据处理
         if (!this.formData.isApproval) {
-          data['partAOperator'] = null;
-          data['partBOperator'] = null;
+          data.approvers = [];
         }
         if (this.formData.byAorB === 'PARTYA') {
-          data['partAOperator'] = {id: this.operator.id};
+          data.partyAOperator = {id: this.operator.id};
         } else {
-          data['partBOperator'] = {id: this.operator.id};
+          data.partyBOperator = {id: this.operator.id};
         }
 
         if (this.formData.id) {
           const url = this.apis().updateOutboundOrder();
           const result = await this.$http.put(url, data);
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
+          if (result.code == 0) {
+            this.$message.error(result.msg);
             return;
           }
           this.$message.success('编辑外发订单成功');
         } else {
           const url = this.apis().createOutboundOrder();
           const result = await this.$http.post(url, data);
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
+          if (result.code == 0) {
+            this.$message.error(result.msg);
             return;
           }
           this.$message.success('创建外发订单成功');
@@ -505,6 +531,9 @@
     created () {
       if (this.$route.params.formData != null) {
         this.formData = this.$route.params.formData;
+        if (this.formData.entries.length <= 0) {
+          this.addRow();
+        }
         if (this.formData.payPlan.payPlanItems.length > 0) {
           this.setPayPlan(this.formData.payPlan);
         }

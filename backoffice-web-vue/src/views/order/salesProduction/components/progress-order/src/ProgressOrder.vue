@@ -11,7 +11,7 @@
     <el-row type="flex" justify="center" class="pp-basic-row">
       <el-col :span="23">
         <el-card>
-          <production-progress-node :slotData="slotData" @refreshData="refreshData" />
+          <production-progress-node :slotData="slotData" @callback="onCallBack" />
         </el-card>
       </el-col>
     </el-row>
@@ -50,12 +50,11 @@
         // this.$router.push('/sales/progressOrder/' + this.slotData.code);
         this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');
       },
-      refreshData() {
-        this.$emit('refreshData');
+      onCallBack() {
+        this.$emit('callback');
       }
     },
-    created(){
-    }
+    created() {}
   }
 
 </script>

@@ -24,7 +24,7 @@
               :productsColors="colors" />
           </el-row>
         </div>
-        <progress-order :slotData="formData.progressWorkSheet" @refreshData="getDetail" />
+        <progress-order :slotData="formData.progressWorkSheet" @callback="onCallBack" />
         <production-order-relation-info :slotData="formData" />
         <production-order-button-group style="margin-top:50px" :slotData="formData" />
       </el-row>
@@ -86,8 +86,12 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
+        this.$set(result.progressWorkSheet,'materialsSpecEntries',result.materialsSpecEntries);
         this.$store.state.ProductionOrderModule.formData = Object.assign({}, result);
       },
+      onCallBack() {
+        this.getDetail();
+      }
     },
     data() {
       return {}

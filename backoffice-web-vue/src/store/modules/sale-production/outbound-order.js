@@ -71,9 +71,21 @@ const state = {
       }
     },
     attachments: [],
-    partAOperator: '',
-    partBOperator: '',
-    approvers: []
+    partyAOperator: {
+      name: '',
+      contactPhone: ''
+    },
+    partyBOperator: {
+      name: '',
+      contactPhone: ''
+    },
+    approvers: [],
+    partyACompany: {
+      uid: ''
+    },
+    partyBCompany: {
+      uid: ''
+    }
   },
   queryFormData: {
     keyword: '',
@@ -225,9 +237,21 @@ const actions = {
         }
       },
       attachments: [],
-      partAOperator: '',
-      partBOperator: '',
-      approvers: []
+      partyAOperator: {
+        name: '',
+        contactPhone: ''
+      },
+      partyBOperator: {
+        name: '',
+        contactPhone: ''
+      },
+      approvers: [],
+      partyACompany: {
+        uid: ''
+      },
+      partyBCompany: {
+        uid: ''
+      }
     });
   },
   clearQueryFormData ({dispatch, commit, state}) {

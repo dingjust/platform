@@ -1,7 +1,7 @@
 <template>
   <div class="info-remarks-body" @mouseenter="onShowButton(true)" @mouseleave="onShowButton(false)">
     <el-row>
-      <production-progress-node-info :slot-data="slotData" @refreshData="refreshData" />
+      <production-progress-node-info :slot-data="slotData" @callback="onCallback" />
     </el-row>
     <div class="progress-modal" v-show="showButton" v-if="modalExist">
       <el-row type="flex" justify="center" align="middle" class="progress-modal-row">
@@ -26,20 +26,21 @@
     },
     props: ['slotData'],
     computed: {
+      //还没设置预计完成时间
       modalExist: function () {
-        // if (this.isFactory() && this.slotData.status == 'IN_PRODUCTION') {
-        var result = false;
-        // if (this.slotData != null) {
-        //   this.slotData.progresses.forEach(element => {
-        //     if (element.estimatedDate == null || element.estimatedDate == '') {
-        //       result = true;
-        //     }
-        //   });
-        // }
-        return result;
-        // } else {
-        //   return false;
-        // }
+        if (this.slotData.status == 'IN_PRODUCTION') {
+          var result = false;
+          if (this.slotData != null) {
+            this.slotData.progresses.forEach(element => {
+              if (element.estimatedDate == null || element.estimatedDate == '') {
+                result = true;
+              }
+            });
+          }
+          return result;
+        } else {
+          return false;
+        }
       }
     },
     methods: {
@@ -48,10 +49,10 @@
       },
       onAfterSubmit() {
         this.estimatedFormVisible = false;
-        this.refreshData();
+        this.$emit('callback');
       },
-      async refreshData() {
-        this.$emit('refreshData');
+      onCallback() {
+        this.$emit('callback');
       }
     },
     data() {

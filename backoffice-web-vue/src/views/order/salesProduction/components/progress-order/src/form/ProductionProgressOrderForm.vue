@@ -1,25 +1,25 @@
 <template>
   <div class="finance-form-body">
-<!--    <el-row class="info-title-row" type="flex" justify="space-between">-->
-<!--      <div class="info-title">-->
-<!--        <h6 class="info-title_text">{{getEnum('productionProgressPhaseTypes', progress.phase)}}报工</h6>-->
-<!--      </div>-->
-<!--    </el-row>-->
+    <!--    <el-row class="info-title-row" type="flex" justify="space-between">-->
+    <!--      <div class="info-title">-->
+    <!--        <h6 class="info-title_text">{{getEnum('productionProgressPhaseTypes', progress.phase)}}报工</h6>-->
+    <!--      </div>-->
+    <!--    </el-row>-->
     <el-row type="flex" justify="space-between">
       <el-col :span="4">
         <div class="report-list-title">
-          <h6>{{getEnum('productionProgressPhaseTypes', progress.phase)}}报工</h6>
+          <h6>{{progress.progressPhase}}报工</h6>
         </div>
       </el-col>
     </el-row>
-    <el-form ref="form" :model="progressOrder" :rules="rules">
+    <el-form ref="form" :model="progressOrder" :rules="rules" :disabled="readOnly">
       <div class="form-main">
         <el-row type="flex" align="middle" class="progress-update-form-row" justify="space-between">
           <el-col :span="6">
             <h6 class="progress-update-form-text1">工单号：{{progress.id}}</h6>
           </el-col>
           <el-col :span="4" :offset="1">
-            <h6 class="info-title_text">款号：{{purchaseOrder.product.skuID}}</h6>
+            <h6 class="info-title_text">款号：{{belong.skuID}}</h6>
           </el-col>
           <el-col :span="8">
             <h6 class="info-title_text">合作商：{{cooperatorName}}</h6>
@@ -35,7 +35,7 @@
                 <el-col :span="18">
                   <div style="width:100%;">
                     <el-date-picker style="width:100%;" class="progress-update-form-datepicker"
-                                    v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
+                      v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
                     </el-date-picker>
                   </div>
                 </el-col>
@@ -58,7 +58,7 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
-          <span>{{variantTotal}}/{{purchaseOrder.totalQuantity}}</span>
+          <span>{{variantTotal}}/{{totalNeed}}</span>
         </el-row>
         <el-row type="flex">
           <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
@@ -73,8 +73,8 @@
                 <td>{{sizeArray[0].color}}</td>
                 <template v-for="(item,sizeIndex) in sizeArray">
                   <td style="width:80px" :key="sizeIndex">
-                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent v-model="item.quantity" :min="1"
-                              :placeholder="countRemainNum(item.color,item.size)"></el-input>
+                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent v-model="item.quantity"
+                      :min="1" :placeholder="countRemainNum(item.color,item.size)"></el-input>
                   </td>
                 </template>
               </tr>
@@ -111,39 +111,33 @@
 
   export default {
     name: 'ProductionProgressOrderForm',
-    props: ['progressOrder', 'purchaseOrder', 'progress'],
+    props: ['progressOrder', 'belong', 'progress','readOnly'],
     components: {
       ImagesUpload
     },
     mixins: [],
     computed: {
+      totalNeed:function(){
+        var result=0;
+        this.belong.colorSizeEntries.forEach(element=>{
+          let num=parseFloat(element.quantity);
+          if(num!=null&&!Number.isNaN(element.quantity)){
+            result+=num;
+          }
+        });
+        return result;
+      },
       cooperatorName: function () {
-        if (this.purchaseOrder.cooperator != null) {
-          if (this.purchaseOrder.cooperator.type == 'ONLINE') {
-            return this.purchaseOrder.cooperator.partner.name;
-          } else {
-            return this.purchaseOrder.cooperator.name;
-          }
+        if (this.currentUser.companyCode == this.belong.partyACompany.uid) {
+          return this.belong.partyBCompany.name;
         } else {
-          if (this.isBrand()) {
-            if (this.purchaseOrder.belongTo != null) {
-              return this.purchaseOrder.belongTo.name;
-            } else {
-              return this.purchaseOrder.companyOfSeller;
-            }
-          } else {
-            if (this.purchaseOrder.purchaser != null) {
-              return this.purchaseOrder.purchaser.name;
-            } else {
-              return this.purchaseOrder.companyOfSeller;
-            }
-          }
+          return this.belong.partyACompany.name;
         }
       },
       sizes: function () {
         var sizes = [];
-        this.purchaseOrder.entries.forEach(element => {
-          sizes.push(element.product.size);
+        this.belong.colorSizeEntries.forEach(element => {
+          sizes.push(element.size);
         });
         const res = new Map();
         var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
@@ -151,8 +145,8 @@
       },
       colors: function () {
         var colors = new Set([]);
-        this.purchaseOrder.entries.forEach(element => {
-          colors.add(element.product.color.name);
+        this.belong.colorSizeEntries.forEach(element => {
+          colors.add(element.color.name);
         });
         return colors;
       },
@@ -172,7 +166,7 @@
       }
     },
     methods: {
-      getVariant (color, size, entries) {
+      getVariant(color, size, entries) {
         var result = entries.filter(
           item => item.color == color && item.size == size
         );
@@ -182,7 +176,7 @@
           return null;
         }
       },
-      onSubmit () {
+      onSubmit() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
             if (this.progressOrder.id != null && this.progressOrder.id != '') {
@@ -193,7 +187,7 @@
           }
         });
       },
-      async _onCreate () {
+      async _onCreate() {
         const url = this.apis().createProductionProgressOrder(this.progress.id);
         let form = Object.assign({}, this.progressOrder);
         let variantEntries = [];
@@ -212,7 +206,7 @@
         this.$message.success('创建成功');
         this.$emit('callback');
       },
-      async _onUpdate () {
+      async _onUpdate() {
         const url = this.apis().updateProductionProgressOrder(this.progress.id, this.progressOrder.id);
         let form = Object.assign({}, this.progressOrder);
         form.id = '';
@@ -232,9 +226,9 @@
         this.$message.success('修改成功');
         this.$emit('callback');
       },
-      countRemainNum (color, size) {
-        var need = this.purchaseOrder.entries.filter(
-          item => item.product.color.name == color && item.product.size.name == size
+      countRemainNum(color, size) {
+        var need = this.belong.colorSizeEntries.filter(
+          item => item.color.name == color && item.size.name == size
         );
         if (need.length != 0) {
           var sum = 0;
@@ -254,10 +248,11 @@
         }
       }
     },
-    data () {
+    data() {
       return {
         allOrdersShow: false,
         operator: this.$store.getters.currentUser.username,
+        currentUser: this.$store.getters.currentUser,
         entries: [],
         form: {
           reportTime: ''
@@ -273,7 +268,7 @@
         }
       }
     },
-    created () {
+    created() {
       // 初始化表格
       this.entries = [];
       this.colors.forEach(color => {
@@ -305,9 +300,10 @@
         this.entries.push(sizeArray);
       });
     },
-    mounted () {}
+    mounted() {}
 
   }
+
 </script>
 <style scoped>
   .order-table {
@@ -413,4 +409,5 @@
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
+
 </style>

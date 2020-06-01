@@ -1,19 +1,19 @@
 <template>
   <div>
-    <!-- <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <production-progress-order-form :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder"
-        v-if="hackSet" @callback="onCallback" />
+    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false" v-if="isColorSizeType">
+      <production-progress-order-form :belong="belong" :progress="slotData" :progressOrder="progressOrder"
+        :readOnly="onView" v-if="hackSet" @callback="onCallback" />
     </el-dialog>
-    <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
+      v-if="slotData.progressPhase=='裁剪'" :close-on-click-modal="false">
+      <production-progress-order-form-material :belong="belong" :progress="slotData" :progressOrder="progressOrder"
+        v-if="formVisible" @callback="onCallback" :readOnly="onView" />
+    </el-dialog>
+    <!-- <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <production-progress-order-view :purchaseOrder="order" :progress="slotData"
         :progressOrder="selectProgressOrder" />
-    </el-dialog>
-    <el-dialog :visible.sync="materialVisible" width="70%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <production-progress-order-form-material :purchaseOrder="order" :progress="slotData"
-        :progressOrder="progressOrder" v-if="materialVisible" @callback="onCallback" :isRead="isRead" />
     </el-dialog>
     <el-dialog :visible.sync="sampleVisible" width="70%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -23,7 +23,7 @@
     <el-row type="flex" justify="space-between">
       <el-col :span="4">
         <div class="report-list-title">
-          <h6>{{getEnum('productionProgressPhaseTypes', slotData.phase)}}</h6>
+          <h6>{{slotData.currentPhase}}</h6>
         </div>
       </el-col>
       <el-col :span="6">
@@ -34,11 +34,11 @@
       <el-col :span="10" :offset="1">
         <el-row type="flex" align="middle">
           <h6 class="basic-title" style="width: 100px">预计完成时间：</h6>
-          <h6 class="basic-title" v-if="!onEditEstimatedDateVisible">{{slotData.estimatedDate | timestampToTime}}</h6>
-          <el-date-picker v-if="onEditEstimatedDateVisible" ref="datePicker" style="width: 50%;" :clearable="false"
-            v-model="slotData.estimatedDate" type="date" placeholder="选择日期" />
-          <el-button v-if="!readonly" class="edit-time-btn" type="text" @click="onEditEstimatedDate">
-            {{onEditEstimatedDateVisible ? '确定' : '编辑'}}</el-button>
+          <h6 class="basic-title">{{slotData.estimatedDate | timestampToTime}}</h6>
+          <!-- <el-date-picker v-if="onEditEstimatedDateVisible" ref="datePicker" style="width: 50%;" :clearable="false"
+            v-model="slotData.estimatedDate" type="date" placeholder="选择日期" /> -->
+          <!-- <el-button v-if="!readonly" class="edit-time-btn" type="text" @click="onEditEstimatedDate">
+            {{onEditEstimatedDateVisible ? '确定' : '编辑'}}</el-button> -->
         </el-row>
       </el-col>
       <el-col :span="7">
@@ -71,8 +71,8 @@
         <!--        <progress-report-sample :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
         <!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
 
-        <!-- <progress-report-common :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"
-                                @onOrder="onOrder" :orderEntriesTotal="order.totalQuantity" :readonly="readonly"/> -->
+        <progress-report-common :orderEntries="belong.colorSizeEntries" :noteEntries="slotData.productionProgressOrders"
+          @onOrder="onOrder" :orderEntriesTotal="0" :readonly="readonly" />
 
         <el-row type="flex" justify="end" align="center" class="show-btn-row">
           <i class="iconfont icon_arrow" v-if="!allOrdersShow" @click="allOrdersShow=true">&#xe714;&nbsp;展开全部单据</i>
@@ -101,8 +101,9 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-row type="flex" justify="center" align="top" v-if="!readonly">
+    <el-row type="flex" justify="center" align="top">
       <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
+      <el-button size="mini" class="update-form-finish" @click="onFinish" v-if="!readonly">完成</el-button>
     </el-row>
   </div>
 </template>
@@ -119,7 +120,7 @@
   import ProductionProgressOrderFormMaterial from '../form/ProductionProgressOrderFormMaterial';
   export default {
     name: 'ProgressReport',
-    props: ['slotData', 'belong', 'readonly'],
+    props: ['slotData', 'belong'],
     components: {
       ProductionProgressOrderFormMaterial,
       ProductionProgressOrderFormSample,
@@ -132,28 +133,24 @@
       ProgressReportMaterial
     },
     computed: {
+      isColorSizeType: function () {
+        switch (this.slotData.progressPhase) {
+          case '备料':
+            return false;
+          case '裁剪':
+            return false;
+          case '产前样':
+            return false;
+          default:
+            return true;
+        }
+      },
       cooperatorName: function () {
-        // if (this.order.cooperator == null) {
-        //   if (this.isBrand()) {
-        //     if (this.order.belongTo != null) {
-        //       return this.order.belongTo.name;
-        //     } else {
-        //       return this.order.companyOfSeller;
-        //     }
-        //   } else {
-        //     if (this.order.purchaser != null) {
-        //       return this.order.purchaser.name;
-        //     } else {
-        //       return this.order.companyOfSeller;
-        //     }
-        //   }
-        // }
-        // if (this.order.cooperator.type == 'ONLINE') {
-        //   return this.order.cooperator.partner.name;
-        // } else {
-        //   return this.order.cooperator.name;
-        // }
-        return '合作商.....';
+        if (this.currentUser.companyCode == this.belong.partyACompany.uid) {
+          return this.belong.partyBCompany.name;
+        } else {
+          return this.belong.partyACompany.name;
+        }
       },
       allMedias: function () {
         var result = [];
@@ -163,6 +160,13 @@
           });
         });
         return result;
+      },
+      readonly: function () {
+        if (this.belong.status == 'IN_PRODUCTION') {
+          return !(this.belong.currentPhase == this.slotData.progressPhase);
+        } else {
+          return true;
+        }
       }
     },
     methods: {
@@ -177,12 +181,13 @@
         //   this.isRead = false;
         // } else {
         this.progressOrder = progressOrder;
+        this.onView = false;
         this.formVisible = true;
         // }
       },
       onDetail(progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
-        //   this.progressOrder = progressOrder;
+        this.progressOrder = progressOrder;
         //   this.materialVisible = true;
         //   this.isRead = true;
         // } else if (this.order.currentPhase == 'SAMPLE') {
@@ -190,8 +195,8 @@
         //   this.sampleVisible = true;
         //   this.isRead = true;
         // } else {
-        this.selectProgressOrder = progressOrder;
-        this.viewVisible = true;
+        this.onView = true;
+        this.formVisible = true;
         // }
       },
       onCencel(id) {
@@ -204,19 +209,14 @@
         });
       },
       async _onCancel(id) {
-
-
-        // const url = this.apis().deleteProductionProgressOrder(this.order.id, id);
-
-
-
-        // const result = await this.$http.delete(url);
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        //   return;
-        // }
-        // this.$message.success('作废成功');
-        // this.$emit('callback');
+        const url = this.apis().deleteProductionProgressOrder(this.slotData.id, id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('作废成功');
+        this.$emit('callback');
       },
       onCallback() {
         this.formVisible = false;
@@ -240,6 +240,7 @@
         //   this.isRead = false;
         // } else {
         this.formVisible = true;
+        this.onView = false;
         // }
       },
       async onSubmit() {
@@ -258,23 +259,34 @@
       },
       onEditEstimatedDate() {
         this.onEditEstimatedDateVisible = !this.onEditEstimatedDateVisible;
-        this.$nextTick(() => {
-          this.$refs.datePicker.focus();
-        })
+        // this.$nextTick(() => {
+        //   this.$refs.datePicker.focus();
+        // })
+      },
+      async onFinish() {
+        const url = this.apis().finshProgress(this.belong.code, this.slotData.id);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('操作成功');
+        this.$emit('callback');
       }
     },
     data() {
       return {
         formVisible: false,
+        onView: false,
         progressOrder: {},
         allOrdersShow: false,
-        selectProgressOrder: {},
         hackSet: true,
         viewVisible: false,
         onEditEstimatedDateVisible: false,
         materialVisible: false,
         sampleVisible: false,
-        isRead: true
+        isRead: true,
+        currentUser: this.$store.getters.currentUser,
       }
     },
     watch: {
@@ -329,6 +341,14 @@
     background-color: #FFD60C;
     border-color: #FFD60C;
     color: #000;
+    width: 150px;
+    margin-top: 50px;
+  }
+
+  .update-form-finish {
+    /* background-color: #FFD60C;
+    border-color: #FFD60C; */
+    /* color: ; */
     width: 150px;
     margin-top: 50px;
   }

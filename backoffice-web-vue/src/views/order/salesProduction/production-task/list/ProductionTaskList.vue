@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight"
               @selection-change="handleSelectionChange" @row-click="clickRow">
-      <el-table-column type="selection" width="55"/>
+      <el-table-column type="selection" width="55" :selectable="selectable"/>
       <el-table-column label="生产单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -85,7 +85,7 @@
         }
         this.$router.push('/sales/production/' + row.id);
       },
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
@@ -94,7 +94,7 @@
         }
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
@@ -109,7 +109,15 @@
         this.$emit('getSelectTaskList', val);
       },
       clickRow (row) {
-        this.$refs.resultTable.toggleRowSelection(row);
+        if (row.state == 'DISPATCHING') {
+          this.$refs.resultTable.toggleRowSelection(row);
+        }
+      },
+      selectable (row, index) {
+        if (row.state == 'DISPATCHING') {
+          return true;
+        }
+        return false;
       }
     }
   }

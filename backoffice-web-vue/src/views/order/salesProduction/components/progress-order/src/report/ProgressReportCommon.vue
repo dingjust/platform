@@ -48,7 +48,7 @@
       sizes: function () {
         var sizes = [];
         this.orderEntries.forEach(element => {
-          sizes.push(element.product.size);
+          sizes.push(element.size);
         });
         const res = new Map();
         var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
@@ -57,7 +57,7 @@
       colors: function () {
         var colors = new Set([]);
         this.orderEntries.forEach(element => {
-          colors.add(element.product.color.name);
+          colors.add(element.color.name);
         });
         return colors;
       },
@@ -77,7 +77,7 @@
     methods: {
       getOrderVariant (color, size) {
         var result = this.orderEntries.filter(
-          item => item.product.color.name == color && item.product.size.name == size
+          item => item.color.name == color && item.size.name == size
         );
         if (result.length != 0) {
           return result[0].quantity;

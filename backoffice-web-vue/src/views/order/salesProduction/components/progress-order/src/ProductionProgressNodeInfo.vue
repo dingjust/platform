@@ -2,13 +2,22 @@
   <div>
     <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <progress-report v-if="updateFormVisible" :slotData="selectProgressModel" :readonly="readonly" :belong="slotData"
+      <progress-report v-if="updateFormVisible" :slotData="selectProgressModel" :belong="slotData"
         @callback="onCallback" @editSubmit="onEditSubmit" />
     </el-dialog>
     <el-row type="flex" justify="space-between">
-      <el-steps :active="2" align-center>
+      <el-steps :active="activeNodeIndex" align-center style="width:100%" finish-status="success">
         <template v-for="(item,index) in slotData.progresses">
-          <el-step :title="item.progressPhase" :key="index" ></el-step>
+          <step :title="item.progressPhase" :key="index" @onClick="onEdit(item)">
+            <div slot="description">
+              <el-row type="flex" justify="center">
+                预计完成日期:{{item.estimatedDate | timestampToTime}}
+              </el-row>
+              <el-row type="flex" justify="center">
+                实际完成日期:{{item.finishDate|timestampToTime}}
+              </el-row>
+            </div>
+          </step>
         </template>
       </el-steps>
     </el-row>
@@ -24,6 +33,7 @@
     createNamespacedHelpers
   } from 'vuex';
   import ProgressReport from './report/ProgressReport';
+  import Step from './Step';
 
   const {
     mapGetters,
@@ -36,57 +46,31 @@
     name: 'ProductionProgressNodeInfo',
     props: ['slotData'],
     components: {
-      ProgressReport
+      ProgressReport,
+      Step
     },
     computed: {
       ...mapGetters({
         contentData: 'formData'
       }),
-      currentSequence: function () {
-        var result = 0;
-        this.slotData.progresses.forEach(element => {
-          if (element.phase == this.slotData.currentPhase) {
-            result = element.sequence;
-          }
-        });
-        return result;
-      }
+      selectProgressModel: function () {
+        return this.$store.state.ProgressOrderModule.currentProgress;
+      },
+      activeNodeIndex: function () {
+        if (this.slotData.status == 'COMPLETED') {
+          return this.slotData.progresses.length;
+        }
+        let index = this.slotData.progresses.findIndex(val => val.progressPhase == this.slotData.currentPhase);
+        return index;
+      },
     },
     methods: {
       ...mapActions({
         refreshDetail: 'refreshDetail'
       }),
-      readEditShow(item) {
-        return (!this.judgeReadonly(item) && !hasPermission(this.permission.purchaseOrderOperate)) || this.isTenant();
-      },
-      /// 判断左边线样式
-      getLeftLine(index, data) {
-        if (index == 0) {
-          return 'progress-line-horizon_none'
-        } else {
-          if (data[index].sequence <= this.currentSequence) {
-            return 'progress-line-horizon';
-          } else {
-            return 'progress-line-horizon_grey';
-          }
-        }
-      },
-      /// 判断右边线样式
-      getRightLine(index, data) {
-        if (index == data.length - 1) {
-          return 'progress-line-horizon_none'
-        } else {
-          if (data[index].sequence <= this.currentSequence) {
-            if (data[index].phase == this.slotData.currentPhase) {
-              return 'progress-line-horizon_grey';
-            } else {
-              return 'progress-line-horizon';
-            }
-          } else {
-            return 'progress-line-horizon_grey';
-          }
-        }
-      },
+      ...createNamespacedHelpers('ProgressOrderModule').mapMutations({
+        updateProgressModel: 'currentProgress'
+      }),
       /// 判断是否正在进行中
       isDoing(index, data) {
         if (this.slotData.status == 'IN_PRODUCTION') {
@@ -96,24 +80,23 @@
         }
       },
       onEdit(item) {
-        this.readonly = this.judgeReadonly(item);
-        this.selectProgressModel = item;
-        this.selectProgressModel.updateOnly = true;
+        item.updateOnly = true;
+        this.updateProgressModel(item);
         this.updateFormVisible = !this.updateFormVisible;
       },
       async onEditSubmit() {
-        if (this.compareDate(new Date(), new Date(this.selectProgressModel.estimatedDate))) {
-          this.$message.error('预计完成时间不能小于当前时间');
-          return false;
-        }
-        const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, this.selectProgressModel.id);
-        this.selectProgressModel.updateOnly = true;
-        const result = await this.$http.put(url, this.selectProgressModel);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('更新成功');
+        // if (this.compareDate(new Date(), new Date(this.selectProgressModel.estimatedDate))) {
+        //   this.$message.error('预计完成时间不能小于当前时间');
+        //   return false;
+        // }
+        // const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, this.selectProgressModel.id);
+        // this.updateProgressModel(this.selectProgressModel);
+        // const result = await this.$http.put(url, this.selectProgressModel);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
+        // this.$message.success('更新成功');
         this.updateFormVisible = false;
       },
       async onProgressFinish(item, index) {
@@ -126,61 +109,26 @@
         }
         this.$message.success('更新成功');
         this.updateFormVisible = false;
-        this.$emit('refreshData');
-        // if (index != this.slotData.progresses.length - 1) {
-        //   this.slotData.currentPhase = this.slotData.progresses[index + 1].phase;
-        // } else {
-        //   this.slotData.status = 'WAIT_FOR_OUT_OF_STORE';
-        // }
-      },
-      onShowButton(value, index) {
-        this.$set(this.showButtonArray, index, value);
-      },
-      getShowVal(index) {
-        return this.showButtonArray[index];
-      },
-      getBlockStyle(index) {
-        var width = 100 / this.slotData.progresses.length;
-        return {
-          'width': width + '%',
-          'left': width * index + '%'
-        }
+        this.$emit('callback');
       },
       async onCallback() {
         await this.refreshDetail();
-        this.contentData.progresses.forEach(item => {
-          if (item.id == this.selectProgressModel.id) {
-            this.selectProgressModel = item;
-          }
-        });
-      },
-      judgeReadonly(item) {
-        if (item.sequence >= this.currentSequence && this.slotData.status == 'IN_PRODUCTION') {
-          return false;
-        } else {
-          return true;
+        // this.$emit('callback');
+        //更新        
+        let index = this.contentData.progressWorkSheet.progresses.findIndex(item => item.id == this
+          .selectProgressModel.id);
+        if (index != -1) {
+          this.updateProgressModel(this.contentData.progressWorkSheet.progresses[index]);
         }
-      }
+      },
     },
     data() {
       return {
         updateFormVisible: false,
         hackSet: true,
-        phaseIcon: {
-          MATERIAL_PREPARATION: '&#xe675;',
-          CUTTING: '&#xe677;',
-          STITCHING: '&#xe67a;',
-          AFTER_FINISHING: '&#xe67a;',
-          INSPECTION: '&#xe689;'
-        },
-        selectProgressModel: '',
-        showButtonArray: [],
-        readonly: false
       };
     },
-    created() {
-      this.showButtonArray = this.slotData.progresses.map((val) => false);
-    }
+    created() {}
   };
 
 </script>

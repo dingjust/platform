@@ -18,31 +18,39 @@
         <el-button type="primary" @click="onPayPlanSave">确 定</el-button>
       </div>
     </el-dialog>
+<!--    <div>-->
+<!--      <el-row type="flex" justify="start" :gutter="12" class="info-order-row">-->
+<!--        <el-col :span="10">-->
+<!--          <el-row type="flex" align="start" justify="space-between">-->
+<!--            <h6 style="margin-right:5px;margin-bottom: 0px;width:200px;line-height: normal">-->
+<!--              {{form.name!=''?'当前选中方案：'+form.name:'当前未选择账务方案'}}</h6>-->
+<!--            <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain-->
+<!--              size="mini">选用我的账务方案</el-button>-->
+<!--            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>-->
+<!--          </el-row>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+<!--    </div>-->
     <div>
-      <el-row type="flex" justify="start" :gutter="12" class="info-order-row">
-        <el-col :span="10">
-          <el-row type="flex" align="start" justify="space-between">
-            <h6 style="margin-right:5px;margin-bottom: 0px;width:200px;line-height: normal">
-              {{form.name!=''?'当前选中方案：'+form.name:'当前未选择账务方案'}}</h6>
-            <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain
-              size="mini">选用我的账务方案</el-button>
-            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
-          </el-row>
-        </el-col>
-      </el-row>
-    </div>
-    <div>
-      <el-row type="flex" justify="start">
-        <el-col :span="9">
+      <el-row type="flex" justify="start" align="middle">
+        <el-col :span="6" style="padding-top: 5px;">
           <span class="info-input-prepend">有无定金：</span>
           <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="true">有定金</el-radio>
           <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="false">无定金</el-radio>
         </el-col>
-        <el-col :span="14">
+        <el-col :span="8" style="padding-top: 5px;">
           <span class="info-input-prepend">尾款期数：</span>
           <template v-for="(value,key) in payPlanType">
-            <el-radio class="info-radio" :key="key" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
+            <el-radio class="info-radio" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
           </template>
+        </el-col>
+        <el-col :span="9" :offset="1">
+          <el-row type="flex" align="start" justify="space-between">
+            <h6 style="margin-top: 3px;">{{form.name!=''?'当前选中方案：'+form.name:'当前未选择账务方案'}}</h6>
+            <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain
+                       size="mini">选用账务方案</el-button>
+            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
+          </el-row>
         </el-col>
       </el-row>
     </div>
@@ -463,7 +471,7 @@
               });
             }
           }
-          
+
           this.$set(this.vPayPlan, 'name', this.form.name);
           this.$set(this.vPayPlan, 'payPlanType', newVal.payPlanType);
           this.$set(this.vPayPlan, 'isHaveDeposit', newVal.isHaveDeposit);
@@ -473,7 +481,7 @@
       }
     },
     created() {
-      this.updateCurForm(this.vPayPlan);      
+      this.updateCurForm(this.vPayPlan);
     },
     mounted() {
 

@@ -676,6 +676,10 @@ const COMMON_APIS = {
   updateOutboundOrder() {
     return '/b2b/orders/outbound/update';
   },
+  // 接单
+  acceptOutboundOrder(code) {
+    return '/b2b/orders/outbound/' + code + '/production';
+  },
   // 获取节点方案列表
   getProgressPlan() {
     return '/b2b/progress/plan';
@@ -701,23 +705,23 @@ const COMMON_APIS = {
     return '/b2b/progress/plan/delete/' + id;
   },
   // 获取节点列表
-  getProgressPhaseList () {
+  getProgressPhaseList() {
     return '/b2b/progress/phase';
   },
   // 获取代办列表
-  getToDoList () {
+  getToDoList() {
     return '/b2b/todo/task/list';
   },
   // 跟新为已读
-  updateToRead (id) {
+  updateToRead(id) {
     return '/b2b/todo/task/read/' + id;
   },
   // 获取审核列表
-  getAuditList () {
+  getAuditList() {
     return '/b2b/audit/order/order/list';
   },
   // 审核任务
-  taskAudit () {
+  taskAudit() {
     return '/b2b/audit/order/order/audit'
   }
 };
@@ -1040,8 +1044,6 @@ let NONE_TENANT_APIS = {
 
 
   //销售计划
-
-
   salesPlanSave(needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
   },
@@ -1069,6 +1071,16 @@ let NONE_TENANT_APIS = {
   getProductionOrderDetail(code) {
     return '/b2b/orders/production/work/' + code;
   },
+
+  //设置生产进度预计完成时间
+  setProgressDate(code) {
+    return '/b2b/sheets/progress/work/' + code + '/update/progresses';
+  },
+
+  //节点完成
+  finshProgress(code, id) {
+    return '/b2b/sheets/progress/work/' + code + '/finish/progress/' + id;
+  }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

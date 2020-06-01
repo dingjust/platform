@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <prodcution-task-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :is-select="true"/>
-    <production-task-list :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"
+    <production-task-list ref="taskList" :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"
                           :is-select="true" @onDetails="onDetails"/>
     <el-row type="flex" justify="center" align="middle">
       <el-col :span="4">
@@ -65,6 +65,7 @@
         });
       },
       onAdvancedSearch (page, size) {
+        this.queryFormData.state = 'DISPATCHING';
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getProductionTaskList();
@@ -77,57 +78,45 @@
       },
       getSelectTaskList (val) {
         this.selectTaskList = val;
-        console.log(this.selectTaskList);
       },
-      // createOutboundOrder () {
-      //   let row = {};
-      //   let entries = [];
-      //   this.selectTaskList.forEach(item => {
-      //     row = {
-      //       productionTaskId: item.id,
-      //       billPrice: '',
-      //       expectedDeliveryDate: '',
-      //       shippingAddress: {},
-      //       product: {
-      //         id: item.productionEntry.product.id,
-      //         name: item.productionEntry.product.name,
-      //         thumbnail: item.productionEntry.product.thumbnail,
-      //         colorSizeEntry: item.productionEntry.colorSizeEntry
-      //       }
-      //     }
-      //     entries.push(row);
-      //     row = {};
-      //   })
-      //   this.formData.entries = entries;
-      //   this.outboundOrderTypeSelect = true;
-      // },
       onDetails (id) {
         this.taskId = id;
         this.taskVisible = true;
       },
       onSelect () {
-        let row = {};
-        let entries = [];
-        this.selectTaskList.forEach(item => {
-          row = {
-            productionTask: {
-              id: item.id
-            },
-            billPrice: '',
-            expectedDeliveryDate: '',
-            shippingAddress: {},
-            product: {
-              id: item.productionEntry.product.id,
-              name: item.productionEntry.product.name,
-              thumbnail: item.productionEntry.product.thumbnail,
-            },
-            colorSizeEntries: item.productionEntry.colorSizeEntries
+        // let row = {};
+        // let entries = [];
+        // this.selectTaskList.forEach(item => {
+        //   row = {
+        //     productionTask: {
+        //       id: item.id
+        //     },
+        //     billPrice: '',
+        //     expectedDeliveryDate: '',
+        //     shippingAddress: {},
+        //     product: {
+        //       id: item.productionEntry.product.id,
+        //       name: item.productionEntry.product.name,
+        //       thumbnail: item.productionEntry.product.thumbnail,
+        //     },
+        //     colorSizeEntries: item.productionEntry.colorSizeEntries
+        //   }
+        //   entries.push(row);
+        //   row = {};
+        // })
+        // this.formData.entries = entries;
+        this.$emit('onSelectTask', this.selectTaskList);
+      },
+      // 回显已选择行
+      initSelectRow () {
+        let index;
+        this.formData.entries.forEach(item => {
+          index = this.page.content.findIndex(val => val.id == item.productionTask.id)
+          if (index > -1) {
+            // this.$refs['taskList'].$refs['resultTable'].toggleRowSelection(this.page.content[index]);
+            this.$refs['taskList'].clickRow(this.page.content[index]);
           }
-          entries.push(row);
-          row = {};
         })
-        this.formData.entries = entries;
-        this.$emit('onSelectTask');
       }
     },
     data () {
@@ -135,12 +124,21 @@
         taskId: '',
         taskVisible: false,
         outboundOrderTypeSelect: false,
-        selectTaskList: [],
+        selectTaskList: []
         // formData: this.$store.state.OutboundOrderModule.formData
       }
     },
+    watch: {
+      page: function (newVal, oldVal) {
+        if (newVal) {
+          this.$nextTick(() => {
+            this.initSelectRow();
+          })
+        }
+      }
+    },
     created () {
-      this.onSearch();
+      this.onAdvancedSearch();
     }
   }
 </script>

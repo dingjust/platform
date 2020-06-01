@@ -92,35 +92,12 @@ const state = {
     keyword: '',
     categories: []
   },
-  addressFormData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
-    },
-    city: {
-      code: '',
-      name: ''
-    },
-    cityDistrict: {
-      code: '',
-      name: ''
-    },
-    line1: ''
-  },
-  consignmentFormData: {
-    trackingID: '',
-    carrierDetails: {
-      code: '',
-      name: ''
-    }
-  },
   detailData: {
 
   },
-  colorSizeData: []
+  colorSizeData: [],
+  //当前打开的进度窗口
+  currentProgress: ''
 };
 
 const mutations = {
@@ -134,11 +111,22 @@ const mutations = {
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
   detailData: (state, detailData) => state.detailData = detailData,
   formData: (state, formData) => state.formData = formData,
-  colorSizeData: (state, colorSizeData) => state.colorSizeData = colorSizeData
+  colorSizeData: (state, colorSizeData) => state.colorSizeData = colorSizeData,
+  currentProgress: (state, currentProgress) => state.currentProgress = currentProgress,
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
+  async search({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    keyword,
+    statuses,
+    page,
+    size
+  }) {
     console.log(keyword + 'test' + page + 'test' + size);
     commit('url', url);
     commit('keyword', keyword);
@@ -165,7 +153,16 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    query,
+    page,
+    size
+  }) {
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
@@ -182,15 +179,31 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh ({dispatch, commit, state}) {
+  refresh({
+    dispatch,
+    commit,
+    state
+  }) {
     const keyword = state.keyword;
     const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {
+      url: state.url,
+      keyword,
+      statuses,
+      page: currentPageNumber,
+      size: currentPageSize
+    });
   },
-  async getDetail ({dispatch, commit, state}, {code}) {
+  async getDetail({
+    dispatch,
+    commit,
+    state
+  }, {
+    code
+  }) {
     // const url = '/b2b/orders/production/work/' + code;
     const url = '/b2b/orders/purchase/' + code;
     const result = await http.get(url);
@@ -198,14 +211,18 @@ const actions = {
       commit('formData', result);
     }
   },
-  async refreshDetail ({dispatch, commit, state}) {
+  async refreshDetail({
+    dispatch,
+    commit,
+    state
+  }) {
     // const url = '/b2b/orders/production/work/' + state.formData.code;
     const url = '/b2b/orders/purchase/' + state.formData.code;
     const result = await http.get(url);
     if (!result['errors']) {
       commit('formData', result);
     }
-  }
+  },
 };
 
 const getters = {
