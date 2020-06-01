@@ -10,10 +10,13 @@
       </el-row>
       <div class="pt-2"></div>
       <el-form :inline="true">
-        <progress-order-receiving-form :formData="formData"/>
+        <progress-order-receiving-form :formData="formData" :isRead="false"/>
         <progress-order-production-info-form :formData="formData" :isRead="false"/>
         <progress-order-node-form :formData="formData"/>
       </el-form>
+      <el-row type="flex" justify="center" align="middle">
+        <el-button class="material-btn">保存</el-button>
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -52,9 +55,12 @@
       ...mapActions({
         getOrderDetail: 'getDetail'
       }),
-      getDetail () {
+      async getDetail () {
         const code = this.code;
-        this.getOrderDetail({code});
+        await this.getOrderDetail({code});
+        this.formData.progresses.forEach(val => {
+          this.$set(val, 'originPhase', true);
+        })
       }
     },
     data () {
@@ -73,8 +79,12 @@
     padding-left: 10px;
   }
 
-  .progress-row {
-    padding-left: 10px;
+  .material-btn {
+    background-color: #ffd60c;
+    /* border-color: #000000; */
+    color: #000;
+    width: 100px;
+    /* height: 35px; */
     margin-top: 20px;
   }
 </style>

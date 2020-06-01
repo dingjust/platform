@@ -27,7 +27,6 @@
         <img width="60px" height="60px"
              :src="formData.product.thumbnail!=null && formData.product.thumbnail.length != 0 ?
              formData.product.thumbnail.url : 'static/img/nopicture.png'">
-        </img>
       </el-col>
       <!-- 商品color/size表 -->
       <el-col :span="20">
@@ -69,29 +68,54 @@
         this.colorSizeData = [];
         let row = {};
         let tableCount = 0;
-        this.formData.entries.forEach(item => {
-          let index = this.colorSizeData.findIndex(val => val.colorName == item.product.color.name);
+        let index;
+        let indexS;
+        this.formData.colorSizeEntries.forEach(item => {
+          index = this.colorSizeData.findIndex(val => val.colorName == item.color.name);
           if (index > -1) {
-            this.colorSizeData[index][item.product.size.name] = item.quantity;
+            this.colorSizeData[index][item.size.name] = item.quantity;
             this.colorSizeData[index].colorCount += item.quantity;
             tableCount += item.quantity;
           } else {
-            row.colorName = item.product.color.name;
-            row[item.product.size.name] = item.quantity;
+            row.colorName = item.color.name;
+            row[item.size.name] = item.quantity;
             row.colorCount = item.quantity;
             tableCount += item.quantity;
             this.colorSizeData.push(row);
             row = {};
           }
-          let indexS = this.sizeList.findIndex(val => val == item.product.size.name);
+          indexS = this.sizeList.findIndex(val => val == item.size.name);
           if (indexS < 0) {
-            this.sizeList.push(item.product.size.name);
+            this.sizeList.push(item.size.name);
           }
         })
         this.colorSizeData.push({
           colorName: '合计',
           colorCount: tableCount
         });
+        // this.formData.entries.forEach(item => {
+        //   let index = this.colorSizeData.findIndex(val => val.colorName == item.product.color.name);
+        //   if (index > -1) {
+        //     this.colorSizeData[index][item.product.size.name] = item.quantity;
+        //     this.colorSizeData[index].colorCount += item.quantity;
+        //     tableCount += item.quantity;
+        //   } else {
+        //     row.colorName = item.product.color.name;
+        //     row[item.product.size.name] = item.quantity;
+        //     row.colorCount = item.quantity;
+        //     tableCount += item.quantity;
+        //     this.colorSizeData.push(row);
+        //     row = {};
+        //   }
+        //   let indexS = this.sizeList.findIndex(val => val == item.product.size.name);
+        //   if (indexS < 0) {
+        //     this.sizeList.push(item.product.size.name);
+        //   }
+        // })
+        // this.colorSizeData.push({
+        //   colorName: '合计',
+        //   colorCount: tableCount
+        // });
         this.showData = [this.colorSizeData[0]];
       },
       // 展开/收起列表行
@@ -123,7 +147,7 @@
       }
     },
     watch: {
-      'formData.entries': function (newVal, oldVal) {
+      'formData.colorSizeEntries': function (newVal, oldVal) {
         if (newVal.length > 0) {
           this.initColorSizeData();
         }

@@ -11,15 +11,16 @@
       <el-col :span="12">
         <div class="progress-container">
           <el-table ref="nodeTable" :data="formData.progresses" stripe :height="autoHeight">
-            <el-table-column label="节点名称" prop="phase"></el-table-column>
+            <el-table-column label="节点名称" prop="progressPhase"></el-table-column>
             <el-table-column label="预警天数">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.delayedDays"></el-input>
+                <el-input v-model="scope.row.delayedDays" v-if="!scope.row.originPhase"></el-input>
+                <span v-else>{{scope.row.delayedDays}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="text" @click="onDelete(scope.row, scope.$index)" :disabled="isDeleteDisabled(scope.row)">删除</el-button>
+                <el-button type="text" @click="onDelete(scope.row, scope.$index)" :disabled="scope.row.originPhase">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -31,8 +32,7 @@
             <el-table-column label="节点名称" prop="name"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-<!--                <el-button type="text" @click="onAppend(scope.row)" :disabled="isDisabled(scope.row)">添加</el-button>-->
-                <el-button type="text">添加</el-button>
+                <el-button type="text" @click="onAppend(scope.row)" :disabled="isDisabled(scope.row)">添加</el-button>
               </template>
             </el-table-column>
             <el-table-column align="right" min-width="150">
@@ -64,21 +64,28 @@
         if (result.code === 0) {
           this.$message.error(result.msg);
         }
-        this.phaseData = result.data.content;
-      },
-      // getProgressPlan (val) {
-      //   this.basicData = val.productionProgresses;
-      //   this.formData.progressPlan = val;
-      //   this.progressPlanVisible = false;
-      // },
-      isDeleteDisabled (row) {
-        // 判断是否为创建外发订单选择的节点方案中的节点
-        this.$nextTick(() => {
-          console.log(this.originData);
-        })
+        this.phaseData = Object.assign([], result.data.content);
       },
       onDelete (row, index) {
         this.formData.progresses.splice(index, 1);
+      },
+      onAppend (row) {
+        this.formData.progresses.push({
+          medias: [],
+          progressPhase: row.name,
+          quantity: 0,
+          sequence: row.sequence,
+          completeAmount: 0,
+          productionProgressOrders: []
+        });
+        this.formData.progresses.sort((o1, o2) => {
+          return o1.sequence - o2.sequence;
+        })
+      },
+      isDisabled (row) {
+        console.log(this.currentSequence);
+        return this.formData.progresses.findIndex(val => val.progressPhase == row.name) > -1 ||
+        row.sequence < this.currentSequence;
       },
       async saveProgressPlan () {
         const data = {
@@ -100,14 +107,25 @@
       return {
         progressPlanVisible: false,
         phaseData: [],
-        originData: []
+        originData: this.formData.progresses,
+        currentSequence: ''
       }
     },
     watch: {
+      'formData.currentPhase': {
+        handler (val) {
+          if (val) {
+            let index = this.formData.progresses.findIndex(val => val.progressPhase == this.formData.currentPhase);
+            this.currentSequence = this.formData.progresses[index].sequence;
+          }
+        },
+        deep: true
+      }
     },
     created () {
       this.getPhaseList();
-      this.originData = this.formData.progresses;
+    },
+    mounted () {
     }
   }
 </script>

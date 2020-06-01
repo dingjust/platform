@@ -1,76 +1,78 @@
 <template>
-  <el-row type="flex" justify="space-between">
-    <template v-for="(item, index) in slotData.progress">
-      <el-col :span="24/slotData.length">
-        <el-row type="flex" justify="space-around">
-          <h6 v-if="item.delatedDays" style="color: #F56C6C">延误{{item.delatedDays}}天</h6>
-          <h6 v-if="!item.compleTime && !item.delatedDays">预计完成：{{item.expectedTime | timestampToTime}}</h6>
-          <h6 v-if="item.compleTime && !item.delatedDays">完成时间：{{item.compleTime | timestampToTime}}</h6>
-        </el-row>
-        <el-row type="flex" justify="space-around">
-          <i class="el-icon-success progress-icon" ref="progressIcon"
-             :style="iconColor(item, slotData)"/>
-          <div class="progress-line" :style="lineColor(item, slotData, index)"></div>
-        </el-row>
-        <el-row type="flex" justify="space-around">
-          <h6>{{getEnum('productionProgressPhaseTypes', item.code)}}</h6>
-        </el-row>
-      </el-col>
-    </template>
-  </el-row>
+  <div>
+    <el-row type="flex" justify="space-between">
+      <template v-for="(item, index) in progresses">
+        <el-col :span="getSpan">
+          <el-row type="flex" justify="center" align="middle">
+            <h6 v-if="item.delatedDays" style="color: #F56C6C">延误{{item.delatedDays}}天</h6>
+            <h6 v-if="!item.compleTime && !item.delatedDays">预计完成：{{item.expectedTime | timestampToTime}}</h6>
+            <h6 v-if="item.compleTime && !item.delatedDays">完成时间：{{item.compleTime | timestampToTime}}</h6>
+          </el-row>
+        </el-col>
+      </template>
+    </el-row>
+    <el-row type="flex" justify="space-between">
+      <template v-for="(item, index) in progresses">
+        <el-col :span="getSpan">
+          <el-row type="flex" justify="center" align="middle">
+            <div class="step-circular" :style="setStepStyle(item, index)">
+              <i class="el-icon-check step-icon" :style="setIconStyle(item, index)"></i>
+            </div>
+            <div class="progress-line" v-if="index != progresses.length - 1" :style="lineColor(item, index)"></div>
+          </el-row>
+          <el-row type="flex" justify="center">
+            <h6>{{getEnum('productionProgressPhaseTypes', item.code)}}</h6>
+          </el-row>
+        </el-col>
+      </template>
+    </el-row>
+  </div>
 </template>
 
 <script>
   export default {
     name: 'ProgressOrderSteps',
-    props: ['slotData'],
+    props: ['phaseSqeuence', 'progresses'],
+    computed: {
+      getSpan: function () {
+        return Math.ceil(24 / this.progresses.length);
+      }
+    },
     methods: {
-      iconColor (item, slotData) {
-        console.log('-----------------------------------')
-        console.log(item)
-        console.log(slotData)
-        console.log(item.sequence < slotData.phaseSqeuence)
-        if (item.sequence < slotData.phaseSqeuence) {
-          return 'color: #67C23A';
-        } else if ((item.sequence > slotData.phaseSqeuence)) {
-          return 'color: #909399;';
+      setStepStyle (item, index) {
+        if (item.sequence < this.phaseSqeuence) {
+          return 'background-color: #67C23A;border: 2px solid #67C23A;';
+        } else if (item.sequence > this.phaseSqeuence) {
+          return 'background-color: #FFFFFF;border: 2px solid #909399;';
         } else {
+          return 'background-color: #FFFFFF;border: 2px solid #000000;';
+        }
+      },
+      setIconStyle (item, index) {
+        if (item.sequence < this.phaseSqeuence) {
           return 'color: #000000';
-        }
-      },
-      lineColor (item, slotData, index) {
-        const width = 'width:' + this.widthList[index] + 'px;';
-        const marginleft = 'margin-left:' + this.widthList[index] / 2 + 'px;';
-        if (item.sequence == slotData.phaseSqeuence - 1) {
-          return 'border-color: #000000;' + width + marginleft;
-        } else if (item.sequence < slotData.phaseSqeuence) {
-          return 'border-color: #67C23A;' + width + marginleft;
         } else {
-          return 'border-color: #909399;' + width + marginleft;
+          return 'color: #FFFFFF';
         }
       },
-      getWidthList () {
-        let leftLH = [];
-        let startX;
-        this.$nextTick(() => {
-          this.$refs.progressIcon.forEach((val, index) => {
-            startX = val.getBoundingClientRect().x;
-            this.widthList.push(startX);
-          })
-          for (let i = 0; i < this.widthList.length - 1; i++) {
-            leftLH.push(this.widthList[i + 1] - this.widthList[i]);
-          }
-          this.widthList = leftLH;
-        });
+      lineColor (item, index) {
+        // if (item.sequence == this.phaseSqeuence - 1) {
+        //   return 'border-color: #000000;';
+        // } else
+        if (item.sequence < this.phaseSqeuence - 1) {
+          return 'border-color: #67C23A;';
+        } else {
+          return 'border-color: #909399;';
+        }
       }
     },
     data () {
       return {
-        widthList: []
       }
     },
+    watch: {
+    },
     mounted () {
-      this.getWidthList();
     }
   }
 </script>
@@ -94,9 +96,27 @@
 
   .progress-line {
     border-top: 2px solid #DCDFE6;
-    margin-top: 15px;
+    /*margin-top: 15px;*/
     /*margin-left: 60px;*/
-    position: absolute;
+    width: 100%;
     z-index: 0;
+    left: 50%;
+    position: absolute;
+  }
+
+  .step-circular {
+    width: 30px;
+    height: 30px;
+    /*background-color: #000000;*/
+    border-radius: 30px;
+    /*border: 2px solid #DCDFE6;*/
+    z-index: 2;
+  }
+
+  .step-icon {
+    font-size: 20px;
+    font-weight: bolder;
+    padding-top: 4px;
+    padding-left: 2px;
   }
 </style>

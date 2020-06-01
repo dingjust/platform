@@ -1,7 +1,6 @@
 <template>
   <el-form :inline="true">
-    <el-row type="flex" justify="space-between">
-<!--      <el-col :span="20" style="padding-top: 5px">-->
+    <el-row type="flex" justify="start">
         <el-form-item label="工单信息" prop="name">
           <el-input placeholder="工单号，产品名或货号" v-model="queryFormData.keyword"></el-input>
         </el-form-item>
@@ -22,15 +21,6 @@
           <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
           <el-button native-type="reset" @click="onReset">重置</el-button>
         </el-button-group>
-<!--      </el-col>-->
-    </el-row>
-    <el-row>
-      <span class="status_name_label">状态：</span>
-      <el-radio-group v-model="queryFormData.status" @change="onAdvancedSearch">
-        <template v-for="(status, index) in statuses">
-          <el-radio :label="status.code">{{status.name}}</el-radio>
-        </template>
-      </el-radio-group>
     </el-row>
   </el-form>
 </template>
@@ -59,20 +49,6 @@
     data () {
       return {
         dateArr: '',
-        statuses: [
-          {
-            code: '',
-            name: '全部'
-          },
-          {
-            code: 'UNDELAY',
-            name: '未延期'
-          },
-          {
-            code: 'ISDELAY',
-            name: '已延期'
-          }
-        ],
         queryFormData: {
           keyword: '',
           name: '',

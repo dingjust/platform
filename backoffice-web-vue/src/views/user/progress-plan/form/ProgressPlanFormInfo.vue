@@ -1,17 +1,17 @@
 <template>
   <div>
 <!--    <el-card>-->
-<!--      <el-row type="flex" justify="space-between">-->
-<!--        <el-col :span="6">-->
-<!--          <div class="node-list-title">-->
-<!--            <h6>创建节点方案</h6>-->
-<!--          </div>-->
-<!--        </el-col>-->
-<!--        <el-col :span="2">-->
-<!--          <el-button class="progress-btn" @click="onSubmit">确定</el-button>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-<!--      <div class="pt-2"></div>-->
+      <el-row type="flex" justify="space-between" v-if="fromDialog">
+        <el-col :span="6">
+          <div class="node-list-title">
+            <h6>创建节点方案</h6>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <el-button class="progress-btn" @click="onSubmit">确定</el-button>
+        </el-col>
+      </el-row>
+      <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :rules="rules" :model="formData">
         <el-row class="progress-basic-row">
           <el-form-item label="方案名称" prop="name">
@@ -36,35 +36,20 @@
   import ProgressSettingForm from '../components/ProgressSettingForm';
   export default {
     name: 'ProgressPlanFormInfo',
-    props: ['formData'],
+    props: {
+      formData: {
+        type: Object
+      },
+      fromDialog: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {ProgressSettingForm},
     methods: {
-      // onSubmit () {
-      //   this.$refs['form'].validate(valid => {
-      //     if (valid) {
-      //       this._onSubmit();
-      //     } else {
-      //       this.$message.error('请完善表单信息');
-      //       return false;
-      //     }
-      //   });
-      // },
-      // async _onSubmit () {
-      //   const data = {
-      //     id: this.formData.id ? this.formData.id : null,
-      //     name: this.formData.name,
-      //     remarks: this.formData.remarks,
-      //     productionProgresses: this.formData.productionProgresses
-      //   }
-      //   const url = this.apis().createProgressPlan();
-      //   const result = await this.$http.post(url, data);
-      //   if (result['errors']) {
-      //     this.$message.error(result['errors'][0].message);
-      //     return;
-      //   }
-      //   this.$message.success(this.formData.id ? '添加节点成功' : '编辑节点成功');
-      //   await this.$router.push('/account/setting/progress-plan');
-      // },
+      onSubmit () {
+        this.$emit('onSubmit');
+      },
       validateField (name) {
         this.$refs.form.validateField(name);
       }

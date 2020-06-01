@@ -74,6 +74,7 @@
           productionProgressOrders: []
         }
         this.formData.productionProgresses.push(item);
+        this.formData.productionProgresses.sort((o1, o2) => o1.sequence - o2.sequence);
       },
       onDelete (row) {
         const index = this.formData.productionProgresses.findIndex(val => val.progressPhase == row.progressPhase);

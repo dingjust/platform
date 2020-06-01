@@ -1556,11 +1556,26 @@ const state = {
     code: 'IN_APPROVAL',
     name: '审核中'
   }, {
+    code: 'REJECTED',
+    name: '审核拒绝'
+  }, {
+    code: 'APPROVED',
+    name: '审核通过'
+  }, {
     code: 'PENDING_CONFIRM',
     name: '待确认'
   }, {
     code: 'CONFIRMED',
     name: '已确认'
+  }, {
+    code: 'REJECTED_CONFIRM',
+    name: '拒绝确认'
+  }, {
+    code: 'COMPLETED',
+    name: '已完成'
+  }, {
+    code: 'CANCELLED',
+    name: '已取消'
   }]
 };
 

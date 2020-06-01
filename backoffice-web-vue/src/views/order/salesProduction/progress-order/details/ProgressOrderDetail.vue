@@ -10,7 +10,7 @@
       </el-row>
       <div class="pt-2"></div>
       <el-form :inline="true">
-        <progress-order-receiving-form :formData="formData"/>
+        <progress-order-receiving-form :formData="formData" :isRead="true"/>
         <progress-order-production-info-form :formData="formData" :isRead="false"/>
         <production-progress-order-info :slotData="formData" @refreshData="getDetail"/>
       </el-form>
