@@ -1,9 +1,9 @@
 <template>
   <div>
-    <template v-for="item in estimateDates">
-      <el-row type="flex" justify="center" align="middle" class="progress-date-form-row">
+    <template v-for="item in slotData.progresses">
+      <el-row type="flex" justify="center" align="middle" class="progress-date-form-row" :key="item.id">
         <div class="progress-date-form-title">
-          <h6>{{getEnum('productionProgressPhaseTypes', item.phase)}}</h6>
+          <h6>{{item.progressPhase}}</h6>
         </div>
         <el-date-picker v-model="item.estimatedDate" :picker-options="pickerOptions" type="date" placeholder="选择日期">
         </el-date-picker>
@@ -23,27 +23,9 @@
     components: {},
     computed: {},
     methods: {
-      generateDates () {
-        var array = [];
-        this.slotData.progresses.forEach(element => {
-          array.push({
-            creationtime: element.creationtime,
-            delayedDays: element.delayedDays,
-            estimatedDate: element.estimatedDate,
-            id: element.id,
-            medias: element.medias,
-            modifiedtime: element.modifiedtime,
-            phase: element.phase,
-            quantity: element.quantity,
-            sequence: element.sequence,
-            updateOnly: true
-          });
-        }); ;
-        this.estimateDates = array;
-      },
-      async onSubmit () {
-        const url = this.apis().updateProgressForBatch(this.slotData.code);
-        const result = await this.$http.put(url, this.estimateDates);
+      async onSubmit() {
+        const url = this.apis().setProgressDate(this.slotData.code);
+        const result = await this.$http.put(url, this.slotData.progresses);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -52,9 +34,8 @@
         this.$emit('afterSubmit');
       }
     },
-    data () {
+    data() {
       return {
-        estimateDates: [],
         pickerOptions: {
           // disabledDate(time) {
           //   let date=new Date();
@@ -64,18 +45,9 @@
         }
       };
     },
-    created () {
-      this.generateDates();
-    },
-    watch: {
-      slotData: {
-        handler (val, oldVal) {
-          this.generateDates();
-        },
-        deep: true
-      }
-    }
+    created() {},
   };
+
 </script>
 <style>
   .purchase-grid-content {

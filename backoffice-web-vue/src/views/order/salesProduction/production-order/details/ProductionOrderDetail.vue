@@ -19,12 +19,14 @@
         <production-order-top-info :slotData="formData" />
         <div style="margin-top: 50px" v-if="formData.materialsSpecEntries!=null">
           <el-row style="margin-top:20px;">
-            <sample-attach-orders-form :entries.sync="formData.materialsSpecEntries" :medias.sync="formData.medias" :isRead="true"
-              :productionProcessContent.sync="formData.productionProcessContent" :productsColors="colors" />
+            <sample-attach-orders-form :entries.sync="formData.materialsSpecEntries" :medias.sync="formData.medias"
+              :isRead="true" :productionProcessContent.sync="formData.productionProcessContent"
+              :productsColors="colors" />
           </el-row>
         </div>
-         <production-progress-order-info :slotData="formData" @refreshData="getDetail" />
+        <progress-order :slotData="formData.progressWorkSheet" @callback="onCallBack" />
         <production-order-relation-info :slotData="formData" />
+        <production-order-button-group style="margin-top:50px" :slotData="formData" />
       </el-row>
     </el-card>
   </div>
@@ -44,8 +46,9 @@
   );
 
   import ProductionOrderTopInfo from '../info/ProductionOrderTopInfo';
-  import ProductionProgressOrderInfo from '../info/ProductionProgressOrderInfo';
+  import ProgressOrder from '../../components/progress-order';
   import ProductionOrderRelationInfo from '../info/ProductionOrderRelationInfo';
+  import ProductionOrderButtonGroup from '../info/ProductionOrderButtonGroup';
   import SampleAttachOrdersForm from '@/views/product/sample/form/SampleAttachOrdersForm';
 
   export default {
@@ -53,9 +56,10 @@
     props: ['code'],
     components: {
       ProductionOrderRelationInfo,
-      ProductionProgressOrderInfo,
+      ProgressOrder,
       ProductionOrderTopInfo,
       SampleAttachOrdersForm,
+      ProductionOrderButtonGroup
     },
     computed: {
       ...mapGetters({
@@ -63,7 +67,7 @@
       }),
       colors: function () {
         var colors = [];
-        if (this.formData.colorSizeEntries!= null) {
+        if (this.formData.colorSizeEntries != null) {
           this.formData.colorSizeEntries.forEach(entry => {
             let index = colors.findIndex(color => color.code == entry.color.code);
             if (index == -1) {
@@ -84,6 +88,9 @@
         }
         this.$store.state.ProductionOrderModule.formData = Object.assign({}, result);
       },
+      onCallBack() {
+        this.getDetail();
+      }
     },
     data() {
       return {}

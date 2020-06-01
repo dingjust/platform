@@ -199,8 +199,8 @@ const actions = {
     }
   },
   async refreshDetail ({dispatch, commit, state}) {
-    // const url = '/b2b/orders/production/work/' + state.formData.code;
-    const url = '/b2b/orders/purchase/' + state.formData.code;
+    const url = '/b2b/orders/production/work/' + state.formData.code;
+    
     const result = await http.get(url);
     if (!result['errors']) {
       commit('formData', result);

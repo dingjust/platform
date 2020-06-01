@@ -40,7 +40,7 @@ const state = {
 
   },
   colorSizeData: [],
-  currentPhase: ''
+  currentProgress: ''
 };
 
 const mutations = {
@@ -54,7 +54,8 @@ const mutations = {
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
   detailData: (state, detailData) => state.detailData = detailData,
   formData: (state, formData) => state.formData = formData,
-  colorSizeData: (state, colorSizeData) => state.colorSizeData = colorSizeData
+  colorSizeData: (state, colorSizeData) => state.colorSizeData = colorSizeData,
+  currentProgress: (state, currentProgress) => state.currentProgress = currentProgress,
 };
 
 const actions = {

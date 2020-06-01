@@ -20,11 +20,12 @@
           <span>{{getEnum('ProgressOrderStatus', scope.row.status)}}</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" v-if="!readonly">
+      <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="onDetail(scope.row)">查看</el-button>
-          <el-button type="text" size="small" @click="onUpdate(scope.row)">修改</el-button>
-          <el-button v-if="scope.row.status != 'CANCEL'" type="text" size="small" @click="onCencel(scope.row.id)">作废</el-button>
+          <el-button type="text" size="small" @click="onUpdate(scope.row)" v-if="!readonly">修改</el-button>
+          <el-button v-if="(scope.row.status != 'CANCEL')&&!readonly" type="text" size="small"
+            @click="onCencel(scope.row.id)">作废</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,25 +49,26 @@
 
     },
     methods: {
-      onDetail (data) {
+      onDetail(data) {
         this.$emit('onDetail', data);
       },
-      onCencel (id) {
+      onCencel(id) {
         this.$emit('onCencel', id);
       },
-      onUpdate (data) {
+      onUpdate(data) {
         this.$emit('onUpdate', data);
       }
     },
-    data () {
+    data() {
       return {
 
       }
     },
-    created () {
+    created() {
       console.log(this.orders);
     }
   }
+
 </script>
 <style scoped>
   .table-body {

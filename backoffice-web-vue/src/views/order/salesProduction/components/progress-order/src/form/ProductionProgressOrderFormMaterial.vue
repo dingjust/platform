@@ -1,25 +1,20 @@
 <template>
   <div class="finance-form-body">
-<!--    <el-row class="info-title-row" type="flex" justify="space-between">-->
-<!--      <div class="info-title">-->
-<!--        <h6 class="info-title_text">{{getEnum('productionProgressPhaseTypes', progress.phase)}}报工</h6>-->
-<!--      </div>-->
-<!--    </el-row>-->
     <el-row type="flex" justify="space-between">
       <el-col :span="4">
         <div class="report-list-title">
-          <h6>{{getEnum('productionProgressPhaseTypes', progress.phase)}}报工</h6>
+          <h6>{{progress.progressPhase}}报工</h6>
         </div>
       </el-col>
     </el-row>
-    <el-form ref="form" :model="progressOrder" :rules="rules">
+    <el-form ref="form" :model="progressOrder" :rules="rules" :disabled="readOnly">
       <div class="form-main">
         <el-row type="flex" align="middle" class="progress-update-form-row" justify="space-between">
           <el-col :span="6">
             <h6 class="progress-update-form-text1">工单号：{{progress.id}}</h6>
           </el-col>
           <el-col :span="4" :offset="1">
-            <h6 class="info-title_text">款号：{{purchaseOrder.product.skuID}}</h6>
+            <h6 class="info-title_text">款号：{{belong.skuID}}</h6>
           </el-col>
           <el-col :span="8">
             <h6 class="info-title_text">合作商：{{cooperatorName}}</h6>
@@ -28,23 +23,27 @@
         <el-row type="flex" :gutter="150" align="middle" class="progress-update-form-row">
           <el-col :span="12">
             <el-form-item prop="reportTime">
-              <el-row type="flex" justify="space-between" align="middle" :gutter="10">
+              <el-row type="flex" justify="space-between" align="middle" :gutter="10" v-if="!readOnly">
                 <el-col :span="6">
                   <h6 class="progress-update-form-text1">上报时间：</h6>
                 </el-col>
                 <el-col :span="18">
                   <div style="width:100%;">
                     <el-date-picker style="width:100%;" class="progress-update-form-datepicker"
-                                    v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
+                      v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
                     </el-date-picker>
                   </div>
                 </el-col>
+              </el-row>
+              <el-row v-else>
+                <h6 class="info-title_text" style="width:200px;">上报时间：{{progressOrder.reportTime | timestampToTime}}
+                </h6>
               </el-row>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item>
-              <el-row type="flex" align="middle" justify="space-between" :gutter="10">
+              <el-row type="flex" align="middle" justify="space-between" :gutter="10" v-if="!readOnly">
                 <el-col :span="6">
                   <h6 class="progress-update-form-text1">上报人员：</h6>
                 </el-col>
@@ -54,30 +53,61 @@
                   </el-select>
                 </el-col>
               </el-row>
+              <el-row type="flex" align="middle" v-else>
+                <h6 class="progress-update-form-text1">上报人员：{{progressOrder.operator.name}}</h6>
+              </el-row>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
-          <span>{{variantTotal}}/{{purchaseOrder.totalQuantity}}</span>
-        </el-row>
-        <el-row type="flex">
-          <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
+        <el-row>
+          <table cellspacing="2" width="100%" class="order-table">
             <tr class="order-table-th_row">
-              <td style="width:40px">颜色</td>
-              <template v-for="item in sizes">
-                <th :key="item.code">{{item.name}}</th>
+              <template v-for="item in titleRow">
+                <th :key="item">{{item}}</th>
               </template>
             </tr>
-            <template v-for="(sizeArray,colorIndex) in entries">
-              <tr :key="colorIndex">
-                <td>{{sizeArray[0].color}}</td>
-                <template v-for="(item,sizeIndex) in sizeArray">
-                  <td style="width:80px" :key="sizeIndex">
-                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent v-model="item.quantity" :min="1"
-                              :placeholder="countRemainNum(item.color,item.size)"></el-input>
-                  </td>
-                </template>
+            <template v-for="item in progressOrder.materialPreparationEntries">
+              <tr :key="item.id">
+                <td :rowspan="item.colorEntries.length + 1">{{item.materialsName}}</td>
+                <td :rowspan="item.colorEntries.length + 1">{{item.spec}}</td>
+                <td :rowspan="item.colorEntries.length + 1">{{getEnum('MaterialsUnit', item.materialsUnit)}}
+                </td>
+                <td :rowspan="item.colorEntries.length + 1">{{getEnum('MaterialsType', item.materialsType)}}
+                </td>
               </tr>
+              <template v-for="(val, index) in item.colorEntries">
+                <tr :key="val.id">
+                  <td>{{val.materialsColor}}</td>
+                  <!-- 实际需求数量 -->
+                  <td v-if="readOnly" style="width:120px">
+                    {{val.actualDemandQuantity}}
+                  </td>
+                  <td v-else style="width:120px">
+                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent
+                      v-model="val.actualDemandQuantity" :min="1" :placeholder="'剩余'"></el-input>
+                  </td>
+                  <!-- 实际收货数量 -->
+                  <td v-if="readOnly" style="width:120px">
+                    {{val.actualReceivedQuantity}}
+                  </td>
+                  <td v-else style="width:120px">
+                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent
+                      v-model="val.actualReceivedQuantity" :min="1" :placeholder="'剩余'">
+                    </el-input>
+                  </td>
+                  <td v-if="index === 0 && readOnly" :rowspan="item.colorEntries.length + 1" style="width:120px">
+                    <!-- 物料状态 -->
+                    {{getEnum('MaterialsType', item.materialsType)}}
+                  </td>
+                  <td v-if="index === 0 && !readOnly" :rowspan="item.colorEntries.length + 1" style="width:120px">
+                    <el-select v-model="item.status" class="w-100" value-key="code">
+                      <el-option v-for="element in statuses" :key="element.code" :label="element.name"
+                        :value="element.code">
+                      </el-option>
+                    </el-select>
+                  </td>
+                </tr>
+              </template>
             </template>
           </table>
         </el-row>
@@ -98,81 +128,55 @@
             </el-input>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
-          <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
-        </el-row>
       </div>
     </el-form>
+    <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
+      <el-button size="mini" v-if="!readOnly" class="update-form-submit" @click="onSubmit">确定</el-button>
+      <el-button size="mini" class="update-form-submit" @click="onClose">关闭</el-button>
+    </el-row>
   </div>
 </template>
 
 <script>
   import ImagesUpload from '@/components/custom/ImagesUpload';
+  import ProductionMediaImageCardShow from '../ProductionMediaImageCardShow';
 
   export default {
-    name: 'ProductionProgressOrderForm',
-    props: ['progressOrder', 'purchaseOrder', 'progress'],
+    name: 'ProductionProgressOrderFormMaterial',
+    props: {
+      progressOrder: {
+        type: Object
+      },
+      belong: {
+        type: Object
+      },
+      progress: {
+        type: Object
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
+      ProductionMediaImageCardShow,
       ImagesUpload
     },
     mixins: [],
     computed: {
       cooperatorName: function () {
-        if (this.purchaseOrder.cooperator != null) {
-          if (this.purchaseOrder.cooperator.type == 'ONLINE') {
-            return this.purchaseOrder.cooperator.partner.name;
-          } else {
-            return this.purchaseOrder.cooperator.name;
-          }
+        if (this.currentUser.companyCode == this.belong.partyACompany.uid) {
+          return this.belong.partyBCompany.name;
         } else {
-          if (this.isBrand()) {
-            if (this.purchaseOrder.belongTo != null) {
-              return this.purchaseOrder.belongTo.name;
-            } else {
-              return this.purchaseOrder.companyOfSeller;
-            }
-          } else {
-            if (this.purchaseOrder.purchaser != null) {
-              return this.purchaseOrder.purchaser.name;
-            } else {
-              return this.purchaseOrder.companyOfSeller;
-            }
-          }
+          return this.belong.partyACompany.name;
         }
       },
-      sizes: function () {
-        var sizes = [];
-        this.purchaseOrder.entries.forEach(element => {
-          sizes.push(element.product.size);
-        });
-        const res = new Map();
-        var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
-        return result.sort((o1, o2) => o1.sequence - o2.sequence);
-      },
-      colors: function () {
-        var colors = new Set([]);
-        this.purchaseOrder.entries.forEach(element => {
-          colors.add(element.product.color.name);
-        });
-        return colors;
-      },
-      variantTotal: function () {
-        var result = 0;
-        this.entries.forEach(entry => {
-          entry.forEach(item => {
-            if (item.quantity != '') {
-              let num = parseInt(item.quantity);
-              if (num != null && num != '') {
-                result = num + result;
-              }
-            }
-          });
-        });
-        return result;
-      }
     },
     methods: {
-      getVariant (color, size, entries) {
+      onClose() {
+        this.$emit('onClose')
+      },
+      getVariant(color, size, entries) {
         var result = entries.filter(
           item => item.color == color && item.size == size
         );
@@ -182,7 +186,7 @@
           return null;
         }
       },
-      onSubmit () {
+      onSubmit() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
             if (this.progressOrder.id != null && this.progressOrder.id != '') {
@@ -193,16 +197,9 @@
           }
         });
       },
-      async _onCreate () {
+      async _onCreate() {
         const url = this.apis().createProductionProgressOrder(this.progress.id);
         let form = Object.assign({}, this.progressOrder);
-        let variantEntries = [];
-        this.entries.forEach(sizeArray => {
-          sizeArray.filter(item => item.quantity != '').forEach(item => {
-            variantEntries.push(item);
-          });
-        });
-        form.entries = variantEntries;
         form.operator.id = this.$store.getters.currentUser.id;
         const result = await this.$http.post(url, form);
         if (result['errors']) {
@@ -212,17 +209,10 @@
         this.$message.success('创建成功');
         this.$emit('callback');
       },
-      async _onUpdate () {
+      async _onUpdate() {
         const url = this.apis().updateProductionProgressOrder(this.progress.id, this.progressOrder.id);
         let form = Object.assign({}, this.progressOrder);
         form.id = '';
-        let variantEntries = [];
-        this.entries.forEach(sizeArray => {
-          sizeArray.filter(item => item.quantity != '').forEach(item => {
-            variantEntries.push(item);
-          });
-        });
-        form.entries = variantEntries;
         form.operator.id = this.$store.getters.currentUser.id;
         const result = await this.$http.put(url, form);
         if (result['errors']) {
@@ -232,37 +222,12 @@
         this.$message.success('修改成功');
         this.$emit('callback');
       },
-      countRemainNum (color, size) {
-        var need = this.purchaseOrder.entries.filter(
-          item => item.product.color.name == color && item.product.size.name == size
-        );
-        if (need.length != 0) {
-          var sum = 0;
-          var result = this.progress.productionProgressOrders.filter(order => order.status == 'PASS').forEach(order => {
-            var result = order.entries.filter(entry => entry.color == color && entry
-              .size == size);
-            if (result.length != 0 && result[0].quantity != '') {
-              sum += result[0].quantity;
-            }
-          });
-          if (need[0].quantity < sum) {
-            return '';
-          }
-          return '剩余未报' + (need[0].quantity - sum);
-        } else {
-          return '';
-        }
-      }
     },
-    data () {
+    data() {
       return {
         allOrdersShow: false,
         operator: this.$store.getters.currentUser.username,
-        entries: [],
-        form: {
-          reportTime: ''
-
-        },
+        currentUser: this.$store.getters.currentUser,
         rules: {
           reportTime: [{
             type: 'date',
@@ -270,44 +235,46 @@
             message: '请选择日期',
             trigger: 'blur'
           }]
-        }
+        },
+        statuses: this.$store.state.EnumsModule.ProgressReportMaterialStatus,
+        showTabelData: '',
+        tableData: [],
+        titleRow: ['物料名称', '物料规格', '物料单位', '物料属性', '物料颜色', '实际需求数量', '实际收货数量', '状态'],
       }
     },
-    created () {
-      // 初始化表格
-      this.entries = [];
-      this.colors.forEach(color => {
-        var sizeArray = [];
-        this.sizes.forEach(size => {
-          if (this.progressOrder.entries.length == 0) {
-            sizeArray.push({
-              size: size.name,
-              color: color,
-              quantity: ''
-            });
-          } else {
-            let variant = this.getVariant(
-              color,
-              size.name,
-              this.progressOrder.entries
-            );
-            if (variant != null) {
-              sizeArray.push(variant);
-            } else {
-              sizeArray.push({
-                size: size.name,
-                color: color,
-                quantity: ''
-              });
-            }
-          }
+    created() {
+      if (!this.readOnly) {
+        this.progressOrder.materialPreparationEntries = this.belong.materialsSpecEntries.map(entry => {
+          var obj = {
+            status: null,
+            title: entry.title,
+            position: entry.position,
+            materialsId: entry.materialsId,
+            materialsCode: entry.materialsCode,
+            materialsName: entry.materialsName,
+            unitQuantity: entry.unitQuantity,
+            lossRate: entry.lossRate,
+            materialsType: entry.materialsType,
+            materialsUnit: entry.materialsUnit,
+            spec: entry.spec.name
+          };
+          var colorEntries = entry.materialsColorEntries.map(element => {
+            return {
+              materialsColor: element.materialsColor.name,
+              actualDemandQuantity: '',
+              actualReceivedQuantity: '',
+            };
+          });
+          obj['colorEntries'] = colorEntries;
+          return obj;
         });
-        this.entries.push(sizeArray);
-      });
+      }
+
     },
-    mounted () {}
+    mounted() {}
 
   }
+
 </script>
 <style scoped>
   .order-table {
@@ -413,4 +380,5 @@
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
+
 </style>

@@ -3,7 +3,7 @@ import http from '@/common/js/http';
 const state = {
   url: '',
   keyword: '',
-  statuses: [],
+  status: [],
   isAdvancedSearch: false,
   currentPageNumber: 0,
   currentPageSize: 10,
@@ -24,7 +24,7 @@ const state = {
   queryFormData: {
     code: '',
     skuID: '',
-    statuses: [],
+    status: [],
     keywords: '',
     productionLeaderName: '',
     cooperator: '',
@@ -65,7 +65,7 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
-  statuses: (state, statuses) => state.statuses = statuses,
+  status: (state, status) => state.status = status,
   formData: (state, formData) => state.formData = formData,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
@@ -81,14 +81,14 @@ const actions = {
   }, {
     url,
     keyword,
-    statuses,
+    status,
     page,
     size
   }) {
     console.log(keyword + 'test' + page + 'test' + size);
     commit('url', url);
     commit('keyword', keyword);
-    commit('statuses', statuses);
+    commit('status', status);
     if (page || page === 0) {
       console.log(page);
       commit('currentPageNumber', page);
@@ -100,7 +100,7 @@ const actions = {
 
     const response = await http.post(url, {
       keyword: state.keyword,
-      statuses: state.statuses
+      status: state.status
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -143,14 +143,14 @@ const actions = {
     state
   }) {
     const keyword = state.keyword;
-    const statuses = state.statuses;
+    const status = state.status;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {
       url: state.url,
       keyword,
-      statuses,
+      status,
       page: currentPageNumber,
       size: currentPageSize
     });
@@ -171,7 +171,7 @@ const actions = {
 const getters = {
   url: state => state.url,
   keyword: state => state.keyword,
-  statuses: state => state.statuses,
+  status: state => state.status,
   isAdvancedSearch: state => state.isAdvancedSearch,
   formData: state => state.formData,
   queryFormData: state => state.queryFormData,

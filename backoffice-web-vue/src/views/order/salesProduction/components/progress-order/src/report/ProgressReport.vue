@@ -1,28 +1,29 @@
 <template>
   <div>
     <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
-      <production-progress-order-form :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder"
-                                      v-if="hackSet" @callback="onCallback" />
+      :close-on-click-modal="false" v-if="isColorSizeType">
+      <production-progress-order-form :belong="belong" :progress="slotData" :progressOrder="progressOrder"
+        :readOnly="onView" v-if="hackSet" @callback="onCallback" @onClose="onClose" />
     </el-dialog>
-    <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
-      <production-progress-order-view :purchaseOrder="order" :progress="slotData" :progressOrder="selectProgressOrder" />
+    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
+      v-if="slotData.progressPhase=='备料'" :close-on-click-modal="false">
+      <production-progress-order-form-material :belong="belong" :progress="slotData" :progressOrder="progressOrder"
+        v-if="formVisible" @callback="onCallback" :readOnly="onView" @onClose="onClose" />
     </el-dialog>
-    <el-dialog :visible.sync="materialVisible" width="70%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
-      <production-progress-order-form-material :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder"
-                                             v-if="materialVisible" @callback="onCallback" :isRead="isRead"/>
+    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
+      v-if="slotData.progressPhase=='产前样'" :close-on-click-modal="false">
+      <production-progress-order-form-sample :belong="belong" :progress="slotData" :progressOrder="progressOrder"
+        v-if="formVisible" @callback="onCallback" :readOnly="onView" @onClose="onClose" />
     </el-dialog>
-    <el-dialog :visible.sync="sampleVisible" width="70%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
-      <production-progress-order-form-sample :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder"
-                                             v-if="sampleVisible" @callback="onCallback" :isRead="isRead"/>
-    </el-dialog>
+    <!-- <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <production-progress-order-view :purchaseOrder="order" :progress="slotData"
+        :progressOrder="selectProgressOrder" />
+    </el-dialog> -->
     <el-row type="flex" justify="space-between">
-      <el-col :span="4">
+      <el-col :span="6">
         <div class="report-list-title">
-          <h6>{{getEnum('productionProgressPhaseTypes', slotData.phase)}}</h6>
+          <h6>{{slotData.progressPhase}}</h6>
         </div>
       </el-col>
       <el-col :span="6">
@@ -33,16 +34,17 @@
       <el-col :span="10" :offset="1">
         <el-row type="flex" align="middle">
           <h6 class="basic-title" style="width: 100px">预计完成时间：</h6>
-          <h6 class="basic-title" v-if="!onEditEstimatedDateVisible">{{slotData.estimatedDate | timestampToTime}}</h6>
-          <el-date-picker v-if="onEditEstimatedDateVisible" ref="datePicker" style="width: 50%;" :clearable="false"
-                          v-model="slotData.estimatedDate" type="date" placeholder="选择日期"/>
-          <el-button v-if="!readonly" class="edit-time-btn" type="text" @click="onEditEstimatedDate">{{onEditEstimatedDateVisible ? '确定' : '编辑'}}</el-button>
+          <h6 class="basic-title">{{slotData.estimatedDate | timestampToTime}}</h6>
+          <!-- <el-date-picker v-if="onEditEstimatedDateVisible" ref="datePicker" style="width: 50%;" :clearable="false"
+            v-model="slotData.estimatedDate" type="date" placeholder="选择日期" /> -->
+          <!-- <el-button v-if="!readonly" class="edit-time-btn" type="text" @click="onEditEstimatedDate">
+            {{onEditEstimatedDateVisible ? '确定' : '编辑'}}</el-button> -->
         </el-row>
       </el-col>
       <el-col :span="7">
         <el-row type="flex" align="middle">
           <el-col>
-            <h6 class="basic-title">款号：{{order.product.skuID}}</h6>
+            <h6 class="basic-title">款号：{{belong.skuID}}</h6>
           </el-col>
         </el-row>
       </el-col>
@@ -64,19 +66,23 @@
     </el-row>
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="22">
-<!--        <progress-report-material :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
-<!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
-<!--        <progress-report-sample :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"-->
-<!--                                :orderEntriesTotal="order.totalQuantity" :readonly="readonly" @onOrder="onOrder"/>-->
-        <progress-report-common :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"
-                                @onOrder="onOrder" :orderEntriesTotal="order.totalQuantity" :readonly="readonly"/>
+        <el-row type="flex" justify="end">
+          <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
+        </el-row>
+        <progress-report-material v-if="slotData.progressPhase=='备料'"
+          :productionProgressOrders="slotData.productionProgressOrders" />
+        <progress-report-sample v-if="slotData.progressPhase=='产前样'"
+          :productionProgressOrders="slotData.productionProgressOrders" />
+        <progress-report-common v-if="isColorSizeType" :orderEntries="belong.colorSizeEntries"
+          :noteEntries="slotData.productionProgressOrders" @onOrder="onOrder" :orderEntriesTotal="0"
+          :readonly="readonly" />
         <el-row type="flex" justify="end" align="center" class="show-btn-row">
           <i class="iconfont icon_arrow" v-if="!allOrdersShow" @click="allOrdersShow=true">&#xe714;&nbsp;展开全部单据</i>
           <i class="iconfont icon_arrow" v-if="allOrdersShow" @click="allOrdersShow=false">&#xe713;&nbsp;收回全部单据</i>
         </el-row>
         <el-row v-if="allOrdersShow">
-          <production-progress-orders-table :orders="slotData.productionProgressOrders" @onDetail="onDetail" @onCencel="onCencel"
-                                            :readonly="readonly" @onUpdate="onUpdate" />
+          <production-progress-orders-table :orders="slotData.productionProgressOrders" @onDetail="onDetail"
+            @onCencel="onCencel" :readonly="readonly" @onUpdate="onUpdate" />
         </el-row>
         <el-row type="flex" align="top" class="progress-update-form-row" style="margin-top:20px;">
           <el-col :span="2">
@@ -97,8 +103,9 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-row type="flex" justify="center" align="top" v-if="!readonly">
+    <el-row type="flex" justify="center" align="top">
       <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
+      <el-button size="mini" class="update-form-finish" @click="onFinish" v-if="!readonly">完成</el-button>
     </el-row>
   </div>
 </template>
@@ -107,15 +114,15 @@
   import ProgressReportMaterial from './ProgressReportMaterial';
   import ProgressReportSample from './ProgressReportSample';
   import ProgressReportCommon from './ProgressReportCommon';
-  import ProductionProgressOrdersTable from '../info/ProductionProgressOrderTable';
-  import ProductionMediaImageCardShow from '../info/ProductionMediaImageCardShow';
+  import ProductionProgressOrdersTable from '../ProductionProgressOrderTable';
+  import ProductionMediaImageCardShow from '../ProductionMediaImageCardShow';
   import ProductionProgressOrderForm from '../form/ProductionProgressOrderForm';
   import ProductionProgressOrderView from '../form/ProductionProgressOrderView';
   import ProductionProgressOrderFormSample from '../form/ProductionProgressOrderFormSample';
   import ProductionProgressOrderFormMaterial from '../form/ProductionProgressOrderFormMaterial';
   export default {
     name: 'ProgressReport',
-    props: ['slotData', 'order', 'readonly'],
+    props: ['slotData', 'belong'],
     components: {
       ProductionProgressOrderFormMaterial,
       ProductionProgressOrderFormSample,
@@ -125,28 +132,24 @@
       ProductionProgressOrdersTable,
       ProgressReportCommon,
       ProgressReportSample,
-      ProgressReportMaterial},
+      ProgressReportMaterial
+    },
     computed: {
-      cooperatorName: function () {
-        if (this.order.cooperator == null) {
-          if (this.isBrand()) {
-            if (this.order.belongTo != null) {
-              return this.order.belongTo.name;
-            } else {
-              return this.order.companyOfSeller;
-            }
-          } else {
-            if (this.order.purchaser != null) {
-              return this.order.purchaser.name;
-            } else {
-              return this.order.companyOfSeller;
-            }
-          }
+      isColorSizeType: function () {
+        switch (this.slotData.progressPhase) {
+          case '备料':
+            return false;
+          case '产前样':
+            return false;
+          default:
+            return true;
         }
-        if (this.order.cooperator.type == 'ONLINE') {
-          return this.order.cooperator.partner.name;
+      },
+      cooperatorName: function () {
+        if (this.currentUser.companyCode == this.belong.partyACompany.uid) {
+          return this.belong.partyBCompany.name;
         } else {
-          return this.order.cooperator.name;
+          return this.belong.partyACompany.name;
         }
       },
       allMedias: function () {
@@ -157,10 +160,21 @@
           });
         });
         return result;
+      },
+      readonly: function () {
+        if (this.belong.status == 'IN_PRODUCTION') {
+          return !(this.belong.currentPhase == this.slotData.progressPhase);
+        } else {
+          return true;
+        }
+        return false;
       }
     },
     methods: {
-      onUpdate (progressOrder) {
+      onClose() {
+        this.formVisible = false;
+      },
+      onUpdate(progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
         //   this.progressOrder = progressOrder;
         //   this.materialVisible = true;
@@ -170,13 +184,14 @@
         //   this.sampleVisible = true;
         //   this.isRead = false;
         // } else {
-          this.progressOrder = progressOrder;
-          this.formVisible = true;
+        this.progressOrder = progressOrder;
+        this.onView = false;
+        this.formVisible = true;
         // }
       },
-      onDetail (progressOrder) {
+      onDetail(progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
-        //   this.progressOrder = progressOrder;
+        this.progressOrder = progressOrder;
         //   this.materialVisible = true;
         //   this.isRead = true;
         // } else if (this.order.currentPhase == 'SAMPLE') {
@@ -184,11 +199,11 @@
         //   this.sampleVisible = true;
         //   this.isRead = true;
         // } else {
-          this.selectProgressOrder = progressOrder;
-          this.viewVisible = true;
+        this.onView = true;
+        this.formVisible = true;
         // }
       },
-      onCencel (id) {
+      onCencel(id) {
         this.$confirm('是否作废该单据?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -197,8 +212,8 @@
           this._onCancel(id);
         });
       },
-      async _onCancel (id) {
-        const url = this.apis().deleteProductionProgressOrder(this.order.id, id);
+      async _onCancel(id) {
+        const url = this.apis().deleteProductionProgressOrder(this.slotData.id, id);
         const result = await this.$http.delete(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -207,11 +222,11 @@
         this.$message.success('作废成功');
         this.$emit('callback');
       },
-      onCallback () {
+      onCallback() {
         this.formVisible = false;
         this.$emit('callback');
       },
-      onOrder () {
+      onOrder() {
         this.progressOrder = {
           medias: [],
           operator: {
@@ -219,7 +234,9 @@
           },
           reportTime: '',
           remarks: '',
-          entries: []
+          entries: [],
+          materialPreparationEntries: [],
+          preProductionSampleEntries: []
         };
         // if (this.order.currentPhase == 'SAMPLE') {
         //   this.materialVisible = true;
@@ -228,10 +245,11 @@
         //   this.sampleVisible = true;
         //   this.isRead = false;
         // } else {
-          this.formVisible = true;
+        this.formVisible = true;
+        this.onView = false;
         // }
       },
-      async onSubmit () {
+      async onSubmit() {
         // if (this.compareDate(new Date(), new Date(this.slotData.estimatedDate))) {
         //   this.$message.error('预计完成时间不能小于当前时间');
         //   return false;
@@ -245,38 +263,49 @@
         // this.$message.success('更新成功');
         this.$emit('editSubmit');
       },
-      onEditEstimatedDate () {
+      onEditEstimatedDate() {
         this.onEditEstimatedDateVisible = !this.onEditEstimatedDateVisible;
-        this.$nextTick(() => {
-          this.$refs.datePicker.focus();
-        })
+        // this.$nextTick(() => {
+        //   this.$refs.datePicker.focus();
+        // })
+      },
+      async onFinish() {
+        const url = this.apis().finshProgress(this.belong.code, this.slotData.id);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('操作成功');
+        this.$emit('callback');
       }
     },
-    data () {
+    data() {
       return {
         formVisible: false,
+        onView: false,
         progressOrder: {},
         allOrdersShow: false,
-        selectProgressOrder: {},
         hackSet: true,
         viewVisible: false,
         onEditEstimatedDateVisible: false,
         materialVisible: false,
         sampleVisible: false,
-        isRead: true
+        isRead: true,
+        currentUser: this.$store.getters.currentUser,
       }
     },
     watch: {
-      formVisible (newValue, oldValue) {
+      formVisible(newValue, oldValue) {
         this.hackSet = false;
         this.$nextTick(() => {
           this.hackSet = true;
         });
       }
     },
-    created () {
-    }
+    created() {}
   }
+
 </script>
 
 <style scoped>
@@ -321,4 +350,21 @@
     width: 150px;
     margin-top: 50px;
   }
+
+  .update-form-finish {
+    /* background-color: #FFD60C;
+    border-color: #FFD60C; */
+    /* color: ; */
+    width: 150px;
+    margin-top: 50px;
+  }
+
+  .form-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #FFD60C;
+    border-color: #FFD60C;
+    color: #000;
+  }
+
 </style>
