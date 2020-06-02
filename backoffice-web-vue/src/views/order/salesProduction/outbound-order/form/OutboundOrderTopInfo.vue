@@ -67,7 +67,7 @@
             <h6>甲方跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.contactPhone : ''}}</h6>
+            <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.mobileNumber : ''}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
@@ -75,7 +75,7 @@
             <h6>乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.contactPhone : ''}}</h6>
+            <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.mobileNumber : ''}}</h6>
           </el-col>
         </el-row>
       </el-col>

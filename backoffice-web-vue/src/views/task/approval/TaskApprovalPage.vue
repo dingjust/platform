@@ -12,19 +12,25 @@
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="订单任务" name="ORDER_TASK">
           <div class="tab-basic-row">
-            <task-approval-toolbar :queryFormData="queryFormData" :statuses="statuses"
+            <task-approval-toolbar :queryFormData="queryFormData"
                           @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>
-            <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                       @onDetail="onDetail" @onApproval="onApproval"/>
+            <el-tabs v-model="activeStatus" @tab-click="handleClick">
+              <template v-for="(item, index) in statuses">
+                <el-tab-pane :name="item.code" :label="item.name">
+                  <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch"
+                                      @onDetail="onDetail" @onApproval="onApproval"/>
+                </el-tab-pane>
+              </template>
+            </el-tabs>
           </div>
         </el-tab-pane>
         <el-tab-pane label="采购任务" name="PURCHASE_TASK">
-          <div class="tab-basic-row">
-            <task-approval-toolbar :queryFormData="queryFormData" :statuses="statuses"
-                                   @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>
-            <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                                @onDetail="onDetail" @onApproval="onApproval"/>
-          </div>
+<!--          <div class="tab-basic-row">-->
+<!--            <task-approval-toolbar :queryFormData="queryFormData" :statuses="statuses"-->
+<!--                                   @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>-->
+<!--            <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch"-->
+<!--                                @onDetail="onDetail" @onApproval="onApproval"/>-->
+<!--          </div>-->
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -88,10 +94,8 @@
       },
       handleClick (tab, event) {
         this.onReset();
-        // TODO 根据tab.name查询page数据
-        switch (tab.name) {
-
-        }
+        this.queryFormData.status = tab.name;
+        this.onAdvancedSearch();
       },
       onDetail (code) {
       },
@@ -102,6 +106,10 @@
       return {
         activeName: 'ORDER_TASK',
         statuses: [
+          {
+            code: '',
+            name: '全部'
+          },
           {
             code: 'unApproval',
             name: '待审批'

@@ -21,7 +21,7 @@
         </el-row>
       </el-col>
       <el-col :span="2">
-        <h6 style="color: #F56C6C">延期??天</h6>
+<!--        <h6 style="color: #F56C6C">延期??天</h6>-->
       </el-col>
     </el-row>
     <el-row type="flex" justify="space-between" style="margin-top: 10px" align="bottom">
@@ -88,6 +88,9 @@
     props: ['slotData'],
     computed: {
       getActive: function () {
+        if (this.slotData.status == 'COMPLETED') {
+          return this.slotData.progresses.length;
+        }
         return this.slotData.progresses.findIndex(val => val.progressPhase == this.slotData.currentPhase);
       },
       getSpan: function () {
