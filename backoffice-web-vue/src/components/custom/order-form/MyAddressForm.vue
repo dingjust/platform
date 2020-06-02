@@ -189,6 +189,10 @@
     watch: {
       vAddress: function (newVal, oldVal) {
         this.address = newVal;
+        if (this.address != null && this.address.region != null && this.address.region != "") {
+          this.getCities(this.address.region);
+          this.onCityChanged(this.address.city);
+        }
       },
       address: function (newVal, oldVal) {
         this.$emit("update:vAddress", newVal);

@@ -323,7 +323,9 @@
       },
       addRow () {
         let item = {
-          productionTaskId: '',
+          productionTaskId: {
+            id: ''
+          },
           billPrice: '',
           expectedDeliveryDate: '',
           shippingAddress: {},
@@ -350,7 +352,7 @@
               },
               billPrice: '',
               expectedDeliveryDate: '',
-              shippingAddress: {},
+              shippingAddress: item.shippingAddress,
               product: {
                 id: item.productionEntry.product.id,
                 name: item.productionEntry.product.name,

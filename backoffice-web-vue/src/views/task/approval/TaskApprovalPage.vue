@@ -99,7 +99,17 @@
       },
       onDetail (code) {
       },
-      onApproval (code) {
+      async onApproval (row) {
+        let formData = {
+          id: row.id,
+          auditMsg: '',
+          state: 'PASSED'
+        };
+        const url = this.apis().taskAudit();
+        const result = await this.$http.post(url, formData);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+        }
       }
     },
     data () {

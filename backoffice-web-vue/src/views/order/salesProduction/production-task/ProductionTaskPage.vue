@@ -69,10 +69,10 @@
       }),
       handleClick(tab, event) {
         if (tab.name == 'ALL') {
-          this.queryFormData.status = '';
+          this.queryFormData.state = '';
           this.onAdvancedSearch();
         } else {
-          this.queryFormData.status = tab.name;
+          this.queryFormData.state = tab.name;
           this.onAdvancedSearch();
         }
       },
@@ -104,6 +104,10 @@
         this.selectTaskList = val;
       },
       createOutboundOrder () {
+        if (this.selectTaskList.length <= 0) {
+          this.$message.warning('请先选择生产任务');
+          return;
+        }
         let row = {};
         let entries = [];
         this.selectTaskList.forEach(item => {
@@ -111,7 +115,7 @@
             productionTask: {id: item.id},
             billPrice: '',
             expectedDeliveryDate: '',
-            shippingAddress: {},
+            shippingAddress: item.shippingAddress,
             product: {
               id: item.productionEntry.product.id,
               name: item.productionEntry.product.name,

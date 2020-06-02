@@ -44,7 +44,7 @@
         this.$emit('onDetail', row.code);
       },
       onApproval (row) {
-        this.$emit('onApproval', row.code);
+        this.$emit('onApproval', row);
       },
       onPageSizeChanged(val) {
         this.$emit('onAdvancedSearch', 0, val);
