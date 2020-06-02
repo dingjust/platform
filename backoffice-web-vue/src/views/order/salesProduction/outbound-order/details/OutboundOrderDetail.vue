@@ -8,15 +8,8 @@
           </div>
         </el-col>
       </el-row>
-<!--      <div class="pt-2"></div>-->
       <outbound-order-top-info :slotData="formData"/>
       <outbound-order-center-table :slot-data="formData" @onDetail="onDetail"/>
-<!--      <el-row v-if="isFactory()">-->
-<!--        <outbound-order-receipt-info :slotData="formData"/>-->
-<!--      </el-row>-->
-<!--      <el-row v-if="isBrand()">-->
-<!--        <outbound-order-payment-info :slot-data="formData"/>-->
-<!--      </el-row>-->
       <el-row class="basic-form-row" type="flex" align="middle">
         <h6>备注及附件</h6>
       </el-row>
@@ -26,7 +19,7 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isReceiver">
-        <el-button class="purchase-order-btn2" @click="onCancel">拒单</el-button>
+        <el-button class="purchase-order-btn2" @click="onRejected">拒单</el-button>
         <el-button class="purchase-order-btn" @click="onConfirm">接单</el-button>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isCancel">
@@ -82,7 +75,7 @@
         if (this.formData.partyACompany.uid == uid) {
           AorB = 'PARTYA';
         }
-        return this.formData.createdBy == AorB && this.formData.status != 'CONFIRMED';
+        return this.formData.createdBy == AorB && this.formData.status != 'CONFIRMED' && this.formData.status != 'CANCELLED';
       }
     },
     methods: {
@@ -102,8 +95,15 @@
         this.taskDetailVisible = true;
         this.productionTaskId = row.productionTask.id;
       },
-      onCancel () {
-
+      async onCancel () {
+        const url = this.apis().cancelOutboundOrder(this.formData.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('取消订单成功');
+        await this.getDetail();
       },
       async onConfirm () {
         const url = this.apis().acceptOutboundOrder(this.formData.code);
@@ -113,6 +113,16 @@
           return;
         }
         this.$message.success('接单成功');
+        await this.getDetail();
+      },
+      async onRejected () {
+        const url = this.apis().rejectedOutboundOrder(this.formData.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('拒绝接单成功');
         await this.getDetail();
       }
     },

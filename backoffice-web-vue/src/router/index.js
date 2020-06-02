@@ -293,7 +293,7 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/outbound-order/details/OutboundOrderDetail')
       },
       {
-        path: 'purchase',
+        path: 'purchaseTask',
         name: '采购任务列表',
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/purchase-task/PurchaseTaskPage')
       },

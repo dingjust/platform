@@ -9,19 +9,19 @@
           <el-col :span="5">
             <h6>工单号：{{slotData.code}}</h6>
           </el-col>
-          <el-col :span="5">
-            <h6>工单负责人：{{slotData.charge}}</h6>
+          <el-col :span="6">
+            <h6>工单负责人：{{slotData.personInCharge.name}}</h6>
           </el-col>
-          <el-col :span="5">
-            <h6>优先级：{{slotData.priority}}</h6>
+          <el-col :span="6">
+            <h6>优先级：{{''}}</h6>
           </el-col>
-          <el-col :span="5">
-            <h6>工单生成时间：{{slotData.creationTime | timestampToTime}}</h6>
+          <el-col :span="6">
+            <h6>工单生成时间：{{slotData.creationtime | timestampToTime}}</h6>
           </el-col>
         </el-row>
       </el-col>
       <el-col :span="2">
-        <h6 style="color: #F56C6C">延期10天</h6>
+        <h6 style="color: #F56C6C">延期??天</h6>
       </el-col>
     </el-row>
     <el-row type="flex" justify="space-between" style="margin-top: 10px" align="bottom">
@@ -33,32 +33,49 @@
           </el-col>
           <el-col :span="5">
             <h6 style="margin-bottom: 13px;">产品名：{{slotData.product.name}}</h6>
-            <h6>货号：{{slotData.product.shuID}}</h6>
+            <h6>货号：{{slotData.product.skuID}}</h6>
           </el-col>
           <el-col :span="5">
-            <h6>生成数量：{{slotData.product.quantity}}</h6>
+            <h6>生成数量：{{getTotalQuantity}}</h6>
           </el-col>
           <el-col :span="5">
-            <h6 style="margin-bottom: 13px;">关联订单：{{slotData.product.relationOrder}}</h6>
-            <h6>交货日期：{{slotData.product.deliveryDate | timestampToTime}}</h6>
+            <h6 style="margin-bottom: 13px;">关联订单：{{slotData.orderCode}}</h6>
+            <h6>交货日期：{{slotData.expectedDeliveryDate | timestampToTime}}</h6>
           </el-col>
         </el-row>
       </el-col>
       <el-col :span="2">
-        <el-button class="list-btn">查看详情</el-button>
+        <el-button class="list-btn" @click="onDetail">查看详情</el-button>
       </el-col>
     </el-row>
     <el-divider/>
     <el-row type="flex" justify="space-between" align="middle">
-      <el-col :span="19" :offset="1">
-        <progress-order-steps :slotData="slotData.progressPlan"/>
-      </el-col>
-      <el-col :span="4">
-        <el-row>
-          <el-button class="list-btn">发货</el-button>
-          <el-button class="list-btn">入库</el-button>
+      <el-col :span="24">
+<!--        <progress-order-steps :phaseSqeuence="slotData.progressPlan.phaseSqeuence"-->
+<!--                              :progresses="slotData.progressPlan.progress"/>-->
+        <el-row type="flex" justify="space-between">
+          <template v-for="(item, index) in slotData.progresses">
+            <el-col :span="getSpan">
+              <el-row type="flex" justify="center" align="middle">
+<!--                <h6 v-if="item.delatedDays" style="color: #F56C6C">延误{{item.delatedDays}}天</h6>-->
+                <h6 v-if="item.finishDate">完成时间：{{item.finishDate | timestampToTime}}</h6>
+                <h6 v-if="item.estimatedDate && !item.finishDate">预计完成：{{item.estimatedDate | timestampToTime}}</h6>
+              </el-row>
+            </el-col>
+          </template>
         </el-row>
+        <el-steps :active="getActive" align-center finish-status="success">
+          <template v-for="(item, index) in slotData.progresses">
+            <el-step :title="item.progressPhase"/>
+          </template>
+        </el-steps>
       </el-col>
+<!--      <el-col :span="4">-->
+<!--        <el-row>-->
+<!--          <el-button class="list-btn">发货</el-button>-->
+<!--          <el-button class="list-btn">入库</el-button>-->
+<!--        </el-row>-->
+<!--      </el-col>-->
     </el-row>
   </div>
 </template>
@@ -70,11 +87,23 @@
     components: {ProgressOrderSteps},
     props: ['slotData'],
     computed: {
-
+      getActive: function () {
+        return this.slotData.progresses.findIndex(val => val.progressPhase == this.slotData.currentPhase);
+      },
+      getSpan: function () {
+        return Math.ceil(24 / this.slotData.progresses.length);
+      },
+      getTotalQuantity: function () {
+        let count = 0;
+        this.slotData.colorSizeEntries.forEach(val => {
+          count += val.quantity;
+        })
+        return count;
+      }
     },
     methods: {
       onDetail (row) {
-        this.$router.push('/sales/outboundOrder/' + row.code);
+        this.$router.push('/sales/progressOrder/' + this.slotData.code);
       }
     },
     data () {

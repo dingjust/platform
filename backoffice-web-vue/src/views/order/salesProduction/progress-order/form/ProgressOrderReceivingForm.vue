@@ -13,7 +13,7 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="交货日期" prop="expectedDeliveryDate">
-          <el-date-picker style="width: 160px"
+          <el-date-picker style="width: 160px" :disabled="isRead"
                           v-model="formData.expectedDeliveryDate"
                           type="date"
                           value-format="timestamp">
@@ -22,12 +22,12 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="创建人" prop="creationPerson">
-          <el-input v-model="formData.creator.name"></el-input>
+          <el-input v-model="formData.code" :disabled="true"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="货号" prop="skuID">
-          <el-input v-model="formData.product.skuID"></el-input>
+          <el-input v-model="formData.skuID" :disabled="true"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -35,14 +35,14 @@
       <el-col :span="12">
         <el-row>
           <el-form-item label="所属订单">
-            <el-input v-model="formData.product.code"></el-input>
+            <el-input v-model="formData.orderCode" :disabled="true"></el-input>
           </el-form-item>
-          <el-button type="text" style="color: #ffd60c">选择订单</el-button>
+<!--          <el-button type="text" style="color: #ffd60c">选择订单</el-button>-->
         </el-row>
       </el-col>
       <el-col :span="6">
         <el-form-item label="优先级">
-          <el-select>
+          <el-select :disabled="isRead">
             <el-option label="普通" :value="'普通'" />
             <el-option label="加急" :value="'加急'" />
             <el-option label="特级" :value="'特级'" />
@@ -51,11 +51,11 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="跟单人">
-          <el-input></el-input>
+          <el-input v-model="formData.personInCharge.name" :disabled="isRead"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
-    <el-row type="flex">
+    <el-row type="flex" align="middle">
       <el-col :span="8">
         <el-form-item label="合作方式" prop="machiningType">
           <el-radio-group v-model="formData.machiningType">
@@ -74,7 +74,15 @@
 <script>
   export default {
     name: 'ProgressOrderReceivingForm',
-    props: ['formData'],
+    props: {
+      formData: {
+        type: Object
+      },
+      isRead: {
+        type: Boolean,
+        default: true
+      }
+    },
     data () {
       return {
         machiningTypes: this.$store.state.EnumsModule.machiningTypes

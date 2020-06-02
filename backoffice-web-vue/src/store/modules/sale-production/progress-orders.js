@@ -16,87 +16,30 @@ const state = {
   },
   formData: {
     id: null,
-    code: '',
-    product: {
-      thumbnail: '',
-      category: {
-        name: ''
-      }
-    },
-    cooperator: {
-      partner: {
-        name: ''
-      }
-    },
-    status: 'PENDING_CONFIRM',
-    supplier: {},
-    user: {},
-    deliveryAddress: {
-      id: null,
-      fullname: '',
-      cellphone: '',
-      region: {
-        isocode: '',
-        name: ''
-      },
-      city: {
-        code: '',
-        name: ''
-      },
-      cityDistrict: {
-        code: '',
-        name: ''
-      },
-      line1: ''
-    },
-    entries: [],
-    attachments: [],
-    remarks: '',
-    salesApplication: 'BELOW_THE_LINE',
-    totalPrice: 0,
-    totalQuantity: 0,
-    unitPrice: 0,
-    purchaser: {},
-    belongTo: {
-      uid: '',
-      name: ''
-    },
-    creator: {},
     progresses: [],
-    companyOfSeller: '',
-    contactPersonOfSeller: '',
-    contactOfSeller: '',
-    payPlan: {
-      payPlanType: '',
-      isHaveDeposit: true,
-      payPlanItems: [],
-    },
-    factoryOperator: {
-      name: ''
-    },
-    brandOperator: {
-      name: ''
+    partyACompany: {},
+    partyBCompany: {},
+    code: '',
+    status: '',
+    skuID: '',
+    currentPhase: '',
+    machiningType: 'LABOR_AND_MATERIAL',
+    expectedDeliveryDate: '',
+    personInCharge: {},
+    orderStatus: '',
+    colorSizeEntries: [],
+    product: {
+
     }
   },
   queryFormData: {
-    code: '',
-    requirementOrderCode: '',
-    skuID: '',
-    statuses: [],
-    expectedDeliveryDateFrom: null,
-    expectedDeliveryDateTo: null,
-    createdDateFrom: null,
-    createdDateTo: null,
-    // belongTos: [],
-    // purchasers:[],
     keyword: '',
-    categories: []
+    status: ''
   },
   detailData: {
 
   },
   colorSizeData: [],
-  //当前打开的进度窗口
   currentProgress: ''
 };
 
@@ -116,17 +59,7 @@ const mutations = {
 };
 
 const actions = {
-  async search({
-    dispatch,
-    commit,
-    state
-  }, {
-    url,
-    keyword,
-    statuses,
-    page,
-    size
-  }) {
+  async search ({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
     console.log(keyword + 'test' + page + 'test' + size);
     commit('url', url);
     commit('keyword', keyword);
@@ -153,16 +86,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({
-    dispatch,
-    commit,
-    state
-  }, {
-    url,
-    query,
-    page,
-    size
-  }) {
+  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
@@ -179,50 +103,29 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({
-    dispatch,
-    commit,
-    state
-  }) {
+  refresh ({dispatch, commit, state}) {
     const keyword = state.keyword;
     const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {
-      url: state.url,
-      keyword,
-      statuses,
-      page: currentPageNumber,
-      size: currentPageSize
-    });
+    dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
   },
-  async getDetail({
-    dispatch,
-    commit,
-    state
-  }, {
-    code
-  }) {
-    // const url = '/b2b/orders/production/work/' + code;
-    const url = '/b2b/orders/purchase/' + code;
+  async getDetail ({dispatch, commit, state}, {code}) {
+    const url = '/b2b/sheets/progress/work/' + code;
     const result = await http.get(url);
     if (!result['errors']) {
-      commit('formData', result);
+      commit('formData', result.data);
     }
   },
-  async refreshDetail({
-    dispatch,
-    commit,
-    state
-  }) {
+  async refreshDetail ({dispatch, commit, state}) {
     // const url = '/b2b/orders/production/work/' + state.formData.code;
-    const url = '/b2b/orders/purchase/' + state.formData.code;
+    const url = '/b2b/sheets/progress/work/' + state.formData.code;
     const result = await http.get(url);
     if (!result['errors']) {
-      commit('formData', result);
+      commit('formData', result.data);
     }
-  },
+  }
 };
 
 const getters = {

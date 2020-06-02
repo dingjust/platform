@@ -680,6 +680,14 @@ const COMMON_APIS = {
   acceptOutboundOrder(code) {
     return '/b2b/orders/outbound/' + code + '/production';
   },
+  // 拒绝接单
+  rejectedOutboundOrder (code) {
+    return '/b2b/orders/outbound/' + code + '/rejectedConfirm';
+  },
+  // 取消外发订单
+  cancelOutboundOrder (code) {
+    return '/b2b/orders/outbound/' + code + '/cancelling';
+  },
   // 获取节点方案列表
   getProgressPlan() {
     return '/b2b/progress/plan';
@@ -723,6 +731,14 @@ const COMMON_APIS = {
   // 审核任务
   taskAudit() {
     return '/b2b/audit/order/order/audit'
+  },
+  // 获取进度工单列表
+  getProgressOrderList () {
+    return '/b2b/sheets/progress/work';
+  },
+  // 获取进度工单详情
+  getProgressOrderDetail (code) {
+    return '/b2b/sheets/progress/work/' + code;
   }
 };
 

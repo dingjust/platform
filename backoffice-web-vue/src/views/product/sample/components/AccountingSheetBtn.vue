@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible.sync="viewDialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false">
+    <el-dialog :visible.sync="viewDialogVisible" width="90%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <sample-accounting-sheet :slot-data="slotData" :readOnly="true" :unitPrice="unitPrice"/>
     </el-dialog>
     <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">

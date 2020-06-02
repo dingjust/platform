@@ -27,9 +27,15 @@
     methods: {
       onPageSizeChanged (val) {
         this.$emit('onAdvancedSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       onCurrentPageChanged (val) {
         this.$emit('onAdvancedSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       }
     },
     data () {

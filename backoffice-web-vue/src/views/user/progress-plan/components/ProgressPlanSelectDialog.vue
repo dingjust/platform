@@ -41,12 +41,18 @@
                    @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
                    :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <el-dialog :visible.sync="appendVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
+      <progress-plan-form-info v-if="appendVisible" ref="infoForm" @onSubmit="onSubmit"
+                               :form-data="formData" :fromDialog="true"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import ProgressPlanFormInfo from '../form/ProgressPlanFormInfo';
   export default {
     name: 'ProgressPlanSelectDialog',
+    components: {ProgressPlanFormInfo},
     methods: {
       async onSearch (page, size) {
         const url = this.apis().getProgressPlan();
@@ -79,19 +85,52 @@
         this.$emit('getProgressPlan', this.multipleSelection);
       },
       onNew () {
-
+        this.appendVisible = true;
+      },
+      onSubmit () {
+        this.$refs['infoForm'].$refs['form'].validate(valid => {
+          if (valid) {
+            this._onSubmit();
+          } else {
+            this.$message.error('请完善表单信息');
+            return false;
+          }
+        });
+      },
+      async _onSubmit () {
+        const data = {
+          id: this.formData.id ? this.formData.id : null,
+          name: this.formData.name,
+          remarks: this.formData.remarks,
+          productionProgresses: this.formData.productionProgresses
+        }
+        const url = this.apis().createProgressPlan();
+        const result = await this.$http.post(url, data);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success(this.formData.id ? '添加节点成功' : '编辑节点成功');
+        this.appendVisible = false;
+        await this.onSearch();
       }
     },
     data () {
       return {
+        appendVisible: false,
         multipleSelection: '',
         page: {},
         queryFormData: {
           keyword: ''
+        },
+        formData: {
+          name: '',
+          remarks: '',
+          productionProgresses: []
         }
       }
     },
-    created() {
+    created () {
       this.onSearch();
     }
   }
