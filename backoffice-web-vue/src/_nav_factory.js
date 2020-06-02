@@ -65,7 +65,7 @@ export default {
       icon: 'el-icon-shopping-cart-1',
       children: [{
         name: '采购任务',
-        url: '/sales/purchase'
+        url: '/sales/purchaseTask'
       }]
     },
     {

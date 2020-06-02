@@ -17,10 +17,16 @@
             </el-badge>
           </span>
           <div class="tab-basic-row">
-            <task-handle-toolbar :queryFormData="queryFormData" :statuses="statuses"
+            <task-handle-toolbar :queryFormData="queryFormData"
                                  @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>
-            <task-handle-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                              @onDetail="onDetail" @onUndertake="onUndertake" @onAssignment="onAssignment"/>
+            <el-tabs v-model="activeStatus" @tab-click="handleClick">
+              <template v-for="(item, index) in statuses">
+                <el-tab-pane :name="item.code" :label="item.name">
+                  <task-handle-list :page="page" @onAdvancedSearch="onAdvancedSearch"
+                                    @onDetail="onDetail" @onUndertake="onUndertake" @onAssignment="onAssignment"/>
+                </el-tab-pane>
+              </template>
+            </el-tabs>
           </div>
         </el-tab-pane>
         <el-tab-pane label="采购任务" name="PURCHASE_TASK">
@@ -101,10 +107,8 @@
       },
       handleClick (tab, event) {
         this.onReset();
-        // TODO 根据tab.name查询page数据
-        switch (tab.name) {
-
-        }
+        this.queryFormData.status = tab.name;
+        this.onAdvancedSearch();
       },
       onDetail (row) {
         if (row.type == 'ProductionTask') {
@@ -132,6 +136,10 @@
       return {
         activeName: 'ORDER_TASK',
         statuses: [
+          {
+            code: '',
+            name: '全部'
+          },
           {
             code: 'unUndertake',
             name: '待承接'

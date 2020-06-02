@@ -22,15 +22,15 @@
           </el-row>
         </el-col>
       </el-row>
-      <el-row>
-        <span class="status_name_label">工单状态：</span>
-        <el-radio-group v-model="queryFormData.status" @change="onAdvancedSearch">
-          <el-radio :label="''">全部</el-radio>
-          <template v-for="(status, index) in statuses">
-            <el-radio :label="status.code">{{status.name}}</el-radio>
-          </template>
-        </el-radio-group>
-      </el-row>
+<!--      <el-row>-->
+<!--        <span class="status_name_label">工单状态：</span>-->
+<!--        <el-radio-group v-model="queryFormData.status" @change="onAdvancedSearch">-->
+<!--          <el-radio :label="''">全部</el-radio>-->
+<!--          <template v-for="(status, index) in statuses">-->
+<!--            <el-radio :label="status.code">{{status.name}}</el-radio>-->
+<!--          </template>-->
+<!--        </el-radio-group>-->
+<!--      </el-row>-->
     </el-form>
   </div>
 </template>
@@ -38,7 +38,7 @@
 <script>
   export default {
     name: 'TaskHandleToolbar',
-    props: ['queryFormData', 'statuses'],
+    props: ['queryFormData'],
     computed: {
 
     },

@@ -34,7 +34,7 @@
     },
     methods: {
       onAdvancedSearch () {
-        this.emit('onAdvancedSearch');
+        this.$emit('onAdvancedSearch');
       },
       onReset () {
         this.queryFormData = {

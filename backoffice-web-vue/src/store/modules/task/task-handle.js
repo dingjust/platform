@@ -15,7 +15,8 @@ const state = {
   formData: {
   },
   queryFormData: {
-    keyword: ''
+    keyword: '',
+    status: ''
   }
 };
 
