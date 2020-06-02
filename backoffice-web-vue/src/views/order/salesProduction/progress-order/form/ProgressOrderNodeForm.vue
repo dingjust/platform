@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-row class="progress-row">
-      <el-col :span="6">
-        <el-form-item label="生产节点" prop="progressPlan">
-          <el-input :disabled="true"></el-input>
-        </el-form-item>
-      </el-col>
-    </el-row>
+<!--    <el-row class="progress-row">-->
+<!--      <el-col :span="6">-->
+<!--        <el-form-item label="生产节点" prop="progressPlan">-->
+<!--          <el-input :disabled="true"></el-input>-->
+<!--        </el-form-item>-->
+<!--      </el-col>-->
+<!--    </el-row>-->
     <el-row class="progress-row" :gutter="20">
       <el-col :span="12">
         <div class="progress-container">
@@ -38,8 +38,8 @@
             <el-table-column align="right" min-width="150">
               <template slot="header" slot-scope="scope">
                 <el-row>
-                  <el-button size="mini">添加节点</el-button>
-                  <el-button size="mini" @click="saveProgressPlan">保存节点方案</el-button>
+<!--                  <el-button size="mini">添加节点</el-button>-->
+                  <el-button size="mini" @click="progressPlanVisible=!progressPlanVisible">保存节点方案</el-button>
                 </el-row>
               </template>
             </el-table-column>
@@ -47,6 +47,34 @@
         </div>
       </el-col>
     </el-row>
+    <el-dialog :visible.sync="progressPlanVisible" width="30%" class="purchase-dialog" append-to-body
+               :close-on-click-modal="false">
+      <div>
+        <el-row>
+          <el-col>
+            <div class="progress-list-title">
+              <h6>保存节点方案</h6>
+            </div>
+          </el-col>
+        </el-row>
+        <el-form :model="saveData">
+          <el-row>
+            <el-form-item label="方案名称" prop="name"
+                          :rules="{required: true, message: '不能为空', trigger: 'change'}">
+              <el-input v-model="saveData.name"></el-input>
+            </el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="备注">
+              <el-input v-model="saveData.remarks"></el-input>
+            </el-form-item>
+          </el-row>
+        </el-form>
+        <el-row type="flex" justify="center" align="middle">
+          <el-button class="material-btn" @click="saveProgressPlan">保存</el-button>
+        </el-row>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -88,19 +116,25 @@
         row.sequence < this.currentSequence;
       },
       async saveProgressPlan () {
-        const data = {
-          id: this.formData.id ? this.formData.id : null,
-          name: this.formData.name,
-          remarks: this.formData.remarks,
-          productionProgresses: this.formData.productionProgresses
-        }
+        let item = {};
+        this.formData.progresses.forEach(val => {
+          item.medias = val.medias;
+          item.progressPhase = val.progressPhase;
+          item.quantity = val.quantity;
+          item.sequence = val.sequence;
+          item.completeAmount = val.completeAmount;
+          item.productionProgressOrders = val.productionProgressOrders;
+          this.saveData.productionProgresses.push(item);
+          item = {}
+        })
         const url = this.apis().createProgressPlan();
-        const result = await this.$http.post(url, data);
+        const result = await this.$http.post(url, this.saveData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
         this.$message.success('保存节点方案成功');
+        this.progressPlanVisible = !this.progressPlanVisible;
       }
     },
     data () {
@@ -108,7 +142,12 @@
         progressPlanVisible: false,
         phaseData: [],
         originData: this.formData.progresses,
-        currentSequence: ''
+        currentSequence: '',
+        saveData: {
+          name: '',
+          remarks: '',
+          productionProgresses: []
+        }
       }
     },
     watch: {
@@ -140,5 +179,19 @@
     border: 1px solid #DCDFE6;
     border-radius: 2px;
     width: 100%;
+  }
+
+  .progress-list-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    /* border-color: #000000; */
+    color: #000;
+    width: 100px;
+    /* height: 35px; */
+    margin-top: 20px;
   }
 </style>
