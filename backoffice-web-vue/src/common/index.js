@@ -1080,7 +1080,80 @@ let NONE_TENANT_APIS = {
   //节点完成
   finshProgress(code, id) {
     return '/b2b/sheets/progress/work/' + code + '/finish/progress/' + id;
-  }
+  },
+
+  // 创建发货单================================新生产工单
+  createShippingOrderV2(code) {
+    return '/b2b/orders/production/work/' + code + '/createShippingOrder';
+  },
+  // 创建全部发货单
+  confirmShippingV2(code) {
+    return '/b2b/orders/production/work/' + code + '/confirmShipping';
+  },
+  // 删除发货单
+  deleteShippingOrderV2(id) {
+    return '/b2b/orders/production/work/deleteShippingOrder/' + id;
+  },
+  // 创建收货单
+  createDeliveryOrderV2(code) {
+    return '/b2b/orders/production/work/' + code + '/createDeliveryOrder';
+  },
+  // 创建并提交收货单
+  createAndCommitDeliveryOrderV2(code) {
+    return '/b2b/orders/production/work/' + code + '/createAndCommitDeliveryOrder';
+  },
+  // 提交收货单
+  commitDeliveryOrderV2() {
+    return '/b2b/orders/production/work/commitDeliveryOrder';
+  },
+  // 保存收货单
+  updateDeliveryOrderV2() {
+    return '/b2b/orders/production/work/updateDeliveryOrder';
+  },
+  // 撤回收货单
+  withdrawDeliveryOrderV2(code) {
+    return '/b2b/orders/production/work/' + code + '/recallDelivery';
+  },
+  // 确认收货单
+  confirmDeliveryOrderV2(code) {
+    return '/b2b/orders/production/work/' + code + '/confirmDelivery';
+  },
+  // 拒绝收货单
+  rejectDeliveryOrderV2(code) {
+    return '/b2b/orders/production/work/' + code + '/rejectDelivery';
+  },
+  // 创建对账单
+  createReconciliationOrderV2(code) {
+    return '/b2b/orders/production/work/' + code + '/createReconciliationOrder';
+  },
+  // 创建并提交对账单
+  createAndCommitReconciliationOrderV2(code) {
+    return '/b2b/orders/production/work/' + code + '/createAndCommitReconciliationOrder';
+  },
+  // 保存
+  updateReconciliationOrderV2() {
+    return '/b2b/orders/production/work/updateReconciliationOrder';
+  },
+  // 保存并提交
+  updateAndCommitReconciliationOrderV2() {
+    return '/b2b/orders/production/work/updateAndCommitReconciliationOrder';
+  },
+  // 提交对账单
+  commitReconciliationOrderV2() {
+    return '/b2b/orders/production/work/commitReconciliationOrder';
+  },
+  // 撤回对账单
+  withdrawReconciliationOrderV2() {
+    return '/b2b/orders/production/work/recallReconciliationOrder';
+  },
+  // 确认对账单
+  confirmReconciliationV2(code) {
+    return '/b2b/orders/production/work/' + code + '/confirmReconciliation';
+  },
+  // 拒绝对账单
+  rejectReconciliationV2(code) {
+    return '/b2b/orders/production/work/' + code + '/rejectReconciliation';
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

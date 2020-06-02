@@ -138,7 +138,7 @@
         </td>
       </tr>
     </table>
-    <el-row type="flex" justify="center" class="info-receive-row" v-if="hasPartBPermission">
+    <el-row type="flex" justify="center" class="info-receive-row" v-if="isFactory()">
       <el-button class="info-receive-submit" @click="onSubmit(false)">部分发货</el-button>
       <el-button class="info-receive-submit" @click="onSubmit(true)"
         :disabled="slotData.status!='WAIT_FOR_OUT_OF_STORE'">全部发货</el-button>
@@ -152,7 +152,7 @@
   import FormLabel from '@/components/custom/FormLabel';
 
   export default {
-    name: 'DeliverOrderForm',
+    name: 'PurchaseOrderInfoDeliver',
     props: ['slotData'],
     components: {
       OrdersInfoItem,
@@ -160,39 +160,10 @@
     },
     mixins: [],
     computed: {
-      //判断是否拥有甲乙方权限
-      hasPartAPermission: function () {
-        //先判断订单类型
-        if (this.slotData.managementMode == 'COLLABORATION') {
-          return this.currentUser.companyCode == this.slotData.partyACompany.uid;
-        } else if (this.slotData.managementMode == 'AUTOGESTION') {
-          if (this.slotData.createdBy == 'PARTYA') {
-            return this.currentUser.companyCode == this.slotData.partyACompany.uid;
-          } else {
-            return this.currentUser.companyCode == this.slotData.partyBCompany.uid;
-          }
-        } else {
-          return false;
-        }
-      },
-      hasPartBPermission: function () {
-        //先判断订单类型
-        if (this.slotData.managementMode == 'COLLABORATION') {
-          return this.currentUser.companyCode == this.slotData.partyBCompany.uid;
-        } else if (this.slotData.managementMode == 'AUTOGESTION') {
-          if (this.slotData.createdBy == 'PARTYA') {
-            return this.currentUser.companyCode == this.slotData.partyACompany.uid;
-          } else {
-            return this.currentUser.companyCode == this.slotData.partyBCompany.uid;
-          }
-        } else {
-          return false;
-        }
-      },
       sizes: function () {
         var sizes = [];
-        this.slotData.colorSizeEntries.forEach(element => {
-          sizes.push(element.size);
+        this.slotData.entries.forEach(element => {
+          sizes.push(element.product.size);
         });
         const res = new Map();
         var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
@@ -200,8 +171,8 @@
       },
       colors: function () {
         var colors = new Set([]);
-        this.slotData.colorSizeEntries.forEach(element => {
-          colors.add(element.color.name);
+        this.slotData.entries.forEach(element => {
+          colors.add(element.product.color.name);
         });
         return colors;
       },
@@ -264,10 +235,10 @@
         };
         var result;
         if (isAll) {
-          const url = this.apis().confirmShippingV2(this.slotData.code);
+          const url = this.apis().confirmShipping(this.slotData.code);
           result = await this.$http.put(url, form);
         } else {
-          const url = this.apis().createShippingOrderV2(this.slotData.code);
+          const url = this.apis().createShippingOrder(this.slotData.code);
           result = await this.$http.post(url, form);
         }
         if (result['errors']) {
@@ -279,14 +250,14 @@
         this.refreshData();
       },
       async refreshData() {
-        // const url = this.apis().getPurchaseOrder(this.slotData.code);
-        // const result = await this.$http.get(url);
-        // if (result["errors"]) {
-        //   this.$message.error(result["errors"][0].message);
-        //   return;
-        // }
-        // //跟新slotData
-        // this.$set(this.slotData, 'shippingOrders', result.shippingOrders);
+        const url = this.apis().getPurchaseOrder(this.slotData.code);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        //跟新slotData
+        this.$set(this.slotData, 'shippingOrders', result.shippingOrders);
         this.$emit('afterCreate');
       },
       async getCarriers() {

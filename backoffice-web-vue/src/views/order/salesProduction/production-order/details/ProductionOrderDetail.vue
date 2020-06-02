@@ -26,7 +26,7 @@
         </div>
         <progress-order :slotData="formData.progressWorkSheet" @callback="onCallBack" />
         <production-order-relation-info :slotData="formData" />
-        <production-order-button-group style="margin-top:50px" :slotData="formData" />
+        <production-order-button-group style="margin-top:50px" :slotData="formData" @callback="getDetail"/>
       </el-row>
     </el-card>
   </div>
