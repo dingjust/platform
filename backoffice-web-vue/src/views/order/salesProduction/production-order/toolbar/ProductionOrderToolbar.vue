@@ -51,7 +51,7 @@
 
   const {
     mapMutations
-  } = createNamespacedHelpers('PurchaseOrdersModule');
+  } = createNamespacedHelpers('ProductionOrderModule');
 
   export default {
     name: 'ProductionOrderToolbar',
@@ -65,7 +65,7 @@
         setQueryFormData: 'queryFormData'
       }),
       onSearch () {
-        this.$store.state.PurchaseOrdersModule.keyword = this.keyword;
+        this.$store.state.ProductionOrderModule.keyword = this.keyword;
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
@@ -171,9 +171,9 @@
         dateTime: '',
         factories: [],
         brands: [],
-        keyword: this.$store.state.PurchaseOrdersModule.keyword,
-        formData: this.$store.state.PurchaseOrdersModule.formData,
-        queryFormData: this.$store.state.PurchaseOrdersModule.queryFormData,
+        keyword: this.$store.state.ProductionOrderModule.keyword,
+        formData: this.$store.state.ProductionOrderModule.formData,
+        queryFormData: this.$store.state.ProductionOrderModule.queryFormData,
         categories: []
       }
     },
