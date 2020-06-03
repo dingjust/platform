@@ -47,6 +47,7 @@ import {
   ProductionTasksModule,
   ProductionOrderModule,
   ProgressOrderModule,
+  PurchaseTaskModule,
   // contract
   ContractModule,
   ContractTemplateModule,
@@ -136,6 +137,7 @@ export default new Vuex.Store({
     ProductionOrderModule,
     ProgressOrderModule,
     ProductionTasksModule,
+    PurchaseTaskModule,
     // contract
     ContractModule,
     ContractTemplateModule,

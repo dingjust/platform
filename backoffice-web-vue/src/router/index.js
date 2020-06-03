@@ -298,6 +298,17 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/purchase-task/PurchaseTaskPage')
       },
       {
+        path: 'create/purchaseTask',
+        name: '创建采购任务',
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/purchase-task/form/PurchaseTaskForm')
+      },
+      {
+        path: 'purchaseTask/:code',
+        name: '采购任务详情',
+        props: true,
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/purchase-task/details/PurchaseTaskDetail')
+      },
+      {
         path: 'progressOrder',
         name: '进度工单列表',
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-order/ProgressOrderPage')
