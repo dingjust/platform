@@ -11,7 +11,7 @@
       <el-col :span="12">
         <div class="progress-container">
           <el-table ref="nodeTable" :data="formData.progresses" stripe :height="autoHeight">
-            <el-table-column label="节点名称" prop="progressPhase"></el-table-column>
+            <el-table-column label="节点名称" prop="progressPhase.name"></el-table-column>
             <el-table-column label="预警天数">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.delayedDays" v-if="!scope.row.originPhase"></el-input>
@@ -100,7 +100,10 @@
       onAppend (row) {
         this.formData.progresses.push({
           medias: [],
-          progressPhase: row.name,
+          progressPhase: {
+            id: row.id,
+            name: row.name
+          },
           quantity: 0,
           sequence: row.sequence,
           completeAmount: 0,
@@ -111,9 +114,8 @@
         })
       },
       isDisabled (row) {
-        console.log(this.currentSequence);
-        return this.formData.progresses.findIndex(val => val.progressPhase == row.name) > -1 ||
-        row.sequence < this.currentSequence;
+        return this.formData.progresses.findIndex(val => val.progressPhase.id == row.id) > -1 ||
+          row.sequence < this.formData.currentPhase.sequence;
       },
       async saveProgressPlan () {
         let item = {};
@@ -142,7 +144,6 @@
         progressPlanVisible: false,
         phaseData: [],
         originData: this.formData.progresses,
-        currentSequence: '',
         saveData: {
           name: '',
           remarks: '',
@@ -151,15 +152,6 @@
       }
     },
     watch: {
-      'formData.currentPhase': {
-        handler (val) {
-          if (val) {
-            let index = this.formData.progresses.findIndex(val => val.progressPhase.id== this.formData.currentPhase.id);
-            this.currentSequence = this.formData.progresses[index].sequence;
-          }
-        },
-        deep: true
-      }
     },
     created () {
       this.getPhaseList();

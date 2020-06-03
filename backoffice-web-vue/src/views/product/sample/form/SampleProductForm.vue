@@ -1,10 +1,12 @@
 <template>
   <div>
-    <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false" append-to-body>
+    <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
+               append-to-body>
       <sample-accounting-sheet-form :slot-data="sampleAccountingSheet" @onSave="onAccountingSheetSave"
         :sampleSpecEntries="slotData.entries" v-if="hackSet" />
     </el-dialog>
-    <el-dialog :visible.sync="viewDialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false">
+    <el-dialog :visible.sync="viewDialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
+               append-to-body>
       <sample-accounting-sheet :slot-data="sampleAccountingSheet" :sampleSpecEntries="slotData.entries"
         v-if="hackSet" />
     </el-dialog>

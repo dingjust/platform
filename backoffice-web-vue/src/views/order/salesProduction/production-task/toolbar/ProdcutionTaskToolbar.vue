@@ -62,7 +62,7 @@
         this.$emit('onAdvancedSearch', 0);
       },
       onReset() {
-        this.queryFormData.keyword = '';
+        this.queryFormData.keywords = '';
         this.queryFormData.status = '';
       },
       createOutboundOrder() {

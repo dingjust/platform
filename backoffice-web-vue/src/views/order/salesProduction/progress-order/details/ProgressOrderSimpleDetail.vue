@@ -66,7 +66,7 @@
         </el-row>
         <el-steps :active="getActive" align-center finish-status="success">
           <template v-for="(item, index) in slotData.progresses">
-            <el-step :title="item.progressPhase"/>
+            <el-step :title="item.progressPhase.name"/>
           </template>
         </el-steps>
       </el-col>
@@ -91,7 +91,7 @@
         if (this.slotData.status == 'COMPLETED') {
           return this.slotData.progresses.length;
         }
-        return this.slotData.progresses.findIndex(val => val.progressPhase.id == this.slotData.currentPhase.id);
+        return this.slotData.progresses.findIndex(val => val.progressPhase == this.slotData.currentPhase.id);
       },
       getSpan: function () {
         return Math.ceil(24 / this.slotData.progresses.length);

@@ -1,29 +1,26 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="订单编号" prop="code"></el-table-column>
-      <el-table-column label="订单类型" prop="type"></el-table-column>
-      <el-table-column label="创建人" prop="creationPerson"></el-table-column>
+      <el-table-column label="采购任务单号" prop="code"></el-table-column>
+      <el-table-column label="关联款号" prop="skuID"></el-table-column>
+      <el-table-column label="关联订单" prop="orderCode"></el-table-column>
+      <el-table-column label="创建人" prop="creator.name"></el-table-column>
+      <el-table-column label="采购员" prop="purchaser.name"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交货时间">
+      <el-table-column label="审批状态">
         <template slot-scope="scope">
-          <span>{{scope.row.deliverytime | timestampToTime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="任务状态">
-        <template slot-scope="scope">
-          <span>{{scope.row.state}}</span>
+          <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
-          <el-divider direction="vertical"/>
-          <el-button type="text" size="mini" @click="onApproval(scope.row)">审批</el-button>
+          <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-button type="text" @click="onEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -37,26 +34,26 @@
 
 <script>
   export default {
-    name: 'TaskApprovalList',
+    name: 'PurchaseTaskList',
     props: ['page'],
     methods: {
-      onDetail (row) {
-        this.$emit('onDetail', row.code);
-      },
-      onApproval (row) {
-        this.$emit('onApproval', row);
-      },
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this.$emit('onAdvancedSearch', 0, val);
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         this.$emit('onAdvancedSearch', val - 1);
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
+      },
+      onDetail (row) {
+
+      },
+      onEdit(row) {
+
       }
     }
   }

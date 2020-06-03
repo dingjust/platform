@@ -43,6 +43,7 @@ import PromoteProductModule from './miscs/promoteProduct';
 // sale-production
 import OutboundOrderModule from './sale-production/outbound-order'
 import ProductionTasksModule from './sale-production/production-tasks'
+import PurchaseTaskModule from './sale-production/purchase-orders'
 
 import ProductionOrderModule from './sale-production/production-orders.js'
 import ProgressOrderModule from './sale-production/progress-orders.js'
@@ -110,6 +111,7 @@ export {
   ProductionOrderModule,
   ProgressOrderModule,
   ProductionTasksModule,
+  PurchaseTaskModule,
   // contract
   ContractModule,
   ContractTemplateModule,

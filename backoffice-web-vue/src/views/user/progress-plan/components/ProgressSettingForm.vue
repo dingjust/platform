@@ -4,7 +4,7 @@
       <el-col :span="12">
         <div class="progress-container">
           <el-table ref="nodeTable" :data="formData.productionProgresses" stripe :height="autoHeight">
-            <el-table-column label="节点名称" prop="progressPhase"></el-table-column>
+            <el-table-column label="节点名称" prop="progressPhase.name"></el-table-column>
             <el-table-column label="预警天数">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.delayedDays"></el-input>
@@ -65,7 +65,10 @@
       },
       onAppend (row) {
         let item = {
-          progressPhase: row.name,
+          progressPhase: {
+            id: row.id,
+            name: row.name
+          },
           sequence: row.sequence,
           medias: [],
           delayedDays: 0,
@@ -83,7 +86,7 @@
         }
       },
       isDisabled (row) {
-        return this.formData.productionProgresses.findIndex(val => val.progressPhase == row.name) > -1;
+        return this.formData.productionProgresses.findIndex(val => val.progressPhase.id == row.id) > -1;
       },
       isDeleteDisabled (row) {
         if (this.isCreate) {
