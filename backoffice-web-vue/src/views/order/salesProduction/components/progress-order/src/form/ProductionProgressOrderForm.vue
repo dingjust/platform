@@ -8,7 +8,7 @@
     <el-row type="flex" justify="space-between">
       <el-col :span="4">
         <div class="report-list-title">
-          <h6>{{progress.progressPhase}}报工</h6>
+          <h6>{{progress.progressPhase.name}}报工</h6>
         </div>
       </el-col>
     </el-row>

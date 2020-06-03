@@ -3,7 +3,7 @@
     <template v-for="item in slotData.progresses">
       <el-row type="flex" justify="center" align="middle" class="progress-date-form-row" :key="item.id">
         <div class="progress-date-form-title">
-          <h6>{{item.progressPhase}}</h6>
+          <h6>{{item.progressPhase.name}}</h6>
         </div>
         <el-date-picker v-model="item.estimatedDate" :picker-options="pickerOptions" type="date" placeholder="选择日期">
         </el-date-picker>

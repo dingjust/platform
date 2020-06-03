@@ -102,6 +102,10 @@
               <el-button class="product-form-btn" @click="onCreateAccountingSheet(productIndex)"
                 :disabled="entry.costOrder.isIncludeTax!=null">创建成本核算单</el-button>
             </el-col>
+            <el-col :span="4">
+              <el-button class="product-form-btn" @click="onImportAccountingSheet(productIndex)" type="text"
+                v-if="entry.costOrder.isIncludeTax==null&&entry.sampleCostOrder!=null">导入样衣成本核算单</el-button>
+            </el-col>
             <el-col :span="2">
               <h6 style="padding-top:8px">核算单：</h6>
             </el-col>
@@ -255,6 +259,7 @@
           costOrder: {},
           colors: this.getColorsByEntries(colorSizeEntries),
           sizes: this.getSizesByEntries(colorSizeEntries),
+          sampleCostOrder: data.costingSheets[0]
         }
 
         var newEntry = Object.assign(this.appendProductForm.sampleList[this.currentProductIndex], entry);
@@ -361,6 +366,22 @@
           this.dialogVisible = true;
         });
       },
+      onImportAccountingSheet(productIndex) {
+        this.$set(this, 'openSampleSpecEntries', this.appendProductForm.sampleList[productIndex].materialsSpecEntries);
+        let order = Object.assign({}, this.appendProductForm.sampleList[productIndex].sampleCostOrder);
+        //移除id
+        this.$delete(order, 'id');
+        order.laborCostEntries.forEach(entry => {
+          this.$delete(entry, 'id');
+        });
+        order.materialsEntries.forEach(entry => {
+          this.$delete(entry, 'id');
+        });
+        order.specialProcessEntries.forEach(entry => {
+          this.$delete(entry, 'id');
+        });
+        this.$set(this.appendProductForm.sampleList[productIndex], 'costOrder', order);
+      },
       onUpdateAccountingSheet(index) {
         this.currentProductIndex = index;
         this.openAccountingSheetUnitPrice = this.appendProductForm.sampleList[index].unitPrice;
@@ -404,13 +425,16 @@
         this.appendProductForm.sampleList.push(newEntry);
       },
       onSubmit() {
-        //校验是否有核算单
-        let costingValidate = true;
-        this.appendProductForm.sampleList.forEach(element => {
-          if (element.costOrder.isIncludeTax == null) {
-            costingValidate = false;
+        let amountValidate = true;
+        //校验数量行
+        this.appendProductForm.sampleList.forEach(entry => {
+          if (this.countTotalAmount(entry.colorSizeEntries) < 1) {
+            amountValidate = false;
           }
         });
+        if (!amountValidate) {
+          this.$message.error('产品数量不能为空');
+        }
         //获取各层级form
         var forms = [];
         forms.push(this.$refs.appendProductForm);
@@ -423,14 +447,10 @@
         // 使用Promise.all 并行去校验结果
         Promise.all(forms.map(this.getFormPromise)).then(res => {
           const validateResult = res.every(item => !!item);
-          if (validateResult && costingValidate) {
+          if (validateResult && amountValidate) {
             this.$emit('onSave', this.appendProductForm.sampleList);
           } else {
-            if (!costingValidate) {
-              this.$message.error('请完创建成本核算单');
-            } else {
-              this.$message.error('请完善信息');
-            }
+            this.$message.error('请完善信息');
           }
         });
       },
@@ -447,7 +467,7 @@
         if (entry.costOrder != null && entry.costOrder.materialsEntries != null) {
           var newEntries = entry.costOrder.materialsEntries.filter(element => ids.indexOf(element.materialsSpecEntry
             .id) > -1);
-          this.$set(entry.costOrder, 'materialsEntries', newEntries);          
+          this.$set(entry.costOrder, 'materialsEntries', newEntries);
         }
       }
     },

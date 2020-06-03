@@ -91,7 +91,7 @@
         if (this.slotData.status == 'COMPLETED') {
           return this.slotData.progresses.length;
         }
-        return this.slotData.progresses.findIndex(val => val.progressPhase == this.slotData.currentPhase);
+        return this.slotData.progresses.findIndex(val => val.progressPhase.id == this.slotData.currentPhase.id);
       },
       getSpan: function () {
         return Math.ceil(24 / this.slotData.progresses.length);

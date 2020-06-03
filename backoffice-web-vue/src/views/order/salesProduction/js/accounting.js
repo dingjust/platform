@@ -1,5 +1,9 @@
 //成本核算单核算
 
+import {
+  parse
+} from "semver";
+
 
 //行成本
 function getEntryCostPrice(entry) {
@@ -129,11 +133,40 @@ function getEntryProfitPercent(entry) {
   }
 }
 
+//物料-颜色-实际需求数量
+function getMaterialQuantityOfColor(materialsCode, specCode, materialColor, colorSizeEntries, materialsSpecEntries) {
+  //数量划分每种颜色对应需求量
+  let colorQuantityMap = new Map();
+  colorSizeEntries.forEach(entry => {
+    if (colorQuantityMap.has(entry.color.code)) {
+      let quantity = colorQuantityMap.get(entry.color.code);
+      let newQuantity = quantity + parseInt(entry.quantity);
+      colorQuantityMap.set(entry.color.code, newQuantity);
+    } else {
+      let quantity = parseInt(entry.quantity);
+      colorQuantityMap.set(entry.color.code, quantity);
+    }
+  });
+
+  let result = 0;
+  //筛选对应物料-规格行
+  materialsSpecEntries.filter(entry => entry.materialsCode == materialsCode && entry.spec.code == specCode).forEach(entry => {
+    entry.materialsColorEntries.filter(element => element.materialsColor.code == materialColor).forEach(element => {
+      let quantity = colorQuantityMap.get(element.sampleColor.code);
+      //计算实际用量
+      let actualUseage = (1.00 + parseFloat(entry.lossRate)) * parseFloat(entry.unitQuantity);
+      result += (quantity * actualUseage);
+    });
+  });
+  return result;
+}
+
 export {
   getEntryCostPrice,
   getEntryTotalAmount,
   getEntryTotalPrice,
   getEntryTotalCost,
   getEntryProfit,
-  getEntryProfitPercent
+  getEntryProfitPercent,
+  getMaterialQuantityOfColor
 }

@@ -10,7 +10,7 @@
         <tr v-if="order.preProductionSampleEntries.length <= 0">
           <td colspan="4" style="padding: 8px;color: #909399">暂无数据</td>
         </tr>
-        <template v-for="(item, index) in order.preProductionSampleEntries">
+        <template v-else v-for="(item, index) in order.preProductionSampleEntries">
           <tr :key="index">
             <td>{{item.colorText}}</td>
             <td>{{item.sizeText}}</td>
@@ -36,7 +36,13 @@
     },
     computed: {
       order: function () {
-        return this.productionProgressOrders[this.productionProgressOrders.length - 1];
+        if (this.productionProgressOrders.length > 0) {
+          return this.productionProgressOrders[this.productionProgressOrders.length - 1];
+        } else {
+          return {
+            preProductionSampleEntries: []
+          };
+        }
       }
     },
     methods: {

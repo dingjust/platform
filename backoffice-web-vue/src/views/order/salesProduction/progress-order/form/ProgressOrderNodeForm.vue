@@ -154,7 +154,7 @@
       'formData.currentPhase': {
         handler (val) {
           if (val) {
-            let index = this.formData.progresses.findIndex(val => val.progressPhase == this.formData.currentPhase);
+            let index = this.formData.progresses.findIndex(val => val.progressPhase.id== this.formData.currentPhase.id);
             this.currentSequence = this.formData.progresses[index].sequence;
           }
         },
