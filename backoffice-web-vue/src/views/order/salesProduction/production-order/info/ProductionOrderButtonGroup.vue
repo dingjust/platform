@@ -1,14 +1,9 @@
 <template>
   <div>
     <el-row class="purchase-order-row" type="flex" justify="center" align="middle" :gutter="50">
-      <!-- <el-button class="purchase-order-btn" v-if="isMyself&&isPending&&isOffline" @click="onUniqueCode">唯一码
-    </el-button> -->
       <el-button class="purchase-order-btn" v-if="receBtn" @click="onCreateReceive">收货
       </el-button>
       <el-button class="purchase-order-btn" v-if="reconBtn" @click="onCreateReconciliation">对账单</el-button>
-      <!-- <el-button class="purchase-order-btn2" @click="onCancel" v-if="isPending && judgeType">{{isMyself?'取消订单':'拒单'}}
-    </el-button> -->
-      <!-- <el-button class="purchase-order-btn" v-if="!isMyself&&isPending&&hasPer(permission.purchaseOrderConfirm)" @click="onConfirm">接单</el-button> -->
       <el-button class="purchase-order-btn" v-if="delivBtn" @click="onDeliverViewsOpen">发货</el-button>
       <el-button class="purchase-order-btn" v-if="receViewBtn" @click="onCreateReceive" :disabled="!hasDeliveryOrders">
         {{hasDeliveryOrders?'查看收货单':'对方尚未创建收货单'}}</el-button>
@@ -28,10 +23,10 @@
       :close-on-click-modal="false">
       <deliver-order-form :slotData="slotData" @afterCreate="onAfterCreate" />
     </el-dialog>
-    <!-- <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <purchase-order-info-reconciliation :slotData="slotData" />
-    </el-dialog> -->
+      <purchase-order-info-reconciliation :slotData="slotData" @afterCreate="onAfterCreate"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -44,9 +39,9 @@
   import DeliverOrderForm from '../form/DeliverOrderForm';
   import DeliverOrderViews from './DeliverOrderViews';
 
-  import PurchaseOrderDeliverViews from '@/views/order/purchase/info/PurchaseOrderDeliverViews';
-  import PurchaseOrderInfoReconciliation from '@/views/order/purchase/info/PurchaseOrderInfoReconciliation';
-  import PurchaseOrderInfoDeliver from '@/views/order/purchase/info/PurchaseOrderInfoDeliver';
+  import PurchaseOrderDeliverViews from './PurchaseOrderDeliverViews';
+  import PurchaseOrderInfoReconciliation from './PurchaseOrderInfoReconciliation';
+  import PurchaseOrderInfoDeliver from './PurchaseOrderInfoDeliver';
 
   export default {
     name: 'ProductionOrderButtonGroup',
@@ -173,10 +168,11 @@
       },
       onDeliverViewsOpen() {
         // this.$emit('onDeliverViewsOpen');
-        this.deliverFormVisible=true;
+        this.deliverFormVisible = true;
       },
       onCreateReconciliation() {
-        this.$emit('onReconciliation');
+        this.reconciliatioFormVisible=true;
+        // this.$emit('onReconciliation');
       },
       onUpdate() {
         this.$emit('onUpdate');
@@ -184,6 +180,8 @@
       onAfterCreate() {
         this.receiveFormVisible = false;
         this.deliverFormVisible = false;
+        this.reconciliatioFormVisible=false;
+        this.$emit('callback');
       },
       onCreateNewDeliver() {
         this.deliverViewsVisible = false;

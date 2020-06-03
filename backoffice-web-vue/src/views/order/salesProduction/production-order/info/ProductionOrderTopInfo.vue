@@ -124,7 +124,7 @@
           </el-col>
         </el-row>
         <!-- 查看单据 -->
-        <purchase-order-button-group :slotData="slotData" />
+        <order-view-button-group :slotData="slotData" />
         <el-row class="info-row-title_row">
           <el-col :span="12">
             <!-- <h6>生产负责人：{{slotData.productionLeader.name}}</h6> -->
@@ -152,7 +152,7 @@
 
 <script>
   import PDFUpload from '@/components/custom/upload/PDFUpload';
-  import PurchaseOrderButtonGroup from '@/views/order/purchase/info/PurchaseOrderButtonGroup';
+  import OrderViewButtonGroup from './OrderViewButtonGroup';
 
 
   export default {
@@ -160,7 +160,7 @@
     props: ['slotData'],
     components: {
       PDFUpload,
-      PurchaseOrderButtonGroup
+      OrderViewButtonGroup
     },
     computed: {
       cooperator: function () {

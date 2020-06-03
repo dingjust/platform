@@ -8,7 +8,7 @@
     <el-row class="info-receive-row">
       <form-label label="合作对象" />
     </el-row>
-    <el-form :disabled="!hasPartAPermission">
+    <el-form :disabled="!isBrand()">
       <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
         <el-col :span="6">
           <el-row type="flex" align="middle">
@@ -138,14 +138,14 @@
       </h6>
     </el-row>
     <el-row type="flex" justify="center" class="info-receive-row">
-      <template v-if="hasPartAPermission">
+      <template v-if="isBrand()">
         <el-button class="info-receive-submit" v-if="showSaveBtn" @click="onSave">保存并退出</el-button>
         <el-button class="info-receive-submit" :disabled="!showCommitBtn" @click="onCommit">确认完成收货</el-button>
         <el-button class="info-receive-submit"
           v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onWithdraw">撤回
         </el-button>
       </template>
-      <template v-if="hasPartBPermission">
+      <template v-if="isFactory()">
         <el-button class="info-receive-refuse"
           v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onReject">拒绝
         </el-button>
@@ -162,7 +162,7 @@
   import FormLabel from "@/components/custom/FormLabel";
 
   export default {
-    name: "ReceiveOrderForm",
+    name: "PurchaseOrderInfoReceive",
     props: ["slotData"],
     components: {
       OrdersInfoItem,
@@ -170,35 +170,6 @@
     },
     mixins: [],
     computed: {
-      //判断是否拥有甲乙方权限
-      hasPartAPermission: function () {
-        //先判断订单类型
-        if (this.slotData.managementMode == 'COLLABORATION') {
-          return this.currentUser.companyCode == this.slotData.partyACompany.uid;
-        } else if (this.slotData.managementMode == 'AUTOGESTION') {
-          if (this.slotData.createdBy == 'PARTYA') {
-            return this.currentUser.companyCode == this.slotData.partyACompany.uid;
-          } else {
-            return this.currentUser.companyCode == this.slotData.partyBCompany.uid;
-          }
-        } else {
-          return false;
-        }
-      },
-      hasPartBPermission: function () {
-        //先判断订单类型
-        if (this.slotData.managementMode == 'COLLABORATION') {
-          return this.currentUser.companyCode == this.slotData.partyBCompany.uid;
-        } else if (this.slotData.managementMode == 'AUTOGESTION') {
-          if (this.slotData.createdBy == 'PARTYA') {
-            return this.currentUser.companyCode == this.slotData.partyACompany.uid;
-          } else {
-            return this.currentUser.companyCode == this.slotData.partyBCompany.uid;
-          }
-        } else {
-          return false;
-        }
-      },
       sizes: function () {
         var sizes = [];
         this.slotData.colorSizeEntries.forEach(element => {
@@ -317,7 +288,7 @@
           consignment: this.form.consignment
         };
 
-        const url = this.apis().createDeliveryOrderV2(this.slotData.code);
+        const url = this.apis().createDeliveryOrder(this.slotData.code);
         const result = await this.$http.post(url, form);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -328,16 +299,16 @@
         this.refreshData();
       },
       async refreshData() {
-        // const url = this.apis().getPurchaseOrder(this.slotData.code);
-        // const result = await this.$http.get(url);
-        // if (result["errors"]) {
-        //   this.$message.error(result["errors"][0].message);
-        //   return;
-        // }
-        // //跟新slotData
-        // this.$set(this.slotData, "deliveryOrders", result.deliveryOrders);
-        // this.$set(this.slotData, "status", result.status);
-        this.$emit("afterCreate");
+        const url = this.apis().getPurchaseOrder(this.slotData.code);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        //跟新slotData
+        this.$set(this.slotData, "deliveryOrders", result.deliveryOrders);
+        this.$set(this.slotData, "status", result.status);
+        // this.$emit("afterCreate");
       },
       getVariant(color, size, entries) {
         var result = entries.filter(
@@ -383,10 +354,10 @@
           this.slotData.deliveryOrders == null ||
           this.slotData.deliveryOrders.length == 0
         ) {
-          url = this.apis().createAndCommitDeliveryOrderV2(this.slotData.code);
+          url = this.apis().createAndCommitDeliveryOrder(this.slotData.code);
           result = await this.$http.post(url, form);
         } else {
-          url = this.apis().commitDeliveryOrderV2();
+          url = this.apis().commitDeliveryOrder();
           result = await this.$http.put(url, form);
         }
 
@@ -443,7 +414,7 @@
           consignment: this.form.consignment
         };
 
-        const url = this.apis().updateDeliveryOrderV2();
+        const url = this.apis().updateDeliveryOrder();
         const result = await this.$http.put(url, form);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -454,7 +425,7 @@
         this.refreshData();
       },
       async onWithdraw() {
-        const url = this.apis().withdrawDeliveryOrderV2(this.form.code);
+        const url = this.apis().withdrawDeliveryOrder(this.form.code);
         const result = await this.$http.put(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -465,7 +436,7 @@
         this.refreshData();
       },
       async onAccept() {
-        const url = this.apis().confirmDeliveryOrderV2(this.form.code);
+        const url = this.apis().confirmDeliveryOrder(this.form.code);
         const result = await this.$http.put(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -476,7 +447,7 @@
         this.refreshData();
       },
       async onReject() {
-        const url = this.apis().rejectDeliveryOrderV2(this.form.code);
+        const url = this.apis().rejectDeliveryOrder(this.form.code);
         const result = await this.$http.put(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -549,7 +520,6 @@
     data() {
       return {
         receiveFormVisible: false,
-        currentUser: this.$store.getters.currentUser,
         activeForm: "1",
         carriers: [],
         form: {

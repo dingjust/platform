@@ -134,7 +134,7 @@
 
   export default {
     name: "DeliverView",
-    props: ["slotData","purchaseOrder"],
+    props: ["slotData", "purchaseOrder"],
     components: {
       OrdersInfoItem,
       FormLabel
@@ -143,8 +143,8 @@
     computed: {
       sizes: function () {
         var sizes = [];
-        this.purchaseOrder.entries.forEach(element => {
-          sizes.push(element.product.size);
+        this.purchaseOrder.colorSizeEntries.forEach(element => {
+          sizes.push(element.size);
         });
         const res = new Map();
         var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
@@ -152,8 +152,8 @@
       },
       colors: function () {
         var colors = new Set([]);
-        this.slotData.entries.forEach(element => {
-          colors.add(element.color);
+        this.purchaseOrder.colorSizeEntries.forEach(element => {
+          colors.add(element.color.name);
         });
         return colors;
       },
@@ -184,7 +184,7 @@
         return amount;
       },
       getColspanLength() {
-        return this.sizes.length ;
+        return this.sizes.length;
       },
       getVariant(color, size) {
         var result = this.slotData.entries.filter(
