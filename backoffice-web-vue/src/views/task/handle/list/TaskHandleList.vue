@@ -16,7 +16,7 @@
       </el-table-column>
       <el-table-column label="任务状态">
         <template slot-scope="scope">
-          <span>{{scope.row.status}}</span>
+          <span>{{scope.row.read ? '已承接' : '未承接'}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">

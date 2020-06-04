@@ -41,6 +41,7 @@
             progressPhase: val.progressPhase,
             quantity: val.quantity,
             sequence: val.sequence,
+            warningDays: val.warningDays,
             completeAmount: val.completeAmount,
             productionProgressOrders: val.productionProgressOrders
           }

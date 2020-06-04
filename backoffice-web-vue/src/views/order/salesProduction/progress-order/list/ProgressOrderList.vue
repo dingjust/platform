@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
+    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight" :show-header="false">
       <el-table-column>
         <template slot-scope="scope">
           <progress-order-simple-detail :slotData="scope.row"/>

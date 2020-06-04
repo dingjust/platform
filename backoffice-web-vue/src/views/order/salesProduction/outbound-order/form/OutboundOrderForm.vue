@@ -323,7 +323,7 @@
       },
       addRow () {
         let item = {
-          productionTaskId: {
+          productionTask: {
             id: ''
           },
           billPrice: '',
@@ -365,6 +365,12 @@
           }
         })
         this.formData.entries = entries;
+        this.formData.entries.forEach((val, index) => {
+          if (this.$refs.addressForm[index]) {
+            this.$refs.addressForm[index].getCities(val.shippingAddress.region);
+            this.$refs.addressForm[index].onCityChanged(val.shippingAddress.city);
+          }
+        })
         this.taskDialogVisible = false;
       },
       // 封装Promise对象

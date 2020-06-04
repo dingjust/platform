@@ -7,7 +7,7 @@
             <el-table-column label="节点名称" prop="progressPhase.name"></el-table-column>
             <el-table-column label="预警天数">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.delayedDays"></el-input>
+                <el-input v-model="scope.row.warningDays" v-number-input.float="{ min: 0 ,decimal:0}"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -71,6 +71,7 @@
           },
           sequence: row.sequence,
           medias: [],
+          warningDays: 0,
           delayedDays: 0,
           quantity: 0,
           completeAmount: 0,

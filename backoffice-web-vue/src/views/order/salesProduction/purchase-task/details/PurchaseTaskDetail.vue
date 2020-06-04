@@ -9,16 +9,19 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <purchase-task-detail-top :formData="formData"/>
+      <purchase-task-detail-top :formData="formData" :readOnly="true"/>
+      <el-divider></el-divider>
+      <purchase-task-detail-table :formData="formData"/>
     </el-card>
   </div>
 </template>
 
 <script>
   import PurchaseTaskDetailTop from './PurchaseTaskDetailTop';
+  import PurchaseTaskDetailTable from './PurchaseTaskDetailTable';
   export default {
     name: 'PurchaseTaskDetail',
-    components: {PurchaseTaskDetailTop},
+    components: {PurchaseTaskDetailTable, PurchaseTaskDetailTop},
     data () {
       return {
         formData: {
@@ -100,4 +103,7 @@
     padding-left: 10px;
   }
 
+  /deep/ .el-divider--horizontal {
+    margin: 0px 0;
+  }
 </style>

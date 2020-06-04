@@ -130,8 +130,15 @@
           this.$router.push('/sales/production/' + row.refItemPk);
         }
       },
+      // 承接
       onUndertake (row) {
-        this.$message('--------------------承接-------------------------')
+        const url = this.apis().updateToRead(row.id);
+        const result = this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('已承接该任务');
       },
       onAssignment () {
         this.$message('--------------------分配任务-------------------------')

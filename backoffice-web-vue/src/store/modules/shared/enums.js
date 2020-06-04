@@ -1600,7 +1600,24 @@ const state = {
     code: 'APPROVED',
     name: '审核通过'
   }
-  ]
+  ],
+  // 任务中心-审核状态
+  AuditState: [{
+    code: 'NONE',
+    name: '无'
+  }, {
+    code: 'AUDITING',
+    name: '审核中'
+  }, {
+    code: 'PASSED',
+    name: '审核通过'
+  }, {
+    code: 'AUDITED_FAILED',
+    name: '审核失败'
+  }, {
+    code: 'REVOKED',
+    name: '撤回'
+  }]
 };
 
 const mutations = {};
