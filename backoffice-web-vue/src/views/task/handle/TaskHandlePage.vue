@@ -131,9 +131,9 @@
         }
       },
       // 承接
-      onUndertake (row) {
+      async onUndertake (row) {
         const url = this.apis().updateToRead(row.id);
-        const result = this.$http.get(url);
+        const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

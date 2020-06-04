@@ -42,7 +42,7 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="优先级">
-          <el-select :disabled="isRead">
+          <el-select v-model="value" :disabled="isRead">
             <el-option label="普通" :value="'普通'" />
             <el-option label="加急" :value="'加急'" />
             <el-option label="特级" :value="'特级'" />
@@ -85,6 +85,7 @@
     },
     data () {
       return {
+        value: '',
         machiningTypes: this.$store.state.EnumsModule.machiningTypes
       }
     }
