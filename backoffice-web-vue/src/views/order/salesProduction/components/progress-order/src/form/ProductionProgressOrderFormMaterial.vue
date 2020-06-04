@@ -3,7 +3,7 @@
     <el-row type="flex" justify="space-between">
       <el-col :span="4">
         <div class="report-list-title">
-          <h6>{{progress.progressPhase}}报工</h6>
+          <h6>{{progress.progressPhase.name}}报工</h6>
         </div>
       </el-col>
     </el-row>
@@ -138,6 +138,10 @@
 </template>
 
 <script>
+  import {
+    getMaterialQuantityOfColor
+  } from '@/views/order/salesProduction/js/accounting.js';
+
   import ImagesUpload from '@/components/custom/ImagesUpload';
   import ProductionMediaImageCardShow from '../ProductionMediaImageCardShow';
 
@@ -258,12 +262,21 @@
             materialsUnit: entry.materialsUnit,
             spec: entry.spec.name
           };
-          var colorEntries = entry.materialsColorEntries.map(element => {
-            return {
-              materialsColor: element.materialsColor.name,
-              actualDemandQuantity: '',
-              actualReceivedQuantity: '',
-            };
+
+          var colorEntries = [];
+          let colorSet = new Set();
+          entry.materialsColorEntries.forEach(element => {
+            //除重
+            if (!colorSet.has(element.materialsColor.name)) {
+              colorEntries.push({
+                materialsColor: element.materialsColor.name,
+                actualDemandQuantity: getMaterialQuantityOfColor(entry.materialsCode, entry.spec.code,
+                  element.materialsColor.code, this.belong.colorSizeEntries, this.belong
+                  .materialsSpecEntries),
+                actualReceivedQuantity: '',
+              });
+              colorSet.add(element.materialsColor.name);
+            }
           });
           obj['colorEntries'] = colorEntries;
           return obj;

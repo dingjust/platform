@@ -32,8 +32,10 @@
       </div>
     </div>
     <div class="modal" v-show="isShowModal">
-      <el-row type="flex" justify="center">
-        <el-button round class="modal-btn" @click="onClick">查看</el-button>
+      <el-row type="flex" justify="center" align="middle" style="height:100%">
+        <el-col :span="24" >
+          <el-button round class="modal-btn" @click="onClick">查看</el-button>
+        </el-col>
       </el-row>
     </div>
   </div>
@@ -182,13 +184,12 @@
     display: inline-block;
     align-content: center;
     text-align: center;
-    padding-top: 20%;
+    /* padding-top: 20%; */
     vertical-align: middle;
   }
 
   .modal-btn {
-    width: 50%;
-    /* line-height: 20%; */
+    width: 50%;    
   }
 
 </style>

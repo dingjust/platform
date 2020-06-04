@@ -28,11 +28,6 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="approvalStatus">
-        <template slot-scope="scope">
-          <span>{{getEnum('approvalStatuses', scope.row.approvalStatus)}}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" min-width="240">
         <template slot-scope="scope">
           <el-button v-if="modifyShow()" type="text" icon="el-icon-edit" @click="onDetails(scope.row)">详情</el-button>

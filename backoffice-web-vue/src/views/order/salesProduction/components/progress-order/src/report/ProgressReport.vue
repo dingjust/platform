@@ -6,12 +6,12 @@
         :readOnly="onView" v-if="hackSet" @callback="onCallback" @onClose="onClose" />
     </el-dialog>
     <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
-      v-if="slotData.progressPhase=='备料'" :close-on-click-modal="false">
+      v-if="slotData.progressPhase.name=='备料'" :close-on-click-modal="false">
       <production-progress-order-form-material :belong="belong" :progress="slotData" :progressOrder="progressOrder"
         v-if="formVisible" @callback="onCallback" :readOnly="onView" @onClose="onClose" />
     </el-dialog>
     <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
-      v-if="slotData.progressPhase=='产前样'" :close-on-click-modal="false">
+      v-if="slotData.progressPhase.name=='产前样'" :close-on-click-modal="false">
       <production-progress-order-form-sample :belong="belong" :progress="slotData" :progressOrder="progressOrder"
         v-if="formVisible" @callback="onCallback" :readOnly="onView" @onClose="onClose" />
     </el-dialog>
@@ -23,7 +23,7 @@
     <el-row type="flex" justify="space-between">
       <el-col :span="6">
         <div class="report-list-title">
-          <h6>{{slotData.progressPhase}}</h6>
+          <h6>{{slotData.progressPhase.name}}</h6>
         </div>
       </el-col>
       <el-col :span="6">
@@ -69,9 +69,10 @@
         <el-row type="flex" justify="end">
           <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
         </el-row>
-        <progress-report-material v-if="slotData.progressPhase=='备料'"
-          :productionProgressOrders="slotData.productionProgressOrders" />
-        <progress-report-sample v-if="slotData.progressPhase=='产前样'"
+        <progress-report-material v-if="slotData.progressPhase.name=='备料'"
+          :productionProgressOrders="slotData.productionProgressOrders"
+          :materialsSpecEntries="belong.materialsSpecEntries" />
+        <progress-report-sample v-if="slotData.progressPhase.name=='产前样'"
           :productionProgressOrders="slotData.productionProgressOrders" />
         <progress-report-common v-if="isColorSizeType" :orderEntries="belong.colorSizeEntries"
           :noteEntries="slotData.productionProgressOrders" @onOrder="onOrder" :orderEntriesTotal="0"
@@ -136,7 +137,7 @@
     },
     computed: {
       isColorSizeType: function () {
-        switch (this.slotData.progressPhase) {
+        switch (this.slotData.progressPhase.name) {
           case '备料':
             return false;
           case '产前样':
@@ -163,7 +164,7 @@
       },
       readonly: function () {
         if (this.belong.status == 'IN_PRODUCTION') {
-          return !(this.belong.currentPhase == this.slotData.progressPhase);
+          return !(this.belong.currentPhase.id == this.slotData.progressPhase.id);
         } else {
           return true;
         }

@@ -8,7 +8,7 @@
     <el-row type="flex" justify="space-between">
       <el-steps :active="activeNodeIndex" align-center style="width:100%" finish-status="success">
         <template v-for="(item,index) in slotData.progresses">
-          <step :title="item.progressPhase" :key="index" @onClick="onEdit(item)">
+          <step :title="item.progressPhase.name" :key="index" @onClick="onEdit(item)">
             <div slot="description">
               <el-row type="flex" justify="center">
                 预计完成日期:{{item.estimatedDate | timestampToTime}}
@@ -60,7 +60,7 @@
         if (this.slotData.status == 'COMPLETED') {
           return this.slotData.progresses.length;
         }
-        let index = this.slotData.progresses.findIndex(val => val.progressPhase == this.slotData.currentPhase);
+        let index = this.slotData.progresses.findIndex(val => val.progressPhase.id == this.slotData.currentPhase.id);
         return index;
       },
     },
@@ -71,14 +71,6 @@
       ...createNamespacedHelpers('ProgressOrderModule').mapMutations({
         updateProgressModel: 'currentProgress'
       }),
-      /// 判断是否正在进行中
-      isDoing(index, data) {
-        if (this.slotData.status == 'IN_PRODUCTION') {
-          return data[index].phase == this.slotData.currentPhase;
-        } else {
-          return false;
-        }
-      },
       onEdit(item) {
         item.updateOnly = true;
         this.updateProgressModel(item);

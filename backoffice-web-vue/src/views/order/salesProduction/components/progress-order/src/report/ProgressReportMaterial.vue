@@ -44,21 +44,55 @@
           return [];
         }
       },
-      // materialsSpecEntries: {
-      //   type: Array,
-      //   default: () => {
-      //     return [];
-      //   }
-      // }
+      materialsSpecEntries: {
+        type: Array,
+        default: () => {
+          return [];
+        }
+      }
     },
     computed: {
       order: function () {
-        // var arry = this.productionProgressOrders.sort((o1, o2) => {
-        //   console.log(o1.reportTime+'-'+o2.reportTime);
-        //   console.log(o1.reportTime - o2.reportTime);
-        //   return o1.reportTime - o2.reportTime;
-        // });
-        return this.productionProgressOrders[this.productionProgressOrders.length - 1];
+        if (this.productionProgressOrders.length > 0) {
+          return this.productionProgressOrders[this.productionProgressOrders.length - 1];
+        } else {
+          //若没有则显示物料清单
+          let materialsSpecEntries = [];
+          this.materialsSpecEntries.forEach(entry => {
+            var obj = {
+              status: null,
+              title: entry.title,
+              position: entry.position,
+              materialsId: entry.materialsId,
+              materialsCode: entry.materialsCode,
+              materialsName: entry.materialsName,
+              unitQuantity: entry.unitQuantity,
+              lossRate: entry.lossRate,
+              materialsType: entry.materialsType,
+              materialsUnit: entry.materialsUnit,
+              spec: entry.spec.name
+            };
+            var colorEntries = [];
+            let colorSet = new Set();
+            entry.materialsColorEntries.forEach(element => {
+              //除重
+              if (!colorSet.has(element.materialsColor.name)) {
+                colorEntries.push({
+                  materialsColor: element.materialsColor.name,
+                  actualDemandQuantity: '',
+                  actualReceivedQuantity: '',
+                });
+                colorSet.add(element.materialsColor.name);
+              }
+            });
+            obj['colorEntries'] = colorEntries;
+            console.log(obj.materialsName);
+            materialsSpecEntries.push(obj);
+          });
+          return {
+            materialsSpecEntries: materialsSpecEntries
+          };
+        }
       }
     },
     methods: {
