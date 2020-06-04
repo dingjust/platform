@@ -26,17 +26,22 @@
           <span>{{getEntryTotalAmount(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="关联任务单" prop="productionTask.code">
+      <el-table-column label="关联任务单" prop="productionTask.code" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onTaskDetail(scope.row.productionTask.id)">{{scope.row.productionTask.code}}
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="关联外发单">
+      <el-table-column label="关联外发单" min-width="120">
       </el-table-column>
-      <el-table-column label="关联生产单">
+      <el-table-column label="关联生产单" min-width="120">
+        <template slot-scope="scope">
+          <el-button type="text" @click="onProductionOrderDetail(scope.row.productionWorkOrderCode)">
+            {{scope.row.productionWorkOrderCode}}
+          </el-button>
+        </template>
       </el-table-column>
-      <el-table-column label="关联采购任务">
+      <el-table-column label="关联采购任务" min-width="120">
       </el-table-column>
       <el-table-column label="交货时间">
         <template slot-scope="scope">
@@ -50,9 +55,7 @@
       </el-table-column>
       <el-table-column label="操作" min-width="120">
         <template slot-scope="scope">
-          <!-- <el-button type="text" @click="onProductDetail(scope.row)">详情</el-button> -->
-          <el-button type="text" @click="onModify(scope.$index)">编辑</el-button>
-          <el-button slot="reference" type="text" @click="onDelete(scope.$index)">删除</el-button>
+          <el-button type="text" @click="onDetail(scope.row.productionTask.id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -69,14 +72,17 @@
       }
     },
     methods: {
-      onProductDetail(row) {
-        // this.salesProductDetailsVisible = true;
+      onDetail(id) {
+        this.$router.push('/sales/entry/' + id);
       },
       onDelete(index) {
         this.$emit('onTaskDelete', index);
       },
       onTaskDetail(id) {
         this.$router.push('/sales/production/' + id);
+      },
+      onProductionOrderDetail(code) {
+        this.$router.push('/sales/productionOrder/' + code);
       },
       onClose() {
 

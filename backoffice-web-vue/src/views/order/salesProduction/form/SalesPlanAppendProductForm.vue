@@ -8,12 +8,14 @@
       append-to-body>
       <sample-accounting-sheet-form v-if="dialogVisible" :slot-data="openAccountingSheet"
         @onSave="onAccountingSheetSave" :sampleSpecEntries="openSampleSpecEntries"
-        :unitPrice="openAccountingSheetUnitPrice" />
+        :needMaterialsSpec="needMaterialsSpec" :unitPrice="openAccountingSheetUnitPrice"
+        :needMaterialAccounting="needMaterialsSpec" />
     </el-dialog>
     <el-dialog :visible.sync="viewDialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
       append-to-body>
       <sample-accounting-sheet :slot-data="openAccountingSheet" :sampleSpecEntries="openSampleSpecEntries"
-        :unitPrice="openAccountingSheetUnitPrice" v-if="viewDialogVisible" :readOnly="readOnly" />
+        :unitPrice="openAccountingSheetUnitPrice" v-if="viewDialogVisible" :readOnly="readOnly"
+        :needMaterialAccounting="needMaterialsSpec" />
     </el-dialog>
     <el-form :model="appendProductForm" ref="appendProductForm" label-position="left" :disabled="readOnly">
       <template v-for="(entry, productIndex) in appendProductForm.sampleList">
@@ -178,6 +180,11 @@
       readOnly: {
         type: Boolean,
         default: false
+      },
+      //是否需要物料清单
+      needMaterialsSpec: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -207,7 +214,7 @@
               price: '',
               deliveryTime: '',
               populationScale: '',
-              cooperationModes: "LABOR_AND_MATERIAL",
+              cooperationMode: "LABOR_AND_MATERIAL",
               invoiceTaxPoint: 0.03,
               invoiceNeeded: false,
               remarks: "",
@@ -253,13 +260,18 @@
           colorSizeEntries: colorSizeEntries,
           unitPrice: '',
           deliveryDate: '',
-          materialsSpecEntries: data.entries,
+          // materialsSpecEntries: data.entries,
           productionProcessContent: '',
           medias: [],
           costOrder: {},
           colors: this.getColorsByEntries(colorSizeEntries),
           sizes: this.getSizesByEntries(colorSizeEntries),
           sampleCostOrder: data.costingSheets[0]
+        }
+
+        //若需要物料清单
+        if (this.needMaterialsSpec) {
+          entry['materialsSpecEntries'] = data.entries;
         }
 
         var newEntry = Object.assign(this.appendProductForm.sampleList[this.currentProductIndex], entry);
@@ -350,20 +362,27 @@
         }
       },
       onCreateAccountingSheet(productIndex) {
-        this.currentProductIndex = productIndex;
-        this.openAccountingSheetUnitPrice = this.appendProductForm.sampleList[productIndex].unitPrice;
-        this.$set(this, 'openSampleSpecEntries', this.appendProductForm.sampleList[productIndex].materialsSpecEntries);
-        // this.openSampleSpecEntries = this.appendProductForm.sampleList[productIndex].materialsSpecEntries;
-        this.openAccountingSheet = {
-          'isIncludeTax': true,
-          'remarks': '',
-          'totalPrice': 0,
-          'materialsEntries': [],
-          'specialProcessEntries': [],
-          'laborCostEntries': []
-        };
-        this.$nextTick(() => {
-          this.dialogVisible = true;
+        this.$refs.appendProductForm.validateField('sampleList.' + productIndex + '.unitPrice', errMsg => {
+          if (errMsg) {
+            this.$message.error('请先填写订单报价');
+          } else {
+            this.currentProductIndex = productIndex;
+            this.openAccountingSheetUnitPrice = this.appendProductForm.sampleList[productIndex].unitPrice;
+            this.$set(this, 'openSampleSpecEntries', this.appendProductForm.sampleList[productIndex]
+              .materialsSpecEntries);
+            this.openSampleSpecEntries = this.appendProductForm.sampleList[productIndex].materialsSpecEntries;
+            this.openAccountingSheet = {
+              'isIncludeTax': true,
+              'remarks': '',
+              'totalPrice': 0,
+              'materialsEntries': [],
+              'specialProcessEntries': [],
+              'laborCostEntries': []
+            };
+            this.$nextTick(() => {
+              this.dialogVisible = true;
+            });
+          }
         });
       },
       onImportAccountingSheet(productIndex) {
@@ -409,7 +428,7 @@
             price: '',
             deliveryTime: '',
             populationScale: '',
-            cooperationModes: "LABOR_AND_MATERIAL",
+            cooperationMode: "LABOR_AND_MATERIAL",
             invoiceTaxPoint: 0.03,
             invoiceNeeded: false,
             remarks: "",

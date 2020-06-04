@@ -56,11 +56,15 @@
       },
       medias: {
         type: Array,
-        default: []
+        default: () => {
+          return [];
+        }
       },
       productsColors: {
         type: Array,
-        default: []
+        default: () => {
+          return [];
+        }
       },
       isRead: {
         type: Boolean,

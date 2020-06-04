@@ -14,14 +14,14 @@
           </el-col>
         </el-row>
         <div class="pt-2"></div>
-        <el-row type="flex" :gutter="20">
+        <!-- <el-row type="flex" :gutter="20">
           <el-col :span="8">
             <el-form-item label="订单名称" label-width="110px" prop='name'
               :rules="{required: true, message: '不能为空', trigger: 'blur'}">
               <el-input v-model="form.name" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -141,7 +141,8 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
-        :defaultAddress="form.address" :isUpdate="false" :productionLeader="form.productionLeader" />
+        :needMaterialsSpec="needMaterialsSpec" :defaultAddress="form.address" :isUpdate="false"
+        :productionLeader="form.productionLeader" />
     </el-dialog>
   </div>
 </template>
@@ -170,6 +171,18 @@
       SalesProductionTabs
     },
     computed: {
+      //根据订单类型，加工类型判断是否需要物料清单等
+      needMaterialsSpec: function () {
+        //销售订单
+        switch (this.form.cooperationMode) {
+          case 'LABOR_AND_MATERIAL':
+            return true;
+          case 'LIGHT_PROCESSING':
+            return false;
+          default:
+            return false;
+        }
+      },
       //总数量
       totalAmount: function () {
         let total = 0;

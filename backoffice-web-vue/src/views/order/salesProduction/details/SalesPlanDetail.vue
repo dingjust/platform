@@ -12,11 +12,6 @@
             <h6>销售计划详情</h6>
           </div>
         </el-col>
-        <el-col :span="16">
-          <div>
-            <h6>销售单号：{{formData.code}}</h6>
-          </div>
-        </el-col>
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
@@ -44,7 +39,8 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
-        :defaultAddress="formData.address" :isUpdate="false" :productionLeader="formData.productionLeader" />
+        :needMaterialsSpec="needMaterialsSpec" :defaultAddress="formData.address" :isUpdate="false"
+        :productionLeader="formData.productionLeader" />
     </el-dialog>
   </div>
 </template>
@@ -85,6 +81,18 @@
       ...mapGetters({
         formData: 'formData'
       }),
+      //根据订单类型，加工类型判断是否需要物料清单等
+      needMaterialsSpec: function () {
+        //销售计划
+        switch (this.formData.cooperationMode) {
+          case 'LABOR_AND_MATERIAL':
+            return false;
+          case 'LIGHT_PROCESSING':
+            return true;
+          default:
+            return false;
+        }
+      },
       getTriangleColor: function () {
         switch (this.formData.auditState) {
           case 'AUDITING':
@@ -152,6 +160,7 @@
         } else if (result.code == '1') {
           this.$message.success('更新成功');
           this.$router.go(0);
+          this.getDetails();
         }
       },
       onReturnPage() {
@@ -164,7 +173,6 @@
       },
       getRefuseMsg(msg) {
         this.refuseVisible = false;
-        this.$message('-----------拒绝销售计划' + msg + '----------------------');
       },
       onPass() {
         this.$confirm('请问是否通过此销售计划', '提示', {

@@ -23,7 +23,7 @@
 <script>
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
-  import PurchaseOrderBasicTable from '../../components/PurchaseOrderBasicTable';
+  import PurchaseOrderBasicTable from '../../components/context-order-tab/PurchaseOrderBasicTable';
 
   export default {
     name: 'ProductionOrderRelationInfo',

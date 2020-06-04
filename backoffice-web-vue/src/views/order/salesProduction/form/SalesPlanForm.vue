@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="form" :model="form" label-width="100px" label-position="left">
         <el-row>
           <el-col :span="4">
             <div class="sales-plan-form-title">
@@ -19,12 +19,12 @@
             </el-col>
           </el-row>
           <el-row type="flex" :gutter="20">
-            <el-col :span="8">
+            <!-- <el-col :span="8">
               <el-form-item label="计划名称" prop="name" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                 <el-input v-model="form.name" placeholder="请输入"></el-input>
               </el-form-item>
-            </el-col>
-            <el-col :span="10">
+            </el-col> -->
+            <el-col :span="24">
               <el-form-item label="预计销售时间" class="form-date-item" label-width="120px">
                 <el-date-picker v-model="form.salesDateRange" type="daterange" range-separator="~" unlink-panels
                   @change="onDateRangeChange" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -94,7 +94,8 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
-        :defaultAddress="form.address" :isUpdate="false" :productionLeader="form.productionLeader" />
+        :needMaterialsSpec="needMaterialsSpec" :defaultAddress="form.address" :isUpdate="false"
+        :productionLeader="form.productionLeader" />
     </el-dialog>
   </div>
 </template>
@@ -114,7 +115,18 @@
       SalesProductionTabs
     },
     computed: {
-
+      //根据订单类型，加工类型判断是否需要物料清单等
+      needMaterialsSpec: function () {
+        //销售计划
+        switch (this.form.cooperationMode) {
+          case 'LABOR_AND_MATERIAL':
+            return false;
+          case 'LIGHT_PROCESSING':
+            return true;
+          default:
+            return false;
+        }
+      }
     },
     methods: {
       onDateRangeChange(val) {
