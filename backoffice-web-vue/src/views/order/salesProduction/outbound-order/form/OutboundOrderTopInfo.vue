@@ -2,31 +2,34 @@
   <div>
     <el-row type="flex">
       <el-col :span="12">
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col>
             <h5 style="font-weight: bold">订单详情</h5>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
-          <el-col :span="10">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
+          <el-col :span="9">
             <h6>生产单号：{{slotData.code}}</h6>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <h6>合作方式：{{getEnum('machiningTypes', slotData.machiningType)}}</h6>
           </el-col>
-          <el-col :span="6">
-            <h6>是否开发票：{{slotData.invoiceNeeded ? '是' : '否'}}</h6>
+          <el-col :span="5">
+            <h6>是否开票：{{slotData.invoiceNeeded ? '是' : '否'}}</h6>
+          </el-col>
+          <el-col :span="3">
+            <h6>税点：{{slotData.invoiceTaxPoint * 100}}%</h6>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
-          <el-col :span="10">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
+          <el-col :span="9">
             <h6>生产总数：{{totalQuantity}}</h6>
           </el-col>
-          <el-col :span="14">
-            <h6>生产总价：{{totalPrice}}</h6>
+          <el-col :span="15">
+            <h6>生产总价：{{totalPrice}}元</h6>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="24">
             <h6>送货地址：{{slotData.entries[0].shippingAddress.details}}</h6>
           </el-col>
@@ -34,45 +37,45 @@
       </el-col>
       <el-divider direction="vertical"></el-divider>
       <el-col :span="8">
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col>
             <h5 style="font-weight: bold">合作商信息</h5>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col>
             <h6>合作工厂：{{slotData.cooperator.type == 'ONLINE' ?
               slotData.cooperator.partner.name : slotData.cooperator.name}}</h6>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="12">
-<!--            <h6>联系人：{{slotData.cooperator.contactPerson}}</h6>-->
-            <h6>合作工厂：{{slotData.cooperator.type == 'ONLINE' ?
+            <h6>联系人：{{slotData.cooperator.type == 'ONLINE' ?
               slotData.cooperator.partner.contactPerson : slotData.cooperator.contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-<!--            <h6>联系方式：{{slotData.cooperator.contactPhone}}</h6>-->
-            <h6>合作工厂：{{slotData.cooperator.type == 'ONLINE' ?
+            <h6>联系方式：{{slotData.cooperator.type == 'ONLINE' ?
               slotData.cooperator.partner.contactPhone : slotData.cooperator.contactPhone}}</h6>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col>
             <h5 style="font-weight: bold">人员设置</h5>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="12">
-            <h6>甲方跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6>
+            <h6 class="hide-text" :title="slotData.partyAOperator ? slotData.partyAOperator.name : ''">
+              甲方跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6>
           </el-col>
           <el-col :span="12">
             <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.mobileNumber : ''}}</h6>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="12">
-            <h6>乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>
+            <h6 class="hide-text" :title="slotData.partyBOperator ? slotData.partyBOperator.name : ''">
+              乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>
           </el-col>
           <el-col :span="12">
             <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.mobileNumber : ''}}</h6>
@@ -163,5 +166,11 @@
   .el-divider--vertical{
     height: auto;
     margin: 0px;
+  }
+
+  .hide-text {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }
 </style>

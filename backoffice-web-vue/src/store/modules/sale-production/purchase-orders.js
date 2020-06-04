@@ -103,7 +103,6 @@ const actions = {
     }
   },
   async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
-    commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);

@@ -92,10 +92,10 @@
       }
     },
     methods: {
-      addressSelect() {
+      addressSelect () {
         this.addressSelectVisible = !this.addressSelectVisible;
       },
-      async onAddressSelect(val) {
+      async onAddressSelect (val) {
         this.addressSelectVisible = false;
         this.address = val;
         this.getCities(val.region);
@@ -109,7 +109,7 @@
 
         this.cityDistricts = result;
       },
-      async getRegions() {
+      async getRegions () {
         const url = this.apis().getRegions();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -119,14 +119,14 @@
 
         this.regions = result;
       },
-      onRegionChanged(current) {
+      onRegionChanged (current) {
         if (!current || current.isocode == '') {
           return;
         }
 
         this._onRegionChanged(current);
       },
-      _onRegionChanged(current) {
+      _onRegionChanged (current) {
         this.cities = [];
         this.$set(this.address, 'city', {
           code: '',
@@ -141,7 +141,7 @@
           this.onCityChanged(this.address.city.code);
         }
       },
-      async getCities(region) {
+      async getCities (region) {
         const url = this.apis().getCities(region.isocode);
         const result = await this.$http.get(url);
 
@@ -152,13 +152,13 @@
 
         this.cities = result;
       },
-      onCityChanged(current) {
+      onCityChanged (current) {
         if (!current) {
           return;
         }
         this._onCityChanged(current);
       },
-      async _onCityChanged(city) {
+      async _onCityChanged (city) {
         this.cityDistricts.clear;
         const url = this.apis().getDistricts(city.code);
         const result = await this.$http.get(url);
@@ -169,10 +169,10 @@
         }
 
         this.cityDistricts = result;
-      },
+      }
 
     },
-    data() {
+    data () {
       return {
         address: {
           region: '',
@@ -189,26 +189,21 @@
     watch: {
       vAddress: function (newVal, oldVal) {
         this.address = newVal;
-        if (this.address != null && this.address.region != null && this.address.region != "") {
-          this.getCities(this.address.region);
-          this.onCityChanged(this.address.city);
-        }
       },
       address: function (newVal, oldVal) {
-        this.$emit("update:vAddress", newVal);
-      },
+        this.$emit('update:vAddress', newVal);
+      }
     },
-    created() {
+    created () {
       this.getRegions();
       this.address = this.vAddress
-      //手动加载选中市区数据
-      if (this.address != null && this.address.region != null && this.address.region != "") {
+      // 手动加载选中市区数据
+      if (this.address != null && this.address.region != null && this.address.region != '') {
         this.getCities(this.address.region);
         this.onCityChanged(this.address.city);
       }
     }
   }
-
 </script>
 
 <style>

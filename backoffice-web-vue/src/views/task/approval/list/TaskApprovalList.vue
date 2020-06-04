@@ -2,7 +2,7 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="订单编号" prop="code"></el-table-column>
-      <el-table-column label="订单类型" prop="type"></el-table-column>
+      <el-table-column label="订单类型" prop="typeLabel"></el-table-column>
       <el-table-column label="创建人" prop="creationPerson"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
@@ -16,14 +16,14 @@
       </el-table-column>
       <el-table-column label="任务状态">
         <template slot-scope="scope">
-          <span>{{scope.row.state}}</span>
+          <span>{{getEnum('AuditState', scope.row.state)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
-          <el-divider direction="vertical"/>
-          <el-button type="text" size="mini" @click="onApproval(scope.row)">审批</el-button>
+          <el-divider v-if="scope.row.state != 'PASSED'" direction="vertical"/>
+          <el-button v-if="scope.row.state != 'PASSED'" type="text" size="mini" @click="onApproval(scope.row)">审批</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,7 +41,7 @@
     props: ['page'],
     methods: {
       onDetail (row) {
-        this.$emit('onDetail', row.code);
+        this.$emit('onDetail', row);
       },
       onApproval (row) {
         this.$emit('onApproval', row);

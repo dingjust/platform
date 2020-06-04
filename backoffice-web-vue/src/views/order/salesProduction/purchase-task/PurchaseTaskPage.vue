@@ -55,12 +55,12 @@
       onSearch (page, size) {
       },
       onAdvancedSearch (page, size) {
-        // const query = this.queryFormData;
-        // const url = this.apis().getProgressOrderList();
-        // this.searchAdvanced({url, query, page, size});
+        const query = this.queryFormData;
+        const url = this.apis().getPurchaseTaskList();
+        this.searchAdvanced({url, query, page, size});
       },
       handleClick (tab, event) {
-        this.queryFormData.status = tab.name;
+        // this.queryFormData.status = tab.name;
         this.onAdvancedSearch();
       },
       createPurchaseTask () {

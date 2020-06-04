@@ -3,53 +3,87 @@
     <el-form>
     <el-row type="flex" justify="space-between" align="middle">
       <el-col :span="6">
-        <h6>采购单号：{{formData.code}}</h6>
+        <el-form-item style="margin-bottom: 0">
+          <label class="el-form-item__label">创建人：{{formData.code}}</label>
+        </el-form-item>
       </el-col>
       <el-col :span="6">
-        <h6>关联任务：{{formData.orderCode}}</h6>
+        <el-form-item style="margin-bottom: 0">
+          <label class="el-form-item__label">关联任务：{{formData.orderCode}}</label>
+        </el-form-item>
       </el-col>
       <el-col :span="6">
-        <h6>关联款号：{{formData.skuID}}</h6>
+        <el-form-item style="margin-bottom: 0">
+          <label class="el-form-item__label">关联款号：{{formData.skuID}}</label>
+        </el-form-item>
       </el-col>
       <el-col :span="6">
-        <h6>状态：{{formData.status}}</h6>
+        <el-form-item style="margin-bottom: 0">
+          <label class="el-form-item__label">状态：{{formData.status}}</label>
+        </el-form-item>
       </el-col>
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="basic-row">
       <el-col :span="6">
-        <h6>采购名称：{{formData.purchaseName}}</h6>
-      </el-col>
-      <el-col :span="6">
-        <h6>完成时间：{{formData.completedDateFrom | timestampToTime}}
-          -{{formData.completedDateTo | timestampToTime}}</h6>
-      </el-col>
-      <el-col :span="4">
-        <h6>创建人：{{formData.creator.name}}</h6>
-      </el-col>
-      <el-col :span="4">
-        <h6>审批人：{{formData.approver.name}}</h6>
-      </el-col>
-      <el-col :span="4">
-        <h6>采购人：{{formData.purchaser.name}}</h6>
-      </el-col>
-    </el-row>
-    <el-row type="flex" justify="start" align="middle" class="basic-row">
-      <el-col :span="4">
-        <h6>生产要求</h6>
-      </el-col>
-    </el-row>
-    <el-row type="flex" justify="start" align="middle" class="basic-row">
-      <el-col :span="6">
-<!--        <h6>是否含税：{{formData.taxIncluded ? '含税' : '不含税'}}</h6>-->
-        <el-form-item label="是否含税：" label-width="60">
-          <el-radio v-model="formData.taxIncluded" :label="true">含税</el-radio>
-          <el-radio v-model="formData.taxIncluded" :label="false">不含税</el-radio>
+        <el-form-item style="margin-bottom: 0">
+          <label class="el-form-item__label">采购名称：{{formData.purchaseName}}</label>
         </el-form-item>
       </el-col>
       <el-col :span="6">
-<!--        <h6>品质要求：{{formData.qualityLevel}}</h6>-->
+        <el-form-item style="margin-bottom: 0">
+          <label class="el-form-item__label">完成时间：{{formData.completedDateFrom | timestampToTime}}
+            ~ {{formData.completedDateTo | timestampToTime}}</label>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4">
+        <el-form-item label="创建人" label-width="60" style="margin-bottom: 0">
+<!--         <label class="el-form-item__label">创建人：{{formData.creator.name}}</label>-->
+          <el-input :disabled="readOnly" v-model="formData.creator.name" style="width: 120px"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4">
+        <el-form-item label="审批人" label-width="60" style="margin-bottom: 0">
+<!--         <label class="el-form-item__label">审批人：{{formData.approver.name}}</label>-->
+          <el-select :disabled="readOnly" v-model="formData.approver" value-key="id" style="width: 120px">
+            <el-option v-for="(item, index) in personList"
+                       :value="item"
+                       :key="item.id"
+                       :label="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4">
+        <el-form-item label="采购人" label-width="60" style="margin-bottom: 0">
+<!--          <label class="el-form-item__label">采购人：{{formData.purchaser.name}}</label>-->
+          <el-select :disabled="readOnly" v-model="formData.purchaser" value-key="id" style="width: 120px">
+            <el-option v-for="(item, index) in personList"
+                       :value="item"
+                       :key="item.id"
+                       :label="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row type="flex" justify="start" align="middle" class="basic-row">
+      <el-col :span="4">
+        <el-form-item style="margin-bottom: 0">
+          <label class="el-form-item__label">生产要求</label>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row type="flex" justify="start" align="top" class="basic-row">
+      <el-col :span="6">
+<!--        <h6>是否含税：{{formData.taxIncluded ? '含税' : '不含税'}}</h6>-->
+        <el-form-item label="是否含税：" label-width="60">
+          <el-radio :disabled="readOnly" v-model="formData.taxIncluded" :label="true">含税</el-radio>
+          <el-radio :disabled="readOnly" v-model="formData.taxIncluded" :label="false">不含税</el-radio>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
         <el-form-item label="品质要求：" label-width="60">
-          <h6 style="margin-bottom: 0px">{{formData.qualityLevel}}</h6>
+          <label class="el-form-item__label">{{formData.qualityLevel}}</label>
         </el-form-item>
       </el-col>
     </el-row>
@@ -67,7 +101,7 @@
   export default {
     name: 'PurchaseTaskDetailTop',
     components: {MyAddressForm},
-    props: ['formData'],
+    props: ['formData', 'readOnly'],
     data () {
       return {
         completionTime: [],

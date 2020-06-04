@@ -14,7 +14,9 @@
         <el-divider></el-divider>
         <purchase-task-form-table :formData="formData" @appendMaterial="appendMaterial"/>
       </el-form>
-      <el-button class="material-btn" @click="onSumbit">保存</el-button>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+        <el-button class="material-btn" @click="onSumbit">保存</el-button>
+      </el-row>
     </el-card>
     <el-dialog :visible.sync="materialVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false"
                :append-to-body="true">
@@ -76,5 +78,13 @@
 
   /deep/ .el-divider--horizontal {
      margin: 0px 0;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 120px;
+    height: 40px;
   }
 </style>

@@ -315,6 +315,11 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/purchase-task/details/PurchaseTaskDetail')
       },
       {
+        path: 'materials/detail',
+        name: '物料单',
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/purchase-task/materials-bill/MaterialsBillPage')
+      },
+      {
         path: 'progressOrder',
         name: '进度工单列表',
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-order/ProgressOrderPage')

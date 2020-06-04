@@ -103,7 +103,15 @@
         this.queryFormData.status = tab.name;
         this.onAdvancedSearch();
       },
-      onDetail (code) {
+      onDetail (row) {
+        switch (row.type) {
+          case 'SalesOrder':
+            // this.$router.push('/sales/plan/' + row.orderCode);
+            break;
+          case 'OutboundOrder':
+            // this.$router.push('/sales/outbound/' + row.orderCode);
+            break;
+        }
       },
       async onApproval (row) {
         let formData = {
@@ -121,24 +129,16 @@
     data () {
       return {
         activeName: 'ORDER_TASK',
-        statuses: [
-          {
-            code: '',
-            name: '全部'
-          },
-          {
-            code: 'unApproval',
-            name: '待审批'
-          },
-          {
-            code: 'approval',
-            name: '已审批'
-          },
-          {
-            code: 'reject',
-            name: '已驳回'
-          }
-        ]
+        statuses: [{
+          code: '',
+          name: '全部'
+        }, {
+          code: 'PASSED',
+          name: '审核通过'
+        }, {
+          code: 'AUDITED_FAILED',
+          name: '审核失败'
+        }]
       }
     },
     created () {

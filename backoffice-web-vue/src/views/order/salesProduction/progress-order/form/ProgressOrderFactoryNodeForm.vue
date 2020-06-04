@@ -31,7 +31,6 @@
     props: ['formData'],
     methods: {
       getProgressPlan (val) {
-        this.basicData = val.productionProgresses;
         this.formData.progressPlan = val;
         this.progressPlanVisible = false;
       },

@@ -739,6 +739,18 @@ const COMMON_APIS = {
   // 获取进度工单详情
   getProgressOrderDetail (code) {
     return '/b2b/sheets/progress/work/' + code;
+  },
+  // 获取采购任务列表
+  getPurchaseTaskList () {
+    return '/b2b/purchase/task/search';
+  },
+  // 根据id获取采购任务
+  getPurchaseTask (id) {
+    return '/b2b/purchase/task/' + id;
+  },
+  // 添加采购任务
+  savePurchaseTask () {
+    return '/b2b/purchase/task/save'
   }
 };
 
