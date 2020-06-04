@@ -20,9 +20,17 @@ import {
 import HttpServletPlugin from '@/plugins/HttpServletPlugin.js';
 import http from '@/common/js/http';
 import autoHeight from '@/mixins/autoHeight';
-import {numberInput} from './directives';
+import {
+  numberInput
+} from './directives';
 import Authorized from '@/auth/Authorized';
 import permission from './common/js/permission';
+
+import Promise from 'babel-polyfill';
+// 解决promise 在ie中未定义的问题
+if (!window.Promise) {
+  window.Promise = Promise;
+}
 
 import App from './App';
 Vue.component('Authorized', Authorized);
