@@ -12,11 +12,6 @@
             <h6>销售订单详情</h6>
           </div>
         </el-col>
-        <el-col :span="16">
-          <div>
-            <h6>销售单号：{{formData.code}}</h6>
-          </div>
-        </el-col>
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
@@ -44,7 +39,7 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :isUpdate="false"
-        :productionLeader="formData.productionLeader" />
+        :needMaterialsSpec="needMaterialsSpec" :productionLeader="formData.productionLeader" />
     </el-dialog>
   </div>
 </template>
@@ -85,6 +80,18 @@
       ...mapGetters({
         formData: 'formData'
       }),
+      //根据订单类型，加工类型判断是否需要物料清单等
+      needMaterialsSpec: function () {
+        //销售订单
+        switch (this.formData.cooperationMode) {
+          case 'LABOR_AND_MATERIAL':
+            return true;
+          case 'LIGHT_PROCESSING':
+            return false;
+          default:
+            return false;
+        }
+      },
       getTriangleColor: function () {
         switch (this.formData.auditState) {
           case 'AUDITING':
@@ -137,7 +144,7 @@
         this.$store.state.SalesProductionOrdersModule.formData = Object.assign({}, result.data);
       },
       onReturn() {
-        
+
       },
       async onSave(submitAudit) {
         const url = this.apis().salesPlanSave(submitAudit);

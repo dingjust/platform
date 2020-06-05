@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="data" stripe style="width: 100%">
+    <el-table :data="orders" stripe style="width: 100%">
       <el-table-column label="生产工单号">
       </el-table-column>
       <el-table-column label="产品" min-width="150">
@@ -53,7 +53,7 @@
     name: 'DispatchOrderBasicTable',
     components: {},
     props: {
-      data: {
+      codes: {
         type: Array
       }
     },
@@ -61,10 +61,25 @@
       onProductDetail(row) {
         this.$router.push('/sales/production/' + id);
       },
+      async getDetail(code) {
+        const url = this.apis().getoutboundOrderDetail(code);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.orders.push(result);
+      },
     },
     data() {
       return {
-
+        orders: []
+      }
+    },
+    created() {
+      //获取单个订单详情
+      if (this.codes.length > 0) {
+        this.getDetail(this.codes[0]);
       }
     }
   }

@@ -3,7 +3,8 @@
     <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
       :append-to-body="true">
       <sample-accounting-sheet-form :slot-data="sampleAccountingSheet" @onSave="onAccountingSheetSave"
-        :unitPrice="unitPrice" :sampleSpecEntries="sampleSpecEntries" v-if="hackSet" />
+        :unitPrice="unitPrice" :sampleSpecEntries="sampleSpecEntries" v-if="hackSet"
+        :needMaterialAccounting="needMaterialAccounting" />
     </el-dialog>
     <el-form :model="slotData" ref="accountingSheetForm">
       <el-tabs value="first" type="card">
@@ -18,16 +19,18 @@
           </el-row>
           <div>
             <div class="d1">
-              <el-divider></el-divider>
-              <el-row type="flex" align="center">
-                <el-col :span="1" class="form-column">
-                  <h6 class="accounting-form-title">面辅料</h6>
-                </el-col>
-                <el-col :span="23">
-                  <material-accounting-table :slotData="slotData.materialsEntries" :taxIncluded="slotData.isIncludeTax"
-                    :sampleSpecEntries="sampleSpecEntries" />
-                </el-col>
-              </el-row>
+              <template v-if="needMaterialAccounting">
+                <el-divider></el-divider>
+                <el-row type="flex" align="center">
+                  <el-col :span="1" class="form-column">
+                    <h6 class="accounting-form-title">面辅料</h6>
+                  </el-col>
+                  <el-col :span="23">
+                    <material-accounting-table :slotData="slotData.materialsEntries"
+                      :taxIncluded="slotData.isIncludeTax" :sampleSpecEntries="sampleSpecEntries" />
+                  </el-col>
+                </el-row>
+              </template>
               <el-divider></el-divider>
               <el-row type="flex" align="center">
                 <el-col :span="1" class="form-column">
@@ -122,8 +125,10 @@
       sampleSpecEntries: {
         type: Array,
       },
-      unitPrice: {
-
+      unitPrice: {},
+      needMaterialAccounting: {
+        type: Boolean,
+        default: true
       }
     },
     components: {

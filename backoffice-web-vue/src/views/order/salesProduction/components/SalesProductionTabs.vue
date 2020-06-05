@@ -3,7 +3,8 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onSave" :isUpdate="true"
-        :updataEntry="updateEntry" :productionLeader="form.productionLeader" :readOnly="productFormReadOnly" />
+        :needMaterialsSpec="needMaterialsSpec" :updataEntry="updateEntry" :productionLeader="form.productionLeader"
+        :readOnly="productFormReadOnly" />
     </el-dialog>
     <div class="over-tabs">
       <el-row type="flex">
@@ -50,6 +51,19 @@
       form: {
         type: Object
       }
+    },
+    computed: {
+      //根据订单类型，加工类型判断是否需要物料清单等
+      needMaterialsSpec: function () {
+        switch (this.form.cooperationMode) {
+          case 'LABOR_AND_MATERIAL':
+            return this.form.type == 'SALES_PLAN' ? false : true;
+          case 'LIGHT_PROCESSING':
+            return this.form.type == 'SALES_PLAN' ? true : false;
+          default:
+            return false;
+        }
+      },
     },
     methods: {
       appendProduct() {

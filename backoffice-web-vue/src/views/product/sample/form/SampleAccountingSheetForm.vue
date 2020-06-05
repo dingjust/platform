@@ -11,16 +11,18 @@
           </el-row>
           <div>
             <div class="d1">
-              <el-divider></el-divider>
-              <el-row type="flex" align="center">
-                <el-col :span="1" class="form-column">
-                  <h6 class="accounting-form-title">面辅料</h6>
-                </el-col>
-                <el-col :span="23">
-                  <material-accounting-form :slotData="slotData.materialsEntries" :taxIncluded="slotData.isIncludeTax"
-                    :sampleSpecEntries="sampleSpecEntries" />
-                </el-col>
-              </el-row>
+              <template v-if="needMaterialAccounting">
+                <el-divider></el-divider>
+                <el-row type="flex" align="center">
+                  <el-col :span="1" class="form-column">
+                    <h6 class="accounting-form-title">面辅料</h6>
+                  </el-col>
+                  <el-col :span="23">
+                    <material-accounting-form :slotData="slotData.materialsEntries" :taxIncluded="slotData.isIncludeTax"
+                      :sampleSpecEntries="sampleSpecEntries" />
+                  </el-col>
+                </el-row>
+              </template>
               <el-divider></el-divider>
               <el-row type="flex" align="center">
                 <el-col :span="1" class="form-column">
@@ -101,7 +103,22 @@
 
   export default {
     name: "SampleAccountingSheetForm",
-    props: ["slotData", "readOnly", "isRead", "sampleSpecEntries", 'unitPrice'],
+    props: {
+      slotData: {
+        type: Object,
+      },
+      sampleSpecEntries: {
+        type: Array,
+        default: () => {
+          return [];
+        }
+      },
+      unitPrice: {},
+      needMaterialAccounting: {
+        type: Boolean,
+        default: true
+      }
+    },
     components: {
       MaterialAccountingForm,
       CraftAccountingForm,
@@ -156,7 +173,7 @@
         this.$refs['accountingSheetForm'].validate((valid) => {
           if (valid) {
             //设置总价
-            this.$set(this.slotData,'totalPrice',this.totalPrice);
+            this.$set(this.slotData, 'totalPrice', this.totalPrice);
             this.$emit('onSave', this.slotData);
           } else {
             this.$message.error('请完善表格');
@@ -168,7 +185,7 @@
         // this.$refs['accountingSheetForm'].validate();
       },
       countProfit() {
-        if (this.unitPrice == null||this.unitPrice=='s') {
+        if (this.unitPrice == null || this.unitPrice == '') {
           return '';
         }
         let result = (((parseFloat(this.unitPrice) - this.totalPrice) / parseFloat(this.unitPrice)) * 100).toFixed(2);
