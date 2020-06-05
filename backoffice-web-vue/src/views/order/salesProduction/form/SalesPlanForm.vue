@@ -61,8 +61,7 @@
           <el-row type="flex" align="center" :gutter="10">
             <el-col :span="5">
               <el-form-item label="生产负责人" label-width="85px">
-                <el-input v-model="form.productionLeader.name" :disabled="true">
-                </el-input>
+                <personnel-selection :vPerson.sync="form.productionLeader" />
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -72,9 +71,8 @@
             </el-col>
             <el-col :span="5">
               <el-form-item label="审批人" label-width="85px" v-if="form.auditNeeded">
-                <template v-for="item in form.approvers">
-                  <el-input :key="item.id" v-model="item.name" :disabled="true">
-                  </el-input>
+                <template v-for="(item,itemIndex) in form.approvers">
+                  <personnel-selection :key="item.id" :vPerson.sync="form.approvers[itemIndex]" />
                 </template>
               </el-form-item>
             </el-col>
@@ -105,6 +103,7 @@
   import MyAddressForm from '@/components/custom/order-form/MyAddressForm';
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
+  import PersonnelSelection from '@/components/custom/PersonnelSelection';
 
   export default {
     name: 'SalesPlanForm',
@@ -112,7 +111,8 @@
       SalesPlanAppendProductForm,
       MTAVAT,
       MyAddressForm,
-      SalesProductionTabs
+      SalesProductionTabs,
+      PersonnelSelection
     },
     computed: {
       //根据订单类型，加工类型判断是否需要物料清单等

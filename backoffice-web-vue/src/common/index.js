@@ -681,11 +681,11 @@ const COMMON_APIS = {
     return '/b2b/orders/outbound/' + code + '/production';
   },
   // 拒绝接单
-  rejectedOutboundOrder (code) {
+  rejectedOutboundOrder(code) {
     return '/b2b/orders/outbound/' + code + '/rejectedConfirm';
   },
   // 取消外发订单
-  cancelOutboundOrder (code) {
+  cancelOutboundOrder(code) {
     return '/b2b/orders/outbound/' + code + '/cancelling';
   },
   // 获取节点方案列表
@@ -733,23 +733,23 @@ const COMMON_APIS = {
     return '/b2b/audit/order/order/audit'
   },
   // 获取进度工单列表
-  getProgressOrderList () {
+  getProgressOrderList() {
     return '/b2b/sheets/progress/work';
   },
   // 获取进度工单详情
-  getProgressOrderDetail (code) {
+  getProgressOrderDetail(code) {
     return '/b2b/sheets/progress/work/' + code;
   },
   // 获取采购任务列表
-  getPurchaseTaskList () {
+  getPurchaseTaskList() {
     return '/b2b/purchase/task/search';
   },
   // 根据id获取采购任务
-  getPurchaseTask (id) {
+  getPurchaseTask(id) {
     return '/b2b/purchase/task/' + id;
   },
   // 添加采购任务
-  savePurchaseTask () {
+  savePurchaseTask() {
     return '/b2b/purchase/task/save'
   }
 };
@@ -1074,6 +1074,10 @@ let NONE_TENANT_APIS = {
   //销售计划
   salesPlanSave(needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
+  },
+  //销售计划撤回
+  salesPlanWithdraw(id) {
+    return '/b2b/sales/production/order/revoke/audit/' + id;
   },
   //销售计划订单列表
   getSalesOrderList() {

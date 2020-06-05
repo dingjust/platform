@@ -13,8 +13,6 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="订单名称" min-width="150" prop="name">
-      </el-table-column>
       <el-table-column label="客户">
         <template slot-scope="scope">
           <span>{{getCustName(scope.row)}}</span>

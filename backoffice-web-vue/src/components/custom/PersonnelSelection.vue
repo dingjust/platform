@@ -1,14 +1,7 @@
 <template>
-  <el-select v-model="person" filterable placeholder="请选择"
-             value-key="id"
-             :disabled="readOnly"
-             :size="size"
-             :style="'width:'+ width +'px'">
-    <el-option
-      v-for="item in personnelList"
-      :key="item.id"
-      :label="item.name"
-      :value="item">
+  <el-select v-model="person" filterable placeholder="请选择" value-key="id" :disabled="readOnly" :size="size"
+    :style="'width:'+ width +'px'">
+    <el-option v-for="item in personnelList" :key="item.id" :label="item.name" :value="item">
     </el-option>
   </el-select>
 </template>
@@ -44,7 +37,7 @@
     },
     methods: {
       // 获取人员列表
-      async getPersonnelList () {
+      async getPersonnelList() {
         const url = this.apis().getB2BCustomers();
         const result = await this.$http.post(url, {}, {
           page: 0,
@@ -57,7 +50,7 @@
         this.personnelList = result.content;
       }
     },
-    data () {
+    data() {
       return {
         personnelList: [],
         person: {}
@@ -65,23 +58,19 @@
     },
     watch: {
       vPerson: function (newVal, oldVal) {
-        this.address = newVal;
+        this.person = newVal;
       },
       person: function (newVal, oldVal) {
-        this.$emit('update:vPerson', {
-          id: newVal.id,
-          uid: newVal.uid,
-          name: newVal.name
-        });
+        this.$emit('update:vPerson', newVal);
       }
     },
-    created () {
+    created() {
       this.getPersonnelList();
       this.person = this.vPerson;
     },
-    mounted () {
-    }
+    mounted() {}
   }
+
 </script>
 
 <style scoped>

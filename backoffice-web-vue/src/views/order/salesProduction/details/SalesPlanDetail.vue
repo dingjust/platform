@@ -30,7 +30,7 @@
           </el-col>
         </el-row>
       </div>
-      <sales-plan-detail-btn-group :state="formData.auditState" @onReturn="onReturn" @onSave="onSave(false)"
+      <sales-plan-detail-btn-group :state="formData.auditState" @onWithdraw="onWithdraw" @onSave="onSave(false)"
         @onSubmit="onSave(true)" />
     </el-card>
     <el-dialog :visible.sync="refuseVisible" width="40%" :close-on-click-modal="false">
@@ -125,8 +125,29 @@
         }
         this.$store.state.SalesProductionOrdersModule.formData = Object.assign({}, result.data);
       },
-      onReturn() {
-
+      onWithdraw() {
+        this.$confirm('确认撤回?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onWithdraw();
+        });
+      },
+      async _onWithdraw() {
+        const url = this.apis().salesPlanWithdraw(this.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == '0') {
+          this.$message.error(result.msg);
+          return;
+        } else if (result.code == '1') {
+          this.$message.success('撤回成功');
+          this.getDetails();
+        }
       },
       appendProduct() {
         this.salesProductAppendVisible = true;
