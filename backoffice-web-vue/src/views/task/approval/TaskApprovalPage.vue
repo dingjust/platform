@@ -123,7 +123,10 @@
         const result = await this.$http.post(url, formData);
         if (result.code == 0) {
           this.$message.error(result.msg);
+          return
         }
+        this.$message.error('审批成功');
+        this.onAdvancedSearch(this.page.number);
       }
     },
     data () {
