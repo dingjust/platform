@@ -93,6 +93,9 @@
               </el-row>
             </el-col>
           </el-row>
+          <el-row style="padding-left: 6px">
+            <my-address-form :vAddress.sync="entry.shippingAddress" ref="addressComp" :readOnly="readOnly" />
+          </el-row>
           <el-row style="margin-top:20px;">
             <sample-attach-orders-form :entries.sync="entry.materialsSpecEntries" :medias.sync="entry.medias"
               :productionProcessContent.sync="entry.productionProcessContent"
@@ -153,6 +156,8 @@
   import SampleAccountingSheetForm from '@/views/product/sample/form/SampleAccountingSheetForm';
   import SampleAccountingSheet from '@/views/product/sample/components/SampleAccountingSheet';
   import ProductionTask from '../components/ProductionTask';
+  import MyAddressForm from '@/components/custom/order-form/MyAddressForm';
+
   export default {
     name: 'SalesPlanAppendProductForm',
     components: {
@@ -160,7 +165,8 @@
       SampleAccountingSheet,
       SampleAttachOrdersForm,
       SampleProductsSelectDialog,
-      ProductionTask
+      ProductionTask,
+      MyAddressForm
     },
     props: {
       productionLeader: {
@@ -210,6 +216,7 @@
             productionProcessContent: '',
             medias: [],
             costOrder: {},
+            shippingAddress: {},
             productionTask: {
               price: '',
               deliveryTime: '',
@@ -219,7 +226,6 @@
               invoiceNeeded: false,
               remarks: "",
               appointFactory: null,
-              shippingAddress: {}
             }
           }],
         },
@@ -424,6 +430,7 @@
           productionProcessContent: '',
           medias: [],
           costOrder: {},
+          shippingAddress: {},
           productionTask: {
             price: '',
             deliveryTime: '',
@@ -433,14 +440,8 @@
             invoiceNeeded: false,
             remarks: "",
             appointFactory: null,
-            shippingAddress: {}
           }
         };
-        if (this.defaultAddress != null) {
-          var obj = JSON.parse(JSON.stringify(this.defaultAddress));
-          var address = Object.assign({}, obj);
-          this.$set(newEntry.productionTask, 'shippingAddress', address);
-        }
         this.appendProductForm.sampleList.push(newEntry);
       },
       onSubmit() {
@@ -470,8 +471,10 @@
         // taskForm数组
         this.$refs.taskComp.forEach(item => {
           forms.push(item.$refs.taskForm);
-          //addressForm数组
-          forms.push(item.$refs.addressComp.$refs.address);
+        });
+        //addressForm数组
+        this.$refs.addressComp.forEach(item => {
+          forms.push(item.$refs.address);
         });
         // 使用Promise.all 并行去校验结果
         Promise.all(forms.map(this.getFormPromise)).then(res => {
@@ -513,12 +516,6 @@
         this.$set(newEntry, 'colors', this.getColorsByEntries(newEntry.colorSizeEntries));
         this.$set(newEntry, 'sizes', this.getSizesByEntries(newEntry.colorSizeEntries));
         this.$set(this.appendProductForm.sampleList, 0, newEntry);
-      } else {
-        if (this.defaultAddress != null) {
-          var obj = JSON.parse(JSON.stringify(this.defaultAddress));
-          var address = Object.assign({}, obj);
-          this.$set(this.appendProductForm.sampleList[0].productionTask, 'shippingAddress', address);
-        }
       }
     }
   }

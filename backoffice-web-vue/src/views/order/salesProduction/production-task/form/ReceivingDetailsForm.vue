@@ -7,7 +7,7 @@
             <!-- 商品图片 -->
             <div>
               <img class="purchase-product-img"
-                :src="slotData.entries[0].product.thumbnail!=null?slotData.entries[0].product.thumbnail.url:'static/img/nopicture.png'">
+                :src="slotData.entries[0]!=null?slotData.entries[0].product.thumbnail.url:'static/img/nopicture.png'">
             </div>
           </el-col>
           <el-col :span="18">
@@ -54,7 +54,7 @@
             <el-row class="info-basic-row" type="flex">
               <el-col>
                 <h6>
-                  收货地址：{{slotData.entries[0].productionTask.shippingAddress!=null?slotData.entries[0].productionTask.shippingAddress.details:''}}
+                  收货地址：{{slotData.entries[0].shippingAddress!=null?slotData.entries[0].shippingAddress.details:''}}
                 </h6>
               </el-col>
             </el-row>

@@ -67,7 +67,6 @@
                 :tax.sync="form.invoiceTaxPoint" />
             </el-col>
           </el-row>
-          <my-address-form :vAddress.sync="form.address" ref="addressComp" />
         </div>
         <el-divider />
         <el-row type="flex" justify="space-between" align="middle">
@@ -96,8 +95,9 @@
                 </el-input>
               </el-form-item>
             </el-col> -->
-            <el-col :span="5">
-              <el-form-item label="生产负责人" label-width="85px">
+            <el-col :span="6">
+              <el-form-item label="生产负责人" label-width="100px" prop="productionLeader"
+                :rules="{required: true, message: '不能为空', trigger: 'change'}">
                 <personnel-selection :vPerson.sync="form.productionLeader" />
               </el-form-item>
             </el-col>
@@ -106,21 +106,23 @@
                 <el-checkbox v-model="form.auditNeeded">需审核</el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="5" v-if="form.auditNeeded">
-              <el-form-item label="审批人" label-width="85px">
-                <template v-for="(item,itemIndex) in form.approvers">
-                  <personnel-selection :key="item.id" :vPerson.sync="form.approvers[itemIndex]" />
-                </template>
-              </el-form-item>
+            <el-col :span="6" v-if="form.auditNeeded">
+              <template v-for="(item,itemIndex) in form.approvers">
+                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="100px"
+                  :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
+                  <personnel-selection :vPerson.sync="form.approvers[itemIndex]" />
+                </el-form-item>
+              </template>
             </el-col>
-            <el-col :span="5">
-              <el-form-item label="采购负责人" label-width="85px">
+            <el-col :span="6">
+              <el-form-item label="采购负责人" label-width="100px" prop="purchasingLeader"
+                :rules="{required: true, message: '不能为空', trigger: 'change'}">
                 <personnel-selection :vPerson.sync="form.purchasingLeader" />
               </el-form-item>
             </el-col>
           </el-row>
         </div>
-        <el-row type="flex" justify="end">
+        <el-row type="flex" justify="end" style="margin-top:20px;">
           <el-col :span="4">订单总数：<span style="color:red;">{{totalAmount}}</span></el-col>
           <el-col :span="4">订单金额：<span style="color:red;">{{totalPrice}}</span></el-col>
         </el-row>
@@ -138,7 +140,7 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
-        :needMaterialsSpec="needMaterialsSpec" :defaultAddress="form.address" :isUpdate="false"
+        :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
         :productionLeader="form.productionLeader" />
     </el-dialog>
   </div>
@@ -147,7 +149,6 @@
 <script>
   import SupplierSelect from '@/components/custom/SupplierSelect';
   import MTAVAT from '../../../../components/custom/order-form/MTAVAT';
-  import MyAddressForm from '../../../../components/custom/order-form/MyAddressForm';
   import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
   import PayPlanForm from '@/components/custom/order-form/PayPlanForm';
   import SalesProductionTabs from '../components/SalesProductionTabs';
@@ -162,7 +163,6 @@
     name: 'SalesOrderForm',
     components: {
       SalesPlanAppendProductForm,
-      MyAddressForm,
       MTAVAT,
       SupplierSelect,
       PayPlanForm,
@@ -207,7 +207,13 @@
     },
     methods: {
       appendProduct() {
-        this.salesProductAppendVisible = true;
+        this.$refs.form.validateField('productionLeader', errMsg => {
+          if (errMsg) {
+            this.$message.error('请先选择生产负责人');
+          } else {
+            this.salesProductAppendVisible = true;
+          }
+        }, );
       },
       onAppendProduct(products) {
         products.forEach(element => {
@@ -231,7 +237,6 @@
         this.form.cooperator.name = val.name;
         this.form.cooperator.contactPhone = val.phone;
         this.form.cooperator.contactPerson = val.person;
-
         if (val.payPlan != null) {
           this.setPayPlan(val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
@@ -275,9 +280,8 @@
         }
 
         const form = this.$refs.form;
-        const addressForm = this.$refs.addressComp.$refs.address;
         // 使用Promise.all 并行去校验结果
-        let res = await Promise.all([form, addressForm].map(this.getFormPromise));
+        let res = await Promise.all([form].map(this.getFormPromise));
 
         return res.every(item => !!item);
       },
@@ -302,7 +306,6 @@
           invoiceNeeded: false,
           auditNeeded: true,
           invoiceTaxPoint: 0.03,
-          address: {},
           entries: [],
           cooperationMode: 'LABOR_AND_MATERIAL',
           payPlan: {
@@ -326,18 +329,9 @@
           //   id: this.$store.getters.currentUser.id,
           //   name: this.$store.getters.currentUser.username
           // },
-          productionLeader: {
-            id: this.$store.getters.currentUser.id,
-            name: this.$store.getters.currentUser.username
-          },
-          approvers: [{
-            id: this.$store.getters.currentUser.id,
-            name: this.$store.getters.currentUser.username
-          }],
-          purchasingLeader: {
-            id: this.$store.getters.currentUser.id,
-            name: this.$store.getters.currentUser.username
-          },
+          productionLeader: null,
+          approvers: [null],
+          purchasingLeader: null
         }
       }
     },
