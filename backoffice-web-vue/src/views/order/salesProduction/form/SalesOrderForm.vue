@@ -98,8 +98,7 @@
             </el-col> -->
             <el-col :span="5">
               <el-form-item label="生产负责人" label-width="85px">
-                <el-input v-model="form.productionLeader.name" :disabled="true">
-                </el-input>
+                <personnel-selection :vPerson.sync="form.productionLeader" />
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -109,16 +108,14 @@
             </el-col>
             <el-col :span="5" v-if="form.auditNeeded">
               <el-form-item label="审批人" label-width="85px">
-                <template v-for="item in form.approvers">
-                  <el-input :key="item.id" v-model="item.name" :disabled="true">
-                  </el-input>
+                <template v-for="(item,itemIndex) in form.approvers">
+                  <personnel-selection :key="item.id" :vPerson.sync="form.approvers[itemIndex]" />
                 </template>
               </el-form-item>
             </el-col>
             <el-col :span="5">
               <el-form-item label="采购负责人" label-width="85px">
-                <el-input v-model="form.productionLeader.name" :disabled="true">
-                </el-input>
+                <personnel-selection :vPerson.sync="form.purchasingLeader" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -154,6 +151,7 @@
   import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
   import PayPlanForm from '@/components/custom/order-form/PayPlanForm';
   import SalesProductionTabs from '../components/SalesProductionTabs';
+  import PersonnelSelection from '@/components/custom/PersonnelSelection';
 
   import {
     getEntryTotalAmount,
@@ -168,7 +166,8 @@
       MTAVAT,
       SupplierSelect,
       PayPlanForm,
-      SalesProductionTabs
+      SalesProductionTabs,
+      PersonnelSelection
     },
     computed: {
       //根据订单类型，加工类型判断是否需要物料清单等

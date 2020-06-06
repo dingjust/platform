@@ -2,12 +2,14 @@
   <div class="animated fadeIn image-upload">
     <el-row :gutter="10">
       <el-col :span="24">
-        <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData" :disabled="disabled"
-          :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
-          :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
-          :class="{disabled:uploadDisabled,picClass:picClass}">
+        <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+          :disabled="disabled" :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
+          :file-list="fileList" :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit"
+          :on-remove="handleRemove" :class="{disabled:uploadDisabled,picClass:picClass}">
           <i class="el-icon-plus" slot="default"></i>
-          <div slot="tip" class="el-upload__tip"><slot name="picBtn" ></slot></div>
+          <div slot="tip" class="el-upload__tip">
+            <slot name="picBtn"></slot>
+          </div>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible" :modal="false">
           <img width="100%" :src="dialogImageUrl" alt="">
@@ -18,6 +20,8 @@
 </template>
 
 <script>
+  import ExifUtil from '@/plugins/ExifUtil';
+
   export default {
     name: 'ImagesUpload',
     props: {
@@ -43,14 +47,28 @@
       }
     },
     methods: {
-      onBeforeUpload (file) {
+      onBeforeUpload(file) {
         if (file.size > 1024 * 1024 * 5) {
           this.$message.error('上传的文件不允许超过5M');
           return false;
+        } else {
+          return new Promise((resolve, reject) => {
+            //压缩图片
+            let reader = new FileReader();
+            let img = new Image();
+            reader.onload = (e) => {
+              img.src = e.target.result;
+              img.onload = function () {
+                const data = ExifUtil.compressImage(img, img.width, img.height, 0.5);                
+                const newFile = ExifUtil.dataURLtoFile(data, file.name);
+                resolve(newFile);
+              };
+            }
+            reader.readAsDataURL(file);
+          });
         }
-        return true;
       },
-      onSuccess (response) {
+      onSuccess(response) {
         this.slotData.push(response);
         if (this.slotData.length === this.limit) {
           this.uploadDisabled = true;
@@ -58,7 +76,7 @@
           this.uploadDisabled = false;
         }
       },
-      async handleRemove (file) {
+      async handleRemove(file) {
         // console.log(JSON.stringify(file));
         // TODO: 自定义删除方法（删除图片之前，清理product的others属性
         // const url = this.apis().removeMedia(file.id);
@@ -88,11 +106,11 @@
           this.uploadDisabled = false;
         }
       },
-      handlePreview (file) {
+      handlePreview(file) {
         this.dialogImageUrl = file.artworkUrl;
         this.dialogVisible = true;
       },
-      handleExceed (files, fileList) {
+      handleExceed(files, fileList) {
         this.$message.warning('当前限制选择' + this.limit + ' 个图片');
       }
     },
@@ -112,8 +130,12 @@
             // image.url = '';
             if (image.convertedMedias.length > 0) {
               image.convertedMedias.forEach(convertedMedia => {
-                if (convertedMedia.mediaFormat === 'DefaultProductPreview') { file.url = convertedMedia.url; }
-                if (convertedMedia.mediaFormat === 'DefaultProductDetail') { file.artworkUrl = convertedMedia.url; }
+                if (convertedMedia.mediaFormat === 'DefaultProductPreview') {
+                  file.url = convertedMedia.url;
+                }
+                if (convertedMedia.mediaFormat === 'DefaultProductDetail') {
+                  file.artworkUrl = convertedMedia.url;
+                }
               })
             }
             files.push(file);
@@ -139,7 +161,7 @@
         }
       }
     },
-    data () {
+    data() {
       return {
         dialogImageUrl: '',
         dialogVisible: false,
@@ -147,26 +169,31 @@
       }
     }
   };
+
 </script>
 
 <style>
   .image-upload .disabled .el-upload--picture-card {
-    display: none!important;
+    display: none !important;
   }
 
-  .image-upload  .el-upload-list__item {
+  .image-upload .el-upload-list__item {
     transition: none !important;
   }
 
-  .image-upload .picClass .el-upload-list--picture-card .el-upload-list__item{
+  .image-upload .picClass .el-upload-list--picture-card .el-upload-list__item {
     width: 320px;
     height: 180px;
-    position:absolute;left:0px; top:0px;clip:rect(0px 320px 180px 0px)
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    clip: rect(0px 320px 180px 0px)
   }
 
   .image-upload .picClass .el-upload--picture-card {
-    width:120px;
+    width: 120px;
     height: 120px;
     line-height: 120px;
   }
+
 </style>

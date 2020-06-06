@@ -41,8 +41,24 @@
         </el-col>
         <el-divider direction="vertical"></el-divider>
         <el-col :span="8">
-          <el-row type="flex" justify="start" class="basic-form-row">
-            <h5>人员设置</h5>
+          <template v-if="form.type==='SALES_ORDER'">
+            <el-row type="flex" justify="start" class="basic-form-row">
+              <el-col :span="24">
+                <h6 class="sales-plan-h6"><span class="info-title">合作商：</span>{{cooperator.name}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="start" class="basic-form-row">
+              <el-col :span="12">
+                <h6 class="sales-plan-h6"><span class="info-title">联系人：</span>{{cooperator.contactPerson}}</h6>
+              </el-col>
+              <el-col :span="12">
+                <h6 class="sales-plan-h6"><span class="info-title">联系电话：</span>
+                  {{cooperator.contactPhone}}</h6>
+              </el-col>
+            </el-row>
+          </template>
+          <el-row type="flex" justify="start" class="basic-form-row" style="margin-top:10px">
+            <h6 class="info-title">人员设置</h6>
           </el-row>
           <el-row type="flex" justify="start" class="basic-form-row">
             <el-col :span="12">
@@ -57,10 +73,11 @@
                   <span class="info-title">审批负责人：</span>
                 </el-col>
                 <el-col :span="14">
-                  <el-select v-model="form.approvers[0]" placeholder="请选择" v-if="modifyType" value-key="id">
+                  <personnel-selection :vPerson.sync="form.approvers[0]" v-if="modifyType"/>
+                  <!-- <el-select v-model="form.approvers[0]" placeholder="请选择" v-if="modifyType" value-key="id">
                     <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                     </el-option>
-                  </el-select>
+                  </el-select> -->
                 </el-col>
               </el-row>
             </el-col>
@@ -72,31 +89,15 @@
               <el-row type="flex" v-if="modifyType" align="middle">
                 <el-col :span="10"><span class="info-title">生产负责人：</span></el-col>
                 <el-col :span="14">
-                  <el-select v-model="form.productionLeader" placeholder="请选择" v-if="modifyType" value-key="id">
+                  <!-- <el-select v-model="form.productionLeader" placeholder="请选择" v-if="modifyType" value-key="id">
                     <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                     </el-option>
-                  </el-select>
+                  </el-select> -->
+                  <personnel-selection :vPerson.sync="form.productionLeader" v-if="modifyType"/>
                 </el-col>
               </el-row>
             </el-row>
           </el-row>
-          <template v-if="form.type==='SALES_ORDER'">
-            <el-row type="flex" justify="start" class="basic-form-row">
-              <el-col :span="10">
-                <h6 class="sales-plan-h6"><span class="info-title">合作商：</span>{{cooperator.name}}</h6>
-              </el-col>
-            </el-row>
-            <el-row type="flex" justify="start" class="basic-form-row">
-              <el-col :span="12">
-                <h6 class="sales-plan-h6"><span class="info-title">联系人：</span>
-                  {{cooperator.contactPerson}}</h6>
-              </el-col>
-              <el-col :span="12">
-                <h6 class="sales-plan-h6"><span class="info-title">联系电话：</span>
-                  {{cooperator.contactPhone}}</h6>
-              </el-col>
-            </el-row>
-          </template>
         </el-col>
         <el-divider direction="vertical"></el-divider>
         <el-col :span="6">
@@ -126,6 +127,7 @@
 
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
   import PurchaseOrderInfoContract from '@/views/order/purchase/info/PurchaseOrderInfoContract';
+  import PersonnelSelection from '@/components/custom/PersonnelSelection';
 
 
   export default {
@@ -203,7 +205,8 @@
     },
     components: {
       MTAVAT,
-      PurchaseOrderInfoContract
+      PurchaseOrderInfoContract,
+      PersonnelSelection
     },
     props: {
       form: {
@@ -239,7 +242,7 @@
 <style scoped>
   .info-title {
     font-weight: bold;
-    font-size: 12px;
+    font-size: 14px;
     border: none
   }
 

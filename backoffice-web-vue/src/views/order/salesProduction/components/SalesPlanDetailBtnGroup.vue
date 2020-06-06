@@ -2,7 +2,7 @@
   <div>
     <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50">
       <el-col :span="3" v-if="state=='AUDITING'">
-        <el-button class="material-btn" @click="onReturn">撤回</el-button>
+        <el-button class="material-btn" @click="onWithdraw">撤回</el-button>
       </el-col>
       <el-col :span="3" v-if="state=='NONE'||state=='AUDITED_FAILED'">
         <el-button class="material-btn" @click="onSave">保存</el-button>
@@ -28,8 +28,8 @@
       onGoback() {
         this.$router.go(-1);
       },
-      onReturn() {
-        this.$emit('onReturn');
+      onWithdraw() {
+        this.$emit('onWithdraw');
       },
       onSave() {
         this.$emit('onSave');

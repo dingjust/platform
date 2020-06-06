@@ -48,7 +48,9 @@
     props: {
       entries: {
         type: Array,
-        default: []
+        default: ()=>{
+          return [];
+        }
       },
       productionProcessContent: {
         type: String,
