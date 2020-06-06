@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <prodcution-task-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :is-select="true"/>
     <production-task-list ref="taskList" :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"
-                          :is-select="true" @onDetails="onDetails"/>
+                          :is-select="true" @onDetails="onDetails" :isSingleChoice="isSingleChoice"/>
     <el-row type="flex" justify="center" align="middle">
       <el-col :span="4">
         <el-button class="material-btn" @click="onSelect">确定</el-button>
@@ -32,7 +32,15 @@
   import ProductionTaskDetails from '../details/ProductionTaskDetail';
   export default {
     name: 'ProductionTaskSelectDialog',
-    props: ['formData'],
+    props: {
+      formData: {
+        type: Object
+      },
+      isSingleChoice: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {ProductionTaskDetails, ProductionTaskList, ProdcutionTaskToolbar},
     computed: {
       ...mapGetters({

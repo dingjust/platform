@@ -4,8 +4,7 @@
       <el-table-column label="生产订单号" prop="code"></el-table-column>
       <el-table-column label="合作商">
         <template slot-scope="scope">
-          <span>{{scope.row.partyACompany.uid == uid
-            ? scope.row.partyBCompany.name : scope.row.partyACompany.name}}</span>
+          <span>{{scope.row.cooperator.partner ? scope.row.cooperator.partner.name : scope.row.cooperator.name}}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联产品数">
@@ -51,24 +50,18 @@
     },
     methods: {
       isCreate (row) {
-        const uid = this.$store.getters.currentUser.companyCode;
-        // 判断自身是 PARTYA 还是 PARTYB
-        let AorB = 'PARTYB'
-        if (row.partyACompany.uid == uid) {
-          AorB = 'PARTYA';
-        }
-        return row.createdBy == AorB && row.status == 'NOT_COMMITED';
+        return row.belongTo.uid == this.uid;
       },
       getOperatorName(row) {
-        let aName = '';
-        let bName = '';
-        if (row.partyAOperator != null) {
-          aName = row.partyAOperator.name;
-        }
-        if (row.partyBOperator != null) {
-          bName = row.partyBOperator.name;
-        }
-        return row.byAorB == 'PARTYA' ? aName : bName;
+        // let aName = '';
+        // let bName = '';
+        // if (row.partyAOperator != null) {
+        //   aName = row.partyAOperator.name;
+        // }
+        // if (row.partyBOperator != null) {
+        //   bName = row.partyBOperator.name;
+        // }
+        // return row.byAorB == 'PARTYA' ? aName : bName;
       },
       onPageSizeChanged(val) {
         this.$emit('onAdvancedSearch', 0, val);

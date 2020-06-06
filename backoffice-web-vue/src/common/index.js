@@ -750,7 +750,11 @@ const COMMON_APIS = {
   },
   // 添加采购任务
   savePurchaseTask () {
-    return '/b2b/purchase/task/save'
+    return '/b2b/purchase/task/save';
+  },
+  // 创建生产工单
+  createProductionOrder () {
+    return '/b2b/orders/production/work/create';
   }
 };
 

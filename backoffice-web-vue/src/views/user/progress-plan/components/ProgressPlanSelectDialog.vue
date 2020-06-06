@@ -44,6 +44,9 @@
     <el-dialog :visible.sync="appendVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
       <progress-plan-form-info v-if="appendVisible" ref="infoForm" @onSubmit="onSubmit"
                                :form-data="formData" :fromDialog="true"/>
+      <el-row type="flex" justify="center" align="middle">
+        <el-button class="material-btn" @click="onSubmit">创建</el-button>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -140,5 +143,13 @@
   .toolbar-search_input{
     background-color: #ffd60c;
     border-color: #ffd60c;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
   }
 </style>

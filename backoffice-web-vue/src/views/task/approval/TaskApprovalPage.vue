@@ -125,13 +125,14 @@
           this.$message.error(result.msg);
           return
         }
-        this.$message.error('审批成功');
+        this.$message.success('审批成功');
         this.onAdvancedSearch(this.page.number);
       }
     },
     data () {
       return {
         activeName: 'ORDER_TASK',
+        activeStatus: '',
         statuses: [{
           code: '',
           name: '全部'

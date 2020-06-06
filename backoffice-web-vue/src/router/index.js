@@ -343,6 +343,11 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-order/ProductionOrders')
       },
       {
+        path: 'create/productionOrder',
+        name: '创建生产工单',
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-order/form/ProductionOrderForm')
+      },
+      {
         path: 'productionOrder/:code',
         name: '生产工单详情',
         props: true,

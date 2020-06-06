@@ -51,7 +51,8 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="跟单人">
-          <el-input v-model="formData.personInCharge.name" :disabled="isRead"></el-input>
+<!--          <el-input v-model="formData.personInCharge.name" :disabled="isRead"></el-input>-->
+          <personnel-selection :vPerson.sync="formData.personInCharge" :read-only="isRead"/>
         </el-form-item>
       </el-col>
     </el-row>
@@ -72,8 +73,10 @@
 </template>
 
 <script>
+  import PersonnelSelection from '@/components/custom/PersonnelSelection';
   export default {
     name: 'ProgressOrderReceivingForm',
+    components: {PersonnelSelection},
     props: {
       formData: {
         type: Object

@@ -65,14 +65,10 @@
     },
     watch: {
       vPerson: function (newVal, oldVal) {
-        this.address = newVal;
+        this.person = newVal;
       },
       person: function (newVal, oldVal) {
-        this.$emit('update:vPerson', {
-          id: newVal.id,
-          uid: newVal.uid,
-          name: newVal.name
-        });
+        this.$emit('update:vPerson', newVal);
       }
     },
     created () {

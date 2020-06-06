@@ -145,28 +145,30 @@
         <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top">
           <el-col :span="6">
             <el-form-item label="跟单员">
-              <el-select v-model="operator" value-key="id" :disabled="true">
-                <el-option v-for="item in operatorList"
-                           :key="item.id"
-                           :label="item.name"
-                           :value="item">
-                </el-option>
-              </el-select>
+              <personnel-selection :vPerson.sync="operator"/>
+<!--              <el-select v-model="operator" value-key="id" :disabled="true">-->
+<!--                <el-option v-for="item in operatorList"-->
+<!--                           :key="item.id"-->
+<!--                           :label="item.name"-->
+<!--                           :value="item">-->
+<!--                </el-option>-->
+<!--              </el-select>-->
             </el-form-item>
           </el-col>
           <el-col :span="2">
             <el-checkbox v-model="formData.isApproval" style="padding-top: 5px">是否需要审核</el-checkbox>
           </el-col>
           <template v-for="(item, index) in formData.approvers">
-            <el-col :span="6">
+            <el-col :span="6" v-if="formData.isApproval">
               <el-form-item label="审核员">
-                <el-select v-model="formData.approvers[index]" value-key="id" :disabled="true">
-                  <el-option v-for="item in operatorList"
-                             :key="item.id"
-                             :label="item.name"
-                             :value="item">
-                  </el-option>
-                </el-select>
+                <personnel-selection :vPerson.sync="formData.approvers[index]"/>
+<!--                <el-select v-model="formData.approvers[index]" value-key="id" :disabled="true">-->
+<!--                  <el-option v-for="item in operatorList"-->
+<!--                             :key="item.id"-->
+<!--                             :label="item.name"-->
+<!--                             :value="item">-->
+<!--                  </el-option>-->
+<!--                </el-select>-->
               </el-form-item>
             </el-col>
           </template>
@@ -232,9 +234,11 @@
   import ProgressPlanSelectDialog from '../../../../user/progress-plan/components/ProgressPlanSelectDialog';
   import ProductionTaskSelectDialog from '../../production-task/components/ProductionTaskSelectDialog';
   import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
+  import PersonnelSelection from '@/components/custom/PersonnelSelection';
   export default {
     name: 'OutboundOrderForm',
     components: {
+      PersonnelSelection,
       OutboundOrderColorSizeTable,
       ProductionTaskSelectDialog,
       ProgressPlanSelectDialog,
@@ -434,7 +438,7 @@
             moneyType: 'PHASEONE',
             triggerType: this.formData.payPlan.balance1.range
           });
-          if (this.formData.payPlanType == 'PHASETWO') {
+          if (this.formData.payPlan.payPlanType == 'PHASETWO') {
             payPlanData.payPlanItems.push({
               payPercent: this.formData.payPlan.balance2.percent * 0.01,
               triggerEvent: this.formData.payPlan.balance2.event,
@@ -451,25 +455,23 @@
         if (!this.formData.isApproval) {
           data.approvers = [];
         }
-        if (this.formData.byAorB === 'PARTYA') {
-          data.partyAOperator = {id: this.operator.id};
-        } else {
-          data.partyBOperator = {id: this.operator.id};
+        data.partyAOperator = {id: this.operator.id};
+        if (!data.invoiceNeeded) {
+          data.invoiceTaxPoint = null;
         }
-
         if (this.formData.id) {
           const url = this.apis().updateOutboundOrder();
           const result = await this.$http.put(url, data);
-          if (result.code == 0) {
-            this.$message.error(result.msg);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
             return;
           }
           this.$message.success('编辑外发订单成功');
         } else {
           const url = this.apis().createOutboundOrder();
           const result = await this.$http.post(url, data);
-          if (result.code == 0) {
-            this.$message.error(result.msg);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
             return;
           }
           this.$message.success('创建外发订单成功');
@@ -517,7 +519,7 @@
         taskDialogVisible: false,
         selectIndex: '',
         progressPlanVisible: false,
-        operator: this.$store.getters.currentUser,
+        operator: {},
         count: 0,
         operatorList: [{
           id: 1,
@@ -548,11 +550,11 @@
       } else {
         this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
       }
-      this.formData.approvers.push(this.$store.getters.currentUser);
-      this.operatorList.push({
-        id: this.$store.getters.currentUser.id,
-        name: this.$store.getters.currentUser.username
-      });
+      // this.formData.approvers.push(this.$store.getters.currentUser);
+      // this.operatorList.push({
+      //   id: this.$store.getters.currentUser.id,
+      //   name: this.$store.getters.currentUser.username
+      // });
     },
     mounted () {
       this.$nextTick(() => {

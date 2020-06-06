@@ -79,7 +79,7 @@ const state = {
       name: '',
       contactPhone: ''
     },
-    approvers: [],
+    approvers: [{}],
     partyACompany: {
       uid: ''
     },

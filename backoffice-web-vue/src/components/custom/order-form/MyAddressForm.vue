@@ -5,7 +5,7 @@
       :close-on-click-modal="false">
       <address-select @onSelect="onAddressSelect" />
     </el-dialog>
-    <el-form ref="address" :model="address" label-position="left" :disabled="readOnly">
+    <el-form :inline="true" ref="address" :model="address" label-position="left" :disabled="readOnly">
       <el-row type="flex" align="middle" :gutter="10" justify="space-between">
         <el-col :span="7">
           <el-form-item label="送货地址" style="padding-top:8px" :rules="[
@@ -37,28 +37,28 @@
         </el-col>
         <el-col :span="6">
           <el-form-item :rules="[
-                { required: !readOnly, message: '请详细地址', trigger: 'blur'}]" prop="line1">
+                { required: !readOnly, message: '请详细地址', trigger: 'change'}]" prop="line1">
             <el-input placeholder="详细地址" v-model="address.line1" size="mini">
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="3">
           <el-form-item>
             <el-button size="mini" @click="addressSelect">选择</el-button>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row type="flex" align="middle" :gutter="10">
-        <el-col :span="6">
+        <el-col :span="7">
           <el-form-item label="联系人" label-width="80px" :rules="[
-                { required: !readOnly, message: '请填写收货人', trigger: 'blur'}]" prop="fullname">
+                { required: !readOnly, message: '请填写收货人', trigger: 'change'}]" prop="fullname">
             <el-input placeholder="名称" v-model="address.fullname" size="mini">
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="7">
           <el-form-item label="联系方式" label-width="80px" :rules="[
-                { required: !readOnly, message: '请填写联系方式', trigger: 'blur'}]" prop="cellphone">
+                { required: !readOnly, message: '请填写联系方式', trigger: 'change'}]" prop="cellphone">
             <el-input placeholder="电话" v-model="address.cellphone" size="mini">
             </el-input>
           </el-form-item>
