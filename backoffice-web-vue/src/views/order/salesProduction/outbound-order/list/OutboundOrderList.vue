@@ -4,7 +4,7 @@
       <el-table-column label="生产订单号" prop="code"></el-table-column>
       <el-table-column label="合作商">
         <template slot-scope="scope">
-          <span>{{scope.row.cooperator.partner ? scope.row.cooperator.partner.name : scope.row.cooperator.name}}</span>
+          <span>{{getCooperator(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联产品数">
@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column label="跟单员">
         <template slot-scope="scope">
-          <span>{{getOperatorName(scope.row)}}</span>
+          <span>{{scope.row.partyAOperator ? scope.row.partyAOperator.name : ''}}</span>
         </template>
       </el-table-column>
       <el-table-column label="审批状态" prop="status">
@@ -52,16 +52,9 @@
       isCreate (row) {
         return row.belongTo.uid == this.uid;
       },
-      getOperatorName(row) {
-        // let aName = '';
-        // let bName = '';
-        // if (row.partyAOperator != null) {
-        //   aName = row.partyAOperator.name;
-        // }
-        // if (row.partyBOperator != null) {
-        //   bName = row.partyBOperator.name;
-        // }
-        // return row.byAorB == 'PARTYA' ? aName : bName;
+      getCooperator (row) {
+        return row.cooperator ?
+          (row.cooperator.partner ? row.cooperator.partner.name : row.cooperator.name) : ''
       },
       onPageSizeChanged(val) {
         this.$emit('onAdvancedSearch', 0, val);

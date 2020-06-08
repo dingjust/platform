@@ -10,7 +10,7 @@
             <h6>工单号：{{slotData.code}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>工单负责人：{{slotData.personInCharge.name}}</h6>
+            <h6>工单负责人：{{slotData.personInCharge ? slotData.personInCharge.name : ''}}</h6>
           </el-col>
           <el-col :span="6">
             <h6>优先级：{{''}}</h6>
@@ -29,11 +29,12 @@
         <el-row type="flex" align="bottom">
           <el-col :span="2" :offset="1">
             <img width="60px" height="60px"
-                 :src="slotData.product.thumbnail!=null&&slotData.product.thumbnail.length!=0?slotData.product.thumbnail.url:'static/img/nopicture.png'"/>
+                 :src="slotData.product && slotData.product.thumbnail!=null&&slotData.product.thumbnail.length!=0
+                 ? slotData.product.thumbnail.url : 'static/img/nopicture.png'"/>
           </el-col>
           <el-col :span="5">
-            <h6 style="margin-bottom: 13px;">产品名：{{slotData.product.name}}</h6>
-            <h6>货号：{{slotData.product.skuID}}</h6>
+            <h6 style="margin-bottom: 13px;">产品名：{{slotData.product ? slotData.product.name : ''}}</h6>
+            <h6>货号：{{slotData.product ? slotData.product.skuID : ''}}</h6>
           </el-col>
           <el-col :span="5">
             <h6>生成数量：{{getTotalQuantity}}</h6>

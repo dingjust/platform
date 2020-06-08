@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <div class="basic-form-row">
+      <div style="margin-left: 10px">
         <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
           <el-row>
             <label class="el-form-item__label">合作对象</label>
@@ -34,7 +34,7 @@
             </el-col>
             <el-col :span="4" :offset="1">
               <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini"
-                         :disabled="formData.isOwnFactory">选择供应商</el-button>
+                         :disabled="formData.isSelfProduction">选择供应商</el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -151,7 +151,8 @@
   } from 'vuex';
 
   const {
-    mapGetters
+    mapGetters,
+    mapActions
   } = createNamespacedHelpers(
     'ProductionOrderModule'
   );
@@ -184,6 +185,9 @@
       })
     },
     methods: {
+      ...mapActions({
+        clearFormData: 'clearCreateFormData'
+      }),
       // 判断是否为自有工厂
       handleCheckChange (val) {
         if (val) {
@@ -247,6 +251,7 @@
       },
       // 选择生产任务
       onSelectTask (selectTaskList) {
+        console.log(selectTaskList);
         this.formData.entries[0] = {
           productionTask: {
             id: selectTaskList[0].id
@@ -261,11 +266,11 @@
           thumbnail: selectTaskList[0].productionEntry.product.thumbnail,
           colorSizeEntries: selectTaskList[0].productionEntry.colorSizeEntries
         };
-        this.formData.deliveryAddress = selectTaskList[0].shippingAddress;
-        if (this.$refs.addressForm) {
-          this.$refs.addressForm.getCities(selectTaskList[0].shippingAddress.region);
-          this.$refs.addressForm.onCityChanged(selectTaskList[0].shippingAddress.city);
-        }
+        // this.formData.deliveryAddress = selectTaskList[0].shippingAddress;
+        // if (this.$refs.addressForm) {
+        //   this.$refs.addressForm.getCities(selectTaskList[0].shippingAddress.region);
+        //   this.$refs.addressForm.onCityChanged(selectTaskList[0].shippingAddress.city);
+        // }
         this.taskDialogVisible = false;
       },
       // 选择进度节点
@@ -381,8 +386,6 @@
         this.__onCreate(data);
       },
       async __onCreate (data) {
-        console.log(data);
-        return;
         const url = this.apis().createProductionOrder();
         const result = await this.$http.post(url, data);
         if (result['errors']) {
@@ -390,7 +393,7 @@
           return;
         }
         this.$message.success('创建生产工单成功');
-        await this.$router.push('/sales/production');
+        await this.$router.push('/sales/productionOrder');
       },
       validateField (name) {
         this.$refs.form.validateField(name);
@@ -455,6 +458,9 @@
     },
     mounted () {
 
+    },
+    destroyed() {
+      this.clearFormData();
     }
   }
 </script>

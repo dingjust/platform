@@ -113,7 +113,16 @@
             break;
         }
       },
-      async onApproval (row) {
+      onApproval (row) {
+        this.$confirm('是否确认进行审批?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onApproval(row);
+        });
+      },
+      async _onApproval (row) {
         let formData = {
           id: row.id,
           auditMsg: '',

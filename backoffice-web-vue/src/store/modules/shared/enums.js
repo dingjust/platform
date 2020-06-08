@@ -1559,9 +1559,6 @@ const state = {
     code: 'REJECTED',
     name: '审核拒绝'
   }, {
-    code: 'APPROVED',
-    name: '审核通过'
-  }, {
     code: 'PENDING_CONFIRM',
     name: '待确认'
   }, {

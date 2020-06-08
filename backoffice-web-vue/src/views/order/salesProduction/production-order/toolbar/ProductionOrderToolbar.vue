@@ -37,6 +37,11 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
+        <el-col :span="4">
+          <el-row type="flex" justify="end">
+            <el-button type="primary" class="create-button" @click="onCreate">创建生产工单</el-button>
+          </el-row>
+        </el-col>
       </el-row>
     </el-form>
   </div>
@@ -136,6 +141,9 @@
       },
       jumpToOrderPurchase () {
         this.$router.push('/orderPurchase');
+      },
+      onCreate () {
+        this.$router.push('/sales/create/productionOrder');
       }
     },
     data () {
@@ -225,6 +233,22 @@
     color: rgba(255, 164, 3, 1);
     /* height: ; */
     font-size: 10px;
+  }
+
+  .create-button {
+    background-color: #ffd60c;
+    border-color: #DCDFE6;
+    width: 100px;
+    height: 40px;
+    color: #606266;
+  }
+
+  .create-button:hover {
+    background-color: #ffd60c;
+    border-color: #DCDFE6;
+    width: 100px;
+    height: 40px;
+    color: #606266;
   }
 
 </style>

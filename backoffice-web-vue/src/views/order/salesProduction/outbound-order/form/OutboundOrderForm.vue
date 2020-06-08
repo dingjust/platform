@@ -144,15 +144,8 @@
         </el-row>
         <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top">
           <el-col :span="6">
-            <el-form-item label="跟单员">
-              <personnel-selection :vPerson.sync="operator"/>
-<!--              <el-select v-model="operator" value-key="id" :disabled="true">-->
-<!--                <el-option v-for="item in operatorList"-->
-<!--                           :key="item.id"-->
-<!--                           :label="item.name"-->
-<!--                           :value="item">-->
-<!--                </el-option>-->
-<!--              </el-select>-->
+            <el-form-item label="跟单员" prop="partyAOperator">
+              <personnel-selection :vPerson.sync="formData.partyAOperator"/>
             </el-form-item>
           </el-col>
           <el-col :span="2">
@@ -160,15 +153,8 @@
           </el-col>
           <template v-for="(item, index) in formData.approvers">
             <el-col :span="6" v-if="formData.isApproval">
-              <el-form-item label="审核员">
+              <el-form-item label="审核员" prop="approvers" :rules="[{ type: 'object', validator: checkApprover, trigger: 'change' }]">
                 <personnel-selection :vPerson.sync="formData.approvers[index]"/>
-<!--                <el-select v-model="formData.approvers[index]" value-key="id" :disabled="true">-->
-<!--                  <el-option v-for="item in operatorList"-->
-<!--                             :key="item.id"-->
-<!--                             :label="item.name"-->
-<!--                             :value="item">-->
-<!--                  </el-option>-->
-<!--                </el-select>-->
               </el-form-item>
             </el-col>
           </template>
@@ -200,12 +186,14 @@
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
-          <el-button class="material-btn" @click="onCreate">确认创建</el-button>
+          <el-button class="material-btn" @click="onSave">保存</el-button>
+        </el-col>
+        <el-col :span="5">
+          <el-button class="material-btn" @click="onCreate">创建并提交</el-button>
         </el-col>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-<!--      <sample-products-select-dialog v-if="taskDialogVisible" @onSelectSample="onSelectSample"/>-->
       <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"/>
     </el-dialog>
     <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
@@ -230,7 +218,6 @@
   import MTAVAT from '../../../../../components/custom/order-form/MTAVAT';
   import MyPayPlanForm from '../../../../../components/custom/order-form/MyPayPlanForm';
   import ImagesUpload from '../../../../../components/custom/ImagesUpload';
-  import SampleProductsSelectDialog from '../../../../product/sample/components/SampleProductsSelectDialog';
   import ProgressPlanSelectDialog from '../../../../user/progress-plan/components/ProgressPlanSelectDialog';
   import ProductionTaskSelectDialog from '../../production-task/components/ProductionTaskSelectDialog';
   import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
@@ -242,7 +229,6 @@
       OutboundOrderColorSizeTable,
       ProductionTaskSelectDialog,
       ProgressPlanSelectDialog,
-      SampleProductsSelectDialog,
       ImagesUpload,
       MyPayPlanForm,
       MTAVAT,
@@ -356,7 +342,8 @@
               },
               billPrice: '',
               expectedDeliveryDate: '',
-              shippingAddress: item.shippingAddress,
+              // shippingAddress: item.shippingAddress,
+              shippingAddress: {},
               product: {
                 id: item.productionEntry.product.id,
                 name: item.productionEntry.product.name,
@@ -369,12 +356,6 @@
           }
         })
         this.formData.entries = entries;
-        this.formData.entries.forEach((val, index) => {
-          if (this.$refs.addressForm[index]) {
-            this.$refs.addressForm[index].getCities(val.shippingAddress.region);
-            this.$refs.addressForm[index].onCityChanged(val.shippingAddress.city);
-          }
-        })
         this.taskDialogVisible = false;
       },
       // 封装Promise对象
@@ -388,7 +369,7 @@
       async onCreate () {
         let validate = await this.validateForms();
         if (validate) {
-          this._onCreate();
+          this._onCreate(true);
         } else {
           this.$message.error('请完善表单信息');
         }
@@ -409,7 +390,7 @@
 
         return res.every(item => !!item);
       },
-      async _onCreate () {
+      _onCreate (isSumbitAudit) {
         var payPlanData = {
           isHaveDeposit: this.formData.payPlan.isHaveDeposit,
           payPlanType: this.formData.payPlan.payPlanType,
@@ -455,10 +436,16 @@
         if (!this.formData.isApproval) {
           data.approvers = [];
         }
-        data.partyAOperator = {id: this.operator.id};
         if (!data.invoiceNeeded) {
           data.invoiceTaxPoint = null;
         }
+        if (isSumbitAudit) {
+          this.__onCreate(data);
+        } else {
+          this._onSave(data);
+        }
+      },
+      async __onCreate (data) {
         if (this.formData.id) {
           const url = this.apis().updateOutboundOrder();
           const result = await this.$http.put(url, data);
@@ -469,13 +456,33 @@
           this.$message.success('编辑外发订单成功');
         } else {
           const url = this.apis().createOutboundOrder();
-          const result = await this.$http.post(url, data);
+          const result = await this.$http.post(url, data, {
+            submitAudit: true
+          });
           if (result['errors']) {
             this.$message.error(result['errors'][0].message);
             return;
           }
           this.$message.success('创建外发订单成功');
         }
+        await this.$router.push({
+          name: '外发订单列表'
+        });
+      },
+      // 保存不提交
+      onSave () {
+        this._onCreate(false);
+      },
+      async _onSave (data) {
+        const url = this.apis().createOutboundOrder();
+        const result = await this.$http.post(url, data, {
+          submitAudit: false
+        });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('保存外发订单成功');
         await this.$router.push({
           name: '外发订单列表'
         });
@@ -489,6 +496,47 @@
         } else {
           return callback(new Error('请选择产品'))
         }
+      },
+      checkApprover (rule, value, callback) {
+        if (value[0] && value[0].id) {
+          return callback();
+        } else {
+          return callback(new Error('请选择审核员'))
+        }
+      },
+      initData () {
+        if (this.$route.params.formData != null) {
+          this.formData = this.$route.params.formData;
+          if (this.formData.entries.length <= 0) {
+            this.addRow();
+          }
+          if (this.formData.payPlan.payPlanItems.length > 0) {
+            this.setPayPlan(this.formData.payPlan);
+          }
+          if (this.formData.status == 'NOT_COMMITED') {
+            if (!this.formData.cooperator) {
+              this.formData.cooperator = {
+                id: ''
+              }
+            }
+            this.formData.entries.forEach(item => {
+              if (item.product == null) {
+                item.product = {
+                  id: '',
+                  name: '',
+                  thumbnail: ''
+                }
+              }
+              if (item.productionTask == null) {
+                item.productionTask = {
+                  id: ''
+                }
+              }
+            })
+          }
+        } else {
+          this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
+        }
       }
     },
     data () {
@@ -499,20 +547,20 @@
           return callback(new Error('请选择生产节点'));
         }
       };
-      // var checkProduct = (rule, value, callback) => {
-      //   console.log(value);
-      //   // if (!this.formData.pro.id) {
-      //   //   return callback(new Error('请选择生产节点'));
-      //   // } else {
-      //   //   return callback();
-      //   // }
-      // };
+      var checkPartyAOperator = (rule, value, callback) => {
+        if (value && value.id != '') {
+          return callback();
+        } else {
+          return callback(new Error('请选择跟单员'));
+        }
+      };
       return {
         rules: {
           outboundCompanyName: [{required: true, message: '请选择外发工厂', trigger: 'change'}],
           outboundContactPerson: [{required: true, message: '请选择联系人', trigger: 'change'}],
           outboundContactPhone: [{required: true, message: '请选择联系方式', trigger: 'change'}],
-          progressPlan: [{ type: 'object', validator: checkProgressPlan, trigger: 'change' }]
+          progressPlan: [{ type: 'object', validator: checkProgressPlan, trigger: 'change' }],
+          partyAOperator: [{ type: 'object', validator: checkPartyAOperator, trigger: 'change' }]
         },
         formData: '',
         suppliersSelectVisible: false,
@@ -539,22 +587,7 @@
       }
     },
     created () {
-      if (this.$route.params.formData != null) {
-        this.formData = this.$route.params.formData;
-        if (this.formData.entries.length <= 0) {
-          this.addRow();
-        }
-        if (this.formData.payPlan.payPlanItems.length > 0) {
-          this.setPayPlan(this.formData.payPlan);
-        }
-      } else {
-        this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
-      }
-      // this.formData.approvers.push(this.$store.getters.currentUser);
-      // this.operatorList.push({
-      //   id: this.$store.getters.currentUser.id,
-      //   name: this.$store.getters.currentUser.username
-      // });
+      this.initData();
     },
     mounted () {
       this.$nextTick(() => {

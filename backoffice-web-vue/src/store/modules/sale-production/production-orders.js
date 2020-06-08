@@ -272,6 +272,74 @@ const actions = {
     if (!result['errors']) {
       commit('formData', result);
     }
+  },
+  clearCreateFormData ({dispatch, commit, state}) {
+    commit('createFormData', {
+      cooperator: {
+        id: '',
+        partner: {
+          id: '',
+          name: '',
+          contactPerson: '',
+          contactPhone: ''
+        }
+      },
+      isSelfProduction: false,
+      productionTask: {
+        id: '',
+        product: {
+          name: '',
+          colorSizeEntries: []
+        }
+      },
+      expectedDeliveryDate: '',
+      deliveryAddress: {},
+      machiningType: 'LABOR_AND_MATERIAL',
+      invoiceNeeded: false,
+      invoiceTaxPoint: 0.03,
+      freightPayer: 'PARTYA',
+      progressWorkSheet: {
+        name: '',
+        progresses: []
+      },
+      payPlan: {
+        payPlanType: 'PHASEONE',
+        isHaveDeposit: false,
+        payPlanItems: [],
+        deposit: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        balance1: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        balance2: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        monthBalance: {
+          event: 'ORDER_CONFIRMED',
+          time: 5
+        }
+      },
+      remarks: '',
+      partyAOperator: {
+        id: ''
+      },
+      attachments: [],
+      entries: [{
+        productionTask: {
+          id: ''
+        }
+      }]
+    })
   }
 };
 

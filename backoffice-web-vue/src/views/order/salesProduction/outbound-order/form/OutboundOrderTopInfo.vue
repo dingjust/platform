@@ -17,7 +17,7 @@
           <el-col :span="5">
             <h6>是否开票：{{slotData.invoiceNeeded ? '是' : '否'}}</h6>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="3" v-if="slotData.invoiceNeeded">
             <h6>税点：{{slotData.invoiceTaxPoint * 100}}%</h6>
           </el-col>
         </el-row>
@@ -66,21 +66,21 @@
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="12">
             <h6 class="hide-text" :title="slotData.partyAOperator ? slotData.partyAOperator.name : ''">
-              甲方跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6>
+              跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6>
           </el-col>
           <el-col :span="12">
             <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.mobileNumber : ''}}</h6>
           </el-col>
         </el-row>
-        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
-          <el-col :span="12">
-            <h6 class="hide-text" :title="slotData.partyBOperator ? slotData.partyBOperator.name : ''">
-              乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>
-          </el-col>
-          <el-col :span="12">
-            <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.mobileNumber : ''}}</h6>
-          </el-col>
-        </el-row>
+<!--        <el-row class="info-basic-row" type="flex" align="middle" justify="start">-->
+<!--          <el-col :span="12">-->
+<!--            <h6 class="hide-text" :title="slotData.partyBOperator ? slotData.partyBOperator.name : ''">-->
+<!--              乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>-->
+<!--          </el-col>-->
+<!--          <el-col :span="12">-->
+<!--            <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.mobileNumber : ''}}</h6>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
       </el-col>
       <el-divider direction="vertical"></el-divider>
       <el-col :span="4">
@@ -128,25 +128,13 @@
       }
     },
     methods: {
-      initOperator () {
-        const type = this.currentUser.type;
-        if (type == 'FACTORY') {
-          if (this.currentUser.companyCode == this.slotData.partyACompany.uid) {
-            this.operator.factory = this.slotData.partyACompany.name;
-          }
-        } else {
-
-        }
-      }
     },
     data () {
       return {
-        currentUser: this.$store.getters.currentUser,
-        operator: {}
+        currentUser: this.$store.getters.currentUser
       }
     },
     created () {
-      this.initOperator();
     }
   }
 </script>

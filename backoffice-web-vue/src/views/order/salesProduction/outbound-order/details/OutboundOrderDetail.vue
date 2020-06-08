@@ -22,7 +22,7 @@
         <el-button class="purchase-order-btn2" @click="onRejected">拒单</el-button>
         <el-button class="purchase-order-btn" @click="onConfirm">接单</el-button>
       </el-row>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isCancel">
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">
         <el-button class="purchase-order-btn2" @click="onCancel" v-if="this.formData.status != ''">取消订单</el-button>
       </el-row>
     </el-card>
@@ -61,21 +61,11 @@
       }),
       isReceiver: function () {
         const uid = this.$store.getters.currentUser.companyCode;
-        // 判断自身是 PARTYA 还是 PARTYB
-        let AorB = 'PARTYB'
-        if (this.formData.partyACompany.uid == uid) {
-          AorB = 'PARTYA';
-        }
-        return this.formData.createdBy != AorB && this.formData.status == 'PENDING_CONFIRM';
+        return !(uid == this.formData.belongTo.uid) && this.formData.status == 'PENDING_CONFIRM';
       },
-      isCancel: function () {
+      isBelongTo: function () {
         const uid = this.$store.getters.currentUser.companyCode;
-        // 判断自身是 PARTYA 还是 PARTYB
-        let AorB = 'PARTYB'
-        if (this.formData.partyACompany.uid == uid) {
-          AorB = 'PARTYA';
-        }
-        return this.formData.createdBy == AorB && this.formData.status != 'CONFIRMED' && this.formData.status != 'CANCELLED';
+        return uid == this.formData.belongTo.uid && this.formData.status != 'CONFIRMED' && this.formData.status != 'CANCELLED';
       }
     },
     methods: {

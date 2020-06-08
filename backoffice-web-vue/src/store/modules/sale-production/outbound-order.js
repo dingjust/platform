@@ -21,6 +21,9 @@ const state = {
     outboundCompanyName: '',
     outboundContactPerson: '',
     outboundContactPhone: '',
+    belongTo: {
+      uid: ''
+    },
     cooperator: {
       id: ''
     },
@@ -72,20 +75,18 @@ const state = {
     },
     attachments: [],
     partyAOperator: {
+      id: '',
       name: '',
-      contactPhone: ''
+      mobileNumber: ''
     },
     partyBOperator: {
+      id: '',
       name: '',
-      contactPhone: ''
+      mobileNumber: ''
     },
-    approvers: [{}],
-    partyACompany: {
-      uid: ''
-    },
-    partyBCompany: {
-      uid: ''
-    }
+    approvers: [{
+      id: ''
+    }]
   },
   queryFormData: {
     keyword: '',
@@ -188,6 +189,9 @@ const actions = {
       outboundCompanyName: '',
       outboundContactPerson: '',
       outboundContactPhone: '',
+      belongTo: {
+        uid: ''
+      },
       cooperator: {
         id: ''
       },
@@ -238,20 +242,18 @@ const actions = {
       },
       attachments: [],
       partyAOperator: {
+        id: '',
         name: '',
-        contactPhone: ''
+        mobileNumber: ''
       },
       partyBOperator: {
+        id: '',
         name: '',
-        contactPhone: ''
+        mobileNumber: ''
       },
-      approvers: [],
-      partyACompany: {
-        uid: ''
-      },
-      partyBCompany: {
-        uid: ''
-      }
+      approvers: [{
+        id: ''
+      }]
     });
   },
   clearQueryFormData ({dispatch, commit, state}) {
