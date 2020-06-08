@@ -272,7 +272,11 @@
           costOrder: {},
           colors: this.getColorsByEntries(colorSizeEntries),
           sizes: this.getSizesByEntries(colorSizeEntries),
-          sampleCostOrder: data.costingSheets[0]
+        }
+
+        //若有成本核算单                  
+        if(data.costingSheets!=null&&data.costingSheets[0]!=null){
+          entry['sampleCostOrder']=data.costingSheets[0];
         }
 
         //若需要物料清单
