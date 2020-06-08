@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import ExifUtil from '@/plugins/ExifUtil';
+  import ImageUtil from '@/plugins/ImageUtil';
 
   export default {
     name: 'ImagesUpload',
@@ -59,8 +59,8 @@
             reader.onload = (e) => {
               img.src = e.target.result;
               img.onload = function () {
-                const data = ExifUtil.compressImage(img, img.width, img.height, 0.5);                
-                const newFile = ExifUtil.dataURLtoFile(data, file.name);
+                const data = ImageUtil.compressImage(img, img.width, img.height, 0.5);                
+                const newFile = ImageUtil.dataURLtoFile(data, file.name);
                 resolve(newFile);
               };
             }
