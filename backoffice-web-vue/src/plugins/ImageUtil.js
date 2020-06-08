@@ -1,14 +1,14 @@
-import EXIF from 'exif-js'
+// import EXIF from 'exif-js'
 
 export default {
-  getOrientation: (file) => {
-    return new Promise((resolve) => {
-      EXIF.getData(file, function () {
-        const orient = EXIF.getTag(this, 'Orientation')
-        resolve(orient)
-      })
-    })
-  },
+  // getOrientation: (file) => {
+  //   return new Promise((resolve) => {
+  //     EXIF.getData(file, function () {
+  //       const orient = EXIF.getTag(this, 'Orientation')
+  //       resolve(orient)
+  //     })
+  //   })
+  // },
 
   dataURLtoFile: (dataurl, filename) => {
     const arr = dataurl.split(',')

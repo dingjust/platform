@@ -59,9 +59,6 @@
         </el-form-item>
       </el-col> -->
       </el-row>
-      <el-row style="padding-left: 6px">
-        <my-address-form :vAddress.sync="slotData.shippingAddress" ref="addressComp" :readOnly="readOnly" />
-      </el-row>
       <el-row class="basic-form-row_top" type="flex" align="middle">
         <h6 class="info-input-prepend_top">人员设置</h6>
       </el-row>
@@ -86,7 +83,6 @@
 
 <script>
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
-  import MyAddressForm from '@/components/custom/order-form/MyAddressForm';
   import SupplierSelect from '@/components/custom/SupplierSelect';
   export default {
     name: 'ProductionTask',
@@ -107,7 +103,6 @@
       }
     },
     components: {
-      MyAddressForm,
       MTAVAT,
       SupplierSelect
     },
@@ -134,14 +129,7 @@
     },
     mounted() {},
     created() {
-      if (this.slotData.shippingAddress == null) {
-        this.$set(this.slotData, 'shippingAddress', {
-          region: '',
-          city: '',
-          cityDistrict: '',
-          line1: ''
-        });
-      }
+
     }
   }
 
