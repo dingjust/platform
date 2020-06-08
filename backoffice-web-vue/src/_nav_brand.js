@@ -278,11 +278,6 @@ export default {
         //   url: '/manage/createContract',
         //   icon: 'iconNone',
         // },
-        // {
-        //   name: 'markdown',
-        //   url: '/unclassified/markDown',
-        //   icon: 'iconNone',
-        // },
       ]
     },
     {
