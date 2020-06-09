@@ -20,10 +20,10 @@
         </template>
       </el-tabs>
     </el-card>
-    <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData" />
-    </el-dialog>
+<!--    <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body-->
+<!--      :close-on-click-modal="false">-->
+<!--      <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData" />-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
@@ -127,7 +127,13 @@
           row = {};
         })
         this.formData.entries = entries;
-        this.outboundOrderTypeSelect = true;
+        // this.outboundOrderTypeSelect = true;
+        this.$router.push({
+          name: '创建外发订单',
+          params: {
+            formData: Object.assign({}, this.formData)
+          }
+        });
       }
     },
     data () {

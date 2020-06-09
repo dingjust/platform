@@ -86,7 +86,12 @@
         this.searchAdvanced({url, query, page, size});
       },
       createOutboundOrder () {
-        this.outboundOrderTypeSelect = true;
+        this.$router.push({
+          name: '创建外发订单',
+          params: {
+            formData: this.formData
+          }
+        });
       },
       handleClick (tab, event) {
         if (tab.name == '') {
