@@ -1089,7 +1089,7 @@ let NONE_TENANT_APIS = {
   },
   //唯一码导入销售订单
   importSalesOrderByUniqueCode(code) {
-    return '/b2b}/sales/production/order/create/from/uniqueCode/' + code;
+    return '/b2b/sales/production/order/create/from/uniqueCode/' + code;
   },
   //销售计划订单列表
   getSalesOrderList() {

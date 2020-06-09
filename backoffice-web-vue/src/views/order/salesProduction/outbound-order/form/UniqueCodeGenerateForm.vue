@@ -6,9 +6,11 @@
       </div>
     </el-row>
     <el-row type="flex" justify="center">
-      <el-input v-model="uniqueCode" :disabled="true">
-        <el-button slot="append" @click="onCreate">生成</el-button>
+      <el-input v-model="order.uniqueCode" v-if="canGenerate">
+        <el-button slot="append" @click="onCreate">生成
+        </el-button>
       </el-input>
+      <h6 v-else>{{order.uniqueCode}}</h6>
     </el-row>
   </div>
 </template>
@@ -21,6 +23,19 @@
         type: Object
       }
     },
+    computed: {
+      canGenerate: function () {
+        if (this.order.status == 'REJECTED_CONFIRM') {
+          if (this.order.uniqueCode != null && this.order.uniqueCode != '') {
+            return false;
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      }
+    },
     methods: {
       async onCreate() {
         const url = this.apis().generateUniqueCodeForSale(this.order.code);
@@ -30,13 +45,11 @@
           return;
         }
         this.$message.success("生成成功");
-        this.$set(this, 'uniqueCode', result);
+        this.$set(this.order, 'uniqueCode', result);
       }
     },
     data() {
-      return {
-        uniqueCode: "",
-      };
+      return {};
     },
     created() {},
     mounted() {}

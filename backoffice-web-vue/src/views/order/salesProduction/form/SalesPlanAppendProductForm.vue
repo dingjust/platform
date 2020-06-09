@@ -275,8 +275,8 @@
         }
 
         //若有成本核算单                  
-        if(data.costingSheets!=null&&data.costingSheets[0]!=null){
-          entry['sampleCostOrder']=data.costingSheets[0];
+        if (data.costingSheets != null && data.costingSheets[0] != null) {
+          entry['sampleCostOrder'] = data.costingSheets[0];
         }
 
         //若需要物料清单
@@ -372,6 +372,14 @@
         }
       },
       onCreateAccountingSheet(productIndex) {
+        //是否校验物料清单
+        if (this.needMaterialsSpec) {
+          if (this.appendProductForm.sampleList[productIndex].materialsSpecEntries == null || this.appendProductForm
+            .sampleList[productIndex].materialsSpecEntries.length < 1) {
+            this.$message.error('请先添加物料清单');
+            return;
+          }
+        }
         this.$refs.appendProductForm.validateField('sampleList.' + productIndex + '.unitPrice', errMsg => {
           if (errMsg) {
             this.$message.error('请先填写订单报价');
@@ -394,6 +402,7 @@
             });
           }
         });
+
       },
       onImportAccountingSheet(productIndex) {
         this.$set(this, 'openSampleSpecEntries', this.appendProductForm.sampleList[productIndex].materialsSpecEntries);
@@ -451,6 +460,7 @@
       onSubmit() {
         let amountValidate = true;
         let costingValidate = true;
+        let materialsSpecEntriesValiadte = true;
 
         //校验数量行
         this.appendProductForm.sampleList.forEach(entry => {
@@ -469,6 +479,15 @@
           }
         });
 
+        //校验物料清单
+        if (this.needMaterialsSpec) {
+          this.appendProductForm.sampleList.forEach(element => {
+            if (element.materialsSpecEntries == null || element.materialsSpecEntries.length < 1) {
+              materialsSpecEntriesValiadte = false;
+            }
+          });
+        }
+
         //获取各层级form
         var forms = [];
         forms.push(this.$refs.appendProductForm);
@@ -483,11 +502,18 @@
         // 使用Promise.all 并行去校验结果
         Promise.all(forms.map(this.getFormPromise)).then(res => {
           const validateResult = res.every(item => !!item);
-          if (validateResult && amountValidate && costingValidate) {
+          if (validateResult && amountValidate && costingValidate && materialsSpecEntriesValiadte) {
             this.$emit('onSave', this.appendProductForm.sampleList);
           } else {
-            if (!costingValidate) {
-              this.$message.error('请完创建成本核算单');
+            if (!costingValidate || !materialsSpecEntriesValiadte) {
+              let str = '请创建 ';
+              if (!materialsSpecEntriesValiadte) {
+                str += '物料清单';
+              }
+              if (!costingValidate) {
+                str += '\n成本核算单';
+              }
+              this.$message.error(str);
             } else {
               this.$message.error('请完善信息');
             }
