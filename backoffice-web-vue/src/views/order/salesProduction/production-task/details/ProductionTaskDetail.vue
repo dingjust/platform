@@ -22,10 +22,13 @@
             :medias.sync="formData.entries[0].medias" :isRead="true"
             :productionProcessContent.sync="formData.entries[0].productionProcessContent" :productsColors="colors" />
         </el-row>
-        <accounting-sheet-btn :slotData="formData.entries[0].costOrder" :unitPrice="formData.entries[0].unitPrice" />
+        <accounting-sheet-btn :slotData="formData.entries[0].costOrder" :unitPrice="formData.entries[0].unitPrice"
+                              :isOutboundRead="isOutboundRead"/>
       </div>
-      <production-task :slotData="formData.entries[0].productionTask" ref="taskComp" v-if="formData.entries[0]!=null"
-        :productionLeader="formData.productionLeader" :readOnly="true" />
+      <div v-if="!isOutboundRead">
+        <production-task :slotData="formData.entries[0].productionTask" ref="taskComp" v-if="formData.entries[0]!=null"
+          :productionLeader="formData.productionLeader" :readOnly="true" />
+      </div>
       <div style="margin-top:40px">
         <el-row>
           <el-col :span="4">关联订单</el-col>
@@ -59,7 +62,15 @@
 
   export default {
     name: 'ProductionTaskDetails',
-    props: ['id'],
+    props: {
+      id: {
+        require: true
+      },
+      isOutboundRead: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       ReceivingDetailsForm,
       ProductionTask,

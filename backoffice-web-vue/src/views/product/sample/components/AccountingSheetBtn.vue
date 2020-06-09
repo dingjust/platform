@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="viewDialogVisible" width="90%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <sample-accounting-sheet :slot-data="slotData" :readOnly="true" :unitPrice="unitPrice"/>
     </el-dialog>
-    <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">
+    <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10" v-if="!isOutboundRead">
       <el-col :span="2">
         <h6 style="padding-top:8px">核算单：</h6>
       </el-col>
@@ -21,7 +21,7 @@
 
   export default {
     name: "AccountingSheetBtn",
-    props: ["slotData","unitPrice"],
+    props: ["slotData","unitPrice", 'isOutboundRead'],
     components: {
       SampleAccountingSheet
     },

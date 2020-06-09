@@ -27,7 +27,7 @@
       </el-row>
     </el-card>
     <el-dialog :visible.sync="taskDetailVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <production-task-details v-if="taskDetailVisible" :id="productionTaskId"/>
+      <production-task-details v-if="taskDetailVisible" :id="productionTaskId" :isOutboundRead="true"/>
     </el-dialog>
   </div>
 </template>
