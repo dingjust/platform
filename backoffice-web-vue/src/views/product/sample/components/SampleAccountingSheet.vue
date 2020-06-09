@@ -145,8 +145,9 @@
 
         if (this.slotData.materialsEntries != null) {
           this.slotData.materialsEntries.forEach(element => {
-            let sum = parseFloat(element.materialsSpecEntry.unitQuantity * (1 + element.materialsSpecEntry
-              .lossRate) * (this
+            let sum = parseFloat(element.materialsSpecEntry.unitQuantity * (1 + parseFloat(element
+              .materialsSpecEntry
+              .lossRate)) * (this
               .slotData
               .isIncludeTax ?
               element.unitPriceIncludingTax : element.unitPriceExcludingTax));

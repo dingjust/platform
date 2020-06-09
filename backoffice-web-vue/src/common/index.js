@@ -753,7 +753,7 @@ const COMMON_APIS = {
     return '/b2b/purchase/task/save'
   },
   // 创建生产工单
-  createProductionOrder () {
+  createProductionOrder() {
     return '/b2b/orders/production/work/create';
   }
 };
@@ -1083,6 +1083,14 @@ let NONE_TENANT_APIS = {
   salesPlanWithdraw(id) {
     return '/b2b/sales/production/order/revoke/audit/' + id;
   },
+  //拒绝销售订单
+  refuseSalesOrder(id) {
+    return '/b2b/sales/production/order/reject/outboundOrder/' + id;
+  },
+  //唯一码导入销售订单
+  importSalesOrderByUniqueCode(code) {
+    return '/b2b}/sales/production/order/create/from/uniqueCode/' + code;
+  },
   //销售计划订单列表
   getSalesOrderList() {
     return '/b2b/sales/production/order/search';
@@ -1117,6 +1125,12 @@ let NONE_TENANT_APIS = {
   finshProgress(code, id) {
     return '/b2b/sheets/progress/work/' + code + '/finish/progress/' + id;
   },
+
+  //外发订单生成唯一码
+  generateUniqueCodeForSale(code) {
+    return '/b2b/orders/outbound/' + code + '/unique';
+  },
+
 
   // 创建发货单================================新生产工单
   createShippingOrderV2(code) {

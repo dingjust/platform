@@ -14,7 +14,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
+      <el-form ref="form" :inline="true" :model="formData">
         <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
@@ -78,9 +78,9 @@
       SalesPlanAppendProductForm
     },
     computed: {
-      ...mapGetters({
-        formData: 'formData'
-      }),
+      // ...mapGetters({
+      //   formData: 'formData'
+      // }),
       //根据订单类型，加工类型判断是否需要物料清单等
       needMaterialsSpec: function () {
         //销售计划
@@ -108,10 +108,16 @@
         }
       },
       modifyType: function () {
-        if (this.formData.auditState == 'NONE' || this.formData.auditState == 'AUDITED_FAILED') {
-          return true;
-        } else {
+        if (this.formData.auditState == null) {
           return false;
+        }
+        switch (this.formData.auditState) {
+          case 'NONE':
+            return true;
+          case 'AUDITED_FAILED':
+            return true;
+          default:
+            return false;
         }
       }
     },
@@ -123,7 +129,9 @@
           this.$message.error(result.msg);
           return;
         }
-        this.$store.state.SalesProductionOrdersModule.formData = Object.assign({}, result.data);
+        this.formData = Object.assign({
+          approvers: [null]
+        }, result.data);
       },
       onWithdraw() {
         this.$confirm('确认撤回?', '提示', {
@@ -169,6 +177,15 @@
         this.salesProductAppendVisible = false;
       },
       async onSave(submitAudit) {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this._onSave(submitAudit);
+          } else {
+            this.$message.error('请完善信息');
+          }
+        });
+      },
+      async _onSave(submitAudit) {
         const url = this.apis().salesPlanSave(submitAudit);
         const result = await this.$http.post(url, this.formData);
         if (result['errors']) {
@@ -176,7 +193,7 @@
           return;
         }
         if (result.code == '0') {
-          this.$message.error(result.msg);
+          this.$message.error('保存失败:' + result.msg != null ? result.msg : '');
           return;
         } else if (result.code == '1') {
           this.$message.success('更新成功');
@@ -188,9 +205,6 @@
         this.$router.push({
           name: '销售计划'
         })
-      },
-      onRefuse() {
-        this.refuseVisible = true;
       },
       getRefuseMsg(msg) {
         this.refuseVisible = false;
@@ -207,9 +221,6 @@
       onClose() {
         this.$message('-----------关闭----------------------');
       },
-      validate(callback) {
-        this.$refs.form.validate(callback);
-      }
     },
     data() {
       return {
@@ -217,6 +228,18 @@
         salesProductAppendVisible: false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
+        formData: {
+          code: '',
+          entries: [],
+          deliveryAddress: {},
+          id: '',
+          status: '',
+          user: {},
+          quality: '',
+          seller: {},
+          approvers: [null],
+          productionLeader: null
+        },
       }
     },
     created() {

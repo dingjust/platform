@@ -17,7 +17,6 @@
     props: {
       vPerson: {
         type: Object,
-        default: {}
       },
       readOnly: {
         type: Boolean,

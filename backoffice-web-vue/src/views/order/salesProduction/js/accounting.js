@@ -11,7 +11,7 @@ function getEntryCostPrice(entry) {
   let materialsPrice = 0;
   let specialPrice = 0;
   //工费
-  if (entry.costOrder.laborCostEntries != null) {
+  if (entry.costOrder != null && entry.costOrder.laborCostEntries != null) {
     entry.costOrder.laborCostEntries.forEach(element => {
       let num;
       //含税
@@ -32,7 +32,7 @@ function getEntryCostPrice(entry) {
   }
 
   //物料
-  if (entry.costOrder.materialsEntries != null) {
+  if (entry.costOrder != null && entry.costOrder.materialsEntries != null) {
     entry.costOrder.materialsEntries.forEach(element => {
       let num;
       //含税
@@ -56,7 +56,7 @@ function getEntryCostPrice(entry) {
   }
 
   //工艺
-  if (entry.costOrder.specialProcessEntries != null) {
+  if (entry.costOrder != null && entry.costOrder.specialProcessEntries != null) {
     entry.costOrder.specialProcessEntries.forEach(element => {
       let num;
       //含税

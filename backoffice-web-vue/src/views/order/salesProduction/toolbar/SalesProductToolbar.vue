@@ -19,6 +19,7 @@
         </el-col>
         <el-col :span="5">
           <el-row type="flex" justify="end">
+            <el-button type="primary" class="create-button_blue" @click="onUniqueCodeImport">唯一码导入</el-button>
             <el-button type="primary" class="create-button" @click="createSalesPlan">创建销售计划</el-button>
             <el-button type="primary" class="create-button" @click="createSalesOrder">创建销售订单</el-button>
           </el-row>
@@ -26,6 +27,10 @@
       </el-row>
     </el-form>
     <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses" />
+    <el-dialog :visible.sync="uniqueCodeImportFormVisible" width="30%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <unique-code-import-form @callback="onImportCallback" />
+    </el-dialog>
   </div>
 </template>
 
@@ -34,6 +39,7 @@
     createNamespacedHelpers
   } from 'vuex';
   import SalesProductionStatusBar from '../components/SalesProductionStatusBar';
+  import UniqueCodeImportForm  from '../form/UniqueCodeImportForm';
 
   const {
     mapMutations
@@ -42,12 +48,14 @@
   export default {
     name: 'SalesProductionToolbar',
     components: {
-      SalesProductionStatusBar
+      SalesProductionStatusBar,
+      UniqueCodeImportForm 
     },
     computed: {},
     data() {
       return {
         statuses: this.$store.state.EnumsModule.SalesProductionStatuses,
+        uniqueCodeImportFormVisible: false,
         queryFormData: {
           name: '',
           status: '',
@@ -67,6 +75,13 @@
       },
       createSalesOrder() {
         this.$emit('createSalesOrder');
+      },
+      onUniqueCodeImport() {
+        this.uniqueCodeImportFormVisible = true;
+      },
+      onImportCallback() {
+        this.uniqueCodeImportFormVisible = false;
+        this.$emit('onAdvancedSearch', 0);
       },
       onAdvancedSearch() {
         this.setQueryFormData(this.queryFormData);
@@ -155,6 +170,14 @@
     width: 100px;
     height: 40px;
     color: #606266;
+  }
+
+  .create-button_blue {
+    /* background-color: #ecf5ff;
+    border-color: #b3d8ff; */
+    width: 100px;
+    height: 40px;
+    /* color: #409eff; */
   }
 
   .el-form-item--mini.el-form-item,

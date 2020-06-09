@@ -31,7 +31,7 @@
         </el-row>
       </div>
       <sales-plan-detail-btn-group :state="formData.auditState" @onReturn="onReturn" @onSave="onSave(false)"
-        @onSubmit="onSave(true)" />
+        @onRefuse="onRefuse" :canRefuse="hasOrigin" @onSubmit="onSave(true)" />
     </el-card>
     <el-dialog :visible.sync="refuseVisible" width="40%" :close-on-click-modal="false">
       <refuse-dialog v-if="refuseVisible" @getRefuseMsg="getRefuseMsg" />
@@ -77,9 +77,9 @@
       SalesPlanAppendProductForm
     },
     computed: {
-      ...mapGetters({
-        formData: 'formData'
-      }),
+      // ...mapGetters({
+      //   formData: 'formData'
+      // }),
       //根据订单类型，加工类型判断是否需要物料清单等
       needMaterialsSpec: function () {
         //销售订单
@@ -107,11 +107,20 @@
         }
       },
       modifyType: function () {
-        if (this.formData.auditState == 'NONE' || this.formData.auditState == 'AUDITED_FAILED') {
-          return true;
-        } else {
+        if (this.formData.auditState == null) {
           return false;
         }
+        switch (this.formData.auditState) {
+          case 'NONE':
+            return true;
+          case 'AUDITED_FAILED':
+            return true;
+          default:
+            return false;
+        }
+      },
+      hasOrigin: function () {
+        return this.formData.originOrder != null && this.formData.originOrder.code != null;
       }
     },
     methods: {
@@ -141,12 +150,23 @@
           this.$message.error(result.msg);
           return;
         }
-        this.$store.state.SalesProductionOrdersModule.formData = Object.assign({}, result.data);
+        this.formData = Object.assign({
+          approvers: [null]
+        }, result.data);
       },
       onReturn() {
 
       },
       async onSave(submitAudit) {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this._onSave(submitAudit);
+          } else {
+            this.$message.error('请完善信息');
+          }
+        });
+      },
+      async _onSave(submitAudit) {
         const url = this.apis().salesPlanSave(submitAudit);
         const result = await this.$http.post(url, this.formData);
         if (result['errors']) {
@@ -154,11 +174,12 @@
           return;
         }
         if (result.code == '0') {
-          this.$message.error(result.msg);
+          this.$message.error('保存失败:' + result.msg != null ? result.msg : '');
           return;
         } else if (result.code == '1') {
           this.$message.success('更新成功');
           this.$router.go(0);
+          this.getDetails();
         }
       },
       onReturnPage() {
@@ -167,7 +188,27 @@
         })
       },
       onRefuse() {
-        this.refuseVisible = true;
+        this.$confirm('确认拒绝订单？')
+          .then(_ => {
+            this._onRefuse();
+          })
+          .catch(_ => {});
+      },
+      async _onRefuse() {
+        const url = this.apis().refuseSalesOrder(this.formData.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == '0') {
+          this.$message.error('拒单失败:' + result.msg != null ? result.msg : '');
+          return;
+        } else if (result.code == '1') {
+          this.$message.success('拒单成功');
+          this.$router.go(0);
+          this.getDetails();
+        }
       },
       getRefuseMsg(msg) {
         this.refuseVisible = false;
@@ -195,6 +236,18 @@
         salesProductAppendVisible: false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
+        formData: {
+          code: '',
+          entries: [],
+          deliveryAddress: {},
+          id: '',
+          status: '',
+          user: {},
+          quality: '',
+          seller: {},
+          approvers: [null],
+          productionLeader: null
+        },
       }
     },
     created() {
