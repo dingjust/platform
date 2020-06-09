@@ -115,7 +115,7 @@
             productionTask: {id: item.id},
             billPrice: '',
             expectedDeliveryDate: '',
-            shippingAddress: {},
+            shippingAddress: item.productionEntry.shippingAddress,
             product: {
               id: item.productionEntry.product.id,
               name: item.productionEntry.product.name,

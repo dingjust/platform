@@ -342,8 +342,7 @@
               },
               billPrice: '',
               expectedDeliveryDate: '',
-              // shippingAddress: item.shippingAddress,
-              shippingAddress: {},
+              shippingAddress: item.productionEntry.shippingAddress,
               product: {
                 id: item.productionEntry.product.id,
                 name: item.productionEntry.product.name,
@@ -356,6 +355,13 @@
           }
         })
         this.formData.entries = entries;
+        // 回显地址
+        this.formData.entries.forEach((val, index) => {
+          if (this.$refs.addressForm[index]) {
+            this.$refs.addressForm[index].getCities(val.shippingAddress.region);
+            this.$refs.addressForm[index].onCityChanged(val.shippingAddress.city);
+          }
+        })
         this.taskDialogVisible = false;
       },
       // 封装Promise对象
