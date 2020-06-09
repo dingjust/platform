@@ -21,10 +21,10 @@ const state = {
     roles: [],
     b2bRoleList: [],
     b2bDept: {
-      id: 0
+      id: ''
     },
     b2bRoleGroup: {
-      id: 0
+      id: ''
     }
   },
   queryFormData: {

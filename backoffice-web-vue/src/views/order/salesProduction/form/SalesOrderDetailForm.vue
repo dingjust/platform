@@ -105,7 +105,8 @@
             <h5>合同</h5>
             <el-button type="text" style="color: #ffd60c">签署合同</el-button>
           </el-row> -->
-          <purchase-order-info-contract :slotData="form" :contracts="[]" />
+<!--          <purchase-order-info-contract :slotData="form" :contracts="[]" />-->
+          <contract-com :slotData="form" :contracts="[]"/>
         </el-col>
       </el-row>
     </div>
@@ -128,6 +129,7 @@
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
   import PurchaseOrderInfoContract from '@/views/order/purchase/info/PurchaseOrderInfoContract';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
+  import ContractCom from "../contract/ContractCom";
 
 
   export default {
@@ -204,6 +206,7 @@
       },
     },
     components: {
+      ContractCom,
       MTAVAT,
       PurchaseOrderInfoContract,
       PersonnelSelection

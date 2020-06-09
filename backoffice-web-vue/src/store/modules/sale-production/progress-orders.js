@@ -34,7 +34,10 @@ const state = {
   },
   queryFormData: {
     keyword: '',
-    status: ''
+    statuses: '',
+    expectedDeliveryDateFrom: '',
+    expectedDeliveryDateTo: '',
+    operatorName: ''
   },
   detailData: {
 

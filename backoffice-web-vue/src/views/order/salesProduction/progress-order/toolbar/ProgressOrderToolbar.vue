@@ -5,7 +5,7 @@
           <el-input placeholder="工单号，产品名或货号" v-model="queryFormData.keyword"></el-input>
         </el-form-item>
         <el-form-item label="跟单员" prop="name">
-          <el-input placeholder="跟单员姓名" v-model="queryFormData.name"></el-input>
+          <el-input placeholder="跟单员姓名" v-model="queryFormData.operatorName"></el-input>
         </el-form-item>
         <el-form-item label="交货日期">
           <el-date-picker
@@ -28,7 +28,7 @@
 <script>
   export default {
     name: 'ProgressOrderToolbar',
-    props: [],
+    props: ['queryFormData'],
     computed: {
 
     },
@@ -37,31 +37,22 @@
         this.$emit('onAdvancedSearch');
       },
       onReset () {
-        this.queryFormData = {
-          keyword: '',
-          name: '',
-          creationTimeFrom: '',
-          creationTimeTo: '',
-          status: ''
-        };
+        this.queryFormData.keyword = '';
+        this.queryFormData.statuses = '';
+        this.queryFormData.expectedDeliveryDateFrom = '';
+        this.queryFormData.expectedDeliveryDateTo = '';
+        this.queryFormData.operatorName = '';
       }
     },
     data () {
       return {
-        dateArr: '',
-        queryFormData: {
-          keyword: '',
-          name: '',
-          creationTimeFrom: '',
-          creationTimeTo: '',
-          status: ''
-        }
+        dateArr: ''
       }
     },
     watch: {
       dateArr: function (newVal, oldVal) {
-        this.queryFormData.creationTimeFrom = newVal.start;
-        this.queryFormData.creationTimeTo = newVal.end;
+        this.queryFormData.expectedDeliveryDateFrom = newVal[0];
+        this.queryFormData.expectedDeliveryDateTo = newVal[1];
       }
     },
     created () {

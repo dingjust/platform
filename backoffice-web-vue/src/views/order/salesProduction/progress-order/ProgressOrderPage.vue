@@ -10,7 +10,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <progress-order-toolbar @onAdvancedSearch="onAdvancedSearch"/>
+      <progress-order-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="(item, index) in statuses">
           <el-tab-pane :name="item.code" :key="index" :label="item.name">
@@ -62,7 +62,7 @@
         this.searchAdvanced({url, query, page, size});
       },
       handleClick (tab, event) {
-        this.queryFormData.status = tab.name;
+        this.queryFormData.statuses = tab.name;
         this.onAdvancedSearch();
       }
     },
@@ -73,11 +73,11 @@
           code: '',
           name: '全部'
         }, {
-          code: 'UNDELAY',
-          name: '未延期'
+          code: 'IN_PRODUCTION',
+          name: '生产中'
         }, {
-          code: 'DELAY',
-          name: '已延期'
+          code: 'COMPLETED',
+          name: '完成'
         }]
       }
     },
