@@ -18,10 +18,7 @@
           <span>{{getCustName(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人">
-        <template slot-scope="scope">
-          <span>{{scope.row.creator.name}}</span>
-        </template>
+      <el-table-column label="创建人" prop="creator.name">
       </el-table-column>
       <el-table-column label="创建日期">
         <template slot-scope="scope">

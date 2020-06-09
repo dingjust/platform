@@ -22,7 +22,8 @@ const state = {
     status: '',
     user: {},
     quality: '',
-    seller: {}
+    seller: {},
+    approvers:[null]
   },
   queryFormData: {
     code: '',
@@ -39,31 +40,6 @@ const state = {
     keyword: '',
     categories: []
   },
-  addressFormData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
-    },
-    city: {
-      code: '',
-      name: ''
-    },
-    cityDistrict: {
-      code: '',
-      name: ''
-    },
-    line1: ''
-  },
-  consignmentFormData: {
-    trackingID: '',
-    carrierDetails: {
-      code: '',
-      name: ''
-    }
-  },
   detailData: {
 
   }
@@ -76,7 +52,6 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   statuses: (state, statuses) => state.statuses = statuses,
   formData: (state, formData) => state.formData = formData,
-  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
   detailData: (state, detailData) => state.detailData = detailData

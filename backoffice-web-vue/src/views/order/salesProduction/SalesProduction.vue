@@ -9,7 +9,8 @@
         </el-col>
       </el-row>
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-        @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder" />
+        @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"
+        @onUniqueCodeImport="onUniqueCodeImport" />
       <el-divider class="sales-divider"></el-divider>
       <sales-production-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
         @onDelete="onDelete" />
@@ -93,7 +94,8 @@
         this.$router.push({
           name: '录入销售订单'
         });
-      }
+      },
+      onUniqueCodeImport() {},
     },
     data() {
       return {
