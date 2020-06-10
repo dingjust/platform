@@ -10,7 +10,7 @@
       </el-row>
       <div class="pt-2"></div>
       <production-task-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-        @createOutboundOrder="createOutboundOrder" />
+        @createOutboundOrder="createOutboundOrder" @createProductionOrder="createProductionOrder"/>
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code" :key="index" :label="item.name">
@@ -104,36 +104,39 @@
         this.selectTaskList = val;
       },
       createOutboundOrder () {
-        if (this.selectTaskList.length <= 0) {
-          this.$message.warning('请先选择生产任务');
-          return;
-        }
-        let row = {};
-        let entries = [];
-        this.selectTaskList.forEach(item => {
-          row = {
-            productionTask: {id: item.id},
-            billPrice: '',
-            expectedDeliveryDate: '',
-            shippingAddress: item.productionEntry.shippingAddress,
-            product: {
-              id: item.productionEntry.product.id,
-              name: item.productionEntry.product.name,
-              thumbnail: item.productionEntry.product.thumbnail
-            },
-            colorSizeEntries: item.productionEntry.colorSizeEntries
-          }
-          entries.push(row);
-          row = {};
-        })
-        this.formData.entries = entries;
+        // if (this.selectTaskList.length <= 0) {
+        //   this.$message.warning('请先选择生产任务');
+        //   return;
+        // }
+        // let row = {};
+        // let entries = [];
+        // this.selectTaskList.forEach(item => {
+        //   row = {
+        //     productionTask: {id: item.id},
+        //     billPrice: '',
+        //     expectedDeliveryDate: '',
+        //     shippingAddress: item.productionEntry.shippingAddress,
+        //     product: {
+        //       id: item.productionEntry.product.id,
+        //       name: item.productionEntry.product.name,
+        //       thumbnail: item.productionEntry.product.thumbnail
+        //     },
+        //     colorSizeEntries: item.productionEntry.colorSizeEntries
+        //   }
+        //   entries.push(row);
+        //   row = {};
+        // })
+        // this.formData.entries = entries;
         // this.outboundOrderTypeSelect = true;
         this.$router.push({
           name: '创建外发订单',
           params: {
-            formData: Object.assign({}, this.formData)
+            formData: this.formData
           }
         });
+      },
+      createProductionOrder () {
+        this.$router.push('/sales/create/productionOrder');
       }
     },
     data () {

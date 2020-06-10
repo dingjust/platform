@@ -34,7 +34,10 @@ const state = {
   },
   queryFormData: {
     keyword: '',
-    status: ''
+    statuses: '',
+    expectedDeliveryDateFrom: '',
+    expectedDeliveryDateTo: '',
+    operatorName: ''
   },
   detailData: {
 
@@ -125,6 +128,15 @@ const actions = {
     if (!result['errors']) {
       commit('formData', result.data);
     }
+  },
+  clearQueryFormData ({dispatch, commit, state}) {
+    commit('queryFormData', {
+      keyword: '',
+      statuses: '',
+      expectedDeliveryDateFrom: '',
+      expectedDeliveryDateTo: '',
+      operatorName: ''
+    });
   }
 };
 

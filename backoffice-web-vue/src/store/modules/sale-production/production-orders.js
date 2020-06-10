@@ -273,6 +273,20 @@ const actions = {
       commit('formData', result);
     }
   },
+  clearQueryFormData ({dispatch, commit, state}) {
+    commit('queryFormData', {
+      code: '',
+      requirementOrderCode: '',
+      skuID: '',
+      statuses: [],
+      expectedDeliveryDateFrom: null,
+      expectedDeliveryDateTo: null,
+      createdDateFrom: null,
+      createdDateTo: null,
+      keyword: '',
+      categories: []
+    })
+  },
   clearCreateFormData ({dispatch, commit, state}) {
     commit('createFormData', {
       cooperator: {

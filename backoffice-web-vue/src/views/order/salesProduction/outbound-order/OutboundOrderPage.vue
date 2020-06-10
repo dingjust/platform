@@ -10,7 +10,8 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"/>
+      <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"
+                              :queryFormData="queryFormData"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="(item, index) in stateList">
           <el-tab-pane :label="item.name" :name="item.code">
@@ -62,7 +63,8 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
@@ -95,9 +97,10 @@
       },
       handleClick (tab, event) {
         if (tab.name == '') {
+          this.queryFormData.statuses = tab.name;
           this.onSearch();
         } else {
-          this.queryFormData.status = tab.name
+          this.queryFormData.statuses = tab.name;
           this.onAdvancedSearch();
         }
       },
@@ -141,6 +144,9 @@
     },
     mounted () {
 
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   };
 </script>

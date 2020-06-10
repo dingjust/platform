@@ -109,7 +109,8 @@
             <h5>合同</h5>
             <el-button type="text" style="color: #ffd60c">签署合同</el-button>
           </el-row> -->
-          <purchase-order-info-contract :slotData="form" :contracts="[]" />
+<!--          <purchase-order-info-contract :slotData="form" :contracts="[]" />-->
+          <contract-com :slotData="form" :contracts="contracts" :canSign="canSign"/>
         </el-col>
       </el-row>
     </div>
@@ -132,7 +133,7 @@
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
   import PurchaseOrderInfoContract from '@/views/order/purchase/info/PurchaseOrderInfoContract';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
-
+  import ContractCom from '../contract/ContractCom';
 
   export default {
     name: 'SalesOrderDetailForm',
@@ -176,15 +177,24 @@
         });
         return total;
       },
+      // 已签的合同列表
+      contracts: function () {
+        return this.form.agreements ? this.form.agreements : [];
+      },
+      // 判断是否能签署合同
+      canSign: function () {
+
+      }
     },
     components: {
+      ContractCom,
       MTAVAT,
       PurchaseOrderInfoContract,
       PersonnelSelection
     },
     props: {
       form: {
-        type: Object,
+        type: Object
       },
       modifyType: {
         type: Boolean,
@@ -194,7 +204,7 @@
     methods: {
 
     },
-    data() {
+    data () {
       return {
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
         mtavatLayoutScale: [9, 9, 6],
@@ -204,12 +214,11 @@
             id: this.$store.getters.currentUser.id,
             name: this.$store.getters.currentUser.username
           }
-        }],
+        }]
       }
     },
-    created() {}
+    created () {}
   }
-
 </script>
 
 <style scoped>
