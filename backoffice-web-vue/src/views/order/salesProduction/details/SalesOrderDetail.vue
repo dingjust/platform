@@ -18,7 +18,7 @@
         <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
-        <sales-production-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
+        <sales-production-tabs :canAdd="canAddProduct" :form="formData" @appendProduct="appendProduct" />
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -117,6 +117,24 @@
             return true;
           default:
             return false;
+        }
+      },
+      canAddProduct: function () {
+        //外发订单来源不能添加
+        if (this.formData.originOrder != null && this.formData.originOrder.code != '') {
+          return false;
+        } else {
+          if (this.formData.auditState == null) {
+            return false;
+          }
+          switch (this.formData.auditState) {
+            case 'NONE':
+              return true;
+            case 'AUDITED_FAILED':
+              return true;
+            default:
+              return false;
+          }
         }
       },
       hasOrigin: function () {

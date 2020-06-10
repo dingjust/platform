@@ -140,8 +140,7 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
-        :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
-        :productionLeader="form.productionLeader" />
+        :needMaterialsSpec="needMaterialsSpec" :isUpdate="false" :productionLeader="form.productionLeader" />
     </el-dialog>
   </div>
 </template>
@@ -185,12 +184,14 @@
       //总数量
       totalAmount: function () {
         let total = 0;
-        this.form.entries.forEach(element => {
-          let num = parseFloat(getEntryTotalAmount(element));
-          if (num != null && (!Number.isNaN(num))) {
-            total += num;
-          }
-        });
+        if (this.form.entries != null) {
+          this.form.entries.forEach(element => {
+            let num = parseFloat(getEntryTotalAmount(element));
+            if (num != null && (!Number.isNaN(num))) {
+              total += num;
+            }
+          });
+        }
         return total;
       },
       //销售总价
@@ -336,7 +337,7 @@
       }
     },
     created() {
-
+      
     },
     mounted() {
 

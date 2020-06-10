@@ -147,10 +147,14 @@
         }
       },
       cooperatorName: function () {
-        if (this.currentUser.companyCode == this.belong.partyACompany.uid) {
-          return this.belong.partyBCompany.name;
+        if (this.slotData.cooperator != null) {
+          if (this.slotData.cooperator.type == 'ONLINE') {
+            return this.slotData.cooperator.partner.name;
+          } else {
+            return this.slotData.cooperator.name;
+          }
         } else {
-          return this.belong.partyACompany.name;
+          return '';
         }
       },
       allMedias: function () {
