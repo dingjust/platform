@@ -22,21 +22,20 @@
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">合同（{{contracts==null || contracts == '' || contracts.length <= 0?'未签署':'已有合同'}}）
+        <h6 class="info-title_text" style="margin-bottom: 0px">合同（{{contracts==null || contracts == '' || contracts.length <= 0?'未签署':'已有合同'}}）
         </h6>
       </div>
 <!--      <el-button-->
 <!--        v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED' && !isTenant()"-->
 <!--        type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同-->
 <!--      </el-button>-->
-      <el-button v-if="canSign" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
-      </el-button>
+      <el-button v-if="canSign" type="text" @click="onCreate">签署合同</el-button>
       <!--<el-button v-if="contract !=null && contract.state != 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同-->
       <!--</el-button>-->
     </el-row>
     <div>
-      <el-row>
-        <el-col v-if="contracts!=null && contracts!= []" :span="4" v-for="(item, index) in contracts" :key="index"
+      <el-row type="flex" justify="start" align="middle">
+        <el-col v-if="contracts!=null && contracts!= []" :span="6" v-for="(item, index) in contracts" :key="index"
           :offset="0">
           <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)" :title="item.title">
             <el-row type="flex" justify="center">
@@ -61,7 +60,7 @@
    * @param {Array} [contracts]    - 订单已签订合同数组
    * @param {Boolean} [canSign]    - 判断能否签署合同
    * @example 调用示例
-   *  <contract-com :slotData="form" :contracts="[]" :canSign="canSign"/>
+   *  <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign"/>
    */
   import Bus from '@/common/js/bus.js';
   import http from '@/common/js/http';
@@ -364,7 +363,8 @@
           page: 0,
           size: 100
         });
-        this.contracts = [];
+        // 清空contracts
+        this.contracts.splice(0);
         for (var i = 0; i < result.content.length; i++) {
           if (result.content[i].state != 'INVALID') {
             this.contracts.push(result.content[i]);

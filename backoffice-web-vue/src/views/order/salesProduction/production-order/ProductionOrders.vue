@@ -2,8 +2,9 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-row>
-        <el-col :span="2">
+        <el-col :span="4">
           <div class="orders-list-title">
+<!--            生产工单列表-->
             <h6>订单列表</h6>
           </div>
         </el-col>
@@ -55,7 +56,8 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
@@ -116,6 +118,9 @@
     },
     mounted() {
 
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   };
 

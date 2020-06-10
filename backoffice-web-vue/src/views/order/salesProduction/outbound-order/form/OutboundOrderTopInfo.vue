@@ -36,7 +36,7 @@
         </el-row>
       </el-col>
       <el-divider direction="vertical"></el-divider>
-      <el-col :span="8">
+      <el-col :span="7">
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col>
             <h5 style="font-weight: bold">合作商信息</h5>
@@ -83,24 +83,9 @@
 <!--        </el-row>-->
       </el-col>
       <el-divider direction="vertical"></el-divider>
-      <el-col :span="4">
-        <el-row class="info-basic-row" type="flex" align="middle" justify="space-between" :gutter="20">
-          <el-col :span="8">
-            <h5 style="font-weight: bold">合同</h5>
-          </el-col>
-          <el-col :span="12">
-            <el-button type="text" style="color: #ffd60c">签署合同</el-button>
-          </el-col>
-        </el-row>
-        <el-row class="info-basic-row" type="flex" justify="center" :gutter="20">
-<!--          <el-col :span="16">-->
-<!--            <el-row>-->
-<!--              <img src="static/img/word.png" class="info-img-word" alt="" :title="slotData.contract.name"/>-->
-<!--            </el-row>-->
-<!--            <el-row>-->
-<!--              <h6 style="padding-left: 30px;">{{slotData.contract.name}}</h6>-->
-<!--            </el-row>-->
-<!--          </el-col>-->
+      <el-col :span="5">
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
+          <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign"/>
         </el-row>
       </el-col>
     </el-row>
@@ -108,8 +93,10 @@
 </template>
 
 <script>
+  import ContractCom from '../../contract/ContractCom';
   export default {
     name: 'OutboundOrderTopInfo',
+    components: {ContractCom},
     props: ['slotData'],
     computed: {
       totalQuantity: function () {
@@ -125,6 +112,14 @@
           count += item.totalPrice;
         })
         return count;
+      },
+      // 已签合同列表
+      contracts: function () {
+        return this.slotData.agreements ? this.slotData.agreements : [];
+      },
+      // 判断是否能签署合同
+      canSign: function () {
+
       }
     },
     methods: {

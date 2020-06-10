@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight"
               @selection-change="handleSelectionChange" @row-click="clickRow" :row-key="getRowKeys">
-      <el-table-column type="selection" width="55" :selectable="selectable" :reserve-selection="true"/>
+      <el-table-column type="selection" width="55" :selectable="selectable" :reserve-selection="true" v-if="isSelect"/>
       <el-table-column label="生产单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">

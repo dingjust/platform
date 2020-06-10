@@ -128,6 +128,15 @@ const actions = {
     if (!result['errors']) {
       commit('formData', result.data);
     }
+  },
+  clearQueryFormData ({dispatch, commit, state}) {
+    commit('queryFormData', {
+      keyword: '',
+      statuses: '',
+      expectedDeliveryDateFrom: '',
+      expectedDeliveryDateTo: '',
+      operatorName: ''
+    });
   }
 };
 

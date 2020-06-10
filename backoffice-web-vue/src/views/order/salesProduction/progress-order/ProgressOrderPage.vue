@@ -52,7 +52,8 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       onSearch(page, size) {
       },
@@ -83,6 +84,9 @@
     },
     created() {
       this.onAdvancedSearch();
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   }
 </script>

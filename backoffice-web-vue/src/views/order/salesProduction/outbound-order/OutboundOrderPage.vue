@@ -63,7 +63,8 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
@@ -143,6 +144,9 @@
     },
     mounted () {
 
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   };
 </script>
