@@ -3,9 +3,9 @@
     <div class="sales-plan-box">
         <el-row type="flex">
           <el-col :span="10">
-            <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
-              :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" />
-            <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType">
+            <!-- <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
+              :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" /> -->
+            <el-row type="flex" justify="start" class="basic-form-row">
               <el-col :span="8">
                 <el-row type="flex" align="middle">
                   <h6 class="sales-plan-h6"><span class="info-title">单号：</span>{{form.code}}

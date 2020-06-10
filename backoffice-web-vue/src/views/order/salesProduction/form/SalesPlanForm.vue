@@ -198,13 +198,6 @@
           this.$router.go(-1);
         }
       },
-      appendProductionCadre() {
-        this.form.productionCharge.push({
-          label: '张三',
-          name: '张三',
-          value: '张三'
-        });
-      }
     },
     data() {
       return {

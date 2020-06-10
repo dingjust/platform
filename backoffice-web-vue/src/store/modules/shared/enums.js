@@ -1560,13 +1560,13 @@ const state = {
     name: '审核拒绝'
   }, {
     code: 'PENDING_CONFIRM',
-    name: '待确认'
+    name: '待接单'
   }, {
     code: 'CONFIRMED',
-    name: '已确认'
+    name: '已接单'
   }, {
     code: 'REJECTED_CONFIRM',
-    name: '拒绝确认'
+    name: '已拒绝'
   }, {
     code: 'COMPLETED',
     name: '已完成'

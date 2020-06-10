@@ -293,10 +293,6 @@
           })
         })
       },
-      //校验行数据
-      validateEntries(){
-        
-      }
     },
     data() {
       return {

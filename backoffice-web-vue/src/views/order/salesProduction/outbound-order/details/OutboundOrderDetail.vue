@@ -19,7 +19,7 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">
-        <el-button class="purchase-order-btn2" @click="onGenerateUniqueCode">生成唯一码</el-button>
+        <el-button class="purchase-order-btn2" @click="onGenerateUniqueCode" v-if="canGenerate">唯一码</el-button>
         <el-button class="purchase-order-btn2" @click="onCancel" v-if="this.formData.status != ''">取消订单</el-button>
       </el-row>
     </el-card>
@@ -73,7 +73,8 @@
           'CANCELLED';
       },
       canGenerate: function () {
-        if (this.formData.cooperator != null && this.formData.cooperator.type == 'OFFLINE') {
+        if (this.formData.cooperator != null && this.formData.cooperator.type == 'OFFLINE' && this.formData.status ==
+          'PENDING_CONFIRM') {
           //TODO判断有无唯一码
           return true;
         } else {

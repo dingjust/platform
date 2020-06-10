@@ -158,11 +158,23 @@
 
       },
       async onSave(submitAudit) {
+        let costingValidate = true;
+        //校验是否有核算单
+        this.formData.entries.forEach(element => {
+          if (element.costOrder == null) {
+            costingValidate = false;
+          }
+        });
+
         this.$refs['form'].validate((valid) => {
-          if (valid) {
+          if (valid && costingValidate) {
             this._onSave(submitAudit);
           } else {
-            this.$message.error('请完善信息');
+            if (!costingValidate) {
+              this.$message.error('请补充明细信息');
+            } else {
+              this.$message.error('请完善信息');
+            }
           }
         });
       },
@@ -178,7 +190,7 @@
           return;
         } else if (result.code == '1') {
           this.$message.success('更新成功');
-          this.$router.go(0);
+          // this.$router.go(0);
           this.getDetails();
         }
       },
@@ -206,8 +218,7 @@
           return;
         } else if (result.code == '1') {
           this.$message.success('拒单成功');
-          this.$router.go(0);
-          this.getDetails();
+          this.$router.go(-1);
         }
       },
       getRefuseMsg(msg) {
