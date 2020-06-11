@@ -4,11 +4,11 @@
       <h5 style="fontWeight: bold;">外发要求</h5>
     </el-row>
     <el-row type="flex" class="basic-form-row" :gutter="10">
-      <el-col :span="8">
+      <!-- <el-col :span="8">
         <h6>外发目标价格:&#12288;￥{{form.price}}</h6>
-      </el-col>
+      </el-col> -->
       <el-col :span="8">
-        <h6>外发目标交期:&#12288;{{form.time | timestampToTime}}</h6>
+        <h6>外发交期:&#12288;{{form.time | timestampToTime}}</h6>
       </el-col>
       <el-col :span="8">
         <h6>工厂规模:&#12288;{{getEnum('populationScales', form.populationScales)}}</h6>

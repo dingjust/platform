@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-row class="info-basic-row" type="flex" :gutter="20">
+    <el-row class="info-basic-row" type="flex" :gutter="20" v-if="slotData.entries[0]!=null">
       <el-col :span="14">
         <el-row type="flex" :gutter="20">
           <el-col :span="6">

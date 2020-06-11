@@ -3,18 +3,18 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onSave" :isUpdate="true"
-        :needMaterialsSpec="needMaterialsSpec" :updataEntry="updateEntry" :productionLeader="form.productionLeader"
-        :readOnly="productFormReadOnly" />
+        :fromOrigin="!canChangeProduct" :needMaterialsSpec="needMaterialsSpec" :updataEntry="updateEntry"
+        :productionLeader="form.productionLeader" :readOnly="productFormReadOnly" />
     </el-dialog>
     <div class="over-tabs">
       <el-row type="flex">
-        <el-button v-if="canAdd" class="material-btn" @click="appendProduct">添加商品</el-button>
+        <el-button v-if="canChangeProduct" class="material-btn" @click="appendProduct">添加商品</el-button>
       </el-row>
     </div>
     <el-tabs type="border-card">
       <el-tab-pane label="产品明细">
-        <sales-production-products-table :data="form.entries" @onDelete="onProductDelete" @onModify="onProductModify"
-          @onDetail="onProductDetail" />
+        <sales-production-products-table :data="form.entries" :canDelete="canChangeProduct" @onDelete="onProductDelete"
+          :canUpdate="canUpdate" @onModify="onProductModify" @onDetail="onProductDetail" />
       </el-tab-pane>
       <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'">
         <sales-production-tasks-table :data="form.entries" @onDelete="onTaskDelete" @onModify="onTaskModify" />
@@ -44,7 +44,11 @@
       SalesProductionTasksTable
     },
     props: {
-      canAdd: {
+      canUpdate: {
+        type: Boolean,
+        default: true
+      },
+      canChangeProduct: {
         type: Boolean,
         default: true
       },
@@ -64,6 +68,7 @@
             return false;
         }
       },
+
     },
     methods: {
       appendProduct() {

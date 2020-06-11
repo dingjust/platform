@@ -106,6 +106,7 @@
 
   export default {
     name: 'SalesPlanForm',
+    props: ['id'],
     components: {
       SalesPlanAppendProductForm,
       MTAVAT,
@@ -185,7 +186,11 @@
       },
       async _Save(submitAudit) {
         const url = this.apis().salesPlanSave(submitAudit);
-        const result = await this.$http.post(url, this.form);
+        let submitForm = Object.assign({}, this.form);
+        if (!submitForm.auditNeeded) {
+          submitForm.approvers = [];
+        }
+        const result = await this.$http.post(url, submitForm);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
