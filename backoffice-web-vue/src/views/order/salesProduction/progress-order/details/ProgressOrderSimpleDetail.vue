@@ -13,7 +13,7 @@
             <h6>工单负责人：{{slotData.personInCharge ? slotData.personInCharge.name : ''}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>优先级：{{''}}</h6>
+            <h6>优先级：{{slotData.priorityLevel ? getEnum('priorities', slotData.priorityLevel) : ''}}</h6>
           </el-col>
           <el-col :span="6">
             <h6>工单生成时间：{{slotData.creationtime | timestampToTime}}</h6>

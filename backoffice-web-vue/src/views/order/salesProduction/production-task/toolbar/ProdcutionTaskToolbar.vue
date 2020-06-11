@@ -53,6 +53,11 @@
     components: {
       SalesProductionStatusBar
     },
+    computed: {
+      ...mapGetters({
+        queryFormData: 'queryFormData'
+      })
+    },
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
@@ -64,7 +69,8 @@
       },
       onReset () {
         this.queryFormData.keywords = '';
-        this.queryFormData.status = '';
+        this.queryFormData.productionLeaderName = '';
+        this.queryFormData.cooperator = '';
       },
       createOutboundOrder () {
         this.$emit('createOutboundOrder');
@@ -75,12 +81,12 @@
     },
     data () {
       return {
-        queryFormData: {
-          keywords: '',
-          productionLeaderName: '',
-          cooperator: '',
-          status: ''
-        },
+        // queryFormData: {
+        //   keywords: '',
+        //   productionLeaderName: '',
+        //   cooperator: '',
+        //   status: ''
+        // },
         statuses: this.$store.state.EnumsModule.SalesProductionStatuses
       }
     }

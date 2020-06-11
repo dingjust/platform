@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-<!--              @selection-change="handleSelectionChange" @row-click="clickRow" :row-key="getRowKeys">-->
-<!--      <el-table-column type="selection" width="55" :selectable="selectable" :reserve-selection="true" v-if="isSelect"/>-->
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight"
+              @selection-change="handleSelectionChange" @row-click="clickRow" :row-key="getRowKeys">
+      <el-table-column type="selection" width="55" :reserve-selection="true" v-if="isSelect"/>
       <el-table-column label="生产单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -75,7 +75,7 @@
 
 <script>
   export default {
-    name: 'ProductionTaskList',
+    name: 'ProductionTaskSelectList',
     props: ['page', 'selectTaskList', 'isSelect', 'isSingleChoice'],
     methods: {
       onDetails (row) {
@@ -119,15 +119,7 @@
         return row.id;
       },
       clickRow (row) {
-        if (row.state == 'DISPATCHING') {
-          this.$refs.resultTable.toggleRowSelection(row);
-        }
-      },
-      selectable (row, index) {
-        if (row.state == 'DISPATCHING') {
-          return true;
-        }
-        return false;
+        this.$refs.resultTable.toggleRowSelection(row);
       }
     }
   }

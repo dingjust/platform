@@ -19,10 +19,15 @@
             <h6 class="progress-update-form-text1">工单号：{{progress.id}}</h6>
           </el-col>
           <el-col :span="4" :offset="1">
-            <h6 class="info-title_text">款号：{{belong.skuID}}</h6>
+            <h6 class="info-title_text">款号：{{belong.product.skuID}}</h6>
           </el-col>
           <el-col :span="8">
-            <h6 class="info-title_text">合作商：{{cooperatorName}}</h6>
+            <h6 class="info-title_text">
+              <h6 class="info-title_text">合作商：
+                <span v-if="belong.cooperator">{{cooperatorName}}</span>
+                <span v-else style="color: #C0C4CC">自有工厂</span>
+              </h6>
+            </h6>
           </el-col>
         </el-row>
         <el-row type="flex" :gutter="150" align="middle" class="progress-update-form-row">
@@ -129,10 +134,10 @@
         return result;
       },
       cooperatorName: function () {
-        if (this.currentUser.companyCode == this.belong.partyACompany.uid) {
-          return this.belong.partyBCompany.name;
+        if (this.belong.cooperator.type == 'ONLINE') {
+          return this.belong.cooperator.partner.name;
         } else {
-          return this.belong.partyACompany.name;
+          return this.belong.cooperator.name;
         }
       },
       sizes: function () {

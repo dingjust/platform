@@ -24,11 +24,12 @@ const state = {
   queryFormData: {
     code: '',
     skuID: '',
-    status: [],
+    state: '',
     keywords: '',
     productionLeaderName: '',
     cooperator: '',
-    categories: []
+    categories: [],
+    productionWorkOrder: ''
   },
   addressFormData: {
     id: null,
@@ -165,6 +166,18 @@ const actions = {
     if (!result['errors']) {
       commit('detailData', result);
     }
+  },
+  clearQueryFormData({dispatch, commit, state}) {
+    commit('queryFormData', {
+      code: '',
+      skuID: '',
+      state: '',
+      keywords: '',
+      productionLeaderName: '',
+      cooperator: '',
+      categories: [],
+      productionWorkOrder: ''
+    })
   }
 };
 

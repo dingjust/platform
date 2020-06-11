@@ -44,14 +44,17 @@
       <el-col :span="7">
         <el-row type="flex" align="middle">
           <el-col>
-            <h6 class="basic-title">款号：{{belong.skuID}}</h6>
+            <h6 class="basic-title">款号：{{belong.product.skuID}}</h6>
           </el-col>
         </el-row>
       </el-col>
       <el-col :span="7">
         <el-row type="flex" align="middle">
           <el-col>
-            <h6 class="basic-title">合作商：{{cooperatorName}}</h6>
+            <h6 class="basic-title">合作商：
+              <span v-if="belong.cooperator">{{cooperatorName}}</span>
+              <span v-else style="color: #C0C4CC">自有工厂</span>
+            </h6>
           </el-col>
         </el-row>
       </el-col>
@@ -147,14 +150,10 @@
         }
       },
       cooperatorName: function () {
-        if (this.slotData.cooperator != null) {
-          if (this.slotData.cooperator.type == 'ONLINE') {
-            return this.slotData.cooperator.partner.name;
-          } else {
-            return this.slotData.cooperator.name;
-          }
+        if (this.belong.cooperator.type == 'ONLINE') {
+          return this.belong.cooperator.partner.name;
         } else {
-          return '';
+          return this.belong.cooperator.name;
         }
       },
       allMedias: function () {
@@ -176,10 +175,10 @@
       }
     },
     methods: {
-      onClose() {
+      onClose () {
         this.formVisible = false;
       },
-      onUpdate(progressOrder) {
+      onUpdate (progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
         //   this.progressOrder = progressOrder;
         //   this.materialVisible = true;
@@ -194,7 +193,7 @@
         this.formVisible = true;
         // }
       },
-      onDetail(progressOrder) {
+      onDetail (progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
         this.progressOrder = progressOrder;
         //   this.materialVisible = true;
@@ -208,7 +207,7 @@
         this.formVisible = true;
         // }
       },
-      onCencel(id) {
+      onCencel (id) {
         this.$confirm('是否作废该单据?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -217,7 +216,7 @@
           this._onCancel(id);
         });
       },
-      async _onCancel(id) {
+      async _onCancel (id) {
         const url = this.apis().deleteProductionProgressOrder(this.slotData.id, id);
         const result = await this.$http.delete(url);
         if (result['errors']) {
@@ -227,11 +226,11 @@
         this.$message.success('作废成功');
         this.$emit('callback');
       },
-      onCallback() {
+      onCallback () {
         this.formVisible = false;
         this.$emit('callback');
       },
-      onOrder() {
+      onOrder () {
         this.progressOrder = {
           medias: [],
           operator: {
@@ -254,7 +253,7 @@
         this.onView = false;
         // }
       },
-      async onSubmit() {
+      async onSubmit () {
         // if (this.compareDate(new Date(), new Date(this.slotData.estimatedDate))) {
         //   this.$message.error('预计完成时间不能小于当前时间');
         //   return false;
@@ -268,13 +267,13 @@
         // this.$message.success('更新成功');
         this.$emit('editSubmit');
       },
-      onEditEstimatedDate() {
+      onEditEstimatedDate () {
         this.onEditEstimatedDateVisible = !this.onEditEstimatedDateVisible;
         // this.$nextTick(() => {
         //   this.$refs.datePicker.focus();
         // })
       },
-      async onFinish() {
+      async onFinish () {
         const url = this.apis().finshProgress(this.belong.code, this.slotData.id);
         const result = await this.$http.put(url);
         if (result['errors']) {
@@ -285,7 +284,7 @@
         this.$emit('callback');
       }
     },
-    data() {
+    data () {
       return {
         formVisible: false,
         onView: false,
@@ -297,20 +296,19 @@
         materialVisible: false,
         sampleVisible: false,
         isRead: true,
-        currentUser: this.$store.getters.currentUser,
+        currentUser: this.$store.getters.currentUser
       }
     },
     watch: {
-      formVisible(newValue, oldValue) {
+      formVisible (newValue, oldValue) {
         this.hackSet = false;
         this.$nextTick(() => {
           this.hackSet = true;
         });
       }
     },
-    created() {}
+    created () {}
   }
-
 </script>
 
 <style scoped>

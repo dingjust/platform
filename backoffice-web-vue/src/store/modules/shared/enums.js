@@ -1614,6 +1614,17 @@ const state = {
   }, {
     code: 'REVOKED',
     name: '撤回'
+  }],
+  // 进度工单-优先级
+  priorities: [{
+    code: 1,
+    name: '普通'
+  }, {
+    code: 2,
+    name: '加急'
+  }, {
+    code: 3,
+    name: '特急'
   }]
 };
 

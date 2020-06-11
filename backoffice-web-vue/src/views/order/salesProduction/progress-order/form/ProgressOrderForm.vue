@@ -15,7 +15,7 @@
         <progress-order-node-form :formData="formData"/>
       </el-form>
       <el-row type="flex" justify="center" align="middle">
-        <el-button class="material-btn">保存</el-button>
+        <el-button class="material-btn" @click="updateProgress">保存</el-button>
       </el-row>
     </el-card>
   </div>
@@ -58,9 +58,21 @@
       async getDetail () {
         const code = this.code;
         await this.getOrderDetail({code});
-        this.formData.progresses.forEach(val => {
-          this.$set(val, 'originPhase', true);
-        })
+      },
+      async updateProgress () {
+        let formData = {
+          id: this.formData.id,
+          priorityLevel: this.formData.priorityLevel,
+          personInCharge: this.formData.personInCharge,
+          progresses: this.formData.progresses
+        }
+        const url = this.apis().updateProgressOrder();
+        const result = await this.$http.put(url, formData);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        await this.$router.push('/sales/progressOrder/' + this.formData.code);
       }
     },
     data () {

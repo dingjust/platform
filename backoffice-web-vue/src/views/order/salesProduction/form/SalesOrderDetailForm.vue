@@ -4,7 +4,7 @@
       <el-row type="flex">
         <el-col :span="10">
           <!-- <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
-              :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" /> -->
+            :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" /> -->
           <el-row type="flex" justify="start" class="basic-form-row">
             <el-col :span="8">
               <el-row type="flex" align="middle">
@@ -79,12 +79,7 @@
         </el-col>
         <el-divider direction="vertical"></el-divider>
         <el-col :span="6">
-          <!-- <el-row type="flex" justify="space-between" class="basic-form-row">
-            <h5>合同</h5>
-            <el-button type="text" style="color: #ffd60c">签署合同</el-button>
-          </el-row> -->
-<!--          <purchase-order-info-contract :slotData="form" :contracts="[]" />-->
-          <contract-com :slotData="form" :contracts="contracts" :canSign="canSign"/>
+          <contract-com v-if="form.type == 'SALES_ORDER'" :slotData="form" :contracts="contracts" :canSign="canSign"/>
         </el-col>
       </el-row>
     </div>
@@ -127,7 +122,7 @@
           }
         }
       },
-      //总数量
+      // 总数量
       totalAmount: function () {
         let total = 0;
         if (this.form.entries != null) {
@@ -140,7 +135,7 @@
         }
         return total;
       },
-      //销售总价
+      // 销售总价
       totalPrice: function () {
         let total = 0;
         this.form.entries.forEach(element => {
@@ -157,7 +152,11 @@
       },
       // 判断是否能签署合同
       canSign: function () {
-
+        // 未签合同 && 账号为productionleader && 审核状态为 PASSED
+        return this.form.agreements.length <= 0 &&
+          this.$store.getters.currentUser.uid == this.form.productionLeader.uid &&
+          this.form.auditState == 'PASSED' &&
+          this.form.acceptState == 'ACCEPTED';
       }
     },
     components: {

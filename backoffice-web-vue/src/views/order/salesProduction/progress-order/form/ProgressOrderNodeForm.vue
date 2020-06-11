@@ -14,13 +14,13 @@
             <el-table-column label="节点名称" prop="progressPhase.name"></el-table-column>
             <el-table-column label="预警天数">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.warningDays" v-if="!scope.row.originPhase"></el-input>
-                <span v-else>{{scope.row.warningDays}}</span>
+                <el-input v-model="scope.row.warningDays"></el-input>
+<!--                <span v-else>{{scope.row.warningDays}}</span>-->
               </template>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="text" @click="onDelete(scope.row, scope.$index)" :disabled="scope.row.originPhase">删除</el-button>
+                <el-button type="text" @click="onDelete(scope.row, scope.$index)" :disabled="scope.row.isCannotRemove">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -107,6 +107,7 @@
           quantity: 0,
           sequence: row.sequence,
           completeAmount: 0,
+          warningDays: 0,
           productionProgressOrders: []
         });
         this.formData.progresses.sort((o1, o2) => {
@@ -125,6 +126,7 @@
           item.quantity = val.quantity;
           item.sequence = val.sequence;
           item.completeAmount = val.completeAmount;
+          item.warningDays = val.warningDays;
           item.productionProgressOrders = val.productionProgressOrders;
           this.saveData.productionProgresses.push(item);
           item = {}

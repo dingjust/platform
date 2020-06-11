@@ -61,7 +61,8 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
@@ -156,9 +157,11 @@
         this.statues.push(element);
       });
       this.onSearch();
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   }
-
 </script>
 
 <style scoped>

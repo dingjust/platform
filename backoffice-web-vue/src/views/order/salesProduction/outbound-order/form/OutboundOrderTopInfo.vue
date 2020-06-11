@@ -119,7 +119,11 @@
       },
       // 判断是否能签署合同
       canSign: function () {
-
+        // 未签合同 && 账号为productionleader && 审核状态为 PASSED
+        return this.slotData.agreements &&
+          this.slotData.agreements.length <= 0 &&
+          this.$store.getters.currentUser.uid == this.slotData.partyAOperator.uid &&
+          this.slotData.status == 'CONFIRMED';
       }
     },
     methods: {
