@@ -18,7 +18,7 @@
         <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
-        <sales-production-tabs :canChangeProduct="modifyType" :form="formData" @appendProduct="appendProduct" />
+        <sales-production-tabs :canChangeProduct="false" :form="formData" @appendProduct="appendProduct" />
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -31,7 +31,7 @@
         </el-row>
       </div>
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
-        @callback="onRefresh" @onSubmit="onSave(true)" />
+        @onWithdraw="onWithdraw" @callback="onRefresh" @onSubmit="onSave(true)" />
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">

@@ -227,7 +227,10 @@
       };
     },
     created() {
-
+      if (this.$route.params.order != null) {
+        Object.assign(this.form, this.$route.params.order);
+        this.form.salesDateRange = [this.form.salesDateStart, this.form.salesDateEnd];
+      }
     },
     mounted() {
 

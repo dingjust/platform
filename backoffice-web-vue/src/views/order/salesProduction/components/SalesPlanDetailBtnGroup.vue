@@ -35,7 +35,7 @@
           </el-col>
         </template>
         <!-- 销售计划 -->
-        <template v-if="!isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin">
+        <template v-if="!isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')">
           <el-col :span="3">
             <el-button class="material-btn" @click="onCommit">提交</el-button>
           </el-col>

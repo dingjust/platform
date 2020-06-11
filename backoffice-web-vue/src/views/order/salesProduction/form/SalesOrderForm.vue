@@ -208,6 +208,10 @@
       },
       //是否能添加删除产品
       canChangeProduct: function () {
+        //新建订单
+        if (this.form.id == null) {
+          return true;
+        }
         //来源订单不能添加删除
         if (this.form.originOrder != null && this.form.originOrder.code != null) {
           return false;
