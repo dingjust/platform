@@ -73,8 +73,12 @@
     },
     created () {
       this.submitData = JSON.parse(JSON.stringify(this.slotData));
-      this.submitData.priorityLevel = '';
-      this.submitData.personInCharge = {id: ''};
+      if (!this.submitData.priorityLevel) {
+        this.$set(this.submitData, 'priorityLevel', '');
+      }
+      if (!this.submitData.priorityLevel) {
+        this.$set(this.submitData, 'personInCharge', {id: ''});
+      }
     }
   };
 </script>

@@ -14,8 +14,8 @@
             <el-table-column label="节点名称" prop="progressPhase.name"></el-table-column>
             <el-table-column label="预警天数">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.warningDays" v-if="!scope.row.isCannotRemove"></el-input>
-                <span v-else>{{scope.row.warningDays}}</span>
+                <el-input v-model="scope.row.warningDays"></el-input>
+<!--                <span v-else>{{scope.row.warningDays}}</span>-->
               </template>
             </el-table-column>
             <el-table-column label="操作">

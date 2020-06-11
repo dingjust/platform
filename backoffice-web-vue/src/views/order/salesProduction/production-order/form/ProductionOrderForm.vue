@@ -251,7 +251,6 @@
       },
       // 选择生产任务
       onSelectTask (selectTaskList) {
-        console.log(selectTaskList);
         this.formData.entries[0] = {
           productionTask: {
             id: selectTaskList[0].id
@@ -266,11 +265,11 @@
           thumbnail: selectTaskList[0].productionEntry.product.thumbnail,
           colorSizeEntries: selectTaskList[0].productionEntry.colorSizeEntries
         };
-        // this.formData.deliveryAddress = selectTaskList[0].shippingAddress;
-        // if (this.$refs.addressForm) {
-        //   this.$refs.addressForm.getCities(selectTaskList[0].shippingAddress.region);
-        //   this.$refs.addressForm.onCityChanged(selectTaskList[0].shippingAddress.city);
-        // }
+        this.formData.deliveryAddress = selectTaskList[0].productionEntry.shippingAddress;
+        if (this.$refs.addressForm) {
+          this.$refs.addressForm.getCities(selectTaskList[0].productionEntry.shippingAddress.region);
+          this.$refs.addressForm.onCityChanged(selectTaskList[0].productionEntry.shippingAddress.city);
+        }
         this.taskDialogVisible = false;
       },
       // 选择进度节点
