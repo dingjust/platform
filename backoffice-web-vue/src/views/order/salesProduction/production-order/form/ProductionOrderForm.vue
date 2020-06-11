@@ -136,7 +136,7 @@
       <suppliers-select @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <production-task-select-dialog v-if="taskDialogVisible" :isSingleChoice="true"
+      <production-task-select-dialog v-if="taskDialogVisible" :isSingleChoice="true" :selectType="'PRODUCTION_ORDER'"
                                      :formData="formData" @onSelectTask="onSelectTask"/>
     </el-dialog>
     <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
@@ -282,6 +282,7 @@
           item.progressPhase = val.progressPhase;
           item.quantity = val.quantity;
           item.sequence = val.sequence;
+          item.warningDays = val.warningDays;
           item.completeAmount = val.completeAmount;
           item.productionProgressOrders = val.productionProgressOrders;
           progressList.push(item);

@@ -755,6 +755,14 @@ const COMMON_APIS = {
   // 创建生产工单
   createProductionOrder() {
     return '/b2b/orders/production/work/create';
+  },
+  // 更新进度工单
+  updateProgressOrder () {
+    return '/b2b/sheets/progress/work/update';
+  },
+  // 设置进度节点时间
+  updateProgressDate () {
+    return '/b2b/sheets/progress/work/update/progresses/date'
   }
 };
 

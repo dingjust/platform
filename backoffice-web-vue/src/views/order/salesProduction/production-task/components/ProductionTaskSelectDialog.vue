@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
-    <prodcution-task-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :is-select="true"/>
-    <production-task-list ref="taskList" :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"
+    <prodcution-task-toolbar @onAdvancedSearch="onAdvancedSearch" :is-select="true"/>
+    <production-task-select-list ref="taskList" :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"
                           :is-select="true" @onDetails="onDetails" :isSingleChoice="isSingleChoice"/>
     <el-row type="flex" justify="center" align="middle">
       <el-col :span="4">
@@ -30,6 +30,7 @@
   import ProdcutionTaskToolbar from '../toolbar/ProdcutionTaskToolbar';
   import ProductionTaskList from '../list/ProductionTaskList';
   import ProductionTaskDetails from '../details/ProductionTaskDetail';
+  import ProductionTaskSelectList from '../list/ProductionTaskSelectList';
   export default {
     name: 'ProductionTaskSelectDialog',
     props: {
@@ -39,9 +40,12 @@
       isSingleChoice: {
         type: Boolean,
         default: false
+      },
+      selectType: {
+        type: String
       }
     },
-    components: {ProductionTaskDetails, ProductionTaskList, ProdcutionTaskToolbar},
+    components: {ProductionTaskSelectList, ProductionTaskDetails, ProductionTaskList, ProdcutionTaskToolbar},
     computed: {
       ...mapGetters({
         page: 'page',
@@ -53,27 +57,20 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch (page, size) {
-        const keyword = this.keyword;
-        const statuses = this.statuses;
-        const url = this.apis().getProductionTaskList();
-        this.setIsAdvancedSearch(false);
-        this.search({
-          url,
-          keyword,
-          statuses,
-          page,
-          size
-        });
-      },
       onAdvancedSearch (page, size) {
-        this.queryFormData.state = 'DISPATCHING';
+        if (this.selectType == 'OUTBOUND_ORDER') {
+          this.queryFormData.state = 'DISPATCHING';
+        } else {
+          this.queryFormData.productionWorkOrder = 'isProductionWorkOrder';
+        }
+        this.queryFormData.productionLeader = 'isProductionLeader'
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getProductionTaskList();
@@ -92,27 +89,6 @@
         this.taskVisible = true;
       },
       onSelect () {
-        // let row = {};
-        // let entries = [];
-        // this.selectTaskList.forEach(item => {
-        //   row = {
-        //     productionTask: {
-        //       id: item.id
-        //     },
-        //     billPrice: '',
-        //     expectedDeliveryDate: '',
-        //     shippingAddress: {},
-        //     product: {
-        //       id: item.productionEntry.product.id,
-        //       name: item.productionEntry.product.name,
-        //       thumbnail: item.productionEntry.product.thumbnail,
-        //     },
-        //     colorSizeEntries: item.productionEntry.colorSizeEntries
-        //   }
-        //   entries.push(row);
-        //   row = {};
-        // })
-        // this.formData.entries = entries;
         this.$emit('onSelectTask', this.selectTaskList);
       },
       // 回显已选择行
@@ -147,6 +123,9 @@
     },
     created () {
       this.onAdvancedSearch();
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   }
 </script>

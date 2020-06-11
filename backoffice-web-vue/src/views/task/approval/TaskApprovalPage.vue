@@ -18,7 +18,7 @@
               <template v-for="(item, index) in statuses">
                 <el-tab-pane :name="item.code" :label="item.name">
                   <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                                      @onDetail="onDetail" @onApproval="onApproval"/>
+                                      @onDetail="onDetail" @onApproval="onApproval" @onRefuse="onRefuse"/>
                 </el-tab-pane>
               </template>
             </el-tabs>
@@ -122,6 +122,15 @@
           this._onApproval(row);
         });
       },
+      onRefuse (row) {
+        this.$confirm('是否确认进行拒绝?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onRefuse(row);
+        });
+      },
       async _onApproval (row) {
         let formData = {
           id: row.id,
@@ -135,6 +144,21 @@
           return
         }
         this.$message.success('审批成功');
+        this.onAdvancedSearch(this.page.number);
+      },
+      async _onRefuse (row) {
+        let formData = {
+          id: row.id,
+          auditMsg: '',
+          state: 'AUDITED_FAILED'
+        };
+        const url = this.apis().taskAudit();
+        const result = await this.$http.post(url, formData);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return
+        }
+        this.$message.success('拒绝成功');
         this.onAdvancedSearch(this.page.number);
       }
     },

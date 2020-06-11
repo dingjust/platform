@@ -30,7 +30,8 @@ const state = {
     colorSizeEntries: [],
     product: {
 
-    }
+    },
+    belongTo: {}
   },
   queryFormData: {
     keyword: '',

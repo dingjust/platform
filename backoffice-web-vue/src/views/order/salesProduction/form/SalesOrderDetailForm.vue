@@ -1,118 +1,113 @@
 <template>
   <div>
     <div class="sales-plan-box">
-        <el-row type="flex">
-          <el-col :span="10">
-            <!-- <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
-              :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" /> -->
-            <el-row type="flex" justify="start" class="basic-form-row">
-              <el-col :span="8">
-                <el-row type="flex" align="middle">
-                  <h6 class="sales-plan-h6"><span class="info-title">单号：</span>{{form.code}}
-                  </h6>
-                </el-row>
-              </el-col>
-              <el-col :span="8">
-                <el-row type="flex" align="middle">
-                  <h6 class="sales-plan-h6"><span
-                      class="info-title">合作方式：</span>{{getEnum('cooperationModes', form.cooperationMode)}}
-                  </h6>
-                </el-row>
-              </el-col>
-              <el-col :span="8">
-                <el-row type="flex" align="middle">
-                  <h6 class="sales-plan-h6"><span
-                      class="info-title">是否开发票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
-                  </h6>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType">
-              <el-col :span="8">
-                <el-row type="flex" align="middle">
-                  <h6 class="sales-plan-h6"><span class="info-title">生产总数：</span>{{totalAmount}}</h6>
-                </el-row>
-              </el-col>
-              <el-col :span="8">
-                <el-row type="flex" align="middle">
-                  <h6 class="sales-plan-h6"><span class="info-title">生产总价：</span>{{totalPrice}}元</h6>
-                </el-row>
-              </el-col>
-            </el-row>
-          </el-col>
-          <el-divider direction="vertical"></el-divider>
-          <el-col :span="8">
-            <template v-if="form.type==='SALES_ORDER'">
-              <el-row type="flex" justify="start" class="basic-form-row">
-                <el-col :span="24">
-                  <h6 class="sales-plan-h6"><span class="info-title">合作商：</span>{{cooperator.name}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" justify="start" class="basic-form-row">
-                <el-col :span="12">
-                  <h6 class="sales-plan-h6"><span class="info-title">联系人：</span>{{cooperator.contactPerson}}</h6>
-                </el-col>
-                <el-col :span="12">
-                  <h6 class="sales-plan-h6"><span class="info-title">联系电话：</span>
-                    {{cooperator.contactPhone}}</h6>
-                </el-col>
-              </el-row>
-            </template>
-            <el-row type="flex" justify="start" class="basic-form-row" style="margin-top:10px">
-              <h6 class="info-title">人员设置</h6>
-            </el-row>
-            <el-row type="flex" justify="start" class="basic-form-row">
-              <el-col :span="12">
-                <h6 class="sales-plan-h6"><span
-                    class="info-title">创建人：</span>{{form.creator!=null?form.creator.name:''}}
-                </h6>
-              </el-col>
-              <el-col :span="12">
-                <h6 v-show="!modifyType" class="sales-plan-h6"><span class="info-title">审批负责人：</span>
-                  {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
-                <el-row type="flex" v-if="modifyType" align="middle">
-                  <el-col :span="10">
-                    <span class="info-title">审批负责人：</span>
-                  </el-col>
-                  <el-col :span="14">
-                    <el-form-item prop="approvers.0" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                      <personnel-selection :vPerson.sync="form.approvers[0]" v-if="modifyType" />
-                    </el-form-item>
-                    <!-- <el-select v-model="form.approvers[0]" placeholder="请选择" v-if="modifyType" value-key="id">
-                    <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select> -->
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row type="flex" justify="start" class="basic-form-row">
+      <el-row type="flex">
+        <el-col :span="10">
+          <!-- <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
+            :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" /> -->
+          <el-row type="flex" justify="start" class="basic-form-row">
+            <el-col :span="8">
               <el-row type="flex" align="middle">
-                <h6 v-show="!modifyType" class="sales-plan-h6"><span class="info-title">生产负责人：</span>
-                  {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
-                <el-row type="flex" v-if="modifyType" align="middle">
-                  <el-col :span="10"><span class="info-title">生产负责人：</span></el-col>
-                  <el-col :span="14">
-                    <!-- <el-select v-model="form.productionLeader" placeholder="请选择" v-if="modifyType" value-key="id">
-                    <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select> -->
-                    <el-form-item prop="productionLeader" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                      <personnel-selection :vPerson.sync="form.productionLeader" v-if="modifyType" />
-                    </el-form-item>
-                  </el-col>
-                </el-row>
+                <h6 class="sales-plan-h6"><span class="info-title">单号：</span>{{form.code}}
+                </h6>
+              </el-row>
+            </el-col>
+            <el-col :span="8">
+              <el-row type="flex" align="middle">
+                <h6 class="sales-plan-h6"><span
+                    class="info-title">合作方式：</span>{{getEnum('cooperationModes', form.cooperationMode)}}
+                </h6>
+              </el-row>
+            </el-col>
+            <el-col :span="8">
+              <el-row type="flex" align="middle">
+                <h6 class="sales-plan-h6"><span
+                    class="info-title">是否开发票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
+                </h6>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType">
+            <el-col :span="8">
+              <el-row type="flex" align="middle">
+                <h6 class="sales-plan-h6"><span class="info-title">生产总数：</span>{{totalAmount}}</h6>
+              </el-row>
+            </el-col>
+            <el-col :span="8">
+              <el-row type="flex" align="middle">
+                <h6 class="sales-plan-h6"><span class="info-title">生产总价：</span>{{totalPrice}}元</h6>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-divider direction="vertical"></el-divider>
+        <el-col :span="8">
+          <template v-if="form.type==='SALES_ORDER'">
+            <el-row type="flex" justify="start" class="basic-form-row">
+              <el-col :span="24">
+                <h6 class="sales-plan-h6"><span class="info-title">合作商：</span>{{cooperator.name}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="start" class="basic-form-row">
+              <el-col :span="12">
+                <h6 class="sales-plan-h6"><span class="info-title">联系人：</span>{{cooperator.contactPerson}}</h6>
+              </el-col>
+              <el-col :span="12">
+                <h6 class="sales-plan-h6"><span class="info-title">联系电话：</span>
+                  {{cooperator.contactPhone}}</h6>
+              </el-col>
+            </el-row>
+          </template>
+          <el-row type="flex" justify="start" class="basic-form-row" style="margin-top:10px">
+            <h6 class="info-title">人员设置</h6>
+          </el-row>
+          <el-row type="flex" justify="start" class="basic-form-row">
+            <el-col :span="12">
+              <h6 class="sales-plan-h6"><span
+                  class="info-title">创建人：</span>{{form.creator!=null?form.creator.name:''}}
+              </h6>
+            </el-col>
+            <el-col :span="12">
+              <h6 v-show="!modifyType" class="sales-plan-h6"><span class="info-title">审批负责人：</span>
+                {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
+              <el-row type="flex" v-if="modifyType" align="middle">
+                <el-col :span="10">
+                  <span class="info-title">审批负责人：</span>
+                </el-col>
+                <el-col :span="14">
+                  <el-form-item prop="approvers.0" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+                    <personnel-selection :vPerson.sync="form.approvers[0]" v-if="modifyType" />
+                  </el-form-item>
+                  <!-- <el-select v-model="form.approvers[0]" placeholder="请选择" v-if="modifyType" value-key="id">
+                  <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select> -->
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="start" class="basic-form-row">
+            <el-row type="flex" align="middle">
+              <h6 v-show="!modifyType" class="sales-plan-h6"><span class="info-title">生产负责人：</span>
+                {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
+              <el-row type="flex" v-if="modifyType" align="middle">
+                <el-col :span="10"><span class="info-title">生产负责人：</span></el-col>
+                <el-col :span="14">
+                  <!-- <el-select v-model="form.productionLeader" placeholder="请选择" v-if="modifyType" value-key="id">
+                  <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select> -->
+                  <el-form-item prop="productionLeader" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+                    <personnel-selection :vPerson.sync="form.productionLeader" v-if="modifyType" />
+                  </el-form-item>
+                </el-col>
               </el-row>
             </el-row>
-          </el-col>
-          <el-divider direction="vertical"></el-divider>
-          <el-col :span="6">
-            <!-- <el-row type="flex" justify="space-between" class="basic-form-row">
-            <h5>合同</h5>
-            <el-button type="text" style="color: #ffd60c">签署合同</el-button>
-          </el-row> -->
-<!--          <purchase-order-info-contract :slotData="form" :contracts="[]" />-->
-          <contract-com :slotData="form" :contracts="contracts" :canSign="canSign"/>
+          </el-row>
+        </el-col>
+        <el-divider direction="vertical"></el-divider>
+        <el-col :span="6">
+          <contract-com v-if="form.type == 'SALES_ORDER'" :slotData="form" :contracts="contracts" :canSign="canSign"/>
         </el-col>
       </el-row>
     </div>
@@ -183,7 +178,11 @@
       },
       // 判断是否能签署合同
       canSign: function () {
-
+        // 未签合同 && 账号为productionleader && 审核状态为 PASSED
+        return this.form.agreements.length <= 0 &&
+          this.$store.getters.currentUser.uid == this.form.productionLeader.uid &&
+          this.form.auditState == 'PASSED' &&
+          this.form.acceptState == 'ACCEPTED';
       }
     },
     components: {

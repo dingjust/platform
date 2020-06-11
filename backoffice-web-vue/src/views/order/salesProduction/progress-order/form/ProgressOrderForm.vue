@@ -58,9 +58,6 @@
       async getDetail () {
         const code = this.code;
         await this.getOrderDetail({code});
-        this.formData.progresses.forEach(val => {
-          this.$set(val, 'originPhase', true);
-        })
       }
     },
     data () {

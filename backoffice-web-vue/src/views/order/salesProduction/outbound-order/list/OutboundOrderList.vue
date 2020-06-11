@@ -27,7 +27,7 @@
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetail(scope.row)" class="purchase-list-button">详情</el-button>
-            <el-button v-if="isCreate(scope.row)" type="text" @click="onModify(scope.row)" class="purchase-list-button">修改</el-button>
+            <el-button v-if="canModify(scope.row)" type="text" @click="onModify(scope.row)" class="purchase-list-button">修改</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -49,8 +49,8 @@
     computed: {
     },
     methods: {
-      isCreate (row) {
-        return row.belongTo.uid == this.uid;
+      canModify (row) {
+        return row.belongTo.uid == this.$store.getters.currentUser.companyCode && (row.status == 'NOT_COMMITED' || row.status == 'REJECTED_CONFIRM');
       },
       getCooperator (row) {
         return row.cooperator ?

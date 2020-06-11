@@ -154,6 +154,7 @@
     data () {
       return {
         activeName: 'ORDER_TASK',
+        activeStatus: '',
         statuses: [
           {
             code: '',
