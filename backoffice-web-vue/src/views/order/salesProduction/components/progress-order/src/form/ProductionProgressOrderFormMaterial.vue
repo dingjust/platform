@@ -172,7 +172,7 @@
     mixins: [],
     computed: {
       cooperatorName: function () {
-        if (this.belong.cooperator.partner) {
+        if (this.belong.cooperator.type == 'ONLINE') {
           return this.belong.cooperator.partner.name;
         } else {
           return this.belong.cooperator.name;
