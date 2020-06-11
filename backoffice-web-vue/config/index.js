@@ -11,7 +11,8 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, targetPath + '/'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
-    productionSourceMap: true,
+    // productionSourceMap: true,
+    productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -184,25 +185,25 @@ module.exports = {
     // },
     // proxyTable: {
     //   '/resource': {
-    //     target: 'http://192.168.31.177',
+    //     target: 'http://192.168.31.180',
     //     "secure": false,
     //   },
     //   '/medias': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.180:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/medias': 'djwebservices/medias'
     //     }
     //   },
     //   '/logout': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.180:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/logout': 'djwebservices/logout'
     //     }
     //   },
     //   '/authorizationserver': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.180:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -210,7 +211,7 @@ module.exports = {
     //     }
     //   },
     //   '/b2b': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.180:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -218,7 +219,7 @@ module.exports = {
     //     }
     //   },
     //   '/c2b': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.180:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
