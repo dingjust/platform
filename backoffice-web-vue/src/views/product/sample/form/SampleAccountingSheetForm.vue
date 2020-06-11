@@ -3,15 +3,20 @@
     <el-form :model="slotData" ref="accountingSheetForm">
       <el-tabs value="first" type="card">
         <el-tab-pane label="成本预算单" name="first">
-          <el-row>
+          <el-row type="flex">
             <el-col :span="6">
               <el-radio v-model="slotData.isIncludeTax" @change="onIncludeTaxChange" :label="true">含税</el-radio>
               <el-radio v-model="slotData.isIncludeTax" @change="onIncludeTaxChange" :label="false">不含税</el-radio>
             </el-col>
+            <el-col :span="12">
+              <el-checkbox v-model="hasMaterial" :disabled="needMaterialAccounting">面辅料</el-checkbox>
+              <el-checkbox v-model="hasSpecial" :disabled="true">特殊工艺</el-checkbox>
+              <el-checkbox v-model="hasLabor" :disabled="true">工费及其他</el-checkbox>
+            </el-col>
           </el-row>
           <div>
             <div class="d1">
-              <template v-if="needMaterialAccounting">
+              <template v-if="hasMaterial">
                 <el-divider></el-divider>
                 <el-row type="flex" align="center">
                   <el-col :span="1" class="form-column">
@@ -200,10 +205,18 @@
 
     data() {
       return {
-        remark: ''
+        remark: '',
+        hasMaterial: this.needMaterialAccounting,
+        hasSpecial: true,
+        hasLabor: true
       };
     },
-    created() {}
+    created() {
+      //若有物料项
+      if (this.slotData.materialsEntries != null && this.slotData.materialsEntries.length > 0) {
+        this.hasMaterial = true;
+      }
+    }
   };
 
 </script>

@@ -18,7 +18,8 @@
         <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
-        <sales-production-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
+        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
+          @appendProduct="appendProduct" />
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -30,12 +31,9 @@
           </el-col>
         </el-row>
       </div>
-      <sales-plan-detail-btn-group :state="formData.auditState" @onReturn="onReturn" @onSave="onSave(false)"
-        @onRefuse="onRefuse" :canRefuse="hasOrigin" @onSubmit="onSave(true)" />
+      <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
+        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" />
     </el-card>
-    <el-dialog :visible.sync="refuseVisible" width="40%" :close-on-click-modal="false">
-      <refuse-dialog v-if="refuseVisible" @getRefuseMsg="getRefuseMsg" />
-    </el-dialog>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :isUpdate="false"
@@ -61,7 +59,6 @@
     accMul
   } from '@/common/js/number';
   import SalesProductionTabs from '../components/SalesProductionTabs';
-  import RefuseDialog from '../components/RefuseDialog';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
@@ -71,7 +68,6 @@
     props: ['id'],
     components: {
       SalesOrderDetailForm,
-      RefuseDialog,
       SalesProductionTabs,
       SalesPlanDetailBtnGroup,
       SalesPlanAppendProductForm
@@ -119,9 +115,25 @@
             return false;
         }
       },
-      hasOrigin: function () {
-        return this.formData.originOrder != null && this.formData.originOrder.code != null;
-      }
+      canAddProduct: function () {
+        //外发订单来源不能添加
+        if (this.formData.originOrder != null && this.formData.originOrder.code != '') {
+          return false;
+        } else {
+          if (this.formData.auditState == null) {
+            return false;
+          }
+          switch (this.formData.auditState) {
+            case 'NONE':
+              return true;
+            case 'AUDITED_FAILED':
+              return true;
+            default:
+              return false;
+          }
+        }
+      },
+
     },
     methods: {
       appendProduct() {
@@ -221,21 +233,8 @@
           this.$router.go(-1);
         }
       },
-      getRefuseMsg(msg) {
-        this.refuseVisible = false;
-        this.$message('-----------拒绝销售计划' + msg + '----------------------');
-      },
-      onPass() {
-        this.$confirm('请问是否通过此销售计划', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message('-----------通过销售计划----------------------');
-        });
-      },
-      onClose() {
-        this.$message('-----------关闭----------------------');
+      onRefresh() {
+        this.$router.go(0);
       },
       validate(callback) {
         this.$refs.form.validate(callback);
@@ -243,7 +242,6 @@
     },
     data() {
       return {
-        refuseVisible: false,
         salesProductAppendVisible: false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,

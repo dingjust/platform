@@ -57,12 +57,16 @@
           <span>{{scope.row.auditState!=null? getEnum('SalesProductionAuditStatus', scope.row.auditState):''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="120">
+      <el-table-column label="操作" min-width="150">
         <template slot-scope="scope">
+          <!-- <span style="color:red;">{{scope.row.validateMsg!=null?scope.row.validateMsg:''}}</span> -->
+          <i v-if="validateEntry(scope.row)" class="el-icon-warning" style="color:red;font-size:20px;"></i>
           <el-button type="text" @click="onDetail(scope.$index)">详情</el-button>
           <template v-if="canEdit(scope.row.auditState)">
-            <el-button type="text" @click="onModify(scope.$index)">编辑</el-button>
-            <el-button slot="reference" type="text" @click="onDelete(scope.$index)" :disabled="scope.$index==0">删除</el-button>
+            <el-button v-if="canUpdate" type="text" @click="onModify(scope.$index)">编辑</el-button>
+            <el-button v-if="canDelete" slot="reference" type="text" @click="onDelete(scope.$index)"
+              :disabled="scope.$index==0">删除
+            </el-button>
           </template>
         </template>
       </el-table-column>
@@ -86,6 +90,14 @@
     props: {
       data: {
         type: Array
+      },
+      canUpdate:{
+        type:Boolean,
+        default:true,
+      },
+      canDelete: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
@@ -117,7 +129,9 @@
       onModify(index) {
         this.$emit('onModify', index);
       },
-
+      validateEntry(entry) {
+        return entry.costOrder == null;
+      }
     },
     data() {
       return {}

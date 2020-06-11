@@ -87,11 +87,11 @@
             <h6 class="info-input-prepend_top">发单需求</h6>
           </el-row>
           <el-row class="basic-form-row" type="flex" :gutter="20">
-            <el-col :span="5">
+            <!-- <el-col :span="5">
               <h6 class="info-input-prepend">外发目标价格:&#12288;{{product.outPrice}}</h6>
-            </el-col>
+            </el-col> -->
             <el-col :span="5">
-              <h6 class="info-input-prepend">外发目标交期:&#12288;{{product.date}}</h6>
+              <h6 class="info-input-prepend">外发交期:&#12288;{{product.date}}</h6>
             </el-col>
             <el-col :span="5">
               <h6 class="info-input-prepend">外发工厂规模:&#12288;{{product.scale}}</h6>

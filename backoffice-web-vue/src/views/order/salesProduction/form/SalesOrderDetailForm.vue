@@ -21,8 +21,7 @@
             </el-col>
             <el-col :span="8">
               <el-row type="flex" align="middle">
-                <h6 class="sales-plan-h6"><span
-                    class="info-title">是否开发票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
+                <h6 class="sales-plan-h6"><span class="info-title">是否开发票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
                 </h6>
               </el-row>
             </el-col>
@@ -63,45 +62,18 @@
           </el-row>
           <el-row type="flex" justify="start" class="basic-form-row">
             <el-col :span="12">
-              <h6 class="sales-plan-h6"><span
-                  class="info-title">创建人：</span>{{form.creator!=null?form.creator.name:''}}
+              <h6 class="sales-plan-h6"><span class="info-title">创建人：</span>{{form.creator!=null?form.creator.name:''}}
               </h6>
             </el-col>
             <el-col :span="12">
               <h6 v-show="!modifyType" class="sales-plan-h6"><span class="info-title">审批负责人：</span>
                 {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
-              <el-row type="flex" v-if="modifyType" align="middle">
-                <el-col :span="10">
-                  <span class="info-title">审批负责人：</span>
-                </el-col>
-                <el-col :span="14">
-                  <el-form-item prop="approvers.0" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                    <personnel-selection :vPerson.sync="form.approvers[0]" v-if="modifyType" />
-                  </el-form-item>
-                  <!-- <el-select v-model="form.approvers[0]" placeholder="请选择" v-if="modifyType" value-key="id">
-                  <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select> -->
-                </el-col>
-              </el-row>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" class="basic-form-row">
             <el-row type="flex" align="middle">
               <h6 v-show="!modifyType" class="sales-plan-h6"><span class="info-title">生产负责人：</span>
                 {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
-              <el-row type="flex" v-if="modifyType" align="middle">
-                <el-col :span="10"><span class="info-title">生产负责人：</span></el-col>
-                <el-col :span="14">
-                  <!-- <el-select v-model="form.productionLeader" placeholder="请选择" v-if="modifyType" value-key="id">
-                  <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select> -->
-                  <el-form-item prop="productionLeader" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                    <personnel-selection :vPerson.sync="form.productionLeader" v-if="modifyType" />
-                  </el-form-item>
-                </el-col>
-              </el-row>
             </el-row>
           </el-row>
         </el-col>
@@ -153,12 +125,14 @@
       // 总数量
       totalAmount: function () {
         let total = 0;
-        this.form.entries.forEach(element => {
-          let num = parseFloat(getEntryTotalAmount(element));
-          if (num != null && (!Number.isNaN(num))) {
-            total += num;
-          }
-        });
+        if (this.form.entries != null) {
+          this.form.entries.forEach(element => {
+            let num = parseFloat(getEntryTotalAmount(element));
+            if (num != null && (!Number.isNaN(num))) {
+              total += num;
+            }
+          });
+        }
         return total;
       },
       // 销售总价

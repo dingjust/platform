@@ -19,7 +19,7 @@
           </el-row>
           <div>
             <div class="d1">
-              <template v-if="needMaterialAccounting">
+              <template>
                 <el-divider></el-divider>
                 <el-row type="flex" align="center">
                   <el-col :span="1" class="form-column">
@@ -228,7 +228,9 @@
         sampleAccountingSheet: {},
       };
     },
-    created() {}
+    created() {
+      
+    }
   };
 
 </script>

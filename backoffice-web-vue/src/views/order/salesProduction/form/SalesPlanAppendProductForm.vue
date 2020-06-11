@@ -59,6 +59,7 @@
                   <template v-for="size in entry.sizes">
                     <td style="width:80px" :key="'td'+size.name">
                       <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="1"
+                        :disabled="fromOrigin"
                         v-model="getEntryByColorSize(color, size, entry.colorSizeEntries).quantity">
                       </el-input>
                     </td>
@@ -77,8 +78,8 @@
               <el-row type="flex" align="middle">
                 <el-form-item :prop="'sampleList.' + productIndex + '.unitPrice'" label="订单报价" label-width="100px"
                   :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                  <el-input placeholder="订单报价" v-model="entry.unitPrice" v-number-input.float="{ min: 0 ,decimal:2}"
-                    size="mini">
+                  <el-input placeholder="订单报价" v-model="entry.unitPrice" :disabled="fromOrigin"
+                    v-number-input.float="{ min: 0 ,decimal:2}" size="mini">
                   </el-input>
                 </el-form-item>
               </el-row>
@@ -87,14 +88,15 @@
               <el-row type="flex" align="middle">
                 <el-form-item :prop="'sampleList.' + productIndex + '.deliveryDate'" label="交货日期" label-width="100px"
                   :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                  <el-date-picker v-model="entry.deliveryDate" type="date" placeholder="选择日期">
+                  <el-date-picker v-model="entry.deliveryDate" type="date" placeholder="选择日期" :disabled="fromOrigin">
                   </el-date-picker>
                 </el-form-item>
               </el-row>
             </el-col>
           </el-row>
           <el-row style="padding-left: 6px">
-            <my-address-form :vAddress.sync="entry.shippingAddress" ref="addressComp" :readOnly="readOnly" />
+            <my-address-form :vAddress.sync="entry.shippingAddress" ref="addressComp"
+              :readOnly="readOnly||fromOrigin" />
           </el-row>
           <el-row style="margin-top:20px;">
             <sample-attach-orders-form :entries.sync="entry.materialsSpecEntries" :medias.sync="entry.medias"
@@ -191,6 +193,11 @@
       needMaterialsSpec: {
         type: Boolean,
         default: true
+      },
+      //是否来源外发，是则禁止修改产品
+      fromOrigin: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -274,14 +281,13 @@
           sizes: this.getSizesByEntries(colorSizeEntries),
         }
 
-        //若有成本核算单                  
-        if (data.costingSheets != null && data.costingSheets[0] != null) {
-          entry['sampleCostOrder'] = data.costingSheets[0];
-        }
-
         //若需要物料清单
         if (this.needMaterialsSpec) {
           entry['materialsSpecEntries'] = data.entries;
+          //若有成本核算单                  
+          if (data.costingSheets != null && data.costingSheets[0] != null) {
+            entry['sampleCostOrder'] = data.costingSheets[0];
+          }
         }
 
         var newEntry = Object.assign(this.appendProductForm.sampleList[this.currentProductIndex], entry);
@@ -409,15 +415,21 @@
         let order = Object.assign({}, this.appendProductForm.sampleList[productIndex].sampleCostOrder);
         //移除id
         this.$delete(order, 'id');
-        order.laborCostEntries.forEach(entry => {
-          this.$delete(entry, 'id');
-        });
-        order.materialsEntries.forEach(entry => {
-          this.$delete(entry, 'id');
-        });
-        order.specialProcessEntries.forEach(entry => {
-          this.$delete(entry, 'id');
-        });
+        if (order.laborCostEntries != null) {
+          order.laborCostEntries.forEach(entry => {
+            this.$delete(entry, 'id');
+          });
+        }
+        if (order.materialsEntries) {
+          order.materialsEntries.forEach(entry => {
+            this.$delete(entry, 'id');
+          });
+        }
+        if (order.specialProcessEntries) {
+          order.specialProcessEntries.forEach(entry => {
+            this.$delete(entry, 'id');
+          });
+        }
         this.$set(this.appendProductForm.sampleList[productIndex], 'costOrder', order);
       },
       onUpdateAccountingSheet(index) {

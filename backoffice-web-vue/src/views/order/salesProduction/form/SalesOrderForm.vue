@@ -49,7 +49,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商
+            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini" :disabled="hasOrigin">选择供应商
             </el-button>
           </el-col>
         </el-row>
@@ -64,7 +64,7 @@
           <el-row type="flex">
             <el-col :span="18">
               <MTAVAT :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
-                :tax.sync="form.invoiceTaxPoint" />
+                :readOnly="hasOrigin" :tax.sync="form.invoiceTaxPoint" />
             </el-col>
           </el-row>
         </div>
@@ -126,7 +126,8 @@
           <el-col :span="4">订单总数：<span style="color:red;">{{totalAmount}}</span></el-col>
           <el-col :span="4">订单金额：<span style="color:red;">{{totalPrice}}</span></el-col>
         </el-row>
-        <sales-production-tabs style="margin-top:20px;" :form="form" @appendProduct="appendProduct" />
+        <sales-production-tabs :canChangeProduct="canChangeProduct" style="margin-top:20px;" :form="form"
+          @appendProduct="appendProduct" />
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
@@ -140,8 +141,7 @@
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
-        :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
-        :productionLeader="form.productionLeader" />
+        :needMaterialsSpec="needMaterialsSpec" :isUpdate="false" :productionLeader="form.productionLeader" />
     </el-dialog>
   </div>
 </template>
@@ -185,12 +185,14 @@
       //总数量
       totalAmount: function () {
         let total = 0;
-        this.form.entries.forEach(element => {
-          let num = parseFloat(getEntryTotalAmount(element));
-          if (num != null && (!Number.isNaN(num))) {
-            total += num;
-          }
-        });
+        if (this.form.entries != null) {
+          this.form.entries.forEach(element => {
+            let num = parseFloat(getEntryTotalAmount(element));
+            if (num != null && (!Number.isNaN(num))) {
+              total += num;
+            }
+          });
+        }
         return total;
       },
       //销售总价
@@ -204,6 +206,33 @@
         });
         return total;
       },
+      //是否能添加删除产品
+      canChangeProduct: function () {
+        //新建订单
+        if (this.form.id == null) {
+          return true;
+        }
+        //来源订单不能添加删除
+        if (this.form.originOrder != null && this.form.originOrder.code != null) {
+          return false;
+        } else {
+          //订单状态
+          if (this.form.auditState == 'NONE' || this.form.auditState == 'AUDITED_FAILED') {
+            //TODO人员判断控制
+            return true;
+          } else {
+            return false;
+          }
+        }
+      },
+      //是否来源外发
+      hasOrigin: function () {
+        if (this.form.originOrder != null && this.form.originOrder.code != null && this.form.originOrder.code != '') {
+          return true;
+        } else {
+          return false;
+        }
+      }
     },
     methods: {
       appendProduct() {
@@ -260,7 +289,11 @@
       },
       async _Save(submitAudit) {
         const url = this.apis().salesPlanSave(submitAudit);
-        const result = await this.$http.post(url, this.form);
+        let submitForm = Object.assign({}, this.form);
+        if (!submitForm.auditNeeded) {
+          submitForm.approvers = [];
+        }
+        const result = await this.$http.post(url, submitForm);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -279,10 +312,22 @@
           return false;
         }
 
+        //校验明细行是否有预算单
+        let costingValidate = true;
+        //校验是否有核算单
+        this.form.entries.forEach(element => {
+          if (element.costOrder == null) {
+            costingValidate = false;
+          }
+        });
+        if (!costingValidate) {
+          this.$message.error('请添加产品');
+          return false;
+        }
+
         const form = this.$refs.form;
         // 使用Promise.all 并行去校验结果
         let res = await Promise.all([form].map(this.getFormPromise));
-
         return res.every(item => !!item);
       },
       //封装Promise对象
@@ -336,7 +381,15 @@
       }
     },
     created() {
-
+      if (this.$route.params.order != null) {
+        Object.assign(this.form, this.$route.params.order);
+        //设置对应供应商
+        if (this.form.cooperator.type == 'ONLINE') {
+          this.form.cooperator.name = this.form.cooperator.partner.name;
+          this.form.cooperator.contactPhone = this.form.cooperator.partner.contactPhone;
+          this.form.cooperator.contactPerson = this.form.cooperator.partner.contactPerson;
+        }
+      }
     },
     mounted() {
 

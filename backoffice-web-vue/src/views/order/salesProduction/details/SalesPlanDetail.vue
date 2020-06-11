@@ -18,7 +18,7 @@
         <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
-        <sales-production-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
+        <sales-production-tabs :canChangeProduct="false" :form="formData" @appendProduct="appendProduct" />
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -30,12 +30,9 @@
           </el-col>
         </el-row>
       </div>
-      <sales-plan-detail-btn-group :state="formData.auditState" @onWithdraw="onWithdraw" @onSave="onSave(false)"
-        @onSubmit="onSave(true)" />
+      <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
+        @onWithdraw="onWithdraw" @callback="onRefresh" @onSubmit="onSave(true)" />
     </el-card>
-    <el-dialog :visible.sync="refuseVisible" width="40%" :close-on-click-modal="false">
-      <refuse-dialog v-if="refuseVisible" @getRefuseMsg="getRefuseMsg" />
-    </el-dialog>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
@@ -62,7 +59,6 @@
     accMul
   } from '@/common/js/number';
   import SalesProductionTabs from '../components/SalesProductionTabs';
-  import RefuseDialog from '../components/RefuseDialog';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
@@ -72,7 +68,6 @@
     props: ['id'],
     components: {
       SalesOrderDetailForm,
-      RefuseDialog,
       SalesProductionTabs,
       SalesPlanDetailBtnGroup,
       SalesPlanAppendProductForm
@@ -201,30 +196,20 @@
           this.getDetails();
         }
       },
+      onReturn() {
+
+      },
       onReturnPage() {
         this.$router.push({
           name: '销售计划'
         })
       },
-      getRefuseMsg(msg) {
-        this.refuseVisible = false;
-      },
-      onPass() {
-        this.$confirm('请问是否通过此销售计划', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message('-----------通过销售计划----------------------');
-        });
-      },
-      onClose() {
-        this.$message('-----------关闭----------------------');
+      onRefresh() {
+        this.$router.go(0);
       },
     },
     data() {
       return {
-        refuseVisible: false,
         salesProductAppendVisible: false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,

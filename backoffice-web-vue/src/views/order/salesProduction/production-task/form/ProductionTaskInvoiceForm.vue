@@ -4,13 +4,13 @@
       <h6 class="info-input-prepend_top">{{title ? title : '发单需求'}}</h6>
     </el-row>
     <el-row class="basic-form-row" type="flex" :gutter="20">
-      <el-col :span="6">
+      <!-- <el-col :span="6">
         <el-form-item label="外发目标价格" label-width="100px">
           <el-input placeholder="请输入接单价格" size="mini"></el-input>
         </el-form-item>
-      </el-col>
+      </el-col> -->
       <el-col :span="6">
-        <el-form-item label="外发目标交期" label-width="100px">
+        <el-form-item label="外发交期" label-width="100px">
           <el-date-picker v-model="value" type="date" placeholder="请选择日期" style="width: 160px"></el-date-picker>
         </el-form-item>
       </el-col>
