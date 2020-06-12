@@ -18,187 +18,192 @@
         <el-button type="primary" @click="onPayPlanSave">确 定</el-button>
       </div>
     </el-dialog>
-<!--    <div>-->
-<!--      <el-row type="flex" justify="start" :gutter="12" class="info-order-row">-->
-<!--        <el-col :span="10">-->
-<!--          <el-row type="flex" align="start" justify="space-between">-->
-<!--            <h6 style="margin-right:5px;margin-bottom: 0px;width:200px;line-height: normal">-->
-<!--              {{form.name!=''?'当前选中方案：'+form.name:'当前未选择账务方案'}}</h6>-->
-<!--            <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain-->
-<!--              size="mini">选用我的账务方案</el-button>-->
-<!--            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>-->
-<!--          </el-row>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-<!--    </div>-->
-    <div>
-      <el-row type="flex" justify="start" align="middle">
-        <el-col :span="6" style="padding-top: 5px;">
-          <span class="info-input-prepend">有无定金：</span>
-          <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="true">有定金</el-radio>
-          <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="false">无定金</el-radio>
-        </el-col>
-        <el-col :span="8" style="padding-top: 5px;">
-          <span class="info-input-prepend">尾款期数：</span>
-          <template v-for="(value,key) in payPlanType">
-            <el-radio class="info-radio" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
-          </template>
-        </el-col>
-        <el-col :span="9" :offset="1">
-          <el-row type="flex" align="start" justify="space-between">
-            <h6 style="margin-top: 3px;">{{form.name!=''?'当前选中方案：'+form.name:'当前未选择账务方案'}}</h6>
-            <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain
-                       size="mini">选用账务方案</el-button>
-            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
-          </el-row>
-        </el-col>
-      </el-row>
-    </div>
-    <div style="margin-top: 10px">
-      <el-row class="info-order-row" v-if="form.isHaveDeposit" type="flex" justify="start" align="middle" :gutter="10">
-        <el-col :span="8">
-          <el-row type="flex" align="middle">
-            <h6 style="padding-right: 50px;margin-bottom: 0px">定金</h6>
-            <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
-            <el-select v-model="form.deposit.event" placeholder="请选择">
-              <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key" :key="key"></el-option>
-              </template>
-            </el-select>
-          </el-row>
-        </el-col>
-        <el-col :span="5">
-          <el-row type="flex" align="middle" justify="start" :gutter="20">
-            <el-col :span="6">
-              <h6 class="info-input-prepend2" style="width:50px;">后时长</h6>
-            </el-col>
-            <el-input-number v-model="form.deposit.time" :precision="0" :step="1" :min="1" size="mini">
-            </el-input-number>
-            <h6 class="info-input-prepend2">天以内</h6>
-          </el-row>
-        </el-col>
-        <el-col :span="8">
-          <el-row type="flex" align="middle" justify="start">
-            <el-col :span="4">
-              <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
-            </el-col>
-            <el-col :span="18">
-              <el-input-number v-model="form.deposit.percent" :precision="0" :step="1" :min="1" :max="99" size="mini">
-              </el-input-number>
-              %
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row class="info-order-row" v-if="form.payPlanType!='MONTHLY_SETTLEMENT'" type="flex" justify="start"
-        align="middle" :gutter="10">
-        <el-col :span="8">
-          <el-row type="flex" align="middle">
-            <h6 style="padding-right: 14px;margin-bottom: 0px">第1期尾款</h6>
-            <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
-            <el-select v-model="form.balance1.event" placeholder="请选择">
-              <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key" :key="key"></el-option>
-              </template>
-            </el-select>
-          </el-row>
-        </el-col>
-        <el-col :span="5">
-          <el-row type="flex" align="middle" justify="start" :gutter="20">
-            <el-col :span="6">
-              <h6 class="info-input-prepend2" style="width:40px;">后时长</h6>
-            </el-col>
-            <el-input-number v-model="form.balance1.time" :precision="0" :step="1" :min="1" size="mini">
-            </el-input-number>
-            <h6 class="info-input-prepend2">天以内</h6>
-          </el-row>
-        </el-col>
-        <el-col :span="7" v-if="form.payPlanType=='PHASEONE'">
-          <el-row type="flex" align="middle" justify="start">
-            <h6 class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
-          </el-row>
-        </el-col>
-        <el-col :span="8" v-if="form.payPlanType!='PHASEONE'">
-          <el-row type="flex" align="middle" justify="start">
-            <el-col :span="4">
-              <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
-            </el-col>
-            <el-col :span="18">
-              <el-input-number v-model="form.balance1.percent" :precision="0" :step="1" :min="1" :max="99" size="mini">
-              </el-input-number>
-              %
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row class="info-order-row" v-if="form.payPlanType=='PHASETWO'" type="flex" justify="start" align="middle"
-        :gutter="10">
-        <el-col :span="8">
-          <el-row type="flex" align="middle">
-            <h6 style="padding-right: 14px;margin-bottom: 0px">第2期尾款</h6>
-            <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
-            <el-select v-model="form.balance2.event" placeholder="请选择">
-              <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key" :key="key"></el-option>
-              </template>
-            </el-select>
-          </el-row>
-        </el-col>
-        <el-col :span="5">
-          <el-row type="flex" align="middle" justify="start" :gutter="20">
-            <el-col :span="6">
-              <h6 class="info-input-prepend2" style="width:40px;">后时长</h6>
-            </el-col>
-            <el-input-number v-model="form.balance2.time" :precision="0" :step="1" :min="1" size="mini">
-            </el-input-number>
-            <h6 class="info-input-prepend2">天以内</h6>
-          </el-row>
-        </el-col>
-        <el-col :span="7">
-          <el-row type="flex" align="middle" justify="start">
-            <h6 class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row class="info-order-row" v-if="form.payPlanType=='MONTHLY_SETTLEMENT'" type="flex" justify="start"
-        align="middle" :gutter="10">
-        <el-col :span="8">
-          <el-row type="flex" align="middle">
-            <h6 style="padding-right: 50px;margin-bottom: 0px">月结</h6>
-            <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
-            <el-select v-model="form.monthBalance.event" placeholder="请选择">
-              <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key" :key="key"></el-option>
-              </template>
-            </el-select>
-          </el-row>
-        </el-col>
-        <el-col :span="4">
-          <el-row type="flex" align="middle" justify="start">
-            <el-row type="flex" align="middle" justify="space-between" :gutter="20">
+    <el-form :model="form" :disabled="readOnly">
+      <!--    <div>-->
+      <!--      <el-row type="flex" justify="start" :gutter="12" class="info-order-row">-->
+      <!--        <el-col :span="10">-->
+      <!--          <el-row type="flex" align="start" justify="space-between">-->
+      <!--            <h6 style="margin-right:5px;margin-bottom: 0px;width:200px;line-height: normal">-->
+      <!--              {{form.name!=''?'当前选中方案：'+form.name:'当前未选择账务方案'}}</h6>-->
+      <!--            <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain-->
+      <!--              size="mini">选用我的账务方案</el-button>-->
+      <!--            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>-->
+      <!--          </el-row>-->
+      <!--        </el-col>-->
+      <!--      </el-row>-->
+      <!--    </div>-->
+      <div>
+        <el-row type="flex" justify="start" align="middle">
+          <el-col :span="6" style="padding-top: 5px;">
+            <span class="info-input-prepend">有无定金：</span>
+            <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="true">有定金</el-radio>
+            <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="false">无定金</el-radio>
+          </el-col>
+          <el-col :span="8" style="padding-top: 5px;">
+            <span class="info-input-prepend">尾款期数：</span>
+            <template v-for="(value,key) in payPlanType">
+              <el-radio class="info-radio" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
+            </template>
+          </el-col>
+          <el-col :span="9" :offset="1">
+            <el-row type="flex" align="start" justify="space-between">
+              <h6 style="margin-top: 3px;">{{form.name!=''?'当前选中方案：'+form.name:'当前未选择账务方案'}}</h6>
+              <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain
+                size="mini">选用账务方案</el-button>
+              <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
+            </el-row>
+          </el-col>
+        </el-row>
+      </div>
+      <div style="margin-top: 10px">
+        <el-row class="info-order-row" v-if="form.isHaveDeposit" type="flex" justify="start" align="middle"
+          :gutter="10">
+          <el-col :span="8">
+            <el-row type="flex" align="middle">
+              <h6 style="padding-right: 50px;margin-bottom: 0px">定金</h6>
+              <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
+              <el-select v-model="form.deposit.event" placeholder="请选择">
+                <template v-for="(value,key) in triggerEvent">
+                  <el-option :label="value" :value="key" :key="key"></el-option>
+                </template>
+              </el-select>
+            </el-row>
+          </el-col>
+          <el-col :span="5">
+            <el-row type="flex" align="middle" justify="start" :gutter="20">
               <el-col :span="6">
-                <h6 class="info-input-prepend2" style="width:40px;">后</h6>
+                <h6 class="info-input-prepend2" style="width:50px;">后时长</h6>
+              </el-col>
+              <el-input-number v-model="form.deposit.time" :precision="0" :step="1" :min="1" size="mini">
+              </el-input-number>
+              <h6 class="info-input-prepend2">天以内</h6>
+            </el-row>
+          </el-col>
+          <el-col :span="8">
+            <el-row type="flex" align="middle" justify="start">
+              <el-col :span="4">
+                <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
               </el-col>
               <el-col :span="18">
-                <el-select v-model="form.monthBalance.time" placeholder="请选择">
-                  <template v-for="val in 28">
-                    <el-option :label="val" :value="val" :key="val"></el-option>
-                  </template>
-                  <el-option label="月底" :value="-1" :key="-1"></el-option>
-                </el-select>
+                <el-input-number v-model="form.deposit.percent" :precision="0" :step="1" :min="1" :max="99" size="mini">
+                </el-input-number>
+                %
               </el-col>
             </el-row>
-          </el-row>
-        </el-col>
-        <el-col :span="13">
-          <el-row type="flex" align="middle" justify="start">
-            <el-col :span="24">
-              <h6 class="info-input-prepend2" style="width: 200px;">号支付剩余全部款项</h6>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-    </div>
+          </el-col>
+        </el-row>
+        <el-row class="info-order-row" v-if="form.payPlanType!='MONTHLY_SETTLEMENT'" type="flex" justify="start"
+          align="middle" :gutter="10">
+          <el-col :span="8">
+            <el-row type="flex" align="middle">
+              <h6 style="padding-right: 14px;margin-bottom: 0px">第1期尾款</h6>
+              <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
+              <el-select v-model="form.balance1.event" placeholder="请选择">
+                <template v-for="(value,key) in triggerEvent">
+                  <el-option :label="value" :value="key" :key="key"></el-option>
+                </template>
+              </el-select>
+            </el-row>
+          </el-col>
+          <el-col :span="5">
+            <el-row type="flex" align="middle" justify="start" :gutter="20">
+              <el-col :span="6">
+                <h6 class="info-input-prepend2" style="width:40px;">后时长</h6>
+              </el-col>
+              <el-input-number v-model="form.balance1.time" :precision="0" :step="1" :min="1" size="mini">
+              </el-input-number>
+              <h6 class="info-input-prepend2">天以内</h6>
+            </el-row>
+          </el-col>
+          <el-col :span="7" v-if="form.payPlanType=='PHASEONE'">
+            <el-row type="flex" align="middle" justify="start">
+              <h6 class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
+            </el-row>
+          </el-col>
+          <el-col :span="8" v-if="form.payPlanType!='PHASEONE'">
+            <el-row type="flex" align="middle" justify="start">
+              <el-col :span="4">
+                <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
+              </el-col>
+              <el-col :span="18">
+                <el-input-number v-model="form.balance1.percent" :precision="0" :step="1" :min="1" :max="99"
+                  size="mini">
+                </el-input-number>
+                %
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row class="info-order-row" v-if="form.payPlanType=='PHASETWO'" type="flex" justify="start" align="middle"
+          :gutter="10">
+          <el-col :span="8">
+            <el-row type="flex" align="middle">
+              <h6 style="padding-right: 14px;margin-bottom: 0px">第2期尾款</h6>
+              <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
+              <el-select v-model="form.balance2.event" placeholder="请选择">
+                <template v-for="(value,key) in triggerEvent">
+                  <el-option :label="value" :value="key" :key="key"></el-option>
+                </template>
+              </el-select>
+            </el-row>
+          </el-col>
+          <el-col :span="5">
+            <el-row type="flex" align="middle" justify="start" :gutter="20">
+              <el-col :span="6">
+                <h6 class="info-input-prepend2" style="width:40px;">后时长</h6>
+              </el-col>
+              <el-input-number v-model="form.balance2.time" :precision="0" :step="1" :min="1" size="mini">
+              </el-input-number>
+              <h6 class="info-input-prepend2">天以内</h6>
+            </el-row>
+          </el-col>
+          <el-col :span="7">
+            <el-row type="flex" align="middle" justify="start">
+              <h6 class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row class="info-order-row" v-if="form.payPlanType=='MONTHLY_SETTLEMENT'" type="flex" justify="start"
+          align="middle" :gutter="10">
+          <el-col :span="8">
+            <el-row type="flex" align="middle">
+              <h6 style="padding-right: 50px;margin-bottom: 0px">月结</h6>
+              <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
+              <el-select v-model="form.monthBalance.event" placeholder="请选择">
+                <template v-for="(value,key) in triggerEvent">
+                  <el-option :label="value" :value="key" :key="key"></el-option>
+                </template>
+              </el-select>
+            </el-row>
+          </el-col>
+          <el-col :span="4">
+            <el-row type="flex" align="middle" justify="start">
+              <el-row type="flex" align="middle" justify="space-between" :gutter="20">
+                <el-col :span="6">
+                  <h6 class="info-input-prepend2" style="width:40px;">后</h6>
+                </el-col>
+                <el-col :span="18">
+                  <el-select v-model="form.monthBalance.time" placeholder="请选择">
+                    <template v-for="val in 28">
+                      <el-option :label="val" :value="val" :key="val"></el-option>
+                    </template>
+                    <el-option label="月底" :value="-1" :key="-1"></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+            </el-row>
+          </el-col>
+          <el-col :span="13">
+            <el-row type="flex" align="middle" justify="start">
+              <el-col :span="24">
+                <h6 class="info-input-prepend2" style="width: 200px;">号支付剩余全部款项</h6>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </div>
+    </el-form>
+
   </div>
 </template>
 
@@ -209,6 +214,10 @@
     props: {
       vPayPlan: {
         type: Object
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
       }
     },
     components: {

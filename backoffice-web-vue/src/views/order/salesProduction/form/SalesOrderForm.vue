@@ -75,11 +75,11 @@
               <h6>财务设置</h6>
             </div>
           </el-col>
-<!--          <el-col :span="4">-->
-<!--            <el-button class="contract-btn">添加合同</el-button>-->
-<!--          </el-col>-->
+          <!--          <el-col :span="4">-->
+          <!--            <el-button class="contract-btn">添加合同</el-button>-->
+          <!--          </el-col>-->
         </el-row>
-        <pay-plan-form :vPayPlan.sync="form.payPlan" />
+        <pay-plan-form :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" />
         <el-row type="flex" justify="space-between" align="middle">
           <el-col :span="4">
             <div>
