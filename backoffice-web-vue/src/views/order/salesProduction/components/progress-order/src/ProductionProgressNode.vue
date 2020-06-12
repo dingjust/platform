@@ -10,7 +10,7 @@
     </div>
     <el-dialog :visible.sync="estimatedFormVisible" width="30%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <production-progress-date-setting-form :slotData="slotData" @afterSubmit="onAfterSubmit" />
+      <production-progress-date-setting-form v-if="estimatedFormVisible" :slotData="slotData" @afterSubmit="onAfterSubmit" />
     </el-dialog>
   </div>
 </template>

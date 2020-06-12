@@ -70,7 +70,8 @@
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="22">
         <el-row type="flex" justify="end">
-          <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
+<!--          <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>-->
+          <el-button class="form-btn" @click="onOrder">上报数量</el-button>
         </el-row>
         <progress-report-material v-if="slotData.progressPhase.name=='备料'"
           :productionProgressOrders="slotData.productionProgressOrders"
