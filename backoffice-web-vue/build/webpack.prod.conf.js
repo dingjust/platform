@@ -9,9 +9,9 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 
-let env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : config.build.env;
+let env = process.env.NODE_ENV === 'testing' ?
+  require('../config/test.env') :
+  config.build.env;
 
 let webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -39,7 +39,8 @@ let webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css')
+      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      allChunks:true
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
@@ -52,9 +53,8 @@ let webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.build.index,
+      filename: process.env.NODE_ENV === 'testing' ?
+        'index.html' : config.build.index,
       template: 'index.html',
       inject: true,
       minify: {
@@ -68,33 +68,37 @@ let webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     // split vendor js into its own file
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   minChunks: function (module, count) { // 插件会遍历所有引入的模块，传入此函数的module参数，而count是当前module的引用次数
+    //     // any required modules inside node_modules are extracted to vendor
+    //     return ( // 返回true则打包进vendor，否则不打包
+    //       module.resource &&
+    //       /\.js$/.test(module.resource) &&
+    //       module.resource.indexOf(
+    //         path.join(__dirname, '../node_modules')
+    //       ) === 0 // 从node_module引入的返回true
+    //     )
+    //   }
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: function (module, count) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
-      }
+      name: ['vendor_jquery', 'vendor_echarts', 'vendor_highlight', 'vendor_tui_editor', 'vendor_codemirror'],
+      minChunks: 2,
+      filename:'[name].[chunkhash:8].js'
     }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
-      chunks: ['vendor']
+      chunks: ['vendor_jquery', 'vendor_echarts', 'vendor_highlight', 'vendor_tui_editor', 'vendor_codemirror'],
+      filename:'[name].[chunkhash:8].js'
     }),
     // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ])
+    new CopyWebpackPlugin([{
+      from: path.resolve(__dirname, '../static'),
+      to: config.build.assetsSubDirectory,
+      ignore: ['.*']
+    }]),
   ]
 });
 
