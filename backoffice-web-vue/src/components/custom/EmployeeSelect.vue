@@ -19,7 +19,7 @@
     props: ["page"],
     computed: {},
     components: {
-      ApparelProductDetailsPage
+      // ApparelProductDetailsPage
     },
     methods: {
       ...mapMutations({

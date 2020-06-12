@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import PersonnelSelection from '../../../../../../../components/custom/PersonnelSelection';
+  import { PersonnelSelection } from '@/components/';
   export default {
     name: 'ProductionProgressDateSettingForm',
     props: ['slotData'],

@@ -210,7 +210,7 @@
 <script>
   import PayPlanSelect from '../PayPlanSelect';
   export default {
-    name: 'PayPlanForm',
+    name: 'PayPlanFormV2',
     props: {
       vPayPlan: {
         type: Object
