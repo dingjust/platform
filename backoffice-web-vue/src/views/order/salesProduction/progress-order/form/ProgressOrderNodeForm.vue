@@ -115,8 +115,12 @@
         })
       },
       isDisabled (row) {
-        return this.formData.progresses.findIndex(val => val.progressPhase.id == row.id) > -1 ||
-          row.sequence < this.formData.currentPhase.sequence;
+        if (this.formData.progresses.length <= 0) {
+          return false
+        } else {
+          return this.formData.progresses.findIndex(val => val.progressPhase.id == row.id) > -1 ||
+            row.sequence < this.formData.currentPhase.sequence;
+        }
       },
       async saveProgressPlan () {
         let item = {};

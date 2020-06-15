@@ -54,7 +54,7 @@
       <el-col :span="24">
 <!--        <progress-order-steps :phaseSqeuence="slotData.progressPlan.phaseSqeuence"-->
 <!--                              :progresses="slotData.progressPlan.progress"/>-->
-        <el-row type="flex" justify="space-between">
+        <el-row type="flex" justify="space-between" v-if="slotData.progresses.length > 0">
           <template v-for="(item, index) in slotData.progresses">
             <el-col :span="getSpan">
               <el-row type="flex" justify="center" align="middle">
@@ -64,6 +64,9 @@
               </el-row>
             </el-col>
           </template>
+        </el-row>
+        <el-row type="flex" justify="center" v-else>
+          <h6 style="color: #C0C4CC">暂无进度节点</h6>
         </el-row>
         <el-steps :active="getActive" align-center finish-status="success">
           <template v-for="(item, index) in slotData.progresses">
