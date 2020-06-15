@@ -484,21 +484,21 @@
           this.$message.error('产品数量不能为空');
         }
 
-        //校验是否有核算单
-        this.appendProductForm.sampleList.forEach(element => {
-          if (element.costOrder.isIncludeTax == null) {
-            costingValidate = false;
-          }
-        });
+        // //校验是否有核算单
+        // this.appendProductForm.sampleList.forEach(element => {
+        //   if (element.costOrder.isIncludeTax == null) {
+        //     costingValidate = false;
+        //   }
+        // });
 
-        //校验物料清单
-        if (this.needMaterialsSpec) {
-          this.appendProductForm.sampleList.forEach(element => {
-            if (element.materialsSpecEntries == null || element.materialsSpecEntries.length < 1) {
-              materialsSpecEntriesValiadte = false;
-            }
-          });
-        }
+        // //校验物料清单
+        // if (this.needMaterialsSpec) {
+        //   this.appendProductForm.sampleList.forEach(element => {
+        //     if (element.materialsSpecEntries == null || element.materialsSpecEntries.length < 1) {
+        //       materialsSpecEntriesValiadte = false;
+        //     }
+        //   });
+        // }
 
         //获取各层级form
         var forms = [];
