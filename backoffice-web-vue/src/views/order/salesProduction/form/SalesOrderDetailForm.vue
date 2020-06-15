@@ -275,7 +275,7 @@
     font-size: 12px;
   }
 
-  /deep/ .el-input__inner {
+  .sales-plan-box>>>.el-input__inner {
     height: 24px;
     line-height: 24px;
     border-radius: 2px;
@@ -293,12 +293,12 @@
     margin-top: 2px;
   }
 
-  /deep/ .el-form-item--mini.el-form-item,
+  .sales-plan-box>>>.el-form-item--mini.el-form-item,
   .el-form-item--small.el-form-item {
     margin-bottom: 5px;
   }
 
-  /deep/.el-divider--vertical {
+  .sales-plan-box>>>.el-divider--vertical {
     height: auto;
   }
 
