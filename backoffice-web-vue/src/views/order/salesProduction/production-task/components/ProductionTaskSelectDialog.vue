@@ -29,7 +29,7 @@
 
   import ProdcutionTaskToolbar from '../toolbar/ProdcutionTaskToolbar';
   import ProductionTaskList from '../list/ProductionTaskList';
-  import ProductionTaskDetails from '../details/ProductionTaskDetail';
+  import ProductionTaskDetail from '../details/ProductionTaskDetail';
   import ProductionTaskSelectList from '../list/ProductionTaskSelectList';
   export default {
     name: 'ProductionTaskSelectDialog',
@@ -45,7 +45,7 @@
         type: String
       }
     },
-    components: {ProductionTaskSelectList, ProductionTaskDetails, ProductionTaskList, ProdcutionTaskToolbar},
+    components: {ProductionTaskSelectList, ProductionTaskDetail, ProductionTaskList, ProdcutionTaskToolbar},
     computed: {
       ...mapGetters({
         page: 'page',

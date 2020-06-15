@@ -56,7 +56,7 @@
   import AccountingSheetBtn from '@/views/product/sample/components/AccountingSheetBtn';
 
   export default {
-    name: 'ProductionTaskDetails',
+    name: 'ProductionEntryDetail',
     props: ['id'],
     components: {
       ReceivingDetailsForm,

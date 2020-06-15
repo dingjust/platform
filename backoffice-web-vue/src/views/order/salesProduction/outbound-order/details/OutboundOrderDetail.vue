@@ -9,13 +9,14 @@
         </el-col>
       </el-row>
       <outbound-order-top-info :slotData="formData" />
-      <outbound-order-center-table :slot-data="formData" @onDetail="onDetail" />
+      <outbound-order-center-table :slot-data="formData" />
       <el-row class="basic-form-row" type="flex" align="middle">
         <h6>备注及附件</h6>
       </el-row>
       <el-row type="flex" style="padding-left: 20px">
         <el-col>
-          <el-input type="textarea" autosize v-model="formData.remarks" :autosize="{ minRows: 4, maxRows: 6 }" />
+          <el-input type="textarea" autosize v-model="formData.remarks" :disabled="true"
+            :autosize="{ minRows: 4, maxRows: 6 }" />
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">
@@ -23,10 +24,6 @@
         <el-button class="purchase-order-btn2" @click="onCancel" v-if="this.formData.status != ''">取消订单</el-button>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="taskDetailVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <production-task-details v-if="taskDetailVisible" :id="productionTaskId" :isOutboundRead="true" />
-    </el-dialog>
     <el-dialog :visible.sync="uniqueCodeFormVisible" width="30%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <unique-code-generate-form :order="formData" />
@@ -49,12 +46,11 @@
   import OutboundOrderTopInfo from '../form/OutboundOrderTopInfo';
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
-  import ProductionTaskDetails from '../../production-task/details/ProductionTaskDetail';
+
   export default {
     name: 'OutboundOrderDetail',
     props: ['code'],
     components: {
-      ProductionTaskDetails,
       OutboundOrderCenterTable,
       OutboundOrderTopInfo,
       UniqueCodeGenerateForm
@@ -95,10 +91,6 @@
         }
         this.$store.state.OutboundOrderModule.formData = Object.assign({}, result);
       },
-      onDetail(row) {
-        this.taskDetailVisible = true;
-        this.productionTaskId = row.productionTask.id;
-      },
       async onCancel() {
         const url = this.apis().cancelOutboundOrder(this.formData.code);
         const result = await this.$http.put(url);
@@ -135,8 +127,6 @@
     },
     data() {
       return {
-        productionTaskId: '',
-        taskDetailVisible: false,
         uniqueCodeFormVisible: false
       }
     },

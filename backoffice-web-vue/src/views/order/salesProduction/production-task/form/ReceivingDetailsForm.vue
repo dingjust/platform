@@ -83,7 +83,7 @@
       </el-col>
       <el-col :span="9">
         <!-- 合作商信息 -->
-        <el-row type="flex">
+        <!-- <el-row type="flex">
           <el-col :span="6">
             <div class="info-row-title">
               <h6>合作商信息</h6>
@@ -102,7 +102,7 @@
           <el-col :span="12">
             <h6>联系方式：{{contactPhone}}</h6>
           </el-col>
-        </el-row>
+        </el-row> -->
         <!-- <el-row class="info-row-title_row">
           <el-col>
             <h6>工厂：</h6>
@@ -125,13 +125,13 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>生产负责人：{{slotData.productionLeader.name}}</h6>
+            <h6>生产负责人：{{slotData.productionLeader!=null?slotData.productionLeader.name:''}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>审批人：{{slotData.approvers[0].name}}</h6>
+            <h6>审批人：{{slotData.approvers!=null&&slotData.approvers[0]!=null?slotData.approvers[0].name:''}}</h6>
           </el-col>
         </el-row>
-        <el-row type="flex">
+        <!-- <el-row type="flex">
           <el-col :span="6">
             <div class="info-row-title">
               <h6>合同</h6>
@@ -140,7 +140,7 @@
         </el-row>
         <el-row class="info-row-title_row" type="flex">
           <el-col>
-            <!-- <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+            <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
               :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
               :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
               <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
@@ -156,9 +156,9 @@
                   </span>
                 </span>
               </div>
-            </el-upload> -->
+            </el-upload>
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-col>
     </el-row>
   </div>

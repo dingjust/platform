@@ -58,7 +58,7 @@
         </el-form-item>
       </el-col> -->
       </el-row>
-      <el-row class="basic-form-row_top" type="flex" align="middle">
+      <!-- <el-row class="basic-form-row_top" type="flex" align="middle">
         <h6 class="info-input-prepend_top">人员设置</h6>
       </el-row>
       <el-row type="flex" class="basic-form-row_top">
@@ -68,7 +68,7 @@
             </el-input>
           </el-form-item>
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-row class="basic-form-row_top" type="flex" align="middle">
         <h6 class="info-input-prepend_top">备注</h6>
       </el-row>
@@ -90,12 +90,12 @@
       slotData: {
         type: Object,
       },
-      productionLeader: {
-        type: Object,
-        default: {
-          name: ''
-        }
-      },
+      // productionLeader: {
+      //   type: Object,
+      //   default: {
+      //     name: ''
+      //   }
+      // },
       readOnly: {
         type: Boolean,
         default: false
