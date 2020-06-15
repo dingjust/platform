@@ -107,18 +107,18 @@
           <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">
             <el-col :span="4">
               <el-button class="product-form-btn" @click="onCreateAccountingSheet(productIndex)"
-                :disabled="canCreateCostOrder(entry)">创建成本核算单</el-button>
+                :disabled="!canCreateCostOrder(entry)">创建成本核算单</el-button>
             </el-col>
             <el-col :span="4">
               <el-button class="product-form-btn" @click="onImportAccountingSheet(productIndex)" type="text"
-                v-if="entry.costOrder.isIncludeTax==null&&entry.sampleCostOrder!=null">导入样衣成本核算单</el-button>
+                v-if="canCreateCostOrder(entry)&&entry.sampleCostOrder!=null">导入样衣成本核算单</el-button>
             </el-col>
             <el-col :span="2">
               <h6 style="padding-top:8px">核算单：</h6>
             </el-col>
             <el-col :span="18">
               <h6 class="account_sheet-btn" @click="onUpdateAccountingSheet(productIndex)"
-                v-if="canCreateCostOrder(entry)">
+                v-if="!canCreateCostOrder(entry)">
                 {{entry.costOrder.id!=null?entry.costOrder.id:'成本核算单'}}
               </h6>
             </el-col>
