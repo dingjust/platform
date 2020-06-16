@@ -2,7 +2,11 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="订单编号" prop="code"></el-table-column>
-      <el-table-column label="订单类型" prop="typeLabel"></el-table-column>
+      <el-table-column label="订单类型">
+        <template slot-scope="scope">
+          <span>{{getEnum('AuditLabel', scope.row.type)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建人" prop="creationPerson"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">

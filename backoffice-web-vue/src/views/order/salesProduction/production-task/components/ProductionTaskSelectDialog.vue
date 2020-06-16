@@ -1,6 +1,26 @@
 <template>
   <div class="animated fadeIn">
-    <prodcution-task-toolbar @onAdvancedSearch="onAdvancedSearch" :is-select="true"/>
+    <el-row>
+      <el-form :inline="true">
+        <el-row type="flex" justify="space-between">
+          <el-col :span="20" style="padding-top: 5px">
+            <el-form-item label="订单信息" prop="name">
+              <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keywords"></el-input>
+            </el-form-item>
+            <el-form-item label="负责人" prop="name">
+              <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.productionLeaderName"></el-input>
+            </el-form-item>
+            <el-form-item label="合作商" prop="name">
+              <el-input placeholder="请输入合作商名称" v-model="queryFormData.cooperator"></el-input>
+            </el-form-item>
+            <el-button-group>
+              <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+              <el-button native-type="reset" @click="onReset">重置</el-button>
+            </el-button-group>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-row>
     <production-task-select-list ref="taskList" :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"
                           :is-select="true" @onDetails="onDetails" :isSingleChoice="isSingleChoice"/>
     <el-row type="flex" justify="center" align="middle">
@@ -15,18 +35,6 @@
 </template>
 
 <script>
-  import {
-    createNamespacedHelpers
-  } from 'vuex';
-
-  const {
-    mapGetters,
-    mapActions,
-    mapMutations
-  } = createNamespacedHelpers(
-    'ProductionTasksModule'
-  );
-
   import ProdcutionTaskToolbar from '../toolbar/ProdcutionTaskToolbar';
   import ProductionTaskList from '../list/ProductionTaskList';
   import ProductionTaskDetails from '../details/ProductionTaskDetail';
@@ -45,41 +53,48 @@
         type: String
       }
     },
-    components: {ProductionTaskSelectList, ProductionTaskDetails, ProductionTaskList, ProdcutionTaskToolbar},
+    components: {
+      ProductionTaskSelectList,
+      ProductionTaskDetails,
+      ProductionTaskList,
+      ProdcutionTaskToolbar
+    },
     computed: {
-      ...mapGetters({
-        page: 'page',
-        keyword: 'keyword',
-        queryFormData: 'queryFormData',
-        contentData: 'detailData'
-      })
     },
     methods: {
-      ...mapActions({
-        search: 'search',
-        searchAdvanced: 'searchAdvanced',
-        clearQueryFormData: 'clearQueryFormData'
-      }),
-      ...mapMutations({
-        setIsAdvancedSearch: 'isAdvancedSearch',
-        setDetailData: 'detailData'
-      }),
-      onAdvancedSearch (page, size) {
+      async onAdvancedSearch (page, size) {
+        let pageS = 0;
+        let sizeS = 10;
+        if (page) {
+          pageS = page;
+        }
+        if (size) {
+          sizeS = size;
+        }
         if (this.selectType == 'OUTBOUND_ORDER') {
           this.queryFormData.state = 'DISPATCHING';
+          this.queryFormData.productionWorkOrder = '';
         } else {
+          this.queryFormData.state = '';
           this.queryFormData.productionWorkOrder = 'isProductionWorkOrder';
         }
         this.queryFormData.productionLeader = 'isProductionLeader'
-        this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getProductionTaskList();
-        this.searchAdvanced({
-          url,
-          query,
-          page,
-          size
+        const result = await this.$http.post(url, query, {
+          page: pageS,
+          size: sizeS
         });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.page = result;
+      },
+      onReset () {
+        this.queryFormData.keywords = '';
+        this.queryFormData.productionLeaderName = '';
+        this.queryFormData.cooperator = '';
       },
       getSelectTaskList (val) {
         this.selectTaskList = val;
@@ -89,6 +104,16 @@
         this.taskVisible = true;
       },
       onSelect () {
+        // let cooperatorList = [];
+        // this.selectTaskList.forEach(item => {
+        //   if (item.appointFactory && cooperatorList.indexOf(item.appointFactory.id) <= -1) {
+        //     cooperatorList.push(item.appointFactory.id);
+        //   }
+        // })
+        // if (cooperatorList.length > 1) {
+        //   this.$message.error('已选生产任务中存在指派工厂冲突，请重新选择')
+        //   return;
+        // }
         this.$emit('onSelectTask', this.selectTaskList);
       },
       // 回显已选择行
@@ -108,7 +133,24 @@
         taskId: '',
         taskVisible: false,
         outboundOrderTypeSelect: false,
-        selectTaskList: []
+        selectTaskList: [],
+        queryFormData: {
+          code: '',
+          skuID: '',
+          state: '',
+          keywords: '',
+          productionLeaderName: '',
+          cooperator: '',
+          categories: [],
+          productionWorkOrder: ''
+        },
+        page: {
+          number: 0, // 当前页，从0开始
+          size: 10, // 每页显示条数
+          totalPages: 1, // 总页数
+          totalElements: 0, // 总数目数
+          content: [] // 当前页数据
+        }
         // formData: this.$store.state.OutboundOrderModule.formData
       }
     },
@@ -122,10 +164,7 @@
       }
     },
     created () {
-      this.onAdvancedSearch();
-    },
-    destroyed() {
-      this.clearQueryFormData();
+      this.onAdvancedSearch(0, 10);
     }
   }
 </script>
@@ -136,5 +175,10 @@
     border-color: #ffd60c;
     color: #000;
     width: 100px;
+  }
+
+  .toolbar-search_input{
+    background-color: #ffd60c;
+    border-color: #ffd60c;
   }
 </style>

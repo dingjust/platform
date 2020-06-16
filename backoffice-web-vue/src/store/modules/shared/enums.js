@@ -1625,6 +1625,16 @@ const state = {
   }, {
     code: 3,
     name: '特急'
+  }],
+  AuditLabel: [{
+    code: 'SalesOrder',
+    name: '销售订单'
+  }, {
+    code: 'SalesPlan',
+    name: '销售计划'
+  }, {
+    code: 'OutboundOrder',
+    name: '外发订单'
   }]
 };
 

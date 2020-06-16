@@ -455,7 +455,9 @@
       async __onCreate (data) {
         if (this.formData.id) {
           const url = this.apis().updateOutboundOrder();
-          const result = await this.$http.put(url, data);
+          const result = await this.$http.put(url, data, {
+            submitAudit: true
+          });
           if (result['errors']) {
             this.$message.error(result['errors'][0].message);
             return;
@@ -481,7 +483,8 @@
         this._onCreate(false);
       },
       async _onSave (data) {
-        const url = this.apis().createOutboundOrder();
+        // const url = this.apis().createOutboundOrder();
+        let url = data.id ? this.apis().updateOutboundOrder() : this.apis().createOutboundOrder();
         const result = await this.$http.post(url, data, {
           submitAudit: false
         });

@@ -109,8 +109,8 @@
         }
         const url = this.apis().createProgressPlan();
         const result = await this.$http.post(url, data);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
           return;
         }
         this.$message.success(this.formData.id ? '添加节点成功' : '编辑节点成功');
