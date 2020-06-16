@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="sales-plan-form-title">
-            <h6>生产任务明细</h6>
+            <h6>订单详情</h6>
           </div>
         </el-col>
         <el-col :span="6">
@@ -22,19 +22,14 @@
             :medias.sync="formData.entries[0].medias" :isRead="true"
             :productionProcessContent.sync="formData.entries[0].productionProcessContent" :productsColors="colors" />
         </el-row>
-        <accounting-sheet-btn :slotData="formData.entries[0].costOrder" :unitPrice="formData.entries[0].unitPrice"
-          :isOutboundRead="isOutboundRead" />
-      </div>
-      <div v-if="!isOutboundRead">
-        <production-task :slotData="formData.entries[0].productionTask" ref="taskComp" v-if="formData.entries[0]!=null"
-          :productionLeader="formData.productionLeader" :readOnly="true" />
+        <accounting-sheet-btn :slotData="formData.entries[0].costOrder" :unitPrice="formData.entries[0].unitPrice" />
       </div>
       <div style="margin-top:40px">
         <el-row>
           <el-col :span="4">关联订单</el-col>
         </el-row>
-        <context-info-tab style="margin-top:20px" :showTask="false" :purchaseOrders="[]" :taskIds="[id]"
-          :productionOrders="contextProductionOrders" :profitOrders="[]" :logs="[]" />
+        <context-info-tab style="margin-top:20px" :showTask="false" :showDispatch="false"
+          :productionOrders="productionOrders" :purchaseOrders="[]" :profitOrders="[]" :logs="[]" />
       </div>
     </el-card>
   </div>
@@ -42,33 +37,21 @@
 
 <script>
   import {
-    createNamespacedHelpers
-  } from 'vuex';
+    ReceivingDetailsForm
+  } from '../../production-task/index';
 
-  const {
-    mapGetters,
-    mapActions,
-    mapMutations
-  } = createNamespacedHelpers(
-    'ProductionTasksModule'
-  );
-
-
-  import ReceivingDetailsForm from '../form/ReceivingDetailsForm';
-  import ProductionTask from '../../components/ProductionTask';
-  import ContextInfoTab from '../../components/context-order-tab/ContextInfoTab';
+  import {
+    ProductionTask,
+    ContextInfoTab
+  } from '../../components/index';
   import SampleAttachOrdersForm from '@/views/product/sample/form/SampleAttachOrdersForm';
   import AccountingSheetBtn from '@/views/product/sample/components/AccountingSheetBtn';
 
   export default {
-    name: 'ProductionTaskDetail',
+    name: 'OutboundOrderEntryDetail',
     props: {
-      id: {
-        require: true
-      },
-      isOutboundRead: {
-        type: Boolean,
-        default: false
+      formData: {
+        type: Object,
       }
     },
     components: {
@@ -79,9 +62,6 @@
       ContextInfoTab
     },
     computed: {
-      ...mapGetters({
-        formData: 'formData'
-      }),
       colors: function () {
         var colors = [];
         if (this.formData.entries[0] != null) {
@@ -94,13 +74,13 @@
         }
         return colors;
       },
-      contextProductionOrders: function () {
-        if (this.formData.entries[0] != null && this.formData.entries[0].productionWorkOrderCode != null) {
-          return [this.formData.entries[0].productionWorkOrderCode];
+      productionOrders: function () {
+        if (this.formData.entries != null) {
+          return this.formData.entries.map(entry => entry.productionWorkOrderCode);
         } else {
           return [];
         }
-      }
+      },
     },
     methods: {
       async getDetails() {

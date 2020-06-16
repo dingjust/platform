@@ -1,24 +1,24 @@
 <template>
   <div class="animated fadeIn">
     <el-tabs type="border-card">
-      <el-tab-pane label="生产任务">
+      <el-tab-pane label="生产任务" v-if="showTask">
         <production-task-basic-table :data="productionTaskDatas" />
       </el-tab-pane>
-      <el-tab-pane label="外发订单" :lazy="true">
-        <dispatch-order-basic-table :codes="dispatchOrders" />
+      <el-tab-pane label="外发订单" :lazy="true" v-if="showDispatch">
+        <dispatch-order-basic-table :codes="dispatchOrders" :taskIds="taskIds" />
       </el-tab-pane>
-      <el-tab-pane label="生产工单" :lazy="true">
-        <production-order-basic-table :codes="productionOrders" />
+      <el-tab-pane label="生产工单" :lazy="true" v-if="showProduction">
+        <production-order-basic-table :codes="productionOrders" :taskIds="taskIds" />
       </el-tab-pane>
-      <el-tab-pane label="采购订单">
+      <el-tab-pane label="采购订单" :lazy="true" v-if="showPurchase">
         <purchase-order-basic-table :data="[]" />
       </el-tab-pane>
-      <el-tab-pane label="财务">
+      <el-tab-pane label="财务" :lazy="true">
       </el-tab-pane>
-      <el-tab-pane label="利润核算">
+      <el-tab-pane label="利润核算" :lazy="true">
 
       </el-tab-pane>
-      <el-tab-pane label="操作日志">
+      <el-tab-pane label="操作日志" :lazy="true">
 
       </el-tab-pane>
     </el-tabs>
@@ -35,17 +35,41 @@
   export default {
     name: 'ContextInfoTab',
     props: {
+      //相关订单对应任务id
+      taskIds: {
+        type: Array
+      },
+      //是否需要生产任务
+      showTask: {
+        type: Boolean,
+        default: true
+      },
       //生产任务-数据
       productionTaskDatas: {
         type: Array,
+      },
+      //是否需要外发订单
+      showDispatch: {
+        type: Boolean,
+        default: true
       },
       //外发订单-单号
       dispatchOrders: {
         type: Array,
       },
+      //是否需要生产订单
+      showProduction: {
+        type: Boolean,
+        default: true
+      },
       //生产工单-单号
       productionOrders: {
         type: Array,
+      },
+      //是否需要采购订单
+      showPurchase: {
+        type: Boolean,
+        default: true
       },
       //采购订单-单号
       purchaseOrders: {

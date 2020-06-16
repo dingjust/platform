@@ -232,12 +232,12 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   void _onSortConditionSelect(FilterConditionEntry condition) {
     _dropdownMenuController.hide();
 
-    if (condition.value is RequirementOrderDateRange && condition.checked) {
+    if (condition.value is RequirementOrderDateRange) {
       currentCondition.dateRange = condition.value;
       _dropDownHeaderItemStrings[0] = condition.label;
     }
 
-    if (condition.value is MachiningType && condition.checked) {
+    if (condition.value is MachiningType) {
       currentCondition.machiningType = condition.value;
       _dropDownHeaderItemStrings[1] = condition.label;
     }

@@ -83,7 +83,7 @@
       <sales-production-tabs :form="form" @appendProduct="appendProduct" />
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
-          <el-button class="material-btn" @click="onSave(false)">创建保存</el-button>
+          <el-button class="material-btn" @click="onSave(false)">保存</el-button>
         </el-col>
         <el-col :span="5">
           <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>

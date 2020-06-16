@@ -757,11 +757,11 @@ const COMMON_APIS = {
     return '/b2b/orders/production/work/create';
   },
   // 更新进度工单
-  updateProgressOrder () {
+  updateProgressOrder() {
     return '/b2b/sheets/progress/work/update';
   },
   // 设置进度节点时间
-  updateProgressDate () {
+  updateProgressDate() {
     return '/b2b/sheets/progress/work/update/progresses/date'
   }
 };
@@ -1139,6 +1139,15 @@ let NONE_TENANT_APIS = {
     return '/b2b/orders/outbound/' + code + '/unique';
   },
 
+  //根据任务id查生产订单
+  searchProductionByTaskIds() {
+    return '/b2b/orders/production/work/search';
+  },
+
+  //根据任务id查外发订单
+  searchPurchaseByTaskIds() {
+    return '/b2b/orders/outbound/search';
+  },
 
   // 创建发货单================================新生产工单
   createShippingOrderV2(code) {

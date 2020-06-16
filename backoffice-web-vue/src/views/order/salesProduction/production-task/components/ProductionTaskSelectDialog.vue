@@ -37,7 +37,7 @@
 <script>
   import ProdcutionTaskToolbar from '../toolbar/ProdcutionTaskToolbar';
   import ProductionTaskList from '../list/ProductionTaskList';
-  import ProductionTaskDetails from '../details/ProductionTaskDetail';
+  import ProductionTaskDetail from '../details/ProductionTaskDetail';
   import ProductionTaskSelectList from '../list/ProductionTaskSelectList';
   export default {
     name: 'ProductionTaskSelectDialog',
@@ -53,12 +53,7 @@
         type: String
       }
     },
-    components: {
-      ProductionTaskSelectList,
-      ProductionTaskDetails,
-      ProductionTaskList,
-      ProdcutionTaskToolbar
-    },
+    components: {ProductionTaskSelectList, ProductionTaskDetail, ProductionTaskList, ProdcutionTaskToolbar},
     computed: {
     },
     methods: {
@@ -104,16 +99,6 @@
         this.taskVisible = true;
       },
       onSelect () {
-        // let cooperatorList = [];
-        // this.selectTaskList.forEach(item => {
-        //   if (item.appointFactory && cooperatorList.indexOf(item.appointFactory.id) <= -1) {
-        //     cooperatorList.push(item.appointFactory.id);
-        //   }
-        // })
-        // if (cooperatorList.length > 1) {
-        //   this.$message.error('已选生产任务中存在指派工厂冲突，请重新选择')
-        //   return;
-        // }
         this.$emit('onSelectTask', this.selectTaskList);
       },
       // 回显已选择行

@@ -1,18 +1,23 @@
 <template>
   <div>
     <el-table :data="orders" stripe style="width: 100%">
-      <el-table-column label="生产工单号" prop="code">
+      <el-table-column label="生产订单号" min-width="130">
+        <template slot-scope="scope">
+          <el-row type="flex" justify="space-between" align="middle">
+            <span>{{scope.row.code}}</span>
+          </el-row>
+        </template>
       </el-table-column>
       <el-table-column label="产品" min-width="150">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
               <img width="54px" v-if="scope.row.product!=null" height="54px"
-                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'" />
+                :src="scope.row.product.images!=null&&scope.row.product.images.length!=0?scope.row.product.images[0].url:'static/img/nopicture.png'" />
             </el-col>
             <el-col :span="16">
               <el-row>
-                <span>{{scope.row.product.name}}</span>
+                <span>{{scope.row.product!=null?scope.row.product.name:''}}</span>
               </el-row>
               <el-row>
                 <span>货号:{{scope.row.product!=null?scope.row.product.skuID:''}}</span>
@@ -21,15 +26,17 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="生产工厂">
-      </el-table-column>
-      <el-table-column label="当前进度">
+      <el-table-column label="生产订单状态" prop="status" :column-key="'status'">
+        <template slot-scope="scope">
+          <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
+          <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
+        </template>
       </el-table-column>
       <el-table-column label="跟单员">
       </el-table-column>
-      <el-table-column label="交货时间">
+      <el-table-column label="订单生成时间" min-width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.deliveryDate | timestampToTime}}</span>
+          <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单标签">
@@ -55,6 +62,9 @@
     props: {
       codes: {
         type: Array
+      },
+      taskIds: {
+        type: Array
       }
     },
     methods: {
@@ -70,6 +80,17 @@
         }
         this.orders.push(result);
       },
+      async getOrdersByTaskIds(ids) {
+        const url = this.apis().searchProductionByTaskIds();
+        const result = await this.$http.post(url, {
+          "productionTaskIds": ids
+        });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.orders = result;
+      },
     },
     data() {
       return {
@@ -77,11 +98,10 @@
       }
     },
     created() {
-      //获取单个订单详情
-      // if (this.codes.length > 0) {
-        console.log('=========');
-        this.getDetail(this.codes[0]);
-      // }
+      //根据生产任务id查找
+      if (this.taskIds != null && this.taskIds.length > 0) {
+        this.getOrdersByTaskIds(this.taskIds);
+      }
     }
   }
 

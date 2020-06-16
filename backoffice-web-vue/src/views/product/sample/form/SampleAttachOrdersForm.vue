@@ -48,7 +48,7 @@
     props: {
       entries: {
         type: Array,
-        default: ()=>{
+        default: () => {
           return [];
         }
       },
@@ -182,7 +182,7 @@
 
 </script>
 <style scoped>
-  /deep/ .el-table--enable-row-hover .el-table__body tr:hover>td {
+  .over-tabs>>>.el-table--enable-row-hover .el-table__body tr:hover>td {
     background-color: #f5f7fa !important;
   }
 

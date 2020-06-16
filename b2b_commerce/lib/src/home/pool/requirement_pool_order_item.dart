@@ -104,12 +104,15 @@ class RequirementPoolOrderItem extends StatelessWidget {
         // Row(
         //   children: _buildTag(order.labels ?? []),
         // ),
-        Text(
-          '${order.details.productName ?? order.details.category?.name}',
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+        Expanded(
+          flex: 1,
+          child: Text(
+            '${order.details.productName ?? order.details.category?.name}',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        )
       ],
     );
   }

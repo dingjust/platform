@@ -79,7 +79,7 @@
         </el-col>
         <el-divider direction="vertical"></el-divider>
         <el-col :span="6">
-          <contract-com v-if="form.type == 'SALES_ORDER'" :slotData="form" :contracts="contracts" :canSign="canSign"/>
+          <contract-com v-if="form.type == 'SALES_ORDER'" :slotData="form" :contracts="contracts" :canSign="canSign" />
         </el-col>
       </el-row>
     </div>
@@ -153,10 +153,14 @@
       // 判断是否能签署合同
       canSign: function () {
         // 未签合同 && 账号为productionleader && 审核状态为 PASSED
-        return this.form.agreements.length <= 0 &&
-          this.$store.getters.currentUser.uid == this.form.productionLeader.uid &&
-          this.form.auditState == 'PASSED' &&
-          this.form.acceptState == 'ACCEPTED';
+        if (this.form.productionLeader != null) {
+          return this.form.agreements.length <= 0 &&
+            this.$store.getters.currentUser.uid == this.form.productionLeader.uid &&
+            this.form.auditState == 'PASSED' &&
+            this.form.acceptState == 'ACCEPTED';
+        } else {
+          return false;
+        }
       }
     },
     components: {
@@ -177,7 +181,7 @@
     methods: {
 
     },
-    data () {
+    data() {
       return {
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
         mtavatLayoutScale: [9, 9, 6],
@@ -190,8 +194,9 @@
         }]
       }
     },
-    created () {}
+    created() {}
   }
+
 </script>
 
 <style scoped>
@@ -270,7 +275,7 @@
     font-size: 12px;
   }
 
-  /deep/ .el-input__inner {
+  .sales-plan-box>>>.el-input__inner {
     height: 24px;
     line-height: 24px;
     border-radius: 2px;
@@ -288,12 +293,12 @@
     margin-top: 2px;
   }
 
-  /deep/ .el-form-item--mini.el-form-item,
+  .sales-plan-box>>>.el-form-item--mini.el-form-item,
   .el-form-item--small.el-form-item {
     margin-bottom: 5px;
   }
 
-  /deep/.el-divider--vertical {
+  .sales-plan-box>>>.el-divider--vertical {
     height: auto;
   }
 

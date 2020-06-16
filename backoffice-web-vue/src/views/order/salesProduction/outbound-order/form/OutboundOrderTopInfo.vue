@@ -72,20 +72,20 @@
             <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.mobileNumber : ''}}</h6>
           </el-col>
         </el-row>
-<!--        <el-row class="info-basic-row" type="flex" align="middle" justify="start">-->
-<!--          <el-col :span="12">-->
-<!--            <h6 class="hide-text" :title="slotData.partyBOperator ? slotData.partyBOperator.name : ''">-->
-<!--              乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>-->
-<!--          </el-col>-->
-<!--          <el-col :span="12">-->
-<!--            <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.mobileNumber : ''}}</h6>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
+        <!--        <el-row class="info-basic-row" type="flex" align="middle" justify="start">-->
+        <!--          <el-col :span="12">-->
+        <!--            <h6 class="hide-text" :title="slotData.partyBOperator ? slotData.partyBOperator.name : ''">-->
+        <!--              乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>-->
+        <!--          </el-col>-->
+        <!--          <el-col :span="12">-->
+        <!--            <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.mobileNumber : ''}}</h6>-->
+        <!--          </el-col>-->
+        <!--        </el-row>-->
       </el-col>
       <el-divider direction="vertical"></el-divider>
       <el-col :span="5">
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
-          <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign"/>
+          <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign" />
         </el-row>
       </el-col>
     </el-row>
@@ -96,7 +96,9 @@
   import ContractCom from '../../contract/ContractCom';
   export default {
     name: 'OutboundOrderTopInfo',
-    components: {ContractCom},
+    components: {
+      ContractCom
+    },
     props: ['slotData'],
     computed: {
       totalQuantity: function () {
@@ -120,22 +122,25 @@
       // 判断是否能签署合同
       canSign: function () {
         // 未签合同 && 账号为productionleader && 审核状态为 PASSED
-        return this.slotData.agreements &&
-          this.slotData.agreements.length <= 0 &&
-          this.$store.getters.currentUser.uid == this.slotData.partyAOperator.uid &&
-          this.slotData.status == 'CONFIRMED';
+        // if (this.form.productionLeader != null) {
+          return this.slotData.agreements &&
+            this.slotData.agreements.length <= 0 &&
+            this.$store.getters.currentUser.uid == this.slotData.partyAOperator.uid &&
+            this.slotData.status == 'CONFIRMED';
+        // } else {
+        //   return false;
+        // }
       }
     },
-    methods: {
-    },
-    data () {
+    methods: {},
+    data() {
       return {
         currentUser: this.$store.getters.currentUser
       }
     },
-    created () {
-    }
+    created() {}
   }
+
 </script>
 
 <style scoped>
@@ -150,14 +155,15 @@
     margin-bottom: 5px;
   }
 
-  .el-divider--vertical{
+  .el-divider--vertical {
     height: auto;
     margin: 0px;
   }
 
   .hide-text {
     overflow: hidden;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
+
 </style>

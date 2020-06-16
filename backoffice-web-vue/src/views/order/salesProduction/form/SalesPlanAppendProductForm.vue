@@ -107,18 +107,18 @@
           <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">
             <el-col :span="4">
               <el-button class="product-form-btn" @click="onCreateAccountingSheet(productIndex)"
-                :disabled="entry.costOrder.isIncludeTax!=null">创建成本核算单</el-button>
+                :disabled="!canCreateCostOrder(entry)">创建成本核算单</el-button>
             </el-col>
             <el-col :span="4">
               <el-button class="product-form-btn" @click="onImportAccountingSheet(productIndex)" type="text"
-                v-if="entry.costOrder.isIncludeTax==null&&entry.sampleCostOrder!=null">导入样衣成本核算单</el-button>
+                v-if="canCreateCostOrder(entry)&&entry.sampleCostOrder!=null">导入样衣成本核算单</el-button>
             </el-col>
             <el-col :span="2">
               <h6 style="padding-top:8px">核算单：</h6>
             </el-col>
             <el-col :span="18">
               <h6 class="account_sheet-btn" @click="onUpdateAccountingSheet(productIndex)"
-                v-if="entry.costOrder.isIncludeTax!=null">
+                v-if="!canCreateCostOrder(entry)">
                 {{entry.costOrder.id!=null?entry.costOrder.id:'成本核算单'}}
               </h6>
             </el-col>
@@ -203,7 +203,7 @@
     computed: {
       ...mapGetters({
         slotData: 'newFormData'
-      })
+      }),
     },
     data() {
       return {
@@ -222,7 +222,7 @@
             materialsSpecEntries: [],
             productionProcessContent: '',
             medias: [],
-            costOrder: {},
+            costOrder: null,
             shippingAddress: {},
             productionTask: {
               price: '',
@@ -276,7 +276,7 @@
           // materialsSpecEntries: data.entries,
           productionProcessContent: '',
           medias: [],
-          costOrder: {},
+          costOrder: null,
           colors: this.getColorsByEntries(colorSizeEntries),
           sizes: this.getSizesByEntries(colorSizeEntries),
         }
@@ -454,7 +454,7 @@
           materialsSpecEntrie: [],
           productionProcessContent: '',
           medias: [],
-          costOrder: {},
+          costOrder: null,
           shippingAddress: {},
           productionTask: {
             price: '',
@@ -484,21 +484,21 @@
           this.$message.error('产品数量不能为空');
         }
 
-        //校验是否有核算单
-        this.appendProductForm.sampleList.forEach(element => {
-          if (element.costOrder.isIncludeTax == null) {
-            costingValidate = false;
-          }
-        });
+        // //校验是否有核算单
+        // this.appendProductForm.sampleList.forEach(element => {
+        //   if (element.costOrder.isIncludeTax == null) {
+        //     costingValidate = false;
+        //   }
+        // });
 
-        //校验物料清单
-        if (this.needMaterialsSpec) {
-          this.appendProductForm.sampleList.forEach(element => {
-            if (element.materialsSpecEntries == null || element.materialsSpecEntries.length < 1) {
-              materialsSpecEntriesValiadte = false;
-            }
-          });
-        }
+        // //校验物料清单
+        // if (this.needMaterialsSpec) {
+        //   this.appendProductForm.sampleList.forEach(element => {
+        //     if (element.materialsSpecEntries == null || element.materialsSpecEntries.length < 1) {
+        //       materialsSpecEntriesValiadte = false;
+        //     }
+        //   });
+        // }
 
         //获取各层级form
         var forms = [];
@@ -547,6 +547,15 @@
             .id) > -1);
           this.$set(entry.costOrder, 'materialsEntries', newEntries);
         }
+      },
+      //是否可以创建成本核算单
+      canCreateCostOrder(entry) {
+        if (entry.costOrder == null || entry.costOrder.isIncludeTax == null) {
+          return true;
+        } else {
+          return false;
+        }
+
       }
     },
     created() {

@@ -131,7 +131,7 @@
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
-          <el-button class="material-btn" @click="onSave(false)">创建保存</el-button>
+          <el-button class="material-btn" @click="onSave(false)">保存</el-button>
         </el-col>
         <el-col :span="5">
           <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
@@ -311,18 +311,18 @@
           return false;
         }
 
-        // 校验明细行是否有预算单
-        let costingValidate = true;
-        // 校验是否有核算单
-        this.form.entries.forEach(element => {
-          if (element.costOrder == null) {
-            costingValidate = false;
-          }
-        });
-        if (!costingValidate) {
-          this.$message.error('请添加产品');
-          return false;
-        }
+        // //校验明细行是否有预算单
+        // let costingValidate = true;
+        // //校验是否有核算单
+        // this.form.entries.forEach(element => {
+        //   if (element.costOrder == null) {
+        //     costingValidate = false;
+        //   }
+        // });
+        // if (!costingValidate) {
+        //   this.$message.error('请添加产品');
+        //   return false;
+        // }
 
         const form = this.$refs.form;
         // 使用Promise.all 并行去校验结果
