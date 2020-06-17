@@ -66,10 +66,10 @@
           </el-tabs>
 <!--          <sample-attach-orders-form :slot-data="product"/>-->
         </el-row>
-        <el-row class="info-order-row" style="margin-top:20px;" type="flex" align="center" :gutter="10">
-<!--          <el-col :span="4">-->
-<!--            <el-button class="product-form-btn" @click="onCreateAccountingSheet">创建成本核算单</el-button>-->
-<!--          </el-col>-->
+        <!-- <el-row class="info-order-row" style="margin-top:20px;" type="flex" align="center" :gutter="10">
+         <el-col :span="4">
+           <el-button class="product-form-btn" @click="onCreateAccountingSheet">创建成本核算单</el-button>
+         </el-col>
           <el-col :span="2">
             <h6 style="padding-top:8px">核算单：</h6>
           </el-col>
@@ -80,7 +80,7 @@
               </el-button>
             </template>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-divider/>
         <div>
           <el-row class="basic-form-row_top" type="flex" align="middle">

@@ -17,13 +17,13 @@
       <div class="pt-2"></div>
       <el-row class="production-order-basic-row">
         <production-order-top-info :slotData="formData" />
-        <div style="margin-top: 50px" v-if="formData.materialsSpecEntries!=null">
+        <!-- <div style="margin-top: 50px" v-if="formData.materialsSpecEntries!=null">
           <el-row style="margin-top:20px;">
             <sample-attach-orders-form :entries.sync="formData.materialsSpecEntries" :medias.sync="formData.medias"
               :isRead="true" :productionProcessContent.sync="formData.productionProcessContent"
               :productsColors="colors" />
           </el-row>
-        </div>
+        </div> -->
         <progress-order :slotData="formData.progressWorkSheet" @callback="onCallBack" />
         <production-order-relation-info :slotData="formData" />
         <production-order-button-group style="margin-top:50px" :slotData="formData" @callback="getDetail"/>

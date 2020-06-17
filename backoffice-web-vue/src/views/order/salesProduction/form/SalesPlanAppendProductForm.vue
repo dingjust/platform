@@ -98,7 +98,7 @@
             <my-address-form :vAddress.sync="entry.shippingAddress" ref="addressComp"
               :readOnly="readOnly||fromOrigin" />
           </el-row>
-          <el-row style="margin-top:20px;">
+          <!-- <el-row style="margin-top:20px;">
             <sample-attach-orders-form :entries.sync="entry.materialsSpecEntries" :medias.sync="entry.medias"
               :productionProcessContent.sync="entry.productionProcessContent"
               @onSpecEntryUpdate="(ids)=>onSpecEntryUpdate(entry,ids)"
@@ -122,7 +122,7 @@
                 {{entry.costOrder.id!=null?entry.costOrder.id:'成本核算单'}}
               </h6>
             </el-col>
-          </el-row>
+          </el-row> -->
           <production-task :slotData="entry.productionTask" ref="taskComp" :productionLeader="productionLeader"
             :readOnly="readOnly" />
         </div>
