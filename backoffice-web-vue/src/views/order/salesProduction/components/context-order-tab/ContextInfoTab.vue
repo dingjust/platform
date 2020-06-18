@@ -8,7 +8,8 @@
         <dispatch-order-basic-table :codes="dispatchOrders" :taskIds="taskIds" />
       </el-tab-pane>
       <el-tab-pane label="生产工单" :lazy="true" v-if="showProduction">
-        <production-order-basic-table :codes="productionOrders" :taskIds="taskIds" />
+        <production-order-basic-table :codes="productionOrders" :taskIds="taskIds"
+          :outboundOrderIds="outboundOrderIds" />
       </el-tab-pane>
       <el-tab-pane label="采购订单" :lazy="true" v-if="showPurchase">
         <purchase-order-basic-table :data="[]" />
@@ -37,6 +38,10 @@
     props: {
       //相关订单对应任务id
       taskIds: {
+        type: Array
+      },
+      //外发订单id
+      outboundOrderIds: {
         type: Array
       },
       //是否需要生产任务

@@ -16,20 +16,21 @@
       </el-row>
       <div class="pt-2"></div>
       <receiving-details-form :slotData="formData" />
-      <div style="margin-top: 50px" v-if="formData.entries[0]!=null">
+      <!-- <div style="margin-top: 50px" v-if="formData.entries[0]!=null">
         <el-row style="margin-top:20px;">
           <sample-attach-orders-form :entries.sync="formData.entries[0].materialsSpecEntries"
             :medias.sync="formData.entries[0].medias" :isRead="true"
             :productionProcessContent.sync="formData.entries[0].productionProcessContent" :productsColors="colors" />
         </el-row>
-        <accounting-sheet-btn :slotData="formData.entries[0].costOrder" :unitPrice="formData.entries[0].unitPrice" />
-      </div>
+        <accounting-sheet-btn v-if="formData.entries[0].costOrder!=null" :slotData="formData.entries[0].costOrder"
+          :unitPrice="formData.entries[0].unitPrice" />
+      </div> -->
       <div style="margin-top:40px">
         <el-row>
           <el-col :span="4">关联订单</el-col>
         </el-row>
         <context-info-tab style="margin-top:20px" :showTask="false" :showDispatch="false"
-          :productionOrders="productionOrders" :purchaseOrders="[]" :profitOrders="[]" :logs="[]" />
+          :outboundOrderIds="[formData.id]" :purchaseOrders="[]" :profitOrders="[]" :logs="[]" />
       </div>
     </el-card>
   </div>
@@ -74,13 +75,6 @@
         }
         return colors;
       },
-      productionOrders: function () {
-        if (this.formData.entries != null) {
-          return this.formData.entries.map(entry => entry.productionWorkOrderCode);
-        } else {
-          return [];
-        }
-      },
     },
     methods: {
       async getDetails() {
@@ -103,7 +97,7 @@
       }
     },
     created() {
-      this.getDetails();
+      // this.getDetails();
     }
   }
 

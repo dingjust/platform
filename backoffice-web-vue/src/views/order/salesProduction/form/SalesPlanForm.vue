@@ -145,13 +145,15 @@
         products.forEach(element => {
           let index = this.form.entries.findIndex(entry => entry.product.code == element.product.code);
           if (index == -1) {
-            //移除原有Id;
-            element.materialsSpecEntries.forEach(item => {
-              this.$delete(item, 'id');
-              item.materialsColorEntries.forEach(colorEntry => {
-                this.$delete(colorEntry, 'id');
+            if (element.materialsSpecEntries != null) {
+              //移除原有Id;
+              element.materialsSpecEntries.forEach(item => {
+                this.$delete(item, 'id');
+                item.materialsColorEntries.forEach(colorEntry => {
+                  this.$delete(colorEntry, 'id');
+                });
               });
-            });
+            }
             this.form.entries.push(element);
           }
         });

@@ -65,11 +65,14 @@
       },
       taskIds: {
         type: Array
+      },
+      outboundOrderIds: {
+        type: Array
       }
     },
     methods: {
       onProductDetail(row) {
-        this.$router.push('/sales/production/' + id);
+        this.$router.push('/sales/productionOrder/' + row.code);
       },
       async getDetail(code) {
         const url = this.apis().getProductionOrderDetail(code);
@@ -91,6 +94,17 @@
         }
         this.orders = result;
       },
+      async getOrdersByOutboundOrderIds(ids) {
+        const url = this.apis().searchProductionByTaskIds();
+        const result = await this.$http.post(url, {
+          "outboundOrderIds": ids
+        });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.orders = result;
+      },
     },
     data() {
       return {
@@ -101,6 +115,8 @@
       //根据生产任务id查找
       if (this.taskIds != null && this.taskIds.length > 0) {
         this.getOrdersByTaskIds(this.taskIds);
+      } else if (this.outboundOrderIds != null && this.outboundOrderIds.length > 0) {
+        this.getOrdersByOutboundOrderIds(this.outboundOrderIds);
       }
     }
   }

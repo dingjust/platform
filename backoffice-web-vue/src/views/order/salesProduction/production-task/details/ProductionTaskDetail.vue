@@ -16,7 +16,7 @@
       </el-row>
       <div class="pt-2"></div>
       <receiving-details-form :slotData="formData" />
-      <div style="margin-top: 50px" v-if="formData.entries[0]!=null">
+      <!-- <div style="margin-top: 50px" v-if="formData.entries[0]!=null">
         <el-row style="margin-top:20px;">
           <sample-attach-orders-form :entries.sync="formData.entries[0].materialsSpecEntries"
             :medias.sync="formData.entries[0].medias" :isRead="true"
@@ -24,7 +24,7 @@
         </el-row>
         <accounting-sheet-btn :slotData="formData.entries[0].costOrder" :unitPrice="formData.entries[0].unitPrice"
           :isOutboundRead="isOutboundRead" />
-      </div>
+      </div> -->
       <div v-if="!isOutboundRead">
         <production-task :slotData="formData.entries[0].productionTask" ref="taskComp" v-if="formData.entries[0]!=null"
           :productionLeader="formData.productionLeader" :readOnly="true" />
