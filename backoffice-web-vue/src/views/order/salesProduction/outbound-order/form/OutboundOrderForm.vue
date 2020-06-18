@@ -130,9 +130,10 @@
             </div>
           </el-col>
         </el-row>
-        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
+        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
           <el-col :span="24">
-            <my-pay-plan-form :form="formData.payPlan"/>
+            <!-- <pay-plan-form-v4 :vPayPlan.sync="formData.payPlan" :showPreview="true"/> -->
+            <pay-plan-form-v2 :vPayPlan.sync="formData.payPlan" :showPreview="true"/>
           </el-col>
         </el-row>
         <el-row>
@@ -222,6 +223,7 @@
   import ProductionTaskSelectDialog from '../../production-task/components/ProductionTaskSelectDialog';
   import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
+  import {PayPlanFormV2} from '@/components/'
   export default {
     name: 'OutboundOrderForm',
     components: {
@@ -233,7 +235,8 @@
       MyPayPlanForm,
       MTAVAT,
       MyAddressForm,
-      SuppliersSelect
+      SuppliersSelect,
+      PayPlanFormV2
     },
     methods: {
       ...mapActions({
@@ -273,7 +276,8 @@
         this.formData.outboundContactPhone = val.phone;
         this.formData.cooperator.id = val.id;
         if (val.payPlan != null) {
-          this.setPayPlan(val.payPlan);
+          this.formData.payPlan = val.payPlan;
+          // this.setPayPlan(val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
@@ -398,46 +402,46 @@
         return res.every(item => !!item);
       },
       _onCreate (isSumbitAudit) {
-        var payPlanData = {
-          isHaveDeposit: this.formData.payPlan.isHaveDeposit,
-          payPlanType: this.formData.payPlan.payPlanType,
-          payPlanItems: []
-        };
-        if (this.formData.payPlan.isHaveDeposit) {
-          payPlanData.payPlanItems.push({
-            payPercent: this.formData.payPlan.deposit.percent * 0.01,
-            triggerEvent: this.formData.payPlan.deposit.event,
-            triggerDays: this.formData.payPlan.deposit.time,
-            moneyType: 'DEPOSIT',
-            triggerType: this.formData.payPlan.deposit.range
-          });
-        }
-        if (this.formData.payPlan.payPlanType == 'MONTHLY_SETTLEMENT') {
-          payPlanData.payPlanItems.push({
-            triggerEvent: this.formData.payPlan.monthBalance.event,
-            moneyType: 'MONTHLY_SETTLEMENT',
-            triggerDays: this.formData.payPlan.monthBalance.time
-          });
-        } else {
-          payPlanData.payPlanItems.push({
-            payPercent: this.formData.payPlan.balance1.percent * 0.01,
-            triggerEvent: this.formData.payPlan.balance1.event,
-            triggerDays: this.formData.payPlan.balance1.time,
-            moneyType: 'PHASEONE',
-            triggerType: this.formData.payPlan.balance1.range
-          });
-          if (this.formData.payPlan.payPlanType == 'PHASETWO') {
-            payPlanData.payPlanItems.push({
-              payPercent: this.formData.payPlan.balance2.percent * 0.01,
-              triggerEvent: this.formData.payPlan.balance2.event,
-              triggerDays: this.formData.payPlan.balance2.time,
-              moneyType: 'PHASETWO',
-              triggerType: this.formData.payPlan.balance2.range
-            });
-          }
-        }
+        // var payPlanData = {
+        //   isHaveDeposit: this.formData.payPlan.isHaveDeposit,
+        //   payPlanType: this.formData.payPlan.payPlanType,
+        //   payPlanItems: []
+        // };
+        // if (this.formData.payPlan.isHaveDeposit) {
+        //   payPlanData.payPlanItems.push({
+        //     payPercent: this.formData.payPlan.deposit.percent * 0.01,
+        //     triggerEvent: this.formData.payPlan.deposit.event,
+        //     triggerDays: this.formData.payPlan.deposit.time,
+        //     moneyType: 'DEPOSIT',
+        //     triggerType: this.formData.payPlan.deposit.range
+        //   });
+        // }
+        // if (this.formData.payPlan.payPlanType == 'MONTHLY_SETTLEMENT') {
+        //   payPlanData.payPlanItems.push({
+        //     triggerEvent: this.formData.payPlan.monthBalance.event,
+        //     moneyType: 'MONTHLY_SETTLEMENT',
+        //     triggerDays: this.formData.payPlan.monthBalance.time
+        //   });
+        // } else {
+        //   payPlanData.payPlanItems.push({
+        //     payPercent: this.formData.payPlan.balance1.percent * 0.01,
+        //     triggerEvent: this.formData.payPlan.balance1.event,
+        //     triggerDays: this.formData.payPlan.balance1.time,
+        //     moneyType: 'PHASEONE',
+        //     triggerType: this.formData.payPlan.balance1.range
+        //   });
+        //   if (this.formData.payPlan.payPlanType == 'PHASETWO') {
+        //     payPlanData.payPlanItems.push({
+        //       payPercent: this.formData.payPlan.balance2.percent * 0.01,
+        //       triggerEvent: this.formData.payPlan.balance2.event,
+        //       triggerDays: this.formData.payPlan.balance2.time,
+        //       moneyType: 'PHASETWO',
+        //       triggerType: this.formData.payPlan.balance2.range
+        //     });
+        //   }
+        // }
         let data = Object.assign({}, this.formData);
-        data.payPlan = payPlanData;
+        // data.payPlan = payPlanData;
 
         // 人员设置数据处理
         if (!this.formData.isApproval) {

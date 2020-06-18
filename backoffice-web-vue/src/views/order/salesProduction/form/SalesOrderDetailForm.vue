@@ -38,6 +38,17 @@
               </el-row>
             </el-col>
           </el-row>
+          <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType" v-popover:popover>
+            <h6 class="sales-plan-h6"><span class="info-title">财务</span></h6>
+          </el-row>
+          <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType" v-popover:popover>
+            <el-col :span="8">
+              <h6 class="sales-plan-h6"><span class="info-title">有无定金：</span>{{form.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="sales-plan-h6"><span class="info-title">尾款期数：</span>{{payPlanType[form.payPlan.payPlanType]}}</h6>
+            </el-col>
+          </el-row>
         </el-col>
         <el-divider direction="vertical"></el-divider>
         <el-col :span="8">
@@ -83,6 +94,9 @@
         </el-col>
       </el-row>
     </div>
+    <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
+      <pay-plan-info :form="payPlan"></pay-plan-info>
+    </el-popover>
   </div>
 </template>
 
@@ -103,6 +117,7 @@
   import PurchaseOrderInfoContract from '@/views/order/purchase/info/PurchaseOrderInfoContract';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ContractCom from '../contract/ContractCom';
+  import {PayPlanInfo} from '@/components/'
 
   export default {
     name: 'SalesOrderDetailForm',
@@ -167,7 +182,8 @@
       ContractCom,
       MTAVAT,
       PurchaseOrderInfoContract,
-      PersonnelSelection
+      PersonnelSelection,
+      PayPlanInfo
     },
     props: {
       form: {
@@ -176,6 +192,9 @@
       modifyType: {
         type: Boolean,
         default: false
+      },
+      payPlan: {
+        type: Object
       }
     },
     methods: {
@@ -191,7 +210,12 @@
             id: this.$store.getters.currentUser.id,
             name: this.$store.getters.currentUser.username
           }
-        }]
+        }],
+        payPlanType: {
+          'PHASEONE': '一期尾款',
+          'PHASETWO': '二期尾款',
+          'MONTHLY_SETTLEMENT': '月结'
+        }
       }
     },
     created() {}

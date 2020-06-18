@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-table :data="formData.variants" default-expand-all :highlight-current-row="false">
-        <el-table-column prop="specs" label="规格" min-width="100">
+        <el-table-column prop="specs" label="规格/克重" min-width="100">
           <template slot-scope="scope">
             <el-select v-model="scope.row.spec" placeholder="请选择" value-key="key" v-if="isCreate">
               <el-option
@@ -16,7 +16,7 @@
             <span v-else>{{scope.row.spec.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="color" label="颜色" min-width="90">
+        <el-table-column prop="color" label="颜色" min-width="100">
           <template slot-scope="scope">
             <el-select v-model="scope.row.color" placeholder="请选择" value-key="key" v-if="isCreate">
               <el-option
@@ -30,7 +30,21 @@
             <span v-else>{{scope.row.color.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="unit" label="单位" min-width="90">
+        <el-table-column prop="model" label="尺寸/型号" min-width="100">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.model" placeholder="请选择" value-key="key" v-if="isCreate">
+              <el-option
+                v-for="(item,index) in modelsData"
+                :key="index"
+                :label="item.name"
+                :value="item"
+                :disabled="modelDisabled(item, scope.row)">
+              </el-option>
+            </el-select>
+            <span v-else>{{scope.row.model ? scope.row.model.name : ''}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" min-width="60">
           <template slot-scope="scope">
             <span>{{getEnum('MaterialsUnit', formData.materialsUnit)}}</span>
           </template>
@@ -48,7 +62,7 @@
             <span v-else>{{scope.row.referencePrice}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="taxRate" label="税率" min-width="60">
+        <el-table-column prop="taxRate" label="税率" min-width="80">
           <template slot-scope="scope">
             <el-input :value="showFloatPercentNum(scope.row.taxRate)" @blur="onBlur(scope.row,'taxRate')"
                       @input="(val)=>onTaxInput(val,scope.row)" v-number-input.float="{ min: 0 , max: 100, decimal: 1 }" v-if="isCreate">
@@ -64,7 +78,7 @@
             <span v-else>{{scope.row.taxPrice}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="address" label="操作" min-width="120">
+        <el-table-column prop="address" label="操作" min-width="80">
           <template slot-scope="scope">
 <!--            <el-button v-if="modifyFlag && scope.$index == modifyIndex" type="text" icon="el-icon-edit"-->
 <!--                       @click="onSave(scope.row, scope.$index)">保存</el-button>-->
@@ -92,7 +106,7 @@
 
   export default {
     name: 'MaterialStyleDetailsForm',
-    props: ['formData', 'specsData', 'colorsData', 'isCreate'],
+    props: ['formData', 'specsData', 'colorsData', 'isCreate', 'modelsData'],
     methods: {
       onSave (row, index) {
         if (!row.spec) {
@@ -168,6 +182,7 @@
         const data = {
           spec: '',
           color: '',
+          model: '',
           quantity: '',
           referencePrice: '',
           taxRate: '',
@@ -223,24 +238,28 @@
         }
       },
       specDisabled (item, row) {
-        if (row.color != '') {
-          const hasThisColorRow = this.formData.variants.filter(val => val.color == row.color);
-          const hasThisSpecRow = hasThisColorRow.filter(val => val.spec == item);
+        if (row.color != '' && row.model != '') {
+          let rowList = this.formData.variants.filter(val => val.color == row.color && val.model == row.model);
+          let hasThisSpecRow = rowList.filter(val => val.spec == item);
           return hasThisSpecRow.length > 0;
         }
         return false;
-        // const arr = this.formData.variants.filter(val => val.spec == item);
-        // return arr.length > 0;
       },
       colorDisabled (item, row) {
-        if (row.spec != '') {
-          const hasThisSpecRow = this.formData.variants.filter(val => val.spec == row.spec);
-          const hasThisColorRow = hasThisSpecRow.filter(val => val.color == item);
+        if (row.spec != '' && row.model != '') {
+          let rowList = this.formData.variants.filter(val => val.spec == row.spec && val.model == row.model);
+          let hasThisColorRow = rowList.filter(val => val.color == item);
           return hasThisColorRow.length > 0;
         }
         return false;
-        // const arr = this.formData.variants.filter(val => val.color == item);
-        // return arr.length > 0;
+      },
+      modelDisabled (item, row) {
+        if (row.spec != '' && row.color != '') {
+          let rowList = this.formData.variants.filter(val => val.spec == row.spec && val.color == row.color);
+          let hasThisModelRow = rowList.filter(val => val.model == item);
+          return hasThisModelRow.length > 0;
+        }
+        return false;
       },
       initFormData () {
         this.formData.variants.forEach((item, index) => {

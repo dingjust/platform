@@ -47,31 +47,15 @@ const state = {
     isApproval: false,
     progressPlan: {},
     payPlan: {
-      payPlanItems: [],
       isHaveDeposit: false,
       payPlanType: 'PHASEONE',
-      deposit: {
-        event: 'ORDER_CONFIRMED',
-        time: 5,
-        range: 'INSIDE',
-        percent: 0.3
-      },
-      balance1: {
-        event: 'ORDER_CONFIRMED',
-        time: 5,
-        range: 'INSIDE',
-        percent: 0.3
-      },
-      balance2: {
-        event: 'ORDER_CONFIRMED',
-        time: 5,
-        range: 'INSIDE',
-        percent: 0.3
-      },
-      monthBalance: {
-        event: 'ORDER_CONFIRMED',
-        time: 5
-      }
+      payPlanItems: [{
+        moneyType: 'PHASEONE',
+        payPercent: 0.003,
+        triggerDays: 5,
+        triggerEvent: 'ORDER_CONFIRMED',
+        triggerType: 'INSIDE'
+      }]
     },
     attachments: [],
     partyAOperator: {
@@ -214,31 +198,15 @@ const actions = {
       isApproval: false,
       progressPlan: {},
       payPlan: {
-        payPlanItems: [],
         isHaveDeposit: false,
         payPlanType: 'PHASEONE',
-        deposit: {
-          event: 'ORDER_CONFIRMED',
-          time: 5,
-          range: 'INSIDE',
-          percent: 0.3
-        },
-        balance1: {
-          event: 'ORDER_CONFIRMED',
-          time: 5,
-          range: 'INSIDE',
-          percent: 0.3
-        },
-        balance2: {
-          event: 'ORDER_CONFIRMED',
-          time: 5,
-          range: 'INSIDE',
-          percent: 0.3
-        },
-        monthBalance: {
-          event: 'ORDER_CONFIRMED',
-          time: 5
-        }
+        payPlanItems: [{
+          moneyType: 'PHASEONE',
+          payPercent: 0.003,
+          triggerDays: 5,
+          triggerEvent: 'ORDER_CONFIRMED',
+          triggerType: 'INSIDE'
+        }]
       },
       attachments: [],
       partyAOperator: {

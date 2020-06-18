@@ -1,157 +1,172 @@
 <template>
   <div class="animated fadeIn">
-      <el-row type="flex" justify="space-between" align="middle">
-        <div class="material-list-title">
-          <h6>{{isCreate && !formData.id ? '添加物料' : '物料详情'}}</h6>
-        </div>
-        <el-button class="material-btn" v-if="!isCreate" @click="editMaterial">编辑物料</el-button>
+    <el-row type="flex" justify="space-between" align="middle">
+      <div class="material-list-title">
+        <h6>{{isCreate && !formData.id ? '添加物料' : '物料详情'}}</h6>
+      </div>
+      <el-button class="material-btn" v-if="!isCreate" @click="editMaterial">编辑物料</el-button>
+    </el-row>
+    <div class="pt-4"></div>
+    <el-form :model="formData" ref="form" :rules="rules" label-width="80px" label-position="right"> 
+      <el-row type="flex" style="padding-left: 20px">
+        <el-col :span="8">
+          <el-form-item label="物料类型" prop="materialsType">
+            <el-select v-model="formData.materialsType" placeholder="请选择" :disabled="!isCreate">
+              <el-option
+                v-for="item in materialsType"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>    
+        </el-col>
       </el-row>
-      <div class="pt-2"></div>
-      <el-form :model="formData" ref="form" :rules="rules">
-        <el-row class="basic-form-row" type="flex" align="top" :gutter="20">
-          <el-col :span="2">
-            <h6 class="info-input-prepend">标题<span style="color: red">*</span></h6>
-          </el-col>
-          <el-col :span="20">
-            <el-form-item prop="name">
-              <el-input v-model="formData.name" placeholder="输入物料标题" size="mini" maxlength="40" show-word-limit :disabled="!isCreate"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row class="basic-form-row" type="flex" align="top" :gutter="20">
-          <el-col :span="2">
-            <h6 class="info-input-prepend">物料编号</h6>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item prop="code">
-              <el-input v-model="formData.code" placeholder="物料编号由系统自动生成" size="mini" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="2">
-            <h6 class="info-input-prepend">物料类型<span style="color: red">*</span></h6>
-          </el-col>
-          <el-col :span="5">
-            <el-form-item prop="materialsType">
-              <el-select v-model="formData.materialsType" placeholder="请选择" :disabled="!isCreate">
-                <el-option
-                  v-for="item in materialsType"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="2">
-            <h6 class="info-input-prepend">物料单位<span style="color: red">*</span></h6>
-          </el-col>
-          <el-col :span="5">
-            <el-form-item prop="materialsUnit">
-              <el-select v-model="formData.materialsUnit" placeholder="请选择" :disabled="!isCreate">
-                <el-option
-                  v-for="item in materialsUnit"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row class="basic-form-row" type="flex" align="middle" :gutter="20">
-          <el-col :span="2">
-            <h6 class="info-image-prepend">上传图片</h6>
-          </el-col>
-          <el-col :span="20">
-              <el-form-item>
-                <images-upload class="product-images-form-upload" :slot-data="formData.images" :limit="5" :disabled="!isCreate">
-                  <template slot="picBtn" slot-scope="props" v-if="isCreate">
-                    <h6>大小不超过5M/张，且最多5张主图</h6>
-                  </template>
-                </images-upload>
-              </el-form-item>
-            <el-divider></el-divider>
-          </el-col>
-        </el-row>
-        <el-row class="basic-form-row" type="flex" align="top" :gutter="20">
-          <el-col :span="2">
-            <h6 class="info-input-prepend">物料规格<span style="color: red">*</span></h6>
-          </el-col>
-          <el-col :span="20">
-            <div class="border-container" v-if="isCreate">
-              <el-row type="flex" style="margin-bottom: 18px">
-                <h6>颜色</h6>&nbsp;&nbsp;<h6>最多支持30个颜色</h6>
-              </el-row>
-              <el-checkbox-group v-model="formData.colors" :max="colorsMax">
-                <template v-for="color in colors">
-                  <el-checkbox class="size-tag" :label="color.name" @change="((val,$event)=>colorHanleClick(val,color))" style="margin-bottom: 35px">
-                    <el-row  type="flex" style="float: left;margin-bottom: -13px;" >
-                      <div :style="{width: '13px',height: '13px',backgroundColor: color.colorCode==null?'#': color.colorCode,marginRight: '5px',align:'middle'}">
-                      </div>
-                      <h6>{{color.name}}</h6>
-                    </el-row>
-                  </el-checkbox>
-                </template>
-              </el-checkbox-group>
-              <el-row type="flex"  v-for="(color,index) in customColors" v-if="index%4 == 0">
-                <template v-for="(customColor) in customColors.slice(index,index+4)" >
-                  <el-col :span="6">
-                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
-                      <el-input v-model="customColor.name" @change="editCustomColor(customColor)" :disabled="colorDisabled(customColor)"></el-input>
-                      <el-button type="text" @click="removeCustomColor(customColor)" :disabled="colorDisabled(customColor)"> 删除</el-button>
-                    </el-row>
-                  </el-col>
-                </template>
-                <el-row type="flex" v-if="Math.floor(index/4) == Math.floor(customColors.length/4)">
-                  <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
-                </el-row>
-              </el-row>
-              <el-row type="flex" v-if="customColors.length%4 == 0">
+      <el-row type="flex" style="padding-left: 20px" align="middle">
+        <el-col :span="2">
+          <label class="el-form-item__label pic-label" >上传图片</label>
+        </el-col>
+        <el-col :span="22">
+          <images-upload class="product-images-form-upload" :slot-data="formData.images" :limit="5" :disabled="!isCreate">
+            <template slot="picBtn" v-if="isCreate">
+              <h6>大小不超过5M/张，且最多5张主图</h6>
+            </template>
+          </images-upload>
+        </el-col>
+      </el-row>
+      <el-row type="flex" style="padding-left: 20px">
+        <el-col>
+          <label class="el-form-item__label">基本信息</label>
+        </el-col>
+      </el-row>
+      <el-row type="flex" style="padding-left: 20px" :gutter="10">
+        <el-col :span="8">
+          <el-form-item label="物料名称" prop="name">
+            <el-input v-model="formData.name" placeholder="输入物料名称" maxlength="40" show-word-limit :disabled="!isCreate"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="物料编号" prop="code">
+            <el-input v-model="formData.code" placeholder="物料编号由系统自动生产" :disabled="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="物料单位" prop="materialsUnit">
+            <el-select v-model="formData.materialsUnit" placeholder="请选择" :disabled="!isCreate">
+              <el-option
+                v-for="item in materialsUnit"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" style="padding-left: 20px" :gutter="10">
+        <el-col :span="8">
+          <el-form-item label="物料幅宽">
+            <el-input v-model="formData.materialWidth" placeholder="输入物料幅宽" :disabled="!isCreate"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="物料成分">
+            <el-input v-model="formData.materialComposition" placeholder="输入物料成分" :disabled="!isCreate"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" style="padding-left: 20px">
+        <el-divider></el-divider>
+      </el-row>
+      <el-row type="flex" style="padding-left: 20px">
+        <el-col :span="2">
+          <label class="el-form-item__label pic-label" >物料规格</label>
+        </el-col>
+        <el-col :span="22">
+          <!---------------------------------- 颜色 --------------------------------------------------------------->
+          <div class="border-container" v-if="isCreate">
+            <el-row type="flex" style="margin-bottom: 18px">
+              <h6>颜色</h6>&nbsp;&nbsp;<h6>最多支持30个颜色</h6>
+            </el-row>
+            <el-checkbox-group v-model="formData.colors" :max="colorsMax">
+              <template v-for="color in colors">
+                <el-checkbox class="size-tag" :label="color.name" :key="color.id" 
+                  @change="((val,$event)=>colorHanleClick(val,color))" style="margin-bottom: 35px">
+                  <el-row  type="flex" style="float: left;margin-bottom: -13px;" >
+                    <div :style="{width: '13px',height: '13px',backgroundColor: color.colorCode==null?'#': color.colorCode,marginRight: '5px',align:'middle'}">
+                    </div>
+                    <h6>{{color.name}}</h6>
+                  </el-row>
+                </el-checkbox>
+              </template>
+            </el-checkbox-group>
+            <el-row type="flex" v-for="(color,index) in customColors" v-if="index%4 == 0">
+              <template v-for="(customColor) in customColors.slice(index,index+4)" >
+                <el-col :span="6">
+                  <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                    <el-input v-model="customColor.name" @change="editCustomColor(customColor)" :disabled="colorDisabled(customColor)"></el-input>
+                    <el-button type="text" @click="removeCustomColor(customColor)" :disabled="colorDisabled(customColor)"> 删除</el-button>
+                  </el-row>
+                </el-col>
+              </template>
+              <el-row type="flex" v-if="Math.floor(index/4) == Math.floor(customColors.length/4)">
                 <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
               </el-row>
-<!--              <el-row type="flex"  v-for="(color,index) in selectColors" v-if="index%6 == 0">-->
-<!--                <template v-for="(color) in selectColors.slice(index,index+6)">-->
-<!--                  <el-col :span="4">-->
-<!--                    <images-upload :limit="1" :slotData="color.previewImg" />-->
-<!--                    <h6 style="width: 100px;text-align: center;">{{color.name}}</h6>-->
-<!--                  </el-col>-->
-<!--                </template>-->
-<!--              </el-row>-->
-            </div>
-            <div class="border-container" style="margin-top: 10px" v-if="isCreate">
-              <el-row type="flex" style="margin-bottom: 18px">
-                <h6>规格</h6>&nbsp;&nbsp;<h6>最多支持30个规格</h6>
-              </el-row>
-              <el-row type="flex" align="middle" v-for="(specItem,index) in formData.specs" v-if="index % 4 == 0">
-                <template  v-for="(spec) in formData.specs.slice(index, index+4)">
-                  <el-col :span="6">
-                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
-                      <el-input ref="input" v-model="spec.name" @change="editSpec(spec)" :disabled="specDisabled(spec)"></el-input>
-                      <el-button type="text" @click="removeSpec(spec)" :disabled="specDisabled(spec)">删除</el-button>
-                    </el-row>
-<!--                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px" v-else>-->
-<!--                      <span class="spec_text">{{spec.name}}</span>-->
-<!--                      <el-button type="text" @click="removeSpec(spec)">删除</el-button>-->
-<!--                    </el-row>-->
-                  </el-col>
-                </template>
-              </el-row>
-              <el-row type="flex">
-                <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendSpec">+ 添加自定义规格</el-button>
-              </el-row>
-            </div>
-            <div class="border-container" style="margin-top: 10px">
-              <el-form-item prop="variants">
-                <material-style-details-form ref="materielForm" :formData="formData" :isCreate="isCreate"
-                                             :specsData="selectSpecs" :colorsData="selectColors"/>
-              </el-form-item>
-            </div>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-row type="flex" justify="center" style="margin-top: 20px">
-        <el-button v-if="isCreate" size="medium" class="material-btn" @click="onSubmit">{{formData.id ? '保存' : '创建物料'}}</el-button>
+            </el-row>
+            <el-row type="flex" v-if="customColors.length%4 == 0">
+              <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
+            </el-row>
+          </div>
+          <!---------------------------------- 规格/克重 --------------------------------------------------------------->
+          <div class="border-container" style="margin-top: 10px" v-if="isCreate">
+            <el-row type="flex" style="margin-bottom: 18px">
+              <h6>规格/克重</h6>&nbsp;&nbsp;<h6>最多支持30个规格</h6>
+            </el-row>
+            <el-row type="flex" align="middle" v-for="(specItem,index) in formData.specs" v-if="index % 4 == 0">
+              <template  v-for="(spec) in formData.specs.slice(index, index+4)">
+                <el-col :span="6">
+                  <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                    <el-input ref="input" v-model="spec.name" @change="editSpec(spec)" :disabled="specDisabled(spec)"></el-input>
+                    <el-button type="text" @click="removeSpec(spec)" :disabled="specDisabled(spec)">删除</el-button>
+                  </el-row>
+                </el-col>
+              </template>
+            </el-row>
+            <el-row type="flex">
+              <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendSpec">+ 添加自定义规格</el-button>
+            </el-row>
+          </div>
+          <!---------------------------------- 尺寸/型号 --------------------------------------------------------------->
+          <div class="border-container" style="margin-top: 10px" v-if="isCreate">
+            <el-row type="flex" style="margin-bottom: 18px">
+              <h6>尺寸/型号</h6>&nbsp;&nbsp;<h6>最多支持30个规格</h6>
+            </el-row>
+            <el-row type="flex" align="middle" v-for="(modelItem,index) in formData.models" v-if="index % 4 == 0">
+              <template  v-for="(model) in formData.models.slice(index, index+4)">
+                <el-col :span="6">
+                  <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                    <el-input ref="input" v-model="model.name" @change="editModel(model)" :disabled="modelDisabled(model)"></el-input>
+                    <el-button type="text" @click="removeModel(model)" :disabled="modelDisabled(model)">删除</el-button>
+                  </el-row>
+                </el-col>
+              </template>
+            </el-row>
+            <el-row type="flex">
+              <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendModel">+ 添加自定义规格</el-button>
+            </el-row>
+          </div>
+          <div class="border-container" style="margin-top: 10px">
+            <el-form-item prop="variants" label-width="0px">
+              <material-style-details-form ref="materielForm" :formData="formData" :isCreate="isCreate"
+                                            :specsData="selectSpecs" :colorsData="selectColors" :modelsData="selectModels"/>
+            </el-form-item>
+          </div>
+        </el-col>
       </el-row>
+    </el-form>
+    <el-row type="flex" justify="center" style="margin-top: 20px">
+      <el-button v-if="isCreate" size="medium" class="material-btn" @click="onSubmit">{{formData.id ? '保存' : '创建物料'}}</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -163,7 +178,7 @@
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
   import MaterialStyleDetailsForm from '../form/MaterialStyleDetailsForm';
   export default {
-    name: 'MaterialDetailsDialog',
+    name: 'MaterialDetailsPage',
     components: {MaterialStyleDetailsForm, ImagesUpload},
     props: {
     },
@@ -176,6 +191,9 @@
       specDisabled (spec) {
         return this.formData.variants.findIndex(item => item.spec.name === spec.name) > -1;
       },
+      modelDisabled (model) {
+        return this.formData.variants.findIndex(item => item.model.name === model.name) > -1;
+      },
       colorDisabled (color) {
         return this.formData.variants.findIndex(item => item.color.name === color.name) > -1;
       },
@@ -186,12 +204,6 @@
         this.formData.colors = this.formData.colors.map((color) => color.name);
         this.isCreate = true;
         this.returnCount();
-      },
-      specInputJ (spec) {
-        if (this.formData.specs[0].name === '' && this.formData.specs.length === 1) {
-          this.specInputShow = true;
-        }
-        return this.specInputShow && this.formData.specs.length - 1 == this.formData.specs.indexOf(spec);
       },
       async getAllColors () {
         const url = this.apis().getAllColors();
@@ -243,7 +255,8 @@
         return colors;
       },
       appendCustomColor () {
-        if (this.selectColors.length >= 30) {
+        if ((this.formData.colors.length + this.customColors.length) >= 30) {
+          this.$message.error('支持颜色已到达上限');
           return;
         }
         this.customColors.push({
@@ -292,9 +305,7 @@
       },
       editSpec (spec) {
         if (spec.name.replace(/(^s*)|(s*$)/g, '').length > 0) {
-          console.log(this.selectSpecs);
           const index = this.selectSpecs.findIndex(item => item.key === spec.key);
-          console.log(index);
           if (index > -1) {
             this.selectSpecs[index].name = spec.name;
             this.selectSpecs[index].code = null;
@@ -305,6 +316,7 @@
       },
       appendSpec () {
         if (this.formData.specs.length >= 30) {
+          this.$message.error('支持规格已到达上限');
           return;
         }
         let flag = true;
@@ -344,14 +356,57 @@
           this.selectSpecs.splice(selectIndex, 1);
         });
       },
-      specBlur (spec) {
-        const index = this.formData.specs.indexOf(spec);
-        if (this.formData.specs.length > 0) {
-          if (this.formData.specs[index].name.replace(/^\s*|\s*$/g, '').length === 0 && index > 0) {
-            this.formData.specs.splice(index, 1);
+      editModel (model) {
+        if (model.name.replace(/(^s*)|(s*$)/g, '').length > 0) {
+          const index = this.selectModels.findIndex(item => item.key === model.key);
+          if (index > -1) {
+            this.selectModels[index].name = model.name;
+            this.selectModels[index].code = null;
+          } else {
+            this.selectModels.push(model);
           }
-          this.specInputShow = false;
         }
+      },
+      appendModel () {
+        if (this.formData.models.length >= 30) {
+          this.$message.error('支持尺寸已到达上限');
+          return;
+        }
+        let flag = true;
+        if (this.formData.models.length != 0) {
+          flag = this.formData.models[this.formData.models.length - 1].name.replace(/(^s*)|(s*$)/g, '').length > 0;
+        }
+        if (!flag) {
+          this.formData.models.splice(this.formData.models.length - 1, 1);
+        }
+        const model = {
+          name: '',
+          code: '',
+          key: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36)
+        }
+        this.formData.models.push(model);
+      },
+      removeModel (model) {
+        const flag = this.formData.variants.some(val => {
+          return val.model.name == model.name;
+        })
+        if (flag) {
+          this.$message.error('此尺寸已被使用，若想删除请取消使用后继续操作');
+          return;
+        }
+        const formIndex = this.formData.models.indexOf(model);
+        if (formIndex === 0 && this.formData.models.length === 1) {
+          return;
+        }
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.formData.models.splice(formIndex, 1);
+          const selectIndex = this.selectModels.indexOf(model);
+          this.selectModels.splice(selectIndex, 1);
+        });
       },
       onSubmit () {
         this.$refs['form'].validate(valid => {
@@ -381,7 +436,7 @@
           materialsUnit: this.formData.materialsUnit,
           images: this.formData.images,
           colors: this.selectColors,
-          specs: this.formData.specs,
+          specs: this.selectSpecs,
           variants: this.formData.variants
         }
         const url = this.apis().saveMaterials();
@@ -393,10 +448,9 @@
 
         this.$message.success(this.formData.id != null ? '编辑物料成功' : '创建物料成功');
         this.saveAndEdit = true;
-        this.$emit('closeMaterialdetailsVisible');
-        // await this.$router.push({
-        //   name: '物料管理'
-        // });
+        await this.$router.push({
+          name: '物料管理'
+        });
       },
       validateField (name) {
         this.$refs.form.validateField(name);
@@ -433,7 +487,6 @@
         },
         materialsType: this.$store.state.EnumsModule.MaterialsType,
         materialsUnit: this.$store.state.EnumsModule.MaterialsUnit,
-        // isCreate: this.$route.params.isCreate != null ? this.$route.params.isCreate : true,
         isCreate: true,
         formData: '',
         value: '',
@@ -450,7 +503,8 @@
         codeSelect: 100,
         leaveCount: 0,
         saveAndEdit: false,
-        selectSpecs: []
+        selectSpecs: [],
+        selectModels: []
       }
     },
     watch: {
@@ -467,7 +521,6 @@
         handler (val) {
           if (val) {
             this.operationCount();
-            console.log(this.leaveCount);
           }
         },
         deep: true
@@ -525,8 +578,17 @@
     padding-left: 10px;
   }
 
+  .pic-label {
+    padding-left: 12px;
+    padding-bottom: 30px;
+  }
+
+  .el-divider--horizontal{
+    margin: 0px 0px 24px 12px;
+  } 
+
   .basic-form-row {
-    padding-left: 30px;
+    padding-left: 40px;
     /*margin-bottom: 20px;*/
   }
 
@@ -578,7 +640,7 @@
   }
 
   .spec_text {
-    padding-top: 5px;
+    padding-top: 16px;
     padding-right: 15px;
   }
 
