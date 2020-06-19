@@ -12,6 +12,9 @@ import MyPayPlanForm from './custom/order-form/MyPayPlanForm';
 import PayPlanFormV2 from './custom/order-form/PayPlanFormV2';
 import PayPlanInfo from '@/components/custom/order-form/PayPlanInfo'
 
+//table
+import ColorSizeTable from '@/components/custom/table/ColorSizeTable'
+
 // Custom/upload
 import PDFUpload from './custom/upload/PDFUpload';
 
@@ -111,5 +114,6 @@ export {
   AppHeader,
   Sidebar,
   Switch,
-  SideSlider
+  SideSlider,
+  ColorSizeTable
 }
