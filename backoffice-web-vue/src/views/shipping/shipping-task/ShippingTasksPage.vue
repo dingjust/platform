@@ -9,13 +9,13 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <shipping-orders-toolbar :queryFormData="queryFormData" 
+      <shipping-tasks-toolbar :queryFormData="queryFormData" 
                                 @onAdvancedSearch="onAdvancedSearch" 
                                 @onCreate="onCreate"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
           <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-            <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
+            <shipping-tasks-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -29,17 +29,17 @@
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    'ShippingOrdersModule'
+    'ShippingTasksModule'
   );
 
-  import ShippingOrdersToolbar from '@/views/shipping/shipping-order/toolbar/ShippingOrdersToolbar'
-  import ShippingOrdersList from '@/views/shipping/shipping-order/list/ShippingOrdersList'
+  import ShippingTasksToolbar from '@/views/shipping/shipping-Task/toolbar/ShippingTasksToolbar'
+  import ShippingTasksList from '@/views/shipping/shipping-Task/list/ShippingTasksList'
 
   export default {
-    name: 'ShippingOrdersPage',
+    name: 'ShippingTasksPage',
     components: {
-     ShippingOrdersToolbar,
-     ShippingOrdersList 
+     ShippingTasksToolbar,
+     ShippingTasksList 
     },
     computed: {
       ...mapGetters({
@@ -76,7 +76,7 @@
         // TODO 创建发货单
       },
       onDetail (row) {
-        this.$router.push('/shipping/orders/' + row.id);
+        this.$router.push('/shipping/tasks/' + row.id);
       },
     },
     data() {

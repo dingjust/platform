@@ -52,6 +52,8 @@ import {
   ContractModule,
   ContractTemplateModule,
   ContractSealModule,
+  // shipping(发货)
+  ShippingTasksModule,
   // 产能
   CapacityModule,
   // 报表
@@ -142,6 +144,8 @@ export default new Vuex.Store({
     ContractModule,
     ContractTemplateModule,
     ContractSealModule,
+    // shipping(发货)
+    ShippingTasksModule,
     // 产能
     CapacityModule,
     // 报表

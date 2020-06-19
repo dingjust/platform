@@ -37,7 +37,8 @@
             <span slot="label">
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
-              <cooperator-search-result-list :page="page" @onDetails="onDetails" @onDelete="onDelete" @onEdit="onEdit"/>
+              <cooperator-search-result-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onSearch"
+              @onDetails="onDetails" @onDelete="onDelete" @onEdit="onEdit"/>
             </el-tab-pane>
           </template>
         </el-tabs>
