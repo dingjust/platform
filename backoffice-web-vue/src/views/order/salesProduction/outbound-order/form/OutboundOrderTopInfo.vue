@@ -34,6 +34,19 @@
             <h6>送货地址：{{slotData.entries[0].shippingAddress.details}}</h6>
           </el-col>
         </el-row>
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start">
+          <el-col :span="24">
+            <h6>财务</h6>
+          </el-col>
+        </el-row>
+        <el-row class="info-basic-row" type="flex" align="middle" justify="start" v-popover:popover>
+          <el-col :span="9">
+            <h6>有无定金：{{slotData.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
+          </el-col>
+          <el-col :span="9">
+            <h6>尾款期数：{{payPlanType[slotData.payPlan.payPlanType]}}</h6>
+          </el-col>
+        </el-row>
       </el-col>
       <el-divider direction="vertical"></el-divider>
       <el-col :span="7">
@@ -89,17 +102,23 @@
         </el-row>
       </el-col>
     </el-row>
+    <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
+      <pay-plan-info :form="payPlan"></pay-plan-info>
+    </el-popover>
   </div>
 </template>
 
 <script>
   import ContractCom from '../../contract/ContractCom';
+  import {PayPlanInfo} from '@/components/'
+
   export default {
     name: 'OutboundOrderTopInfo',
     components: {
-      ContractCom
+      ContractCom,
+      PayPlanInfo
     },
-    props: ['slotData'],
+    props: ['slotData', 'payPlan'],
     computed: {
       totalQuantity: function () {
         let count = 0
@@ -135,7 +154,12 @@
     methods: {},
     data() {
       return {
-        currentUser: this.$store.getters.currentUser
+        currentUser: this.$store.getters.currentUser,
+        payPlanType: {
+          'PHASEONE': '一期尾款',
+          'PHASETWO': '二期尾款',
+          'MONTHLY_SETTLEMENT': '月结'
+        }
       }
     },
     created() {}

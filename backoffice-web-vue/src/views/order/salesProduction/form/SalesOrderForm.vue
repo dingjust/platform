@@ -79,10 +79,14 @@
           <!--            <el-button class="contract-btn">添加合同</el-button>-->
           <!--          </el-col>-->
         </el-row>
-        <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" />
+        <el-row type="flex" style="padding-left: 20px">
+          <el-col :span="24">
+            <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" />
+          </el-col>
+        </el-row>
         <el-row type="flex" justify="space-between" align="middle">
           <el-col :span="4">
-            <div>
+            <div style="padding-left: 10px">
               <h6>人员设置</h6>
             </div>
           </el-col>
@@ -153,6 +157,7 @@
   import PayPlanFormV2 from '../../../../components/custom/order-form/PayPlanFormV2';
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
+  import {PayPlanFormV4} from '@/components/'
 
   import {
     getEntryTotalAmount,
@@ -167,7 +172,8 @@
       MTAVAT,
       SupplierSelect,
       SalesProductionTabs,
-      PersonnelSelection
+      PersonnelSelection,
+      PayPlanFormV4
     },
     computed: {
       // 根据订单类型，加工类型判断是否需要物料清单等

@@ -15,7 +15,7 @@
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
-        <sales-order-detail-form :form="formData" :modifyType="modifyType" />
+        <sales-order-detail-form :form="formData" :modifyType="modifyType" :payPlan="payPlan"/>
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
@@ -167,6 +167,40 @@
         this.formData = Object.assign({
           approvers: [null]
         }, result.data);
+
+        this.setPayPlan(result.data.payPlan);
+      },
+      setPayPlan (payPlan) {
+        this.payPlan.name = payPlan.name;
+        this.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
+        this.payPlan.payPlanType = payPlan.payPlanType;
+        payPlan.payPlanItems.forEach((item) => {
+          switch (item.moneyType) {
+            case 'PHASEONE':
+              this.payPlan.balance1.percent = item.payPercent * 100;
+              this.payPlan.balance1.event = item.triggerEvent;
+              this.payPlan.balance1.time = item.triggerDays;
+              this.payPlan.balance1.range = item.triggerType;
+              break;
+            case 'PHASETWO':
+              this.payPlan.balance2.percent = item.payPercent * 100;
+              this.payPlan.balance2.event = item.triggerEvent;
+              this.payPlan.balance2.time = item.triggerDays;
+              this.payPlan.balance2.range = item.triggerType;
+              break;
+            case 'DEPOSIT':
+              this.payPlan.deposit.percent = item.payPercent * 100;
+              this.payPlan.deposit.event = item.triggerEvent;
+              this.payPlan.deposit.time = item.triggerDays;
+              this.payPlan.deposit.range = item.triggerType;
+              break;
+            case 'MONTHLY_SETTLEMENT':
+              this.payPlan.monthBalance.event = item.triggerEvent;
+              this.payPlan.monthBalance.time = item.triggerDays;
+              break;
+          }
+        });
+        this.$set(this.payPlan,'1',1);
       },
       onReturn() {
 
@@ -247,6 +281,12 @@
         salesProductAppendVisible: false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
+        payPlan: {
+          deposit: {},
+          balance1: {},
+          balance2: {},
+          monthBalance: {}
+        },
         formData: {
           code: '',
           entries: [],
@@ -254,6 +294,7 @@
           id: '',
           status: '',
           user: {},
+          payPlan: {},
           quality: '',
           seller: {},
           approvers: [null],

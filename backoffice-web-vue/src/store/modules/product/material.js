@@ -18,9 +18,18 @@ const state = {
     code: '',
     materialsType: '',
     materialsUnit: '',
+    materialWidth: '',
+    materialComposition: '',
     images: [],
     colors: [],
     specs: [
+      {
+        code: '',
+        name: '',
+        key: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36)
+      }
+    ],
+    models: [
       {
         code: '',
         name: '',

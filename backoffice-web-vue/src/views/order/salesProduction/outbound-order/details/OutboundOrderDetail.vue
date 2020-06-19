@@ -8,7 +8,7 @@
           </div>
         </el-col>
       </el-row>
-      <outbound-order-top-info :slotData="formData" />
+      <outbound-order-top-info :slotData="formData" :payPlan="payPlan"/>
       <outbound-order-center-table :slot-data="formData" />
       <el-row class="basic-form-row" type="flex" align="middle">
         <h6>备注及附件</h6>
@@ -90,6 +90,39 @@
           return;
         }
         this.$store.state.OutboundOrderModule.formData = Object.assign({}, result);
+        this.setPayPlan(result.payPlan);
+      },
+      setPayPlan (payPlan) {
+        this.payPlan.name = payPlan.name;
+        this.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
+        this.payPlan.payPlanType = payPlan.payPlanType;
+        payPlan.payPlanItems.forEach((item) => {
+          switch (item.moneyType) {
+            case 'PHASEONE':
+              this.payPlan.balance1.percent = item.payPercent * 100;
+              this.payPlan.balance1.event = item.triggerEvent;
+              this.payPlan.balance1.time = item.triggerDays;
+              this.payPlan.balance1.range = item.triggerType;
+              break;
+            case 'PHASETWO':
+              this.payPlan.balance2.percent = item.payPercent * 100;
+              this.payPlan.balance2.event = item.triggerEvent;
+              this.payPlan.balance2.time = item.triggerDays;
+              this.payPlan.balance2.range = item.triggerType;
+              break;
+            case 'DEPOSIT':
+              this.payPlan.deposit.percent = item.payPercent * 100;
+              this.payPlan.deposit.event = item.triggerEvent;
+              this.payPlan.deposit.time = item.triggerDays;
+              this.payPlan.deposit.range = item.triggerType;
+              break;
+            case 'MONTHLY_SETTLEMENT':
+              this.payPlan.monthBalance.event = item.triggerEvent;
+              this.payPlan.monthBalance.time = item.triggerDays;
+              break;
+          }
+        });
+        this.$set(this.payPlan,'1',1);
       },
       async onCancel() {
         const url = this.apis().cancelOutboundOrder(this.formData.code);
@@ -127,7 +160,13 @@
     },
     data() {
       return {
-        uniqueCodeFormVisible: false
+        uniqueCodeFormVisible: false,
+        payPlan: {
+          deposit: {},
+          balance1: {},
+          balance2: {},
+          monthBalance: {}
+        }
       }
     },
     created() {

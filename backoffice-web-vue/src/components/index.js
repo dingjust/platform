@@ -10,6 +10,7 @@ import MTAVAT from './custom/order-form/MTAVAT';
 import MyAddressForm from './custom/order-form/MyAddressForm';
 import MyPayPlanForm from './custom/order-form/MyPayPlanForm';
 import PayPlanFormV2 from './custom/order-form/PayPlanFormV2';
+import PayPlanInfo from '@/components/custom/order-form/PayPlanInfo'
 
 // Custom/upload
 import PDFUpload from './custom/upload/PDFUpload';
@@ -69,6 +70,7 @@ export {
   MyAddressForm,
   MyPayPlanForm,
   PayPlanFormV2,
+  PayPlanInfo,
   PDFUpload,
   AddressSelect,
   ApprovalStatus,
