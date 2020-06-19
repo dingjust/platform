@@ -693,7 +693,37 @@ const router = new Router({
             //   component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/template/contractTemplate')
             // }
           ]
-        }
+        },
+        {
+          path: 'shipping',
+          redirect: '/shipping/orders',
+          name: '发货',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [{
+            path: 'orders',
+            name: '发货单',
+            component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
+          }, ]
+        },
+        {
+          path: 'receipt',
+          redirect: '/receipt/orders',
+          name: '收货',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [{
+            path: 'orders',
+            name: '收货单',
+            component: () => import( /* webpackChunkName: 'shipping' */ '@/views/receipt/receipt-order/ReceiptOrdersPage')
+          }, ]
+        },
       ]
     },
     {

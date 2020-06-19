@@ -90,6 +90,24 @@ export default {
       }]
     },
     {
+      name: '发货管理',
+      url: '/shipping',
+      icon: 'el-icon-box',
+      children: [{
+        name: '发货单',
+        url: '/shipping/orders',
+      }]
+    },
+    {
+      name: '收货管理',
+      url: '/receipt',
+      icon: 'el-icon-receiving',
+      children: [{
+        name: '收货单',
+        url: '/receipt/orders',
+      }]
+    },
+    {
       name: '资料中心',
       url: '/product',
       icon: 'el-icon-tickets',
