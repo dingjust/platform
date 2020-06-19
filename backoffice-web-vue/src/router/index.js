@@ -715,17 +715,16 @@ const router = new Router({
               props: true,
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/details/ShippingTasksDetail')
             }, 
-            // {
-            //   path: 'orders',
-            //   name: '发货单',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
-            // }, 
-            // {
-            //   path: 'orders/:id',
-            //   name: '创建发货单',
-            //   props: true,
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/details/ShippingOrdersDetail')
-            // }, 
+            {
+              path: 'orders',
+              name: '发货单',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
+            },
+            {
+              path: 'create/orders',
+              name: '发货单',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/form/ShippingOrdersForm')
+            }
           ]
         },
         {

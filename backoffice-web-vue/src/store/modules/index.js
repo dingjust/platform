@@ -55,6 +55,7 @@ import ContractSealModule from './contract/contractSeal'
 
 // shipping(发货)
 import ShippingTasksModule from './shipping/shipping-tasks'
+import ShippingOrdersModule from './shipping/shipping-orders'
 
 // 产能
 import CapacityModule from './capacity/capacity'
@@ -121,6 +122,7 @@ export {
   ContractSealModule,
   // shipping(发货)
   ShippingTasksModule,
+  ShippingOrdersModule,
   // 产能
   CapacityModule,
   // 报表

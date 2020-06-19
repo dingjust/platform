@@ -90,6 +90,9 @@ export default {
       url: '/shipping',
       icon: 'el-icon-box',
       children: [{
+        name: '发货任务',
+        url: '/shipping/tasks',
+      }, {
         name: '发货单',
         url: '/shipping/orders',
       }]
