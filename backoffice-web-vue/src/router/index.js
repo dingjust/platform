@@ -703,11 +703,30 @@ const router = new Router({
               return c('router-view');
             }
           },
-          children: [{
-            path: 'orders',
-            name: '发货单',
-            component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
-          }, ]
+          children: [
+            {
+              path: 'tasks',
+              name: '发货任务列表',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
+            }, 
+            {
+              path: 'tasks/:id',
+              name: '创建发货单',
+              props: true,
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/details/ShippingTasksDetail')
+            }, 
+            // {
+            //   path: 'orders',
+            //   name: '发货单',
+            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
+            // }, 
+            // {
+            //   path: 'orders/:id',
+            //   name: '创建发货单',
+            //   props: true,
+            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/details/ShippingOrdersDetail')
+            // }, 
+          ]
         },
         {
           path: 'receipt',
