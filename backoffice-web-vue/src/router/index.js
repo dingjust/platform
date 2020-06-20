@@ -703,18 +703,22 @@ const router = new Router({
               return c('router-view');
             }
           },
-          children: [
-            {
+          children: [{
               path: 'tasks',
-              name: '任务列表',
+              name: '收发任务列表',
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
-            }, 
+            },
             {
               path: 'tasks/:id',
               name: '任务详情',
               props: true,
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/details/ShippingTasksDetail')
-            }, 
+            },
+            {
+              path: 'shipping-receipt-sheet',
+              name: '发货收发货列表',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
+            },
             {
               path: 'orders',
               name: '发货单',
@@ -742,8 +746,31 @@ const router = new Router({
             }
           },
           children: [{
+            path: 'tasks',
+            name: '收发任务列表',
+            component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
+          }, {
+            path: 'shipping-receipt-sheet',
+            name: '收货收发货列表',
+            component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
+          }, {
             path: 'orders',
             name: '收货单',
+            component: () => import( /* webpackChunkName: 'shipping' */ '@/views/receipt/receipt-order/ReceiptOrdersPage')
+          }, ]
+        },
+        {
+          path: 'returned',
+          redirect: '/returned/orders',
+          name: '退货',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [{
+            path: 'orders',
+            name: '退货单',
             component: () => import( /* webpackChunkName: 'shipping' */ '@/views/receipt/receipt-order/ReceiptOrdersPage')
           }, ]
         },

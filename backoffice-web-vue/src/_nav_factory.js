@@ -90,23 +90,26 @@ export default {
       }]
     },
     {
-      name: '发货管理',
+      name: '订单发货',
       url: '/shipping',
       icon: 'el-icon-box',
       children: [{
-        name: '发货任务',
+        name: '收发任务单',
         url: '/shipping/tasks',
       }, {
-        name: '发货单',
+        name: '收发货列表',
         url: '/shipping/orders',
       }]
     },
     {
-      name: '收货管理',
+      name: '外发收货',
       url: '/receipt',
       icon: 'el-icon-receiving',
       children: [{
-        name: '收货单',
+        name: '收发任务单',
+        url: '/receipt/tasks',
+      }, {
+        name: '收发货列表',
         url: '/receipt/orders',
       }]
     },
