@@ -25,7 +25,8 @@
               </template>
               <template v-else>
                 <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="1"
-                  :disabled="readOnly" v-model="getEntryByColorSize(color, size).quantity">
+                  v-number-input.float="{ min: 0,decimal:0}" :disabled="readOnly"
+                  v-model="getEntryByColorSize(color, size).quantity">
                 </el-input>
               </template>
             </td>

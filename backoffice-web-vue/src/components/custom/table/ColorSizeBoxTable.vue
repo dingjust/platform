@@ -3,7 +3,7 @@
  * @fileName: ColorSizeBoxTable.vue 
  * @author: yj 
  * @date: 2020-06-19 15:16:18
- * @version: V1.0.0 
+ * @version: V1.0.0  
 !-->
 <template>
   <div>
@@ -19,8 +19,8 @@
       </tr>
       <template v-for="(entry,entryIndex) in data">
         <template v-for="(color,colorIndex) in colors">
-          <tr :key="'entry'+entryIndex+'color'+colorIndex">
-            <td v-if="colorIndex==0" :rowspan="colors.length">
+          <tr :key="'entry'+entryIndex+'color'+colorIndex" v-if="readOnly?countColorsAmount(color,entryIndex)!=0:true">
+            <td v-if="colorIndex==0" :rowspan="getRowspanLength(entryIndex)">
               <el-row type="flex" justify="center">
                 <div class="index-container">
                   <el-row type="flex" justify="center" align="middle">
@@ -78,7 +78,7 @@
   export default {
     name: 'ColorSizeBoxTable',
     props: {
-      data: {
+      vdata: {
         type: Array,
         default: () => {
           return [];
@@ -132,12 +132,14 @@
       countTotalAmount: function () {
         var amount = 0;
         this.data.forEach(entry => {
-          entry.forEach(item => {
-            let num = parseFloat(item.quantity);
-            if (!Number.isNaN(num)) {
-              amount += num;
-            }
-          });
+          if (entry != null) {
+            entry.forEach(item => {
+              let num = parseFloat(item.quantity);
+              if (!Number.isNaN(num)) {
+                amount += num;
+              }
+            });
+          }
         });
         return amount;
       },
@@ -196,6 +198,22 @@
       getColspanLength(size) {
         return size + 1;
       },
+      //计算行合并值
+      getRowspanLength(index) {
+        //若只读则省略合计为0的颜色行
+        if (this.readOnly) {
+          //先计算该entry忽略颜色行的值
+          let num = 0;
+          this.colors.forEach(color => {
+            if (this.countColorsAmount(color, index) == 0) {
+              num++;
+            }
+          });
+          return this.colors.length - num;
+        } else {
+          return this.colors.length;
+        }
+      },
       addRow() {
         let newEntry = this.colorSizeEntries.map(entry => {
           return {
@@ -204,23 +222,35 @@
             quantity: ''
           };
         });
-        this.data.push(newEntry);
+        // this.data.push(newEntry);                
+        // this.$set(this.data[0],'1','1');
+        this.$set(this.data, this.data.length, newEntry);
       },
       onDeleteRow(entryIndex) {
         this.data.splice(entryIndex, 1);
       }
     },
-    created() {},
+    created() {
+      if (this.vdata.length != 0) {
+        Object.assign(this.data, this.vdata);
+      }
+    },
     watch: {
       colorSizeEntries: function (n, o) {
         if (this.data.length == 0) {
           this.addRow();
         }
       },
+      data: function (newVal, oldVal) {
+        this.$emit("update:vdata", newVal);
+      },
+      vdata: function (newVal, oldVal) {
+        this.data = newVal;
+      },
     },
     data() {
       return {
-
+        data: []
       }
     }
   }
