@@ -49,7 +49,7 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="24">
-          <shipping-tasks-orders-list :formData="formData"/>
+          <shipping-tasks-orders-list :formData="formData" @onCreate="onCreate"/>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
@@ -85,6 +85,16 @@
           return;
         }
         this.formData = result.data;
+      },
+      onCreate () {
+        // TODO 整理需要传递的数据
+        let taskData = this.formData;
+        this.$router.push({
+          name: '创建发货单',
+          params: {
+            taskData: taskData
+          }
+        });
       },
       onFinish () {
         this.$confirm('确认发货完结后，不能再创建发货单了，表示改发货任务完结，是否确认该操作。', '提示', {

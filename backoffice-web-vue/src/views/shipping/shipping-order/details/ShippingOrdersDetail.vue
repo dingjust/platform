@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="4">
           <div class="title">
-            <h6>创建发货单</h6>
+            <h6>发货单详情</h6>
           </div>
         </el-col>
       </el-row>
@@ -82,11 +82,8 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="24">
-            <color-size-box-table :data="[]" :colorSizeEntries="[]"/>
+            <color-size-box-table :data="[]" :colorSizeEntries="[]" :readOnly="true"/>
           </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-          <el-button class="sumbit-btn" @click="onCreate">确认创建</el-button>
         </el-row>
       </el-form>
     </el-card>
@@ -96,13 +93,17 @@
 <script>
   import {ColorSizeBoxTable} from '@/components/'
   export default {
-    name: 'ShippingOrdersPage',
+    name: 'ShippingOrdersDetail',
+    props: ['id'],
     components: {
       ColorSizeBoxTable
     },
     computed: {
     },
     methods: {
+      async getDetail () {
+        // TODO 获取发货单详情
+      },
       async getCarriers() {
         const url = this.apis().getCarriers();
         const result = await this.$http.get(url);
@@ -117,10 +118,6 @@
           this.formData.carrier = '';
           this.formData.deliverCode = '';
         }
-      },
-      onCreate () {
-        // TODO 创建发货单
-        this.$router.go(-1);
       }
     },
     data() {
@@ -134,9 +131,7 @@
       }
     },
     created() {
-      if (this.$route.params.taskData) {
-        this.taskData = this.$route.params.taskData;
-      }
+      this.getDetail();
       this.getCarriers();
     },
     destroyed() {

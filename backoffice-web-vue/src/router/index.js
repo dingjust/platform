@@ -706,12 +706,12 @@ const router = new Router({
           children: [
             {
               path: 'tasks',
-              name: '发货任务列表',
+              name: '任务列表',
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
             }, 
             {
               path: 'tasks/:id',
-              name: '创建发货单',
+              name: '任务详情',
               props: true,
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/details/ShippingTasksDetail')
             }, 
@@ -721,8 +721,13 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
             },
             {
+              path: 'orders/:id',
+              name: '发货单详情',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/details/ShippingOrdersDetail')
+            },
+            {
               path: 'create/orders',
-              name: '发货单',
+              name: '创建发货单',
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/form/ShippingOrdersForm')
             }
           ]

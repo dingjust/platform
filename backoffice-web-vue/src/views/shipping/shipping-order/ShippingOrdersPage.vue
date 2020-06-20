@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="4">
           <div class="title">
-            <h6>发货列表</h6>
+            <h6>发货单列表</h6>
           </div>
         </el-col>
       </el-row>
@@ -88,17 +88,25 @@
             name: '全部'
           },
           {
-            code: 'PENDING_DELIVERY',
+            code: '1',
             name: '待发货'
           },
           {
-            code: 'SHIPPED',
-            name: '已发货'
+            code: '2',
+            name: '已收货'
           },
           {
-            code: 'COMPLETED',
-            name: '已完成'
+            code: '3',
+            name: '待退货'
           },
+          {
+            code: '4',
+            name: '退货待收'
+          },
+          {
+            code: '5',
+            name: '退货已收'
+          }
         ],
         queryFormData: {
           keyword: '',

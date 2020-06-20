@@ -34,7 +34,7 @@
     },
     methods: {
       onCreate () {
-        this.$router.push('/shipping/create/orders');
+        this.$emit('onCreate');
       }
     },
     data () {
