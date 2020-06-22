@@ -1,22 +1,30 @@
 <template>
-  <div class="animated fadeIn">
-      <el-row>
-        <el-col :span="4">
-          <div class="title">
-            <h6>收货单列表</h6>
-          </div>
-        </el-col>
-      </el-row>
-      <div class="pt-2"></div>
-      <receipt-orders-toolbar :queryFormData="queryFormData" 
-                                @onAdvancedSearch="onAdvancedSearch"/>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-            <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
-          </el-tab-pane>
-        </template>
-      </el-tabs>
+  <div class="receipt-orders-page">
+    <el-row>
+      <el-col :span="4">
+        <div class="title">
+          <h6>收货单列表</h6>
+        </div>
+      </el-col>
+    </el-row>
+    <div class="pt-2"></div>
+    <receipt-orders-toolbar :queryFormData="queryFormData" 
+                              @onAdvancedSearch="onAdvancedSearch"/>
+    <el-row type="flex" justify="space-between" align="middle">
+      <el-col :span="22">
+        <h6 style="color: #F56C6C;margin-bottom: 0px">{{this.tips}}</h6>
+      </el-col>
+      <el-col :span="2">
+        <el-button class="check-btn" v-if="canCheck" @click="onCheck">核验</el-button>
+      </el-col>
+    </el-row>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <template v-for="item in statuses">
+        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
+        </el-tab-pane>
+      </template>
+    </el-tabs>
   </div>
 </template>
 
@@ -43,7 +51,11 @@
         keyword: 'keyword',
         page: 'page',
         formData: 'formData'
-      })
+      }),
+      canCheck: function () {
+        // TODO 判断是否是发货方
+        return true;
+      }
     },
     methods: {
       ...mapActions({
@@ -73,6 +85,9 @@
         // TODO 发货单详情
         this.$router.push('/receipt/orders/' + row.id);
       },
+      onCheck () {
+        // TODO 核验
+      }
     },
     data() {
       return {
@@ -84,23 +99,19 @@
           },
           {
             code: '1',
-            name: '待发货'
+            name: '待核验'
           },
           {
             code: '2',
-            name: '已收货'
+            name: '复议中'
           },
           {
             code: '3',
-            name: '待退货'
+            name: '待对账'
           },
           {
             code: '4',
-            name: '退货待收'
-          },
-          {
-            code: '5',
-            name: '退货已收'
+            name: '已对账'
           }
         ],
         queryFormData: {
@@ -110,7 +121,8 @@
           creationtimeStart: '',
           creationtimeEnd: '',
           status: ''
-        }
+        },
+        tips: '注明：核验时间为收货单创建之日起5天内完成，若5天内没有操作收货单核验，收货单将自动完成核验。核验后的收货单不能修改。'
       }
     },
     created() {
@@ -129,4 +141,13 @@
     padding-left: 10px;
   }
 
+  .check-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+  }
+
+  .receipt-orders-page >>> .el-form-item {
+    margin-bottom: 0px;
+  }
 </style>
