@@ -45,7 +45,7 @@
 
 <script>
   export default {
-    name: 'ShippingTasksList',
+    name: 'ReceiptOrdersList',
     props: ['page'],
     components: {
 

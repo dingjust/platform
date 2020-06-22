@@ -709,37 +709,37 @@ const router = new Router({
             }
           },
           children: [
-            // {
-            //   path: 'tasks',
-            //   name: '收发任务列表',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-task/ShippingTasksPage')
-            // },
-            // {
-            //   path: 'tasks/:id',
-            //   name: '任务详情',
-            //   props: true,
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/details/ShippingTasksDetail')
-            // },
-            // {
-            //   path: 'shipping-receipt-sheet',
-            //   name: '发货收发货列表',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-task/page/shipping/ShippingTasksPage')
-            // },
+            {
+              path: 'tasks',
+              name: '收发任务列表',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/shipping/ShippingPage')
+            },
+            {
+              path: 'tasks/:id',
+              name: '任务详情',
+              props: true,
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-task/details/ShippingTasksDetail')
+            },
+            {
+              path: 'create/orders',
+              name: '创建发货单',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-order/form/ShippingOrdersForm')
+            },
+            {
+              path: 'orders/:id',
+              name: '发货单详情',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-order/details/ShippingOrdersDetail')
+            },
+            {
+              path: 'shipping-receipt-sheet',
+              name: '发货收发货列表',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-receipt-sheet/ShippingReceiptPage')
+            },
             // {
             //   path: 'orders',
             //   name: '发货单',
             //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
             // },
-            // {
-            //   path: 'orders/:id',
-            //   name: '发货单详情',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/details/ShippingOrdersDetail')
-            // },
-            // {
-            //   path: 'create/orders',
-            //   name: '创建发货单',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/form/ShippingOrdersForm')
-            // }
           ]
         },
         {
@@ -752,20 +752,21 @@ const router = new Router({
             }
           },
           children: [
-            //   {
-            //   path: 'tasks',
-            //   name: '收发任务列表',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
-            // }, {
-            //   path: 'shipping-receipt-sheet',
-            //   name: '收货收发货列表',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
-            // }, {
-            //   path: 'orders',
-            //   name: '收货单',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/receipt/receipt-order/ReceiptOrdersPage')
-            // }, 
-          ]
+            {
+              path: 'tasks',
+              name: '收发任务列表',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/receipt/ReceiptPage')
+            },
+          // {
+          //   path: 'shipping-receipt-sheet',
+          //   name: '收货收发货列表',
+          //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-task/ShippingTasksPage')
+          // }, {
+          //   path: 'orders',
+          //   name: '收货单',
+          //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/receipt/receipt-order/ReceiptOrdersPage')
+          // }, 
+        ]
         },
         {
           path: 'returned',
@@ -777,12 +778,12 @@ const router = new Router({
             }
           },
           children: [
-            //   {
-            //   path: 'orders',
-            //   name: '退货单',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/receipt/receipt-order/ReceiptOrdersPage')
-            // },
-          ]
+          //   {
+          //   path: 'orders',
+          //   name: '退货单',
+          //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/receipt/receipt-order/ReceiptOrdersPage')
+          // },
+         ]
         },
       ]
     },

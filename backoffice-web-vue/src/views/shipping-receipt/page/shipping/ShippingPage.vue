@@ -4,21 +4,13 @@
       <el-row>
         <el-col :span="4">
           <div class="title">
-            <h6>发货列表</h6>
+            <h6>收发任务</h6>
           </div>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <shipping-tasks-toolbar :queryFormData="queryFormData" 
-                                @onAdvancedSearch="onAdvancedSearch" 
-                                @onCreate="onCreate"/>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-            <shipping-tasks-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
-          </el-tab-pane>
-        </template>
-      </el-tabs>
+      <shipping-tasks-page :page="page" :queryFormData="queryFormData" 
+                            @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
     </el-card>
   </div>
 </template>
@@ -32,14 +24,11 @@
     'ShippingTasksModule'
   );
 
-  import ShippingTasksToolbar from '@/views/shipping/shipping-Task/toolbar/ShippingTasksToolbar'
-  import ShippingTasksList from '@/views/shipping/shipping-Task/list/ShippingTasksList'
-
+  import ShippingTasksPage from '../../shipping-task/ShippingTasksPage'
   export default {
-    name: 'ShippingTasksPage',
+    name: 'ShippingPage',
     components: {
-     ShippingTasksToolbar,
-     ShippingTasksList 
+      ShippingTasksPage
     },
     computed: {
       ...mapGetters({
@@ -54,6 +43,7 @@
         searchAdvanced: 'searchAdvanced'
       }),
       onSearch (page, size) {
+        // TODO 查询自身的收发任务
         const keyword = this.keyword;
         const url = this.apis().getProductionTaskList();
         this.search({
@@ -64,42 +54,14 @@
         });
       },
       onAdvancedSearch (page, size) {
+        // TODO 查询自身的收发任务
         const query = this.queryFormData;
         const url = this.apis().getProductionTaskList();
         this.searchAdvanced({url, query, page, size});
-      },
-      handleClick (tab, event) {
-        this.queryFormData.status = tab.name;
-        this.onAdvancedSearch(0, 10);
-      },
-      onCreate () {
-        // TODO 创建发货单
-      },
-      onDetail (row) {
-        this.$router.push('/shipping/tasks/' + row.id);
-      },
+      }
     },
     data() {
       return {
-        activeName: '',
-        statuses: [
-          {
-            code: '',
-            name: '全部'
-          },
-          {
-            code: 'PENDING_DELIVERY',
-            name: '待发货'
-          },
-          {
-            code: 'SHIPPED',
-            name: '已发货'
-          },
-          {
-            code: 'COMPLETED',
-            name: '已完成'
-          },
-        ],
         queryFormData: {
           keyword: '',
           productionLeaderName: '',

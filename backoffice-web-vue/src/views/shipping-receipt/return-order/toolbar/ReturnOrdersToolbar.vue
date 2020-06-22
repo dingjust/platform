@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="return-order-container">
     <el-form :inline="true">
       <el-row type="flex" justify="space-between">
         <el-col :span="24">
@@ -35,7 +35,7 @@
 
 <script>
   export default {
-    name: 'ShippingOrdersToolbar',
+    name: 'ReturnOrdersToolbar',
     props: ['queryFormData'],
     components: {
 
@@ -85,7 +85,7 @@
     background-color: #ffd60c;
   }
 
-  /deep/ .el-date-editor .el-range-separator {
+ .return-order-container /deep/ .el-date-editor .el-range-separator {
     width: 12%;
   }
 </style>

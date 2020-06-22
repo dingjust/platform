@@ -55,9 +55,11 @@ import ContractModule from './contract/contract';
 import ContractTemplateModule from './contract/contractTemplate'
 import ContractSealModule from './contract/contractSeal'
 
-// shipping(发货)
-import ShippingTasksModule from './shipping/shipping-tasks'
-import ShippingOrdersModule from './shipping/shipping-orders'
+// shipping-receipt
+import ShippingTasksModule from './shipping-receipt/shipping-tasks'
+import ShippingOrdersModule from './shipping-receipt/shipping-orders'
+import ReceiptOrdersModule from './shipping-receipt/receipt-orders'
+import ReturnOrdersModule from './shipping-receipt/return-orders'
 
 // 产能
 import CapacityModule from './capacity/capacity'
@@ -123,9 +125,11 @@ export {
   ContractModule,
   ContractTemplateModule,
   ContractSealModule,
-  // shipping(发货)
+  // shipping-receipt
   ShippingTasksModule,
   ShippingOrdersModule,
+  ReceiptOrdersModule,
+  ReturnOrdersModule,
   // 产能
   CapacityModule,
   // 报表

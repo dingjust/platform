@@ -4,18 +4,18 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="24">
           <el-form-item label="订单信息">
-            <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 130px"></el-input>
+            <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 180px"></el-input>
           </el-form-item>
           <el-form-item label="负责人">
-            <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 120px"></el-input>
+            <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 130px"></el-input>
           </el-form-item>
           <el-form-item label="合作商">
-            <el-input placeholder="输入合作商名称" v-model="queryFormData.operatorName" style="width: 120px"></el-input>
+            <el-input placeholder="输入合作商名称" v-model="queryFormData.operatorName" style="width: 130px"></el-input>
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
               v-model="dateArr"
-              style="width: 215px"
+              style="width: 240px"
               type="daterange"
               value-format="timestamp"
               range-separator="至"
@@ -35,7 +35,7 @@
 
 <script>
   export default {
-    name: 'ShippingOrdersToolbar',
+    name: 'ShippingReceiptToolbar',
     props: ['queryFormData'],
     components: {
 
@@ -87,5 +87,9 @@
 
   /deep/ .el-date-editor .el-range-separator {
     width: 12%;
+  }
+
+  /deep/ .el-form-item {
+    margin-bottom: 0px;
   }
 </style>

@@ -2,20 +2,20 @@
   <div>
     <el-form :inline="true">
       <el-row type="flex" justify="space-between">
-        <el-col :span="22">
+        <el-col :span="24">
           <el-form-item label="订单信息">
-            <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 130px"></el-input>
+            <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 180px"></el-input>
           </el-form-item>
           <el-form-item label="负责人">
-            <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 120px"></el-input>
+            <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 130px"></el-input>
           </el-form-item>
           <el-form-item label="合作商">
-            <el-input placeholder="输入合作商名称" v-model="queryFormData.operatorName" style="width: 120px"></el-input>
+            <el-input placeholder="输入合作商名称" v-model="queryFormData.operatorName" style="width: 130px"></el-input>
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
               v-model="dateArr"
-              style="width: 215px"
+              style="width: 240px"
               type="daterange"
               value-format="timestamp"
               range-separator="至"
@@ -27,9 +27,6 @@
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
-        </el-col>
-        <el-col :span="2">
-          <el-button class="material-btn" @click="onCreate">创建发货单</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -56,9 +53,6 @@
         this.queryFormData.operatorName = '';
         this.queryFormData.creationtimeStart = '';
         this.queryFormData.creationtimeEnd = '';
-      },
-      onCreate () {
-        this.$emit('onCreate');
       }
     },
     data () {

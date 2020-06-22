@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column type="selection" width="55"/>
       <el-table-column label="发货任务单号" prop="code" min-width="120"></el-table-column>
       <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">

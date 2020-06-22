@@ -10,7 +10,7 @@
       <el-table-column label="退货单"></el-table-column>
       <el-table-column label="退货数"></el-table-column>
       <el-table-column label="差异数"></el-table-column>
-      <el-table-column align="right" min-width="120" v-if="canCreate">
+      <el-table-column align="right" min-width="120" v-if="readOnly">
         <template slot="header">
           <el-button @click="onCreate">创建发货订单</el-button>
         </template>
@@ -22,15 +22,11 @@
 <script>
   export default {
     name: 'ShippingTasksOrdersList',
-    props: ['formData'],
+    props: ['formData', 'readOnly'],
     components: {
 
     },
     computed: {
-      canCreate: function () {
-        // TODO 判断是否能创建发货订单
-        return true;
-      }
     },
     methods: {
       onCreate () {
