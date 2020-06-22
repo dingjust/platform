@@ -94,7 +94,7 @@ export default {
         url: '/shipping/tasks',
       }, {
         name: '收发货列表',
-        url: '/shipping/orders',
+        url: '/shipping/shipping-receipt-sheet',
       }]
     },
     {
@@ -106,7 +106,7 @@ export default {
         url: '/receipt/tasks',
       }, {
         name: '收发货列表',
-        url: '/receipt/orders',
+        url: '/shipping/shipping-receipt-sheet',
       }]
     },
     {

@@ -39,7 +39,7 @@
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
-              <h6 class="baisc-lable">收货地址</h6>
+              <h6 class="baisc-lable">收货地址：广州市海珠区云顶同创汇二期</h6>
             </el-row>
             <el-row type="flex" align="middle">
               <el-col :span="8">
@@ -120,7 +120,7 @@
       },
       onCreate () {
         // TODO 创建发货单
-        this.$router.go(-1);
+        this.$router.push('/shipping/tasks/' + this.taskData.id);
       }
     },
     data() {

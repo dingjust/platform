@@ -49,7 +49,7 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="24">
-          <shipping-tasks-orders-list :formData="formData" @onCreate="onCreate"/>
+          <shipping-tasks-orders-list :formData="formData" :readOnly="readOnly" @onCreate="onCreate"/>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
@@ -60,8 +60,8 @@
 </template>
 
 <script>
-  import ShippingTasksQuantityTable from '@/views/shipping/shipping-Task/table/ShippingTasksQuantityTable'
-  import ShippingTasksOrdersList from '@/views/shipping/shipping-task/list/ShippingTasksOrdersList'
+  import ShippingTasksQuantityTable from '../table/ShippingTasksQuantityTable'
+  import ShippingTasksOrdersList from '../list/ShippingTasksOrdersList'
   export default {
     name: 'ShippingTasksDetail',
     props: ['id'],
@@ -70,6 +70,10 @@
       ShippingTasksOrdersList
     },
     computed: {
+      readOnly: function () {
+        // TODO 判断是否只读，不能创建收货单
+        return true;
+      },
       isFinish: function () {
         // TODO 判断是否所有发货单都已收货
         return false;

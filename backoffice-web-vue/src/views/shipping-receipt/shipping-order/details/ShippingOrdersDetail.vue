@@ -18,64 +18,45 @@
           <el-col :span="21">
             <el-row type="flex" style="padding: 10px 0px">
               <el-col :span="8">
-                <h6 class="baisc-lable">产品名称：红烧猪蹄</h6>
+                <h6 class="basic-label">产品名称：红烧猪蹄</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">发货方：梅菜扣肉</h6>
-              </el-col>
-              <el-col :span="8">
-                <h6 class="baisc-lable">收货方：烧鸡翅</h6>
+                <h6 class="basic-label">货号：梅菜扣肉</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
               <el-col :span="8">
-                <h6 class="baisc-lable">货号：红烧猪蹄</h6>
+                <h6 class="basic-label">发货方：红烧猪蹄</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">发货负责人：梅菜扣肉</h6>
+                <h6 class="basic-label">收货方：梅菜扣肉</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">联系方式：烧鸡翅</h6>
+                <h6 class="basic-label">发货负责人：烧鸡翅</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
-              <h6 class="baisc-lable">收货地址</h6>
-            </el-row>
-            <el-row type="flex" align="middle">
-              <el-col :span="8">
-                <el-form-item label="发货方式">
-                  <el-select v-model="formData.carrier" :disabled="formData.online" :placeholder="''">
-                    <template v-for="item in carriers">
-                      <el-option :label="item.name" :value="item.code" :key="item.code"></el-option>
-                    </template>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="发货单号">
-                  <el-input v-model="formData.deliverCode" style="width: 194px" :disabled="formData.online"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-checkbox v-model="formData.online" @change="isOnline"></el-checkbox>
-                <span class="basci-label">线下物流<span style="color: #F56C6C">(勾选后无需填写发货方式和单号)</span></span>
+              <el-col :span="12">
+                <h6 class="basic-label">收货地址：广州市海珠区云顶同创汇二期</h6>
               </el-col>
             </el-row>
-            <el-row type="flex" align="middle" v-if="formData.online">
+            <el-row type="flex" style="padding-bottom: 10px" v-if="formData.online">
               <el-col :span="8">
-                <el-form-item label="物流方式">
-                  <el-input style="width: 194px"></el-input>
-                </el-form-item>
+                <h6 class="basic-label">发货方式：顺丰快递</h6>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="送货人">
-                  <el-input style="width: 194px"></el-input>
-                </el-form-item>
+                <h6 class="basic-label">发货单号：SF017532492929</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" style="padding-bottom: 10px" v-else>
+              <el-col :span="8">
+                <h6 class="basic-label">物流方式：货拉拉</h6>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="联系方式">
-                  <el-input style="width: 194px"></el-input>
-                </el-form-item>
+                <h6 class="basic-label">送货人：麻花腾</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6 class="basic-label">联系方式：19829999999</h6>
               </el-col>
             </el-row>
           </el-col>
@@ -83,6 +64,14 @@
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="24">
             <color-size-box-table :data="[]" :colorSizeEntries="[]" :readOnly="true"/>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" class="basic-row">
+          <el-col :span="8">
+            <h6 class="basic-label">收货单：KY1000000001</h6>
+          </el-col>
+          <el-col :span="8">
+            <h6 class="basic-label">收货单：KY1000000001</h6>
           </el-col>
         </el-row>
       </el-form>
@@ -152,7 +141,7 @@
     margin-top: 20px;
   }
 
-  .baisc-lable {
+  .basic-label {
     font-size: 14px;
     color: #606266;
   }

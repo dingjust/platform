@@ -35,7 +35,7 @@
 
 <script>
   export default {
-    name: 'ShippingOrdersToolbar',
+    name: 'ReceiptOrdersToolbar',
     props: ['queryFormData'],
     components: {
 

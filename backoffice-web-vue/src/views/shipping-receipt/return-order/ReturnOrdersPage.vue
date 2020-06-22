@@ -1,22 +1,22 @@
 <template>
   <div class="animated fadeIn">
-    <el-row>
-      <el-col :span="4">
-        <div class="title">
-          <h6>发货单列表</h6>
-        </div>
-      </el-col>
-    </el-row>
-    <div class="pt-2"></div>
-    <shipping-orders-toolbar :queryFormData="queryFormData" 
-                              @onAdvancedSearch="onAdvancedSearch"/>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <template v-for="item in statuses">
-        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
-        </el-tab-pane>
-      </template>
-    </el-tabs>
+      <el-row>
+        <el-col :span="4">
+          <div class="title">
+            <h6>收货单列表</h6>
+          </div>
+        </el-col>
+      </el-row>
+      <div class="pt-2"></div>
+      <return-orders-toolbar :queryFormData="queryFormData" 
+                                @onAdvancedSearch="onAdvancedSearch"/>
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <template v-for="item in statuses">
+          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+            <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
+          </el-tab-pane>
+        </template>
+      </el-tabs>
   </div>
 </template>
 
@@ -26,17 +26,17 @@
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    'ShippingOrdersModule'
+    'ReturnOrdersModule'
   );
 
-  import ShippingOrdersToolbar from './toolbar/ShippingOrdersToolbar'
-  import ShippingOrdersList from './list/ShippingOrdersList'
+  import ReturnOrdersToolbar from './toolbar/ReturnOrdersToolbar'
+  import ReturnOrdersList from './list/ReturnOrdersList'
 
   export default {
-    name: 'ShippingOrdersPage',
+    name: 'ReturnOrdersPage',
     components: {
-     ShippingOrdersToolbar,
-     ShippingOrdersList 
+     ReturnOrdersToolbar,
+     ReturnOrdersList 
     },
     computed: {
       ...mapGetters({
@@ -70,7 +70,8 @@
         this.onAdvancedSearch(0, 10);
       },
       onDetail (row) {
-        this.$router.push('/shipping/orders/' + row.id);
+        // TODO 发货单详情
+        // this.$router.push('/receipt/orders/' + row.id);
       },
     },
     data() {
