@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
+  <div class="shipping-order-list-container">
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id" 
+              @selection-change="handleSelectionChange" @row-click="rowClick">
+      <el-table-column type="selection" width="55" v-if="canCreateReceipt"></el-table-column>
       <el-table-column label="发货任务单号" prop="code" min-width="120"></el-table-column>
       <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">
@@ -46,7 +48,16 @@
 <script>
   export default {
     name: 'ShippingOrdersList',
-    props: ['page'],
+    props: {
+      page: {
+        type: Object,
+        required: true
+      },
+      canCreateReceipt: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
 
     },
@@ -68,11 +79,34 @@
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
+      },
+      handleSelectionChange (val) {
+        // 限制单选
+        if (val.length > 1) {
+          this.$refs.resultTable.toggleRowSelection(val[0], false);
+          this.selectionRow = val[val.length - 1];
+        } else if (val.length == 1) {
+          this.selectionRow = val[val.length - 1];
+        } else if (val.length == 0) {
+          this.selectionRow = '';
+        }
+      },
+      rowClick (row) {
+        if (this.selectionRow == '') {
+          this.$refs.resultTable.toggleRowSelection(row, true);
+        } else {
+          if (this.selectionRow.id == row.id) {
+            this.$refs.resultTable.toggleRowSelection(row, false);
+          } else {
+            this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
+            this.$refs.resultTable.toggleRowSelection(row, true);
+          }
+        }
       }
     },
     data () {
       return {
-
+        selectionRow: ''
       }
     },
     create () {
@@ -81,6 +115,8 @@
   }
 </script>
 
-<style scope>
-
+<style scoped>
+ .shipping-order-list-container >>> .el-table th>.cell .el-checkbox {
+    display: none;
+  }
 </style>

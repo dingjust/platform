@@ -24,13 +24,15 @@
       </el-row>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="待发货" name="first">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onShippingDetail"/> 
+          <shipping-orders-list :page="page" :canCreateReceipt="canCreateReceipt"
+                                @onAdvancedSearch="onAdvancedSearch" @onDetail="onShippingDetail"/> 
         </el-tab-pane>
         <el-tab-pane label="已发货" name="second">
           <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReceiptDetail"/>
         </el-tab-pane>
         <el-tab-pane label="待退货" name="third">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onShippingDetail"/> 
+          <shipping-orders-list :page="page" :canCreateReceipt="canCreateReceipt"
+                                @onAdvancedSearch="onAdvancedSearch" @onDetail="onShippingDetail"/> 
         </el-tab-pane>
         <el-tab-pane label="退货待收" name="fourth">
           <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail"/>
