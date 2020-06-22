@@ -66,30 +66,40 @@
       </el-row>
       <el-row type="flex" style="margin-top:20px">
         <el-col :span="4" :offset="4">
-          <el-checkbox v-model="boxShow">按箱号</el-checkbox>
-          <el-checkbox v-model="summaryShow">按总列表</el-checkbox>
+          <el-radio v-model="showOnBox" :label="true">按箱号</el-radio>
+          <el-radio v-model="showOnBox" :label="false">按总列表</el-radio>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="boxShow">
+      <el-row type="flex" justify="start" class="basic-row" v-if="showOnBox">
         <el-col :span="24">
-          <color-size-box-table :vdata="data.entries!=null?[data.entries[0].colorSizeEntries]:[]"
-            :colorSizeEntries="data.entries!=null?data.entries[0].colorSizeEntries:[]" :readOnly="true" />
+          <color-size-box-table :vdata="data" :colorSizeEntries="colorSizeEntries" :readOnly="false" />
         </el-col>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="summaryShow">
+      <el-row type="flex" justify="start" class="basic-row" v-if="!showOnBox">
         <el-col :span="24">
-          <color-size-table :data="data.entries!=null?data.entries[0].colorSizeEntries:[]" :readOnly="true" />
+          <color-size-table :data="summaryData" :readOnly="false" />
         </el-col>
       </el-row>
       <el-row type="flex" style="margin-top:20px">
-        <el-col :span="4" :offset="4">
-          <h6>有无退货：{{returned?'有':'无'}}退货</h6>
+        <el-col :span="8" :offset="4">
+          <el-row type="flex">
+            <h6>有无退货：</h6>
+            <el-radio v-model="returned" :label="true">有退货</el-radio>
+            <el-radio v-model="returned" :label="false">无退货</el-radio>
+          </el-row>
         </el-col>
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="8" :offset="2">
           <h6>发货单：KY1000000001</h6>
         </el-col>
+      </el-row>
+      <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">
+        <template>
+          <el-col :span="4">
+            <el-button class="material-btn" @click="onSubmit">确认收货</el-button>
+          </el-col>
+        </template>
       </el-row>
     </el-card>
   </div>
@@ -113,29 +123,99 @@
       ColorSizeBoxTable,
       ColorSizeTable,
     },
-    computed: {},
-    methods: {
-      async getDetail() {
-        const url = this.apis().getProductionTaskDetails(this.id);
-        const result = await this.$http.get(url);
-        if (result.code === 0) {
-          this.$message.error(result.msg);
-          return;
-        }
-        // this.data = Object.assign({}, result.data);
-        this.$set(this, 'data', Object.assign({}, result.data));
+    computed: {
+      //箱总数
+      boxAmount: function () {
+        var amount = 0;
+        this.data.forEach(entry => {
+          if (entry != null) {
+            entry.forEach(item => {
+              let num = parseFloat(item.quantity);
+              if (!Number.isNaN(num)) {
+                amount += num;
+              }
+            });
+          }
+        });
+        return amount;
       },
+      //总列表总数
+      summaryAmount: function () {
+        var amount = 0;
+        if (this.summaryData != null) {
+          this.summaryData.forEach(entry => {
+            let num = parseFloat(entry.quantity);
+            if (!Number.isNaN(num)) {
+              amount += num;
+            }
+          });
+        }
+        return amount;
+      },
+      //下单数
+      orderAmount: function () {
+        var amount = 0;
+        if (this.colorSizeEntries != null) {
+          this.colorSizeEntries.forEach(entry => {
+            let num = parseFloat(entry.quantity);
+            if (!Number.isNaN(num)) {
+              amount += num;
+            }
+          });
+        }
+        return amount;
+      },
+    },
+    methods: {
+      onSubmit() {
+        //校验数量与订单差异
+        let num = this.showOnBox ? this.boxAmount : this.summaryAmount;
+        if (num != this.orderAmount) {
+          this.$confirm('收货数与发货总数不一致，是否创建收货单？创建后不允许修改', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this._onSubmit();
+          }).catch(() => {
+
+          });
+        }
+      },
+      async _onSubmit() {
+        this.onReturnedMessage();
+      },
+      //提示是否创建退货单
+      onReturnedMessage() {
+        this.$confirm('是否马上创建退货单？', '提示', {
+          confirmButtonText: '马上创建',
+          cancelButtonText: '下次再说',
+          type: 'info'
+        }).then(() => {
+
+        }).catch(() => {
+
+        });
+      }
     },
     data() {
       return {
-        data: '',
-        boxShow: true,
-        summaryShow: true,
+        data: [],
+        summaryData: [],
+        colorSizeEntries: [],
+        showOnBox: false,
         returned: false
       }
     },
     created() {
-      this.getDetail();
+      if (this.$route.params.shippingOrder == null) {
+        this.$router.go(-1);
+      } else {
+        this.$set(this, 'data', JSON.parse(JSON.stringify([this.$route.params.shippingOrder.colorSizeEntries])));
+        this.$set(this, 'colorSizeEntries', JSON.parse(JSON.stringify(this.$route.params.shippingOrder
+          .colorSizeEntries)));
+        this.$set(this, 'summaryData', JSON.parse(JSON.stringify(this.$route.params.shippingOrder.colorSizeEntries)));
+      }
     },
     destroyed() {
 
@@ -155,21 +235,21 @@
     margin-top: 20px;
   }
 
-  .sumbit-btn {
-    background-color: #ffd60c;
-    border-color: #FFD5CE;
-    color: #000;
-    width: 125px;
-    height: 32px;
-  }
-
   .receipt-order-container h6 {
     font-size: 14px;
     color: #606266;
   }
 
-  .receipt-order-container{
+  .receipt-order-container {
     padding-bottom: 10px;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 150px;
+    height: 35px;
   }
 
 </style>
