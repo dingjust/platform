@@ -83,23 +83,19 @@
           },
           {
             code: '1',
-            name: '待发货'
+            name: '待收货'
           },
           {
             code: '2',
-            name: '已收货'
-          },
-          {
-            code: '3',
             name: '待退货'
           },
           {
-            code: '4',
-            name: '退货待收'
+            code: '3',
+            name: '退货中'
           },
           {
-            code: '5',
-            name: '退货已收'
+            code: '4',
+            name: '已完成'
           }
         ],
         queryFormData: {
