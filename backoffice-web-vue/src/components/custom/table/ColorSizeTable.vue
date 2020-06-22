@@ -9,7 +9,7 @@
   <div>
     <table cellspacing="2" width="100%" class="order-table">
       <tr class="order-table-th_row">
-        <td style="width: 60px">颜色/尺码</td>
+        <th style="width: 60px">颜色/尺码</th>
         <template v-for="size in sizes">
           <th :key="size.name">{{size.name}}</th>
         </template>

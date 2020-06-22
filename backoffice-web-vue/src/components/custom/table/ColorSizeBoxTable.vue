@@ -165,22 +165,26 @@
       },
       countColorsAmount(color, entryIndex) {
         var amount = 0;
-        this.data[entryIndex].filter(entry => entry.color.code == color.code).forEach(entry => {
-          let num = parseFloat(entry.quantity);
-          if (!Number.isNaN(num)) {
-            amount += num;
-          }
-        });
+        if (this.data != null) {
+          this.data[entryIndex].filter(entry => entry.color.code == color.code).forEach(entry => {
+            let num = parseFloat(entry.quantity);
+            if (!Number.isNaN(num)) {
+              amount += num;
+            }
+          });
+        }
         return amount;
       },
       countSizesAmount(size) {
         var amount = 0;
-        this.data.filter(entry => entry.size.code == size.code).forEach(entry => {
-          let num = parseFloat(entry.quantity);
-          if (!Number.isNaN(num)) {
-            amount += num;
-          }
-        });
+        if (this.data != null) {
+          this.data.filter(entry => entry.size.code == size.code).forEach(entry => {
+            let num = parseFloat(entry.quantity);
+            if (!Number.isNaN(num)) {
+              amount += num;
+            }
+          });
+        }
         return amount;
       },
       countEntryAmount(index) {
