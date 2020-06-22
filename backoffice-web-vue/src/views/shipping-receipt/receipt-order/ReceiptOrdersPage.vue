@@ -83,7 +83,7 @@
       },
       onDetail (row) {
         // TODO 发货单详情
-        // this.$router.push('/receipt/orders/' + row.id);
+        this.$router.push('/receipt/orders/' + row.id);
       },
       onCheck () {
         // TODO 核验

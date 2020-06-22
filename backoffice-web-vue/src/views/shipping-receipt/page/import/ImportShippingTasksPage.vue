@@ -26,7 +26,7 @@
 
   import ShippingTasksPage from '../../shipping-task/ShippingTasksPage'
   export default {
-    name: 'ReceiptPage',
+    name: 'ImportShippingTasksPage',
     components: {
       ShippingTasksPage
     },
@@ -43,7 +43,7 @@
         searchAdvanced: 'searchAdvanced'
       }),
       onSearch (page, size) {
-        // TODO 查询外发的收发任务
+        // TODO 查询自身的收发任务
         const keyword = this.keyword;
         const url = this.apis().getProductionTaskList();
         this.search({
@@ -54,7 +54,7 @@
         });
       },
       onAdvancedSearch (page, size) {
-        // TODO 查询外发的收发任务
+        // TODO 查询自身的收发任务
         const query = this.queryFormData;
         const url = this.apis().getProductionTaskList();
         this.searchAdvanced({url, query, page, size});
