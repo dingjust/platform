@@ -25,7 +25,6 @@ import PurchaseOrdersModule from './order/purchase-orders';
 import QuotesModule from './order/quotes';
 import ProofingsModule from './order/proofings';
 import SalesOrdersModule from './order/sales-orders';
-import SalesProductionOrdersModule from './order/sales-Production-orders';
 
 // miscs
 import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
@@ -41,6 +40,9 @@ import CashOutManagerModule from './miscs/cashOutManager';
 import PromoteProductModule from './miscs/promoteProduct';
 
 // sale-production
+import SalesProductionOrdersModule from './sale-production/sales-Production-orders';
+import PendingSalesProductionOrdersModule from './sale-production/pending-sales-Production-orders';
+
 import OutboundOrderModule from './sale-production/outbound-order'
 import ProductionTasksModule from './sale-production/production-tasks'
 import PurchaseTaskModule from './sale-production/purchase-orders'
@@ -97,7 +99,6 @@ export {
   QuotesModule,
   ProofingsModule,
   SalesOrdersModule,
-  SalesProductionOrdersModule,
   // miscs
   CarouselsModule,
   IndustrialClustersModule,
@@ -111,6 +112,8 @@ export {
   CashOutManagerModule,
   PromoteProductModule,
   // sale-production
+  SalesProductionOrdersModule,
+  PendingSalesProductionOrdersModule,
   OutboundOrderModule,
   ProductionOrderModule,
   ProgressOrderModule,

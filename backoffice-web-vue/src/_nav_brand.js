@@ -39,6 +39,9 @@ export default {
       children: [{
         name: '计划订单',
         url: '/sales/plan'
+      }, {
+        name: '待接订单',
+        url: '/sales/pending-order'
       }]
     },
     {
