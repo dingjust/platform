@@ -1,9 +1,18 @@
 <template>
   <div>
-    <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="detailVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onSave" :isUpdate="true"
+      <!-- <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onSave" :isUpdate="true"
         :fromOrigin="!canChangeProduct" :needMaterialsSpec="needMaterialsSpec" :updataEntry="updateEntry"
+        :productionLeader="form.productionLeader" :readOnly="productFormReadOnly" /> -->
+      <sales-plan-entry-detail v-if="detailVisible" :fromOrigin="!canChangeProduct"
+        :needMaterialsSpec="needMaterialsSpec" :slotData="updateEntry" :belongOrder="form"
+        :productionLeader="form.productionLeader" :readOnly="productFormReadOnly" />
+    </el-dialog>
+    <el-dialog :visible.sync="formVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sales-plan-entry-form v-if="formVisible" @onSave="onSave" :isUpdate="true" :fromOrigin="!canChangeProduct"
+        :needMaterialsSpec="needMaterialsSpec" :slotData="updateEntry" :belongOrder="form"
         :productionLeader="form.productionLeader" :readOnly="productFormReadOnly" />
     </el-dialog>
     <div class="over-tabs">
@@ -20,10 +29,6 @@
         <sales-production-tasks-table :data="form.entries" @onDelete="onTaskDelete" @onModify="onTaskModify" />
       </el-tab-pane>
     </el-tabs>
-    <!-- <el-dialog :visible.sync="salesProductDetailsVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <sales-plan-product-detail v-if="salesProductDetailsVisible" />
-    </el-dialog> -->
   </div>
 </template>
 
@@ -35,13 +40,17 @@
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import SalesProductionProductsTable from './SalesProductionProductsTable';
   import SalesProductionTasksTable from './SalesProductionTasksTable';
+  import SalesPlanEntryForm from '../form/SalesPlanEntryForm'
+  import SalesPlanEntryDetail from '../form/SalesPlanEntryDetail'
 
   export default {
     name: 'SalesProductionTabs',
     components: {
       SalesPlanAppendProductForm,
       SalesProductionProductsTable,
-      SalesProductionTasksTable
+      SalesProductionTasksTable,
+      SalesPlanEntryForm,
+      SalesPlanEntryDetail
     },
     props: {
       canUpdate: {
@@ -103,15 +112,15 @@
       onProductDetail(index) {
         this.updateIndex = index;
         this.updateEntry = this.form.entries[index];
-        this.productFormReadOnly = true,
-          this.salesProductAppendVisible = true;
+        this.productFormReadOnly = true;
+        this.detailVisible = true;
       },
       //产品修改
       onProductModify(index) {
         this.updateIndex = index;
         this.updateEntry = this.form.entries[index];
-        this.productFormReadOnly = false,
-          this.salesProductAppendVisible = true;
+        this.productFormReadOnly = false;
+        this.formVisible = true;
       },
       //编辑回调
       onSave(entries) {
@@ -143,6 +152,8 @@
         updateIndex: null,
         salesProductAppendVisible: false,
         productFormReadOnly: false,
+        detailVisible: false,
+        formVisible: false
       }
     }
   }

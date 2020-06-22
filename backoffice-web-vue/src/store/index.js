@@ -29,7 +29,6 @@ import {
   QuotesModule,
   ProofingsModule,
   SalesOrdersModule,
-  SalesProductionOrdersModule,
   // miscs
   CarouselsModule,
   IndustrialClustersModule,
@@ -43,6 +42,8 @@ import {
   CashOutManagerModule,
   PromoteProductModule,
   // sale-plan
+  SalesProductionOrdersModule,
+  PendingSalesProductionOrdersModule,
   OutboundOrderModule,
   ProductionTasksModule,
   ProductionOrderModule,
@@ -124,7 +125,6 @@ export default new Vuex.Store({
     QuotesModule,
     ProofingsModule,
     SalesOrdersModule,
-    SalesProductionOrdersModule,
     // miscs
     CarouselsModule,
     IndustrialClustersModule,
@@ -138,6 +138,8 @@ export default new Vuex.Store({
     CashOutManagerModule,
     PromoteProductModule,
     // sale-plan
+    PendingSalesProductionOrdersModule,
+    SalesProductionOrdersModule,
     OutboundOrderModule,
     ProductionOrderModule,
     ProgressOrderModule,

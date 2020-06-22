@@ -239,6 +239,11 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/SalesProduction')
             },
             {
+              path: 'pending-order',
+              name: '待接订单列表',
+              component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/PendingSalesProduction')
+            },
+            {
               path: 'create/plan',
               name: '录入销售计划',
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/form/SalesPlanForm')
@@ -751,7 +756,7 @@ const router = new Router({
               path: 'tasks',
               name: '收发任务列表',
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/receipt/ReceiptPage')
-            }, 
+            },
           // {
           //   path: 'shipping-receipt-sheet',
           //   name: '收货收发货列表',
