@@ -745,6 +745,17 @@ const router = new Router({
             //   name: '发货单',
             //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
             // },
+            {
+              path: 'reconsider/form',
+              name: '复议单表单',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/form/ReconsiderOrderForm')
+            },
+            {
+              path: 'reconsider/:id',
+              name: '复议单详情',
+              props: true,
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/details/ReconsiderOrderDetail')
+            },
           ]
         },
         {
@@ -813,7 +824,7 @@ const router = new Router({
             path: 'create/orders',
             name: '创建对账单',
             component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/reconciliation-order/form/ReconciliationOrdersForm')
-          },{
+          }, {
             path: 'tasks/export',
             name: '外发对账任务',
             component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/page/export/ExportReconciliationTasksPage')
