@@ -47,6 +47,7 @@ import {
   OutboundOrderModule,
   ProductionTasksModule,
   ProductionOrderModule,
+  OutboundProductionOrderModule,
   ProgressOrderModule,
   PurchaseTaskModule,
   // contract
@@ -142,6 +143,7 @@ export default new Vuex.Store({
     SalesProductionOrdersModule,
     OutboundOrderModule,
     ProductionOrderModule,
+    OutboundProductionOrderModule,
     ProgressOrderModule,
     ProductionTasksModule,
     PurchaseTaskModule,

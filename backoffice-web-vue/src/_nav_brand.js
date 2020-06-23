@@ -60,7 +60,10 @@ export default {
       }, {
         name: '生产进度工单',
         url: '/sales/progressOrder'
-      }]
+      }, {
+        name: '外发工单',
+        url: '/sales/outboundProductionOrder'
+      }, ]
     },
     {
       name: '采购中心',

@@ -48,6 +48,7 @@ import ProductionTasksModule from './sale-production/production-tasks'
 import PurchaseTaskModule from './sale-production/purchase-orders'
 
 import ProductionOrderModule from './sale-production/production-orders.js'
+import OutboundProductionOrderModule from './sale-production/outbound-production-orders.js'
 import ProgressOrderModule from './sale-production/progress-orders.js'
 
 // contract
@@ -118,6 +119,7 @@ export {
   PendingSalesProductionOrdersModule,
   OutboundOrderModule,
   ProductionOrderModule,
+  OutboundProductionOrderModule,
   ProgressOrderModule,
   ProductionTasksModule,
   PurchaseTaskModule,
