@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="shipping-receipt-toolbar-container">
     <el-form :inline="true">
       <el-row type="flex" justify="space-between">
         <el-col :span="22">
@@ -7,20 +7,15 @@
             <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 140px"></el-input>
           </el-form-item>
           <el-form-item label="负责人">
-            <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 110px"></el-input>
+            <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 110px">
+            </el-input>
           </el-form-item>
           <el-form-item label="合作商">
             <el-input placeholder="输入合作商名称" v-model="queryFormData.operatorName" style="width: 110px"></el-input>
           </el-form-item>
           <el-form-item label="创建时间">
-            <el-date-picker
-              v-model="dateArr"
-              style="width: 215px"
-              type="daterange"
-              value-format="timestamp"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
+            <el-date-picker v-model="dateArr" style="width: 215px" type="daterange" value-format="timestamp"
+              range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
           <el-button-group>
@@ -47,10 +42,10 @@
 
     },
     methods: {
-      onAdvancedSearch () {
-        this.$emit('onAdvancedSearch', 0 , 10);
+      onAdvancedSearch() {
+        this.$emit('onAdvancedSearch', 0, 10);
       },
-      onReset () {
+      onReset() {
         this.dateArr = [];
         this.queryFormData.keyword = '';
         this.queryFormData.productionLeaderName = '';
@@ -58,11 +53,11 @@
         this.queryFormData.creationtimeStart = '';
         this.queryFormData.creationtimeEnd = '';
       },
-      onCreate () {
+      onCreate() {
         this.$emit('onCreate');
       }
     },
-    data () {
+    data() {
       return {
         dateArr: []
       }
@@ -75,14 +70,15 @@
         }
       }
     },
-    create () {
-      
+    create() {
+
     }
   }
+
 </script>
 
 <style scoped>
-  .toolbar-search_input{
+  .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
   }
@@ -93,11 +89,12 @@
     color: #000;
   }
 
-  /deep/ .el-date-editor .el-range-separator {
+  .shipping-receipt-toolbar-container /deep/ .el-date-editor .el-range-separator {
     width: 12%;
   }
 
-  /deep/ .el-form-item {
+  .shipping-receipt-toolbar-container >>> .el-form-item {
     margin-bottom: 0px;
   }
+
 </style>

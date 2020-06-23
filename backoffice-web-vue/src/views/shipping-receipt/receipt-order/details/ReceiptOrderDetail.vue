@@ -66,17 +66,17 @@
       </el-row>
       <el-row type="flex" style="margin-top:20px">
         <el-col :span="4" :offset="4">
-          <el-checkbox v-model="boxShow">按箱号</el-checkbox>
-          <el-checkbox v-model="summaryShow">按总列表</el-checkbox>
+          <el-radio v-model="showOnBox" :disabled="true" :label="true">按箱号</el-radio>
+          <el-radio v-model="showOnBox" :disabled="true" :label="false">按总列表</el-radio>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="boxShow">
+      <el-row type="flex" justify="start" class="basic-row" v-if="showOnBox">
         <el-col :span="24">
           <color-size-box-table :vdata="data.entries!=null?[data.entries[0].colorSizeEntries]:[]"
             :colorSizeEntries="data.entries!=null?data.entries[0].colorSizeEntries:[]" :readOnly="true" />
         </el-col>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="summaryShow">
+      <el-row type="flex" justify="start" class="basic-row" v-if="!showOnBox">
         <el-col :span="24">
           <color-size-table :data="data.entries!=null?data.entries[0].colorSizeEntries:[]" :readOnly="true" />
         </el-col>
@@ -133,8 +133,7 @@
     data() {
       return {
         data: '',
-        boxShow: true,
-        summaryShow: true,
+        showOnBox: false,
         returned: false
       }
     },
@@ -172,7 +171,7 @@
     color: #606266;
   }
 
-  .receipt-order-container{
+  .receipt-order-container {
     padding-bottom: 10px;
   }
 
