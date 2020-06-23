@@ -111,19 +111,19 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        let item = {
-          event: 'ORDER_CONFIRMED',
-          time: 5,
-          range: 'INSIDE',
-          percent: 0.3
-        }
-        result.payPlan['deposit'] = item;
-        result.payPlan['balance1'] = item;
-        result.payPlan['balance2'] = item;
-        result.payPlan['monthBalance'] = {
-          event: 'ORDER_CONFIRMED',
-          time: 5
-        };
+        // let item = {
+        //   event: 'ORDER_CONFIRMED',
+        //   time: 5,
+        //   range: 'INSIDE',
+        //   percent: 0.3
+        // }
+        // result.payPlan['deposit'] = item;
+        // result.payPlan['balance1'] = item;
+        // result.payPlan['balance2'] = item;
+        // result.payPlan['monthBalance'] = {
+        //   event: 'ORDER_CONFIRMED',
+        //   time: 5
+        // };
         await this.$router.push({
           name: '创建外发订单',
           params: {

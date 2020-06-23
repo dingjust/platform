@@ -61,6 +61,7 @@ import {
   ReturnOrdersModule,
   // reconciliation
   ReconciliationTasksModule,
+  ReconciliationOrdersModule,
   // 产能
   CapacityModule,
   // 报表
@@ -160,6 +161,7 @@ export default new Vuex.Store({
     ReturnOrdersModule,
     // reconciliation
     ReconciliationTasksModule,
+    ReconciliationOrdersModule,
     // 产能
     CapacityModule,
     // 报表

@@ -96,7 +96,10 @@
         // TODO 获取发货单详情
       },
       onCreate () {
-        this.$router.push('/reconciliation/create/orders');
+        this.$router.push({
+          name: '创建对账单',
+          params: {} 
+        });
       },
       onSumbit () {
         this.$confirm('确认对账完结后，不能再创建对账单了，表示该对账任务完结，是否确认该操作?', '提示', {

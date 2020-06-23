@@ -524,9 +524,9 @@
           if (this.formData.entries.length <= 0) {
             this.addRow();
           }
-          if (this.formData.payPlan.payPlanItems.length > 0) {
-            this.setPayPlan(this.formData.payPlan);
-          }
+          // if (this.formData.payPlan.payPlanItems.length > 0) {
+          //   this.setPayPlan(this.formData.payPlan);
+          // }
           if (this.formData.status == 'NOT_COMMITED') {
             if (!this.formData.cooperator) {
               this.formData.cooperator = {
