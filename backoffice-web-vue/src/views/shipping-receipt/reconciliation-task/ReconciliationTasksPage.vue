@@ -60,7 +60,7 @@
         this.$emit('onAdvancedSearch');
       },
       onCreate () {
-        this.$emit('onCreate');
+        this.$router.push('/reconciliation/create/orders');
       },
       onDetail (row) {
         this.$router.push('/reconciliation/tasks/' + row.id);

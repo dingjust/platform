@@ -63,6 +63,7 @@ import ReturnOrdersModule from './shipping-receipt/return-orders'
 
 // reconciliation
 import ReconciliationTasksModule from './reconciliation/reconciliation-tasks'
+import ReconciliationOrdersModule from './reconciliation/reconciliation-orders'
 
 // 产能
 import CapacityModule from './capacity/capacity'
@@ -135,6 +136,7 @@ export {
   ReturnOrdersModule,
   // reconciliation
   ReconciliationTasksModule,
+  ReconciliationOrdersModule,
   // 产能
   CapacityModule,
   // 报表

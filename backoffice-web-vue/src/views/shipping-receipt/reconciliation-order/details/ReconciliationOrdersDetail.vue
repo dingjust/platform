@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="4">
           <div class="title">
-            <h6>创建对账单</h6>
+            <h6>对账单详情</h6>
           </div>
         </el-col>
       </el-row>
@@ -12,17 +12,17 @@
       <el-form :inline="true">
         <el-row type="flex" style="padding-left: 10px">
           <el-col :span="24">
-            <reconciliation-orders-form-head :formData="formData"/>
+            <reconciliation-orders-form-head :formData="formData" :readOnly="true"/>
           </el-col>
         </el-row>
         <el-row type="flex" style="padding-left: 10px">
           <el-col :span="24">
-            <reconciliation-shipping-orders-list :formData="formData"/>
+            <reconciliation-shipping-orders-list :formData="formData" :readOnly="true"/>
           </el-col>
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="24">
-            <reconciliation-orders-form-foot :formData="formData"/>
+            <reconciliation-orders-form-foot :formData="formData" :readOnly="true"/>
           </el-col>
         </el-row>
         <el-row type="flex" justify="end" style="padding-left: 10px;margin-top: 20px">
@@ -30,9 +30,17 @@
             <h5>应付金额：{{payable}}元</h5>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isCreator">
           <el-col :span="4">
-            <el-button class="create-btn" @click="onCreate">确认创建</el-button>
+            <el-button class="create-btn" @click="onReturn">返回</el-button>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-else>
+          <el-col :span="4">
+            <el-button class="create-btn" @click="onCheck">核验</el-button>
+          </el-col>
+          <el-col :span="4">
+            <el-button class="create-btn" @click="onApply">申请复议</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -41,13 +49,12 @@
 </template>
 
 <script>
-  import ReconciliationOrdersFormHead from './ReconciliationOrdersFormHead'
-  import ReconciliationOrdersFormFoot from './ReconciliationOrdersFormFoot'
+  import ReconciliationOrdersFormHead from '../form/ReconciliationOrdersFormHead'
+  import ReconciliationOrdersFormFoot from '../form/ReconciliationOrdersFormFoot'
   import ReconciliationShippingOrdersList from '../list/ReconciliationShippingOrdersList'
   export default {
-    name: 'ReconciliationOrdersForm',
-    props: {
-    },
+    name: 'ReconciliationOrdersDetail',
+    props: ['id'],
     components: {
       ReconciliationOrdersFormHead,
       ReconciliationOrdersFormFoot,
