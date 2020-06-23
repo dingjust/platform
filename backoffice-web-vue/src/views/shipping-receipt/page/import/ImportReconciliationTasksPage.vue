@@ -6,31 +6,87 @@
  * @version: V1.0.0 
 !-->
 <template>
-  <div>
-
+  <div class="animated fadeIn content">
+    <el-card>
+      <el-row>
+        <el-col :span="4">
+          <div class="title">
+            <h6>对账单看板</h6>
+          </div>
+        </el-col>
+      </el-row>
+      <div class="pt-2"></div>
+      <reconciliation-tasks-page :page="page" :queryFormData="queryFormData"
+            @onCreate="onCreate" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
+    </el-card>
   </div>
 </template>
 
 <script>
+  import { createNamespacedHelpers } from 'vuex';
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers(
+    'ReconciliationTasksModule'
+  );
+
+  import ReconciliationTasksPage from '../../reconciliation-task/ReconciliationTasksPage'
   export default {
     name: 'ImportReconciliationTasksPage',
     props: {
 
     },
     components: {
-
+      ReconciliationTasksPage
     },
     computed: {
+      ...mapGetters({
+        keyword: 'keyword',
+        page: 'page',
+        formData: 'formData'
+      })
     },
     methods: {
-
+      ...mapActions({
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
+      }),
+      onSearch (page, size) {
+        // TODO 查询外发的收发任务
+        const keyword = this.keyword;
+        const url = this.apis().getProductionTaskList();
+        this.search({
+          url,
+          keyword,
+          page,
+          size
+        });
+      },
+      onAdvancedSearch (page, size) {
+        // TODO 查询外发的收发任务
+        const query = this.queryFormData;
+        const url = this.apis().getProductionTaskList();
+        this.searchAdvanced({url, query, page, size});
+      },
+      onCreate () {
+        // TODO 创建对账单
+      }
     },
     data() {
       return {
-
+        queryFormData: {
+          keyword: '',
+          productionLeaderName: '',
+          operatorName: '',
+          creationtimeStart: '',
+          creationtimeEnd: '',
+          status: ''
+        }
       }
     },
     created() {
+      this.onSearch();
     },
     destroyed() {
 

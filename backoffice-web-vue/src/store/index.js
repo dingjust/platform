@@ -59,6 +59,8 @@ import {
   ShippingOrdersModule,
   ReceiptOrdersModule,
   ReturnOrdersModule,
+  // reconciliation
+  ReconciliationTasksModule,
   // 产能
   CapacityModule,
   // 报表
@@ -156,6 +158,8 @@ export default new Vuex.Store({
     ShippingOrdersModule,
     ReceiptOrdersModule,
     ReturnOrdersModule,
+    // reconciliation
+    ReconciliationTasksModule,
     // 产能
     CapacityModule,
     // 报表

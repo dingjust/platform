@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="发货任务单号" prop="code" min-width="120"></el-table-column>
+  <div class="shipping-order-list-container">
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id">
+      <el-table-column label="对账单任务号" prop="code" min-width="120"></el-table-column>
+      <el-table-column label="关联订单号" prop="orderCode" min-width="120"></el-table-column>
       <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
@@ -26,9 +27,10 @@
         </template>
       </el-table-column>
       <el-table-column label="订单数量"></el-table-column>
+      <el-table-column label="单价"></el-table-column>
       <el-table-column label="创建人"></el-table-column>
       <el-table-column label="负责人"></el-table-column>
-      <el-table-column label="发布任务"></el-table-column>
+      <el-table-column label="对账单数"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
@@ -45,8 +47,13 @@
 
 <script>
   export default {
-    name: 'ReceiptOrdersList',
-    props: ['page'],
+    name: 'ReconciliationTasksList',
+    props: {
+      page: {
+        type: Object,
+        required: true
+      }
+    },
     components: {
 
     },
@@ -72,7 +79,6 @@
     },
     data () {
       return {
-
       }
     },
     create () {
@@ -82,5 +88,4 @@
 </script>
 
 <style scoped>
-
 </style>

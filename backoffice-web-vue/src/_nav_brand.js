@@ -101,6 +101,9 @@ export default {
       }, {
         name: '收发货列表',
         url: '/shipping/shipping-receipt-sheet',
+      }, {
+        name: '对账任务',
+        url: '/reconciliation/tasks/export',
       }]
     },
     {
@@ -113,6 +116,9 @@ export default {
       }, {
         name: '收发货列表',
         url: '/shipping/shipping-receipt-sheet',
+      }, {
+        name: '对账任务',
+        url: '/reconciliation/tasks/import',
       }]
     },
     {

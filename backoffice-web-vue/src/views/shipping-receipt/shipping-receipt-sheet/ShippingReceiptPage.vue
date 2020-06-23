@@ -10,7 +10,7 @@
       </el-row>
       <div class="pt-2"></div>
       <shipping-receipt-toolbar :queryFormData="queryFormData" :canCreateReceipt="canCreateReceipt"
-        @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch" />
+                                @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch"/>
       <el-row type="flex" justify="end">
         <el-col :span="3">
           <el-button type="text" class="list-btn" @click="shippingListVisible = !shippingListVisible">发货单</el-button>
@@ -24,33 +24,32 @@
       </el-row>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="待发货" name="first">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onShippingDetail" />
+          <shipping-orders-list :page="page" :canCreateReceipt="canCreateReceipt"
+                                @onAdvancedSearch="onAdvancedSearch" @onDetail="onShippingDetail"/> 
         </el-tab-pane>
         <el-tab-pane label="已发货" name="second">
-          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReceiptDetail" />
+          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReceiptDetail"/>
         </el-tab-pane>
         <el-tab-pane label="待退货" name="third">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onShippingDetail" />
+          <shipping-orders-list :page="page" :canCreateReceipt="canCreateReceipt"
+                                @onAdvancedSearch="onAdvancedSearch" @onDetail="onShippingDetail"/> 
         </el-tab-pane>
         <el-tab-pane label="退货待收" name="fourth">
-          <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail" />
+          <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail"/>
         </el-tab-pane>
         <el-tab-pane label="退货已收" name="fifth">
-          <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail" />
+          <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail"/>
         </el-tab-pane>
       </el-tabs>
     </el-card>
-    <el-dialog :visible.sync="shippingListVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <shipping-orders-page v-if="shippingListVisible" />
+    <el-dialog :visible.sync="shippingListVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <shipping-orders-page v-if="shippingListVisible"/>
     </el-dialog>
-    <el-dialog :visible.sync="receiptListVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <receipt-orders-page v-if="receiptListVisible" />
+    <el-dialog :visible.sync="receiptListVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <receipt-orders-page v-if="receiptListVisible"/>
     </el-dialog>
-    <el-dialog :visible.sync="returnListVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <return-orders-page v-if="returnListVisible" />
+    <el-dialog :visible.sync="returnListVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <return-orders-page v-if="returnListVisible"/>
     </el-dialog>
   </div>
 </template>
@@ -81,7 +80,7 @@
       }
     },
     methods: {
-      handleClick(tab, event) {
+      handleClick (tab, event) {
         if (tab.name == 'first') {
           this.queryFormData.status = '待发货';
           this.searchUrl = this.apis().getProductionTaskList();
@@ -100,7 +99,7 @@
         }
         this.onAdvancedSearch(0, 10);
       },
-      async onAdvancedSearch(page, size) {
+      async onAdvancedSearch (page, size) {
         const url = this.searchUrl;
         const query = this.queryFormData;
         const result = await this.$http.post(url, query, {
@@ -109,25 +108,18 @@
         });
         this.page = result;
       },
-      onShippingDetail() {
+      onShippingDetail () {
 
       },
-      onReceiptDetail() {
+      onReceiptDetail () {
 
       },
-      onReturnDetail() {
+      onReturnDetail () {
 
       },
-      // 创建收货单
-      onCreateReceiptOrder() {
-        this.$router.push({
-          name: '收货单表单',
-          params: {
-            shippingOrder: {
-              colorSizeEntries: this.page.content[0].productionEntry.colorSizeEntries
-            }
-          }
-        });
+      // 创建发货单
+      onCreateReceiptOrder () {
+        
       }
     },
     data() {
@@ -176,5 +168,4 @@
     font-size: 16px;
     color: #606266;
   }
-
 </style>
