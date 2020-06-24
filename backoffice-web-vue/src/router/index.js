@@ -746,6 +746,12 @@ const router = new Router({
             //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
             // },
             {
+              path: 'reconsiders/:mode',
+              name: '复议单列表',
+              props: true,
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/ReconsiderOrdersPage')
+            },
+            {
               path: 'reconsider/form',
               name: '复议单表单',
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/form/ReconsiderOrderForm')

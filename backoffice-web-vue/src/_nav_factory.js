@@ -106,6 +106,9 @@ export default {
         name: '收发货列表',
         url: '/shipping/shipping-receipt-sheet',
       }, {
+        name: '差异复议',
+        url: '/shipping/reconsiders/export',
+      }, {
         name: '对账任务',
         url: '/reconciliation/tasks/export',
       }, {
@@ -120,6 +123,9 @@ export default {
       children: [{
         name: '收发任务单',
         url: '/receipt/tasks',
+      }, {
+        name: '差异复议',
+        url: '/shipping/reconsiders/import',
       }, {
         name: '收发货列表',
         url: '/shipping/shipping-receipt-sheet',
