@@ -217,7 +217,7 @@
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
         formData: {
           code: '',
-          entries: [],
+          taskOrderEntries: [],
           deliveryAddress: {},
           id: '',
           status: '',

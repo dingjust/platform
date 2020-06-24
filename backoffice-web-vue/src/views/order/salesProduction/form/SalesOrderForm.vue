@@ -31,21 +31,21 @@
         </el-row>
         <el-row type="flex" justify="start" :gutter="20">
           <el-col :span="8">
-            <el-form-item label="客户" prop='cooperator.name'
+            <el-form-item label="客户" prop='originCooperator.name'
               :rules="{required: true, message: '不能为空', trigger: 'change'}">
-              <el-input v-model="form.cooperator.name" :disabled="true" placeholder="请输入"></el-input>
+              <el-input v-model="form.originCooperator.name" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="联系人" prop='cooperator.contactPerson'
+            <el-form-item label="联系人" prop='originCooperator.contactPerson'
               :rules="{required: true, message: '不能为空', trigger: 'change'}">
-              <el-input v-model="form.cooperator.contactPerson" :disabled="true" placeholder="请输入"></el-input>
+              <el-input v-model="form.originCooperator.contactPerson" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="联系方式" prop='cooperator.contactPhone'
+            <el-form-item label="联系方式" prop='originCooperator.contactPhone'
               :rules="{required: true, message: '不能为空', trigger: 'change'}">
-              <el-input v-model="form.cooperator.contactPhone" :disabled="true" placeholder="请输入"></el-input>
+              <el-input v-model="form.originCooperator.contactPhone" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -65,6 +65,22 @@
             <el-col :span="18">
               <MTAVAT :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
                 :readOnly="hasOrigin" :tax.sync="form.invoiceTaxPoint" />
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="是否需要产前：" label-width="120" prop="needVoice">
+                <el-radio v-model="form.needPreproduction" :label="true">是</el-radio>
+                <el-radio v-model="form.needPreproduction" :label="false">否</el-radio>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex">
+            <el-col :span="8">
+              <el-form-item label="生产节点设置" label-width="100px">
+                <el-input v-model="form.progressPlan.name" :disabled="true" style="width: 200px"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+              <el-button class="progreesPlan-btn" @click="progressPlanVisible = !progressPlanVisible">选择</el-button>
             </el-col>
           </el-row>
         </div>
@@ -118,12 +134,12 @@
                 </el-form-item>
               </template>
             </el-col>
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-form-item label="采购负责人" label-width="100px" prop="purchasingLeader"
                 :rules="{required: true, message: '不能为空', trigger: 'change'}">
                 <personnel-selection :vPerson.sync="form.purchasingLeader" />
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
         </div>
         <el-row type="flex" justify="end" style="margin-top:20px;">
@@ -147,6 +163,9 @@
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
         :needMaterialsSpec="needMaterialsSpec" :isUpdate="false" :productionLeader="form.productionLeader" />
     </el-dialog>
+    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="setProgressPlan"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -154,11 +173,11 @@
   import SupplierSelect from '@/components/custom/SupplierSelect';
   import MTAVAT from '../../../../components/custom/order-form/MTAVAT';
   import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
-  import PayPlanFormV2 from '../../../../components/custom/order-form/PayPlanFormV2';
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
+  import ProgressPlanSelectDialog from '@/views/user/progress-plan/components/ProgressPlanSelectDialog'
   import {
-    PayPlanFormV4
+    PayPlanFormV2
   } from '@/components/'
 
   import {
@@ -175,7 +194,7 @@
       SupplierSelect,
       SalesProductionTabs,
       PersonnelSelection,
-      PayPlanFormV4
+      ProgressPlanSelectDialog
     },
     computed: {
       // 根据订单类型，加工类型判断是否需要物料清单等
@@ -193,8 +212,8 @@
       // 总数量
       totalAmount: function () {
         let total = 0;
-        if (this.form.entries != null) {
-          this.form.entries.forEach(element => {
+        if (this.form.taskOrderEntries != null) {
+          this.form.taskOrderEntries.forEach(element => {
             let num = parseFloat(getEntryTotalAmount(element));
             if (num != null && (!Number.isNaN(num))) {
               total += num;
@@ -206,7 +225,7 @@
       // 销售总价
       totalPrice: function () {
         let total = 0;
-        this.form.entries.forEach(element => {
+        this.form.taskOrderEntries.forEach(element => {
           let num = parseFloat(getEntryTotalPrice(element));
           if (num != null && (!Number.isNaN(num))) {
             total += num;
@@ -254,7 +273,7 @@
       },
       onAppendProduct(products) {
         products.forEach(element => {
-          let index = this.form.entries.findIndex(entry => entry.product.code == element.product.code);
+          let index = this.form.taskOrderEntries.findIndex(entry => entry.product.code == element.product.code);
           if (index == -1) {
             // 移除原有Id;
             if (element.materialsSpecEntries != null) {
@@ -265,21 +284,26 @@
                 });
               });
             }
-            this.form.entries.push(element);
+            this.form.taskOrderEntries.push(element);
           }
         });
         this.salesProductAppendVisible = false;
       },
       onSuppliersSelect(val) {
         this.suppliersSelectVisible = false;
-        this.form.cooperator.id = val.id;
-        this.form.cooperator.name = val.name;
-        this.form.cooperator.contactPhone = val.phone;
-        this.form.cooperator.contactPerson = val.person;
+        this.form.originCooperator.id = val.id;
+        this.form.originCooperator.name = val.name;
+        this.form.originCooperator.contactPhone = val.phone;
+        this.form.originCooperator.contactPerson = val.person;
         if (val.payPlan != null) {
           this.setPayPlan(val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
+      },
+      setProgressPlan (val) {
+        this.form.progressPlan.id = val.id;
+        this.form.progressPlan.name = val.name;
+        this.progressPlanVisible = !this.progressPlanVisible; 
       },
       setPayPlan(payPlan) {
         // 删除原有id
@@ -316,7 +340,7 @@
         }
       },
       async validateForms() {
-        if (this.form.entries.length < 1) {
+        if (this.form.taskOrderEntries.length < 1) {
           this.$message.error('请添加产品');
           return false;
         }
@@ -324,7 +348,7 @@
         // //校验明细行是否有预算单
         // let costingValidate = true;
         // //校验是否有核算单
-        // this.form.entries.forEach(element => {
+        // this.form.taskOrderEntries.forEach(element => {
         //   if (element.costOrder == null) {
         //     costingValidate = false;
         //   }
@@ -354,13 +378,15 @@
         suppliersSelectVisible: false,
         payPlanSelectDialogVisible: false,
         dialogPayPlanFormVisible: false,
+        progressPlanVisible: false,
         form: {
           name: '',
           type: 'SALES_ORDER',
           invoiceNeeded: false,
           auditNeeded: true,
+          needPreproduction: true,
           invoiceTaxPoint: 0.03,
-          entries: [],
+          taskOrderEntries: [],
           cooperationMode: 'LABOR_AND_MATERIAL',
           payPlan: {
             isHaveDeposit: false,
@@ -373,7 +399,13 @@
               triggerType: 'INSIDE'
             }]
           },
-          cooperator: {
+          progressPlan: {
+            id: null,
+            name: '',
+            remarks: '',
+            productionProgresses: []
+          },
+          originCooperator: {
             id: '',
             name: '',
             contactPhone: '',
@@ -393,10 +425,10 @@
       if (this.$route.params.order != null) {
         Object.assign(this.form, this.$route.params.order);
         // 设置对应供应商
-        if (this.form.cooperator.type == 'ONLINE') {
-          this.form.cooperator.name = this.form.cooperator.partner.name;
-          this.form.cooperator.contactPhone = this.form.cooperator.partner.contactPhone;
-          this.form.cooperator.contactPerson = this.form.cooperator.partner.contactPerson;
+        if (this.form.originCooperator.type == 'ONLINE') {
+          this.form.originCooperator.name = this.form.originCooperator.partner.name;
+          this.form.originCooperator.contactPhone = this.form.originCooperator.partner.contactPhone;
+          this.form.originCooperator.contactPerson = this.form.originCooperator.partner.contactPerson;
         }
       }
     },
@@ -453,4 +485,9 @@
     height: 40px;
   }
 
+  .progreesPlan-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+  }
 </style>

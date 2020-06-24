@@ -33,7 +33,7 @@
             </el-col>
           </el-row>
         </div>
-        <el-row>
+        <!-- <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
               <h6>生产要求</h6>
@@ -48,7 +48,7 @@
             </el-col>
           </el-row>
         </div>
-        <el-divider />
+        <el-divider /> -->
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -143,7 +143,7 @@
       },
       onAppendProduct(products) {
         products.forEach(element => {
-          let index = this.form.entries.findIndex(entry => entry.product.code == element.product.code);
+          let index = this.form.taskOrderEntries.findIndex(entry => entry.product.code == element.product.code);
           if (index == -1) {
             if (element.materialsSpecEntries != null) {
               //移除原有Id;
@@ -154,13 +154,13 @@
                 });
               });
             }
-            this.form.entries.push(element);
+            this.form.taskOrderEntries.push(element);
           }
         });
         this.salesProductAppendVisible = false;
       },
       async validateForms() {
-        if (this.form.entries.length < 1) {
+        if (this.form.taskOrderEntries.length < 1) {
           this.$message.error('请添加产品');
           return false;
         }
@@ -220,7 +220,7 @@
           cooperationMode: 'LABOR_AND_MATERIAL',
           invoiceNeeded: false,
           invoiceTaxPoint: 0.03,
-          entries: [],
+          taskOrderEntries: [],
           productionLeader: null,
           approvers: [null],
           auditNeeded: true,

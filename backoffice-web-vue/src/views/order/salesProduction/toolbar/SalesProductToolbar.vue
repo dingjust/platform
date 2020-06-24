@@ -2,44 +2,39 @@
   <div>
     <el-form :inline="true" label-position="left">
       <el-row type="flex" justify="space-between">
-        <el-col :span="5">
-          <el-form-item label="订单信息" prop="name" label-width="70px">
+        <el-col :span="17">
+          <el-form-item label="订单信息" prop="name">
             <el-input placeholder="订单号，订单名称" v-model="queryFormData.keyword" class="input-item"></el-input>
           </el-form-item>
-        </el-col>
-        <el-col :span="5">
-          <el-form-item label="负责人" prop="name" label-width="70px">
+        <!-- </el-col> -->
+        <!-- <el-col :span="5"> -->
+          <el-form-item label="负责人" prop="name">
             <el-input placeholder="跟单员姓名" v-model="queryFormData.name" class="input-item"></el-input>
           </el-form-item>
-        </el-col>
-        <el-col :span="5">
-          <el-form-item label="合作商" prop="name" label-width="70px">
+        <!-- </el-col> -->
+        <!-- <el-col :span="5"> -->
+          <el-form-item label="合作商" prop="name">
             <el-input placeholder="合作商名称" v-model="queryFormData.name" class="input-item"></el-input>
           </el-form-item>
-        </el-col>
-        <el-col :span="1" style="margin-right:10px">
+        <!-- </el-col> -->
+        <!-- <el-col :span="1" style="margin-right:10px"> -->
           <el-button-group>
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+            <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
-        <!-- </el-col> -->
-        <!-- <el-col :span="8"> -->
-        <!-- <el-row type="flex" justify="end" align="middle"> -->
-        <el-col :span="8" >
-          <el-row type="flex" justify="center">
-          <el-button-group>
-            <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入
-            </el-button>
-            <el-button size="small" @click="createSalesPlan">创建销售计划</el-button>
-            <el-button size="small" @click="createSalesOrder">创建销售订单</el-button>
-          </el-button-group>
+        <el-col :span="7" v-if="!isPending">
+          <el-row type="flex" justify="end">
+            <el-button-group>
+              <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入
+              </el-button>
+              <el-button size="small" @click="createSalesPlan">创建销售计划</el-button>
+              <el-button size="small" @click="createSalesOrder">创建销售订单</el-button>
+            </el-button-group>
           </el-row>
         </el-col>
-        <!-- </el-row> -->
-        <!-- </el-col> -->
       </el-row>
     </el-form>
-    <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses" />
     <el-dialog :visible.sync="uniqueCodeImportFormVisible" width="30%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <unique-code-import-form @callback="onImportCallback" />
@@ -60,6 +55,12 @@
 
   export default {
     name: 'SalesProductionToolbar',
+    props: {
+      isPending: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       SalesProductionStatusBar,
       UniqueCodeImportForm
@@ -144,7 +145,6 @@
       onReset() {
         this.queryFormData.keyword = '';
         this.queryFormData.name = '';
-        this.queryFormData.status = '';
         this.queryFormData.hasContact = '';
         this.queryFormData.isArrears = '';
         this.queryFormData.isDelay = '';
@@ -173,7 +173,7 @@
 </script>
 <style scoped>
   .input-item {
-    width: 110px;    
+    width: 140px;    
   }
 
   .toolbar-search_input {
