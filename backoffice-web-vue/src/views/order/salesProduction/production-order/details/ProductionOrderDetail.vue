@@ -4,11 +4,11 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="production-order-list-title">
-            <h6>生产任务明细</h6>
+            <h6>生产工单明细</h6>
           </div>
         </el-col>
         <el-col :span="6">
-          <h6>任务单号：{{code}}</h6>
+          <h6>工单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="6">
           <h6>订单状态：{{getEnum('purchaseOrderStatuses', formData.status)}}</h6>
@@ -53,7 +53,7 @@
 
   export default {
     name: 'ProductionOrderDetail',
-    props: ['code'],
+    props: ['id'],
     components: {
       ProductionOrderRelationInfo,
       ProgressOrder,
@@ -80,13 +80,13 @@
     },
     methods: {
       async getDetail() {
-        const url = this.apis().getProductionOrderDetail(this.code);
+        const url = this.apis().getProductionOrderDetail(this.id);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$store.state.ProductionOrderModule.formData = Object.assign({}, result);
+        this.$store.state.ProductionOrderModule.formData = Object.assign({}, result.data);
       },
       onCallBack() {
         this.getDetail();

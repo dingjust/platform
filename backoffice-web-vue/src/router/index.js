@@ -359,7 +359,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/production-order/form/ProductionOrderForm')
             },
             {
-              path: 'productionOrder/:code',
+              path: 'productionOrder/:id',
               name: '生产工单详情',
               props: true,
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/production-order/details/ProductionOrderDetail')

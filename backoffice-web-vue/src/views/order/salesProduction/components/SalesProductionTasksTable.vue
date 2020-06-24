@@ -36,7 +36,7 @@
       </el-table-column>
       <el-table-column label="关联生产单" min-width="120">
         <template slot-scope="scope">
-          <el-button type="text" @click="onProductionOrderDetail(scope.row.productionWorkOrderCode)">
+          <el-button type="text" @click="onProductionOrderDetail(scope.row.id)">
             {{scope.row.productionWorkOrderCode}}
           </el-button>
         </template>
@@ -81,8 +81,8 @@
       onTaskDetail(id) {
         this.$router.push('/sales/production/' + id);
       },
-      onProductionOrderDetail(code) {
-        this.$router.push('/sales/productionOrder/' + code);
+      onProductionOrderDetail(id) {
+        this.$router.push('/sales/productionOrder/' + id);
       },
       onClose() {
 

@@ -108,7 +108,7 @@
         this.$refs.resultTable.clearSelection();
       },
       onDetails(row) {
-        this.$router.push('/sales/productionOrder/' + row.code);
+        this.$router.push('/sales/productionOrder/' + row.id);
       },
       countTotalQuantity(entries) {
         let amount = 0;

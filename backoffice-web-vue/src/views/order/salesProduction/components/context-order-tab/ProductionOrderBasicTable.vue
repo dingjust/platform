@@ -72,7 +72,7 @@
     },
     methods: {
       onProductDetail(row) {
-        this.$router.push('/sales/productionOrder/' + row.code);
+        this.$router.push('/sales/productionOrder/' + row.id);
       },
       async getDetail(code) {
         const url = this.apis().getProductionOrderDetail(code);
