@@ -15,6 +15,8 @@ import PayPlanInfo from '@/components/custom/order-form/PayPlanInfo'
 //table
 import ColorSizeTable from '@/components/custom/table/ColorSizeTable'
 import ColorSizeBoxTable from '@/components/custom/table/ColorSizeBoxTable'
+import ColorSizeBoxChangeTable from '@/components/custom/table/ColorSizeBoxChangeTable'
+import ColorSizeChangeTable from '@/components/custom/table/ColorSizeChangeTable'
 
 // Custom/upload
 import PDFUpload from './custom/upload/PDFUpload';
@@ -117,5 +119,7 @@ export {
   Switch,
   SideSlider,
   ColorSizeTable,
-  ColorSizeBoxTable
+  ColorSizeBoxTable,
+  ColorSizeBoxChangeTable,
+  ColorSizeChangeTable
 }
