@@ -195,7 +195,7 @@
     },
     methods: {
       onSave() {
-        this.$emit('onSave', slotData);
+        this.$emit('onSave', this.slotData);
       }
     },
     data() {

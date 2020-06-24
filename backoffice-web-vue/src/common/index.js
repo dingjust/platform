@@ -1087,6 +1087,10 @@ let NONE_TENANT_APIS = {
   salesPlanSave(needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
   },
+  // 更新销售订单行
+  updateSalesOrderRow () {
+    return '/b2b/sales/production/order/update/entry';
+  },
   //销售计划撤回
   salesPlanWithdraw(id) {
     return '/b2b/sales/production/order/revoke/audit/' + id;
