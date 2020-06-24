@@ -25,12 +25,14 @@
     <el-row type="flex" style="padding-bottom: 10px" justify="space-around">
       <el-col :span="8">
         <el-row type="flex">
-          <el-button>补收货单</el-button>
+          <el-button @click="receiptFormVisible=true" :disabled="form.receiptOrder!=null">补收货单</el-button>
+          <el-button type="text" v-if="form.receiptOrder!=null" @click="receiptFormVisible=true">收货单</el-button>
         </el-row>
       </el-col>
       <el-col :span="8">
         <el-row type="flex">
-          <el-button>补退货单</el-button>
+          <el-button @click="returnFormVisible=true" :disabled="form.returnOrder!=null">补退货单</el-button>
+          <el-button type="text" v-if="form.returnOrder!=null" @click="returnFormVisible=true">退货单</el-button>
         </el-row>
       </el-col>
     </el-row>
@@ -47,7 +49,7 @@
         <el-col :span="12" :offset="2">
           <el-row type="flex">
             <h6 style="margin-right:20px">上传凭证</h6>
-            <images-upload class="form-upload" :slot-data="attachments" />
+            <images-upload class="form-upload" :slot-data="form.attachments" />
           </el-row>
         </el-col>
       </el-row>
@@ -59,15 +61,23 @@
         </el-col>
       </template>
     </el-row>
-    <el-dialog :visible.sync="acceptFormVisible" width="60%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="receiptFormVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <return-orders-page v-if="acceptFormVisible" />
+      <receipt-form :receiptOrder="{colorSizeEntries:reconsiderOrder.colorSizeEntries}" :data="form.receiptOrder"
+        v-if="receiptFormVisible" @onSave="onReceiptSave" />
+    </el-dialog>
+    <el-dialog :visible.sync="returnFormVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <return-form :data="form.returnOrder" :colorSizeEntries="reconsiderOrder.colorSizeEntries"
+        v-if="returnFormVisible" @onSave="onReturnSave" />
     </el-dialog>
   </div>
 </template>
 
 <script>
   import ImagesUpload from '@/components/custom/ImagesUpload';
+  import ReceiptForm from './ReceiptForm';
+  import ReturnForm from './ReturnForm';
 
   export default {
     name: 'AcceptForm',
@@ -77,7 +87,9 @@
       }
     },
     components: {
-      ImagesUpload
+      ImagesUpload,
+      ReceiptForm,
+      ReturnForm
     },
     computed: {
 
@@ -85,21 +97,33 @@
     methods: {
       onSubmit() {
         //校验数量与订单差异
-
+        this.receiptFormVisible = true;
       },
       async _onSubmit() {
         // this.onReturnedMessage();
       },
+      onReceiptSave(val) {
+        this.$set(this.form, 'receiptOrder', val);
+        this.receiptFormVisible = false;
+      },
+      onReturnSave(val) {
+        this.$set(this.form, 'returnOrder', val);
+        this.returnFormVisible = false;
+      }
     },
     data() {
       return {
-        acceptFormVisible: false,
+        receiptFormVisible: false,
+        returnFormVisible: false,
         data: [],
         form: {
           num: '',
-          message: ''
+          message: '',
+          attachments: [],
+          data: [],
+          receiptOrder: null,
+          returnOrder: null
         },
-        attachments: []
       }
     },
     created() {

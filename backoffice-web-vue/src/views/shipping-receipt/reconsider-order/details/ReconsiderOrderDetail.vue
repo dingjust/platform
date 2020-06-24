@@ -94,7 +94,7 @@
     </el-dialog>
     <el-dialog :visible.sync="rejectFormVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <reject-form v-if="rejectFormVisible" />
+      <reject-form v-if="rejectFormVisible" :reconsiderOrder="{colorSizeEntries:colorSizeMockData}" />
     </el-dialog>
   </div>
 </template>
@@ -150,7 +150,7 @@
               "code": "S24",
               "name": "40"
             },
-            "quantity": 22
+            "quantity": 22342
           },
           {
             "id": 8798845762901,
@@ -165,7 +165,7 @@
               "code": "S17",
               "name": "30"
             },
-            "quantity": 2
+            "quantity": 22323
           },
           {
             "id": 8798845795669,
@@ -180,7 +180,7 @@
               "code": "S17",
               "name": "30"
             },
-            "quantity": 2
+            "quantity": 2111
           },
           {
             "id": 8798845828437,
