@@ -26,7 +26,7 @@
               </el-row>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType">
+          <el-row type="flex" justify="start" class="basic-form-row">
             <el-col :span="8">
               <el-row type="flex" align="middle">
                 <h6 class="sales-plan-h6"><span class="info-title">生产总数：</span>{{totalAmount}}</h6>
@@ -38,10 +38,10 @@
               </el-row>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType" v-popover:popover>
+          <el-row type="flex" justify="start" class="basic-form-row" v-if=" form.type == 'SALES_ORDER'" v-popover:popover>
             <h6 class="sales-plan-h6"><span class="info-title">财务</span></h6>
           </el-row>
-          <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType" v-popover:popover>
+          <el-row type="flex" justify="start" class="basic-form-row" v-if="form.type == 'SALES_ORDER'" v-popover:popover>
             <el-col :span="8">
               <h6 class="sales-plan-h6"><span class="info-title">有无定金：</span>{{form.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
             </el-col>
@@ -77,13 +77,13 @@
               </h6>
             </el-col>
             <el-col :span="12">
-              <h6 v-show="!modifyType" class="sales-plan-h6"><span class="info-title">审批负责人：</span>
+              <h6 class="sales-plan-h6"><span class="info-title">审批负责人：</span>
                 {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" class="basic-form-row">
             <el-row type="flex" align="middle">
-              <h6 v-show="!modifyType" class="sales-plan-h6"><span class="info-title">生产负责人：</span>
+              <h6 class="sales-plan-h6"><span class="info-title">生产负责人：</span>
                 {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
             </el-row>
           </el-row>
@@ -94,7 +94,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
+    <el-popover ref="popover" placement="top-start" width="500" trigger="hover" v-if="form.type == 'SALES_ORDER'">
       <pay-plan-info :form="payPlan"></pay-plan-info>
     </el-popover>
   </div>
@@ -123,11 +123,11 @@
     name: 'SalesOrderDetailForm',
     computed: {
       cooperator: function () {
-        if (this.form.cooperator != null) {
-          if (this.form.cooperator.type == 'ONLINE') {
-            return Object.assign({}, this.form.cooperator.partner);
+        if (this.form.originCooperator != null) {
+          if (this.form.originCooperator.type == 'ONLINE') {
+            return Object.assign({}, this.form.originCooperator.partner);
           } else {
-            return Object.assign({}, this.form.cooperator);
+            return Object.assign({}, this.form.originCooperator);
           }
         } else {
           return {
@@ -140,8 +140,8 @@
       // 总数量
       totalAmount: function () {
         let total = 0;
-        if (this.form.entries != null) {
-          this.form.entries.forEach(element => {
+        if (this.form.taskOrderEntries != null) {
+          this.form.taskOrderEntries.forEach(element => {
             let num = parseFloat(getEntryTotalAmount(element));
             if (num != null && (!Number.isNaN(num))) {
               total += num;
@@ -153,7 +153,7 @@
       // 销售总价
       totalPrice: function () {
         let total = 0;
-        this.form.entries.forEach(element => {
+        this.form.taskOrderEntries.forEach(element => {
           let num = parseFloat(getEntryTotalPrice(element));
           if (num != null && (!Number.isNaN(num))) {
             total += num;

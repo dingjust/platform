@@ -71,11 +71,11 @@
         refresh: 'refresh'
       }),
       getCustName(row) {
-        if (row.cooperator != null) {
-          if (row.cooperator.type == 'ONLINE') {
-            return row.cooperator.partner.name;
+        if (row.originCooperator != null) {
+          if (row.originCooperator.type == 'ONLINE') {
+            return row.originCooperator.partner.name;
           } else {
-            return row.cooperator.name;
+            return row.originCooperator.name;
           }
         }
         return '';

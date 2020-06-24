@@ -22,11 +22,11 @@
     </div>
     <el-tabs type="border-card">
       <el-tab-pane label="产品明细">
-        <sales-production-products-table :data="form.entries" :canDelete="canChangeProduct" @onDelete="onProductDelete"
+        <sales-production-products-table :data="form.taskOrderEntries" :canDelete="canChangeProduct" @onDelete="onProductDelete"
           :canUpdate="canUpdate" @onModify="onProductModify" @onDetail="onProductDetail" />
       </el-tab-pane>
       <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'">
-        <sales-production-tasks-table :data="form.entries" @onDelete="onTaskDelete" @onModify="onTaskModify" />
+        <sales-production-tasks-table :data="form.taskOrderEntries" @onDelete="onTaskDelete" @onModify="onTaskModify" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -100,7 +100,7 @@
       onProductDelete(index) {
         this.$confirm('确认删除？')
           .then(_ => {
-            this.form.entries.splice(index, 1);
+            this.form.taskOrderEntries.splice(index, 1);
             popVisible = false;
           })
           .catch(_ => {});
@@ -111,28 +111,28 @@
       //详情
       onProductDetail(index) {
         this.updateIndex = index;
-        this.updateEntry = this.form.entries[index];
+        this.updateEntry = this.form.taskOrderEntries[index];
         this.productFormReadOnly = true;
         this.detailVisible = true;
       },
       //产品修改
       onProductModify(index) {
         this.updateIndex = index;
-        this.updateEntry = this.form.entries[index];
+        this.updateEntry = JSON.parse(JSON.stringify(this.form.taskOrderEntries[index]));;
         this.productFormReadOnly = false;
         this.formVisible = true;
       },
       //编辑回调
       onSave(entries) {
-        var newEntry = Object.assign(this.updateEntry, entries[0]);
-        this.$set(this.form.entries, this.updateIndex, newEntry);
-        this.salesProductAppendVisible = false;
+        // var newEntry = Object.assign(this.updateEntry, entries[0]);
+        // this.$set(this.form.taskOrderEntries, this.updateIndex, newEntry);
+        // this.salesProductAppendVisible = false;
       },
       //任务删除
       onTaskDelete(index) {
         // this.$confirm('确认删除？')
         //   .then(_ => {
-        //     this.form.entries.splice(index, 1);
+        //     this.form.taskOrderEntries.splice(index, 1);
         //     popVisible = false;
         //   })
         //   .catch(_ => {});
@@ -140,7 +140,7 @@
       //任务修改
       onTaskModify(index) {
         // this.updateIndex = index;
-        // this.updateEntry = this.form.entries[index];
+        // this.updateEntry = this.form.taskOrderEntries[index];
         // this.salesProductAppendVisible = true;
       },
     },

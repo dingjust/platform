@@ -11,9 +11,15 @@
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
         @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"
         @onUniqueCodeImport="onUniqueCodeImport" />
-      <el-divider class="sales-divider"></el-divider>
-      <sales-production-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-        @onDelete="onDelete" />
+      <!-- <el-divider class="sales-divider"></el-divider> -->
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <template v-for="item in statuses">
+          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+            <sales-production-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
+              @onDelete="onDelete" />
+          </el-tab-pane>
+        </template>
+      </el-tabs>
     </el-card>
   </div>
 </template>
@@ -82,6 +88,10 @@
           size
         });
       },
+      handleClick (tab, event) {
+        this.queryFormData.status = tab.name;
+        this.onAdvancedSearch();
+      },
       onDelete() {
 
       },
@@ -99,7 +109,33 @@
     },
     data() {
       return {
-
+        activeName: '',
+        statuses: [
+          {
+            code: '',
+            name: '全部'
+          },
+          {
+            code: 'NONE',
+            name: '未提交'
+          },
+          {
+            code: 'AUDITING',
+            name: '审核中'
+          },
+          {
+            code: 'PASSED',
+            name: '审核通过'
+          },
+          {
+            code: 'AUDITED_FAILED',
+            name: '审核驳回'
+          },
+          {
+            code: 'CANCELLED',
+            name: '已取消'
+          }
+        ]
       }
     },
     created() {
