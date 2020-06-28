@@ -103,7 +103,7 @@
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="18">
-            <MTAVAT :machiningTypes.sync="formData.machiningType" :needVoice.sync="formData.invoiceNeeded"
+            <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
                     :tax.sync="formData.invoiceTaxPoint" />
           </el-col>
           <el-col :span="6">

@@ -38,7 +38,7 @@ const state = {
       },
       colorSizeEntries: []
     }],
-    machiningType: 'LABOR_AND_MATERIAL',
+    cooperationMode: 'LABOR_AND_MATERIAL',
     invoiceNeeded: false,
     invoiceTaxPoint: 0.03,
     freightPayer: 'PARTYA',
@@ -183,7 +183,7 @@ const actions = {
         },
         colorSizeEntries: []
       }],
-      machiningType: 'LABOR_AND_MATERIAL',
+      cooperationMode: 'LABOR_AND_MATERIAL',
       invoiceNeeded: false,
       invoiceTaxPoint: 0.03,
       freightPayer: 'PARTYA',
