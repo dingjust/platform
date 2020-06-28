@@ -39,7 +39,7 @@
         </el-col>
         <el-col :span="4">
           <el-row type="flex" justify="end">
-            <el-button type="primary" class="create-button" @click="onCreate">创建生产工单</el-button>
+            <el-button type="primary" class="create-button" @click="onCreate">创建外发订单</el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -143,7 +143,8 @@
         this.$router.push('/orderPurchase');
       },
       onCreate () {
-        this.$router.push('/sales/create/productionOrder');
+        // this.$router.push('/sales/create/productionOrder');
+        this.$emit('onCreate');
       }
     },
     data () {

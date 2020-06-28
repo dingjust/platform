@@ -63,7 +63,7 @@
         this.$emit('onAdvancedSearch', val - 1);
       },
       onDetail(row) {
-        this.$router.push('/sales/outboundOrder/' + row.code);
+        this.$router.push('/sales/outboundOrder/' + row.id);
       },
       onModify(row) {
         this.$emit('onModify', row.code);

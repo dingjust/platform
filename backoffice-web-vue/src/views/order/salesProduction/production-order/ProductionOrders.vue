@@ -10,15 +10,18 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate"/>
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code" :key="index" :label="item.name">
-            <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+            <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :vSelectRow.sync="selectRow"/>
           </el-tab-pane>
         </template>
       </el-tabs>
     </el-card>
+    <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -38,12 +41,14 @@
 
   import ProductionOrderList from './list/ProductionOrderList';
   import ProductionOrderToolbar from './toolbar/ProductionOrderToolbar';
+  import OutboundOrderTypeSelectForm from '../outbound-order/form/OutboundOrderTypeSelectForm'
 
   export default {
     name: 'ProductionOrders',
     components: {
       ProductionOrderList,
-      ProductionOrderToolbar
+      ProductionOrderToolbar,
+      OutboundOrderTypeSelectForm
     },
     computed: {
       ...mapGetters({
@@ -99,15 +104,80 @@
           this.onAdvancedSearch();
         }
       },
+      onCreate () {
+        let row = [];
+        this.selectRow.forEach(item => {
+          row.push({
+            originOrder: {id: item.id},
+            unitPrice: '',
+            deliveryDate: '',
+            shippingAddress: item.shippingAddress,
+            product: item.product,
+            colorSizeEntries: item.colorSizeEntries
+          })
+        })
+        this.formData.taskOrderEntries = row;
+        this.outboundOrderTypeSelect = true;
+      }
     },
     data() {
       return {
-        formData: this.$store.state.ProductionOrderModule.formData,
         activeStatus: 'ALL',
         statues: [{
           code: 'ALL',
           name: '全部'
         }],
+        outboundOrderTypeSelect: false,
+        selectRow: [],
+        formData: {
+          id: null,
+          managementMode: 'COLLABORATION',
+          outboundCompanyName: '',
+          outboundContactPerson: '',
+          outboundContactPhone: '',
+          targetCooperator: {
+            id: ''
+          },
+          taskOrderEntries: [{
+            originOrder: {
+              id: ''
+            },
+            billPrice: '',
+            expectedDeliveryDate: '',
+            shippingAddress: {},
+            product: {
+
+            },
+            colorSizeEntries: []
+          }],
+          machiningType: 'LABOR_AND_MATERIAL',
+          invoiceNeeded: false,
+          invoiceTaxPoint: 0.03,
+          freightPayer: 'PARTYA',
+          remarks: '',
+          isApproval: false,
+          progressPlan: {
+            name: '',
+            remarks: '',
+            productionProgresses: []
+          },
+          payPlan: {
+            name: '',
+            isHaveDeposit: false,
+            payPlanType: 'PHASEONE',
+            payPlanItems: [{
+              moneyType: 'PHASEONE',
+              payPercent: 0.003,
+              triggerDays: 5,
+              triggerEvent: 'ORDER_CONFIRMED',
+              triggerType: 'INSIDE'
+            }]
+          },
+          attachments: [],
+          approvers: [{
+            id: ''
+          }]
+        },
       };
     },
     created() {

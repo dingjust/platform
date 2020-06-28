@@ -1,7 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
-      :height="autoHeight">
+    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed" :row-key="'id'"
+      :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick" :reserve-selection="true">
+      <el-table-column type="selection" width="55px" :selectable="rowDisabled"></el-table-column>
       <el-table-column label="生产订单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -69,7 +70,15 @@
 
   export default {
     name: 'ProductionOrderList',
-    props: ['page'],
+    props: {
+      page: {
+        type: Object,
+        required: true
+      },
+      vSelectRow: {
+        type: Array
+      }
+    },
     components: {},
     computed: {},
     methods: {
@@ -117,6 +126,21 @@
         });
         return amount;
       },
+      rowDisabled (row, index) {
+        if (row.outboundOrderCode) {
+          return false;
+        }
+        return true;
+      },
+      handleSelectionChange (val) {
+        this.selectRow = val;
+      },
+      rowClick (row, column, event) {
+        if (row.outboundOrderCode) {
+          return;
+        }
+        this.$refs.resultTable.toggleRowSelection(row);
+      },
       // getPaymentStatusTag (row) {
       //   return row.payStatus === 'PAID' ? 'static/img/paid.png' : 'static/img/arrears.png';
       // },
@@ -140,10 +164,22 @@
         // this.$emit('onUpdate', row);
       }
     },
+    watch: {
+      vSelectRow: function (newVal, oldVal) {
+        this.selectRow = newVal;
+      },
+      selectRow: function (newVal, oldVal) {
+        this.$emit('update:vSelectRow', newVal);
+      }
+    },
     data() {
       return {
-        statuses: this.$store.state.ProductionOrderModule.statuses
+        statuses: this.$store.state.ProductionOrderModule.statuses,
+        selectRow: []
       }
+    },
+    created () {
+      this.selectRow = this.vSelectRow;
     }
   }
 
