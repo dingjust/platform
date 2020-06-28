@@ -243,19 +243,7 @@
         clearFormData: 'clearFormData'
       }),
       getProgressPlan (val) {
-        // let item = {};
-        // let progressList = [];
-        // val.productionProgresses.forEach(val => {
-        //   item.medias = val.medias;
-        //   item.progressPhase = val.progressPhase;
-        //   item.quantity = val.quantity;
-        //   item.sequence = val.sequence;
-        //   item.completeAmount = val.completeAmount;
-        //   item.warningDays = val.warningDays;
-        //   item.productionProgressOrders = val.productionProgressOrders;
-        //   progressList.push(item);
-        //   item = {}
-        // })
+        val.id = null;
         this.formData.progressPlan = val;
         this.progressPlanVisible = false;
       },
