@@ -72,7 +72,7 @@
       onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
-        const url = this.apis().getProductionOrders();
+        const url = this.apis().getoutboundProductionList();
         // const url = this.apis().getPurchaseOrders();
         this.setIsAdvancedSearch(false);
         this.search({
@@ -86,7 +86,7 @@
       onAdvancedSearch(page, size) {
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
-        const url = this.apis().getProductionOrders();
+        const url = this.apis().getoutboundProductionList();
         // const url = this.apis().getPurchaseOrders();
         this.searchAdvanced({
           url,

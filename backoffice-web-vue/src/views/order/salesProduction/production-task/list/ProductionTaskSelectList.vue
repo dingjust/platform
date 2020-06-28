@@ -14,30 +14,30 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
-              <img width="54px" v-if="scope.row.productionEntry.product!=null" height="54px"
-                :src="scope.row.productionEntry.product.thumbnail!=null&&scope.row.productionEntry.product.thumbnail.length!=0?scope.row.productionEntry.product.thumbnail.url:'static/img/nopicture.png'" />
+              <img width="54px" v-if="scope.row.product!=null" height="54px"
+                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'" />
             </el-col>
             <el-col :span="16">
               <el-row>
-                <span>{{scope.row.productionEntry.product.name}}</span>
+                <span>{{scope.row.product.name}}</span>
               </el-row>
               <el-row>
-                <span>货号:{{scope.row.productionEntry.product!=null?scope.row.productionEntry.product.skuID:''}}</span>
+                <span>货号:{{scope.row.product!=null?scope.row.product.skuID:''}}</span>
               </el-row>
             </el-col>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品类" prop="productionEntry.product.category.name">
+      <el-table-column label="品类" prop="product.category.name">
       </el-table-column>
-      <el-table-column label="订单数量" prop="productionEntry.quantity">
+      <el-table-column label="订单数量" prop="quantity">
       </el-table-column>
-      <el-table-column label="创建人" prop="creator.name">
+      <!-- <el-table-column label="创建人" prop="creator.name">
       </el-table-column>
       <el-table-column label="负责人" prop="productionLeader.name">
-      </el-table-column>
-      <el-table-column label="指定工厂" prop="appointFactory.name">
-      </el-table-column>
+      </el-table-column> -->
+      <!-- <el-table-column label="指定工厂" prop="appointFactory.name">
+      </el-table-column> -->
       <el-table-column label="创建日期">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
@@ -45,14 +45,14 @@
       </el-table-column>
       <el-table-column label="交货时间">
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | timestampToTime}}</span>
+          <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status">
+      <!-- <el-table-column label="状态" prop="status">
         <template slot-scope="scope">
           <span>{{getEnum('ProductionState', scope.row.state)}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
           <el-row>

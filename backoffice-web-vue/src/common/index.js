@@ -662,11 +662,15 @@ const COMMON_APIS = {
   },
   // 获取外发订单列表
   getoutboundOrdersList() {
-    return '/b2b/orders/outbound';
+    return '/b2b/out/order/search';
+  },
+  // 获取外发工单列表
+  getoutboundProductionList() {
+    return '/b2b/out/order/production/search';
   },
   // 创建外发订单
   createOutboundOrder() {
-    return '/b2b/orders/outbound/create';
+    return '/b2b/out/order/save';
   },
   // 获取外发订单详情
   getoutboundOrderDetail(code) {

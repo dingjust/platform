@@ -145,8 +145,8 @@
         </el-row>
         <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top">
           <el-col :span="6">
-            <el-form-item label="跟单员" prop="partyAOperator">
-              <personnel-selection :vPerson.sync="formData.partyAOperator"/>
+            <el-form-item label="跟单员" prop="merchandiser">
+              <personnel-selection :vPerson.sync="formData.merchandiser"/>
             </el-form-item>
           </el-col>
           <el-col :span="2">
@@ -187,10 +187,10 @@
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
-          <el-button class="material-btn" @click="onSave">保存</el-button>
+          <el-button class="material-btn" @click="onCreate(false)">保存</el-button>
         </el-col>
         <el-col :span="5">
-          <el-button class="material-btn" @click="onCreate">创建并提交</el-button>
+          <el-button class="material-btn" @click="onCreate(true)">创建并提交</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -243,24 +243,20 @@
         clearFormData: 'clearFormData'
       }),
       getProgressPlan (val) {
-        let item = {};
-        let progressList = [];
-        val.productionProgresses.forEach(val => {
-          item.medias = val.medias;
-          item.progressPhase = val.progressPhase;
-          item.quantity = val.quantity;
-          item.sequence = val.sequence;
-          item.completeAmount = val.completeAmount;
-          item.warningDays = val.warningDays;
-          item.productionProgressOrders = val.productionProgressOrders;
-          progressList.push(item);
-          item = {}
-        })
-        this.formData.progressPlan = {
-          name: val.name,
-          remarks: val.remarks,
-          productionProgresses: progressList
-        };
+        // let item = {};
+        // let progressList = [];
+        // val.productionProgresses.forEach(val => {
+        //   item.medias = val.medias;
+        //   item.progressPhase = val.progressPhase;
+        //   item.quantity = val.quantity;
+        //   item.sequence = val.sequence;
+        //   item.completeAmount = val.completeAmount;
+        //   item.warningDays = val.warningDays;
+        //   item.productionProgressOrders = val.productionProgressOrders;
+        //   progressList.push(item);
+        //   item = {}
+        // })
+        this.formData.progressPlan = val;
         this.progressPlanVisible = false;
       },
       onBlur (row, attribute) {
@@ -315,13 +311,13 @@
               },
               billPrice: '',
               expectedDeliveryDate: '',
-              shippingAddress: item.productionEntry.shippingAddress,
+              shippingAddress: item.shippingAddress,
               product: {
-                id: item.productionEntry.product.id,
-                name: item.productionEntry.product.name,
-                thumbnail: item.productionEntry.product.thumbnail
+                id: item.product.id,
+                name: item.product.name,
+                thumbnail: item.product.thumbnail
               },
-              colorSizeEntries: item.productionEntry.colorSizeEntries
+              colorSizeEntries: item.colorSizeEntries
             }
             entries.push(row);
             row = {};
@@ -345,14 +341,6 @@
           })
         })
       },
-      async onCreate () {
-        let validate = await this.validateForms();
-        if (validate) {
-          this._onCreate(true);
-        } else {
-          this.$message.error('请完善表单信息');
-        }
-      },
       async validateForms () {
         var formArr = [];
         formArr.push(this.$refs['form']);
@@ -367,7 +355,15 @@
 
         return res.every(item => !!item);
       },
-      _onCreate (isSumbitAudit) {
+      async onCreate (flag) {
+        let validate = await this.validateForms();
+        if (validate) {
+          this._onCreate(flag);
+        } else {
+          this.$message.error('请完善表单信息');
+        }
+      },
+      async _onCreate (flag) {
         let data = Object.assign({}, this.formData);
 
         // 人员设置数据处理
@@ -377,57 +373,66 @@
         if (!data.invoiceNeeded) {
           data.invoiceTaxPoint = null;
         }
-        if (isSumbitAudit) {
-          this.__onCreate(data);
-        } else {
-          this._onSave(data);
-        }
-      },
-      async __onCreate (data) {
-        if (this.formData.id) {
-          const url = this.apis().updateOutboundOrder();
-          const result = await this.$http.put(url, data, {
-            submitAudit: true
-          });
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
-            return;
-          }
-          this.$message.success('编辑外发订单成功');
-        } else {
-          const url = this.apis().createOutboundOrder();
-          const result = await this.$http.post(url, data, {
-            submitAudit: true
-          });
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
-            return;
-          }
-          this.$message.success('创建外发订单成功');
-        }
-        await this.$router.push({
-          name: '外发订单列表'
-        });
-      },
-      // 保存不提交
-      onSave () {
-        this._onCreate(false);
-      },
-      async _onSave (data) {
-        // const url = this.apis().createOutboundOrder();
-        let url = data.id ? this.apis().updateOutboundOrder() : this.apis().createOutboundOrder();
+
+        const url = this.apis().createOutboundOrder();
         const result = await this.$http.post(url, data, {
-          submitAudit: false
+          submitAudit: flag
         });
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
           return;
         }
-        this.$message.success('保存外发订单成功');
+        
+        this.$message.success(flag ? '创建外发订单成功！' : '保存外发订单成功！');
         await this.$router.push({
           name: '外发订单列表'
         });
       },
+      // async __onCreate (data) {
+      //   if (this.formData.id) {
+      //     const url = this.apis().updateOutboundOrder();
+      //     const result = await this.$http.put(url, data, {
+      //       submitAudit: true
+      //     });
+      //     if (result['errors']) {
+      //       this.$message.error(result['errors'][0].message);
+      //       return;
+      //     }
+      //     this.$message.success('编辑外发订单成功');
+      //   } else {
+      //     const url = this.apis().createOutboundOrder();
+      //     const result = await this.$http.post(url, data, {
+      //       submitAudit: true
+      //     });
+      //     if (result['errors']) {
+      //       this.$message.error(result['errors'][0].message);
+      //       return;
+      //     }
+      //     this.$message.success('创建外发订单成功');
+      //   }
+      //   await this.$router.push({
+      //     name: '外发订单列表'
+      //   });
+      // },
+      // // 保存不提交
+      // onSave () {
+      //   this._onCreate(false);
+      // },
+      // async _onSave (data) {
+      //   // const url = this.apis().createOutboundOrder();
+      //   let url = data.id ? this.apis().updateOutboundOrder() : this.apis().createOutboundOrder();
+      //   const result = await this.$http.post(url, data, {
+      //     submitAudit: false
+      //   });
+      //   if (result['errors']) {
+      //     this.$message.error(result['errors'][0].message);
+      //     return;
+      //   }
+      //   this.$message.success('保存外发订单成功');
+      //   await this.$router.push({
+      //     name: '外发订单列表'
+      //   });
+      // },
       validateField (name) {
         this.$refs.form.validateField(name);
       },
@@ -498,7 +503,7 @@
           outboundContactPerson: [{required: true, message: '请选择联系人', trigger: 'change'}],
           outboundContactPhone: [{required: true, message: '请选择联系方式', trigger: 'change'}],
           progressPlan: [{ type: 'object', validator: checkProgressPlan, trigger: 'change' }],
-          partyAOperator: [{ type: 'object', validator: checkPartyAOperator, trigger: 'change' }]
+          merchandiser: [{ type: 'object', validator: checkPartyAOperator, trigger: 'change' }]
         },
         formData: '',
         suppliersSelectVisible: false,
