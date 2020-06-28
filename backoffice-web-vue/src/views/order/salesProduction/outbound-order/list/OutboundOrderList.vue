@@ -9,17 +9,17 @@
       </el-table-column>
       <el-table-column label="关联产品数">
         <template slot-scope="scope">
-          <span>{{scope.row.entries.length}}</span>
+          <!-- <span>{{scope.row.entries.length}}</span> -->
         </template>
       </el-table-column>
       <el-table-column label="跟单员">
         <template slot-scope="scope">
-          <span>{{scope.row.partyAOperator ? scope.row.partyAOperator.name : ''}}</span>
+          <!-- <span>{{scope.row.partyAOperator ? scope.row.partyAOperator.name : ''}}</span> -->
         </template>
       </el-table-column>
-      <el-table-column label="审批状态" prop="status">
+      <el-table-column label="审批状态">
         <template slot-scope="scope">
-          <span>{{getEnum('OutboundOrderStatuses', scope.row.status)}}</span>
+          <span>{{getEnum('AuditState', scope.row.auditState)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单标签" min-width="100"></el-table-column>
@@ -50,11 +50,11 @@
     },
     methods: {
       canModify (row) {
-        return row.belongTo.uid == this.$store.getters.currentUser.companyCode && (row.status == 'NOT_COMMITED' || row.status == 'REJECTED_CONFIRM');
+        return false;
+        // return row.belongTo.uid == this.$store.getters.currentUser.companyCode && (row.status == 'NOT_COMMITED' || row.status == 'REJECTED_CONFIRM');
       },
       getCooperator (row) {
-        return row.cooperator ?
-          (row.cooperator.partner ? row.cooperator.partner.name : row.cooperator.name) : ''
+        return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
       },
       onPageSizeChanged(val) {
         this.$emit('onAdvancedSearch', 0, val);
