@@ -125,10 +125,10 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>生产负责人：{{slotData.productionLeader.name}}</h6>
+            <h6>生产负责人：{{slotData.productionLeader!=null?slotData.productionLeader.name:''}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>审批人：{{slotData.approvers[0].name}}</h6>
+            <h6>审批人：{{slotData.approvers!=null?slotData.approvers[0].name:''}}</h6>
           </el-col>
         </el-row>
         <!-- 查看单据 -->
@@ -193,16 +193,19 @@
         }
       },
       cooperator: function () {
-        var cooperator = {
-          name: '',
-          contactPerson: '',
-          contactPhone: ''
-        };
-        let company = this.slotData.byAorB == "PARTYA" ? this.slotData.partyBCompany : this.slotData.partyACompany;
-        if (company != null) {
-          Object.assign(cooperator, company);
+        if (this.slotData.originCooperator != null) {
+          if (this.slotData.originCooperator.type == 'ONLINE') {
+            return Object.assign({}, this.slotData.originCooperator.partner);
+          } else {
+            return Object.assign({}, this.slotData.originCooperator);
+          }
+        } else {
+          return {
+            name: '',
+            contactPerson: '',
+            contactPhone: ''
+          }
         }
-        return cooperator;
       },
       sizes: function () {
         var sizes = [];

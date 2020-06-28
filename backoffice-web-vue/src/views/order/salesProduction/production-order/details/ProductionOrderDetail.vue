@@ -8,7 +8,7 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <h6>工单号：{{formData.taskOrderEntries[0].code}}</h6>
+          <h6>工单号：{{formData.taskOrderEntries!=null?formData.taskOrderEntries[0].code:''}}</h6>
         </el-col>
         <el-col :span="6">
           <h6>订单状态：{{getEnum('purchaseOrderStatuses', formData.status)}}</h6>
@@ -26,7 +26,7 @@
         </div> -->
         <progress-order :slotData="formData.progressWorkSheet" @callback="onCallBack" />
         <production-order-relation-info :slotData="formData" />
-        <production-order-button-group style="margin-top:50px" :slotData="formData" @callback="getDetail"/>
+        <production-order-button-group style="margin-top:50px" :slotData="formData" @callback="getDetail" />
       </el-row>
     </el-card>
   </div>

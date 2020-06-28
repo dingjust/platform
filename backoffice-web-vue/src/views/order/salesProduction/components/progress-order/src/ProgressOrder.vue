@@ -11,7 +11,8 @@
     <el-row type="flex" justify="center" class="pp-basic-row">
       <el-col :span="23">
         <el-card>
-          <production-progress-node :slotData="slotData" @callback="onCallBack" />
+          <production-progress-node v-if="slotData.code!=''" :slotData="slotData" @callback="onCallBack" />
+          <el-row type="flex" justify="center">暂无数据</el-row>
         </el-card>
       </el-col>
     </el-row>
@@ -47,8 +48,11 @@
     },
     methods: {
       onEdit() {
-        // this.$router.push('/sales/progressOrder/' + this.slotData.code);
-        this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');
+        // this.$router.push('/sales/progressOrder/' + this.slotData.code);        
+        if (this.slotData.code != null && "" != this.slotData.code) {
+          this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');
+
+        }
       },
       onCallBack() {
         this.$emit('callback');
