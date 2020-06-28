@@ -673,8 +673,8 @@ const COMMON_APIS = {
     return '/b2b/out/order/save';
   },
   // 获取外发订单详情
-  getoutboundOrderDetail(code) {
-    return '/b2b/orders/outbound/' + code;
+  getoutboundOrderDetail(id) {
+    return '/b2b/out/order/' + id;
   },
   // 编辑外发订单详情
   updateOutboundOrder() {

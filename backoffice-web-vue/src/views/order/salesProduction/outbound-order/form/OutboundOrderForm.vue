@@ -67,14 +67,14 @@
             <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item"/>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="6">
-                <el-form-item label="发单价格" prop="billPrice" :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
-                  <el-input v-model="item.billPrice" placeholder="请输入" @blur="onBlur(item,'billPrice')"
+                <el-form-item label="发单价格" prop="unitPrice" :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
+                  <el-input v-model="item.unitPrice" placeholder="请输入" @blur="onBlur(item,'billPrice')"
                             v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item label="交货日期" prop="expectedDeliveryDate" :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
-                  <el-date-picker v-model="item.expectedDeliveryDate" type="date"
+                <el-form-item label="交货日期" prop="deliveryDate" :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
+                  <el-date-picker v-model="item.deliveryDate" type="date"
                                   value-format="timestamp" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
@@ -243,8 +243,23 @@
         clearFormData: 'clearFormData'
       }),
       getProgressPlan (val) {
-        val.id = null;
-        this.formData.progressPlan = val;
+        let row = {
+          name: val.name,
+          remarks: val.remarks,
+          productionProgresses: []
+        }
+        val.productionProgresses.forEach(item => {
+          row.productionProgresses.push({
+            progressPhase: item.progressPhase,
+            warningDays: item.warningDays,
+            medias: item.medias,
+            completeAmount: item.completeAmount,
+            productionProgressOrders: item.productionProgressOrders,
+            quantity: item.quantity,
+            sequence: item.sequence
+          })
+        })
+        this.formData.progressPlan = row;
         this.progressPlanVisible = false;
       },
       onBlur (row, attribute) {
@@ -297,8 +312,8 @@
               originOrder: {
                 id: item.id
               },
-              billPrice: '',
-              expectedDeliveryDate: '',
+              unitPrice: '',
+              deliveryDate: '',
               shippingAddress: item.shippingAddress,
               product: {
                 id: item.product.id,
@@ -376,51 +391,6 @@
           name: '外发订单列表'
         });
       },
-      // async __onCreate (data) {
-      //   if (this.formData.id) {
-      //     const url = this.apis().updateOutboundOrder();
-      //     const result = await this.$http.put(url, data, {
-      //       submitAudit: true
-      //     });
-      //     if (result['errors']) {
-      //       this.$message.error(result['errors'][0].message);
-      //       return;
-      //     }
-      //     this.$message.success('编辑外发订单成功');
-      //   } else {
-      //     const url = this.apis().createOutboundOrder();
-      //     const result = await this.$http.post(url, data, {
-      //       submitAudit: true
-      //     });
-      //     if (result['errors']) {
-      //       this.$message.error(result['errors'][0].message);
-      //       return;
-      //     }
-      //     this.$message.success('创建外发订单成功');
-      //   }
-      //   await this.$router.push({
-      //     name: '外发订单列表'
-      //   });
-      // },
-      // // 保存不提交
-      // onSave () {
-      //   this._onCreate(false);
-      // },
-      // async _onSave (data) {
-      //   // const url = this.apis().createOutboundOrder();
-      //   let url = data.id ? this.apis().updateOutboundOrder() : this.apis().createOutboundOrder();
-      //   const result = await this.$http.post(url, data, {
-      //     submitAudit: false
-      //   });
-      //   if (result['errors']) {
-      //     this.$message.error(result['errors'][0].message);
-      //     return;
-      //   }
-      //   this.$message.success('保存外发订单成功');
-      //   await this.$router.push({
-      //     name: '外发订单列表'
-      //   });
-      // },
       validateField (name) {
         this.$refs.form.validateField(name);
       },

@@ -12,7 +12,7 @@
             <h6>生产单号：{{slotData.code}}</h6>
           </el-col>
           <el-col :span="7">
-            <h6>合作方式：{{getEnum('machiningTypes', slotData.machiningType)}}</h6>
+            <!-- <h6>合作方式：{{getEnum('machiningTypes', slotData.machiningType)}}</h6> -->
           </el-col>
           <el-col :span="5">
             <h6>是否开票：{{slotData.invoiceNeeded ? '是' : '否'}}</h6>
@@ -23,15 +23,15 @@
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="9">
-            <h6>生产总数：{{totalQuantity}}</h6>
+            <h6>生产总数：{{slotData.totalQuantity}}</h6>
           </el-col>
           <el-col :span="15">
-            <h6>生产总价：{{totalPrice}}元</h6>
+            <!-- <h6>生产总价：{{totalPrice}}元</h6> -->
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="24">
-            <h6>送货地址：{{slotData.entries[0].shippingAddress.details}}</h6>
+            <h6>送货地址：{{slotData.taskOrderEntries[0].shippingAddress.details}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
@@ -57,18 +57,18 @@
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col>
-            <h6>合作工厂：{{slotData.cooperator.type == 'ONLINE' ?
-              slotData.cooperator.partner.name : slotData.cooperator.name}}</h6>
+            <h6>合作工厂：{{slotData.targetCooperator.type == 'ONLINE' ?
+              slotData.targetCooperator.partner.name : slotData.targetCooperator.name}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="12">
-            <h6>联系人：{{slotData.cooperator.type == 'ONLINE' ?
-              slotData.cooperator.partner.contactPerson : slotData.cooperator.contactPerson}}</h6>
+            <h6>联系人：{{slotData.targetCooperator.type == 'ONLINE' ?
+              slotData.targetCooperator.partner.contactPerson : slotData.targetCooperator.contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.cooperator.type == 'ONLINE' ?
-              slotData.cooperator.partner.contactPhone : slotData.cooperator.contactPhone}}</h6>
+            <h6>联系方式：{{slotData.targetCooperator.type == 'ONLINE' ?
+              slotData.targetCooperator.partner.contactPhone : slotData.targetCooperator.contactPhone}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
@@ -78,22 +78,13 @@
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="12">
-            <h6 class="hide-text" :title="slotData.partyAOperator ? slotData.partyAOperator.name : ''">
-              跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6>
+            <!-- <h6 class="hide-text" :title="slotData.partyAOperator ? slotData.partyAOperator.name : ''">
+              跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6> -->
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.mobileNumber : ''}}</h6>
+            <!-- <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.mobileNumber : ''}}</h6> -->
           </el-col>
         </el-row>
-        <!--        <el-row class="info-basic-row" type="flex" align="middle" justify="start">-->
-        <!--          <el-col :span="12">-->
-        <!--            <h6 class="hide-text" :title="slotData.partyBOperator ? slotData.partyBOperator.name : ''">-->
-        <!--              乙方跟单员：{{slotData.partyBOperator ? slotData.partyBOperator.name : ''}}</h6>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="12">-->
-        <!--            <h6>联系方式：{{slotData.partyBOperator ? slotData.partyBOperator.mobileNumber : ''}}</h6>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
       </el-col>
       <el-divider direction="vertical"></el-divider>
       <el-col :span="5">
@@ -120,20 +111,6 @@
     },
     props: ['slotData', 'payPlan'],
     computed: {
-      totalQuantity: function () {
-        let count = 0
-        this.slotData.entries.forEach(item => {
-          count += item.totalQuantity;
-        })
-        return count;
-      },
-      totalPrice: function () {
-        let count = 0
-        this.slotData.entries.forEach(item => {
-          count += item.totalPrice;
-        })
-        return count;
-      },
       // 已签合同列表
       contracts: function () {
         return this.slotData.agreements ? this.slotData.agreements : [];
@@ -142,10 +119,10 @@
       canSign: function () {
         // 未签合同 && 账号为productionleader && 审核状态为 PASSED
         // if (this.form.productionLeader != null) {
-          return this.slotData.agreements &&
-            this.slotData.agreements.length <= 0 &&
-            this.$store.getters.currentUser.uid == this.slotData.partyAOperator.uid &&
-            this.slotData.status == 'CONFIRMED';
+          // return this.slotData.agreements &&
+          //   this.slotData.agreements.length <= 0 &&
+          //   this.$store.getters.currentUser.uid == this.slotData.partyAOperator.uid &&
+          //   this.slotData.status == 'CONFIRMED';
         // } else {
         //   return false;
         // }

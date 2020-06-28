@@ -60,22 +60,22 @@
         formData: 'formData'
       }),
       isReceiver: function () {
-        const uid = this.$store.getters.currentUser.companyCode;
-        return !(uid == this.formData.belongTo.uid) && this.formData.status == 'PENDING_CONFIRM';
+        // const uid = this.$store.getters.currentUser.companyCode;
+        // return !(uid == this.formData.belongTo.uid) && this.formData.status == 'PENDING_CONFIRM';
       },
       isBelongTo: function () {
-        const uid = this.$store.getters.currentUser.companyCode;
-        return uid == this.formData.belongTo.uid && this.formData.status != 'CONFIRMED' && this.formData.status !=
-          'CANCELLED';
+        // const uid = this.$store.getters.currentUser.companyCode;
+        // return uid == this.formData.belongTo.uid && this.formData.status != 'CONFIRMED' && this.formData.status !=
+        //   'CANCELLED';
       },
       canGenerate: function () {
-        if (this.formData.cooperator != null && this.formData.cooperator.type == 'OFFLINE' && this.formData.status ==
-          'PENDING_CONFIRM') {
-          //TODO判断有无唯一码
-          return true;
-        } else {
-          return false;
-        }
+        // if (this.formData.cooperator != null && this.formData.cooperator.type == 'OFFLINE' && this.formData.status ==
+        //   'PENDING_CONFIRM') {
+        //   //TODO判断有无唯一码
+        //   return true;
+        // } else {
+        //   return false;
+        // }
       }
     },
     methods: {
@@ -89,8 +89,8 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$store.state.OutboundOrderModule.formData = Object.assign({}, result);
-        this.setPayPlan(result.payPlan);
+        this.$store.state.OutboundOrderModule.formData = Object.assign({}, result.data);
+        this.setPayPlan(result.data.payPlan);
       },
       setPayPlan (payPlan) {
         this.payPlan.name = payPlan.name;
