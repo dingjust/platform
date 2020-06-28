@@ -49,21 +49,24 @@ export default {
       url: '/sales',
       icon: 'el-icon-notebook-2',
       children: [{
-        name: '生产任务',
-        url: '/sales/production'
-      }, {
-        name: '外发订单',
-        url: '/sales/outboundOrder'
-      }, {
-        name: '生产工单',
-        url: '/sales/productionOrder'
-      }, {
-        name: '生产进度工单',
-        url: '/sales/progressOrder'
-      }, {
-        name: '外发工单',
-        url: '/sales/outboundProductionOrder'
-      }, ]
+          name: '生产工单',
+          url: '/sales/productionOrder'
+        }, {
+          name: '生产进度工单',
+          url: '/sales/progressOrder'
+        },
+        // {
+        //   name: '生产任务',
+        //   url: '/sales/production'
+        // },
+        {
+          name: '外发订单',
+          url: '/sales/outboundOrder'
+        }, {
+          name: '外发工单',
+          url: '/sales/outboundProductionOrder'
+        },
+      ]
     },
     {
       name: '采购中心',

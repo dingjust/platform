@@ -8,7 +8,7 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <h6>工单号：{{formData.code}}</h6>
+          <h6>工单号：{{formData.taskOrderEntries[0].code}}</h6>
         </el-col>
         <el-col :span="6">
           <h6>订单状态：{{getEnum('purchaseOrderStatuses', formData.status)}}</h6>

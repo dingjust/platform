@@ -7,54 +7,54 @@
             <!-- 商品图片 -->
             <div>
               <img class="purchase-product-img"
-                :src="slotData.product.thumbnail!=null?slotData.product.thumbnail.url:'static/img/nopicture.png'">
+                :src="productionOrder.product.thumbnail!=null?productionOrder.product.thumbnail.url:'static/img/nopicture.png'">
             </div>
           </el-col>
           <el-col :span="18">
             <!-- 商品详情 -->
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>产品名称：{{slotData.product.name}}</h6>
+                <h6>产品名称：{{productionOrder.product.name}}</h6>
               </el-col>
               <el-col :span="12">
-                <h6>商品货号：{{slotData.product.skuID}}</h6>
+                <h6>商品货号：{{productionOrder.product.skuID}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
                 <h6>
-                  品&#12288;&#12288;类：{{slotData.product.category!=null?slotData.product.category.name:''}}
+                  品&#12288;&#12288;类：{{productionOrder.product.category!=null?productionOrder.product.category.name:''}}
                 </h6>
               </el-col>
               <el-col :span="12">
-                <h6>交货货期：{{slotData.expectedDeliveryDate | timestampToTime}}</h6>
+                <h6>交货货期：{{productionOrder.deliveryDate | timestampToTime}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>销售价格：{{slotData.unitPrice}}</h6>
+                <h6>销售价格：{{productionOrder.unitPrice}}</h6>
               </el-col>
               <el-col :span="12">
-                <h6>合作方式：{{getEnum('machiningTypes', slotData.machiningType)}}</h6>
+                <h6>合作方式：{{getEnum('machiningTypes', slotData.cooperationMode)}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>生产数量：{{slotData.totalQuantity}}</h6>
+                <h6>生产数量：{{productionOrder.quantity}}</h6>
               </el-col>
               <el-col :span="12">
-                <h6>订单来源：{{getEnum('SalesProductionOrderType', slotData.orderSource)}}</h6>
+                <h6>订单来源：{{getEnum('SalesProductionOrderType', slotData.type)}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col>
-                <h6>关联订单：{{slotData.relationOrderCode}}</h6>
+                <h6>关联订单：{{slotData.code}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col>
                 <h6>
-                  收货地址：{{slotData.deliveryAddress!=null?slotData.deliveryAddress.details:''}}
+                  收货地址：{{productionOrder.shippingAddress!=null?productionOrder.shippingAddress.details:''}}
                 </h6>
               </el-col>
             </el-row>
@@ -123,16 +123,16 @@
             </div>
           </el-col>
         </el-row>
-        <!-- 查看单据 -->
-        <order-view-button-group :slotData="slotData" />
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <!-- <h6>生产负责人：{{slotData.productionLeader.name}}</h6> -->
+            <h6>生产负责人：{{slotData.productionLeader.name}}</h6>
           </el-col>
           <el-col :span="12">
-            <!-- <h6>审批人：{{slotData.approvers[0].name}}</h6> -->
+            <h6>审批人：{{slotData.approvers[0].name}}</h6>
           </el-col>
         </el-row>
+        <!-- 查看单据 -->
+        <order-view-button-group :slotData="slotData" />
         <el-row type="flex">
           <el-col :span="6">
             <div class="info-row-title">
@@ -163,6 +163,35 @@
       OrderViewButtonGroup
     },
     computed: {
+      productionOrder: function () {
+        if (this.slotData.taskOrderEntries != null && this.slotData.taskOrderEntries[0]) {
+          return this.slotData.taskOrderEntries[0];
+        } else {
+          return {
+            "code": "",
+            "invoiceNeeded": "",
+            "product": {
+              "code": "",
+              "name": "",
+              "images": [],
+              "thumbnail": "",
+              "thumbnails": [
+
+              ],
+              "details": [],
+              "category": "",
+              "approvalStatus": "",
+            },
+            "unitPrice": "",
+            "shippingAddress": "",
+            "quantity": "",
+            "deliveryDate": "",
+            "productionProcessContent": "",
+            "materialsSpecEntries": [],
+            "colorSizeEntries": []
+          };
+        }
+      },
       cooperator: function () {
         var cooperator = {
           name: '',
@@ -177,8 +206,8 @@
       },
       sizes: function () {
         var sizes = [];
-        if (this.slotData.colorSizeEntries != null) {
-          this.slotData.colorSizeEntries.forEach(entry => {
+        if (this.productionOrder.colorSizeEntries != null) {
+          this.productionOrder.colorSizeEntries.forEach(entry => {
             let index = sizes.findIndex(size => size.code == entry.size.code);
             if (index == -1) {
               sizes.push(entry.size);
@@ -189,8 +218,8 @@
       },
       dataTable: function () {
         var result = [];
-        if (this.slotData.colorSizeEntries != null) {
-          this.slotData.colorSizeEntries.forEach(entry => {
+        if (this.productionOrder.colorSizeEntries != null) {
+          this.productionOrder.colorSizeEntries.forEach(entry => {
             //找到颜色          
             let index = result.findIndex(item => {
               return item.color.code == entry.color.code;

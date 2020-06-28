@@ -865,7 +865,13 @@ const router = new Router({
       path: '/register',
       name: '用户注册',
       component: () => import( /* webpackChunkName: 'register' */ 'shared/account/register/RegisterPage')
-    }
+    },
+    {
+      path: '/404',
+      component: () => import('@/views/error-page/404'),
+      hidden: true
+    },
+    { path: '*', redirect: '/404', hidden: true }
   ]
 });
 
