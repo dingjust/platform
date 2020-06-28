@@ -16,19 +16,18 @@ const state = {
   },
   formData: {
     id: null,
-    // byAorB: '',
-    // managementMode: '',
+    managementMode: 'COLLABORATION',
     outboundCompanyName: '',
     outboundContactPerson: '',
     outboundContactPhone: '',
     belongTo: {
       uid: ''
     },
-    cooperator: {
+    targetCooperator: {
       id: ''
     },
-    entries: [{
-      productionTask: {
+    taskOrderEntries: [{
+      originOrder: {
         id: ''
       },
       billPrice: '',
@@ -58,19 +57,13 @@ const state = {
       }]
     },
     attachments: [],
-    partyAOperator: {
-      id: '',
-      name: '',
-      mobileNumber: ''
-    },
-    partyBOperator: {
-      id: '',
-      name: '',
-      mobileNumber: ''
-    },
     approvers: [{
       id: ''
-    }]
+    }],
+    merchandiser: {
+      id: '',
+      name: ''
+    }
   },
   queryFormData: {
     keyword: '',
@@ -168,25 +161,25 @@ const actions = {
   clearFormData ({dispatch, commit, state}) {
     commit('formData', {
       id: null,
-      // byAorB: '',
-      // managementMode: '',
+      managementMode: 'COLLABORATION',
       outboundCompanyName: '',
       outboundContactPerson: '',
       outboundContactPhone: '',
       belongTo: {
         uid: ''
       },
-      cooperator: {
+      targetCooperator: {
         id: ''
       },
-      entries: [{
-        productionTask: {
+      taskOrderEntries: [{
+        originOrder: {
           id: ''
         },
         billPrice: '',
         expectedDeliveryDate: '',
         shippingAddress: {},
         product: {
+  
         },
         colorSizeEntries: []
       }],
@@ -209,19 +202,13 @@ const actions = {
         }]
       },
       attachments: [],
-      partyAOperator: {
-        id: '',
-        name: '',
-        mobileNumber: ''
-      },
-      partyBOperator: {
-        id: '',
-        name: '',
-        mobileNumber: ''
-      },
       approvers: [{
         id: ''
-      }]
+      }],
+      merchandiser: {
+        id: '',
+        name: ''
+      }
     });
   },
   clearQueryFormData ({dispatch, commit, state}) {

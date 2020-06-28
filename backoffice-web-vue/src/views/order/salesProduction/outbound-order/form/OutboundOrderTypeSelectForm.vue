@@ -5,7 +5,7 @@
         <h6>选择外发订单类型</h6>
       </el-col>
     </el-row>
-    <el-row type="flex" justify="center" style="margin-top: 20px">
+    <!-- <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="6">
         <h6 style="margin-top: 4px;">选择我方身份</h6>
       </el-col>
@@ -18,7 +18,7 @@
       <el-col :span="14">
         <h6 style="color: #F56C6C;font-size: 12px">这里的身份就是您在订单与合同的身份角色，甲方为发单方，乙方为接单方</h6>
       </el-col>
-    </el-row>
+    </el-row> -->
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="6">
         <h6 style="margin-top: 4px;">订单管理方式</h6>
@@ -85,8 +85,6 @@
       }
     },
     created() {
-      this.formData.byAorB = 'PARTYA';
-      this.formData.managementMode = 'COLLABORATION';
     }
   }
 </script>

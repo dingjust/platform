@@ -123,10 +123,33 @@
         this.formVisible = true;
       },
       //编辑回调
-      onSave(entries) {
+      onSave(rowData) {
+        if (rowData.id) {
+          this.$confirm('是否保存修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.onSaveRow(rowData);
+          });
+        } else {
+          this.form.taskOrderEntries[this.updateIndex] = rowData;
+          this.formVisible = false;
+        }
+        // this.$emit('onSaveRow', entries);
         // var newEntry = Object.assign(this.updateEntry, entries[0]);
         // this.$set(this.form.taskOrderEntries, this.updateIndex, newEntry);
         // this.salesProductAppendVisible = false;
+      },
+      async onSaveRow (row) {
+        const url = this.apis().updateSalesOrderRow();
+        const result = await this.$http.post(url, row);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return; 
+        }
+        this.$emit('getDetails');
+        this.formVisible = false;
       },
       //任务删除
       onTaskDelete(index) {

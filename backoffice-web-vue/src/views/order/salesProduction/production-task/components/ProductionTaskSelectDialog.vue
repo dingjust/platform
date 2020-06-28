@@ -66,16 +66,16 @@
         if (size) {
           sizeS = size;
         }
-        if (this.selectType == 'OUTBOUND_ORDER') {
-          this.queryFormData.state = 'DISPATCHING';
-          this.queryFormData.productionWorkOrder = '';
-        } else {
-          this.queryFormData.state = '';
-          this.queryFormData.productionWorkOrder = 'isProductionWorkOrder';
-        }
+        // if (this.selectType == 'OUTBOUND_ORDER') {
+        //   this.queryFormData.state = 'DISPATCHING';
+        //   this.queryFormData.productionWorkOrder = '';
+        // } else {
+        //   this.queryFormData.state = '';
+        //   this.queryFormData.productionWorkOrder = 'isProductionWorkOrder';
+        // }
         this.queryFormData.productionLeader = 'isProductionLeader'
         const query = this.queryFormData;
-        const url = this.apis().getProductionTaskList();
+        const url = this.apis().getProductionOrders();
         const result = await this.$http.post(url, query, {
           page: pageS,
           size: sizeS
@@ -104,8 +104,8 @@
       // 回显已选择行
       initSelectRow () {
         let index;
-        this.formData.entries.forEach(item => {
-          index = this.page.content.findIndex(val => val.id == item.productionTask.id)
+        this.formData.taskOrderEntries.forEach(item => {
+          index = this.page.content.findIndex(val => val.id == item.originOrder.id)
           if (index > -1) {
             // this.$refs['taskList'].$refs['resultTable'].toggleRowSelection(this.page.content[index]);
             this.$refs['taskList'].clickRow(this.page.content[index]);

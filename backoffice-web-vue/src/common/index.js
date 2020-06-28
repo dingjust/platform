@@ -662,11 +662,15 @@ const COMMON_APIS = {
   },
   // 获取外发订单列表
   getoutboundOrdersList() {
-    return '/b2b/orders/outbound';
+    return '/b2b/out/order/search';
+  },
+  // 获取外发工单列表
+  getoutboundProductionList() {
+    return '/b2b/out/order/production/search';
   },
   // 创建外发订单
   createOutboundOrder() {
-    return '/b2b/orders/outbound/create';
+    return '/b2b/out/order/save';
   },
   // 获取外发订单详情
   getoutboundOrderDetail(code) {
@@ -1086,6 +1090,10 @@ let NONE_TENANT_APIS = {
   //销售计划
   salesPlanSave(needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
+  },
+  // 更新销售订单行
+  updateSalesOrderRow () {
+    return '/b2b/sales/production/order/update/entry';
   },
   //销售计划撤回
   salesPlanWithdraw(id) {

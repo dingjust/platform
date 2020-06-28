@@ -13,8 +13,8 @@
       <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"
                               :queryFormData="queryFormData"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <template v-for="(item, index) in stateList">
-          <el-tab-pane :label="item.name" :name="item.code">
+        <template v-for="item in stateList">
+          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
             <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
           </el-tab-pane>
         </template>
@@ -53,8 +53,7 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData',
-        formData: 'formData'
+        queryFormData: 'queryFormData'
       }),
       stateList: function () {
         return this.statuses.concat({code: '', name: '全部'}, this.$store.state.EnumsModule.OutboundOrderStatuses);
@@ -88,12 +87,7 @@
         this.searchAdvanced({url, query, page, size});
       },
       createOutboundOrder () {
-        this.$router.push({
-          name: '创建外发订单',
-          params: {
-            formData: this.formData
-          }
-        });
+        this.outboundOrderTypeSelect = true;
       },
       handleClick (tab, event) {
         if (tab.name == '') {
@@ -111,19 +105,6 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        // let item = {
-        //   event: 'ORDER_CONFIRMED',
-        //   time: 5,
-        //   range: 'INSIDE',
-        //   percent: 0.3
-        // }
-        // result.payPlan['deposit'] = item;
-        // result.payPlan['balance1'] = item;
-        // result.payPlan['balance2'] = item;
-        // result.payPlan['monthBalance'] = {
-        //   event: 'ORDER_CONFIRMED',
-        //   time: 5
-        // };
         await this.$router.push({
           name: '创建外发订单',
           params: {
@@ -136,7 +117,56 @@
       return {
         outboundOrderTypeSelect: false,
         activeName: '',
-        statuses: []
+        statuses: [],
+        formData: {
+          id: null,
+          managementMode: 'COLLABORATION',
+          outboundCompanyName: '',
+          outboundContactPerson: '',
+          outboundContactPhone: '',
+          targetCooperator: {
+            id: ''
+          },
+          taskOrderEntries: [{
+            originOrder: {
+              id: ''
+            },
+            billPrice: '',
+            expectedDeliveryDate: '',
+            shippingAddress: {},
+            product: {
+
+            },
+            colorSizeEntries: []
+          }],
+          machiningType: 'LABOR_AND_MATERIAL',
+          invoiceNeeded: false,
+          invoiceTaxPoint: 0.03,
+          freightPayer: 'PARTYA',
+          remarks: '',
+          isApproval: false,
+          progressPlan: {
+            name: '',
+            remarks: '',
+            productionProgresses: []
+          },
+          payPlan: {
+            name: '',
+            isHaveDeposit: false,
+            payPlanType: 'PHASEONE',
+            payPlanItems: [{
+              moneyType: 'PHASEONE',
+              payPercent: 0.003,
+              triggerDays: 5,
+              triggerEvent: 'ORDER_CONFIRMED',
+              triggerType: 'INSIDE'
+            }]
+          },
+          attachments: [],
+          approvers: [{
+            id: ''
+          }]
+        },
       }
     },
     created () {
