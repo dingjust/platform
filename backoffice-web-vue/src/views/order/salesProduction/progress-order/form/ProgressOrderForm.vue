@@ -57,7 +57,7 @@
       }),
       async getDetail () {
         const code = this.code;
-        await this.getOrderDetail({code});
+        await this.getOrderDetail(code);
       },
       async updateProgress () {
         let formData = {
