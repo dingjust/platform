@@ -137,6 +137,9 @@
             product: {
 
             },
+            progressPlan: {
+              name: ''
+            },
             colorSizeEntries: []
           }],
           cooperationMode: 'LABOR_AND_MATERIAL',
@@ -144,12 +147,7 @@
           invoiceTaxPoint: 0.03,
           freightPayer: 'PARTYA',
           remarks: '',
-          isApproval: false,
-          progressPlan: {
-            name: '',
-            remarks: '',
-            productionProgresses: []
-          },
+          sendAuditNeeded: false,
           payPlan: {
             name: '',
             isHaveDeposit: false,
@@ -163,7 +161,7 @@
             }]
           },
           attachments: [],
-          approvers: [{
+          sendApprovers: [{
             id: ''
           }]
         },

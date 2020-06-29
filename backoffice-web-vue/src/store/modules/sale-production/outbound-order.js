@@ -30,11 +30,14 @@ const state = {
       originOrder: {
         id: ''
       },
-      billPrice: '',
-      expectedDeliveryDate: '',
+      unitPrice: '',
+      deliveryDate: '',
       shippingAddress: {},
       product: {
 
+      },
+      progressPlan: {
+        name: ''
       },
       colorSizeEntries: []
     }],
@@ -43,7 +46,7 @@ const state = {
     invoiceTaxPoint: 0.03,
     freightPayer: 'PARTYA',
     remarks: '',
-    isApproval: false,
+    sendAuditNeeded: false,
     progressPlan: {},
     payPlan: {
       isHaveDeposit: false,
@@ -57,7 +60,7 @@ const state = {
       }]
     },
     attachments: [],
-    approvers: [{
+    sendApprovers: [{
       id: ''
     }],
     merchandiser: {
@@ -175,11 +178,14 @@ const actions = {
         originOrder: {
           id: ''
         },
-        billPrice: '',
-        expectedDeliveryDate: '',
+        unitPrice: '',
+        deliveryDate: '',
         shippingAddress: {},
         product: {
   
+        },
+        progressPlan: {
+          name: ''
         },
         colorSizeEntries: []
       }],
@@ -188,7 +194,7 @@ const actions = {
       invoiceTaxPoint: 0.03,
       freightPayer: 'PARTYA',
       remarks: '',
-      isApproval: false,
+      sendAuditNeeded: false,
       progressPlan: {},
       payPlan: {
         isHaveDeposit: false,
@@ -202,7 +208,7 @@ const actions = {
         }]
       },
       attachments: [],
-      approvers: [{
+      sendApprovers: [{
         id: ''
       }],
       merchandiser: {

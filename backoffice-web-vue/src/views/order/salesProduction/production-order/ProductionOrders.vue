@@ -113,6 +113,9 @@
             deliveryDate: '',
             shippingAddress: item.shippingAddress,
             product: item.product,
+            progressPlan: {
+              name: ''
+            },
             colorSizeEntries: item.colorSizeEntries
           })
         })
@@ -142,25 +145,23 @@
             originOrder: {
               id: ''
             },
-            billPrice: '',
-            expectedDeliveryDate: '',
+            unitPrice: '',
+            deliveryDate: '',
             shippingAddress: {},
             product: {
 
             },
+            progressPlan: {
+              name: ''
+            },
             colorSizeEntries: []
           }],
-          machiningType: 'LABOR_AND_MATERIAL',
+          cooperationMode: 'LABOR_AND_MATERIAL',
           invoiceNeeded: false,
           invoiceTaxPoint: 0.03,
           freightPayer: 'PARTYA',
           remarks: '',
-          isApproval: false,
-          progressPlan: {
-            name: '',
-            remarks: '',
-            productionProgresses: []
-          },
+          sendAuditNeeded: false,
           payPlan: {
             name: '',
             isHaveDeposit: false,
@@ -174,7 +175,7 @@
             }]
           },
           attachments: [],
-          approvers: [{
+          sendApprovers: [{
             id: ''
           }]
         },

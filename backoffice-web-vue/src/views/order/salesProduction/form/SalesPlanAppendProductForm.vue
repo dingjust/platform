@@ -17,6 +17,9 @@
         :unitPrice="openAccountingSheetUnitPrice" v-if="viewDialogVisible" :readOnly="readOnly"
         :needMaterialAccounting="needMaterialsSpec" />
     </el-dialog>
+    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="setProgressPlan"/>
+    </el-dialog>
     <el-form :model="appendProductForm" ref="appendProductForm" label-position="left" :disabled="readOnly">
       <template v-for="(entry, productIndex) in appendProductForm.sampleList">
         <div :key="productIndex">
@@ -72,6 +75,22 @@
                 <td>{{countTotalAmount(entry.colorSizeEntries)}}</td>
               </tr>
             </table>
+          </el-row>
+          <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20">
+            <el-col :span="16">
+              <el-row type="flex" align="middle">
+                <el-col :span="14" style="padding-top:25px">
+                  <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案" label-width="100px"
+                    :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                  <el-button style="margin-left: 10px" @click="appendProgressPlan(productIndex)" size="mini"
+                    :disabled="isUpdate">点击选择</el-button>
+                </el-col>
+              </el-row>
+            </el-col>
           </el-row>
           <el-row type="flex" :gutter="10">
             <el-col :span="8">
@@ -159,6 +178,7 @@
   import SampleAccountingSheet from '@/views/product/sample/components/SampleAccountingSheet';
   import ProductionTask from '../components/ProductionTask';
   import MyAddressForm from '@/components/custom/order-form/MyAddressForm';
+  import ProgressPlanSelectDialog from '@/views/user/progress-plan/components/ProgressPlanSelectDialog'
 
   export default {
     name: 'SalesPlanAppendProductForm',
@@ -168,7 +188,8 @@
       SampleAttachOrdersForm,
       SampleProductsSelectDialog,
       ProductionTask,
-      MyAddressForm
+      MyAddressForm,
+      ProgressPlanSelectDialog
     },
     props: {
       productionLeader: {
@@ -216,6 +237,8 @@
             product: {
 
             },
+            progressPlan: {
+            },
             colorSizeEntries: [],
             unitPrice: '',
             deliveryDate: '',
@@ -239,12 +262,37 @@
         currentProductIndex: 0,
         dialogVisible: false,
         viewDialogVisible: false,
+        progressPlanVisible: false
       }
     },
     methods: {
       appendSample(index) {
         this.currentProductIndex = index;
         this.materialDialogVisible = true;
+      },
+      appendProgressPlan(index) {
+        this.currentProductIndex = index;
+        this.progressPlanVisible = true;
+      },
+      setProgressPlan (val) {
+        let row = {
+          name: val.name,
+          remarks: val.remarks,
+          productionProgresses: []
+        }
+        val.productionProgresses.forEach(item => {
+          row.productionProgresses.push({
+            progressPhase: item.progressPhase,
+            warningDays: item.warningDays,
+            medias: item.medias,
+            completeAmount: item.completeAmount,
+            productionProgressOrders: item.productionProgressOrders,
+            quantity: item.quantity,
+            sequence: item.sequence
+          })
+        })
+        this.appendProductForm.sampleList[this.currentProductIndex].progressPlan = row;
+        this.progressPlanVisible = false; 
       },
       onSelectSample(data) {
         //构建颜色尺码行
@@ -448,6 +496,7 @@
           product: {
 
           },
+          progressPlan: {},
           colorSizeEntries: [],
           unitPrice: '',
           deliveryDate: '',
