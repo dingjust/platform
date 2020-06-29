@@ -30,20 +30,23 @@ const state = {
       originOrder: {
         id: ''
       },
-      billPrice: '',
-      expectedDeliveryDate: '',
+      unitPrice: '',
+      deliveryDate: '',
       shippingAddress: {},
       product: {
 
       },
+      progressPlan: {
+        name: ''
+      },
       colorSizeEntries: []
     }],
-    machiningType: 'LABOR_AND_MATERIAL',
+    cooperationMode: 'LABOR_AND_MATERIAL',
     invoiceNeeded: false,
     invoiceTaxPoint: 0.03,
     freightPayer: 'PARTYA',
     remarks: '',
-    isApproval: false,
+    sendAuditNeeded: false,
     progressPlan: {},
     payPlan: {
       isHaveDeposit: false,
@@ -57,7 +60,7 @@ const state = {
       }]
     },
     attachments: [],
-    approvers: [{
+    sendApprovers: [{
       id: ''
     }],
     merchandiser: {
@@ -175,20 +178,23 @@ const actions = {
         originOrder: {
           id: ''
         },
-        billPrice: '',
-        expectedDeliveryDate: '',
+        unitPrice: '',
+        deliveryDate: '',
         shippingAddress: {},
         product: {
   
         },
+        progressPlan: {
+          name: ''
+        },
         colorSizeEntries: []
       }],
-      machiningType: 'LABOR_AND_MATERIAL',
+      cooperationMode: 'LABOR_AND_MATERIAL',
       invoiceNeeded: false,
       invoiceTaxPoint: 0.03,
       freightPayer: 'PARTYA',
       remarks: '',
-      isApproval: false,
+      sendAuditNeeded: false,
       progressPlan: {},
       payPlan: {
         isHaveDeposit: false,
@@ -202,7 +208,7 @@ const actions = {
         }]
       },
       attachments: [],
-      approvers: [{
+      sendApprovers: [{
         id: ''
       }],
       merchandiser: {

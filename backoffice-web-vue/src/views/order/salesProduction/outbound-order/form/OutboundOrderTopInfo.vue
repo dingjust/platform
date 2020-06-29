@@ -26,7 +26,7 @@
             <h6>生产总数：{{slotData.totalQuantity}}</h6>
           </el-col>
           <el-col :span="15">
-            <!-- <h6>生产总价：{{totalPrice}}元</h6> -->
+            <h6>生产总价：{{totalAmount}}元</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
@@ -111,6 +111,13 @@
     },
     props: ['slotData', 'payPlan'],
     computed: {
+      totalAmount: function () {
+        let totalAmount = 0;
+        this.slotData.taskOrderEntries.forEach(item => {
+          totalAmount += (item.unitPrice * item.quantity);
+        })
+        return totalAmount;
+      },
       // 已签合同列表
       contracts: function () {
         return this.slotData.agreements ? this.slotData.agreements : [];

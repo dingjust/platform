@@ -73,7 +73,7 @@
         //   this.queryFormData.state = '';
         //   this.queryFormData.productionWorkOrder = 'isProductionWorkOrder';
         // }
-        this.queryFormData.productionLeader = 'isProductionLeader'
+        this.queryFormData.haveOutOrder = 'haveOutOrder'
         const query = this.queryFormData;
         const url = this.apis().getProductionOrders();
         const result = await this.$http.post(url, query, {

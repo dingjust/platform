@@ -9,7 +9,9 @@
         </el-col>
       </el-row>
       <outbound-order-top-info :slotData="formData" :payPlan="payPlan"/>
-      <outbound-order-center-table :slot-data="formData" />
+      <div style="margin: 20px 0px 0px 10px;">
+        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"/>
+      </div>
       <el-row class="basic-form-row" type="flex" align="middle">
         <h6>备注及附件</h6>
       </el-row>
@@ -46,6 +48,7 @@
   import OutboundOrderTopInfo from '../form/OutboundOrderTopInfo';
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
+  import { SalesProductionTabs } from '@/views/order/salesProduction/components/'
 
   export default {
     name: 'OutboundOrderDetail',
@@ -53,7 +56,8 @@
     components: {
       OutboundOrderCenterTable,
       OutboundOrderTopInfo,
-      UniqueCodeGenerateForm
+      UniqueCodeGenerateForm,
+      SalesProductionTabs
     },
     computed: {
       ...mapGetters({

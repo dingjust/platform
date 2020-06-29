@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column label="审批状态">
         <template slot-scope="scope">
-          <span>{{getEnum('AuditState', scope.row.auditState)}}</span>
+          <span>{{getEnum('SalesProductionAuditStatus', scope.row.sendAuditState)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单标签" min-width="100"></el-table-column>

@@ -73,7 +73,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row type="flex">
+          <!-- <el-row type="flex">
             <el-col :span="8">
               <el-form-item label="生产节点设置" label-width="100px">
                 <el-input v-model="form.progressPlan.name" :disabled="true" style="width: 200px"></el-input>
@@ -82,7 +82,7 @@
             <el-col :span="2">
               <el-button class="progreesPlan-btn" @click="progressPlanVisible = !progressPlanVisible">选择</el-button>
             </el-col>
-          </el-row>
+          </el-row> -->
         </div>
         <el-divider />
         <el-row type="flex" justify="space-between" align="middle">
@@ -163,9 +163,9 @@
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
         :needMaterialsSpec="needMaterialsSpec" :isUpdate="false" :productionLeader="form.productionLeader" />
     </el-dialog>
-    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <!-- <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="setProgressPlan"/>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -300,11 +300,11 @@
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
-      setProgressPlan (val) {
-        this.form.progressPlan.id = val.id;
-        this.form.progressPlan.name = val.name;
-        this.progressPlanVisible = !this.progressPlanVisible; 
-      },
+      // setProgressPlan (val) {
+      //   this.form.progressPlan.id = val.id;
+      //   this.form.progressPlan.name = val.name;
+      //   this.progressPlanVisible = !this.progressPlanVisible; 
+      // },
       setPayPlan(payPlan) {
         // 删除原有id
         this.$delete(payPlan, 'id');
@@ -378,7 +378,7 @@
         suppliersSelectVisible: false,
         payPlanSelectDialogVisible: false,
         dialogPayPlanFormVisible: false,
-        progressPlanVisible: false,
+        // progressPlanVisible: false,
         form: {
           name: '',
           type: 'SALES_ORDER',

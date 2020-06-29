@@ -60,7 +60,10 @@
         if (this.slotData.status == 'COMPLETED') {
           return this.slotData.progresses.length;
         }
-        let index = this.slotData.progresses.findIndex(val => val.progressPhase.id == this.slotData.currentPhase.id);
+        let index = 0;
+        if (this.slotData.currentPhase) {
+          index = this.slotData.progresses.findIndex(val => val.progressPhase.id == this.slotData.currentPhase.id);
+        }
         return index;
       },
     },

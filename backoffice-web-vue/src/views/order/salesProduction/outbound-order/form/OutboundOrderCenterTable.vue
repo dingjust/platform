@@ -10,7 +10,7 @@
     </el-dialog>
     <el-tabs type="border-card">
       <el-tab-pane label="产品明细">
-        <el-table ref="resultTable" stripe :data="slotData.entries" :height="autoHeight">
+        <el-table ref="resultTable" stripe :data="slotData.taskOrderEntries" :height="autoHeight">
           <el-table-column label="产品名称" prop="product.name"></el-table-column>
           <el-table-column label="货号" prop="product.skuID"></el-table-column>
           <el-table-column label="品类">
@@ -35,7 +35,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="订单进度">
-        <el-table ref="resultTable" stripe :data="slotData.entries" highlight-current-row :height="autoHeight">
+        <el-table ref="resultTable" stripe :data="slotData.taskOrderEntries" highlight-current-row :height="autoHeight">
           <el-table-column label="产品名称" prop="product.name"></el-table-column>
           <el-table-column label="货号" prop="product.skuID"></el-table-column>
           <el-table-column label="对应生产进度工单"></el-table-column>
@@ -81,7 +81,7 @@
       //外发单详情
       onOutboundEntryDetails(row) {
         this.currentFormData = Object.assign({}, this.slotData);
-        this.$set(this.currentFormData, 'entries', [row]);
+        this.$set(this.currentFormData, 'taskOrderEntries', [row]);
         this.detailVisible = true;
       }
     },

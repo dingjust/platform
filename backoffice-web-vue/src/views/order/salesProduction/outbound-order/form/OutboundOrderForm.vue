@@ -66,6 +66,16 @@
             </el-row>
             <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item"/>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
+              <el-col :span="8">
+                <el-form-item label="生产节点" prop="progressPlan" :rules="[{ type: 'object', validator: validateProgressPlan, trigger: 'change' }]">
+                  <el-input v-model="item.progressPlan.name" :disabled="true" placeholder="请输入"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-button @click="onProgressPlanSelect(index)" size="mini">选择节点</el-button>
+              </el-col>
+            </el-row>
+            <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="6">
                 <el-form-item label="发单价格" prop="unitPrice" :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
                   <el-input v-model="item.unitPrice" placeholder="请输入" @blur="onBlur(item,'billPrice')"
@@ -103,7 +113,7 @@
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="18">
-            <MTAVAT :machiningTypes.sync="formData.machiningType" :needVoice.sync="formData.invoiceNeeded"
+            <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
                     :tax.sync="formData.invoiceTaxPoint" />
           </el-col>
           <el-col :span="6">
@@ -113,7 +123,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
+        <!-- <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="6">
             <el-form-item label="生产节点" prop="progressPlan">
               <el-input v-model="formData.progressPlan.name" :disabled="true"></el-input>
@@ -122,7 +132,7 @@
           <el-col :span="2">
             <el-button class="outbound-btn" @click="progressPlanVisible = !progressPlanVisible">选择</el-button>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -150,12 +160,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="2">
-            <el-checkbox v-model="formData.isApproval" style="padding-top: 5px">是否需要审核</el-checkbox>
+            <el-checkbox v-model="formData.sendAuditNeeded" style="padding-top: 5px">是否需要审核</el-checkbox>
           </el-col>
-          <template v-for="(item, index) in formData.approvers">
-            <el-col :span="6" v-if="formData.isApproval">
-              <el-form-item label="审核员" prop="approvers" :rules="[{ type: 'object', validator: checkApprover, trigger: 'change' }]">
-                <personnel-selection :vPerson.sync="formData.approvers[index]"/>
+          <template v-for="(item, index) in formData.sendApprovers">
+            <el-col :span="6" v-if="formData.sendAuditNeeded">
+              <el-form-item label="审核员" prop="sendApprovers" :rules="[{ type: 'object', validator: checkApprover, trigger: 'change' }]">
+                <personnel-selection :vPerson.sync="formData.sendApprovers[index]"/>
               </el-form-item>
             </el-col>
           </template>
@@ -259,7 +269,7 @@
             sequence: item.sequence
           })
         })
-        this.formData.progressPlan = row;
+        this.formData.taskOrderEntries[this.selectIndex].progressPlan = row;
         this.progressPlanVisible = false;
       },
       onBlur (row, attribute) {
@@ -283,15 +293,22 @@
         this.taskDialogVisible = true;
         this.selectIndex = index;
       },
+      onProgressPlanSelect (index) {
+        this.progressPlanVisible = true;
+        this.selectIndex = index;
+      },
       addRow () {
         let item = {
           originOrder: {
             id: ''
           },
-          billPrice: '',
-          expectedDeliveryDate: '',
+          unitPrice: '',
+          deliveryDate: '',
           shippingAddress: {},
           product: {},
+          progressPlan: {
+            name: ''
+          },
           colorSizeEntries: []
         };
         this.formData.taskOrderEntries.push(item);
@@ -319,6 +336,9 @@
                 id: item.product.id,
                 name: item.product.name,
                 thumbnail: item.product.thumbnail
+              },
+              progressPlan: {
+                name: ''
               },
               colorSizeEntries: item.colorSizeEntries
             }
@@ -370,8 +390,8 @@
         let data = Object.assign({}, this.formData);
 
         // 人员设置数据处理
-        if (!this.formData.isApproval) {
-          data.approvers = [];
+        if (!this.formData.sendAuditNeeded) {
+          data.sendApprovers = [];
         }
         if (!data.invoiceNeeded) {
           data.invoiceTaxPoint = null;
@@ -381,6 +401,10 @@
         const result = await this.$http.post(url, data, {
           submitAudit: flag
         });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;
@@ -399,6 +423,13 @@
           return callback();
         } else {
           return callback(new Error('请选择产品'))
+        }
+      },
+      validateProgressPlan (rule, value, callback) {
+        if (value.name && value != '') {
+          return callback();
+        } else {
+          return callback(new Error('请选择生产节点'))
         }
       },
       checkApprover (rule, value, callback) {
@@ -441,13 +472,6 @@
       }
     },
     data () {
-      var checkProgressPlan = (rule, value, callback) => {
-        if (value.name) {
-          return callback();
-        } else {
-          return callback(new Error('请选择生产节点'));
-        }
-      };
       var checkPartyAOperator = (rule, value, callback) => {
         if (value && value.id != '') {
           return callback();
@@ -460,7 +484,6 @@
           outboundCompanyName: [{required: true, message: '请选择外发工厂', trigger: 'change'}],
           outboundContactPerson: [{required: true, message: '请选择联系人', trigger: 'change'}],
           outboundContactPhone: [{required: true, message: '请选择联系方式', trigger: 'change'}],
-          progressPlan: [{ type: 'object', validator: checkProgressPlan, trigger: 'change' }],
           merchandiser: [{ type: 'object', validator: checkPartyAOperator, trigger: 'change' }]
         },
         formData: '',
