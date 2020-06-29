@@ -76,7 +76,7 @@
               </tr>
             </table>
           </el-row>
-          <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20">
+          <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20" v-if="orderType == 'SALES_ORDER'">
             <el-col :span="16">
               <el-row type="flex" align="middle">
                 <el-col :span="14" style="padding-top:25px">
@@ -219,6 +219,10 @@
       fromOrigin: {
         type: Boolean,
         default: false
+      },
+      orderType: {
+        type: String,
+        default: 'SALES_PLAN'
       }
     },
     computed: {

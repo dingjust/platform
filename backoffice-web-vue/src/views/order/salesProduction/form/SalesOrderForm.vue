@@ -160,7 +160,7 @@
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
+      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :orderType="'SALES_ORDER'"
         :needMaterialsSpec="needMaterialsSpec" :isUpdate="false" :productionLeader="form.productionLeader" />
     </el-dialog>
     <!-- <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
