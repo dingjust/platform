@@ -26,7 +26,7 @@
           :canUpdate="canUpdate" @onModify="onProductModify" @onDetail="onProductDetail" />
       </el-tab-pane>
       <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'">
-        <sales-production-tasks-table :data="form.taskOrderEntries" @onDelete="onTaskDelete" @onModify="onTaskModify" />
+        <sales-production-tasks-table :data="form.taskOrderEntries" @onDetail="onTaskDetail"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -151,21 +151,9 @@
         this.$emit('getDetails');
         this.formVisible = false;
       },
-      //任务删除
-      onTaskDelete(index) {
-        // this.$confirm('确认删除？')
-        //   .then(_ => {
-        //     this.form.taskOrderEntries.splice(index, 1);
-        //     popVisible = false;
-        //   })
-        //   .catch(_ => {});
-      },
-      //任务修改
-      onTaskModify(index) {
-        // this.updateIndex = index;
-        // this.updateEntry = this.form.taskOrderEntries[index];
-        // this.salesProductAppendVisible = true;
-      },
+      onTaskDetail(index){
+        
+      }
     },
     data() {
       return {

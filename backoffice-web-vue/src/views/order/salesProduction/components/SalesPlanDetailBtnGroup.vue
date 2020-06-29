@@ -35,7 +35,7 @@
           </el-col>
         </template>
         <!-- 销售计划 -->
-        <template  v-else-if="(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')">
+        <template v-else-if="(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')">
           <el-col :span="3">
             <el-button class="material-btn" @click="onCommit">提交</el-button>
           </el-col>
@@ -92,7 +92,8 @@
         return index != -1;
       },
       hasOrigin: function () {
-        return this.slotData.originOrder != null && this.slotData.originOrder.code != null;
+        //来源公司
+        return this.slotData.originCompany != null && this.slotData.originCompany != '';
       },
       isSalesOrder: function () {
         return this.slotData.type == 'SALES_ORDER';

@@ -68,8 +68,8 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="是否需要产前：" label-width="120" prop="needVoice">
-                <el-radio v-model="form.needPreproduction" :label="true">是</el-radio>
-                <el-radio v-model="form.needPreproduction" :label="false">否</el-radio>
+                <el-radio v-model="form.needPreproduction" :label="true" :disabled="hasOrigin">是</el-radio>
+                <el-radio v-model="form.needPreproduction" :label="false" :disabled="hasOrigin">否</el-radio>
               </el-form-item>
             </el-col>
           </el-row>
@@ -240,7 +240,7 @@
           return true;
         }
         // 来源订单不能添加删除
-        if (this.form.originOrder != null && this.form.originOrder.code != null) {
+        if (this.hasOrigin) {
           return false;
         } else {
           // 订单状态
@@ -254,11 +254,8 @@
       },
       // 是否来源外发
       hasOrigin: function () {
-        if (this.form.originOrder != null && this.form.originOrder.code != null && this.form.originOrder.code != '') {
-          return true;
-        } else {
-          return false;
-        }
+        //来源公司
+        return this.form.originCompany != null && this.form.originCompany != '';
       }
     },
     methods: {
@@ -303,7 +300,7 @@
       // setProgressPlan (val) {
       //   this.form.progressPlan.id = val.id;
       //   this.form.progressPlan.name = val.name;
-      //   this.progressPlanVisible = !this.progressPlanVisible; 
+      //   this.progressPlanVisible = !this.progressPlanVisible;
       // },
       setPayPlan(payPlan) {
         // 删除原有id
@@ -490,4 +487,5 @@
     border-color: #FFD5CE;
     color: #000;
   }
+
 </style>

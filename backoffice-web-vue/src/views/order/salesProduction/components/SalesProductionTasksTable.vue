@@ -26,18 +26,18 @@
           <span>{{getEntryTotalAmount(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="关联任务单" prop="productionTask.code" min-width="120">
+      <!-- <el-table-column label="关联任务单" prop="productionTask.code" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onTaskDetail(scope.row.productionTask.id)">{{scope.row.productionTask.code}}
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="关联外发单" min-width="120">
       </el-table-column>
       <el-table-column label="关联生产单" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onProductionOrderDetail(scope.row.id)">
-            {{scope.row.productionWorkOrderCode}}
+            {{scope.row.code}}
           </el-button>
         </template>
       </el-table-column>
@@ -55,7 +55,7 @@
       </el-table-column>
       <el-table-column label="操作" min-width="120">
         <template slot-scope="scope">
-          <el-button type="text" @click="onDetail(scope.row.productionTask.id)">详情</el-button>
+          <el-button type="text" @click="onProductionOrderDetail(scope.row.id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,6 +72,7 @@
       }
     },
     methods: {
+      //entry detail
       onDetail(id) {
         this.$router.push('/sales/entry/' + id);
       },

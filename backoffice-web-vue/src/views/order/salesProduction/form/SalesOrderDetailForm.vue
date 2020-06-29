@@ -38,15 +38,19 @@
               </el-row>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" class="basic-form-row" v-if=" form.type == 'SALES_ORDER'" v-popover:popover>
+          <el-row type="flex" justify="start" class="basic-form-row" v-if=" form.type == 'SALES_ORDER'"
+            v-popover:popover>
             <h6 class="sales-plan-h6"><span class="info-title">财务</span></h6>
           </el-row>
-          <el-row type="flex" justify="start" class="basic-form-row" v-if="form.type == 'SALES_ORDER'" v-popover:popover>
+          <el-row type="flex" justify="start" class="basic-form-row" v-if="form.type == 'SALES_ORDER'"
+            v-popover:popover>
             <el-col :span="8">
-              <h6 class="sales-plan-h6"><span class="info-title">有无定金：</span>{{form.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
+              <h6 class="sales-plan-h6"><span
+                  class="info-title">有无定金：</span>{{form.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="sales-plan-h6"><span class="info-title">尾款期数：</span>{{payPlanType[form.payPlan.payPlanType]}}</h6>
+              <h6 class="sales-plan-h6"><span class="info-title">尾款期数：</span>{{payPlanType[form.payPlan.payPlanType]}}
+              </h6>
             </el-col>
           </el-row>
         </el-col>
@@ -117,7 +121,9 @@
   import PurchaseOrderInfoContract from '@/views/order/purchase/info/PurchaseOrderInfoContract';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ContractCom from '../contract/ContractCom';
-  import {PayPlanInfo} from '@/components/'
+  import {
+    PayPlanInfo
+  } from '@/components/'
 
   export default {
     name: 'SalesOrderDetailForm',
@@ -153,12 +159,14 @@
       // 销售总价
       totalPrice: function () {
         let total = 0;
-        this.form.taskOrderEntries.forEach(element => {
-          let num = parseFloat(getEntryTotalPrice(element));
-          if (num != null && (!Number.isNaN(num))) {
-            total += num;
-          }
-        });
+        if (this.form.taskOrderEntries != null) {
+          this.form.taskOrderEntries.forEach(element => {
+            let num = parseFloat(getEntryTotalPrice(element));
+            if (num != null && (!Number.isNaN(num))) {
+              total += num;
+            }
+          });
+        }
         return total;
       },
       // 已签的合同列表

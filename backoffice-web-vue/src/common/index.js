@@ -1111,6 +1111,10 @@ let NONE_TENANT_APIS = {
   getSalesOrderList() {
     return '/b2b/sales/production/order/search';
   },
+  //待接销售订单列表
+  getPendingSalesOrderList() {
+    return '/b2b/out/order/pending/accept/search';
+  },
   //销售计划订单详情
   getSalesProductionOrderDetails(id) {
     return '/b2b/sales/production/order/' + id;
