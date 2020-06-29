@@ -48,7 +48,7 @@
       }),
       getDetail () {
         const code = this.code;
-        this.getOrderDetail({code});
+        this.getOrderDetail(code);
       }
     },
     data () {

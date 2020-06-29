@@ -12,7 +12,7 @@
             <h6>生产单号：{{slotData.code}}</h6>
           </el-col>
           <el-col :span="7">
-            <!-- <h6>合作方式：{{getEnum('machiningTypes', slotData.machiningType)}}</h6> -->
+            <h6>合作方式：{{getEnum('machiningTypes', slotData.cooperationMode)}}</h6>
           </el-col>
           <el-col :span="5">
             <h6>是否开票：{{slotData.invoiceNeeded ? '是' : '否'}}</h6>
