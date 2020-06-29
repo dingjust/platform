@@ -146,7 +146,7 @@
           <el-col :span="4">订单总数：<span style="color:red;">{{totalAmount}}</span></el-col>
           <el-col :span="4">订单金额：<span style="color:red;">{{totalPrice}}</span></el-col>
         </el-row>
-        <sales-production-tabs :canChangeProduct="canChangeProduct" style="margin-top:20px;" :form="form"
+        <sales-production-tabs :canChangeProduct="canChangeProduct" :canUpdate="!hasOrigin" style="margin-top:20px;" :form="form" 
           @appendProduct="appendProduct" />
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
