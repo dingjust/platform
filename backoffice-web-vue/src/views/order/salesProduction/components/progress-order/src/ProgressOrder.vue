@@ -11,8 +11,9 @@
     <el-row type="flex" justify="center" class="pp-basic-row">
       <el-col :span="23">
         <el-card>
-          <production-progress-node v-if="slotData.code!=''" :slotData="slotData" @callback="onCallBack" />
-          <el-row type="flex" justify="center">暂无数据</el-row>
+          <production-progress-node v-if="hasData" :slotData="slotData"
+            @callback="onCallBack" />
+          <el-row v-else type="flex" justify="center">暂无数据</el-row>
         </el-card>
       </el-col>
     </el-row>
@@ -31,7 +32,7 @@
         type: Object,
         default: () => {
           return {
-            code: "",
+            code: '',
             creationtime: '',
             expectedDeliveryDate: '',
             id: '',
@@ -43,6 +44,15 @@
             progresses: [],
             skuID: "",
           };
+        }
+      }
+    },
+    computed: {
+      hasData: function () {
+        if (this.slotData != null && this.slotData.code != null && this.slotData.code != '') {
+          return true;
+        } else {
+          return false;
         }
       }
     },

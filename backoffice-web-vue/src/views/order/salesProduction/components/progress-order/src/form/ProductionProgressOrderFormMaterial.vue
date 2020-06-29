@@ -250,7 +250,7 @@
       }
     },
     created() {
-      if (!this.readOnly) {
+      if (!this.readOnly&&this.belong.materialsSpecEntries!=null) {
         this.progressOrder.materialPreparationEntries = this.belong.materialsSpecEntries.map(entry => {
           var obj = {
             status: null,

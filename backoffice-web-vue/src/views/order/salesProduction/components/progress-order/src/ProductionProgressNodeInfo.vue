@@ -47,6 +47,7 @@
     props: ['slotData'],
     components: {
       ProgressReport,
+      
       Step
     },
     computed: {
@@ -71,8 +72,11 @@
       ...mapActions({
         refreshDetail: 'refreshDetail'
       }),
+      ...createNamespacedHelpers('ProgressOrderModule').mapActions({
+        refreshProgressDetail: 'getDetail',
+      }),
       ...createNamespacedHelpers('ProgressOrderModule').mapMutations({
-        updateProgressModel: 'currentProgress'
+        updateProgressModel: 'currentProgress',
       }),
       onEdit(item) {
         item.updateOnly = true;
@@ -107,13 +111,20 @@
         this.$emit('callback');
       },
       async onCallback() {
-        await this.refreshDetail();
         // this.$emit('callback');
-        //更新        
-        let index = this.contentData.progressWorkSheet.progresses.findIndex(item => item.id == this
-          .selectProgressModel.id);
-        if (index != -1) {
-          this.updateProgressModel(this.contentData.progressWorkSheet.progresses[index]);
+        
+        //刷新当前生产进度工单详情
+        this.refreshProgressDetail(this.slotData.code);
+        //刷新当前打开生产工单详情
+        if (this.contentData.taskOrderEntries != null && this.contentData.taskOrderEntries[0] != null) {
+          await this.refreshDetail(this.contentData.taskOrderEntries[0].id);
+          //更新        
+          let index = this.contentData.taskOrderEntries[0].progressWorkSheet.progresses.findIndex(item => item.id ==
+            this
+            .selectProgressModel.id);
+          if (index != -1) {
+            this.updateProgressModel(this.contentData.taskOrderEntries[0].progressWorkSheet.progresses[index]);
+          }
         }
       },
     },
