@@ -24,7 +24,7 @@
               :productsColors="colors" />
           </el-row>
         </div> -->
-        <progress-order :slotData="formData.progressWorkSheet" @callback="onCallBack" />
+        <progress-order :slotData="progressOrder" @callback="onCallBack" />
         <production-order-relation-info :slotData="formData" />
         <production-order-button-group style="margin-top:50px" :slotData="formData" @callback="getDetail" />
       </el-row>
@@ -77,6 +77,14 @@
         }
         return colors;
       },
+      //生产进度工单
+      progressOrder: function () {
+        if (this.formData.taskOrderEntries != null && this.formData.taskOrderEntries.length > 0) {
+          return this.formData.taskOrderEntries[0].progressWorkSheet;
+        } else {
+          return null;
+        }
+      }
     },
     methods: {
       async getDetail() {

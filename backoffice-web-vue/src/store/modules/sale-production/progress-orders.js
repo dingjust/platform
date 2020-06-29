@@ -63,7 +63,17 @@ const mutations = {
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
+  async search({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    keyword,
+    statuses,
+    page,
+    size
+  }) {
     console.log(keyword + 'test' + page + 'test' + size);
     commit('url', url);
     commit('keyword', keyword);
@@ -90,7 +100,16 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    query,
+    page,
+    size
+  }) {
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
@@ -107,22 +126,40 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh ({dispatch, commit, state}) {
+  refresh({
+    dispatch,
+    commit,
+    state
+  }) {
     const keyword = state.keyword;
     const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {
+      url: state.url,
+      keyword,
+      statuses,
+      page: currentPageNumber,
+      size: currentPageSize
+    });
   },
-  async getDetail ({dispatch, commit, state}, {code}) {
+  async getDetail({
+    dispatch,
+    commit,
+    state
+  }, code) {
     const url = '/b2b/sheets/progress/work/' + code;
     const result = await http.get(url);
     if (!result['errors']) {
       commit('formData', result.data);
     }
   },
-  async refreshDetail ({dispatch, commit, state}) {
+  async refreshDetail({
+    dispatch,
+    commit,
+    state
+  }) {
     // const url = '/b2b/orders/production/work/' + state.formData.code;
     const url = '/b2b/sheets/progress/work/' + state.formData.code;
     const result = await http.get(url);
@@ -130,7 +167,11 @@ const actions = {
       commit('formData', result.data);
     }
   },
-  clearQueryFormData ({dispatch, commit, state}) {
+  clearQueryFormData({
+    dispatch,
+    commit,
+    state
+  }) {
     commit('queryFormData', {
       keyword: '',
       statuses: '',

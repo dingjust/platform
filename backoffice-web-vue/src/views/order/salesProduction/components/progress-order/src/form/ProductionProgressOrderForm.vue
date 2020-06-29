@@ -322,8 +322,8 @@
     margin-bottom: 20px;
   }
 
-  .order-table tr td,
-  .order-table tr th {
+  .order-table >>> tr td,
+  .order-table >>> tr th {
     border: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
     height: 30px;
@@ -334,7 +334,7 @@
     height: 80px;
   } */
 
-  .order-table-input .el-input__inner {
+  .order-table-input >>> .el-input__inner {
     /* width: 60px; */
     border: 0px solid #fff;
   }

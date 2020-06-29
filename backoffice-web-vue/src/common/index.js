@@ -1132,8 +1132,8 @@ let NONE_TENANT_APIS = {
     return '/b2b/production/task/order/search';
   },
   //生产工单详情
-  getProductionOrderDetail(code) {
-    return '/b2b/production/task/order/' + code;
+  getProductionOrderDetail(id) {
+    return '/b2b/production/task/order/' + id;
   },
 
   //设置生产进度预计完成时间
