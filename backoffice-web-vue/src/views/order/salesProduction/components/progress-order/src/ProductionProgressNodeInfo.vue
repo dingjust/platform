@@ -25,37 +25,28 @@
 </template>
 
 <script>
-  import {
-    hasPermission
-  } from '@/auth/auth';
+  // import {
+  //   hasPermission
+  // } from '@/auth/auth';
 
-  import {
-    createNamespacedHelpers
-  } from 'vuex';
   import ProgressReport from './report/ProgressReport';
   import Step from './Step';
-
-  const {
-    mapGetters,
-    mapActions,
-  } = createNamespacedHelpers(
-    'ProductionOrderModule'
-  );
+  import {
+    store,
+    mutations
+  } from './store';
 
   export default {
     name: 'ProductionProgressNodeInfo',
     props: ['slotData'],
     components: {
       ProgressReport,
-      
       Step
     },
     computed: {
-      ...mapGetters({
-        contentData: 'formData'
-      }),
       selectProgressModel: function () {
-        return this.$store.state.ProgressOrderModule.currentProgress;
+        return store.currentProgress;
+        // return this.$store.state.ProgressOrderModule.currentProgress;
       },
       activeNodeIndex: function () {
         if (this.slotData.status == 'COMPLETED') {
@@ -69,15 +60,7 @@
       },
     },
     methods: {
-      ...mapActions({
-        refreshDetail: 'refreshDetail'
-      }),
-      ...createNamespacedHelpers('ProgressOrderModule').mapActions({
-        refreshProgressDetail: 'getDetail',
-      }),
-      ...createNamespacedHelpers('ProgressOrderModule').mapMutations({
-        updateProgressModel: 'currentProgress',
-      }),
+      updateProgressModel: mutations.setProgress,
       onEdit(item) {
         item.updateOnly = true;
         this.updateProgressModel(item);
@@ -111,20 +94,27 @@
         this.$emit('callback');
       },
       async onCallback() {
-        // this.$emit('callback');
-        
-        //刷新当前生产进度工单详情
-        this.refreshProgressDetail(this.slotData.code);
-        //刷新当前打开生产工单详情
-        if (this.contentData.taskOrderEntries != null && this.contentData.taskOrderEntries[0] != null) {
-          await this.refreshDetail(this.contentData.taskOrderEntries[0].id);
-          //更新        
-          let index = this.contentData.taskOrderEntries[0].progressWorkSheet.progresses.findIndex(item => item.id ==
-            this
-            .selectProgressModel.id);
-          if (index != -1) {
-            this.updateProgressModel(this.contentData.taskOrderEntries[0].progressWorkSheet.progresses[index]);
+        if (this.slotData.orderId != null && this.slotData.orderId != '') {
+          //获取对应生产工单详情
+          const url = this.apis().getProductionOrderDetail(this.slotData.orderId);
+          const result = await this.$http.get(url);
+          if (result["errors"]) {
+            this.$message.error(result["errors"][0].message);
+            return;
           }
+          let productionOrder = Object.assign({}, result.data);
+
+          //更新当前生产进度节点详情
+          if (productionOrder.taskOrderEntries != null && productionOrder.taskOrderEntries[0] != null) {
+            //更新        
+            let index = productionOrder.taskOrderEntries[0].progressWorkSheet.progresses.findIndex(item => item.id ==
+              this
+              .selectProgressModel.id);
+            if (index != -1) {
+              this.updateProgressModel(productionOrder.taskOrderEntries[0].progressWorkSheet.progresses[index]);
+            }
+          }
+          this.$emit('callback', productionOrder);
         }
       },
     },

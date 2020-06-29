@@ -167,6 +167,15 @@ const actions = {
       commit('formData', result.data);
     }
   },
+  async setDetail({
+    dispatch,
+    commit,
+    state
+  }, data) {
+    if (data != null) {
+      commit('formData', data);
+    }
+  },
   clearQueryFormData({
     dispatch,
     commit,

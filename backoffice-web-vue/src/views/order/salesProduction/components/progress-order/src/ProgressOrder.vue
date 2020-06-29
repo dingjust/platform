@@ -61,11 +61,10 @@
         // this.$router.push('/sales/progressOrder/' + this.slotData.code);        
         if (this.slotData.code != null && "" != this.slotData.code) {
           this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');
-
         }
       },
-      onCallBack() {
-        this.$emit('callback');
+      onCallBack(data) {
+        this.$emit('callback',data);
       }
     },
     created() {}
