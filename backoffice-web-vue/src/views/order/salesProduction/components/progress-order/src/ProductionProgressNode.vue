@@ -51,8 +51,8 @@
         this.estimatedFormVisible = false;
         this.$emit('callback');
       },
-      onCallback() {
-        this.$emit('callback');
+      onCallback(data) {
+        this.$emit('callback',data);
       }
     },
     data() {

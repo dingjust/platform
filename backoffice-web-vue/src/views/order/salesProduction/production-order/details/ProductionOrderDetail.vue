@@ -96,8 +96,8 @@
         }
         this.$store.state.ProductionOrderModule.formData = Object.assign({}, result.data);
       },
-      onCallBack() {
-        this.getDetail();
+      onCallBack(data) {
+        this.$store.state.ProductionOrderModule.formData = Object.assign({}, data);
       }
     },
     data() {
