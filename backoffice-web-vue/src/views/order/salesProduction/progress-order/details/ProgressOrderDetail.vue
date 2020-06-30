@@ -12,7 +12,7 @@
       <el-form :inline="true">
         <progress-order-receiving-form :formData="formData" :isRead="true"/>
         <progress-order-production-info-form :formData="formData" :isRead="false"/>
-        <progress-order :slotData="formData" @callback="getDetail" />
+        <progress-order :slotData="formData" @callback="callback" />
       </el-form>
     </el-card>
   </div>
@@ -49,6 +49,14 @@
       getDetail () {
         const code = this.code;
         this.getOrderDetail(code);
+      },
+      callback (productionOrder) {
+        console.log(productionOrder);
+        if (productionOrder == null) {
+          this.getDetail();
+        } else {
+          this.$store.state.ProgressOrderModule.formData = Object.assign({}, productionOrder.taskOrderEntries[0].progressWorkSheet);
+        }
       }
     },
     data () {

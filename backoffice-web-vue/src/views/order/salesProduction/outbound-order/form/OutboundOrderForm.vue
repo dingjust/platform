@@ -67,26 +67,25 @@
             <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item"/>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="8">
-                <el-form-item label="生产节点" prop="progressPlan" :rules="[{ type: 'object', validator: validateProgressPlan, trigger: 'change' }]">
-                  <el-input v-model="item.progressPlan.name" :disabled="true" placeholder="请输入"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-button @click="onProgressPlanSelect(index)" size="mini">选择节点</el-button>
-              </el-col>
-            </el-row>
-            <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-              <el-col :span="6">
                 <el-form-item label="发单价格" prop="unitPrice" :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
                   <el-input v-model="item.unitPrice" placeholder="请输入" @blur="onBlur(item,'billPrice')"
                             v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="交货日期" prop="deliveryDate" :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
                   <el-date-picker v-model="item.deliveryDate" type="date"
                                   value-format="timestamp" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="生产节点" prop="progressPlan" :rules="[{ required: true, type: 'object', validator: validateProgressPlan, trigger: 'change' }]">
+                  <el-input v-model="item.progressPlan.name" :disabled="true" placeholder="请输入"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3">
+                <el-button v-if="item.progressPlan.isFromOrder" @click="editProgressPlan(index, item)" size="mini">编辑</el-button>
+                <el-button v-else @click="onProgressPlanSelect(index)" size="mini">选择节点</el-button>
               </el-col>
             </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
@@ -210,6 +209,9 @@
     <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="getProgressPlan"/>
     </el-dialog>
+    <el-dialog :visible.sync="editProgressPlanVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <progress-plan-edit-form v-if="editProgressPlanVisible" :progressPlan="editProgress" @onEditProgress="onEditProgress"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -233,6 +235,7 @@
   import ProductionTaskSelectDialog from '../../production-task/components/ProductionTaskSelectDialog';
   import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
+  import ProgressPlanEditForm from '@/views/user/progress-plan/components/ProgressPlanEditForm'
   import {PayPlanFormV2, SupplierSelect} from '@/components/'
   export default {
     name: 'OutboundOrderForm',
@@ -246,13 +249,22 @@
       MTAVAT,
       MyAddressForm,
       SupplierSelect,
-      PayPlanFormV2
+      PayPlanFormV2,
+      ProgressPlanEditForm
     },
     methods: {
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
       getProgressPlan (val) {
+        this.formData.taskOrderEntries[this.selectIndex].progressPlan = this.copyProgressPlan(val);
+        this.progressPlanVisible = false;
+      },
+      onEditProgress (val) {
+        this.formData.taskOrderEntries[this.selectIndex].progressPlan.productionProgresses = val;
+        this.editProgressPlanVisible = false;
+      },
+      copyProgressPlan (val) {
         let row = {
           name: val.name,
           remarks: val.remarks,
@@ -269,8 +281,7 @@
             sequence: item.sequence
           })
         })
-        this.formData.taskOrderEntries[this.selectIndex].progressPlan = row;
-        this.progressPlanVisible = false;
+        return row;
       },
       onBlur (row, attribute) {
         var reg = /\.$/;
@@ -295,6 +306,11 @@
       },
       onProgressPlanSelect (index) {
         this.progressPlanVisible = true;
+        this.selectIndex = index;
+      },
+      editProgressPlan (index, item) {
+        this.editProgressPlanVisible = true;
+        this.editProgress = item.progressPlan.productionProgresses;
         this.selectIndex = index;
       },
       addRow () {
@@ -342,11 +358,25 @@
               },
               colorSizeEntries: item.colorSizeEntries
             }
+            if (item.progressWorkSheet) {
+              row.progressPlan = this.copyProgressPlan({
+                name: '节点方案1',
+                remarks: '',
+                productionProgresses: item.progressWorkSheet.progresses
+              })
+              row.progressPlan.isFromOrder = true;
+            }
             entries.push(row);
             row = {};
           }
         })
         this.formData.taskOrderEntries = entries;
+        // 没有选择生产工单添加默认数据
+        if (selectTaskList.length <= 0) {
+          this.addRow();
+          this.taskDialogVisible = false;
+          return;
+        }
         // 回显地址
         this.formData.taskOrderEntries.forEach((val, index) => {
           if (this.$refs.addressForm[index]) {
@@ -491,6 +521,8 @@
         taskDialogVisible: false,
         selectIndex: '',
         progressPlanVisible: false,
+        editProgressPlanVisible: false,
+        editProgress: '',
         operator: {},
         count: 0,
         operatorList: [{
