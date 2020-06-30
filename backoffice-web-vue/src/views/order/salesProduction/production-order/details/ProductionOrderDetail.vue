@@ -97,7 +97,11 @@
         this.$store.state.ProductionOrderModule.formData = Object.assign({}, result.data);
       },
       onCallBack(data) {
-        this.$store.state.ProductionOrderModule.formData = Object.assign({}, data);
+        if (data != null) {
+          this.$store.state.ProductionOrderModule.formData = Object.assign({}, data);
+        } else {
+          this.getDetail();
+        }
       }
     },
     data() {
