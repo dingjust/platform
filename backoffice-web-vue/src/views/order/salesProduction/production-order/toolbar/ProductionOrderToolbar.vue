@@ -39,7 +39,7 @@
         </el-col>
         <el-col :span="4">
           <el-row type="flex" justify="end">
-            <el-button type="primary" class="create-button" @click="onCreate">创建外发订单</el-button>
+            <el-button v-if="!isOutProduction" type="primary" class="create-button" @click="onCreate">创建外发订单</el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -60,6 +60,12 @@
 
   export default {
     name: 'ProductionOrderToolbar',
+    props: {
+      isOutProduction: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       UniquecodeImportForm
     },

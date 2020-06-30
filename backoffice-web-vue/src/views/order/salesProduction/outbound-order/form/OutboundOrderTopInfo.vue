@@ -78,11 +78,11 @@
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
           <el-col :span="12">
-            <!-- <h6 class="hide-text" :title="slotData.partyAOperator ? slotData.partyAOperator.name : ''">
-              跟单员：{{slotData.partyAOperator ? slotData.partyAOperator.name : ''}}</h6> -->
+            <h6 class="hide-text" :title="slotData.merchandiser ? slotData.merchandiser.name : ''">
+              跟单员：{{slotData.merchandiser ? slotData.merchandiser.name : ''}}</h6>
           </el-col>
           <el-col :span="12">
-            <!-- <h6>联系方式：{{slotData.partyAOperator ? slotData.partyAOperator.mobileNumber : ''}}</h6> -->
+            <h6>联系方式：{{slotData.merchandiser ? slotData.merchandiser.mobileNumber : ''}}</h6>
           </el-col>
         </el-row>
       </el-col>
@@ -124,15 +124,12 @@
       },
       // 判断是否能签署合同
       canSign: function () {
-        // 未签合同 && 账号为productionleader && 审核状态为 PASSED
-        // if (this.form.productionLeader != null) {
-          // return this.slotData.agreements &&
-          //   this.slotData.agreements.length <= 0 &&
-          //   this.$store.getters.currentUser.uid == this.slotData.partyAOperator.uid &&
-          //   this.slotData.status == 'CONFIRMED';
-        // } else {
-        //   return false;
-        // }
+        // 未签合同 && 账号为merchandiser && 审核状态为 PASSED
+        return this.slotData.agreements &&
+          this.slotData.agreements.length <= 0 &&
+          this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
+          this.slotData.sendAuditState == 'PASSED' &&
+          this.slotData.acceptState == 'ACCEPTED';
       }
     },
     methods: {},

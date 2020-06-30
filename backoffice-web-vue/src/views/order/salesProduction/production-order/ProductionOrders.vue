@@ -107,25 +107,28 @@
       onCreate () {
         let row = [];
         this.selectRow.forEach(item => {
+          let progressPlan = {
+            name: '',
+            remarks: '',
+            productionProgresses: []
+          }
+          if (item.progressWorkSheet) {
+            progressPlan = this.copyProgressPlan({
+              name: '节点方案1',
+              remarks: '',
+              productionProgresses: item.progressWorkSheet.progresses
+            })
+            progressPlan.isFromOrder = true;
+          }
           row.push({
             originOrder: {id: item.id},
             unitPrice: '',
             deliveryDate: '',
             shippingAddress: item.shippingAddress,
             product: item.product,
-            progressPlan: {
-              name: ''
-            },
+            progressPlan: progressPlan,
             colorSizeEntries: item.colorSizeEntries
           })
-          // if (item.progressPlan.productionProgresses.length > 0) {
-          //   row.progressPlan = this.copyProgressPlan({
-          //     name: '节点方案1',
-          //     remarks: '',
-          //     productionProgresses: item.progressPlan.productionProgresses
-          //   })
-          //   row.progressPlan.isFromOrder = true;
-          // }
         })
         this.formData.taskOrderEntries = row;
         this.outboundOrderTypeSelect = true;
