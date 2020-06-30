@@ -76,7 +76,7 @@
               </tr>
             </table>
           </el-row>
-          <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20">
+          <!-- <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20" v-if="orderType == 'SALES_ORDER'">
             <el-col :span="16">
               <el-row type="flex" align="middle">
                 <el-col :span="14" style="padding-top:25px">
@@ -91,7 +91,7 @@
                 </el-col>
               </el-row>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row type="flex" :gutter="10">
             <el-col :span="8">
               <el-row type="flex" align="middle">
@@ -110,6 +110,20 @@
                   <el-date-picker v-model="entry.deliveryDate" type="date" placeholder="选择日期" :disabled="fromOrigin">
                   </el-date-picker>
                 </el-form-item>
+              </el-row>
+            </el-col>
+            <el-col :span="8" v-if="orderType == 'SALES_ORDER'">
+              <el-row type="flex" align="top">
+                <el-col :span="16">
+                  <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案" label-width="100px"
+                    :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-button style="margin-left: 10px;padding-top: 10px" @click="appendProgressPlan(productIndex)" size="mini"
+                    :disabled="isUpdate">点击选择</el-button>
+                </el-col>
               </el-row>
             </el-col>
           </el-row>
@@ -219,6 +233,10 @@
       fromOrigin: {
         type: Boolean,
         default: false
+      },
+      orderType: {
+        type: String,
+        default: 'SALES_PLAN'
       }
     },
     computed: {

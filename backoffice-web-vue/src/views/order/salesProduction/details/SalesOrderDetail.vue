@@ -132,8 +132,7 @@
               return false;
           }
         }
-      },
-
+      }
     },
     methods: {
       appendProduct() {

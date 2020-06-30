@@ -45,6 +45,9 @@
             skuID: "",
           };
         }
+      },
+      order: {
+        type: Object
       }
     },
     computed: {
@@ -58,9 +61,17 @@
     },
     methods: {
       onEdit() {
+        console.log(this.slotData);
         // this.$router.push('/sales/progressOrder/' + this.slotData.code);        
         if (this.slotData.code != null && "" != this.slotData.code) {
           this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');
+        } else if (this.slotData.code == '') {
+          this.$router.push({
+            name: '创建进度工单',
+            params: {
+              order: this.order
+            }
+          })
         }
       },
       onCallBack(data) {

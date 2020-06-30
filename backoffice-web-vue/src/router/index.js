@@ -330,6 +330,11 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/progress-order/ProgressOrderPage')
             },
             {
+              path: 'progressOrder/create',
+              name: '创建进度工单',
+              component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/progress-order/form/ProgressOrderForm')
+            },
+            {
               path: 'progressOrder/:code/edit',
               name: '编辑进度工单',
               props: true,
