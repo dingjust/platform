@@ -7,16 +7,8 @@
           <span>{{getCooperator(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="关联产品数">
-        <template slot-scope="scope">
-          <!-- <span>{{scope.row.entries.length}}</span> -->
-        </template>
-      </el-table-column>
-      <el-table-column label="跟单员">
-        <template slot-scope="scope">
-          <!-- <span>{{scope.row.partyAOperator ? scope.row.partyAOperator.name : ''}}</span> -->
-        </template>
-      </el-table-column>
+      <el-table-column label="关联产品数" prop="entrySize"></el-table-column>
+      <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
       <el-table-column label="审批状态">
         <template slot-scope="scope">
           <span>{{getEnum('SalesProductionAuditStatus', scope.row.sendAuditState)}}</span>

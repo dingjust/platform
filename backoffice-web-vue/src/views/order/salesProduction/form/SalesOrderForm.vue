@@ -313,7 +313,17 @@
       async onSave(submitAudit) {
         let validate = await this.validateForms();
         if (validate) {
-          this._Save(submitAudit);
+          if (this.hasOrigin) {
+            this.$confirm('此订单合作对象非本公司合作商，是否添加为合作商?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._Save(submitAudit);
+            });
+          } else {
+            this._Save(submitAudit);
+          }
         } else {
           this.$message.error('请完善信息');
         }

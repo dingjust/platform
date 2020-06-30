@@ -278,7 +278,8 @@
             completeAmount: item.completeAmount,
             productionProgressOrders: item.productionProgressOrders,
             quantity: item.quantity,
-            sequence: item.sequence
+            sequence: item.sequence,
+            isCannotRemove: true
           })
         })
         return row;

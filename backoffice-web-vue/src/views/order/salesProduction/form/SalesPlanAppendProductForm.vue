@@ -112,7 +112,7 @@
                 </el-form-item>
               </el-row>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="8" v-if="orderType == 'SALES_ORDER'">
               <el-row type="flex" align="top">
                 <el-col :span="16">
                   <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案" label-width="100px"

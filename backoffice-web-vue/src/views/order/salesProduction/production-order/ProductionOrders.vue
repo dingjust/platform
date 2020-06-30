@@ -118,9 +118,37 @@
             },
             colorSizeEntries: item.colorSizeEntries
           })
+          // if (item.progressPlan.productionProgresses.length > 0) {
+          //   row.progressPlan = this.copyProgressPlan({
+          //     name: '节点方案1',
+          //     remarks: '',
+          //     productionProgresses: item.progressPlan.productionProgresses
+          //   })
+          //   row.progressPlan.isFromOrder = true;
+          // }
         })
         this.formData.taskOrderEntries = row;
         this.outboundOrderTypeSelect = true;
+      },
+      copyProgressPlan (val) {
+        let row = {
+          name: val.name,
+          remarks: val.remarks,
+          productionProgresses: []
+        }
+        val.productionProgresses.forEach(item => {
+          row.productionProgresses.push({
+            progressPhase: item.progressPhase,
+            warningDays: item.warningDays,
+            medias: item.medias,
+            completeAmount: item.completeAmount,
+            productionProgressOrders: item.productionProgressOrders,
+            quantity: item.quantity,
+            sequence: item.sequence,
+            isCannotRemove: true
+          })
+        })
+        return row;
       }
     },
     data() {

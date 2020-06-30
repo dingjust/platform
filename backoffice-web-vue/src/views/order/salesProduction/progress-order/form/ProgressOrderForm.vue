@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="6">
           <div class="progress-list-title">
-            <h6>编辑进度工单</h6>
+            <h6>{{code == undefined ? '创建进度工单' : '编辑进度工单'}}</h6>
           </div>
         </el-col>
       </el-row>
@@ -80,7 +80,18 @@
       }
     },
     created () {
-      this.getDetail();
+      console.log(this.$route.params.order);
+      if (this.code == undefined && this.$route.params.order != null) {
+        const order = this.$route.params.order;
+        this.formData.belongTo = order.creator;
+        this.formData.machiningType = order.cooperationMode;
+        this.formData.orderCode = order.code;
+        this.formData.product = order.taskOrderEntries[0].product;
+        this.formData.expectedDeliveryDate = order.taskOrderEntries[0].deliveryDate;
+        this.formData.colorSizeEntries = order.taskOrderEntries[0].colorSizeEntries;
+      } else if (this.code != undefined){
+        this.getDetail();
+      }
     }
   }
 </script>
