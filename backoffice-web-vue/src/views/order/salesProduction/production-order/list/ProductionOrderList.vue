@@ -28,12 +28,12 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="生产订单状态" prop="status" :column-key="'status'" :filters="statuses">
-        <template slot-scope="scope">
+      <!-- <el-table-column label="生产订单状态" prop="status" :column-key="'status'" :filters="statuses">
+        <template slot-scope="scope"> -->
           <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-          <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
+          <!-- <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="跟单员">
       </el-table-column>
       <el-table-column label="订单生成时间" min-width="100">
@@ -42,6 +42,11 @@
         </template>
       </el-table-column>
       <el-table-column label="订单标签">
+        <template slot-scope="scope">
+          <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133">
+            {{isOuted(scope.row) ? '已外发' : '未外发'}}
+          </el-tag>
+        </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
@@ -85,6 +90,12 @@
       ...mapActions({
         refresh: 'refresh'
       }),
+      isOuted (row) {
+        if (row.outboundOrderCode) {
+          return true;
+        } 
+        return false;
+      },
       handleFilterChange(val) {
         this.statuses = val.status;
 

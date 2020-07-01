@@ -5,7 +5,7 @@
         <h6 style="margin-bottom: 0px;margin-top: 2px;">生产进度工单</h6>
       </el-col>
       <el-col :span="2">
-        <el-button class="pp-edit-btn" @click="onEdit">编辑</el-button>
+        <el-button class="pp-edit-btn" @click="onEdit" v-if="canEdit">编辑</el-button>
       </el-col>
     </el-row>
     <el-row type="flex" justify="center" class="pp-basic-row">
@@ -57,6 +57,9 @@
         } else {
           return false;
         }
+      },
+      canEdit: function () {
+        return true;
       }
     },
     methods: {

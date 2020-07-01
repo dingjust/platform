@@ -213,9 +213,9 @@
       };
     },
     created() {
-      this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
-        this.statues.push(element);
-      });
+      // this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
+      //   this.statues.push(element);
+      // });
       this.onSearch();
     },
     mounted() {
