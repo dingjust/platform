@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed" :row-key="'id'"
       :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick" :reserve-selection="true">
-      <el-table-column type="selection" width="55px" :selectable="rowDisabled"></el-table-column>
+      <el-table-column type="selection" width="55px" :selectable="rowDisabled" v-if="!isOutProduction"></el-table-column>
       <el-table-column label="生产订单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -42,7 +42,7 @@
         </template>
       </el-table-column>
       <el-table-column label="订单标签">
-        <template slot-scope="scope" v-if="!isOutboundList">
+        <template slot-scope="scope" v-if="!isOutProduction">
           <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133">
             {{isOuted(scope.row) ? '已外发' : '未外发'}}
           </el-tag>
@@ -83,7 +83,7 @@
       vSelectRow: {
         type: Array
       },
-      isOutboundList: {
+      isOutProduction: {
         type: Boolean,
         default: false
       }

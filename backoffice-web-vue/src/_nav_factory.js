@@ -16,7 +16,7 @@ export default {
     },
     {
       name: '任务中心',
-      url: '/task',
+      // url: '/task',
       icon: 'el-icon-notebook-1',
       children: [{
         name: '待我处理',
@@ -34,7 +34,7 @@ export default {
     },
     {
       name: '销售中心',
-      url: '/sales',
+      // url: '/sales',
       icon: 'el-icon-s-order',
       children: [{
         name: '计划订单',
@@ -45,32 +45,46 @@ export default {
       }]
     },
     {
-      name: '生产中心',
-      url: '/sales',
+      name: '生产管理',
+      // url: '/sales',
       icon: 'el-icon-notebook-2',
       children: [{
           name: '生产工单',
-          url: '/sales/productionOrder'
-        }, {
-          name: '生产进度工单',
-          url: '/sales/progressOrder'
+          url: '/sales/productionOrder',
+          children: [{
+            name: '生产进度工单',
+            url: '/sales/progressOrder'  
+          }]
         },
         // {
         //   name: '生产任务',
         //   url: '/sales/production'
         // },
-        {
-          name: '外发订单',
-          url: '/sales/outboundOrder'
-        }, {
-          name: '外发工单',
-          url: '/sales/outboundProductionOrder'
-        },
+        // {
+        //   name: '外发订单',
+        //   url: '/sales/outboundOrder'
+        // }, {
+        //   name: '外发工单',
+        //   url: '/sales/outboundProductionOrder'
+        // },
       ]
     },
     {
+      name: '外发管理',
+      // url: '/sales',
+      icon: 'el-icon-notebook-2',
+      children: [{
+        name: '外发订单',
+        url: '/sales/outboundOrder',
+        children: [{
+          name: '外发工单',
+          url: '/sales/outboundProductionOrder'
+        }]
+      }]
+    },
+    {
       name: '采购中心',
-      url: '/sales',
+      // url: '/sales',
       icon: 'el-icon-shopping-cart-1',
       children: [{
         name: '采购任务',
@@ -79,7 +93,7 @@ export default {
     },
     {
       name: '产品中心',
-      url: '/product',
+      // url: '/product',
       icon: 'el-icon-shopping-bag-1',
       children: [{
         name: '销售产品',
@@ -100,7 +114,7 @@ export default {
     },
     {
       name: '订单发货',
-      url: '/shipping',
+      // url: '/shipping',
       icon: 'el-icon-box',
       children: [{
         name: '收发任务单',
@@ -121,7 +135,7 @@ export default {
     },
     {
       name: '外发收货',
-      url: '/receipt',
+      // url: '/receipt',
       icon: 'el-icon-receiving',
       children: [{
         name: '收发任务单',
@@ -142,7 +156,7 @@ export default {
     },
     {
       name: '资料中心',
-      url: '/product',
+      // url: '/product',
       icon: 'el-icon-tickets',
       children: [{
         name: '物料管理',
@@ -156,7 +170,7 @@ export default {
     },
     {
       name: '公司介绍',
-      url: '/account',
+      // url: '/account',
       icon: 'el-icon-office-building',
       children: [
         // {
@@ -232,7 +246,7 @@ export default {
     },
     {
       name: '报表中心',
-      url: '/report',
+      // url: '/report',
       icon: 'el-icon-s-data',
       children: [{
           name: '生产进度',
@@ -252,7 +266,7 @@ export default {
     },
     {
       name: '订单',
-      url: '/order',
+      // url: '/order',
       icon: 'el-icon-s-order',
       children: [{
           name: '报价订单',
@@ -295,7 +309,7 @@ export default {
     },
     {
       name: '合同',
-      url: '/contract',
+      // url: '/contract',
       icon: 'el-icon-s-marketing',
       children: [{
           name: '合同管理',
@@ -370,7 +384,7 @@ export default {
     // },
     {
       name: '产品',
-      url: '/product',
+      // url: '/product',
       icon: 'el-icon-goods',
       children: [{
           name: '产品管理',
@@ -413,7 +427,7 @@ export default {
     },
     {
       name: '其他',
-      url: '/miscs',
+      // url: '/miscs',
       icon: 'el-icon-coin',
       children: [{
         name: '钱包',
