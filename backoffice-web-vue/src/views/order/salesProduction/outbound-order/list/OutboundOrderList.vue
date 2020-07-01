@@ -43,7 +43,7 @@
     computed: {},
     methods: {
       canModify(row) {
-        return row.merchandiser.uid == this.$store.getters.currentUser.companyCode &&
+        return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
           (row.sendAuditState == 'AUDITED_FAILED' || row.acceptState == 'REJECTED');
         // return row.belongTo.uid == this.$store.getters.currentUser.companyCode && (row.status == 'NOT_COMMITED' || row.status == 'REJECTED_CONFIRM');
       },
@@ -60,7 +60,7 @@
         this.$router.push('/sales/outboundOrder/' + row.id);
       },
       onModify(row) {
-        this.$emit('onModify', row.code);
+        this.$emit('onModify', row.id);
       }
     },
     data() {

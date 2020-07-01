@@ -476,27 +476,11 @@
           if (this.formData.taskOrderEntries.length <= 0) {
             this.addRow();
           }
-          if (this.formData.status == 'NOT_COMMITED') {
-            if (!this.formData.targetCooperator) {
-              this.formData.targetCooperator = {
-                id: ''
-              }
-            }
-            this.formData.taskOrderEntries.forEach(item => {
-              if (item.product == null) {
-                item.product = {
-                  id: '',
-                  name: '',
-                  thumbnail: ''
-                }
-              }
-              if (item.originOrder == null) {
-                item.originOrder = {
-                  id: ''
-                }
-              }
-            })
-          }
+          console.log(this.$route.params.formData);
+          this.formData.outboundCompanyName = this.$route.params.formData.targetCooperator.partner.name;
+          this.formData.outboundContactPerson = this.$route.params.formData.targetCooperator.partner.contactPerson;
+          this.formData.outboundContactPhone = this.$route.params.formData.targetCooperator.partner.contactPhone;
+          this.formData.attachments = [];
         } else {
           this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
         }

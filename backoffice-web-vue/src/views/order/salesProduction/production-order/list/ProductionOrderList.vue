@@ -42,7 +42,7 @@
         </template>
       </el-table-column>
       <el-table-column label="订单标签">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="!isOutboundList">
           <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133">
             {{isOuted(scope.row) ? '已外发' : '未外发'}}
           </el-tag>
@@ -82,6 +82,10 @@
       },
       vSelectRow: {
         type: Array
+      },
+      isOutboundList: {
+        type: Boolean,
+        default: false
       }
     },
     components: {},
