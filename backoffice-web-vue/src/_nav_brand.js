@@ -33,14 +33,14 @@ export default {
       }]
     },
     {
-      name: '销售中心',
+      name: '订单管理',
       url: '/sales',
       icon: 'el-icon-s-order',
       children: [{
-        name: '计划订单',
+        name: '业务订单',
         url: '/sales/plan'
       }, {
-        name: '待接订单',
+        name: '外接订单',
         url: '/sales/pending-order'
       }]
     },

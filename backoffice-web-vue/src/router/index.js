@@ -738,6 +738,7 @@ const router = new Router({
             {
               path: 'orders/:id',
               name: '发货单详情',
+              props:true,
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-order/details/ShippingOrdersDetail')
             },
             {
