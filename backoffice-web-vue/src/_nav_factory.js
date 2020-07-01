@@ -51,11 +51,10 @@ export default {
       children: [{
           name: '生产工单',
           url: '/sales/productionOrder',
-          children: [{
-            name: '生产进度工单',
-            url: '/sales/progressOrder'  
-          }]
-        },
+        }, {
+          name: '生产进度工单',
+          url: '/sales/progressOrder'  
+        }
         // {
         //   name: '生产任务',
         //   url: '/sales/production'
@@ -76,10 +75,9 @@ export default {
       children: [{
         name: '外发订单',
         url: '/sales/outboundOrder',
-        children: [{
-          name: '外发工单',
-          url: '/sales/outboundProductionOrder'
-        }]
+      }, {
+        name: '外发工单',
+        url: '/sales/outboundProductionOrder'
       }]
     },
     {
