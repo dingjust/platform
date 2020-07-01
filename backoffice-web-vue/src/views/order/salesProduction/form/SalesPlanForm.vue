@@ -187,6 +187,9 @@
         }
       },
       async _Save(submitAudit) {
+        this.form.taskOrderEntries.forEach(item => {
+          this.$delete(item, 'progressPlan');
+        })
         const url = this.apis().salesPlanSave(submitAudit);
         let submitForm = Object.assign({}, this.form);
         if (!submitForm.auditNeeded) {

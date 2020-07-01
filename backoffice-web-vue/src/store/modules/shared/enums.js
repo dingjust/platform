@@ -1635,6 +1635,14 @@ const state = {
   }, {
     code: 'OutboundOrder',
     name: '外发订单'
+  }],
+  // 外发模式
+  ManagementMode: [{
+    code: 'COLLABORATION',
+    name: '协同'
+  }, {
+    code: 'AUTOGESTION',
+    name: '自管'
   }]
 };
 

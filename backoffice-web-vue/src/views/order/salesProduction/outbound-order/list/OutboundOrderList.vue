@@ -14,12 +14,14 @@
           <span>{{getEnum('SalesProductionAuditStatus', scope.row.sendAuditState)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签" min-width="100"></el-table-column>
+      <el-table-column label="订单标签" min-width="100">
+      </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetail(scope.row)" class="purchase-list-button">详情</el-button>
-            <el-button v-if="canModify(scope.row)" type="text" @click="onModify(scope.row)" class="purchase-list-button">修改</el-button>
+            <el-button v-if="canModify(scope.row)" type="text" @click="onModify(scope.row)"
+              class="purchase-list-button">修改</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -38,14 +40,14 @@
   export default {
     name: 'OutboundOrderList',
     props: ['page'],
-    computed: {
-    },
+    computed: {},
     methods: {
-      canModify (row) {
-        return false;
+      canModify(row) {
+        return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
+          (row.sendAuditState == 'AUDITED_FAILED' || row.acceptState == 'REJECTED');
         // return row.belongTo.uid == this.$store.getters.currentUser.companyCode && (row.status == 'NOT_COMMITED' || row.status == 'REJECTED_CONFIRM');
       },
-      getCooperator (row) {
+      getCooperator(row) {
         return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
       },
       onPageSizeChanged(val) {
@@ -58,17 +60,17 @@
         this.$router.push('/sales/outboundOrder/' + row.id);
       },
       onModify(row) {
-        this.$emit('onModify', row.code);
+        this.$emit('onModify', row.id);
       }
     },
-    data () {
+    data() {
       return {
         uid: this.$store.getters.currentUser.companyCode
       }
     },
-    created () {
-    }
+    created() {}
   }
+
 </script>
 
 <style scoped>

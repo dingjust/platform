@@ -4,13 +4,13 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="20" style="padding-top: 5px">
           <el-form-item label="订单信息" prop="name">
-            <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keyword"></el-input>
+            <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.name"></el-input>
           </el-form-item>
           <el-form-item label="负责人" prop="name">
-            <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.operatorName"></el-input>
+            <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.merchandiser"></el-input>
           </el-form-item>
           <el-form-item label="合作商" prop="name">
-            <el-input placeholder="请输入合作商名称" v-model="queryFormData.cooperatorName"></el-input>
+            <el-input placeholder="请输入合作商名称" v-model="queryFormData.targetCooperator"></el-input>
           </el-form-item>
           <el-button-group>
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>

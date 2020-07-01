@@ -99,6 +99,7 @@
                   :rules="{required: true, message: '不能为空', trigger: 'blur'}">
                   <el-input placeholder="订单报价" v-model="entry.unitPrice" :disabled="fromOrigin"
                     v-number-input.float="{ min: 0 ,decimal:2}" size="mini">
+                    <span slot="suffix">元</span>
                   </el-input>
                 </el-form-item>
               </el-row>

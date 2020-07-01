@@ -98,8 +98,8 @@
           this.onAdvancedSearch();
         }
       },
-      async onModify (code) {
-        const url = this.apis().getoutboundOrderDetail(code);
+      async onModify (id) {
+        const url = this.apis().getoutboundOrderDetail(id);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -108,7 +108,7 @@
         await this.$router.push({
           name: '创建外发订单',
           params: {
-            formData: result
+            formData: result.data
           }
         });
       }

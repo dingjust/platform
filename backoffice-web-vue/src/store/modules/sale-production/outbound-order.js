@@ -70,9 +70,10 @@ const state = {
   },
   queryFormData: {
     keyword: '',
-    cooperatorName: '',
-    operatorName: '',
-    statuses: ''
+    targetCooperator: '',
+    merchandiser: '',
+    statuses: '',
+    name: ''
   },
   addressFormData: {
     id: null,
@@ -220,9 +221,10 @@ const actions = {
   clearQueryFormData ({dispatch, commit, state}) {
     commit('queryFormData', {
       keyword: '',
-      cooperatorName: '',
-      operatorName: '',
-      statuses: ''
+      targetCooperator: '',
+      merchandiser: '',
+      statuses: '',
+      name: ''
     });
   },
   refresh ({dispatch, commit, state}) {
