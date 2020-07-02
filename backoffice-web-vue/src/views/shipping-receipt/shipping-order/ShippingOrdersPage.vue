@@ -52,7 +52,7 @@
       }),
       onSearch (page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getProductionTaskList();
+        const url = this.apis().shippingOrderList();
         this.search({
           url,
           keyword,
@@ -62,7 +62,7 @@
       },
       onAdvancedSearch (page, size) {
         const query = this.queryFormData;
-        const url = this.apis().getProductionTaskList();
+        const url = this.apis().shippingOrderList();
         this.searchAdvanced({url, query, page, size});
       },
       handleClick (tab, event) {

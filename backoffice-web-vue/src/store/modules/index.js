@@ -57,7 +57,8 @@ import ContractTemplateModule from './contract/contractTemplate'
 import ContractSealModule from './contract/contractSeal'
 
 // shipping-receipt
-import ShippingTasksModule from './shipping-receipt/shipping-tasks'
+import ImportShippingTasksModule from './shipping-receipt/import-shipping-tasks'
+import ExportShippingTasksModule from './shipping-receipt/export-shipping-tasks'
 import ShippingOrdersModule from './shipping-receipt/shipping-orders'
 import ReceiptOrdersModule from './shipping-receipt/receipt-orders'
 import ReturnOrdersModule from './shipping-receipt/return-orders'
@@ -132,7 +133,8 @@ export {
   ContractTemplateModule,
   ContractSealModule,
   // shipping-receipt
-  ShippingTasksModule,
+  ImportShippingTasksModule,
+  ExportShippingTasksModule,
   ShippingOrdersModule,
   ReceiptOrdersModule,
   ReturnOrdersModule,

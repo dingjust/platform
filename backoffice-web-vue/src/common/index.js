@@ -1262,6 +1262,15 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/shipping/create';
   },
 
+  //创建收货单
+  receiptOrderCreate() {
+    return '/b2b/sheets/receipt/create';
+  },
+
+  // 收货单详情
+  receiptOrderDetail(id) {
+    return '/b2b/sheets/receipt/' + id;
+  },
 
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

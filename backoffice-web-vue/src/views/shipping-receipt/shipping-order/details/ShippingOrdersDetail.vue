@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn content form-container">
     <el-card>
       <el-row>
         <el-col :span="4">
@@ -8,79 +8,85 @@
           </div>
         </el-col>
       </el-row>
-      <el-form :inline="true" label-position="left" label-width="70px">
+      <div>
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="3">
-            <!-- <img width="54px" height="54px"
-              :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'"> -->
-            <img width="100px" height="100px" :src="'static/img/nopicture.png'">
+            <img width="100px" height="100px"
+              :src="formData.product.thumbnail!=null&&formData.product.thumbnail.length!=0?formData.product.thumbnail.url:'static/img/nopicture.png'">
           </el-col>
           <el-col :span="21">
             <el-row type="flex" style="padding: 10px 0px">
               <el-col :span="8">
-                <h6 class="basic-label">产品名称：红烧猪蹄</h6>
+                <h6 class="basic-label">产品名称：{{formData.product.name}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="basic-label">货号：梅菜扣肉</h6>
+                <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
               <el-col :span="8">
-                <h6 class="basic-label">发货方：红烧猪蹄</h6>
+                <h6 class="basic-label">发货方：{{formData.shipParty.name}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="basic-label">收货方：梅菜扣肉</h6>
+                <h6 class="basic-label">收货方：{{formData.receiveParty.name}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="basic-label">发货负责人：烧鸡翅</h6>
+                <h6 class="basic-label">发货负责人：{{formData.merchandiser.name}}</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
               <el-col :span="12">
-                <h6 class="basic-label">收货地址：广州市海珠区云顶同创汇二期</h6>
+                <h6 class="basic-label">收货地址：{{formData.deliveryAddress.details}}</h6>
               </el-col>
             </el-row>
-            <el-row type="flex" style="padding-bottom: 10px" v-if="formData.online">
+            <el-row type="flex" style="padding-bottom: 10px"
+              v-if="!formData.isOfflineConsignment&&formData.consignment!=null">
               <el-col :span="8">
-                <h6 class="basic-label">发货方式：顺丰快递</h6>
+                <h6 class="basic-label">发货方式：{{formData.consignment.carrierDetails.name}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="basic-label">发货单号：SF017532492929</h6>
+                <h6 class="basic-label">发货单号：{{formData.consignment.trackingID}}</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px" v-else>
               <el-col :span="8">
-                <h6 class="basic-label">物流方式：货拉拉</h6>
+                <h6 class="basic-label">物流方式：{{formData.offlineConsignorMode}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="basic-label">送货人：麻花腾</h6>
+                <h6 class="basic-label">送货人：{{formData.offlineConsignorName}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="basic-label">联系方式：19829999999</h6>
+                <h6 class="basic-label">联系方式：{{formData.offlineConsignorPhone}}</h6>
               </el-col>
             </el-row>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="start" class="basic-row">
+        <el-row type="flex" justify="start" class="basic-row" v-if="formData.packageSheets!=null">
           <el-col :span="24">
-            <color-size-box-table :data="[]" :colorSizeEntries="[]" :readOnly="true"/>
+            <color-size-box-table :vdata.sync="formData.packageSheets"
+              :colorSizeEntries="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="8">
-            <h6 class="basic-label">收货单：KY1000000001</h6>
+            <h6 class="basic-label">收货单：</h6>
           </el-col>
           <el-col :span="8">
-            <h6 class="basic-label">收货单：KY1000000001</h6>
+            <h6 class="basic-label">收货单：</h6>
           </el-col>
         </el-row>
-      </el-form>
+        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="!hasReceiptOrder">
+          <el-button class="sumbit-btn" @click="onCreate">创建收货单</el-button>
+        </el-row>
+      </div>
     </el-card>
   </div>
 </template>
 
 <script>
-  import {ColorSizeBoxTable} from '@/components/'
+  import {
+    ColorSizeBoxTable
+  } from '@/components/'
   export default {
     name: 'ShippingOrdersDetail',
     props: ['id'],
@@ -88,32 +94,53 @@
       ColorSizeBoxTable
     },
     computed: {
+      hasReceiptOrder: function () {
+        return this.formData.receiptSheets != null && this.formData.receiptSheets.length > 0;
+      }
     },
     methods: {
-      async getDetail () {
+      async getDetail() {
         // TODO 获取发货单详情
-      },
-      async getCarriers() {
-        const url = this.apis().getCarriers();
+        const url = this.apis().shippingOrderDetail(this.id);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
         }
-        this.carriers = result;
+        this.formData = Object.assign({}, result.data);
       },
-      isOnline (flag) {
-        if (flag) {
-          this.formData.carrier = '';
-          this.formData.deliverCode = '';
-        }
+      //创建收货单
+      onCreate() {
+        this.$router.push({
+          name: '创建收货单',
+          params: {
+            shippingOrder: this.formData
+          }
+        });
       }
     },
     data() {
       return {
         formData: {
-          online: false,
-          carrier: ''
+          product: {
+            name: '',
+            skuID: '',
+          },
+          shipParty: {
+            name: '',
+          },
+          receiveParty: {
+            name: ''
+          },
+          merchandiser: {
+            name: ''
+          },
+          deliveryAddress: {
+            details: ''
+          },
         },
         taskData: '',
         carriers: ''
@@ -121,7 +148,6 @@
     },
     created() {
       this.getDetail();
-      this.getCarriers();
     },
     destroyed() {
 
@@ -146,7 +172,11 @@
     color: #606266;
   }
 
-  /deep/ .el-form-item {
+  .form-container {
+    margin-bottom: 20px;
+  }
+
+  .form-container /deep/ .el-form-item {
     margin-bottom: 0px;
   }
 
@@ -157,4 +187,5 @@
     width: 125px;
     height: 32px;
   }
+
 </style>

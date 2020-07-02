@@ -133,7 +133,7 @@
         var amount = 0;
         this.data.forEach(entry => {
           if (entry != null) {
-            entry.forEach(item => {
+            entry.colorSizeEntries.forEach(item => {
               let num = parseFloat(item.quantity);
               if (!Number.isNaN(num)) {
                 amount += num;
@@ -147,10 +147,10 @@
     methods: {
       //获取颜色尺码对应entry
       getEntryByColorSize(color, size, entryIndex) {
-        let index = this.data[entryIndex].findIndex(entry => entry.color.code == color.code && entry.size.code == size
+        let index = this.data[entryIndex].colorSizeEntries.findIndex(entry => entry.color.code == color.code && entry.size.code == size
           .code);
         if (index != -1) {
-          return this.data[entryIndex][index];
+          return this.data[entryIndex].colorSizeEntries[index];
         }
         // else {
         //   //没找到，则创建对应对象
@@ -166,7 +166,7 @@
       countColorsAmount(color, entryIndex) {
         var amount = 0;
         if (this.data != null) {
-          this.data[entryIndex].filter(entry => entry.color.code == color.code).forEach(entry => {
+          this.data[entryIndex].colorSizeEntries.filter(entry => entry.color.code == color.code).forEach(entry => {
             let num = parseFloat(entry.quantity);
             if (!Number.isNaN(num)) {
               amount += num;
@@ -190,7 +190,7 @@
       countEntryAmount(index) {
         var amount = 0;
         if (this.data[index] != null) {
-          this.data[index].forEach(entry => {
+          this.data[index].colorSizeEntries.forEach(entry => {
             let num = parseFloat(entry.quantity);
             if (!Number.isNaN(num)) {
               amount += num;
@@ -228,7 +228,9 @@
         });
         // this.data.push(newEntry);                
         // this.$set(this.data[0],'1','1');
-        this.$set(this.data, this.data.length, newEntry);
+        this.$set(this.data, this.data.length, {
+          colorSizeEntries: newEntry
+        });
       },
       onDeleteRow(entryIndex) {
         this.data.splice(entryIndex, 1);
@@ -237,6 +239,8 @@
     created() {
       if (this.vdata.length != 0) {
         Object.assign(this.data, this.vdata);
+      } else {
+        this.addRow();
       }
     },
     watch: {

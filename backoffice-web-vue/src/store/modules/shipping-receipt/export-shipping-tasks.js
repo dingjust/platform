@@ -11,8 +11,7 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
-  formData: {
-  },
+  formData: {},
 };
 
 const mutations = {
@@ -24,11 +23,19 @@ const mutations = {
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
-    console.log(keyword + 'test' + page + 'test' + size);
+  async search({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    keyword,
+    page,
+    size,
+    companyCode
+  }) {
     commit('keyword', keyword);
     if (page || page === 0) {
-      console.log(page);
       commit('currentPageNumber', page);
     }
 
@@ -37,10 +44,11 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword
+      keyword: state.keyword,
+      receiveParty: companyCode
     }, {
       page: state.currentPageNumber,
-      size: state.currentPageSize
+      size: state.currentPageSize,
     });
 
     // console.log(JSON.stringify(response));
@@ -48,18 +56,32 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
-    commit('currentPageNumber', page);
+  async searchAdvanced({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    query,
+    page,
+    size,
+    companyCode
+  }) {
+    if (page || page === 0) {
+      commit('currentPageNumber', page);
+    }
     if (size) {
       commit('currentPageSize', size);
     }
 
+    //设置筛选发货方
+    query['receiveParty'] = companyCode;
+
     const response = await http.post(url, query, {
       page: state.currentPageNumber,
-      size: state.currentPageSize
+      size: state.currentPageSize,
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
