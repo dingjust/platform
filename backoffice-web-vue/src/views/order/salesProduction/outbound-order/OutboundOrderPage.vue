@@ -12,13 +12,24 @@
       <div class="pt-2"></div>
       <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"
                               :queryFormData="queryFormData"/>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <template v-for="item in stateList">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-            <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
-          </el-tab-pane>
-        </template>
-      </el-tabs>
+      <div>
+        <div class="tag-container">
+          <el-row type="flex" justify="start" align="middle">
+            <h6 style="margin-bottom: 0px">标签：</h6>
+            <el-button type="text" class="type-btn" :style="outBtnColor" @click="setQuery(true)">已签合同
+            </el-button>
+            <el-button type="text" class="type-btn" :style="selfBtnColor"
+              @click="setQuery(false)">未签合同</el-button>
+          </el-row>
+        </div>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <template v-for="item in statuses">
+            <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+              <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
+            </el-tab-pane>
+          </template>
+        </el-tabs>
+      </div>
     </el-card>
     <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData"/>
@@ -52,18 +63,25 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword',
-        queryFormData: 'queryFormData'
+        keyword: 'keyword'
       }),
-      stateList: function () {
-        return this.statuses.concat({code: '', name: '全部'}, this.$store.state.EnumsModule.OutboundOrderStatuses);
+      outBtnColor: function () {
+        if (this.queryFormData.hasContact == '') {
+          return 'color: #303133';
+        }
+        return this.queryFormData.hasContact == 'hasContact' ? 'color: #409EFF' : '#303133';
+      },
+      selfBtnColor: function () {
+        if (this.queryFormData.hasContact == '') {
+          return 'color: #303133';
+        }
+        return this.queryFormData.hasContact == 'notHasContact' ? 'color: #409EFF' : '#303133';
       }
     },
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced',
-        clearQueryFormData: 'clearQueryFormData'
+        searchAdvanced: 'searchAdvanced'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
@@ -87,16 +105,24 @@
         this.searchAdvanced({url, query, page, size});
       },
       createOutboundOrder () {
-        this.outboundOrderTypeSelect = true;
+        // this.outboundOrderTypeSelect = true;
+        this.$router.push({
+          name: '创建外发订单',
+          params: {
+            formData: Object.assign({}, this.formData)
+          }
+        });
       },
       handleClick (tab, event) {
-        if (tab.name == '') {
-          this.queryFormData.statuses = tab.name;
-          this.onSearch();
+        this.queryFormData.state = tab.name;
+        this.onAdvancedSearch();
+      },
+      setQuery (flag) {
+        if (flag) {
+          this.queryFormData.hasContact = 'hasContact';
         } else {
-          this.queryFormData.statuses = tab.name;
-          this.onAdvancedSearch();
-        }
+          this.queryFormData.hasContact = 'notHasContact';
+        } 
       },
       async onModify (id) {
         const url = this.apis().getoutboundOrderDetail(id);
@@ -116,8 +142,8 @@
     data () {
       return {
         outboundOrderTypeSelect: false,
-        activeName: '',
-        statuses: [],
+        activeName: 'TO_BE_SUBMITTED',
+        statuses: Object.assign([], this.$store.state.EnumsModule.OutboundOrderStatuses),
         formData: {
           id: null,
           managementMode: 'COLLABORATION',
@@ -165,16 +191,27 @@
             id: ''
           }]
         },
+        queryFormData: {
+          keyword: '',
+          targetCooperator: '',
+          merchandiser: '',
+          statuses: '',
+          name: '',
+          hasContact: ''
+        },
       }
     },
     created () {
-      this.onSearch();
+      this.onAdvancedSearch();
+      this.statuses.push({
+        code: '',
+        name: '全部'
+      })
     },
     mounted () {
 
     },
     destroyed() {
-      this.clearQueryFormData();
     }
   };
 </script>
@@ -185,4 +222,20 @@
     padding-left: 10px;
   }
 
+  .tag-container {
+    position: absolute;
+    right: 150px;
+    margin-top: 4px;
+    z-index: 999;
+  }
+
+  .type-btn {
+    font-size: 14px;
+    color: #303133;
+    padding-left: 20px;
+  }
+
+  .type-btn:focus {
+    outline: 0;
+  }
 </style>

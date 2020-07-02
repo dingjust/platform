@@ -90,7 +90,8 @@ const state = {
     // belongTos: [],
     // purchasers:[],
     keyword: '',
-    categories: []
+    categories: [],
+    orderType: ''
   },
   addressFormData: {
     id: null,
@@ -328,7 +329,8 @@ const actions = {
       createdDateFrom: null,
       createdDateTo: null,
       keyword: '',
-      categories: []
+      categories: [],
+      orderType: ''
     })
   },
   clearCreateFormData({

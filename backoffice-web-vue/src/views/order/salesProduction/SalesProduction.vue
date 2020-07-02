@@ -8,7 +8,7 @@
           </div>
         </el-col>
       </el-row>
-      <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
+      <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"
         @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"
         @onUniqueCodeImport="onUniqueCodeImport" />
       <!-- <el-divider class="sales-divider"></el-divider> -->
@@ -51,7 +51,6 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData',
         contentData: 'detailData'
       })
     },
@@ -66,7 +65,7 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const statuses = this.statuses;
+        const statuses = ['NONE'];
         const url = this.apis().getSalesOrderList();
         this.setIsAdvancedSearch(false);
         this.search({
@@ -89,7 +88,7 @@
         });
       },
       handleClick (tab, event) {
-        this.queryFormData.status = tab.name;
+        this.queryFormData.state = tab.name;
         this.onAdvancedSearch();
       },
       onDelete() {
@@ -109,37 +108,30 @@
     },
     data() {
       return {
-        activeName: '',
-        statuses: [
-          {
-            code: '',
-            name: '全部'
-          },
-          {
-            code: 'NONE',
-            name: '未提交'
-          },
-          {
-            code: 'AUDITING',
-            name: '审核中'
-          },
-          {
-            code: 'PASSED',
-            name: '审核通过'
-          },
-          {
-            code: 'AUDITED_FAILED',
-            name: '审核驳回'
-          },
-          {
-            code: 'CANCELLED',
-            name: '已取消'
-          }
-        ]
+        activeName: 'TO_BE_SUBMITTED',
+        statuses: [],
+        queryFormData: {
+          code: '',
+          requirementOrderCode: '',
+          skuID: '',
+          statuses: [],
+          refunding: '',
+          expectedDeliveryDateFrom: null,
+          expectedDeliveryDateTo: null,
+          createdDateFrom: null,
+          createdDateTo: null,
+          keyword: '',
+          categories: [],
+          state: 'TO_BE_SUBMITTED'
+        },
       }
     },
     created() {
-      this.onSearch();
+      this.onAdvancedSearch(0, 10);
+      this.statuses = Object.assign([], this.$store.state.EnumsModule.SalesProductionOrderState);
+      // 去除未接单
+      let index = this.statuses.findIndex(item => item.code == 'TO_BE_ACCEPTED');
+      this.statuses.splice(index, 1);
     }
   }
 

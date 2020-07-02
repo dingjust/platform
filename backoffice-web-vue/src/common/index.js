@@ -767,6 +767,9 @@ const COMMON_APIS = {
   // 设置进度节点时间
   updateProgressDate() {
     return '/b2b/sheets/progress/work/update/progresses/date'
+  },
+  allocatingProductionOrder () {
+    return '/b2b/production/task/order/update/merchandiser'
   }
 };
 

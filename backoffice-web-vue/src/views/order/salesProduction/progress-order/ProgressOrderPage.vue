@@ -73,7 +73,7 @@
         result.data.content.forEach(item => {
           this.statuses.push({
             name: item.name,
-            code: item.sequence
+            code: item.name
           })
         })
       },

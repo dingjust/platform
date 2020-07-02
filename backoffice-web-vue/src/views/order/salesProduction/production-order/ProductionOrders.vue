@@ -4,23 +4,36 @@
       <el-row>
         <el-col :span="4">
           <div class="orders-list-title">
-<!--            生产工单列表-->
+            <!--            生产工单列表-->
             <h6>订单列表</h6>
           </div>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate"/>
-      <el-tabs v-model="activeStatus" @tab-click="handleClick">
-        <template v-for="(item, index) in statues">
-          <el-tab-pane :name="item.code" :key="index" :label="item.name">
-            <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :vSelectRow.sync="selectRow"/>
-          </el-tab-pane>
-        </template>
-      </el-tabs>
+      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate" :queryFormData="queryFormData"/>
+      <div>
+        <div class="tag-container">
+          <el-row type="flex" justify="start" align="middle">
+            <h6 style="margin-bottom: 0px">标签：</h6>
+            <el-button type="text" class="type-btn" :style="outBtnColor" @click="setQueryOrderType(true)">外发
+            </el-button>
+            <el-button type="text" class="type-btn" :style="selfBtnColor"
+              @click="setQueryOrderType(false)">自产</el-button>
+          </el-row>
+        </div>
+        <el-tabs v-model="activeStatus" @tab-click="handleClick">
+          <template v-for="(item, index) in statues">
+            <el-tab-pane :name="item.code" :key="index" :label="item.name">
+              <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
+                :vSelectRow.sync="selectRow" />
+            </el-tab-pane>
+          </template>
+        </el-tabs>
+      </div>
     </el-card>
-    <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData"/>
+    <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData" />
     </el-dialog>
   </div>
 </template>
@@ -54,15 +67,25 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData',
         contentData: 'detailData'
-      })
+      }),
+      outBtnColor: function () {
+        if (this.queryFormData.orderType == '') {
+          return 'color: #303133';
+        }
+        return this.queryFormData.orderType == 'OUTBOUND' ? 'color: #409EFF' : '#303133';
+      },
+      selfBtnColor: function () {
+        if (this.queryFormData.orderType == '') {
+          return 'color: #303133';
+        }
+        return this.queryFormData.orderType == 'SELF_PRODUCTION' ? 'color: #409EFF' : '#303133';
+      }
     },
     methods: {
       ...mapActions({
         search: 'search',
         searchAdvanced: 'searchAdvanced',
-        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
@@ -72,7 +95,6 @@
         const keyword = this.keyword;
         const statuses = this.statuses;
         const url = this.apis().getProductionOrders();
-        // const url = this.apis().getPurchaseOrders();
         this.setIsAdvancedSearch(false);
         this.search({
           url,
@@ -86,7 +108,6 @@
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getProductionOrders();
-        // const url = this.apis().getPurchaseOrders();
         this.searchAdvanced({
           url,
           query,
@@ -95,16 +116,17 @@
         });
       },
       handleClick(tab, event) {
-        // console.log(tab.name);
-        if (tab.name == 'ALL') {
-          this.queryFormData.statuses = [];
-          this.onAdvancedSearch();
-        } else {
-          this.queryFormData.statuses = [tab.name];
-          this.onAdvancedSearch();
-        }
+        this.queryFormData.state = tab.name;
+        this.onAdvancedSearch();
       },
-      onCreate () {
+      setQueryOrderType (flag) {
+        if (flag) {
+          this.queryFormData.orderType = 'OUTBOUND';
+        } else {
+          this.queryFormData.orderType = 'SELF_PRODUCTION';
+        } 
+      },
+      onCreate() {
         let row = [];
         this.selectRow.forEach(item => {
           let progressPlan = {
@@ -121,7 +143,9 @@
             progressPlan.isFromOrder = true;
           }
           row.push({
-            originOrder: {id: item.id},
+            originOrder: {
+              id: item.id
+            },
             unitPrice: '',
             deliveryDate: '',
             shippingAddress: item.shippingAddress,
@@ -131,9 +155,15 @@
           })
         })
         this.formData.taskOrderEntries = row;
-        this.outboundOrderTypeSelect = true;
+        // this.outboundOrderTypeSelect = true;
+        this.$router.push({
+          name: '创建外发订单',
+          params: {
+            formData: Object.assign({}, this.formData)
+          }
+        });
       },
-      copyProgressPlan (val) {
+      copyProgressPlan(val) {
         let row = {
           name: val.name,
           remarks: val.remarks,
@@ -156,13 +186,22 @@
     },
     data() {
       return {
-        activeStatus: 'ALL',
-        statues: [{
-          code: 'ALL',
-          name: '全部'
-        }],
+        activeStatus: 'TO_BE_PRODUCED',
+        statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
         outboundOrderTypeSelect: false,
         selectRow: [],
+        queryFormData: {
+          code: '',
+          requirementOrderCode: '',
+          skuID: '',
+          expectedDeliveryDateFrom: null,
+          expectedDeliveryDateTo: null,
+          createdDateFrom: null,
+          createdDateTo: null,
+          keyword: '',
+          categories: [],
+          state: 'TO_BE_PRODUCED'
+        },
         formData: {
           id: null,
           managementMode: 'COLLABORATION',
@@ -213,16 +252,16 @@
       };
     },
     created() {
-      // this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
-      //   this.statues.push(element);
-      // });
-      this.onSearch();
+      this.onAdvancedSearch();
+      this.statues.push({
+        code: '',
+        name: '全部'
+      })
     },
     mounted() {
 
     },
     destroyed() {
-      this.clearQueryFormData();
     }
   };
 
@@ -247,6 +286,23 @@
 
   .purchase-dialog .el-dialog__header {
     padding: 0px !important;
+  }
+
+  .tag-container {
+    position: absolute;
+    right: 150px;
+    margin-top: 4px;
+    z-index: 999;
+  }
+
+  .type-btn {
+    font-size: 14px;
+    color: #303133;
+    padding-left: 20px;
+  }
+
+  .type-btn:focus {
+    outline: 0;
   }
 
 </style>

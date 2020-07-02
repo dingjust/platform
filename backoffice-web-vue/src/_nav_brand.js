@@ -33,14 +33,14 @@ export default {
       }]
     },
     {
-      name: '销售中心',
+      name: '订单管理',
       // url: '/sales',
       icon: 'el-icon-s-order',
       children: [{
-        name: '计划订单',
+        name: '业务订单',
         url: '/sales/plan'
       }, {
-        name: '待接订单',
+        name: '外接订单',
         url: '/sales/pending-order'
       }]
     },
@@ -49,23 +49,15 @@ export default {
       // url: '/sales',
       icon: 'el-icon-notebook-2',
       children: [{
+          name: '待分配工单',
+          url: '/sales/allocating/productionOrder'
+        }, {
           name: '生产工单',
           url: '/sales/productionOrder',
         }, {
           name: '生产进度工单',
           url: '/sales/progressOrder'  
         }
-        // {
-        //   name: '生产任务',
-        //   url: '/sales/production'
-        // },
-        // {
-        //   name: '外发订单',
-        //   url: '/sales/outboundOrder'
-        // }, {
-        //   name: '外发工单',
-        //   url: '/sales/outboundProductionOrder'
-        // },
       ]
     },
     {
@@ -76,7 +68,7 @@ export default {
         name: '外发订单',
         url: '/sales/outboundOrder',
       }, {
-        name: '外发工单',
+        name: '外发生产工单',
         url: '/sales/outboundProductionOrder'
       }]
     },
