@@ -20,6 +20,8 @@
       </el-table-column>
       <el-table-column label="创建人" prop="creator.name">
       </el-table-column>
+      <el-table-column label="生产负责人" prop="productionLeader.name">
+      </el-table-column>
       <el-table-column label="创建日期">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>

@@ -768,8 +768,13 @@ const COMMON_APIS = {
   updateProgressDate() {
     return '/b2b/sheets/progress/work/update/progresses/date'
   },
+  // 分配工单任务
   allocatingProductionOrder () {
     return '/b2b/production/task/order/update/merchandiser'
+  },
+  // 创建进度工单
+  createProgressOrder (id) {
+    return '/b2b/orders/production/work/create/' + id;
   }
 };
 

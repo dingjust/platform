@@ -19,6 +19,9 @@
             </el-col>
             <el-col :span="16">
               <el-row>
+                <span>{{scope.row.product!=null?scope.row.product.name:''}}</span>
+              </el-row>
+              <el-row>
                 <span>货号:{{scope.row.product!=null?scope.row.product.skuID:''}}</span>
               </el-row>
               <el-row>
@@ -28,6 +31,9 @@
           </el-row>
         </template>
       </el-table-column>
+      <!-- <el-table-column label="产品" min-width="150">
+
+      </el-table-column> -->
       <!-- <el-table-column label="生产订单状态" prop="status" :column-key="'status'" :filters="statuses">
         <template slot-scope="scope"> -->
           <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
