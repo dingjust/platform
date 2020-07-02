@@ -176,6 +176,31 @@ const actions = {
       commit('formData', data);
     }
   },
+  clearFormData({
+    dispatch,
+    commit,
+    state
+  }) {
+    commit('formData', {
+      id: null,
+      progresses: [],
+      partyACompany: {},
+      partyBCompany: {},
+      code: '',
+      status: '',
+      skuID: '',
+      currentPhase: '',
+      machiningType: 'LABOR_AND_MATERIAL',
+      expectedDeliveryDate: '',
+      personInCharge: {},
+      orderStatus: '',
+      colorSizeEntries: [],
+      product: {
+  
+      },
+      belongTo: {}
+    });
+  },
   clearQueryFormData({
     dispatch,
     commit,

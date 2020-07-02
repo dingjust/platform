@@ -4,36 +4,30 @@
       <el-row>
         <el-col :span="4">
           <div class="orders-list-title">
-            <!--            生产工单列表-->
-            <h6>订单列表</h6>
+            <!--            待分配列表-->
+            <h6>待分配列表</h6>
           </div>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate" :queryFormData="queryFormData"/>
-      <div>
-        <div class="tag-container">
-          <el-row type="flex" justify="start" align="middle">
-            <h6 style="margin-bottom: 0px">标签：</h6>
-            <el-button type="text" class="type-btn" :style="outBtnColor" @click="setQueryOrderType(true)">外发
-            </el-button>
-            <el-button type="text" class="type-btn" :style="selfBtnColor"
-              @click="setQueryOrderType(false)">自产</el-button>
-          </el-row>
-        </div>
-        <el-tabs v-model="activeStatus" @tab-click="handleClick">
-          <template v-for="(item, index) in statues">
-            <el-tab-pane :name="item.code" :key="index" :label="item.name">
-              <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-                :vSelectRow.sync="selectRow" />
-            </el-tab-pane>
-          </template>
-        </el-tabs>
-      </div>
+      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate"
+        @onAllocating="onAllocating" :isAllocating="true" :queryFormData="queryFormData"/>
+      <el-tabs v-model="activeStatus" @tab-click="handleClick">
+        <template v-for="(item, index) in statues">
+          <el-tab-pane :name="item.code" :key="index" :label="item.name">
+            <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
+              :vSelectRow.sync="selectRow" />
+          </el-tab-pane>
+        </template>
+      </el-tabs>
     </el-card>
     <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData" />
+    </el-dialog>
+    <el-dialog :visible.sync="allocatingVisible" width="40%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <allocating-form :slotData="selectRow" @onCallback="onCallback"></allocating-form>  
     </el-dialog>
   </div>
 </template>
@@ -55,32 +49,22 @@
   import ProductionOrderList from './list/ProductionOrderList';
   import ProductionOrderToolbar from './toolbar/ProductionOrderToolbar';
   import OutboundOrderTypeSelectForm from '../outbound-order/form/OutboundOrderTypeSelectForm'
+  import AllocatingForm from './components/AllocatingForm'
 
   export default {
     name: 'ProductionOrders',
     components: {
       ProductionOrderList,
       ProductionOrderToolbar,
-      OutboundOrderTypeSelectForm
+      OutboundOrderTypeSelectForm,
+      AllocatingForm
     },
     computed: {
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
         contentData: 'detailData'
-      }),
-      outBtnColor: function () {
-        if (this.queryFormData.orderType == '') {
-          return 'color: #303133';
-        }
-        return this.queryFormData.orderType == 'OUTBOUND' ? 'color: #409EFF' : '#303133';
-      },
-      selfBtnColor: function () {
-        if (this.queryFormData.orderType == '') {
-          return 'color: #303133';
-        }
-        return this.queryFormData.orderType == 'SELF_PRODUCTION' ? 'color: #409EFF' : '#303133';
-      }
+      })
     },
     methods: {
       ...mapActions({
@@ -116,15 +100,8 @@
         });
       },
       handleClick(tab, event) {
-        this.queryFormData.state = tab.name;
+        this.queryFormData.state = [tab.name];
         this.onAdvancedSearch();
-      },
-      setQueryOrderType (flag) {
-        if (flag) {
-          this.queryFormData.orderType = 'OUTBOUND';
-        } else {
-          this.queryFormData.orderType = 'SELF_PRODUCTION';
-        } 
       },
       onCreate() {
         let row = [];
@@ -155,13 +132,7 @@
           })
         })
         this.formData.taskOrderEntries = row;
-        // this.outboundOrderTypeSelect = true;
-        this.$router.push({
-          name: '创建外发订单',
-          params: {
-            formData: Object.assign({}, this.formData)
-          }
-        });
+        this.outboundOrderTypeSelect = true;
       },
       copyProgressPlan(val) {
         let row = {
@@ -182,13 +153,31 @@
           })
         })
         return row;
+      },
+      // 分配跟单员
+      onAllocating () {
+        if (this.selectRow.length <= 0) {
+          this.$message.warning('请选择要进行分配操作的工单');
+          return;
+        }
+        this.allocatingVisible = true;
+      },
+      onCallback (flag) {
+        if (flag) {
+          this.onAdvancedSearch(0, 10);
+        }
+        this.allocatingVisible = false;
       }
     },
     data() {
       return {
-        activeStatus: 'TO_BE_PRODUCED',
-        statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
+        activeStatus: 'TO_BE_ALLOCATED',
+        statues: [{
+          code: 'TO_BE_ALLOCATED',
+          name: '待分配'
+        }],
         outboundOrderTypeSelect: false,
+        allocatingVisible: false,
         selectRow: [],
         queryFormData: {
           code: '',
@@ -200,69 +189,17 @@
           createdDateTo: null,
           keyword: '',
           categories: [],
-          state: 'TO_BE_PRODUCED'
-        },
-        formData: {
-          id: null,
-          managementMode: 'COLLABORATION',
-          outboundCompanyName: '',
-          outboundContactPerson: '',
-          outboundContactPhone: '',
-          targetCooperator: {
-            id: ''
-          },
-          taskOrderEntries: [{
-            originOrder: {
-              id: ''
-            },
-            unitPrice: '',
-            deliveryDate: '',
-            shippingAddress: {},
-            product: {
-
-            },
-            progressPlan: {
-              name: ''
-            },
-            colorSizeEntries: []
-          }],
-          cooperationMode: 'LABOR_AND_MATERIAL',
-          invoiceNeeded: false,
-          invoiceTaxPoint: 0.03,
-          freightPayer: 'PARTYA',
-          remarks: '',
-          sendAuditNeeded: false,
-          payPlan: {
-            name: '',
-            isHaveDeposit: false,
-            payPlanType: 'PHASEONE',
-            payPlanItems: [{
-              moneyType: 'PHASEONE',
-              payPercent: 0.003,
-              triggerDays: 5,
-              triggerEvent: 'ORDER_CONFIRMED',
-              triggerType: 'INSIDE'
-            }]
-          },
-          attachments: [],
-          sendApprovers: [{
-            id: ''
-          }]
-        },
+          state: 'TO_BE_ALLOCATED'
+        }
       };
     },
     created() {
       this.onAdvancedSearch();
-      this.statues.push({
-        code: '',
-        name: '全部'
-      })
     },
     mounted() {
 
     },
-    destroyed() {
-    }
+    destroyed() {}
   };
 
 </script>

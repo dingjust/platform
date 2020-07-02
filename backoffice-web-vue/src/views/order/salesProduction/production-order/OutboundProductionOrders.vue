@@ -16,12 +16,12 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" 
+      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"
                                 :isOutProduction="true"/>
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code" :key="index" :label="item.name">
-            <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :isOutboundList="true"/>
+            <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :isOutProduction="true"/>
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -56,7 +56,6 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData',
         contentData: 'detailData'
       })
     },
@@ -64,7 +63,6 @@
       ...mapActions({
         search: 'search',
         searchAdvanced: 'searchAdvanced',
-        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
@@ -74,7 +72,6 @@
         const keyword = this.keyword;
         const statuses = this.statuses;
         const url = this.apis().getoutboundProductionList();
-        // const url = this.apis().getPurchaseOrders();
         this.setIsAdvancedSearch(false);
         this.search({
           url,
@@ -88,7 +85,6 @@
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getoutboundProductionList();
-        // const url = this.apis().getPurchaseOrders();
         this.searchAdvanced({
           url,
           query,
@@ -97,37 +93,40 @@
         });
       },
       handleClick(tab, event) {
-        // console.log(tab.name);
-        if (tab.name == 'ALL') {
-          this.queryFormData.statuses = [];
-          this.onAdvancedSearch();
-        } else {
-          this.queryFormData.statuses = [tab.name];
-          this.onAdvancedSearch();
-        }
+        this.queryFormData.state = tab.name;
+        this.onAdvancedSearch();
       },
     },
     data() {
       return {
         formData: this.$store.state.ProductionOrderModule.formData,
-        activeStatus: 'ALL',
-        statues: [{
-          code: 'ALL',
-          name: '全部'
-        }],
+        activeStatus: 'TO_BE_PRODUCED',
+        statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
+        queryFormData: {
+          code: '',
+          requirementOrderCode: '',
+          skuID: '',
+          expectedDeliveryDateFrom: null,
+          expectedDeliveryDateTo: null,
+          createdDateFrom: null,
+          createdDateTo: null,
+          keyword: '',
+          categories: [],
+          state: 'TO_BE_PRODUCED'
+        },
       };
     },
     created() {
-      this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
-        this.statues.push(element);
-      });
-      this.onSearch();
+      this.onAdvancedSearch();
+      this.statues.push({
+        code: '',
+        name: '全部'
+      })
     },
     mounted() {
 
     },
     destroyed() {
-      this.clearQueryFormData();
     }
   };
 

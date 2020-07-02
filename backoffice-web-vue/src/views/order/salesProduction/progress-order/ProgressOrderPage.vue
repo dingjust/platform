@@ -12,8 +12,8 @@
       <div class="pt-2"></div>
       <progress-order-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <template v-for="(item, index) in statuses">
-          <el-tab-pane :name="item.code" :key="index" :label="item.name">
+        <template v-for="item in statuses">
+          <el-tab-pane :name="item.code" :key="item.code" :label="item.name">
             <progress-order-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
           </el-tab-pane>
         </template>
@@ -45,15 +45,13 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData',
         contentData: 'detailData'
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced',
-        clearQueryFormData: 'clearQueryFormData'
+        searchAdvanced: 'searchAdvanced'
       }),
       onSearch(page, size) {
       },
@@ -61,6 +59,23 @@
         const query = this.queryFormData;
         const url = this.apis().getProgressOrderList();
         this.searchAdvanced({url, query, page, size});
+      },
+      async getPhaseList () {
+        const url = this.apis().getProgressPhaseList();
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+        }
+        result.data.content.forEach(item => {
+          this.statuses.push({
+            name: item.name,
+            code: item.name
+          })
+        })
       },
       handleClick (tab, event) {
         this.queryFormData.statuses = tab.name;
@@ -73,20 +88,21 @@
         statuses: [{
           code: '',
           name: '全部'
-        }, {
-          code: 'IN_PRODUCTION',
-          name: '生产中'
-        }, {
-          code: 'COMPLETED',
-          name: '完成'
-        }]
+        }],
+        queryFormData: {
+          keyword: '',
+          statuses: '',
+          expectedDeliveryDateFrom: '',
+          expectedDeliveryDateTo: '',
+          operatorName: ''
+        },
       }
     },
     created() {
       this.onAdvancedSearch();
+      this.getPhaseList();
     },
     destroyed() {
-      this.clearQueryFormData();
     }
   }
 </script>

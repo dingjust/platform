@@ -11,11 +11,11 @@
       <el-row>
         <el-col :span="4">
           <div class="sales-list-title">
-            <h6>待接订单列表</h6>
+            <h6>外接订单列表</h6>
           </div>
         </el-col>
       </el-row>
-      <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
+      <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"
         @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"
         @onUniqueCodeImport="onUniqueCodeImport" :isPending="true"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -57,7 +57,6 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData',
         contentData: 'detailData'
       })
     },
@@ -72,7 +71,7 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const statuses = this.statuses;
+        const statuses = ['NONE'];
         const url = this.apis().getPendingSalesOrderList();
         this.setIsAdvancedSearch(false);
         this.search({
@@ -95,7 +94,7 @@
         });
       },
       handleClick (tab, event) {
-        this.queryFormData.status = tab.name;
+        this.queryFormData.state = tab.name;
         this.onAdvancedSearch();
       },
       onDelete() {
@@ -115,37 +114,30 @@
     },
     data() {
       return {
-        activeName: '',
-        statuses: [
-          {
-            code: '',
-            name: '全部'
-          },
-          {
-            code: 'NONE',
-            name: '未提交'
-          },
-          {
-            code: 'AUDITING',
-            name: '审核中'
-          },
-          {
-            code: 'PASSED',
-            name: '审核通过'
-          },
-          {
-            code: 'AUDITED_FAILED',
-            name: '审核驳回'
-          },
-          {
-            code: 'CANCELLED',
-            name: '已取消'
-          }
-        ]
+        activeName: 'TO_BE_ACCEPTED',
+        statuses: [],
+        queryFormData: {
+          code: '',
+          requirementOrderCode: '',
+          skuID: '',
+          statuses: [],
+          refunding: '',
+          expectedDeliveryDateFrom: null,
+          expectedDeliveryDateTo: null,
+          createdDateFrom: null,
+          createdDateTo: null,
+          keyword: '',
+          categories: [],
+          state: 'TO_BE_ACCEPTED'
+        },
       }
     },
     created() {
-      this.onSearch();
+      this.onAdvancedSearch();
+      this.statuses = Object.assign([], this.$store.state.EnumsModule.SalesProductionOrderState);
+      // 去除未提交
+      let index = this.statuses.findIndex(item => item.code == 'TO_BE_SUBMITTED');
+      this.statuses.splice(index, 1);
     }
   }
 

@@ -53,13 +53,21 @@
     },
     methods: {
       ...mapActions({
-        getOrderDetail: 'getDetail'
+        getOrderDetail: 'getDetail',
+        clearFormData: 'clearFormData'
       }),
       async getDetail () {
         const code = this.code;
         await this.getOrderDetail(code);
       },
-      async updateProgress () {
+      updateProgress () {
+        if (this.formData.id) {
+          this._updateProgress();
+        } else {
+          this.createProgressOrder();
+        }
+      },
+      async _updateProgress () {
         let formData = {
           id: this.formData.id,
           priorityLevel: this.formData.priorityLevel,
@@ -68,6 +76,29 @@
         }
         const url = this.apis().updateProgressOrder();
         const result = await this.$http.put(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        await this.$router.push('/sales/progressOrder/' + this.formData.code);
+      },
+      async createProgressOrder () {
+        const id = this.$route.params.order.taskOrderEntries[0].id;
+        let formData = {
+          priorityLevel: this.formData.priorityLevel,
+          personInCharge: this.formData.personInCharge,
+          progresses: this.formData.progresses
+        }
+        const url = this.apis().createProgressOrder(id);
+        const result = await this.$http.post(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;
@@ -77,6 +108,7 @@
     },
     data () {
       return {
+
       }
     },
     created () {
@@ -92,6 +124,9 @@
       } else if (this.code != undefined){
         this.getDetail();
       }
+    },
+    destroyed () {
+      this.clearFormData();
     }
   }
 </script>

@@ -1548,30 +1548,78 @@ const state = {
     name: '已外发'
   }
   ],
-  // 外发订单状态
-  OutboundOrderStatuses: [{
-    code: 'NOT_COMMITED',
-    name: '未提交'
+  // 销售订单状态
+  SalesProductionOrderState: [{
+    code: 'TO_BE_SUBMITTED',
+    name: '待提交'
   }, {
-    code: 'IN_APPROVAL',
-    name: '审核中'
-  }, {
-    code: 'REJECTED',
-    name: '审核拒绝'
-  }, {
-    code: 'PENDING_CONFIRM',
+    code: 'TO_BE_ACCEPTED',
     name: '待接单'
   }, {
-    code: 'CONFIRMED',
-    name: '已接单'
+    code: 'AUDITING',
+    name: '审核中'
   }, {
-    code: 'REJECTED_CONFIRM',
-    name: '已拒绝'
+    code: 'AUDIT_REJECTED',
+    name: '审核驳回'
+  }, {
+    code: 'ACCEPTED',
+    name: '待对账'
   }, {
     code: 'COMPLETED',
     name: '已完成'
   }, {
-    code: 'CANCELLED',
+    code: 'CANCED',
+    name: '已取消'
+  }],
+  // 生产工单状态
+  ProductionTaskOrderState: [{
+    code: 'TO_BE_PRODUCED',
+    name: '待生产'
+  }, {
+    code: 'PRODUCING',
+    name: '生产中'
+  }, {
+    code: 'TO_BE_DELIVERED',
+    name: '待出库'
+  }, {
+    code: 'TO_BE_RECONCILED',
+    name: '待对账'
+  }, {
+    code: 'COMPLETED',
+    name: '已完成'
+  }, {
+    code: 'CANCED',
+    name: '已取消'
+  }],
+  // 工单类型
+  ProductionTaskOrderType: [{
+    code: 'SELF_PRODUCED',
+    name: '自产'
+  }, {
+    code: 'FOUNDRY_PRODUCTION',
+    name: '外发'
+  }],
+  // 外发订单状态
+  OutboundOrderStatuses: [{
+    code: 'TO_BE_SUBMITTED',
+    name: '待提交'
+  }, {
+    code: 'AUDITING',
+    name: '审核中'
+  }, {
+    code: 'AUDIT_REJECTED',
+    name: '审核驳回'
+  }, {
+    code: 'TO_BE_ACCEPTED',
+    name: '待接单'
+  }, {
+    code: 'PRODUCING',
+    name: '生产中'
+  }, {
+    code: 'COMPLETED',
+    name: '已完成'
+  }, {
+    code: 'CANCED',
     name: '已取消'
   }],
   // 进度工单单据-物料类型状态
@@ -1642,7 +1690,7 @@ const state = {
     name: '协同'
   }, {
     code: 'AUTOGESTION',
-    name: '自管'
+    name: '协同'
   }]
 };
 

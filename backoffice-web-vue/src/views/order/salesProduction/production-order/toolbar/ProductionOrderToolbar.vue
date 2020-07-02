@@ -39,7 +39,8 @@
         </el-col>
         <el-col :span="4">
           <el-row type="flex" justify="end">
-            <el-button v-if="!isOutProduction" type="primary" class="create-button" @click="onCreate">创建外发订单</el-button>
+            <el-button v-if="!isOutProduction  && !isAllocating" type="primary" class="create-button" @click="onCreate">创建外发订单</el-button>
+            <el-button v-if="isAllocating" type="primary" class="create-button" @click="onAllocating">去分配</el-button> 
           </el-row>
         </el-col>
       </el-row>
@@ -61,7 +62,14 @@
   export default {
     name: 'ProductionOrderToolbar',
     props: {
+      queryFormData: {
+        type: Object
+      },
       isOutProduction: {
+        type: Boolean,
+        default: false
+      },
+      isAllocating: {
         type: Boolean,
         default: false
       }
@@ -73,15 +81,15 @@
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
-        setQueryFormData: 'queryFormData'
+        // setQueryFormData: 'queryFormData'
       }),
-      onSearch () {
-        this.$store.state.ProductionOrderModule.keyword = this.keyword;
-        this.setKeyword(this.keyword);
-        this.$emit('onSearch', 0);
-      },
+      // onSearch () {
+      //   this.$store.state.ProductionOrderModule.keyword = this.keyword;
+      //   this.setKeyword(this.keyword);
+      //   this.$emit('onAdvancedSearch', 0);
+      // },
       onAdvancedSearch () {
-        this.setQueryFormData(this.queryFormData);
+        // this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
       onReset () {
@@ -89,7 +97,7 @@
         this.queryFormData.categories = [];
         this.queryFormData.createdDateTo = null;
         this.queryFormData.createdDateFrom = null;
-        this.queryFormData.statuses = [];
+        // this.queryFormData.statuses = [];
         // const query = {
         //   code: '',
         //   requirementOrderCode: '',
@@ -133,7 +141,7 @@
         this.brands = result.content;
       },
       onDateChange (values) {
-        console.log(values[0]);
+        // console.log(values[0]);
         this.queryFormData.createdDateFrom = values[0];
         this.queryFormData.createdDateTo = values[1];
         this.onAdvancedSearch();
@@ -151,6 +159,9 @@
       onCreate () {
         // this.$router.push('/sales/create/productionOrder');
         this.$emit('onCreate');
+      },
+      onAllocating () {
+        this.$emit('onAllocating');
       }
     },
     data () {
@@ -188,8 +199,8 @@
         brands: [],
         keyword: this.$store.state.ProductionOrderModule.keyword,
         formData: this.$store.state.ProductionOrderModule.formData,
-        queryFormData: this.$store.state.ProductionOrderModule.queryFormData,
         categories: []
+        // queryFormData: this.$store.state.ProductionOrderModule.queryFormData,
       }
     },
     created () {

@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed" :row-key="'id'"
       :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick" :reserve-selection="true">
-      <el-table-column type="selection" width="55px" :selectable="rowDisabled"></el-table-column>
+      <el-table-column type="selection" width="55px" :selectable="rowDisabled" v-if="!isOutProduction"></el-table-column>
       <el-table-column label="生产订单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -19,6 +19,9 @@
             </el-col>
             <el-col :span="16">
               <el-row>
+                <span>{{scope.row.product!=null?scope.row.product.name:''}}</span>
+              </el-row>
+              <el-row>
                 <span>货号:{{scope.row.product!=null?scope.row.product.skuID:''}}</span>
               </el-row>
               <el-row>
@@ -26,6 +29,12 @@
               </el-row>
             </el-col>
           </el-row>
+        </template>
+      </el-table-column>
+      <el-table-column label="品类" min-width="150">
+        <template slot-scope="scope">
+          <span>{{scope.row.product !=null ? 
+            scope.row.product.category.parent.name + '-' + scope.row.product.category.name : ''}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="生产订单状态" prop="status" :column-key="'status'" :filters="statuses">
@@ -42,7 +51,7 @@
         </template>
       </el-table-column>
       <el-table-column label="订单标签">
-        <template slot-scope="scope" v-if="!isOutboundList">
+        <template slot-scope="scope" v-if="!isOutProduction">
           <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133">
             {{isOuted(scope.row) ? '已外发' : '未外发'}}
           </el-tag>
@@ -83,7 +92,7 @@
       vSelectRow: {
         type: Array
       },
-      isOutboundList: {
+      isOutProduction: {
         type: Boolean,
         default: false
       }

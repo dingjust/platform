@@ -157,8 +157,8 @@
               </h6>
             </el-col>
           </el-row> -->
-          <production-task :slotData="entry.productionTask" ref="taskComp" :productionLeader="productionLeader"
-            :readOnly="readOnly" />
+          <!-- <production-task :slotData="entry.productionTask" ref="taskComp" :productionLeader="productionLeader"
+            :readOnly="readOnly" /> -->
         </div>
       </template>
       <el-row type="flex" justify="center" class="info-order-row" align="middle" style="margin-top: 20px"
@@ -572,9 +572,9 @@
         var forms = [];
         forms.push(this.$refs.appendProductForm);
         // taskForm数组
-        this.$refs.taskComp.forEach(item => {
-          forms.push(item.$refs.taskForm);
-        });
+        // this.$refs.taskComp.forEach(item => {
+        //   forms.push(item.$refs.taskForm);
+        // });
         //addressForm数组
         this.$refs.addressComp.forEach(item => {
           forms.push(item.$refs.address);

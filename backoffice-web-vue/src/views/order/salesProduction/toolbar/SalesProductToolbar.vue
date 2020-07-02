@@ -23,11 +23,14 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
+        <el-col :span="7" v-if="isPending">
+          <el-row type="flex" justify="end">
+            <el-button v-if="isPending" type="primary" size="small" @click="onUniqueCodeImport">唯一码导入</el-button>
+          </el-row>
+        </el-col>
         <el-col :span="7" v-if="!isPending">
           <el-row type="flex" justify="end">
             <el-button-group>
-              <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入
-              </el-button>
               <el-button size="small" @click="createSalesPlan">创建销售计划</el-button>
               <el-button size="small" @click="createSalesOrder">创建销售订单</el-button>
             </el-button-group>
@@ -59,6 +62,9 @@
       isPending: {
         type: Boolean,
         default: false
+      },
+      queryFormData: {
+        type: Object
       }
     },
     components: {
@@ -69,20 +75,12 @@
     data() {
       return {
         statuses: this.$store.state.EnumsModule.SalesProductionStatuses,
-        uniqueCodeImportFormVisible: false,
-        queryFormData: {
-          name: '',
-          status: '',
-          hasContact: '',
-          isArrears: '',
-          isDelay: ''
-        }
+        uniqueCodeImportFormVisible: false
       }
     },
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
-        setQueryFormData: 'queryFormData'
       }),
       createSalesPlan() {
         this.$emit('createSalesPlan');
@@ -98,7 +96,6 @@
         this.$emit('onAdvancedSearch', 0);
       },
       onAdvancedSearch() {
-        this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
       async getFactories(query) {
@@ -130,7 +127,6 @@
         this.brands = result.content;
       },
       onDateChange(values) {
-        console.log(values[0]);
         this.queryFormData.createdDateFrom = values[0];
         this.queryFormData.createdDateTo = values[1];
         this.onAdvancedSearch();
