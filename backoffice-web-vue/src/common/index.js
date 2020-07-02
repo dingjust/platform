@@ -782,7 +782,7 @@ const COMMON_APIS = {
   },
   // 待接订单状态统计
   pendingOrderStateCount () {
-    return '/b2b/sales/production/order/state/count';
+    return '/b2b/out/order/state/count';
   },
   // 生产工单状态统计
   productionOrderStateCount () {
