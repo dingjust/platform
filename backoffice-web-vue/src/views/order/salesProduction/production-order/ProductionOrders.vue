@@ -23,7 +23,7 @@
         </div>
         <el-tabs v-model="activeStatus" @tab-click="handleClick">
           <template v-for="(item, index) in statues">
-            <el-tab-pane :name="item.code" :key="index" :label="item.name">
+            <el-tab-pane :name="item.code" :key="index" :label="tabName(item)">
               <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
                 :vSelectRow.sync="selectRow" />
             </el-tab-pane>
@@ -114,9 +114,26 @@
           page,
           size
         });
+        this.productionOrderStateCount();
+      },
+      async productionOrderStateCount () {
+        const url = this.apis().productionOrderStateCount();
+        const result = await this.$http.get(url);
+        this.stateCount = result.data;
+      },
+      tabName (tab) {
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name +'('+ this.stateCount[tab.code] +')';  
+        }
+        return tab.name;
       },
       handleClick(tab, event) {
-        this.queryFormData.state = tab.name;
+        if (tab.name == '') {
+          this.queryFormData.excludeState = 'TO_BE_ALLOCATED';
+          this.queryFormData.state = null;
+        } else {
+          this.queryFormData.state = tab.name;
+        }
         this.onAdvancedSearch();
       },
       setQueryOrderType (flag) {
@@ -249,6 +266,7 @@
             id: ''
           }]
         },
+        stateCount: {}
       };
     },
     created() {

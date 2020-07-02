@@ -775,6 +775,18 @@ const COMMON_APIS = {
   // 创建进度工单
   createProgressOrder (id) {
     return '/b2b/orders/production/work/create/' + id;
+  },
+  // 销售订单状态统计
+  salesOrderStateCount () {
+    return '/b2b/sales/production/order/state/count';
+  },
+  // 待接订单状态统计
+  pendingOrderStateCount () {
+    return '/b2b/sales/production/order/state/count';
+  },
+  // 生产工单状态统计
+  productionOrderStateCount () {
+    return '/b2b/production/task/order/state/count';
   }
 };
 

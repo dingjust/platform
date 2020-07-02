@@ -20,7 +20,7 @@
                                 :isOutProduction="true"/>
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
-          <el-tab-pane :name="item.code" :key="index" :label="item.name">
+          <el-tab-pane :name="item.code" :key="index" :label="tabName(item)">
             <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :isOutProduction="true"/>
           </el-tab-pane>
         </template>
@@ -91,6 +91,18 @@
           page,
           size
         });
+        this.productionOrderStateCount();
+      },
+      async productionOrderStateCount () {
+        const url = this.apis().productionOrderStateCount();
+        const result = await this.$http.get(url);
+        this.stateCount = result.data;
+      },
+      tabName (tab) {
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name +'('+ this.stateCount[tab.code] +')';  
+        }
+        return tab.name;
       },
       handleClick(tab, event) {
         this.queryFormData.state = tab.name;
@@ -114,6 +126,7 @@
           categories: [],
           state: 'TO_BE_PRODUCED'
         },
+        stateCount: {}
       };
     },
     created() {

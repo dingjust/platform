@@ -1562,13 +1562,13 @@ const state = {
     code: 'AUDIT_REJECTED',
     name: '审核驳回'
   }, {
-    code: 'ACCEPTED',
-    name: '待对账'
+    code: 'PRODUCING',
+    name: '生产中'
   }, {
     code: 'COMPLETED',
     name: '已完成'
   }, {
-    code: 'CANCED',
+    code: 'CANCELED',
     name: '已取消'
   }],
   // 生产工单状态

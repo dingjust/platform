@@ -14,7 +14,7 @@
       <!-- <el-divider class="sales-divider"></el-divider> -->
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+          <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
             <sales-production-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
               @onDelete="onDelete" />
           </el-tab-pane>
@@ -86,6 +86,18 @@
           page,
           size
         });
+        this.salesOrderStateCount();
+      },
+      async salesOrderStateCount () {
+        const url = this.apis().salesOrderStateCount();
+        const result = await this.$http.get(url);
+        this.stateCount = result.data;
+      },
+      tabName (tab) {
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name +'('+ this.stateCount[tab.code] +')';  
+        }
+        return tab.name;
       },
       handleClick (tab, event) {
         this.queryFormData.state = tab.name;
@@ -124,6 +136,7 @@
           categories: [],
           state: 'TO_BE_SUBMITTED'
         },
+        stateCount: {}
       }
     },
     created() {
