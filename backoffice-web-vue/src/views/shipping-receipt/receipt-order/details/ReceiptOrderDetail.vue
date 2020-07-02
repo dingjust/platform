@@ -22,68 +22,80 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="3">
-          <!-- <img width="54px" height="54px"
-              :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'"> -->
-          <img width="100px" height="100px" :src="'static/img/nopicture.png'">
+          <img width="100px" height="100px"
+            :src="formData.product.thumbnail!=null&&formData.product.thumbnail.length!=0?formData.product.thumbnail.url:'static/img/nopicture.png'">
         </el-col>
         <el-col :span="21">
           <el-row type="flex" style="padding: 10px 0px">
             <el-col :span="8">
-              <h6>产品名称：红烧猪蹄</h6>
+              <h6 class="basic-label">产品名称：{{formData.product.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>发货方：红烧猪蹄</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>收货方：梅菜扣肉</h6>
+              <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="8">
-              <h6>货号：梅菜扣肉</h6>
+              <h6 class="basic-label">发货方：{{formData.shipParty.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>发货负责人：烧鸡翅</h6>
+              <h6 class="basic-label">收货方：{{formData.receiveParty.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>联系方式：123456789</h6>
+              <h6 class="basic-label">发货负责人：{{formData.merchandiser.name}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
-            <el-col :span="24">
-              <h6>收货地址：广州市海珠区云顶同创汇二期</h6>
+            <el-col :span="12">
+              <h6 class="basic-label">收货地址：{{formData.deliveryAddress.details}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" style="padding-bottom: 10px">
+          <el-row type="flex" style="padding-bottom: 10px"
+            v-if="!formData.isOfflineConsignment&&formData.consignment!=null">
             <el-col :span="8">
-              <h6>物流方式：货拉拉</h6>
+              <h6 class="basic-label">发货方式：{{formData.consignment.carrierDetails.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>发货单号：SF017532492929</h6>
+              <h6 class="basic-label">发货单号：{{formData.consignment.trackingID}}</h6>
             </el-col>
           </el-row>
+          <el-row type="flex" style="padding-bottom: 10px" v-else>
+            <el-col :span="8">
+              <h6 class="basic-label">物流方式：{{formData.offlineConsignorMode}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">送货人：{{formData.offlineConsignorName}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">联系方式：{{formData.offlineConsignorPhone}}</h6>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+      <!-- <el-row type="flex" style="margin-top:20px">
+        <el-col :span="4" :offset="4">
+          <el-radio v-model="receivingMode" label="BY_PACKAGE">按箱号</el-radio>
+          <el-radio v-model="receivingMode" label="BY_LIST">按总列表</el-radio>
+        </el-col>
+      </el-row> -->
+      <el-row type="flex" justify="start" class="basic-row" v-if="formData.receivingMode=='BY_PACKAGE'">
+        <el-col :span="24">
+          <color-size-box-table :vdata="formData.packageSheets"
+            :colorSizeEntries="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="start" class="basic-row" v-if="formData.receivingMode=='BY_LIST'">
+        <el-col :span="24">
+          <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
         </el-col>
       </el-row>
       <el-row type="flex" style="margin-top:20px">
-        <el-col :span="4" :offset="4">
-          <el-radio v-model="showOnBox" :disabled="true" :label="true">按箱号</el-radio>
-          <el-radio v-model="showOnBox" :disabled="true" :label="false">按总列表</el-radio>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="showOnBox">
-        <el-col :span="24">
-          <color-size-box-table :vdata="data.entries!=null?[data.entries[0].colorSizeEntries]:[]"
-            :colorSizeEntries="data.entries!=null?data.entries[0].colorSizeEntries:[]" :readOnly="true" />
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="!showOnBox">
-        <el-col :span="24">
-          <color-size-table :data="data.entries!=null?data.entries[0].colorSizeEntries:[]" :readOnly="true" />
-        </el-col>
-      </el-row>
-      <el-row type="flex" style="margin-top:20px">
-        <el-col :span="4" :offset="4">
-          <h6>有无退货：{{returned?'有':'无'}}退货</h6>
+        <el-col :span="8" :offset="4">
+          <el-row type="flex">
+            <h6>有无退货：</h6>
+            <el-radio v-model="formData.isHaveReturn" :label="true" :disabled="true">有退货</el-radio>
+            <el-radio v-model="formData.isHaveReturn" :label="false" :disabled="true">无退货</el-radio>
+          </el-row>
         </el-col>
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
@@ -91,7 +103,7 @@
           <h6>发货单：KY1000000001</h6>
         </el-col>
       </el-row>
-      <receipt-order-detail-btn-group />
+      <receipt-order-detail-btn-group v-if="isReceiveParty" />
     </el-card>
   </div>
 </template>
@@ -117,24 +129,52 @@
       ColorSizeTable,
       ReceiptOrderDetailBtnGroup
     },
-    computed: {},
+    computed: {
+      //是收货方
+      isReceiveParty: function () {
+        if (this.formData.receiveParty != null && this.currentUser != null) {
+          return this.currentUser.companyCode == this.formData.receiveParty.uid;
+        } else {
+          return false;
+        }
+      },
+    },
     methods: {
       async getDetail() {
-        const url = this.apis().getProductionTaskDetails(this.id);
+        // 获取收货单详情
+        const url = this.apis().receiptOrderDetail(this.id);
         const result = await this.$http.get(url);
-        if (result.code === 0) {
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
           this.$message.error(result.msg);
           return;
         }
-        // this.data = Object.assign({}, result.data);
-        this.$set(this, 'data', Object.assign({}, result.data));
+        this.formData = Object.assign({}, result.data);
       },
     },
     data() {
       return {
-        data: '',
-        showOnBox: false,
-        returned: false
+        currentUser: this.$store.getters.currentUser,
+        formData: {
+          product: {
+            name: '',
+            skuID: '',
+          },
+          shipParty: {
+            name: '',
+          },
+          receiveParty: {
+            name: ''
+          },
+          merchandiser: {
+            name: ''
+          },
+          deliveryAddress: {
+            details: ''
+          },
+        }
       }
     },
     created() {

@@ -9,19 +9,21 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <shipping-tasks-page :page="page" :queryFormData="queryFormData" 
-                            @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
+      <shipping-tasks-page :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
+        @onAdvancedSearch="onAdvancedSearch" />
     </el-card>
   </div>
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
   const {
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    'ShippingTasksModule'
+    'ImportShippingTasksModule'
   );
 
   import ShippingTasksPage from '../../shipping-task/ShippingTasksPage'
@@ -42,26 +44,36 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         // TODO 查询自身的收发任务
         const keyword = this.keyword;
-        const url = this.apis().getProductionTaskList();
+        const url = this.apis().shippingTaskList();
+        const companyCode = this.currentUser.companyCode;
         this.search({
           url,
           keyword,
           page,
-          size
+          size,
+          companyCode
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         // TODO 查询自身的收发任务
         const query = this.queryFormData;
-        const url = this.apis().getProductionTaskList();
-        this.searchAdvanced({url, query, page, size});
+        const url = this.apis().shippingTaskList();
+        const companyCode = this.currentUser.companyCode;
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size,
+          companyCode
+        });
       }
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         queryFormData: {
           keyword: '',
           productionLeaderName: '',

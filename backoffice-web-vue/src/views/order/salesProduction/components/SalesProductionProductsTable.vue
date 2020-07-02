@@ -60,7 +60,7 @@
       <el-table-column label="操作" min-width="150">
         <template slot-scope="scope">
           <!-- <span style="color:red;">{{scope.row.validateMsg!=null?scope.row.validateMsg:''}}</span> -->
-          <i v-if="validateEntry(scope.row)" class="el-icon-warning" style="color:red;font-size:20px;"></i>
+          <!-- <i v-if="validateEntry(scope.row)" class="el-icon-warning" style="color:red;font-size:20px;"></i> -->
           <el-button type="text" @click="onDetail(scope.$index)">详情</el-button>
           <template v-if="canEdit(scope.row.auditState)">
             <el-button v-if="canUpdate" type="text" @click="onModify(scope.$index)">编辑</el-button>

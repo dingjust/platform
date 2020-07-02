@@ -6,25 +6,25 @@
           <el-row type="flex" justify="start">
             <h6>下单数量</h6>
           </el-row>
-          <color-size-table :data="orderQuantity" :readOnly="true"/>
+          <color-size-table :data="formData.colorSizeEntries" :readOnly="true" />
         </el-col>
         <el-col :span="12">
           <el-row type="flex" justify="start">
             <h6>实裁数量</h6>
           </el-row>
-          <color-size-table :data="cropQuantity" :readOnly="true"/>
+          <color-size-table :data="cropColorSizeEntry" :readOnly="true" />
         </el-col>
       </el-row>
     </div>
     <el-row type="flex" justify="end" align="middle" style="margin-top: 20px">
       <el-col :span="3">
-        <h6>订单数：200000</h6>
+        <h6>订单数：{{orderTotalNum}}</h6>
       </el-col>
       <el-col :span="3">
-        <h6>应发数：200000</h6>
+        <h6>应发数：{{cropTotalNum}}</h6>
       </el-col>
       <el-col :span="3">
-        <h6>已发数：200000</h6>
+        <h6>已发数：{{totalShippingNum}}</h6>
       </el-col>
       <el-col :span="3">
         <h6>已退数：200000</h6>
@@ -40,7 +40,9 @@
 </template>
 
 <script>
-  import {ColorSizeTable} from '@/components/'
+  import {
+    ColorSizeTable
+  } from '@/components/'
   export default {
     name: 'ShippingTasksQuantityTable',
     props: ['formData'],
@@ -48,27 +50,88 @@
       ColorSizeTable
     },
     computed: {
-      orderQuantity: function () {
-        // TODO 处理下单数量数据
-        return [];
+      // 处理裁剪数量数据
+      cropColorSizeEntry: function () {
+        if (this.formData.colorSizeEntries != null) {
+          let result = this.formData.colorSizeEntries.map(entry => {
+            let quantity = this.getEntryFromActualNum(entry.color.name, entry.size.name);
+            let color = Object.assign({}, entry.color);
+            let size = Object.assign({}, entry.size);
+            return {
+              color: color,
+              size: size,
+              quantity: quantity
+            };
+          });
+          return result;
+        } else {
+          return [];
+        }
       },
-      cropQuantity: function () {
-        // TODO 处理裁剪数量数据
-        return [];
+      //订单数量
+      orderTotalNum: function () {
+        let result = 0;
+        if (this.formData.colorSizeEntries != null) {
+          this.formData.colorSizeEntries.forEach(entry => {
+            let num = parseInt(entry.quantity);
+            if (!Number.isNaN(num)) {
+              result += num;
+            }
+          });
+        }
+        return result;
+      },
+      //应发数（实裁总数）
+      cropTotalNum: function () {
+        let result = 0;
+        if (this.formData.actualCutEntries != null) {
+          this.formData.actualCutEntries.forEach(entry => {
+            let num = parseInt(entry.quantity);
+            if (!Number.isNaN(num)) {
+              result += num;
+            }
+          });
+        }
+        return result;
+      },
+      //统计发货总数
+      totalShippingNum: function () {
+        let result = 0;
+        if (this.formData.shippingSheets != null) {
+          this.formData.shippingSheets.forEach(element => {
+            let num = parseInt(element.totalQuantity);
+            result += num;
+          });
+        }
+        return result;
       }
     },
     methods: {
-    },
-    data() {
-      return {
+      //获取实裁数量entry（报单行color,size是Sring类型）
+      getEntryFromActualNum(colorName, sizeName) {
+        let num = 0;
+        if (this.formData.actualCutEntries != null) {
+          let index = this.formData.actualCutEntries.findIndex(entry => entry.color == colorName && entry.size ==
+            sizeName);
+          if (index != -1) {
+            let entryQuantity = parseInt(this.formData.actualCutEntries[index].quantity);
+            if (!Number.isNaN(entryQuantity)) {
+              num += entryQuantity;
+            }
+          }
+        }
+        return num;
       }
     },
-    created() {
+    data() {
+      return {}
     },
+    created() {},
     destroyed() {
 
     }
   }
+
 </script>
 
 <style scoped>
@@ -77,4 +140,5 @@
     border-radius: 5px;
     padding: 20px 20px 0px 20px;
   }
+
 </style>

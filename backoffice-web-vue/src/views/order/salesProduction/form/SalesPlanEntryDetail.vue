@@ -168,6 +168,12 @@
           } else {
             return this.belongOrder.cooperator.name;
           }
+        } else if (this.belongOrder.originCooperator != null) {
+          if (this.belongOrder.originCooperator.type == 'ONLINE') {
+            return this.belongOrder.originCooperator.partner.name;
+          } else {
+            return this.belongOrder.originCooperator.name;
+          }
         }
       },
       contactPerson: function () {
@@ -177,6 +183,12 @@
           } else {
             return this.belongOrder.cooperator.contactPerson;
           }
+        } else if (this.belongOrder.originCooperator != null) {
+          if (this.belongOrder.originCooperator.type == 'ONLINE') {
+            return this.belongOrder.originCooperator.partner.contactPerson;
+          } else {
+            return this.belongOrder.originCooperator.contactPerson;
+          }
         }
       },
       contactPhone: function () {
@@ -185,6 +197,12 @@
             return this.belongOrder.cooperator.partner.contactPhone;
           } else {
             return this.belongOrder.cooperator.contactPhone;
+          }
+        } else if (this.belongOrder.originCooperator != null) {
+          if (this.belongOrder.originCooperator.type == 'ONLINE') {
+            return this.belongOrder.originCooperator.partner.contactPhone;
+          } else {
+            return this.belongOrder.originCooperator.contactPhone;
           }
         }
       },

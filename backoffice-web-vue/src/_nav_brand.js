@@ -37,7 +37,7 @@ export default {
       // url: '/sales',
       icon: 'el-icon-s-order',
       children: [{
-        name: '业务订单',
+        name: '计划订单',
         url: '/sales/plan'
       }, {
         name: '外接订单',
@@ -56,7 +56,7 @@ export default {
           url: '/sales/productionOrder',
         }, {
           name: '生产进度工单',
-          url: '/sales/progressOrder'  
+          url: '/sales/progressOrder'
         }
       ]
     },

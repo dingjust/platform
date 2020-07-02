@@ -56,7 +56,7 @@ export default {
           url: '/sales/productionOrder',
         }, {
           name: '生产进度工单',
-          url: '/sales/progressOrder'  
+          url: '/sales/progressOrder'
         }
       ]
     },

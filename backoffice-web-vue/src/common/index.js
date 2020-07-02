@@ -1112,7 +1112,7 @@ let NONE_TENANT_APIS = {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
   },
   // 更新销售订单行
-  updateSalesOrderRow () {
+  updateSalesOrderRow() {
     return '/b2b/sales/production/order/update/entry';
   },
   //销售计划撤回
@@ -1253,6 +1253,45 @@ let NONE_TENANT_APIS = {
   rejectReconciliationV2(code) {
     return '/b2b/orders/production/work/' + code + '/rejectReconciliation';
   },
+
+
+  /**---------------       收发货           ---------------**/
+
+  // 收发任务列表
+  shippingTaskList() {
+    return '/b2b/sheets/receivedispatch';
+  },
+
+  // 收发任务详情
+  shippingTaskDetail(id) {
+    return '/b2b/sheets/receivedispatch/' + id;
+  },
+
+  // 发货单列表
+  shippingOrderList() {
+    return '/b2b/sheets/shipping';
+  },
+
+  // 发货单详情
+  shippingOrderDetail(id) {
+    return '/b2b/sheets/shipping/' + id;
+  },
+
+  // 创建发货单
+  shippingOrderCreate() {
+    return '/b2b/sheets/shipping/create';
+  },
+
+  //创建收货单
+  receiptOrderCreate() {
+    return '/b2b/sheets/receipt/create';
+  },
+
+  // 收货单详情
+  receiptOrderDetail(id) {
+    return '/b2b/sheets/receipt/' + id;
+  },
+
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

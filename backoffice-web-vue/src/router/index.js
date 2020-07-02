@@ -744,6 +744,7 @@ const router = new Router({
             {
               path: 'orders/:id',
               name: '发货单详情',
+              props:true,
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-order/details/ShippingOrdersDetail')
             },
             {
@@ -801,8 +802,8 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'receipt' */ '@/views/shipping-receipt/receipt-order/details/ReceiptOrderDetail')
             },
             {
-              path: 'form',
-              name: '收货单表单',
+              path: 'create/orders',
+              name: '创建收货单',
               component: () => import( /* webpackChunkName: 'receipt' */ '@/views/shipping-receipt/receipt-order/form/ReceiptOrderForm')
             },
           ]

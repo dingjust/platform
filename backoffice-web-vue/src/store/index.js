@@ -55,7 +55,8 @@ import {
   ContractTemplateModule,
   ContractSealModule,
   // shipping-receipt
-  ShippingTasksModule,
+  ImportShippingTasksModule,
+  ExportShippingTasksModule,
   ShippingOrdersModule,
   ReceiptOrdersModule,
   ReturnOrdersModule,
@@ -85,7 +86,7 @@ const getters = {};
 
 // mutations
 const mutations = {
-  sideSliderState_get (state, payload) {
+  sideSliderState_get(state, payload) {
     // 类别
     state.sideSliderState = payload;
   }
@@ -93,7 +94,7 @@ const mutations = {
 
 // actions
 const actions = {
-  sideSliderState_set ({
+  sideSliderState_set({
     dispatch,
     commit,
     state
@@ -155,7 +156,8 @@ export default new Vuex.Store({
     ContractTemplateModule,
     ContractSealModule,
     // shipping-receipt
-    ShippingTasksModule,
+    ImportShippingTasksModule,
+    ExportShippingTasksModule,
     ShippingOrdersModule,
     ReceiptOrdersModule,
     ReturnOrdersModule,

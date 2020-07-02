@@ -29,69 +29,78 @@
         <el-col :span="21">
           <el-row type="flex" style="padding: 10px 0px">
             <el-col :span="8">
-              <h6>产品名称：红烧猪蹄</h6>
+              <h6 class="basic-label">产品名称：{{shippingOder.product.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>发货方：红烧猪蹄</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>收货方：梅菜扣肉</h6>
+              <h6 class="basic-label">货号：{{shippingOder.product.skuID}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="8">
-              <h6>货号：梅菜扣肉</h6>
+              <h6 class="basic-label">发货方：{{shippingOder.shipParty.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>发货负责人：烧鸡翅</h6>
+              <h6 class="basic-label">收货方：{{shippingOder.receiveParty.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>联系方式：123456789</h6>
+              <h6 class="basic-label">发货负责人：{{shippingOder.merchandiser.name}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
-            <el-col :span="24">
-              <h6>收货地址：广州市海珠区云顶同创汇二期</h6>
+            <el-col :span="12">
+              <h6 class="basic-label">收货地址：{{shippingOder.deliveryAddress.details}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" style="padding-bottom: 10px">
+          <el-row type="flex" style="padding-bottom: 10px"
+            v-if="!shippingOder.isOfflineConsignment&&shippingOder.consignment!=null">
             <el-col :span="8">
-              <h6>物流方式：货拉拉</h6>
+              <h6 class="basic-label">发货方式：{{shippingOder.consignment.carrierDetails.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>发货单号：SF017532492929</h6>
+              <h6 class="basic-label">发货单号：{{shippingOder.consignment.trackingID}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px" v-else>
+            <el-col :span="8">
+              <h6 class="basic-label">物流方式：{{shippingOder.offlineConsignorMode}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">送货人：{{shippingOder.offlineConsignorName}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">联系方式：{{shippingOder.offlineConsignorPhone}}</h6>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
       <el-row type="flex" style="margin-top:20px">
         <el-col :span="4" :offset="4">
-          <el-radio v-model="showOnBox" :label="true">按箱号</el-radio>
-          <el-radio v-model="showOnBox" :label="false">按总列表</el-radio>
+          <el-radio v-model="receivingMode" label="BY_PACKAGE">按箱号</el-radio>
+          <el-radio v-model="receivingMode" label="BY_LIST">按总列表</el-radio>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="showOnBox">
+      <el-row type="flex" justify="start" class="basic-row" v-if="receivingMode=='BY_PACKAGE'">
         <el-col :span="24">
           <color-size-box-table :vdata="data" :colorSizeEntries="colorSizeEntries" :readOnly="false" />
         </el-col>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="!showOnBox">
+      <el-row type="flex" justify="start" class="basic-row" v-if="receivingMode=='BY_LIST'">
         <el-col :span="24">
-          <color-size-table :data="summaryData" :readOnly="false" />
+          <color-size-table :data="summaryData[0].colorSizeEntries" :readOnly="false" />
         </el-col>
       </el-row>
       <el-row type="flex" style="margin-top:20px">
         <el-col :span="8" :offset="4">
           <el-row type="flex">
             <h6>有无退货：</h6>
-            <el-radio v-model="returned" :label="true">有退货</el-radio>
-            <el-radio v-model="returned" :label="false">无退货</el-radio>
+            <el-radio v-model="isHaveReturn" :label="true">有退货</el-radio>
+            <el-radio v-model="isHaveReturn" :label="false">无退货</el-radio>
           </el-row>
         </el-col>
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="8" :offset="2">
-          <h6>发货单：KY1000000001</h6>
+          <h6>发货单：{{shippingOder.code}}</h6>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">
@@ -127,40 +136,44 @@
       //箱总数
       boxAmount: function () {
         var amount = 0;
-        this.data.forEach(entry => {
-          if (entry != null) {
-            entry.forEach(item => {
-              let num = parseFloat(item.quantity);
+        if (this.data != null) {
+          this.data.forEach(sheet => {
+            sheet.colorSizeEntries.forEach(entry => {
+              let num = parseFloat(entry.quantity);
               if (!Number.isNaN(num)) {
                 amount += num;
               }
-            });
-          }
-        });
+            })
+          });
+        }
         return amount;
       },
       //总列表总数
       summaryAmount: function () {
         var amount = 0;
         if (this.summaryData != null) {
-          this.summaryData.forEach(entry => {
-            let num = parseFloat(entry.quantity);
-            if (!Number.isNaN(num)) {
-              amount += num;
-            }
+          this.summaryData.forEach(sheet => {
+            sheet.colorSizeEntries.forEach(entry => {
+              let num = parseFloat(entry.quantity);
+              if (!Number.isNaN(num)) {
+                amount += num;
+              }
+            })
           });
         }
         return amount;
       },
-      //下单数
-      orderAmount: function () {
+      //发货单数
+      shippingOrderAmount: function () {
         var amount = 0;
-        if (this.colorSizeEntries != null) {
-          this.colorSizeEntries.forEach(entry => {
-            let num = parseFloat(entry.quantity);
-            if (!Number.isNaN(num)) {
-              amount += num;
-            }
+        if (this.shippingOder != null) {
+          this.shippingOder.packageSheets.forEach(sheet => {
+            sheet.colorSizeEntries.forEach(entry => {
+              let num = parseFloat(entry.quantity);
+              if (!Number.isNaN(num)) {
+                amount += num;
+              }
+            })
           });
         }
         return amount;
@@ -169,8 +182,8 @@
     methods: {
       onSubmit() {
         //校验数量与订单差异
-        let num = this.showOnBox ? this.boxAmount : this.summaryAmount;
-        if (num != this.orderAmount) {
+        let num = this.receivingMode == 'BY_PACKAGE' ? this.boxAmount : this.summaryAmount;
+        if (num != this.shippingOrderAmount) {
           this.$confirm('收货数与发货总数不一致，是否创建收货单？创建后不允许修改', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -180,10 +193,34 @@
           }).catch(() => {
 
           });
+        } else {
+          this._onSubmit();
         }
       },
       async _onSubmit() {
-        this.onReturnedMessage();
+        const url = this.apis().receiptOrderCreate();
+
+        let submitForm = {
+          isHaveReturn: this.isHaveReturn,
+          receivingMode: this.receivingMode,
+          packageSheets: this.receivingMode == 'BY_PACKAGE' ? this.data : this.summaryData
+        };
+        const result = await this.$http.post(url, submitForm, {
+          id: this.shippingOder.id
+        });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == '0') {
+          this.$message.error(result.msg);
+        } else if (result.code == '1') {
+          this.$message.success(result.msg);
+          //有退货则提示创建退货单
+          if (this.isHaveReturn) {
+            this.onReturnedMessage();
+          }
+        }
       },
       //提示是否创建退货单
       onReturnedMessage() {
@@ -201,20 +238,38 @@
     data() {
       return {
         data: [],
+        shippingOder: '',
         summaryData: [],
         colorSizeEntries: [],
-        showOnBox: false,
-        returned: false
+        receivingMode: 'BY_PACKAGE',
+        isHaveReturn: false
       }
     },
     created() {
       if (this.$route.params.shippingOrder == null) {
         this.$router.go(-1);
       } else {
-        this.$set(this, 'data', JSON.parse(JSON.stringify([this.$route.params.shippingOrder.colorSizeEntries])));
+        //设置colorSizeEntries
+        this.$set(this, 'shippingOder', JSON.parse(JSON.stringify(this.$route.params.shippingOrder)));
         this.$set(this, 'colorSizeEntries', JSON.parse(JSON.stringify(this.$route.params.shippingOrder
-          .colorSizeEntries)));
-        this.$set(this, 'summaryData', JSON.parse(JSON.stringify(this.$route.params.shippingOrder.colorSizeEntries)));
+          .packageSheets[0].colorSizeEntries)));
+        this.$set(this, 'data', JSON.parse(JSON.stringify(this.$route.params.shippingOrder.packageSheets)));
+        //整理按总汇表单数据
+        let summaryData = [];
+        this.$route.params.shippingOrder.packageSheets.forEach(sheet => {
+          if (summaryData.length == 0) {
+            summaryData.push(JSON.parse(JSON.stringify(sheet)));
+          } else {
+            //整合数据
+            for (let i = 0; i < sheet.colorSizeEntries.length; i++) {
+              let num = parseInt(sheet.colorSizeEntries[i].quantity);
+              if (!Number.isNaN(num)) {
+                summaryData[0].colorSizeEntries[i].quantity += num;
+              }
+            }
+          }
+        });
+        this.$set(this, 'summaryData', summaryData);
       }
     },
     destroyed() {
