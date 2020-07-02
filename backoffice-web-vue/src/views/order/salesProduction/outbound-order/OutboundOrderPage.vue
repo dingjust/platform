@@ -195,7 +195,7 @@
           keyword: '',
           targetCooperator: '',
           merchandiser: '',
-          statuses: '',
+          state: 'TO_BE_SUBMITTED',
           name: '',
           hasContact: ''
         },
