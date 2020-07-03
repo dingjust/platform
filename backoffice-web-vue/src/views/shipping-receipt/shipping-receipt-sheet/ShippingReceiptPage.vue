@@ -23,23 +23,12 @@
         </el-col>
       </el-row>
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="待发货" name="first">
-          <shipping-orders-list :page="page" :canCreateReceipt="canCreateReceipt" @onAdvancedSearch="onAdvancedSearch"
-            @onDetail="onShippingDetail" />
-        </el-tab-pane>
-        <el-tab-pane label="已发货" name="second">
-          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReceiptDetail" />
-        </el-tab-pane>
-        <el-tab-pane label="待退货" name="third">
-          <shipping-orders-list :page="page" :canCreateReceipt="canCreateReceipt" @onAdvancedSearch="onAdvancedSearch"
-            @onDetail="onShippingDetail" />
-        </el-tab-pane>
-        <el-tab-pane label="退货待收" name="fourth">
-          <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail" />
-        </el-tab-pane>
-        <el-tab-pane label="退货已收" name="fifth">
-          <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail" />
-        </el-tab-pane>
+        <template v-for="(map,status) in statusMap">
+          <el-tab-pane :label="map.status" :name="status" :key="status">
+            <shipping-dynamic-table :page="page" :canCreateReceipt="canCreateReceipt" :columns="map.columns"
+              @onAdvancedSearch="onAdvancedSearch"/>
+          </el-tab-pane>
+        </template>
       </el-tabs>
     </el-card>
     <el-dialog :visible.sync="shippingListVisible" width="80%" class="purchase-dialog" append-to-body
@@ -62,7 +51,9 @@
   import ShippingOrdersPage from '../shipping-order/ShippingOrdersPage'
   import ReceiptOrdersPage from '../receipt-order/ReceiptOrdersPage'
   import ReturnOrdersPage from '../return-order/ReturnOrdersPage'
-  import ShippingOrdersList from '../shipping-order/list/ShippingOrdersList'
+  import {
+    ShippingDynamicTable
+  } from '../components/index'
   import ReceiptOrdersList from '../receipt-order/list/ReceiptOrdersList'
   import ReturnOrdersList from '../return-order/list/ReturnOrdersList'
   export default {
@@ -72,7 +63,7 @@
       ShippingOrdersPage,
       ReceiptOrdersPage,
       ReturnOrdersPage,
-      ShippingOrdersList,
+      ShippingDynamicTable,
       ReceiptOrdersList,
       ReturnOrdersList
     },
@@ -84,22 +75,8 @@
     },
     methods: {
       handleClick(tab, event) {
-        if (tab.name == 'first') {
-          this.queryFormData.status = '待发货';
-          this.searchUrl = this.apis().getProductionTaskList();
-        } else if (tab.name == 'second') {
-          this.queryFormData.status = '';
-          this.searchUrl = this.apis().getProductionOrders();
-        } else if (tab.name == 'third') {
-          this.queryFormData.status = '待退货';
-          this.searchUrl = this.apis().getProductionTaskList();
-        } else if (tab.name == 'fourth') {
-          this.queryFormData.status = '退货待收';
-          this.searchUrl = this.apis().getoutboundOrdersList();
-        } else if (tab.name == 'fifth') {
-          this.queryFormData.status = '退货已收';
-          this.searchUrl = this.apis().getoutboundOrdersList();
-        }
+        this.queryFormData.status = this.statusMap[tab.name].status;
+        this.searchUrl = this.statusMap[tab.name].url;
         this.onAdvancedSearch(0, 10);
       },
       async onAdvancedSearch(page, size) {
@@ -110,15 +87,6 @@
           size: size
         });
         this.page = result;
-      },
-      onShippingDetail() {
-
-      },
-      onReceiptDetail() {
-
-      },
-      onReturnDetail() {
-
       },
       // 创建发货单
       onCreateReceiptOrder() {
@@ -141,8 +109,8 @@
           totalElements: 0, // 总数目数
           content: [] // 当前页数据
         },
-        activeName: 'first',
-        searchUrl: '',
+        activeName: 'STATUS_1',
+        searchUrl: this.apis().shippingOrderList(),
         shippingListVisible: false,
         receiptListVisible: false,
         returnListVisible: false,
@@ -152,14 +120,39 @@
           operatorName: '',
           creationtimeStart: '',
           creationtimeEnd: '',
-          status: ''
+          status: '待收货'
+        },
+        statusMap: {
+          STATUS_1: {
+            status: '待收货',
+            columns: ['发货单号', '产品名称', '关联订单', '发货人', '单价', '发货数量', '发货总额', '发货日期', '发货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          STATUS_2: {
+            status: '待退货',
+            columns: ['发货单号', '产品名称', '关联订单', '关联收货单', '收货单创建人', '发货数', '收货数', '发货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          STATUS_3: {
+            status: '退货待收',
+            columns: ['退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          STATUS_4: {
+            status: '退货已收',
+            columns: ['退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          STATUS_5: {
+            status: '已完成',
+            columns: ['发货单号', '产品名称', '单价', '发货数量', '收货单', '收货数', '差异数', '发货操作'],
+            url: this.apis().shippingOrderList()
+          }
         }
       }
     },
     created() {
-      this.queryFormData.status = '待发货';
-      this.searchUrl = this.apis().getProductionTaskList();
-      this.onAdvancedSearch(0, 10);
+      this.onAdvancedSearch(this.page.number, this.page.size);
     },
     destroyed() {
 
