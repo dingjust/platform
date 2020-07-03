@@ -91,11 +91,19 @@
           page,
           size
         });
-        this.productionOrderStateCount();
+        this.outProductionOrderStateCount();
       },
-      async productionOrderStateCount () {
-        const url = this.apis().productionOrderStateCount();
+      async outProductionOrderStateCount () {
+        const url = this.apis().outProductionOrderStateCount();
         const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.stateCount = {};
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          return;
+        }
         this.stateCount = result.data;
       },
       tabName (tab) {

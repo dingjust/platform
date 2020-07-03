@@ -70,16 +70,16 @@
         contentData: 'detailData'
       }),
       outBtnColor: function () {
-        if (this.queryFormData.orderType == '') {
+        if (this.queryFormData.type == '') {
           return 'color: #303133';
         }
-        return this.queryFormData.orderType == 'OUTBOUND' ? 'color: #409EFF' : '#303133';
+        return this.queryFormData.type == 'FOUNDRY_PRODUCTION' ? 'color: #409EFF' : '#303133';
       },
       selfBtnColor: function () {
-        if (this.queryFormData.orderType == '') {
+        if (this.queryFormData.type == '') {
           return 'color: #303133';
         }
-        return this.queryFormData.orderType == 'SELF_PRODUCTION' ? 'color: #409EFF' : '#303133';
+        return this.queryFormData.type == 'SELF_PRODUCED' ? 'color: #409EFF' : '#303133';
       }
     },
     methods: {
@@ -119,6 +119,14 @@
       async productionOrderStateCount () {
         const url = this.apis().productionOrderStateCount();
         const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.stateCount = {};
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          return;
+        }
         this.stateCount = result.data;
       },
       tabName (tab) {
@@ -138,10 +146,11 @@
       },
       setQueryOrderType (flag) {
         if (flag) {
-          this.queryFormData.orderType = 'OUTBOUND';
+          this.queryFormData.type = 'FOUNDRY_PRODUCTION';
         } else {
-          this.queryFormData.orderType = 'SELF_PRODUCTION';
-        } 
+          this.queryFormData.type = 'SELF_PRODUCED';
+        }
+        this.onAdvancedSearch();
       },
       onCreate() {
         let row = [];
@@ -217,7 +226,8 @@
           createdDateTo: null,
           keyword: '',
           categories: [],
-          state: 'TO_BE_PRODUCED'
+          state: 'TO_BE_PRODUCED',
+          type: ''
         },
         formData: {
           id: null,

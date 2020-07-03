@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="production-order-toolbar-container">
     <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
       <uniquecode-import-form />
     </el-dialog>
@@ -223,7 +223,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .el-input__inner {
     /* border-radius: 5px; */
     line-height: 30px;
@@ -269,4 +269,7 @@
     color: #606266;
   }
 
+  /deep/ .el-form-item {
+    margin-bottom: 5px;
+  }
 </style>

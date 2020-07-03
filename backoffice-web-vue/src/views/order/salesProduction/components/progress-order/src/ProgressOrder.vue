@@ -59,7 +59,10 @@
         }
       },
       canEdit: function () {
-        return true;
+        return (this.$store.getters.currentUser.uid == this.order.merchandiser.uid || 
+                this.$store.getters.currentUser.uid == this.order.productionLeader.uid) &&
+                (this.order.state == 'TO_BE_PRODUCED' ||
+                this.order.state == 'PRODUCING')
       }
     },
     methods: {

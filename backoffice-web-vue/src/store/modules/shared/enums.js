@@ -1535,7 +1535,7 @@ const state = {
   },
   {
     code: 'AUDITED_FAILED',
-    name: '审核失败'
+    name: '审核驳货'
   }
   ],
   // 生产任务状态
@@ -1619,7 +1619,7 @@ const state = {
     code: 'COMPLETED',
     name: '已完成'
   }, {
-    code: 'CANCED',
+    code: 'CANCELED',
     name: '已取消'
   }],
   // 进度工单单据-物料类型状态
@@ -1658,7 +1658,7 @@ const state = {
     name: '审核通过'
   }, {
     code: 'AUDITED_FAILED',
-    name: '审核失败'
+    name: '审核驳回'
   }, {
     code: 'REVOKED',
     name: '撤回'
@@ -1690,7 +1690,7 @@ const state = {
     name: '协同'
   }, {
     code: 'AUTOGESTION',
-    name: '协同'
+    name: '自管'
   }]
 };
 

@@ -16,7 +16,7 @@
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code" :key="index" :label="item.name">
             <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-              :vSelectRow.sync="selectRow" />
+              :vSelectRow.sync="selectRow" :isAllocating="true"/>
           </el-tab-pane>
         </template>
       </el-tabs>

@@ -96,7 +96,7 @@
           return this.slotData.progresses.length;
         }
         if (this.slotData.currentPhase) {
-          return this.slotData.progresses.findIndex(val => val.progressPhase == this.slotData.currentPhase.id);
+          return this.slotData.progresses.findIndex(val => val.progressPhase.name == this.slotData.currentPhase.name);
         }
         return 0;
       },

@@ -24,7 +24,7 @@
               :productsColors="colors" />
           </el-row>
         </div> -->
-        <progress-order :slotData="progressOrder" :order="formData" @callback="onCallBack" />
+        <progress-order :slotData="progressOrder" :order="formData.taskOrderEntries[0]" @callback="onCallBack" />
         <production-order-relation-info :slotData="formData" />
         <!-- <production-order-button-group style="margin-top:50px" :slotData="formData" @callback="getDetail" /> -->
       </el-row>

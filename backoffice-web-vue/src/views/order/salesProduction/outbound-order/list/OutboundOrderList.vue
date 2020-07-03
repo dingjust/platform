@@ -14,6 +14,11 @@
           <span>{{getEnum('SalesProductionAuditStatus', scope.row.sendAuditState)}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('OutboundOrderStatuses', scope.row.state)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="订单标签" min-width="100">
       </el-table-column>
       <el-table-column label="操作" min-width="100">

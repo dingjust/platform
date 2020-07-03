@@ -69,27 +69,8 @@
      padding: 0px;
   }
 
-  /deep/ .el-radio__inner {
-    border: 0px solid #DCDFE6;
-    border-radius: 100%;
-    width: 0px;
-    height: 0px;
-  }
-
-  /deep/ .el-radio__label {
-    padding-left: 0px;
-  }
-
-  .status_name_label {
-    margin-right: 0px;
-  }
-
-  /deep/ .el-radio-group {
-    margin-top: 7px;
-  }
-
   /deep/ .el-form-item {
-     margin-bottom: 0px;
+     margin-bottom: 5px;
   }
 
   .toolbar-search_input{

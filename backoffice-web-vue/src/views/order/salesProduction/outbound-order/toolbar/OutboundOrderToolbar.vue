@@ -84,4 +84,8 @@
     height: 40px;
     color: #606266;
   }
+
+  /deep/ .el-form-item {
+    margin-bottom: 5px;
+  }
 </style>

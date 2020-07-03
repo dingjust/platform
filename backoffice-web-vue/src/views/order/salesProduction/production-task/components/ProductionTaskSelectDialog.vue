@@ -73,6 +73,7 @@
         //   this.queryFormData.state = '';
         //   this.queryFormData.productionWorkOrder = 'isProductionWorkOrder';
         // }
+        this.queryFormData.type = 'FOUNDRY_PRODUCTION';
         this.queryFormData.haveOutOrder = 'haveOutOrder'
         const query = this.queryFormData;
         const url = this.apis().getProductionOrders();
