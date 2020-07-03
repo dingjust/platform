@@ -223,7 +223,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .el-input__inner {
     /* border-radius: 5px; */
     line-height: 30px;
@@ -269,7 +269,7 @@
     color: #606266;
   }
 
-  .production-order-toolbar-container >>> .el-form-item {
-    margin-bottom: 0px;
+  /deep/ .el-form-item {
+    margin-bottom: 5px;
   }
 </style>

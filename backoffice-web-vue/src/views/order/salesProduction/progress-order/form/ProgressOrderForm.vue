@@ -84,7 +84,7 @@
           this.$message.error(result.msg);
           return;
         }
-        await this.$router.push('/sales/progressOrder/' + this.formData.code);
+        await this.$router.go(-1);
       },
       async createProgressOrder () {
         const id = this.$route.params.order.taskOrderEntries[0].id;
@@ -103,7 +103,7 @@
           this.$message.error(result.msg);
           return;
         }
-        await this.$router.push('/sales/progressOrder/' + this.formData.code);
+        await this.$router.go(-1);
       }
     },
     data () {
@@ -121,6 +121,7 @@
         this.formData.product = order.taskOrderEntries[0].product;
         this.formData.expectedDeliveryDate = order.taskOrderEntries[0].deliveryDate;
         this.formData.colorSizeEntries = order.taskOrderEntries[0].colorSizeEntries;
+        this.formData.progresses = [];
       } else if (this.code != undefined){
         this.getDetail();
       }

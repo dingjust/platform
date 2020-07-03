@@ -70,11 +70,12 @@
         }
         if (result.code === 0) {
           this.$message.error(result.msg);
+          return;
         }
         result.data.content.forEach(item => {
           this.statuses.push({
             name: item.name,
-            code: item.name
+            code: item.id
           })
         })
       },

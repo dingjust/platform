@@ -4,7 +4,16 @@
       :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick" :reserve-selection="true">
       <el-table-column type="selection" width="55px" :selectable="rowDisabled" v-if="!isOutProduction" fixed></el-table-column>
       <el-table-column label="生产订单号" min-width="130" fixed>
+        <!-- <template slot-scope="scope">
+          <el-row type="flex" justify="space-between" align="middle">
+            <span>{{scope.row.code}}</span>
+          </el-row>
+        </template> -->
         <template slot-scope="scope">
+          <el-row type="flex" justify="space-between" align="middle">
+            <el-tag type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
+              {{getEnum('ProductionTaskOrderType', scope.row.type)}}</el-tag>
+          </el-row>
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
           </el-row>
@@ -215,7 +224,17 @@
     data() {
       return {
         statuses: this.$store.state.ProductionOrderModule.statuses,
-        selectRow: []
+        selectRow: [],
+        orderTypeTagMap: {
+          'SELF_PRODUCED': {
+            'color': '#ffd60c',
+            'borderColor': '#ffd60c'
+          },
+          'FOUNDRY_PRODUCTION': {
+            'color': '#67c23a',
+            'borderColor': '#67c23a'
+          },
+        }
       }
     },
     created () {
