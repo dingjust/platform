@@ -13,7 +13,7 @@
       <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"
                               :queryFormData="queryFormData"/>
       <div>
-        <div class="tag-container">
+        <!-- <div class="tag-container">
           <el-row type="flex" justify="start" align="middle">
             <h6 style="margin-bottom: 0px">标签：</h6>
             <el-button type="text" class="type-btn" :style="outBtnColor" @click="setQuery(true)">已签合同
@@ -21,7 +21,7 @@
             <el-button type="text" class="type-btn" :style="selfBtnColor"
               @click="setQuery(false)">未签合同</el-button>
           </el-row>
-        </div>
+        </div> -->
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <template v-for="item in statuses">
             <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">

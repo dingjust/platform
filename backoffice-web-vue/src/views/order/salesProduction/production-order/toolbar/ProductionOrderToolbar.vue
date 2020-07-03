@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="production-order-toolbar-container">
     <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
       <uniquecode-import-form />
     </el-dialog>
@@ -269,4 +269,7 @@
     color: #606266;
   }
 
+  .production-order-toolbar-container >>> .el-form-item {
+    margin-bottom: 0px;
+  }
 </style>

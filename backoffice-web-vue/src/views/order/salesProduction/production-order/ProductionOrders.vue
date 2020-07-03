@@ -114,10 +114,10 @@
           page,
           size
         });
-        this.outProductionOrderStateCount();
+        this.productionOrderStateCount();
       },
-      async outProductionOrderStateCount () {
-        const url = this.apis().outProductionOrderStateCount();
+      async productionOrderStateCount () {
+        const url = this.apis().productionOrderStateCount();
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.stateCount = {};

@@ -27,9 +27,14 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="审批状态" prop="status">
+      <el-table-column label="审批状态">
         <template slot-scope="scope">
           <span>{{scope.row.auditState!=null? getEnum('SalesProductionAuditStatus', scope.row.auditState):''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="status">
+        <template slot-scope="scope">
+          <span>{{getEnum('SalesProductionOrderState', scope.row.state)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单标签" min-width="100">
