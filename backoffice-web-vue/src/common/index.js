@@ -782,12 +782,20 @@ const COMMON_APIS = {
   },
   // 待接订单状态统计
   pendingOrderStateCount () {
-    return '/b2b/out/order/state/count';
+    return '/b2b/out/order/pending/state/count';
   },
   // 生产工单状态统计
   productionOrderStateCount () {
     return '/b2b/production/task/order/state/count';
-  }
+  },
+  // 外发订单状态统计
+  outboundOrderStateCount () {
+    return '/b2b/out/order/state/count';
+  },
+  // 进度工单状态统计
+  progressOrderStateCount () {
+    return '/b2b/orders/production/work/state/count';
+  } 
 };
 
 let TENANT_APIS = {

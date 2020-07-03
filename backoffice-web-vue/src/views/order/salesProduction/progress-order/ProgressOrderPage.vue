@@ -13,7 +13,7 @@
       <progress-order-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
-          <el-tab-pane :name="item.code" :key="item.code" :label="item.name">
+          <el-tab-pane :name="item.code" :key="item.code" :label="tabName(item)">
             <progress-order-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
           </el-tab-pane>
         </template>
@@ -59,6 +59,7 @@
         const query = this.queryFormData;
         const url = this.apis().getProgressOrderList();
         this.searchAdvanced({url, query, page, size});
+        this.progressOrderStateCount();
       },
       async getPhaseList () {
         const url = this.apis().getProgressPhaseList();
@@ -77,8 +78,23 @@
           })
         })
       },
+      async progressOrderStateCount () {
+        const url = this.apis().progressOrderStateCount();
+        const result = await this.$http.get(url);
+        this.stateCount = result.data;
+      },
+      tabName (tab) {
+        let index = this.stateCount.findIndex(item => item.stateName == tab.name);
+        if (index > -1) {
+          return tab.name +'('+ this.stateCount[index].count +')';
+        }
+        // if (this.stateCount.hasOwnProperty(tab.code)) {
+        //   return tab.name +'('+ this.stateCount[tab.code] +')';  
+        // }
+        return tab.name;
+      },
       handleClick (tab, event) {
-        this.queryFormData.statuses = tab.name;
+        this.queryFormData.state = tab.name;
         this.onAdvancedSearch();
       }
     },
@@ -91,11 +107,12 @@
         }],
         queryFormData: {
           keyword: '',
-          statuses: '',
+          state: '',
           expectedDeliveryDateFrom: '',
           expectedDeliveryDateTo: '',
           operatorName: ''
         },
+        stateCount: {}
       }
     },
     created() {

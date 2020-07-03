@@ -10,7 +10,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="产品" min-width="150">
+      <el-table-column label="产品" min-width="180">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
@@ -31,15 +31,15 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品类">
+      <el-table-column label="品类" min-width="130">
         <template slot-scope="scope">
           <span>{{scope.row.product !=null ? 
             scope.row.product.category.parent.name + '-' + scope.row.product.category.name : ''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="客户"></el-table-column>
+      <!-- <el-table-column label="客户"></el-table-column> -->
       <el-table-column label="订单数量" prop="quantity"></el-table-column>
-      <el-table-column label="负责人"></el-table-column>
+      <el-table-column label="负责人" prop="productionLeader.name"></el-table-column>
       <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
       <!-- <el-table-column label="生产订单状态" prop="status" :column-key="'status'" :filters="statuses">
         <template slot-scope="scope"> -->
@@ -47,24 +47,24 @@
           <!-- <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="创建时间" min-width="100">
+      <el-table-column label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交货时间" min-width="100">
+      <el-table-column label="交货时间" min-width="120">
         <template slot-scope="scope">
-          <span>{{scope.row.deliveryDate | formatDate}}</span>
+          <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签">
-        <template slot-scope="scope" v-if="!isOutProduction">
+      <el-table-column label="订单标签" v-if="!isOutProduction && !isAllocating">
+        <template slot-scope="scope">
           <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133">
             {{isOuted(scope.row) ? '已外发' : '未外发'}}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
+      <el-table-column label="状态" v-if="!isAllocating">
         <template slot-scope="scope">
           <span>{{getEnum('ProductionTaskOrderState', scope.row.state)}}</span>
         </template>
@@ -105,6 +105,10 @@
         type: Array
       },
       isOutProduction: {
+        type: Boolean,
+        default: false
+      },
+      isAllocating: {
         type: Boolean,
         default: false
       }

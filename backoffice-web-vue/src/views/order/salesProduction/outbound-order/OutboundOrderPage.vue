@@ -24,7 +24,7 @@
         </div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <template v-for="item in statuses">
-            <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+            <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
               <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
             </el-tab-pane>
           </template>
@@ -103,6 +103,7 @@
         const url = this.apis().getoutboundOrdersList();
         this.setIsAdvancedSearch(true);
         this.searchAdvanced({url, query, page, size});
+        this.outboundOrderStateCount();
       },
       createOutboundOrder () {
         // this.outboundOrderTypeSelect = true;
@@ -112,6 +113,17 @@
             formData: Object.assign({}, this.formData)
           }
         });
+      },
+      async outboundOrderStateCount () {
+        const url = this.apis().outboundOrderStateCount();
+        const result = await this.$http.get(url);
+        this.stateCount = result.data;
+      },
+      tabName (tab) {
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name +'('+ this.stateCount[tab.code] +')';  
+        }
+        return tab.name;
       },
       handleClick (tab, event) {
         this.queryFormData.state = tab.name;
@@ -199,6 +211,7 @@
           name: '',
           hasContact: ''
         },
+        stateCount: {}
       }
     },
     created () {

@@ -91,7 +91,8 @@
       },
       canAudit: function () {
         // 订单审核状态在审核中且登陆账号为审核人
-        return this.formData.sendAuditState == 'AUDITING';
+        return false;
+        // return this.formData.sendAuditState == 'AUDITING';
       }
     },
     methods: {

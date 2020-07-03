@@ -1619,7 +1619,7 @@ const state = {
     code: 'COMPLETED',
     name: '已完成'
   }, {
-    code: 'CANCED',
+    code: 'CANCELED',
     name: '已取消'
   }],
   // 进度工单单据-物料类型状态
