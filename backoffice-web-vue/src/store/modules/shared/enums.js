@@ -1690,7 +1690,7 @@ const state = {
     name: '协同'
   }, {
     code: 'AUTOGESTION',
-    name: '协同'
+    name: '自管'
   }]
 };
 

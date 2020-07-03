@@ -788,6 +788,10 @@ const COMMON_APIS = {
   productionOrderStateCount () {
     return '/b2b/production/task/order/state/count';
   },
+  // 外发生产工单状态统计
+  outProductionOrderStateCount () {
+    return '/b2b/production/task/order/out/state/count';
+  },
   // 外发订单状态统计
   outboundOrderStateCount () {
     return '/b2b/out/order/state/count';

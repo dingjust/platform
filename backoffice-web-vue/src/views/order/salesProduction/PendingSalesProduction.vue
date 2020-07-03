@@ -101,6 +101,14 @@
       async pendingOrderStateCount () {
         const url = this.apis().pendingOrderStateCount();
         const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.stateCount = {};
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          return;
+        }
         this.stateCount = result.data;
       },
       tabName (tab) {

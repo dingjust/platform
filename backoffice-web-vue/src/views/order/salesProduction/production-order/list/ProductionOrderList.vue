@@ -31,7 +31,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品类" min-width="130">
+      <el-table-column label="品类" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.product !=null ? 
             scope.row.product.category.parent.name + '-' + scope.row.product.category.name : ''}}</span>
