@@ -91,8 +91,8 @@
       },
       canAudit: function () {
         // 订单审核状态在审核中且登陆账号为审核人
-        return false;
-        // return this.formData.sendAuditState == 'AUDITING';
+        return this.formData.sendAuditState == 'AUDITING' && 
+          this.formData.sendApprovers[0].uid == this.$store.getters.currentUser.uid;
       }
     },
     methods: {
@@ -143,7 +143,6 @@
       },
       //审批
       onApproval(isPass) {
-        return;
         if (isPass) {
           this.$confirm('是否确认审核通过?', '提示', {
             confirmButtonText: '确定',
@@ -167,7 +166,7 @@
       },
       async _onApproval(isPass, auditMsg) {
         let formData = {
-          id: this.slotData.auditWorkOrder.id,
+          id: this.formData.sendAuditWorkOrder.id,
           auditMsg: auditMsg,
           state: isPass ? 'PASSED' : 'AUDITED_FAILED'
         };
@@ -178,7 +177,7 @@
           return
         }
         this.$message.success('审批成功');
-        this.$emit('callback');
+        this.$router.go(-1);
       },
       async onCancel() {
         const url = this.apis().cancelOutboundOrder(this.formData.code);

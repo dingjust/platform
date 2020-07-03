@@ -48,8 +48,8 @@
     computed: {},
     methods: {
       canModify(row) {
-        if (!row.merchandiser) {
-          return;
+        if (!row.merchandiser || row.state == 'CANCELED') {
+          return false;
         }
         return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
           (row.sendAuditState == 'AUDITED_FAILED' || row.acceptState == 'REJECTED' || row.sendAuditState == 'NONE');
