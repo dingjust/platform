@@ -109,7 +109,7 @@
             this.$router.push('/sales/plan/' + row.auditModel.id);
             break;
           case 'OutboundOrder':
-            this.$router.push('/sales/outboundOrder/' + row.originCode);
+            this.$router.push('/sales/outboundOrder/' + row.auditModel.id);
             break;
         }
       },

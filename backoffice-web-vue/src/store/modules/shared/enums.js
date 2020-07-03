@@ -1562,7 +1562,7 @@ const state = {
     code: 'AUDIT_REJECTED',
     name: '审核驳回'
   }, {
-    code: 'PRODUCING',
+    code: 'AUDIT_PASSED',
     name: '生产中'
   }, {
     code: 'COMPLETED',
@@ -1613,7 +1613,7 @@ const state = {
     code: 'TO_BE_ACCEPTED',
     name: '待接单'
   }, {
-    code: 'PRODUCING',
+    code: 'AUDIT_PASSED',
     name: '生产中'
   }, {
     code: 'COMPLETED',
