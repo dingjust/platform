@@ -43,9 +43,11 @@
     computed: {},
     methods: {
       canModify(row) {
+        if (!row.merchandiser) {
+          return;
+        }
         return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
           (row.sendAuditState == 'AUDITED_FAILED' || row.acceptState == 'REJECTED' || row.sendAuditState == 'NONE');
-        // return row.belongTo.uid == this.$store.getters.currentUser.companyCode && (row.status == 'NOT_COMMITED' || row.status == 'REJECTED_CONFIRM');
       },
       getCooperator(row) {
         return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;

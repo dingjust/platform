@@ -124,6 +124,9 @@
       },
       // 判断是否能签署合同
       canSign: function () {
+        if (!this.slotData.merchandiser) {
+          return;
+        }
         // 未签合同 && 账号为merchandiser && 审核状态为 PASSED
         return this.slotData.agreements &&
           this.slotData.agreements.length <= 0 &&

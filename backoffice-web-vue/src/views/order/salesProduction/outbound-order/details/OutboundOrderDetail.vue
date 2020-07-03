@@ -25,6 +25,14 @@
         <el-button class="purchase-order-btn2" @click="onGenerateUniqueCode" v-if="canGenerate">唯一码</el-button>
         <el-button class="purchase-order-btn2" @click="onCancel" v-if="this.formData.status != ''">取消订单</el-button>
       </el-row>
+      <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
+        <el-col :span="3">
+          <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+        </el-col>
+        <el-col :span="3">
+          <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+        </el-col>
+      </el-row>
     </el-card>
     <el-dialog :visible.sync="uniqueCodeFormVisible" width="30%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -80,6 +88,10 @@
         // } else {
         //   return false;
         // }
+      },
+      canAudit: function () {
+        // 订单审核状态在审核中且登陆账号为审核人
+        return this.formData.sendAuditState == 'AUDITING';
       }
     },
     methods: {
@@ -127,6 +139,45 @@
           }
         });
         this.$set(this.payPlan,'1',1);
+      },
+      //审批
+      onApproval(isPass) {
+        return;
+        if (isPass) {
+          this.$confirm('是否确认审核通过?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this._onApproval(isPass, '');
+          });
+        } else {
+          this.$prompt('请输入不通过原因', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }).then(({
+            value
+          }) => {
+            this._onApproval(isPass, value);
+          }).catch(() => {
+            //TODO:取消操作
+          });
+        }
+      },
+      async _onApproval(isPass, auditMsg) {
+        let formData = {
+          id: this.slotData.auditWorkOrder.id,
+          auditMsg: auditMsg,
+          state: isPass ? 'PASSED' : 'AUDITED_FAILED'
+        };
+        const url = this.apis().taskAudit();
+        const result = await this.$http.post(url, formData);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return
+        }
+        this.$message.success('审批成功');
+        this.$emit('callback');
       },
       async onCancel() {
         const url = this.apis().cancelOutboundOrder(this.formData.code);
@@ -204,6 +255,22 @@
     background: #FFD60C;
     color: rgba(0, 0, 0, 0.85);
     width: 200px;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
+  }
+
+  .material-btn_red {
+    background-color: red;
+    /* border-color: #FFD5CE; */
+    color: white;
+    width: 90px;
+    height: 35px;
   }
 
 </style>
