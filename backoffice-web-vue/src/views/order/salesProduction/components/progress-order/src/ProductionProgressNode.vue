@@ -5,7 +5,7 @@
     </el-row>
     <div class="progress-modal" v-show="showButton" v-if="modalExist">
       <el-row type="flex" justify="center" align="middle" class="progress-modal-row">
-        <el-button type="primary" plain @click="estimatedFormVisible=true">设置预计完成时间</el-button>
+        <el-button type="primary" plain @click="estimatedFormVisible=true" :disabled="!canEdit">设置预计完成时间</el-button>
       </el-row>
     </div>
     <el-dialog :visible.sync="estimatedFormVisible" width="30%" class="purchase-dialog" append-to-body
@@ -24,7 +24,7 @@
       ProductionProgressNodeInfo,
       ProductionProgressDateSettingForm
     },
-    props: ['slotData'],
+    props: ['slotData', 'canEdit'],
     computed: {
       //还没设置预计完成时间
       modalExist: function () {

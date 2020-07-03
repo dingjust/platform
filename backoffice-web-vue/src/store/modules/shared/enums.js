@@ -1535,7 +1535,7 @@ const state = {
   },
   {
     code: 'AUDITED_FAILED',
-    name: '审核驳货'
+    name: '审核驳回'
   }
   ],
   // 生产任务状态

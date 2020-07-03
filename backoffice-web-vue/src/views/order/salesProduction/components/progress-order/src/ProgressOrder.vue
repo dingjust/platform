@@ -11,7 +11,7 @@
     <el-row type="flex" justify="center" class="pp-basic-row">
       <el-col :span="23">
         <el-card>
-          <production-progress-node v-if="hasData" :slotData="slotData"
+          <production-progress-node v-if="hasData" :slotData="slotData" :canEdit="canEdit"
             @callback="onCallBack" />
           <el-row v-else type="flex" justify="center">暂无数据</el-row>
         </el-card>
@@ -59,10 +59,12 @@
         }
       },
       canEdit: function () {
-        return (this.$store.getters.currentUser.uid == this.order.merchandiser.uid || 
-                this.$store.getters.currentUser.uid == this.order.productionLeader.uid) &&
-                (this.order.state == 'TO_BE_PRODUCED' ||
-                this.order.state == 'PRODUCING')
+        if (this.order != null) {
+          return (this.order.state == 'TO_BE_PRODUCED' ||
+                  this.order.state == 'PRODUCING') && 
+                  (this.$store.getters.currentUser.uid == this.order.merchandiser.uid || 
+                  this.$store.getters.currentUser.uid == this.order.productionLeader.uid)
+        }
       }
     },
     methods: {

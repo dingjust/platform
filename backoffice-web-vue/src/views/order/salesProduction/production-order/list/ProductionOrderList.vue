@@ -10,7 +10,7 @@
           </el-row>
         </template> -->
         <template slot-scope="scope">
-          <el-row type="flex" justify="space-between" align="middle">
+          <el-row type="flex" justify="space-between" align="middle" v-if="!isAllocating && !isOutProduction">
             <el-tag type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
               {{getEnum('ProductionTaskOrderType', scope.row.type)}}</el-tag>
           </el-row>
@@ -176,7 +176,7 @@
         return amount;
       },
       rowDisabled (row, index) {
-        if (row.outboundOrderCode) {
+        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
           return false;
         }
         return true;
@@ -185,7 +185,7 @@
         this.selectRow = val;
       },
       rowClick (row, column, event) {
-        if (row.outboundOrderCode) {
+        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
           return;
         }
         this.$refs.resultTable.toggleRowSelection(row);

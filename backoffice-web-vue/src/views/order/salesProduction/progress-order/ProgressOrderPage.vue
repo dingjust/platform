@@ -75,7 +75,7 @@
         result.data.content.forEach(item => {
           this.statuses.push({
             name: item.name,
-            code: item.id
+            code: item.id + ''
           })
         })
       },
@@ -121,7 +121,7 @@
           expectedDeliveryDateTo: '',
           operatorName: ''
         },
-        stateCount: {}
+        stateCount: []
       }
     },
     created() {
