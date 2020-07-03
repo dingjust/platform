@@ -48,6 +48,9 @@
       },
       order: {
         type: Object
+      },
+      formData: {
+        type: Object
       }
     },
     computed: {
@@ -77,7 +80,7 @@
           this.$router.push({
             name: '创建进度工单',
             params: {
-              order: this.order
+              order: this.formData
             }
           })
         }
