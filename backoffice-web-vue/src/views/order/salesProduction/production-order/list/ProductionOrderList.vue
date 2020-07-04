@@ -56,10 +56,13 @@
         </template>
       </el-table-column>
       <el-table-column label="订单标签" v-if="!isOutProduction && !isAllocating">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.type == 'FOUNDRY_PRODUCTION'">
           <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133">
             {{isOuted(scope.row) ? '已外发' : '未外发'}}
           </el-tag>
+        </template>
+        <template slot-scope="scope" v-if="scope.row.type == 'SELF_PRODUCED'">
+          <el-tag color="#FFD60C" style="color: #303133">自产</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="状态" min-width="60" v-if="!isAllocating">
