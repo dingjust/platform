@@ -476,17 +476,12 @@
           if (this.formData.taskOrderEntries.length <= 0) {
             this.addRow();
           }
-          if (this.$route.params.formData.targetCooperator.id != '') {
-            this.formData.outboundCompanyName = this.$route.params.formData.targetCooperator.partner.name;
-            this.formData.outboundContactPerson = this.$route.params.formData.targetCooperator.partner.contactPerson;
-            this.formData.outboundContactPhone = this.$route.params.formData.targetCooperator.partner.contactPhone;
-            this.formData.attachments = [];
-          }
-          if (this.formData.taskOrderEntries.length > 0) {
-            this.formData.taskOrderEntries.forEach(item => {
-              this.$set(item, 'originOrder', {id: item.id});
-            })
-          }
+          // if (this.$route.params.formData.targetCooperator.id != '') {
+          //   this.formData.outboundCompanyName = this.$route.params.formData.targetCooperator.partner.name;
+          //   this.formData.outboundContactPerson = this.$route.params.formData.targetCooperator.partner.contactPerson;
+          //   this.formData.outboundContactPhone = this.$route.params.formData.targetCooperator.partner.contactPhone;
+          //   this.formData.attachments = [];
+          // }
         } else {
           this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
         }

@@ -11,7 +11,7 @@
       </el-row>
       <div class="pt-2"></div>
       <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"
-                              :queryFormData="queryFormData"/>
+        :queryFormData="queryFormData" />
       <div>
         <!-- <div class="tag-container">
           <el-row type="flex" justify="start" align="middle">
@@ -25,14 +25,15 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <template v-for="item in statuses">
             <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
-              <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
+              <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify" />
             </el-tab-pane>
           </template>
         </el-tabs>
       </div>
     </el-card>
-    <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData"/>
+    <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData" />
     </el-dialog>
   </div>
 </template>
@@ -87,7 +88,7 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         const keyword = this.keyword;
         const url = this.apis().getoutboundOrdersList();
         this.setIsAdvancedSearch(false);
@@ -98,14 +99,19 @@
           size
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         const query = this.queryFormData;
         const url = this.apis().getoutboundOrdersList();
         this.setIsAdvancedSearch(true);
-        this.searchAdvanced({url, query, page, size});
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size
+        });
         this.outboundOrderStateCount();
       },
-      createOutboundOrder () {
+      createOutboundOrder() {
         // this.outboundOrderTypeSelect = true;
         this.$router.push({
           name: '创建外发订单',
@@ -114,44 +120,69 @@
           }
         });
       },
-      async outboundOrderStateCount () {
+      async outboundOrderStateCount() {
         const url = this.apis().outboundOrderStateCount();
         const result = await this.$http.get(url);
         this.stateCount = result.data;
       },
-      tabName (tab) {
+      tabName(tab) {
         if (this.stateCount.hasOwnProperty(tab.code)) {
-          return tab.name +'('+ this.stateCount[tab.code] +')';  
+          return tab.name + '(' + this.stateCount[tab.code] + ')';
         }
         return tab.name;
       },
-      handleClick (tab, event) {
+      handleClick(tab, event) {
         this.queryFormData.state = tab.name;
         this.onAdvancedSearch();
       },
-      setQuery (flag) {
+      setQuery(flag) {
         if (flag) {
           this.queryFormData.hasContact = 'hasContact';
         } else {
           this.queryFormData.hasContact = 'notHasContact';
-        } 
+        }
       },
-      async onModify (id) {
+      async onModify(id) {
         const url = this.apis().getoutboundOrderDetail(id);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
+        let formData = this.setFormData(result.data);
         await this.$router.push({
           name: '创建外发订单',
           params: {
-            formData: result.data
+            formData: formData
           }
         });
+      },
+      setFormData (data) {
+        let formData = {
+          id: data.id,
+          managementMode: data.managementMode,
+          outboundCompanyName: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.name : data.targetCooperator.name,
+          outboundContactPerson: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPerson : data.targetCooperator.contactPerson,
+          outboundContactPhone: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPhone : data.targetCooperator.contactPhone,
+          targetCooperator: {
+            id: data.targetCooperator.id
+          },
+          taskOrderEntries: data.taskOrderEntries,
+          cooperationMode: data.cooperationMode,
+          invoiceNeeded: data.invoiceNeeded,
+          invoiceTaxPoint: data.invoiceTaxPoint,
+          freightPayer: data.freightPayer,
+          remarks: data.remarks,
+          sendAuditNeeded: data.sendAuditNeeded,
+          payPlan: data.payPlan,
+          attachments: data.attachments ? data.attachments : [],
+          sendApprovers: data.sendApprovers,
+          merchandiser: data.merchandiser
+        }
+        return formData;
       }
     },
-    data () {
+    data() {
       return {
         outboundOrderTypeSelect: false,
         activeName: 'TO_BE_SUBMITTED',
@@ -214,19 +245,19 @@
         stateCount: {}
       }
     },
-    created () {
+    created() {
       this.onAdvancedSearch();
       this.statuses.push({
         code: '',
         name: '全部'
       })
     },
-    mounted () {
+    mounted() {
 
     },
-    destroyed() {
-    }
+    destroyed() {}
   };
+
 </script>
 
 <style scoped>
@@ -251,4 +282,5 @@
   .type-btn:focus {
     outline: 0;
   }
+
 </style>
