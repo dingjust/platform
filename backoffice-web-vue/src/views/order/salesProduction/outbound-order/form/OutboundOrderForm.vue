@@ -482,6 +482,11 @@
             this.formData.outboundContactPhone = this.$route.params.formData.targetCooperator.partner.contactPhone;
             this.formData.attachments = [];
           }
+          if (this.formData.taskOrderEntries.length > 0) {
+            this.formData.taskOrderEntries.forEach(item => {
+              this.$set(item, 'originOrder', {id: item.id});
+            })
+          }
         } else {
           this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
         }

@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true" label-position="left">
       <el-row type="flex" justify="space-between">
-        <el-col :span="17">
+        <el-col :span="19">
           <el-form-item label="订单信息" prop="name">
             <el-input placeholder="订单号，订单名称" v-model="queryFormData.keyword" class="input-item"></el-input>
           </el-form-item>
@@ -23,12 +23,14 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
-        <el-col :span="7" v-if="isPending">
+        <el-col :span="5" v-if="isPending">
           <el-row type="flex" justify="end">
-            <el-button v-if="isPending" type="primary" size="small" @click="onUniqueCodeImport">唯一码导入</el-button>
+            <el-button-group>
+              <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入</el-button>
+            </el-button-group>
           </el-row>
         </el-col>
-        <el-col :span="7" v-if="!isPending">
+        <el-col :span="5" v-if="!isPending">
           <el-row type="flex" justify="end">
             <el-button-group>
               <el-button size="small" @click="createSalesPlan">创建销售计划</el-button>
@@ -169,7 +171,7 @@
 </script>
 <style scoped>
   .input-item {
-    width: 140px;    
+    width: 170px;    
   }
 
   .toolbar-search_input {

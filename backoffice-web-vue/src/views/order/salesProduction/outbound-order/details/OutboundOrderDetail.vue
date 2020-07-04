@@ -177,7 +177,8 @@
           return
         }
         this.$message.success('审批成功');
-        this.$router.go(-1);
+        // this.$router.go(-1);
+        this.getDetail();
       },
       async onCancel() {
         const url = this.apis().cancelOutboundOrder(this.formData.code);

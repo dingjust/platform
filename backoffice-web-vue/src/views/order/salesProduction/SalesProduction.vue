@@ -8,6 +8,7 @@
           </div>
         </el-col>
       </el-row>
+      <div class="pt-2"></div>
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"
         @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"
         @onUniqueCodeImport="onUniqueCodeImport" />
