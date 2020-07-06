@@ -35,7 +35,19 @@ const Product = {
 
 const RelationOrder = {
   template: `
-  <el-table-column label="关联订单"></el-table-column>`
+  <el-table-column label="关联订单" min-width="120px">
+  <template slot-scope="scope">
+    <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
+      @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
+    </el-button>
+  </template>
+</el-table-column>`,
+  methods: {
+    //跳转生产订单明细
+    onProductionOrderDetail(id) {
+      this.$router.push('/sales/productionOrder/' + id);
+    },
+  }
 }
 
 const ShipParty = {
@@ -43,7 +55,12 @@ const ShipParty = {
 }
 
 const UnitPrice = {
-  template: `<el-table-column label="单价"></el-table-column>`
+  template: `
+  <el-table-column label="单价">
+    <template slot-scope="scope">
+      <span v-if="scope.row.productionTaskOrder!=null">{{scope.row.productionTaskOrder.unitPrice}}</span>
+    </template>
+  </el-table-column>`
 }
 
 const ShipNum = {

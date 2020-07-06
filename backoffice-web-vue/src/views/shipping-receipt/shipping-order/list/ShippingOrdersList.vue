@@ -3,8 +3,8 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange" @row-click="rowClick">
       <el-table-column type="selection" width="55" v-if="canCreateReceipt"></el-table-column>
-      <el-table-column label="发货单号" prop="code" min-width="120"></el-table-column>
-      <el-table-column label="产品名称" min-width="150">
+      <el-table-column label="发货单号" prop="code" min-width="120px"></el-table-column>
+      <el-table-column label="产品名称" min-width="150px">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
@@ -22,7 +22,13 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="关联订单"></el-table-column>
+      <el-table-column label="关联订单" min-width="120px">
+        <template slot-scope="scope">
+          <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
+            @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
+          </el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="发货人" prop="shipParty.name"></el-table-column>
       <el-table-column label="发货数量">
         <template slot-scope="scope">
@@ -34,11 +40,41 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收货单"></el-table-column>
-      <el-table-column label="收货数量"></el-table-column>
-      <el-table-column label="退货单"></el-table-column>
-      <el-table-column label="退货数/退货已收数"></el-table-column>
-      <el-table-column label="差异数"></el-table-column>
+      <el-table-column label="收货单">
+        <template slot-scope="scope" v-if="scope.row.receiptSheets!=null">
+          <template v-for="(sheet,sheetIndex) in scope.row.receiptSheets">
+            <el-row :key="'sheet'+sheetIndex" type="flex">
+              <el-button type="text" @click="onReceiptDetail(scope.row.receiptSheets[sheetIndex].id)">
+                {{scope.row.receiptSheets[sheetIndex].code}}</el-button>
+            </el-row>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column label="收货数量">
+        <template slot-scope="scope" v-if="scope.row.receiptSheets!=null">
+          <span>{{countTotalSheetsNum(scope.row.receiptSheets)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="退货单">
+        <template slot-scope="scope" v-if="scope.row.returnSheets!=null">
+          <template v-for="(sheet,sheetIndex) in scope.row.returnSheets">
+            <el-row :key="'sheet'+sheetIndex" type="flex">
+              <el-button type="text" @click="onReturnDetail(scope.row.returnSheets[sheetIndex].id)">
+                {{scope.row.returnSheets[sheetIndex].code}}</el-button>
+            </el-row>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column label="退货数/退货已收数">
+        <template slot-scope="scope">
+          <span>{{scope.row.returnQuantity}}/{{scope.row.returnReceivedQuantity}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="差异数">
+        <template slot-scope="scope">
+          <span>{{scope.row.diffQuantity}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
@@ -88,6 +124,15 @@
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
+      onProductionOrderDetail(id) {
+        this.$router.push('/sales/productionOrder/' + id);
+      },
+      onReceiptDetail(id) {
+        this.$router.push('/receipt/orders/' + id);
+      },
+      onReturnDetail(id) {
+        this.$router.push('/returned/orders/' + id);
+      },
       handleSelectionChange(val) {
         // 限制单选
         if (val.length > 1) {
@@ -110,6 +155,17 @@
             this.$refs.resultTable.toggleRowSelection(row, true);
           }
         }
+      },
+      //统计单数
+      countTotalSheetsNum(sheets) {
+        let result = 0;
+        sheets.forEach(element => {
+          let num = parseInt(element.totalQuantity);
+          if (!Number.isNaN(num)) {
+            result += num;
+          }
+        });
+        return result;
       },
       //统计发货数量
       getTotalNum(order) {
