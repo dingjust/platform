@@ -95,7 +95,7 @@
       },
       async outProductionOrderStateCount () {
         const url = this.apis().outProductionOrderStateCount();
-        const result = await this.$http.get(url);
+        const result = await this.$http.post(url, this.queryFormData);
         if (result['errors']) {
           this.stateCount = {};
           return;
@@ -123,11 +123,6 @@
         activeStatus: 'TO_BE_PRODUCED',
         statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
         queryFormData: {
-          code: '',
-          requirementOrderCode: '',
-          skuID: '',
-          expectedDeliveryDateFrom: null,
-          expectedDeliveryDateTo: null,
           createdDateFrom: null,
           createdDateTo: null,
           keyword: '',

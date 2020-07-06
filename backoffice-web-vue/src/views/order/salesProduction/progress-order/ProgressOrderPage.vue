@@ -81,7 +81,7 @@
       },
       async progressOrderStateCount () {
         const url = this.apis().progressOrderStateCount();
-        const result = await this.$http.get(url);
+        const result = await this.$http.post(url, this.queryFormData);
         if (result['errors']) {
           this.stateCount = {};
           return;

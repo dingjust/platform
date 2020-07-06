@@ -122,7 +122,7 @@
       },
       async outboundOrderStateCount() {
         const url = this.apis().outboundOrderStateCount();
-        const result = await this.$http.get(url);
+        const result = await this.$http.post(url, this.queryFormData);
         this.stateCount = result.data;
       },
       tabName(tab) {
@@ -239,8 +239,7 @@
           targetCooperator: '',
           merchandiser: '',
           state: 'TO_BE_SUBMITTED',
-          name: '',
-          hasContact: ''
+          name: ''
         },
         stateCount: {}
       }

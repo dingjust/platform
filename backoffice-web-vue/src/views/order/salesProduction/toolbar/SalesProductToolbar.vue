@@ -9,12 +9,12 @@
         <!-- </el-col> -->
         <!-- <el-col :span="5"> -->
           <el-form-item label="负责人" prop="name">
-            <el-input placeholder="跟单员姓名" v-model="queryFormData.name" class="input-item"></el-input>
+            <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input>
           </el-form-item>
         <!-- </el-col> -->
         <!-- <el-col :span="5"> -->
           <el-form-item label="合作商" prop="name">
-            <el-input placeholder="合作商名称" v-model="queryFormData.name" class="input-item"></el-input>
+            <el-input placeholder="合作商名称" v-model="queryFormData.originCooperator" class="input-item"></el-input>
           </el-form-item>
         <!-- </el-col> -->
         <!-- <el-col :span="1" style="margin-right:10px"> -->
@@ -142,10 +142,8 @@
       },
       onReset() {
         this.queryFormData.keyword = '';
-        this.queryFormData.name = '';
-        this.queryFormData.hasContact = '';
-        this.queryFormData.isArrears = '';
-        this.queryFormData.isDelay = '';
+        this.queryFormData.planLeader = '';
+        this.queryFormData.originCooperator = '';
       }
     },
     created() {
