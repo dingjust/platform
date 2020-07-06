@@ -76,7 +76,7 @@
         this.$router.push('/receipt/orders/' + id);
       },
       onReturnDetail(id) {
-
+        this.$router.push('/returned/orders/' + id);
       },
       //统计单数
       countTotalSheetsNum(sheets) {

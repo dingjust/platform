@@ -226,9 +226,14 @@
           cancelButtonText: '下次再说',
           type: 'info'
         }).then(() => {
-
+          this.$router.push({
+            name: '创建退货单',
+            params: {
+              shippingOrder: this.shippingOder,
+            }
+          });
         }).catch(() => {
-
+          this.$$router.go(-1);
         });
       }
     },

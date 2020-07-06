@@ -19,8 +19,8 @@
       </tr>
       <template v-for="(entry,entryIndex) in data">
         <template v-for="(color,colorIndex) in colors">
-          <tr :key="'entry'+entryIndex+'color'+colorIndex" v-if="readOnly?countColorsAmount(color,entryIndex)!=0:true">
-            <td v-if="colorIndex==0" :rowspan="getRowspanLength(entryIndex)">
+          <tr :key="'entry'+entryIndex+'color'+colorIndex" v-if="showTr(color, entryIndex)">
+            <td v-if="showTd(colorIndex,entryIndex)" :rowspan="getRowspanLength(entryIndex)">
               <el-row type="flex" justify="center">
                 <div class="index-container">
                   <el-row type="flex" justify="center" align="middle">
@@ -49,9 +49,11 @@
             <td style="width:100px" class="grey-td">
               {{countColorsAmount(color,entryIndex)}}
             </td>
-            <td v-if="colorIndex==0" :rowspan="colors.length" style="width:100px">
-              {{countEntryAmount(entryIndex)}}
-            </td>
+            <template v-if="showTd(colorIndex,entryIndex)">
+              <td :rowspan="getRowspanLength(entryIndex)" style="width:100px">
+                {{countEntryAmount(entryIndex)}}
+              </td>
+            </template>
           </tr>
         </template>
       </template>
@@ -143,11 +145,22 @@
         });
         return amount;
       },
+      colorsEntriesAmountArray: function () {
+        let result = [];
+        for (let i = 0; i < this.data.length; i++) {
+          let colorAmounts = this.colors.map(color => {
+            return this.countColorsAmount(color, i);
+          });
+          result.push(colorAmounts);
+        }
+        return result;
+      }
     },
     methods: {
       //获取颜色尺码对应entry
       getEntryByColorSize(color, size, entryIndex) {
-        let index = this.data[entryIndex].colorSizeEntries.findIndex(entry => entry.color.code == color.code && entry.size.code == size
+        let index = this.data[entryIndex].colorSizeEntries.findIndex(entry => entry.color.code == color.code && entry
+          .size.code == size
           .code);
         if (index != -1) {
           return this.data[entryIndex].colorSizeEntries[index];
@@ -165,7 +178,7 @@
       },
       countColorsAmount(color, entryIndex) {
         var amount = 0;
-        if (this.data != null) {
+        if (this.data != null && this.data[entryIndex] != null) {
           this.data[entryIndex].colorSizeEntries.filter(entry => entry.color.code == color.code).forEach(entry => {
             let num = parseFloat(entry.quantity);
             if (!Number.isNaN(num)) {
@@ -204,16 +217,16 @@
       },
       //计算行合并值
       getRowspanLength(index) {
-        //若只读则省略合计为0的颜色行
+        // //若只读则省略合计为0的颜色行
         if (this.readOnly) {
           //先计算该entry忽略颜色行的值
           let num = 0;
           this.colors.forEach(color => {
             if (this.countColorsAmount(color, index) == 0) {
-              num++;
+              num += 1;
             }
           });
-          return this.colors.length - num;
+          return parseInt(this.colors.length - num);
         } else {
           return this.colors.length;
         }
@@ -234,7 +247,26 @@
       },
       onDeleteRow(entryIndex) {
         this.data.splice(entryIndex, 1);
-      }
+      },
+      //行是否隐藏
+      showTr(color, entryIndex) {
+        //若非只读则不隐藏
+        if (this.readOnly) {
+          let colorsAmount = this.countColorsAmount(color, entryIndex);
+          return colorsAmount != 0;
+        } else {
+          return true;
+        }
+      },
+      //头尾格是否隐藏
+      showTd(colorIndex, entryIndex) {
+        if (this.readOnly) {
+          let index = this.colorsEntriesAmountArray[entryIndex].findIndex(amount => amount != 0);
+          return colorIndex == index;
+        } else {
+          return colorIndex == 0;
+        }
+      },
     },
     created() {
       if (this.vdata.length != 0) {
@@ -258,7 +290,10 @@
     },
     data() {
       return {
-        data: []
+        data: [],
+        //记录td显示值状态
+        tdHeadShowArray: [],
+        tdTailShowArray: []
       }
     }
   }

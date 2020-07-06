@@ -72,18 +72,20 @@
           </el-row>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-row">
+      <el-row type="flex" justify="start" class="basic-row" v-if="formData.packageSheets!=null">
         <el-col :span="24">
           <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
         </el-col>
       </el-row>
-      <el-row type="flex">
-        <el-input type="textarea" placeholder="输入退货原因" v-model="formData.remarks" :rows="5" :disabled="true">
-        </el-input>
+      <el-row type="flex" :gutter="20" style="margin-top:20px">
+        <el-col :span="24">
+          <el-input type="textarea" placeholder="输入退货原因" v-model="formData.remarks" :rows="5" :disabled="true">
+          </el-input>
+        </el-col>
       </el-row>
-      <el-row type="flex">
+      <el-row type="flex" style="margin-top:20px">
         <template v-for="(media,index) in formData.medias">
-          <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="formData.medias">
+          <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="mediasUrlList">
           </el-image>
         </template>
       </el-row>
@@ -127,6 +129,10 @@
           return false;
         }
       },
+      //图片url list
+      mediasUrlList: function () {
+        return this.formData.medias.map(media => media.url);
+      }
     },
     methods: {
       async getDetail() {
