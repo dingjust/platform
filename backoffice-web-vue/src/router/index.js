@@ -744,7 +744,7 @@ const router = new Router({
             {
               path: 'orders/:id',
               name: '发货单详情',
-              props:true,
+              props: true,
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-order/details/ShippingOrdersDetail')
             },
             {
@@ -817,12 +817,17 @@ const router = new Router({
               return c('router-view');
             }
           },
-          children: [
-            //   {
-            //   path: 'orders',
-            //   name: '退货单',
-            //   component: () => import( /* webpackChunkName: 'returned' */ '@/views/receipt/receipt-order/ReceiptOrdersPage')
-            // },
+          children: [{
+              path: 'orders/:id',
+              name: '退货单详情',
+              props: true,
+              component: () => import( /* webpackChunkName: 'returned' */ '@/views/shipping-receipt/return-order/details/ReturnOrderDetail')
+            },
+            {
+              path: 'create/orders',
+              name: '创建退货单',
+              component: () => import( /* webpackChunkName: 'returned' */ '@/views/shipping-receipt/return-order/form/ReturnOrdersForm')
+            },
           ]
         },
         {
@@ -883,7 +888,11 @@ const router = new Router({
       component: () => import('@/views/error-page/404'),
       hidden: true
     },
-    { path: '*', redirect: '/404', hidden: true }
+    {
+      path: '*',
+      redirect: '/404',
+      hidden: true
+    }
   ]
 });
 

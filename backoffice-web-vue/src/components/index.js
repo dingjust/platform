@@ -7,6 +7,7 @@ import FactoryItem from './custom/item/FactoryItem';
 
 // Custom/order-form
 import MTAVAT from './custom/order-form/MTAVAT';
+import AddressForm from './custom/order-form/AddressForm';
 import MyAddressForm from './custom/order-form/MyAddressForm';
 import MyPayPlanForm from './custom/order-form/MyPayPlanForm';
 import PayPlanFormV2 from './custom/order-form/PayPlanFormV2';
@@ -78,6 +79,7 @@ export {
   PayPlanFormV2,
   PayPlanInfo,
   PDFUpload,
+  AddressForm,
   AddressSelect,
   ApprovalStatus,
   CategorySelect,

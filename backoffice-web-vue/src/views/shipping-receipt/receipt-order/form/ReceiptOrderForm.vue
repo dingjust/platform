@@ -11,20 +11,14 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="4">
           <div class="title">
-            <h6>收货单详情</h6>
+            <h6>创建收货单</h6>
           </div>
-        </el-col>
-        <el-col :span="4">
-          <div>
-            <h6>状态：待核验</h6>
-          </div>
-        </el-col>
+        </el-col>        
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="3">
-          <!-- <img width="54px" height="54px"
-              :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'"> -->
-          <img width="100px" height="100px" :src="'static/img/nopicture.png'">
+          <img width="100px" height="100px"
+            :src="shippingOder.product.thumbnail!=null&&shippingOder.product.thumbnail.length!=0?shippingOder.product.thumbnail.url:'static/img/nopicture.png'">
         </el-col>
         <el-col :span="21">
           <el-row type="flex" style="padding: 10px 0px">
@@ -219,6 +213,8 @@
           //有退货则提示创建退货单
           if (this.isHaveReturn) {
             this.onReturnedMessage();
+          }else{
+            this.$router.go(-1);
           }
         }
       },

@@ -76,7 +76,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    //设置筛选收货方
+    //设置筛选发货方
     query['shipParty'] = companyCode;
 
     const response = await http.post(url, query, {

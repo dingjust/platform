@@ -769,37 +769,37 @@ const COMMON_APIS = {
     return '/b2b/sheets/progress/work/update/progresses/date'
   },
   // 分配工单任务
-  allocatingProductionOrder () {
+  allocatingProductionOrder() {
     return '/b2b/production/task/order/update/merchandiser'
   },
   // 创建进度工单
-  createProgressOrder (id) {
+  createProgressOrder(id) {
     return '/b2b/orders/production/work/create/' + id;
   },
   // 销售订单状态统计
-  salesOrderStateCount () {
+  salesOrderStateCount() {
     return '/b2b/sales/production/order/state/count';
   },
   // 待接订单状态统计
-  pendingOrderStateCount () {
+  pendingOrderStateCount() {
     return '/b2b/out/order/pending/state/count';
   },
   // 生产工单状态统计
-  productionOrderStateCount () {
+  productionOrderStateCount() {
     return '/b2b/production/task/order/state/count';
   },
   // 外发生产工单状态统计
-  outProductionOrderStateCount () {
+  outProductionOrderStateCount() {
     return '/b2b/production/task/order/out/state/count';
   },
   // 外发订单状态统计
-  outboundOrderStateCount () {
+  outboundOrderStateCount() {
     return '/b2b/out/order/state/count';
   },
   // 进度工单状态统计
-  progressOrderStateCount () {
+  progressOrderStateCount() {
     return '/b2b/orders/production/work/state/count';
-  } 
+  }
 };
 
 let TENANT_APIS = {
@@ -1304,6 +1304,15 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/receipt/' + id;
   },
 
+  // 创建退货单
+  returnOrderCreate() {
+    return '/b2b/sheets/return/create';
+  },
+
+  // 退货单详情
+  returnOrderDetail(id) {
+    return '/b2b/sheets/return/' + id;
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

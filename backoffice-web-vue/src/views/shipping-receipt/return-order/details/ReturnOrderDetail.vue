@@ -1,0 +1,214 @@
+<!-- 
+ * @description: 退货单详情
+ * @fileName: ReturnOrderDetail.vue 
+ * @author: yj 
+ * @date: 2020-07-04 17:13:02
+ * @version: V1.0.0 
+!-->
+<template>
+  <div class="animated fadeIn return-order-container">
+    <el-card>
+      <el-row type="flex" justify="space-between">
+        <el-col :span="4">
+          <div class="title">
+            <h6>收货单详情</h6>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <h6>状态：待核验</h6>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="start" class="basic-row">
+        <el-col :span="3">
+          <img width="100px" height="100px"
+            :src="formData.product.thumbnail!=null&&formData.product.thumbnail.length!=0?formData.product.thumbnail.url:'static/img/nopicture.png'">
+        </el-col>
+        <el-col :span="21">
+          <el-row type="flex" style="padding: 10px 0px">
+            <el-col :span="8">
+              <h6 class="basic-label">产品名称：{{formData.product.name}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px">
+            <el-col :span="8">
+              <h6 class="basic-label">发货方：{{formData.shipParty.name}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">收货方：{{formData.receiveParty.name}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">发货负责人：{{formData.merchandiser.name}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px">
+            <el-col :span="12">
+              <h6 class="basic-label">收货地址：{{formData.deliveryAddress.details}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px"
+            v-if="!formData.isOfflineConsignment&&formData.consignment!=null">
+            <el-col :span="8">
+              <h6 class="basic-label">发货方式：{{formData.consignment.carrierDetails.name}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">发货单号：{{formData.consignment.trackingID}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px" v-else>
+            <el-col :span="8">
+              <h6 class="basic-label">物流方式：{{formData.offlineConsignorMode}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">送货人：{{formData.offlineConsignorName}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">联系方式：{{formData.offlineConsignorPhone}}</h6>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="start" class="basic-row">
+        <el-col :span="24">
+          <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
+        </el-col>
+      </el-row>
+      <el-row type="flex">
+        <el-input type="textarea" placeholder="输入退货原因" v-model="formData.remarks" :rows="5" :disabled="true">
+        </el-input>
+      </el-row>
+      <el-row type="flex">
+        <template v-for="(media,index) in formData.medias">
+          <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="formData.medias">
+          </el-image>
+        </template>
+      </el-row>
+      <el-row type="flex" justify="start" class="basic-row">
+        <el-col :span="8" :offset="2">
+          <h6>发货单：KY1000000001</h6>
+        </el-col>
+      </el-row>
+      <receipt-order-detail-btn-group v-if="isReceiveParty" />
+    </el-card>
+  </div>
+</template>
+
+<script>
+  import {
+    ColorSizeBoxTable,
+    ColorSizeTable
+  } from '@/components/'
+
+  import ReturnOrderDetailBtnGroup from './ReturnOrderDetailBtnGroup';
+
+  export default {
+    name: 'ReturnOrderDetail',
+    props: {
+      //收货单id
+      id: {
+        require: true
+      }
+    },
+    components: {
+      ColorSizeBoxTable,
+      ColorSizeTable,
+      ReturnOrderDetailBtnGroup
+    },
+    computed: {
+      //是收货方
+      isReceiveParty: function () {
+        if (this.formData.receiveParty != null && this.currentUser != null) {
+          return this.currentUser.companyCode == this.formData.receiveParty.uid;
+        } else {
+          return false;
+        }
+      },
+    },
+    methods: {
+      async getDetail() {
+        // 获取收货单详情
+        const url = this.apis().returnOrderDetail(this.id);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.formData = Object.assign({}, result.data);
+      },
+    },
+    data() {
+      return {
+        currentUser: this.$store.getters.currentUser,
+        formData: {
+          product: {
+            name: '',
+            skuID: '',
+          },
+          shipParty: {
+            name: '',
+          },
+          receiveParty: {
+            name: ''
+          },
+          merchandiser: {
+            name: ''
+          },
+          deliveryAddress: {
+            details: ''
+          },
+          medias: []
+        }
+      }
+    },
+    created() {
+      this.getDetail();
+    },
+    destroyed() {
+
+    }
+  }
+
+</script>
+
+<style scoped>
+  .title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
+
+  .basic-row {
+    padding-left: 10px;
+    margin-top: 20px;
+  }
+
+  .sumbit-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 125px;
+    height: 32px;
+  }
+
+  .return-order-container h6 {
+    font-size: 14px;
+    color: #606266;
+  }
+
+  .return-order-container {
+    padding-bottom: 10px;
+  }
+
+  .image-item {
+    margin-right: 10px;
+    width: 100px;
+    height: 100px;
+  }
+
+</style>

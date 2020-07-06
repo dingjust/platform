@@ -131,7 +131,10 @@
       },
       isOnline(flag) {
         if (flag) {
-          this.formData.consignment.carrierDetails = '';
+          this.formData.consignment.carrierDetails = {
+            code: '',
+            name: ''
+          };
           this.formData.consignment.trackingID = '';
         }
         //校验线上表单字段
