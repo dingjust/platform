@@ -36,10 +36,10 @@
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="8">
-              <h6 class="basic-label">发货方：{{formData.shipParty.name}}</h6>
+              <h6 class="basic-label">发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">收货方：{{formData.receiveParty.name}}</h6>
+              <h6 class="basic-label">收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6 class="basic-label">发货负责人：{{formData.merchandiser.name}}</h6>

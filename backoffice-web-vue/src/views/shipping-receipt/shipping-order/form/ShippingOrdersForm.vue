@@ -11,9 +11,8 @@
       <el-form :inline="true" ref="form" label-position="left" label-width="70px" :model="formData">
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="3">
-            <!-- <img width="54px" height="54px"
-              :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'"> -->
-            <img width="100px" height="100px" :src="'static/img/nopicture.png'">
+            <img width="100px" height="100px"
+              :src="taskData.product.thumbnail!=null&&taskData.product.thumbnail.length!=0?taskData.product.thumbnail.url:'static/img/nopicture.png'">
           </el-col>
           <el-col :span="21">
             <el-row type="flex" style="padding: 10px 0px">
@@ -21,25 +20,25 @@
                 <h6 class="baisc-lable">产品名称：{{taskData.product?taskData.product.name:''}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">发货方：{{taskData.shipParty.name}}</h6>
+                <h6 class="baisc-lable">发货方：{{taskData.shipParty!=null?taskData.shipParty.name:''}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">收货方：{{taskData.receiveParty.name}}</h6>
+                <h6 class="baisc-lable">收货方：{{taskData.receiveParty!=null?taskData.receiveParty.name:''}}</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
               <el-col :span="8">
-                <h6 class="baisc-lable">货号：{{taskData.product.skuId}}</h6>
+                <h6 class="baisc-lable">货号：{{taskData.product.skuId!=null?nulltaskData.product.skuId:''}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">发货负责人：{{taskData.merchandiser.name}}</h6>
+                <h6 class="baisc-lable">发货负责人：{{taskData.merchandiser!=null?taskData.merchandiser.name:''}}</h6>
               </el-col>
               <el-col :span="8">
                 <h6 class="baisc-lable">联系方式：{{taskData.merchandiser.mobileNumber}}</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
-              <h6 class="baisc-lable">收货地址：{{taskData.deliveryAddress.details}}</h6>
+              <h6 class="baisc-lable">收货地址：{{taskData.deliveryAddress!=null?taskData.deliveryAddress.details:''}}</h6>
             </el-row>
             <el-row type="flex" align="middle">
               <el-col :span="8">

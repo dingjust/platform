@@ -13,7 +13,7 @@
           <div class="title">
             <h6>创建收货单</h6>
           </div>
-        </el-col>        
+        </el-col>
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="3">
@@ -26,15 +26,15 @@
               <h6 class="basic-label">产品名称：{{shippingOder.product.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">货号：{{shippingOder.product.skuID}}</h6>
+              <h6 class="basic-label">货号：{{shippingOder.product!=null?shippingOder.product.skuID:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="8">
-              <h6 class="basic-label">发货方：{{shippingOder.shipParty.name}}</h6>
+              <h6 class="basic-label">发货方：{{shippingOder.shipParty!=null?shippingOder.shipParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">收货方：{{shippingOder.receiveParty.name}}</h6>
+              <h6 class="basic-label">收货方：{{shippingOder.receiveParty!=null?shippingOder.receiveParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6 class="basic-label">发货负责人：{{shippingOder.merchandiser.name}}</h6>
@@ -42,7 +42,8 @@
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="12">
-              <h6 class="basic-label">收货地址：{{shippingOder.deliveryAddress.details}}</h6>
+              <h6 class="basic-label">
+                收货地址：{{shippingOder.deliveryAddress!=null?shippingOder.deliveryAddress.details:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px"
@@ -213,7 +214,7 @@
           //有退货则提示创建退货单
           if (this.isHaveReturn) {
             this.onReturnedMessage();
-          }else{
+          } else {
             this.$router.go(-1);
           }
         }
