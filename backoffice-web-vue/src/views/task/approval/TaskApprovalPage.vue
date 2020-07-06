@@ -63,8 +63,7 @@
     props: [],
     computed: {
       ...mapGetters({
-        page: 'page',
-        queryFormData: 'queryFormData'
+        page: 'page'
       }),
       orderTaskToDoRead: function () {
         let count = 0;
@@ -100,7 +99,7 @@
       },
       handleClick (tab, event) {
         this.onReset();
-        this.queryFormData.status = tab.name;
+        this.queryFormData.state = tab.name;
         this.onAdvancedSearch();
       },
       onDetail (row) {
@@ -166,6 +165,10 @@
       return {
         activeName: 'ORDER_TASK',
         activeStatus: '',
+        queryFormData: {
+          keyword: '',
+          state: ''
+        },
         statuses: [{
           code: '',
           name: '全部'
@@ -174,7 +177,7 @@
           name: '审核通过'
         }, {
           code: 'AUDITED_FAILED',
-          name: '审核失败'
+          name: '审核驳回'
         }]
       }
     },

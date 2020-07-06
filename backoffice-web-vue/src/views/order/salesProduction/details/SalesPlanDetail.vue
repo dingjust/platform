@@ -208,7 +208,8 @@
         })
       },
       onRefresh() {
-        this.$router.go(0);
+        // this.$router.go(0);
+        this.getDetails();
       },
     },
     data() {

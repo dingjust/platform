@@ -15,6 +15,7 @@
           </div>
         </el-col>
       </el-row>
+      <div class="pt-2"></div>
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"
         @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"
         @onUniqueCodeImport="onUniqueCodeImport" :isPending="true"/>
@@ -100,7 +101,7 @@
       },
       async pendingOrderStateCount () {
         const url = this.apis().pendingOrderStateCount();
-        const result = await this.$http.get(url);
+        const result = await this.$http.post(url, this.queryFormData);
         if (result['errors']) {
           this.stateCount = {};
           return;
@@ -137,17 +138,9 @@
         activeName: 'TO_BE_ACCEPTED',
         statuses: [],
         queryFormData: {
-          code: '',
-          requirementOrderCode: '',
-          skuID: '',
-          statuses: [],
-          refunding: '',
-          expectedDeliveryDateFrom: null,
-          expectedDeliveryDateTo: null,
-          createdDateFrom: null,
-          createdDateTo: null,
           keyword: '',
-          categories: [],
+          planLeader: '',
+          originCooperator: '',
           state: 'TO_BE_ACCEPTED'
         },
         stateCount: {}

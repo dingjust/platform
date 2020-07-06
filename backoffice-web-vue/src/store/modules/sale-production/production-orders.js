@@ -253,6 +253,14 @@ const actions = {
     page,
     size
   }) {
+    // 多页面复用,查询前清空查询数据
+    commit('page', {
+      number: 0,
+      size: 10,
+      totalPages: 1,
+      totalElements: 0,
+      content: []
+    });
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {

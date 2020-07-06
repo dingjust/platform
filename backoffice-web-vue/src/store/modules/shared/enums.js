@@ -1535,7 +1535,7 @@ const state = {
   },
   {
     code: 'AUDITED_FAILED',
-    name: '审核驳货'
+    name: '审核驳回'
   }
   ],
   // 生产任务状态
@@ -1613,7 +1613,7 @@ const state = {
     code: 'TO_BE_ACCEPTED',
     name: '待接单'
   }, {
-    code: 'AUDIT_PASSED',
+    code: 'ACCEPTED',
     name: '生产中'
   }, {
     code: 'COMPLETED',

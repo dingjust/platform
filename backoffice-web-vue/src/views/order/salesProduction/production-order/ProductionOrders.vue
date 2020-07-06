@@ -118,7 +118,7 @@
       },
       async productionOrderStateCount () {
         const url = this.apis().productionOrderStateCount();
-        const result = await this.$http.get(url);
+        const result = await this.$http.post(url, this.queryFormData);
         if (result['errors']) {
           this.stateCount = {};
           return;
@@ -217,11 +217,6 @@
         outboundOrderTypeSelect: false,
         selectRow: [],
         queryFormData: {
-          code: '',
-          requirementOrderCode: '',
-          skuID: '',
-          expectedDeliveryDateFrom: null,
-          expectedDeliveryDateTo: null,
           createdDateFrom: null,
           createdDateTo: null,
           keyword: '',

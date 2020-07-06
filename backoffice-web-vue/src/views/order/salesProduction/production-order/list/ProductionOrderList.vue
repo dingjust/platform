@@ -2,15 +2,10 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed" :row-key="'id'"
       :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick" :reserve-selection="true">
-      <el-table-column type="selection" width="55px" :selectable="rowDisabled" v-if="!isOutProduction" fixed></el-table-column>
-      <el-table-column label="生产订单号" min-width="130" fixed>
-        <!-- <template slot-scope="scope">
-          <el-row type="flex" justify="space-between" align="middle">
-            <span>{{scope.row.code}}</span>
-          </el-row>
-        </template> -->
+      <el-table-column type="selection" width="50px" :selectable="rowDisabled" v-if="!isOutProduction" fixed></el-table-column>
+      <el-table-column label="生产订单号" min-width="115">
         <template slot-scope="scope">
-          <el-row type="flex" justify="space-between" align="middle">
+          <el-row type="flex" justify="space-between" align="middle" v-if="!isAllocating && !isOutProduction">
             <el-tag type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
               {{getEnum('ProductionTaskOrderType', scope.row.type)}}</el-tag>
           </el-row>
@@ -40,45 +35,40 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品类" min-width="120">
+      <el-table-column label="品类" min-width="115">
         <template slot-scope="scope">
           <span>{{scope.row.product !=null ? 
             scope.row.product.category.parent.name + '-' + scope.row.product.category.name : ''}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="客户"></el-table-column> -->
-      <el-table-column label="订单数量" prop="quantity"></el-table-column>
-      <el-table-column label="负责人" prop="productionLeader.name"></el-table-column>
-      <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
-      <!-- <el-table-column label="生产订单状态" prop="status" :column-key="'status'" :filters="statuses">
-        <template slot-scope="scope"> -->
-          <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-          <!-- <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
-        </template>
-      </el-table-column> -->
+      <el-table-column label="订单数量" prop="quantity" min-width="70"></el-table-column>
+      <el-table-column label="负责人" prop="productionLeader.name" min-width="60"></el-table-column>
+      <el-table-column label="跟单员" prop="merchandiser.name" min-width="60"></el-table-column>
       <el-table-column label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交货时间" min-width="120">
+      <el-table-column label="交货时间" min-width="90">
         <template slot-scope="scope">
           <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单标签" v-if="!isOutProduction && !isAllocating">
         <template slot-scope="scope">
-          <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133">
+          <el-tag color="#FFD60C" style="color: #303133" v-if="scope.row.type == 'SELF_PRODUCED'">自产</el-tag>
+          <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133" v-else>
             {{isOuted(scope.row) ? '已外发' : '未外发'}}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="状态" v-if="!isAllocating">
+      <el-table-column label="状态" min-width="60" v-if="!isAllocating">
         <template slot-scope="scope">
           <span>{{getEnum('ProductionTaskOrderState', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="100" fixed="right">
+      <el-table-column label="操作" min-width="80">
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>
@@ -176,7 +166,7 @@
         return amount;
       },
       rowDisabled (row, index) {
-        if (row.outboundOrderCode) {
+        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
           return false;
         }
         return true;
@@ -185,7 +175,7 @@
         this.selectRow = val;
       },
       rowClick (row, column, event) {
-        if (row.outboundOrderCode) {
+        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
           return;
         }
         this.$refs.resultTable.toggleRowSelection(row);

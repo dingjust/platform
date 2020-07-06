@@ -75,13 +75,13 @@
         result.data.content.forEach(item => {
           this.statuses.push({
             name: item.name,
-            code: item.id
+            code: item.id + ''
           })
         })
       },
       async progressOrderStateCount () {
         const url = this.apis().progressOrderStateCount();
-        const result = await this.$http.get(url);
+        const result = await this.$http.post(url, this.queryFormData);
         if (result['errors']) {
           this.stateCount = {};
           return;
@@ -121,7 +121,7 @@
           expectedDeliveryDateTo: '',
           operatorName: ''
         },
-        stateCount: {}
+        stateCount: []
       }
     },
     created() {

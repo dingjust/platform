@@ -24,7 +24,7 @@
         </el-col>
       </template>
       <!-- 制定交接人或创建者按钮 -->
-      <template>
+      <template v-if="slotData.state != 'CANCELED'">
         <!-- 销售订单按钮 -->
         <template v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin">
           <el-col :span="3">

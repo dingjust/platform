@@ -48,11 +48,11 @@
     computed: {},
     methods: {
       canModify(row) {
-        if (!row.merchandiser) {
-          return;
+        if (!row.merchandiser || row.state == 'CANCELED' || row.merchandiser.uid != this.$store.getters.currentUser.uid) {
+          return false;
         }
         return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
-          (row.sendAuditState == 'AUDITED_FAILED' || row.acceptState == 'REJECTED' || row.sendAuditState == 'NONE');
+          (row.sendAuditState == 'AUDITED_FAILED' || row.sendAuditState == 'NONE');
       },
       getCooperator(row) {
         return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;

@@ -43,21 +43,18 @@
   import SalesProductionStatusBar from '../../components/SalesProductionStatusBar';
   export default {
     name: 'OutboundOrderToolbar',
+    props: ['queryFormData'],
     components: {SalesProductionStatusBar},
     computed: {
-      ...mapGetters({
-        queryFormData: 'queryFormData'
-      })
     },
     methods: {
-      ...mapActions({
-        clearQueryFormData: 'clearQueryFormData'
-      }),
       onAdvancedSearch () {
         this.$emit('onAdvancedSearch');
       },
       onReset () {
-        this.clearQueryFormData();
+        this.queryFormData.name = '';
+        this.queryFormData.merchandiser = '';
+        this.queryFormData.targetCooperator = '';
       },
       createOutboundOrder () {
         this.$emit('createOutboundOrder');
