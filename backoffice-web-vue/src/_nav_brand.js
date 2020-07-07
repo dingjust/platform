@@ -110,13 +110,13 @@ export default {
         url: '/shipping/shipping-receipt-sheet',
       }, {
         name: '差异复议',
-        url: '/shipping/reconsiders/export',
+        url: '/shipping/reconsiders/import',
       }, {
         name: '对账任务',
-        url: '/reconciliation/tasks/export',
+        url: '/reconciliation/tasks/import',
       }, {
         name: '对账管理',
-        url: '/reconciliation/manage/export',
+        url: '/reconciliation/manage/import',
       }]
     },
     {
@@ -128,16 +128,16 @@ export default {
         url: '/receipt/tasks',
       }, {
         name: '收发货列表',
-        url: '/shipping/shipping-receipt-sheet',
+        url: '/receipt/shipping-receipt-sheet',
       }, {
         name: '差异复议',
-        url: '/shipping/reconsiders/import',
+        url: '/shipping/reconsiders/export',
       }, {
         name: '对账任务',
-        url: '/reconciliation/tasks/import',
+        url: '/reconciliation/tasks/export',
       }, {
         name: '对账管理',
-        url: '/reconciliation/manage/import',
+        url: '/reconciliation/manage/export',
       }]
     },
     {

@@ -49,16 +49,15 @@ export default {
       // url: '/sales',
       icon: 'el-icon-notebook-2',
       children: [{
-          name: '待分配工单',
-          url: '/sales/allocating/productionOrder'
-        }, {
-          name: '生产工单',
-          url: '/sales/productionOrder',
-        }, {
-          name: '生产进度工单',
-          url: '/sales/progressOrder'
-        }
-      ]
+        name: '待分配工单',
+        url: '/sales/allocating/productionOrder'
+      }, {
+        name: '生产工单',
+        url: '/sales/productionOrder',
+      }, {
+        name: '生产进度工单',
+        url: '/sales/progressOrder'
+      }]
     },
     {
       name: '外发管理',
@@ -114,28 +113,7 @@ export default {
         url: '/shipping/shipping-receipt-sheet',
       }, {
         name: '差异复议',
-        url: '/shipping/reconsiders/export',
-      }, {
-        name: '对账任务',
-        url: '/reconciliation/tasks/export',
-      }, {
-        name: '对账管理',
-        url: '/reconciliation/manage/export',
-      }]
-    },
-    {
-      name: '外发收货',
-      // url: '/receipt',
-      icon: 'el-icon-receiving',
-      children: [{
-        name: '收发任务单',
-        url: '/receipt/tasks',
-      }, {
-        name: '差异复议',
         url: '/shipping/reconsiders/import',
-      }, {
-        name: '收发货列表',
-        url: '/shipping/shipping-receipt-sheet',
       }, {
         name: '对账任务',
         url: '/reconciliation/tasks/import',
@@ -143,6 +121,29 @@ export default {
         name: '对账管理',
         url: '/reconciliation/manage/import',
       }]
+    },
+    {
+      name: '外发收货',
+      // url: '/receipt',
+      icon: 'el-icon-receiving',
+      children: [{
+          name: '收发任务单',
+          url: '/receipt/tasks',
+        }, {
+          name: '收发货列表',
+          url: '/receipt/shipping-receipt-sheet',
+        },
+        {
+          name: '差异复议',
+          url: '/shipping/reconsiders/export',
+        }, {
+          name: '对账任务',
+          url: '/reconciliation/tasks/export',
+        }, {
+          name: '对账管理',
+          url: '/reconciliation/manage/export',
+        }
+      ]
     },
     {
       name: '资料中心',

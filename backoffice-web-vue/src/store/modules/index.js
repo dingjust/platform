@@ -62,6 +62,8 @@ import ExportShippingTasksModule from './shipping-receipt/export-shipping-tasks'
 import ShippingOrdersModule from './shipping-receipt/shipping-orders'
 import ReceiptOrdersModule from './shipping-receipt/receipt-orders'
 import ReturnOrdersModule from './shipping-receipt/return-orders'
+import ImportShippingReceiptModule from './shipping-receipt/import-shipping-receipt'
+import ExportShippingReceiptModule from './shipping-receipt/export-shipping-receipt'
 
 // reconciliation
 import ReconciliationTasksModule from './reconciliation/reconciliation-tasks'
@@ -138,6 +140,8 @@ export {
   ShippingOrdersModule,
   ReceiptOrdersModule,
   ReturnOrdersModule,
+  ImportShippingReceiptModule,
+  ExportShippingReceiptModule,
   // reconciliation
   ReconciliationTasksModule,
   ReconciliationOrdersModule,

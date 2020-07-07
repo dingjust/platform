@@ -1,50 +1,29 @@
 <template>
-  <div class="animated fadeIn content">
-    <el-card>
-      <el-row>
-        <el-col :span="4">
-          <div class="title">
-            <h6>收发货列表</h6>
-          </div>
-        </el-col>
-      </el-row>
-      <div class="pt-2"></div>
-      <shipping-receipt-toolbar :queryFormData="queryFormData" :canCreateReceipt="canCreateReceipt"
-        @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch" />
-      <el-row type="flex" justify="end">
-        <el-col :span="3">
-          <el-button type="text" class="list-btn" @click="shippingListVisible = !shippingListVisible">发货单</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button type="text" class="list-btn" @click="receiptListVisible = !receiptListVisible">收货单</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button type="text" class="list-btn" @click="returnListVisible = !returnListVisible">退货单</el-button>
-        </el-col>
-      </el-row>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="待发货" name="first">
-          <shipping-orders-list :page="page" :canCreateReceipt="canCreateReceipt" @onAdvancedSearch="onAdvancedSearch"
-            @onDetail="onShippingDetail" />
+  <div>
+    <shipping-receipt-toolbar :queryFormData="queryFormData" :canCreateReceipt="canCreateReceipt"
+      @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch" />
+    <el-row type="flex" justify="end">
+      <el-col :span="3">
+        <el-button type="text" class="list-btn" @click="shippingListVisible = !shippingListVisible">发货单</el-button>
+      </el-col>
+      <el-col :span="3">
+        <el-button type="text" class="list-btn" @click="receiptListVisible = !receiptListVisible">收货单</el-button>
+      </el-col>
+      <el-col :span="3">
+        <el-button type="text" class="list-btn" @click="returnListVisible = !returnListVisible">退货单</el-button>
+      </el-col>
+    </el-row>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <template v-for="(map,status) in statusMap">
+        <el-tab-pane :label="map.status" :name="status" :key="status">
+          <shipping-dynamic-table :page="page" :canCreateReceipt="canCreateReceipt" :columns="map.columns"
+            @onAdvancedSearch="onAdvancedSearch" />
         </el-tab-pane>
-        <el-tab-pane label="已发货" name="second">
-          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReceiptDetail" />
-        </el-tab-pane>
-        <el-tab-pane label="待退货" name="third">
-          <shipping-orders-list :page="page" :canCreateReceipt="canCreateReceipt" @onAdvancedSearch="onAdvancedSearch"
-            @onDetail="onShippingDetail" />
-        </el-tab-pane>
-        <el-tab-pane label="退货待收" name="fourth">
-          <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail" />
-        </el-tab-pane>
-        <el-tab-pane label="退货已收" name="fifth">
-          <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onReturnDetail" />
-        </el-tab-pane>
-      </el-tabs>
-    </el-card>
+      </template>
+    </el-tabs>
     <el-dialog :visible.sync="shippingListVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <shipping-orders-page v-if="shippingListVisible" />
+      <shipping-orders-page :mode="mode" v-if="shippingListVisible" />
     </el-dialog>
     <el-dialog :visible.sync="receiptListVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -62,17 +41,33 @@
   import ShippingOrdersPage from '../shipping-order/ShippingOrdersPage'
   import ReceiptOrdersPage from '../receipt-order/ReceiptOrdersPage'
   import ReturnOrdersPage from '../return-order/ReturnOrdersPage'
-  import ShippingOrdersList from '../shipping-order/list/ShippingOrdersList'
+  import {
+    ShippingDynamicTable
+  } from '../components/index'
   import ReceiptOrdersList from '../receipt-order/list/ReceiptOrdersList'
   import ReturnOrdersList from '../return-order/list/ReturnOrdersList'
   export default {
     name: 'ShippingReceiptPage',
+    props: {
+      mode: {
+        type: String,
+        default: 'import'
+      },
+      page: {
+        type: Object,
+        required: true
+      },
+      queryFormData: {
+        type: Object,
+        required: true
+      }
+    },
     components: {
       ShippingReceiptToolbar,
       ShippingOrdersPage,
       ReceiptOrdersPage,
       ReturnOrdersPage,
-      ShippingOrdersList,
+      ShippingDynamicTable,
       ReceiptOrdersList,
       ReturnOrdersList
     },
@@ -84,41 +79,16 @@
     },
     methods: {
       handleClick(tab, event) {
-        if (tab.name == 'first') {
-          this.queryFormData.status = '待发货';
-          this.searchUrl = this.apis().getProductionTaskList();
-        } else if (tab.name == 'second') {
-          this.queryFormData.status = '';
-          this.searchUrl = this.apis().getProductionOrders();
-        } else if (tab.name == 'third') {
-          this.queryFormData.status = '待退货';
-          this.searchUrl = this.apis().getProductionTaskList();
-        } else if (tab.name == 'fourth') {
-          this.queryFormData.status = '退货待收';
-          this.searchUrl = this.apis().getoutboundOrdersList();
-        } else if (tab.name == 'fifth') {
-          this.queryFormData.status = '退货已收';
-          this.searchUrl = this.apis().getoutboundOrdersList();
-        }
-        this.onAdvancedSearch(0, 10);
-      },
-      async onAdvancedSearch(page, size) {
-        const url = this.searchUrl;
-        const query = this.queryFormData;
-        const result = await this.$http.post(url, query, {
-          page: page,
-          size: size
+        this.$emit('handleClick', {
+          status: this.statusMap[tab.name].status,
+          searchUrl: this.statusMap[tab.name].url
         });
-        this.page = result;
       },
-      onShippingDetail() {
-
+      onSearch(page, size) {
+        this.$emit('onSearch');
       },
-      onReceiptDetail() {
-
-      },
-      onReturnDetail() {
-
+      onAdvancedSearch(page, size) {
+        this.$emit('onAdvancedSearch');
       },
       // 创建发货单
       onCreateReceiptOrder() {
@@ -134,36 +104,39 @@
     },
     data() {
       return {
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        },
-        activeName: 'first',
-        searchUrl: '',
+        activeName: 'STATUS_1',
         shippingListVisible: false,
         receiptListVisible: false,
         returnListVisible: false,
-        queryFormData: {
-          keyword: '',
-          productionLeaderName: '',
-          operatorName: '',
-          creationtimeStart: '',
-          creationtimeEnd: '',
-          status: ''
+        statusMap: {
+          STATUS_1: {
+            status: '待收货',
+            columns: ['发货单号', '产品名称', '关联订单', '发货人', '单价', '发货数量', '发货总额', '发货日期', '发货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          STATUS_2: {
+            status: '待退货',
+            columns: ['发货单号', '产品名称', '关联订单', '关联收货单', '收货单创建人', '发货数', '收货数', '发货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          STATUS_3: {
+            status: '退货待收',
+            columns: ['退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          STATUS_4: {
+            status: '退货已收',
+            columns: ['退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          STATUS_5: {
+            status: '已完成',
+            columns: ['发货单号', '产品名称', '单价', '发货数量', '收货单', '收货数', '差异数', '发货操作'],
+            url: this.apis().shippingOrderList()
+          }
         }
       }
     },
-    created() {
-      this.queryFormData.status = '待发货';
-      this.searchUrl = this.apis().getProductionTaskList();
-      this.onAdvancedSearch(0, 10);
-    },
-    destroyed() {
-
-    }
   }
 
 </script>

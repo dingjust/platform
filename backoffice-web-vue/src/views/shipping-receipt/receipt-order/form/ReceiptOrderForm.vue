@@ -11,20 +11,14 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="4">
           <div class="title">
-            <h6>收货单详情</h6>
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <div>
-            <h6>状态：待核验</h6>
+            <h6>创建收货单</h6>
           </div>
         </el-col>
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="3">
-          <!-- <img width="54px" height="54px"
-              :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'"> -->
-          <img width="100px" height="100px" :src="'static/img/nopicture.png'">
+          <img width="100px" height="100px"
+            :src="shippingOder.product.thumbnail!=null&&shippingOder.product.thumbnail.length!=0?shippingOder.product.thumbnail.url:'static/img/nopicture.png'">
         </el-col>
         <el-col :span="21">
           <el-row type="flex" style="padding: 10px 0px">
@@ -32,15 +26,15 @@
               <h6 class="basic-label">产品名称：{{shippingOder.product.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">货号：{{shippingOder.product.skuID}}</h6>
+              <h6 class="basic-label">货号：{{shippingOder.product!=null?shippingOder.product.skuID:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="8">
-              <h6 class="basic-label">发货方：{{shippingOder.shipParty.name}}</h6>
+              <h6 class="basic-label">发货方：{{shippingOder.shipParty!=null?shippingOder.shipParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">收货方：{{shippingOder.receiveParty.name}}</h6>
+              <h6 class="basic-label">收货方：{{shippingOder.receiveParty!=null?shippingOder.receiveParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6 class="basic-label">发货负责人：{{shippingOder.merchandiser.name}}</h6>
@@ -48,7 +42,8 @@
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="12">
-              <h6 class="basic-label">收货地址：{{shippingOder.deliveryAddress.details}}</h6>
+              <h6 class="basic-label">
+                收货地址：{{shippingOder.deliveryAddress!=null?shippingOder.deliveryAddress.details:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px"
@@ -219,6 +214,8 @@
           //有退货则提示创建退货单
           if (this.isHaveReturn) {
             this.onReturnedMessage();
+          } else {
+            this.$router.go(-1);
           }
         }
       },
@@ -229,9 +226,14 @@
           cancelButtonText: '下次再说',
           type: 'info'
         }).then(() => {
-
+          this.$router.push({
+            name: '创建退货单',
+            params: {
+              shippingOrder: this.shippingOder,
+            }
+          });
         }).catch(() => {
-
+          this.$$router.go(-1);
         });
       }
     },

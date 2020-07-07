@@ -37,6 +37,7 @@
      ShippingTasksList 
     },
     computed: {
+      
     },
     methods: {
       onSearch (page, size) {

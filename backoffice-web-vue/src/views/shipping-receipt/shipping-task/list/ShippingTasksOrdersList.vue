@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column label="收货数">
         <template slot-scope="scope" v-if="scope.row.receiptSheets!=null">
-          <span>{{countTotalReceiptNum(scope.row.receiptSheets)}}</span>
+          <span>{{countTotalSheetsNum(scope.row.receiptSheets)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="收货时间">
@@ -32,8 +32,21 @@
           <span>{{scope.row.receiptSheets[0].creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退货单"></el-table-column>
-      <el-table-column label="退货数"></el-table-column>
+      <el-table-column label="退货单">
+        <template slot-scope="scope" v-if="scope.row.returnSheets!=null">
+          <template v-for="(sheet,sheetIndex) in scope.row.returnSheets">
+            <el-row :key="'sheet'+sheetIndex" type="flex">
+              <el-button type="text" @click="onReturnDetail(scope.row.returnSheets[sheetIndex].id)">
+                {{scope.row.returnSheets[sheetIndex].code}}</el-button>
+            </el-row>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column label="退货数">
+        <template slot-scope="scope" v-if="scope.row.returnSheets!=null">
+          <span>{{countTotalSheetsNum(scope.row.returnSheets)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="差异数" prop="diffQuantity"></el-table-column>
       <el-table-column align="right" min-width="120" v-if="!readOnly">
         <template slot="header">
@@ -62,8 +75,11 @@
       onReceiptDetail(id) {
         this.$router.push('/receipt/orders/' + id);
       },
-      //统计收货数
-      countTotalReceiptNum(sheets) {
+      onReturnDetail(id) {
+        this.$router.push('/returned/orders/' + id);
+      },
+      //统计单数
+      countTotalSheetsNum(sheets) {
         let result = 0;
         sheets.forEach(element => {
           let num = parseInt(element.totalQuantity);

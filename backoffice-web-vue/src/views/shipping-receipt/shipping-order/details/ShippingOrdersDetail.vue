@@ -25,10 +25,10 @@
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
               <el-col :span="8">
-                <h6 class="basic-label">发货方：{{formData.shipParty.name}}</h6>
+                <h6 class="basic-label">发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="basic-label">收货方：{{formData.receiveParty.name}}</h6>
+                <h6 class="basic-label">收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
               </el-col>
               <el-col :span="8">
                 <h6 class="basic-label">发货负责人：{{formData.merchandiser.name}}</h6>
@@ -69,14 +69,29 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="8">
-            <h6 class="basic-label">收货单：</h6>
+            <el-row type="flex" align="middle">
+              <span class="basic-label">收货单：</span>
+              <template v-for="(sheet,sheetIndex) in formData.receiptSheets">
+                <el-button type="text" @click="onReceiptDetail(formData.receiptSheets[sheetIndex].id)"
+                  :key="'return'+sheetIndex">
+                  {{formData.receiptSheets[sheetIndex].code}}</el-button>
+              </template>
+            </el-row>
           </el-col>
           <el-col :span="8">
-            <h6 class="basic-label">收货单：</h6>
+            <el-row type="flex" align="middle">
+              <span class="basic-label">退货单：</span>
+              <template v-for="(sheet,sheetIndex) in formData.returnSheets">
+                <el-button type="text" @click="onReturnDetail(formData.returnSheets[sheetIndex].id)"
+                  :key="'return'+sheetIndex">
+                  {{formData.returnSheets[sheetIndex].code}}</el-button>
+              </template>
+            </el-row>
           </el-col>
         </el-row>
         <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="!hasReceiptOrder">
           <el-button class="sumbit-btn" @click="onCreate">创建收货单</el-button>
+          <el-button style="margin-left:50px" type="text" @click="onReturnAll">整单退货 >></el-button>
         </el-row>
       </div>
     </el-card>
@@ -118,6 +133,24 @@
           name: '创建收货单',
           params: {
             shippingOrder: this.formData
+          }
+        });
+      },
+      //跳转收货详情
+      onReceiptDetail(id) {
+        this.$router.push('/receipt/orders/' + id);
+      },
+      //跳转退货详情
+      onReturnDetail(id) {
+        this.$router.push('/returned/orders/' + id);
+      },
+      //整单退货
+      onReturnAll() {
+        this.$router.push({
+          name: '创建退货单',
+          params: {
+            shippingOrder: this.formData,
+            isAllReturn:true
           }
         });
       }

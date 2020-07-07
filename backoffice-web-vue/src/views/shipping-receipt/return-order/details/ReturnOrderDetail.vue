@@ -1,12 +1,12 @@
 <!-- 
- * @description: 收货单详情
- * @fileName: ReceiptOrderDetail.vue 
+ * @description: 退货单详情
+ * @fileName: ReturnOrderDetail.vue 
  * @author: yj 
- * @date: 2020-06-22 13:58:22
+ * @date: 2020-07-04 17:13:02
  * @version: V1.0.0 
 !-->
 <template>
-  <div class="animated fadeIn receipt-order-container">
+  <div class="animated fadeIn return-order-container">
     <el-card>
       <el-row type="flex" justify="space-between">
         <el-col :span="4">
@@ -72,31 +72,22 @@
           </el-row>
         </el-col>
       </el-row>
-      <!-- <el-row type="flex" style="margin-top:20px">
-        <el-col :span="4" :offset="4">
-          <el-radio v-model="receivingMode" label="BY_PACKAGE">按箱号</el-radio>
-          <el-radio v-model="receivingMode" label="BY_LIST">按总列表</el-radio>
-        </el-col>
-      </el-row> -->
-      <el-row type="flex" justify="start" class="basic-row" v-if="formData.receivingMode=='BY_PACKAGE'">
-        <el-col :span="24">
-          <color-size-box-table :vdata="formData.packageSheets"
-            :colorSizeEntries="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="formData.receivingMode=='BY_LIST'">
+      <el-row type="flex" justify="start" class="basic-row" v-if="formData.packageSheets!=null">
         <el-col :span="24">
           <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
         </el-col>
       </el-row>
-      <el-row type="flex" style="margin-top:20px">
-        <el-col :span="8" :offset="4">
-          <el-row type="flex">
-            <h6>有无退货：</h6>
-            <el-radio v-model="formData.isHaveReturn" :label="true" :disabled="true">有退货</el-radio>
-            <el-radio v-model="formData.isHaveReturn" :label="false" :disabled="true">无退货</el-radio>
-          </el-row>
+      <el-row type="flex" :gutter="20" style="margin-top:20px">
+        <el-col :span="24">
+          <el-input type="textarea" placeholder="输入退货原因" v-model="formData.remarks" :rows="5" :disabled="true">
+          </el-input>
         </el-col>
+      </el-row>
+      <el-row type="flex" style="margin-top:20px">
+        <template v-for="(media,index) in formData.medias">
+          <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="mediasUrlList">
+          </el-image>
+        </template>
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="8" :offset="2">
@@ -114,10 +105,10 @@
     ColorSizeTable
   } from '@/components/'
 
-  import ReceiptOrderDetailBtnGroup from './ReceiptOrderDetailBtnGroup';
+  import ReturnOrderDetailBtnGroup from './ReturnOrderDetailBtnGroup';
 
   export default {
-    name: 'ReceiptOrderDetail',
+    name: 'ReturnOrderDetail',
     props: {
       //收货单id
       id: {
@@ -127,7 +118,7 @@
     components: {
       ColorSizeBoxTable,
       ColorSizeTable,
-      ReceiptOrderDetailBtnGroup
+      ReturnOrderDetailBtnGroup
     },
     computed: {
       //是收货方
@@ -138,11 +129,15 @@
           return false;
         }
       },
+      //图片url list
+      mediasUrlList: function () {
+        return this.formData.medias.map(media => media.url);
+      }
     },
     methods: {
       async getDetail() {
         // 获取收货单详情
-        const url = this.apis().receiptOrderDetail(this.id);
+        const url = this.apis().returnOrderDetail(this.id);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -174,6 +169,7 @@
           deliveryAddress: {
             details: ''
           },
+          medias: []
         }
       }
     },
@@ -206,13 +202,19 @@
     height: 32px;
   }
 
-  .receipt-order-container h6 {
+  .return-order-container h6 {
     font-size: 14px;
     color: #606266;
   }
 
-  .receipt-order-container {
+  .return-order-container {
     padding-bottom: 10px;
+  }
+
+  .image-item {
+    margin-right: 10px;
+    width: 100px;
+    height: 100px;
   }
 
 </style>
