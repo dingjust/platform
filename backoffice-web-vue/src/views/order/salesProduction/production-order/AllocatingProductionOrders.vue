@@ -27,7 +27,7 @@
     </el-dialog>
     <el-dialog :visible.sync="allocatingVisible" width="40%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <allocating-form :slotData="selectRow" @onCallback="onCallback"></allocating-form>  
+      <allocating-form v-if="allocatingVisible" :slotData="selectRow" @onCallback="onCallback"></allocating-form>  
     </el-dialog>
   </div>
 </template>

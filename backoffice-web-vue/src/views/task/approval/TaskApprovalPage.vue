@@ -105,7 +105,7 @@
       onDetail (row) {
         switch (row.type) {
           case 'SalesOrder':
-            this.$router.push('/sales/plan/' + row.auditModel.id);
+            this.$router.push('/sales/order/' + row.auditModel.id);
             break;
           case 'OutboundOrder':
             this.$router.push('/sales/outboundOrder/' + row.auditModel.id);
