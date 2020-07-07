@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_full_pdf_viewer/full_pdf_viewer_plugin.dart';
 
+//TODO: 目前插件full_pdf_viewer_plugin  需在FlutterFullPdfViewerManager 添加 .enableAnnotationRendering(true) 支持印章显示。后续需重写pdf插件
 class PDFWidget extends StatefulWidget {
   final PreferredSizeWidget appBar;
   final String path;
@@ -44,7 +45,6 @@ class _PDFWidgetState extends State<PDFWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(bottomHeight);
     bottomHeight = widget.bottomHeight==null?150.0:widget.bottomHeight;
     if (_rect == null) {
       _rect = _buildRect(context);
@@ -63,7 +63,6 @@ class _PDFWidgetState extends State<PDFWidget> {
       }
     }
     return new Scaffold(
-
         appBar: widget.appBar,
         body: Container(
           height: 500,
