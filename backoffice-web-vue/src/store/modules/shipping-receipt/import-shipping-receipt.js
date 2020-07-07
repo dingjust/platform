@@ -32,11 +32,11 @@ const actions = {
     keyword,
     page,
     size,
-    mode,
     companyCode
   }) {
     commit('keyword', keyword);
     if (page || page === 0) {
+      console.log(page);
       commit('currentPageNumber', page);
     }
 
@@ -44,23 +44,15 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    let queryForm = {
-      keyword: state.keyword
-    }
-
-    if (mode == 'import') {
-      //设置筛选发货方
-      queryForm['shipParty'] = companyCode;
-    } else if (mode == 'export') {
-      //设置筛选收货方
-      queryForm['receiveParty'] = companyCode;
-    }
-
-    const response = await http.post(url, queryForm, {
+    const response = await http.post(url, {
+      keyword: state.keyword,
+      shipParty: companyCode
+    }, {
       page: state.currentPageNumber,
-      size: state.currentPageSize
+      size: state.currentPageSize,
     });
 
+    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -74,29 +66,24 @@ const actions = {
     query,
     page,
     size,
-    mode,
     companyCode
   }) {
-    commit('currentPageNumber', page);
+
+    if (page || page === 0) {
+      commit('currentPageNumber', page);
+    }
     if (size) {
       commit('currentPageSize', size);
     }
 
-    if (mode == 'import') {
-      //设置筛选发货方
-      query['shipParty'] = companyCode;
-    } else if (mode == 'export') {
-      //设置筛选收货方
-      query['receiveParty'] = companyCode;
-    }
-
+    //设置筛选发货方
+    query['shipParty'] = companyCode;
 
     const response = await http.post(url, query, {
       page: state.currentPageNumber,
-      size: state.currentPageSize
+      size: state.currentPageSize,
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }

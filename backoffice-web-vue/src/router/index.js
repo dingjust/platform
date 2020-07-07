@@ -750,7 +750,7 @@ const router = new Router({
             {
               path: 'shipping-receipt-sheet',
               name: '发货收发货列表',
-              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/shipping-receipt-sheet/ShippingReceiptPage')
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/import/ImportShippingReceiptPage')
             },
             // {
             //   path: 'orders',
@@ -790,11 +790,11 @@ const router = new Router({
               name: '收发任务列表',
               component: () => import( /* webpackChunkName: 'receipt' */ '@/views/shipping-receipt/page/export/ExportShippingTasksPage')
             },
-            // {
-            //   path: 'shipping-receipt-sheet',
-            //   name: '收货收发货列表',
-            //   component: () => import( /* webpackChunkName: 'receipt' */ '@/views/shipping/shipping-task/ShippingTasksPage')
-            // }, 
+            {
+              path: 'shipping-receipt-sheet',
+              name: '发货收发货列表',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/export/ExportShippingReceiptPage')
+            },
             {
               path: 'orders/:id',
               name: '收货单详情',

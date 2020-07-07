@@ -8,12 +8,11 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <shipping-orders-toolbar :queryFormData="queryFormData" 
-                              @onAdvancedSearch="onAdvancedSearch"/>
+    <shipping-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
+          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -21,7 +20,9 @@
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
   const {
     mapGetters,
     mapActions
@@ -34,9 +35,15 @@
 
   export default {
     name: 'ShippingOrdersPage',
+    props: {
+      mode: {
+        type: String,
+        default: 'import'
+      }
+    },
     components: {
-     ShippingOrdersToolbar,
-     ShippingOrdersList 
+      ShippingOrdersToolbar,
+      ShippingOrdersList
     },
     computed: {
       ...mapGetters({
@@ -50,34 +57,47 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         const keyword = this.keyword;
         const url = this.apis().shippingOrderList();
+        const mode = this.mode;
+        const companyCode = this.currentUser.companyCode;
         this.search({
           url,
           keyword,
           page,
-          size
+          size,
+          mode,
+          companyCode
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         const query = this.queryFormData;
         const url = this.apis().shippingOrderList();
-        this.searchAdvanced({url, query, page, size});
+        const mode = this.mode;
+        const companyCode = this.currentUser.companyCode;
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size,
+          mode,
+          companyCode
+        });
       },
-      handleClick (tab, event) {
+      handleClick(tab, event) {
         this.queryFormData.status = tab.name;
         this.onAdvancedSearch(0, 10);
       },
-      onDetail (row) {
+      onDetail(row) {
         this.$router.push('/shipping/orders/' + row.id);
       },
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         activeName: '',
-        statuses: [
-          {
+        statuses: [{
             code: '',
             name: '全部'
           },
