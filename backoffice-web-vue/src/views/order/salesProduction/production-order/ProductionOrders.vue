@@ -91,12 +91,12 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch(page, size) {
+      async onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
         const url = this.apis().getProductionOrders();
         this.setIsAdvancedSearch(false);
-        this.search({
+        await this.search({
           url,
           keyword,
           statuses,
@@ -104,11 +104,11 @@
           size
         });
       },
-      onAdvancedSearch(page, size) {
+      async onAdvancedSearch(page, size) {
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getProductionOrders();
-        this.searchAdvanced({
+        await this.searchAdvanced({
           url,
           query,
           page,
@@ -121,10 +121,12 @@
         const result = await this.$http.post(url, this.queryFormData);
         if (result['errors']) {
           this.stateCount = {};
+          this.$message.error(result['errors'][0].message);
           return;
         }
         if (result.code === 0) {
           this.stateCount = {};
+          this.$message.error(result.msg);
           return;
         }
         this.stateCount = result.data;

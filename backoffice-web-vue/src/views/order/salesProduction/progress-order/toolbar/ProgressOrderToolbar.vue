@@ -39,9 +39,8 @@
       onReset () {
         this.queryFormData.keyword = '';
         this.queryFormData.statuses = '';
-        this.queryFormData.expectedDeliveryDateFrom = '';
-        this.queryFormData.expectedDeliveryDateTo = '';
         this.queryFormData.operatorName = '';
+        this.dateArr = null;
       }
     },
     data () {
@@ -51,8 +50,13 @@
     },
     watch: {
       dateArr: function (newVal, oldVal) {
-        this.queryFormData.expectedDeliveryDateFrom = newVal[0];
-        this.queryFormData.expectedDeliveryDateTo = newVal[1];
+        if (newVal == null) {
+          this.queryFormData.expectedDeliveryDateFrom = null;
+          this.queryFormData.expectedDeliveryDateTo = null;
+        } else {
+          this.queryFormData.expectedDeliveryDateFrom = newVal[0];
+          this.queryFormData.expectedDeliveryDateTo = newVal[1];
+        }
       }
     },
     created () {

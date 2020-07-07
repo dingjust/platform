@@ -44,7 +44,7 @@
       <!-- <el-table-column label="客户"></el-table-column> -->
       <el-table-column label="订单数量" prop="quantity" min-width="70"></el-table-column>
       <el-table-column label="负责人" prop="productionLeader.name" min-width="60"></el-table-column>
-      <el-table-column label="跟单员" prop="merchandiser.name" min-width="60"></el-table-column>
+      <el-table-column label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating"></el-table-column>
       <el-table-column label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
@@ -65,7 +65,7 @@
       </el-table-column>
       <el-table-column label="状态" min-width="60" v-if="!isAllocating">
         <template slot-scope="scope">
-          <span>{{getEnum('ProductionTaskOrderState', scope.row.state)}}</span>
+          <span>{{stateName(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="80">
@@ -113,11 +113,18 @@
       }
     },
     components: {},
-    computed: {},
+    computed: {
+    },
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
+      stateName (row) {
+        if (row.state == 'TO_BE_ALLOCATED') {
+          return '待生产';
+        }
+        return this.getEnum('ProductionTaskOrderState', row.state)
+      },
       isOuted (row) {
         if (row.outboundOrderCode) {
           return true;

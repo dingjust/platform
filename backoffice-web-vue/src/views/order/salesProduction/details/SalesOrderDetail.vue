@@ -170,7 +170,7 @@
         this.setPayPlan(result.data.payPlan);
       },
       setPayPlan (payPlan) {
-        this.payPlan.name = payPlan.name;
+        // this.payPlan.name = payPlan.name;
         this.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
         this.payPlan.payPlanType = payPlan.payPlanType;
         payPlan.payPlanItems.forEach((item) => {
@@ -269,7 +269,8 @@
         }
       },
       onRefresh() {
-        this.$router.go(0);
+        // this.$router.go(0);
+        this.getDetails();
       },
       validate(callback) {
         this.$refs.form.validate(callback);

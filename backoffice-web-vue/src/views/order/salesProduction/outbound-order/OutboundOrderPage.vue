@@ -123,6 +123,16 @@
       async outboundOrderStateCount() {
         const url = this.apis().outboundOrderStateCount();
         const result = await this.$http.post(url, this.queryFormData);
+        if (result['errors']) {
+          this.stateCount = {};
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          this.$message.error(result.msg);
+          return;
+        }
         this.stateCount = result.data;
       },
       tabName(tab) {

@@ -17,15 +17,16 @@
         </el-radio-group>
       </el-col>
     </el-row>
-    <el-row type="flex" justify="center" style="margin-top: 5px">
+    <el-row type="flex" justify="center" style="margin-top: 5px;height: 48px">
       <el-col :span="4">
         <h6 style="margin-bottom: 0px;margin-top: 8px;">跟单员：</h6>
       </el-col>
       <el-col :span="8">
         <personnel-selection :vPerson.sync="formData.merchandiser"/>
+        <h6 style="color: #F56C6C;margin-bottom: 0px" v-show="validatevisible">{{this.validatevisible ? '请选择跟单员' : '  '}}</h6>
       </el-col>
     </el-row>
-    <el-row type="flex" justify="center" style="margin-top: 20px">
+    <el-row type="flex" justify="center" style="margin-top: 10px">
       <el-col :span="4">
         <el-button @click="onCancel">取消</el-button>
       </el-col>
@@ -56,6 +57,10 @@
         this.$emit('onCallback', false);
       },
       async onSumbit () {
+        if (this.formData.merchandiser.id === '') {
+          this.validatevisible = true;
+          return;
+        }
         let data = {
           merchandiser: this.formData.merchandiser.id,
           type: this.formData.type
@@ -76,6 +81,7 @@
     },
     data () {
       return {
+        validatevisible: false,
         formData: {
           type: 'SELF_PRODUCED',
           merchandiser: {

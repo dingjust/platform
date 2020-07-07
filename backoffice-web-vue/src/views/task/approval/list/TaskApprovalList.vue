@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="订单编号" prop="code"></el-table-column>
+      <el-table-column label="订单编号" prop="originCode"></el-table-column>
       <el-table-column label="订单类型">
         <template slot-scope="scope">
           <span>{{getEnum('AuditLabel', scope.row.type)}}</span>

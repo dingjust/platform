@@ -93,24 +93,9 @@
         this.$emit('onAdvancedSearch', 0);
       },
       onReset () {
+        this.dateTime = null;
         this.queryFormData.keyword = '';
         this.queryFormData.categories = [];
-        this.queryFormData.createdDateTo = null;
-        this.queryFormData.createdDateFrom = null;
-        // this.queryFormData.statuses = [];
-        // const query = {
-        //   code: '',
-        //   requirementOrderCode: '',
-        //   skuID: '',
-        //   statuses: [],
-        //   expectedDeliveryDateFrom: null,
-        //   expectedDeliveryDateTo: null,
-        //   createdDateFrom: null,
-        //   createdDateTo: null,
-        //   keyword: '',
-        //   categories: []
-        // }
-        // this.setQueryFormData(query);
       },
       async getFactories (query) {
         const url = this.apis().getFactories();
