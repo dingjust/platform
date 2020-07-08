@@ -1,11 +1,17 @@
 <template>
   <div class="animated fadeIn content form-container">
     <el-card>
-      <el-row>
+      <el-row type="flex" justify="space-between">
         <el-col :span="4">
           <div class="title">
             <h6>发货单详情</h6>
           </div>
+        </el-col>
+        <el-col :span="6">
+          <h6>单号：{{formData.code}}</h6>
+        </el-col>
+        <el-col :span="4">
+          <h6>状态：{{getEnum('ShippingSheetState', formData.state)}}</h6>
         </el-col>
       </el-row>
       <div>
@@ -89,9 +95,15 @@
             </el-row>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="!hasReceiptOrder">
-          <el-button class="sumbit-btn" @click="onCreate">创建收货单</el-button>
-          <el-button style="margin-left:50px" type="text" @click="onReturnAll">整单退货 >></el-button>
+        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+          <template v-if="!hasReceiptOrder&&isReceiveParty">
+            <el-button class="sumbit-btn" @click="onCreate">创建收货单</el-button>
+            <el-button style="margin-left:50px" type="text" @click="onReturnAll">整单退货 >></el-button>
+          </template>
+          <!-- 待退货 -->
+          <template v-if="formData.state=='PENDING_RETURNED'&&isReceiveParty">
+            <el-button class="sumbit-btn" @click="onReturn">创建退货单</el-button>
+          </template>
         </el-row>
       </div>
     </el-card>
@@ -111,6 +123,14 @@
     computed: {
       hasReceiptOrder: function () {
         return this.formData.receiptSheets != null && this.formData.receiptSheets.length > 0;
+      },
+      //是否为收货方
+      isReceiveParty: function () {
+        if (this.currentUser != null && this.formData.receiveParty != null) {
+          return this.currentUser.companyCode == this.formData.receiveParty.uid;
+        } else {
+          return false;
+        }
       }
     },
     methods: {
@@ -150,13 +170,24 @@
           name: '创建退货单',
           params: {
             shippingOrder: this.formData,
-            isAllReturn:true
+            isAllReturn: true
+          }
+        });
+      },
+      //部分退货
+      onReturn() {
+        this.$router.push({
+          name: '创建退货单',
+          params: {
+            shippingOrder: this.formData,
+            isAllReturn: false
           }
         });
       }
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         formData: {
           product: {
             name: '',

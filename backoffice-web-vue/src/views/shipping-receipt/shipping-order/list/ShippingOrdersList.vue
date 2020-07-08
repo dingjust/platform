@@ -29,7 +29,7 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="发货人" prop="shipParty.name"></el-table-column>
+      <el-table-column label="发货人" prop="creator.name"></el-table-column>
       <el-table-column label="发货数量">
         <template slot-scope="scope">
           <span>{{getTotalNum(scope.row)}}</span>

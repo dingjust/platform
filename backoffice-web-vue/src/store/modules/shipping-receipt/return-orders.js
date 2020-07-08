@@ -11,8 +11,7 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
-  formData: {
-  },
+  formData: {},
 };
 
 const mutations = {
@@ -24,8 +23,18 @@ const mutations = {
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
-    console.log(keyword + 'test' + page + 'test' + size);
+  async search({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    keyword,
+    page,
+    size,
+    mode,
+    companyCode
+  }) {
     commit('keyword', keyword);
     if (page || page === 0) {
       console.log(page);
@@ -36,30 +45,60 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post(url, {
+    let queryForm = {
       keyword: state.keyword
-    }, {
+    }
+
+    if (mode == 'import') {
+      //设置筛选发货方
+      queryForm['shipParty'] = companyCode;
+    } else if (mode == 'export') {
+      //设置筛选收货方
+      queryForm['receiveParty'] = companyCode;
+    }
+
+
+    const response = await http.post(url, queryForm, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
   },
-  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
+
+  async searchAdvanced({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    query,
+    page,
+    size,
+    mode,
+    companyCode
+  }) {
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
+
+    if (mode == 'import') {
+      //设置筛选发货方
+      query['shipParty'] = companyCode;
+    } else if (mode == 'export') {
+      //设置筛选收货方
+      query['receiveParty'] = companyCode;
+    }
+
 
     const response = await http.post(url, query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
