@@ -312,7 +312,7 @@
       },
       async onSave(submitAudit) {
         let validate = await this.validateForms();
-        let flag = this.isCooperator();
+        let flag = await this.isCooperator();
         if (validate) {
           if (this.hasOrigin) {
             if (flag) {
@@ -389,7 +389,7 @@
         const result = await this.$http.post(url, {
           type: 'ONLINE'
         })
-        return result.content.some(item => item.id == this.form.id);
+        return result.content.some(item => item.id == this.form.originCooperator.id);
       } 
     },
     data() {
