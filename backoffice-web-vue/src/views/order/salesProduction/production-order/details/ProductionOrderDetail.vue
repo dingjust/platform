@@ -1,6 +1,11 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
+      <div class="sales-plan-triangle_box" v-if="isMySelf">
+        <div class="sales-plan-triangle" :style="isShowTag ? '#ffd60c': '#ffffff'">
+          <h6 class="sales-plan-triangle_text">{{orderType}}</h6>
+        </div>
+      </div>
       <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="production-order-list-title">
@@ -11,7 +16,7 @@
           <h6>工单号：{{formData.taskOrderEntries!=null?formData.taskOrderEntries[0].code:''}}</h6>
         </el-col>
         <el-col :span="6">
-          <h6>订单状态：{{getEnum('purchaseOrderStatuses', formData.status)}}</h6>
+          <h6>订单状态：{{orderState}}</h6>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
@@ -25,7 +30,7 @@
           </el-row>
         </div> -->
         <progress-order :slotData="progressOrder" :order="productionOrder" @callback="onCallBack" :formData="formData"/>
-        <production-order-relation-info :slotData="formData" :id="id"/>
+        <production-order-relation-info :slotData="formData" :id="id" v-if="isMySelf"/>
         <!-- <production-order-button-group style="margin-top:50px" :slotData="formData" @callback="getDetail" /> -->
       </el-row>
     </el-card>
@@ -92,11 +97,40 @@
         } else {
           return null;
         }
+      },
+      orderType: function () {
+        if (!this.formData.taskOrderEntries) {
+          return;
+        }
+        if (this.formData.taskOrderEntries[0].type == 'SELF_PRODUCED') {
+          this.isShowTag = true;
+          return '自\xa0\xa0\xa0\xa0\xa0产';
+        } else if (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.formData.taskOrderEntries[0].outboundOrderCode) {
+          this.isShowTag = true; 
+          return '已外发'; 
+        } else {
+          this.isShowTag = false;
+        }
+      },
+      isMySelf: function () {
+        if (!this.formData.taskOrderEntries) {
+          return;
+        }
+        return this.formData.taskOrderEntries[0].belongTo.uid == this.$store.getters.currentUser.companyCode;
+      },
+      orderState: function () {
+        if (!this.formData.taskOrderEntries) {
+          return;
+        }
+        if (this.formData.taskOrderEntries[0].state == 'TO_BE_ALLOCATED') {
+          return this.isMySelf ? '待分配' : '待生产';
+        }
+        return this.getEnum('ProductionTaskOrderState', this.formData.taskOrderEntries[0].state)
       }
     },
     methods: {
-      async getDetail() {
-        const url = this.apis().getProductionOrderDetail(this.id);
+      async getDetail(id) {
+        const url = this.apis().getProductionOrderDetail(id);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -108,17 +142,27 @@
         if (data != null) {
           this.$store.state.ProductionOrderModule.formData = Object.assign({}, data);
         } else {
-          this.getDetail();
+          this.getDetail(this.id);
         }
       }
     },
     data() {
-      return {}
+      return {
+        isShowTag: false
+      }
     },
-    mounted() {},
+    mounted() {
+
+    },
     created() {
-      this.getDetail();
-    }
+      this.getDetail(this.id);
+    },
+    beforeRouteUpdate (to, from, next) {
+      if (to.name === from.name && to.params.id != from.params.id) {
+        this.getDetail(to.params.id);
+      }
+      next();
+    },
   }
 
 </script>
@@ -129,4 +173,27 @@
     padding-left: 10px;
   }
 
+  .sales-plan-triangle_box {
+    margin-top: 1px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .sales-plan-triangle {
+    width: 0;
+    height: 0;
+    border-right: 70px solid #ffffff;
+    border-bottom: 70px solid transparent;
+    z-index: 0;
+  }
+
+  .sales-plan-triangle_text {
+    width: 80px;
+    padding-top: 10px;
+    padding-left: 35px;
+    transform: rotateZ(45deg);
+    color: white;
+    font-size: 12px;
+  }
 </style>

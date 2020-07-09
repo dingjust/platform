@@ -1613,7 +1613,7 @@ const state = {
     code: 'TO_BE_ACCEPTED',
     name: '待接单'
   }, {
-    code: 'ACCEPTED',
+    code: 'AUDIT_PASSED',
     name: '生产中'
   }, {
     code: 'COMPLETED',

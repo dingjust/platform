@@ -27,9 +27,9 @@
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
           <el-divider v-if="scope.row.state == 'AUDITING'" direction="vertical"/>
-          <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onApproval(scope.row)">审批</el-button>
+          <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onApproval(scope.row)">通过</el-button>
           <el-divider v-if="scope.row.state == 'AUDITING'" direction="vertical"/>
-          <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onRefuse(scope.row)">拒绝</el-button>
+          <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onRefuse(scope.row)">驳回</el-button>
         </template>
       </el-table-column>
     </el-table>

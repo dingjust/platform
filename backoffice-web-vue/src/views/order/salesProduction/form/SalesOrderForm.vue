@@ -312,15 +312,20 @@
       },
       async onSave(submitAudit) {
         let validate = await this.validateForms();
+        let flag = this.isCooperator();
         if (validate) {
           if (this.hasOrigin) {
-            this.$confirm('此订单合作对象非本公司合作商，是否添加为合作商?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
+            if (flag) {
               this._Save(submitAudit);
-            });
+            } else {
+              this.$confirm('此订单合作对象非本公司合作商，是否添加为合作商?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this._Save(submitAudit);
+              });
+            }
           } else {
             this._Save(submitAudit);
           }
@@ -377,7 +382,15 @@
             resolve(res);
           })
         })
-      }
+      },
+      // 判断合作对象是否为本公司合作商
+      async isCooperator () {
+        const url = this.apis().getCooperators();
+        const result = await this.$http.post(url, {
+          type: 'ONLINE'
+        })
+        return result.content.some(item => item.id == this.form.id);
+      } 
     },
     data() {
       return {
