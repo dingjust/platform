@@ -3,7 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange" @row-click="rowClick">
       <el-table-column type="selection" width="55" v-if="canCreateReceipt"></el-table-column>
-      <el-table-column label="发货单号" prop="code" min-width="120px"></el-table-column>
+      <el-table-column label="发货单号" prop="code" min-width="110px"></el-table-column>
       <el-table-column label="产品名称" min-width="150px">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
@@ -22,7 +22,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="关联订单" min-width="120px">
+      <el-table-column label="关联订单" min-width="110px">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
             @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
@@ -30,7 +30,7 @@
         </template>
       </el-table-column>
       <el-table-column label="发货人" prop="creator.name"></el-table-column>
-      <el-table-column label="发货数量">
+      <el-table-column label="发货数量" min-width="70px">
         <template slot-scope="scope">
           <span>{{getTotalNum(scope.row)}}</span>
         </template>
@@ -40,7 +40,7 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收货单">
+      <el-table-column label="收货单" min-width="110px">
         <template slot-scope="scope" v-if="scope.row.receiptSheets!=null">
           <template v-for="(sheet,sheetIndex) in scope.row.receiptSheets">
             <el-row :key="'sheet'+sheetIndex" type="flex">
@@ -55,7 +55,7 @@
           <span>{{countTotalSheetsNum(scope.row.receiptSheets)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退货单">
+      <el-table-column label="退货单" min-width="110px">
         <template slot-scope="scope" v-if="scope.row.returnSheets!=null">
           <template v-for="(sheet,sheetIndex) in scope.row.returnSheets">
             <el-row :key="'sheet'+sheetIndex" type="flex">
@@ -73,6 +73,11 @@
       <el-table-column label="差异数">
         <template slot-scope="scope">
           <span>{{scope.row.diffQuantity}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('ShippingSheetState', scope.row.state)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">

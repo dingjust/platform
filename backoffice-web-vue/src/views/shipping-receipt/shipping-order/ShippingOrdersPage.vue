@@ -86,7 +86,7 @@
         });
       },
       handleClick(tab, event) {
-        this.queryFormData.status = tab.name;
+        this.queryFormData.states = tab.name;
         this.onAdvancedSearch(0, 10);
       },
       onDetail(row) {
@@ -96,40 +96,38 @@
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
-        activeName: '',
+        activeName: 'PENDING_RECEIVED',
         statuses: [{
-            code: '',
-            name: '全部'
-          },
-          {
-            code: '1',
-            name: '待收货'
-          },
-          {
-            code: '2',
-            name: '待退货'
-          },
-          {
-            code: '3',
-            name: '退货中'
-          },
-          {
-            code: '4',
-            name: '已完成'
-          }
-        ],
+          code: 'PENDING_RECEIVED',
+          name: '待收货'
+        }, {
+          code: 'PENDING_RETURNED',
+          name: '待退货'
+        }, {
+          code: 'RETURNING',
+          name: '退货中'
+        }, {
+          code: 'PENDING_RECONSIDER',
+          name: '待复议'
+        }, {
+          code: 'IN_RECONSIDER',
+          name: '复议中'
+        }, {
+          code: 'PENDING_RECONCILED',
+          name: '待对账'
+        }],
         queryFormData: {
           keyword: '',
-          productionLeaderName: '',
-          operatorName: '',
-          creationtimeStart: '',
-          creationtimeEnd: '',
-          status: ''
+          cooperatorName: '',
+          merchandiserName: '',
+          createdDateFrom: '',
+          createdDateTo: '',
+          states: 'PENDING_RECEIVED'
         }
       }
     },
     created() {
-      this.onSearch();
+      this.onAdvancedSearch();
     },
     destroyed() {
 

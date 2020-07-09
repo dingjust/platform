@@ -45,7 +45,6 @@
         searchAdvanced: 'searchAdvanced'
       }),
       onSearch(page, size) {
-        // TODO 查询自身的收发任务
         const keyword = this.keyword;
         const url = this.apis().shippingTaskList();
         const companyCode = this.currentUser.companyCode;
@@ -58,7 +57,6 @@
         });
       },
       onAdvancedSearch(page, size) {
-        // TODO 查询自身的收发任务
         const query = this.queryFormData;
         const url = this.apis().shippingTaskList();
         const companyCode = this.currentUser.companyCode;
@@ -76,16 +74,16 @@
         currentUser: this.$store.getters.currentUser,
         queryFormData: {
           keyword: '',
-          productionLeaderName: '',
-          operatorName: '',
-          creationtimeStart: '',
-          creationtimeEnd: '',
-          status: ''
+          cooperatorName: '',
+          merchandiserName: '',
+          createdDateFrom: '',
+          createdDateTo: '',
+          states: 'PENDING_DELIVERY'
         }
       }
     },
     created() {
-      this.onSearch();
+      this.onAdvancedSearch();
     },
     destroyed() {
 

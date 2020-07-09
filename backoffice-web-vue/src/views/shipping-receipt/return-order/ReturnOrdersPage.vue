@@ -95,7 +95,7 @@
         });
       },
       handleClick(tab, event) {
-        this.queryFormData.status = tab.name;
+        this.queryFormData.states = tab.name;
         this.onAdvancedSearch(0, 10);
       },
       onDetail(row) {
@@ -108,33 +108,30 @@
     },
     data() {
       return {
-        activeName: '',
+        activeName: 'RETURN_TO_BE_RECEIVED',
         currentUser: this.$store.getters.currentUser,
-        statuses: [{
-            code: '',
-            name: '全部'
-          },
+        statuses: [
           {
-            code: '1',
+            code: 'RETURN_TO_BE_RECEIVED',
             name: '退货待收'
           },
           {
-            code: '2',
+            code: 'RETURN_RECEIVED',
             name: '退货已收'
-          }
+          },
         ],
         queryFormData: {
           keyword: '',
-          productionLeaderName: '',
-          operatorName: '',
-          creationtimeStart: '',
-          creationtimeEnd: '',
-          status: ''
+          cooperatorName: '',
+          merchandiserName: '',
+          createdDateFrom: '',
+          createdDateTo: '',
+          states: 'RETURN_TO_BE_RECEIVED'
         }
       }
     },
     created() {
-      this.onSearch();
+      this.onAdvancedSearch();
     },
     destroyed() {
 

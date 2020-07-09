@@ -47,7 +47,7 @@
         this.$emit('onAdvancedSearch');
       },
       handleClick (tab, event) {
-        this.queryFormData.status = tab.name;
+        this.queryFormData.states = tab.name;
         this.$emit('onAdvancedSearch');
       },
       onDetail (row) {
@@ -56,25 +56,8 @@
     },
     data() {
       return {
-        activeName: '',
-        statuses: [
-          {
-            code: '',
-            name: '全部'
-          },
-          {
-            code: 'PENDING_DELIVERY',
-            name: '待发货'
-          },
-          {
-            code: 'SHIPPED',
-            name: '已发货'
-          },
-          {
-            code: 'COMPLETED',
-            name: '已完成'
-          },
-        ]
+        activeName: 'PENDING_DELIVERY',
+        statuses: this.$store.state.EnumsModule.ReceiveDispatchTaskState
       }
     },
     created() {
