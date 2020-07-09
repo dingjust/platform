@@ -77,12 +77,17 @@
       onDetail() {
 
       },
-      onSelect(val) {        
-        this.selectedData=val;
+      onSelect(val) {
+        this.selectedData = val;
       },
+      //复议
       onReconsider() {
-
-      }
+        if (this.selectedData != null && this.selectedData.id != null) {
+          this.$router.push('/reconsiders/create/orders/' + this.selectedData.id);
+        } else {
+          this.$message('请选择发货单复议');
+        }
+      },
     },
     data() {
       return {
@@ -95,26 +100,26 @@
           },
           IN_RECONSIDER: {
             states: 'IN_RECONSIDER',
-            columns: ['多选','发货单号', '产品名称', '关联订单', '关联收货单', '收货单创建人', '发货数', '收货数', '发货操作'],
+            columns: ['多选', '发货单号', '产品名称', '关联订单', '关联收货单', '收货单创建人', '发货数', '收货数', '发货操作'],
             url: this.apis().shippingOrderList()
           },
           RECONSIDER_SUCCESS: {
             states: 'RECONSIDER_SUCCESS',
-            columns: ['多选','退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
+            columns: ['多选', '退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
             url: this.apis().shippingOrderList()
           },
           RECONSIDER_FAIL: {
             states: 'RECONSIDER_FAIL',
-            columns: ['多选','退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
+            columns: ['多选', '退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
             url: this.apis().shippingOrderList()
           },
           RECONSIDER_EXPIRED: {
             states: 'RECONSIDER_EXPIRED',
-            columns: ['多选','发货单号', '产品名称', '单价', '发货数量', '收货单', '收货数', '差异数', '发货操作'],
+            columns: ['多选', '发货单号', '产品名称', '单价', '发货数量', '收货单', '收货数', '差异数', '发货操作'],
             url: this.apis().shippingOrderList()
           }
         },
-        selectedData:''
+        selectedData: ''
       }
     },
   }
