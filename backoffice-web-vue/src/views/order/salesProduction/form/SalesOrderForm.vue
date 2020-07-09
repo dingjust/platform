@@ -312,10 +312,9 @@
       },
       async onSave(submitAudit) {
         let validate = await this.validateForms();
-        let flag = await this.isCooperator();
         if (validate) {
           if (this.hasOrigin) {
-            if (flag) {
+            if (this.form.originCooperator.id) {
               this._Save(submitAudit);
             } else {
               this.$confirm('此订单合作对象非本公司合作商，是否添加为合作商?', '提示', {
@@ -382,15 +381,7 @@
             resolve(res);
           })
         })
-      },
-      // 判断合作对象是否为本公司合作商
-      async isCooperator () {
-        const url = this.apis().getCooperators();
-        const result = await this.$http.post(url, {
-          type: 'ONLINE'
-        })
-        return result.content.some(item => item.id == this.form.originCooperator.id);
-      } 
+      }
     },
     data() {
       return {
