@@ -1,4 +1,5 @@
 import {
+  Selection,
   ShippingOrderCode,
   RelationShippingOrder,
   Product,
@@ -20,6 +21,8 @@ import {
   ShippingOperation,
   ReceiptOperation,
   ReturnOperation,
+  ShipReceNum,
+  ReceiptDate,
   COMPONENT_NAME_MAP
 } from "./table-constants";
 
@@ -33,6 +36,7 @@ const ShippingDynamicTableList = {
     }
   },
   components: {
+    Selection,
     ShippingOrderCode,
     RelationShippingOrder,
     Product,
@@ -54,6 +58,8 @@ const ShippingDynamicTableList = {
     ShippingOperation,
     ReceiptOperation,
     ReturnOperation,
+    ShipReceNum,
+    ReceiptDate,
     COMPONENT_NAME_MAP
   },
   render: function (createElement) {

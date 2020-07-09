@@ -1,6 +1,12 @@
+const Selection = {
+  template: `
+  <el-table-column type="selection" width="55" fixed="left"></el-table-column>
+`
+}
+
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" prop="code" min-width="120" fixed="left" ></el-table-column>
+  <el-table-column label="发货单号" prop="code" min-width="120" fiexd></el-table-column>
 `
 }
 
@@ -112,8 +118,41 @@ const RelationReceiptOrder = {
   template: `<el-table-column label="关联收货单"></el-table-column>`
 }
 
+const ShipReceNum = {
+  template: `
+  <el-table-column label="发货数/收货数">
+    <template slot-scope="scope">
+      <span>{{scope.row.totalQuantity}}/{{getTotalNum(scope.row.receiptSheets)}}</span>
+    </template>
+  </el-table-column>`,
+  methods: {
+    //统计收货数
+    getTotalNum(sheets) {
+      let result = 0;
+      if (sheets != null) {
+        sheets.forEach(element => {
+          let num = parseInt(element.totalQuantity);
+          if (!Number.isNaN(num)) {
+            result += num;
+          }
+        });
+      }
+      return result;
+    }
+  }
+}
+
 const ReceiptNum = {
   template: `<el-table-column label="收货数"></el-table-column>`
+}
+
+const ReceiptDate = {
+  template: `
+  <el-table-column label="收货日期">
+    <template slot-scope="scope">
+      <span v-if="scope.row.receiptSheets!=null">{{scope.row.receiptSheets[0].creationtime | formatDate}}</span>
+    </template>
+  </el-table-column>`
 }
 
 const ReturnOrder = {
@@ -134,11 +173,44 @@ const ReturnOrderCreator = {
 }
 
 const ReturnReceiptNum = {
-  template: `<el-table-column label="退货数/退货已收数"></el-table-column>`
+  template: `
+  <el-table-column label="退货数/收退货数">
+    <template slot-scope="scope">
+      <span>{{getReturnTotalNum(scope.row.returnSheets)}}/{{getReceReturnlNum(scope.row.returnSheets)}}</span>
+    </template>
+  </el-table-column>`,
+  methods: {
+    //统计退货数
+    getReturnTotalNum(sheets) {
+      let result = 0;
+      if (sheets != null) {
+        sheets.forEach(element => {
+          let num = parseInt(element.totalQuantity);
+          if (!Number.isNaN(num)) {
+            result += num;
+          }
+        });
+      }
+      return result;
+    },
+    //统计收退货数
+    getReceReturnlNum(sheets) {
+      let result = 0;
+      if (sheets != null) {
+        sheets.filter(sheet => sheet.state == 'RETURN_RECEIVED').forEach(element => {
+          let num = parseInt(element.totalQuantity);
+          if (!Number.isNaN(num)) {
+            result += num;
+          }
+        });
+      }
+      return result;
+    }
+  }
 }
 
 const DifferentNum = {
-  template: `<el-table-column label="差异数"></el-table-column>`
+  template: `<el-table-column label="差异数" prop="diffQuantity"></el-table-column>`
 }
 
 const ShippingOperation = {
@@ -182,6 +254,7 @@ const ReturnOperation = {
 
 
 const COMPONENT_NAME_MAP = {
+  '多选': 'selection',
   '发货单号': 'shipping-order-code',
   '关联发货单': 'relation-shipping-order',
   '产品名称': 'product',
@@ -202,9 +275,12 @@ const COMPONENT_NAME_MAP = {
   '发货操作': 'shipping-operation',
   '收货操作': 'receipt-operation',
   '退货操作': 'return-operation',
+  '发货收货数': 'ship-rece-num',
+  '收货日期': 'receipt-date'
 }
 
 export {
+  Selection,
   ShippingOrderCode,
   RelationShippingOrder,
   Product,
@@ -226,5 +302,7 @@ export {
   ShippingOperation,
   ReceiptOperation,
   ReturnOperation,
+  ShipReceNum,
+  ReceiptDate,
   COMPONENT_NAME_MAP
 }

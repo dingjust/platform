@@ -9,10 +9,7 @@
   <div>
     <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">
       <template>
-        <el-col :span="4">
-          <el-button class="material-btn">核验</el-button>
-        </el-col>
-        <el-col :span="4">
+        <el-col :span="4" v-if="isShipParty">
           <el-button class="material-btn">申请复议</el-button>
         </el-col>
       </template>
@@ -34,6 +31,14 @@
       }
     },
     computed: {
+      //是否为发货方
+      isShipParty: function () {
+        if (this.currentUser != null && this.formData.shipParty != null) {
+          return this.currentUser.companyCode == this.formData.shipParty.uid;
+        } else {
+          return false;
+        }
+      }
       // //是否创建人
       // isCreator: function () {
       //   if (this.slotData.creator != null && this.currentUser != null) {

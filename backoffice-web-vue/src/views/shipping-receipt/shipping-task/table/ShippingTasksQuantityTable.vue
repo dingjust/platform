@@ -27,13 +27,13 @@
         <h6>已发数：{{totalShippingNum}}</h6>
       </el-col>
       <el-col :span="3">
-        <h6>已退数：200000</h6>
+        <h6>已退数：{{totalReturnNum}}</h6>
       </el-col>
       <el-col :span="3">
-        <h6>实收数：200000</h6>
+        <h6>实收数：{{totalReceiptNum}}</h6>
       </el-col>
       <el-col :span="3">
-        <h6>差异数：200000</h6>
+        <h6>差异数：{{totalDiffNum}}</h6>
       </el-col>
     </el-row>
   </div>
@@ -100,7 +100,58 @@
         if (this.formData.shippingSheets != null) {
           this.formData.shippingSheets.forEach(element => {
             let num = parseInt(element.totalQuantity);
-            result += num;
+            if (!Number.isNaN(num)) {
+              result += num;
+            }
+          });
+        }
+        return result;
+      },
+      //统计退货总数
+      totalReturnNum: function () {
+        let result = 0;
+        if (this.formData.shippingSheets != null) {
+          this.formData.shippingSheets.forEach(element => {
+            //统计对应退货单数
+            if (element.returnSheets != null) {
+              element.returnSheets.forEach(sheet => {
+                let num = parseInt(sheet.totalQuantity);
+                if (!Number.isNaN(num)) {
+                  result += num;
+                }
+              });
+            }
+          });
+        }
+        return result;
+      },
+      //统计收货总数
+      totalReceiptNum: function () {
+        let result = 0;
+        if (this.formData.shippingSheets != null) {
+          this.formData.shippingSheets.forEach(element => {
+            //统计对应退货单数
+            if (element.receiptSheets != null) {
+              element.receiptSheets.forEach(sheet => {
+                let num = parseInt(sheet.totalQuantity);
+                if (!Number.isNaN(num)) {
+                  result += num;
+                }
+              });
+            }
+          });
+        }
+        return result;
+      },
+      //统计差异总数
+      totalDiffNum: function () {
+        let result = 0;
+        if (this.formData.shippingSheets != null) {
+          this.formData.shippingSheets.forEach(element => {
+            let num = parseInt(element.diffQuantity);
+            if (!Number.isNaN(num)) {
+              result += num;
+            }
           });
         }
         return result;

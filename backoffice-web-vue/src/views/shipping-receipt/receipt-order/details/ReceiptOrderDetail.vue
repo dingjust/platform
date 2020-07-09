@@ -106,7 +106,6 @@
           <h6>发货单：KY1000000001</h6>
         </el-col>
       </el-row>
-      <receipt-order-detail-btn-group v-if="isReceiveParty" />
     </el-card>
   </div>
 </template>
@@ -116,8 +115,6 @@
     ColorSizeBoxTable,
     ColorSizeTable
   } from '@/components/'
-
-  import ReceiptOrderDetailBtnGroup from './ReceiptOrderDetailBtnGroup';
 
   export default {
     name: 'ReceiptOrderDetail',
@@ -129,8 +126,7 @@
     },
     components: {
       ColorSizeBoxTable,
-      ColorSizeTable,
-      ReceiptOrderDetailBtnGroup
+      ColorSizeTable,    
     },
     computed: {
       //是收货方

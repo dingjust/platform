@@ -7,7 +7,7 @@
     </el-dialog>
     <el-form :inline="true" ref="address" :model="address" label-position="left" :disabled="readOnly">
       <el-row type="flex" align="middle" :gutter="10" justify="space-between">
-        <el-col :span="7">
+        <el-col :span="8">
           <el-form-item label="送货地址" style="padding-top:8px" :rules="[
                 { required: !readOnly, message: '请选择省', trigger: 'change'}]" :prop="'region'">
             <el-select v-model="address.region" value-key="isocode" @change="(val)=>onRegionChanged(val)"
@@ -42,7 +42,7 @@
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="3">
+        <el-col :span="2">
           <el-form-item>
             <el-button size="mini" @click="addressSelect">选择</el-button>
           </el-form-item>

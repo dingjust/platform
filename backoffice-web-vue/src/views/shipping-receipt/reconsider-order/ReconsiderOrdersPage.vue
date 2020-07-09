@@ -1,40 +1,54 @@
 <template>
-  <div class="animated fadeIn content">
-    <el-card>
-      <el-row>
-        <el-col :span="4">
-          <div class="title">
-            <h6>差异复议</h6>
-          </div>
-        </el-col>
+  <div>
+    <reconsider-orders-toolbar :queryFormData="queryFormData" :ableToApply="ableToApply"
+      @onAdvancedSearch="onAdvancedSearch" @onApply="onApply" />
+    <el-row type="flex" justify="start">
+      <h6 style="color: #F56C6C">注明：待复议中的发货订单，申请复议时间为5天，如5天内没有申请复议，则视为放弃复议，此发货单将不再接受复议</h6>
+    </el-row>
+    <div class="over-tabs">
+      <el-row type="flex">
+        <el-button v-if="activeName=='PENDING_RECONSIDER'" class="material-btn" @click="onReconsider">申请复议</el-button>
       </el-row>
-      <div class="pt-2"></div>
-      <reconsider-orders-toolbar :queryFormData="queryFormData" :ableToApply="ableToApply" 
-                                  @onAdvancedSearch="onAdvancedSearch" @onApply="onApply"/>
-      <el-row type="flex" justify="start">
-        <h6 style="color: #F56C6C">注明：待复议中的发货订单，申请复议时间为5天，如5天内没有申请复议，则视为放弃复议，此发货单将不再接受复议</h6>
-      </el-row>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-            <reconsider-orders-list :page="page" :ableToApply="ableToApply" :searchType="searchType"
-                                    @onDetail="onDetail" @onAdvancedSearch="onAdvancedSearch"/>
-          </el-tab-pane>
-        </template>
-      </el-tabs>
-    </el-card>
+    </div>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <template v-for="(map,states) in statusMap">
+        <el-tab-pane :label="getEnum('ShippingSheetState', map.states)" :name="states" :key="states">
+          <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch"
+            @onSelect="onSelect" />
+        </el-tab-pane>
+      </template>
+    </el-tabs>
   </div>
 </template>
 
 <script>
   import ReconsiderOrdersToolbar from './toolbar/ReconsiderOrdersToolbar'
   import ReconsiderOrdersList from './list/ReconsiderOrdersList'
+
+  import {
+    ShippingDynamicTable
+  } from '../components/index'
+
   export default {
     name: 'ReconsiderOrdersPage',
-    props: ['mode'],
+    props: {
+      mode: {
+        type: String,
+        default: 'import'
+      },
+      page: {
+        type: Object,
+        required: true
+      },
+      queryFormData: {
+        type: Object,
+        required: true
+      }
+    },
     components: {
       ReconsiderOrdersToolbar,
-      ReconsiderOrdersList
+      ReconsiderOrdersList,
+      ShippingDynamicTable
     },
     computed: {
       ableToApply: function () {
@@ -42,93 +56,67 @@
       }
     },
     methods: {
-      handleClick (tab, event) {
-        if (tab.name == 'first') {
-          this.searchType = 'SHIPPING_ORDER';
-          this.queryFormData.status = '待复议';
-          this.searchUrl = this.apis().getProductionTaskList();
-        } else if (tab.name == 'second') {
-          this.searchType = 'RECONSIDER_ORDER';
-          this.queryFormData.status = '复议中';
-          this.searchUrl = this.apis().getProductionOrders();
-        } else if (tab.name == 'third') {
-          this.searchType = 'RECONSIDER_ORDER';
-          this.queryFormData.status = '复议成功';
-          this.searchUrl = this.apis().getProductionOrders();
-        } else if (tab.name == 'fourth') {
-          this.searchType = 'RECONSIDER_ORDER';
-          this.queryFormData.status = '复议失败';
-          this.searchUrl = this.apis().getProductionOrders();
-        } else if (tab.name == 'fifth') {
-          this.searchType = 'SHIPPING_ORDER';
-          this.queryFormData.status = '已过期';
-          this.searchUrl = this.apis().getProductionTaskList();
-        } 
-        this.onAdvancedSearch(0, 10);
+      getStatusVal(state) {
+        return this.getEnum("ShippingSheetState", state);
       },
-      async onAdvancedSearch (page, size) {
-        const url = this.searchUrl;
-        const query = this.queryFormData;
-        const result = await this.$http.post(url, query, {
-          page: page,
-          size: size
+      handleClick(tab, event) {
+        this.$emit('handleClick', {
+          states: this.statusMap[tab.name].states,
+          searchUrl: this.statusMap[tab.name].url
         });
-        this.page = result;
       },
-      onApply () {
+      onSearch(page, size) {
+        this.$emit('onSearch');
+      },
+      onAdvancedSearch(page, size) {
+        this.$emit('onAdvancedSearch');
+      },
+      onApply() {
 
       },
-      onDetail () {
+      onDetail() {
+
+      },
+      onSelect(val) {        
+        this.selectedData=val;
+      },
+      onReconsider() {
 
       }
     },
     data() {
       return {
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
+        activeName: 'PENDING_RECONSIDER',
+        statusMap: {
+          PENDING_RECONSIDER: {
+            states: 'PENDING_RECONSIDER',
+            columns: ['多选', '发货单号', '产品名称', '关联订单', '发货收货数', '退货收货数', '收货日期', '差异数', '发货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          IN_RECONSIDER: {
+            states: 'IN_RECONSIDER',
+            columns: ['多选','发货单号', '产品名称', '关联订单', '关联收货单', '收货单创建人', '发货数', '收货数', '发货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          RECONSIDER_SUCCESS: {
+            states: 'RECONSIDER_SUCCESS',
+            columns: ['多选','退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          RECONSIDER_FAIL: {
+            states: 'RECONSIDER_FAIL',
+            columns: ['多选','退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
+            url: this.apis().shippingOrderList()
+          },
+          RECONSIDER_EXPIRED: {
+            states: 'RECONSIDER_EXPIRED',
+            columns: ['多选','发货单号', '产品名称', '单价', '发货数量', '收货单', '收货数', '差异数', '发货操作'],
+            url: this.apis().shippingOrderList()
+          }
         },
-        activeName: 'first',
-        searchType: '',
-        searchUrl: '',
-        statuses: [{
-          code: 'first',
-          name: '待复议'
-        }, {
-          code: 'second',
-          name: '复议中'
-        }, {
-          code: 'third',
-          name: '复议成功'
-        }, {
-          code: 'fourth',
-          name: '复议失败'
-        }, {
-          code: 'fifth',
-          name: '已过期'
-        }],
-        queryFormData: {
-          keyword: '',
-          productionLeaderName: '',
-          operatorName: '',
-          creationtimeStart: '',
-          creationtimeEnd: '',
-          status: ''
-        }
+        selectedData:''
       }
     },
-    created() {
-      this.searchType = 'SHIPPING_ORDER';
-      this.queryFormData.status = '待复议';
-      this.searchUrl = this.apis().getProductionTaskList();
-      this.onAdvancedSearch(0, 10);
-    },
-    destroyed() {
-
-    }
   }
 
 </script>
@@ -138,4 +126,20 @@
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
+
+  .over-tabs {
+    position: absolute;
+    z-index: 100;
+    right: 30px;
+    margin-top: 2px;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 120px;
+    height: 35px;
+  }
+
 </style>

@@ -1,9 +1,13 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="formData.shippingSheets" :height="autoHeight">
-      <el-table-column label="发货单号" prop="code" min-width="120">
+      <el-table-column label="发货单号" prop="code" min-width="160px">
         <template slot-scope="scope">
-          <el-button type="text" @click="onShippingSheetDetail(scope.row.id)">{{scope.row.code}}</el-button>
+          <el-row type="flex" align="middle">
+            <el-button type="text" @click="onShippingSheetDetail(scope.row.id)">{{scope.row.code}}</el-button>
+            <el-tag size="mini" style="margin-left:10px" type="info" effect="plain">
+              {{getEnum('ShippingSheetState', scope.row.state)}}</el-tag>
+          </el-row>
         </template>
       </el-table-column>
       <el-table-column label="发货数量" prop="totalQuantity"></el-table-column>
@@ -12,7 +16,7 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收货单">
+      <el-table-column label="收货单" min-width="120px">
         <template slot-scope="scope">
           <template v-for="(sheet,sheetIndex) in scope.row.receiptSheets">
             <el-row :key="'sheet'+sheetIndex" type="flex">
@@ -32,12 +36,14 @@
           <span>{{scope.row.receiptSheets[0].creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退货单">
+      <el-table-column label="退货单" min-width="165px">
         <template slot-scope="scope" v-if="scope.row.returnSheets!=null">
           <template v-for="(sheet,sheetIndex) in scope.row.returnSheets">
-            <el-row :key="'sheet'+sheetIndex" type="flex">
+            <el-row :key="'sheet'+sheetIndex" type="flex" align="middle">
               <el-button type="text" @click="onReturnDetail(scope.row.returnSheets[sheetIndex].id)">
                 {{scope.row.returnSheets[sheetIndex].code}}</el-button>
+              <el-tag size="mini" style="margin-left:10px" type="danger" effect="plain">
+                {{getEnum('ShippingSheetState', scope.row.returnSheets[sheetIndex].state)}}</el-tag>
             </el-row>
           </template>
         </template>
@@ -48,9 +54,19 @@
         </template>
       </el-table-column>
       <el-table-column label="差异数" prop="diffQuantity"></el-table-column>
-      <el-table-column align="right" min-width="120" v-if="!readOnly">
+      <!-- 发货方 -->
+      <el-table-column align="center" fixed="right" v-if="isShipParty">
         <template slot="header">
           <el-button @click="onCreate">创建发货订单</el-button>
+        </template>
+        <template slot-scope="scope">
+          <el-button type="text" @click="onReconsider(scope.row.id)" v-if="scope.row.state=='PENDING_RECONSIDER'">复议</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" fixed="right" v-if="isReceiptParty">
+        <template slot-scope="scope">
+          <el-button type="text" @click="onReceive(scope.row.id)" v-if="scope.row.state=='PENDING_RECEIVED'">收货
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,7 +80,24 @@
     components: {
 
     },
-    computed: {},
+    computed: {
+      //是否为发货方
+      isShipParty: function () {
+        if (this.currentUser != null && this.formData.shipParty != null) {
+          return this.currentUser.companyCode == this.formData.shipParty.uid;
+        } else {
+          return false;
+        }
+      },
+      //是否为收货方
+      isReceiptParty: function () {
+        if (this.currentUser != null && this.formData.receiveParty != null) {
+          return this.currentUser.companyCode == this.formData.receiveParty.uid;
+        } else {
+          return false;
+        }
+      }
+    },
     methods: {
       onCreate() {
         this.$emit('onCreate');
@@ -77,6 +110,19 @@
       },
       onReturnDetail(id) {
         this.$router.push('/returned/orders/' + id);
+      },
+      //收货
+      onReceive(id) {
+        this.$router.push({
+          name: '创建收货单',
+          params: {
+            shippingOrderId: id
+          }
+        });
+      },
+      //复议
+      onReconsider(id) {
+        this.$router.push('/reconsiders/create/orders/' + id);
       },
       //统计单数
       countTotalSheetsNum(sheets) {
@@ -92,7 +138,7 @@
     },
     data() {
       return {
-
+        currentUser: this.$store.getters.currentUser,
       }
     },
     create() {

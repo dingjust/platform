@@ -110,7 +110,7 @@ export default {
         url: '/shipping/shipping-receipt-sheet',
       }, {
         name: '差异复议',
-        url: '/shipping/reconsiders/import',
+        url: '/shipping/reconsider-order',
       }, {
         name: '对账任务',
         url: '/reconciliation/tasks/import',

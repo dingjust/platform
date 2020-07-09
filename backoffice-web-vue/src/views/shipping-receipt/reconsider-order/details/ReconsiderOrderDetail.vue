@@ -22,55 +22,95 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="3">
-          <!-- <img width="54px" height="54px"
-              :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'"> -->
-          <img width="100px" height="100px" :src="'static/img/nopicture.png'">
+          <img width="100px" height="100px"
+            :src="shippingOrder.product.thumbnail!=null&&shippingOrder.product.thumbnail.length!=0?shippingOrder.product.thumbnail.url:'static/img/nopicture.png'">
         </el-col>
         <el-col :span="21">
           <el-row type="flex" style="padding: 10px 0px">
             <el-col :span="8">
-              <h6>产品名称：红烧猪蹄</h6>
+              <h6 class="basic-label">产品名称：{{shippingOrder.product.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>货号：梅菜扣肉</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>单价：12</h6>
+              <h6 class="basic-label">货号：{{shippingOrder.product.skuID}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="8">
-              <h6>发货方：烧鸡翅</h6>
+              <h6 class="basic-label">发货方：{{shippingOrder.shipParty!=null?shippingOrder.shipParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>收货方：xxx</h6>
+              <h6 class="basic-label">收货方：{{shippingOrder.receiveParty!=null?shippingOrder.receiveParty.name:''}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">发货负责人：{{shippingOrder.merchandiser.name}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px">
+            <el-col :span="12">
+              <h6 class="basic-label">收货地址：{{shippingOrder.deliveryAddress.details}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px"
+            v-if="!shippingOrder.isOfflineConsignment&&shippingOrder.consignment!=null">
+            <el-col :span="8">
+              <h6 class="basic-label">发货方式：{{shippingOrder.consignment.carrierDetails.name}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">发货单号：{{shippingOrder.consignment.trackingID}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px" v-else>
+            <el-col :span="8">
+              <h6 class="basic-label">物流方式：{{shippingOrder.offlineConsignorMode}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">送货人：{{shippingOrder.offlineConsignorName}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">联系方式：{{shippingOrder.offlineConsignorPhone}}</h6>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
-      <el-table :data="[]" stripe style="width: 100%">
-        <el-table-column prop="" label="发货单">
+      <el-table :data="[shippingOrder]" stripe style="width: 100%">
+        <el-table-column prop="code" label="发货单">
         </el-table-column>
-        <el-table-column prop="name" label="发货数量">
+        <el-table-column prop="totalQuantity" label="发货数量">
         </el-table-column>
-        <el-table-column prop="" label="收货单">
+        <el-table-column label="收货单">
+          <template slot-scope="scope">
+            <el-button type="text" @click="onReceiptDetail(scope.row.receiptSheets[0].id)"
+              v-if="scope.row.receiptSheets[0]!=null">
+              {{scope.row.receiptSheets[0].code}}</el-button>
+          </template>
         </el-table-column>
-        <el-table-column prop="" label="收货数量">
+        <el-table-column label="收货数量">
+          <template slot-scope="scope" v-if="scope.row.receiptSheets[0]!=null">
+            <span>{{scope.row.receiptSheets[0].totalQuantity}}</span>
+          </template>
         </el-table-column>
         <el-table-column prop="" label="退货单">
+          <template slot-scope="scope">
+            <el-button type="text" @click="onReturnDetail(scope.row.returnSheets[0].id)"
+              v-if="scope.row.returnSheets[0]!=null">
+              {{scope.row.returnSheets[0].code}}</el-button>
+          </template>
         </el-table-column>
         <el-table-column prop="" label="退货数/收退数">
+          <template slot-scope="scope" v-if="scope.row.returnSheets[0]!=null">
+            <span>{{scope.row.returnSheets[0].totalQuantity}}</span>
+          </template>
         </el-table-column>
-        <el-table-column prop="" label="差异数">
+        <el-table-column prop="diffQuantity" label="差异数">
         </el-table-column>
       </el-table>
       <el-form :model="form" :inline="true">
         <el-row type="flex" justify="space-between" style="margin-top:20px">
           <el-col :span="6" :offset="2">
-            <el-row type="flex">
-              <h6 style="margin-right:20px">上传凭证</h6>
-              <images-upload class="form-upload" :slot-data="attachments" />
-            </el-row>
+            <template v-for="(media,index) in formData.medias">
+              <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="mediasUrlList">
+              </el-image>
+            </template>
           </el-col>
           <el-col :span="6">
             <h6>申请复议数量：1</h6>
@@ -125,12 +165,26 @@
 
     },
     methods: {
+      async getDetail() {
+        // TODO 获取复议单详情
+        const url = this.apis().shippingOrderDetail(this.id);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.shippingOrder = Object.assign({}, result.data);
+      },
       onSure() {
         this.acceptFormVisible = true;
       },
       onReject() {
         this.rejectFormVisible = true;
       },
+
     },
     data() {
       return {

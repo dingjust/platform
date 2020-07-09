@@ -752,27 +752,10 @@ const router = new Router({
               name: '发货收发货列表',
               component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/import/ImportShippingReceiptPage')
             },
-            // {
-            //   path: 'orders',
-            //   name: '发货单',
-            //   component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping/shipping-order/ShippingOrdersPage')
-            // },
             {
-              path: 'reconsiders/:mode',
-              name: '复议单列表',
-              props: true,
-              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/ReconsiderOrdersPage')
-            },
-            {
-              path: 'reconsider/form',
-              name: '复议单表单',
-              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/form/ReconsiderOrderForm')
-            },
-            {
-              path: 'reconsider/:id',
-              name: '复议单详情',
-              props: true,
-              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/details/ReconsiderOrderDetail')
+              path: 'reconsider-order',
+              name: '发货差异复议',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/import/ImportReconsiderOrderPage')
             },
           ]
         },
@@ -827,6 +810,36 @@ const router = new Router({
               path: 'create/orders',
               name: '创建退货单',
               component: () => import( /* webpackChunkName: 'returned' */ '@/views/shipping-receipt/return-order/form/ReturnOrdersForm')
+            },
+          ]
+        },
+        {
+          path: 'reconsiders',
+          redirect: '/reconsiders/orders',
+          name: '复议',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [
+            {
+              path: 'orders/:mode',
+              name: '复议单列表',
+              props: true,
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/ReconsiderOrdersPage')
+            },
+            {
+              path: 'create/orders/:id',
+              name: '复议单表单',
+              props:true,
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/form/ReconsiderOrderForm')
+            },
+            {
+              path: 'orders/:id',
+              name: '复议单详情',
+              props: true,
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/details/ReconsiderOrderDetail')
             },
           ]
         },

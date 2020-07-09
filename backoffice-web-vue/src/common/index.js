@@ -1325,8 +1325,18 @@ let NONE_TENANT_APIS = {
   },
 
   //确认退货单
-  confirmReturnOrder(id){
+  confirmReturnOrder(id) {
     return '/b2b/sheets/return/confirm/' + id;
+  },
+
+  //创建复议单
+  reconsiderOrderCreate() {
+    return '/b2b/sheets/reconsider/create';
+  },
+
+  //复议单详情
+  reconsiderOrderDetail(id) {
+    return '/b2b/sheets/reconsider/' + id;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

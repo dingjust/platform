@@ -1,7 +1,7 @@
 <template>
   <div class="shipping-order-list-container">
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
-      @selection-change="handleSelectionChange" @row-click="rowClick">      
+    <el-table ref="resultTable" stripe :data="page.content" row-key="id"
+      @selection-change="handleSelectionChange" @row-click="rowClick">
       <shipping-dynamic-table-list :columns="columns" />
     </el-table>
     <div class="pt-2"></div>
@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import {
-  ShippingDynamicTableList
-} from "./shipping-dynamic-table-list";
+  import {
+    ShippingDynamicTableList
+  } from "./shipping-dynamic-table-list";
 
   export default {
     name: "ShippingDynamicTable",
@@ -32,13 +32,12 @@ import {
         default: () => {
           return ["发货单号", "产品名称", "关联订单"];
         }
-      }
+      },
     },
     components: {
       ShippingDynamicTableList
     },
-    computed: {
-    },
+    computed: {},
     methods: {
       onDetail(row) {
         this.$emit("onDetail", row);
@@ -65,6 +64,7 @@ import {
         } else if (val.length == 0) {
           this.selectionRow = "";
         }
+        this.$emit('onSelect', this.selectionRow);
       },
       rowClick(row) {
         if (this.selectionRow == "") {
