@@ -1,7 +1,6 @@
 <template>
   <div class="sidebar">
-    <el-menu default-active="0" class="el-menu-vertical-demo" active-text-color="#FEB026" @open="handleOpen"
-      @close="handleClose" :collapse="false" :unique-opened="true">
+    <el-menu default-active="0" class="el-menu-vertical-demo" active-text-color="#FEB026" @open="handleOpen" @close="handleClose" :collapse="false" :unique-opened="true">
       <template v-for="(item,index) in navItems">
         <template v-if="item.children!=null">
           <el-submenu :key="index" :index="''+index">
@@ -12,55 +11,10 @@
               <span slot="title">{{item.name}}</span>
             </template>
             <template v-for="(subItem,subIndex) in item.children">
-              <template v-if="subItem.children != null">
-                <template v-if="subItem.url != undefined">
-                  <router-link :key="index + '-' + subIndex" :to="subItem.url">
-                    <el-submenu :key="index + '-' + subIndex" :index="index + '-' + subIndex">
-                      <template slot="title">
-                        <i :class="subItem.icon">
-                          <!-- <i >{{item.name}}</i> -->
-                        </i>
-                        <span slot="title">{{subItem.name}}</span>
-                      </template>
-                      <template v-for="(childItem,childIndex) in subItem.children">
-                        <router-link :key="index + '-' + subIndex + '-' + childIndex" :to="childItem.url"
-                          v-if="routeCheck(childItem)">
-                          <el-menu-item :key="index + '-' + subIndex + '-' + childIndex"
-                            :index="index + '-' + subIndex + '-' + childIndex" :route="childItem.url">
-                            {{childItem.name}}
-                          </el-menu-item>
-                        </router-link>
-                      </template>
-                    </el-submenu>
-                  </router-link>
-                </template>
-                <template v-else>
-                  <el-submenu :key="index + '-' +subIndex" :index="index + '-' +subIndex">
-                    <template slot="title">
-                      <i :class="subItem.icon">
-                        <!-- <i >{{item.name}}</i> -->
-                      </i>
-                      <span slot="title">{{subItem.name}}</span>
-                    </template>
-                    <template v-for="(childItem,childIndex) in subItem.children">
-                      <router-link :key="childItem" :to="childItem.url" v-if="routeCheck(childItem)">
-                        <el-menu-item :key="index + '-' + subIndex + '-' + childIndex"
-                          :index="index + '-' + subIndex + '-' + childIndex" :route="childItem.url">
-                          {{childItem.name}}
-                        </el-menu-item>
-                      </router-link>
-                    </template>
-                  </el-submenu>
-                </template>
-              </template>
-              <template v-else>
-                <router-link :key="index + '-' + subIndex" :to="subItem.url">
-                  <el-menu-item :index="index + '-' + subIndex">
-                    <i v-if="subItem.icon!=null" :class="subItem.icon"></i>
-                    <span slot="title">{{subItem.name}}</span>
-                  </el-menu-item>
-                </router-link>
-              </template>
+              <router-link :key="subIndex" :to="subItem.url" v-if="routeCheck(subItem)">
+                <el-menu-item :key="index+'-'+subIndex" :index="index+'-'+subIndex" :route="item.url" >{{subItem.name}}
+                </el-menu-item>
+              </router-link>
             </template>
           </el-submenu>
         </template>

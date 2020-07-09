@@ -314,13 +314,17 @@
         let validate = await this.validateForms();
         if (validate) {
           if (this.hasOrigin) {
-            this.$confirm('此订单合作对象非本公司合作商，是否添加为合作商?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
+            if (this.form.originCooperator.id) {
               this._Save(submitAudit);
-            });
+            } else {
+              this.$confirm('此订单合作对象非本公司合作商，是否添加为合作商?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this._Save(submitAudit);
+              });
+            }
           } else {
             this._Save(submitAudit);
           }

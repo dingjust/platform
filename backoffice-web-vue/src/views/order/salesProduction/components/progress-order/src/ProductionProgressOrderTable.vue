@@ -23,8 +23,8 @@
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="onDetail(scope.row)">查看</el-button>
-          <el-button type="text" size="small" @click="onUpdate(scope.row)" v-if="!readonly">修改</el-button>
-          <el-button v-if="(scope.row.status != 'CANCEL')&&!readonly" type="text" size="small"
+          <el-button type="text" size="small" @click="onUpdate(scope.row)" v-if="!readonly && isMySelf">修改</el-button>
+          <el-button v-if="(scope.row.status != 'CANCEL')&&!readonly&&isMySelf" type="text" size="small"
             @click="onCencel(scope.row.id)">作废</el-button>
         </template>
       </el-table-column>
@@ -43,6 +43,10 @@
       readonly: {
         type: Boolean,
         default: false
+      },
+      isMySelf: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {

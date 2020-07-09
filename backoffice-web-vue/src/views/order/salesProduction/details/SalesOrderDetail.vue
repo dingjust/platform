@@ -269,8 +269,8 @@
         }
       },
       onRefresh() {
-        // this.$router.go(0);
-        this.getDetails();
+        // this.getDetails();
+        this.$router.go(0);
       },
       validate(callback) {
         this.$refs.form.validate(callback);
