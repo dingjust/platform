@@ -1,19 +1,31 @@
 const Selection = {
   template: `
   <el-table-column type="selection" width="55" fixed="left"></el-table-column>
-`
+`,
 }
 
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" prop="code" min-width="120" fiexd></el-table-column>
-`
+  <el-table-column label="发货单号" :prop="prop" min-width="120" fiexd></el-table-column>
+  `,
+  props: {
+    prop: {
+      type: String,
+      default: 'code'
+    }
+  }
 }
 
 const RelationShippingOrder = {
   template: `
-  <el-table-column label="关联发货单" prop="code" min-width="120"></el-table-column>
-`
+  <el-table-column label="关联发货单" :prop="prop" min-width="120"></el-table-column>
+`,
+  props: {
+    prop: {
+      type: String,
+      default: 'code'
+    }
+  }
 }
 
 const Product = {
@@ -22,66 +34,110 @@ const Product = {
   <template slot-scope="scope">
     <el-row type="flex" justify="space-between" align="middle" :gutter="50">
       <el-col :span="6">
-        <img width="54px" v-if="scope.row.product!=null" height="54px"
-          :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'" />
+        <img width="54px" v-if="getProduct(scope.row)!=null" height="54px"
+          :src="getProduct(scope.row).thumbnail!=null&&getProduct(scope.row).thumbnail.length!=0?getProduct(scope.row).thumbnail.url:'static/img/nopicture.png'" />
       </el-col>
       <el-col :span="16">
         <el-row>
-          <span>{{scope.row.product.name}}</span>s
+          <span>{{getProduct(scope.row).name}}</span>s
         </el-row>
         <el-row>
-          <span>货号:{{scope.row.product!=null?scope.row.product.skuID:''}}</span>
+          <span>货号:{{getProduct(scope.row)!=null?getProduct(scope.row).skuID:''}}</span>
         </el-row>
       </el-col>
     </el-row>
   </template>
 </el-table-column>
-`
+`,
+  props: {
+    prop: {
+      type: String,
+      default: 'product'
+    }
+  },
+  methods: {
+    //获取产品
+    getProduct(row) {
+      return row[this.prop];
+    }
+  },
 }
 
 const RelationOrder = {
   template: `
   <el-table-column label="关联订单" min-width="120px">
   <template slot-scope="scope">
-    <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
-      @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
+    <el-button type="text" v-if="getProductionOrder(scope.row)!=null"
+      @click="onProductionOrderDetail(scope.row)">{{getProductionOrder(scope.row).code}}
     </el-button>
   </template>
 </el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'productionTaskOrder'
+    }
+  },
   methods: {
+    getProductionOrder(row) {
+      return row[this.prop];
+    },
     //跳转生产订单明细
-    onProductionOrderDetail(id) {
-      this.$router.push('/sales/productionOrder/' + id);
+    onProductionOrderDetail(row) {
+      this.$router.push('/sales/productionOrder/' + row[this.prop].id);
     },
   }
 }
 
 const ShipParty = {
-  template: `<el-table-column label="发货人" prop="shipParty.name"></el-table-column>`
+  template: `<el-table-column label="发货人" :prop="prop"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'shipParty.name'
+    }
+  },
 }
 
 const UnitPrice = {
   template: `
   <el-table-column label="单价">
     <template slot-scope="scope">
-      <span v-if="scope.row.productionTaskOrder!=null">{{scope.row.productionTaskOrder.unitPrice}}</span>
+      <span v-if="getProductionTaskOrder(scope.row)!=null">{{getProductionTaskOrder(scope.row).unitPrice}}</span>
     </template>
-  </el-table-column>`
+  </el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'productionTaskOrder'
+    }
+  },
+  methods: {
+    getProductionTaskOrder(row) {
+      return row[this.prop];
+    },
+  }
 }
 
 const ShipNum = {
   template: `
   <el-table-column label="发货数">
-  <template slot-scope="scope">
-    <span>{{getTotalNum(scope.row)}}</span>
-  </template>
-</el-table-column>`,
+    <template slot-scope="scope">
+      <span>{{getTotalNum(scope.row)}}</span>
+    </template>
+  </el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'packageSheets'
+    }
+  },
   methods: {
     //统计发货数
     getTotalNum(order) {
       let result = 0;
-      if (order.packageSheets != null) {
-        order.packageSheets.forEach(element => {
+      if (order[this.prop] != null) {
+        order[this.prop].forEach(element => {
           if (element.colorSizeEntries != null) {
             element.colorSizeEntries.forEach(entry => {
               let num = parseInt(entry.quantity);
@@ -100,13 +156,19 @@ const ShipNum = {
 const ShipDate = {
   template: `<el-table-column label="发货日期">
   <template slot-scope="scope">
-    <span>{{scope.row.creationtime | timestampToTime}}</span>
+    <span>{{scope.row[prop] | timestampToTime}}</span>
   </template>
-</el-table-column>`
+</el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'creationtime'
+    }
+  },
 }
 
 const ReceiptOrder = {
-  template: `<el-table-column label="收货单" fixed="left"></el-table-column>`
+  template: `<el-table-column label="收货单" fixed="left"></el-table-column>`,
 }
 
 //收货单创建人
@@ -122,24 +184,54 @@ const ShipReceNum = {
   template: `
   <el-table-column label="发货数/收货数">
     <template slot-scope="scope">
-      <span>{{scope.row.totalQuantity}}/{{getTotalNum(scope.row.receiptSheets)}}</span>
-    </template>
+      <span>{{getShipNum(scope.row)}}/{{getTotalNum(scope.row)}}</span>
+    </template> 
   </el-table-column>`,
-  methods: {
+  props: {
+    ///发货数
+    shipProp: {
+      type: String,
+      default: 'totalQuantity'
+    },
+    receSheetProp: {
+      type: String,
+      default: 'receiptSheets'
+    }
+  },
+  methods: {    
+    //发货数
+    getShipNum(row) {
+      let num = 0;
+      try {
+        if (eval('row.' + this.shipProp) != null) {
+          num = eval('row.' + this.shipProp);
+        }
+      } catch (e) {
+        // TODO:空值处理        
+      }
+      return num;
+    },
     //统计收货数
-    getTotalNum(sheets) {
+    getTotalNum(row) {
       let result = 0;
-      if (sheets != null) {
-        sheets.forEach(element => {
-          let num = parseInt(element.totalQuantity);
-          if (!Number.isNaN(num)) {
-            result += num;
-          }
-        });
+      try {
+        let sheets = eval('row.' + this.receSheetProp);
+        if (sheets != null) {
+          sheets.forEach(element => {
+            if (element.totalQuantity != null) {
+              let num = parseInt(element.totalQuantity);
+              if (!Number.isNaN(num)) {
+                result += num;
+              }
+            }
+          });
+        }
+      } catch (e) {
+        // TODO:空值处理        
       }
       return result;
     }
-  }
+  },
 }
 
 const ReceiptNum = {
@@ -150,9 +242,25 @@ const ReceiptDate = {
   template: `
   <el-table-column label="收货日期">
     <template slot-scope="scope">
-      <span v-if="scope.row.receiptSheets!=null">{{scope.row.receiptSheets[0].creationtime | formatDate}}</span>
+      <span v-if="getReceiptDate(scope.row)!=null">{{getReceiptDate(scope.row) | formatDate}}</span>
     </template>
-  </el-table-column>`
+  </el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'receiptSheets'
+    }
+  },
+  methods: {
+    //收货时间
+    getReceiptDate(row) {
+      try {
+        return eval('row.' + this.prop + '[0].creationtime');
+      } catch (e) {
+        return null
+      }
+    }
+  },
 }
 
 const ReturnOrder = {
@@ -176,33 +284,55 @@ const ReturnReceiptNum = {
   template: `
   <el-table-column label="退货数/收退货数">
     <template slot-scope="scope">
-      <span>{{getReturnTotalNum(scope.row.returnSheets)}}/{{getReceReturnlNum(scope.row.returnSheets)}}</span>
+      <span>{{getReturnTotalNum(scope.row)}}/{{getReceReturnlNum(scope.row)}}</span>
     </template>
   </el-table-column>`,
+  props: {
+    //退货字段
+    prop: {
+      type: String,
+      default: 'returnSheets'
+    },
+  },
   methods: {
+
     //统计退货数
-    getReturnTotalNum(sheets) {
+    getReturnTotalNum(row) {
       let result = 0;
-      if (sheets != null) {
-        sheets.forEach(element => {
-          let num = parseInt(element.totalQuantity);
-          if (!Number.isNaN(num)) {
-            result += num;
-          }
-        });
+      try {
+        let sheets = eval('row.' + this.prop);
+        if (sheets != null) {
+          sheets.forEach(element => {
+            if (element.totalQuantity != null) {
+              let num = parseInt(element.totalQuantity);
+              if (!Number.isNaN(num)) {
+                result += num;
+              }
+            }
+          });
+        }
+      } catch (e) {
+        //TODO:空值处理
       }
       return result;
     },
     //统计收退货数
-    getReceReturnlNum(sheets) {
+    getReceReturnlNum(row) {
       let result = 0;
-      if (sheets != null) {
-        sheets.filter(sheet => sheet.state == 'RETURN_RECEIVED').forEach(element => {
-          let num = parseInt(element.totalQuantity);
-          if (!Number.isNaN(num)) {
-            result += num;
-          }
-        });
+      try {
+        let sheets = eval('row.' + this.prop);
+        if (sheets != null) {
+          sheets.filter(sheet => sheet.state == 'RETURN_RECEIVED').forEach(element => {
+            if (element.totalQuantity != null) {
+              let num = parseInt(element.totalQuantity);
+              if (!Number.isNaN(num)) {
+                result += num;
+              }
+            }
+          });
+        }
+      } catch (e) {
+        //TODO:空值处理
       }
       return result;
     }
@@ -210,7 +340,13 @@ const ReturnReceiptNum = {
 }
 
 const DifferentNum = {
-  template: `<el-table-column label="差异数" prop="diffQuantity"></el-table-column>`
+  template: `<el-table-column label="差异数" :prop="prop"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'diffQuantity'
+    }
+  }
 }
 
 const ShippingOperation = {
@@ -252,6 +388,21 @@ const ReturnOperation = {
   }
 }
 
+//////////////////////////////////////////////////复议
+
+//复议单号
+const ReconsiderOrderCode = {
+  template: `
+  <el-table-column label="复议单号" prop="code" min-width="120" fiexd></el-table-column>
+`
+}
+
+//复议数
+const ReconsiderNum = {
+  template: `
+  <el-table-column label="复议数" prop="reconsiderQuantity"></el-table-column>
+`
+}
 
 const COMPONENT_NAME_MAP = {
   '多选': 'selection',
@@ -276,8 +427,12 @@ const COMPONENT_NAME_MAP = {
   '收货操作': 'receipt-operation',
   '退货操作': 'return-operation',
   '发货收货数': 'ship-rece-num',
-  '收货日期': 'receipt-date'
+  '收货日期': 'receipt-date',
+  //复议
+  '复议单号': 'reconsider-order-code',
+  '复议数': 'reconsider-num',
 }
+
 
 export {
   Selection,
@@ -304,5 +459,7 @@ export {
   ReturnOperation,
   ShipReceNum,
   ReceiptDate,
+  ReconsiderOrderCode,
+  ReconsiderNum,
   COMPONENT_NAME_MAP
 }

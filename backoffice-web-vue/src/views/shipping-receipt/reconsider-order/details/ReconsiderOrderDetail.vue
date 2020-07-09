@@ -23,56 +23,56 @@
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="3">
           <img width="100px" height="100px"
-            :src="shippingOrder.product.thumbnail!=null&&shippingOrder.product.thumbnail.length!=0?shippingOrder.product.thumbnail.url:'static/img/nopicture.png'">
+            :src="formData.product.thumbnail!=null&&formData.product.thumbnail.length!=0?formData.product.thumbnail.url:'static/img/nopicture.png'">
         </el-col>
         <el-col :span="21">
           <el-row type="flex" style="padding: 10px 0px">
             <el-col :span="8">
-              <h6 class="basic-label">产品名称：{{shippingOrder.product.name}}</h6>
+              <h6 class="basic-label">产品名称：{{formData.product.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">货号：{{shippingOrder.product.skuID}}</h6>
+              <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="8">
-              <h6 class="basic-label">发货方：{{shippingOrder.shipParty!=null?shippingOrder.shipParty.name:''}}</h6>
+              <h6 class="basic-label">发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">收货方：{{shippingOrder.receiveParty!=null?shippingOrder.receiveParty.name:''}}</h6>
+              <h6 class="basic-label">收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">发货负责人：{{shippingOrder.merchandiser.name}}</h6>
+              <h6 class="basic-label">发货负责人：{{formData.merchandiser.name}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="12">
-              <h6 class="basic-label">收货地址：{{shippingOrder.deliveryAddress.details}}</h6>
+              <h6 class="basic-label">收货地址：{{formData.deliveryAddress.details}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px"
-            v-if="!shippingOrder.isOfflineConsignment&&shippingOrder.consignment!=null">
+            v-if="!formData.isOfflineConsignment&&formData.consignment!=null">
             <el-col :span="8">
-              <h6 class="basic-label">发货方式：{{shippingOrder.consignment.carrierDetails.name}}</h6>
+              <h6 class="basic-label">发货方式：{{formData.consignment.carrierDetails.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">发货单号：{{shippingOrder.consignment.trackingID}}</h6>
+              <h6 class="basic-label">发货单号：{{formData.consignment.trackingID}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px" v-else>
             <el-col :span="8">
-              <h6 class="basic-label">物流方式：{{shippingOrder.offlineConsignorMode}}</h6>
+              <h6 class="basic-label">物流方式：{{formData.offlineConsignorMode}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">送货人：{{shippingOrder.offlineConsignorName}}</h6>
+              <h6 class="basic-label">送货人：{{formData.offlineConsignorName}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">联系方式：{{shippingOrder.offlineConsignorPhone}}</h6>
+              <h6 class="basic-label">联系方式：{{formData.offlineConsignorPhone}}</h6>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
-      <el-table :data="[shippingOrder]" stripe style="width: 100%">
+      <el-table :data="[formData]" stripe style="width: 100%">
         <el-table-column prop="code" label="发货单">
         </el-table-column>
         <el-table-column prop="totalQuantity" label="发货数量">
@@ -167,7 +167,7 @@
     methods: {
       async getDetail() {
         // TODO 获取复议单详情
-        const url = this.apis().shippingOrderDetail(this.id);
+        const url = this.apis().formDataDetail(this.id);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -176,7 +176,7 @@
           this.$message.error(result.msg);
           return;
         }
-        this.shippingOrder = Object.assign({}, result.data);
+        this.formData = Object.assign({}, result.data);
       },
       onSure() {
         this.acceptFormVisible = true;
@@ -252,8 +252,23 @@
             "quantity": 2
           }
         ],
-        form: {
-          num: ''
+        formData: {
+          product: {
+            name: '',
+            skuID: '',
+          },
+          shipParty: {
+            name: '',
+          },
+          receiveParty: {
+            name: ''
+          },
+          merchandiser: {
+            name: ''
+          },
+          deliveryAddress: {
+            details: ''
+          },
         },
         attachments: []
       }
