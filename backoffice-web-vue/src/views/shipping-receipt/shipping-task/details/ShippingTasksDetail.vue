@@ -1,11 +1,14 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-row>
+      <el-row type="flex" justify="space-between"> 
         <el-col :span="6">
           <div class="title">
             <h6>发货任务单</h6>
           </div>
+        </el-col>
+        <el-col :span="4">
+          <h6>状态：{{getEnum('ReceiveDispatchTaskState', formData.state)}}</h6>
         </el-col>
       </el-row>
       <div class="pt-2"></div>

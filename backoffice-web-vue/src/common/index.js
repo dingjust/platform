@@ -1299,6 +1299,11 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/receipt/create';
   },
 
+  //收货单列表
+  receiptOrderList() {
+    return '/b2b/sheets/receipt';
+  },
+
   // 收货单详情
   receiptOrderDetail(id) {
     return '/b2b/sheets/receipt/' + id;
@@ -1313,6 +1318,16 @@ let NONE_TENANT_APIS = {
   returnOrderDetail(id) {
     return '/b2b/sheets/return/' + id;
   },
+
+  // 退货单列表
+  returnOrderList() {
+    return '/b2b/sheets/return';
+  },
+
+  //确认退货单
+  confirmReturnOrder(id){
+    return '/b2b/sheets/return/confirm/' + id;
+  }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

@@ -14,9 +14,12 @@
             <h6>收货单详情</h6>
           </div>
         </el-col>
+        <el-col :span="6">
+          <h6>单号：{{formData.code}}</h6>
+        </el-col>
         <el-col :span="4">
           <div>
-            <h6>状态：待核验</h6>
+            <h6>状态：{{getEnum('ShippingSheetState', formData.state)}}</h6>
           </div>
         </el-col>
       </el-row>

@@ -14,9 +14,12 @@
             <h6>收货单详情</h6>
           </div>
         </el-col>
+        <el-col :span="6">
+          <h6>单号：{{formData.code}}</h6>
+        </el-col>
         <el-col :span="4">
           <div>
-            <h6>状态：待核验</h6>
+            <h6>状态：{{getEnum('ShippingSheetState', formData.state)}}</h6>
           </div>
         </el-col>
       </el-row>
@@ -94,7 +97,12 @@
           <h6>发货单：KY1000000001</h6>
         </el-col>
       </el-row>
-      <receipt-order-detail-btn-group v-if="isReceiveParty" />
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+        <!-- 待退货收货 -->
+        <template v-if="formData.state=='RETURN_TO_BE_RECEIVED'&&isShipParty">
+          <el-button class="sumbit-btn" @click="onConfirm">确认收货</el-button>
+        </template>
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -104,8 +112,6 @@
     ColorSizeBoxTable,
     ColorSizeTable
   } from '@/components/'
-
-  import ReturnOrderDetailBtnGroup from './ReturnOrderDetailBtnGroup';
 
   export default {
     name: 'ReturnOrderDetail',
@@ -118,13 +124,20 @@
     components: {
       ColorSizeBoxTable,
       ColorSizeTable,
-      ReturnOrderDetailBtnGroup
     },
     computed: {
       //是收货方
       isReceiveParty: function () {
         if (this.formData.receiveParty != null && this.currentUser != null) {
           return this.currentUser.companyCode == this.formData.receiveParty.uid;
+        } else {
+          return false;
+        }
+      },
+      //是发货方
+      isShipParty: function () {
+        if (this.formData.shipParty != null && this.currentUser != null) {
+          return this.currentUser.companyCode == this.formData.shipParty.uid;
         } else {
           return false;
         }
@@ -146,8 +159,32 @@
           this.$message.error(result.msg);
           return;
         }
-        this.formData = Object.assign({}, result.data);
+        this.$set(this, 'formData', Object.assign({}, result.data));
       },
+      //确认收货
+      onConfirm() {
+        this.$confirm('是否确认收货?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onConfirm();
+        }).catch(() => {
+
+        });
+      },
+      async _onConfirm() {
+        const url = this.apis().confirmReturnOrder(this.id);
+        const result = await this.$http.put(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.getDetail();
+      }
     },
     data() {
       return {

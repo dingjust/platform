@@ -27,11 +27,11 @@
     </el-dialog>
     <el-dialog :visible.sync="receiptListVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <receipt-orders-page v-if="receiptListVisible" />
+      <receipt-orders-page :mode="mode" v-if="receiptListVisible" />
     </el-dialog>
     <el-dialog :visible.sync="returnListVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <return-orders-page v-if="returnListVisible" />
+      <return-orders-page :mode="mode" v-if="returnListVisible" />
     </el-dialog>
   </div>
 </template>

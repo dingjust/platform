@@ -3,32 +3,31 @@
     <el-row>
       <el-col :span="4">
         <div class="title">
-          <h6>收货单列表</h6>
+          <h6>退货单列表</h6>
         </div>
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <return-orders-toolbar :queryFormData="queryFormData" 
-                              @onAdvancedSearch="onAdvancedSearch"/>
-    <!-- <template> -->
-      <div>
-        <div class="good-btn">
-          <el-button class="check-btn" v-if="canClick" @click="onReceiptReturn">收退货</el-button>
-        </div>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <template v-for="item in statuses">
-            <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-              <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
-            </el-tab-pane>
-          </template>
-        </el-tabs>
+    <return-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+    <div>
+      <div class="good-btn">
+        <el-button class="check-btn" v-if="canClick" @click="onReceiptReturn">收退货</el-button>
       </div>
-    <!-- </template> -->
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <template v-for="item in statuses">
+          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+            <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
+          </el-tab-pane>
+        </template>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
   const {
     mapGetters,
     mapActions
@@ -41,9 +40,15 @@
 
   export default {
     name: 'ReturnOrdersPage',
+    props: {
+      mode: {
+        type: String,
+        default: 'import'
+      }
+    },
     components: {
-     ReturnOrdersToolbar,
-     ReturnOrdersList 
+      ReturnOrdersToolbar,
+      ReturnOrdersList
     },
     computed: {
       ...mapGetters({
@@ -61,38 +66,51 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getProductionTaskList();
+        const url = this.apis().returnOrderList();
+        const mode = this.mode;
+        const companyCode = this.currentUser.companyCode;
         this.search({
           url,
           keyword,
           page,
-          size
+          size,
+          mode,
+          companyCode
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         const query = this.queryFormData;
-        const url = this.apis().getProductionTaskList();
-        this.searchAdvanced({url, query, page, size});
+        const url = this.apis().returnOrderList();
+        const mode = this.mode;
+        const companyCode = this.currentUser.companyCode;
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size,
+          mode,
+          companyCode
+        });
       },
-      handleClick (tab, event) {
+      handleClick(tab, event) {
         this.queryFormData.status = tab.name;
         this.onAdvancedSearch(0, 10);
       },
-      onDetail (row) {
-        // TODO 发货单详情
-        // this.$router.push('/receipt/orders/' + row.id);
+      onDetail(row) {
+        // 退单详情
+        this.$router.push('/returned/orders/' + row.id);
       },
-      onReceiptReturn () {
+      onReceiptReturn() {
 
       }
     },
     data() {
       return {
         activeName: '',
-        statuses: [
-          {
+        currentUser: this.$store.getters.currentUser,
+        statuses: [{
             code: '',
             name: '全部'
           },

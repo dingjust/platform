@@ -105,7 +105,7 @@
             <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="false" />
           </el-col>
         </el-row>
-        <el-row type="flex">
+        <el-row type="flex" style="margin-top:20px;">
           <el-input type="textarea" placeholder="输入退货原因" v-model="formData.remarks" :rows="5">
           </el-input>
         </el-row>

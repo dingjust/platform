@@ -8,8 +8,7 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <receipt-orders-toolbar :queryFormData="queryFormData" 
-                              @onAdvancedSearch="onAdvancedSearch"/>
+    <receipt-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
     <el-row type="flex" justify="space-between" align="middle">
       <el-col :span="22">
         <h6 style="color: #F56C6C;margin-bottom: 0px">{{this.tips}}</h6>
@@ -21,7 +20,7 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
+          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -29,7 +28,9 @@
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
   const {
     mapGetters,
     mapActions
@@ -42,9 +43,15 @@
 
   export default {
     name: 'ReceiptOrdersPage',
+    props: {
+      mode: {
+        type: String,
+        default: 'import'
+      }
+    },
     components: {
-     ReceiptOrdersToolbar,
-     ReceiptOrdersList 
+      ReceiptOrdersToolbar,
+      ReceiptOrdersList
     },
     computed: {
       ...mapGetters({
@@ -62,38 +69,51 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getProductionTaskList();
+        const url = this.apis().receiptOrderList();
+        const mode = this.mode;
+        const companyCode = this.currentUser.companyCode;
         this.search({
           url,
           keyword,
           page,
-          size
+          size,
+          mode,
+          companyCode
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         const query = this.queryFormData;
-        const url = this.apis().getProductionTaskList();
-        this.searchAdvanced({url, query, page, size});
+        const url = this.apis().receiptOrderList();
+        const mode = this.mode;
+        const companyCode = this.currentUser.companyCode;
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size,
+          mode,
+          companyCode
+        });
       },
-      handleClick (tab, event) {
+      handleClick(tab, event) {
         this.queryFormData.status = tab.name;
         this.onAdvancedSearch(0, 10);
       },
-      onDetail (row) {
+      onDetail(row) {
         // TODO 发货单详情
         this.$router.push('/receipt/orders/' + row.id);
       },
-      onCheck () {
+      onCheck() {
         // TODO 核验
       }
     },
     data() {
       return {
         activeName: '',
-        statuses: [
-          {
+        currentUser: this.$store.getters.currentUser,
+        statuses: [{
             code: '',
             name: '全部'
           },
@@ -147,7 +167,8 @@
     color: #000;
   }
 
-  .receipt-orders-page >>> .el-form-item {
+  .receipt-orders-page>>>.el-form-item {
     margin-bottom: 0px;
   }
+
 </style>

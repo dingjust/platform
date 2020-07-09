@@ -1,8 +1,6 @@
 
 import 'dart:async';
 
-import 'package:b2b_commerce/src/_shared/widgets/browser.dart';
-import 'package:b2b_commerce/src/my/contract/contract_mark_down_widget.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
@@ -156,7 +154,7 @@ class _ContractItemPageState extends State<ContractItemPage>{
 //    final url = "http://africau.edu/images/default/sample.pdf";
     //获取应用目录路径
     String dir = (await getApplicationDocumentsDirectory()).path;
-    print(pdf.name);
+    // print(pdf.name);
     print(dir);
     String fileName = pdf.name;
     String filePath = "$dir/$fileName";
