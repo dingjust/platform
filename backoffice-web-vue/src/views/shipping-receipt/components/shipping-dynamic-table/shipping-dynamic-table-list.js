@@ -23,6 +23,8 @@ import {
   ReturnOperation,
   ShipReceNum,
   ReceiptDate,
+  ReconsiderOrderCode,
+  ReconsiderNum,
   COMPONENT_NAME_MAP
 } from "./table-constants";
 
@@ -60,12 +62,16 @@ const ShippingDynamicTableList = {
     ReturnOperation,
     ShipReceNum,
     ReceiptDate,
+    ReconsiderOrderCode,
+    ReconsiderNum,
     COMPONENT_NAME_MAP
   },
   render: function (createElement) {
     return createElement(
-      'template', this.columns.map(key => {
-        return createElement(COMPONENT_NAME_MAP[key]);
+      'template', this.columns.map(entry => {
+        return createElement(COMPONENT_NAME_MAP[entry.key], {
+          props: entry.props != null ? entry.props : {}
+        });
       })
     );
   }

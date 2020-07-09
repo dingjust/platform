@@ -1334,6 +1334,12 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/reconsider/create';
   },
 
+
+  //复议单列表
+  reconsiderOrderList() {
+    return '/b2b/sheets/reconsider';
+  },
+
   //复议单详情
   reconsiderOrderDetail(id) {
     return '/b2b/sheets/reconsider/' + id;

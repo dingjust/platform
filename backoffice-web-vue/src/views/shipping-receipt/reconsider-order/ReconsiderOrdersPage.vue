@@ -22,19 +22,19 @@
 </template>
 
 <script>
-  import ReconsiderOrdersToolbar from './toolbar/ReconsiderOrdersToolbar'
-  import ReconsiderOrdersList from './list/ReconsiderOrdersList'
+  import ReconsiderOrdersToolbar from "./toolbar/ReconsiderOrdersToolbar";
+  import ReconsiderOrdersList from "./list/ReconsiderOrdersList";
 
   import {
     ShippingDynamicTable
-  } from '../components/index'
+  } from "../components/index";
 
   export default {
-    name: 'ReconsiderOrdersPage',
+    name: "ReconsiderOrdersPage",
     props: {
       mode: {
         type: String,
-        default: 'import'
+        default: "import"
       },
       page: {
         type: Object,
@@ -52,7 +52,7 @@
     },
     computed: {
       ableToApply: function () {
-        return this.activeName == 'first';
+        return this.activeName == "first";
       }
     },
     methods: {
@@ -60,69 +60,234 @@
         return this.getEnum("ShippingSheetState", state);
       },
       handleClick(tab, event) {
-        this.$emit('handleClick', {
+        this.$emit("handleClick", {
           states: this.statusMap[tab.name].states,
           searchUrl: this.statusMap[tab.name].url
         });
       },
       onSearch(page, size) {
-        this.$emit('onSearch');
+        this.$emit("onSearch");
       },
       onAdvancedSearch(page, size) {
-        this.$emit('onAdvancedSearch');
+        this.$emit("onAdvancedSearch");
       },
-      onApply() {
-
-      },
-      onDetail() {
-
-      },
+      onApply() {},
+      onDetail() {},
       onSelect(val) {
         this.selectedData = val;
       },
       //复议
       onReconsider() {
         if (this.selectedData != null && this.selectedData.id != null) {
-          this.$router.push('/reconsiders/create/orders/' + this.selectedData.id);
+          this.$router.push("/reconsiders/create/orders/" + this.selectedData.id);
         } else {
-          this.$message('请选择发货单复议');
+          this.$message("请选择发货单复议");
         }
-      },
+      }
     },
     data() {
       return {
-        activeName: 'PENDING_RECONSIDER',
+        activeName: "PENDING_RECONSIDER",
         statusMap: {
           PENDING_RECONSIDER: {
-            states: 'PENDING_RECONSIDER',
-            columns: ['多选', '发货单号', '产品名称', '关联订单', '发货收货数', '退货收货数', '收货日期', '差异数', '发货操作'],
+            states: "PENDING_RECONSIDER",
+            columns: [{
+                key: "多选"
+              },
+              {
+                key: "发货单号"
+              },
+              {
+                key: "产品名称"
+              },
+              {
+                key: "关联订单"
+              },
+              {
+                key: "发货收货数"
+              },
+              {
+                key: "退货收货数"
+              },
+              {
+                key: "收货日期"
+              },
+              {
+                key: "差异数"
+              },
+              {
+                key: "发货操作"
+              }
+            ],
             url: this.apis().shippingOrderList()
           },
           IN_RECONSIDER: {
-            states: 'IN_RECONSIDER',
-            columns: ['多选', '发货单号', '产品名称', '关联订单', '关联收货单', '收货单创建人', '发货数', '收货数', '发货操作'],
-            url: this.apis().shippingOrderList()
+            states: "IN_RECONSIDER",
+            columns: [{
+                key: "多选"
+              },
+              {
+                key: "复议单号"
+              },
+              {
+                key: "产品名称"
+              },
+              {
+                key: "关联订单"
+              },
+              {
+                key: "发货收货数",
+                props:{
+                  shipProp:'logisticsSheet.totalQuantity',
+                  receSheetProp:'logisticsSheet.receiptSheets'
+                }
+              },
+              {
+                key: "退货收货数",
+                props:{
+                  prop:'logisticsSheet.returnSheets'
+                }
+              },
+              {
+                key: "收货日期",
+                props:{
+                  prop:'logisticsSheet.receiptSheets'
+                }
+              },
+              {
+                key: "差异数",
+                props: {
+                  prop: "logisticsSheet.diffQuantity"
+                }
+              },
+              {
+                key: "复议数"
+              },
+              {
+                key: "发货操作"
+              }
+            ],
+            url: this.apis().reconsiderOrderList()
           },
           RECONSIDER_SUCCESS: {
-            states: 'RECONSIDER_SUCCESS',
-            columns: ['多选', '退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
-            url: this.apis().shippingOrderList()
+            states: "RECONSIDER_SUCCESS",
+            columns: [{
+                key: "多选"
+              },
+              {
+                key: "复议单号"
+              },
+              {
+                key: "产品名称"
+              },
+              {
+                key: "关联订单"
+              },
+              {
+                key: "发货收货数"
+              },
+              {
+                key: "退货收货数"
+              },
+              {
+                key: "收货日期"
+              },
+              {
+                key: "差异数",
+                props: {
+                  prop: "logisticsSheet.diffQuantity"
+                }
+              },
+              {
+                key: "复议数"
+              },
+              {
+                key: "发货操作"
+              }
+            ],
+            url: this.apis().reconsiderOrderList()
           },
           RECONSIDER_FAIL: {
-            states: 'RECONSIDER_FAIL',
-            columns: ['多选', '退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
-            url: this.apis().shippingOrderList()
+            states: "RECONSIDER_FAIL",
+            columns: [{
+                key: "多选"
+              },
+              {
+                key: "复议单号"
+              },
+              {
+                key: "产品名称"
+              },
+              {
+                key: "关联订单"
+              },
+              {
+                key: "发货收货数"
+              },
+              {
+                key: "退货收货数"
+              },
+              {
+                key: "收货日期"
+              },
+              {
+                key: "差异数",
+                props: {
+                  prop: "logisticsSheet.diffQuantity"
+                }
+              },
+              {
+                key: "复议数"
+              },
+              {
+                key: "发货操作"
+              }
+            ],
+            url: this.apis().reconsiderOrderList()
           },
           RECONSIDER_EXPIRED: {
-            states: 'RECONSIDER_EXPIRED',
-            columns: ['多选', '发货单号', '产品名称', '单价', '发货数量', '收货单', '收货数', '差异数', '发货操作'],
-            url: this.apis().shippingOrderList()
+            states: "RECONSIDER_EXPIRED",
+            columns: [{
+                key: "多选"
+              },
+              {
+                key: "复议单号"
+              },
+              {
+                key: "产品名称"
+              },
+              {
+                key: "关联订单"
+              },
+              {
+                key: "发货收货数"
+              },
+              {
+                key: "退货收货数"
+              },
+              {
+                key: "收货日期"
+              },
+              {
+                key: "差异数",
+                props: {
+                  prop: "logisticsSheet.diffQuantity"
+                }
+              },
+              {
+                key: "复议数"
+              },
+              {
+                key: "发货操作"
+              }
+            ],
+            url: this.apis().reconsiderOrderList()
           }
         },
-        selectedData: ''
-      }
-    },
-  }
+        selectedData: ""
+      };
+    }
+  };
 
 </script>
 
@@ -141,7 +306,7 @@
 
   .material-btn {
     background-color: #ffd60c;
-    border-color: #FFD5CE;
+    border-color: #ffd5ce;
     color: #000;
     width: 120px;
     height: 35px;
