@@ -14,8 +14,8 @@
         </div>
       </el-col>
     </el-row>
-    <color-size-box-change-table :vdata="curData" :oldData="[receiptOrder.colorSizeEntries]"
-      :colorSizeEntries="receiptOrder.colorSizeEntries" />
+    <color-size-box-change-table :vdata="curData" :oldData="receiptOrder.packageSheets"
+      :colorSizeEntries="receiptOrder.packageSheets[0].colorSizeEntries" />
     <!-- <color-size-change-table :oldData="receiptOrder.colorSizeEntries" :data="curData[0]" /> -->
     <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">
       <template>
@@ -64,7 +64,13 @@
       if (this.data != null && this.data.length > 0) {
         this.curData = JSON.parse(JSON.stringify(this.data));
       } else {
-        this.curData = [JSON.parse(JSON.stringify(this.receiptOrder.colorSizeEntries))];
+        this.curData = JSON.parse(JSON.stringify(this.receiptOrder.packageSheets));
+        //清空数据 quantity为0
+        this.curData.forEach(entry=>{
+          entry.colorSizeEntries.forEach(element=>{
+            element.quantity=0;
+          });
+        });
       }
     },
     destroyed() {

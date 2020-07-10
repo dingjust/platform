@@ -131,7 +131,7 @@
         var amount = 0;
         this.data.forEach(entry => {
           if (entry != null) {
-            entry.forEach(item => {
+            entry.colorSizeEntries.forEach(item => {
               let num = parseFloat(item.quantity);
               if (!Number.isNaN(num)) {
                 amount += num;
@@ -145,25 +145,35 @@
     methods: {
       //获取收货单颜色尺码对应entry
       getOldEntryByColorSize(color, size, entryIndex) {
-        let index = this.oldData[entryIndex].findIndex(entry => entry.color.code == color.code && entry.size.code ==
+        let index = this.oldData[entryIndex].colorSizeEntries.findIndex(entry => entry.color.code == color.code && entry
+          .size.code ==
           size
           .code);
         if (index != -1) {
-          return this.oldData[entryIndex][index];
+          return this.oldData[entryIndex].colorSizeEntries[index];
+        } else {
+          return {
+            quantity: ''
+          };
         }
       },
       //获取颜色尺码对应entry
       getEntryByColorSize(color, size, entryIndex) {
-        let index = this.data[entryIndex].findIndex(entry => entry.color.code == color.code && entry.size.code == size
+        let index = this.data[entryIndex].colorSizeEntries.findIndex(entry => entry.color.code == color.code && entry
+          .size.code == size
           .code);
         if (index != -1) {
-          return this.data[entryIndex][index];
+          return this.data[entryIndex].colorSizeEntries[index];
+        } else {
+          return {
+            quantity: ''
+          };
         }
       },
       countColorsAmount(color, entryIndex) {
         var amount = 0;
         if (this.data != null) {
-          this.data[entryIndex].filter(entry => entry.color.code == color.code).forEach(entry => {
+          this.data[entryIndex].colorSizeEntries.filter(entry => entry.color.code == color.code).forEach(entry => {
             let num = parseFloat(entry.quantity);
             if (!Number.isNaN(num)) {
               amount += num;
@@ -187,7 +197,7 @@
       countEntryAmount(index) {
         var amount = 0;
         if (this.data[index] != null) {
-          this.data[index].forEach(entry => {
+          this.data[index].colorSizeEntries.forEach(entry => {
             let num = parseFloat(entry.quantity);
             if (!Number.isNaN(num)) {
               amount += num;

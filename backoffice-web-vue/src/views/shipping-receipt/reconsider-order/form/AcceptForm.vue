@@ -64,8 +64,8 @@
     </el-row>
     <el-dialog :visible.sync="receiptFormVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <receipt-form :receiptOrder="{colorSizeEntries:reconsiderOrder.colorSizeEntries}"
-        :data="form.receiptColorSizeEntries" v-if="receiptFormVisible" @onSave="onReceiptSave" />
+      <receipt-form :receiptOrder="receiptOrder" :data="form.receiptColorSizeEntries" v-if="receiptFormVisible"
+        @onSave="onReceiptSave" />
     </el-dialog>
     <el-dialog :visible.sync="returnFormVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -87,9 +87,7 @@
       reconsiderOrder: {
         type: Object
       },
-      receiptOrderId: {
-        type:String
-      }
+      receiptOrderId: {}
     },
     components: {
       ImagesUpload,
@@ -132,6 +130,15 @@
       async _onSubmit() {
         const url = this.apis().acceptReconsider();
         let submitForm = Object.assign({}, this.form);
+        //修改补全收货单数据
+        let receiptColorSizeEntries=[];
+        this.form.receiptColorSizeEntries.forEach(entry=>{
+          entry.colorSizeEntries.forEach(element=>{
+            receiptColorSizeEntries.push(element);
+          });
+        });
+        this.$set(submitForm,'receiptColorSizeEntries',receiptColorSizeEntries);
+
         const result = await this.$http.put(url, submitForm);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -168,7 +175,7 @@
       }
     },
     created() {
-      if(this.receiptOrderId!=null&&this.receiptOrderId!=''){
+      if (this.receiptOrderId != null && this.receiptOrderId != '') {
         this.getReceiptDetail(this.receiptOrderId);
       }
     },

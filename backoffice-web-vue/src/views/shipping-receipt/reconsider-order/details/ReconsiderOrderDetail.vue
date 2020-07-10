@@ -117,6 +117,14 @@
           <h6>申请复议数量：{{formData.reconsiderQuantity}}</h6>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="space-between" style="margin-top:20px">
+        <el-col :span="12">
+          <h6>审批意见：{{formData.remarks}}</h6>
+        </el-col>
+        <el-col :span="6">
+          <h6>已补数量：{{completeNum}}</h6>
+        </el-col>
+      </el-row>
       <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50"
         v-if="formData.state=='IN_RECONSIDER'&&isReceiveParty">
         <template>
@@ -131,7 +139,8 @@
     </el-card>
     <el-dialog :visible.sync="acceptFormVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <accept-form v-if="acceptFormVisible" :reconsiderOrder="formData" @callback="onCallback" />
+      <accept-form v-if="acceptFormVisible" :reconsiderOrder="formData" @callback="onCallback"
+        :receiptOrderId="acceptReceiptOrderId" />
     </el-dialog>
     <el-dialog :visible.sync="rejectFormVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -174,6 +183,39 @@
       //图片url list
       mediasUrlList: function () {
         return this.formData.medias.map(media => media.url);
+      },
+      //制定收货单id
+      acceptReceiptOrderId: function () {
+        if (this.formData.logisticsSheet.receiptSheets != null) {
+          return this.formData.logisticsSheet.receiptSheets[0].id;
+        } else {
+          return null;
+        }
+      },
+      //已补数量
+      completeNum: function () {
+        let result = 0;
+        if (this.formData.receiptColorSizeEntries != null) {
+          this.formData.receiptColorSizeEntries.forEach(entry => {
+            let num = parseInt(entry.quantity);
+            if (!Number.isNaN(num)) {
+              result += num;
+            }
+          });
+        }
+
+        if (this.formData.returnSheet != null) {
+          this.formData.returnSheet.packageSheets.forEach(sheet => {
+            sheet.colorSizeEntries.forEach(entry => {
+              let num = parseInt(entry.quantity);
+              if (!Number.isNaN(num)) {
+                result += num;
+              }
+            })
+          });
+        }
+
+        return result;
       }
     },
     methods: {
