@@ -4,7 +4,8 @@ import 'package:models/models.dart';
 
 class ExpectedDeliveryDateField extends StatefulWidget {
   final RequirementOrderModel item;
-  ExpectedDeliveryDateField(this.item);
+  bool enabled;
+  ExpectedDeliveryDateField(this.item, [this.enabled = true]);
 
   ExpectedDeliveryDateFieldState createState() =>
       ExpectedDeliveryDateFieldState();
@@ -63,19 +64,21 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
           ],
         ),
         onTap: () {
-          showDatePicker(
-            context: context,
-            initialDate: widget.item.details?.expectedDeliveryDate ?? now,
-            firstDate: DateTime(2019),
-            lastDate: DateTime(2999),
-          ).then((value) {
-            setState(() {
-              if(value != null){
-                widget.item.details?.expectedDeliveryDate = value;
-              }
+          if (widget.enabled) {
+            showDatePicker(
+              context: context,
+              initialDate: widget.item.details?.expectedDeliveryDate ?? now,
+              firstDate: DateTime(2019),
+              lastDate: DateTime(2999),
+            ).then((value) {
+              setState(() {
+                if(value != null){
+                  widget.item.details?.expectedDeliveryDate = value;
+                }
 
+              });
             });
-          });
+          }
         });
   }
 }

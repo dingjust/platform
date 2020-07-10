@@ -85,7 +85,9 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
             children: <Widget>[
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderFirstEditForm(formState: widget.formState,)));
+                  if (widget.formState.editModel.editable) {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderFirstEditForm(formState: widget.formState,)));
+                  }
                 },
                 child: Container(
                   color: Colors.white,
@@ -125,6 +127,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                         hintText: '填写',
                         controller: super.productNameController,
                         focusNode: super.productNameFocusNode,
+                        enabled: widget.formState.editModel.editable,
                         onChanged: (v) {
                           widget.formState.editModel.details.productName =
                               super.productNameController.text;
@@ -162,14 +165,18 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                               groupValue: -1,
                               onChanged: (v) {
                                 setState(() {
-                                  widget.formState.editModel.details.maxExpectedPrice = -1;
+                                  if (widget.formState.editModel.editable) {
+                                    widget.formState.editModel.details.maxExpectedPrice = -1;
+                                  }
                                 });
                               }),
                           Expanded(
                               child: GestureDetector(
                                 onTap: (){
                                   setState(() {
-                                    widget.formState.editModel.details.maxExpectedPrice = -1;
+                                    if (widget.formState.editModel.editable) {
+                                      widget.formState.editModel.details.maxExpectedPrice = -1;
+                                    } 
                                   });
                                 },
                                 child: Text(
@@ -196,10 +203,11 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                             Text('面议',style: TextStyle(color: Colors.grey,fontSize: 16),),
                             GestureDetector(child: Icon(Icons.cancel,size: 20,),onTap: (){
                               setState(() {
-                                print(widget.formState.editModel.details.maxExpectedPrice);
-                                widget.formState.editModel.details.maxExpectedPrice = null;
-                                print(super.maxExpectedPriceController.text);
-
+                                if (widget.formState.editModel.editable) {
+                                  print(widget.formState.editModel.details.maxExpectedPrice);
+                                  widget.formState.editModel.details.maxExpectedPrice = null;
+                                  print(super.maxExpectedPriceController.text);
+                                }
                               });
                             },),
                           ],
@@ -218,6 +226,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                         hintText: '填写',
                         controller: super.maxExpectedPriceController,
                         focusNode: super.maxExpectedPriceFocusNode,
+                        enabled: widget.formState.editModel.editable,
                         onChanged: (value) {
                           if (value.contains('.')) {
                             int index = value.indexOf('.');
@@ -270,6 +279,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                         hintText: '填写',
                         controller: super.expectedMachiningQuantityController,
                         focusNode: super.expectedMachiningQuantityNode,
+                        enabled: widget.formState.editModel.editable,
                         onChanged: (v) {
                           widget.formState.editModel.details.expectedMachiningQuantity =
                               ClassHandleUtil.transInt(
@@ -283,11 +293,27 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
               Container(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: ExpectedDeliveryDateField(widget.formState.editModel),
+                child: ExpectedDeliveryDateField(widget.formState.editModel, widget.formState.editModel.editable),
               ),
               Container(
                 color: Colors.white,
-                child: ContactWayField(widget.formState.editModel),
+                // decoration: BoxDecoration(
+                //   color: Colors.white,
+                //   border: Border.all(color: Colors.red, width: 1.0),
+                //   borderRadius: BorderRadius.circular(3.0),
+                // ),
+                // child: ContactWayField(widget.formState.editModel),
+                child: Column(
+                  children: <Widget>[
+                    ContactWayField(widget.formState.editModel),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text('*已有报价的订单只允许修改联系方式', style: TextStyle(color: Colors.red, fontSize: 10),)
+                      ],
+                    )
+                  ]
+                )
               ),
               Container(
                 color: Colors.white,
@@ -314,15 +340,6 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                           onSelected: (val) {
                             print(val);
                             setState(() {});
-//                            setState(() {
-//                              if (consignment?.carrierDetails !=
-//                                  null) {
-//                                consignment.carrierDetails = val;
-//                              } else {
-//                                consignment = ConsignmentModel();
-//                                consignment.carrierDetails = val;
-//                              }
-//                            });
                           },
                           itemBuilder: (BuildContext context) =>
                               FactoryQualityLevelsEnum.map(
@@ -336,19 +353,21 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                                                 ListTileControlAffinity.leading,
                                             title: Text(saleMarket.name),
                                             onChanged: (v) {
-                                              setState(() {
-                                                state(() {
-                                                  if (v) {
-                                                    widget.formState.editModel.details
-                                                        .salesMarket
-                                                        .add(saleMarket.code);
-                                                  } else {
-                                                    widget.formState.editModel.details
-                                                        .salesMarket
-                                                        .remove(saleMarket.code);
-                                                  }
+                                              if (widget.formState.editModel.editable) {
+                                                setState(() {
+                                                  state(() {
+                                                    if (v) {
+                                                      widget.formState.editModel.details
+                                                          .salesMarket
+                                                          .add(saleMarket.code);
+                                                    } else {
+                                                      widget.formState.editModel.details
+                                                          .salesMarket
+                                                          .remove(saleMarket.code);
+                                                    }
+                                                  });
                                                 });
-                                              });
+                                              }
                                             },
                                             activeColor: Colors.orange,
                                             value: widget.formState.editModel.details
@@ -410,10 +429,12 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                             widget.formState.editModel.details.machiningType ==
                                 type,
                             onSelected: (bool selected) {
-                              setState(() {
-                                widget.formState.editModel.details.machiningType =
-                                    type;
-                              });
+                              if (widget.formState.editModel.editable) {
+                                setState(() {
+                                  widget.formState.editModel.details.machiningType =
+                                      type;
+                                });
+                              }
                             }))
                             .toList(),
                       ),
@@ -452,43 +473,13 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                               selectedColor: Color.fromRGBO(255, 214, 12, 1),
                               selected: widget.formState.editModel.details.proofingNeeded,
                               onSelected: (bool selected) {
-                                setState(() {
-                                  widget.formState.editModel.details.proofingNeeded = true;
-                                });
+                                if (widget.formState.editModel.editable) {
+                                  setState(() {
+                                    widget.formState.editModel.details.proofingNeeded = true;
+                                  });
+                                }
                               },
                             ),
-//                          GestureDetector(
-//                            onTap: (){
-//                              setState(() {
-//                                widget.formState?.model?.details?.proofingNeeded = true;
-//                              });
-//                            },
-//                            child: Container(
-//                              width: 80,
-//                              height: 30,
-//                              decoration: ShapeDecoration(
-//                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50),),
-//                                color: widget.formState?.model?.details?.proofingNeeded ?? false ? Color.fromRGBO(255, 214, 12, 1) : Colors.grey[100],
-//                              ),
-//                              child: Center(child: Text('是')),
-//                            ),
-//                          ),
-//                          GestureDetector(
-//                            onTap: (){
-//                              setState(() {
-//                                widget.formState?.model?.details?.proofingNeeded = false;
-//                              });
-//                            },
-//                            child: Container(
-//                              width: 80,
-//                              height: 30,
-//                              decoration: ShapeDecoration(
-//                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50),),
-//                                color: widget.formState?.model?.details?.proofingNeeded == null ? true : !widget.formState.editModel.details.proofingNeeded ? Color.fromRGBO(255, 214, 12, 1) : Colors.grey[100],
-//                              ),
-//                              child: Center(child: Text('否')),
-//                            ),
-//                          ),
                             ChoiceChip(
                               label: Container(
                                 height: 20,
@@ -499,9 +490,11 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                               selectedColor: Color.fromRGBO(255, 214, 12, 1),
                               selected: !widget.formState.editModel.details.proofingNeeded,
                               onSelected: (bool selected) {
-                                setState(() {
-                                  widget.formState.editModel.details.proofingNeeded = false;
-                                });
+                                if (widget.formState.editModel.editable) {
+                                  setState(() {
+                                    widget.formState.editModel.details.proofingNeeded = false;
+                                  });
+                                }
                               },
                             ),
                           ]
@@ -541,9 +534,11 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                               selectedColor: Color.fromRGBO(255, 214, 12, 1),
                               selected: widget.formState.editModel.details.invoiceNeeded,
                               onSelected: (bool selected) {
-                                setState(() {
-                                  widget.formState.editModel.details.invoiceNeeded = true;
-                                });
+                                if (widget.formState.editModel.editable) {
+                                  setState(() {
+                                    widget.formState.editModel.details.invoiceNeeded = true;
+                                  });
+                                }
                               },
                             ),
                             ChoiceChip(
@@ -556,9 +551,11 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                               selectedColor: Color.fromRGBO(255, 214, 12, 1),
                               selected: !widget.formState.editModel.details.invoiceNeeded,
                               onSelected: (bool selected) {
-                                setState(() {
-                                  widget.formState.editModel.details.invoiceNeeded = false;
-                                });
+                                if (widget.formState.editModel.editable) {
+                                  setState(() {
+                                    widget.formState.editModel.details.invoiceNeeded = false;
+                                  });
+                                }
                               },
                             ),
                           ]
@@ -605,11 +602,6 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                                               groupValue: widget.formState.editModel
                                                   .details.publishingMode,
                                               onChanged: (v) {
-//                                                setState(() {
-//                                                  widget.formState.editModel.details
-//                                                      .publishingMode =
-//                                                      PublishingModesEnum[index].code;
-//                                                });
                                               }),
                                           Expanded(
                                             child: Text(
@@ -677,73 +669,6 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                           Expanded(
                             flex: 3,
                             child: Container()
-//                            GridView.count(
-//                                physics: NeverScrollableScrollPhysics(),
-//                                shrinkWrap: true,
-//                                crossAxisCount: 2,
-//                                childAspectRatio: 5,
-//                                padding: EdgeInsets.zero,
-//                                children: [
-//                                  Opacity(
-//                                    opacity: widget.formState.editModel.details.publishingMode == 'PUBLIC' ? 1 : 0,
-//                                    child: GestureDetector(
-//                                      onTap: ()async{
-//                                        dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
-//                                        if(result != null){
-//                                          _factoryUids = result;
-//                                        }
-//                                      },
-//                                      child: Row(
-//                                        children: <Widget>[
-//                                          RichText(text: TextSpan(
-//                                              style:TextStyle(fontSize: 13),
-//                                              children: [
-//                                                TextSpan(text: '已邀请报价',style: TextStyle(color: Colors.black),),
-//                                                TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
-//                                              ]
-//                                          ),),
-//                                          Container(
-//                                              width: 10,
-//                                              child: Icon(
-//                                                Icons.chevron_right,
-//                                                size: 20,
-//                                                textDirection: TextDirection.ltr,
-//                                              )),
-//                                        ],
-//                                      ),
-//                                    ),
-//                                  ),
-//                                  Opacity(
-//                                    opacity: widget.formState.editModel.details.publishingMode == 'PRIVATE' ? 1 : 0,
-//                                    child: GestureDetector(
-//                                      onTap: ()async{
-//                                        dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
-//                                        if(result != null){
-//                                          _factoryUids = result;
-//                                        }
-//                                      },
-//                                      child: Row(
-//                                        children: <Widget>[
-//                                          RichText(text: TextSpan(
-//                                              style:TextStyle(fontSize: 13),
-//                                              children: [
-//                                                TextSpan(text: '已指定工厂',style: TextStyle(color: Colors.black),),
-//                                                TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
-//                                              ]
-//                                          ),),
-//                                          Container(
-//                                              width: 10,
-//                                              child: Icon(
-//                                                Icons.chevron_right,
-//                                                size: 20,
-//                                                textDirection: TextDirection.ltr,
-//                                              )),
-//                                        ],
-//                                      ),
-//                                    ),
-//                                  ),
-//                                ]
-//                            ),
                           ),
                         ],
                       ),
@@ -782,12 +707,14 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                           List.generate(EffectiveDaysEnum.length, (index) {
                             return GestureDetector(
                               onTap: (){
-                                setState(() {
-                                  widget.formState.editModel.details
-                                      .effectiveDays =
-                                      int.parse(
-                                          EffectiveDaysEnum[index].code);
-                                });
+                                if (widget.formState.editModel.editable) {
+                                  setState(() {
+                                    widget.formState.editModel.details
+                                        .effectiveDays =
+                                        int.parse(
+                                            EffectiveDaysEnum[index].code);
+                                  });
+                                }
                               },
                               child: Row(
                                 children: <Widget>[
@@ -797,12 +724,14 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                                           .formState.editModel.details.effectiveDays
                                           .toString(),
                                       onChanged: (v) {
-                                        setState(() {
-                                          widget.formState.editModel.details
-                                              .effectiveDays =
-                                              int.parse(
-                                                  EffectiveDaysEnum[index].code);
-                                        });
+                                        if (widget.formState.editModel.editable) {
+                                          setState(() {
+                                            widget.formState.editModel.details
+                                                .effectiveDays =
+                                                int.parse(
+                                                    EffectiveDaysEnum[index].code);
+                                          });
+                                        }
                                       }),
                                   Expanded(
                                       child: Text(
@@ -822,6 +751,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                 color: Colors.white,
                 child: PicturesField(
                   model: widget.formState.editModel,
+                  enabled: widget.formState.editModel.editable
                 ),
               ),
               Container(
@@ -851,6 +781,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                       maxLines: null,
                       maxLength: 120,
                       controller: remarksController,
+                      enabled: widget.formState.editModel.editable,
                       onChanged: (v) {
                         widget.formState.editModel.remarks = remarksController.text;
                       },

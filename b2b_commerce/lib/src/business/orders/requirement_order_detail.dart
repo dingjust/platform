@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_contact_edit_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_edit_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
@@ -905,47 +906,77 @@ class _RequirementOrderDetailPageState
   }
 
   List<PopupMenuItem<String>> _buildPopupMenu() {
-    if (orderModel.editable != null &&
-        orderModel.editable &&
-        orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
-      return <PopupMenuItem<String>>[
-        PopupMenuItem<String>(
-          value: 'edit',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.edit),
-              ),
-              Text('编辑')
-            ],
+    // if (orderModel.editable != null &&
+    //     orderModel.editable &&
+    //     orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
+    if (orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
+      if (orderModel.editable != null && orderModel.editable) {
+        return <PopupMenuItem<String>>[
+          PopupMenuItem<String>(
+            value: 'edit',
+            child: Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.edit),
+                ),
+                Text('编辑')
+              ],
+            ),
           ),
-        ),
-        PopupMenuItem<String>(
-          value: 'close',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.close),
-              ),
-              Text('关闭')
-            ],
+          PopupMenuItem<String>(
+            value: 'close',
+            child: Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.close),
+                ),
+                Text('关闭')
+              ],
+            ),
           ),
-        ),
-        PopupMenuItem<String>(
-          value: 'share',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.share),
-              ),
-              Text('分享')
-            ],
+          PopupMenuItem<String>(
+            value: 'share',
+            child: Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.share),
+                ),
+                Text('分享')
+              ],
+            ),
           ),
-        ),
-      ];
+        ];
+      } else {
+        return <PopupMenuItem<String>>[
+          PopupMenuItem<String>(
+            value: 'edit',
+            child: Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.edit),
+                ),
+                Text('编辑')
+              ],
+            ),
+          ),
+          PopupMenuItem<String>(
+            value: 'share',
+            child: Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.share),
+                ),
+                Text('分享')
+              ],
+            ),
+          ),
+        ];
+      }
     } else {
       return <PopupMenuItem<String>>[
         PopupMenuItem<String>(
