@@ -45,6 +45,7 @@
             v-if="scope.row.productionTaskOrder!=null">{{scope.row.productionTaskOrder.deliveryDate | timestampToTime}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="标签"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>

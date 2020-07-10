@@ -14,7 +14,7 @@
         <h6 style="color: #F56C6C;margin-bottom: 0px">{{this.tips}}</h6>
       </el-col>
       <el-col :span="2">
-        <el-button class="check-btn" v-if="canCheck" @click="onCheck">核验</el-button>
+        <el-button class="check-btn" v-if="canCheck" @click="isStockIn">入库</el-button>
       </el-col>
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -98,15 +98,15 @@
         });
       },
       handleClick(tab, event) {
-        this.queryFormData.status = tab.name;
+        this.queryFormData.states = tab.name;
         this.onAdvancedSearch(0, 10);
       },
       onDetail(row) {
         // TODO 发货单详情
         this.$router.push('/receipt/orders/' + row.id);
       },
-      onCheck() {
-        // TODO 核验
+      isStockIn () {
+        // TODO 入库
       }
     },
     data() {
@@ -116,31 +116,15 @@
         statuses: [{
             code: '',
             name: '全部'
-          },
-          {
-            code: '1',
-            name: '待核验'
-          },
-          {
-            code: '2',
-            name: '复议中'
-          },
-          {
-            code: '3',
-            name: '待对账'
-          },
-          {
-            code: '4',
-            name: '已对账'
           }
         ],
         queryFormData: {
           keyword: '',
-          productionLeaderName: '',
-          operatorName: '',
-          creationtimeStart: '',
-          creationtimeEnd: '',
-          status: ''
+          cooperatorName: '',
+          merchandiserName: '',
+          createdDateFrom: '',
+          createdDateTo: '',
+          states: ''
         },
         tips: '注明：核验时间为收货单创建之日起5天内完成，若5天内没有操作收货单核验，收货单将自动完成核验。核验后的收货单不能修改。'
       }

@@ -20,11 +20,6 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品类" min-width="120">
-        <template slot-scope="scope">
-          <span>{{scope.row.product.category.parent.name}} - {{scope.row.product.category.name}}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="关联订单" min-width="120px">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
@@ -32,16 +27,25 @@
           </el-button>
         </template>
       </el-table-column>
+      <!-- <el-table-column label="品类" min-width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.product.category.parent.name}} - {{scope.row.product.category.name}}</span>
+        </template>
+      </el-table-column> -->
       <el-table-column label="收货人" prop="creator.name"></el-table-column>
-      <el-table-column label="单价" prop="receiveParty.name"></el-table-column>
-      <el-table-column label="订单数量" prop="totalQuantity" />
-      <el-table-column label="收货总额" prop="totalQuantity" />
-      <el-table-column label="收货日期" prop="totalQuantity">
+      <el-table-column label="单价"></el-table-column>
+      <el-table-column label="收货数量" prop="totalQuantity" />
+      <el-table-column label="收货总额" />
+      <el-table-column label="收货日期">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态"></el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('ShippingSheetState', scope.row.state)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
