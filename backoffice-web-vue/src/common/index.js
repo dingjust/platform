@@ -1284,6 +1284,11 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/shipping';
   },
 
+  // 发货完结
+  shippingFinish(id) {
+    return '/b2b/sheets/receivedispatch/finishDelivery/'+id;
+  },
+
   // 发货单详情
   shippingOrderDetail(id) {
     return '/b2b/sheets/shipping/' + id;
@@ -1352,7 +1357,7 @@ let NONE_TENANT_APIS = {
 
   //拒绝复议单
   rejectReconsider(id) {
-    return '/b2b/sheets/reconsider/reject/'+id;
+    return '/b2b/sheets/reconsider/reject/' + id;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

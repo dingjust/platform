@@ -50,7 +50,7 @@
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="12">
-              <h6 class="basic-label">收货地址：{{formData.deliveryAddress.details}}</h6>
+              <h6 class="basic-label">收货地址：{{formData.deliveryAddress!=null?formData.deliveryAddress.details:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px"
@@ -94,7 +94,7 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="8" :offset="2">
-          <h6>发货单：KY1000000001</h6>
+          发货单：<el-button type="text" @click="onShipDetail">{{formData.logisticsSheet.code}}</el-button>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
@@ -148,6 +148,9 @@
       }
     },
     methods: {
+      onShipDetail() {
+        this.$router.push('/shipping/orders/' + this.formData.logisticsSheet.id);
+      },
       async getDetail() {
         // 获取收货单详情
         const url = this.apis().returnOrderDetail(this.id);

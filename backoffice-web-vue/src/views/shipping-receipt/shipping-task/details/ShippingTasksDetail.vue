@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-row type="flex" justify="space-between"> 
+      <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="title">
             <h6>发货任务单</h6>
@@ -54,8 +54,9 @@
           <shipping-tasks-orders-list :formData="formData" :readOnly="!isShipParty" @onCreate="onCreate" />
         </el-col>
       </el-row>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isShipParty">
-        <el-button class="shipping-btn" :disabled="isFinish" @click="onFinish">发货完结</el-button>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
+        v-if="isShipParty&&formData.state=='IN_DELIVERY'">
+        <el-button class="shipping-btn" :disabled="!showFinshiBtn" @click="onFinish">发货完结</el-button>
       </el-row>
     </el-card>
   </div>
@@ -72,6 +73,23 @@
       ShippingTasksOrdersList
     },
     computed: {
+      //发货完结按钮显示状态
+      showFinshiBtn: function () {
+        if (this.isShipParty) {
+          if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
+            let pass = true;
+            this.formData.shippingSheets.forEach(sheet => {
+              if (sheet.state != 'PENDING_RECONCILED') {
+                pass = false;
+                return false;
+              }
+            });
+            return pass;
+          }
+        }
+        return false;
+
+      },
       //是发货方
       isShipParty: function () {
         if (this.formData.shipParty != null && this.currentUser != null) {
@@ -126,8 +144,18 @@
           this._onFinish();
         });
       },
-      _onFinish() {
-        // 发货完结
+      async _onFinish() {
+        // 发货完结        
+        const url = this.apis().shippingFinish(this.id);
+        const result = await this.$http.put(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.getDetail();
       }
     },
     data() {
