@@ -82,10 +82,10 @@
         searchUrl: this.apis().shippingOrderList(),
         queryFormData: {
           keyword: '',
-          productionLeaderName: '',
-          operatorName: '',
-          creationtimeStart: '',
-          creationtimeEnd: '',
+          cooperatorName: '',
+          merchandiserName: '',
+          createdDateFrom: '',
+          createdDateTo: '',
           states: 'PENDING_RECONSIDER'
         },
       }

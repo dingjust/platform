@@ -46,11 +46,10 @@
       }),
       onHandleClick(val) {
         this.searchUrl = val.searchUrl;
-        this.queryFormData.status = val.status;
+        this.queryFormData.states = val.code;
         this.onAdvancedSearch(0, 10);
       },
       onSearch(page, size) {
-        // TODO 查询自身的收发任务
         const keyword = this.keyword;
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
@@ -63,7 +62,6 @@
         });
       },
       onAdvancedSearch(page, size) {
-        // TODO 查询自身的收发任务
         const query = this.queryFormData;
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
@@ -82,16 +80,16 @@
         searchUrl: this.apis().shippingOrderList(),
         queryFormData: {
           keyword: '',
-          productionLeaderName: '',
-          operatorName: '',
-          creationtimeStart: '',
-          creationtimeEnd: '',
-          status: '待收货'
+          cooperatorName: '',
+          merchandiserName: '',
+          createdDateFrom: '',
+          createdDateTo: '',
+          states: 'PENDING_RECEIVED'
         },
       }
     },
     created() {
-      this.onSearch();
+      this.onAdvancedSearch();
     },
   }
 

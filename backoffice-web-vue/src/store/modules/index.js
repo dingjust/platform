@@ -65,6 +65,7 @@ import ReturnOrdersModule from './shipping-receipt/return-orders'
 import ImportShippingReceiptModule from './shipping-receipt/import-shipping-receipt'
 import ExportShippingReceiptModule from './shipping-receipt/export-shipping-receipt'
 import ImportReconsiderOrderModule from './shipping-receipt/import-reconsider-order'
+import ExportReconsiderOrderModule from './shipping-receipt/export-reconsider-order'
 
 // reconciliation
 import ReconciliationTasksModule from './reconciliation/reconciliation-tasks'
@@ -144,6 +145,7 @@ export {
   ImportShippingReceiptModule,
   ExportShippingReceiptModule,
   ImportReconsiderOrderModule,
+  ExportReconsiderOrderModule,
   // reconciliation
   ReconciliationTasksModule,
   ReconciliationOrdersModule,

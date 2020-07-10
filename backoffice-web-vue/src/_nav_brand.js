@@ -131,7 +131,7 @@ export default {
         url: '/receipt/shipping-receipt-sheet',
       }, {
         name: '差异复议',
-        url: '/shipping/reconsiders/export',
+        url: '/receipt/reconsider-order',
       }, {
         name: '对账任务',
         url: '/reconciliation/tasks/export',

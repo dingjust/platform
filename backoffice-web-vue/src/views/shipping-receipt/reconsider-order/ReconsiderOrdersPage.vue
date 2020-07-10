@@ -133,6 +133,13 @@
                 key: "产品名称"
               },
               {
+                key: '关联发货单',
+                props: {
+                  code: 'logisticsSheet.code',
+                  id: 'logisticsSheet.id'
+                }
+              },
+              {
                 key: "关联订单"
               },
               {
@@ -164,7 +171,7 @@
                 key: "复议数"
               },
               {
-                key: "发货操作"
+                key: "复议操作"
               }
             ],
             url: this.apis().reconsiderOrderList()
@@ -181,16 +188,30 @@
                 key: "产品名称"
               },
               {
+                key: '关联发货单',
+                props: {
+                  code: 'logisticsSheet.code',
+                  id: 'logisticsSheet.id'
+                }
+              },
+              {
                 key: "关联订单"
               },
               {
-                key: "发货收货数"
+                key: "发货收货数",
+                props:{
+                  shipProp:'logisticsSheet.totalQuantity',
+                  receSheetProp:'logisticsSheet.receiptSheets'
+                }
               },
               {
                 key: "退货收货数"
               },
               {
-                key: "收货日期"
+                key: "收货日期",
+                props:{
+                  prop:'logisticsSheet.receiptSheets'
+                }
               },
               {
                 key: "差异数",
@@ -202,7 +223,7 @@
                 key: "复议数"
               },
               {
-                key: "发货操作"
+                key: "复议操作"
               }
             ],
             url: this.apis().reconsiderOrderList()
@@ -219,16 +240,30 @@
                 key: "产品名称"
               },
               {
+                key: '关联发货单',
+                props: {
+                  code: 'logisticsSheet.code',
+                  id: 'logisticsSheet.id'
+                }
+              },
+              {
                 key: "关联订单"
               },
               {
-                key: "发货收货数"
+                key: "发货收货数",
+                props:{
+                  shipProp:'logisticsSheet.totalQuantity',
+                  receSheetProp:'logisticsSheet.receiptSheets'
+                }
               },
               {
                 key: "退货收货数"
               },
               {
-                key: "收货日期"
+                key: "收货日期",
+                props:{
+                  prop:'logisticsSheet.receiptSheets'
+                }
               },
               {
                 key: "差异数",
@@ -240,7 +275,7 @@
                 key: "复议数"
               },
               {
-                key: "发货操作"
+                key: "复议操作"
               }
             ],
             url: this.apis().reconsiderOrderList()
@@ -251,7 +286,7 @@
                 key: "多选"
               },
               {
-                key: "复议单号"
+                key: "发货单号"
               },
               {
                 key: "产品名称"
@@ -260,13 +295,20 @@
                 key: "关联订单"
               },
               {
-                key: "发货收货数"
+                key: "发货收货数",
+                props:{
+                  shipProp:'logisticsSheet.totalQuantity',
+                  receSheetProp:'logisticsSheet.receiptSheets'
+                }
               },
               {
                 key: "退货收货数"
               },
               {
-                key: "收货日期"
+                key: "收货日期",
+                props:{
+                  prop:'logisticsSheet.receiptSheets'
+                }
               },
               {
                 key: "差异数",
@@ -275,13 +317,10 @@
                 }
               },
               {
-                key: "复议数"
-              },
-              {
                 key: "发货操作"
               }
             ],
-            url: this.apis().reconsiderOrderList()
+            url: this.apis().shippingOrderList()
           }
         },
         selectedData: ""

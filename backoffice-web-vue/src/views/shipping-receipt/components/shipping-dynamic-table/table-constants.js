@@ -18,12 +18,36 @@ const ShippingOrderCode = {
 
 const RelationShippingOrder = {
   template: `
-  <el-table-column label="关联发货单" :prop="prop" min-width="120"></el-table-column>
+  <el-table-column label="关联发货单" min-width="120">
+    <template slot-scope="scope">
+      <el-button type="text" @click="onShipDetail(scope.row)">{{shippingName(scope.row)}}</el-button>
+    </template>
+  </el-table-column>
 `,
   props: {
-    prop: {
+    code: {
       type: String,
       default: 'code'
+    },
+    id: {
+      type: String,
+      default: 'id'
+    }
+  },
+  methods: {
+    shippingName (row) {
+      try {
+        return eval('row.' + this.code);
+      } catch (e) {
+        return null;
+      }
+    },
+    onShipDetail (row) {
+      try {
+        this.$router.push('/shipping/orders/' + eval('row.' + this.id));
+      } catch (e) {
+        return null;
+      }
     }
   }
 }
@@ -168,7 +192,20 @@ const ShipDate = {
 }
 
 const ReceiptOrder = {
-  template: `<el-table-column label="收货单" fixed="left"></el-table-column>`,
+  template: `
+    <el-table-column label="收货单" fixed="left">
+      <template slot-scope="scope">
+        <template v-for="item in scope.row.receiptSheets">
+          <el-button type="text" @click="onReceiptDetail(item)" :key="item.id">{{item.code}}</el-button>
+        </template>
+      </template>
+    </el-table-column>
+  `,
+  methods: {
+    onReceiptDetail (item) {
+      this.$router.push('/receipt/orders/' + item.id);
+    }
+  }
 }
 
 //收货单创建人
@@ -235,7 +272,40 @@ const ShipReceNum = {
 }
 
 const ReceiptNum = {
-  template: `<el-table-column label="收货数"></el-table-column>`
+  template: `
+    <el-table-column label="收货数">
+      <template slot-scope="scope">
+        <span>{{receiptNum(scope.row)}}</span>
+      </template>
+    </el-table-column>
+  `,
+  props: {
+    prop: {
+      type: String,
+      default: 'receiptSheets'
+    }
+  },
+  methods: {
+    receiptNum (row) {
+      let result = 0;
+      try {
+        let sheets = eval('row.' + this.prop);
+        if (sheets != null) {
+          sheets.forEach(element => {
+            if (element.totalQuantity != null) {
+              let num = parseInt(element.totalQuantity);
+              if (!Number.isNaN(num)) {
+                result += num;
+              }
+            }
+          });
+        }
+      } catch (e) {
+
+      }
+      return result;
+    }
+  }
 }
 
 const ReceiptDate = {
@@ -264,7 +334,13 @@ const ReceiptDate = {
 }
 
 const ReturnOrder = {
-  template: `<el-table-column label="退货单" fixed="left"></el-table-column>`
+  template: `<el-table-column label="退货单" :prop="prop" fixed="left"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'code'
+    }
+  }
 }
 
 const RelationReturnOrder = {
@@ -272,12 +348,12 @@ const RelationReturnOrder = {
 }
 
 const ReturnNum = {
-  template: `<el-table-column label="退货数"></el-table-column>`
+  template: `<el-table-column label="退货数" prop="totalQuantity"></el-table-column>`
 }
 
 //退货单创建人
 const ReturnOrderCreator = {
-  template: `<el-table-column label="创建人"></el-table-column>`
+  template: `<el-table-column label="创建人" prop="creator.name"></el-table-column>`
 }
 
 const ReturnReceiptNum = {
@@ -404,6 +480,19 @@ const ReconsiderNum = {
 `
 }
 
+const ReconsiderOperation = {
+  template: `<el-table-column label="操作">
+  <template slot-scope="scope">
+    <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
+  </template>
+</el-table-column>`,
+  methods: {
+    onDetail(row) {
+      this.$router.push('/reconsiders/detail/orders/' + row.id);
+    }
+  }
+}
+
 const COMPONENT_NAME_MAP = {
   '多选': 'selection',
   '发货单号': 'shipping-order-code',
@@ -426,13 +515,13 @@ const COMPONENT_NAME_MAP = {
   '发货操作': 'shipping-operation',
   '收货操作': 'receipt-operation',
   '退货操作': 'return-operation',
+  '复议操作': 'reconsider-operation',
   '发货收货数': 'ship-rece-num',
   '收货日期': 'receipt-date',
   //复议
   '复议单号': 'reconsider-order-code',
-  '复议数': 'reconsider-num',
+  '复议数': 'reconsider-num'
 }
-
 
 export {
   Selection,
@@ -457,6 +546,7 @@ export {
   ShippingOperation,
   ReceiptOperation,
   ReturnOperation,
+  ReconsiderOperation,
   ShipReceNum,
   ReceiptDate,
   ReconsiderOrderCode,

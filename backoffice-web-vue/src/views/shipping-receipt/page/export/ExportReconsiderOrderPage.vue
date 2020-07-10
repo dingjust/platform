@@ -4,12 +4,12 @@
       <el-row>
         <el-col :span="4">
           <div class="title">
-            <h6>收发货列表</h6>
+            <h6>差异复议</h6>
           </div>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <shipping-receipt-page mode="export" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
+      <reconsider-orders-page mode="export" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
         @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
     </el-card>
   </div>
@@ -23,14 +23,14 @@
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    'ExportShippingReceiptModule'
+    'ExportReconsiderOrderModule'
   );
 
-  import ShippingReceiptPage from '../../shipping-receipt-sheet/ShippingReceiptPage'
+  import ReconsiderOrdersPage from '../../reconsider-order/ReconsiderOrdersPage'
   export default {
-    name: 'ExportShippingReceiptPage',
+    name: 'ExportReconsiderOrderPage',
     components: {
-      ShippingReceiptPage
+      ReconsiderOrdersPage
     },
     computed: {
       ...mapGetters({
@@ -46,10 +46,11 @@
       }),
       onHandleClick(val) {
         this.searchUrl = val.searchUrl;
-        this.queryFormData.states = val.code;
+        this.queryFormData.states = val.states;
         this.onAdvancedSearch(0, 10);
       },
       onSearch(page, size) {
+        // TODO 查询自身的收发任务
         const keyword = this.keyword;
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
@@ -62,6 +63,7 @@
         });
       },
       onAdvancedSearch(page, size) {
+        // TODO 查询自身的收发任务
         const query = this.queryFormData;
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
@@ -84,16 +86,13 @@
           merchandiserName: '',
           createdDateFrom: '',
           createdDateTo: '',
-          states: 'PENDING_RECEIVED'
+          states: 'PENDING_RECONSIDER'
         },
       }
     },
     created() {
       this.onAdvancedSearch();
     },
-    destroyed() {
-
-    }
   }
 
 </script>

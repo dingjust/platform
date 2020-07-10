@@ -789,6 +789,11 @@ const router = new Router({
               name: '创建收货单',
               component: () => import( /* webpackChunkName: 'receipt' */ '@/views/shipping-receipt/receipt-order/form/ReceiptOrderForm')
             },
+            {
+              path: 'reconsider-order',
+              name: '发货差异复议',
+              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/Export/ExportReconsiderOrderPage')
+            },
           ]
         },
         {

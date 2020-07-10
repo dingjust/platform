@@ -81,6 +81,7 @@
       handleClick(tab, event) {
         this.$emit('handleClick', {
           status: this.statusMap[tab.name].status,
+          code: this.statusMap[tab.name].code,
           searchUrl: this.statusMap[tab.name].url
         });
       },
@@ -111,27 +112,125 @@
         statusMap: {
           STATUS_1: {
             status: '待收货',
-            columns: ['发货单号', '产品名称', '关联订单', '发货人', '单价', '发货数量', '发货总额', '发货日期', '发货操作'],
+            code: 'PENDING_RECEIVED',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '发货人'
+            }, {
+              key: '单价'
+            }, {
+              key: '发货数量'
+            }, {
+              key: '发货总额'
+            }, {
+              key: '发货日期'
+            }, {
+              key: '发货操作'
+            }],
             url: this.apis().shippingOrderList()
           },
           STATUS_2: {
             status: '待退货',
-            columns: ['发货单号', '产品名称', '关联订单', '关联收货单', '收货单创建人', '发货数', '收货数', '发货操作'],
+            code: 'PENDING_RETURNED',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '关联收货单'
+            }, {
+              key: '收货单创建人'
+            }, {
+              key: '发货数'
+            }, {
+              key: '收货数'
+            }, {
+              key: '发货操作'
+            }],
             url: this.apis().shippingOrderList()
           },
           STATUS_3: {
             status: '退货待收',
-            columns: ['退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
-            url: this.apis().shippingOrderList()
+            code: 'RETURN_TO_BE_RECEIVED',
+            columns: [{
+              key: '退货单'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '关联发货单',
+              props: {
+                code: 'logisticsSheet.code',
+                id: 'logisticsSheet.id'
+              }
+            }, {
+              key: '退货单创建人'
+            }, {
+              key: '单价'
+            }, {
+              key: '退货数'
+            }, {
+              key: '退货操作'
+            }],
+            url: this.apis().returnOrderList()
           },
           STATUS_4: {
             status: '退货已收',
-            columns: ['退货单', '产品名称', '关联订单', '关联发货单', '退货单创建人', '单价', '退货数', '退货操作'],
-            url: this.apis().shippingOrderList()
+            code: 'RETURN_RECEIVED',
+            columns: [{
+              key: '退货单'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '关联发货单',
+              props: {
+                code: 'logisticsSheet.code',
+                id: 'logisticsSheet.id'
+              }
+            }, {
+              key: '退货单创建人'
+            }, {
+              key: '单价'
+            }, {
+              key: '退货数'
+            }, {
+              key: '退货操作'
+            }],
+            url: this.apis().returnOrderList()
           },
           STATUS_5: {
             status: '已完成',
-            columns: ['发货单号', '产品名称', '单价', '发货数量', '收货单', '收货数', '差异数', '发货操作'],
+            code: 'COMPLETED',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '单价'
+            }, {
+              key: '发货数量'
+            }, {
+              key: '收货单'
+            }, {
+              key: '收货数',
+              props: {
+                prop: 'receiptSheets'
+              }
+            }, {
+              key: '差异数'
+            }, {
+              key: '发货操作'
+            }],
             url: this.apis().shippingOrderList()
           }
         }

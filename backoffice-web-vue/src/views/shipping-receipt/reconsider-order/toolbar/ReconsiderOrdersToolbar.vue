@@ -7,10 +7,10 @@
             <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 140px"></el-input>
           </el-form-item>
           <el-form-item label="负责人">
-            <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 110px"></el-input>
+            <el-input placeholder="输入负责人名称" v-model="queryFormData.merchandiserName" style="width: 110px"></el-input>
           </el-form-item>
           <el-form-item label="合作商">
-            <el-input placeholder="输入合作商名称" v-model="queryFormData.operatorName" style="width: 110px"></el-input>
+            <el-input placeholder="输入合作商名称" v-model="queryFormData.cooperatorName" style="width: 110px"></el-input>
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
@@ -51,12 +51,10 @@
         this.$emit('onAdvancedSearch', 0 , 10);
       },
       onReset () {
-        this.dateArr = [];
+        this.dateArr = null;
         this.queryFormData.keyword = '';
-        this.queryFormData.productionLeaderName = '';
-        this.queryFormData.operatorName = '';
-        this.queryFormData.creationtimeStart = '';
-        this.queryFormData.creationtimeEnd = '';
+        this.queryFormData.cooperatorName = '';
+        this.queryFormData.merchandiserName = '';
       },
       onApply () {
         this.$emit('onApply');
@@ -69,9 +67,13 @@
     },
     watch: {
       dateArr: function (newVal, oldVal) {
+        if (newVal == null) {
+          this.queryFormData.createdDateFrom = '';
+          this.queryFormData.createdDateTo = '';
+        }
         if (newVal && newVal.length > 0) {
-          this.queryFormData.creationtimeStart = newVal[0];
-          this.queryFormData.creationtimeEnd = newVal[1];
+          this.queryFormData.createdDateFrom = newVal[0];
+          this.queryFormData.createdDateTo = newVal[1];
         }
       }
     },

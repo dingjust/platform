@@ -63,6 +63,7 @@ import {
   ImportShippingReceiptModule,
   ExportShippingReceiptModule,
   ImportReconsiderOrderModule,
+  ExportReconsiderOrderModule,
   // reconciliation
   ReconciliationTasksModule,
   ReconciliationOrdersModule,
@@ -167,6 +168,7 @@ export default new Vuex.Store({
     ImportShippingReceiptModule,
     ExportShippingReceiptModule,
     ImportReconsiderOrderModule,
+    ExportReconsiderOrderModule,
     // reconciliation
     ReconciliationTasksModule,
     ReconciliationOrdersModule,
