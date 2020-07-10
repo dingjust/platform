@@ -210,9 +210,9 @@ const RelationReceiptOrder = {
   template: `
   <el-table-column label="关联收货单" fixed="left" min-width="110px">
     <template slot-scope="scope">
-      <template v-for="item in scope.row.receiptSheets">
+      <el-row v-for="item in scope.row.receiptSheets">
         <el-button type="text" @click="onReceiptDetail(item)" :key="item.id">{{item.code}}</el-button>
-      </template>
+      </el-row>
     </template>
   </el-table-column>
   `,
@@ -353,9 +353,9 @@ const RelationReturnOrder = {
   template: `
   <el-table-column label="关联退货单" min-width="110px">
     <template slot-scope="scope">
-      <template v-for="item in scope.row.returnSheets">
-        <el-button type="text" @click="onDetail(item)">{{item.code}}</el-button>
-      </template>
+      <el-row v-for="item in scope.row.returnSheets">
+        <el-button type="text" @click="onDetail(item)" :key="item.id">{{item.code}}</el-button>
+      </el-row>
     </template>
   </el-table-column>
   `,
@@ -529,6 +529,7 @@ const COMPONENT_NAME_MAP = {
   '退货数': 'return-num',
   '退货单创建人': 'return-order-creator',
   '关联退货单': 'relation-return-order',
+  '关联收货单': 'relation-receipt-order',
   '退货收货数': 'return-receipt-num',
   '差异数': 'different-num',
   '发货操作': 'shipping-operation',
