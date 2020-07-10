@@ -223,7 +223,7 @@
                 key: "复议数"
               },
               {
-                key: "复议操作"
+                key: "复议单操作"
               }
             ],
             url: this.apis().reconsiderOrderList()
@@ -275,7 +275,7 @@
                 key: "复议数"
               },
               {
-                key: "复议操作"
+                key: "复议单操作"
               }
             ],
             url: this.apis().reconsiderOrderList()

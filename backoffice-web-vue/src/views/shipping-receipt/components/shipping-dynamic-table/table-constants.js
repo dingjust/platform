@@ -459,7 +459,7 @@ const ReturnOperation = {
 </el-table-column>`,
   methods: {
     onDetail(row) {
-      this.$router.push('/shipping/orders/' + row.id);
+      this.$router.push('/returned/orders/' + row.id);
     }
   }
 }
