@@ -6,7 +6,7 @@ const Selection = {
 
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" :prop="prop" min-width="120" fiexd></el-table-column>
+  <el-table-column label="发货单号" :prop="prop" min-width="120" fixed="left"></el-table-column>
   `,
   props: {
     prop: {
@@ -192,18 +192,11 @@ const ShipDate = {
 }
 
 const ReceiptOrder = {
-  template: `
-    <el-table-column label="收货单" fixed="left">
-      <template slot-scope="scope">
-        <template v-for="item in scope.row.receiptSheets">
-          <el-button type="text" @click="onReceiptDetail(item)" :key="item.id">{{item.code}}</el-button>
-        </template>
-      </template>
-    </el-table-column>
-  `,
-  methods: {
-    onReceiptDetail (item) {
-      this.$router.push('/receipt/orders/' + item.id);
+  template: `<el-table-column label="收货单" :prop="prop" fixed="left"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'code'
     }
   }
 }
@@ -214,7 +207,20 @@ const ReceiptOrderCreator = {
 }
 
 const RelationReceiptOrder = {
-  template: `<el-table-column label="关联收货单"></el-table-column>`
+  template: `
+  <el-table-column label="关联收货单" fixed="left" min-width="110px">
+    <template slot-scope="scope">
+      <template v-for="item in scope.row.receiptSheets">
+        <el-button type="text" @click="onReceiptDetail(item)" :key="item.id">{{item.code}}</el-button>
+      </template>
+    </template>
+  </el-table-column>
+  `,
+  methods: {
+    onReceiptDetail (item) {
+      this.$router.push('/receipt/orders/' + item.id);
+    }
+  }
 }
 
 const ShipReceNum = {
@@ -344,7 +350,20 @@ const ReturnOrder = {
 }
 
 const RelationReturnOrder = {
-  template: `<el-table-column label="关联退货单"></el-table-column>`
+  template: `
+  <el-table-column label="关联退货单" min-width="110px">
+    <template slot-scope="scope">
+      <template v-for="item in scope.row.returnSheets">
+        <el-button type="text" @click="onDetail(item)">{{item.code}}</el-button>
+      </template>
+    </template>
+  </el-table-column>
+  `,
+  methods: {
+    onDetail (item) {
+      this.$router.push('/returned/orders/' + item.id);
+    }
+  }
 }
 
 const ReturnNum = {
@@ -426,7 +445,7 @@ const DifferentNum = {
 }
 
 const ShippingOperation = {
-  template: `<el-table-column label="操作">
+  template: `<el-table-column label="操作" fixed="right">
   <template slot-scope="scope">
     <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
   </template>
@@ -439,7 +458,7 @@ const ShippingOperation = {
 }
 
 const ReceiptOperation = {
-  template: `<el-table-column label="操作">
+  template: `<el-table-column label="操作" fixed="right">
   <template slot-scope="scope">
     <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
   </template>
@@ -452,7 +471,7 @@ const ReceiptOperation = {
 }
 
 const ReturnOperation = {
-  template: `<el-table-column label="操作">
+  template: `<el-table-column label="操作" fixed="right">
   <template slot-scope="scope">
     <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
   </template>
@@ -481,7 +500,7 @@ const ReconsiderNum = {
 }
 
 const ReconsiderOperation = {
-  template: `<el-table-column label="操作">
+  template: `<el-table-column label="操作" fixed="right">
   <template slot-scope="scope">
     <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
   </template>

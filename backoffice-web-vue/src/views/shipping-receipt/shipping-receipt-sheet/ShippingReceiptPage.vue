@@ -212,20 +212,24 @@
             status: '已完成',
             code: 'COMPLETED',
             columns: [{
-              key: '发货单号'
+              key: '收货单'
+            }, {
+              key: '关联发货单'
             }, {
               key: '产品名称'
             }, {
               key: '单价'
             }, {
-              key: '发货数量'
-            }, {
-              key: '收货单'
+              key: '发货数'
             }, {
               key: '收货数',
               props: {
                 prop: 'receiptSheets'
               }
+            }, {
+              key: '关联退货单'
+            }, {
+              key: '退货数'
             }, {
               key: '差异数'
             }, {
