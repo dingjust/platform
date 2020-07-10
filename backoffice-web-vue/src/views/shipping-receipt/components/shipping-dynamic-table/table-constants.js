@@ -6,7 +6,7 @@ const Selection = {
 
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" :prop="prop" min-width="120" fixed="left"></el-table-column>
+  <el-table-column label="发货单号" :prop="prop" min-width="120"></el-table-column>
   `,
   props: {
     prop: {
