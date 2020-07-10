@@ -488,7 +488,7 @@ const ReconsiderOperation = {
 </el-table-column>`,
   methods: {
     onDetail(row) {
-      this.$router.push('/reconsiders/detail/orders/' + row.id);
+      this.$router.push('/reconsiders/orders/detail/' + row.id);
     }
   }
 }
@@ -515,13 +515,14 @@ const COMPONENT_NAME_MAP = {
   '发货操作': 'shipping-operation',
   '收货操作': 'receipt-operation',
   '退货操作': 'return-operation',
-  '复议操作': 'reconsider-operation',
   '发货收货数': 'ship-rece-num',
   '收货日期': 'receipt-date',
   //复议
   '复议单号': 'reconsider-order-code',
-  '复议数': 'reconsider-num'
+  '复议数': 'reconsider-num',
+  '复议单操作':'reconsider-operation'
 }
+
 
 export {
   Selection,
@@ -546,10 +547,10 @@ export {
   ShippingOperation,
   ReceiptOperation,
   ReturnOperation,
-  ReconsiderOperation,
   ShipReceNum,
   ReceiptDate,
   ReconsiderOrderCode,
   ReconsiderNum,
+  ReconsiderOperation,
   COMPONENT_NAME_MAP
 }

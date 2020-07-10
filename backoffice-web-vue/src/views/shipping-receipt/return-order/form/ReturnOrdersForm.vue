@@ -67,7 +67,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="发货单号" prop="consignment.trackingID" label-width="120px"
+                <el-form-item label="物流单号" prop="consignment.trackingID" label-width="120px"
                   :rules="{required: !formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-input v-model="formData.consignment.trackingID" style="width: 194px"
                     :disabled="formData.isOfflineConsignment"></el-input>
@@ -151,7 +151,10 @@
   export default {
     name: 'ReturnOrdersForm',
     props: {
-
+      componentsType: {
+        type: String,
+        default: 'page'
+      }
     },
     components: {
       ColorSizeBoxTable,
@@ -218,20 +221,27 @@
         });
       },
       async _onSubmit() {
-        const url = this.apis().returnOrderCreate();
-        let submitForm = Object.assign({}, this.formData);
-        const result = await this.$http.post(url, submitForm, {
-          id: this.shippingOder.id
-        });
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
+        //页面直接提交数据
+        if (this.componentsType == 'page') {
+          const url = this.apis().returnOrderCreate();
+          let submitForm = Object.assign({}, this.formData);
+          const result = await this.$http.post(url, submitForm, {
+            id: this.shippingOder.id
+          });
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          if (result.code == '0') {
+            this.$message.error(result.msg);
+          } else if (result.code == '1') {
+            this.$message.success(result.msg);
+            this.$router.go(-1);
+          }
         }
-        if (result.code == '0') {
-          this.$message.error(result.msg);
-        } else if (result.code == '1') {
-          this.$message.success(result.msg);
-          this.$router.go(-1);
+        //组件回调
+        else if (this.componentsType == 'component') {
+          this.$emit('callback', this.formData);
         }
       },
       //提示是否创建退货单

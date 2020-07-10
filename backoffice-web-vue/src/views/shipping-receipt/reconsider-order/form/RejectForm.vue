@@ -11,7 +11,7 @@
       <el-row type="flex" justify="center" style="margin-top:20px">
         <el-col :span="20">
           <el-form-item label="审批意见">
-            <el-input type="textarea" :autosize="{ minRows: 5, maxRows:10}" placeholder="请输入内容" v-model="form.message">
+            <el-input type="textarea" :autosize="{ minRows: 5, maxRows:10}" placeholder="请输入内容" v-model="form.remarks">
             </el-input>
           </el-form-item>
         </el-col>
@@ -20,7 +20,7 @@
         <el-col :span="12" :offset="2">
           <el-row type="flex">
             <h6 style="margin-right:20px">上传凭证</h6>
-            <images-upload class="form-upload" :slot-data="attachments" />
+            <images-upload class="form-upload" :slot-data="form.medias" />
           </el-row>
         </el-col>
       </el-row>
@@ -54,16 +54,29 @@
     methods: {
       onSubmit() {
         //校验数量与订单差异
-
+        this._onSubmit();
       },
       async _onSubmit() {
-        // this.onReturnedMessage();
+        const url = this.apis().rejectReconsider(this.reconsiderOrder.id);
+        let submitForm = Object.assign({}, this.form);
+        const result = await this.$http.put(url, submitForm);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == '0') {
+          this.$message.error(result.msg);
+        } else if (result.code == '1') {
+          this.$message.success(result.msg);
+          this.$emit('callback');
+        }
       },
     },
     data() {
       return {
         form: {
-          message: ''
+          marks: '',
+          medias:[]
         },
         attachments: []
       }
