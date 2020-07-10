@@ -3,7 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange" @row-click="rowClick">
       <el-table-column type="selection" width="55" v-if="canCreateReceipt"></el-table-column>
-      <el-table-column label="发货单号" prop="code" min-width="110px"></el-table-column>
+      <el-table-column label="发货单号" prop="code" min-width="110px" fixed="left"></el-table-column>
       <el-table-column label="产品名称" min-width="150px">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
@@ -22,7 +22,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="关联订单" min-width="110px">
+      <el-table-column label="" min-width="110px">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
             @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
@@ -80,7 +80,7 @@
           <span>{{getEnum('ShippingSheetState', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
         </template>

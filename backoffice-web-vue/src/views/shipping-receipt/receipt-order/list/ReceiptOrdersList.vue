@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="收货单号" prop="code" min-width="120"></el-table-column>
+      <el-table-column label="收货单号" prop="code" min-width="120" fixed></el-table-column>
       <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
@@ -20,7 +20,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="关联订单" min-width="120px">
+      <el-table-column label="生产工单" min-width="120px">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
             @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
@@ -41,12 +41,12 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
+      <!-- <el-table-column label="状态">
         <template slot-scope="scope">
           <span>{{getEnum('ShippingSheetState', scope.row.state)}}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="操作">
+      </el-table-column> -->
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
         </template>

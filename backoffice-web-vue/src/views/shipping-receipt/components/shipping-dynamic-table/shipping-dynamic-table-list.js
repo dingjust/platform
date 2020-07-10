@@ -9,11 +9,10 @@ import {
   ShipNum,
   ShipDate,
   ReceiptOrder,
-  ReceiptOrderCreator,
+  Creator,
   RelationReceiptOrder,
   ReceiptNum,
   ReturnOrder,
-  ReturnOrderCreator,
   ReturnNum,
   RelationReturnOrder,
   ReturnReceiptNum,
@@ -49,11 +48,10 @@ const ShippingDynamicTableList = {
     ShipNum,
     ShipDate,
     ReceiptOrder,
-    ReceiptOrderCreator,
+    Creator,
     RelationReceiptOrder,
     ReceiptNum,
     ReturnOrder,
-    ReturnOrderCreator,
     ReturnNum,
     RelationReturnOrder,
     ReturnReceiptNum,
@@ -70,9 +68,13 @@ const ShippingDynamicTableList = {
   },
   render: function (createElement) {
     return createElement(
-      'template', this.columns.map(entry => {
+      
+      'template', this.columns.map((entry,index) => {
+        let props = entry.props != null ? entry.props : {};
+        props['sortKey']=index;
+        //增加排序
         return createElement(COMPONENT_NAME_MAP[entry.key], {
-          props: entry.props != null ? entry.props : {}
+          props: props
         });
       })
     );

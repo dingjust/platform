@@ -75,6 +75,8 @@
     computed: {
       //发货完结按钮显示状态
       showFinshiBtn: function () {
+        //TODO:生产单状态为待出库
+        // if(this.formData.productionTaskOrder.)
         if (this.isShipParty) {
           if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
             let pass = true;
