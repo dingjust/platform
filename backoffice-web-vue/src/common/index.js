@@ -1343,6 +1343,16 @@ let NONE_TENANT_APIS = {
   //复议单详情
   reconsiderOrderDetail(id) {
     return '/b2b/sheets/reconsider/' + id;
+  },
+
+  //同意复议单
+  acceptReconsider() {
+    return '/b2b/sheets/reconsider/confirm';
+  },
+
+  //拒绝复议单
+  rejectReconsider(id) {
+    return '/b2b/sheets/reconsider/reject/'+id;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

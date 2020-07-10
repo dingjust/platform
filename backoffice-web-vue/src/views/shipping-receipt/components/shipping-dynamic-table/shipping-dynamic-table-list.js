@@ -25,6 +25,7 @@ import {
   ReceiptDate,
   ReconsiderOrderCode,
   ReconsiderNum,
+  ReconsiderOperation,
   COMPONENT_NAME_MAP
 } from "./table-constants";
 
@@ -64,6 +65,7 @@ const ShippingDynamicTableList = {
     ReceiptDate,
     ReconsiderOrderCode,
     ReconsiderNum,
+    ReconsiderOperation,
     COMPONENT_NAME_MAP
   },
   render: function (createElement) {

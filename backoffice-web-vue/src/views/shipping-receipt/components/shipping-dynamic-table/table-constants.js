@@ -404,6 +404,19 @@ const ReconsiderNum = {
 `
 }
 
+const ReconsiderOperation = {
+  template: `<el-table-column label="操作">
+  <template slot-scope="scope">
+    <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
+  </template>
+</el-table-column>`,
+  methods: {
+    onDetail(row) {
+      this.$router.push('/reconsiders/orders/detail/' + row.id);
+    }
+  }
+}
+
 const COMPONENT_NAME_MAP = {
   '多选': 'selection',
   '发货单号': 'shipping-order-code',
@@ -431,6 +444,7 @@ const COMPONENT_NAME_MAP = {
   //复议
   '复议单号': 'reconsider-order-code',
   '复议数': 'reconsider-num',
+  '复议单操作':'reconsider-operation'
 }
 
 
@@ -461,5 +475,6 @@ export {
   ReceiptDate,
   ReconsiderOrderCode,
   ReconsiderNum,
+  ReconsiderOperation,
   COMPONENT_NAME_MAP
 }

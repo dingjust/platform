@@ -827,19 +827,19 @@ const router = new Router({
               path: 'orders/:mode',
               name: '复议单列表',
               props: true,
-              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/ReconsiderOrdersPage')
+              component: () => import( /* webpackChunkName: 'reconsiders' */ '@/views/shipping-receipt/reconsider-order/ReconsiderOrdersPage')
             },
             {
               path: 'create/orders/:id',
               name: '复议单表单',
               props:true,
-              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/form/ReconsiderOrderForm')
+              component: () => import( /* webpackChunkName: 'reconsiders' */ '@/views/shipping-receipt/reconsider-order/form/ReconsiderOrderForm')
             },
             {
-              path: 'orders/:id',
+              path: 'orders/detail/:id',
               name: '复议单详情',
               props: true,
-              component: () => import( /* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/reconsider-order/details/ReconsiderOrderDetail')
+              component: () => import( /* webpackChunkName: 'reconsiders' */ '@/views/shipping-receipt/reconsider-order/details/ReconsiderOrderDetail')
             },
           ]
         },
