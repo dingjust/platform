@@ -212,9 +212,9 @@
             status: '已完成',
             code: 'COMPLETED',
             columns: [{
-              key: '收货单'
+              key: '发货单号'
             }, {
-              key: '关联发货单'
+              key: '关联收货单'
             }, {
               key: '产品名称'
             }, {

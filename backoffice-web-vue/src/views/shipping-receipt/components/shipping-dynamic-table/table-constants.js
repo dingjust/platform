@@ -529,6 +529,7 @@ const COMPONENT_NAME_MAP = {
   '退货数': 'return-num',
   '退货单创建人': 'return-order-creator',
   '关联退货单': 'relation-return-order',
+  '关联收货单': 'relation-receipt-order',
   '退货收货数': 'return-receipt-num',
   '差异数': 'different-num',
   '发货操作': 'shipping-operation',
