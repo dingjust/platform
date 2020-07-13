@@ -56,7 +56,7 @@
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
         v-if="isShipParty&&formData.state=='IN_DELIVERY'">
-        <el-button class="shipping-btn" :disabled="!showFinshiBtn" @click="onFinish">发货完结</el-button>
+        <el-button class="shipping-btn" :disabled="!finshiBtnEnable" @click="onFinish">发货完结</el-button>
       </el-row>
     </el-card>
   </div>
@@ -74,23 +74,24 @@
     },
     computed: {
       //发货完结按钮显示状态
-      showFinshiBtn: function () {
+      finshiBtnEnable: function () {
         //TODO:生产单状态为待出库
-        // if(this.formData.productionTaskOrder.)
-        if (this.isShipParty) {
-          if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
-            let pass = true;
-            this.formData.shippingSheets.forEach(sheet => {
-              if (sheet.state != 'PENDING_RECONCILED') {
-                pass = false;
-                return false;
-              }
-            });
-            return pass;
+        if (this.formData.productionTaskOrder != null && this.formData.productionTaskOrder.state ==
+          'TO_BE_DELIVERED') {
+          if (this.isShipParty) {
+            if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
+              let pass = true;
+              this.formData.shippingSheets.forEach(sheet => {
+                if (sheet.state != 'PENDING_RECONCILED') {
+                  pass = false;
+                  return false;
+                }
+              });
+              return pass;
+            }
           }
         }
         return false;
-
       },
       //是发货方
       isShipParty: function () {
