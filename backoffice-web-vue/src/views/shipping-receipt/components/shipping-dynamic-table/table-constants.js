@@ -26,7 +26,7 @@ const ShippingOrderCode = {
 
 const RelationShippingOrder = {
   template: `
-  <el-table-column label="关联发货单" min-width="120" :key="sortKey">
+  <el-table-column label="发货单" min-width="120" :key="sortKey">
     <template slot-scope="scope">
       <el-button type="text" @click="onShipDetail(scope.row)">{{shippingName(scope.row)}}</el-button>
     </template>
@@ -136,6 +136,19 @@ const ShipParty = {
     prop: {
       type: String,
       default: 'shipParty.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
+const ShipPerson = {
+  template: `<el-table-column label="发货人" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'creator.name'
     },
     sortKey: {
       default: 10
@@ -410,7 +423,7 @@ const ReturnOrder = {
 
 const RelationReturnOrder = {
   template: `
-  <el-table-column label="关联退货单" min-width="110px" :key="sortKey">
+  <el-table-column label="退货单" min-width="110px" :key="sortKey">
     <template slot-scope="scope">
       <el-row v-for="item in scope.row.returnSheets">
         <el-button type="text" @click="onDetail(item)" :key="item.id">{{item.code}}</el-button>
@@ -435,7 +448,7 @@ const RelationReturnOrder = {
 }
 
 const ReturnNum = {
-  template: `<el-table-column label="退货数" prop="prop" :key="sortKey"></el-table-column>`,
+  template: `<el-table-column label="退货数" :prop="prop" :key="sortKey"></el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -594,8 +607,35 @@ const ReturnOperation = {
 //复议单号
 const ReconsiderOrderCode = {
   template: `
-  <el-table-column label="复议单号" prop="code" min-width="120" fiexd :key="sortKey"></el-table-column>
+  <el-table-column label="复议单号" :prop="prop" min-width="120" fiexd :key="sortKey"></el-table-column>
 `,
+  props: {
+    prop: {
+      type: String,
+      default: 'code'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
+//关联复议单
+const RelationReconsiderOrder = {
+  template: `
+  <el-table-column label="复议单" min-width="110px" :key="sortKey">
+    <template slot-scope="scope">
+      <el-row v-for="item in scope.row.reconsiderSheets">
+        <el-button type="text" @click="onReconsiderDetail(item)" :key="item.id">{{item.code}}</el-button>
+      </el-row>
+    </template>
+  </el-table-column>
+  `,
+  methods: {
+    onReconsiderDetail(item) {
+      this.$router.push('/reconsiders/orders/detail/' + item.id);
+    }
+  },
   props: {
     sortKey: {
       default: 10
@@ -606,9 +646,13 @@ const ReconsiderOrderCode = {
 //复议数
 const ReconsiderNum = {
   template: `
-  <el-table-column label="复议数" prop="reconsiderQuantity" :key="sortKey"></el-table-column>
+  <el-table-column label="复议数" :prop="prop" :key="sortKey"></el-table-column>
 `,
   props: {
+    prop: {
+      type: String,
+      default: 'reconsiderQuantity'
+    },
     sortKey: {
       default: 10
     }
@@ -633,13 +677,56 @@ const ReconsiderOperation = {
   }
 }
 
+//退货方
+const ReturnParty = {
+  template: `<el-table-column label="退货方" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'shipParty.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
+//退货人
+const ReturnPerson = {
+  template: `<el-table-column label="退货人" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'creator.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
+// //复议方
+// const ReconsiderParty = {
+//   template: `<el-table-column label="复议方" :prop="prop" :key="sortKey"></el-table-column>`,
+//   props: {
+//     prop: {
+//       type: String,
+//       default: 'shipParty.name'
+//     },
+//     sortKey: {
+//       default: 10
+//     }
+//   },
+// }
+
 const COMPONENT_NAME_MAP = {
   // '多选': 'selection',
   '发货单号': 'shipping-order-code',
   '关联发货单': 'relation-shipping-order',
   '产品名称': 'product',
   '关联订单': 'relation-order',
-  '发货人': 'ship-party',
+  '发货人': 'ship-person',
+  '发货方': 'ship-party',
   '单价': 'unit-price',
   '发货数': 'ship-num',
   '发货日期': 'ship-date',
@@ -660,7 +747,11 @@ const COMPONENT_NAME_MAP = {
   //复议
   '复议单号': 'reconsider-order-code',
   '复议数': 'reconsider-num',
-  '复议单操作': 'reconsider-operation'
+  '复议单操作': 'reconsider-operation',
+  '关联复议单':'relation-reconsider-order',
+  //退货
+  '退货方': 'return-party',
+  '退货人':'return-person'
 }
 
 
@@ -672,6 +763,7 @@ export {
   RelationOrder,
   UnitPrice,
   ShipParty,
+  ShipPerson,
   ShipNum,
   ShipDate,
   ReceiptOrder,
@@ -679,7 +771,6 @@ export {
   RelationReceiptOrder,
   ReceiptNum,
   ReturnOrder,
-  ReturnNum,
   RelationReturnOrder,
   ReturnReceiptNum,
   DifferentNum,
@@ -691,5 +782,9 @@ export {
   ReconsiderOrderCode,
   ReconsiderNum,
   ReconsiderOperation,
+  ReturnParty,
+  ReturnPerson,
+  ReturnNum,
+  RelationReconsiderOrder,
   COMPONENT_NAME_MAP
 }

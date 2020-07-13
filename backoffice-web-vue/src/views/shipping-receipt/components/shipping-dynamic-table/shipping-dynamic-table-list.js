@@ -6,6 +6,7 @@ import {
   RelationOrder,
   UnitPrice,
   ShipParty,
+  ShipPerson,
   ShipNum,
   ShipDate,
   ReceiptOrder,
@@ -13,7 +14,6 @@ import {
   RelationReceiptOrder,
   ReceiptNum,
   ReturnOrder,
-  ReturnNum,
   RelationReturnOrder,
   ReturnReceiptNum,
   DifferentNum,
@@ -25,6 +25,10 @@ import {
   ReconsiderOrderCode,
   ReconsiderNum,
   ReconsiderOperation,
+  ReturnParty,
+  ReturnPerson,
+  ReturnNum,
+  RelationReconsiderOrder,
   COMPONENT_NAME_MAP
 } from "./table-constants";
 
@@ -45,6 +49,7 @@ const ShippingDynamicTableList = {
     RelationOrder,
     UnitPrice,
     ShipParty,
+    ShipPerson,
     ShipNum,
     ShipDate,
     ReceiptOrder,
@@ -52,7 +57,6 @@ const ShippingDynamicTableList = {
     RelationReceiptOrder,
     ReceiptNum,
     ReturnOrder,
-    ReturnNum,
     RelationReturnOrder,
     ReturnReceiptNum,
     DifferentNum,
@@ -64,6 +68,10 @@ const ShippingDynamicTableList = {
     ReconsiderOrderCode,
     ReconsiderNum,
     ReconsiderOperation,
+    ReturnParty,
+    ReturnPerson,
+    ReturnNum,
+    RelationReconsiderOrder,
     COMPONENT_NAME_MAP
   },
   render: function (createElement) {

@@ -104,6 +104,10 @@
           <template v-if="formData.state=='PENDING_RETURNED'&&isReceiveParty">
             <el-button class="sumbit-btn" @click="onReturn">创建退货单</el-button>
           </template>
+          <!-- 待复议 -->
+          <template v-if="formData.state=='PENDING_RECONSIDER'&&isShipParty">
+            <el-button class="sumbit-btn" @click="onReconsider">提出复议</el-button>
+          </template>
         </el-row>
       </div>
     </el-card>
@@ -131,7 +135,15 @@
         } else {
           return false;
         }
-      }
+      },
+      //是否为发货方
+      isShipParty: function () {
+        if (this.currentUser != null && this.formData.shipParty != null) {
+          return this.currentUser.companyCode == this.formData.shipParty.uid;
+        } else {
+          return false;
+        }
+      },
     },
     methods: {
       async getDetail() {
@@ -183,6 +195,10 @@
             isAllReturn: false
           }
         });
+      },
+      //创建复议单
+      onReconsider() {
+        this.$router.push("/reconsiders/create/orders/" + this.formData.id);
       }
     },
     data() {

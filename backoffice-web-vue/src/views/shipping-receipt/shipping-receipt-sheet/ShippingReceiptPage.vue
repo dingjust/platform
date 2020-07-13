@@ -12,6 +12,9 @@
       <el-col :span="3">
         <el-button type="text" class="list-btn" @click="returnListVisible = !returnListVisible">退货单</el-button>
       </el-col>
+      <el-col :span="3">
+        <el-button type="text" class="list-btn" @click="reconsiderListVisible = !reconsiderListVisible">复议单</el-button>
+      </el-col>
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,status) in statusMap">
@@ -32,6 +35,10 @@
       :close-on-click-modal="false">
       <return-orders-page :mode="mode" v-if="returnListVisible" />
     </el-dialog>
+    <el-dialog :visible.sync="reconsiderListVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <reconsider-order-mode-page :mode="mode" v-if="reconsiderListVisible" />
+    </el-dialog>
   </div>
 </template>
 
@@ -40,6 +47,7 @@
   import ShippingOrdersPage from '../shipping-order/ShippingOrdersPage'
   import ReceiptOrdersPage from '../receipt-order/ReceiptOrdersPage'
   import ReturnOrdersPage from '../return-order/ReturnOrdersPage'
+  import ReconsiderOrderModePage from '../reconsider-order/ReconsiderOrderModePage'
   import {
     ShippingDynamicTable
   } from '../components/index'
@@ -72,7 +80,8 @@
       ReturnOrdersPage,
       ShippingDynamicTable,
       ReceiptOrdersList,
-      ReturnOrdersList
+      ReturnOrdersList,
+      ReconsiderOrderModePage
     },
     computed: {
       canCreateReceipt: function () {
@@ -118,6 +127,7 @@
         shippingListVisible: false,
         receiptListVisible: false,
         returnListVisible: false,
+        reconsiderListVisible: false,
       }
     },
   }

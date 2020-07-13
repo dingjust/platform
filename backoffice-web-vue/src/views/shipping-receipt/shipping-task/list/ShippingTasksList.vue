@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="发货任务单号" prop="code" min-width="120px" fixed="left"></el-table-column>
+      <!-- <el-table-column label="发货任务单号" prop="code" min-width="120px" fixed="left"></el-table-column> -->
       <el-table-column label="生产工单" prop="productionTaskOrder.code" min-width="120px">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.productionTaskOrder!=null"

@@ -5,11 +5,11 @@
     <el-row type="flex" justify="start">
       <h6 style="color: #F56C6C">注明：待复议中的发货订单，申请复议时间为5天，如5天内没有申请复议，则视为放弃复议，此发货单将不再接受复议</h6>
     </el-row>
-    <div class="over-tabs">
-      <el-row type="flex">
-        <el-button v-if="activeName=='PENDING_RECONSIDER'" class="material-btn" @click="onReconsider">申请复议</el-button>
-      </el-row>
-    </div>
+    <!-- <div class="over-tabs"> -->
+    <el-row type="flex" justify="end">
+      <el-button v-show="activeName=='PENDING_RECONSIDER'" class="material-btn" @click="onReconsider">申请复议</el-button>
+    </el-row>
+    <!-- </div> -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,states) in statusMap">
         <el-tab-pane :label="getEnum('ShippingSheetState', map.states)" :name="states" :key="states">
@@ -32,10 +32,6 @@
   export default {
     name: "ReconsiderOrdersPage",
     props: {
-      mode: {
-        type: String,
-        default: "import"
-      },
       page: {
         type: Object,
         required: true
@@ -43,6 +39,14 @@
       queryFormData: {
         type: Object,
         required: true
+      },
+      statusMap: {
+        type: Object,
+        required: true
+      },
+      currentState: {
+        type: String,
+        default: 'PENDING_RECONSIDER'
       }
     },
     components: {
@@ -85,244 +89,12 @@
         }
       }
     },
+    created() {
+
+    },
     data() {
       return {
-        activeName: "PENDING_RECONSIDER",
-        statusMap: {
-          PENDING_RECONSIDER: {
-            states: "PENDING_RECONSIDER",
-            columns: [{
-                key: "多选"
-              },
-              {
-                key: "发货单号"
-              },
-              {
-                key: "产品名称"
-              },
-              {
-                key: "关联订单"
-              },
-              {
-                key: "发货收货数"
-              },
-              {
-                key: "退货收货数"
-              },
-              {
-                key: "收货日期"
-              },
-              {
-                key: "差异数"
-              },
-              {
-                key: "发货操作"
-              }
-            ],
-            url: this.apis().shippingOrderList()
-          },
-          IN_RECONSIDER: {
-            states: "IN_RECONSIDER",
-            columns: [{
-                key: "多选"
-              },
-              {
-                key: "复议单号"
-              },
-              {
-                key: "产品名称"
-              },
-              {
-                key: '关联发货单',
-                props: {
-                  code: 'logisticsSheet.code',
-                  id: 'logisticsSheet.id'
-                }
-              },
-              {
-                key: "关联订单"
-              },
-              {
-                key: "发货收货数",
-                props:{
-                  shipProp:'logisticsSheet.totalQuantity',
-                  receSheetProp:'logisticsSheet.receiptSheets'
-                }
-              },
-              {
-                key: "退货收货数",
-                props:{
-                  prop:'logisticsSheet.returnSheets'
-                }
-              },
-              {
-                key: "收货日期",
-                props:{
-                  prop:'logisticsSheet.receiptSheets'
-                }
-              },
-              {
-                key: "差异数",
-                props: {
-                  prop: "logisticsSheet.diffQuantity"
-                }
-              },
-              {
-                key: "复议数"
-              },
-              {
-                key: "复议单操作"
-              }
-            ],
-            url: this.apis().reconsiderOrderList()
-          },
-          RECONSIDER_SUCCESS: {
-            states: "RECONSIDER_SUCCESS",
-            columns: [{
-                key: "多选"
-              },
-              {
-                key: "复议单号"
-              },
-              {
-                key: "产品名称"
-              },
-              {
-                key: '关联发货单',
-                props: {
-                  code: 'logisticsSheet.code',
-                  id: 'logisticsSheet.id'
-                }
-              },
-              {
-                key: "关联订单"
-              },
-              {
-                key: "发货收货数",
-                props:{
-                  shipProp:'logisticsSheet.totalQuantity',
-                  receSheetProp:'logisticsSheet.receiptSheets'
-                }
-              },
-              {
-                key: "退货收货数"
-              },
-              {
-                key: "收货日期",
-                props:{
-                  prop:'logisticsSheet.receiptSheets'
-                }
-              },
-              {
-                key: "差异数",
-                props: {
-                  prop: "logisticsSheet.diffQuantity"
-                }
-              },
-              {
-                key: "复议数"
-              },
-              {
-                key: "复议单操作"
-              }
-            ],
-            url: this.apis().reconsiderOrderList()
-          },
-          RECONSIDER_FAIL: {
-            states: "RECONSIDER_FAIL",
-            columns: [{
-                key: "多选"
-              },
-              {
-                key: "复议单号"
-              },
-              {
-                key: "产品名称"
-              },
-              {
-                key: '关联发货单',
-                props: {
-                  code: 'logisticsSheet.code',
-                  id: 'logisticsSheet.id'
-                }
-              },
-              {
-                key: "关联订单"
-              },
-              {
-                key: "发货收货数",
-                props:{
-                  shipProp:'logisticsSheet.totalQuantity',
-                  receSheetProp:'logisticsSheet.receiptSheets'
-                }
-              },
-              {
-                key: "退货收货数"
-              },
-              {
-                key: "收货日期",
-                props:{
-                  prop:'logisticsSheet.receiptSheets'
-                }
-              },
-              {
-                key: "差异数",
-                props: {
-                  prop: "logisticsSheet.diffQuantity"
-                }
-              },
-              {
-                key: "复议数"
-              },
-              {
-                key: "复议单操作"
-              }
-            ],
-            url: this.apis().reconsiderOrderList()
-          },
-          RECONSIDER_EXPIRED: {
-            states: "RECONSIDER_EXPIRED",
-            columns: [{
-                key: "多选"
-              },
-              {
-                key: "发货单号"
-              },
-              {
-                key: "产品名称"
-              },
-              {
-                key: "关联订单"
-              },
-              {
-                key: "发货收货数",
-                props:{
-                  shipProp:'logisticsSheet.totalQuantity',
-                  receSheetProp:'logisticsSheet.receiptSheets'
-                }
-              },
-              {
-                key: "退货收货数"
-              },
-              {
-                key: "收货日期",
-                props:{
-                  prop:'logisticsSheet.receiptSheets'
-                }
-              },
-              {
-                key: "差异数",
-                props: {
-                  prop: "logisticsSheet.diffQuantity"
-                }
-              },
-              {
-                key: "发货操作"
-              }
-            ],
-            url: this.apis().shippingOrderList()
-          }
-        },
+        activeName: this.currentState,
         selectedData: ""
       };
     }

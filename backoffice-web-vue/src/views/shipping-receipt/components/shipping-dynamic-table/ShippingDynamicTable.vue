@@ -2,7 +2,7 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" row-key="id" @selection-change="handleSelectionChange"
       @row-click="rowClick">
-      <el-table-column type="selection" width="55" v-show="hasSelection" fixed key="1" ></el-table-column>
+      <el-table-column type="selection" width="55" v-show="hasSelection" fixed key="1"></el-table-column>
       <shipping-dynamic-table-list :columns="columns" />
     </el-table>
     <div class="pt-2"></div>
@@ -37,7 +37,7 @@
     computed: {
       //是否有多选项
       hasSelection: function () {
-        let index = this.columns.findIndex(element => element.key == '多选');
+        let index = this.columns.filter(element => element.key != null).findIndex(element => element.key == '多选');
         return index != -1;
       }
     },

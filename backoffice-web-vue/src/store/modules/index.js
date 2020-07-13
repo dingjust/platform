@@ -62,6 +62,7 @@ import ExportShippingTasksModule from './shipping-receipt/export-shipping-tasks'
 import ShippingOrdersModule from './shipping-receipt/shipping-orders'
 import ReceiptOrdersModule from './shipping-receipt/receipt-orders'
 import ReturnOrdersModule from './shipping-receipt/return-orders'
+import ReconsiderOrdersModule from './shipping-receipt/reconsider-orders'
 import ImportShippingReceiptModule from './shipping-receipt/import-shipping-receipt'
 import ExportShippingReceiptModule from './shipping-receipt/export-shipping-receipt'
 import ImportReconsiderOrderModule from './shipping-receipt/import-reconsider-order'
@@ -142,6 +143,7 @@ export {
   ShippingOrdersModule,
   ReceiptOrdersModule,
   ReturnOrdersModule,
+  ReconsiderOrdersModule,
   ImportShippingReceiptModule,
   ExportShippingReceiptModule,
   ImportReconsiderOrderModule,

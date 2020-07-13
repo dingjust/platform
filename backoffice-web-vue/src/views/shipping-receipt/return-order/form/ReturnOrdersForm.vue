@@ -114,7 +114,7 @@
             <h6 class="info-input-prepend" style="margin-top: 41px;">凭证<span style="color:red">*</span></h6>
           </el-col>
           <el-col :span="20">
-            <el-form-item prop="medias" :rules="[{ required: true, message: '请上传凭证', trigger: 'change'}]">
+            <el-form-item prop="medias" :rules="[{ required: false, message: '请上传凭证', trigger: 'change'}]">
               <images-upload class="return-images-form-upload" :slot-data="formData.medias" :limit="5">
                 <template slot="picBtn">
                   <h6>大小不超过5M/张，且最多5张主图</h6>
