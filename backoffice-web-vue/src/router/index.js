@@ -878,7 +878,7 @@ const router = new Router({
             name: '订单对账任务',
             component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/page/import/ImportReconciliationTasksPage')
           }, {
-            path: 'tasks/:id',
+            path: 'tasks/detail/:id',
             name: '对账任务详情',
             props: true,
             component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/reconciliation-task/details/ReconciliationTasksDetail')

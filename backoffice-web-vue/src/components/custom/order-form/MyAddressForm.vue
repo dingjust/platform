@@ -48,7 +48,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row type="flex" align="middle" :gutter="10">
+      <el-row type="flex" align="middle" :gutter="10" v-if="!hideContact">
         <el-col :span="7">
           <el-form-item label="联系人" label-width="80px" :rules="[
                 { required: !readOnly, message: '请填写收货人', trigger: 'change'}]" prop="fullname">
@@ -91,6 +91,10 @@
       readOnly: {
         type: Boolean,
         default: false
+      },
+      hideContact:{
+        type:Boolean,
+        default:false
       }
     },
     methods: {
