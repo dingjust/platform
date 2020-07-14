@@ -62,7 +62,7 @@
         <td :colspan="sizes.length+2" class="end-td grey-td">{{countTotalAmount}}</td>
       </tr>
     </table>
-    <el-row type="flex" justify="center" align="middle" v-if="!readOnly">
+    <el-row type="flex" justify="center" align="middle" v-if="!readOnly&&canAddBox">
       <el-col :span="24">
         <div class="add_btn" @click="addRow">
           +点击添加箱
@@ -96,6 +96,10 @@
       readOnly: {
         type: Boolean,
         default: false
+      },
+      canAddBox:{
+        type:Boolean,
+        default:true
       }
     },
     computed: {

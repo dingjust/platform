@@ -16,7 +16,7 @@
         <th>合计</th>
       </tr>
       <template v-for="color in colors">
-        <tr :key="'tr'+color.code">
+        <tr :key="'tr'+color.code" v-if="countColorsAmount(color)>0||!readOnly">
           <td>{{color.name}}</td>
           <template v-for="size in sizes">
             <td :key="'td'+size.name">
