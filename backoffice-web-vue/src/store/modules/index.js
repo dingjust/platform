@@ -72,6 +72,11 @@ import ExportReconsiderOrderModule from './shipping-receipt/export-reconsider-or
 import ReconciliationTasksModule from './reconciliation/reconciliation-tasks'
 import ReconciliationOrdersModule from './reconciliation/reconciliation-orders'
 
+// financial
+import ReceivableModule from './financial/receivable'
+import PayableModule from './financial/payable'
+import PaymentRequestModule from './financial/payment-request'
+
 // 产能
 import CapacityModule from './capacity/capacity'
 
@@ -151,6 +156,10 @@ export {
   // reconciliation
   ReconciliationTasksModule,
   ReconciliationOrdersModule,
+  // financial
+  ReceivableModule,
+  PayableModule,
+  PaymentRequestModule,
   // 产能
   CapacityModule,
   // 报表

@@ -1,0 +1,93 @@
+<template>
+  <div>
+    <el-row>
+      <el-col :span="6">
+        <div class="financial-list-title">
+          <h6>上传发票</h6>
+        </div>
+      </el-col>
+    </el-row>
+    <div class="pt-2"></div>
+    <el-form :model="formData" :inline="true">
+      <el-row type="flex" justify="center" align="middle" style="margin-bottom: 10px">
+        <images-upload-single :formData="formData.media" @removePicture="removePicture" @getPicture="getPicture"/>
+      </el-row>
+      <el-row type="flex" justify="center" align="middle">
+        <el-col :span="16">
+          <el-form-item label="发票金额：">
+            <el-input v-model="formData.invoiceAmount"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="center" align="middle">
+        <el-col :span="16">
+          <h6>备注：</h6>
+          <el-input v-model="formData.remarks" type="textarea"></el-input>
+        </el-col>
+      </el-row>
+    </el-form>
+    <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" :gutter="50">
+      <el-col :span="4">
+        <el-button @click="onCancel" class="invoice-btn">取消</el-button>
+      </el-col>
+      <el-col :span="4">
+        <el-button @click="onConfirm" class="invoice-btn">确认</el-button>
+      </el-col>
+    </el-row>
+  </div> 
+</template>
+
+<script>
+  import {ImagesUploadSingle} from '@/components/index.js'
+  export default {
+    name: 'FinancialInvoiceForm',
+    props: [],
+    components: {
+      ImagesUploadSingle
+    },
+    computed: {
+
+    },
+    methods: {
+      getPicture (data) {
+        this.formData.media = data;
+      },
+      removePicture () {
+        this.formData.media = {};
+      },
+      onCancel () {
+        this.$emit('onCancel');
+      },
+      onConfirm () {
+        this.$emit('onConfirm', this.formData);
+      }
+    },
+    data () {
+      return {
+        formData: {
+          media: {},
+          invoiceAmount: '',
+          remarks: ''
+        }  
+      }
+    },
+    created () {
+
+    },
+    destroyed () {
+      
+    }
+  }
+</script>
+
+<style scoped>
+  .financial-list-title {
+    border-left: 2px solid #ffd500;
+    padding-left: 10px;
+  }
+
+  .invoice-btn {
+    width: 100px;
+    border-radius: 5px;
+  }
+</style>

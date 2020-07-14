@@ -68,6 +68,10 @@ import {
   // reconciliation
   ReconciliationTasksModule,
   ReconciliationOrdersModule,
+  // financial
+  ReceivableModule,
+  PayableModule,
+  PaymentRequestModule,
   // 产能
   CapacityModule,
   // 报表
@@ -174,6 +178,10 @@ export default new Vuex.Store({
     // reconciliation
     ReconciliationTasksModule,
     ReconciliationOrdersModule,
+    // financial
+    ReceivableModule,
+    PayableModule,
+    PaymentRequestModule,
     // 产能
     CapacityModule,
     // 报表

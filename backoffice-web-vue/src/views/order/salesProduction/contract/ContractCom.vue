@@ -427,7 +427,7 @@
 <style>
   .info-detail-staff-body {
     width: 100%;
-    margin-top: 20px;
+    /* margin-top: 20px; */
   }
 
   .info-row {

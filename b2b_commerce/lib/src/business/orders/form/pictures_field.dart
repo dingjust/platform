@@ -7,8 +7,9 @@ import 'package:widgets/widgets.dart';
 class PicturesField extends StatefulWidget {
   RequirementOrderModel model;
   ApparelProductModel product;
+  bool enabled;
 
-  PicturesField({this.model,this.product});
+  PicturesField({this.model, this.product, this.enabled = true});
 
   PicturesFieldState createState() => PicturesFieldState();
 }
@@ -50,7 +51,7 @@ class PicturesFieldState extends State<PicturesField> {
         EditableAttachments(
           list: widget.model.details.pictures,
           maxNum: widget.product == null ? 5 : widget.model.details.pictures.length,
-          editable: widget.product == null,
+          editable: widget.product == null && widget.enabled,
         )
       ],
     );

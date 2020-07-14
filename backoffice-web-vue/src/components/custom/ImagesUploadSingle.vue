@@ -5,11 +5,11 @@
         <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData" :disabled="disabled"
           :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
           :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
-          :class="{hide:hideUploadShow}">
+          :class="{hide:hideUploadShow,disabled:uploadDisabled}">
           <i class="el-icon-plus" slot="default"></i>
           <div slot="tip" class="el-upload__tip"><slot name="picBtn" ></slot></div>
         </el-upload>
-        <el-dialog :visible.sync="dialogVisible" :modal="false">
+        <el-dialog :visible.sync="dialogVisible" append-to-body>
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-col>
@@ -53,6 +53,7 @@
         this.$emit('getPicture', response);
         // console.log(response);
         this.hideUpload = true;
+        this.uploadDisabled = true;
       },
       handlePreview (file) {
         this.dialogImageUrl = file.artworkUrl;
@@ -83,6 +84,7 @@
         this.$emit('removePicture');
         // this.formData = {};
         this.hideUpload = false;
+        this.uploadDisabled = false;
       }
     },
     computed: {
@@ -141,7 +143,7 @@
 
 <style>
   .hide .el-upload--picture-card {
-    display: none;
+    display: none!important;
   }
 
   .image-upload .disabled .el-upload--picture-card {

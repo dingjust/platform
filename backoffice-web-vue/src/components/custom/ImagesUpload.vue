@@ -6,7 +6,7 @@
           :disabled="disabled" :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
           :file-list="fileList" :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit"
           :on-remove="handleRemove" :class="{disabled:uploadDisabled,picClass:picClass}">
-          <i class="el-icon-plus" slot="default"></i>
+          <i class="el-icon-plus" :style="custom ? 'border: 23px solid transparent;' : ''" slot="default" @click="onClick"></i>
           <div slot="tip" class="el-upload__tip">
             <slot name="picBtn"></slot>
           </div>
@@ -42,6 +42,11 @@
         default: false
       },
       readOnly: {
+        type: Boolean,
+        default: false
+      },
+      // 是否通过自定义方式上传图片
+      custom: {
         type: Boolean,
         default: false
       }
@@ -112,6 +117,12 @@
       },
       handleExceed(files, fileList) {
         this.$message.warning('当前限制选择' + this.limit + ' 个图片');
+      },
+      // 通过其他方式提交图片
+      onClick () {
+        if (this.custom) {
+          this.$emit('onUpload');
+        }
       }
     },
     computed: {
