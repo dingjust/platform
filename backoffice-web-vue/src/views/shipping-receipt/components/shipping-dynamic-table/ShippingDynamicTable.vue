@@ -1,7 +1,8 @@
 <template>
   <div class="shipping-order-list-container">
-    <el-table ref="resultTable" stripe :data="page.content" row-key="id"
-      @selection-change="handleSelectionChange" @row-click="rowClick">
+    <el-table ref="resultTable" stripe :data="page.content" row-key="id" @selection-change="handleSelectionChange"
+      @row-click="rowClick">
+      <el-table-column type="selection" width="55" v-show="hasSelection" fixed key="1"></el-table-column>
       <shipping-dynamic-table-list :columns="columns" />
     </el-table>
     <div class="pt-2"></div>
@@ -23,10 +24,6 @@
         type: Object,
         required: true
       },
-      canCreateReceipt: {
-        type: Boolean,
-        default: false
-      },
       columns: {
         type: Array,
         default: () => {
@@ -37,7 +34,13 @@
     components: {
       ShippingDynamicTableList
     },
-    computed: {},
+    computed: {
+      //是否有多选项
+      hasSelection: function () {
+        let index = this.columns.filter(element => element.key != null).findIndex(element => element.key == '多选');
+        return index != -1;
+      }
+    },
     methods: {
       onDetail(row) {
         this.$emit("onDetail", row);

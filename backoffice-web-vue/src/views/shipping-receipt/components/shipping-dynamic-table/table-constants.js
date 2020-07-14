@@ -1,24 +1,32 @@
 const Selection = {
   template: `
-  <el-table-column type="selection" width="55" fixed="left"></el-table-column>
+  <el-table-column type="selection" width="55" fixed="left" :key='sortKey'></el-table-column>
 `,
+  props: {
+    sortKey: {
+      default: 10
+    }
+  }
 }
 
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" :prop="prop" min-width="120"></el-table-column>
+  <el-table-column label="发货单号" :prop="prop" min-width="110px" :key="sortKey"></el-table-column>
   `,
   props: {
     prop: {
       type: String,
       default: 'code'
+    },
+    sortKey: {
+      default: 10
     }
   }
 }
 
 const RelationShippingOrder = {
   template: `
-  <el-table-column label="关联发货单" min-width="120">
+  <el-table-column label="发货单" min-width="120" :key="sortKey">
     <template slot-scope="scope">
       <el-button type="text" @click="onShipDetail(scope.row)">{{shippingName(scope.row)}}</el-button>
     </template>
@@ -32,17 +40,20 @@ const RelationShippingOrder = {
     id: {
       type: String,
       default: 'id'
+    },
+    sortKey: {
+      default: 10
     }
   },
   methods: {
-    shippingName (row) {
+    shippingName(row) {
       try {
         return eval('row.' + this.code);
       } catch (e) {
         return null;
       }
     },
-    onShipDetail (row) {
+    onShipDetail(row) {
       try {
         this.$router.push('/shipping/orders/' + eval('row.' + this.id));
       } catch (e) {
@@ -54,7 +65,7 @@ const RelationShippingOrder = {
 
 const Product = {
   template: `
-  <el-table-column label="产品名称" min-width="150">
+  <el-table-column label="产品名称" min-width="150" :key="sortKey">
   <template slot-scope="scope">
     <el-row type="flex" justify="space-between" align="middle" :gutter="50">
       <el-col :span="6">
@@ -77,6 +88,9 @@ const Product = {
     prop: {
       type: String,
       default: 'product'
+    },
+    sortKey: {
+      default: 10
     }
   },
   methods: {
@@ -89,7 +103,7 @@ const Product = {
 
 const RelationOrder = {
   template: `
-  <el-table-column label="关联订单" min-width="120px">
+  <el-table-column label="生产工单" min-width="120px" :key="sortKey">
   <template slot-scope="scope">
     <el-button type="text" v-if="getProductionOrder(scope.row)!=null"
       @click="onProductionOrderDetail(scope.row)">{{getProductionOrder(scope.row).code}}
@@ -100,6 +114,9 @@ const RelationOrder = {
     prop: {
       type: String,
       default: 'productionTaskOrder'
+    },
+    sortKey: {
+      default: 10
     }
   },
   methods: {
@@ -114,18 +131,34 @@ const RelationOrder = {
 }
 
 const ShipParty = {
-  template: `<el-table-column label="发货人" :prop="prop"></el-table-column>`,
+  template: `<el-table-column label="发货方" :prop="prop" :key="sortKey"></el-table-column>`,
   props: {
     prop: {
       type: String,
       default: 'shipParty.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
+const ShipPerson = {
+  template: `<el-table-column label="发货人" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'creator.name'
+    },
+    sortKey: {
+      default: 10
     }
   },
 }
 
 const UnitPrice = {
   template: `
-  <el-table-column label="单价">
+  <el-table-column label="单价" :key="sortKey">
     <template slot-scope="scope">
       <span v-if="getProductionTaskOrder(scope.row)!=null">{{getProductionTaskOrder(scope.row).unitPrice}}</span>
     </template>
@@ -134,6 +167,9 @@ const UnitPrice = {
     prop: {
       type: String,
       default: 'productionTaskOrder'
+    },
+    sortKey: {
+      default: 10
     }
   },
   methods: {
@@ -145,7 +181,7 @@ const UnitPrice = {
 
 const ShipNum = {
   template: `
-  <el-table-column label="发货数">
+  <el-table-column label="发货数量" :key="sortKey">
     <template slot-scope="scope">
       <span>{{getTotalNum(scope.row)}}</span>
     </template>
@@ -154,6 +190,9 @@ const ShipNum = {
     prop: {
       type: String,
       default: 'packageSheets'
+    },
+    sortKey: {
+      default: 10
     }
   },
   methods: {
@@ -177,8 +216,9 @@ const ShipNum = {
   }
 }
 
+
 const ShipDate = {
-  template: `<el-table-column label="发货日期">
+  template: `<el-table-column label="发货日期" :key="sortKey">
   <template slot-scope="scope">
     <span>{{scope.row[prop] | timestampToTime}}</span>
   </template>
@@ -187,28 +227,43 @@ const ShipDate = {
     prop: {
       type: String,
       default: 'creationtime'
+    },
+    sortKey: {
+      default: 10
     }
   },
 }
 
 const ReceiptOrder = {
-  template: `<el-table-column label="收货单" :prop="prop" fixed="left"></el-table-column>`,
+  template: `<el-table-column label="收货单" :prop="prop" :key="sortKey"></el-table-column>`,
   props: {
     prop: {
       type: String,
       default: 'code'
+    },
+    sortKey: {
+      default: 10
     }
   }
 }
 
 //收货单创建人
-const ReceiptOrderCreator = {
-  template: `<el-table-column label="创建人"></el-table-column>`
+const Creator = {
+  template: `<el-table-column label="创建人" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'creator.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
 }
 
 const RelationReceiptOrder = {
   template: `
-  <el-table-column label="关联收货单" fixed="left" min-width="110px">
+  <el-table-column label="收货单" min-width="110px" :key="sortKey">
     <template slot-scope="scope">
       <el-row v-for="item in scope.row.receiptSheets" :key="item.id">
         <el-button type="text" @click="onReceiptDetail(item)">{{item.code}}</el-button>
@@ -217,15 +272,20 @@ const RelationReceiptOrder = {
   </el-table-column>
   `,
   methods: {
-    onReceiptDetail (item) {
+    onReceiptDetail(item) {
       this.$router.push('/receipt/orders/' + item.id);
     }
-  }
+  },
+  props: {
+    sortKey: {
+      default: 10
+    }
+  },
 }
 
 const ShipReceNum = {
   template: `
-  <el-table-column label="发货数/收货数">
+  <el-table-column label="发货数/收货数" :key="sortKey">
     <template slot-scope="scope">
       <span>{{getShipNum(scope.row)}}/{{getTotalNum(scope.row)}}</span>
     </template> 
@@ -239,9 +299,12 @@ const ShipReceNum = {
     receSheetProp: {
       type: String,
       default: 'receiptSheets'
+    },
+    sortKey: {
+      default: 10
     }
   },
-  methods: {    
+  methods: {
     //发货数
     getShipNum(row) {
       let num = 0;
@@ -279,7 +342,7 @@ const ShipReceNum = {
 
 const ReceiptNum = {
   template: `
-    <el-table-column label="收货数">
+    <el-table-column label="收货数" :key="sortKey">
       <template slot-scope="scope">
         <span>{{receiptNum(scope.row)}}</span>
       </template>
@@ -289,10 +352,13 @@ const ReceiptNum = {
     prop: {
       type: String,
       default: 'receiptSheets'
+    },
+    sortKey: {
+      default: 10
     }
   },
   methods: {
-    receiptNum (row) {
+    receiptNum(row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.prop);
@@ -316,15 +382,18 @@ const ReceiptNum = {
 
 const ReceiptDate = {
   template: `
-  <el-table-column label="收货日期">
+  <el-table-column label="收货日期" :key="sortKey">
     <template slot-scope="scope">
-      <span v-if="getReceiptDate(scope.row)!=null">{{getReceiptDate(scope.row) | formatDate}}</span>
+      <span v-if="getReceiptDate(scope.row)!=null">{{getReceiptDate(scope.row) | timestampToTime}}</span>
     </template>
   </el-table-column>`,
   props: {
     prop: {
       type: String,
       default: 'receiptSheets'
+    },
+    sortKey: {
+      default: 10
     }
   },
   methods: {
@@ -340,18 +409,21 @@ const ReceiptDate = {
 }
 
 const ReturnOrder = {
-  template: `<el-table-column label="退货单" :prop="prop" fixed="left"></el-table-column>`,
+  template: `<el-table-column label="退货单" :prop="prop" :key="sortKey"></el-table-column>`,
   props: {
     prop: {
       type: String,
       default: 'code'
+    },
+    sortKey: {
+      default: 10
     }
   }
 }
 
 const RelationReturnOrder = {
   template: `
-  <el-table-column label="关联退货单" min-width="110px">
+  <el-table-column label="退货单" min-width="110px" :key="sortKey">
     <template slot-scope="scope">
       <el-row v-for="item in scope.row.returnSheets" :key="item.id">
         <el-button type="text" @click="onDetail(item)">{{item.code}}</el-button>
@@ -359,25 +431,39 @@ const RelationReturnOrder = {
     </template>
   </el-table-column>
   `,
+  props: {
+    prop: {
+      type: String,
+      default: 'code'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
   methods: {
-    onDetail (item) {
+    onDetail(item) {
       this.$router.push('/returned/orders/' + item.id);
     }
   }
 }
 
 const ReturnNum = {
-  template: `<el-table-column label="退货数" prop="totalQuantity"></el-table-column>`
+  template: `<el-table-column label="退货数" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'totalQuantity'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
 }
 
-//退货单创建人
-const ReturnOrderCreator = {
-  template: `<el-table-column label="创建人" prop="creator.name"></el-table-column>`
-}
 
 const ReturnReceiptNum = {
   template: `
-  <el-table-column label="退货数/收退货数">
+  <el-table-column label="退货数/收退货数" :key="sortKey">
     <template slot-scope="scope">
       <span>{{getReturnTotalNum(scope.row)}}/{{getReceReturnlNum(scope.row)}}</span>
     </template>
@@ -388,6 +474,9 @@ const ReturnReceiptNum = {
       type: String,
       default: 'returnSheets'
     },
+    sortKey: {
+      default: 10
+    }
   },
   methods: {
 
@@ -435,11 +524,14 @@ const ReturnReceiptNum = {
 }
 
 const DifferentNum = {
-  template: `<el-table-column label="差异数" :prop="prop"></el-table-column>`,
+  template: `<el-table-column label="差异数" :prop="prop" :key="sortKey"></el-table-column>`,
   props: {
     prop: {
       type: String,
       default: 'diffQuantity'
+    },
+    sortKey: {
+      default: 10
     }
   }
 }
@@ -450,6 +542,15 @@ const ShippingOperation = {
     <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
   </template>
 </el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'diffQuantity'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
   methods: {
     onDetail(row) {
       this.$router.push('/shipping/orders/' + row.id);
@@ -463,6 +564,15 @@ const ReceiptOperation = {
     <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
   </template>
 </el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'diffQuantity'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
   methods: {
     onDetail(row) {
       this.$router.push('/shipping/orders/' + row.id);
@@ -476,6 +586,15 @@ const ReturnOperation = {
     <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
   </template>
 </el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'diffQuantity'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
   methods: {
     onDetail(row) {
       this.$router.push('/returned/orders/' + row.id);
@@ -488,23 +607,69 @@ const ReturnOperation = {
 //复议单号
 const ReconsiderOrderCode = {
   template: `
-  <el-table-column label="复议单号" prop="code" min-width="120" fiexd></el-table-column>
-`
+  <el-table-column label="复议单号" :prop="prop" min-width="120" fiexd :key="sortKey"></el-table-column>
+`,
+  props: {
+    prop: {
+      type: String,
+      default: 'code'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
+//关联复议单
+const RelationReconsiderOrder = {
+  template: `
+  <el-table-column label="复议单" min-width="110px" :key="sortKey">
+    <template slot-scope="scope">
+      <el-row v-for="item in scope.row.reconsiderSheets">
+        <el-button type="text" @click="onReconsiderDetail(item)" :key="item.id">{{item.code}}</el-button>
+      </el-row>
+    </template>
+  </el-table-column>
+  `,
+  methods: {
+    onReconsiderDetail(item) {
+      this.$router.push('/reconsiders/orders/detail/' + item.id);
+    }
+  },
+  props: {
+    sortKey: {
+      default: 10
+    }
+  },
 }
 
 //复议数
 const ReconsiderNum = {
   template: `
-  <el-table-column label="复议数" prop="reconsiderQuantity"></el-table-column>
-`
+  <el-table-column label="复议数" :prop="prop" :key="sortKey"></el-table-column>
+`,
+  props: {
+    prop: {
+      type: String,
+      default: 'reconsiderQuantity'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
 }
 
 const ReconsiderOperation = {
-  template: `<el-table-column label="操作" fixed="right">
+  template: `<el-table-column label="操作" fixed="right" :key="sortKey">
   <template slot-scope="scope">
     <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
   </template>
 </el-table-column>`,
+  props: {
+    sortKey: {
+      default: 10
+    }
+  },
   methods: {
     onDetail(row) {
       this.$router.push('/reconsiders/orders/detail/' + row.id);
@@ -512,22 +677,64 @@ const ReconsiderOperation = {
   }
 }
 
+//退货方
+const ReturnParty = {
+  template: `<el-table-column label="退货方" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'shipParty.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
+//退货人
+const ReturnPerson = {
+  template: `<el-table-column label="退货人" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'creator.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
+// //复议方
+// const ReconsiderParty = {
+//   template: `<el-table-column label="复议方" :prop="prop" :key="sortKey"></el-table-column>`,
+//   props: {
+//     prop: {
+//       type: String,
+//       default: 'shipParty.name'
+//     },
+//     sortKey: {
+//       default: 10
+//     }
+//   },
+// }
+
 const COMPONENT_NAME_MAP = {
-  '多选': 'selection',
+  // '多选': 'selection',
   '发货单号': 'shipping-order-code',
   '关联发货单': 'relation-shipping-order',
   '产品名称': 'product',
   '关联订单': 'relation-order',
-  '发货人': 'ship-party',
+  '发货人': 'ship-person',
+  '发货方': 'ship-party',
   '单价': 'unit-price',
   '发货数': 'ship-num',
   '发货日期': 'ship-date',
   '收货单': 'receipt-order',
-  '收货单创建人': 'receipt-order-creator',
+  '创建人': 'creator',
   '收货数': 'receipt-num',
   '退货单': 'return-order',
   '退货数': 'return-num',
-  '退货单创建人': 'return-order-creator',
   '关联退货单': 'relation-return-order',
   '关联收货单': 'relation-receipt-order',
   '退货收货数': 'return-receipt-num',
@@ -540,7 +747,11 @@ const COMPONENT_NAME_MAP = {
   //复议
   '复议单号': 'reconsider-order-code',
   '复议数': 'reconsider-num',
-  '复议单操作':'reconsider-operation'
+  '复议单操作': 'reconsider-operation',
+  '关联复议单':'relation-reconsider-order',
+  //退货
+  '退货方': 'return-party',
+  '退货人':'return-person'
 }
 
 
@@ -552,15 +763,14 @@ export {
   RelationOrder,
   UnitPrice,
   ShipParty,
+  ShipPerson,
   ShipNum,
   ShipDate,
   ReceiptOrder,
-  ReceiptOrderCreator,
+  Creator,
   RelationReceiptOrder,
   ReceiptNum,
   ReturnOrder,
-  ReturnOrderCreator,
-  ReturnNum,
   RelationReturnOrder,
   ReturnReceiptNum,
   DifferentNum,
@@ -572,5 +782,9 @@ export {
   ReconsiderOrderCode,
   ReconsiderNum,
   ReconsiderOperation,
+  ReturnParty,
+  ReturnPerson,
+  ReturnNum,
+  RelationReconsiderOrder,
   COMPONENT_NAME_MAP
 }

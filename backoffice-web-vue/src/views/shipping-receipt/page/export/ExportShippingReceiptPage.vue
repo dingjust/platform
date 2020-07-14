@@ -10,7 +10,7 @@
       </el-row>
       <div class="pt-2"></div>
       <shipping-receipt-page mode="export" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
+        :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
     </el-card>
   </div>
 </template>
@@ -46,7 +46,7 @@
       }),
       onHandleClick(val) {
         this.searchUrl = val.searchUrl;
-        this.queryFormData.states = val.code;
+        this.queryFormData.states = val.status;
         this.onAdvancedSearch(0, 10);
       },
       onSearch(page, size) {
@@ -86,6 +86,173 @@
           createdDateTo: '',
           states: 'PENDING_RECEIVED'
         },
+        statusMap: {
+          PENDING_RECEIVED: {
+            status: 'PENDING_RECEIVED',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '发货方'
+            }, {
+              key: '发货数'
+            }, {
+              key: '发货日期'
+            }, {
+              key: '发货操作'
+            }],
+            url: this.apis().shippingOrderList()
+          },
+          PENDING_RETURNED: {
+            status: 'PENDING_RETURNED',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '关联收货单'
+            }, {
+              key: '发货方'
+            }, {
+              key: '发货数'
+            }, {
+              key: '收货数'
+            }, {
+              key: '发货操作'
+            }],
+            url: this.apis().shippingOrderList()
+          },
+          RETURN_TO_BE_RECEIVED: {
+            status: 'RETURN_TO_BE_RECEIVED',
+            columns: [{
+              key: '退货单'
+            }, , {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '关联发货单',
+              props: {
+                code: 'logisticsSheet.code',
+                id: 'logisticsSheet.id'
+              }
+            }, {
+              key: '退货人'
+            }, {
+              key: '退货数',
+              props: {
+                prop: 'totalQuantity'
+              }
+            }, {
+              key: '退货操作'
+            }],
+            url: this.apis().returnOrderList()
+          },
+          PENDING_RECONSIDER: {
+            status: 'PENDING_RECONSIDER',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '关联退货单'
+            }, {
+              key: '发货方'
+            }, {
+              key: '发货数'
+            }, {
+              key: '收货数'
+            }, {
+              key: '差异数'
+            }, {
+              key: '发货操作'
+            }],
+            url: this.apis().shippingOrderList()
+          },
+          IN_RECONSIDER: {
+            status: 'IN_RECONSIDER',
+            columns: [{
+                key: '复议单号'
+              },
+              {
+                key: '产品名称'
+              }, {
+                key: '关联订单'
+              }, {
+                key: '关联发货单',
+                props: {
+                  code: 'logisticsSheet.code',
+                  id: 'logisticsSheet.id'
+                }
+              }, {
+                key: '发货收货数',
+                props: {
+                  shipProp: 'logisticsSheet.totalQuantity',
+                  receSheetProp: 'logisticsSheet.receiptSheets'
+                }
+              }, {
+                key: '退货收货数',
+                props: {
+                  prop: 'logisticsSheet.returnSheets'
+                }
+              }, {
+                key: '收货日期',
+                props: {
+                  prop: 'logisticsSheet.receiptSheets',
+                }
+              }, {
+                key: '差异数',
+                props: {
+                  prop: 'logisticsSheet.diffQuantity'
+                }
+              }, {
+                key: '复议数'
+              }, {
+                key: '复议单操作'
+              }
+            ],
+            url: this.apis().reconsiderOrderList()
+          },
+          PENDING_RECONCILED: {
+            status: 'PENDING_RECONCILED',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '发货数'
+            }, {
+              key: '关联收货单'
+            }, {
+              key: '收货数',
+              props: {
+                prop: 'receiptSheets'
+              }
+            }, {
+              key: '关联退货单'
+            }, {
+              key: '退货数'
+            }, {
+              key: '差异数'
+            }, {
+              key: '关联复议单'
+            }, {
+              key: '复议数'
+            }, {
+              key: '发货操作'
+            }],
+            url: this.apis().shippingOrderList()
+          }
+        }
       }
     },
     created() {

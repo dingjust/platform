@@ -6,15 +6,14 @@ import {
   RelationOrder,
   UnitPrice,
   ShipParty,
+  ShipPerson,
   ShipNum,
   ShipDate,
   ReceiptOrder,
-  ReceiptOrderCreator,
+  Creator,
   RelationReceiptOrder,
   ReceiptNum,
   ReturnOrder,
-  ReturnOrderCreator,
-  ReturnNum,
   RelationReturnOrder,
   ReturnReceiptNum,
   DifferentNum,
@@ -26,6 +25,10 @@ import {
   ReconsiderOrderCode,
   ReconsiderNum,
   ReconsiderOperation,
+  ReturnParty,
+  ReturnPerson,
+  ReturnNum,
+  RelationReconsiderOrder,
   COMPONENT_NAME_MAP
 } from "./table-constants";
 
@@ -46,15 +49,14 @@ const ShippingDynamicTableList = {
     RelationOrder,
     UnitPrice,
     ShipParty,
+    ShipPerson,
     ShipNum,
     ShipDate,
     ReceiptOrder,
-    ReceiptOrderCreator,
+    Creator,
     RelationReceiptOrder,
     ReceiptNum,
     ReturnOrder,
-    ReturnOrderCreator,
-    ReturnNum,
     RelationReturnOrder,
     ReturnReceiptNum,
     DifferentNum,
@@ -66,13 +68,21 @@ const ShippingDynamicTableList = {
     ReconsiderOrderCode,
     ReconsiderNum,
     ReconsiderOperation,
+    ReturnParty,
+    ReturnPerson,
+    ReturnNum,
+    RelationReconsiderOrder,
     COMPONENT_NAME_MAP
   },
   render: function (createElement) {
     return createElement(
-      'template', this.columns.map(entry => {
+      
+      'template', this.columns.map((entry,index) => {
+        let props = entry.props != null ? entry.props : {};
+        props['sortKey']=index;
+        //增加排序
         return createElement(COMPONENT_NAME_MAP[entry.key], {
-          props: entry.props != null ? entry.props : {}
+          props: props
         });
       })
     );

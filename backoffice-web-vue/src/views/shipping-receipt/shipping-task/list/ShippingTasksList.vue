@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="发货任务单号" prop="code" min-width="120px"></el-table-column>
-      <el-table-column label="关联工单号" prop="productionTaskOrder.code" min-width="120px">
+      <!-- <el-table-column label="发货任务单号" prop="code" min-width="120px" fixed="left"></el-table-column> -->
+      <el-table-column label="生产工单" prop="productionTaskOrder.code" min-width="120px">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
             @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
@@ -36,8 +36,7 @@
         <template slot-scope="scope">
           {{countTotalAmount(scope.row.colorSizeEntries)}}
         </template>
-      </el-table-column>
-      <el-table-column label="创建人" prop="creator.name"></el-table-column>
+      </el-table-column>      
       <el-table-column label="负责人" prop="merchandiser.name"></el-table-column>
       <el-table-column label="交货时间">
         <template slot-scope="scope">
@@ -46,7 +45,7 @@
         </template>
       </el-table-column>
       <el-table-column label="标签"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
         </template>
@@ -65,7 +64,7 @@
     name: 'ShippingTasksList',
     props: ['page'],
     components: {
-      
+
     },
     computed: {
 
