@@ -42,6 +42,13 @@ Vue.filter('formatDate', time => {
   let date = new Date(time);
   return formatDate(date, 'yyyy-MM-dd hh:mm');
 });
+Vue.filter('formatDateInday', time => {
+  if (time === null || time == '') {
+    return '';
+  }
+  let date = new Date(time);
+  return formatDate(date, 'yyyy-MM-dd');
+});
 Vue.filter('formatDateWithSecond', time => {
   if (time === null) {
     return '';

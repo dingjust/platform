@@ -5,7 +5,7 @@
         <production-order-outbound-list :page="page" :pageType="pageType" />
       </el-tab-pane>
       <el-tab-pane label="发货任务" :lazy="true" v-if="receiveDispatchTaskId">
-        <shipping-tasks-detail :id="receiveDispatchTaskId" shadow="hover" />
+        <shipping-tasks-detail :id="receiveDispatchTaskId" shadow="hover" :showOrderInfo="false" />
       </el-tab-pane>
       <el-tab-pane label="采购订单" :lazy="true" v-if="isMySelf">
         <purchase-order-basic-table :data="[]" />

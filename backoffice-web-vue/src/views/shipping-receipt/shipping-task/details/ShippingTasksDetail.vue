@@ -12,38 +12,40 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-row type="flex" justify="start" class="basic-row">
-        <el-col :span="3">
-          <img width="100px" height="100px"
-            :src="formData.product.thumbnail!=null&&formData.product.thumbnail.length!=0?formData.product.thumbnail.url:'static/img/nopicture.png'">
-        </el-col>
-        <el-col :span="21">
-          <el-row type="flex" style="padding: 10px 0px">
-            <el-col :span="8">
-              <h6>产品名称：{{formData.product.name}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>货号：{{formData.product.skuID}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" style="padding-bottom: 10px">
-            <el-col :span="8">
-              <h6>发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>发货负责人：{{formData.merchandiser.name}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" style="padding-bottom: 10px">
-            <el-col :span="12">
-              <h6>收货地址：{{formData.deliveryAddress.details}}</h6>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
+      <template v-if="showOrderInfo">
+        <el-row type="flex" justify="start" class="basic-row">
+          <el-col :span="3">
+            <img width="100px" height="100px"
+              :src="formData.product.thumbnail!=null&&formData.product.thumbnail.length!=0?formData.product.thumbnail.url:'static/img/nopicture.png'">
+          </el-col>
+          <el-col :span="21">
+            <el-row type="flex" style="padding: 10px 0px">
+              <el-col :span="8">
+                <h6>产品名称：{{formData.product.name}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>货号：{{formData.product.skuID}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" style="padding-bottom: 10px">
+              <el-col :span="8">
+                <h6>发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>发货负责人：{{formData.merchandiser.name}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" style="padding-bottom: 10px">
+              <el-col :span="12">
+                <h6>收货地址：{{formData.deliveryAddress.details}}</h6>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </template>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="24">
           <shipping-tasks-quantity-table :formData="formData" />
@@ -68,12 +70,16 @@
   export default {
     name: 'ShippingTasksDetail',
     props: {
-      id:{
+      id: {
 
       },
-      shadow:{
-        type:String,
-        default:'always'
+      shadow: {
+        type: String,
+        default: 'always'
+      },
+      showOrderInfo: {
+        type: Boolean,
+        default: true
       }
     },
     components: {

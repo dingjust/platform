@@ -10,7 +10,8 @@
       </el-row>
       <div class="pt-2"></div>
       <reconsider-orders-page mode="export" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" :statusMap="statusMap"/>
+        :canReconsider="false" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick"
+        :statusMap="statusMap" />
     </el-card>
   </div>
 </template>

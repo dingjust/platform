@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div class="task-order-container">
+    <el-row type="flex" justify="end">
+      <el-button @click="onCreate">创建发货订单</el-button>
+    </el-row>
     <el-table ref="resultTable" stripe :data="formData.shippingSheets" :height="autoHeight">
       <el-table-column label="发货单号" prop="code" min-width="160px">
         <template slot-scope="scope">
@@ -13,7 +16,7 @@
       <el-table-column label="发货数量" prop="totalQuantity"></el-table-column>
       <el-table-column label="发货时间">
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
+          <span>{{scope.row.creationtime | formatDateInday}}</span>
         </template>
       </el-table-column>
       <el-table-column label="收货单" min-width="120px">
@@ -33,7 +36,7 @@
       </el-table-column>
       <el-table-column label="收货时间">
         <template slot-scope="scope" v-if="scope.row.receiptSheets!=null">
-          <span>{{scope.row.receiptSheets[0].creationtime | formatDate}}</span>
+          <span>{{scope.row.receiptSheets[0].creationtime | formatDateInday}}</span>
         </template>
       </el-table-column>
       <el-table-column label="退货单" min-width="165px">
@@ -56,11 +59,9 @@
       <el-table-column label="差异数" prop="diffQuantity"></el-table-column>
       <!-- 发货方 -->
       <el-table-column align="center" fixed="right" v-if="isShipParty">
-        <template slot="header">
-          <el-button @click="onCreate">创建发货订单</el-button>
-        </template>
         <template slot-scope="scope">
-          <el-button type="text" @click="onReconsider(scope.row.id)" v-if="scope.row.state=='PENDING_RECONSIDER'">复议</el-button>
+          <el-button type="text" @click="onReconsider(scope.row.id)" v-if="scope.row.state=='PENDING_RECONSIDER'">复议
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" v-if="isReceiptParty">
@@ -136,6 +137,13 @@
         return result;
       }
     },
+    watch: {
+      'formData.shippingSheets': function (n, o) {
+        this.$nextTick(() => {
+          this.$refs.resultTable.doLayout()
+        })
+      },
+    },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
@@ -149,5 +157,4 @@
 </script>
 
 <style scope>
-
 </style>
