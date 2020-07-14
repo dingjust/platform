@@ -210,8 +210,8 @@ const RelationReceiptOrder = {
   template: `
   <el-table-column label="关联收货单" fixed="left" min-width="110px">
     <template slot-scope="scope">
-      <el-row v-for="item in scope.row.receiptSheets">
-        <el-button type="text" @click="onReceiptDetail(item)" :key="item.id">{{item.code}}</el-button>
+      <el-row v-for="item in scope.row.receiptSheets" :key="item.id">
+        <el-button type="text" @click="onReceiptDetail(item)">{{item.code}}</el-button>
       </el-row>
     </template>
   </el-table-column>
@@ -353,8 +353,8 @@ const RelationReturnOrder = {
   template: `
   <el-table-column label="关联退货单" min-width="110px">
     <template slot-scope="scope">
-      <el-row v-for="item in scope.row.returnSheets">
-        <el-button type="text" @click="onDetail(item)" :key="item.id">{{item.code}}</el-button>
+      <el-row v-for="item in scope.row.returnSheets" :key="item.id">
+        <el-button type="text" @click="onDetail(item)">{{item.code}}</el-button>
       </el-row>
     </template>
   </el-table-column>

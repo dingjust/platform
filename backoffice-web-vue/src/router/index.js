@@ -401,6 +401,48 @@ const router = new Router({
           }]
         },
         {
+          path: 'financial',
+          redirect: '/financial/receivable',
+          name: '财务管理',
+          component: {
+            render (c) {
+              return c('router-view');
+            }
+          },
+          children: [{
+            path: 'receivable',
+            name: '应收账款',
+            component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/receivable/ReceivablePage')
+          }, {
+            path: 'receivable/:id',
+            name: '应收账款详情',
+            props: true,
+            component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/receivable/detail/ReceivableDetail')
+          }, {
+            path: 'payable',
+            name: '应付账款',
+            component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/payable/PayablePage')
+          }, {
+            path: 'payable/:id',
+            name: '应收账款详情',
+            props: true,
+            component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/payable/detail/PayableDetail')
+          }, {
+            path: 'paymentRequest',
+            name: '付款申请单',
+            component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/payment-request/PaymentRequestPage')
+          }, {
+            path: 'create/paymentRequest',
+            name: '创建付款申请单',
+            component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/payment-request/form/PaymentRequestForm')
+          }, {
+            path: 'paymentRequest/:id',
+            name: '付款申请单详情',
+            props: true,
+            component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/payment-request/detail/PaymentRequestdetail')
+          }]
+        },
+        {
           path: 'account',
           redirect: '/account/index',
           name: '公司',

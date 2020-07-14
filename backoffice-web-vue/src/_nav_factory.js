@@ -146,6 +146,20 @@ export default {
       ]
     },
     {
+      name: '财务管理',
+      icon: 'el-icon-s-finance',
+      children: [{
+        name: '应收账款',
+        url: '/financial/receivable'
+      }, {
+        name: '应付账款',
+        url: '/financial/payable'
+      }, {
+        name: '付款申请单',
+        url: '/financial/paymentRequest'
+      }]
+    },
+    {
       name: '资料中心',
       // url: '/product',
       icon: 'el-icon-tickets',
