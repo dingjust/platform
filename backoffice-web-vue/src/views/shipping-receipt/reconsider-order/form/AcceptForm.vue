@@ -144,12 +144,16 @@
         let submitForm = Object.assign({}, this.form);
         //修改补全收货单数据
         let receiptColorSizeEntries = [];
-        this.form.receiptColorSizeEntries.forEach(entry => {
-          entry.colorSizeEntries.forEach(element => {
-            receiptColorSizeEntries.push(element);
+        if (this.form.receiptColorSizeEntries) {
+          this.form.receiptColorSizeEntries.forEach(entry => {
+            if (entry.colorSizeEntries) {
+              entry.colorSizeEntries.forEach(element => {
+                receiptColorSizeEntries.push(element);
+              });
+            }
           });
-        });
-        this.$set(submitForm, 'receiptColorSizeEntries', receiptColorSizeEntries);
+          this.$set(submitForm, 'receiptColorSizeEntries', receiptColorSizeEntries);
+        }
 
         const result = await this.$http.put(url, submitForm);
         if (result['errors']) {
