@@ -251,6 +251,70 @@
               key: '发货操作'
             }],
             url: this.apis().shippingOrderList()
+          },
+          RECONCILED: {
+            status: 'RECONCILED',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '发货数'
+            }, {
+              key: '关联收货单'
+            }, {
+              key: '收货数',
+              props: {
+                prop: 'receiptSheets'
+              }
+            }, {
+              key: '关联退货单'
+            }, {
+              key: '退货数'
+            }, {
+              key: '差异数'
+            }, {
+              key: '关联复议单'
+            }, {
+              key: '复议数'
+            }, {
+              key: '发货操作'
+            }],
+            url: this.apis().shippingOrderList()
+          },
+          COMPLETED: {
+            status: 'COMPLETED',
+            columns: [{
+              key: '发货单号'
+            }, {
+              key: '产品名称'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '发货数'
+            }, {
+              key: '关联收货单'
+            }, {
+              key: '收货数',
+              props: {
+                prop: 'receiptSheets'
+              }
+            }, {
+              key: '关联退货单'
+            }, {
+              key: '退货数'
+            }, {
+              key: '差异数'
+            }, {
+              key: '关联复议单'
+            }, {
+              key: '复议数'
+            }, {
+              key: '发货操作'
+            }],
+            url: this.apis().shippingOrderList()
           }
         }
       }
