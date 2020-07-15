@@ -4,7 +4,7 @@
                               @onAdvancedSearch="onAdvancedSearch"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
           <shipping-tasks-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
         </el-tab-pane>
       </template>
@@ -30,6 +30,10 @@
       queryFormData: {
         type: Object,
         required: true
+      },
+      mode: {
+        type: String,
+        default: 'import'
       }
     },
     components: {
@@ -45,10 +49,41 @@
       },
       onAdvancedSearch (page, size) {
         this.$emit('onAdvancedSearch');
+        this.receivedispatchStateCount();
+      },
+      async receivedispatchStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().receivedispatchStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.stateCount = {};
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          this.$message.error(result.msg);
+          return;
+        }
+        this.stateCount = result.data;
+      },
+      tabName(tab) {
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name + '(' + this.stateCount[tab.code] + ')';
+        }
+        return tab.name;
       },
       handleClick (tab, event) {
         this.queryFormData.states = tab.name;
         this.$emit('onAdvancedSearch');
+        // this.receivedispatchStateCount();
       },
       onDetail (row) {
         this.$router.push('/shipping/tasks/' + row.id);
@@ -56,11 +91,13 @@
     },
     data() {
       return {
+        stateCount: {},
         activeName: 'PENDING_DELIVERY',
         statuses: this.$store.state.EnumsModule.ReceiveDispatchTaskState
       }
     },
     created() {
+      this.receivedispatchStateCount();
     },
     destroyed() {
 

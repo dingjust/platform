@@ -10,7 +10,7 @@
       </el-row>
       <div class="pt-2"></div>
       <shipping-tasks-page :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onAdvancedSearch="onAdvancedSearch" />
+        @onAdvancedSearch="onAdvancedSearch" mode="export"/>
     </el-card>
   </div>
 </template>

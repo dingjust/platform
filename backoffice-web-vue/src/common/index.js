@@ -799,6 +799,18 @@ const COMMON_APIS = {
   // 进度工单状态统计
   progressOrderStateCount() {
     return '/b2b/orders/production/work/state/count';
+  },
+  // 发货单状态统计
+  shippingOrderStateCount () {
+    return '/b2b/sheets/shipping/state/count';
+  },
+  // 收发货任务状态统计
+  receivedispatchStateCount () {
+    return '/b2b/sheets/receivedispatch/state/count';
+  },
+  // 复议单列表状态统计
+  reconsiderOrderStateCount () {
+    return '/b2b/sheets/reconsider/state/count';
   }
 };
 
