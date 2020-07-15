@@ -76,7 +76,8 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row" v-if="receivingMode=='BY_PACKAGE'">
         <el-col :span="24">
-          <color-size-box-table :vdata="data" :colorSizeEntries="colorSizeEntries" :readOnly="false" />
+          <color-size-box-table :vdata="data" :colorSizeEntries="colorSizeEntries" :readOnly="false"
+            :canAddBox="false" />
         </el-col>
       </el-row>
       <el-row type="flex" justify="start" class="basic-row" v-if="receivingMode=='BY_LIST'">
@@ -300,7 +301,7 @@
         isHaveReturn: false
       }
     },
-    created() {      
+    created() {
       if (this.$route.params.shippingOrder != null) {
         //设置colorSizeEntries
         this.$set(this, 'shippingOrder', JSON.parse(JSON.stringify(this.$route.params.shippingOrder)));

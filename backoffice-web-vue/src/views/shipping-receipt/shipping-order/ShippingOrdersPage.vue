@@ -86,7 +86,12 @@
         });
       },
       handleClick(tab, event) {
-        this.queryFormData.states = tab.name;
+        //已完成状态为 已对账和完成状态
+        if (tab.label == '已完成') {
+          this.queryFormData.states = ['RECONCILED', 'COMPLETED'];
+        } else {
+          this.queryFormData.states = tab.name;
+        }
         this.onAdvancedSearch(0, 10);
       },
       onDetail(row) {
@@ -115,6 +120,9 @@
         }, {
           code: 'PENDING_RECONCILED',
           name: '待对账'
+        }, {
+          code: '已完成',
+          name: '已完成'
         }],
         queryFormData: {
           keyword: '',

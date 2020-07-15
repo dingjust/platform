@@ -1,13 +1,16 @@
 <template>
   <div class="po-relation-box">
     <el-tabs type="border-card" @tab-click="handleClick" :lazy="true">
-      <el-tab-pane label="外发订单" v-if="showOutbound">
-        <production-order-outbound-list :page="page" :pageType="pageType"/>
+      <el-tab-pane label="外发订单" v-if="showOutbound&&isMySelf">
+        <production-order-outbound-list :page="page" :pageType="pageType" />
       </el-tab-pane>
-      <el-tab-pane label="采购订单">
+      <el-tab-pane label="发货任务" :lazy="true" v-if="receiveDispatchTaskId">
+        <shipping-tasks-detail :id="receiveDispatchTaskId" shadow="hover" :showOrderInfo="false" />
+      </el-tab-pane>
+      <el-tab-pane label="采购订单" :lazy="true" v-if="isMySelf">
         <purchase-order-basic-table :data="[]" />
       </el-tab-pane>
-      <el-tab-pane label="财务">
+      <el-tab-pane label="财务" :lazy="true" v-if="isMySelf">
         <el-row v-if="isBrand()">
           <purchase-order-info-payment-finance :slotData="slotData" v-if="isBrand() && slotData.payPlan!= null" />
         </el-row>
@@ -15,9 +18,9 @@
           <purchase-order-info-receipt-finance :slotData="slotData" v-if="isFactory() && slotData.payPlan!= null" />
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="利润核算">
+      <el-tab-pane label="利润核算" :lazy="true" v-if="isMySelf">
       </el-tab-pane>
-      <el-tab-pane label="操作日志">
+      <el-tab-pane label="操作日志" :lazy="true" v-if="isMySelf">
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -29,6 +32,10 @@
   import PurchaseOrderBasicTable from '../../components/context-order-tab/PurchaseOrderBasicTable';
   import ProductionOrderOutboundList from '../list/ProductionOrderOutboundList'
 
+  import {
+    ShippingTasksDetail
+  } from '../../../../shipping-receipt/index';
+
   export default {
     name: 'ProductionOrderRelationInfo',
     props: ['slotData', 'id'],
@@ -36,12 +43,32 @@
       PurchaseOrderInfoPaymentFinance,
       PurchaseOrderInfoReceiptFinance,
       PurchaseOrderBasicTable,
-      ProductionOrderOutboundList
+      ProductionOrderOutboundList,
+      ShippingTasksDetail
     },
     computed: {
       showOutbound: function () {
+        if (this.slotData.taskOrderEntries == null) {
+          return false;
+        }
         return this.slotData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.readOutbound;
-      }
+      },
+      //发货任务id
+      receiveDispatchTaskId: function () {
+        if (this.slotData.taskOrderEntries && this.slotData.taskOrderEntries[0] != null && this.slotData
+          .taskOrderEntries[0].receiveDispatchTask !=
+          null) {
+          return this.slotData.taskOrderEntries[0].receiveDispatchTask.id;
+        } else {
+          return null;
+        }
+      },
+      isMySelf: function () {
+        if (!this.slotData.taskOrderEntries) {
+          return false;
+        }
+        return this.slotData.taskOrderEntries[0].belongTo.uid == this.$store.getters.currentUser.companyCode;
+      },
     },
     methods: {
       handleClick(tab, event) {
@@ -111,15 +138,14 @@
         readOutbound: false,
         page: {
           number: 0,
-          size: 10, 
+          size: 10,
           totalPages: 1,
           totalElements: 0,
           content: []
         },
       }
     },
-    watch: {
-    },
+    watch: {},
     created() {
       this.getOutboundOrder();
     }

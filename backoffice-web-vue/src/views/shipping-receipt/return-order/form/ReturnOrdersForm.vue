@@ -24,7 +24,7 @@
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="3">
             <img width="100px" height="100px"
-              :src="shippingOder.product.thumbnail!=null&&shippingOder.product.thumbnail.length!=0?shippingOder.product.thumbnail.url:'static/img/nopicture.png'">
+              :src="shippingOder.product!=null&&shippingOder.product.thumbnail.length!=0?shippingOder.product.thumbnail.url:'static/img/nopicture.png'">
           </el-col>
           <el-col :span="21">
             <el-row type="flex" style="padding: 10px 0px">
@@ -47,11 +47,12 @@
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
-              <el-col :span="2">
+              <!-- <el-col :span="2">
                 <h6 class="basic-label" style="margin-top:10px">退货地址：</h6>
-              </el-col>
-              <el-col :span="22">
-                <address-form :vAddress.sync="formData.deliveryAddress" ref="addressComp" :readOnly="false" />
+              </el-col> -->
+              <el-col :span="24">
+                <my-address-form :vAddress.sync="formData.deliveryAddress" ref="addressComp" :readOnly="false"
+                  :hideContact="true" />
               </el-col>
             </el-row>
             <el-row type="flex" align="middle">
@@ -102,7 +103,7 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="24">
-            <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="false" />
+            <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="formData.isAllReturn" />
           </el-col>
         </el-row>
         <el-row type="flex" style="margin-top:20px;">
@@ -111,7 +112,7 @@
         </el-row>
         <el-row type="flex" align="top" style="margin-top:20px">
           <el-col :span="2">
-            <h6 class="info-input-prepend" style="margin-top: 41px;">凭证<span style="color:red">*</span></h6>
+            <h6 class="info-input-prepend" style="margin-top: 41px;">凭证</h6>
           </el-col>
           <el-col :span="20">
             <el-form-item prop="medias" :rules="[{ required: false, message: '请上传凭证', trigger: 'change'}]">
@@ -144,7 +145,7 @@
   import {
     ColorSizeBoxTable,
     ColorSizeTable,
-    AddressForm,
+    MyAddressForm,
     ImagesUpload
   } from '@/components/index'
 
@@ -159,7 +160,7 @@
     components: {
       ColorSizeBoxTable,
       ColorSizeTable,
-      AddressForm,
+      MyAddressForm,
       ImagesUpload
     },
     computed: {
@@ -312,6 +313,15 @@
             }
           }
         });
+        //非整单
+        if (!this.formData.isAllReturn) {
+          //清空数量
+          summaryData.forEach(sheet => {
+            sheet.colorSizeEntries.forEach(entry => {
+              entry.quantity = '';
+            })
+          });
+        }
         this.$set(this.formData, 'packageSheets', summaryData);
       }
     },

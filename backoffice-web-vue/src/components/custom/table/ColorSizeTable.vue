@@ -16,7 +16,7 @@
         <th>合计</th>
       </tr>
       <template v-for="color in colors">
-        <tr :key="'tr'+color.code">
+        <tr :key="'tr'+color.code" v-if="countColorsAmount(color)>0||!readOnly">
           <td>{{color.name}}</td>
           <template v-for="size in sizes">
             <td :key="'td'+size.name">
@@ -24,7 +24,7 @@
                 {{getEntryByColorSize(color, size).quantity}}
               </template>
               <template v-else>
-                <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="1"
+                <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="0"
                   v-number-input.float="{ min: 0,decimal:0}" :disabled="readOnly"
                   v-model="getEntryByColorSize(color, size).quantity">
                 </el-input>

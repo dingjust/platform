@@ -33,7 +33,6 @@
   import {
     createNamespacedHelpers
   } from "vuex";
-  import Bus from '@/common/js/bus.js';
 
   const {
     mapGetters,

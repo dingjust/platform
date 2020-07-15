@@ -70,7 +70,7 @@
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="22">
         <el-row type="flex" justify="end">
-<!--          <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>-->
+          <!--          <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>-->
           <el-button class="form-btn" @click="onOrder" v-if="isMySelf">上报数量</el-button>
         </el-row>
         <progress-report-material v-if="slotData.progressPhase.name=='备料'"
@@ -87,7 +87,7 @@
         </el-row>
         <el-row v-if="allOrdersShow">
           <production-progress-orders-table :orders="slotData.productionProgressOrders" @onDetail="onDetail"
-            @onCencel="onCencel" :readonly="readonly" @onUpdate="onUpdate" :isMySelf="isMySelf"/>
+            @onCencel="onCencel" :readonly="readonly" @onUpdate="onUpdate" :isMySelf="isMySelf" />
         </el-row>
         <el-row type="flex" align="top" class="progress-update-form-row" style="margin-top:20px;">
           <el-col :span="2">
@@ -179,10 +179,10 @@
       }
     },
     methods: {
-      onClose () {
+      onClose() {
         this.formVisible = false;
       },
-      onUpdate (progressOrder) {
+      onUpdate(progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
         //   this.progressOrder = progressOrder;
         //   this.materialVisible = true;
@@ -197,7 +197,7 @@
         this.formVisible = true;
         // }
       },
-      onDetail (progressOrder) {
+      onDetail(progressOrder) {
         // if (this.order.currentPhase == 'MATERIAL_PREPARATION') {
         this.progressOrder = progressOrder;
         //   this.materialVisible = true;
@@ -211,7 +211,7 @@
         this.formVisible = true;
         // }
       },
-      onCencel (id) {
+      onCencel(id) {
         this.$confirm('是否作废该单据?', '', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -220,7 +220,7 @@
           this._onCancel(id);
         });
       },
-      async _onCancel (id) {
+      async _onCancel(id) {
         const url = this.apis().deleteProductionProgressOrder(this.slotData.id, id);
         const result = await this.$http.delete(url);
         if (result['errors']) {
@@ -230,11 +230,11 @@
         this.$message.success('作废成功');
         this.$emit('callback');
       },
-      onCallback () {
+      onCallback() {
         this.formVisible = false;
         this.$emit('callback');
       },
-      onOrder () {
+      onOrder() {
         this.progressOrder = {
           medias: [],
           operator: {
@@ -257,27 +257,32 @@
         this.onView = false;
         // }
       },
-      async onSubmit () {
-        // if (this.compareDate(new Date(), new Date(this.slotData.estimatedDate))) {
-        //   this.$message.error('预计完成时间不能小于当前时间');
-        //   return false;
-        // }
-        // const url = this.apis().updateProgressOfPurchaseOrder(this.orderCode, this.slotData.id);
-        // const result = await this.$http.put(url, this.slotData);
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        //   return;
-        // }
-        // this.$message.success('更新成功');
+      async onSubmit() {
         this.$emit('editSubmit');
       },
-      onEditEstimatedDate () {
+      onEditEstimatedDate() {
         this.onEditEstimatedDateVisible = !this.onEditEstimatedDateVisible;
         // this.$nextTick(() => {
         //   this.$refs.datePicker.focus();
         // })
       },
-      async onFinish () {
+      async onFinish() {
+        //裁剪节点提示
+        if (this.slotData.progressPhase.name == '裁剪') {
+          this.$confirm('完成裁剪将会创建发货任务，是否确认?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this._onFinish();
+          }).catch(() => {
+            
+          });
+        } else {
+          this._onFinish();
+        }
+      },
+      async _onFinish() {
         const url = this.apis().finshProgress(this.belong.code, this.slotData.id);
         const result = await this.$http.put(url);
         if (result['errors']) {
@@ -288,7 +293,7 @@
         this.$emit('callback');
       }
     },
-    data () {
+    data() {
       return {
         formVisible: false,
         onView: false,
@@ -304,15 +309,16 @@
       }
     },
     watch: {
-      formVisible (newValue, oldValue) {
+      formVisible(newValue, oldValue) {
         this.hackSet = false;
         this.$nextTick(() => {
           this.hackSet = true;
         });
       }
     },
-    created () {}
+    created() {}
   }
+
 </script>
 
 <style scoped>

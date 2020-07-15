@@ -26,7 +26,7 @@
               <template v-else>
                 <span class="order-table-input_prefix">{{getOldEntryByColorSize(color, size).quantity}}<i
                     class="el-icon-plus icon-plus"/></span>
-                <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="1"
+                <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="0"
                   v-number-input.float="{ min: 0,decimal:0}" :disabled="readOnly"
                   v-model="getEntryByColorSize(color, size).quantity">
                 </el-input>

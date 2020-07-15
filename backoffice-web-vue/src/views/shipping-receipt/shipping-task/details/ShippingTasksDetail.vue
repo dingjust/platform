@@ -1,6 +1,6 @@
 <template>
-  <div class="animated fadeIn content">
-    <el-card>
+  <div class="animated fadeIn">
+    <el-card :shadow="shadow">
       <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="title">
@@ -12,38 +12,40 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-row type="flex" justify="start" class="basic-row">
-        <el-col :span="3">
-          <img width="100px" height="100px"
-            :src="formData.product.thumbnail!=null&&formData.product.thumbnail.length!=0?formData.product.thumbnail.url:'static/img/nopicture.png'">
-        </el-col>
-        <el-col :span="21">
-          <el-row type="flex" style="padding: 10px 0px">
-            <el-col :span="8">
-              <h6>产品名称：{{formData.product.name}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>货号：{{formData.product.skuID}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" style="padding-bottom: 10px">
-            <el-col :span="8">
-              <h6>发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>发货负责人：{{formData.merchandiser.name}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" style="padding-bottom: 10px">
-            <el-col :span="12">
-              <h6>收货地址：{{formData.deliveryAddress.details}}</h6>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
+      <template v-if="showOrderInfo">
+        <el-row type="flex" justify="start" class="basic-row">
+          <el-col :span="3">
+            <img width="100px" height="100px"
+              :src="formData.product.thumbnail!=null&&formData.product.thumbnail.length!=0?formData.product.thumbnail.url:'static/img/nopicture.png'">
+          </el-col>
+          <el-col :span="21">
+            <el-row type="flex" style="padding: 10px 0px">
+              <el-col :span="8">
+                <h6>产品名称：{{formData.product.name}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>货号：{{formData.product.skuID}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" style="padding-bottom: 10px">
+              <el-col :span="8">
+                <h6>发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>发货负责人：{{formData.merchandiser.name}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" style="padding-bottom: 10px">
+              <el-col :span="12">
+                <h6>收货地址：{{formData.deliveryAddress.details}}</h6>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </template>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="24">
           <shipping-tasks-quantity-table :formData="formData" />
@@ -67,7 +69,19 @@
   import ShippingTasksOrdersList from '../list/ShippingTasksOrdersList'
   export default {
     name: 'ShippingTasksDetail',
-    props: ['id'],
+    props: {
+      id: {
+
+      },
+      shadow: {
+        type: String,
+        default: 'always'
+      },
+      showOrderInfo: {
+        type: Boolean,
+        default: true
+      }
+    },
     components: {
       ShippingTasksQuantityTable,
       ShippingTasksOrdersList
@@ -82,7 +96,7 @@
             if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
               let pass = true;
               this.formData.shippingSheets.forEach(sheet => {
-                if (sheet.state != 'PENDING_RECONCILED') {
+                if (!(sheet.state == 'PENDING_RECONCILED' || sheet.state == 'COMPLETED')) {
                   pass = false;
                   return false;
                 }
@@ -139,7 +153,7 @@
         });
       },
       onFinish() {
-        this.$confirm('确认发货完结后，不能再创建发货单了，表示改发货任务完结，是否确认该操作。', '提示', {
+        this.$confirm('确认发货完结后，不能再创建发货单了，表示该发货任务完结，是否确认该操作。', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

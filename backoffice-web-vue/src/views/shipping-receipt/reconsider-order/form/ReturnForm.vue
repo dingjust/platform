@@ -20,7 +20,7 @@
           <h6 class="basic-label" style="margin-top:10px">退货地址：</h6>
         </el-col>
         <el-col :span="22">
-          <address-form :vAddress.sync="curData.deliveryAddress" ref="addressComp" :readOnly="false" />
+          <my-address-form :vAddress.sync="curData.deliveryAddress" ref="addressForm" :readOnly="false" />
         </el-col>
       </el-row>
       <el-row type="flex" align="middle">
@@ -82,7 +82,7 @@
 <script>
   import {
     ColorSizeTable,
-    AddressForm,
+    MyAddressForm,
   } from '@/components/'
 
   export default {
@@ -98,14 +98,52 @@
     },
     components: {
       ColorSizeTable,
-      AddressForm,
+      MyAddressForm,
     },
     computed: {
-
+      //总数
+      totalQuantity: function () {
+        let result = 0;
+        this.curData.packageSheets.forEach(sheet => {
+          sheet.colorSizeEntries.forEach(entry => {
+            let num = parseInt(entry.quantity);
+            if (!Number.isNaN(num)) {
+              result += num;
+            }
+          })
+        });
+        return result;
+      }
     },
     methods: {
-      onSubmit() {
-        this.$emit('onSave', this.curData);
+      // 封装Promise对象
+      getFormPromise(form) {
+        return new Promise(resolve => {
+          form.validate(res => {
+            resolve(res);
+          })
+        })
+      },
+      async validateForms() {
+        var formArr = [];
+        formArr.push(this.$refs['form']);
+        formArr.push(this.$refs.addressForm.$refs.address);
+        // 使用Promise.all 并行去校验结果
+        let res = await Promise.all(formArr.map(this.getFormPromise));
+        return res.every(item => !!item);
+      },
+      async onSubmit() {
+        //校验数量
+        if (this.totalQuantity < 1) {
+          this.$message.error('请完填写数量');
+          return;
+        }
+        let validate = await this.validateForms();
+        if (validate) {
+          this.$emit('onSave', this.curData);
+        } else {
+          this.$message.error('请完善表单信息');
+        }
       },
       isOnline(flag) {
         if (flag) {

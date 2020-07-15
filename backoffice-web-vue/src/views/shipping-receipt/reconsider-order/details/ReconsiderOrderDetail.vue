@@ -78,8 +78,9 @@
         </el-col>
       </el-row>
       <el-table :data="[formData]" stripe style="width: 100%">
-        <el-table-column prop="code" label="发货单"></el-table-column>
-        <el-table-column prop="totalQuantity" label="发货数量"></el-table-column>
+        <el-table-column prop="logisticsSheet.code" label="发货单"></el-table-column>
+        <el-table-column prop="logisticsSheet.totalQuantity" label="发货数量">
+        </el-table-column>
         <el-table-column label="收货单">
           <template slot-scope="scope" v-if="scope.row.logisticsSheet.receiptSheets!=null">
             <el-button type="text" @click="onReceiptDetail(scope.row.logisticsSheet.receiptSheets[0].id)"

@@ -49,16 +49,36 @@ export default {
       // url: '/sales',
       icon: 'el-icon-notebook-2',
       children: [{
-          name: '待分配工单',
-          url: '/sales/allocating/productionOrder'
-        }, {
-          name: '生产工单',
-          url: '/sales/productionOrder',
-        }, {
-          name: '生产进度工单',
-          url: '/sales/progressOrder'
-        }
-      ]
+        name: '待分配工单',
+        url: '/sales/allocating/productionOrder'
+      }, {
+        name: '生产工单',
+        url: '/sales/productionOrder',
+      }, {
+        name: '生产进度工单',
+        url: '/sales/progressOrder'
+      }]
+    },
+    {
+      name: '发货管理',
+      // url: '/shipping',
+      icon: 'el-icon-box',
+      children: [{
+        name: '收发任务单',
+        url: '/shipping/tasks',
+      }, {
+        name: '收发货列表',
+        url: '/shipping/shipping-receipt-sheet',
+      }, {
+        name: '差异复议',
+        url: '/shipping/reconsider-order',
+      }, {
+        name: '对账任务',
+        url: '/reconciliation/tasks/import',
+      }, {
+        name: '对账管理',
+        url: '/reconciliation/manage/import',
+      }]
     },
     {
       name: '外发管理',
@@ -70,6 +90,27 @@ export default {
       }, {
         name: '外发生产工单',
         url: '/sales/outboundProductionOrder'
+      }]
+    },
+    {
+      name: '收货管理',
+      // url: '/receipt',
+      icon: 'el-icon-receiving',
+      children: [{
+        name: '收发任务单',
+        url: '/receipt/tasks',
+      }, {
+        name: '收发货列表',
+        url: '/receipt/shipping-receipt-sheet',
+      }, {
+        name: '差异复议',
+        url: '/receipt/reconsider-order',
+      }, {
+        name: '对账任务',
+        url: '/reconciliation/tasks/export',
+      }, {
+        name: '对账管理',
+        url: '/reconciliation/manage/export',
       }]
     },
     {
@@ -96,48 +137,6 @@ export default {
         name: '款式管理',
         url: '/product/sample',
         icon: 'iconNone'
-      }]
-    },
-    {
-      name: '订单发货',
-      // url: '/shipping',
-      icon: 'el-icon-box',
-      children: [{
-        name: '收发任务单',
-        url: '/shipping/tasks',
-      }, {
-        name: '收发货列表',
-        url: '/shipping/shipping-receipt-sheet',
-      }, {
-        name: '差异复议',
-        url: '/shipping/reconsider-order',
-      }, {
-        name: '对账任务',
-        url: '/reconciliation/tasks/import',
-      }, {
-        name: '对账管理',
-        url: '/reconciliation/manage/import',
-      }]
-    },
-    {
-      name: '外发收货',
-      // url: '/receipt',
-      icon: 'el-icon-receiving',
-      children: [{
-        name: '收发任务单',
-        url: '/receipt/tasks',
-      }, {
-        name: '收发货列表',
-        url: '/receipt/shipping-receipt-sheet',
-      }, {
-        name: '差异复议',
-        url: '/receipt/reconsider-order',
-      }, {
-        name: '对账任务',
-        url: '/reconciliation/tasks/export',
-      }, {
-        name: '对账管理',
-        url: '/reconciliation/manage/export',
       }]
     },
     {

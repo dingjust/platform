@@ -18,7 +18,7 @@
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,status) in statusMap">
-        <el-tab-pane :label="getEnumLabel(map.status)" :name="status" :key="status">
+        <el-tab-pane :label="getEnum('ShippingSheetState', map.status)" :name="status" :key="status">
           <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch" />
         </el-tab-pane>
       </template>
@@ -90,13 +90,13 @@
       }
     },
     methods: {
-      getEnumLabel(status) {
-        if (status == 'PENDING_RECONCILED') {
-          return '完成'
-        } else {
-          return this.getEnum('ShippingSheetState', status);
-        }
-      },
+      // getEnumLabel(status) {
+      //   if (status == 'PENDING_RECONCILED') {
+      //     return '完成'
+      //   } else {
+      //     return this.getEnum('ShippingSheetState', status);
+      //   }
+      // },
       handleClick(tab, event) {
         this.$emit('handleClick', {
           status: this.statusMap[tab.name].status,

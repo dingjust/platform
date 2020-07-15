@@ -7,7 +7,8 @@
     </el-row>
     <!-- <div class="over-tabs"> -->
     <el-row type="flex" justify="end">
-      <el-button v-show="activeName=='PENDING_RECONSIDER'" class="material-btn" @click="onReconsider">申请复议</el-button>
+      <el-button v-show="activeName=='PENDING_RECONSIDER'" class="material-btn" @click="onReconsider"
+        v-if="canReconsider">申请复议</el-button>
     </el-row>
     <!-- </div> -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -47,6 +48,10 @@
       currentState: {
         type: String,
         default: 'PENDING_RECONSIDER'
+      },
+      canReconsider: {
+        type: Boolean,
+        default: true
       }
     },
     components: {

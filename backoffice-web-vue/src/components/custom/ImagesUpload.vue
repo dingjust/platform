@@ -6,7 +6,8 @@
           :disabled="disabled" :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
           :file-list="fileList" :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit"
           :on-remove="handleRemove" :class="{disabled:uploadDisabled,picClass:picClass}">
-          <i class="el-icon-plus" :style="custom ? 'border: 23px solid transparent;' : ''" slot="default" @click="onClick"></i>
+          <i class="el-icon-plus" :style="custom ? 'border: 23px solid transparent;' : ''" slot="default"
+            @click="onClick"></i>
           <div slot="tip" class="el-upload__tip">
             <slot name="picBtn"></slot>
           </div>
@@ -64,7 +65,7 @@
             reader.onload = (e) => {
               img.src = e.target.result;
               img.onload = function () {
-                const data = ImageUtil.compressImage(img, img.width, img.height, 0.5);                
+                const data = ImageUtil.compressImage(img, img.width, img.height, 0.5);
                 const newFile = ImageUtil.dataURLtoFile(data, file.name);
                 resolve(newFile);
               };
@@ -119,7 +120,7 @@
         this.$message.warning('当前限制选择' + this.limit + ' 个图片');
       },
       // 通过其他方式提交图片
-      onClick () {
+      onClick() {
         if (this.custom) {
           this.$emit('onUpload');
         }
@@ -167,8 +168,12 @@
         };
       },
       headers: function () {
+        
+        const token = sessionStorage.getItem('token');
         return {
-          Authorization: this.$store.getters.token
+          //TODO:  store没刷新token
+          // Authorization: this.$store.getters.token
+          Authorization: 'Bearer ' + token
         }
       }
     },

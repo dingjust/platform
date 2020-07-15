@@ -98,6 +98,7 @@
       //已补数量
       completeNum: function () {
         let result = 0;
+        //补的退货单
         if (this.form.returnSheet != null) {
           this.form.returnSheet.packageSheets[0].colorSizeEntries.forEach(element => {
             let num = parseInt(element.quantity);
@@ -105,6 +106,17 @@
               result += num;
             }
           });
+        }
+        //补的收货单
+        if (this.form.receiptColorSizeEntries != null) {
+          this.form.receiptColorSizeEntries.forEach(element => {
+            element.colorSizeEntries.forEach(entry => {
+              let num = parseInt(entry.quantity);
+              if (!Number.isNaN(num)) {
+                result += num;
+              }
+            });
+          })
         }
         return result;
       }
@@ -131,13 +143,13 @@
         const url = this.apis().acceptReconsider();
         let submitForm = Object.assign({}, this.form);
         //修改补全收货单数据
-        let receiptColorSizeEntries=[];
-        this.form.receiptColorSizeEntries.forEach(entry=>{
-          entry.colorSizeEntries.forEach(element=>{
+        let receiptColorSizeEntries = [];
+        this.form.receiptColorSizeEntries.forEach(entry => {
+          entry.colorSizeEntries.forEach(element => {
             receiptColorSizeEntries.push(element);
           });
         });
-        this.$set(submitForm,'receiptColorSizeEntries',receiptColorSizeEntries);
+        this.$set(submitForm, 'receiptColorSizeEntries', receiptColorSizeEntries);
 
         const result = await this.$http.put(url, submitForm);
         if (result['errors']) {
