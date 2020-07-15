@@ -16,6 +16,7 @@ import {
   UsersModule,
   RolesModule,
   PermissionModule,
+  PersonnelModule,
   // product
   ColorsModule,
   SizesModule,
@@ -126,6 +127,7 @@ export default new Vuex.Store({
     UsersModule,
     RolesModule,
     PermissionModule,
+    PersonnelModule,
     // product
     ColorsModule,
     SizesModule,
