@@ -24,36 +24,36 @@ const state = {
   permissions: []
 };
 const mutations = {
-  authorized (state, authorized) {
+  authorized(state, authorized) {
     sessionStorage.setItem('authorized', authorized);
     state.authorized = authorized;
   },
-  token (state, token) {
+  token(state, token) {
     sessionStorage.setItem('token', token);
     state.token = token;
   },
-  expiresIn (state, expiredIn) {
+  expiresIn(state, expiredIn) {
     localStorage.setItem('expiresIn', expiredIn);
     state.expiresIn = expiredIn;
   },
-  refreshToken (state, refreshToken) {
+  refreshToken(state, refreshToken) {
     localStorage.setItem('refreshToken', refreshToken);
     state.refreshToken = refreshToken;
   },
-  currentUser (state, currentUser) {
+  currentUser(state, currentUser) {
     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
     state.currentUser = currentUser;
   },
-  authenticationInfo (state, authenticationInfo) {
+  authenticationInfo(state, authenticationInfo) {
     state.authenticationInfo = authenticationInfo;
   },
-  permissions (state, permissions) {
+  permissions(state, permissions) {
     sessionStorage.setItem('permissions', JSON.stringify(permissions));
     state.permissions = permissions;
   }
 };
 const actions = {
-  async login ({
+  async login({
     dispatch,
     commit,
     state
@@ -107,7 +107,7 @@ const actions = {
     commit('permissions', res.data);
     router.push('/');
   },
-  async getProfile ({
+  async getProfile({
     dispatch,
     commit,
     state
@@ -128,7 +128,7 @@ const actions = {
     }
     location.reload();
   },
-  async refreshToken ({
+  async refreshToken({
     dispatch,
     commit,
     state
@@ -149,17 +149,18 @@ const actions = {
   }
 };
 const getters = {
-  currentUser () {
+  currentUser() {
     if (!state.currentUser) {
       return JSON.parse(sessionStorage.getItem('currentUser'));
     }
     return state.currentUser;
   },
-  token () {
-    return 'Bearer ' + sessionStorage.getItem('token');
+  token() {
+    // return 'Bearer ' + sessionStorage.getItem('token');
+    return 'Bearer ' + state.token;
   },
   authenticationInfo: state => state.authenticationInfo,
-  permissions () {
+  permissions() {
     if (state.permissions.length <= 0) {
       return JSON.parse(sessionStorage.getItem('permissions'));
     }
