@@ -96,7 +96,7 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-          <template v-if="!hasReceiptOrder&&isReceiveParty">
+          <template v-if="!hasReceiptOrder&&isReceiveParty&&formData.state=='PENDING_RECEIVED'">
             <el-button class="sumbit-btn" @click="onCreate">创建收货单</el-button>
             <el-button style="margin-left:50px" type="text" @click="onReturnAll">整单退货 >></el-button>
           </template>
