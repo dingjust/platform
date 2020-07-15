@@ -790,7 +790,7 @@ const router = new Router({
       },
       children: [{
         path: 'tasks',
-        name: '收发任务列表',
+        name: '发货任务',
         component: () => import(/* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/import/ImportShippingTasksPage')
       },
       {
@@ -812,7 +812,7 @@ const router = new Router({
       },
       {
         path: 'shipping-receipt-sheet',
-        name: '发货收发货列表',
+        name: '发货管理',
         component: () => import(/* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/import/ImportShippingReceiptPage')
       },
       {
@@ -833,12 +833,12 @@ const router = new Router({
       },
       children: [{
         path: 'tasks',
-        name: '收发任务列表',
+        name: '收货任务',
         component: () => import(/* webpackChunkName: 'receipt' */ '@/views/shipping-receipt/page/export/ExportShippingTasksPage')
       },
       {
         path: 'shipping-receipt-sheet',
-        name: '发货收发货列表',
+        name: '收货管理',
         component: () => import(/* webpackChunkName: 'shipping' */ '@/views/shipping-receipt/page/export/ExportShippingReceiptPage')
       },
       {
