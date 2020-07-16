@@ -23,7 +23,7 @@
         <template v-for="item in statuses">
           <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
             <sales-production-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-              @onDelete="onDelete" />
+                                    :isPending="true" @onDelete="onDelete" />
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -116,6 +116,9 @@
       },
       tabName (tab) {
         if (this.stateCount.hasOwnProperty(tab.code)) {
+          if (tab.code == 'TO_BE_ACCEPTED') {
+            return '待接单/待提交(' + this.stateCount[tab.code] +')';
+          }
           return tab.name +'('+ this.stateCount[tab.code] +')';  
         }
         return tab.name;

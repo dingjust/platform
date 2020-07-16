@@ -5,7 +5,7 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
-          <shipping-tasks-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
+          <shipping-tasks-list :mode="mode" :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
         </el-tab-pane>
       </template>
     </el-tabs>

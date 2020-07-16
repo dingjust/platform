@@ -26,6 +26,7 @@
         <el-col :span="5" v-if="isPending">
           <el-row type="flex" justify="end">
             <el-button-group>
+              <el-button size="small" @click="createSalesOrder">创建业务订单</el-button>
               <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入</el-button>
             </el-button-group>
           </el-row>
@@ -33,8 +34,7 @@
         <el-col :span="5" v-if="!isPending">
           <el-row type="flex" justify="end">
             <el-button-group>
-              <el-button size="small" @click="createSalesPlan">创建销售计划</el-button>
-              <el-button size="small" @click="createSalesOrder">创建销售订单</el-button>
+              <el-button size="small" @click="createSalesPlan">创建企划订单</el-button>
             </el-button-group>
           </el-row>
         </el-col>
