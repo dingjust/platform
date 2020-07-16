@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-card>
       <div class="sales-plan-triangle_box" v-if="isMySelf">
-        <div class="sales-plan-triangle" :style="isShowTag ? '#ffd60c': '#ffffff'">
+        <div class="sales-plan-triangle" :style="isShowTag ? 'border-right: 70px solid #ffd60c' : 'border-right: 70px solid #ffffff'">
           <h6 class="sales-plan-triangle_text">{{orderType}}</h6>
         </div>
       </div>
@@ -103,14 +103,16 @@
           return;
         }
         if (this.formData.taskOrderEntries[0].type == 'SELF_PRODUCED') {
-          this.isShowTag = true;
           return '自\xa0\xa0\xa0\xa0\xa0产';
         } else if (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.formData.taskOrderEntries[0].outboundOrderCode) {
-          this.isShowTag = true; 
           return '已外发'; 
-        } else {
-          this.isShowTag = false;
         }
+      },
+      isShowTag: function () {
+        return this.formData.taskOrderEntries.length > 0 && 
+                this.formData.taskOrderEntries[0].type == 'SELF_PRODUCED' ||
+                (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' &&
+                 this.formData.taskOrderEntries[0].outboundOrderCode != undefined);
       },
       isMySelf: function () {
         if (!this.formData.taskOrderEntries) {
@@ -148,7 +150,7 @@
     },
     data() {
       return {
-        isShowTag: false
+
       }
     },
     mounted() {
