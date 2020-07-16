@@ -41,7 +41,7 @@
 <script>
   export default {
     name: 'FinancialReconciliationTable',
-    props: ['formData'],
+    props: [],
     components: {
     },
     computed: {

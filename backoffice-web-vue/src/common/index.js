@@ -811,6 +811,30 @@ const COMMON_APIS = {
   // 复议单列表状态统计
   reconsiderOrderStateCount () {
     return '/b2b/sheets/reconsider/state/count';
+  },
+  // 应付账款列表
+  getPaymentList () {
+    return '/b2b/payment/bill/search';
+  },
+  // 根据id获取应付单
+  getPaymentDetail (id) {
+    return '/b2b/payment/bill/' + id;
+  },
+  // 添加发票
+  appendInvoice () {
+    return '/b2b/payment/bill/add/invoice';
+  },
+  // 添加请款单
+  appendPaymentRequest () {
+    return '/b2b/payment/request/save';
+  },
+  // 请款单列表
+  getPaymentRequestList () {
+    return '/b2b/payment/request/search';
+  },
+  // 根据id获取请款单
+  getPaymentRequestDetail (id) {
+    return '/b2b/payment/request/' + id;
   }
 };
 

@@ -113,6 +113,10 @@
         }
       },
       handlePreview(file) {
+        if (this.custom) {
+          this.$emit('callback', file);
+          return;
+        }
         this.dialogImageUrl = file.artworkUrl;
         this.dialogVisible = true;
       },

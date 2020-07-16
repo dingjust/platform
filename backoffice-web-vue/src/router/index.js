@@ -424,7 +424,7 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/payable/PayablePage')
       }, {
         path: 'payable/:id',
-        name: '应收账款详情',
+        name: '应付账款详情',
         props: true,
         component: () => import(/* webpackChunkName: 'financial' */ '@/views/financial/payable/detail/PayableDetail')
       }, {

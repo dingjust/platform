@@ -53,12 +53,12 @@
       }),
       onSearch (page, size) {
         const keyword = this.keyword;
-        const url = this.apis().shippingOrderList();
+        const url = this.apis().getPaymentList();
         this.search({url, keyword, page, size});
       },
       onAdvancedSearch (page, size) {
         const query = this.queryFormData;
-        const url = this.apis().shippingOrderList();
+        const url = this.apis().getPaymentList();
         this.searchAdvanced({url, query, page, size});
       },
       handleClick (tab, event) {

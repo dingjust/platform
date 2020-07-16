@@ -101,8 +101,10 @@
         };
       },
       headers: function () {
+          const token = sessionStorage.getItem('token');
         return {
-          Authorization: this.$store.getters.token
+          Authorization: 'Bearer ' + token
+          // Authorization: this.$store.getters.token
         }
       },
       fileList: function () {

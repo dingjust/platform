@@ -10,23 +10,24 @@
     <div class="pt-2"></div>
     <el-form :model="formData" :inline="true">
       <el-row type="flex" justify="center" align="middle" style="margin-bottom: 10px">
-        <images-upload-single :formData="formData.media" @removePicture="removePicture" @getPicture="getPicture"/>
+        <images-upload-single :formData="invoiceData.image" :disabled="readOnly"
+                              @removePicture="removePicture" @getPicture="getPicture" />
       </el-row>
       <el-row type="flex" justify="center" align="middle">
         <el-col :span="16">
           <el-form-item label="发票金额：">
-            <el-input v-model="formData.invoiceAmount"></el-input>
+            <el-input v-model="invoiceData.amount" :disabled="readOnly"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle">
         <el-col :span="16">
           <h6>备注：</h6>
-          <el-input v-model="formData.remarks" type="textarea"></el-input>
+          <el-input v-model="invoiceData.remark" type="textarea" :disabled="readOnly"></el-input>
         </el-col>
       </el-row>
     </el-form>
-    <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" :gutter="50">
+    <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" :gutter="50" v-if="!readOnly">
       <el-col :span="4">
         <el-button @click="onCancel" class="invoice-btn">取消</el-button>
       </el-col>
@@ -41,7 +42,16 @@
   import {ImagesUploadSingle} from '@/components/index.js'
   export default {
     name: 'FinancialInvoiceForm',
-    props: [],
+    props: ['invoiceData'],
+    props: {
+      invoiceData: {
+        type: Object
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       ImagesUploadSingle
     },
@@ -50,25 +60,21 @@
     },
     methods: {
       getPicture (data) {
-        this.formData.media = data;
+        this.invoiceData.image = data;
       },
       removePicture () {
-        this.formData.media = {};
+        this.invoiceData.image = {};
       },
       onCancel () {
         this.$emit('onCancel');
       },
       onConfirm () {
-        this.$emit('onConfirm', this.formData);
+        this.$emit('onConfirm', this.invoiceData);
       }
     },
     data () {
       return {
-        formData: {
-          media: {},
-          invoiceAmount: '',
-          remarks: ''
-        }  
+
       }
     },
     created () {
