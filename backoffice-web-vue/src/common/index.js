@@ -812,9 +812,21 @@ const COMMON_APIS = {
   reconsiderOrderStateCount() {
     return '/b2b/sheets/reconsider/state/count';
   },
+  // 应收账款列表
+  getReceivableList () {
+    return '/b2b/payment/bill/receivables/search';
+  },
+  // 应收账单统计
+  getReceivableCount () {
+    return '/b2b/payment/bill/receivables/state/count';
+  },
   // 应付账款列表
   getPaymentList() {
     return '/b2b/payment/bill/search';
+  },
+  // 应付账款统计
+  getPaymentCount () {
+    return '/b2b/payment/bill/state/count';
   },
   // 根据id获取应付单
   getPaymentDetail(id) {
@@ -831,6 +843,18 @@ const COMMON_APIS = {
   // 请款单列表
   getPaymentRequestList() {
     return '/b2b/payment/request/search';
+  },
+  // 请款单状态统计
+  getPaymentRequestCount () {
+    return '/b2b/payment/request/state/count';
+  },
+  // 财务请款单
+  getFinancePaymentRequest () {
+    return '/b2b/payment/request/finance/search';
+  },
+  // 财务请款单状态统计
+  getFinancePaymentRequestCount () {
+    return '/b2b/payment/request/finance/state/count';
   },
   // 根据id获取请款单
   getPaymentRequestDetail(id) {

@@ -17,7 +17,7 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="4" v-if="!isSelect">
           <el-row type="flex" justify="end">
             <el-button type="primary" class="create-button" @click="createOutboundOrder">创建外发订单</el-button>
           </el-row>
@@ -43,7 +43,15 @@
   import SalesProductionStatusBar from '../../components/SalesProductionStatusBar';
   export default {
     name: 'OutboundOrderToolbar',
-    props: ['queryFormData'],
+    props: {
+      queryFormData: {
+        type: Object
+      },
+      isSelect: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {SalesProductionStatusBar},
     computed: {
     },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="外接订单号" prop="code"/>
+      <el-table-column label="外发订单号" prop="productionOrder.code"/>
       <el-table-column label="合同号" />
       <el-table-column label="关联SKU数" />
       <el-table-column label="订单数量" />
@@ -13,7 +13,11 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" />
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('financialState', scope.row.state)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>

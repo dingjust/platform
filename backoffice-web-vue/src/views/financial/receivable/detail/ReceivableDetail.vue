@@ -23,6 +23,7 @@
     FinancialReconciliationTable,
     FinancialRecordList
   } from '../../index.js'
+
   export default {
     name: 'ReceivableDetail',
     props: ['id'],
@@ -34,6 +35,20 @@
     computed: {
     },
     methods: {
+      getDetail () {
+        // const url = this.apis().getReceivableCount();
+        // const result = await this.$http.post(url, this.queryFormData);
+        // if (result['errors']) {
+        //   this.stateCount = {};
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
+        // if (result.code === 0) {
+        //   this.stateCount = {};
+        //   this.$message.error(result.msg);
+        //   return;
+        // }
+      },
       setPayPlan (payPlan) {
         this.payPlan.name = payPlan.name;
         this.payPlan.isHaveDeposit = payPlan.isHaveDeposit;

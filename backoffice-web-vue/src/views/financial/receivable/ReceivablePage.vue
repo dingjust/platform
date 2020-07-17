@@ -12,7 +12,7 @@
       <receivable-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+          <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
             <receivable-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
           </el-tab-pane>
         </template>
@@ -53,17 +53,41 @@
       }),
       onSearch (page, size) {
         const keyword = this.keyword;
-        const url = this.apis().shippingOrderList();
+        const url = this.apis().getReceivableList();
         this.search({url, keyword, page, size});
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch (page, size, isTab) {
         const query = this.queryFormData;
-        const url = this.apis().shippingOrderList();
+        const url = this.apis().getReceivableList();
         this.searchAdvanced({url, query, page, size});
+        if (!isTab) {
+          this.getReceivableCount();
+        }
       },
       handleClick (tab, event) {
-        this.queryFormData.states = tab.name;
-        this.onAdvancedSearch(0, 10);
+        this.queryFormData.state = tab.name;
+        this.onAdvancedSearch(0, 10, true);
+      },
+      async getReceivableCount() {
+        const url = this.apis().getReceivableCount();
+        const result = await this.$http.post(url, this.queryFormData);
+        if (result['errors']) {
+          this.stateCount = {};
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          this.$message.error(result.msg);
+          return;
+        }
+        this.stateCount = result.data;
+      },
+      tabName(tab) {
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name + '(' + this.stateCount[tab.code] + ')';
+        }
+        return tab.name;
       },
       onDetail (row) {
         this.$router.push('/financial/receivable/' + row.id);
@@ -71,25 +95,17 @@
     },
     data () {
       return {
-        activeName: 'PENDING_PAYMENT',
+        stateCount: {},
+        activeName: 'WAIT_TO_PAY',
         queryFormData: {
           keyword: '',
           merchandiserName: '',
           cooperatorName: '',
           createdDateFrom: '',
           createdDateTo: '',
-          states: ''
+          state: 'WAIT_TO_PAY'
         },
-        statuses: [{
-          code: 'PENDING_PAYMENT',
-          name: '待付款'
-        }, {
-          code: 'PAYING',
-          name: '付款中'
-        }, {
-          code: 'COMPLETED',
-          name: '已完成'
-        }]
+        statuses: this.$store.state.EnumsModule.financialState
       }
     },
     created () {

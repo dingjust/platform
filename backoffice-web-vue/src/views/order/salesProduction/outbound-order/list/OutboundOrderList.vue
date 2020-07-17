@@ -1,6 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
+      @selection-change="handleSelectionChange"  @row-click="rowClick">
+      <el-table-column type="selection" width="55" v-if="isSelect"></el-table-column>
       <el-table-column label="生产订单号" prop="code"></el-table-column>
       <el-table-column label="合作商">
         <template slot-scope="scope">
@@ -38,13 +40,24 @@
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
     <!-- </div> -->
+    <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isSelect">
+      <el-button class="sure-btn" @click="setSelectOrder">确定</el-button>
+    </el-row>
   </div>
 </template>
 
 <script>
   export default {
     name: 'OutboundOrderList',
-    props: ['page'],
+    props: {
+      page: {
+        type: Object
+      },
+      isSelect: {
+        type: Boolean,
+        default: false
+      }
+    },
     computed: {},
     methods: {
       canModify(row) {
@@ -68,11 +81,39 @@
       },
       onModify(row) {
         this.$emit('onModify', row.id);
+      },
+      handleSelectionChange(val) {
+        // 限制单选
+        if (val.length > 1) {
+          this.$refs.resultTable.toggleRowSelection(val[0], false);
+          this.selectionRow = val[val.length - 1];
+        } else if (val.length == 1) {
+          this.selectionRow = val[val.length - 1];
+        } else if (val.length == 0) {
+          this.selectionRow = "";
+        }
+        this.$emit('onSelect', this.selectionRow);
+      },
+      rowClick(row) {
+        if (this.selectionRow == "") {
+          this.$refs.resultTable.toggleRowSelection(row, true);
+        } else {
+          if (this.selectionRow.id == row.id) {
+            this.$refs.resultTable.toggleRowSelection(row, false);
+          } else {
+            this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
+            this.$refs.resultTable.toggleRowSelection(row, true);
+          }
+        }
+      },
+      setSelectOrder () {
+        this.$emit('setSelectOrder', this.selectionRow);
       }
     },
     data() {
       return {
-        uid: this.$store.getters.currentUser.companyCode
+        uid: this.$store.getters.currentUser.companyCode,
+        selectionRow: ''
       }
     },
     created() {}
@@ -81,5 +122,7 @@
 </script>
 
 <style scoped>
-
+  /deep/ .el-table th>.cell .el-checkbox {
+    display: none;
+  }
 </style>

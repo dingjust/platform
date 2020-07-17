@@ -1798,6 +1798,31 @@ const state = {
       name: '已完成'
     },
   ],
+  // 应收付状态
+  financialState: [{
+    code: 'WAIT_TO_PAY',
+    name: '待付款'
+  }, {
+    code: 'PAYING',
+    name: '付款中'
+  }, {
+    code: 'SETTLED',
+    name: '已完成'
+  }],
+  // 请款单状态
+  PaymentRequestState: [{
+    code: 'AUDITING',
+    name: '待审核',
+  }, {
+    code: 'AUDIT_FAIL',
+    name: '已驳回'
+  }, {
+    code: 'WAIT_TO_PAY',
+    name: '待付款'
+  }, {
+    code: 'PAID',
+    name: '已付款'
+  }]
 };
 
 const mutations = {};
