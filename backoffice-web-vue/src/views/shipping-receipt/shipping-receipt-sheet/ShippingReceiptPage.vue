@@ -98,6 +98,13 @@
       //   }
       // },
       handleClick(tab, event) {
+        if (this.statusMap[tab.name].status == 'COMPLETED') {
+          this.$emit('handleClick', {
+            status: ['PENDING_RECONCILED', 'RECONCILED', 'COMPLETED'],
+            searchUrl: this.statusMap[tab.name].url
+          });
+          return;
+        }
         this.$emit('handleClick', {
           status: this.statusMap[tab.name].status,
           searchUrl: this.statusMap[tab.name].url
@@ -123,13 +130,29 @@
         });
       },
       tabName (map) {
+        let tabName = this.getEnum('ShippingSheetState', map.status);
         if (map.url == '/b2b/sheets/shipping' && this.stateCount.shipping.hasOwnProperty(map.status)) {
-          return this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] + ')';
+          if (map.status == 'COMPLETED') {
+            let count = this.parseIntNotNaN(this.stateCount.shipping['COMPLETED']) + 
+                        this.parseIntNotNaN(this.stateCount.shipping['PENDING_RECONCILED']) + 
+                        this.parseIntNotNaN(this.stateCount.shipping['RECONCILED']);
+            if (count > 0) {
+              tabName = this.getEnum('ShippingSheetState', map.status) + '(' + count + ')';
+            }
+          } else {
+            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] + ')';
+          }
         }
         if (map.url == '/b2b/sheets/reconsider' && this.stateCount.reconsider.hasOwnProperty(map.status)) {
-          return this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.reconsider[map.status] + ')';
+          tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.reconsider[map.status] + ')';
         }
-        return this.getEnum('ShippingSheetState', map.status);
+        return tabName;
+      },
+      parseIntNotNaN (count) {
+        if (isNaN(parseInt(count))) {
+          return 0;
+        }
+        return parseInt(count);
       },
       // 查询发货单状态统计
       async shippingOrderStateCount() {

@@ -1,17 +1,17 @@
-const Selection = {
-  template: `
-  <el-table-column type="selection" width="55" fixed="left" :key='sortKey'></el-table-column>
-`,
-  props: {
-    sortKey: {
-      default: 10
-    }
-  }
-}
+// const Selection = {
+//   template: `
+//   <el-table-column type="selection" width="55" fixed="left" :key='sortKey'></el-table-column>
+// `,
+//   props: {
+//     sortKey: {
+//       default: 10
+//     }
+//   }
+// }
 
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" :prop="prop" min-width="110px" :key="sortKey"></el-table-column>
+  <el-table-column label="发货单号" :prop="prop" min-width="110px" :key="sortKey" fixed="left"></el-table-column>
   `,
   props: {
     prop: {
@@ -46,14 +46,14 @@ const RelationShippingOrder = {
     }
   },
   methods: {
-    shippingName(row) {
+    shippingName (row) {
       try {
         return eval('row.' + this.code);
       } catch (e) {
         return null;
       }
     },
-    onShipDetail(row) {
+    onShipDetail (row) {
       try {
         this.$router.push('/shipping/orders/' + eval('row.' + this.id));
       } catch (e) {
@@ -94,8 +94,8 @@ const Product = {
     }
   },
   methods: {
-    //获取产品
-    getProduct(row) {
+    // 获取产品
+    getProduct (row) {
       return row[this.prop];
     }
   },
@@ -120,13 +120,43 @@ const RelationOrder = {
     }
   },
   methods: {
-    getProductionOrder(row) {
+    getProductionOrder (row) {
       return row[this.prop];
     },
-    //跳转生产订单明细
-    onProductionOrderDetail(row) {
-      this.$router.push('/sales/productionOrder/' + row[this.prop].id);
+    // 跳转生产订单明细
+    onProductionOrderDetail (row) {
+      // this.$router.push('/sales/productionOrder/' + row[this.prop].id);
+      this.$emit('onProductionDetail', row);
+    }
+  }
+}
+
+const RelationOutOrder = {
+  template: `
+  <el-table-column label="外发生产工单" min-width="120px" :key="sortKey">
+  <template slot-scope="scope">
+    <el-button type="text" v-if="getProductionOrder(scope.row)!=null"
+      @click="onProductionOrderDetail(scope.row)">{{getProductionOrder(scope.row).code}}
+    </el-button>
+  </template>
+</el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'productionTaskOrder'
     },
+    sortKey: {
+      default: 10
+    }
+  },
+  methods: {
+    getProductionOrder (row) {
+      return row[this.prop];
+    },
+    // 跳转生产订单明细
+    onProductionOrderDetail (row) {
+      // this.$router.push('/sales/productionOrder/' + row[this.prop].id);
+    }
   }
 }
 
@@ -173,7 +203,7 @@ const UnitPrice = {
     }
   },
   methods: {
-    getProductionTaskOrder(row) {
+    getProductionTaskOrder (row) {
       return row[this.prop];
     },
   }
@@ -196,8 +226,8 @@ const ShipNum = {
     }
   },
   methods: {
-    //统计发货数
-    getTotalNum(order) {
+    // 统计发货数
+    getTotalNum (order) {
       let result = 0;
       if (order[this.prop] != null) {
         order[this.prop].forEach(element => {
@@ -215,7 +245,6 @@ const ShipNum = {
     }
   }
 }
-
 
 const ShipDate = {
   template: `<el-table-column label="发货日期" :key="sortKey">
@@ -247,7 +276,7 @@ const ReceiptOrder = {
   }
 }
 
-//收货单创建人
+// 收货单创建人
 const Creator = {
   template: `<el-table-column label="创建人" :prop="prop" :key="sortKey"></el-table-column>`,
   props: {
@@ -272,7 +301,7 @@ const RelationReceiptOrder = {
   </el-table-column>
   `,
   methods: {
-    onReceiptDetail(item) {
+    onReceiptDetail (item) {
       this.$router.push('/receipt/orders/' + item.id);
     }
   },
@@ -285,13 +314,13 @@ const RelationReceiptOrder = {
 
 const ShipReceNum = {
   template: `
-  <el-table-column label="发货数/收货数" :key="sortKey">
+  <el-table-column label="发货数/收货数" :key="sortKey" min-width="110">
     <template slot-scope="scope">
       <span>{{getShipNum(scope.row)}}/{{getTotalNum(scope.row)}}</span>
     </template> 
   </el-table-column>`,
   props: {
-    ///发货数
+    /// 发货数
     shipProp: {
       type: String,
       default: 'totalQuantity'
@@ -305,8 +334,8 @@ const ShipReceNum = {
     }
   },
   methods: {
-    //发货数
-    getShipNum(row) {
+    // 发货数
+    getShipNum (row) {
       let num = 0;
       try {
         if (eval('row.' + this.shipProp) != null) {
@@ -317,8 +346,8 @@ const ShipReceNum = {
       }
       return num;
     },
-    //统计收货数
-    getTotalNum(row) {
+    // 统计收货数
+    getTotalNum (row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.receSheetProp);
@@ -358,7 +387,7 @@ const ReceiptNum = {
     }
   },
   methods: {
-    receiptNum(row) {
+    receiptNum (row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.prop);
@@ -397,8 +426,8 @@ const ReceiptDate = {
     }
   },
   methods: {
-    //收货时间
-    getReceiptDate(row) {
+    // 收货时间
+    getReceiptDate (row) {
       try {
         return eval('row.' + this.prop + '[0].creationtime');
       } catch (e) {
@@ -409,7 +438,7 @@ const ReceiptDate = {
 }
 
 const ReturnOrder = {
-  template: `<el-table-column label="退货单" :prop="prop" :key="sortKey"></el-table-column>`,
+  template: `<el-table-column label="退货单号" :prop="prop" :key="sortKey"  fixed="left"></el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -441,7 +470,7 @@ const RelationReturnOrder = {
     }
   },
   methods: {
-    onDetail(item) {
+    onDetail (item) {
       this.$router.push('/returned/orders/' + item.id);
     }
   }
@@ -457,19 +486,18 @@ const ReturnNum = {
     sortKey: {
       default: 10
     }
-  },
+  }
 }
-
 
 const ReturnReceiptNum = {
   template: `
-  <el-table-column label="退货数/收退货数" :key="sortKey">
+  <el-table-column label="退货数/收退货数" :key="sortKey" min-width="110px">
     <template slot-scope="scope">
       <span>{{getReturnTotalNum(scope.row)}}/{{getReceReturnlNum(scope.row)}}</span>
     </template>
   </el-table-column>`,
   props: {
-    //退货字段
+    // 退货字段
     prop: {
       type: String,
       default: 'returnSheets'
@@ -480,8 +508,8 @@ const ReturnReceiptNum = {
   },
   methods: {
 
-    //统计退货数
-    getReturnTotalNum(row) {
+    // 统计退货数
+    getReturnTotalNum (row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.prop);
@@ -496,12 +524,12 @@ const ReturnReceiptNum = {
           });
         }
       } catch (e) {
-        //TODO:空值处理
+        // TODO:空值处理
       }
       return result;
     },
-    //统计收退货数
-    getReceReturnlNum(row) {
+    // 统计收退货数
+    getReceReturnlNum (row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.prop);
@@ -516,7 +544,7 @@ const ReturnReceiptNum = {
           });
         }
       } catch (e) {
-        //TODO:空值处理
+        // TODO:空值处理
       }
       return result;
     }
@@ -552,7 +580,7 @@ const ShippingOperation = {
     }
   },
   methods: {
-    onDetail(row) {
+    onDetail (row) {
       this.$router.push('/shipping/orders/' + row.id);
     }
   }
@@ -574,7 +602,7 @@ const ReceiptOperation = {
     }
   },
   methods: {
-    onDetail(row) {
+    onDetail (row) {
       this.$router.push('/shipping/orders/' + row.id);
     }
   }
@@ -596,18 +624,18 @@ const ReturnOperation = {
     }
   },
   methods: {
-    onDetail(row) {
+    onDetail (row) {
       this.$router.push('/returned/orders/' + row.id);
     }
   }
 }
 
-//////////////////////////////////////////////////复议
+/// ///////////////////////////////////////////////复议
 
-//复议单号
+// 复议单号
 const ReconsiderOrderCode = {
   template: `
-  <el-table-column label="复议单号" :prop="prop" min-width="120" fiexd :key="sortKey"></el-table-column>
+  <el-table-column label="复议单号" :prop="prop" min-width="120" fiexd :key="sortKey"  fixed="left"></el-table-column>
 `,
   props: {
     prop: {
@@ -617,22 +645,22 @@ const ReconsiderOrderCode = {
     sortKey: {
       default: 10
     }
-  },
+  }
 }
 
-//关联复议单
+// 关联复议单
 const RelationReconsiderOrder = {
   template: `
   <el-table-column label="复议单" min-width="110px" :key="sortKey">
     <template slot-scope="scope">
-      <el-row v-for="item in scope.row.reconsiderSheets">
-        <el-button type="text" @click="onReconsiderDetail(item)" :key="item.id">{{item.code}}</el-button>
+      <el-row v-for="item in scope.row.reconsiderSheets" :key="item.id">
+        <el-button type="text" @click="onReconsiderDetail(item)">{{item.code}}</el-button>
       </el-row>
     </template>
   </el-table-column>
   `,
   methods: {
-    onReconsiderDetail(item) {
+    onReconsiderDetail (item) {
       this.$router.push('/reconsiders/orders/detail/' + item.id);
     }
   },
@@ -643,7 +671,7 @@ const RelationReconsiderOrder = {
   },
 }
 
-//复议数
+// 复议数
 const ReconsiderNum = {
   template: `
   <el-table-column label="复议数" :prop="prop" :key="sortKey"></el-table-column>
@@ -659,6 +687,163 @@ const ReconsiderNum = {
   },
 }
 
+// 合作商-发货
+const ShippingCooperator = {
+  template: `
+    <el-table-column label="合作商" prop="receiveParty.name" :key="sortKey" />
+  `,
+  props: {
+    sortKey: {
+      default: 10
+    }
+  }
+}
+
+// 合作商-收货
+const ReceiptCooperator = {
+  template: `
+    <el-table-column label="合作商" prop="shipParty.name" :key="sortKey" />
+  `,
+  props: {
+    sortKey: {
+      default: 10
+    }
+  }
+}
+
+// 跟单员
+const Merchandiser = {
+  template: `
+    <el-table-column label="跟单员" prop="merchandiser.name" :key="sortKey" />
+  `,
+  props: {
+    sortKey: {
+      default: 10
+    }
+  }
+}
+
+// 退货日期
+const ReturnDate = {
+  template: `
+    <el-table-column label="退货日期" :key="sortKey">
+      <template slot-scope="scope">
+        <span>{{scope.row.creationtime | timestampToTime}}</span>
+      </template>
+    </el-table-column>
+  `,
+  props: {
+    sortKey: {
+      default: 10
+    }
+  }
+}
+
+const DifferentReconsider = {
+  template: `
+    <el-table-column label="差异数/复议数" :key="sortKey" min-width="110px">
+      <template slot-scope="scope">
+        <span>{{getDiffNum(scope.row)}}/{{getReconsiderNum(scope.row)}}</span>
+      </template>
+    </el-table-column>
+  `,
+  props: {
+    diffProp: {
+      type: String,
+      default: 'logisticsSheet.diffQuantity'
+    },
+    reconsiderProp: {
+      type: String,
+      default: 'reconsiderQuantity'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+  methods: {
+    getDiffNum (row) {
+      let num = 0;
+      try {
+        if (eval('row.' + this.diffProp) != null) {
+          num = eval('row.' + this.diffProp);
+        }
+      } catch (e) {
+        // TODO 空值处理
+      }
+      return num;
+    },
+    getReconsiderNum (row) {
+      let num = 0;
+      try {
+        if (eval('row.' + this.reconsiderProp) != null) {
+          num = eval('row.' + this.reconsiderProp);
+        }
+      } catch (e) {
+        // TODO 空值处理
+      }
+      return num;
+    }
+  }
+}
+
+const DifferentReconsiderAdopt = {
+  template: `
+    <el-table-column label="差异数/复议数/通过数" :key="sortKey" min-width="150px">
+      <template slot-scope="scope">
+        <span>{{getDiffNum(scope.row)}}/{{getReconsiderNum(scope.row)}}/{{getAdopt(scope.row)}}</span>
+      </template>
+    </el-table-column>
+  `,
+  props: {
+    diffProp: {
+      type: String,
+      default: 'diffQuantity'
+    },
+    reconsiderProp: {
+      type: String,
+      default: 'reconsiderSheets'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+  methods: {
+    getDiffNum (row) {
+      let num = 0;
+      try {
+        if (eval('row.' + this.diffProp) != null) {
+          num = eval('row.' + this.diffProp);
+        }
+      } catch (e) {
+        // TODO 空值处理
+      }
+      return num;
+    },
+    getReconsiderNum (row) {
+      let result = 0;
+      try {
+        let sheets = eval('row.' + this.reconsiderProp);
+        if (sheets != null) {
+          sheets.forEach(element => {
+            if (element.reconsiderQuantity != null) {
+              let num = parseInt(element.reconsiderQuantity);
+              if (!Number.isNaN(num)) {
+                result += num;
+              }
+            }
+          });
+        }
+      } catch (e) {
+        // TODO 空值处理
+      }
+      return result;
+    },
+    getAdopt (row) {
+      return 0;
+    }
+  }
+}
+
 const ReconsiderOperation = {
   template: `<el-table-column label="操作" fixed="right" :key="sortKey">
   <template slot-scope="scope">
@@ -671,13 +856,13 @@ const ReconsiderOperation = {
     }
   },
   methods: {
-    onDetail(row) {
+    onDetail (row) {
       this.$router.push('/reconsiders/orders/detail/' + row.id);
     }
   }
 }
 
-//退货方
+// 退货方
 const ReturnParty = {
   template: `<el-table-column label="退货方" :prop="prop" :key="sortKey"></el-table-column>`,
   props: {
@@ -691,7 +876,7 @@ const ReturnParty = {
   },
 }
 
-//退货人
+// 退货人
 const ReturnPerson = {
   template: `<el-table-column label="退货人" :prop="prop" :key="sortKey"></el-table-column>`,
   props: {
@@ -702,7 +887,7 @@ const ReturnPerson = {
     sortKey: {
       default: 10
     }
-  },
+  }
 }
 
 // //复议方
@@ -725,6 +910,7 @@ const COMPONENT_NAME_MAP = {
   '关联发货单': 'relation-shipping-order',
   '产品名称': 'product',
   '关联订单': 'relation-order',
+  '关联订单-收货': 'relation-out-order',
   '发货人': 'ship-person',
   '发货方': 'ship-party',
   '单价': 'unit-price',
@@ -744,16 +930,21 @@ const COMPONENT_NAME_MAP = {
   '退货操作': 'return-operation',
   '发货收货数': 'ship-rece-num',
   '收货日期': 'receipt-date',
-  //复议
+  '合作商-发货': 'shipping-cooperator',
+  '合作商-收货': 'receipt-cooperator',
+  '跟单员': 'merchandiser',
+  '退货日期': 'return-date',
+  '差异-复议': 'different-reconsider',
+  '差异-复议-通过': 'different-reconsider-adopt',
+  // 复议
   '复议单号': 'reconsider-order-code',
   '复议数': 'reconsider-num',
   '复议单操作': 'reconsider-operation',
-  '关联复议单':'relation-reconsider-order',
-  //退货
+  '关联复议单': 'relation-reconsider-order',
+  // 退货
   '退货方': 'return-party',
-  '退货人':'return-person'
+  '退货人': 'return-person'
 }
-
 
 export {
   Selection,
@@ -761,6 +952,7 @@ export {
   RelationShippingOrder,
   Product,
   RelationOrder,
+  RelationOutOrder,
   UnitPrice,
   ShipParty,
   ShipPerson,
@@ -786,5 +978,11 @@ export {
   ReturnPerson,
   ReturnNum,
   RelationReconsiderOrder,
+  ShippingCooperator,
+  ReceiptCooperator,
+  Merchandiser,
+  ReturnDate,
+  DifferentReconsider,
+  DifferentReconsiderAdopt,
   COMPONENT_NAME_MAP
 }

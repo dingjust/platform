@@ -2,8 +2,8 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" row-key="id" @selection-change="handleSelectionChange"
       @row-click="rowClick">
-      <el-table-column type="selection" width="55" v-show="hasSelection" fixed key="1"></el-table-column>
-      <shipping-dynamic-table-list :columns="columns" />
+      <!-- <el-table-column type="selection" width="55" v-show="hasSelection" fixed key="1"></el-table-column> -->
+      <shipping-dynamic-table-list :columns="columns" @onProductionDetail="onProductionDetail"/>
     </el-table>
     <div class="pt-2"></div>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
@@ -16,6 +16,7 @@
   import {
     ShippingDynamicTableList
   } from "./shipping-dynamic-table-list";
+  import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
 
   export default {
     name: "ShippingDynamicTable",
@@ -32,7 +33,8 @@
       },
     },
     components: {
-      ShippingDynamicTableList
+      ShippingDynamicTableList,
+      ProductionOrderDetail
     },
     computed: {
       //是否有多选项
@@ -80,7 +82,7 @@
             this.$refs.resultTable.toggleRowSelection(row, true);
           }
         }
-      },
+      }
     },
     data() {
       return {
