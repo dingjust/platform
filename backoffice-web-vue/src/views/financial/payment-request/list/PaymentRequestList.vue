@@ -1,19 +1,16 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" highlight-current-row :height="autoHeight">
-      <el-table-column label="外接订单号" prop="code"/>
-      <el-table-column label="合同号" />
-      <el-table-column label="关联SKU数" />
-      <el-table-column label="订单数量" />
-      <el-table-column label="创建人" prop="creator.name" />
-      <el-table-column label="负责人" prop="merchandiser.name" />
-      <el-table-column label="创建时间">
+      <el-table-column label="申请单号" prop="code"/>
+      <el-table-column label="关联订单" />
+      <el-table-column label="付款内容" prop="paymentFor"/>
+      <el-table-column label="申请金额" prop="requestAmount"/>
+      <el-table-column label="收款对象" prop="creator.name" />
+      <el-table-column label="状态">
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | timestampToTime}}</span>
+          <span>{{getEnum('PaymentRequestState', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签" />
-      <el-table-column label="状态" />
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>

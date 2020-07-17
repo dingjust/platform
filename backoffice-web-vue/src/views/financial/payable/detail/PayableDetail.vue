@@ -54,6 +54,12 @@
         }
         this.formData = result.data;
       },
+      callback () {
+        this.getDetail();
+      },
+      onConfirmReceipt (row) {
+        this.$message('确认收款');
+      },
       setPayPlan (payPlan) {
         this.payPlan.name = payPlan.name;
         this.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
@@ -84,12 +90,6 @@
               break;
           }
         });
-      },
-      callback () {
-        this.getDetail();
-      },
-      onConfirmReceipt (row) {
-        this.$message('确认收款');
       }
     },
     data () {

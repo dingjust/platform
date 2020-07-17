@@ -77,14 +77,14 @@
               <h6 style="margin-left: 20px">备注旷小勇 旷小勇</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
+          <!-- <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
             <el-col :span="8">
               <h6>上传凭证</h6>
               <el-row style="margin-left: 20px">
                 <images-upload :slotData="formData.media"></images-upload>
               </el-row>
             </el-col>
-          </el-row>
+          </el-row> -->
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
@@ -120,6 +120,19 @@
       }
     },
     methods: {
+      async getDetail () {
+        const url = this.apis().getPaymentRequestDetail(this.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.formData = result.data;
+      },
       onConfirm () {
 
       }
@@ -133,6 +146,7 @@
       }
     },
     created () {
+      this.getDetail();
     },
     destroyed () {
       
