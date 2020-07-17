@@ -2,37 +2,38 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :height="autoHeight">
-      <el-table-column label="销售订单号" min-width="130">
+      <el-table-column label="主订单号" prop="code" min-width="130" v-if="!isPending"/>
+      <el-table-column label="订单号" min-width="130" v-if="isPending">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
-            <el-tag type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
-              {{getEnum('SalesProductionOrderType', scope.row.type)}}</el-tag>
+            <el-tag type="info" effect="plain" :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
+              {{scope.row.originCompany == null ? '业务订单' : '线上接单'}}</el-tag>
           </el-row>
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="客户">
+      <el-table-column label="客户" v-if="isPending">
         <template slot-scope="scope">
-          <span>{{getCustName(scope.row)}}</span>
+          <span>{{cooperatorName(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建人" prop="creator.name">
       </el-table-column>
-      <el-table-column label="生产负责人" prop="productionLeader.name">
+      <el-table-column label="生产负责人" prop="productionLeader.name" v-if="!isPending">
       </el-table-column>
       <el-table-column label="创建日期">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="审批状态">
+      <el-table-column label="审批状态" v-if="isPending">
         <template slot-scope="scope">
           <span>{{scope.row.auditState!=null? getEnum('SalesProductionAuditStatus', scope.row.auditState):''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="status">
+      <el-table-column label="订单状态" v-if="!isPending">
         <template slot-scope="scope">
           <span>{{getEnum('SalesProductionOrderState', scope.row.state)}}</span>
         </template>
@@ -70,13 +71,28 @@
 
   export default {
     name: 'SalesProductionList',
-    props: ['page'],
+    props: {
+      page: {
+        type: Object
+      },
+      isPending: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {},
     computed: {},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
+      cooperatorName (row) {
+        if (row.originCompany != null) {
+          return row.originCompany.name;
+        } else {
+          return row.originCooperator.type == 'ONLINE' ? row.originCooperator.partner.name : row.originCooperator.name;
+        }
+      },
       getCustName(row) {
         if (row.originCooperator != null) {
           if (row.originCooperator.type == 'ONLINE') {
@@ -219,4 +235,13 @@
     overflow: hidden;
   }
 
+  .pending-tag {
+    color: #67c23a;
+    border-Color: #67c23a
+  }
+
+  .business-tag {
+    color: #ffd60c;
+    border-Color: #ffd60c
+  }
 </style>

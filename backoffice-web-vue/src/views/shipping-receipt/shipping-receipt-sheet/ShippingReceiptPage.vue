@@ -18,7 +18,7 @@
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,status) in statusMap">
-        <el-tab-pane :label="getEnum('ShippingSheetState', map.status)" :name="status" :key="status">
+        <el-tab-pane :label="tabName(map)" :name="status" :key="status">
           <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch" />
         </el-tab-pane>
       </template>
@@ -108,6 +108,8 @@
       },
       onAdvancedSearch(page, size) {
         this.$emit('onAdvancedSearch');
+        this.shippingOrderStateCount();
+        this.reconsiderOrderStateCount();
       },
       // 创建发货单
       onCreateReceiptOrder() {
@@ -119,10 +121,69 @@
             }
           }
         });
+      },
+      tabName (map) {
+        if (map.url == '/b2b/sheets/shipping' && this.stateCount.shipping.hasOwnProperty(map.status)) {
+          return this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] + ')';
+        }
+        if (map.url == '/b2b/sheets/reconsider' && this.stateCount.reconsider.hasOwnProperty(map.status)) {
+          return this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.reconsider[map.status] + ')';
+        }
+        return this.getEnum('ShippingSheetState', map.status);
+      },
+      // 查询发货单状态统计
+      async shippingOrderStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().shippingOrderStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.stateCount = {};
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this.stateCount, 'shipping', result.data);
+      },
+      // 查询复议单状态统计
+      async reconsiderOrderStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().reconsiderOrderStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this.stateCount, 'reconsider', result.data);
       }
     },
     data() {
       return {
+        stateCount: {
+          shipping: {},
+          reconsider: {}
+        },
         activeName: 'PENDING_RECEIVED',
         shippingListVisible: false,
         receiptListVisible: false,
@@ -130,6 +191,10 @@
         reconsiderListVisible: false,
       }
     },
+    created () {
+      this.shippingOrderStateCount();
+      this.reconsiderOrderStateCount();
+    }
   }
 
 </script>

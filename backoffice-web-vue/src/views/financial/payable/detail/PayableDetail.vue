@@ -9,10 +9,10 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <financial-order-info :payPlan="payPlan" :formData="form"/>
-      <financial-invoice-info @uploadInvoice="uploadInvoice" :formData="form" />
-      <financial-reconciliation-table :formData="form"/>
-      <financial-record-list :belongTo="'PAYABLE_PAGE'" :formData="form" 
+      <financial-order-info :payPlan="payPlan" :formData="formData"/>
+      <financial-invoice-info :formData="formData" @callback="callback" />
+      <financial-reconciliation-table />
+      <financial-record-list :belongTo="'PAYABLE_PAGE'" :formData="formData" 
                               @onConfirmReceipt="onConfirmReceipt"/>
     </el-card>
   </div>
@@ -36,15 +36,23 @@
       FinancialInvoiceInfo
     },
     computed: {
+      payPlan: function () {
+        return this.payPlanData;
+      }
     },
     methods: {
-      getDetail () {
-        this.$message(this.id);
-        this.setPayPlan(this.form.payPlan);
-      },
-      uploadInvoice (data) {
-        // TODO 上传发票
-        this.getDetail();
+      async getDetail () {
+        const url = this.apis().getPaymentDetail(this.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.formData = result.data;
       },
       setPayPlan (payPlan) {
         this.payPlan.name = payPlan.name;
@@ -77,75 +85,25 @@
           }
         });
       },
+      callback () {
+        this.getDetail();
+      },
       onConfirmReceipt (row) {
         this.$message('确认收款');
       }
     },
     data () {
       return {
-        form: {
-          invoice: [
-            {
-              "id": 8861252485150,
-              "name": "微信截图_20200522095051.png",
-              "url": "/resource/hdd/h5a/8861252517918.png",
-              "mediaType": "image/png",
-              "mime": "image/png",
-              "mediaFormat": "DefaultImageFormat",
-              "convertedMedias": []
-            }
-          ],
-          payPlan: {
-          "id": 8802909289737,
-          "name": "",
-          "payPlanType": "PHASEONE",
-          "isHaveDeposit": false,
-          "payPlanItems": [{
-              "id": 8802679913748,
-              "creationtime": 1594262932000,
-              "modifiedtime": 1594262932000,
-              "payPercent": 1,
-              "triggerEvent": "ORDER_CONFIRMED",
-              "triggerDays": 5,
-              "moneyType": "PHASEONE",
-              "triggerType": "INSIDE"
-            }
-          ]},
-          productionOrder: [{
-            id: 1,
-            code: 'KY00001-01',
-            reconciliationOrder: [{
-              id: 101,
-              code: 'KY00001-01-01',
-              amount: 12000,
-              deposit: 6000,
-              paymentReceived: 9000
-            }, {
-              id: 102,
-              code: 'KY00001-01-02',
-              amount: 12000,
-              deposit: 6000,
-              paymentReceived: 9000
-            }]
-          }, {
-            id: 2,
-            code: 'KY00001-01',
-            reconciliationOrder: [{
-              id: 201,
-              code: 'KY00001-02-01',
-              amount: 12000,
-              deposit: 6000,
-              paymentReceived: 9000
-            }, {
-              id: 202,
-              code: 'KY00001-02-02',
-              amount: 12000,
-              deposit: 6000,
-              paymentReceived: 9000
-            }]
-          }]
+        formData: {
+          productionOrder: {
+            productionLeader: {},
+            originCooperator: {},
+            targetCooperator: {},
+            merchandiser: {}
+          },
+          productionTaskList: []
         },
-        payPlan: {
+        payPlanData: {
           deposit: {},
           balance1: {},
           balance2: {},

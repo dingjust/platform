@@ -21,6 +21,14 @@
             :autosize="{ minRows: 4, maxRows: 6 }" />
         </el-col>
       </el-row>
+      <div style="padding-left: 10px;margin-top: 20px">
+        <el-row v-if="isPayment && formData.payPlan != null">
+          <purchase-order-info-payment-finance :slotData="formData" />
+        </el-row>
+        <el-row v-if="isReceipt && formData.payPlan != null">
+          <purchase-order-info-receipt-finance :slotData="formData" />
+        </el-row>
+      </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">
         <el-button class="purchase-order-btn2" @click="onGenerateUniqueCode" v-if="canGenerate">唯一码</el-button>
         <el-button class="purchase-order-btn2" @click="onCancel" v-if="this.formData.status != ''">取消订单</el-button>
@@ -53,6 +61,8 @@
     'OutboundOrderModule'
   );
 
+  import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
+  import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
   import OutboundOrderTopInfo from '../form/OutboundOrderTopInfo';
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
@@ -65,7 +75,9 @@
       OutboundOrderCenterTable,
       OutboundOrderTopInfo,
       UniqueCodeGenerateForm,
-      SalesProductionTabs
+      SalesProductionTabs,
+      PurchaseOrderInfoPaymentFinance,
+      PurchaseOrderInfoReceiptFinance
     },
     computed: {
       ...mapGetters({
@@ -93,6 +105,12 @@
         // 订单审核状态在审核中且登陆账号为审核人
         return this.formData.sendAuditState == 'AUDITING' && 
           this.formData.sendApprovers[0].uid == this.$store.getters.currentUser.uid;
+      },
+      isPayment: function () {
+        return this.$store.getters.currentUser.companyCode == this.formData.originCooperator.partner.uid;
+      },
+      isReceipt: function () {
+        return this.$store.getters.currentUser.companyCode == this.formData.targetCooperator.partner.uid;
       }
     },
     methods: {

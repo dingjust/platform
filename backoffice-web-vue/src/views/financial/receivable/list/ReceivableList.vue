@@ -5,6 +5,7 @@
       <el-table-column label="合同号" />
       <el-table-column label="关联SKU数" />
       <el-table-column label="订单数量" />
+      <el-table-column label="合作商" />
       <el-table-column label="创建人" prop="creator.name" />
       <el-table-column label="负责人" prop="merchandiser.name" />
       <el-table-column label="创建时间">
@@ -12,7 +13,6 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签" />
       <el-table-column label="状态" />
       <el-table-column label="操作">
         <template slot-scope="scope">

@@ -7,18 +7,18 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="11">
-            <h6>合作方式：包工包料</h6>
+            <h6>合作方式：{{getEnum('machiningTypes', formData.productionOrder.cooperationMode)}}</h6>
           </el-col>
           <el-col :span="8">
-            <h6>是否开发票：是</h6>
+            <h6>是否开发票：{{formData.invoiceNeeded ? '是' : '否'}}</h6>
           </el-col>
-          <el-col :span="5">
-            <h6>税率：15%</h6>
+          <el-col :span="5" v-if="formData.invoiceNeeded">
+            <h6>税率：{{formData.invoiceTaxPoint}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="11">
-            <h6>订单数量：80000</h6>
+            <h6>订单数量：{{productionCount}}</h6>
           </el-col>
           <el-col :span="12">
             <h6>订单总金额(元)：120000</h6>
@@ -46,10 +46,12 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6>联系人：马化腾</h6>
+            <h6>联系人：{{formData.productionOrder.targetCooperator.type == 'ONLINE' ? 
+              formData.productionOrder.targetCooperator.partner.contactPerson : formData.productionOrder.targetCooperator.contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：66666666666</h6>
+            <h6>联系方式：{{formData.productionOrder.targetCooperator.type == 'ONLINE' ? 
+              formData.productionOrder.targetCooperator.partner.contactPhone : formData.productionOrder.targetCooperator.contactPhone}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
@@ -57,21 +59,21 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6>订单创建人：马化腾</h6>
+            <h6>订单创建人：</h6>
           </el-col>
           <el-col :span="12">
-            <h6>生产负责人：马化腾</h6>
+            <h6>生产负责人：{{formData.productionOrder.productionLeader.name}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6>审批负责人：马化腾</h6>
+            <h6>审批负责人：{{formData.productionOrder.merchandiser.name}}</h6>
           </el-col>
         </el-row>
       </div>
       <div style="margin-left: 10px"></div>
       <div class="financial-border-container financial-info-two">
-        <contract-com :slotData="form" :contracts="[]" :canSign="true"/>
+        <contract-com :slotData="formData" :contracts="[]" :canSign="canSign"/>
       </div>
     </div>
   </div>
@@ -82,12 +84,22 @@
   import {PayPlanInfo} from '@/components/index.js'
   export default {
     name: 'FinancialOrderInfo',
-    props: ['form', 'payPlan'],
+    props: ['formData', 'payPlan'],
     components: {
       PayPlanInfo,
       ContractCom
     },
     computed: {
+      productionCount: function () {
+        let count = 0;
+        this.formData.productionTaskList.forEach(item => {
+          count += item.quantity;
+        })
+        return count;
+      },
+      canSign: function () {
+        return false;
+      }
     },
     methods: {
     },

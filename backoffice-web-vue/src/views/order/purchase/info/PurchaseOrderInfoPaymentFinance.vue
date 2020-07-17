@@ -1,7 +1,7 @@
 <template>
   <div class="info-finance-body">
     <el-row type="flex" justify="space-between" align="middle" class="info-finance-body-title-row">
-      <div class="info-title">
+      <div class="info-title" style="margin-bottom: 10px">
         <h6 class="info-title_text">账务（当前选用“森马”账务方案）</h6>
       </div>
     </el-row>
@@ -10,7 +10,7 @@
       <el-button class="info-finance-logistics_info-btn1" @click="financePaymentVisible=!financePaymentVisible">
         查看付款单</el-button>
     </el-row>
-    <el-row style="margin-top:10px;">
+    <el-row style="margin-top: 25px;">
       <el-timeline>
         <el-timeline-item placement="bottom" v-for="(payPlanItem, index) in payPlanItems" :key="index"
           :color="index==0?'#FFD60C':'#E4E7ED'" :hide-timestamp="true">
@@ -96,8 +96,10 @@
       paymentOrders: function () {
         var result = [];
         for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
-          for (var receipt of payPlanItem.paymentOrders) {
-            result.push(receipt);
+          if (payPlanItem.paymentOrders != null) {
+            for (var receipt of payPlanItem.paymentOrders) {
+              result.push(receipt);
+            }
           }
         }
 
@@ -192,16 +194,23 @@
 
 </script>
 <style>
+  .info-title {
+    width: 100%;
+    border-left: 2px solid #FFD60C;
+    padding-left: 10px;
+    height: 14px;
+  }
+
   .info-finance-body {
     width: 100%;
-    margin-top: 20px;
+    /* margin-top: 20px; */
   }
 
   .finance-log-content {
     font-weight: 500;
     color: rgba(0, 0, 0, 0.45);
     font-size: 10px;
-    margin-top: 10px;
+    /* margin-top: 10px; */
   }
 
   .info-finance-btn {
@@ -251,10 +260,11 @@
     font-weight: 400;
     color: rgba(0, 0, 0, 0.85);
     font-size: 10px;
-    border-radius: 0px;
+    border-radius: 2px;
     text-align: center;
     border: 0px solid #FFD60C;
     padding-bottom: 15px;
+    line-height: 7px;
   }
 
   .info-finance-logistics_info-btn3 {

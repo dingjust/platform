@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="4">
           <div class="sales-list-title">
-            <h6>订单列表</h6>
+            <h6>企划订单列表</h6>
           </div>
         </el-col>
       </el-row>

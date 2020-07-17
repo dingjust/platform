@@ -1,6 +1,6 @@
 <template>
     <div class="tree-container">
-      <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent='0'class="tree filter-tree">
+      <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent='0' class="tree filter-tree">
         <span class="custom-tree-node" slot-scope="{ node, data }" @click="searchOnDept(data)">
           <span v-if="data.name !== name || !showInput" @dblclick="dblclick(data)"
                 @mouseover="onActive(data)" @mouseleave="offActive"

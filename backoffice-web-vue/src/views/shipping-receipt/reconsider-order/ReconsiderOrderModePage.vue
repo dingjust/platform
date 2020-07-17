@@ -8,7 +8,7 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <reconsider-orders-page :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
+    <reconsider-orders-page :page="page" :queryFormData="queryFormData" @onSearch="onSearch" :mode="mode"
       currentState="IN_RECONSIDER" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick"
       :statusMap="statusMap" />
   </div>

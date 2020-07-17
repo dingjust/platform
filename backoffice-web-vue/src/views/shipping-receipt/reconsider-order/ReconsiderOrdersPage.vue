@@ -13,7 +13,7 @@
     <!-- </div> -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,states) in statusMap">
-        <el-tab-pane :label="getEnum('ShippingSheetState', map.states)" :name="states" :key="states">
+        <el-tab-pane :label="tabName(map)" :name="states" :key="states">
           <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch"
             @onSelect="onSelect" />
         </el-tab-pane>
@@ -52,6 +52,10 @@
       canReconsider: {
         type: Boolean,
         default: true
+      },
+      mode: {
+        type: String, 
+        default: 'import'
       }
     },
     components: {
@@ -79,6 +83,8 @@
       },
       onAdvancedSearch(page, size) {
         this.$emit("onAdvancedSearch");
+        this.shippingOrderStateCount();
+        this.reconsiderOrderStateCount();
       },
       onApply() {},
       onDetail() {},
@@ -92,13 +98,73 @@
         } else {
           this.$message("请选择发货单复议");
         }
+      },
+      tabName (map) {
+        if (map.url == '/b2b/sheets/shipping' && this.stateCount.shipping.hasOwnProperty(map.states)) {
+          return this.getEnum('ShippingSheetState', map.states) + '(' + this.stateCount.shipping[map.states] + ')';
+        }
+        if (map.url == '/b2b/sheets/reconsider' && this.stateCount.reconsider.hasOwnProperty(map.states)) {
+          return this.getEnum('ShippingSheetState', map.states) + '(' + this.stateCount.reconsider[map.states] + ')';
+        }
+        return this.getEnum('ShippingSheetState', map.states);
+      },
+      // 查询发货单状态统计
+      async shippingOrderStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().shippingOrderStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.stateCount = {};
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this.stateCount, 'shipping', result.data);
+      },
+      // 查询复议单状态统计
+      async reconsiderOrderStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().reconsiderOrderStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this.stateCount, 'reconsider', result.data);
       }
     },
     created() {
-
+      this.shippingOrderStateCount();
+      this.reconsiderOrderStateCount();
     },
     data() {
       return {
+        stateCount: {
+          shipping: {},
+          reconsider: {}
+        },
         activeName: this.currentState,
         selectedData: ""
       };

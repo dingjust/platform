@@ -4,13 +4,13 @@
       <el-row>
         <el-col :span="4">
           <div class="title">
-            <h6>收发任务</h6>
+            <h6>发货任务</h6>
           </div>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
       <shipping-tasks-page :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onAdvancedSearch="onAdvancedSearch" />
+        @onAdvancedSearch="onAdvancedSearch" mode="import"/>
     </el-card>
   </div>
 </template>

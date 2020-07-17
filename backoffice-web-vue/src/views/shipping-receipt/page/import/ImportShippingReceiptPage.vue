@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="4">
           <div class="title">
-            <h6>收发货列表</h6>
+            <h6>发货管理</h6>
           </div>
         </el-col>
       </el-row>

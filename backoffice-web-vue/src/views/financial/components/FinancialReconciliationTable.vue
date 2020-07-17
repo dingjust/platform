@@ -41,7 +41,7 @@
 <script>
   export default {
     name: 'FinancialReconciliationTable',
-    props: ['formData'],
+    props: [],
     components: {
     },
     computed: {
@@ -66,7 +66,42 @@
     },
     data () {
       return {
-        titleRow: ['生产工单号', '对账单号', '对账金额', '定金', '已付款', '应收总额', '已收总额', '未收总额']
+        titleRow: ['生产工单号', '对账单号', '对账金额', '定金', '已付款', '应收总额', '已收总额', '未收总额'],
+        formData: {
+          productionOrder: [{
+            id: 1,
+            code: 'KY00001-01',
+            reconciliationOrder: [{
+              id: 101,
+              code: 'KY00001-01-01',
+              amount: 12000,
+              deposit: 6000,
+              paymentReceived: 9000
+            }, {
+              id: 102,
+              code: 'KY00001-01-02',
+              amount: 12000,
+              deposit: 6000,
+              paymentReceived: 9000
+            }]
+          }, {
+            id: 2,
+            code: 'KY00001-01',
+            reconciliationOrder: [{
+              id: 201,
+              code: 'KY00001-02-01',
+              amount: 12000,
+              deposit: 6000,
+              paymentReceived: 9000
+            }, {
+              id: 202,
+              code: 'KY00001-02-02',
+              amount: 12000,
+              deposit: 6000,
+              paymentReceived: 9000
+            }]
+          }]
+        }
       }
     },
     created () {
