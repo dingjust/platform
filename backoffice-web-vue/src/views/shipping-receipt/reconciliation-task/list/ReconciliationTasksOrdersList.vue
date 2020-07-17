@@ -45,11 +45,11 @@
               <el-button type="text" @click="onReconciliationDetail(scope.row.id)">{{scope.row.code}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="对账数量"></el-table-column>
-          <el-table-column label="对账金额"></el-table-column>
-          <el-table-column label="扣款金额"></el-table-column>
-          <el-table-column label="增款金额"></el-table-column>
-          <el-table-column label="实付金额"></el-table-column>
+          <el-table-column label="对账数量" prop="reconciliationQuantity"></el-table-column>
+          <el-table-column label="对账金额" prop="reconciliationAmount"></el-table-column>
+          <el-table-column label="扣款金额" prop="deductionAmount"></el-table-column>
+          <el-table-column label="增款金额" prop="increaseAmount"></el-table-column>
+          <el-table-column label="实付金额" prop="amountDue"></el-table-column>
           <el-table-column label="状态">
             <template slot-scope="scope">
               <span>{{getEnum('ReconciliationOrderState',scope.row.state)}}</span>
@@ -86,8 +86,7 @@
       ShippingOrdersDetail,
       ReconciliationOrdersDetail
     },
-    computed: {
-    },
+    computed: {},
     methods: {
       onShipDetail(id) {
         this.$set(this, 'shipId', id);
@@ -118,8 +117,8 @@
         return result;
       },
       //赠款
-      totalIncrease(row){
-        if(row.increases!=null){
+      totalIncrease(row) {
+        if (row.increases != null) {
 
         }
       }

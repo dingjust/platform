@@ -18,19 +18,19 @@
     </div>
     <el-row type="flex" justify="end" align="middle" style="margin-top: 20px">
       <el-col :span="4">
-        <h6>订单总额：20000000.00</h6>
+        <h6>订单总额：{{orderTotalAmount}}</h6>
       </el-col>
       <el-col :span="4">
-        <h6>实收总额：20000000.00</h6>
+        <h6>实收总额：{{receiveTotalAmount}}</h6>
       </el-col>
       <el-col :span="4">
-        <h6>累计扣款：20000000.00</h6>
+        <h6>累计扣款：{{reconciliationAmountObj.deAmount}}</h6>
       </el-col>
       <el-col :span="4">
-        <h6>累计增款：20000000.00</h6>
+        <h6>累计增款：{{reconciliationAmountObj.inAmount}}</h6>
       </el-col>
       <el-col :span="4">
-        <h6>实付总额：20000000.00</h6>
+        <h6>实付总额：{{reconciliationAmountObj.payAmount}}</h6>
       </el-col>
     </el-row>
   </div>
@@ -65,6 +65,58 @@
           return [];
         }
       },
+      //订单总额
+      orderTotalAmount: function () {
+        let result = 0;
+        if (this.formData.productionTaskOrder) {
+          result = this.formData.productionTaskOrder.unitPrice * this.formData.productionTaskOrder.totalQuantity;
+        }
+        return result.toFixed(2);
+      },
+      //实收总额(收货数X单价)
+      receiveTotalAmount: function () {
+        let totalQuantity = 0;
+        let unitPrice = 0;
+        if (this.formData.productionTaskOrder) {
+          unitPrice = this.formData.productionTaskOrder.unitPrice;
+        }
+        if (this.formData.shippingSheets) {
+          this.formData.shippingSheets.forEach(sheet => {
+            if (sheet.receiptSheets) {
+              sheet.receiptSheets.forEach(element => {
+                totalQuantity += element.totalQuantity;
+              });
+            }
+          });
+        }
+        return (totalQuantity * unitPrice).toFixed(2);
+      },
+      //对账款项
+      reconciliationAmountObj: function () {
+        let deductResult = 0;
+        let increaseResult = 0;
+        let payResult = 0;
+
+        if (this.formData.reconciliationSheets) {
+          this.formData.reconciliationSheets.forEach(sheet => {
+            if (sheet.deductionAmount) {
+              deductResult += sheet.deductionAmount
+            }
+
+            if (sheet.increaseAmount) {
+              increaseResult += sheet.increaseAmount;
+            }
+            if (sheet.amountDue) {
+              payResult += sheet.amountDue;
+            }
+          });
+        }
+        return {
+          deAmount: deductResult.toFixed(2),
+          inAmount: increaseResult.toFixed(2),
+          payAmount: payResult.toFixed(2)
+        };
+      }
     },
     methods: {
       //获取实裁数量entry（报单行color,size是Sring类型）
