@@ -4,6 +4,7 @@ import {
   RelationShippingOrder,
   Product,
   RelationOrder,
+  RelationOutOrder,
   UnitPrice,
   ShipParty,
   ShipPerson,
@@ -29,15 +30,21 @@ import {
   ReturnPerson,
   ReturnNum,
   RelationReconsiderOrder,
+  ShippingCooperator,
+  ReceiptCooperator,
+  Merchandiser,
+  ReturnDate,
+  DifferentReconsider,
+  DifferentReconsiderAdopt,
   COMPONENT_NAME_MAP
-} from "./table-constants";
+} from './table-constants';
 
 const ShippingDynamicTableList = {
   props: {
     columns: {
       type: Array,
       default: () => {
-        return ["发货单号", "产品名称", "关联订单"];
+        return ['发货单号', '产品名称', '关联订单'];
       }
     }
   },
@@ -47,6 +54,7 @@ const ShippingDynamicTableList = {
     RelationShippingOrder,
     Product,
     RelationOrder,
+    RelationOutOrder,
     UnitPrice,
     ShipParty,
     ShipPerson,
@@ -72,15 +80,20 @@ const ShippingDynamicTableList = {
     ReturnPerson,
     ReturnNum,
     RelationReconsiderOrder,
+    ShippingCooperator,
+    ReceiptCooperator,
+    Merchandiser,
+    ReturnDate,
+    DifferentReconsider,
+    DifferentReconsiderAdopt,
     COMPONENT_NAME_MAP
   },
   render: function (createElement) {
     return createElement(
-      
-      'template', this.columns.map((entry,index) => {
+      'template', this.columns.map((entry, index) => {
         let props = entry.props != null ? entry.props : {};
-        props['sortKey']=index;
-        //增加排序
+        props['sortKey'] = index;
+        // 增加排序
         return createElement(COMPONENT_NAME_MAP[entry.key], {
           props: props
         });

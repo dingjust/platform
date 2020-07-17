@@ -24,7 +24,7 @@
           </el-button-group>
         </el-col>
         <el-col :span="2">
-          <el-button class="create-btn" @click="onCreate" v-if="canCreateReceipt">创建收货单</el-button>
+          <!-- <el-button class="create-btn" @click="onCreate" v-if="canCreateReceipt">创建收货单</el-button> -->
         </el-col>
       </el-row>
     </el-form>
