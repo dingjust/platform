@@ -906,10 +906,12 @@ const router = new Router({
           }, {
             path: 'create/orders',
             name: '创建对账单',
+            props:true,
             component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/reconciliation-order/form/ReconciliationOrdersForm')
           }, {
             path: 'orders/:id',
             name: '对账单详情',
+            props:true,
             component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/reconciliation-order/details/ReconciliationOrdersDetail')
           }, {
             path: 'tasks/export',

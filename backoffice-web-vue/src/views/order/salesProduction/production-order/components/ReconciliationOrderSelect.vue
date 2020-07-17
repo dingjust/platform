@@ -10,7 +10,7 @@
     <el-row>
       <el-col :span="4">
         <div class="orders-list-title">
-          <h6>待对账外发工单</h6>
+          <h6>待对账工单</h6>
         </div>
       </el-col>
     </el-row>
@@ -30,7 +30,7 @@
   import ProductionOrderToolbar from '../toolbar/ProductionOrderToolbar';
 
   export default {
-    name: 'ExportOrderSelect',
+    name: 'ReconciliationOrderSelect',
     components: {
       OrderSelectList,
       ProductionOrderToolbar
@@ -40,7 +40,7 @@
       async onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
-        const url = this.apis().getoutboundProductionList();
+        const url = this.apis().getProductionOrders();
         const result = await this.$http.post(url, query, {
           page: page,
           size: size
@@ -53,7 +53,7 @@
       },
       async onAdvancedSearch(page, size) {
         const query = this.queryFormData;
-        const url = this.apis().getoutboundProductionList();
+        const url = this.apis().getProductionOrders();
         const result = await this.$http.post(url, query, {
           page: page,
           size: size

@@ -16,19 +16,21 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <reconciliation-tasks-page :page="page" :queryFormData="queryFormData" :canCreate="true"
-            @onCreate="onCreate" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
+      <reconciliation-tasks-page :page="page" :queryFormData="queryFormData" :canCreate="true" @onCreate="onCreate"
+        @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
     </el-card>
   </div>
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
   const {
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    'ReconciliationTasksModule'
+    'ExportReconciliationModule'
   );
 
   import ReconciliationTasksPage from '../../reconciliation-task/ReconciliationTasksPage'
@@ -52,10 +54,10 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         // TODO 查询外发的收发任务
         const keyword = this.keyword;
-        const url = this.apis().getProductionTaskList();
+        const url = this.apis().reconciliationTaskList();
         this.search({
           url,
           keyword,
@@ -63,30 +65,38 @@
           size
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         // TODO 查询外发的收发任务
         const query = this.queryFormData;
-        const url = this.apis().getProductionTaskList();
-        this.searchAdvanced({url, query, page, size});
+        const url = this.apis().reconciliationTaskList();
+        const companyCode = this.currentUser.companyCode;
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size,
+          companyCode
+        });
       },
-      onCreate () {
+      onCreate() {
         // TODO 创建对账单
       }
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         queryFormData: {
           keyword: '',
           productionLeaderName: '',
           operatorName: '',
           creationtimeStart: '',
           creationtimeEnd: '',
-          status: ''
+          state: 'PENDING_RECONCILIATION'
         }
       }
     },
     created() {
-      this.onSearch();
+      this.onAdvancedSearch();
     },
     destroyed() {
 

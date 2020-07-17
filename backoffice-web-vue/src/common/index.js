@@ -1286,7 +1286,7 @@ let NONE_TENANT_APIS = {
 
   // 发货完结
   shippingFinish(id) {
-    return '/b2b/sheets/receivedispatch/finishDelivery/'+id;
+    return '/b2b/sheets/receivedispatch/finishDelivery/' + id;
   },
 
   // 发货单详情
@@ -1358,7 +1358,45 @@ let NONE_TENANT_APIS = {
   //拒绝复议单
   rejectReconsider(id) {
     return '/b2b/sheets/reconsider/reject/' + id;
-  }
+  },
+
+  //==========================================对账单
+
+  //对账任务列表
+  reconciliationTaskList() {
+    return '/b2b/sheets/reconciliation_task';
+  },
+
+  //对账任务详情
+  reconciliationTaskDetail(id) {
+    return '/b2b/sheets/reconciliation_task/' + id;
+  },
+
+  //创建对账单
+  reconciliationCreate() {
+    return '/b2b/sheets/reconciliation/create';
+  },
+
+  //对账单列表
+  reconciliationList() {
+    return '/b2b/sheets/reconciliation/';
+  },
+
+  //对账详情
+  reconciliationDetail(id) {
+    return '/b2b/sheets/reconciliation/' + id;
+  },
+
+  //确认对账
+  reconciliationAccept(id) {
+    return '/b2b/sheets/reconciliation/confirm/' + id;
+  },
+
+  //拒绝对账
+  reconciliationReject(id) {
+    return '/b2b/sheets/reconciliation/reject/' + id;
+  },
+
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

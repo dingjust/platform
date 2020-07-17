@@ -1,8 +1,7 @@
 <template>
   <div class="table-container">
-    <el-table ref="table" :data="reconciliationShippingOrders" style="width: 100%"
-      @selection-change="handleSelectionChange" show-summary :summary-method="getSummaries">
-      <el-table-column type="selection" width="55" v-if="!readOnly"></el-table-column>
+    <el-table ref="table" :data="formData.shippingSheets" style="width: 100%" show-summary
+      :summary-method="getSummaries">
       <el-table-column label="发货单号" prop="code"></el-table-column>
       <el-table-column label="发货数" prop="totalQuantity"></el-table-column>
       <el-table-column label="收货单">
@@ -33,34 +32,19 @@
 
 <script>
   export default {
-    name: 'ReconciliationShippingOrdersList',
+    name: 'ShippingOrdersList',
     props: {
       formData: {
         type: Object,
         required: true
       },
-      readOnly: {
-        type: Boolean,
-        default: false
-      }
     },
     components: {
 
     },
-    computed: {
-      //筛选待对账发货单
-      reconciliationShippingOrders: function () {
-        let data = this.formData.shippingTask.shippingSheets.filter(sheet => sheet.state == 'PENDING_RECONCILED');
-        if (data != null && data.length > 0) {
-          return data;
-        } else {
-          return [];
-        }
-      }
-    },
+    computed: {},
     methods: {
       handleSelectionChange(selectionList) {
-
         this.$set(this.formData, 'shippingSheets', selectionList);
       },
       onReceiptDetail(item) {
@@ -102,28 +86,31 @@
             return;
           }
           //合计选中收货总数
-          if (index === 5) {
+          if (index === 4) {
             let result = 0;
-            this.formData.shippingSheets.forEach(element => {
-              element.receiptSheets.forEach(entry => {
-                let num = parseInt(entry.totalQuantity);
-                if (!Number.isNaN(num)) {
-                  result += num;
+            if (this.formData.shippingSheets) {
+              this.formData.shippingSheets.forEach(element => {
+                if (element.receiptSheets != null) {
+                  element.receiptSheets.forEach(entry => {
+                    let num = parseInt(entry.totalQuantity);
+                    if (!Number.isNaN(num)) {
+                      result += num;
+                    }
+                  })
                 }
-              })
-            });
+              });
+            }
             sums[index] = result;
 
             //总额
             let unitPrice = 0;
-            if (this.formData.productionTaskOrder.unitPrice) {
+            if (this.formData.productionTaskOrder && this.formData.productionTaskOrder.unitPrice) {
               unitPrice = this.formData.productionTaskOrder.unitPrice;
             }
             sums[index + 1] = result * unitPrice;
             return;
           }
         });
-
         return sums;
       }
     },

@@ -1714,7 +1714,12 @@ const state = {
     }, {
       code: 'RECONSIDER_EXPIRED',
       name: '复议过期'
-    }, {
+    },
+    {
+      code: 'IN_RECONCILED',
+      name: '对账中'
+    },
+    {
       code: 'COMPLETED',
       name: '已完成'
     },
@@ -1729,9 +1734,6 @@ const state = {
     }, {
       code: 'PENDING_RECONCILED',
       name: '待对账'
-    }, {
-      code: 'RECONCILED',
-      name: '已对账'
     },
 
     //退货单状态  
@@ -1767,6 +1769,35 @@ const state = {
     name: '已完成'
   }, ],
 
+
+  //对账单状态
+  ReconciliationOrderState: [{
+    code: 'PENDING_CONFIRM',
+    name: '待确认'
+  }, {
+    code: 'REJECTED',
+    name: '已拒绝'
+  }, {
+    code: 'COMPLETED',
+    name: '已确认'
+  }, ],
+
+  //对账任务状态
+  ReconciliationTaskState: [{
+      code: 'INIT',
+      name: '初始'
+    },
+    {
+      code: 'PENDING_RECONCILIATION',
+      name: '待对账'
+    }, {
+      code: 'IN_RECONCILIATION',
+      name: '对账中'
+    }, {
+      code: 'COMPLETED',
+      name: '已完成'
+    },
+  ],
 };
 
 const mutations = {};

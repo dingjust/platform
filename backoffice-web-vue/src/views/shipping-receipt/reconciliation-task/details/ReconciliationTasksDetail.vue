@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn content">
-    <el-card>
+    <el-card :shadow="shadow">
       <el-row>
         <el-col :span="4">
           <div class="title">
@@ -9,65 +9,53 @@
         </el-col>
       </el-row>
       <el-form :inline="true" label-position="left" label-width="70px">
-        <el-row type="flex" justify="start" class="basic-row">
-          <el-col :span="3">
-            <!-- <img width="54px" height="54px"
-              :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'"> -->
-            <img width="100px" height="100px" :src="'static/img/nopicture.png'">
-          </el-col>
-          <el-col :span="21">
-            <el-row type="flex" style="padding: 10px 0px">
-              <el-col :span="8">
-                <h6 class="basic-label">产品名称：红烧猪蹄</h6>
-              </el-col>
-              <el-col :span="8">
-                <h6 class="basic-label">货号：梅菜扣肉</h6>
-              </el-col>
-            </el-row>
-            <el-row type="flex" style="padding-bottom: 10px">
-              <el-col :span="8">
-                <h6 class="basic-label">发货方：红烧猪蹄</h6>
-              </el-col>
-              <el-col :span="8">
-                <h6 class="basic-label">收货方：梅菜扣肉</h6>
-              </el-col>
-              <el-col :span="8">
-                <h6 class="basic-label">发货负责人：烧鸡翅</h6>
-              </el-col>
-            </el-row>
-            <el-row type="flex" style="padding-bottom: 10px">
-              <el-col :span="12">
-                <h6 class="basic-label">收货地址：广州市海珠区云顶同创汇二期</h6>
-              </el-col>
-            </el-row>
-            <el-row type="flex" style="padding-bottom: 10px" v-if="formData.online">
-              <el-col :span="8">
-                <h6 class="basic-label">发货方式：顺丰快递</h6>
-              </el-col>
-              <el-col :span="8">
-                <h6 class="basic-label">发货单号：SF017532492929</h6>
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
+        <template v-if="showOrderInfo">
+          <el-row type="flex" justify="start" class="basic-row">
+            <el-col :span="3">
+              <img width="100px" height="100px"
+                :src="formData.product!=null?formData.product.thumbnail.url:'static/img/nopicture.png'">
+            </el-col>
+            <el-col :span="21">
+              <el-row type="flex" style="padding: 10px 0px">
+                <el-col :span="8">
+                  <h6>产品名称：{{formData.product?formData.product.name:''}}</h6>
+                </el-col>
+                <el-col :span="8">
+                  <h6>货号：{{formData.product?formData.product.skuID:''}}</h6>
+                </el-col>
+              </el-row>
+              <el-row type="flex" style="padding-bottom: 10px">
+                <el-col :span="8">
+                  <h6>发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
+                </el-col>
+                <el-col :span="8">
+                  <h6>收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
+                </el-col>
+                <el-col :span="8">
+                  <h6>发货负责人：{{formData.merchandiser?formData.merchandiser.name:''}}</h6>
+                </el-col>
+              </el-row>
+              <el-row type="flex" style="padding-bottom: 10px">
+                <el-col :span="12">
+                  <h6>收货地址：{{formData.deliveryAddress?formData.deliveryAddress.details:''}}</h6>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        </template>
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="24">
-            <reconciliation-tasks-quantity-table :formData="formData"/>
+            <reconciliation-tasks-quantity-table :formData="formData" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="end">
-          <el-col :span="2">
+          <el-col :span="2" v-if="isShipPart">
             <el-button @click="onCreate">创建对账单</el-button>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start">
           <el-col :span="24">
-            <reconciliation-tasks-orders-list :formData="formData" @onCreate="onCreate"/>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" style="margin-top: 30px">
-          <el-col :span="4">
-            <el-button class="sumbit-btn" @click="onSumbit" v-if="canFinish">对账完结</el-button>
+            <reconciliation-tasks-orders-list :formData="formData" @onCreate="onCreate" />
           </el-col>
         </el-row>
       </el-form>
@@ -80,28 +68,62 @@
   import ReconciliationTasksOrdersList from '../list/ReconciliationTasksOrdersList'
   export default {
     name: 'ReconciliationTasksDetail',
-    props: ['id'],
+    props: {
+      id: {
+
+      },
+      shadow: {
+        type: String,
+        default: 'always'
+      },
+      showOrderInfo: {
+        type: Boolean,
+        default: true
+      }
+    },
     components: {
       ReconciliationTasksQuantityTable,
       ReconciliationTasksOrdersList
     },
     computed: {
+      //发货方
+      isShipPart: function () {
+        if (this.formData.shipParty) {
+          return this.currentUser.companyCode == this.formData.shipParty.uid;
+        } else {
+          return false;
+        }
+      },
       canFinish: function () {
         // TODO 判断是否能对账完结
         return true;
       }
     },
     methods: {
-      async getDetail () {
-        // TODO 获取发货单详情
+      async getDetail() {
+        // TODO 获取发货任务详情
+        const url = this.apis().reconciliationTaskDetail(this.id);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.formData = result.data;
       },
-      onCreate () {
+      onCreate() {
         this.$router.push({
           name: '创建对账单',
-          params: {} 
+          params: {
+            taskId: this.id,
+            productionTaskOrder: this.formData.productionTaskOrder,
+            receiveDispatchTaskId: this.formData.receiveDispatchTask.id
+          }
         });
       },
-      onSumbit () {
+      onSumbit() {
         this.$confirm('确认对账完结后，不能再创建对账单了，表示该对账任务完结，是否确认该操作?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -110,12 +132,13 @@
           this._onSumbit();
         });
       },
-      _onSumbit () {
+      _onSumbit() {
 
       }
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         formData: {
           online: false,
           carrier: ''
@@ -159,4 +182,5 @@
     height: 40px;
     border-radius: 10px;
   }
+
 </style>
