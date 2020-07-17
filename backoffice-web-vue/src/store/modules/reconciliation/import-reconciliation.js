@@ -11,8 +11,7 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
-  formData: {
-  },
+  formData: {},
 };
 
 const mutations = {
@@ -24,7 +23,16 @@ const mutations = {
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    keyword,
+    page,
+    size
+  }) {
     console.log(keyword + 'test' + page + 'test' + size);
     commit('keyword', keyword);
     if (page || page === 0) {
@@ -48,11 +56,24 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    query,
+    page,
+    size,
+    companyCode
+  }) {
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
+
+    // 设置筛选收货方
+    query['shipParty'] = companyCode;
 
     const response = await http.post(url, query, {
       page: state.currentPageNumber,

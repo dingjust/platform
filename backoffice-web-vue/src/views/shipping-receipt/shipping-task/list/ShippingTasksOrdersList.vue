@@ -1,6 +1,6 @@
 <template>
   <div class="task-order-container">
-    <el-row type="flex" justify="end">
+    <el-row type="flex" justify="end" v-if="showDeliveryBtn">
       <el-button @click="onCreate">创建发货订单</el-button>
     </el-row>
     <el-table ref="resultTable" stripe :data="formData.shippingSheets" :height="autoHeight">
@@ -97,6 +97,10 @@
         } else {
           return false;
         }
+      },
+      showDeliveryBtn: function () {
+        return this.isShipParty && (this.formData.state == 'IN_DELIVERY' || this.formData.state ==
+          'PENDING_DELIVERY');
       }
     },
     methods: {

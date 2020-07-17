@@ -85,15 +85,24 @@
           <color-size-table :data="summaryData[0].colorSizeEntries" :readOnly="false" />
         </el-col>
       </el-row>
-      <el-row type="flex" style="margin-top:20px">
-        <el-col :span="8" :offset="4">
-          <el-row type="flex">
-            <h6>有无退货：</h6>
+      <el-form :model="form" ref="form">
+        <el-row type="flex" style="margin-top:20px">
+          <el-col :span="8" :offset="4">
+            <el-row type="flex">
+              <el-form-item label="有无退货：" prop="isHaveReturn"
+                :rules="{required: true, message: '请选择有无退货', trigger: 'change'}">
+                <el-radio-group v-model="form.isHaveReturn">
+                  <el-radio :label="true">有退货</el-radio>
+                  <el-radio :label="false">无退货</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <!-- <h6>有无退货：</h6>
             <el-radio v-model="isHaveReturn" :label="true">有退货</el-radio>
-            <el-radio v-model="isHaveReturn" :label="false">无退货</el-radio>
-          </el-row>
-        </el-col>
-      </el-row>
+            <el-radio v-model="isHaveReturn" :label="false">无退货</el-radio> -->
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-form>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="8" :offset="2">
           <h6>发货单：{{shippingOrder.code}}</h6>
@@ -192,27 +201,32 @@
         this.initSummaryData();
       },
       onSubmit() {
-        //校验数量与订单差异
-        let num = this.receivingMode == 'BY_PACKAGE' ? this.boxAmount : this.summaryAmount;
-        if (num != this.shippingOrderAmount) {
-          this.$confirm('收货数与发货总数不一致，是否创建收货单？创建后不允许修改', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this._onSubmit();
-          }).catch(() => {
+        //校验
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            //校验数量与订单差异
+            let num = this.receivingMode == 'BY_PACKAGE' ? this.boxAmount : this.summaryAmount;
+            if (num != this.shippingOrderAmount) {
+              this.$confirm('收货数与发货总数不一致，是否创建收货单？创建后不允许修改', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this._onSubmit();
+              }).catch(() => {
 
-          });
-        } else {
-          this._onSubmit();
-        }
+              });
+            } else {
+              this._onSubmit();
+            }
+          }
+        })
       },
       async _onSubmit() {
         const url = this.apis().receiptOrderCreate();
 
         let submitForm = {
-          isHaveReturn: this.isHaveReturn,
+          isHaveReturn: this.form.isHaveReturn,
           receivingMode: this.receivingMode,
           packageSheets: this.receivingMode == 'BY_PACKAGE' ? this.data : this.summaryData
         };
@@ -228,7 +242,7 @@
         } else if (result.code == '1') {
           this.$message.success(result.msg);
           //有退货则提示创建退货单
-          if (this.isHaveReturn) {
+          if (this.form.isHaveReturn) {
             this.onReturnedMessage();
           } else {
             this.$router.go(-1);
@@ -298,7 +312,9 @@
         summaryData: [],
         colorSizeEntries: [],
         receivingMode: 'BY_PACKAGE',
-        isHaveReturn: false
+        form: {
+          isHaveReturn: ''
+        }
       }
     },
     created() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card>
       <el-row>
         <el-col :span="4">
@@ -12,35 +12,31 @@
       <el-form :inline="true">
         <el-row type="flex" style="padding-left: 10px">
           <el-col :span="24">
-            <reconciliation-orders-form-head :formData="formData" :readOnly="true"/>
+            <reconciliation-orders-detail-head :formData="formData" />
           </el-col>
         </el-row>
         <el-row type="flex" style="padding-left: 10px">
           <el-col :span="24">
-            <reconciliation-shipping-orders-list :formData="formData" :readOnly="true"/>
+            <shipping-orders-list :formData="formData" />
           </el-col>
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="24">
-            <reconciliation-orders-form-foot :formData="formData" :readOnly="true"/>
+            <reconciliation-orders-form-foot :formData="formData" :readOnly="true" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="end" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="6">
-            <h5>应付金额：{{payable}}元</h5>
+            <h5>应付金额：{{formData.amountDue.toFixed(2)}}元</h5>
           </el-col>
         </el-row>
-        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isCreator">
+        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
+          v-if="isReceiptPart&&formData.state=='PENDING_CONFIRM'">
           <el-col :span="4">
-            <el-button class="create-btn" @click="onReturn">返回</el-button>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-else>
-          <el-col :span="4">
-            <el-button class="create-btn" @click="onCheck">核验</el-button>
+            <el-button class="create-btn" @click="onReject">拒绝</el-button>
           </el-col>
           <el-col :span="4">
-            <el-button class="create-btn" @click="onApply">申请复议</el-button>
+            <el-button class="create-btn" @click="onAccept">确认</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -49,96 +45,127 @@
 </template>
 
 <script>
-  import ReconciliationOrdersFormHead from '../form/ReconciliationOrdersFormHead'
+  import ReconciliationOrdersDetailHead from './ReconciliationOrdersDetailHead'
   import ReconciliationOrdersFormFoot from '../form/ReconciliationOrdersFormFoot'
-  import ReconciliationShippingOrdersList from '../list/ReconciliationShippingOrdersList'
+  import ShippingOrdersList from './ShippingOrdersList'
   export default {
     name: 'ReconciliationOrdersDetail',
     props: ['id'],
     components: {
-      ReconciliationOrdersFormHead,
+      ReconciliationOrdersDetailHead,
       ReconciliationOrdersFormFoot,
-      ReconciliationShippingOrdersList
+      ShippingOrdersList
     },
     computed: {
+      //发货方
+      isShipPart: function () {
+        if (this.formData.shipParty) {
+          return this.currentUser.companyCode == this.formData.shipParty.uid;
+        } else {
+          return false;
+        }
+      },
+      //收货方
+      isReceiptPart: function () {
+        if (this.formData.receiveParty) {
+          return this.currentUser.companyCode == this.formData.receiveParty.uid;
+        } else {
+          return false;
+        }
+      },
       isCreator: function () {
         // TODO 判断是否为创建人
         return true;
       },
-      payable: function () {
-        let money = 0;
-        this.formData.testData.forEach(item => {
-          money += parseInt(item.totalPrice);
-        })
-        this.formData.chargedDetail.forEach(item => {
-          if (item.price != '') {
-            money -= parseInt(item.price);
-          }
-        })
-        this.formData.increaseDetail.forEach(item => {
-          if (item.price != '') {
-            money += parseInt(item.price);
-          }
-        })
-        return money;
-      }
     },
     methods: {
-      onCreate () {
+      async getDetail() {
+        //获取对账单详情
+        const url = this.apis().reconciliationDetail(this.id);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.formData = result.data;
+      },
+      onCreate() {
         this.$router.go(-1);
       },
-      onReturn () {
+      onReturn() {
         this.$router.go(-1);
       },
-      onCheck () {
+      onReject() {
+        this.$prompt('拒绝理由', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(({
+          value
+        }) => {
+          this._onReject();
+        }).catch(() => {
 
+        });
       },
-      onApply () {
+      async _onReject() {
+        //获取对账单详情
+        const url = this.apis().reconciliationDetail(this.id);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+      },
+      onAccept() {
+        this.$confirm('提示：对账单一旦确认将不能进行修改，是否确定此操作', '提示', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          this._onAccept();
+        }).catch(() => {
 
-      }
-    },
-    data () {
-      return {
-        formData: {
-          orderCode: 'KY001010101',
-          product: {
-            name: '红烧猪蹄',
-            skuID: '9527',
-          },
-          price: 88,
-          quantity: 100000,
-          machiningTypes: 'LABOR_AND_MATERIAL',
-          expectedDeliveryDate: 1591847127000,
-          testData: [{
-            code: 'KY000001011',
-            price: 88,
-            quantity: 100000,
-            expectedDeliveryDate: 1591847127000,
-            expectedQuantity: 100000,
-            totalPrice: 8800000
-          }, {
-            code: 'KY000001011',
-            price: 88,
-            quantity: 100000,
-            expectedDeliveryDate: 1591847127000,
-            expectedQuantity: 100000,
-            totalPrice: 8800000
-          }],
-          chargedDetail: [{
-            price: '',
-            remarks: ''
-          }],
-          increaseDetail: [{
-            price: '',
-            remarks: ''
-          }]  
+        });
+      },
+      async _onAccept() {
+        //获取对账单详情
+        const url = this.apis().reconciliationAccept(this.id);
+        const result = await this.$http.put(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        } else if (result.code == '1') {
+          this.$message.success(result.msg);
+          this.getDetail();
         }
       }
     },
-    created () {
-
+    data() {
+      return {
+        currentUser: this.$store.getters.currentUser,
+        formData: {
+          code: '',
+          productionTaskOrder: {
+            code: '',
+            unitPrice: 0
+          }
+        }
+      }
+    },
+    created() {
+      this.getDetail();
     }
   }
+
 </script>
 
 <style scoped>
@@ -155,4 +182,5 @@
     height: 40px;
     border-radius: 10px;
   }
+
 </style>

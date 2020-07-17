@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content form-container">
+  <div class="animated fadeIn form-container">
     <el-card>
       <el-row type="flex" justify="space-between">
         <el-col :span="4">

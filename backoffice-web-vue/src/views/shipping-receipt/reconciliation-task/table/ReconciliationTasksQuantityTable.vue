@@ -6,13 +6,13 @@
           <el-row type="flex" justify="start">
             <h6>下单数量</h6>
           </el-row>
-          <color-size-table :data="orderQuantity" :readOnly="true"/>
+          <color-size-table :data="formData.colorSizeEntries" :readOnly="true" />
         </el-col>
         <el-col :span="12">
           <el-row type="flex" justify="start">
             <h6>实收数量</h6>
           </el-row>
-          <color-size-table :data="cropQuantity" :readOnly="true"/>
+          <color-size-table :data="cropColorSizeEntry" :readOnly="true" />
         </el-col>
       </el-row>
     </div>
@@ -37,7 +37,9 @@
 </template>
 
 <script>
-  import {ColorSizeTable} from '@/components/'
+  import {
+    ColorSizeTable
+  } from '@/components/'
   export default {
     name: 'ReconciliationTasksQuantityTable',
     props: ['formData'],
@@ -45,27 +47,51 @@
       ColorSizeTable
     },
     computed: {
-      orderQuantity: function () {
-        // TODO 处理下单数量数据
-        return [];
+      // 处理裁剪数量数据
+      cropColorSizeEntry: function () {
+        if (this.formData.colorSizeEntries != null) {
+          let result = this.formData.colorSizeEntries.map(entry => {
+            let quantity = this.getEntryFromActualNum(entry.color.name, entry.size.name);
+            let color = Object.assign({}, entry.color);
+            let size = Object.assign({}, entry.size);
+            return {
+              color: color,
+              size: size,
+              quantity: quantity
+            };
+          });
+          return result;
+        } else {
+          return [];
+        }
       },
-      cropQuantity: function () {
-        // TODO 处理裁剪数量数据
-        return [];
-      }
     },
     methods: {
-    },
-    data() {
-      return {
+      //获取实裁数量entry（报单行color,size是Sring类型）
+      getEntryFromActualNum(colorName, sizeName) {
+        let num = 0;
+        if (this.formData.actualCutEntries != null) {
+          let index = this.formData.actualCutEntries.findIndex(entry => entry.color == colorName && entry.size ==
+            sizeName);
+          if (index != -1) {
+            let entryQuantity = parseInt(this.formData.actualCutEntries[index].quantity);
+            if (!Number.isNaN(entryQuantity)) {
+              num += entryQuantity;
+            }
+          }
+        }
+        return num;
       }
     },
-    created() {
+    data() {
+      return {}
     },
+    created() {},
     destroyed() {
 
     }
   }
+
 </script>
 
 <style scoped>
@@ -74,4 +100,5 @@
     border-radius: 5px;
     padding: 20px 20px 0px 20px;
   }
+
 </style>

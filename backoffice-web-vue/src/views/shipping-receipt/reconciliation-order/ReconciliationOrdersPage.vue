@@ -59,16 +59,16 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
-        const keyword = this.keyword;
-        const url = this.apis().getProductionTaskList();
-        this.search({
-          url,
-          keyword,
-          page,
-          size
-        });
-      },
+      // onSearch (page, size) {
+      //   const keyword = this.keyword;
+      //   const url = this.apis().getProductionTaskList();
+      //   this.search({
+      //     url,
+      //     keyword,
+      //     page,
+      //     size
+      //   });
+      // },
       onAdvancedSearch (page, size) {
         const query = this.queryFormData;
         const url = this.apis().getProductionTaskList();
@@ -118,7 +118,7 @@
       }
     },
     created() {
-      this.onSearch();
+      this.onAdvancedSearch();
     },
     destroyed() {
 
