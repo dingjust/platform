@@ -73,7 +73,7 @@
               :colorSizeEntries="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
           </el-col>
         </el-row>
-        <el-row type="flex" justify="start" class="basic-row">
+        <el-row type="flex" justify="start" class="basic-row" align="middle">
           <el-col :span="8">
             <el-row type="flex" align="middle">
               <span class="basic-label">收货单：</span>
@@ -103,6 +103,7 @@
           <!-- 待退货 -->
           <template v-if="formData.state=='PENDING_RETURNED'&&isReceiveParty">
             <el-button class="sumbit-btn" @click="onReturn">创建退货单</el-button>
+            <el-button class="sumbit-btn" @click="onNoReturn">无退货</el-button>
           </template>
           <!-- 待复议 -->
           <template v-if="formData.state=='PENDING_RECONSIDER'&&isShipParty">
@@ -175,6 +176,33 @@
       //跳转退货详情
       onReturnDetail(id) {
         this.$router.push('/returned/orders/' + id);
+      },
+      onNoReturn() {
+        this.$confirm('是否确认跳过退货?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onNoReturn();
+        }).catch(() => {
+
+        });
+      },
+      async _onNoReturn() {
+        const url = this.apis().cancelReturn();
+        const result = await this.$http.put(url, {}, {
+          id: this.id
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        } else if (result.code == '1') {
+          this.$message.success(result.msg);
+          this.getDetail();
+        }
       },
       //整单退货
       onReturnAll() {

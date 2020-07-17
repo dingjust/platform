@@ -1,3 +1,19 @@
+import {
+  ReconciliationOrderCode,
+  ReconciliationShipOrders,
+  ReconciliationNum,
+  ReconciliationAmount,
+  ReconciliationDeduct,
+  ReconciliationIncrease,
+  ReconciliationDate,
+  ReconciliationState,
+  ReconciliationDetail,
+  RECONCILIATION_COMPONENT_NAME_MAP
+} from './reconciliation-table-constants';
+
+import ProductionOrderDetail from '../../../order/salesProduction/production-order/details/ProductionOrderDetail'
+import ShippingOrdersDetail from '../../shipping-order/details/ShippingOrdersDetail'
+
 // const Selection = {
 //   template: `
 //   <el-table-column type="selection" width="55" fixed="left" :key='sortKey'></el-table-column>
@@ -30,6 +46,10 @@ const RelationShippingOrder = {
     <template slot-scope="scope">
       <el-button type="text" @click="onShipDetail(scope.row)">{{shippingName(scope.row)}}</el-button>
     </template>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+    :close-on-click-modal="false">
+    <shipping-orders-detail :id="openId" v-if="dialogVisible" />
+    </el-dialog>
   </el-table-column>
 `,
   props: {
@@ -45,17 +65,28 @@ const RelationShippingOrder = {
       default: 10
     }
   },
+  components: {
+    ShippingOrdersDetail
+  },
+  data() {
+    return {
+      openId: null,
+      dialogVisible: false
+    }
+  },
   methods: {
-    shippingName (row) {
+    shippingName(row) {
       try {
         return eval('row.' + this.code);
       } catch (e) {
         return null;
       }
     },
-    onShipDetail (row) {
+    onShipDetail(row) {
       try {
-        this.$router.push('/shipping/orders/' + eval('row.' + this.id));
+        // this.$router.push('/shipping/orders/' + eval('row.' + this.id));
+        this.openId = eval('row.' + this.id);
+        this.dialogVisible = true;
       } catch (e) {
         return null;
       }
@@ -95,11 +126,43 @@ const Product = {
   },
   methods: {
     // 获取产品
-    getProduct (row) {
+    getProduct(row) {
       return row[this.prop];
     }
   },
 }
+
+//发货单状态
+const ShipState = {
+  template: `
+  <el-table-column label="状态" :key="sortKey">
+  <template slot-scope="scope">
+    <span>{{getState(scope.row)}}</span>
+  </template>
+</el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'state'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+  methods: {
+    getState(row) {
+      let result = '';
+      try {
+        let state = eval('row.' + this.prop);
+        result = this.getEnum('ShippingSheetState', state);
+      } catch (e) {
+        // TODO:空值处理
+      }
+      return result;
+    }
+  }
+}
+
 
 const RelationOrder = {
   template: `
@@ -109,6 +172,10 @@ const RelationOrder = {
       @click="onProductionOrderDetail(scope.row)">{{getProductionOrder(scope.row).code}}
     </el-button>
   </template>
+  <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+  :close-on-click-modal="false">
+  <production-order-detail :id="openId" v-if="dialogVisible" />
+  </el-dialog>
 </el-table-column>`,
   props: {
     prop: {
@@ -119,14 +186,33 @@ const RelationOrder = {
       default: 10
     }
   },
+  components: {
+    ProductionOrderDetail
+  },
+  data() {
+    return {
+      openId: null,
+      dialogVisible: false
+    }
+  },
   methods: {
-    getProductionOrder (row) {
-      return row[this.prop];
+    getProductionOrder(row) {
+      let order = {
+        code: ''
+      };
+      try {
+        if (eval('row.' + this.prop) != null) {
+          order = eval('row.' + this.prop);
+        }
+      } catch (e) {
+        // TODO:空值处理        
+      }
+      return order;
     },
     // 跳转生产订单明细
-    onProductionOrderDetail (row) {
-      // this.$router.push('/sales/productionOrder/' + row[this.prop].id);
-      this.$emit('onProductionDetail', row);
+    onProductionOrderDetail(row) {
+      this.openId = this.getProductionOrder(row).id;
+      this.dialogVisible = true;
     }
   }
 }
@@ -139,6 +225,10 @@ const RelationOutOrder = {
       @click="onProductionOrderDetail(scope.row)">{{getProductionOrder(scope.row).code}}
     </el-button>
   </template>
+  <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+  :close-on-click-modal="false">
+  <production-order-detail :id="openId" v-if="dialogVisible" />
+  </el-dialog>
 </el-table-column>`,
   props: {
     prop: {
@@ -149,13 +239,33 @@ const RelationOutOrder = {
       default: 10
     }
   },
+  components: {
+    ProductionOrderDetail
+  },
+  data() {
+    return {
+      openId: null,
+      dialogVisible: false
+    }
+  },
   methods: {
-    getProductionOrder (row) {
-      return row[this.prop];
+    getProductionOrder(row) {
+      let order = {
+        code: ''
+      };
+      try {
+        if (eval('row.' + this.prop) != null) {
+          order = eval('row.' + this.prop);
+        }
+      } catch (e) {
+        // TODO:空值处理        
+      }
+      return order;
     },
     // 跳转生产订单明细
-    onProductionOrderDetail (row) {
-      // this.$router.push('/sales/productionOrder/' + row[this.prop].id);
+    onProductionOrderDetail(row) {
+      this.openId = this.getProductionOrder(row).id;
+      this.dialogVisible = true;
     }
   }
 }
@@ -188,24 +298,19 @@ const ShipPerson = {
 
 const UnitPrice = {
   template: `
-  <el-table-column label="单价" :key="sortKey">
-    <template slot-scope="scope">
-      <span v-if="getProductionTaskOrder(scope.row)!=null">{{getProductionTaskOrder(scope.row).unitPrice}}</span>
-    </template>
+  <el-table-column label="单价" :key="sortKey" :prop="prop">    
   </el-table-column>`,
   props: {
     prop: {
       type: String,
-      default: 'productionTaskOrder'
+      default: 'productionTaskOrder.unitPrice'
     },
     sortKey: {
       default: 10
     }
   },
   methods: {
-    getProductionTaskOrder (row) {
-      return row[this.prop];
-    },
+
   }
 }
 
@@ -227,7 +332,7 @@ const ShipNum = {
   },
   methods: {
     // 统计发货数
-    getTotalNum (order) {
+    getTotalNum(order) {
       let result = 0;
       if (order[this.prop] != null) {
         order[this.prop].forEach(element => {
@@ -301,7 +406,7 @@ const RelationReceiptOrder = {
   </el-table-column>
   `,
   methods: {
-    onReceiptDetail (item) {
+    onReceiptDetail(item) {
       this.$router.push('/receipt/orders/' + item.id);
     }
   },
@@ -335,7 +440,7 @@ const ShipReceNum = {
   },
   methods: {
     // 发货数
-    getShipNum (row) {
+    getShipNum(row) {
       let num = 0;
       try {
         if (eval('row.' + this.shipProp) != null) {
@@ -347,7 +452,7 @@ const ShipReceNum = {
       return num;
     },
     // 统计收货数
-    getTotalNum (row) {
+    getTotalNum(row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.receSheetProp);
@@ -387,7 +492,7 @@ const ReceiptNum = {
     }
   },
   methods: {
-    receiptNum (row) {
+    receiptNum(row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.prop);
@@ -427,7 +532,7 @@ const ReceiptDate = {
   },
   methods: {
     // 收货时间
-    getReceiptDate (row) {
+    getReceiptDate(row) {
       try {
         return eval('row.' + this.prop + '[0].creationtime');
       } catch (e) {
@@ -470,7 +575,7 @@ const RelationReturnOrder = {
     }
   },
   methods: {
-    onDetail (item) {
+    onDetail(item) {
       this.$router.push('/returned/orders/' + item.id);
     }
   }
@@ -509,7 +614,7 @@ const ReturnReceiptNum = {
   methods: {
 
     // 统计退货数
-    getReturnTotalNum (row) {
+    getReturnTotalNum(row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.prop);
@@ -529,7 +634,7 @@ const ReturnReceiptNum = {
       return result;
     },
     // 统计收退货数
-    getReceReturnlNum (row) {
+    getReceReturnlNum(row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.prop);
@@ -580,7 +685,7 @@ const ShippingOperation = {
     }
   },
   methods: {
-    onDetail (row) {
+    onDetail(row) {
       this.$router.push('/shipping/orders/' + row.id);
     }
   }
@@ -602,7 +707,7 @@ const ReceiptOperation = {
     }
   },
   methods: {
-    onDetail (row) {
+    onDetail(row) {
       this.$router.push('/shipping/orders/' + row.id);
     }
   }
@@ -624,7 +729,7 @@ const ReturnOperation = {
     }
   },
   methods: {
-    onDetail (row) {
+    onDetail(row) {
       this.$router.push('/returned/orders/' + row.id);
     }
   }
@@ -660,7 +765,7 @@ const RelationReconsiderOrder = {
   </el-table-column>
   `,
   methods: {
-    onReconsiderDetail (item) {
+    onReconsiderDetail(item) {
       this.$router.push('/reconsiders/orders/detail/' + item.id);
     }
   },
@@ -761,7 +866,7 @@ const DifferentReconsider = {
     }
   },
   methods: {
-    getDiffNum (row) {
+    getDiffNum(row) {
       let num = 0;
       try {
         if (eval('row.' + this.diffProp) != null) {
@@ -772,7 +877,7 @@ const DifferentReconsider = {
       }
       return num;
     },
-    getReconsiderNum (row) {
+    getReconsiderNum(row) {
       let num = 0;
       try {
         if (eval('row.' + this.reconsiderProp) != null) {
@@ -808,7 +913,7 @@ const DifferentReconsiderAdopt = {
     }
   },
   methods: {
-    getDiffNum (row) {
+    getDiffNum(row) {
       let num = 0;
       try {
         if (eval('row.' + this.diffProp) != null) {
@@ -819,7 +924,7 @@ const DifferentReconsiderAdopt = {
       }
       return num;
     },
-    getReconsiderNum (row) {
+    getReconsiderNum(row) {
       let result = 0;
       try {
         let sheets = eval('row.' + this.reconsiderProp);
@@ -838,7 +943,7 @@ const DifferentReconsiderAdopt = {
       }
       return result;
     },
-    getAdopt (row) {
+    getAdopt(row) {
       return 0;
     }
   }
@@ -856,7 +961,7 @@ const ReconsiderOperation = {
     }
   },
   methods: {
-    onDetail (row) {
+    onDetail(row) {
       this.$router.push('/reconsiders/orders/detail/' + row.id);
     }
   }
@@ -904,9 +1009,10 @@ const ReturnPerson = {
 //   },
 // }
 
-const COMPONENT_NAME_MAP = {
+const MAIN_COMPONENT_NAME_MAP = {
   // '多选': 'selection',
   '发货单号': 'shipping-order-code',
+  '发货单状态': 'ship-state',
   '关联发货单': 'relation-shipping-order',
   '产品名称': 'product',
   '关联订单': 'relation-order',
@@ -943,12 +1049,16 @@ const COMPONENT_NAME_MAP = {
   '关联复议单': 'relation-reconsider-order',
   // 退货
   '退货方': 'return-party',
-  '退货人': 'return-person'
+  '退货人': 'return-person',
 }
+
+const COMPONENT_NAME_MAP = Object.assign(MAIN_COMPONENT_NAME_MAP, RECONCILIATION_COMPONENT_NAME_MAP);
+
 
 export {
   Selection,
   ShippingOrderCode,
+  ShipState,
   RelationShippingOrder,
   Product,
   RelationOrder,
@@ -984,5 +1094,16 @@ export {
   ReturnDate,
   DifferentReconsider,
   DifferentReconsiderAdopt,
+  //对账单
+  ReconciliationOrderCode,
+  ReconciliationShipOrders,
+  ReconciliationNum,
+  ReconciliationAmount,
+  ReconciliationDeduct,
+  ReconciliationIncrease,
+  ReconciliationDate,
+  ReconciliationState,
+  ReconciliationDetail,
+  //MAP
   COMPONENT_NAME_MAP
 }

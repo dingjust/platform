@@ -35,7 +35,7 @@
             <h5>应付金额：{{formData.amountDue?formData.amountDue.toFixed(2):0}}元</h5>
           </el-col>
         </el-row>
-        <el-row type="flex">
+        <el-row type="flex" v-if="formData.state=='REJECTED'">
           <el-col :span="12">
             <h5 style="color:red">拒绝理由：<span style="color:black">{{formData.remarks}}</span></h5>
           </el-col>

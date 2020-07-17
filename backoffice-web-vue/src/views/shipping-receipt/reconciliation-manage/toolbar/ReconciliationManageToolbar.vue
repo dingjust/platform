@@ -29,7 +29,7 @@
           </el-button-group>
         </el-col>
         <el-col :span="2">
-          <el-button class="create-btn" @click="onCreate" v-if="canCreateReceipt">创建对账单</el-button>
+          <el-button class="create-btn" @click="onCreate" v-if="canCreate">创建对账单</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -39,7 +39,7 @@
 <script>
   export default {
     name: 'ReconciliationManageToolbar',
-    props: ['queryFormData', 'canCreateReceipt'],
+    props: ['queryFormData', 'canCreate'],
     components: {
 
     },

@@ -3,7 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" row-key="id" @selection-change="handleSelectionChange"
       @row-click="rowClick">
       <!-- <el-table-column type="selection" width="55" v-show="hasSelection" fixed key="1"></el-table-column> -->
-      <shipping-dynamic-table-list :columns="columns" @onProductionDetail="onProductionDetail"/>
+      <shipping-dynamic-table-list :columns="columns" />
     </el-table>
     <div class="pt-2"></div>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
@@ -83,6 +83,13 @@
           }
         }
       }
+    },
+    watch: {
+      'page.content': function (n, o) {
+        this.$nextTick(() => {
+          this.$refs.resultTable.doLayout()
+        })
+      },
     },
     data() {
       return {

@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card>
       <div class="sales-plan-triangle_box" v-if="isMySelf">
         <div class="sales-plan-triangle" :style="isShowTag ? 'border-right: 70px solid #ffd60c' : 'border-right: 70px solid #ffffff'">
