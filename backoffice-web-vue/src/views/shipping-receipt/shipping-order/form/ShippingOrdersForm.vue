@@ -42,7 +42,7 @@
             </el-row>
             <el-row type="flex" align="middle">
               <el-col :span="8">
-                <el-form-item label="发货方式" prop="consignment.carrierDetails.code" label-width="120px"
+                <el-form-item label="发货方式" prop="consignment.carrierDetails.code" label-width="80px"
                   :rules="{required: !formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-select v-model="formData.consignment.carrierDetails.code"
                     :disabled="formData.isOfflineConsignment" :placeholder="''">
@@ -53,7 +53,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="发货单号" prop="consignment.trackingID" label-width="120px"
+                <el-form-item label="发货单号" prop="consignment.trackingID" label-width="80px"
                   :rules="{required: !formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-input v-model="formData.consignment.trackingID" style="width: 194px"
                     :disabled="formData.isOfflineConsignment"></el-input>
@@ -66,19 +66,19 @@
             </el-row>
             <el-row type="flex" align="middle" v-if="formData.isOfflineConsignment" style="margin-top:20px">
               <el-col :span="8">
-                <el-form-item label="物流方式" prop="offlineConsignorMode" label-width="120px"
+                <el-form-item label="物流方式" prop="offlineConsignorMode" label-width="80px"
                   :rules="{required: formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-input style="width: 194px" v-model="formData.offlineConsignorMode"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="送货人" prop="offlineConsignorName" label-width="120px"
+                <el-form-item label="送货人" prop="offlineConsignorName" label-width="80px"
                   :rules="{required: formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-input style="width: 194px" v-model="formData.offlineConsignorName"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="联系方式" prop="offlineConsignorPhone" label-width="120px"
+                <el-form-item label="联系方式" prop="offlineConsignorPhone" label-width="80px"
                   :rules="{required: formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-input style="width: 194px" v-model="formData.offlineConsignorPhone"></el-input>
                 </el-form-item>

@@ -1822,6 +1822,23 @@ const state = {
   }, {
     code: 'PAID',
     name: '已付款'
+  }],
+  // 付款类型
+  PaymentMethod: [{
+    code: 'E_BANK',
+    name: '网银'
+  }, {
+    code: 'CASH',
+    name: '现金'
+  }, {
+    code: 'ACCEPTANCE',
+    name: '承兑'
+  }, {
+    code: 'ALIPAY',
+    name: '支付宝'
+  }, {
+    code: 'WECHAT_PAY',
+    name: '微信支付'
   }]
 };
 

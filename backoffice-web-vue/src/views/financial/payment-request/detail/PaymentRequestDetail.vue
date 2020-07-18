@@ -3,7 +3,7 @@
     <el-card>
       <div class="financial-plan-triangle_box">
         <div class="financial-plan-triangle" :style="getTriangleColor">
-          <h6 class="financial-plan-triangle_text">已审核</h6>
+          <h6 class="financial-plan-triangle_text">{{auditState}}</h6>
         </div>
       </div>
       <el-row type="flex" justify="space-between">
@@ -16,7 +16,7 @@
           <h6 style="color: #F56C6C">申请金额超过未付款金额</h6>
         </el-col>
         <el-col :span="4">
-          <h6>状态：待付款</h6>
+          <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
@@ -24,99 +24,123 @@
         <el-col :span="22">
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>申请单号：1230000000</h6>
+              <h6>申请单号：{{formData.code}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>订单号：1230000000</h6>
+              <h6>订单号：</h6>
             </el-col>
             <el-col :span="8">
-              <h6>合同号：1230000000</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
-            <el-col :span="8">
-              <h6>申请部门：销售一部</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>申请人：旷小勇</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>付款内容：货款</h6>
+              <h6>合同号：</h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>收款对象：宁波衣加衣供应链管理有限公司</h6>
+              <h6>申请部门：</h6>
             </el-col>
             <el-col :span="8">
-              <h6>申请金额：20000元</h6>
+              <h6>申请人：{{formData.applyUser.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>金额大写：叁万元整</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
-            <el-col :span="8">
-              <h6>收款人：宁波衣加衣供应链管理有限公司</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>收款账号：0987654321234567890</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>开户行：中国农业银行股份有限公司宁波江东支行</h6>
+              <h6>付款内容：{{formData.paymentFor}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>审批人：旷小勇 旷小勇</h6>
+              <h6>收款对象：</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6>申请金额：{{formData.requestAmount}}元</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6>金额大写：{{convertCurrency(formData.requestAmount)}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+            <el-col :span="8">
+              <h6>收款人：{{formData.bankCardAccount}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6>收款账号：{{formData.bankCardNo}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6>开户行：{{formData.bank}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+            <el-col :span="8">
+              <h6>审批人：{{approvers}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>备注：</h6>
-              <h6 style="margin-left: 20px">备注旷小勇 旷小勇</h6>
+              <h6 style="margin-left: 20px">{{formData.remark}}</h6>
             </el-col>
           </el-row>
-          <!-- <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
+          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px" 
+            v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
             <el-col :span="8">
               <h6>上传凭证</h6>
               <el-row style="margin-left: 20px">
-                <images-upload :slotData="formData.media"></images-upload>
+                <images-upload :slotData="formData.requestVouchers" :disabled="true"></images-upload>
               </el-row>
             </el-col>
-          </el-row> -->
+          </el-row>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-        <el-button class="create-btn" @click="onConfirm">去付款</el-button>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isFinance">
+        <el-button class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
       </el-row>
     </el-card>
+    <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <payment-form v-if="paymentVisible" :id="id"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import {PersonnelSelection, ImagesUpload} from '@/components/index.js'
+  import PaymentForm from '../form/PaymentForm'
   export default {
     name: 'PaymentRequestDetail',
     props: ['id'],
     components: {
       PersonnelSelection,
-      ImagesUpload
+      ImagesUpload,
+      PaymentForm
     },
     computed: { 
+      auditState: function () {
+        switch (this.formData.state) {
+          case 'AUDITING':
+            return '审核中';
+          case 'AUDIT_FAIL':
+            return '已驳回';
+          default:
+            return '已审核';
+        }
+      },
       getTriangleColor: function () {
-        switch (this.formData.auditState) {
+        switch (this.formData.state) {
           case 'AUDITING':
             return 'border-right: 70px solid #114EE8;';
-          case 'PASSED':
-            return 'border-right: 70px solid #4DE811;';
-          case 'AUDITED_FAILED':
+          case 'AUDIT_FAIL':
             return 'border-right: 70px solid #D91A17;';
-          case 'NONE':
-            return 'border-right: 70px solid #BBBBBB;';
           default:
-            return 'border-right: 70px solid #BBBBBB;';
+            return 'border-right: 70px solid #4DE811;';
         }
+      },
+      approvers: function () {
+        let str = '';
+        if (this.formData.approvers && this.formData.approvers.length > 0) {
+          str += this.formData.approvers[0].name;
+          if (this.formData.approvers.length > 1) {
+            str = str + '\t' + this.formData.approvers[1].name;
+          }
+        }
+      },
+      isFinance: function () {
+        return true;
       }
     },
     methods: {
@@ -135,13 +159,102 @@
       },
       onConfirm () {
 
-      }
+      },
+      convertCurrency(money) {
+        //汉字的数字
+        var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
+        //基本单位
+        var cnIntRadice = new Array('', '拾', '佰', '仟');
+        //对应整数部分扩展单位
+        var cnIntUnits = new Array('', '万', '亿', '兆');
+        //对应小数部分单位
+        var cnDecUnits = new Array('角', '分', '毫', '厘');
+        //整数金额时后面跟的字符
+        var cnInteger = '整';
+        //整型完以后的单位
+        var cnIntLast = '元';
+        //最大处理的数字
+        var maxNum = 999999999999999.9999;
+        //金额整数部分
+        var integerNum;
+        //金额小数部分
+        var decimalNum;
+        //输出的中文金额字符串
+        var chineseStr = '';
+        //分离金额后用的数组，预定义
+        var parts;
+        if (money == '') { return ''; }
+        money = parseFloat(money);
+        if (money >= maxNum) {
+          //超出最大处理数字
+          return '';
+        }
+        if (money == 0) {
+          chineseStr = cnNums[0] + cnIntLast + cnInteger;
+          return chineseStr;
+        }
+        //转换为字符串
+        money = money.toString();
+        if (money.indexOf('.') == -1) {
+          integerNum = money;
+          decimalNum = '';
+        } else {
+          parts = money.split('.');
+          integerNum = parts[0];
+          decimalNum = parts[1].substr(0, 4);
+        }
+        //获取整型部分转换
+        if (parseInt(integerNum, 10) > 0) {
+          var zeroCount = 0;
+          var IntLen = integerNum.length;
+          for (var i = 0; i < IntLen; i++) {
+            var n = integerNum.substr(i, 1);
+            var p = IntLen - i - 1;
+            var q = p / 4;
+            var m = p % 4;
+            if (n == '0') {
+              zeroCount++;
+            } else {
+              if (zeroCount > 0) {
+                chineseStr += cnNums[0];
+              }
+              //归零
+              zeroCount = 0;
+              chineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
+            }
+            if (m == 0 && zeroCount < 4) {
+              chineseStr += cnIntUnits[q];
+            }
+          }
+          chineseStr += cnIntLast;
+        }
+        //小数部分
+        if (decimalNum != '') {
+          var decLen = decimalNum.length;
+          for (var i = 0; i < decLen; i++) {
+            var n = decimalNum.substr(i, 1);
+            if (n != '0') {
+              chineseStr += cnNums[Number(n)] + cnDecUnits[i];
+            }
+          }
+        }
+        if (chineseStr == '') {
+          chineseStr += cnNums[0] + cnIntLast + cnInteger;
+        } else if (decimalNum == '') {
+          chineseStr += cnInteger;
+        }
+        return chineseStr;
+      } 
     },
     data () {
       return {
+        paymentVisible: false,
         formData: {
+          requestAmount: '',
+          applyUser: {
+            name: ''
+          },
           approvers: [{}],
-          media: []
         }
       }
     },
