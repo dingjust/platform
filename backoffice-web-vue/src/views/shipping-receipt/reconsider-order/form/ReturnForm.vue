@@ -14,16 +14,13 @@
         </div>
       </el-col>
     </el-row>
-    <el-form :model="curData" ref="form">
+    <el-form :model="curData" ref="form" label-position="left">
       <el-row type="flex" style="padding-bottom: 10px">
-        <el-col :span="2">
-          <h6 class="basic-label" style="margin-top:10px">退货地址：</h6>
-        </el-col>
-        <el-col :span="22">
+        <el-col :span="24">
           <my-address-form :vAddress.sync="curData.deliveryAddress" ref="addressForm" :readOnly="false" />
         </el-col>
       </el-row>
-      <el-row type="flex" align="middle">
+      <el-row type="flex" align="middle" :gutter="20">
         <el-col :span="8">
           <el-form-item label="发货方式" prop="consignment.carrierDetails.code" label-width="120px"
             :rules="{required: !curData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
@@ -43,16 +40,20 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-checkbox v-model="curData.isOfflineConsignment" @change="isOnline"></el-checkbox>
-          <span class="basci-label">线下物流<span style="color: #F56C6C">(勾选后无需填写发货方式和单号)</span></span>
+          <el-row type="flex" align="top">
+            <el-checkbox v-model="curData.isOfflineConsignment" @change="isOnline"></el-checkbox>
+            <span class="basci-label">线下物流<span style="color: #F56C6C">(勾选后无需填写发货方式和单号)</span></span>
+          </el-row>
         </el-col>
       </el-row>
       <el-row type="flex" align="middle" v-if="curData.isOfflineConsignment" style="margin-top:20px">
         <el-col :span="8">
-          <el-form-item label="物流方式" prop="offlineConsignorMode" label-width="120px"
-            :rules="{required: curData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
-            <el-input style="width: 194px" v-model="curData.offlineConsignorMode"></el-input>
-          </el-form-item>
+          <el-row type="flex" justify="start">
+            <el-form-item label="物流方式" prop="offlineConsignorMode" label-width="120px"
+              :rules="{required: curData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
+              <el-input style="width: 194px" v-model="curData.offlineConsignorMode"></el-input>
+            </el-form-item>
+          </el-row>
         </el-col>
         <el-col :span="8">
           <el-form-item label="送货人" prop="offlineConsignorName" label-width="120px"

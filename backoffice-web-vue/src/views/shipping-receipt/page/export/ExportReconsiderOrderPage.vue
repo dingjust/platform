@@ -117,7 +117,10 @@
                 key: "差异数"
               },
               {
-                key: "发货操作"
+                key: "发货操作",
+                props: {
+                  operationName: '复议'
+                }
               }
             ],
             url: this.apis().shippingOrderList()

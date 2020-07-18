@@ -6,10 +6,9 @@
       <h6 style="color: #F56C6C">注明：待复议中的发货订单，申请复议时间为5天，如5天内没有申请复议，则视为放弃复议，此发货单将不再接受复议</h6>
     </el-row>
     <!-- <div class="over-tabs"> -->
-    <el-row type="flex" justify="end">
-      <el-button v-show="activeName=='PENDING_RECONSIDER'" class="material-btn" @click="onReconsider"
-        v-if="canReconsider">申请复议</el-button>
-    </el-row>
+    <!-- <el-row type="flex" justify="end" v-show="canReconsider">
+      <el-button v-show="activeName=='PENDING_RECONSIDER'" class="material-btn" @click="onReconsider">申请复议</el-button>
+    </el-row> -->
     <!-- </div> -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,states) in statusMap">
@@ -54,7 +53,7 @@
         default: true
       },
       mode: {
-        type: String, 
+        type: String,
         default: 'import'
       }
     },
@@ -99,7 +98,7 @@
           this.$message("请选择发货单复议");
         }
       },
-      tabName (map) {
+      tabName(map) {
         if (map.url == '/b2b/sheets/shipping' && this.stateCount.shipping.hasOwnProperty(map.states)) {
           return this.getEnum('ShippingSheetState', map.states) + '(' + this.stateCount.shipping[map.states] + ')';
         }

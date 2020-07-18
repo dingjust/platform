@@ -27,7 +27,7 @@
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="24">
-            <reconciliation-orders-form-foot :formData="formData" :readOnly="true" />
+            <reconciliation-orders-form-foot :formData="formData" :readOnly="readOnly" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="end" style="padding-left: 10px;margin-top: 20px">
@@ -47,6 +47,15 @@
           </el-col>
           <el-col :span="4">
             <el-button class="create-btn" @click="onAccept">确认</el-button>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
+          v-if="isShipPart&&formData.state=='REJECTED'&&isCreator">
+          <el-col :span="4" v-if="readOnly">
+            <el-button class="create-btn" @click="onUpdate">修改</el-button>
+          </el-col>
+          <el-col :span="4" v-if="!readOnly">
+            <el-button class="create-btn" @click="onSave">更新</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -84,8 +93,11 @@
         }
       },
       isCreator: function () {
-        // TODO 判断是否为创建人
-        return true;
+        if (this.currentUser.uid == this.formData.creator.uid) {
+          return true;
+        } else {
+          return false;
+        }
       },
     },
     methods: {
@@ -162,11 +174,15 @@
           this.$message.success(result.msg);
           this.getDetail();
         }
+      },
+      onUpdate() {
+        this.readOnly=false;
       }
     },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
+        readOnly: true,
         formData: {
           code: '',
           productionTaskOrder: {

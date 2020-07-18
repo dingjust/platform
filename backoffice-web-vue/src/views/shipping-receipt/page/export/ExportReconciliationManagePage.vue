@@ -134,7 +134,9 @@
               key: '对账日期',
             }, {
               key: '对账状态',
-            }, ],
+            }, {
+              key: '对账详情'
+            }],
             url: this.apis().reconciliationList()
           },
           REJECTED: {
@@ -160,7 +162,9 @@
               key: '对账日期',
             }, {
               key: '对账状态',
-            }, ],
+            }, {
+              key: '对账详情'
+            }],
             url: this.apis().reconciliationList()
           },
           CONFIRMED: {
@@ -186,7 +190,9 @@
               key: '对账日期',
             }, {
               key: '对账状态',
-            }, ],
+            }, {
+              key: '对账详情'
+            }],
             url: this.apis().reconciliationList()
           },
         }

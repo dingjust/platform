@@ -36,7 +36,7 @@
       <el-table-column label="单价" prop="productionTaskOrder.unitPrice"></el-table-column>
       <el-table-column label="创建人"></el-table-column>
       <el-table-column label="负责人"></el-table-column>
-      <el-table-column label="对账单数"></el-table-column>
+      <el-table-column label="对账单数" prop="reconciliationSheets.length"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>

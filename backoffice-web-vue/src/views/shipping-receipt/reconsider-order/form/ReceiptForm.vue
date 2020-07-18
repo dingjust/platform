@@ -14,7 +14,7 @@
         </div>
       </el-col>
     </el-row>
-    <color-size-box-change-table :vdata="curData" :oldData="receiptOrder.packageSheets"
+    <color-size-box-change-table :vdata="curData" :oldData="receiptOrder.packageSheets" style="width:100%"
       :colorSizeEntries="receiptOrder.packageSheets[0].colorSizeEntries" />
     <!-- <color-size-change-table :oldData="receiptOrder.colorSizeEntries" :data="curData[0]" /> -->
     <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">

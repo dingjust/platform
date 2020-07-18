@@ -1,7 +1,7 @@
 <template>
   <div>
-    <reconciliation-manage-toolbar :queryFormData="queryFormData" :canCreate="canCreate"
-      @onCreate="onCreate" @onAdvancedSearch="onAdvancedSearch" />
+    <reconciliation-manage-toolbar :queryFormData="queryFormData" :canCreate="canCreate" @onCreate="onCreate"
+      @onAdvancedSearch="onAdvancedSearch" />
     <el-row type="flex" justify="end">
       <el-col :span="3">
         <el-button type="text" class="list-btn" @click="orderListVisible = !orderListVisible">对账单</el-button>
@@ -16,7 +16,7 @@
     </el-tabs>
     <el-dialog :visible.sync="orderListVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <reconciliation-orders-page v-if="orderListVisible" :mode="mode"/>
+      <reconciliation-orders-page v-if="orderListVisible" :mode="mode" />
     </el-dialog>
   </div>
 </template>
@@ -54,8 +54,11 @@
     },
     computed: {
       canCreate: function () {
-        // 判断是否能创建对账单
-        return true;
+        if (this.mode == 'import') {
+          return true;
+        } else {
+          return false;
+        }
       }
     },
     methods: {
@@ -79,8 +82,7 @@
         orderListVisible: false,
       }
     },
-    created() {
-    },
+    created() {},
     destroyed() {
 
     }

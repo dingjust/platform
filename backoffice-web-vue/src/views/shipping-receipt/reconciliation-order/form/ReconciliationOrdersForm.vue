@@ -67,10 +67,10 @@
       ReconciliationShippingOrdersList
     },
     computed: {
-      btnDisabled:function(){
-        if(this.reconciliationTaskId!=null){
+      btnDisabled: function () {
+        if (this.reconciliationTaskId != null) {
           return false;
-        }else{
+        } else {
           return true
         }
       },
@@ -197,6 +197,7 @@
           return;
         }
         this.$set(this.formData, 'shippingTask', result.data);
+        this.reconciliationTaskId = result.data.reconciliationTask.id;
       }
 
     },
