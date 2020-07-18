@@ -1,6 +1,7 @@
 import {
   Selection,
   ShippingOrderCode,
+  ShipState,
   RelationShippingOrder,
   Product,
   RelationOrder,
@@ -36,6 +37,17 @@ import {
   ReturnDate,
   DifferentReconsider,
   DifferentReconsiderAdopt,
+  //对账单
+  ReconciliationOrderCode,
+  ReconciliationShipOrders,
+  ReconciliationNum,
+  ReconciliationAmount,
+  ReconciliationDeduct,
+  ReconciliationIncrease,
+  ReconciliationDate,
+  ReconciliationState,
+  ReconciliationDetail,
+  //MAP
   COMPONENT_NAME_MAP
 } from './table-constants';
 
@@ -51,6 +63,7 @@ const ShippingDynamicTableList = {
   components: {
     Selection,
     ShippingOrderCode,
+    ShipState,
     RelationShippingOrder,
     Product,
     RelationOrder,
@@ -86,6 +99,17 @@ const ShippingDynamicTableList = {
     ReturnDate,
     DifferentReconsider,
     DifferentReconsiderAdopt,
+    //对账单
+    ReconciliationOrderCode,
+    ReconciliationShipOrders,
+    ReconciliationNum,
+    ReconciliationAmount,
+    ReconciliationDeduct,
+    ReconciliationIncrease,
+    ReconciliationDate,
+    ReconciliationState,
+    ReconciliationDetail,
+    //MAP
     COMPONENT_NAME_MAP
   },
   render: function (createElement) {

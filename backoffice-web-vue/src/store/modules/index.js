@@ -72,6 +72,9 @@ import ExportReconsiderOrderModule from './shipping-receipt/export-reconsider-or
 // reconciliation
 import ExportReconciliationModule from './reconciliation/export-reconciliation'
 import ImportReconciliationModule from './reconciliation/import-reconciliation'
+import ExportReconciliationManageModule from './reconciliation/export-reconciliation-manage'
+import ImportReconciliationManageModule from './reconciliation/import-reconciliation-manage'
+import ReconciliationOrdersModule from './reconciliation/reconciliation-orders'
 
 // financial
 import ReceivableModule from './financial/receivable'
@@ -158,6 +161,9 @@ export {
   // reconciliation
   ExportReconciliationModule,
   ImportReconciliationModule,
+  ImportReconciliationManageModule,
+  ExportReconciliationManageModule,
+  ReconciliationOrdersModule,
   // financial
   ReceivableModule,
   PayableModule,

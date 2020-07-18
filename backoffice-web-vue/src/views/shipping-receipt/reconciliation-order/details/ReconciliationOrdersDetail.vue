@@ -1,10 +1,15 @@
 <template>
   <div class="animated fadeIn">
     <el-card>
-      <el-row>
+      <el-row type="flex" justify="space-between">
         <el-col :span="4">
           <div class="title">
             <h6>对账单详情</h6>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <h6>状态: {{getEnum('ReconciliationOrderState',formData.state)}}</h6>
           </div>
         </el-col>
       </el-row>
@@ -27,7 +32,12 @@
         </el-row>
         <el-row type="flex" justify="end" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="6">
-            <h5>应付金额：{{formData.amountDue.toFixed(2)}}元</h5>
+            <h5>应付金额：{{formData.amountDue?formData.amountDue.toFixed(2):0}}元</h5>
+          </el-col>
+        </el-row>
+        <el-row type="flex" v-if="formData.state=='REJECTED'">
+          <el-col :span="12">
+            <h5 style="color:red">拒绝理由：<span style="color:black">{{formData.remarks}}</span></h5>
           </el-col>
         </el-row>
         <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
@@ -105,21 +115,26 @@
         }).then(({
           value
         }) => {
-          this._onReject();
+          this._onReject(value);
         }).catch(() => {
 
         });
       },
-      async _onReject() {
+      async _onReject(reason) {
         //获取对账单详情
-        const url = this.apis().reconciliationDetail(this.id);
-        const result = await this.$http.get(url);
+        const url = this.apis().reconciliationReject(this.id);
+        const result = await this.$http.put(url, {
+          remarks: reason
+        });
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         } else if (result.code === 0) {
           this.$message.error(result.msg);
           return;
+        } else if (result.code == '1') {
+          this.$message.success(result.msg);
+          this.getDetail();
         }
       },
       onAccept() {

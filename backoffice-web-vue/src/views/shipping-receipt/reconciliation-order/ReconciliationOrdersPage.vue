@@ -15,12 +15,11 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <reconciliation-orders-toolbar :queryFormData="queryFormData" 
-                              @onAdvancedSearch="onAdvancedSearch"/>
+    <reconciliation-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-          <reconciliation-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
+          <reconciliation-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -28,7 +27,9 @@
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
   const {
     mapGetters,
     mapActions
@@ -41,7 +42,10 @@
   export default {
     name: 'ReconciliationOrdersPage',
     props: {
-
+      mode: {
+        type: String,
+        default: 'import'
+      }
     },
     components: {
       ReconciliationOrdersToolbar,
@@ -59,61 +63,40 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      // onSearch (page, size) {
-      //   const keyword = this.keyword;
-      //   const url = this.apis().getProductionTaskList();
-      //   this.search({
-      //     url,
-      //     keyword,
-      //     page,
-      //     size
-      //   });
-      // },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         const query = this.queryFormData;
-        const url = this.apis().getProductionTaskList();
-        this.searchAdvanced({url, query, page, size});
+        const url = this.apis().reconciliationList();
+        const mode = this.mode;
+        const companyCode = this.currentUser.companyCode;
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size,
+          mode,
+          companyCode
+        });
       },
-      handleClick (tab, event) {
+      handleClick(tab, event) {
         this.queryFormData.status = tab.name;
         this.onAdvancedSearch(0, 10);
       },
-      onDetail (row) {
+      onDetail(row) {
         this.$router.push('/reconciliation/orders/' + row.id);
       },
     },
     data() {
       return {
-        activeName: '',
-        statuses: [
-          {
-            code: '',
-            name: '全部'
-          },
-          {
-            code: '1',
-            name: '待核验'
-          },
-          {
-            code: '2',
-            name: '复议中'
-          },
-          {
-            code: '3',
-            name: '待付款'
-          },
-          {
-            code: '4',
-            name: '已付款'
-          }
-        ],
+        activeName: 'PENDING_CONFIRM',
+        statuses: this.$store.state.EnumsModule.ReconciliationOrderState,
+        currentUser: this.$store.getters.currentUser,
         queryFormData: {
           keyword: '',
           productionLeaderName: '',
           operatorName: '',
           creationtimeStart: '',
           creationtimeEnd: '',
-          status: ''
+          status: 'PENDING_CONFIRM'
         }
       }
     },

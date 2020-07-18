@@ -69,9 +69,9 @@ export default {
       }, {
         name: '对账任务',
         url: '/reconciliation/tasks/import',
-      }, {
+      },{
         name: '对账管理',
-        url: '/reconciliation/manage/import',
+        url: '/shipping/reconciliation-manage',
       }]
     },
     // {
@@ -119,7 +119,7 @@ export default {
         url: '/reconciliation/tasks/export',
       }, {
         name: '对账管理',
-        url: '/reconciliation/manage/export',
+        url: '/receipt/reconciliation-manage',
       }]
     },
     // {

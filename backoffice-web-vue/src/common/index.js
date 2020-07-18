@@ -801,15 +801,15 @@ const COMMON_APIS = {
     return '/b2b/orders/production/work/state/count';
   },
   // 发货单状态统计
-  shippingOrderStateCount () {
+  shippingOrderStateCount() {
     return '/b2b/sheets/shipping/state/count';
   },
   // 收发货任务状态统计
-  receivedispatchStateCount () {
+  receivedispatchStateCount() {
     return '/b2b/sheets/receivedispatch/state/count';
   },
   // 复议单列表状态统计
-  reconsiderOrderStateCount () {
+  reconsiderOrderStateCount() {
     return '/b2b/sheets/reconsider/state/count';
   },
   // 应收账款列表
@@ -821,7 +821,7 @@ const COMMON_APIS = {
     return '/b2b/payment/bill/receivables/state/count';
   },
   // 应付账款列表
-  getPaymentList () {
+  getPaymentList() {
     return '/b2b/payment/bill/search';
   },
   // 应付账款统计
@@ -829,19 +829,19 @@ const COMMON_APIS = {
     return '/b2b/payment/bill/state/count';
   },
   // 根据id获取应付单
-  getPaymentDetail (id) {
+  getPaymentDetail(id) {
     return '/b2b/payment/bill/' + id;
   },
   // 添加发票
-  appendInvoice () {
+  appendInvoice() {
     return '/b2b/payment/bill/add/invoice';
   },
   // 添加请款单
-  appendPaymentRequest () {
+  appendPaymentRequest() {
     return '/b2b/payment/request/save';
   },
   // 请款单列表
-  getPaymentRequestList () {
+  getPaymentRequestList() {
     return '/b2b/payment/request/search';
   },
   // 请款单状态统计
@@ -857,7 +857,7 @@ const COMMON_APIS = {
     return '/b2b/payment/request/finance/state/count';
   },
   // 根据id获取请款单
-  getPaymentRequestDetail (id) {
+  getPaymentRequestDetail(id) {
     return '/b2b/payment/request/' + id;
   },
   // 添加付款单
@@ -1368,6 +1368,7 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/receipt/create';
   },
 
+
   //收货单列表
   receiptOrderList() {
     return '/b2b/sheets/receipt';
@@ -1382,6 +1383,12 @@ let NONE_TENANT_APIS = {
   returnOrderCreate() {
     return '/b2b/sheets/return/create';
   },
+
+  // 跳过退货
+  cancelReturn() {
+    return '/b2b/sheets/shipping/cancelReturn';
+  },
+
 
   // 退货单详情
   returnOrderDetail(id) {
@@ -1443,7 +1450,7 @@ let NONE_TENANT_APIS = {
 
   //对账单列表
   reconciliationList() {
-    return '/b2b/sheets/reconciliation/';
+    return '/b2b/sheets/reconciliation';
   },
 
   //对账详情

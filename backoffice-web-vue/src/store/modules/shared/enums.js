@@ -1778,7 +1778,7 @@ const state = {
     code: 'REJECTED',
     name: '已拒绝'
   }, {
-    code: 'COMPLETED',
+    code: 'CONFIRMED',
     name: '已确认'
   }, ],
 
