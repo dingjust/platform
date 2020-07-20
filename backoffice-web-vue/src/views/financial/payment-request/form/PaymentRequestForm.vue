@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form :inline="true" :model="formData" label-position="right" label-width="100px">
+      <el-form ref="form" :inline="true" :model="formData" label-position="right" label-width="100px" :hide-required-asterisk="true">
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="7">
             <el-form-item label="付款申请单号">
@@ -17,7 +17,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="9">
-            <el-form-item label="订单号">
+            <el-form-item label="订单号" prop="productionOrder" :rules="[{type: Object, validator: validateProductionOrder, trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.productionOrder.code" :disabled="true"></el-input>
               <el-button @click="saleProdutionVisible = !saleProdutionVisible">选择</el-button>
             </el-form-item>
@@ -40,7 +40,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="付款内容">
+            <el-form-item label="付款内容" prop="paymentFor" :rules="[{required: true, message: '请填写付款内容', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.paymentFor"></el-input>
             </el-form-item>
           </el-col>
@@ -52,11 +52,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="9">
-            <el-form-item label="申请金额" style="margin-bottom: 0px">
+            <el-form-item label="申请金额" style="margin-bottom: 17px" prop="requestAmount" 
+              :rules="[{required: true, message: '请填写申请金额', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.requestAmount" @input="onChange">
                 <span slot="suffix">元</span>
               </el-input>
-              <h6 style="color: #909399">可申请金额3000元</h6>
+              <h6 style="color: #909399;margin-bottom: 0px">可申请金额3000元</h6>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -67,25 +68,25 @@
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="7">
-            <el-form-item label="收款人">
+            <el-form-item label="收款人" prop="bankCardAccount" :rules="[{required: true, message: '请填写收款人', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.bankCardAccount"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="9">
-            <el-form-item label="收款账号">
+            <el-form-item label="收款账号" prop="bankCardNo" :rules="[{required: true, message: '请填写收款账号', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.bankCardNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="开户行">
+            <el-form-item label="开户行" prop="bank" :rules="[{required: true, message: '请填写开户行', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.bank"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <template v-for="(item, index) in formData.approvers">
-            <el-col :span="8" :key="index">
-              <el-form-item label="审批人">
+            <el-col :span="7" :key="index">
+              <el-form-item label="审批人" prop="approvers" :rules="[{type: Array, validator: validateAppeovers, trigger: 'change'}]">
                 <personnel-selection :vPerson.sync="formData.approvers[index]"/>
               </el-form-item>
             </el-col>
@@ -136,7 +137,6 @@
     },
     methods: {
       setSelectOrder (row) {
-        console.log(row);
         this.saleProdutionVisible = !this.saleProdutionVisible;
         this.formData.productionOrder.id = row.id;
         this.formData.productionOrder.code = row.code;
@@ -144,9 +144,36 @@
       },
       addApprover () {
         this.formData.approvers.push({});
+        this.$nextTick(() => {
+          this.$refs.form.clearValidate();
+        })
+      },
+      validateField (name) {
+        this.$refs.form.validateField(name);
+      },
+      validateProductionOrder (rule, value, callback) {
+        if (value.code != undefined && value.code != '') {
+          callback();
+        } else {
+          callback(new Error('请选择订单'));
+        }
+      },
+      validateAppeovers (rule, value, callback) {
+        if (value[0].name != undefined && value[0].name != '') {
+          callback();
+        } else {
+          callback(new Error('请选择审批人'));
+        }
       },
       onConfirm () {
-        this._onConfirm();
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this._onConfirm();
+          } else {
+            this.$message.error('请完善表单信息！');
+            return false;
+          }
+        });
       },
       async _onConfirm () {
         const url = this.apis().appendPaymentRequest();
@@ -270,13 +297,27 @@
             id: null,
             name: ''
           },
-          approvers: [{}],
+          approvers: [{
+            id: null,
+            name: ''
+          }],
           remark: '',
           requestVouchers: []
         }
       }
     },
+    watch: {
+      'formData.productionOrder': function (nval, oval) {
+        this.validateField('productionOrder');
+      },
+      'formData.approvers': function (nval, oval) {
+        this.validateField('approvers');
+      }
+    },
     created () {
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate();
+      })
     },
     destroyed () {
       

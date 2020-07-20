@@ -859,6 +859,10 @@ const COMMON_APIS = {
   // 根据id获取请款单
   getPaymentRequestDetail(id) {
     return '/b2b/payment/request/' + id;
+  },
+  // 添加付款单
+  appendPaymentRecord (id) {
+    return '/b2b/payment/request/add/payment/records/' + id;
   }
 };
 

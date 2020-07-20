@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table ref="resultTable" stripe :data="page.content" highlight-current-row :height="autoHeight">
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="外接订单号" prop="productionOrder.code"/>
       <el-table-column label="合同号" />
       <el-table-column label="关联SKU数" />
