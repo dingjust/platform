@@ -1,11 +1,17 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="外发订单号" prop="productionOrder.code"/>
-      <el-table-column label="合同号" />
-      <el-table-column label="关联SKU数" />
+      <el-table-column label="外发订单号" prop="productionOrder.code" min-width="110px"/>
+      <el-table-column label="合同号" min-width="120px">
+        <template slot-scope="scope">
+          <template v-for="item in scope.row.productionOrder.agreements">
+            <span :key="item.id">{{item.code}}</span>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column label="关联SKU数" prop="itemSize" />
       <el-table-column label="订单数量" />
-      <el-table-column label="合作商" />
+      <el-table-column label="合作商" prop="belongTo.name" min-width="180px"/>
       <el-table-column label="创建人" prop="creator.name" />
       <el-table-column label="负责人" prop="merchandiser.name" />
       <el-table-column label="创建时间">

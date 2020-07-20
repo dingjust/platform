@@ -428,9 +428,13 @@ const router = new Router({
             props: true,
             component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payable/detail/PayableDetail')
           }, {
-            path: 'paymentRequest',
-            name: '付款申请单',
-            component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payment-request/PaymentRequestPage')
+            path: 'merchandiser/paymentRequest',
+            name: '付款申请单(跟单员)',
+            component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payment-request/PaymentRequestMerchandiserPage')
+          }, {
+            path: 'finance/paymentRequest',
+            name: '付款申请单(财务)',
+            component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payment-request/PaymentRequestFinancePage')
           }, {
             path: 'create/paymentRequest',
             name: '创建付款申请单',

@@ -97,7 +97,8 @@
         </el-col>
         <el-divider direction="vertical"></el-divider>
         <el-col :span="6">
-          <contract-com v-if="form.type == 'SALES_ORDER'" :slotData="form" :contracts="contracts" :canSign="canSign" />
+          <contract-com v-if="form.type == 'SALES_ORDER'" @callback="callback" 
+                        :slotData="form" :contracts="contracts" :canSign="canSign" />
         </el-col>
       </el-row>
     </div>
@@ -206,7 +207,9 @@
       }
     },
     methods: {
-
+      callback () {
+        this.$emit('callback');
+      }
     },
     data() {
       return {

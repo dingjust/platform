@@ -37,7 +37,7 @@
   import PaymentRequestList from './list/PaymentRequestList'
 
   export default {
-    name: 'PaymentRequestPage',
+    name: 'PaymentRequestMerchandiserPage',
     props: {
 
     },

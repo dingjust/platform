@@ -77,7 +77,7 @@
       },
       contracts: {
         type: Array,
-        default: []
+        default: () => []
       },
       canSign: {
         type: Boolean,
@@ -370,6 +370,7 @@
             this.contracts.push(result.content[i]);
           }
         }
+        this.$emit('callback');
       },
       onCloseDialog () {
         this.dialogVisible = false;

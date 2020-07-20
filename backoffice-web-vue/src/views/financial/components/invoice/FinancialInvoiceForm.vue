@@ -8,14 +8,17 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <el-form :model="formData" :inline="true">
+    <el-form ref="form" :model="invoiceData" :inline="true">
       <el-row type="flex" justify="center" align="middle" style="margin-bottom: 10px">
-        <images-upload-single :formData="invoiceData.image" :disabled="readOnly"
-                              @removePicture="removePicture" @getPicture="getPicture" />
+        <el-form-item prop="image" :rules="[{ type: Object, validator: validateImage, trigger: 'change' }]">
+          <images-upload-single :formData="invoiceData.image" :disabled="readOnly"
+                                @removePicture="removePicture" @getPicture="getPicture" />
+        </el-form-item>
       </el-row>
       <el-row type="flex" justify="center" align="middle">
         <el-col :span="16">
-          <el-form-item label="发票金额：">
+          <el-form-item label="发票金额：" prop="amount" 
+            :rules="[{required: true, message: '请填写发票金额', trigger: 'blur'}]">
             <el-input v-model="invoiceData.amount" :disabled="readOnly"></el-input>
           </el-form-item>
         </el-col>
@@ -69,12 +72,36 @@
         this.$emit('onCancel');
       },
       onConfirm () {
-        this.$emit('onConfirm', this.invoiceData);
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this.$emit('onConfirm', this.invoiceData);
+          } else {
+            this.$message.error('请完善表单信息！');
+            return false;
+          }
+        });
+      },
+      validateField (name) {
+        this.$refs.form.validateField(name);
+      },
+      validateImage (rule, value, callback) {
+        console.log(value);
+        if (value.id != null) {
+          callback();
+        } else {
+          callback(new Error('请上传付款凭证'));
+        }
       }
     },
     data () {
       return {
 
+      }
+    },
+    watch: {
+      'invoiceData.image': function (nval, oval) {
+        console.log(nval);
+        this.validateField('image');
       }
     },
     created () {

@@ -12,7 +12,8 @@
             </template>
             <template v-for="(subItem,subIndex) in item.children">
               <router-link :key="subIndex" :to="subItem.url" v-if="routeCheck(subItem)">
-                <el-menu-item :key="index+'-'+subIndex" :index="index+'-'+subIndex" :route="item.url" >{{subItem.name}}
+                <el-menu-item :key="index+'-'+subIndex" :index="index+'-'+subIndex" :route="item.url" class="child-el-menu">
+                  {{subItem.name}}
                 </el-menu-item>
               </router-link>
             </template>
@@ -104,10 +105,18 @@
     min-width: 0px;
   }
 
+  .sidebar .el-submenu .child-el-menu {
+    font-size: 12px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 45px;
+    min-width: 0px;
+  }
+
   .sidebar .el-menu-item:focus, .el-menu-item:hover {
     outline: 0;
     background-color: rgba(254,176,38,0.15);
-}
+  }
 
 .sidebar{
   overflow: auto;

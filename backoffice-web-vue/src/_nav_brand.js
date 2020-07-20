@@ -179,8 +179,11 @@ export default {
         name: '应付账款',
         url: '/financial/payable'
       }, {
-        name: '付款申请单',
-        url: '/financial/paymentRequest'
+        name: '付款申请单(财务)',
+        url: '/financial/finance/paymentRequest'
+      }, {
+        name: '付款申请单(跟单)',
+        url: '/financial/merchandiser/paymentRequest'
       }]
     },
     {
