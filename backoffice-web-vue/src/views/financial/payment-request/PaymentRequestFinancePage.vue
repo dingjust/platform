@@ -11,8 +11,8 @@
       <div class="pt-2"></div>
       <payment-request-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
       <div>
-        <el-button class="pr-create-btn" v-if="userRole == 'MERCHANDISER'" @click="onCreate">创建付款申请单</el-button>
-        <el-button class="pr-create-btn" v-if="userRole == 'FINANCE'" @click="onCreate">去付款</el-button>
+        <!-- <el-button class="pr-create-btn" v-if="userRole == 'MERCHANDISER'" @click="onCreate">创建付款申请单</el-button> -->
+        <!-- <el-button class="pr-create-btn" v-if="userRole == 'FINANCE'" @click="onCreate">去付款</el-button> -->
         <el-tabs v-model="pageInfo[userRole].activeName" @tab-click="handleClick">
           <template v-for="item in pageInfo[userRole].status">
             <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
@@ -113,7 +113,7 @@
           cooperatorName: '',
           createdDateFrom: '',
           createdDateTo: '',
-          state: 'AUDITING'
+          state: 'WAIT_TO_PAY'
         },
         pageInfo: {
           MERCHANDISER: {

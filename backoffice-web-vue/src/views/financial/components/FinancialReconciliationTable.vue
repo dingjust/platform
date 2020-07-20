@@ -2,13 +2,13 @@
   <div>
     <el-row type="flex" justify="end" align="middle" style="margin: 15px 0px;">
       <el-col :span="4">
-        <h6>订单总额：{{formData.orderAmount}}</h6>
+        <h6>订单总额：{{formData.orderAmount ? formData.orderAmount : 0}}元</h6>
       </el-col>
       <el-col :span="4">
-        <h6>应收总额：{{formData.amount}}元</h6>
+        <h6>{{modeTitle}}：{{formData.amount ? formData.amount : 0}}元</h6>
       </el-col>
       <el-col :span="5">
-        <h6>已开发票总额：{{formData.invoiceAmount}}元</h6>
+        <h6>已开发票总额：{{formData.invoiceAmount ? formData.invoiceAmount : 0}}元</h6>
       </el-col>
     </el-row>
     <table cellspacing="2" width="100%" class="order-table">
@@ -22,15 +22,24 @@
       <template v-for="(item, productionIndex) in formData.productionTaskList">
         <tr :key="item.code">
           <td :rowspan="item.reconciliationSheetList.length + 1">{{item.code}}</td>
+          <template v-if="item.reconciliationSheetList.length == 0">
+            <td>{{''}}</td>
+            <td>{{''}}</td>
+            <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
+            <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{formData.totalPaidAmount}}</td>
+            <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{totalDifference}}</td>
+        </template>
         </tr>
-        <template v-for="(val, reconciliationIndex) in item.reconciliationSheetList">
-          <tr :key="val.code">
-            <td>{{val.code}}</td>
-            <td>{{val.amountDue}}</td>
-            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
-            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
-            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
-          </tr>
+        <template v-if="item.reconciliationSheetList.length > 0">
+          <template v-for="(val, reconciliationIndex) in item.reconciliationSheetList">
+            <tr :key="val.code">
+              <td>{{val.code}}</td>
+              <td>{{val.amountDue}}</td>
+              <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
+              <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.totalPaidAmount}}</td>
+              <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{totalDifference}}</td>
+            </tr>
+          </template>
         </template>
       </template>
     </table>
@@ -41,9 +50,9 @@
   export default {
     name: 'FinancialReconciliationTable',
     props: {
-      // formData: {
-      //   type: Object
-      // },
+      formData: {
+        type: Object
+      },
       belongTo: {
         type: String,
         default: 'PAYABLE_PAGE'
@@ -55,6 +64,9 @@
       titleRow: function () {
         return this.belongTo == 'PAYABLE_PAGE' ? this.paymentRow : this.receiptRow;
       },
+      modeTitle: function () {
+        return this.belongTo == 'PAYABLE_PAGE' ? '应付总额' : '应收总额';
+      },
       // 计算总行数
       totalRow: function () {
         let count = 0;
@@ -64,7 +76,7 @@
         return count;
       },
       // 计算未收总额
-      totalNotReceived: function () {
+      totalDifference: function () {
         return this.notNaNNum(this.formData.amount) - this.notNaNNum(this.formData.totalPaidAmount);
       }
     },
@@ -82,33 +94,7 @@
     data () {
       return {
         paymentRow: ['生产工单号', '对账单号', '应付金额', '应付总额', '已付总额', '未付总额'],
-        receiptRow: ['生产工单号', '对账单号', '应收金额', '应收总额', '已收总额', '未收总额'],
-        formData: {
-          orderAmount: 2000000,
-          amount: 720000,
-          invoiceAmount: 0,
-          productionTaskList: [{
-            code: 'TSPO00159003-1',
-            quantity: 9600,
-            reconciliationSheetList: [{
-              code: 'DZS100003001',
-              amountDue: 240000
-            }, {
-              code: 'DZS100003002',
-              amountDue: 120000
-            }]
-          }, {
-            code: 'TSPO00159003-2',
-            quantity: 9600,
-            reconciliationSheetList: [{
-              code: 'DZS100003003',
-              amountDue: 240000
-            }, {
-              code: 'DZS100003004',
-              amountDue: 120000
-            }]
-          }]
-        }
+        receiptRow: ['生产工单号', '对账单号', '应收金额', '应收总额', '已收总额', '未收总额']
       }
     },
     created () {

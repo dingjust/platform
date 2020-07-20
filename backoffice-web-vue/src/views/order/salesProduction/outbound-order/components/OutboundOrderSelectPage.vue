@@ -175,8 +175,14 @@
     data() {
       return {
         outboundOrderTypeSelect: false,
-        activeName: 'TO_BE_SUBMITTED',
-        statuses: Object.assign([], this.$store.state.EnumsModule.OutboundOrderStatuses),
+        activeName: 'AUDIT_PASSED',
+        statuses: [{
+          code: 'AUDIT_PASSED',
+          name: '生产中'
+        }, {
+          code: 'COMPLETED',
+          name: '已完成'
+        }],
         formData: {
           id: null,
           managementMode: 'COLLABORATION',
@@ -228,7 +234,7 @@
           keyword: '',
           targetCooperator: '',
           merchandiser: '',
-          state: 'TO_BE_SUBMITTED',
+          state: 'AUDIT_PASSED',
           name: ''
         },
         stateCount: {}
@@ -236,10 +242,6 @@
     },
     created() {
       this.onAdvancedSearch();
-      this.statuses.push({
-        code: '',
-        name: '全部'
-      })
     },
     mounted() {
 

@@ -12,9 +12,9 @@
             <h6>付款申请单</h6>
           </div>
         </el-col>
-        <el-col :span="6">
-          <h6 style="color: #F56C6C">申请金额超过未付款金额</h6>
-        </el-col>
+        <!-- <el-col :span="6"> -->
+          <!-- <h6 style="color: #F56C6C">申请金额超过未付款金额</h6> -->
+        <!-- </el-col> -->
         <el-col :span="4">
           <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
@@ -89,7 +89,7 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isFinance">
-        <el-button class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
+        <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
@@ -141,6 +141,9 @@
       },
       isFinance: function () {
         return true;
+      },
+      canPay: function () {
+        return this.formData.state === 'WAIT_TO_PAY';
       }
     },
     methods: {
