@@ -129,26 +129,39 @@
           }
         });
       },
-      tabName (map) {
+      tabName(map) {
         let tabName = this.getEnum('ShippingSheetState', map.status);
-        if (map.url == '/b2b/sheets/shipping' && this.stateCount.shipping.hasOwnProperty(map.status)) {
-          if (map.status == 'COMPLETED') {
-            let count = this.parseIntNotNaN(this.stateCount.shipping['COMPLETED']) + 
-                        this.parseIntNotNaN(this.stateCount.shipping['PENDING_RECONCILED']) + 
-                        this.parseIntNotNaN(this.stateCount.shipping['RECONCILED']);
-            if (count > 0) {
-              tabName = this.getEnum('ShippingSheetState', map.status) + '(' + count + ')';
+
+        switch (map.url) {
+          //发货单
+          case this.apis().shippingOrderList():
+            if (!this.stateCount.shipping.hasOwnProperty(map.status)) {
+              break;
             }
-          } else {
-            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] + ')';
-          }
-        }
-        if (map.url == '/b2b/sheets/reconsider' && this.stateCount.reconsider.hasOwnProperty(map.status)) {
-          tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.reconsider[map.status] + ')';
+            if (map.status == 'COMPLETED') {
+              let count = this.parseIntNotNaN(this.stateCount.shipping['COMPLETED']) +
+                this.parseIntNotNaN(this.stateCount.shipping['PENDING_RECONCILED']) +
+                this.parseIntNotNaN(this.stateCount.shipping['RECONCILED']);
+              if (count > 0) {
+                tabName = this.getEnum('ShippingSheetState', map.status) + '(' + count + ')';
+              }
+            } else {
+              tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] +
+                ')';
+            }
+            break;
+          //复议单
+          case this.apis().reconsiderOrderList():
+            if (!this.stateCount.reconsider.hasOwnProperty(map.status)) {
+              break;
+            }
+            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.reconsider[map.status] +
+              ')';
+            break;
         }
         return tabName;
       },
-      parseIntNotNaN (count) {
+      parseIntNotNaN(count) {
         if (isNaN(parseInt(count))) {
           return 0;
         }
@@ -214,7 +227,7 @@
         reconsiderListVisible: false,
       }
     },
-    created () {
+    created() {
       this.shippingOrderStateCount();
       this.reconsiderOrderStateCount();
     }

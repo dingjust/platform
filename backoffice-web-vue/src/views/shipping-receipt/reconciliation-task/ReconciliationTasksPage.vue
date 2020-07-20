@@ -52,7 +52,7 @@
         this.$emit('onAdvancedSearch');
       },
       handleClick(tab, event) {
-        this.queryFormData.state = tab.name;
+        this.queryFormData.states = tab.name;
         this.$emit('onAdvancedSearch');
       },
       onCreate() {
