@@ -91,7 +91,7 @@
           operatorName: '',
           creationtimeStart: '',
           creationtimeEnd: '',
-          state: 'PENDING_RECONCILIATION'
+          states: 'PENDING_RECONCILIATION'
         }
       }
     },
