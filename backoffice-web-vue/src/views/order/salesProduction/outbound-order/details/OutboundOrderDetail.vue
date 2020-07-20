@@ -8,7 +8,7 @@
           </div>
         </el-col>
       </el-row>
-      <outbound-order-top-info :slotData="formData" :payPlan="payPlan"/>
+      <outbound-order-top-info :slotData="formData" :payPlan="payPlan" @callback="callback"/>
       <div style="margin: 20px 0px 0px 10px;">
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"/>
       </div>
@@ -28,6 +28,9 @@
         <el-row v-if="isReceipt && formData.payPlan != null">
           <purchase-order-info-receipt-finance :slotData="formData" />
         </el-row>
+      </div>
+      <div>
+        <financial-tabs />
       </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">
         <el-button class="purchase-order-btn2" @click="onGenerateUniqueCode" v-if="canGenerate">唯一码</el-button>
@@ -67,6 +70,7 @@
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
   import { SalesProductionTabs } from '@/views/order/salesProduction/components/'
+  import { FinancialTabs } from '@/views/financial/index.js'
 
   export default {
     name: 'OutboundOrderDetail',
@@ -77,7 +81,8 @@
       UniqueCodeGenerateForm,
       SalesProductionTabs,
       PurchaseOrderInfoPaymentFinance,
-      PurchaseOrderInfoReceiptFinance
+      PurchaseOrderInfoReceiptFinance,
+      FinancialTabs
     },
     computed: {
       ...mapGetters({
@@ -117,6 +122,9 @@
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
+      callback () {
+        this.getDetail();
+      },
       async getDetail() {
         const url = this.apis().getoutboundOrderDetail(this.code);
         const result = await this.$http.get(url);

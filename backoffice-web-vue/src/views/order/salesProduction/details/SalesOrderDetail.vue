@@ -15,7 +15,7 @@
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
-        <sales-order-detail-form :form="formData" :modifyType="modifyType" :payPlan="payPlan"/>
+        <sales-order-detail-form :form="formData" :modifyType="modifyType" :payPlan="payPlan" @callback="callback"/>
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
@@ -153,6 +153,9 @@
       }
     },
     methods: {
+      callback () {
+        this.$emit('getDetails');
+      },
       appendProduct() {
         this.salesProductAppendVisible = true;
       },

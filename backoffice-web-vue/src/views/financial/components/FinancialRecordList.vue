@@ -19,7 +19,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button v-if="belongTo == 'RECEIVABLE_PAGE'" type="text" @click="onConfirm(scope.row)">确认收款</el-button>
-          <el-button v-if="belongTo == 'PAYABLE_PAGE'" type="text" @click="onConfirm(scope.row)">确认付款</el-button>
+          <!-- <el-button v-if="belongTo == 'PAYABLE_PAGE'" type="text" @click="onConfirm(scope.row)">确认付款</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -48,7 +48,13 @@
     },
     methods: {
       onConfirm (row) {
-        this.$emit('onConfirmReceipt', row)
+        this.$confirm('是否确认收款?', '', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          this.$emit('onConfirmReceipt', row)
+        });
       }
     },
     data () {

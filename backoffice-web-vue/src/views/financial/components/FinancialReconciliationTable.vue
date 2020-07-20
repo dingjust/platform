@@ -18,29 +18,20 @@
           <th :key="item">{{item}}</th>
         </template>
       </tr>
+      <!-- 生产工单行 -->
       <template v-for="(item, productionIndex) in formData.productionTaskList">
         <tr :key="item.code">
-          <!-- <td :rowspan="item.reconciliationOrder.length + 1">{{item.code}}</td> -->
-          <td :rowspan="1">{{item.code}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td :rowspan="totalRow">{{formData.amount}}</td>
-          <td :rowspan="totalRow">{{formData.totalPaidAmount}}</td>
-          <td :rowspan="totalRow">{{totalNotReceived}}</td>
+          <td :rowspan="item.reconciliationSheetList.length + 1">{{item.code}}</td>
         </tr>
-        <!-- <template v-for="(val, reconciliationIndex) in item.reconciliationOrder">
-          <tr :key="val.id">
+        <template v-for="(val, reconciliationIndex) in item.reconciliationSheetList">
+          <tr :key="val.code">
             <td>{{val.code}}</td>
-            <td>{{val.amount}}</td>
-            <td>{{val.deposit}}</td>
-            <td>{{val.paymentReceived}}</td>
-            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow">{{formData.amount}}</td>
-            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow">{{formData.totalPaidAmount}}</td>
-            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow">{{totalNotReceived}}</td>
+            <td>{{val.amountDue}}</td>
+            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
+            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
+            <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
           </tr>
-        </template> -->
+        </template>
       </template>
     </table>
   </div>
@@ -49,13 +40,28 @@
 <script>
   export default {
     name: 'FinancialReconciliationTable',
-    props: ['formData'],
+    props: {
+      // formData: {
+      //   type: Object
+      // },
+      belongTo: {
+        type: String,
+        default: 'PAYABLE_PAGE'
+      }
+    },
     components: {
     },
     computed: {
+      titleRow: function () {
+        return this.belongTo == 'PAYABLE_PAGE' ? this.paymentRow : this.receiptRow;
+      },
       // 计算总行数
       totalRow: function () {
-        return 5;
+        let count = 0;
+        this.formData.productionTaskList.forEach(item => {
+          count += item.reconciliationSheetList.length;
+        })
+        return count;
       },
       // 计算未收总额
       totalNotReceived: function () {
@@ -75,42 +81,34 @@
     },
     data () {
       return {
-        titleRow: ['生产工单号', '对账单号', '对账金额', '定金', '已付款', '应收总额', '已收总额', '未收总额']
-        // formData: {
-        //   productionOrder: [{
-        //     id: 1,
-        //     code: 'KY00001-01',
-        //     reconciliationOrder: [{
-        //       id: 101,
-        //       code: 'KY00001-01-01',
-        //       amount: 12000,
-        //       deposit: 6000,
-        //       paymentReceived: 9000
-        //     }, {
-        //       id: 102,
-        //       code: 'KY00001-01-02',
-        //       amount: 12000,
-        //       deposit: 6000,
-        //       paymentReceived: 9000
-        //     }]
-        //   }, {
-        //     id: 2,
-        //     code: 'KY00001-01',
-        //     reconciliationOrder: [{
-        //       id: 201,
-        //       code: 'KY00001-02-01',
-        //       amount: 12000,
-        //       deposit: 6000,
-        //       paymentReceived: 9000
-        //     }, {
-        //       id: 202,
-        //       code: 'KY00001-02-02',
-        //       amount: 12000,
-        //       deposit: 6000,
-        //       paymentReceived: 9000
-        //     }]
-        //   }]
-        // }
+        paymentRow: ['生产工单号', '对账单号', '应付金额', '应付总额', '已付总额', '未付总额'],
+        receiptRow: ['生产工单号', '对账单号', '应收金额', '应收总额', '已收总额', '未收总额'],
+        formData: {
+          orderAmount: 2000000,
+          amount: 720000,
+          invoiceAmount: 0,
+          productionTaskList: [{
+            code: 'TSPO00159003-1',
+            quantity: 9600,
+            reconciliationSheetList: [{
+              code: 'DZS100003001',
+              amountDue: 240000
+            }, {
+              code: 'DZS100003002',
+              amountDue: 120000
+            }]
+          }, {
+            code: 'TSPO00159003-2',
+            quantity: 9600,
+            reconciliationSheetList: [{
+              code: 'DZS100003003',
+              amountDue: 240000
+            }, {
+              code: 'DZS100003004',
+              amountDue: 120000
+            }]
+          }]
+        }
       }
     },
     created () {

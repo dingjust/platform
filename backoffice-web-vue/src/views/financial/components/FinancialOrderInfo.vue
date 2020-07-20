@@ -59,15 +59,21 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6>订单创建人：{{formData.productionOrder.creator ? formData.productionOrder.creator.name : ''}}</h6>
+            <h6 class="hide-text" :title="formData.productionOrder.creator ? formData.productionOrder.creator.name : ''">
+              订单创建人：{{formData.productionOrder.creator ? formData.productionOrder.creator.name : ''}}
+            </h6>
           </el-col>
           <el-col :span="12">
-            <h6>生产负责人：{{formData.productionOrder.productionLeader ? formData.productionOrder.productionLeader.name : ''}}</h6>
+            <h6 class="hide-text" :title="formData.productionOrder.productionLeader ? formData.productionOrder.productionLeader.name : ''">
+              生产负责人：{{formData.productionOrder.productionLeader ? formData.productionOrder.productionLeader.name : ''}}
+            </h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6>审批负责人：{{formData.productionOrder.merchandiser ? formData.productionOrder.merchandiser.name : ''}}</h6>
+            <h6 class="hide-text" :title="formData.productionOrder.merchandiser ? formData.productionOrder.merchandiser.name : ''">
+              审批负责人：{{formData.productionOrder.merchandiser ? formData.productionOrder.merchandiser.name : ''}}
+            </h6>
           </el-col>
         </el-row>
       </div>
@@ -150,5 +156,11 @@
     border: 2px solid #E5E5E5;
     border-radius: 5px;
     padding: 10px 10px 10px 10px;
+  }
+
+  .hide-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 </style>

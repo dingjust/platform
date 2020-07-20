@@ -93,7 +93,7 @@
       </el-row>
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <payment-form v-if="paymentVisible" :id="id"/>
+      <payment-form v-if="paymentVisible" :id="id" @callback="callback"/>
     </el-dialog>
   </div>
 </template>
@@ -157,8 +157,9 @@
         }
         this.formData = result.data;
       },
-      onConfirm () {
-
+      callback () {
+        this.paymentVisible = !this.paymentVisible;
+        this.getDetail();
       },
       convertCurrency(money) {
         //汉字的数字

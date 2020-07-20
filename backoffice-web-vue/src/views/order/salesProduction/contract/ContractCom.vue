@@ -370,6 +370,7 @@
             this.contracts.push(result.content[i]);
           }
         }
+        this.$emit('callback');
       },
       onCloseDialog () {
         this.dialogVisible = false;

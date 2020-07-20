@@ -89,7 +89,7 @@
       <el-divider direction="vertical"></el-divider>
       <el-col :span="5">
         <el-row class="info-basic-row" type="flex" align="middle" justify="start">
-          <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign" />
+          <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback"/>
         </el-row>
       </el-col>
     </el-row>
@@ -135,7 +135,11 @@
           this.slotData.acceptState == 'ACCEPTED';
       }
     },
-    methods: {},
+    methods: {
+      callback () {
+        this.$emit('callback');
+      }
+    },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,

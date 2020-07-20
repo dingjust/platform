@@ -83,6 +83,7 @@
           return;
         }
         this.$message.success('付款成功');
+        this.$emit('callback');
       },
       validateField (name) {
         this.$refs.form.validateField(name);

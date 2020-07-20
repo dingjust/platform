@@ -11,9 +11,8 @@
       <div class="pt-2"></div>
       <financial-order-info :payPlan="payPlanData" :formData="formData"/>
       <financial-invoice-info :formData="formData" @callback="callback" />
-      <financial-reconciliation-table :formData="formData"/>
-      <financial-record-list :belongTo="'PAYABLE_PAGE'" :content="formData.requestList" 
-                              @onConfirmReceipt="onConfirmReceipt"/>
+      <financial-reconciliation-table belongTo="PAYABLE_PAGE" :formData="formData"/>
+      <financial-record-list belongTo="PAYABLE_PAGE" :content="formData.requestList" />
     </el-card>
   </div>
 </template>
