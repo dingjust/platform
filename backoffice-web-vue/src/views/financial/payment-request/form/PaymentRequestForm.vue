@@ -24,7 +24,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="合同号">
-              <el-input class="payment-request-input" :disabled="true"></el-input>
+              <el-input class="payment-request-input" :disabled="true" v-model="contactCode"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -283,6 +283,7 @@
     },
     data () {
       return {
+        contactCode: '',
         saleProdutionVisible: false,
         currentUser: this.$store.getters.currentUser,
         receiver: '',

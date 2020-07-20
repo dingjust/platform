@@ -21,6 +21,14 @@
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
           @appendProduct="appendProduct" />
       </div>
+      <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
+        <el-row v-if="isPayment && formData.payPlan != null">
+          <purchase-order-info-payment-finance :slotData="formData" />
+        </el-row>
+        <el-row v-if="isReceipt && formData.payPlan != null">
+          <purchase-order-info-receipt-finance :slotData="formData" />
+        </el-row>
+      </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
           <h5 style="font-weight: bold">拒绝原因</h5>
@@ -62,6 +70,8 @@
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
+  import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
+  import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
 
   export default {
     name: 'SalesOrderDetail',
@@ -70,7 +80,9 @@
       SalesOrderDetailForm,
       SalesProductionTabs,
       SalesPlanDetailBtnGroup,
-      SalesPlanAppendProductForm
+      SalesPlanAppendProductForm,
+      PurchaseOrderInfoPaymentFinance,
+      PurchaseOrderInfoReceiptFinance
     },
     computed: {
       // ...mapGetters({
@@ -132,6 +144,12 @@
               return false;
           }
         }
+      },
+      isPayment: function () {
+        return this.$store.getters.currentUser.companyCode == this.formData.originCooperator.partner.uid;
+      },
+      isReceipt: function () {
+        return this.$store.getters.currentUser.companyCode == this.formData.targetCooperator.partner.uid;
       }
     },
     methods: {

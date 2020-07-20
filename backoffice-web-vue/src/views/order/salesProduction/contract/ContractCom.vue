@@ -77,7 +77,7 @@
       },
       contracts: {
         type: Array,
-        default: []
+        default: () => []
       },
       canSign: {
         type: Boolean,
