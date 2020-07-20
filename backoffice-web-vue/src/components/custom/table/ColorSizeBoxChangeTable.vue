@@ -7,58 +7,61 @@
 !-->
 <template>
   <div class="table-container">
-    <table cellspacing="2" width="100%" class="order-table">
-      <tr class="order-table-th_row">
-        <th style="width: 100px">箱号</th>
-        <th style="width: 60px">颜色/尺码</th>
-        <template v-for="size in sizes">
-          <th :key="size.name">{{size.name}}</th>
-        </template>
-        <th>数量小计</th>
-        <th>合计</th>
-      </tr>
-      <template v-for="(entry,entryIndex) in data">
-        <template v-for="(color,colorIndex) in colors">
-          <tr :key="'entry'+entryIndex+'color'+colorIndex" v-if="readOnly?countColorsAmount(color,entryIndex)!=0:true">
-            <td v-if="colorIndex==0" :rowspan="getRowspanLength(entryIndex)">
-              <el-row type="flex" justify="center">
-                <div class="index-container">
-                  <el-row type="flex" justify="center" align="middle">
-                    <h6 style="padding-top:5px">{{entryIndex+1}}</h6>
-                  </el-row>
-                </div>
-              </el-row>
-            </td>
-            <td>{{color.name}}</td>
-            <template v-for="size in sizes">
-              <td :key="'td'+size.name">
-                <template v-if="readOnly">
-                  {{getEntryByColorSize(color, size,entryIndex).quantity}}
-                </template>
-                <template v-else>
-                  <span class="order-table-input_prefix">{{getOldEntryByColorSize(color, size,entryIndex).quantity}}<i
-                      class="el-icon-plus icon-plus" /></span>
-                  <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="0"
-                    v-number-input.float="{ min: 0,decimal:0}" :disabled="readOnly"
-                    v-model="getEntryByColorSize(color, size,entryIndex).quantity">
-                  </el-input>
-                </template>
+    <div class="table-box">
+      <table cellspacing="2" width="100%" class="order-table">
+        <tr class="order-table-th_row">
+          <th style="width: 100px">箱号</th>
+          <th style="width: 60px">颜色/尺码</th>
+          <template v-for="size in sizes">
+            <th :key="size.name">{{size.name}}</th>
+          </template>
+          <th>数量小计</th>
+          <th>合计</th>
+        </tr>
+        <template v-for="(entry,entryIndex) in data">
+          <template v-for="(color,colorIndex) in colors">
+            <tr :key="'entry'+entryIndex+'color'+colorIndex"
+              v-if="readOnly?countColorsAmount(color,entryIndex)!=0:true">
+              <td v-if="colorIndex==0" :rowspan="getRowspanLength(entryIndex)">
+                <el-row type="flex" justify="center">
+                  <div class="index-container">
+                    <el-row type="flex" justify="center" align="middle">
+                      <h6 style="padding-top:5px">{{entryIndex+1}}</h6>
+                    </el-row>
+                  </div>
+                </el-row>
               </td>
-            </template>
-            <td style="width:100px" class="grey-td">
-              {{countColorsAmount(color,entryIndex)}}
-            </td>
-            <td v-if="colorIndex==0" :rowspan="colors.length" style="width:100px">
-              {{countEntryAmount(entryIndex)}}
-            </td>
-          </tr>
+              <td>{{color.name}}</td>
+              <template v-for="size in sizes">
+                <td :key="'td'+size.name">
+                  <template v-if="readOnly">
+                    {{getEntryByColorSize(color, size,entryIndex).quantity}}
+                  </template>
+                  <template v-else>
+                    <span class="order-table-input_prefix">{{getOldEntryByColorSize(color, size,entryIndex).quantity}}<i
+                        class="el-icon-plus icon-plus" /></span>
+                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="0"
+                      v-number-input.float="{ min: 0,decimal:0}" :disabled="readOnly"
+                      v-model="getEntryByColorSize(color, size,entryIndex).quantity">
+                    </el-input>
+                  </template>
+                </td>
+              </template>
+              <td style="width:100px" class="grey-td">
+                {{countColorsAmount(color,entryIndex)}}
+              </td>
+              <td v-if="colorIndex==0" :rowspan="colors.length" style="width:100px">
+                {{countEntryAmount(entryIndex)}}
+              </td>
+            </tr>
+          </template>
         </template>
-      </template>
-      <tr>
-        <td :colspan="2" class="end-td grey-td">总计</td>
-        <td :colspan="sizes.length+2" class="end-td grey-td">{{countTotalAmount}}</td>
-      </tr>
-    </table>
+        <tr>
+          <td :colspan="2" class="end-td grey-td">总计</td>
+          <td :colspan="sizes.length+2" class="end-td grey-td">{{countTotalAmount}}</td>
+        </tr>
+      </table>
+    </div>
     <el-row type="flex" justify="space-around" align="middle" style="margin-top:10px">
       <h6>总箱数：{{data.length}}</h6>
       <h6>总件数：{{countTotalAmount}}</h6>
@@ -321,7 +324,7 @@
   }
 
   .order-table-input>>>.el-input__inner {
-    width: auto;
+    width: 80px;
     border: 0px solid #fff;
     /* padding: 0px; */
     text-align: start;
@@ -348,6 +351,10 @@
   .icon-plus {
     color: red;
     margin-left: 10px;
+  }
+
+  .table-box {
+    overflow-x: scroll;
   }
 
 </style>

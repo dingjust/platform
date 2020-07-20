@@ -29,7 +29,7 @@
           </el-button-group>
         </el-col>
         <el-col :span="2">
-          <el-button class="create-btn" @click="onApply" v-if="ableToApply">申请复议</el-button>
+          <el-button class="create-btn" @click="onApply" v-show="ableToApply">申请复议</el-button>
         </el-col>
       </el-row>
     </el-form>

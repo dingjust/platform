@@ -145,14 +145,13 @@
             name: ''
           }
         },
-        activeStatus: 'TO_BE_RECONCILED',
         statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
         queryFormData: {
           createdDateFrom: null,
           createdDateTo: null,
           keyword: '',
           categories: [],
-          state: 'TO_BE_RECONCILED'
+          states: ['TO_BE_RECONCILED','PRODUCING','TO_BE_DELIVERED']
         },
         selectRows: null,
         stateCount: {}

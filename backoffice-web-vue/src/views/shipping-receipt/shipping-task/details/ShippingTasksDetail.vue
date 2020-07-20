@@ -96,7 +96,7 @@
             if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
               let pass = true;
               this.formData.shippingSheets.forEach(sheet => {
-                if (!(sheet.state == 'PENDING_RECONCILED' || sheet.state == 'COMPLETED')) {
+                if (!(sheet.state == 'PENDING_RECONCILED' || sheet.state == 'COMPLETED'||sheet.state == 'IN_RECONCILED')) {
                   pass = false;
                   return false;
                 }

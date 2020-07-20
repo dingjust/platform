@@ -1,10 +1,15 @@
 <template>
   <div class="animated fadeIn content">
     <el-card :shadow="shadow">
-      <el-row>
+      <el-row type="flex" justify="space-between">
         <el-col :span="4">
           <div class="title">
             <h6>对账任务单</h6>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <h6>状态: {{getEnum('ReconciliationTaskState',formData.state)}}</h6>
           </div>
         </el-col>
       </el-row>
@@ -64,6 +69,8 @@
 </template>
 
 <script>
+  import Bus from '../../js/bus'
+
   import ReconciliationTasksQuantityTable from '../table/ReconciliationTasksQuantityTable'
   import ReconciliationTasksOrdersList from '../list/ReconciliationTasksOrdersList'
   export default {
@@ -114,11 +121,15 @@
         this.formData = result.data;
       },
       onCreate() {
+        let productionOrder = Object.assign({
+          product: this.formData.product
+        }, this.formData.productionTaskOrder);
+
         this.$router.push({
           name: '创建对账单',
           params: {
             taskId: this.id,
-            productionTaskOrder: this.formData.productionTaskOrder,
+            productionTaskOrder: productionOrder,
             receiveDispatchTaskId: this.formData.receiveDispatchTask.id
           }
         });
@@ -149,6 +160,11 @@
     },
     created() {
       this.getDetail();
+
+      //监听刷新通知
+      Bus.$on('reconciliation-task-details_onRefresh', args => {
+        this.getDetail();
+      });
     },
     destroyed() {
 

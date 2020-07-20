@@ -74,7 +74,7 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" class="basic-row" align="middle">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-row type="flex" align="middle">
               <span class="basic-label">收货单：</span>
               <template v-for="(sheet,sheetIndex) in formData.receiptSheets">
@@ -84,13 +84,33 @@
               </template>
             </el-row>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-row type="flex" align="middle">
               <span class="basic-label">退货单：</span>
               <template v-for="(sheet,sheetIndex) in formData.returnSheets">
                 <el-button type="text" @click="onReturnDetail(formData.returnSheets[sheetIndex].id)"
                   :key="'return'+sheetIndex">
                   {{formData.returnSheets[sheetIndex].code}}</el-button>
+              </template>
+            </el-row>
+          </el-col>
+          <el-col :span="6">
+            <el-row type="flex" align="middle">
+              <span class="basic-label">复议单：</span>
+              <template v-for="(sheet,sheetIndex) in formData.reconsiderSheets">
+                <el-button type="text" @click="onReconsiderDetail(formData.reconsiderSheets[sheetIndex].id)"
+                  :key="'return'+sheetIndex">
+                  {{formData.reconsiderSheets[sheetIndex].code}}</el-button>
+              </template>
+            </el-row>
+          </el-col>
+          <el-col :span="6">
+            <el-row type="flex" align="middle">
+              <span class="basic-label">对账单：</span>
+              <template v-for="(sheet,sheetIndex) in formData.reconsiderSheets">
+                <el-button type="text" @click="onReconsiderDetail(formData.reconsiderSheets[sheetIndex].id)"
+                  :key="'return'+sheetIndex">
+                  {{formData.reconsiderSheets[sheetIndex].code}}</el-button>
               </template>
             </el-row>
           </el-col>
@@ -111,6 +131,22 @@
           </template>
         </el-row>
       </div>
+      <el-dialog :visible.sync="receDialogVisible" width="80%" class="purchase-dialog" append-to-body
+        :close-on-click-modal="false">
+        <receipt-order-detail :id="receId" v-if="receDialogVisible" />
+      </el-dialog>
+      <el-dialog :visible.sync="returnDialogVisible" width="80%" class="purchase-dialog" append-to-body
+        :close-on-click-modal="false">
+        <return-order-detail :id="returnId" v-if="returnDialogVisible" />
+      </el-dialog>
+      <el-dialog :visible.sync="reconDialogVisible" width="80%" class="purchase-dialog" append-to-body
+        :close-on-click-modal="false">
+        <reconsider-order-detail :id="reconId" v-if="reconDialogVisible" />
+      </el-dialog>
+      <el-dialog :visible.sync="reciliDialogVisible" width="80%" class="purchase-dialog" append-to-body
+        :close-on-click-modal="false">
+        <reconciliation-orders-detail v-if="reciliDialogVisible" :id="reciliId" />
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -119,11 +155,21 @@
   import {
     ColorSizeBoxTable
   } from '@/components/'
+
+  import ReceiptOrderDetail from '../../receipt-order/details/ReceiptOrderDetail'
+  import ReturnOrderDetail from '../../return-order/details/ReturnOrderDetail'
+  import ReconsiderOrderDetail from '../../reconsider-order/details/ReconsiderOrderDetail'
+  import ReconciliationOrdersDetail from '../../reconciliation-order/details/ReconciliationOrdersDetail'
+
   export default {
     name: 'ShippingOrdersDetail',
     props: ['id'],
     components: {
-      ColorSizeBoxTable
+      ColorSizeBoxTable,
+      ReceiptOrderDetail,
+      ReturnOrderDetail,
+      ReconsiderOrderDetail,
+      ReconciliationOrdersDetail
     },
     computed: {
       hasReceiptOrder: function () {
@@ -169,13 +215,22 @@
           }
         });
       },
-      //跳转收货详情
+      //收货详情
       onReceiptDetail(id) {
-        this.$router.push('/receipt/orders/' + id);
+        // this.$router.push('/receipt/orders/' + id);
+        this.receId = id;
+        this.receDialogVisible = true;
       },
-      //跳转退货详情
+      //退货详情
       onReturnDetail(id) {
-        this.$router.push('/returned/orders/' + id);
+        // this.$router.push('/returned/orders/' + id);
+        this.returnId = id;
+        this.returnDialogVisible = true;
+      },
+      //复议单详情
+      onReconsiderDetail(id) {
+        this.reconId = id;
+        this.reconDialogVisible = true;
       },
       onNoReturn() {
         this.$confirm('是否确认跳过退货?', '提示', {
@@ -232,6 +287,14 @@
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
+        receDialogVisible: false,
+        returnDialogVisible: false,
+        reconDialogVisible: false,
+        reciliDialogVisible: false,
+        receId: null,
+        returnId: null,
+        reconId: null,
+        reciliId: null,
         formData: {
           product: {
             name: '',

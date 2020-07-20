@@ -1772,15 +1772,24 @@ const state = {
 
   //对账单状态
   ReconciliationOrderState: [{
-    code: 'PENDING_CONFIRM',
-    name: '待确认'
-  }, {
-    code: 'REJECTED',
-    name: '已拒绝'
-  }, {
-    code: 'CONFIRMED',
-    name: '已确认'
-  }, ],
+      code: 'PENDING_CONFIRM',
+      name: '待确认'
+    }, {
+      code: 'PENDING_APPROVAL',
+      name: '待审批'
+    },
+    {
+      code: 'APPROVAL_RETURN',
+      name: '审批驳回'
+    },
+    {
+      code: 'REJECTED',
+      name: '已拒绝'
+    }, {
+      code: 'CONFIRMED',
+      name: '已确认'
+    },
+  ],
 
   //对账任务状态
   ReconciliationTaskState: [{

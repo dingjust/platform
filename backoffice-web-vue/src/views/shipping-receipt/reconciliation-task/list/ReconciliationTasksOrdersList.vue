@@ -68,7 +68,7 @@
     </el-dialog>
     <el-dialog :visible.sync="reconciliationOrderVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <reconciliation-orders-detail v-if="reconciliationOrderVisible" :id="reconciliationId" />
+      <reconciliation-orders-detail v-if="reconciliationOrderVisible" :id="reconciliationId"/>
     </el-dialog>
   </div>
 </template>

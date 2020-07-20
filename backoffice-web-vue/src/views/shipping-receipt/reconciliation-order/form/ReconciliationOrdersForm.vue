@@ -23,7 +23,7 @@
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="24">
-            <reconciliation-orders-form-foot :formData="formData" ref="footComp" />
+            <reconciliation-orders-form-foot :formData="formData" ref="footComp"/>
           </el-col>
         </el-row>
         <el-row type="flex" justify="end" style="padding-left: 10px;margin-top: 20px">
@@ -67,10 +67,10 @@
       ReconciliationShippingOrdersList
     },
     computed: {
-      btnDisabled:function(){
-        if(this.reconciliationTaskId!=null){
+      btnDisabled: function () {
+        if (this.reconciliationTaskId != null) {
           return false;
-        }else{
+        } else {
           return true
         }
       },
@@ -150,6 +150,14 @@
           deductions: this.formData.deductions
         };
 
+        //是否需要审核
+        if(this.formData.isApproval){
+          Object.assign(form,{
+            isApproval:true,
+            approvers:this.formData.approvers
+          })
+        }
+
         //TODO:对账任务id处理
         const url = this.apis().reconciliationCreate();
         const result = await this.$http.post(url, form, {
@@ -197,6 +205,7 @@
           return;
         }
         this.$set(this.formData, 'shippingTask', result.data);
+        this.reconciliationTaskId = result.data.reconciliationTask.id;
       }
 
     },
@@ -205,6 +214,8 @@
         reconciliationTaskId: null,
         dispatchTaskId: null,
         formData: {
+          isApproval: false,
+          approvers: [null],      
           shippingSheets: [
 
           ],
