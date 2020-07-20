@@ -35,7 +35,9 @@
             <h6>单价：{{formData.productionTaskOrder.unitPrice}}</h6>
           </el-col>
           <el-col :span="8">
-            <h6>数量：{{formData.productionTaskOrder.quantity}}</h6>
+            <h6>
+              数量：{{formData.productionTaskOrder.quantity?formData.productionTaskOrder.quantity:formData.productionTaskOrder.totalQuantity}}
+            </h6>
           </el-col>
         </el-row>
         <el-row type="flex" style="padding-bottom: 10px">
@@ -69,9 +71,9 @@
         type: Boolean,
         default: false
       },
-      disabled:{
-        type:Boolean,
-        default:false
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
     components: {

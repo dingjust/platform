@@ -49,11 +49,72 @@
           </el-col>
         </el-row>
       </template>
+      <!-- 创建方 -->
+      <template v-if="isShipPart||isForm">
+        <el-row type="flex" v-if="!readOnly" style="margin-top:20px">
+          <el-col :span="2">
+            <el-form-item label="" label-width="5px">
+              <el-checkbox v-model="formData.isApproval" @change="onIsApprovalChange">需审核</el-checkbox>
+            </el-form-item>
+          </el-col>
+          <el-col :span="20" v-if="formData.isApproval">
+            <template v-for="(item,itemIndex) in formData.approvers">
+              <el-form-item :key="'a'+itemIndex" :label="'审批人'" label-width="100px" :prop="'approvers.' + itemIndex"
+                :rules="{required: true, message: '不能为空', trigger: 'change'}">
+                <personnel-selection :vPerson.sync="formData.approvers[itemIndex]" />
+              </el-form-item>
+            </template>
+          </el-col>
+        </el-row>
+        <el-row type="flex" v-else>
+          <el-col :span="2"><span>审核人:</span></el-col>
+          <el-col :span="20" v-if="formData.auditWorkOrder&&formData.approvers">
+            <template v-for="(item,itemIndex) in formData.approvers">
+              <span :key="'a'+itemIndex">{{item.name}}</span>
+            </template>
+          </el-col>
+        </el-row>
+      </template>
+      <!-- 收货方 -->
+      <template v-if="isReceiptPart">
+        <template v-if="showReceApproverSelect">
+          <!-- TODO: 限制跟单员-->
+          <el-row type="flex" style="margin-top:20px">
+            <el-col :span="2">
+              <el-form-item label="" label-width="5px">
+                <el-checkbox v-model="formData.isOriginApproval" @change="onIsOriginApprovalChange">需审核</el-checkbox>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20" v-if="formData.isOriginApproval">
+              <template v-for="(item,itemIndex) in formData.originApprovers">
+                <el-form-item :key="'a'+itemIndex" :label="'审批人'" label-width="100px"
+                  :prop="'originApprovers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
+                  <personnel-selection :vPerson.sync="formData.originApprovers[itemIndex]" />
+                </el-form-item>
+              </template>
+            </el-col>
+          </el-row>
+        </template>
+        <template v-else>
+          <el-row type="flex">
+            <el-col :span="2"><span>审核人:</span></el-col>
+            <el-col :span="20" v-if="formData.isOriginApproval">
+              <template v-for="(item,itemIndex) in formData.originApprovers">
+                <span :key="'a'+itemIndex">{{item.name}}</span>
+              </template>
+            </el-col>
+          </el-row>
+        </template>
+      </template>
     </el-form>
   </div>
 </template>
 
 <script>
+  import {
+    PersonnelSelection
+  } from '@/components/'
+
   export default {
     name: 'ReconciliationOrdersFormFoot',
     props: {
@@ -64,13 +125,44 @@
       readOnly: {
         type: Boolean,
         default: false
+      },
+      isForm:{
+        type:Boolean,
+        default:true
       }
     },
     components: {
-
+      PersonnelSelection
     },
     computed: {
-
+      //发货方
+      isShipPart: function () {
+        if (this.formData.shipParty) {
+          return this.currentUser.companyCode == this.formData.shipParty.uid;
+        } else {
+          return false;
+        }
+      },
+      //收货方
+      isReceiptPart: function () {
+        if (this.formData.receiveParty) {
+          return this.currentUser.companyCode == this.formData.receiveParty.uid;
+        } else {
+          return false;
+        }
+      },
+      //收货方跟单员
+      isReceiptCreator: function () {
+        return true;
+      },
+      //收货方显示审核人员选择项
+      showReceApproverSelect: function () {
+        if (this.formData.state == 'PENDING_CONFIRM' && this.isReceiptCreator) {
+          return this.formData.originAuditWorkOrder == null || this.formData.originAuditWorkOrder.state ==
+            'AUDITED_FAILED';
+        }
+        return false;
+      }
     },
     methods: {
       addReduceRow() {
@@ -90,11 +182,25 @@
       },
       removeIncreaseRow(index) {
         this.formData.increases.splice(index, 1);
+      },
+      onIsApprovalChange(val) {
+        if (val) {
+          if (this.formData.approvers == null || this.formData.approvers.length == 0) {
+            this.$set(this.formData, 'approvers', [null]);
+          }
+        }
+      },
+      onIsOriginApprovalChange(val) {
+        if (val) {
+          if (this.formData.originApprovers == null || this.formData.originApprovers.length == 0) {
+            this.$set(this.formData, 'originApprovers', [null]);
+          }
+        }
       }
     },
     data() {
       return {
-
+        currentUser: this.$store.getters.currentUser,
       }
     },
     created() {
