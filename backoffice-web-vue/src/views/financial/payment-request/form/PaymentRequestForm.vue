@@ -54,10 +54,11 @@
           <el-col :span="9">
             <el-form-item label="申请金额" style="margin-bottom: 17px" prop="requestAmount" 
               :rules="[{required: true, message: '请填写申请金额', trigger: 'change'}]">
-              <el-input class="payment-request-input" v-model="formData.requestAmount" @input="onChange">
+              <el-input class="payment-request-input" v-model="formData.requestAmount" @input="onChange" 
+                v-number-input.float="{min: 0 ,decimal:0}">
                 <span slot="suffix">元</span>
               </el-input>
-              <h6 style="color: #909399;margin-bottom: 0px">可申请金额3000元</h6>
+              <h6 v-if="preApplyAmount !== '' || preApplyAmount === 0" style="color: #909399;margin-bottom: 0px">可申请金额{{preApplyAmount}}元</h6>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -136,11 +137,41 @@
 
     },
     methods: {
+      async countRequestAmount (id) {
+        const url = this.apis().getRequestAmount(id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.preApplyAmount = this.parseIntNotParNaN(result.data.amount) - 
+                              this.parseIntNotParNaN(result.data.preTotalPaidAmount) - 
+                              this.parseIntNotParNaN(result.data.invoiceAmount);
+        console.log(this.preApplyAmount);
+      },
+      parseIntNotParNaN (data) {
+        if (isNaN(parseInt(data))) {
+          return 0;
+        } else {
+          return parseInt(data);
+        }
+      },
       setSelectOrder (row) {
         this.saleProdutionVisible = !this.saleProdutionVisible;
         this.formData.productionOrder.id = row.id;
         this.formData.productionOrder.code = row.code;
         this.receiver = row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
+        row.agreements.forEach((item, index) => {
+          this.contactCode += item.code;
+          if (!(index == row.agreements.length - 1)) {
+            this.contactCode += ', ';
+          }
+        })
+        this.countRequestAmount(row.id);
       },
       addApprover () {
         this.formData.approvers.push({});
@@ -192,6 +223,9 @@
         this.$router.go(-1);
       },
       onChange (val) {
+        if (this.parseIntNotParNaN(val) > this.preApplyAmount) {
+          this.formData.requestAmount = this.preApplyAmount + '';
+        }
         this.chineseAmount = this.convertCurrency(val);
       },
       // 金额大写转换
@@ -283,6 +317,7 @@
     },
     data () {
       return {
+        preApplyAmount: '',
         contactCode: '',
         saleProdutionVisible: false,
         currentUser: this.$store.getters.currentUser,

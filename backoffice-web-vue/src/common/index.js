@@ -867,6 +867,10 @@ const COMMON_APIS = {
   // 付款确认
   paymentRequestPayConfirm (id) {
     return '/b2b/payment/request/pay/confirm/' + id;
+  },
+  // 查询订单可请款金额
+  getRequestAmount (id) {
+    return '/b2b/payment/bill/amount/' + id;
   }
 };
 

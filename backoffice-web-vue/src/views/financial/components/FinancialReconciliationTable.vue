@@ -41,8 +41,8 @@
         <template v-else>
           <tr :key="item.code">
             <td>{{item.code}}</td>
-            <td>{{''}}</td>
-            <td>{{''}}</td>
+            <td style="color: #909399">{{'暂无数据'}}</td>
+            <td style="color: #909399">{{'暂无数据'}}</td>
             <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
             <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{formData.totalPaidAmount}}</td>
             <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{totalDifference}}</td>

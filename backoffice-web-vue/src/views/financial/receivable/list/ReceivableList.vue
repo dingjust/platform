@@ -10,10 +10,10 @@
         </template>
       </el-table-column>
       <el-table-column label="关联SKU数" prop="itemSize"/>
-      <el-table-column label="订单数量" />
+      <el-table-column label="订单数量" prop="quantity"/>
       <el-table-column label="合作商" prop="belongTo.name"/>
-      <el-table-column label="创建人" prop="creator.name" />
-      <el-table-column label="负责人" prop="merchandiser.name" />
+      <!-- <el-table-column label="创建人" prop="creator.name" /> -->
+      <!-- <el-table-column label="负责人" prop="merchandiser.name" /> -->
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>

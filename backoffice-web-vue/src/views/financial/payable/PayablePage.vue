@@ -101,7 +101,7 @@
         queryFormData: {
           keyword: '',
           merchandiserName: '',
-          cooperatorName: '',
+          payableName: '',
           createdDateFrom: '',
           createdDateTo: '',
           state: 'WAIT_TO_PAY'

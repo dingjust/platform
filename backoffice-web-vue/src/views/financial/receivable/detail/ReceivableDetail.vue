@@ -68,6 +68,7 @@
           return;
         }
         this.$message.success('确认收款成功！');
+        this.getDetail();
       },
       setPayPlan (payPlan) {
         if (!payPlan) {

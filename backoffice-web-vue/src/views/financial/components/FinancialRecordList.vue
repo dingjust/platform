@@ -3,7 +3,7 @@
     <el-row type="flex" justify="start" align="middle">
       <h6 style="font-size: 14px">{{title}}</h6>
     </el-row>
-    <el-table ref="resultTable" stripe :data="content" :height="autoHeight">
+    <el-table ref="resultTable" stripe :data="content">
       <el-table-column label="收款次数" v-if="belongTo == 'RECEIVABLE_PAGE'" type="index" width="80px"/>
       <el-table-column label="付款次数" v-if="belongTo == 'PAYABLE_PAGE'" type="index" width="80px"/>
       <el-table-column label="付款申请单" prop="code" v-if="belongTo == 'PAYABLE_PAGE'"/>
