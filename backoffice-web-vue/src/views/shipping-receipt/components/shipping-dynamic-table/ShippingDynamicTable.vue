@@ -2,7 +2,8 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" row-key="id" @selection-change="handleSelectionChange"
       @row-click="rowClick">
-      <!-- <el-table-column type="selection" width="55" v-show="hasSelection" fixed key="1"></el-table-column> -->
+      <el-table-column type="selection" v-if="hasSelection" key="1" fixed="left" :selectable="selectableFuc">
+      </el-table-column>
       <shipping-dynamic-table-list :columns="columns" />
     </el-table>
     <div class="pt-2"></div>
@@ -31,6 +32,17 @@
           return ["发货单号", "产品名称", "关联订单"];
         }
       },
+      //是否多选
+      // isMulti: {
+      //   type: Boolean,
+      //   default: true
+      // },
+      // selectable: {
+      //   type: Function,
+      //   default: (row, index) => {
+      //     return true;
+      //   }
+      // }
     },
     components: {
       ShippingDynamicTableList,
@@ -39,8 +51,31 @@
     computed: {
       //是否有多选项
       hasSelection: function () {
-        let index = this.columns.filter(element => element.key != null).findIndex(element => element.key == '多选');
+        let index = this.columns.filter(element => element.key != null).findIndex(element => element.key == 'select');
         return index != -1;
+      },
+      //是否多选
+      isMulti: function () {
+        let index = this.columns.findIndex(item => item.key == 'select');
+        if (index != -1) {
+          if (this.columns[index].isMulti!=null ) {
+            return this.columns[index].isMulti;
+          }
+        }
+        return true;
+      },
+      //选择项是否可选函数
+      selectableFuc: function () {
+        let index = this.columns.findIndex(item => item.key == 'select');
+        if (index != -1) {
+          if (this.columns[index].selectable != null) {
+            return this.columns[index].selectable;
+          }
+        }
+        //默认函数可选
+        return function (row, index) {
+          return true;
+        };
       }
     },
     methods: {
@@ -61,13 +96,17 @@
       },
       handleSelectionChange(val) {
         // 限制单选
-        if (val.length > 1) {
-          this.$refs.resultTable.toggleRowSelection(val[0], false);
-          this.selectionRow = val[val.length - 1];
-        } else if (val.length == 1) {
-          this.selectionRow = val[val.length - 1];
-        } else if (val.length == 0) {
-          this.selectionRow = "";
+        if (!this.isMulti) {
+          if (val.length > 1) {
+            this.$refs.resultTable.toggleRowSelection(val[0], false);
+            this.selectionRow = val[val.length - 1];
+          } else if (val.length == 1) {
+            this.selectionRow = val[val.length - 1];
+          } else if (val.length == 0) {
+            this.selectionRow = "";
+          }
+        } else {
+          this.selectionRow = val;
         }
         this.$emit('onSelect', this.selectionRow);
       },

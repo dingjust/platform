@@ -16,7 +16,7 @@ import ShippingOrdersDetail from '../../shipping-order/details/ShippingOrdersDet
 
 // const Selection = {
 //   template: `
-//   <el-table-column type="selection" width="55" fixed="left" :key='sortKey'></el-table-column>
+//   <el-table-column type="selection" :key='sortKey'></el-table-column>
 // `,
 //   props: {
 //     sortKey: {
@@ -27,7 +27,7 @@ import ShippingOrdersDetail from '../../shipping-order/details/ShippingOrdersDet
 
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" :prop="prop" min-width="110px" :key="sortKey" fixed="left"></el-table-column>
+  <el-table-column label="发货单号" :prop="prop" min-width="110px" :key="sortKey"></el-table-column>
   `,
   props: {
     prop: {

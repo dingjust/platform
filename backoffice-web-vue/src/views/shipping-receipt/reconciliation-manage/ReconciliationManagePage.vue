@@ -10,7 +10,8 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,status) in statusMap">
         <el-tab-pane :label="map.label" :name="status" :key="status">
-          <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch" />
+          <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch"
+            @onSelect="onSelect" />
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -71,15 +72,31 @@
       async onAdvancedSearch(page, size) {
         this.$emit('onAdvancedSearch');
       },
+      onSelect(val) {
+        this.$set(this, 'selectData', val);
+        this.$emit('onSelect', val);
+      },
       // 创建对账单
       onCreate() {
-        this.$router.push('/reconciliation/create/orders');
+        if (this.selectData.length > 0) {
+          this.$router.push({
+            name: '创建对账单',
+            params: {
+              taskId: this.id,
+              productionTaskOrder: this.selectData[0].productionTaskOrder,
+              // receiveDispatchTaskId: this.formData.receiveDispatchTask.id
+            }
+          });
+        } else {
+          this.$router.push('/reconciliation/create/orders');
+        }
       }
     },
     data() {
       return {
         activeName: 'PENDING_RECONCILED',
         orderListVisible: false,
+        selectData: []
       }
     },
     created() {},

@@ -62,7 +62,15 @@
         });
       },
       onAdvancedSearch(page, size) {
-        const query = this.queryFormData;
+        //针对收货方的确认审核状态处理
+        let query;
+        if (this.queryFormData.states == 'PENDING_APPROVAL') {
+          query = Object.assign({}, this.queryFormData);
+          query['states'] = 'PENDING_CONFIRM';
+          query['auditStates'] = 'AUDITING';
+        } else {
+          query = this.queryFormData;
+        }
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
         this.searchAdvanced({
@@ -84,7 +92,7 @@
           merchandiserName: '',
           createdDateFrom: '',
           createdDateTo: '',
-          states: 'PENDING_RECEIVED'
+          states: 'PENDING_RECONCILED'
         },
         statusMap: {
           PENDING_RECONCILED: {
@@ -110,6 +118,35 @@
               key: '发货操作'
             }],
             url: this.apis().shippingOrderList()
+          },
+          PENDING_APPROVAL: {
+            status: 'PENDING_APPROVAL',
+            isAuditStates: true,
+            label: '待审核',
+            columns: [{
+              key: '对账单号'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '对账发货单'
+            }, {
+              key: '单价',
+            }, {
+              key: '对账数量',
+            }, {
+              key: '对账总额',
+            }, {
+              key: '扣款金额',
+            }, {
+              key: '增款金额',
+            }, {
+              key: '对账日期',
+            }, {
+              key: '对账状态',
+            }, {
+              key: '对账详情'
+            }],
+            url: this.apis().reconciliationList()
           },
           PENDING_CONFIRM: {
             status: 'PENDING_CONFIRM',
@@ -199,7 +236,7 @@
       }
     },
     created() {
-      this.onAdvancedSearch();
+      this.onAdvancedSearch(0, 10);
     },
   }
 

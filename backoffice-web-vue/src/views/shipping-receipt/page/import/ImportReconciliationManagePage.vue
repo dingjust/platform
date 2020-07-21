@@ -10,7 +10,7 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-manage-page mode="import" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
+        @onSelect="onSelect" :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
     </el-card>
   </div>
 </template>
@@ -37,7 +37,7 @@
         keyword: 'keyword',
         page: 'page',
         formData: 'formData'
-      })
+      }),
     },
     methods: {
       ...mapActions({
@@ -72,6 +72,9 @@
           size,
           companyCode
         });
+      },
+      onSelect(val) {
+        this.$set(this, 'selectData', val);
       }
     },
     data() {
@@ -84,13 +87,36 @@
           merchandiserName: '',
           createdDateFrom: '',
           createdDateTo: '',
-          states: 'PENDING_RECEIVED'
+          states: 'PENDING_RECONCILED'
         },
         statusMap: {
           PENDING_RECONCILED: {
             status: 'PENDING_RECONCILED',
             label: '待对账',
             columns: [{
+              key: 'select',
+              isMulti: true,
+              //选择项是否可选函数
+              selectable: (row, index) => {
+                //无对应生产单不可选
+                if (row.productionTaskOrder == null) {
+                  return false;
+                }
+                if (this.selectData.length == 0) {
+                  return true;
+                } else {
+                  var orderCode = this.selectData[0].productionTaskOrder.code;
+                  if (orderCode == null) {
+                    return true;
+                  }
+                  if (row.productionTaskOrder != null && row.productionTaskOrder.code != null) {
+                    return row.productionTaskOrder.code == orderCode;
+                  } else {
+                    return false;
+                  }
+                }
+              }
+            }, {
               key: '发货单号'
             }, {
               key: '产品名称'
@@ -110,6 +136,34 @@
               key: '发货操作'
             }],
             url: this.apis().shippingOrderList()
+          },
+          PENDING_APPROVAL: {
+            status: 'PENDING_APPROVAL',
+            label: '待审核',
+            columns: [{
+              key: '对账单号'
+            }, {
+              key: '关联订单'
+            }, {
+              key: '对账发货单'
+            }, {
+              key: '单价',
+            }, {
+              key: '对账数量',
+            }, {
+              key: '对账总额',
+            }, {
+              key: '扣款金额',
+            }, {
+              key: '增款金额',
+            }, {
+              key: '对账日期',
+            }, {
+              key: '对账状态',
+            }, {
+              key: '对账详情'
+            }],
+            url: this.apis().reconciliationList()
           },
           PENDING_CONFIRM: {
             status: 'PENDING_CONFIRM',
@@ -195,11 +249,12 @@
             }],
             url: this.apis().reconciliationList()
           },
-        }
+        },
+        selectData: []
       }
     },
     created() {
-      this.onAdvancedSearch();
+      this.onAdvancedSearch(0, 10);
     },
   }
 

@@ -116,7 +116,9 @@
             <!-- <h6>申请复议数量：1</h6> -->
             <el-form-item label="申请复议数量" label-width="120px"
               :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-              <el-input v-model="form.reconsiderQuantity" placeholder="0" v-number-input.float="{ min: 0,decimal:0}">
+              <!-- TODO: 最大数为差异数最大值-->
+              <el-input ref="input" v-if="hackset" v-model="form.reconsiderQuantity" placeholder="0"
+                v-number-input.float="inputFormat">
               </el-input>
             </el-form-item>
           </el-col>
@@ -168,6 +170,14 @@
           return;
         }
         this.shippingOrder = Object.assign({}, result.data);
+        //最大复议数取差异数绝对值        
+        const num = Math.abs(this.shippingOrder.diffQuantity);
+        this.$set(this, 'inputFormat', {
+          min: 1,
+          max: num,
+          decimal: 0
+        });
+        this.hackset=true;
       },
       onReceiptDetail(id) {
         this.$router.push('/receipt/orders/' + id);
@@ -211,6 +221,12 @@
     data() {
       return {
         data: [],
+        inputFormat: {
+          min: 1,
+          max: 2,
+          decimal: 0
+        },
+        hackset: false,
         shippingOrder: {
           product: {
             name: '',
@@ -238,9 +254,6 @@
     created() {
       this.getDetail();
     },
-    destroyed() {
-
-    }
   }
 
 </script>

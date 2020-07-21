@@ -28,10 +28,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog :visible.sync="receiptOrderVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <receipt-order-detail v-if="receiptOrderVisible" :id="receiptId" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import ReceiptOrderDetail from '../../receipt-order/details/ReceiptOrderDetail'
+
   export default {
     name: 'ReconciliationShippingOrdersList',
     props: {
@@ -45,7 +51,7 @@
       }
     },
     components: {
-
+      ReceiptOrderDetail
     },
     computed: {
       //筛选待对账发货单
@@ -60,11 +66,12 @@
     },
     methods: {
       handleSelectionChange(selectionList) {
-
         this.$set(this.formData, 'shippingSheets', selectionList);
       },
       onReceiptDetail(item) {
-        this.$router.push('/receipt/orders/' + item.id);
+        // this.$router.push('/receipt/orders/' + item.id);
+        this.$set(this, 'receiptId', item.id);
+        this.receiptOrderVisible = true;
       },
       //收货数
       receiptNum(sheets) {
@@ -129,7 +136,8 @@
     },
     data() {
       return {
-
+        receiptOrderVisible: false,
+        receiptId: '',
       }
     },
     created() {}

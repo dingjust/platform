@@ -23,7 +23,7 @@
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="24">
-            <reconciliation-orders-form-foot :formData="formData" ref="footComp"/>
+            <reconciliation-orders-form-foot :formData="formData" ref="footComp" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="end" style="padding-left: 10px;margin-top: 20px">
@@ -58,7 +58,7 @@
       },
       //对应发货单id
       receiveDispatchTaskId: {
-
+        
       }
     },
     components: {
@@ -146,15 +146,27 @@
       async _onSubmit() {
         const form = {
           shippingSheets: this.formData.shippingSheets,
-          increases: this.formData.increases,
-          deductions: this.formData.deductions
+          increases: this.formData.increases.filter(item => item.amount != null && item.remarks != null).map(
+            item => {
+              return {
+                amount: item.amount ? item.amount : 0,
+                remarks: item.remarks ? item.remarks : ''
+              };
+            }),
+          deductions: this.formData.deductions.filter(item => item.amount != null && item.remarks != null).map(
+            item => {
+              return {
+                amount: item.amount ? item.amount : 0,
+                remarks: item.remarks ? item.remarks : ''
+              };
+            }),
         };
 
         //是否需要审核
-        if(this.formData.isApproval){
-          Object.assign(form,{
-            isApproval:true,
-            approvers:this.formData.approvers
+        if (this.formData.isApproval) {
+          Object.assign(form, {
+            isApproval: true,
+            approvers: this.formData.approvers
           })
         }
 
@@ -163,6 +175,8 @@
         const result = await this.$http.post(url, form, {
           taskId: this.reconciliationTaskId
         });
+
+
 
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -215,7 +229,7 @@
         dispatchTaskId: null,
         formData: {
           isApproval: false,
-          approvers: [null],      
+          approvers: [null],
           shippingSheets: [
 
           ],

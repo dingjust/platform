@@ -362,7 +362,7 @@
   }
 
   .sales-plan-triangle_box {
-    margin-top: 1px;
+    /* margin-top: 1px; */
     position: absolute;
     right: 0;
     top: 0;

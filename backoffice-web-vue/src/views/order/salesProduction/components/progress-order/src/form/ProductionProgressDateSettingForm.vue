@@ -6,9 +6,9 @@
 <!--          <h6>跟单员</h6>-->
 <!--        </div>-->
 <!--        <personnel-selection :vPerson.sync="submitData.personInCharge" width="220"/>-->
-        <el-form-item label="跟单员" prop="personInCharge" style="margin-bottom: 0px">
+        <!-- <el-form-item label="跟单员" prop="personInCharge" style="margin-bottom: 0px">
           <personnel-selection :vPerson.sync="submitData.personInCharge" width="220"/>
-        </el-form-item>
+        </el-form-item> -->
       </el-row>
       <el-row type="flex" justify="center" align="middle" class="progress-date-form-row">
 <!--        <div class="progress-date-form-title">-->

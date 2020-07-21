@@ -78,7 +78,7 @@
         });
       },
       handleClick(tab, event) {
-        this.queryFormData.status = tab.name;
+        this.queryFormData.states = tab.name;
         this.onAdvancedSearch(0, 10);
       },
       onDetail(row) {
@@ -96,7 +96,7 @@
           operatorName: '',
           creationtimeStart: '',
           creationtimeEnd: '',
-          status: 'PENDING_CONFIRM'
+          states: 'PENDING_CONFIRM'
         }
       }
     },
