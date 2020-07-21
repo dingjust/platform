@@ -150,12 +150,20 @@
                 ')';
             }
             break;
-          //复议单
+            //复议单
           case this.apis().reconsiderOrderList():
             if (!this.stateCount.reconsider.hasOwnProperty(map.status)) {
               break;
             }
             tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.reconsider[map.status] +
+              ')';
+            break;
+            //退货单
+          case this.apis().returnOrderList():
+            if (!this.stateCount.return.hasOwnProperty(map.status)) {        
+              break;
+            }
+            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.return[map.status] +
               ')';
             break;
         }
@@ -212,13 +220,36 @@
           return;
         }
         this.$set(this.stateCount, 'reconsider', result.data);
+      },
+      // 查询退货单状态统计
+      async returnOrderStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().returnSheetStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this.stateCount, 'return', result.data);
       }
     },
     data() {
       return {
         stateCount: {
           shipping: {},
-          reconsider: {}
+          reconsider: {},
+          return: {}
         },
         activeName: 'PENDING_RECEIVED',
         shippingListVisible: false,
@@ -230,6 +261,7 @@
     created() {
       this.shippingOrderStateCount();
       this.reconsiderOrderStateCount();
+      this.returnOrderStateCount();
     }
   }
 

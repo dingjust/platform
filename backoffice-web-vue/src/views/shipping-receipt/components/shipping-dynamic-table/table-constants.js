@@ -596,7 +596,7 @@ const ReturnNum = {
 
 const ReturnReceiptNum = {
   template: `
-  <el-table-column label="退货数/收退货数" :key="sortKey" min-width="110px">
+  <el-table-column label="退货数/收退数" :key="sortKey" min-width="110px">
     <template slot-scope="scope">
       <span>{{getReturnTotalNum(scope.row)}}/{{getReceReturnlNum(scope.row)}}</span>
     </template>

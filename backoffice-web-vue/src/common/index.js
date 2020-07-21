@@ -808,9 +808,21 @@ const COMMON_APIS = {
   receivedispatchStateCount() {
     return '/b2b/sheets/receivedispatch/state/count';
   },
+  // 退货单状态统计
+  returnSheetStateCount() {
+    return '/b2b/sheets/return/state/count';
+  },
   // 复议单列表状态统计
   reconsiderOrderStateCount() {
     return '/b2b/sheets/reconsider/state/count';
+  },
+  // 对账任务列表状态统计
+  reconciliationTaskStateCount() {
+    return '/b2b/sheets/reconciliation_task/state/count';
+  },
+  // 对账单列表状态统计
+  reconciliationSheetStateCount() {
+    return '/b2b/sheets/reconciliation/state/count';
   },
   // 应收账款列表
   getReceivableList() {
@@ -861,11 +873,11 @@ const COMMON_APIS = {
     return '/b2b/payment/request/' + id;
   },
   // 添加付款单
-  appendPaymentRecord (id) {
+  appendPaymentRecord(id) {
     return '/b2b/payment/request/add/payment/records/' + id;
   },
   // 付款确认
-  paymentRequestPayConfirm (id) {
+  paymentRequestPayConfirm(id) {
     return '/b2b/payment/request/pay/confirm/' + id;
   }
 };

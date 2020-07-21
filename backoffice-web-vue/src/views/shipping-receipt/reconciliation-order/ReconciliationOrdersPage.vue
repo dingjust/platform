@@ -78,7 +78,26 @@
         });
       },
       handleClick(tab, event) {
-        this.queryFormData.states = tab.name;
+        if (this.mode == 'import') {
+          this.queryFormData.states = tab.name;
+        }
+        //收货方，状态查询处理
+        else if (this.mode == 'export') {
+          switch (tab.name) {
+            case 'PENDING_APPROVAL':
+              this.queryFormData.auditStates = 'AUDITING';
+              this.queryFormData.states = 'PENDING_CONFIRM';
+              break
+            case 'APPROVAL_RETURN':
+              this.queryFormData.auditStates = 'AUDITED_FAILED';
+              this.queryFormData.states = 'PENDING_CONFIRM';
+              break;
+            default:
+              this.$delete(this.queryFormData,'auditStates');
+              this.queryFormData.states = tab.name;
+              break
+          }
+        }
         this.onAdvancedSearch(0, 10);
       },
       onDetail(row) {

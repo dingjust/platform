@@ -11,7 +11,7 @@
       @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate" />
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
           <reconciliation-tasks-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
         </el-tab-pane>
       </template>
@@ -61,10 +61,42 @@
       onDetail(row) {
         this.$router.push('/reconciliation/tasks/detail/' + row.id);
       },
+      // 查询对账任务状态统计
+      async reconciliationTaskStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().reconciliationTaskStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this, 'stateCount', result.data);
+      },
+      tabName(map) {
+        let tabName = this.getEnum('ReconciliationTaskState', map.code);
+        if (!this.stateCount.hasOwnProperty(map.code)) {
+          return tabName;
+        }
+        tabName = this.getEnum('ReconciliationTaskState', map.code) + '(' + this.stateCount[map.code] +
+          ')';
+        return tabName;
+      },
     },
     data() {
       return {
         activeName: 'PENDING_RECONCILIATION',
+        stateCount: {},
         statuses: [{
           code: 'PENDING_RECONCILIATION',
           name: '待对账'
@@ -77,10 +109,9 @@
         }, ]
       }
     },
-    created() {},
-    destroyed() {
-
-    }
+    created() {
+      this.reconciliationTaskStateCount();
+    },
   }
 
 </script>
