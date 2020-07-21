@@ -20,26 +20,33 @@
       </tr>
       <!-- 生产工单行 -->
       <template v-for="(item, productionIndex) in formData.productionTaskList">
-        <tr :key="item.code">
-          <td :rowspan="item.reconciliationSheetList.length + 1">{{item.code}}</td>
-          <template v-if="item.reconciliationSheetList.length == 0">
+        <!-- 有对账单 -->
+        <template v-if="item.reconciliationSheetList && item.reconciliationSheetList.length > 0">
+          <tr :key="item.code">
+            <td :rowspan="item.reconciliationSheetList.length + 1">{{item.code}}</td>
+          </tr>
+          <template v-if="item.reconciliationSheetList.length > 0">
+            <template v-for="(val, reconciliationIndex) in item.reconciliationSheetList">
+              <tr :key="val.code">
+                <td>{{val.code}}</td>
+                <td>{{val.amountDue}}</td>
+                <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
+                <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.totalPaidAmount}}</td>
+                <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{totalDifference}}</td>
+              </tr>
+            </template>
+          </template>
+        </template>
+        <!-- 无对账单 -->
+        <template v-else>
+          <tr :key="item.code">
+            <td>{{item.code}}</td>
             <td>{{''}}</td>
             <td>{{''}}</td>
             <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
             <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{formData.totalPaidAmount}}</td>
             <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{totalDifference}}</td>
-        </template>
-        </tr>
-        <template v-if="item.reconciliationSheetList.length > 0">
-          <template v-for="(val, reconciliationIndex) in item.reconciliationSheetList">
-            <tr :key="val.code">
-              <td>{{val.code}}</td>
-              <td>{{val.amountDue}}</td>
-              <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
-              <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.totalPaidAmount}}</td>
-              <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{totalDifference}}</td>
-            </tr>
-          </template>
+          </tr>
         </template>
       </template>
     </table>
@@ -71,7 +78,11 @@
       totalRow: function () {
         let count = 0;
         this.formData.productionTaskList.forEach(item => {
-          count += item.reconciliationSheetList.length;
+          if (item.reconciliationSheetList) {
+            count += item.reconciliationSheetList.length;
+          } else {
+            count += 1;
+          }
         })
         return count;
       },

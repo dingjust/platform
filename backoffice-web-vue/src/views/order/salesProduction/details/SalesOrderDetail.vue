@@ -154,7 +154,7 @@
     },
     methods: {
       callback () {
-        this.$emit('getDetails');
+        this.getDetails();
       },
       appendProduct() {
         this.salesProductAppendVisible = true;

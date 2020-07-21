@@ -48,10 +48,10 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6>联系人：{{formData.productionOrder.targetCooperator ? contactPerson : ''}}</h6>
+            <h6>联系人：</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{formData.productionOrder.targetCooperator ? contactPhone : ''}}</h6>
+            <h6>联系方式：</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
@@ -90,7 +90,7 @@
   import {PayPlanInfo} from '@/components/index.js'
   export default {
     name: 'FinancialOrderInfo',
-    props: ['formData', 'payPlan'],
+    props: ['formData', 'payPlan', 'belongTo'],
     components: {
       PayPlanInfo,
       ContractCom

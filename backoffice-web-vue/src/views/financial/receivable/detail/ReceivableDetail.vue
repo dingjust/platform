@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <financial-order-info :payPlan="payPlanData" :formData="formData"/>
+      <financial-order-info belongTo="RECEIVABLE_PAGE" :payPlan="payPlanData" :formData="formData"/>
       <financial-reconciliation-table belongTo="RECEIVABLE_PAGE" :formData="formData"/>
       <financial-record-list belongTo="RECEIVABLE_PAGE" :content="formData.requestList" 
                               @onConfirmReceipt="onConfirmReceipt"/>
