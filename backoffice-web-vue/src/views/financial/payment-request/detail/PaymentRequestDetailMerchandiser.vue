@@ -93,7 +93,7 @@
       </el-row> -->
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <payment-form v-if="paymentVisible" :id="detailId" @callback="callback"/>
+      <payment-form v-if="paymentVisible" :id="id" @callback="callback"/>
     </el-dialog>
   </div>
 </template>
