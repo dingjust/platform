@@ -7,13 +7,13 @@
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ data.name }}</span>
         <span v-if="data.depth > 0">
-          <el-button v-if="data.depth < 3" type="text" size="mini" @click="appendDept">
+          <el-button v-if="data.depth < 3" type="text" size="mini" @click="appendDept(data)">
             <i class="el-icon-plus" style="border: 1px solid"/>
             </el-button>
-          <el-button type="text" size="mini" @click="editDept">
+          <el-button type="text" size="mini" @click="editDept(data)">
             <i class="el-icon-edit"/>
           </el-button>
-          <el-button type="text" size="mini" @click="deleteDept">
+          <el-button type="text" size="mini" @click="deleteDept(data)">
             <i class="el-icon-delete"/>
           </el-button>
         </span>
@@ -30,14 +30,14 @@
 
     },
     methods: {  
-      appendDept () {
-        
+      appendDept (row) {
+        this.$emit('appendDept', row);
       },
-      editDept () {
-
+      editDept (row) {
+        this.$emit('editDept', row);
       },
       deleteDept () {
-
+        this.$emit('deleteDept', row);
       }
     },
     data () {

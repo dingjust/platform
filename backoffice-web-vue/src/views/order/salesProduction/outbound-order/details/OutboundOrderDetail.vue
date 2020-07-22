@@ -21,16 +21,18 @@
             :autosize="{ minRows: 4, maxRows: 6 }" />
         </el-col>
       </el-row>
-      <div style="padding-left: 10px;margin-top: 20px">
-        <el-row v-if="isPayment && formData.payPlan != null">
-          <purchase-order-info-payment-finance :slotData="formData" />
-        </el-row>
-        <el-row v-if="isReceipt && formData.payPlan != null">
-          <purchase-order-info-receipt-finance :slotData="formData" />
-        </el-row>
-      </div>
-      <div>
-        <financial-tabs />
+      <div v-if="showFinancial">
+        <div style="padding-left: 10px;margin-top: 20px">
+          <el-row v-if="isPayment && formData.payPlan != null">
+            <purchase-order-info-payment-finance :slotData="formData" />
+          </el-row>
+          <el-row v-if="isReceipt && formData.payPlan != null">
+            <purchase-order-info-receipt-finance :slotData="formData" />
+          </el-row>
+        </div>
+        <div v-if="formData.paymentBill != null">
+          <financial-tabs :formData="formData.paymentBill" belongTo="PAYABLE_PAGE"/>
+        </div>
       </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">
         <el-button class="purchase-order-btn2" @click="onGenerateUniqueCode" v-if="canGenerate">唯一码</el-button>
@@ -116,6 +118,11 @@
       },
       isReceipt: function () {
         return this.$store.getters.currentUser.companyCode == this.formData.targetCooperator.partner.uid;
+      },
+      showFinancial: function () {
+        return this.formData.state.sendAuditState == 'PASSED' &&
+                this.formData.state != 'TO_BE_ACCEPTED' && 
+                this.formData.state != 'TO_BE_SUBMITTED';
       }
     },
     methods: {

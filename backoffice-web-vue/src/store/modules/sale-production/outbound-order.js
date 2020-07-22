@@ -24,7 +24,12 @@ const state = {
       uid: ''
     },
     targetCooperator: {
-      id: ''
+      id: '',
+      partner: {}
+    },
+    originCooperator: {
+      id: '',
+      partner: {}
     },
     taskOrderEntries: [{
       originOrder: {
@@ -173,7 +178,12 @@ const actions = {
         uid: ''
       },
       targetCooperator: {
-        id: ''
+        id: '',
+        partner: {}
+      },
+      originCooperator: {
+        id: '',
+        partner: {}
       },
       taskOrderEntries: [{
         originOrder: {

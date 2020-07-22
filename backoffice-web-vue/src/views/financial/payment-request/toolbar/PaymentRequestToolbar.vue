@@ -10,7 +10,7 @@
             <el-input placeholder="输入负责人名称" v-model="queryFormData.merchandiserName" style="width: 150px"></el-input>
           </el-form-item>
           <el-form-item label="合作商">
-            <el-input placeholder="输入合作商名称" v-model="queryFormData.cooperatorName" style="width: 150px"></el-input>
+            <el-input placeholder="输入合作商名称" v-model="queryFormData.payableName" style="width: 150px"></el-input>
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
@@ -51,7 +51,7 @@
         this.dateArr = null;
         this.queryFormData.keyword = '';
         this.queryFormData.merchandiserName = '';
-        this.queryFormData.cooperatorName = '';
+        this.queryFormData.payableName = '';
       }
     },
     data () {

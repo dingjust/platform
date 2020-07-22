@@ -21,13 +21,18 @@
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
           @appendProduct="appendProduct" />
       </div>
-      <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
-        <el-row v-if="isPayment && formData.payPlan != null">
-          <purchase-order-info-payment-finance :slotData="formData" />
-        </el-row>
-        <el-row v-if="isReceipt && formData.payPlan != null">
-          <purchase-order-info-receipt-finance :slotData="formData" />
-        </el-row>
+      <div v-if="showFinancial">
+        <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
+          <el-row v-if="isPayment && formData.payPlan != null">
+            <purchase-order-info-payment-finance :slotData="formData" />
+          </el-row>
+          <el-row v-if="isReceipt && formData.payPlan != null">
+            <purchase-order-info-receipt-finance :slotData="formData" />
+          </el-row>
+        </div>
+        <div v-if="formData.originCompany && formData.paymentBill != null">
+          <financial-tabs :formData="formData.paymentBill" belongTo="RECEIVABLE_PAGE" @callback="callback"/>
+        </div>
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -72,6 +77,7 @@
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
+  import {FinancialTabs} from '@/views/financial/index'
 
   export default {
     name: 'SalesOrderDetail',
@@ -82,7 +88,8 @@
       SalesPlanDetailBtnGroup,
       SalesPlanAppendProductForm,
       PurchaseOrderInfoPaymentFinance,
-      PurchaseOrderInfoReceiptFinance
+      PurchaseOrderInfoReceiptFinance,
+      FinancialTabs
     },
     computed: {
       // ...mapGetters({
@@ -150,11 +157,17 @@
       },
       isReceipt: function () {
         return this.$store.getters.currentUser.companyCode == this.formData.targetCooperator.partner.uid;
+      },
+      showFinancial: function () {
+        return this.formData.state != 'TO_BE_ACCEPTED'  && 
+                this.formData.state != 'TO_BE_SUBMITTED' && 
+                this.formData.state != 'AUDITING' &&
+                this.formData.state != 'AUDIT_REJECTED';
       }
     },
     methods: {
       callback () {
-        this.$emit('getDetails');
+        this.getDetails();
       },
       appendProduct() {
         this.salesProductAppendVisible = true;

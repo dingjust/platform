@@ -98,7 +98,7 @@
         return tab.name;
       },
       onDetail (row) {
-        this.$router.push('/financial/paymentRequest/' + row.id);
+        this.$router.push('/financial/merchandiser/paymentRequest/' + row.id);
       },
       onCreate () {
         this.$router.push('/financial/create/paymentRequest');
@@ -110,7 +110,7 @@
         queryFormData: {
           keyword: '',
           merchandiserName: '',
-          cooperatorName: '',
+          payableName: '',
           createdDateFrom: '',
           createdDateTo: '',
           state: 'AUDITING'

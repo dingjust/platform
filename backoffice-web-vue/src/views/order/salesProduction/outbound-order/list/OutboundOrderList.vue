@@ -3,14 +3,20 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange"  @row-click="rowClick">
       <el-table-column type="selection" width="55" v-if="isSelect"></el-table-column>
-      <el-table-column label="生产订单号" prop="code"></el-table-column>
+      <el-table-column label="外发订单号" prop="code"></el-table-column>
       <el-table-column label="合作商">
         <template slot-scope="scope">
           <span>{{getCooperator(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联产品数" prop="entrySize"></el-table-column>
+      <el-table-column label="创建人" prop="creator.name"></el-table-column>
       <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
+      <el-table-column label="创建时间" min-width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.creationtime | formatDate}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="审批状态">
         <template slot-scope="scope">
           <span>{{getEnum('SalesProductionAuditStatus', scope.row.sendAuditState)}}</span>
@@ -21,9 +27,9 @@
           <span>{{getEnum('OutboundOrderStatuses', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签" min-width="100">
+      <el-table-column label="订单标签" min-width="70">
       </el-table-column>
-      <el-table-column label="操作" min-width="100">
+      <el-table-column label="操作" min-width="70">
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetail(scope.row)" class="purchase-list-button">详情</el-button>

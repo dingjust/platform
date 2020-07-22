@@ -440,10 +440,15 @@ const router = new Router({
             name: '创建付款申请单',
             component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payment-request/form/PaymentRequestForm')
           }, {
-            path: 'paymentRequest/:id',
+            path: 'merchandiser/paymentRequest/:id',
             name: '付款申请单详情',
             props: true,
-            component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payment-request/detail/PaymentRequestdetail')
+            component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payment-request/detail/PaymentRequestDetailMerchandiser')
+          }, {
+            path: 'finance/paymentRequest/:id',
+            name: '付款申请单详情',
+            props: true,
+            component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payment-request/detail/PaymentRequestDetailFinance')
           }]
         },
         {

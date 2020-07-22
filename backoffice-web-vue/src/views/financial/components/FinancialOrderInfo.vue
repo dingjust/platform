@@ -48,10 +48,10 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6>联系人：{{formData.productionOrder.targetCooperator ? contactPerson : ''}}</h6>
+            <h6>联系人：{{contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{formData.productionOrder.targetCooperator ? contactPhone : ''}}</h6>
+            <h6>联系方式：{{contactPhone}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
@@ -59,20 +59,13 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6 class="hide-text" :title="formData.productionOrder.creator ? formData.productionOrder.creator.name : ''">
-              订单创建人：{{formData.productionOrder.creator ? formData.productionOrder.creator.name : ''}}
+            <h6 class="hide-text" :title="merchandiser">
+              跟单员：{{merchandiser}}
             </h6>
           </el-col>
           <el-col :span="12">
-            <h6 class="hide-text" :title="formData.productionOrder.productionLeader ? formData.productionOrder.productionLeader.name : ''">
-              生产负责人：{{formData.productionOrder.productionLeader ? formData.productionOrder.productionLeader.name : ''}}
-            </h6>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="start" align="middle" class="basic-row">
-          <el-col :span="12">
-            <h6 class="hide-text" :title="formData.productionOrder.merchandiser ? formData.productionOrder.merchandiser.name : ''">
-              审批负责人：{{formData.productionOrder.merchandiser ? formData.productionOrder.merchandiser.name : ''}}
+            <h6 class="hide-text" :title="approvers">
+              审批负责人：{{approvers}}
             </h6>
           </el-col>
         </el-row>
@@ -90,19 +83,41 @@
   import {PayPlanInfo} from '@/components/index.js'
   export default {
     name: 'FinancialOrderInfo',
-    props: ['formData', 'payPlan'],
+    props: ['formData', 'payPlan', 'belongTo'],
     components: {
       PayPlanInfo,
       ContractCom
     },
     computed: {
       contactPerson: function () {
-        return this.formData.productionOrder.targetCooperator.type == 'ONLINE' ? 
+        if (!this.formData.productionOrder.originCooperator && !this.formData.productionOrder.targetCooperator) {
+          return '';
+        }
+        if (this.belongTo == 'PAYABLE_PAGE') {
+          return this.formData.productionOrder.targetCooperator.type == 'ONLINE' ? 
               this.formData.productionOrder.targetCooperator.partner.contactPerson : this.formData.productionOrder.targetCooperator.contactPerson;
+        } else {
+          return this.formData.productionOrder.originCooperator.type == 'ONLINE' ? 
+              this.formData.productionOrder.originCooperator.partner.contactPerson : this.formData.productionOrder.originCooperator.contactPerson;
+        }
       },
       contactPhone: function () {
-        return this.formData.productionOrder.targetCooperator.type == 'ONLINE' ? 
+        if (!this.formData.productionOrder.originCooperator && !this.formData.productionOrder.targetCooperator) {
+          return '';
+        }
+        if (this.belongTo == 'PAYABLE_PAGE') {
+          return this.formData.productionOrder.targetCooperator.type == 'ONLINE' ? 
               this.formData.productionOrder.targetCooperator.partner.contactPhone : this.formData.productionOrder.targetCooperator.contactPhone;
+        } else {
+          return this.formData.productionOrder.originCooperator.type == 'ONLINE' ? 
+              this.formData.productionOrder.originCooperator.partner.contactPhone : this.formData.productionOrder.originCooperator.contactPhone;
+        }
+      },
+      merchandiser: function () {
+        return '';
+      },
+      approvers: function () {
+        return '';
       },
       productionCount: function () {
         let count = 0;
@@ -162,5 +177,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 170px;
   }
 </style>

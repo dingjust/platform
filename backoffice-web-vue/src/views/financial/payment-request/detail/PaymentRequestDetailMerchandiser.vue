@@ -12,9 +12,9 @@
             <h6>付款申请单</h6>
           </div>
         </el-col>
-        <el-col :span="6">
-          <h6 style="color: #F56C6C">申请金额超过未付款金额</h6>
-        </el-col>
+        <!-- <el-col :span="6"> -->
+          <!-- <h6 style="color: #F56C6C">申请金额超过未付款金额</h6> -->
+        <!-- </el-col> -->
         <el-col :span="4">
           <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
@@ -27,10 +27,10 @@
               <h6>申请单号：{{formData.code}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>订单号：</h6>
+              <h6>订单号：{{formData.productionOrder.code}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>合同号：</h6>
+              <h6>合同号：{{agreementsCode}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
@@ -46,7 +46,7 @@
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>收款对象：</h6>
+              <h6>收款对象：{{formData.payable.name}}</h6>
             </el-col>
             <el-col :span="8">
               <h6>申请金额：{{formData.requestAmount}}元</h6>
@@ -73,8 +73,7 @@
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>备注：</h6>
-              <h6 style="margin-left: 20px">{{formData.remark}}</h6>
+              <h6>备注：{{formData.remark}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-top: 20px" 
@@ -82,15 +81,16 @@
             <el-col :span="8">
               <h6>上传凭证</h6>
               <el-row style="margin-left: 20px">
-                <images-upload :slotData="formData.requestVouchers" :disabled="true"></images-upload>
+                <images-upload :slotData="formData.requestVouchers" 
+                  :limit="formData.requestVouchers.length" :disabled="true" />
               </el-row>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isFinance">
-        <el-button class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
-      </el-row>
+      <!-- <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isFormFincance">
+        <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
+      </el-row> -->
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <payment-form v-if="paymentVisible" :id="id" @callback="callback"/>
@@ -102,7 +102,7 @@
   import {PersonnelSelection, ImagesUpload} from '@/components/index.js'
   import PaymentForm from '../form/PaymentForm'
   export default {
-    name: 'PaymentRequestDetail',
+    name: 'PaymentRequestDetailMerchandiser',
     props: ['id'],
     components: {
       PersonnelSelection,
@@ -110,6 +110,19 @@
       PaymentForm
     },
     computed: { 
+      agreementsCode: function () {
+        if (!this.formData.productionOrder.agreements && this.formData.productionOrder.agreements.length <= 0) {
+          return '';
+        }
+        let contactCode = '';
+        this.formData.productionOrder.agreements.forEach((item, index) => {
+          contactCode += item.code;
+          if (index != this.formData.productionOrder.agreements.length - 1) {
+            this.contactCode += ', ';
+          }
+        })
+        return contactCode;
+      },
       auditState: function () {
         switch (this.formData.state) {
           case 'AUDITING':
@@ -135,12 +148,16 @@
         if (this.formData.approvers && this.formData.approvers.length > 0) {
           str += this.formData.approvers[0].name;
           if (this.formData.approvers.length > 1) {
-            str = str + '\t' + this.formData.approvers[1].name;
+            str = str + ',' + this.formData.approvers[1].name;
           }
         }
+        return str;
       },
       isFinance: function () {
         return true;
+      },
+      canPay: function () {
+        return this.formData.state === 'WAIT_TO_PAY';
       }
     },
     methods: {
@@ -184,7 +201,7 @@
         var chineseStr = '';
         //分离金额后用的数组，预定义
         var parts;
-        if (money == '') { return ''; }
+        if (money === '') { return ''; }
         money = parseFloat(money);
         if (money >= maxNum) {
           //超出最大处理数字
@@ -251,12 +268,25 @@
       return {
         paymentVisible: false,
         formData: {
+          productionOrder: {
+            code: '',
+            agreements: []
+          },
           requestAmount: '',
           applyUser: {
             name: ''
           },
+          payable: {
+            name: ''
+          },
+          belongTo: {},
           approvers: [{}],
-        }
+          paymentRecords: {
+            paymentVouchers: []
+          }
+        },
+        detailId: '',
+        isFormFincance: false
       }
     },
     created () {
