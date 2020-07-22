@@ -10,9 +10,9 @@
     <div class="pt-2"></div>
     <return-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
     <div>
-      <div class="good-btn">
+      <!-- <div class="good-btn">
         <el-button class="check-btn" v-if="canClick" @click="onReceiptReturn">收退货</el-button>
-      </div>
+      </div> -->
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
           <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">

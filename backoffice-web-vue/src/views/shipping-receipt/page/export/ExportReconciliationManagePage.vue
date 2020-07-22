@@ -68,6 +68,10 @@
           query = Object.assign({}, this.queryFormData);
           query['states'] = 'PENDING_CONFIRM';
           query['auditStates'] = 'AUDITING';
+        } else if (this.queryFormData.states == 'REJECTED') {
+          query = Object.assign({}, this.queryFormData);
+          query['states'] = 'PENDING_CONFIRM';
+          query['auditStates'] = 'AUDITED_FAILED';
         } else {
           query = this.queryFormData;
         }
@@ -119,10 +123,9 @@
             }],
             url: this.apis().shippingOrderList()
           },
-          PENDING_APPROVAL: {
-            status: 'PENDING_APPROVAL',
-            isAuditStates: true,
-            label: '待审核',
+          PENDING_CONFIRM: {
+            status: 'PENDING_CONFIRM',
+            label: '对账中',
             columns: [{
               key: '对账单号'
             }, {
@@ -148,9 +151,10 @@
             }],
             url: this.apis().reconciliationList()
           },
-          PENDING_CONFIRM: {
-            status: 'PENDING_CONFIRM',
-            label: '对账中',
+          PENDING_APPROVAL: {
+            status: 'PENDING_APPROVAL',
+            isAuditStates: true,
+            label: '待审核',
             columns: [{
               key: '对账单号'
             }, {

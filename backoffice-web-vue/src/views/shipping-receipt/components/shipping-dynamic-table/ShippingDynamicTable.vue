@@ -2,7 +2,7 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" row-key="id" @selection-change="handleSelectionChange"
       @row-click="rowClick">
-      <el-table-column type="selection" v-if="hasSelection" key="1" fixed="left" :selectable="selectableFuc">
+      <el-table-column type="selection" v-show="hasSelection" fixed="left" :key="1" :selectable="selectableFuc">
       </el-table-column>
       <shipping-dynamic-table-list :columns="columns" />
     </el-table>
@@ -66,6 +66,11 @@
       },
       //选择项是否可选函数
       selectableFuc: function () {
+        //非可选
+        if(!this.hasSelection){
+          return null;
+        }
+
         let index = this.columns.findIndex(item => item.key == 'select');
         if (index != -1) {
           if (this.columns[index].selectable != null) {

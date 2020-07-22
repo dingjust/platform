@@ -824,6 +824,10 @@ const COMMON_APIS = {
   reconciliationSheetStateCount() {
     return '/b2b/sheets/reconciliation/state/count';
   },
+  // 对账单（收货方审核）列表状态统计
+  reconciliationSheetAuditStateCount() {
+    return '/b2b/sheets/reconciliation/auditState/count';
+  },
   // 应收账款列表
   getReceivableList() {
     return '/b2b/payment/bill/receivables/search';
@@ -881,7 +885,7 @@ const COMMON_APIS = {
     return '/b2b/payment/request/pay/confirm/' + id;
   },
   // 查询订单可请款金额
-  getRequestAmount (id) {
+  getRequestAmount(id) {
     return '/b2b/payment/bill/amount/' + id;
   }
 };

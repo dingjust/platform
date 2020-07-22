@@ -559,7 +559,7 @@ const ReceiptDate = {
 }
 
 const ReturnOrder = {
-  template: `<el-table-column label="退货单号" :prop="prop" :key="sortKey"  fixed="left"></el-table-column>`,
+  template: `<el-table-column label="退货单号" :prop="prop" :key="sortKey" ></el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -760,7 +760,7 @@ const ReturnOperation = {
 // 复议单号
 const ReconsiderOrderCode = {
   template: `
-  <el-table-column label="复议单号" :prop="prop" min-width="120" fiexd :key="sortKey"  fixed="left"></el-table-column>
+  <el-table-column label="复议单号" :prop="prop" min-width="120"  :key="sortKey" ></el-table-column>
 `,
   props: {
     prop: {

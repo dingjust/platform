@@ -1683,6 +1683,12 @@ const state = {
   }, {
     code: 'OutboundOrder',
     name: '外发订单'
+  }, {
+    code: 'ReconciliationSheet',
+    name: '对账单'
+  }, {
+    code: 'OriginReconciliationSheet',
+    name: '对账单'
   }],
   // 外发模式
   ManagementMode: [{

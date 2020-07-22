@@ -94,7 +94,7 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="8" :offset="2">
-          发货单：<el-button type="text" @click="onShipDetail">{{formData.logisticsSheet.code}}</el-button>
+          发货单：<el-button type="text" @click="onShipDetail" v-if="formData.logisticsSheet">{{formData.logisticsSheet.code}}</el-button>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">

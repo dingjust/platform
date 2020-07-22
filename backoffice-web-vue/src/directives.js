@@ -7,9 +7,6 @@ import Vue from 'vue'
 export function onInput(el, ele, binding, vnode) {
 
   function handle() {
-    console.log('==============');
-    console.log(JSON.stringify(binding.value));
-
     let val = ele.value
     // modifiers为修饰符对象，传入了float，则其float属性为true
     if (binding.modifiers.float) {
