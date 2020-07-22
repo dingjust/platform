@@ -116,7 +116,7 @@ const ShippingDynamicTableList = {
     return createElement(
       'template', this.columns.map((entry, index) => {
         let props = entry.props != null ? entry.props : {};
-        props['sortKey'] = index+1;
+        props['sortKey'] = index+2;
         // 增加排序
         return createElement(COMPONENT_NAME_MAP[entry.key], {
           props: props
