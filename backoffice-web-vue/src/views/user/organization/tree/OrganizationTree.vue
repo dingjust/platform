@@ -6,43 +6,101 @@
     <el-tree :data="treeData" node-key="id" default-expand-all :expand-on-click-node="false" class="tree">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ data.name }}</span>
-        <span v-if="data.depth > 0">
-          <el-button v-if="data.depth < 3" type="text" size="mini" @click="appendDept(data)">
+        <span>
+          <el-button v-if="data.depth < 3 || data.depth === 0" type="text" size="mini" @click="appendDept(data)">
             <i class="el-icon-plus" style="border: 1px solid"/>
-            </el-button>
-          <el-button type="text" size="mini" @click="editDept(data)">
+          </el-button>
+          <el-button v-if="data.depth > 0" type="text" size="mini" @click="editDept(data, node)">
             <i class="el-icon-edit"/>
           </el-button>
-          <el-button type="text" size="mini" @click="deleteDept(data)">
+          <el-button v-if="data.depth > 0" type="text" size="mini" @click="deleteDept(data)">
             <i class="el-icon-delete"/>
           </el-button>
         </span>
       </span>
     </el-tree>
+    <el-dialog :visible.sync="deptFormVisible" class="purchase-dialog" width="40%" append-to-body :close-on-click-modal="false">
+      <dept-form v-if="deptFormVisible" :formData="formData" @onConfirm="onConfirm"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import {DeptForm} from '../index.js'
+
   export default {
     name: 'OrganizationTree',
     props: ['treeData'],
+    components: {
+      DeptForm
+    },
     computed: {
 
     },
     methods: {  
       appendDept (row) {
-        this.$emit('appendDept', row);
+        this.formData = {
+          id: null,
+          parentId: row.id !== 0 ? row.id : null,
+          deptName: ''
+        }
+        this.deptFormVisible = true;
       },
-      editDept (row) {
-        this.$emit('editDept', row);
+      editDept (row, node) {
+        this.formData = {
+          id: row.id,
+          parentId: node.parent.data.id !== 0 ? node.parent.data.id : null,
+          deptName: row.name
+        }
+        this.deptFormVisible = true;
       },
-      deleteDept () {
-        this.$emit('deleteDept', row);
+      async onConfirm (form) {
+        const url = this.apis().createB2BCustomerDept();
+        const result = await this.$http.put(url, form, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success(form.id ? '编辑部门成功！' : '创建部门成功！');
+        this.$emit('refreshDept');
+        this.deptFormVisible = false;
+      },
+      deleteDept (data) {
+        this.$confirm('删除此部门会将此部门的下级部门一并删除，请问是否继续', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._deleteDept(data);
+        });
+      },
+      async _deleteDept (data) {
+        const url = this.apis().deleteB2BCustomerDept(data.id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('删除部门成功');
+        this.$emit('refreshDept');
       }
     },
     data () {
       return {
-
+        deptFormVisible: false,
+        formData: {
+          id: null,
+          parentId: null,
+          deptName: ''
+        }
       }
     },
     created () {

@@ -48,10 +48,12 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6>联系人：{{contactPerson}}</h6>
+            <h6 class="hide-text" :title="cooperatorCharge">
+              负责人：{{cooperatorCharge}}
+            </h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{contactPhone}}</h6>
+            <h6>联系方式：{{cooperatorPhone}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
@@ -59,13 +61,13 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
-            <h6 class="hide-text" :title="merchandiser">
-              跟单员：{{merchandiser}}
+            <h6 class="hide-text" :title="charge">
+              负责人：{{charge}}
             </h6>
           </el-col>
           <el-col :span="12">
-            <h6 class="hide-text" :title="approvers">
-              审批负责人：{{approvers}}
+            <h6 class="hide-text" :title="approver">
+              审批人：{{approver}}
             </h6>
           </el-col>
         </el-row>
@@ -89,35 +91,33 @@
       ContractCom
     },
     computed: {
-      contactPerson: function () {
-        if (!this.formData.productionOrder.originCooperator && !this.formData.productionOrder.targetCooperator) {
-          return '';
-        }
-        if (this.belongTo == 'PAYABLE_PAGE') {
-          return this.formData.productionOrder.targetCooperator.type == 'ONLINE' ? 
-              this.formData.productionOrder.targetCooperator.partner.contactPerson : this.formData.productionOrder.targetCooperator.contactPerson;
+      cooperatorCharge: function () {
+        if (this.belongTo == 'RECEIVABLE_PAGE') {
+          return this.formData.productionOrder.merchandiser ? this.formData.productionOrder.merchandiser.name : '';
         } else {
-          return this.formData.productionOrder.originCooperator.type == 'ONLINE' ? 
-              this.formData.productionOrder.originCooperator.partner.contactPerson : this.formData.productionOrder.originCooperator.contactPerson;
+          return this.formData.productionOrder.creator ? this.formData.productionOrder.creator.name : '';
         }
       },
-      contactPhone: function () {
-        if (!this.formData.productionOrder.originCooperator && !this.formData.productionOrder.targetCooperator) {
-          return '';
-        }
-        if (this.belongTo == 'PAYABLE_PAGE') {
-          return this.formData.productionOrder.targetCooperator.type == 'ONLINE' ? 
-              this.formData.productionOrder.targetCooperator.partner.contactPhone : this.formData.productionOrder.targetCooperator.contactPhone;
+      cooperatorPhone: function () {
+        if (this.belongTo == 'RECEIVABLE_PAGE') {
+          return this.formData.productionOrder.merchandiser ? this.formData.productionOrder.merchandiser.mobileNumber : '';
         } else {
-          return this.formData.productionOrder.originCooperator.type == 'ONLINE' ? 
-              this.formData.productionOrder.originCooperator.partner.contactPhone : this.formData.productionOrder.originCooperator.contactPhone;
+          return this.formData.productionOrder.creator ? this.formData.productionOrder.creator.mobileNumber : '';
         }
       },
-      merchandiser: function () {
-        return '';
+      charge: function () {
+        if (this.belongTo == 'RECEIVABLE_PAGE') {
+          return this.formData.productionOrder.creator ? this.formData.productionOrder.creator.name : '';
+        } else {
+          return this.formData.productionOrder.merchandiser ? this.formData.productionOrder.merchandiser.name : '';
+        }
       },
-      approvers: function () {
-        return '';
+      approver: function () {
+        if (this.belongTo == 'RECEIVABLE_PAGE') {
+
+        } else {
+          
+        }
       },
       productionCount: function () {
         let count = 0;

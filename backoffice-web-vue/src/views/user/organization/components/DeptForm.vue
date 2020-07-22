@@ -21,7 +21,7 @@
 <script>
   export default {
     name: 'DeptForm',
-    props: [],
+    props: ['formData'],
     methods: {
       onCreate () {
         this.$refs['form'].validate(valid => {
@@ -34,14 +34,11 @@
         });
       },
       _onCreate () {
-        
+        this.$emit('onConfirm', this.formData);
       }
     },
     data () {
       return {
-        formData: {
-          deptName: ''
-        },
         rules: {
           deptName: [
             { required: true, message: '必填', trigger: 'blur' },
