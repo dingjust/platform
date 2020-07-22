@@ -34,7 +34,7 @@
 
 <script>
   export default {
-    name: 'PersonnelPage',
+    name: 'PersonnelList',
     props: ['page'],
     components: {
 

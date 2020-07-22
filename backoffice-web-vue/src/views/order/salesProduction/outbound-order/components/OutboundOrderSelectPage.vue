@@ -235,7 +235,8 @@
           targetCooperator: '',
           merchandiser: '',
           state: 'AUDIT_PASSED',
-          name: ''
+          name: '',
+          merchandiserPk: 'isMyself'
         },
         stateCount: {}
       }

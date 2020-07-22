@@ -9,19 +9,19 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-row type="flex">
-        <el-col :span="6">
+      <el-container>
+        <el-aside width="30%">
           <el-tabs>
             <el-tab-pane label="组织架构">
-              <organization-tree :treeData="deptList"/>
+              <organization-tree :treeData="deptList" @refreshDept="getDeptList"/>
             </el-tab-pane>
           </el-tabs>
-        </el-col>
-        <el-col :span="18">
-          <!-- <organization-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"/>
-          <organization-list :page="page" @onAdvancedSearch="onAdvancedSearch"/> -->
-        </el-col>
-      </el-row>
+        </el-aside>
+        <el-main width="70%" class="info-main-body">
+          <organization-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
+          <organization-list :page="page" @onAdvancedSearch="onAdvancedSearch" />
+        </el-main>
+      </el-container>
     </el-card>
   </div>
 </template>
@@ -35,14 +35,16 @@
     'PersonnelModule'
   );
 
-  // import OrganizationToolbar from './toolbar/OrganizationToolbar'
-  // import OrganizationList from './toolbar/OrganizationToolbar'
+  import OrganizationToolbar from './toolbar/OrganizationToolbar'
+  import OrganizationList from './toolbar/OrganizationToolbar'
   import OrganizationTree from './tree/OrganizationTree'
   export default {
     name: 'PersonnelPage',
     props: [],
     components: {
-      OrganizationTree
+      OrganizationTree,
+      OrganizationToolbar,
+      OrganizationList
     },
     computed: {
       ...mapGetters({
@@ -81,7 +83,7 @@
           depth: 0,
           children: result.data 
         }];
-      },
+      }
     },
     data () {
       return {
@@ -107,5 +109,15 @@
   .organization-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+  }
+
+  .main-container {
+    margin: 5px 0px 0px 10px;
+  }
+
+  .info-main-body {
+    padding-top: 5px;
+    width: 100%;
+    border-left: 2px solid rgba(0, 0, 0, 0.09);
   }
 </style>

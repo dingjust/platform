@@ -55,7 +55,7 @@
             <el-form-item label="申请金额" style="margin-bottom: 17px" prop="requestAmount" 
               :rules="[{required: true, message: '请填写申请金额', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.requestAmount" @input="onChange" 
-                v-number-input.float="{min: 0 ,decimal:0}">
+                v-number-input.float="{min: 0 ,decimal:2}" @blur="onBlur">
                 <span slot="suffix">元</span>
               </el-input>
               <h6 v-if="preApplyAmount !== '' || preApplyAmount === 0" style="color: #909399;margin-bottom: 0px">可申请金额{{preApplyAmount}}元</h6>
@@ -148,16 +148,15 @@
           this.$message.error(result.msg);
           return;
         }
-        this.preApplyAmount = this.parseIntNotParNaN(result.data.amount) - 
-                              this.parseIntNotParNaN(result.data.preTotalPaidAmount) - 
-                              this.parseIntNotParNaN(result.data.invoiceAmount);
-        console.log(this.preApplyAmount);
+        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) - 
+                              this.parseFloatNotParNaN(result.data.paidAmount);
+        this.onChange(this.formData.requestAmount);
       },
-      parseIntNotParNaN (data) {
-        if (isNaN(parseInt(data))) {
+      parseFloatNotParNaN (data) {
+        if (isNaN(parseFloat(data))) {
           return 0;
         } else {
-          return parseInt(data);
+          return parseFloat(data);
         }
       },
       setSelectOrder (row) {
@@ -223,10 +222,20 @@
         this.$router.go(-1);
       },
       onChange (val) {
-        if (this.parseIntNotParNaN(val) > this.preApplyAmount) {
+        if (this.preApplyAmount == '') {
+          return;
+        }
+        if (this.parseFloatNotParNaN(val) > this.parseFloatNotParNaN(this.preApplyAmount)) {
           this.formData.requestAmount = this.preApplyAmount + '';
         }
-        this.chineseAmount = this.convertCurrency(val);
+        this.chineseAmount = this.convertCurrency(this.formData.requestAmount);
+      },
+      onBlur () {
+        var reg = /\.$/;
+        if (reg.test(this.formData.requestAmount)) {
+          // this.$set(row, attribute, parseFloat(row[attribute] + '00'));
+          this.formData.requestAmount = this.parseFloatNotParNaN(this.formData.requestAmount);
+        }
       },
       // 金额大写转换
       convertCurrency(money) {

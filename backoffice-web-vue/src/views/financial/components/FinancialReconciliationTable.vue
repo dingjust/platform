@@ -23,15 +23,19 @@
         <!-- 有对账单 -->
         <template v-if="item.reconciliationSheetList && item.reconciliationSheetList.length > 0">
           <tr :key="item.code">
-            <td :rowspan="item.reconciliationSheetList.length + 1">{{item.code}}</td>
+            <td :rowspan="item.reconciliationSheetList.length + 1">
+              <el-button type="text" @click="onProductionDetail(item)">{{item.code}}</el-button>
+            </td>
           </tr>
           <template v-if="item.reconciliationSheetList.length > 0">
             <template v-for="(val, reconciliationIndex) in item.reconciliationSheetList">
               <tr :key="val.code">
-                <td>{{val.code}}</td>
+                <td>
+                  <el-button type="text" @click="onReconciliationDetail(val)">{{val.code}}</el-button>
+                </td>
                 <td>{{val.amountDue}}</td>
                 <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
-                <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.totalPaidAmount}}</td>
+                <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{formData.paidAmount}}</td>
                 <td v-if="productionIndex == 0 && reconciliationIndex == 0" :rowspan="totalRow + 1">{{totalDifference}}</td>
               </tr>
             </template>
@@ -40,7 +44,9 @@
         <!-- 无对账单 -->
         <template v-else>
           <tr :key="item.code">
-            <td>{{item.code}}</td>
+            <td>
+              <el-button type="text" @click="onProductionDetail(item)">{{item.code}}</el-button>
+            </td>
             <td style="color: #909399">{{'暂无数据'}}</td>
             <td style="color: #909399">{{'暂无数据'}}</td>
             <td v-if="productionIndex == 0" :rowspan="totalRow + 1">{{formData.amount}}</td>
@@ -50,10 +56,18 @@
         </template>
       </template>
     </table>
+    <el-dialog :visible.sync="productionVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <production-order-detail v-if="productionVisible" :id="productionId"/>
+    </el-dialog>
+    <el-dialog :visible.sync="reconciliationVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <reconciliation-orders-detail v-if="reconciliationVisible"  :id="reconciliationId"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
+  import ReconciliationOrdersDetail from '@/views/shipping-receipt/reconciliation-order/details/ReconciliationOrdersDetail'
   export default {
     name: 'FinancialReconciliationTable',
     props: {
@@ -66,6 +80,8 @@
       }
     },
     components: {
+      ProductionOrderDetail,
+      ReconciliationOrdersDetail
     },
     computed: {
       titleRow: function () {
@@ -78,7 +94,7 @@
       totalRow: function () {
         let count = 0;
         this.formData.productionTaskList.forEach(item => {
-          if (item.reconciliationSheetList) {
+          if (item.reconciliationSheetList && item.reconciliationSheetList.length > 0) {
             count += item.reconciliationSheetList.length;
           } else {
             count += 1;
@@ -88,24 +104,33 @@
       },
       // 计算未收总额
       totalDifference: function () {
-        return this.notNaNNum(this.formData.amount) - this.notNaNNum(this.formData.totalPaidAmount);
+        return (this.notNaNNum(this.formData.amount) * 100 - this.notNaNNum(this.formData.paidAmount) * 100) / 100;
       }
     },
     methods: {
-      reconciliationLength () {
-        
-      },
       notNaNNum (num) {
-        if (isNaN(parseInt(num))) {
+        if (isNaN(parseFloat(num))) {
           return 0;
         }
-        return parseInt(num);
+        return parseFloat(num);
+      },
+      onProductionDetail (item) {
+        this.productionId = item.id;
+        this.productionVisible = true;
+      },
+      onReconciliationDetail (val) {
+        this.reconciliationId = val.id;
+        this.reconciliationVisible = true;
       }
     },
     data () {
       return {
-        paymentRow: ['生产工单号', '对账单号', '应付金额', '应付总额', '已付总额', '未付总额'],
-        receiptRow: ['生产工单号', '对账单号', '应收金额', '应收总额', '已收总额', '未收总额']
+        paymentRow: ['生产工单号', '对账单号', '对账金额', '应付总额', '已付总额', '未付总额'],
+        receiptRow: ['生产工单号', '对账单号', '对账金额', '应收总额', '已收总额', '未收总额'],
+        productionId: '',
+        productionVisible: false,
+        reconciliationId: '',
+        reconciliationVisible: false
       }
     },
     created () {
