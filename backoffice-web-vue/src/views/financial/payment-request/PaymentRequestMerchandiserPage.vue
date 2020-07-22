@@ -110,7 +110,7 @@
         queryFormData: {
           keyword: '',
           merchandiserName: '',
-          cooperatorName: '',
+          belongToName: '',
           createdDateFrom: '',
           createdDateTo: '',
           state: 'AUDITING'

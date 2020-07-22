@@ -18,7 +18,8 @@
           </el-tabs>
         </el-col>
         <el-col :span="18">
-
+          <!-- <organization-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"/>
+          <organization-list :page="page" @onAdvancedSearch="onAdvancedSearch"/> -->
         </el-col>
       </el-row>
     </el-card>
@@ -34,6 +35,8 @@
     'PersonnelModule'
   );
 
+  // import OrganizationToolbar from './toolbar/OrganizationToolbar'
+  // import OrganizationList from './toolbar/OrganizationToolbar'
   import OrganizationTree from './tree/OrganizationTree'
   export default {
     name: 'PersonnelPage',
