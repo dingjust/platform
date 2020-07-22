@@ -110,7 +110,7 @@
         queryFormData: {
           keyword: '',
           merchandiserName: '',
-          belongToName: '',
+          payableName: '',
           createdDateFrom: '',
           createdDateTo: '',
           state: 'WAIT_TO_PAY'
