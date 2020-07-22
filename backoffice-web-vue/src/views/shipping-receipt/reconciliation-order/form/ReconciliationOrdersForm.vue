@@ -23,7 +23,7 @@
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="24">
-            <reconciliation-orders-form-foot :formData="formData" ref="footComp"/>
+            <reconciliation-orders-form-foot :formData="formData" ref="footComp" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="end" style="padding-left: 10px;margin-top: 20px">
@@ -59,6 +59,16 @@
       //对应发货单id
       receiveDispatchTaskId: {
 
+      },
+      //生产工单id
+      productionTaskOrderId: {
+
+      },
+      selectShipOrder: {
+        type: Array,
+        default: () => {
+          return [];
+        }
       }
     },
     components: {
@@ -146,15 +156,27 @@
       async _onSubmit() {
         const form = {
           shippingSheets: this.formData.shippingSheets,
-          increases: this.formData.increases,
-          deductions: this.formData.deductions
+          increases: this.formData.increases.filter(item => item.amount != null && item.remarks != null).map(
+            item => {
+              return {
+                amount: item.amount ? item.amount : 0,
+                remarks: item.remarks ? item.remarks : ''
+              };
+            }),
+          deductions: this.formData.deductions.filter(item => item.amount != null && item.remarks != null).map(
+            item => {
+              return {
+                amount: item.amount ? item.amount : 0,
+                remarks: item.remarks ? item.remarks : ''
+              };
+            }),
         };
 
         //是否需要审核
-        if(this.formData.isApproval){
-          Object.assign(form,{
-            isApproval:true,
-            approvers:this.formData.approvers
+        if (this.formData.isApproval) {
+          Object.assign(form, {
+            isApproval: true,
+            approvers: this.formData.approvers
           })
         }
 
@@ -163,6 +185,8 @@
         const result = await this.$http.post(url, form, {
           taskId: this.reconciliationTaskId
         });
+
+
 
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -193,6 +217,19 @@
           }
         }
       },
+      async getProductionOrderDetail(id) {
+        const url = this.apis().getProductionOrderDetail(id);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$set(this.formData, 'productionTaskOrder', Object.assign({}, result.data.taskOrderEntries[0]));
+        //查询发货任务详情
+        this.getShippingTaskDetai(this.formData.productionTaskOrder.receiveDispatchTask.id);
+        //设置对应对账任务id
+        this.reconciliationTaskId = this.formData.productionTaskOrder.reconciliationTask.id;
+      },
       //查询发货任务详情
       async getShippingTaskDetai(id) {
         const url = this.apis().shippingTaskDetail(id);
@@ -215,7 +252,7 @@
         dispatchTaskId: null,
         formData: {
           isApproval: false,
-          approvers: [null],      
+          approvers: [null],
           shippingSheets: [
 
           ],
@@ -250,6 +287,15 @@
       //若发货单任务id不为空，则查询对应发货任务
       if (this.dispatchTaskId != null) {
         this.getShippingTaskDetai(this.dispatchTaskId);
+      }
+
+      if (this.productionTaskOrderId != null) {
+        this.getProductionOrderDetail(this.productionTaskOrderId);
+      }
+      if (this.selectShipOrder.length > 0) {
+        this.selectShipOrder.forEach(order => {
+          this.formData.shippingSheets.push(order);
+        });
       }
     }
   }

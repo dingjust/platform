@@ -166,13 +166,10 @@
                 }
               },
               {
-                key: "差异数",
+                key: '差异-复议',
                 props: {
-                  prop: "logisticsSheet.diffQuantity"
+                  diffProp: "logisticsSheet.diffQuantity",
                 }
-              },
-              {
-                key: "复议数"
               },
               {
                 key: "复议单操作"
@@ -218,13 +215,10 @@
                 }
               },
               {
-                key: "差异数",
+                key: '差异-复议',
                 props: {
-                  prop: "logisticsSheet.diffQuantity"
+                  diffProp: "logisticsSheet.diffQuantity",
                 }
-              },
-              {
-                key: "复议数"
               },
               {
                 key: "复议单操作"
@@ -270,13 +264,10 @@
                 }
               },
               {
-                key: "差异数",
+                key: '差异-复议',
                 props: {
-                  prop: "logisticsSheet.diffQuantity"
+                  diffProp: "logisticsSheet.diffQuantity",
                 }
-              },
-              {
-                key: "复议数"
               },
               {
                 key: "复议单操作"

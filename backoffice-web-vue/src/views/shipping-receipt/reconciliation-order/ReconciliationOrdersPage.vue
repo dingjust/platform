@@ -18,7 +18,7 @@
     <reconciliation-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
           <reconciliation-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
         </el-tab-pane>
       </template>
@@ -78,11 +78,61 @@
         });
       },
       handleClick(tab, event) {
-        this.queryFormData.status = tab.name;
+        if (this.mode == 'import') {
+          this.queryFormData.states = tab.name;
+        }
+        //收货方，状态查询处理
+        else if (this.mode == 'export') {
+          switch (tab.name) {
+            case 'PENDING_APPROVAL':
+              this.queryFormData.auditStates = 'AUDITING';
+              this.queryFormData.states = 'PENDING_CONFIRM';
+              break
+            case 'APPROVAL_RETURN':
+              this.queryFormData.auditStates = 'AUDITED_FAILED';
+              this.queryFormData.states = 'PENDING_CONFIRM';
+              break;
+            default:
+              this.$delete(this.queryFormData, 'auditStates');
+              this.queryFormData.states = tab.name;
+              break
+          }
+        }
         this.onAdvancedSearch(0, 10);
       },
       onDetail(row) {
         this.$router.push('/reconciliation/orders/' + row.id);
+      },
+      // 查询对账单状态统计
+      async reconciliationStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().reconciliationSheetStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this, 'stateCount', result.data);
+      },
+      tabName(map) {
+        let tabName = this.getEnum('ReconciliationOrderState', map.code);
+        if (!this.stateCount.hasOwnProperty(map.code)) {
+          return tabName;
+        }
+        tabName = this.getEnum('ReconciliationOrderState', map.code) + '(' + this.stateCount[map.code] +
+          ')';
+        return tabName;
       },
     },
     data() {
@@ -90,22 +140,21 @@
         activeName: 'PENDING_CONFIRM',
         statuses: this.$store.state.EnumsModule.ReconciliationOrderState,
         currentUser: this.$store.getters.currentUser,
+        stateCount: {},
         queryFormData: {
           keyword: '',
           productionLeaderName: '',
           operatorName: '',
           creationtimeStart: '',
           creationtimeEnd: '',
-          status: 'PENDING_CONFIRM'
+          states: 'PENDING_CONFIRM'
         }
       }
     },
     created() {
       this.onAdvancedSearch();
+      this.reconciliationStateCount();
     },
-    destroyed() {
-
-    }
   }
 
 </script>

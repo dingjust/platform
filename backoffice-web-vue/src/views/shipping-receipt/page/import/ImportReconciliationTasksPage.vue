@@ -16,7 +16,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <reconciliation-tasks-page :page="page" :queryFormData="queryFormData" :canCreate="false" @onCreate="onCreate"
+      <reconciliation-tasks-page :page="page" :queryFormData="queryFormData" :canCreate="false" @onCreate="onCreate" mode='import'
         @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
     </el-card>
   </div>

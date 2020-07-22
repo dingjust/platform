@@ -1,6 +1,6 @@
 <template>
   <div class="form-foot">
-    <el-form :model="formData" ref="footForm">
+    <el-form :model="formData" ref="footForm" label-width="80px">
       <template v-for="(item, index) in formData.deductions">
         <el-row type="flex" align="middle" :key="'ar'+index" style="margin-top:5px">
           <el-col :span="1" v-if="index == 0 && !readOnly">
@@ -12,8 +12,9 @@
             </el-button>
           </el-col>
           <el-col :span="8">
+
             <el-form-item label="扣款金额" :prop="'deductions.'+index+'.amount'"
-              :rules="{ required: true, message: '请输入金额', trigger: 'blur' }">
+              :rules="{ required: index!=0, message: '请输入金额', trigger: 'blur' }">
               <el-input v-model="item.amount" :disabled="readOnly" v-number-input.float="{ min: 0 ,decimal:2}">
               </el-input>
             </el-form-item>
@@ -37,7 +38,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="增款金额" :prop="'increases.'+index+'.amount'"
-              :rules="{ required: true, message: '请输入金额', trigger: 'blur' }">
+              :rules="{ required: index!=0, message: '请输入金额', trigger: 'blur' }">
               <el-input v-model="item.amount" :disabled="readOnly" v-number-input.float="{ min: 0 ,decimal:2}">
               </el-input>
             </el-form-item>
@@ -57,16 +58,16 @@
               <el-checkbox v-model="formData.isApproval" @change="onIsApprovalChange">需审核</el-checkbox>
             </el-form-item>
           </el-col>
-          <el-col :span="20" v-if="formData.isApproval">
+          <el-col :span="20">
             <template v-for="(item,itemIndex) in formData.approvers">
               <el-form-item :key="'a'+itemIndex" :label="'审批人'" label-width="100px" :prop="'approvers.' + itemIndex"
-                :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                <personnel-selection :vPerson.sync="formData.approvers[itemIndex]" />
+                :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
+                <personnel-selection :vPerson.sync="formData.approvers[itemIndex]" :readOnly="!formData.isApproval" />
               </el-form-item>
             </template>
           </el-col>
         </el-row>
-        <el-row type="flex" v-else>
+        <el-row type="flex" v-else style="margin-top:20px">
           <el-col :span="2"><span>审核人:</span></el-col>
           <el-col :span="20" v-if="formData.auditWorkOrder&&formData.approvers">
             <template v-for="(item,itemIndex) in formData.approvers">
@@ -85,18 +86,20 @@
                 <el-checkbox v-model="formData.isOriginApproval" @change="onIsOriginApprovalChange">需审核</el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="20" v-if="formData.isOriginApproval">
+            <el-col :span="20">
               <template v-for="(item,itemIndex) in formData.originApprovers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'" label-width="100px"
-                  :prop="'originApprovers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                  <personnel-selection :vPerson.sync="formData.originApprovers[itemIndex]" />
+                  :prop="'originApprovers.' + itemIndex"
+                  :rules="{required: formData.isOriginApproval, message: '不能为空', trigger: 'change'}">
+                  <personnel-selection :vPerson.sync="formData.originApprovers[itemIndex]"
+                    :readOnly="!formData.isOriginApproval" />
                 </el-form-item>
               </template>
             </el-col>
           </el-row>
         </template>
         <template v-else>
-          <el-row type="flex">
+          <el-row type="flex" style="margin-top:20px">
             <el-col :span="2"><span>审核人:</span></el-col>
             <el-col :span="20" v-if="formData.isOriginApproval">
               <template v-for="(item,itemIndex) in formData.originApprovers">
@@ -126,9 +129,9 @@
         type: Boolean,
         default: false
       },
-      isForm:{
-        type:Boolean,
-        default:true
+      isForm: {
+        type: Boolean,
+        default: true
       }
     },
     components: {
@@ -162,7 +165,7 @@
             'AUDITED_FAILED';
         }
         return false;
-      }
+      },
     },
     methods: {
       addReduceRow() {
@@ -191,6 +194,8 @@
         }
       },
       onIsOriginApprovalChange(val) {
+        // this.$set(this,'selectDisable',!val);
+        this.selectDisable = !val;
         if (val) {
           if (this.formData.originApprovers == null || this.formData.originApprovers.length == 0) {
             this.$set(this.formData, 'originApprovers', [null]);
@@ -201,11 +206,12 @@
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
+        selectDisable: true
       }
     },
     created() {
 
-    }
+    },
   }
 
 </script>

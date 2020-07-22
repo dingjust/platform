@@ -27,7 +27,7 @@
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
           <el-col :span="24">
-            <reconciliation-orders-form-foot :formData="formData" :readOnly="readOnly" ref="footComp" :isForm="false"/>
+            <reconciliation-orders-form-foot :formData="formData" :readOnly="readOnly" ref="footComp" :isForm="false" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="end" style="padding-left: 10px;margin-top: 20px">
@@ -150,6 +150,9 @@
           return;
         }
         this.formData = result.data;
+        if (this.formData.originApprovers == null || this.formData.originApprovers.length == 0) {
+          this.$set(this.formData, 'originApprovers', [null]);
+        }
       },
       onReject() {
         this.$prompt('拒绝理由', '提示', {

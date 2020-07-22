@@ -48,10 +48,16 @@
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <el-dialog :visible.sync="productionDialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <production-order-detail :id="prductionOrderId" v-if="productionDialogVisible" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import ProductionOrderDetail from '../../../order/salesProduction/production-order/details/ProductionOrderDetail'
+
   export default {
     name: 'ReconciliationTasksList',
     props: {
@@ -61,7 +67,7 @@
       }
     },
     components: {
-
+      ProductionOrderDetail
     },
     computed: {
 
@@ -71,7 +77,9 @@
         this.$emit('onDetail', row);
       },
       onProductionOrderDetail(id) {
-        this.$router.push('/sales/productionOrder/' + id);
+        // this.$router.push('/sales/productionOrder/' + id);
+        this.prductionOrderId=id;
+        this.productionDialogVisible=true;
       },
       onPageSizeChanged(val) {
         this.$emit('onAdvancedSearch', 0, val);
@@ -87,7 +95,10 @@
       }
     },
     data() {
-      return {}
+      return {
+        productionDialogVisible:false,
+        prductionOrderId:''
+      }
     },
     create() {
 

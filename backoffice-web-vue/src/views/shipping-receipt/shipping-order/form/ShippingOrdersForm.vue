@@ -53,7 +53,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="发货单号" prop="consignment.trackingID" label-width="80px"
+                <el-form-item label="物流单号" prop="consignment.trackingID" label-width="80px"
                   :rules="{required: !formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-input v-model="formData.consignment.trackingID" style="width: 194px"
                     :disabled="formData.isOfflineConsignment"></el-input>
