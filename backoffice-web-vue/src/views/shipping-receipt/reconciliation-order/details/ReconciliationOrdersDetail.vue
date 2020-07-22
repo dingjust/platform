@@ -254,6 +254,26 @@
         const url = this.apis().reconciliationUpdate();
 
         let submitForm = Object.assign({}, this.formData);
+
+        //除去空字符
+        submitForm.increases = submitForm.increases.filter(item => item.amount != null && item.remarks != null)
+          .map(
+            item => {
+              return {
+                amount: item.amount ? item.amount : 0,
+                remarks: item.remarks ? item.remarks : ''
+              };
+            });
+        submitForm.deductions = submitForm.deductions.filter(item => item.amount != null && item.remarks != null)
+          .map(
+            item => {
+              return {
+                amount: item.amount ? item.amount : 0,
+                remarks: item.remarks ? item.remarks : ''
+              };
+            });
+
+
         //若不需要审核，则删除字段
         if (!submitForm.isApproval) {
           this.$delete(submitForm, 'approvers');
