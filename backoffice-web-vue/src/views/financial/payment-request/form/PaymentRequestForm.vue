@@ -222,7 +222,7 @@
         this.$router.go(-1);
       },
       onChange (val) {
-        if (this.preApplyAmount == '') {
+        if (this.preApplyAmount === '') {
           return;
         }
         if (this.parseFloatNotParNaN(val) > this.parseFloatNotParNaN(this.preApplyAmount)) {
