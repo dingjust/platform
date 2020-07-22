@@ -147,6 +147,14 @@
       :close-on-click-modal="false">
       <reject-form v-if="rejectFormVisible" :reconsiderOrder="formData" @callback="onCallback" />
     </el-dialog>
+    <el-dialog :visible.sync="receiptDialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <receipt-order-detail :id="receiptId" v-if="receiptDialogVisible" />
+    </el-dialog>
+    <el-dialog :visible.sync="returnDialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <receipt-order-detail :id="returnId" v-if="returnDialogVisible" />
+    </el-dialog>
   </div>
 </template>
 
@@ -156,6 +164,8 @@
     ColorSizeTable
   } from "@/components/";
 
+  import ReceiptOrderDetail from '../../receipt-order/details/ReceiptOrderDetail'
+  import ReturnOrderDetail from '../../return-order/details/ReturnOrderDetail'
   import ImagesUpload from "@/components/custom/ImagesUpload";
   import AcceptForm from "../form/AcceptForm";
   import RejectForm from "../form/RejectForm";
@@ -170,7 +180,9 @@
     components: {
       ImagesUpload,
       AcceptForm,
-      RejectForm
+      RejectForm,
+      ReceiptOrderDetail,
+      ReturnOrderDetail
     },
     computed: {
       //是收货方
@@ -243,6 +255,14 @@
         this.acceptFormVisible = false;
         this.rejectFormVisible = false;
         this.getDetail();
+      },
+      onReturnDetail(id) {
+        this.returnId = id;
+        this.returnDialogVisible = true;
+      },
+      onReceiptDetail(id) {
+        this.receiptId = id;
+        this.receiptDialogVisible = true;
       }
     },
     data() {
@@ -251,6 +271,10 @@
         currentUser: this.$store.getters.currentUser,
         acceptFormVisible: false,
         rejectFormVisible: false,
+        receiptDialogVisible: false,
+        returnDialogVisible: false,
+        receiptId: '',
+        returnId: '',
         formData: {
           product: {
             name: "",

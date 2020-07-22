@@ -58,7 +58,17 @@
       },
       //对应发货单id
       receiveDispatchTaskId: {
-        
+
+      },
+      //生产工单id
+      productionTaskOrderId: {
+
+      },
+      selectShipOrder: {
+        type: Array,
+        default: () => {
+          return [];
+        }
       }
     },
     components: {
@@ -207,6 +217,19 @@
           }
         }
       },
+      async getProductionOrderDetail(id) {
+        const url = this.apis().getProductionOrderDetail(id);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$set(this.formData, 'productionTaskOrder', Object.assign({}, result.data.taskOrderEntries[0]));
+        //查询发货任务详情
+        this.getShippingTaskDetai(this.formData.productionTaskOrder.receiveDispatchTask.id);
+        //设置对应对账任务id
+        this.reconciliationTaskId = this.formData.productionTaskOrder.reconciliationTask.id;
+      },
       //查询发货任务详情
       async getShippingTaskDetai(id) {
         const url = this.apis().shippingTaskDetail(id);
@@ -264,6 +287,15 @@
       //若发货单任务id不为空，则查询对应发货任务
       if (this.dispatchTaskId != null) {
         this.getShippingTaskDetai(this.dispatchTaskId);
+      }
+
+      if (this.productionTaskOrderId != null) {
+        this.getProductionOrderDetail(this.productionTaskOrderId);
+      }
+      if (this.selectShipOrder.length > 0) {
+        this.selectShipOrder.forEach(order => {
+          this.formData.shippingSheets.push(order);
+        });
       }
     }
   }

@@ -21,7 +21,7 @@
         <el-tab-pane :label="tabName(map)" :name="status" :key="status">
           <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch" />
         </el-tab-pane>
-      </template>
+      </template> 
     </el-tabs>
     <el-dialog :visible.sync="shippingListVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">

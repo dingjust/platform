@@ -82,9 +82,11 @@
           this.$router.push({
             name: '创建对账单',
             params: {
-              taskId: this.id,
-              productionTaskOrder: this.selectData[0].productionTaskOrder,
+              // taskId: this.id,
+              // productionTaskOrder: this.selectData[0].productionTaskOrder,
               // receiveDispatchTaskId: this.formData.receiveDispatchTask.id
+              productionTaskOrderId: this.selectData[0].productionTaskOrder.id,
+              selectShipOrder: this.selectData
             }
           });
         } else {
@@ -104,12 +106,10 @@
         const url = this.apis().shippingOrderStateCount();
         const result = await this.$http.post(url, query);
         if (result['errors']) {
-          this.stateCount = {};
           this.$message.error(result['errors'][0].message);
           return;
         }
         if (result.code === 0) {
-          this.stateCount = {};
           this.$message.error(result.msg);
           return;
         }
@@ -128,12 +128,10 @@
         const url = this.apis().reconciliationSheetStateCount();
         const result = await this.$http.post(url, query);
         if (result['errors']) {
-          this.stateCount = {};
           this.$message.error(result['errors'][0].message);
           return;
         }
         if (result.code === 0) {
-          this.stateCount = {};
           this.$message.error(result.msg);
           return;
         }
@@ -145,7 +143,7 @@
         switch (map.url) {
           //发货单
           case this.apis().shippingOrderList():
-            if (!this.stateCount.shipping.hasOwnProperty(map.status)) {
+            if (this.stateCount.shipping == null || !this.stateCount.shipping.hasOwnProperty(map.status)) {
               break;
             }
             tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] +
@@ -153,10 +151,12 @@
             break;
             //对账单
           case this.apis().reconciliationList():
-            if (!this.stateCount.reconciliation.hasOwnProperty(map.status)) {
+            if (this.stateCount.reconciliation == null || !this.stateCount.reconciliation.hasOwnProperty(map.status)) {
+              tabName = this.getEnum('ReconciliationOrderState', map.status);
               break;
             }
-            tabName = this.getEnum('ReconciliationOrderState', map.status) + '(' + this.stateCount.reconciliation[map.status] +
+            tabName = this.getEnum('ReconciliationOrderState', map.status) + '(' + this.stateCount.reconciliation[map
+                .status] +
               ')';
             break;
         }

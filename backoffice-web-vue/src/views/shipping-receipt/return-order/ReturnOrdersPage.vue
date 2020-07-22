@@ -15,7 +15,7 @@
       </div>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+          <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
             <return-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
           </el-tab-pane>
         </template>
@@ -104,14 +104,44 @@
       },
       onReceiptReturn() {
 
-      }
+      },
+      // 查询退货单状态统计
+      async returnOrderStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().returnSheetStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this, 'stateCount', result.data);
+      },
+      tabName(map) {
+        let tabName = this.getEnum('ShippingSheetState', map.code);
+        if (!this.stateCount.hasOwnProperty(map.code)) {
+          return tabName;
+        }
+        tabName = this.getEnum('ShippingSheetState', map.code) + '(' + this.stateCount[map.code] +
+          ')';
+        return tabName;
+      },
     },
     data() {
       return {
         activeName: 'RETURN_TO_BE_RECEIVED',
         currentUser: this.$store.getters.currentUser,
-        statuses: [
-          {
+        statuses: [{
             code: 'RETURN_TO_BE_RECEIVED',
             name: '退货待收'
           },
@@ -127,11 +157,15 @@
           createdDateFrom: '',
           createdDateTo: '',
           states: 'RETURN_TO_BE_RECEIVED'
+        },
+        stateCount: {
+
         }
       }
     },
     created() {
       this.onAdvancedSearch();
+      this.returnOrderStateCount();
     },
     destroyed() {
 

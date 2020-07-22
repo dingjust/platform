@@ -57,7 +57,7 @@
       //筛选待对账发货单
       reconciliationShippingOrders: function () {
         let data = this.formData.shippingTask.shippingSheets.filter(sheet => sheet.state == 'PENDING_RECONCILED');
-        if (data != null && data.length > 0) {
+        if (data != null && data.length > 0) {          
           return data;
         } else {
           return [];
@@ -132,6 +132,9 @@
         });
 
         return sums;
+      },
+      currentSelect() {
+
       }
     },
     data() {
@@ -140,7 +143,13 @@
         receiptId: '',
       }
     },
-    created() {}
+    watch: {
+      'formData.shippingTask.shippingSheets': function (newVal, oldVal) {
+        this.$nextTick(() => {
+          this.currentSelect();
+        })
+      }
+    }
   }
 
 </script>

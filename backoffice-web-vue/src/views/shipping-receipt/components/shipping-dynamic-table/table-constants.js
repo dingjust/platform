@@ -13,6 +13,7 @@ import {
 
 import ProductionOrderDetail from '../../../order/salesProduction/production-order/details/ProductionOrderDetail'
 import ShippingOrdersDetail from '../../shipping-order/details/ShippingOrdersDetail'
+import ReceiptOrderDetail from '../../receipt-order/details/ReceiptOrderDetail'
 
 // const Selection = {
 //   template: `
@@ -164,7 +165,7 @@ const ShipState = {
 }
 
 
-const RelationOrder = {
+const RelationOrder = { 
   template: `
   <el-table-column label="生产工单" min-width="120px" :key="sortKey">
   <template slot-scope="scope">
@@ -403,11 +404,26 @@ const RelationReceiptOrder = {
         <el-button type="text" @click="onReceiptDetail(item)">{{item.code}}</el-button>
       </el-row>
     </template>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+    :close-on-click-modal="false">
+    <receipt-order-detail :id="openId" v-if="dialogVisible" />
+    </el-dialog>
   </el-table-column>
   `,
+  components: {
+    ReceiptOrderDetail
+  },
+  data() {
+    return {
+      openId: null,
+      dialogVisible: false
+    }
+  },
   methods: {
     onReceiptDetail(item) {
-      this.$router.push('/receipt/orders/' + item.id);
+      // this.$router.push('/receipt/orders/' + item.id);
+      this.openId = item.id;
+      this.dialogVisible = true;
     }
   },
   props: {
