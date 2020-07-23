@@ -54,7 +54,7 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="end">
-          <el-col :span="2" v-if="isShipPart">
+          <el-col :span="2" v-if="isReceivePart">
             <el-button @click="onCreate">创建对账单</el-button>
           </el-col>
         </el-row>
@@ -94,12 +94,17 @@
     },
     computed: {
       //发货方
-      isShipPart: function () {
-        if (this.formData.shipParty) {
-          return this.currentUser.companyCode == this.formData.shipParty.uid;
-        } else {
-          return false;
-        }
+      // isShipPart: function () {
+      //   if (this.formData.shipParty) {
+      //     return this.currentUser.companyCode == this.formData.shipParty.uid;
+      //   } else {
+      //     return false;
+      //   }
+      // },
+      //收货方跟单员
+      isReceivePart:function(){
+        //TODO:跟单员判断
+        return true;
       },
       canFinish: function () {
         // TODO 判断是否能对账完结

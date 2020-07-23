@@ -1,6 +1,7 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-card>
@@ -56,7 +57,8 @@
             </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="8">
-                <el-form-item label="产品名称" prop="product" :rules="[{ type: 'object', validator: validateProduct, trigger: 'change' }]">
+                <el-form-item label="产品名称" prop="product"
+                  :rules="[{ type: 'object', validator: validateProduct, trigger: 'change' }]">
                   <el-input v-model="item.product.name" :disabled="true" placeholder="请输入"></el-input>
                 </el-form-item>
               </el-col>
@@ -64,37 +66,41 @@
                 <el-button @click="onProductSelect(index)" size="mini">选择任务</el-button>
               </el-col>
             </el-row>
-            <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item"/>
+            <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" />
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="8">
-                <el-form-item label="发单价格" prop="unitPrice" :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
+                <el-form-item label="发单价格" prop="unitPrice"
+                  :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
                   <el-input v-model="item.unitPrice" placeholder="请输入" @blur="onBlur(item,'billPrice')"
-                            v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
+                    v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="交货日期" prop="deliveryDate" :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
-                  <el-date-picker v-model="item.deliveryDate" type="date"
-                                  value-format="timestamp" placeholder="选择日期"></el-date-picker>
+                <el-form-item label="交货日期" prop="deliveryDate"
+                  :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
+                  <el-date-picker v-model="item.deliveryDate" type="date" value-format="timestamp" placeholder="选择日期">
+                  </el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item label="生产节点" prop="progressPlan" :rules="[{ required: true, type: 'object', validator: validateProgressPlan, trigger: 'change' }]">
+                <el-form-item label="生产节点" prop="progressPlan"
+                  :rules="[{ required: true, type: 'object', validator: validateProgressPlan, trigger: 'change' }]">
                   <el-input v-model="item.progressPlan.name" :disabled="true" placeholder="请输入"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="3">
-                <el-button v-if="item.progressPlan.isFromOrder" @click="editProgressPlan(index, item)" size="mini">编辑</el-button>
+                <el-button v-if="item.progressPlan.isFromOrder" @click="editProgressPlan(index, item)" size="mini">编辑
+                </el-button>
                 <el-button v-else @click="onProgressPlanSelect(index)" size="mini">选择节点</el-button>
               </el-col>
             </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="24">
-                <my-address-form :vAddress.sync="item.shippingAddress" ref="addressForm"/>
+                <my-address-form :vAddress.sync="item.shippingAddress" ref="addressForm" />
               </el-col>
             </el-row>
           </el-form>
-          <el-divider/>
+          <el-divider />
         </template>
         <el-row type="flex" justify="center" class="info-order-row" align="middle">
           <el-col :span="24">
@@ -113,7 +119,7 @@
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="18">
             <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
-                    :tax.sync="formData.invoiceTaxPoint" />
+              :tax.sync="formData.invoiceTaxPoint" />
           </el-col>
           <el-col :span="6">
             <el-form-item label="运费承担：" label-width="120">
@@ -142,7 +148,7 @@
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
           <el-col :span="24">
             <!-- <pay-plan-form-v4 :vPayPlan.sync="formData.payPlan" :showPreview="true"/> -->
-            <pay-plan-form-v2 :vPayPlan.sync="formData.payPlan" :showPreview="true"/>
+            <pay-plan-form-v2 :vPayPlan.sync="formData.payPlan" :showPreview="true" />
           </el-col>
         </el-row>
         <el-row>
@@ -152,10 +158,11 @@
             </div>
           </el-col>
         </el-row>
-        <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top">
+        <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20"
+          align="top">
           <el-col :span="6">
             <el-form-item label="跟单员" prop="merchandiser">
-              <personnel-selection :vPerson.sync="formData.merchandiser"/>
+              <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
             </el-form-item>
           </el-col>
           <el-col :span="2">
@@ -163,8 +170,9 @@
           </el-col>
           <template v-for="(item, index) in formData.sendApprovers">
             <el-col :span="6" v-if="formData.sendAuditNeeded">
-              <el-form-item label="审核员" prop="sendApprovers" :rules="[{ type: 'object', validator: checkApprover, trigger: 'change' }]">
-                <personnel-selection :vPerson.sync="formData.sendApprovers[index]"/>
+              <el-form-item label="审核员" prop="sendApprovers"
+                :rules="[{ type: 'object', validator: checkApprover, trigger: 'change' }]">
+                <personnel-selection :vPerson.sync="formData.sendApprovers[index]" />
               </el-form-item>
             </el-col>
           </template>
@@ -179,18 +187,14 @@
         <el-row style="padding-left: 10px" type="flex" justify="start" :gutter="20">
           <el-col :span="24">
             <el-form-item label="备注">
-              <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="请输入内容"
-                v-model="formData.remarks">
+              <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="formData.remarks">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-form-item label="附件">
-            <images-upload class="order-purchase-upload" :slot-data="formData.attachments"/>
+            <images-upload class="order-purchase-upload" :slot-data="formData.attachments" />
           </el-form-item>
         </el-row>
       </el-form>
@@ -203,14 +207,19 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask" :selectType="'OUTBOUND_ORDER'"/>
+    <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"
+        :selectType="'OUTBOUND_ORDER'" />
     </el-dialog>
-    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="getProgressPlan"/>
+    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="getProgressPlan" />
     </el-dialog>
-    <el-dialog :visible.sync="editProgressPlanVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <progress-plan-edit-form v-if="editProgressPlanVisible" :progressPlan="editProgress" @onEditProgress="onEditProgress"/>
+    <el-dialog :visible.sync="editProgressPlanVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <progress-plan-edit-form v-if="editProgressPlanVisible" :progressPlan="editProgress"
+        @onEditProgress="onEditProgress" />
     </el-dialog>
   </div>
 </template>
@@ -236,7 +245,10 @@
   import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ProgressPlanEditForm from '@/views/user/progress-plan/components/ProgressPlanEditForm'
-  import {PayPlanFormV2, SupplierSelect} from '@/components/'
+  import {
+    PayPlanFormV2,
+    SupplierSelect
+  } from '@/components/'
   export default {
     name: 'OutboundOrderForm',
     components: {
@@ -256,15 +268,15 @@
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
-      getProgressPlan (val) {
+      getProgressPlan(val) {
         this.formData.taskOrderEntries[this.selectIndex].progressPlan = this.copyProgressPlan(val);
         this.progressPlanVisible = false;
       },
-      onEditProgress (val) {
+      onEditProgress(val) {
         this.formData.taskOrderEntries[this.selectIndex].progressPlan.productionProgresses = val;
         this.editProgressPlanVisible = false;
       },
-      copyProgressPlan (val) {
+      copyProgressPlan(val) {
         let row = {
           name: val.name,
           remarks: val.remarks,
@@ -284,13 +296,13 @@
         })
         return row;
       },
-      onBlur (row, attribute) {
+      onBlur(row, attribute) {
         var reg = /\.$/;
         if (reg.test(row[attribute])) {
           this.$set(row, attribute, parseFloat(row[attribute] + '0'));
         }
       },
-      onSuppliersSelect (val) {
+      onSuppliersSelect(val) {
         this.suppliersSelectVisible = false;
         this.formData.outboundCompanyName = val.name;
         this.formData.outboundContactPerson = val.person;
@@ -301,20 +313,20 @@
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
-      onProductSelect (index) {
+      onProductSelect(index) {
         this.taskDialogVisible = true;
         this.selectIndex = index;
       },
-      onProgressPlanSelect (index) {
+      onProgressPlanSelect(index) {
         this.progressPlanVisible = true;
         this.selectIndex = index;
       },
-      editProgressPlan (index, item) {
+      editProgressPlan(index, item) {
         this.editProgressPlanVisible = true;
         this.editProgress = item.progressPlan.productionProgresses;
         this.selectIndex = index;
       },
-      addRow () {
+      addRow() {
         let item = {
           originOrder: {
             id: ''
@@ -330,10 +342,10 @@
         };
         this.formData.taskOrderEntries.push(item);
       },
-      deleteRow (index) {
+      deleteRow(index) {
         this.formData.taskOrderEntries.splice(index, 1);
       },
-      onSelectTask (selectTaskList) {
+      onSelectTask(selectTaskList) {
         let row = {}
         let index;
         let entries = [];
@@ -388,14 +400,14 @@
         this.taskDialogVisible = false;
       },
       // 封装Promise对象
-      getFormPromise (form) {
+      getFormPromise(form) {
         return new Promise(resolve => {
           form.validate(res => {
             resolve(res);
           })
         })
       },
-      async validateForms () {
+      async validateForms() {
         var formArr = [];
         formArr.push(this.$refs['form']);
         this.$refs['itemForm'].forEach(item => {
@@ -409,7 +421,7 @@
 
         return res.every(item => !!item);
       },
-      async onCreate (flag) {
+      async onCreate(flag) {
         let validate = await this.validateForms();
         if (validate) {
           this._onCreate(flag);
@@ -417,7 +429,7 @@
           this.$message.error('请完善表单信息');
         }
       },
-      async _onCreate (flag) {
+      async _onCreate(flag) {
         let data = Object.assign({}, this.formData);
 
         // 人员设置数据处理
@@ -440,37 +452,37 @@
           this.$message.error(result.msg);
           return;
         }
-        
+
         this.$message.success(flag ? '创建外发订单成功！' : '保存外发订单成功！');
         await this.$router.push({
           name: '外发订单列表'
         });
       },
-      validateField (name) {
+      validateField(name) {
         this.$refs.form.validateField(name);
       },
-      validateProduct (rule, value, callback) {
+      validateProduct(rule, value, callback) {
         if (value.id) {
           return callback();
         } else {
           return callback(new Error('请选择产品'))
         }
       },
-      validateProgressPlan (rule, value, callback) {
+      validateProgressPlan(rule, value, callback) {
         if (value.name && value != '') {
           return callback();
         } else {
           return callback(new Error('请选择生产节点'))
         }
       },
-      checkApprover (rule, value, callback) {
+      checkApprover(rule, value, callback) {
         if (value[0] && value[0].id) {
           return callback();
         } else {
           return callback(new Error('请选择审核员'))
         }
       },
-      initData () {
+      initData() {
         if (this.$route.params.formData != null) {
           this.formData = this.$route.params.formData;
           if (this.formData.taskOrderEntries.length <= 0) {
@@ -485,9 +497,11 @@
         } else {
           this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
         }
+        // //默认设置跟单员为当前账号
+        this.$set(this.formData, 'merchandiser', this.currentUser);
       }
     },
-    data () {
+    data() {
       var checkPartyAOperator = (rule, value, callback) => {
         if (value && value.id != '') {
           return callback();
@@ -497,12 +511,29 @@
       };
       return {
         rules: {
-          outboundCompanyName: [{required: true, message: '请选择外发工厂', trigger: 'change'}],
-          outboundContactPerson: [{required: true, message: '请选择联系人', trigger: 'change'}],
-          outboundContactPhone: [{required: true, message: '请选择联系方式', trigger: 'change'}],
-          merchandiser: [{ type: 'object', validator: checkPartyAOperator, trigger: 'change' }]
+          outboundCompanyName: [{
+            required: true,
+            message: '请选择外发工厂',
+            trigger: 'change'
+          }],
+          outboundContactPerson: [{
+            required: true,
+            message: '请选择联系人',
+            trigger: 'change'
+          }],
+          outboundContactPhone: [{
+            required: true,
+            message: '请选择联系方式',
+            trigger: 'change'
+          }],
+          merchandiser: [{
+            type: 'object',
+            validator: checkPartyAOperator,
+            trigger: 'change'
+          }]
         },
         formData: '',
+        currentUser: this.$store.getters.currentUser,
         suppliersSelectVisible: false,
         taskDialogVisible: false,
         selectIndex: '',
@@ -525,21 +556,22 @@
     },
     watch: {
       'formData.progressPlan': function (n, o) {
-        this.validateField('progressPlan');
+        this.validateField('progressPlan', this.currentUser);
       }
     },
-    created () {
+    created() {
       this.initData();
     },
-    mounted () {
+    mounted() {
       this.$nextTick(() => {
         this.$refs['form'].clearValidate();
       })
     },
-    destroyed () {
+    destroyed() {
       this.clearFormData();
     }
   }
+
 </script>
 
 <style scoped>
@@ -603,4 +635,5 @@
     width: 100px;
     height: 100px;
   }
+
 </style>

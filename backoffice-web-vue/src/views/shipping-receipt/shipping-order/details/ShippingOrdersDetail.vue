@@ -116,18 +116,19 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-          <template v-if="!hasReceiptOrder&&isReceiveParty&&formData.state=='PENDING_RECEIVED'">
+          <template v-if="!hasReceiptOrder&&isReceiveOperator&&formData.state=='PENDING_RECEIVED'">
             <el-button class="sumbit-btn" @click="onCreate">创建收货单</el-button>
             <el-button style="margin-left:50px" type="text" @click="onReturnAll">整单退货 >></el-button>
           </template>
           <!-- 待退货 -->
-          <template v-if="formData.state=='PENDING_RETURNED'&&isReceiveParty">
+          <template v-if="formData.state=='PENDING_RETURNED'&&isReceiveOperator">
             <el-button class="sumbit-btn" @click="onReturn">创建退货单</el-button>
             <el-button class="sumbit-btn" @click="onNoReturn">无退货</el-button>
           </template>
           <!-- 待复议 -->
-          <template v-if="formData.state=='PENDING_RECONSIDER'&&isShipParty">
+          <template v-if="formData.state=='PENDING_RECONSIDER'&&isShipOperator">
             <el-button class="sumbit-btn" @click="onReconsider">提出复议</el-button>
+            <el-button class="sumbit-btn" @click="onNoReconsider">无复议</el-button>
           </template>
         </el-row>
       </div>
@@ -175,18 +176,18 @@
       hasReceiptOrder: function () {
         return this.formData.receiptSheets != null && this.formData.receiptSheets.length > 0;
       },
-      //是否为收货方
-      isReceiveParty: function () {
-        if (this.currentUser != null && this.formData.receiveParty != null) {
-          return this.currentUser.companyCode == this.formData.receiveParty.uid;
+      //是否为收货方跟单员
+      isReceiveOperator: function () {
+        if (this.currentUser != null && this.formData.originMerchandiser != null) {
+          return this.currentUser.uid == this.formData.originMerchandiser.uid;
         } else {
           return false;
         }
       },
-      //是否为发货方
-      isShipParty: function () {
-        if (this.currentUser != null && this.formData.shipParty != null) {
-          return this.currentUser.companyCode == this.formData.shipParty.uid;
+      //是否为发货方跟单员
+      isShipOperator: function () {
+        if (this.currentUser != null && this.formData.merchandiser != null) {
+          return this.currentUser.uid == this.formData.merchandiser.uid;
         } else {
           return false;
         }
@@ -244,10 +245,34 @@
         });
       },
       async _onNoReturn() {
-        const url = this.apis().cancelReturn();
-        const result = await this.$http.put(url, {}, {
-          id: this.id
+        const url = this.apis().cancelReturn(this.id);
+        const result = await this.$http.put(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        } else if (result.code == '1') {
+          this.$message.success(result.msg);
+          this.getDetail();
+        }
+      },
+      //跳过复议
+      onNoReconsider() {
+        this.$confirm('是否确认跳过复议?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onNoReconsider();
+        }).catch(() => {
+
         });
+      },
+      async _onNoReconsider() {
+        const url = this.apis().cancelReconsider(this.id);
+        const result = await this.$http.put(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
