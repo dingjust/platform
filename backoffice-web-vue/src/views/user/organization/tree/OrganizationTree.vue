@@ -1,24 +1,26 @@
 <template>
   <div class="tree-container">
-    <el-row type="flex" justify="start">
+    <el-row type="flex" justify="start" style="margin-bottom: 10px;">
       <h6 class="organization-tips"><i class="el-icon-tickets" />部门最多可创建三级</h6>
     </el-row>
-    <el-tree :data="treeData" node-key="id" default-expand-all :expand-on-click-node="false" class="tree">
-      <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ data.name }}</span>
-        <span>
-          <el-button v-if="data.depth < 3 || data.depth === 0" type="text" size="mini" @click="appendDept(data)">
-            <i class="el-icon-plus" style="border: 1px solid"/>
-          </el-button>
-          <el-button v-if="data.depth > 0" type="text" size="mini" @click="editDept(data, node)">
-            <i class="el-icon-edit"/>
-          </el-button>
-          <el-button v-if="data.depth > 0" type="text" size="mini" @click="deleteDept(data)">
-            <i class="el-icon-delete"/>
-          </el-button>
+    <div :style="'height:' + autoHeight + 'px;overflow-y:auto;'">
+      <el-tree :data="treeData" node-key="id" default-expand-all :expand-on-click-node="false" class="tree">
+        <span class="custom-tree-node" slot-scope="{ node, data }" @click="onClick(data)">
+          <span>{{ data.name }}</span>
+          <span>
+            <el-button v-if="data.depth < 3 || data.depth === 0" type="text" size="mini" @click="appendDept(data)">
+              <i class="el-icon-plus" style="border: 1px solid"/>
+            </el-button>
+            <el-button v-if="data.depth > 0" type="text" size="mini" @click="editDept(data, node)">
+              <i class="el-icon-edit"/>
+            </el-button>
+            <el-button v-if="data.depth > 0" type="text" size="mini" @click="deleteDept(data)">
+              <i class="el-icon-delete"/>
+            </el-button>
+          </span>
         </span>
-      </span>
-    </el-tree>
+      </el-tree>
+    </div>
     <el-dialog :visible.sync="deptFormVisible" class="purchase-dialog" width="40%" append-to-body :close-on-click-modal="false">
       <dept-form v-if="deptFormVisible" :formData="formData" @onConfirm="onConfirm"/>
     </el-dialog>
@@ -30,15 +32,25 @@
 
   export default {
     name: 'OrganizationTree',
-    props: ['treeData'],
+    props: ['treeData', 'queryFormData'],
     components: {
       DeptForm
     },
     computed: {
-
+      geiHeight: function () {
+        return parseInt(this.autoHeight) + 35;
+      }
     },
     methods: {  
+      onClick (data) {
+        this.queryFormData.deptName = data.name;
+        if (data.name === '全部') {
+          this.queryFormData.deptName = '';
+        }
+        this.$emit('onAdvancedSearch', 0 , 10);
+      },
       appendDept (row) {
+        event.stopPropagation();
         this.formData = {
           id: null,
           parentId: row.id !== 0 ? row.id : null,
@@ -47,6 +59,7 @@
         this.deptFormVisible = true;
       },
       editDept (row, node) {
+        event.stopPropagation();
         this.formData = {
           id: row.id,
           parentId: node.parent.data.id !== 0 ? node.parent.data.id : null,
@@ -70,6 +83,7 @@
         this.deptFormVisible = false;
       },
       deleteDept (data) {
+        event.stopPropagation();
         this.$confirm('删除此部门会将此部门的下级部门一并删除，请问是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

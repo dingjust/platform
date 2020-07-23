@@ -58,7 +58,6 @@
         this.$router.push('/account/create/personnel');
       },
       onDetail (row) {
-        console.log(row)
         this.$router.push({
           name:'员工详情',
           params:{
@@ -92,6 +91,10 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
         this.$message.success('更改员工账号状态成功');
         this.onSearch(0, 10);
       },
@@ -107,6 +110,10 @@
       async _onDelete (uid) {
         const url = this.apis().removeB2BCustomer(uid);
         const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
         if (result.code == 0) {
           this.$message.error(result.msg);
           return;

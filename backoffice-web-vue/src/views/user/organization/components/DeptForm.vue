@@ -8,7 +8,7 @@
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="16">
         <el-form-item>
-          <el-input v-model="formData.deptName"></el-input>
+          <el-input ref="input" v-model="formData.deptName" @keyup.enter.native="onCreate"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -45,6 +45,12 @@
           ]
         },
       }
+    },
+    created () {
+      // input框获取焦点
+      this.$nextTick(() => {
+        this.$refs.input.focus();
+      })
     }
   }
 </script>

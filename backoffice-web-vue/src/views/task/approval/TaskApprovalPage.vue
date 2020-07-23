@@ -15,8 +15,8 @@
             <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset"
               @onAdvancedSearch="onAdvancedSearch" />
             <el-tabs v-model="activeStatus" @tab-click="handleClick">
-              <template v-for="(item, index) in statuses">
-                <el-tab-pane :name="item.code" :label="item.name">
+              <template v-for="item in statuses">
+                <el-tab-pane :name="item.code" :label="item.name" :key="item.code">
                   <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"
                     @onApproval="onApproval" @onRefuse="onRefuse" />
                 </el-tab-pane>
@@ -29,8 +29,8 @@
             <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset"
               @onAdvancedSearch="onAdvancedSearch" />
             <el-tabs v-model="activeStatus" @tab-click="handleClick">
-              <template v-for="(item, index) in statuses">
-                <el-tab-pane :name="item.code" :label="item.name">
+              <template v-for="item in statuses">
+                <el-tab-pane :name="item.code" :label="item.name" :key="item.code">
                   <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"
                     @onApproval="onApproval" />
                 </el-tab-pane>
@@ -123,6 +123,8 @@
           case 'OriginReconciliationSheet':
             this.$router.push('/reconciliation/orders/' + row.auditModel.id);
             break;
+          case 'PaymentRequestTask':
+            this.$router.push('/financial/merchandiser/paymentRequest/' + row.auditModel.id);
         }
       },
       onApproval(row) {

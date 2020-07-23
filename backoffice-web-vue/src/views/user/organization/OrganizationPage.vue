@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card>
       <el-row>
         <el-col :span="4">
@@ -9,13 +9,12 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-container style="height:100%">
+      <el-container>
         <el-aside width="30%">
           <el-tabs>
             <el-tab-pane label="组织架构">
-              <div style="overflow-y: auto;'">
-                <organization-tree :treeData="deptList" @refreshDept="getDeptList"/>
-              </div>
+              <organization-tree :treeData="deptList" @refreshDept="getDeptList" 
+                                 @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
             </el-tab-pane>
           </el-tabs>
         </el-aside>
@@ -117,8 +116,8 @@
   }
 
   .info-main-body {
-    padding-top: 5px;
-    width: 100%;
+    padding: 5px 0px 0px 20px;
+    /* width: 100%; */
     border-left: 2px solid rgba(0, 0, 0, 0.09);
   }
 </style>

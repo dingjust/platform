@@ -1689,6 +1689,9 @@ const state = {
   }, {
     code: 'OriginReconciliationSheet',
     name: '对账单'
+  }, {
+    code: 'PaymentRequestTask',
+    name: '付款申请单'
   }],
   // 外发模式
   ManagementMode: [{

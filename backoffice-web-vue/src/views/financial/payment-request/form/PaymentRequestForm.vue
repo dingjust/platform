@@ -150,7 +150,6 @@
         }
         this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) - 
                               this.parseFloatNotParNaN(result.data.paidAmount);
-        this.onChange(this.formData.requestAmount);
       },
       parseFloatNotParNaN (data) {
         if (isNaN(parseFloat(data))) {
@@ -222,12 +221,12 @@
         this.$router.go(-1);
       },
       onChange (val) {
-        if (this.preApplyAmount === '') {
-          return;
-        }
-        if (this.parseFloatNotParNaN(val) > this.parseFloatNotParNaN(this.preApplyAmount)) {
-          this.formData.requestAmount = this.preApplyAmount + '';
-        }
+        // if (this.preApplyAmount == '') {
+        //   return;
+        // }
+        // if (this.parseFloatNotParNaN(val) > this.parseFloatNotParNaN(this.preApplyAmount)) {
+        //   this.formData.requestAmount = this.preApplyAmount + '';
+        // }
         this.chineseAmount = this.convertCurrency(this.formData.requestAmount);
       },
       onBlur () {

@@ -539,6 +539,16 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/role/RolePage')
             },
             {
+              path: 'organizationRole',
+              name: '角色管理',
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/OrganizationRolePage')  
+            },
+            {
+              path: 'create/organizationRole',
+              name: '角色管理',
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/form/OrganizationRoleForm')  
+            },
+            {
               path: 'personnel',
               name: '员工管理',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/personnel/PersonnelPage')

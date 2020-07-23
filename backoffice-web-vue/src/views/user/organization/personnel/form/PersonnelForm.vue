@@ -25,11 +25,11 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item prop="mobilePhone">
+                <el-form-item prop="contactPhone">
                   <template slot="label">
                     <span>联系方式<span style="color: #F56C6C">*</span></span>
                   </template>
-                  <el-input v-model="formData.mobilePhone" placeholder="请输入手机号" class="personnel-input"></el-input>
+                  <el-input v-model="formData.contactPhone" placeholder="请输入手机号" class="personnel-input"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -141,6 +141,8 @@
           id: this.formData.id,
           name: this.formData.name,
           uid: this.formData.uid,
+          password: this.formData.password,
+          contactPhone: this.formData.contactPhone,
           b2bDept: {
             id: this.formData.b2bDept.id != '' ? this.formData.b2bDept.id : null 
           },
@@ -169,7 +171,7 @@
         rules: {
           name: [{ required: true, message: '必填', trigger: 'blur' }],
           uid: [{ required: true, message: '必填', trigger: 'blur' }],
-          mobilePhone: [{ required: true, message: '必填', trigger: 'blur' }],
+          contactPhone: [{ required: true, message: '必填', trigger: 'blur' }],
           password: [{ required: true, message: '必填', trigger: 'blur' }],
         },
         formData: {
@@ -180,7 +182,7 @@
           b2bDept: {
             id: ''
           },
-          mobilePhone: '',
+          contactPhone: '',
           password: ''
         },
         roleGroupList: '',
@@ -198,7 +200,7 @@
         this.formData.uid = this.$route.params.data.uid;
         this.formData.b2bRoleGroup = this.$route.params.data.b2bRoleGroup;
         this.formData.b2bDept = this.$route.params.data.b2bDept != null ? this.$route.params.data.b2bDept : {id:''};
-        this.formData.mobilePhone = this.$route.params.data.mobilePhone;
+        this.formData.contactPhone = this.$route.params.data.contactPhone;
         this.formData.password = this.$route.params.data.password;
       }
     },

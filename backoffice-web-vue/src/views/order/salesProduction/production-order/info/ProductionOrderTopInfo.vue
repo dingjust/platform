@@ -133,18 +133,23 @@
         </el-row>
         <!-- 查看单据 -->
         <order-view-button-group :slotData="slotData" />
-        <el-row type="flex">
+        <!-- <el-row type="flex">
           <el-col :span="6">
             <div class="info-row-title">
               <h6>合同</h6>
             </div>
           </el-col>
+        </el-row> -->
+        <el-row>
+          <el-col :span="24">
+            <contract-com :slotData="slotData" :contracts="slotData.agreements" :canSign="false"/>
+          </el-col>
         </el-row>
-        <el-row class="info-row-title_row" type="flex">
+        <!-- <el-row class="info-row-title_row" type="flex">
           <el-col>
             <PDFUpload :vFileList.sync="fileList" />
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-col>
     </el-row>
   </div>
@@ -153,14 +158,15 @@
 <script>
   import PDFUpload from '@/components/custom/upload/PDFUpload';
   import OrderViewButtonGroup from './OrderViewButtonGroup';
-
+  import ContractCom from '@/views/order/salesProduction/contract/ContractCom'
 
   export default {
     name: 'ProductionOrderTopInfo',
     props: ['slotData'],
     components: {
       PDFUpload,
-      OrderViewButtonGroup
+      OrderViewButtonGroup,
+      ContractCom
     },
     computed: {
       productionOrder: function () {
