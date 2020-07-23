@@ -99,7 +99,7 @@
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
         <!-- 待退货收货 -->
-        <template v-if="formData.state=='RETURN_TO_BE_RECEIVED'&&isShipParty">
+        <template v-if="formData.state=='RETURN_TO_BE_RECEIVED'&&isShipOperator">
           <el-button class="sumbit-btn" @click="onConfirm">确认收货</el-button>
         </template>
       </el-row>
@@ -134,13 +134,12 @@
           return false;
         }
       },
-      //是发货方
-      isShipParty: function () {
-        if (this.formData.shipParty != null && this.currentUser != null) {
-          return this.currentUser.companyCode == this.formData.shipParty.uid;
-        } else {
-          return false;
+      //是发货方跟单员
+      isShipOperator: function () {
+        if (this.formData.merchandiser) {
+          return this.formData.merchandiser.uid == this.currentUser.uid;
         }
+        return false;
       },
       //图片url list
       mediasUrlList: function () {

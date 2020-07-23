@@ -103,10 +103,19 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="8" :offset="2">
-          <h6>发货单：KY1000000001</h6>
+          <el-row type="flex">
+            <h6>发货单：<el-button type="text" @click="onShipDetail">
+                {{formData.logisticsSheet?formData.logisticsSheet.code:''}}
+              </el-button>
+            </h6>
+          </el-row>
         </el-col>
       </el-row>
     </el-card>
+    <el-dialog :visible.sync="shippingDetailVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <shipping-orders-detail :id="formData.logisticsSheet.id" v-if="shippingDetailVisible" />
+    </el-dialog>
   </div>
 </template>
 
@@ -115,6 +124,8 @@
     ColorSizeBoxTable,
     ColorSizeTable
   } from '@/components/'
+
+  import ShippingOrdersDetail from '../../shipping-order/details/ShippingOrdersDetail'
 
   export default {
     name: 'ReceiptOrderDetail',
@@ -126,7 +137,8 @@
     },
     components: {
       ColorSizeBoxTable,
-      ColorSizeTable,    
+      ColorSizeTable,
+      ShippingOrdersDetail
     },
     computed: {
       //是收货方
@@ -152,10 +164,15 @@
         }
         this.formData = Object.assign({}, result.data);
       },
+      //发货单详情
+      onShipDetail() {
+        this.shippingDetailVisible = true;
+      }
     },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
+        shippingDetailVisible: false,
         formData: {
           product: {
             name: '',
