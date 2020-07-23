@@ -104,7 +104,7 @@
         <el-table-column prop="diffQuantity" label="差异数">
         </el-table-column>
       </el-table>
-      <el-form :model="form" ref="form" :inline="true">
+      <el-form :model="form" ref="form" :inline="true" :rules="rules">
         <el-row type="flex" justify="space-between" style="margin-top:20px">
           <el-col :span="6" :offset="2">
             <el-row type="flex">
@@ -113,12 +113,10 @@
             </el-row>
           </el-col>
           <el-col :span="6">
-            <!-- <h6>申请复议数量：1</h6> -->
-            <el-form-item label="申请复议数量" label-width="120px"
-              :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+            <el-form-item label="申请复议数量" label-width="120px" prop="reconsiderQuantity">
               <!-- TODO: 最大数为差异数最大值-->
-              <el-input ref="input" v-if="hackset" v-model="form.reconsiderQuantity" placeholder="0"
-                v-number-input.float="inputFormat">
+              <el-input ref="input" v-model="form.reconsiderQuantity" placeholder="0"
+                v-number-input.float="{min:1,decimal: 0}">
               </el-input>
             </el-form-item>
           </el-col>
@@ -171,13 +169,7 @@
         }
         this.shippingOrder = Object.assign({}, result.data);
         //最大复议数取差异数绝对值        
-        const num = Math.abs(this.shippingOrder.diffQuantity);
-        this.$set(this, 'inputFormat', {
-          min: 1,
-          max: num,
-          decimal: 0
-        });
-        this.hackset=true;
+        this.maxNum = Math.abs(this.shippingOrder.diffQuantity);
       },
       onReceiptDetail(id) {
         this.$router.push('/receipt/orders/' + id);
@@ -221,12 +213,7 @@
     data() {
       return {
         data: [],
-        inputFormat: {
-          min: 1,
-          max: 2,
-          decimal: 0
-        },
-        hackset: false,
+        maxNum: 0,
         shippingOrder: {
           product: {
             name: '',
@@ -249,6 +236,25 @@
           reconsiderQuantity: '',
           medias: []
         },
+        rules: {
+          reconsiderQuantity: [{
+            required: true,
+            // message: '不能为空',
+            trigger: 'blur',
+            validator: (rule, value, callback) => {
+              if (!value) {
+                return callback(new Error('复议数不能为空'));
+              }
+              setTimeout(() => {
+                if (value > this.maxNum) {
+                  callback(new Error('复议数值不能大于差异数'));
+                } else {
+                  callback();
+                }
+              }, 100);
+            }
+          }]
+        }
       }
     },
     created() {

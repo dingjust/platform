@@ -117,21 +117,25 @@
 
         //扣款项
         let deduction = 0;
-        this.formData.deductions.forEach(element => {
-          let num = parseFloat(element.amount);
-          if (!Number.isNaN(num)) {
-            deduction += num;
-          }
-        });
+        if (this.formData.deductions) {
+          this.formData.deductions.forEach(element => {
+            let num = parseFloat(element.amount);
+            if (!Number.isNaN(num)) {
+              deduction += num;
+            }
+          });
+        }
 
         //增款项
         let increase = 0;
-        this.formData.increases.forEach(element => {
-          let num = parseFloat(element.amount);
-          if (!Number.isNaN(num)) {
-            increase += num;
-          }
-        });
+        if (this.formData.increases) {
+          this.formData.increases.forEach(element => {
+            let num = parseFloat(element.amount);
+            if (!Number.isNaN(num)) {
+              increase += num;
+            }
+          });
+        }
 
         return (unitPrice * totalNum + increase - deduction).toFixed(2);
       }

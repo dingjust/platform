@@ -9,7 +9,7 @@
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,status) in statusMap">
-        <el-tab-pane :label="tabName(map)" :name="status" :key="status">
+        <el-tab-pane :label="mode=='import'?importTabName(map):exportTabName(map)" :name="status" :key="status">
           <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch"
             @onSelect="onSelect" />
         </el-tab-pane>
@@ -137,9 +137,31 @@
         }
         this.$set(this.stateCount, 'reconciliation', result.data);
       },
-      tabName(map) {
-        let tabName = this.getEnum('ShippingSheetState', map.status);
+      // 查询对账单（收货方审核）状态统计
+      async reconciliationSheetAuditStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
 
+        const url = this.apis().reconciliationSheetAuditStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this.stateCount, 'reconciliationAudit', result.data);
+      },
+      //发货方
+      importTabName(map) {
+        let tabName = this.getEnum('ShippingSheetState', map.status);
         switch (map.url) {
           //发货单
           case this.apis().shippingOrderList():
@@ -162,6 +184,59 @@
         }
         return tabName;
       },
+      //收货方（审核状态处理）
+      exportTabName(map) {
+        let tabName = '';
+
+        switch (map.status) {
+          case 'PENDING_RECONCILED': //发货单
+            if (!this.stateCount.shipping.hasOwnProperty(map.status)) {
+              tabName = this.getEnum('ShippingSheetState', map.status);
+              break;
+            }
+            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] +
+              ')';
+            break;
+          case 'PENDING_CONFIRM': //对账单
+            if (!this.stateCount.reconciliation.hasOwnProperty(map.status)) {
+              tabName = this.getEnum('ReconciliationOrderState', map.status);
+              break;
+            }
+            tabName = this.getEnum('ReconciliationOrderState', map.status) + '(' + this.stateCount.reconciliation[map
+                .status] +
+              ')';
+            break;
+          case 'PENDING_APPROVAL': //审核单-审核中
+            if (!this.stateCount.reconciliationAudit.hasOwnProperty('AUDITING')) {
+              tabName = this.getEnum('ReconciliationOrderState', map.status);
+              break;
+            }
+            tabName = this.getEnum('ReconciliationOrderState', map.status) + '(' + this.stateCount.reconciliationAudit[
+                'AUDITING'] +
+              ')';
+            break;
+          case 'REJECTED': //审核单-拒绝
+            if (!this.stateCount.reconciliationAudit.hasOwnProperty('AUDITED_FAILED')) {
+              tabName = this.getEnum('ReconciliationOrderState', map.status);
+              break;
+            }
+            tabName = this.getEnum('ReconciliationOrderState', map.status) + '(' + this.stateCount.reconciliationAudit[
+                'AUDITED_FAILED'] +
+              ')';
+            break;
+          case 'CONFIRMED': //对账单-完成
+            if (!this.stateCount.reconciliation.hasOwnProperty(map.status)) {
+              tabName = this.getEnum('ReconciliationOrderState', map.status);
+              break;
+            }
+            tabName = this.getEnum('ReconciliationOrderState', map.status) + '(' + this.stateCount.reconciliation[
+                map.status] +
+              ')';
+            break;
+        }
+
+        return tabName;
+      }
     },
     data() {
       return {
@@ -169,7 +244,8 @@
         orderListVisible: false,
         stateCount: {
           shipping: {},
-          reconciliation: {}
+          reconciliation: {},
+          reconciliationAudit: {}
         },
         selectData: []
       }
@@ -177,6 +253,10 @@
     created() {
       this.shippingOrderStateCount();
       this.reconciliationStateCount();
+
+      if (this.mode == 'export') {
+        this.reconciliationSheetAuditStateCount();
+      }
     },
   }
 

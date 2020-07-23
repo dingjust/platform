@@ -89,23 +89,26 @@
         statusMap: {
           PENDING_RECEIVED: {
             status: 'PENDING_RECEIVED',
-            columns: [{
-              key: '发货单号'
-            }, {
-              key: '产品名称'
-            }, {
-              key: '关联订单'
-            }, {
-              key: '合作商-发货'
-            }, {
-              key: '跟单员'
-            }, {
-              key: '发货数'
-            }, {
-              key: '发货日期'
-            }, {
-              key: '发货操作'
-            }],
+            columns: [
+              {
+                key: '发货单号',
+              },
+              {
+                key: '产品名称'
+              }, {
+                key: '关联订单'
+              }, {
+                key: '合作商-发货'
+              }, {
+                key: '跟单员'
+              }, {
+                key: '发货数'
+              }, {
+                key: '发货日期'
+              }, {
+                key: '发货操作'
+              }
+            ],
             url: this.apis().shippingOrderList()
           },
           PENDING_RETURNED: {

@@ -12,13 +12,13 @@
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="订单任务" name="ORDER_TASK">
           <div class="tab-basic-row">
-            <task-approval-toolbar :queryFormData="queryFormData"
-                          @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>
+            <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset"
+              @onAdvancedSearch="onAdvancedSearch" />
             <el-tabs v-model="activeStatus" @tab-click="handleClick">
               <template v-for="(item, index) in statuses">
                 <el-tab-pane :name="item.code" :label="item.name">
-                  <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                                      @onDetail="onDetail" @onApproval="onApproval" @onRefuse="onRefuse"/>
+                  <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"
+                    @onApproval="onApproval" @onRefuse="onRefuse" />
                 </el-tab-pane>
               </template>
             </el-tabs>
@@ -26,13 +26,13 @@
         </el-tab-pane>
         <el-tab-pane label="采购任务" name="PURCHASE_TASK">
           <div class="tab-basic-row">
-            <task-approval-toolbar :queryFormData="queryFormData"
-                                   @onReset="onReset" @onAdvancedSearch="onAdvancedSearch"/>
+            <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset"
+              @onAdvancedSearch="onAdvancedSearch" />
             <el-tabs v-model="activeStatus" @tab-click="handleClick">
               <template v-for="(item, index) in statuses">
                 <el-tab-pane :name="item.code" :label="item.name">
-                  <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch"
-                                      @onDetail="onDetail" @onApproval="onApproval"/>
+                  <task-approval-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"
+                    @onApproval="onApproval" />
                 </el-tab-pane>
               </template>
             </el-tabs>
@@ -59,7 +59,10 @@
   import TaskApprovalList from './list/TaskApprovalList';
   export default {
     name: 'TaskApprovalPage',
-    components: {TaskApprovalList, TaskApprovalToolbar},
+    components: {
+      TaskApprovalList,
+      TaskApprovalToolbar
+    },
     props: [],
     computed: {
       ...mapGetters({
@@ -80,7 +83,7 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         const keyword = this.queryFormData.keyword;
         const url = this.apis().getAuditList();
         this.search({
@@ -90,19 +93,23 @@
           size
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         const query = this.queryFormData;
         const url = this.apis().getAuditList();
-        this.searchAdvanced({url, query, page, size});
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size
+        });
       },
-      onReset () {
-      },
-      handleClick (tab, event) {
+      onReset() {},
+      handleClick(tab, event) {
         this.onReset();
         this.queryFormData.state = tab.name;
         this.onAdvancedSearch();
       },
-      onDetail (row) {
+      onDetail(row) {
         switch (row.type) {
           case 'SalesOrder':
             this.$router.push('/sales/order/' + row.auditModel.id);
@@ -110,9 +117,15 @@
           case 'OutboundOrder':
             this.$router.push('/sales/outboundOrder/' + row.auditModel.id);
             break;
+          case 'ReconciliationSheet':
+            this.$router.push('/reconciliation/orders/' + row.auditModel.id);
+            break;
+          case 'OriginReconciliationSheet':
+            this.$router.push('/reconciliation/orders/' + row.auditModel.id);
+            break;
         }
       },
-      onApproval (row) {
+      onApproval(row) {
         this.$confirm('是否确认进行审批?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -121,7 +134,7 @@
           this._onApproval(row);
         });
       },
-      onRefuse (row) {
+      onRefuse(row) {
         this.$confirm('是否确认进行拒绝?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -130,7 +143,7 @@
           this._onRefuse(row);
         });
       },
-      async _onApproval (row) {
+      async _onApproval(row) {
         let formData = {
           id: row.id,
           auditMsg: '',
@@ -145,7 +158,7 @@
         this.$message.success('审批成功');
         this.onAdvancedSearch(this.page.number);
       },
-      async _onRefuse (row) {
+      async _onRefuse(row) {
         let formData = {
           id: row.id,
           auditMsg: '',
@@ -161,7 +174,7 @@
         this.onAdvancedSearch(this.page.number);
       }
     },
-    data () {
+    data() {
       return {
         activeName: 'ORDER_TASK',
         activeStatus: '',
@@ -181,13 +194,14 @@
         }]
       }
     },
-    created () {
+    created() {
       this.onSearch();
     },
-    mounted () {
+    mounted() {
 
     }
   }
+
 </script>
 
 <style scoped>
@@ -195,4 +209,5 @@
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
+
 </style>

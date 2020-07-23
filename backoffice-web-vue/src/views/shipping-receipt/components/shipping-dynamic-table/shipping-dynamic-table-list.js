@@ -112,7 +112,7 @@ const ShippingDynamicTableList = {
     //MAP
     COMPONENT_NAME_MAP
   },
-  render: function (createElement) {
+  render: function (createElement) {    
     return createElement(
       'template', this.columns.map((entry, index) => {
         let props = entry.props != null ? entry.props : {};
