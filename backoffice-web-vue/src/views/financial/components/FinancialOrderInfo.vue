@@ -44,7 +44,7 @@
       <div style="margin-left: 10px"></div>
       <div class="financial-border-container financial-info-two">
         <el-row type="flex" justify="start" align="middle" class="basic-row">
-          <h6>合作商</h6>
+          <h6>合作商：{{cooperatorName}}</h6>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <el-col :span="12">
@@ -91,6 +91,20 @@
       ContractCom
     },
     computed: {
+      cooperatorName: function () {
+        console.log(this.belongTo);
+        console.log(this.formData.productionOrder.originCooperator);
+        console.log(this.formData.productionOrder.targetCooperator);
+        if (this.belongTo == 'RECEIVABLE_PAGE' && this.formData.productionOrder.originCooperator) {
+          return this.formData.productionOrder.originCooperator.type === 'ONLINE' ? 
+            this.formData.productionOrder.originCooperator.partner.name : this.formData.productionOrder.originCooperator.name; 
+        } else if (this.belongTo == 'PAYABLE_PAGE' && this.formData.productionOrder.targetCooperator) {
+          return this.formData.productionOrder.targetCooperator.type === 'ONLINE' ? 
+            this.formData.productionOrder.targetCooperator.partner.name : this.formData.productionOrder.targetCooperator.name; 
+        } else {
+          return '';
+        }
+      },
       cooperatorCharge: function () {
         if (this.belongTo == 'RECEIVABLE_PAGE') {
           return this.formData.productionOrder.merchandiser ? this.formData.productionOrder.merchandiser.name : '';

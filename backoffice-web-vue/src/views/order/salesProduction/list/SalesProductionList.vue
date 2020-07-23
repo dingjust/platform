@@ -28,12 +28,12 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="审批状态" v-if="isPending">
+      <!-- <el-table-column label="审批状态" v-if="isPending">
         <template slot-scope="scope">
           <span>{{scope.row.auditState!=null? getEnum('SalesProductionAuditStatus', scope.row.auditState):''}}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="订单状态" v-if="!isPending">
+      </el-table-column> -->
+      <el-table-column label="订单状态">
         <template slot-scope="scope">
           <span>{{getEnum('SalesProductionOrderState', scope.row.state)}}</span>
         </template>
