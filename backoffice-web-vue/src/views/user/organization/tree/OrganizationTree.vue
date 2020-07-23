@@ -128,7 +128,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 12px;
     padding-right: 8px;
   }
 

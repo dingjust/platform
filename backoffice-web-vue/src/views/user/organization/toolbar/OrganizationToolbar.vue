@@ -69,8 +69,8 @@
     color: #606266
   }
 
-  /* .personnel-toolbar-container >>> .el-form-item {
+  .personnel-toolbar-container >>> .el-form-item {
     margin-bottom: 0px;
-  } */
+  }
 
 </style>

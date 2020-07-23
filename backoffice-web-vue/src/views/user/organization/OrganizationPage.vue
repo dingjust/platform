@@ -9,16 +9,18 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-container>
+      <el-container style="height:100%">
         <el-aside width="30%">
           <el-tabs>
             <el-tab-pane label="组织架构">
-              <organization-tree :treeData="deptList" @refreshDept="getDeptList"/>
+              <div style="overflow-y: auto;'">
+                <organization-tree :treeData="deptList" @refreshDept="getDeptList"/>
+              </div>
             </el-tab-pane>
           </el-tabs>
         </el-aside>
         <el-main width="70%" class="info-main-body">
-          <organization-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
+          <organization-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
           <organization-list :page="page" @onAdvancedSearch="onAdvancedSearch" />
         </el-main>
       </el-container>
@@ -36,7 +38,7 @@
   );
 
   import OrganizationToolbar from './toolbar/OrganizationToolbar'
-  import OrganizationList from './toolbar/OrganizationToolbar'
+  import OrganizationList from './list/OrganizationList'
   import OrganizationTree from './tree/OrganizationTree'
   export default {
     name: 'PersonnelPage',
@@ -57,7 +59,6 @@
         searchAdvanced: 'searchAdvanced'
       }),
       onSearch (page, size) {
-        const keyword = this.keyword;
         const url = this.apis().getB2BCustomers();
         this.search({url, keyword, page, size});
       },
@@ -96,7 +97,7 @@
       }
     },
     created () {
-      this.onSearch(0, 10);
+      this.onAdvancedSearch(0, 10);
       this.getDeptList();
     },
     destroyed () {

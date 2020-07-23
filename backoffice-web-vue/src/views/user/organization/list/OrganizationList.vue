@@ -1,26 +1,39 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="员工姓名" prop="name" />
-      <el-table-column label="员工账号" prop="uid" />
-      <el-table-column label="所属部门" prop="b2bDept.name" />
-      <el-table-column label="员工角色" prop="b2bRoleGroup.name" />
-      <el-table-column label="创建时间">
+    <el-table ref="resultTable" stripe :data="page.content">
+      <el-table-column label="姓名" prop="name" />
+      <el-table-column label="账号" prop="uid" />
+      <el-table-column label="部门" prop="b2bDept.name" />
+      <el-table-column label="角色" prop="b2bRoleGroup.name" />
+      <!-- <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="状态">
         <template slot-scope="scope">
           <span>{{scope.row.loginDisabled ? '禁用' : '启用'}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" min-width="180px">
         <template slot-scope="scope" v-if="scope.$index != 0">
-          <el-button type="text" @click="onDetail(scope.row)">查看</el-button>
+          <el-button size="mini" @click="onEdit(scope.row)">编辑信息</el-button>
+          <el-dropdown @command="handleCommand($event, scope.row)">
+            <el-button size="mini">
+              更多<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="SET_DEPT_CHARGE">设为部门负责人</el-dropdown-item>
+              <el-dropdown-item command="FORBIDDEN_ACCOUNT">禁用账号</el-dropdown-item>
+              <el-dropdown-item command="ENABLE_ACCOUNT">启用账号</el-dropdown-item>
+              <el-dropdown-item command="WORK_HANDOVER">工作交接</el-dropdown-item>
+              <el-dropdown-item command="DELETE_PERSONNEL">删除员工</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- <el-button type="text" @click="onDetail(scope.row)">查看</el-button>
           <el-button type="text" v-if="!scope.row.loginDisabled" @click="onForbidden(scope.row)">禁用</el-button>
           <el-button type="text" v-else @click="onEnable(scope.row)">启用</el-button>
-          <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
+          <el-button type="text" @click="onDelete(scope.row)">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -57,17 +70,40 @@
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
-      onDetail (row) {
-        this.$emit('onDetail', row);
+      handleCommand (command, row) {
+        this.$message(command);
+        switch (command) {
+          case 'SET_DEPT_CHARGE':
+            this.setDeptCharge(row);
+            break;
+          case 'FORBIDDEN_ACCOUNT':
+            this.changeLoginDisabled(row);
+            break;
+          case 'ENABLE_ACCOUNT':
+            this.changeLoginDisabled(row);
+            break;
+          case 'WORK_HANDOVER': 
+            this.workHandover(row);
+            break;
+          case 'DELETE_PERSONNEL':
+            this.deletePersonnel(row);
+            break;
+        }
       },
-      onForbidden (row) {
-        this.$emit('onForbidden', row);
+      onEdit (row) {
+
       },
-      onEnable (row) {
-        this.$emit('onEnable', row);
+      setDeptCharge (row) {
+
       },
-      onDelete (row) {
-        this.$emit('onDelete', row)
+      changeLoginDisabled (row) {
+
+      },
+      workHandover (row) {
+
+      },
+      deletePersonnel (row) {
+
       }
     },
     data () {
