@@ -21,6 +21,10 @@
             :autosize="{ minRows: 4, maxRows: 6 }" />
         </el-col>
       </el-row>
+      <el-row class="basic-form-row" type="flex" align="middle" 
+        v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED'">
+        <h6>唯一码：<span style="color: #F56C6C">{{formData.uniqueCode}}</span></h6>
+      </el-row>
       <div v-if="showFinancial">
         <div style="padding-left: 10px;margin-top: 20px">
           <el-row v-if="formData.payPlan != null">
@@ -111,7 +115,7 @@
           this.formData.sendApprovers[0].uid == this.$store.getters.currentUser.uid;
       },
       showFinancial: function () {
-        return this.formData.state.sendAuditState == 'PASSED' &&
+        return this.formData.sendAuditState == 'PASSED' &&
                 this.formData.state != 'TO_BE_ACCEPTED' && 
                 this.formData.state != 'TO_BE_SUBMITTED';
       }
