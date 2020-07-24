@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- 收货方 -->
-    <template v-if="isReceiptPart">
+    <!--确认方(发货方) -->
+    <template v-if="isShipPart">
       <!-- 接单确认(跟单员) -->
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"    
-        v-if="formData.state=='PENDING_CONFIRM'&&(formData.originAuditWorkOrder==null||formData.originAuditWorkOrder.state=='AUDITED_FAILED')">
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
+        v-if="formData.state=='PENDING_CONFIRM'&&(formData.originAuditWorkOrder==null||formData.originAuditWorkOrder.state=='AUDITED_FAILED')&&isShipOperator">
         <!-- 未确认提交以及审核失败 -->
         <el-col :span="4">
           <el-button class="create-btn" @click="onReject">拒绝</el-button>
@@ -24,11 +24,11 @@
         </el-col>
       </el-row>
     </template>
-    <!-- 发货方 -->
-    <template v-if="isShipPart">
+    <!-- 创建方（收货方） -->
+    <template v-if="isReceiptPart">
       <!-- 被拒绝或审核修改(跟单员) -->
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
-        v-if="isShipPart&&(formData.state=='REJECTED'||formData.state=='APPROVAL_RETURN')&&isCreator">
+        v-if="formData.state=='REJECTED'||formData.state=='APPROVAL_RETURN'&&isCreator">
         <el-col :span="4" v-if="readOnly">
           <el-button class="create-btn" @click="onUpdate">修改</el-button>
         </el-col>
@@ -79,6 +79,13 @@
           return false;
         }
       },
+      //发货方跟单员
+      isShipOperator: function () {
+        if (this.formData.merchandiser) {
+          return this.formData.merchandiser.uid == this.currentUser.uid;
+        }
+        return false;
+      },
       //创建人
       isCreator: function () {
         if (this.currentUser.uid == this.formData.creator.uid) {
@@ -105,10 +112,7 @@
           return false;
         }
       },
-      //确认方-跟单员显示按钮
-      showReceOperatorBtn:function(){
-        
-      }
+
     },
     methods: {
       onReject() {

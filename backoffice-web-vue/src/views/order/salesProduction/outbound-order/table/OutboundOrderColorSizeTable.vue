@@ -2,7 +2,7 @@
   <div style="margin-bottom: 10px">
     <el-row type="flex" justify="start">
       <el-col :span="3" :offset="1">
-        <img :src="product.thumbnail ? product.thumbnail.url : 'static/img/nopicture.png'" style="width: 100px;height: 100px;border-radius: 8px;"/>
+        <img :src="product.product.thumbnail ? product.product.thumbnail.url : 'static/img/nopicture.png'" style="width: 100px;height: 100px;border-radius: 8px;"/>
       </el-col>
       <el-col :span="12">
         <el-table ref="resultTable" :data="getColorSizeTableData" border>

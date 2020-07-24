@@ -10,7 +10,7 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-manage-page mode="import" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onSelect="onSelect" :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
+        :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
     </el-card>
   </div>
 </template>
@@ -62,7 +62,20 @@
         });
       },
       onAdvancedSearch(page, size) {
-        const query = this.queryFormData;
+        let query ;
+        //针对发货方的确认审核状态处理
+        if (this.queryFormData.states == 'PENDING_APPROVAL') {
+          query=Object.assign({},this.queryFormData);
+          query['states'] = 'PENDING_CONFIRM';
+          query['auditStates'] = 'AUDITING';
+        } else if (this.queryFormData.states == 'REJECTED') {
+          query=Object.assign({},this.queryFormData);
+          query['states'] = 'PENDING_CONFIRM';
+          query['auditStates'] = 'AUDITED_FAILED';
+        }else{
+          query=Object.assign({},this.queryFormData);
+          this.$delete(query,'auditStates');
+        }
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
         this.searchAdvanced({
@@ -73,9 +86,6 @@
           companyCode
         });
       },
-      onSelect(val) {
-        this.$set(this, 'selectData', val);
-      }
     },
     data() {
       return {
@@ -94,29 +104,6 @@
             status: 'PENDING_RECONCILED',
             label: '待对账',
             columns: [{
-              key: 'select',
-              isMulti: true,
-              //选择项是否可选函数
-              selectable: (row, index) => {
-                //无对应生产单不可选
-                if (row.productionTaskOrder == null) {
-                  return false;
-                }
-                if (this.selectData.length == 0) {
-                  return true;
-                } else {
-                  var orderCode = this.selectData[0].productionTaskOrder.code;
-                  if (orderCode == null) {
-                    return true;
-                  }
-                  if (row.productionTaskOrder != null && row.productionTaskOrder.code != null) {
-                    return row.productionTaskOrder.code == orderCode;
-                  } else {
-                    return false;
-                  }
-                }
-              }
-            }, {
               key: '发货单号'
             }, {
               key: '产品名称'
@@ -137,9 +124,9 @@
             }],
             url: this.apis().shippingOrderList()
           },
-          PENDING_APPROVAL: {
-            status: 'PENDING_APPROVAL',
-            label: '待审核',
+          PENDING_CONFIRM: {
+            status: 'PENDING_CONFIRM',
+            label: '对账中',
             columns: [{
               key: '对账单号'
             }, {
@@ -165,9 +152,10 @@
             }],
             url: this.apis().reconciliationList()
           },
-          PENDING_CONFIRM: {
-            status: 'PENDING_CONFIRM',
-            label: '对账中',
+          PENDING_APPROVAL: {
+            status: 'PENDING_APPROVAL',
+            isAuditStates: true,
+            label: '待审核',
             columns: [{
               key: '对账单号'
             }, {
@@ -250,7 +238,6 @@
             url: this.apis().reconciliationList()
           },
         },
-        selectData: []
       }
     },
     created() {

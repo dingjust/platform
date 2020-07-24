@@ -10,6 +10,8 @@
             <el-button type="text" @click="onShippingSheetDetail(scope.row.id)">{{scope.row.code}}</el-button>
             <el-tag size="mini" style="margin-left:10px" type="info" effect="plain">
               {{getEnum('ShippingSheetState', scope.row.state)}}</el-tag>
+            <el-tag v-if="hasAllReturnOrder(scope.row)" size="mini" style="margin-left:10px"
+              type="warning" effect="plain">整单退货</el-tag>
           </el-row>
         </template>
       </el-table-column>
@@ -139,6 +141,16 @@
           }
         });
         return result;
+      },
+      //是否有整单退货
+      hasAllReturnOrder(row){
+        if(row.returnSheets){
+          let index= row.returnSheets.findIndex(sheet=>sheet.isAllReturn);
+          return index>-1;      
+        }else{
+          return false;
+        }
+
       }
     },
     watch: {

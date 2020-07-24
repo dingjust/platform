@@ -55,7 +55,8 @@
     },
     computed: {
       canCreate: function () {
-        if (this.mode == 'import') {
+        //收货方发起对账
+        if (this.mode == 'export') {
           return true;
         } else {
           return false;
@@ -140,7 +141,7 @@
       // 查询对账单（收货方审核）状态统计
       async reconciliationSheetAuditStateCount() {
         let query = Object.assign({}, this.queryFormData);
-        query.states = '';
+        query.states = 'PENDING_CONFIRM';
         if (this.mode == 'import') {
           query['shipParty'] = this.$store.getters.currentUser.companyCode;
         } else {
@@ -161,31 +162,6 @@
       },
       //发货方
       importTabName(map) {
-        let tabName = this.getEnum('ShippingSheetState', map.status);
-        switch (map.url) {
-          //发货单
-          case this.apis().shippingOrderList():
-            if (this.stateCount.shipping == null || !this.stateCount.shipping.hasOwnProperty(map.status)) {
-              break;
-            }
-            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] +
-              ')';
-            break;
-            //对账单
-          case this.apis().reconciliationList():
-            if (this.stateCount.reconciliation == null || !this.stateCount.reconciliation.hasOwnProperty(map.status)) {
-              tabName = this.getEnum('ReconciliationOrderState', map.status);
-              break;
-            }
-            tabName = this.getEnum('ReconciliationOrderState', map.status) + '(' + this.stateCount.reconciliation[map
-                .status] +
-              ')';
-            break;
-        }
-        return tabName;
-      },
-      //收货方（审核状态处理）
-      exportTabName(map) {
         let tabName = '';
 
         switch (map.status) {
@@ -236,6 +212,31 @@
         }
 
         return tabName;
+      },
+      //收货方（审核状态处理）
+      exportTabName(map) {
+        let tabName = this.getEnum('ShippingSheetState', map.status);
+        switch (map.url) {
+          //发货单
+          case this.apis().shippingOrderList():
+            if (this.stateCount.shipping == null || !this.stateCount.shipping.hasOwnProperty(map.status)) {
+              break;
+            }
+            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] +
+              ')';
+            break;
+            //对账单
+          case this.apis().reconciliationList():
+            if (this.stateCount.reconciliation == null || !this.stateCount.reconciliation.hasOwnProperty(map.status)) {
+              tabName = this.getEnum('ReconciliationOrderState', map.status);
+              break;
+            }
+            tabName = this.getEnum('ReconciliationOrderState', map.status) + '(' + this.stateCount.reconciliation[map
+                .status] +
+              ')';
+            break;
+        }
+        return tabName;
       }
     },
     data() {
@@ -254,7 +255,7 @@
       this.shippingOrderStateCount();
       this.reconciliationStateCount();
 
-      if (this.mode == 'export') {
+      if (this.mode == 'import') {
         this.reconciliationSheetAuditStateCount();
       }
     },

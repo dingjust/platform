@@ -38,13 +38,13 @@
             <h5>应付金额：{{payable}}元</h5>
           </el-col>
         </el-row>
-        <el-row type="flex" v-if="isShipPart&&formData.state=='APPROVAL_RETURN'">
+        <el-row type="flex" v-if="isReceiptPart&&formData.state=='APPROVAL_RETURN'">
           <el-col :span="12">
             <h5 style="color:red">驳回理由：<span style="color:black">{{formData.auditWorkOrder.auditMsg}}</span></h5>
           </el-col>
         </el-row>
         <el-row type="flex"
-          v-if="isReceiptPart&&formData.originAuditWorkOrder&&formData.originAuditWorkOrder.state=='AUDITED_FAILED'">
+          v-if="isShipPart&&formData.originAuditWorkOrder&&formData.originAuditWorkOrder.state=='AUDITED_FAILED'">
           <el-col :span="12">
             <h5 style="color:red">驳回理由：<span style="color:black">{{formData.originAuditWorkOrder.auditMsg}}</span></h5>
           </el-col>
@@ -254,6 +254,26 @@
         const url = this.apis().reconciliationUpdate();
 
         let submitForm = Object.assign({}, this.formData);
+
+        //除去空字符
+        submitForm.increases = submitForm.increases.filter(item => item.amount != null && item.remarks != null)
+          .map(
+            item => {
+              return {
+                amount: item.amount ? item.amount : 0,
+                remarks: item.remarks ? item.remarks : ''
+              };
+            });
+        submitForm.deductions = submitForm.deductions.filter(item => item.amount != null && item.remarks != null)
+          .map(
+            item => {
+              return {
+                amount: item.amount ? item.amount : 0,
+                remarks: item.remarks ? item.remarks : ''
+              };
+            });
+
+
         //若不需要审核，则删除字段
         if (!submitForm.isApproval) {
           this.$delete(submitForm, 'approvers');

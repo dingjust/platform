@@ -1409,10 +1409,14 @@ let NONE_TENANT_APIS = {
   },
 
   // 跳过退货
-  cancelReturn() {
-    return '/b2b/sheets/shipping/cancelReturn';
+  cancelReturn(id) {
+    return '/b2b/sheets/shipping/cancelReturn/' + id;
   },
 
+  // 跳过复议
+  cancelReconsider(id) {
+    return '/b2b/sheets/shipping/cancelReconsider/' + id;
+  },
 
   // 退货单详情
   returnOrderDetail(id) {

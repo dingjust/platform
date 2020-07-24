@@ -32,7 +32,7 @@
           {{getEntryTotalPrice(scope.row)}}
         </template>
       </el-table-column>
-      <el-table-column label="预计总成本">
+      <!-- <el-table-column label="预计总成本">
         <template slot-scope="scope">
           {{getEntryTotalCost(scope.row)}}
         </template>
@@ -46,7 +46,7 @@
         <template slot-scope="scope">
           {{getEntryProfitPercent(scope.row)}}%
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="交货时间">
         <template slot-scope="scope">
           <span>{{scope.row.deliveryDate | timestampToTime}}</span>

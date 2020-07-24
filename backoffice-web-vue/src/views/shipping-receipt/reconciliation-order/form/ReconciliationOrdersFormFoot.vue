@@ -50,8 +50,8 @@
           </el-col>
         </el-row>
       </template>
-      <!-- 创建方 -->
-      <template v-if="isShipPart||isForm">
+      <!-- 创建方(收货方) -->
+      <template v-if="isReceiptPart||isForm">
         <el-row type="flex" v-if="!readOnly" style="margin-top:20px">
           <el-col :span="2">
             <el-form-item label="" label-width="5px">
@@ -76,10 +76,9 @@
           </el-col>
         </el-row>
       </template>
-      <!-- 收货方 -->
-      <template v-if="isReceiptPart">
-        <template v-if="showReceApproverSelect">
-          <!-- TODO: 限制跟单员-->
+      <!-- 确认方(发货方) -->
+      <template v-if="isShipPart">
+        <template v-if="showShipApproverSelect">
           <el-row type="flex" style="margin-top:20px">
             <el-col :span="2">
               <el-form-item label="" label-width="5px">
@@ -156,11 +155,21 @@
       },
       //收货方跟单员
       isReceiptCreator: function () {
-        return true;
+        if (this.formData.originMerchandiser) {
+          return this.formData.originMerchandiser == this.currentUser.uid;
+        }
+        return false;
       },
-      //收货方显示审核人员选择项
-      showReceApproverSelect: function () {
-        if (this.formData.state == 'PENDING_CONFIRM' && this.isReceiptCreator) {
+      //发货方跟单员
+      isShipCreator: function () {
+        if (this.formData.merchandiser) {
+          return this.formData.merchandiser.uid == this.currentUser.uid;
+        }
+        return false;
+      },
+      //发货方显示审核人员选择项
+      showShipApproverSelect: function () {
+        if (this.formData.state == 'PENDING_CONFIRM' && this.isShipCreator) {
           return this.formData.originAuditWorkOrder == null || this.formData.originAuditWorkOrder.state ==
             'AUDITED_FAILED';
         }
