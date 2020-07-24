@@ -20,31 +20,60 @@
       <el-row type="flex">
         <el-col :offset="16">
           <el-card class="login-card">
-            <b-input-group class="mb-3 login-row">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="icon-user"></i>
-                </span>
-              </div>
-              <input v-model="username" type="text" class="form-control" placeholder="请输入账号" />
-            </b-input-group>
-            <b-input-group class="mb-4 login-row">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="icon-lock"></i>
-                </span>
-              </div>
-              <input v-model="password" type="password" class="form-control" placeholder="请输入密码" />
-            </b-input-group>
-            <el-row class="login-btn-row" type="flex" justify="space-between">
-              <el-button type="text" @click="onRegister" class="login-btn_text">注册</el-button>
-              <!-- <el-button type="text" class="login-btn_text">忘记密码</el-button> -->
-            </el-row>
-            <div id="nc_captcha" class="nc-container no-captcha-container"></div>
-            <el-row type="flex" justify="center">
-              <!-- <b-button variant="primary" class="px-4" @click="login" @keyup.enter="login">登录</b-button> -->
-              <el-button class="login-btn" @click="login" :disabled="!captchaPass">登录</el-button>
-            </el-row>
+            <div class="tab-container">
+              <el-row type="flex" style="height:100%">
+                <div class="tab-btn" :class="activeTabName=='main'?'btn-active':null" @click="handleTabClick('main')">
+                  <span>主账号</span>
+                </div>
+                <div class="tab-btn" :class="activeTabName=='employee'?'btn-active':null"
+                  @click="handleTabClick('employee')">
+                  <span>员工账号</span>
+                </div>
+              </el-row>
+            </div>
+            <div class="card-main">
+              <!-- 主账号 -->
+              <template v-if="activeTabName=='main'">
+                <b-input-group class="mb-3 login-row">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="icon-user"></i>
+                    </span>
+                  </div>
+                  <input v-model="username" type="text" class="form-control" placeholder="请输入账号" />
+                </b-input-group>
+              </template>
+              <!-- 员工账号 -->
+              <template v-if="activeTabName=='employee'">
+                <b-input-group class="mb-3 login-row">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="icon-user"></i>
+                    </span>
+                  </div>
+                  <input v-model="username" type="text" class="form-control" placeholder="主账号" />
+                  <div style="width:10px"></div>
+                  <input v-model="employeeUserName" type="text" class="form-control" placeholder="员工账号" />
+                </b-input-group>
+              </template>
+              <b-input-group class="mb-4 login-row">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="icon-lock"></i>
+                  </span>
+                </div>
+                <input v-model="password" type="password" class="form-control" placeholder="请输入密码" />
+              </b-input-group>
+              <el-row class="login-btn-row" type="flex" justify="space-between">
+                <el-button type="text" @click="onRegister" class="login-btn_text">注册</el-button>
+                <el-button type="text" @click="onPasswordReset" class="login-btn_text">忘记密码</el-button>
+              </el-row>
+              <div id="nc_captcha" class="nc-container no-captcha-container"></div>
+              <el-row type="flex" justify="center">
+                <!-- <b-button variant="primary" class="px-4" @click="login" @keyup.enter="login">登录</b-button> -->
+                <el-button class="login-btn" @click="login" :disabled="!captchaPass">登录</el-button>
+              </el-row>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -54,9 +83,12 @@
 <script>
   export default {
     name: 'LoginPage',
-    data () {
+    data() {
       return {
+        activeTabName: 'main',
         username: '',
+        //员工账号,
+        employeeUserName: '',
         password: '',
         NC_RESULT: {
           csessionid: '',
@@ -78,11 +110,15 @@
         );
       }
     },
-    created () {
+    created() {
       var ua = navigator.userAgent.toLowerCase(); // 判断浏览器的类型
-      console.log(ua);
+      //本地是否存储userName
+      let localUserName = localStorage.getItem('userName');
+      if (localUserName != null && localUserName != '') {
+        this.username = localUserName;
+      }
     },
-    mounted () {
+    mounted() {
       var nc_token = [
         'FFFF0N00000000008691',
         new Date().getTime(),
@@ -125,7 +161,7 @@
       });
     },
     methods: {
-      async login () {
+      async login() {
         const username = this.username.replace(/(\s*$)/g, '');
         const password = this.password;
 
@@ -135,23 +171,32 @@
         });
       },
       /// NC验证回调
-      ncCallback (data) {
-        // window.console && console.log(nc_token);
-        // window.console && console.log(data.csessionid);
-        // window.console && console.log(data.sig);
+      ncCallback(data) {
         console.log(JSON.stringify(data));
         this.NC_RESULT.csessionid = data.csessionid;
         this.NC_RESULT.sig = data.sig;
         this.NC_RESULT.token = data.token;
         this.NC_RESULT.value = data.value;
       },
-      onRegister () {
+      onRegister() {
         this.$router.push('register');
         // this.$router.push('/account/setting/payPlan/create');
         // this.$router.push("/account/my");
+      },
+      handleTabClick(name) {
+        this.activeTabName = name;
+      },
+      onPasswordReset() {
+        this.$router.push({
+          path:'/password/reset',
+          query: {
+            accountType: this.activeTabName
+          }
+        });
       }
     }
   };
+
 </script>
 <style>
   .login-card {
@@ -159,6 +204,10 @@
     background-color: rgba(0, 0, 0, 0.35) !important;
     border: none !important;
     width: 350px;
+  }
+
+  .login-card .el-card__body {
+    padding: 0;
   }
 
   .login-container {
@@ -234,6 +283,28 @@
 
   .login-btn.el-button.is-disabled {
     background-color: #f1f1f1 !important;
+  }
+
+  .tab-container {
+    width: 100%;
+    height: 40px;
+    background-color: #ffffff40;
+  }
+
+  .card-main {
+    padding: 20px;
+  }
+
+  .tab-btn {
+    width: 50%;
+    height: 100%;
+    cursor: pointer;
+    line-height: 40px;
+    text-align: center;
+  }
+
+  .btn-active {
+    background-color: white;
   }
 
 </style>

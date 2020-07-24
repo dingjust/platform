@@ -55,6 +55,15 @@ const actions = {
     // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
+    } else {
+      //报错设置为空
+      commit('page', {
+        number: 0, // 当前页，从0开始
+        size: 10, // 每页显示条数
+        totalPages: 1, // 总页数
+        totalElements: 0, // 总数目数
+        content: [] // 当前页数据
+      }, );
     }
   },
   async searchAdvanced({
@@ -86,6 +95,15 @@ const actions = {
 
     if (!response['errors']) {
       commit('page', response);
+    } else {
+      //报错设置为空
+      commit('page', {
+        number: 0, // 当前页，从0开始
+        size: 10, // 每页显示条数
+        totalPages: 1, // 总页数
+        totalElements: 0, // 总数目数
+        content: [] // 当前页数据
+      }, );
     }
   }
 };

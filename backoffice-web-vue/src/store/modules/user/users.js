@@ -105,6 +105,8 @@ const actions = {
       return;
     }
     commit('permissions', res.data);
+    //存储登录用户username
+    localStorage.setItem('userName', username);
     router.push('/');
   },
   async getProfile({

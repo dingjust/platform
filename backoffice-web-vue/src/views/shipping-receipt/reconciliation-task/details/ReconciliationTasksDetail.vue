@@ -54,7 +54,7 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="end">
-          <el-col :span="2" v-if="isReceivePart">
+          <el-col :span="2" v-if="isReceiveOperator">
             <el-button @click="onCreate">创建对账单</el-button>
           </el-col>
         </el-row>
@@ -93,18 +93,13 @@
       ReconciliationTasksOrdersList
     },
     computed: {
-      //发货方
-      // isShipPart: function () {
-      //   if (this.formData.shipParty) {
-      //     return this.currentUser.companyCode == this.formData.shipParty.uid;
-      //   } else {
-      //     return false;
-      //   }
-      // },
-      //收货方跟单员
-      isReceivePart:function(){
-        //TODO:跟单员判断
-        return true;
+      //是否为收货方跟单员
+      isReceiveOperator: function () {
+        if (this.currentUser != null && this.formData.originMerchandiser != null) {
+          return this.currentUser.uid == this.formData.originMerchandiser.uid;
+        } else {
+          return false;
+        }
       },
       canFinish: function () {
         // TODO 判断是否能对账完结

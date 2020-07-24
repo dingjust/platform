@@ -9,21 +9,34 @@
     <el-row type="flex" justify="center">
       <el-col :span="16">
         <el-form ref="form" :model="slotData" label-width="80px" :rules="rules" label-position="left">
-          <el-form-item label="会员名" prop="phone">
+          <el-form-item label="会员名" prop="phone" v-if="accountType=='main'">
             <el-input v-model="slotData.phone" placeholder="手机号">
               <template slot="prepend">+86</template>
             </el-input>
           </el-form-item>
+          <template v-if="accountType=='employee'">
+            <el-row type="flex" justify="space-between">
+              <el-col :span="15">
+                <el-form-item label="会员名" prop="phone">
+                  <el-input v-model="slotData.phone" placeholder="主账号">
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="9">
+                <el-form-item prop="phone" label="" label-width="10px" v-if="accountType=='employee'">
+                  <el-input v-model="slotData.phone" placeholder="员工账号" style="width:100%">
+                  </el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </template>
           <el-form-item label="验证码" prop="code">
             <el-input v-model="slotData.code">
               <el-button slot="append" type="primary" :disabled="disable" :class="{ codeGeting:isGeting }"
                 @click="getVerifyCode">{{getCode}}</el-button>
             </el-input>
           </el-form-item>
-          <el-form-item label="联系人" prop="name">
-            <el-input v-model="slotData.name"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item label="登录密码" prop="password">
             <el-input v-model="slotData.password" type="password"></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="againPassword">
@@ -32,19 +45,9 @@
               <i class="el-icon-error icon-error" slot="suffix" v-if="showError"></i>
             </el-input>
           </el-form-item>
-          <el-form-item label="公司名称" prop="companyName">
-            <el-input v-model="slotData.companyName"></el-input>
-          </el-form-item>
-          <el-row type="flex" justify="center">
-            <el-checkbox v-model="checked">我已同意并阅读<el-button type="text"
-                @click="serviceProtocolVisible=!serviceProtocolVisible">《钉单平台服务协议》</el-button>和<el-button type="text"
-                @click="paymentProtocolVisible=!paymentProtocolVisible">
-                《钉单平台贷款代收代付协议》</el-button>
-            </el-checkbox>
-          </el-row>
           <el-form-item>
             <el-row type="flex" justify="center">
-              <el-button class="register-btn" @click="onSubmit" :disabled="!checked">注册</el-button>
+              <el-button class="register-btn" @click="onSubmit">提交</el-button>
             </el-row>
           </el-form-item>
         </el-form>
@@ -53,15 +56,20 @@
   </div>
 </template>
 <script>
-  import ServiceProtocol from './ServiceProtocol';
-  import PaymentProtocol from './PaymentProtocol';
-
   export default {
-    name: "RegisterForm",
-    props: ['slotData'],
+    name: "PasswordResetForm",
+    props: {
+      slotData: {
+
+      },
+      //类型(默认主账号)
+      accountType: {
+        type: String,
+        default: 'main'
+      }
+    },
     components: {
-      ServiceProtocol,
-      PaymentProtocol
+
     },
     data() {
       var validatePass = (rule, value, callback) => {
@@ -98,7 +106,6 @@
         isGeting: false,
         count: 60,
         disable: false,
-        checked: false,
         serviceProtocolVisible: false,
         paymentProtocolVisible: false,
         formData: {
@@ -203,23 +210,23 @@
         //   return;
         // }
 
-        let form = {
-          mobileNumber: this.slotData.phone,
-          password: this.slotData.password,
-          name: this.slotData.companyName,
-          contactPerson: this.slotData.name,
-          contactPhone: this.slotData.phone,
-          captchaCode: this.slotData.code
-        }
-        const url = this.apis().fastRegister(this.slotData.type);
-        const result = await this.$http.post(url, form);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
+        // let form = {
+        //   mobileNumber: this.slotData.phone,
+        //   password: this.slotData.password,
+        //   name: this.slotData.companyName,
+        //   contactPerson: this.slotData.name,
+        //   contactPhone: this.slotData.phone,
+        //   captchaCode: this.slotData.code
+        // }
+        // const url = this.apis().fastRegister(this.slotData.type);
+        // const result = await this.$http.post(url, form);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
 
-        this.$message.success('注册成功！');
-        this.$router.push("/login");
+        this.$message.success('重置成功！');
+        this.$router.push("/password/success");
       }
     }
   };
