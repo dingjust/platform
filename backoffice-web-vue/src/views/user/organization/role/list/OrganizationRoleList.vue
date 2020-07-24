@@ -53,7 +53,7 @@
         });
       },
       onDetail (row) {
-        this.$router.push('/account/create/organizationRole');
+        this.$router.push('/account/organizationRole/' + row.id + '/edit');
       },
       onEdit (row) {
 

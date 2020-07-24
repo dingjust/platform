@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="4">
           <div class="organization-list-title">
-            <h6>创建角色</h6>
+            <h6>{{this.id ? '编辑角色' : '创建角色'}}</h6>
           </div>
         </el-col>
       </el-row>
@@ -35,11 +35,14 @@
           </el-row>
           <el-row type="flex">
             <el-col :span="24">
-              <permission-form />
+              <permission-form ref="permissionForm" />
             </el-col>
           </el-row>
         </div>
       </el-form>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+        <el-button class="personnel-confirm-btn" @click="onConfirm">提交</el-button>
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -48,24 +51,83 @@
   import {PermissionForm} from '../../index.js'
   export default {
     name: 'OrganizationRoleForm',
-    props: [],
+    props: ['id'],
     components: {
       PermissionForm
     },
     computed: {
     },
     methods: {
+      async getRoleDetail () {
+        const url = this.apis().getB2BCustomerRoleGroupDetails(this.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.setRoleData(result.data);
+      },
+      setRoleData (data) {
+        this.formData.name = data.name;
+        // data.roleList.forEach()
+      },
+      async onConfirm () {
+        let checkData = this.$refs.permissionForm.checkData;
+        let authData = this.$refs.permissionForm.authData;
+        let roleIds = [];
+        let flag;
+        for (const key in checkData) {
+          if (checkData.hasOwnProperty(key) && checkData[key].length > 0) {
+            roleIds.push(Number(key));
+            roleIds.push.apply(roleIds, checkData[key]);
+
+            authData.forEach(item => {
+              flag = item.children.some(val => val.id == Number(key));
+              if (flag && roleIds.indexOf(item.id) < 0) {
+                roleIds.push(item.id);
+              }
+            })
+          }
+        }
+
+        let data = {
+          id: this.formData.id,
+          name: this.formData.name,
+          remark: this.formData.remark,
+          roleIds: roleIds
+        }
+
+        const url = this.apis().saveB2BCustomerRoleGroup();
+        const result = await this.$http.post(url, data);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success(data.id ? '编辑角色成功' : '创建角色成功');
+      }
     },
     data () {
       return {
         formData: {
+          id: null,
           name: '',
           remark: '',
-          permissionList: ''
+          roleIds: []
         }
       }
     },
     created () {
+      if (this.id != null) {
+        this.getRoleDetail();
+      }
     },
     destroyed () {
 
@@ -82,4 +144,12 @@
   .main-container {
     padding: 0px 50px;
   } 
+
+  .personnel-confirm-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
+  }
 </style>

@@ -23,11 +23,8 @@
       </el-row>
       <div v-if="showFinancial">
         <div style="padding-left: 10px;margin-top: 20px">
-          <el-row v-if="isPayment && formData.payPlan != null">
+          <el-row v-if="formData.payPlan != null">
             <purchase-order-info-payment-finance :slotData="formData" />
-          </el-row>
-          <el-row v-if="isReceipt && formData.payPlan != null">
-            <purchase-order-info-receipt-finance :slotData="formData" />
           </el-row>
         </div>
         <div v-if="formData.paymentBill != null">
@@ -112,12 +109,6 @@
         // 订单审核状态在审核中且登陆账号为审核人
         return this.formData.sendAuditState == 'AUDITING' && 
           this.formData.sendApprovers[0].uid == this.$store.getters.currentUser.uid;
-      },
-      isPayment: function () {
-        return this.$store.getters.currentUser.companyCode == this.formData.originCooperator.partner.uid;
-      },
-      isReceipt: function () {
-        return this.$store.getters.currentUser.companyCode == this.formData.targetCooperator.partner.uid;
       },
       showFinancial: function () {
         return this.formData.state.sendAuditState == 'PASSED' &&

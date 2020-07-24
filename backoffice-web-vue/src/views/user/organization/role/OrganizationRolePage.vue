@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <organization-role-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+      <organization-role-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate"/>
       <organization-role-list :page="page" @onAdvancedSearch="onAdvancedSearch" />
     </el-card>
   </div>
@@ -51,6 +51,9 @@
         const query = this.queryFormData;
         const url = this.apis().getB2BCustomerRoleGroupList();
         this.searchAdvanced({url, query, page, size});
+      },
+      onCreate () {
+        this.$router.push('/account/create/organizationRole');
       }
     },
     data () {

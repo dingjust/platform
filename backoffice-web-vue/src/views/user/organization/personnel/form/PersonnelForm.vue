@@ -146,8 +146,9 @@
           b2bDept: {
             id: this.formData.b2bDept.id != '' ? this.formData.b2bDept.id : null 
           },
-          b2bRoleGroup: this.formData.b2bRoleGroup,
-          b2bRoleList: [8796160687428, 8796160425284]
+          b2bRoleGroup: {
+            id: this.formData.b2bRoleGroup != '' ? this.formData.b2bRoleGroup.id : null
+          }
         };
         const url = this.apis().createB2BCustomer();
         const result = await this.$http.post(url, data);

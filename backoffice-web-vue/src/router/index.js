@@ -545,7 +545,13 @@ const router = new Router({
             },
             {
               path: 'create/organizationRole',
-              name: '角色管理',
+              name: '创建角色',
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/form/OrganizationRoleForm')  
+            },
+            {
+              path: 'organizationRole/:id/edit',
+              name: '编辑角色',
+              props: true,
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/form/OrganizationRoleForm')  
             },
             {
