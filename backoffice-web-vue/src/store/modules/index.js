@@ -12,7 +12,8 @@ import B2BCustomersModule from './user/b2b-customers';
 import FactoriesModule from './user/factories';
 import BrandsModule from './user/brands';
 import PermissionModule from './user/permission';
-import PersonnelModule from './user/personnel'
+import PersonnelModule from './user/personnel';
+import OrganizationRoleModule from './user/organization-role';
 // product
 import ColorsModule from './product/colors';
 import SizesModule from './product/sizes';
@@ -109,6 +110,7 @@ export {
   PermissionModule,
   UserGroupsModule,
   PersonnelModule,
+  OrganizationRoleModule,
   // product
   ApparelProductsModule,
   CategoriesModule,

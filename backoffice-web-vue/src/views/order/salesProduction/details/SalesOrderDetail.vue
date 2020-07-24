@@ -23,10 +23,7 @@
       </div>
       <div v-if="showFinancial">
         <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
-          <el-row v-if="isPayment && formData.payPlan != null">
-            <purchase-order-info-payment-finance :slotData="formData" />
-          </el-row>
-          <el-row v-if="isReceipt && formData.payPlan != null">
+          <el-row v-if="formData.payPlan != null">
             <purchase-order-info-receipt-finance :slotData="formData" />
           </el-row>
         </div>
@@ -151,12 +148,6 @@
               return false;
           }
         }
-      },
-      isPayment: function () {
-        return this.$store.getters.currentUser.companyCode == this.formData.originCooperator.partner.uid;
-      },
-      isReceipt: function () {
-        return this.$store.getters.currentUser.companyCode == this.formData.targetCooperator.partner.uid;
       },
       showFinancial: function () {
         return this.formData.state != 'TO_BE_ACCEPTED'  && 

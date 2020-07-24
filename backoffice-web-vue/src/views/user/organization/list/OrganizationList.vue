@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content">
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="姓名" prop="name" />
-      <el-table-column label="账号" prop="uid" />
+      <el-table-column label="账号" prop="uid"/>
       <el-table-column label="部门" prop="b2bDept.name" />
       <el-table-column label="角色" prop="b2bRoleGroup.name" />
       <!-- <el-table-column label="创建时间">
@@ -16,17 +16,17 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="180px">
-        <template slot-scope="scope" v-if="scope.$index != 0">
+        <template slot-scope="scope" v-if="!scope.row.root">
           <el-button size="mini" @click="onEdit(scope.row)">编辑信息</el-button>
           <el-dropdown @command="handleCommand($event, scope.row)">
             <el-button size="mini">
               更多<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="SET_DEPT_CHARGE">设为部门负责人</el-dropdown-item>
-              <el-dropdown-item command="FORBIDDEN_ACCOUNT">禁用账号</el-dropdown-item>
-              <el-dropdown-item command="ENABLE_ACCOUNT">启用账号</el-dropdown-item>
-              <el-dropdown-item command="WORK_HANDOVER">工作交接</el-dropdown-item>
+              <!-- <el-dropdown-item command="SET_DEPT_CHARGE">设为部门负责人</el-dropdown-item> -->
+              <el-dropdown-item v-if="!scope.row.loginDisabled" command="FORBIDDEN_ACCOUNT">禁用账号</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.loginDisabled" command="ENABLE_ACCOUNT">启用账号</el-dropdown-item>
+              <!-- <el-dropdown-item command="WORK_HANDOVER">工作交接</el-dropdown-item> -->
               <el-dropdown-item command="DELETE_PERSONNEL">删除员工</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -71,16 +71,27 @@
         });
       },
       handleCommand (command, row) {
-        this.$message(command);
         switch (command) {
           case 'SET_DEPT_CHARGE':
             this.setDeptCharge(row);
             break;
           case 'FORBIDDEN_ACCOUNT':
-            this.changeLoginDisabled(row);
+            this.$confirm('禁用后员工将无法正常使用账号 ， 请问是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.changeLoginDisabled(row);
+            });
             break;
           case 'ENABLE_ACCOUNT':
-            this.changeLoginDisabled(row);
+            this.$confirm('启用账号后账号将恢复正常使用 ， 请问是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.changeLoginDisabled(row);
+            });
             break;
           case 'WORK_HANDOVER': 
             this.workHandover(row);
@@ -91,13 +102,30 @@
         }
       },
       onEdit (row) {
-
+        this.$router.push({
+          name:'员工详情',
+          params:{
+            data: Object.assign({}, row)
+          }
+        });
       },
       setDeptCharge (row) {
 
       },
-      changeLoginDisabled (row) {
-
+      async changeLoginDisabled (row) {
+        const currentUser = this.$store.getters.currentUser;
+        const url = this.apis().changeLoginDisabled(currentUser.uid);
+        const result = await this.$http.put(url, row);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('更改员工账号状态成功');
+        this.$emit('onAdvancedSearch', this.page.number);
       },
       workHandover (row) {
 

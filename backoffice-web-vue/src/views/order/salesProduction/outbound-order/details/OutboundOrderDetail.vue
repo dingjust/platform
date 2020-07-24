@@ -21,13 +21,14 @@
             :autosize="{ minRows: 4, maxRows: 6 }" />
         </el-col>
       </el-row>
+      <el-row class="basic-form-row" type="flex" align="middle" 
+        v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED'">
+        <h6>唯一码：<span style="color: #F56C6C">{{formData.uniqueCode}}</span></h6>
+      </el-row>
       <div v-if="showFinancial">
         <div style="padding-left: 10px;margin-top: 20px">
-          <el-row v-if="isPayment && formData.payPlan != null">
+          <el-row v-if="formData.payPlan != null">
             <purchase-order-info-payment-finance :slotData="formData" />
-          </el-row>
-          <el-row v-if="isReceipt && formData.payPlan != null">
-            <purchase-order-info-receipt-finance :slotData="formData" />
           </el-row>
         </div>
         <div v-if="formData.paymentBill != null">
@@ -113,14 +114,8 @@
         return this.formData.sendAuditState == 'AUDITING' && 
           this.formData.sendApprovers[0].uid == this.$store.getters.currentUser.uid;
       },
-      isPayment: function () {
-        return this.$store.getters.currentUser.companyCode == this.formData.originCooperator.partner.uid;
-      },
-      isReceipt: function () {
-        return this.$store.getters.currentUser.companyCode == this.formData.targetCooperator.partner.uid;
-      },
       showFinancial: function () {
-        return this.formData.state.sendAuditState == 'PASSED' &&
+        return this.formData.sendAuditState == 'PASSED' &&
                 this.formData.state != 'TO_BE_ACCEPTED' && 
                 this.formData.state != 'TO_BE_SUBMITTED';
       }

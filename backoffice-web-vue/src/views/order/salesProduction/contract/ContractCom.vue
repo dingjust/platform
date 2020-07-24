@@ -35,19 +35,22 @@
     </el-row>
     <div>
       <el-row type="flex" justify="start" align="middle">
-        <el-col v-if="contracts!=null && contracts!= []" :span="6" v-for="(item, index) in contracts" :key="index"
-          :offset="0">
-          <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)" :title="item.title">
+        <template v-if="contracts!=null && contracts!= []">
+          <el-col :span="6" v-for="(item, index) in contracts" :key="index" :offset="0">
             <el-row type="flex" justify="center">
-              <img src="static/img/word.png" class="info-img-word" alt="" :title="item.title"/>
+              <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)" :title="item.title">
+                <el-col :span="24">
+                  <img src="static/img/word.png" class="info-img-word" alt="" :title="item.title"/>
+                  <h6 class="info-template-name" >{{ item.title }}</h6>
+                </el-col>
+              <!-- <el-row type="flex" justify="center">
+                <el-col :span="16">
+                </el-col>
+              </el-row> -->
+              </div>
             </el-row>
-            <el-row type="flex" justify="center">
-              <el-col :span="16">
-                <h6 class="info-template-name" >{{ item.title }}</h6>
-              </el-col>
-            </el-row>
-          </div>
-        </el-col>
+          </el-col>
+        </template>
       </el-row>
     </div>
 
@@ -436,10 +439,11 @@
   }
 
   .info-template-name {
-    text-align: center;
+    /* text-align: center;
     font-size: 12px;
     width: 35px;
-    height: 15px;
+    height: 15px; */
+    width: 50px;
     white-space:nowrap;
     text-overflow:ellipsis;
     overflow:hidden;

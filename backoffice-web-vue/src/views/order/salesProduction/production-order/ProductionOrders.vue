@@ -15,10 +15,14 @@
         <div class="tag-container">
           <el-row type="flex" justify="start" align="middle">
             <h6 style="margin-bottom: 0px">标签：</h6>
-            <el-button type="text" class="type-btn" :style="outBtnColor" @click="setQueryOrderType(true)">外发
+            <el-button type="text" class="type-btn" :style="allBtnColor" 
+              @click="setQueryOrderType('')">全部
+            </el-button>
+            <el-button type="text" class="type-btn" :style="outBtnColor" 
+              @click="setQueryOrderType('FOUNDRY_PRODUCTION')">外发
             </el-button>
             <el-button type="text" class="type-btn" :style="selfBtnColor"
-              @click="setQueryOrderType(false)">自产</el-button>
+              @click="setQueryOrderType('SELF_PRODUCED')">自产</el-button>
           </el-row>
         </div>
         <el-tabs v-model="activeStatus" @tab-click="handleClick">
@@ -69,6 +73,9 @@
         keyword: 'keyword',
         contentData: 'detailData'
       }),
+      allBtnColor: function () {
+        return this.queryFormData.type == '' ? 'color: #409EFF' : '#303133';
+      },
       outBtnColor: function () {
         if (this.queryFormData.type == '') {
           return 'color: #303133';
@@ -147,11 +154,7 @@
         this.onAdvancedSearch();
       },
       setQueryOrderType (flag) {
-        if (flag) {
-          this.queryFormData.type = 'FOUNDRY_PRODUCTION';
-        } else {
-          this.queryFormData.type = 'SELF_PRODUCED';
-        }
+        this.queryFormData.type = flag;
         this.onAdvancedSearch();
       },
       onCreate() {

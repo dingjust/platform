@@ -88,9 +88,14 @@
           </el-row>
         </el-col>
       </el-row>
-      <!-- <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isFormFincance">
-        <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
-      </el-row> -->
+      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canAudit">
+        <el-col :span="3">
+          <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+        </el-col>
+        <el-col :span="3">
+          <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+        </el-col>
+      </el-row>
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <payment-form v-if="paymentVisible" :id="id" @callback="callback"/>
@@ -110,6 +115,11 @@
       PaymentForm
     },
     computed: { 
+      canAudit: function () {
+        const id = this.$store.getters.currentUser.id;
+        let index = this.formData.approvers.findIndex(item => item.id == id);
+        return this.formData.state == 'AUDITING' && index >= 0; 
+      },
       agreementsCode: function () {
         if (!this.formData.productionOrder.agreements && this.formData.productionOrder.agreements.length <= 0) {
           return '';
@@ -176,6 +186,43 @@
       },
       callback () {
         this.paymentVisible = !this.paymentVisible;
+        this.getDetail();
+      },
+      onApproval(isPass) {
+        if (isPass) {
+          this.$confirm('是否确认审核通过?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this._onApproval(isPass, '');
+          });
+        } else {
+          this.$prompt('请输入不通过原因', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }).then(({
+            value
+          }) => {
+            this._onApproval(isPass, value);
+          }).catch(() => {
+            //TODO:取消操作
+          });
+        }
+      },
+      async _onApproval(isPass, auditMsg) {
+        let formData = {
+          id: this.formData.currentAuditWork.id,
+          auditMsg: auditMsg,
+          state: isPass ? 'PASSED' : 'AUDITED_FAILED'
+        };
+        const url = this.apis().taskAudit();
+        const result = await this.$http.post(url, formData);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return
+        }
+        this.$message.success('审批成功');
         this.getDetail();
       },
       convertCurrency(money) {
@@ -302,6 +349,22 @@
   .financial-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
+  }
+
+  .material-btn_red {
+    background-color: red;
+    /* border-color: #FFD5CE; */
+    color: white;
+    width: 90px;
+    height: 35px;
   }
 
   .payment-request-input {
