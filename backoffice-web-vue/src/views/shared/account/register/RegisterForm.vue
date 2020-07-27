@@ -68,9 +68,9 @@
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
-          if (this.slotData.password !== '') {
-            this.$refs.form.validateField('password');
-          }
+          // if (this.slotData.password !== '') {
+          //   this.$refs.form.validateField('password');
+          // }
           callback();
         }
       };

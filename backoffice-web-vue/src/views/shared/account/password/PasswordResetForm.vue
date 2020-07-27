@@ -76,9 +76,9 @@
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
-          if (this.slotData.password !== '') {
-            this.$refs.form.validateField('password');
-          }
+          // if (this.slotData.password !== '') {
+          //   this.$refs.form.validateField('password');
+          // }
           callback();
         }
       };
@@ -123,11 +123,6 @@
             message: '请输入验证码',
             trigger: 'blur'
           }],
-          name: [{
-            required: true,
-            message: '请输入会员名',
-            trigger: 'blur'
-          }],
           password: [{
             required: true,
             trigger: 'blur',
@@ -137,11 +132,6 @@
             required: true,
             trigger: 'blur',
             validator: validatePass2
-          }],
-          companyName: [{
-            required: true,
-            message: '请输入公司名',
-            trigger: 'blur'
           }],
         }
       };
@@ -153,10 +143,6 @@
       showError: function () {
         return this.slotData.password != this.slotData.againPassword && this.slotData.password != '';
       },
-    },
-    created() {},
-    mounted() {
-
     },
     methods: {
       getVerifyCode() {
@@ -190,40 +176,25 @@
           console.log('发送成功');
         }
       },
-      async validateCaptcha() {
-        const url = this.apis().validateCaptcha();
-        const result = await this.$http.get(url, {
-          phone: this.slotData.phone,
-          captcha: this.slotData.code
+      onSubmit() {
+        //校验
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this._onSubmit();
+          }
         });
+      },
+      async _onSubmit() {
+        let form = {
+          newPassword: this.slotData.password,
+          captcha: this.slotData.code
+        }
+        const url = this.apis().resetPasswordByCaptcha(this.slotData.phone);
+        const result = await this.$http.put(url, form);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
-          return false;
-        } else {
-          return result;
+          return;
         }
-      },
-      async onSubmit() {
-        // const captchaStatus = await this.validateCaptcha();
-        // if (!captchaStatus) {
-        //   this.$message.error('验证码错误');
-        //   return;
-        // }
-
-        // let form = {
-        //   mobileNumber: this.slotData.phone,
-        //   password: this.slotData.password,
-        //   name: this.slotData.companyName,
-        //   contactPerson: this.slotData.name,
-        //   contactPhone: this.slotData.phone,
-        //   captchaCode: this.slotData.code
-        // }
-        // const url = this.apis().fastRegister(this.slotData.type);
-        // const result = await this.$http.post(url, form);
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        //   return;
-        // }
 
         this.$message.success('重置成功！');
         this.$router.push("/password/success");
