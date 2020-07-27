@@ -10,7 +10,7 @@
         </template>
       </el-table-column>
       <el-table-column label="产品" min-width="150">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.entries!=null">
           <el-row type="flex" align="middle" justify="start">
             <el-col>
               <img width="54px" v-if="scope.row.entries !=null" height="54px"
@@ -36,7 +36,7 @@
         </template>
       </el-table-column>
       <el-table-column label="产品品类">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.entries !=null">
           <span>{{scope.row.entries[0].product.baseProductDetail.category.parent.name}}-{{scope.row.entries[0].product.baseProductDetail.category.name}}</span>
         </template>
       </el-table-column>

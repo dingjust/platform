@@ -7,6 +7,9 @@
             <h6>对账任务单</h6>
           </div>
         </el-col>
+        <el-col :span="6">
+          <h6>单号：{{formData.code}}</h6>
+        </el-col>
         <el-col :span="4">
           <div>
             <h6>状态: {{getEnum('ReconciliationTaskState',formData.state)}}</h6>

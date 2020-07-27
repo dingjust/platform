@@ -7,6 +7,9 @@
             <h6>发货任务单</h6>
           </div>
         </el-col>
+        <el-col :span="6">
+          <h6>单号：{{formData.code}}</h6>
+        </el-col>
         <el-col :span="4">
           <h6>状态：{{getEnum('ReceiveDispatchTaskState', formData.state)}}</h6>
         </el-col>
@@ -96,7 +99,8 @@
             if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
               let pass = true;
               this.formData.shippingSheets.forEach(sheet => {
-                if (!(sheet.state == 'PENDING_RECONCILED' || sheet.state == 'COMPLETED'||sheet.state == 'IN_RECONCILED')) {
+                if (!(sheet.state == 'PENDING_RECONCILED' || sheet.state == 'COMPLETED' || sheet.state ==
+                    'IN_RECONCILED')) {
                   pass = false;
                   return false;
                 }

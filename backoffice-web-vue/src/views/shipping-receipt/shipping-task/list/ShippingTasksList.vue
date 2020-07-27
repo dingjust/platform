@@ -36,9 +36,15 @@
         <template slot-scope="scope">
           {{countTotalAmount(scope.row.colorSizeEntries)}}
         </template>
-      </el-table-column>   
-      <el-table-column label="创建人" prop="creator.name"></el-table-column>
-      <el-table-column label="负责人" prop="merchandiser.name"></el-table-column>
+      </el-table-column>
+      <template v-if="mode=='import'">
+        <el-table-column label="创建人" prop="creator.name"></el-table-column>
+        <el-table-column label="负责人" prop="merchandiser.name"></el-table-column>
+      </template>
+      <template v-if="mode=='export'">
+        <el-table-column label="合作商" prop="shipParty.name"></el-table-column>
+        <el-table-column label="负责人" prop="originMerchandiser.name"></el-table-column>
+      </template>
       <el-table-column label="交货时间">
         <template slot-scope="scope">
           <span

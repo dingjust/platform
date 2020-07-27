@@ -848,6 +848,18 @@ const Merchandiser = {
   }
 }
 
+// 收货跟单员
+const OriginMerchandiser = {
+  template: `
+    <el-table-column label="跟单员" prop="originMerchandiser.name" :key="sortKey" />
+  `,
+  props: {
+    sortKey: {
+      default: 10
+    }
+  }
+}
+
 // 退货日期
 const ReturnDate = {
   template: `
@@ -1059,6 +1071,7 @@ const MAIN_COMPONENT_NAME_MAP = {
   '合作商-发货': 'shipping-cooperator',
   '合作商-收货': 'receipt-cooperator',
   '跟单员': 'merchandiser',
+  '收货跟单员': 'origin-merchandiser',
   '退货日期': 'return-date',
   '差异-复议': 'different-reconsider',
   '差异-复议-通过': 'different-reconsider-adopt',
@@ -1111,6 +1124,7 @@ export {
   ShippingCooperator,
   ReceiptCooperator,
   Merchandiser,
+  OriginMerchandiser,
   ReturnDate,
   DifferentReconsider,
   DifferentReconsiderAdopt,

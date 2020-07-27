@@ -7,6 +7,9 @@
             <h6>对账单详情</h6>
           </div>
         </el-col>
+        <el-col :span="6">
+          <h6>单号：{{formData.code}}</h6>
+        </el-col>
         <el-col :span="4">
           <div>
             <h6>状态: {{getEnum('ReconciliationOrderState',formData.state)}}</h6>
@@ -372,7 +375,7 @@
         this.getDetail();
         //通知对账任务刷新
         Bus.$emit('reconciliation-task-details_onRefresh');
-      }
+      },
     },
     data() {
       return {
