@@ -256,7 +256,7 @@
         let submitForm = Object.assign({}, this.formData);
 
         //除去空字符
-        submitForm.increases = submitForm.increases.filter(item => item.amount != null && item.remarks != null)
+        submitForm.increases = submitForm.increases.filter(item => item.amount != null || item.remarks != null)
           .map(
             item => {
               return {
@@ -264,7 +264,7 @@
                 remarks: item.remarks ? item.remarks : ''
               };
             });
-        submitForm.deductions = submitForm.deductions.filter(item => item.amount != null && item.remarks != null)
+        submitForm.deductions = submitForm.deductions.filter(item => item.amount != null || item.remarks != null)
           .map(
             item => {
               return {
