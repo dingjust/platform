@@ -9,7 +9,7 @@
           <i class="el-icon-plus" slot="default"></i>
           <div slot="tip" class="el-upload__tip"><slot name="picBtn" ></slot></div>
         </el-upload>
-        <el-dialog :visible.sync="dialogVisible" append-to-body>
+        <el-dialog :visible.sync="dialogVisible" append-to-body width="50%">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-col>

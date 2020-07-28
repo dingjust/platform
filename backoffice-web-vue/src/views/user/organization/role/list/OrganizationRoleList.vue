@@ -56,13 +56,33 @@
         this.$router.push('/account/organizationRole/' + row.id + '/edit');
       },
       onEdit (row) {
-
+        this.$router.push('/account/organizationRole/' + row.id + '/edit');
       },
       onChangeState (row) {
 
       },
       onDelete (row) {
-
+        this.$confirm('是否删除此角色?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onDelete(row);
+        });
+      },
+      async _onDelete (row) {
+        const url = this.apis().removeB2BCustomerRoleGroup(row.id);
+        const result = await this.$http.delete(url);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('删除角色成功!');
+        let page = this.page.number;
+        if (this.page.content.length == 1) {
+          page = this.page.number - 1;
+        }
+        this.$emit('onAdvancedSearch', this.page.number);
       }
     },
     data () {

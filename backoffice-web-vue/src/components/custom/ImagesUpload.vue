@@ -12,7 +12,7 @@
             <slot name="picBtn"></slot>
           </div>
         </el-upload>
-        <el-dialog :visible.sync="dialogVisible" :modal="false">
+        <el-dialog :visible.sync="dialogVisible" :modal="false" width="50%">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-col>

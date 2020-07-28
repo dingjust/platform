@@ -58,12 +58,7 @@
         this.$router.push('/account/create/personnel');
       },
       onDetail (row) {
-        this.$router.push({
-          name:'员工详情',
-          params:{
-            data: Object.assign({}, row)
-          }
-        });
+        this.$router.push('/account/personnel/' + row.id);
       },
       onForbidden (row) {
         this.$confirm('禁用后员工将无法正常使用账号 ， 请问是否继续?', '提示', {
@@ -132,7 +127,7 @@
       }
     },
     created () {
-      this.onSearch(0, 10);
+      this.onAdvancedSearch(0, 10);
     },
     destroyed () {
 

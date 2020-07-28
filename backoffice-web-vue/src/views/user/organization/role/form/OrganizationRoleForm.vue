@@ -35,7 +35,7 @@
           </el-row>
           <el-row type="flex">
             <el-col :span="24">
-              <permission-form ref="permissionForm" />
+              <permission-form ref="permissionForm" :roleIds="this.formData.roleIds"/>
             </el-col>
           </el-row>
         </div>
@@ -69,11 +69,19 @@
           this.$message.error(result.msg);
           return;
         }
-        this.setRoleData(result.data);
+        this.formData.id = result.data.id;
+        this.formData.name = result.data.name;
+        result.data.roleList.forEach(item => {
+          this.formData.roleIds.push(item.id);
+          this.getId(item);
+          item.children.forEach(val => {
+            this.getId(val);
+          })
+        })
       },
-      setRoleData (data) {
-        this.formData.name = data.name;
-        // data.roleList.forEach()
+      getId (arr) {
+        let list = arr.children.map(item => item.id);
+        this.formData.roleIds.push.apply(this.formData.roleIds, list);
       },
       async onConfirm () {
         let checkData = this.$refs.permissionForm.checkData;
@@ -112,6 +120,7 @@
           return;
         }
         this.$message.success(data.id ? '编辑角色成功' : '创建角色成功');
+        this.$router.go(-1);
       }
     },
     data () {

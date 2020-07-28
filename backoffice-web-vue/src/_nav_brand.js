@@ -224,7 +224,7 @@ export default {
         },
         {
           name: '员工',
-          url: '/account/b2b-customer',
+          url: '/account/personnel',
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
@@ -242,12 +242,12 @@ export default {
         },
         {
           name: '组织架构',
-          url: '/account/b2b-unit',
+          url: '/account/organization',
           icon: 'iconNone'
         },
         {
           name: '角色',
-          url: '/account/role',
+          url: '/account/organizationRole',
           icon: 'iconNone'
         },
         {

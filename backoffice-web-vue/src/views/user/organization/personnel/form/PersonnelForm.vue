@@ -59,18 +59,18 @@
                   </template>
                   <select-tree :treeData="deptList" :vSelectData.sync="formData.b2bDept"/>
                 </el-form-item>
-                <el-button class="personnel-form-btn" @click="createDept">创建部门</el-button>
+                <!-- <el-button class="personnel-form-btn" @click="createDept">创建部门</el-button> -->
               </el-col>
               <el-col :span="12">
                 <el-form-item>
                   <template slot="label">
                     <span style="padding-right: 6px;">选择角色</span>
                   </template>
-                  <el-select v-model="formData.b2bRoleGroup" placeholder="请选择角色" value-key="id" clearable >
+                  <el-select v-model="formData.b2bRoleGroupList[0]" placeholder="请选择角色" value-key="id" clearable >
                     <el-option v-for="item in roleGroupList" :key="item.id" :label="item.name" :value="item" />
                   </el-select>
                 </el-form-item>
-                <el-button class="personnel-form-btn" @click="createRole">创建角色</el-button>
+                <!-- <el-button class="personnel-form-btn" @click="createRole">创建角色</el-button> -->
               </el-col>
             </el-row>
           </div>
@@ -137,6 +137,11 @@
         });
       },
       async _onConfirm () {
+        let b2bRoleGroupList = this.formData.b2bRoleGroupList.map(item => {
+          if (item.id != null && item.id != '') {
+            return {id: item.id};
+          }
+        });
         let data = {
           id: this.formData.id,
           name: this.formData.name,
@@ -146,9 +151,7 @@
           b2bDept: {
             id: this.formData.b2bDept.id != '' ? this.formData.b2bDept.id : null 
           },
-          b2bRoleGroup: {
-            id: this.formData.b2bRoleGroup != '' ? this.formData.b2bRoleGroup.id : null
-          }
+          b2bRoleGroupList: b2bRoleGroupList
         };
         const url = this.apis().createB2BCustomer();
         const result = await this.$http.post(url, data);
@@ -179,7 +182,9 @@
           id: null,
           name: '',
           uid: '',
-          b2bRoleGroup: '',
+          b2bRoleGroupList: [{
+            id: ''
+          }],
           b2bDept: {
             id: ''
           },

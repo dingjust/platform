@@ -55,10 +55,7 @@
         });
 
         // 清除sessionStorage缓存
-        sessionStorage.removeItem('authorized');
-        sessionStorage.removeItem('currentUser');
-        sessionStorage.removeItem('permissions');
-        sessionStorage.removeItem('token');
+        sessionStorage.clear();
       },
       onCancel () {
         this.dialogVisible = false;

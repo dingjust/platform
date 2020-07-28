@@ -210,6 +210,9 @@ const COMMON_APIS = {
   getB2BCustomers() {
     return '/b2b/b2bCustomers';
   },
+  getPersonnelDetail (id) {
+    return '/b2b/b2bCustomers/get/' + id;
+  },
   getB2BCustomerDeptList() {
     return '/b2b/dept/tree/list';
   },
