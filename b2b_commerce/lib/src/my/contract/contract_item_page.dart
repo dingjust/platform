@@ -9,6 +9,7 @@ import 'package:models/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 class ContractItemPage extends StatefulWidget {
   ContractModel model;
@@ -150,6 +151,10 @@ class _ContractItemPageState extends State<ContractItemPage>{
   //文件下载打开
   _previewFile() async {
     SearchResultModel resultModel = await ContractRepository().getContractPdfMedia(widget.model.code);
+    if (resultModel.code == 0) {
+      BotToast.showText(text: '${resultModel.msg}');
+      return false;
+    }
     MediaModel pdf = resultModel.data;
 //    final url = "http://africau.edu/images/default/sample.pdf";
     //获取应用目录路径

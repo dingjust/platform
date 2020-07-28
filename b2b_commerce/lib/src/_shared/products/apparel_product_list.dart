@@ -273,10 +273,10 @@ class _ApparelProductListState extends State<ApparelProductList> {
         return;
       } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY ){
         if(product.productType.contains(ProductType.SPOT_GOODS) || product.productType.contains(ProductType.TAIL_GOODS)){
-          if(product.deliveryDays == null){
-            _showValidateMsg(context, '价格设置资料未完善，不可上架');
-            return;
-          }
+          // if(product.deliveryDays == null){
+          //   _showValidateMsg(context, '价格设置资料未完善，不可上架');
+          //   return;
+          // }
           if(product.spotSteppedPrices == null || product.spotSteppedPrices.isEmpty){
             _showValidateMsg(context, '价格设置资料未完善，不可上架');
             return;
