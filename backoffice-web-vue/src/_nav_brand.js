@@ -44,7 +44,7 @@ export default {
       //   {
       //   name: '工单分配',
       //   url: '/sales/allocating/productionOrder'
-      // }, 
+      // },
       {
         name: '生产工单',
         url: '/sales/productionOrder',
@@ -173,23 +173,23 @@ export default {
         },
         {
           name: '员工管理',
-          url: '/account/b2b-customer',
+          url: '/account/personnel',
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
             permissions: ['COMPANY_B2BCUSTOMER']
           }
         },
-        // {
-        //   name: '组织架构',
-        //   url: '/account/b2b-unit',
-        //   icon: 'iconNone'
-        // },
-        // {
-        //   name: '角色',
-        //   url: '/account/role',
-        //   icon: 'iconNone'
-        // },
+         {
+           name: '组织架构',
+           url: '/account/organization',
+           icon: 'iconNone'
+         },
+         {
+           name: '角色',
+           url: '/account/organizationRole',
+           icon: 'iconNone'
+         },
       ]
     },
     {
@@ -202,7 +202,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['AGREEMENT']
+            permissions: ['COMPANY_COOPERATOR']
           }
         },
         {
@@ -310,7 +310,7 @@ export default {
         // {
         //   name: '生产进度',
         //   url: '/order/production',
-        //   icon: 'iconNone'       
+        //   icon: 'iconNone'
         // }
         // {
           //     name: '采购任务',

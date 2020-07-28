@@ -163,6 +163,10 @@
         this.formData.productionOrder.id = row.id;
         this.formData.productionOrder.code = row.code;
         this.receiver = row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
+        this.formData.bankCardAccount = 
+              row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.contactPerson : row.targetCooperator.contactPerson;
+        this.formData.bankCardNo = row.targetCooperator.bankAccount;
+        this.formData.bank = row.targetCooperator.bankOfDeposit;
         row.agreements.forEach((item, index) => {
           this.contactCode += item.code;
           if (!(index == row.agreements.length - 1)) {

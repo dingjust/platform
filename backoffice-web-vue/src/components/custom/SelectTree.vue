@@ -1,6 +1,6 @@
 <template>
   <div class="select-tree-container">
-    <el-select v-model="selectData" placeholder="请选择角色" value-key="id" clearable>
+    <el-select v-model="selectData" placeholder="请选择" value-key="id" clearable>
       <div class="tree-container">
         <el-tree :data="treeData"  node-key="id"  default-expand-all :expand-on-click-node="false" class="tree">
           <span slot-scope="{ node, data }" style="width: 100%">

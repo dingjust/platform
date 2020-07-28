@@ -1,6 +1,6 @@
 <template>
-  <div class="permission-form-container">
-    <el-container>
+  <div>
+    <el-container class="permission-form-container">
       <el-aside style="border-right: 2px solid #E6E6E6;">
         <h6 class="permission-form-hear" style="min-width: 298px">权限菜单</h6>
         <el-menu @select="selectAuth" @open="menuOpen" 
@@ -43,7 +43,7 @@
 <script>
   export default {
     name: 'PermissionForm',
-    props: [],
+    props: ['roleIds'],
     components: {
 
     },
@@ -75,6 +75,7 @@
             })
           })
         })
+        this.initData();
       },
       menuOpen (index) {
         let id = Number(index);
@@ -94,11 +95,24 @@
         this.checkState[item.id].indeterminate = list.length > 0 && list.length < item.children.length;
       },
       handleAll (flag, item) {
+        this.checkState[item.id].indeterminate = false;
         if (flag) {
           this.checkData[item.id] = item.children.map(item => item.id);
         } else {
           this.checkData[item.id] = [];
         }
+      },
+      initData () {
+        this.secondList.forEach(item => {
+          item.children.forEach(val => {
+            if (this.roleIds.indexOf(val.id) >= 0) {
+              this.checkData[item.id].push(val.id);
+            }
+          })
+          this.checkState[item.id].checked = this.checkData[item.id].length == item.children.length;
+          this.checkState[item.id].indeterminate = 
+              this.checkData[item.id].length > 0 && this.checkData[item.id].length < item.children.length;
+        })
       }
     },
     data () {
@@ -120,6 +134,7 @@
 <style scoped>
   .permission-form-container {
     border: 2px solid #E6E6E6;
+    height: 550px;
   }
 
   .permission-form-hear {

@@ -10,9 +10,10 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate" :queryFormData="queryFormData"/>
+      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" 
+                                @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating"/>
       <div>
-        <div class="tag-container">
+        <div class="tag-container" v-if="!isAllocating">
           <el-row type="flex" justify="start" align="middle">
             <h6 style="margin-bottom: 0px">标签：</h6>
             <el-button type="text" class="type-btn" :style="allBtnColor" 
@@ -29,7 +30,7 @@
           <template v-for="(item, index) in statues">
             <el-tab-pane :name="item.code" :key="index" :label="tabName(item)">
               <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-                :vSelectRow.sync="selectRow" />
+                :vSelectRow.sync="selectRow" :isAllocating="isAllocating"/>
             </el-tab-pane>
           </template>
         </el-tabs>
@@ -87,6 +88,9 @@
           return 'color: #303133';
         }
         return this.queryFormData.type == 'SELF_PRODUCED' ? 'color: #409EFF' : '#303133';
+      },
+      isAllocating: function () {
+        return this.queryFormData.state === 'TO_BE_ALLOCATED';
       }
     },
     methods: {
@@ -217,7 +221,7 @@
     },
     data() {
       return {
-        activeStatus: 'TO_BE_PRODUCED',
+        activeStatus: 'TO_BE_ALLOCATED',
         statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
         outboundOrderTypeSelect: false,
         selectRow: [],
@@ -226,7 +230,7 @@
           createdDateTo: null,
           keyword: '',
           categories: [],
-          state: 'TO_BE_PRODUCED',
+          state: 'TO_BE_ALLOCATED',
           type: ''
         },
         formData: {

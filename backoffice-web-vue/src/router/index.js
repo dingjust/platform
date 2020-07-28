@@ -613,10 +613,10 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/personnel/form/PersonnelForm')
             },
             {
-              path: 'personnel/detail',
+              path: 'personnel/:id',
               name: '员工详情',
               props: true,
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/personnel/form/PersonnelForm')
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/personnel/Detail/PersonnelDetail')
             },
             {
               path: 'address',

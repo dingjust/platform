@@ -77,7 +77,8 @@
     components: {
       UniquecodeImportForm
     },
-    computed: {},
+    computed: {
+    },
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',

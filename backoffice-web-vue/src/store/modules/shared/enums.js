@@ -1573,6 +1573,9 @@ const state = {
   }],
   // 生产工单状态
   ProductionTaskOrderState: [{
+    code: 'TO_BE_ALLOCATED',
+    name: '待分配'
+  }, {
     code: 'TO_BE_PRODUCED',
     name: '待生产'
   }, {

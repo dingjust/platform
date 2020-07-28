@@ -31,7 +31,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="dialogVisible">
+    <el-dialog :visible.sync="dialogVisible" width="50%">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
   </div>
@@ -68,8 +68,9 @@
         });
       },
       onVouchers (row) {
-        this.dialogVisible = true;
+        console.log(row);
         this.dialogImageUrl = row.paymentRecords.paymentVouchers[0].url;
+        this.dialogVisible = true;
       }
     },
     data () {
