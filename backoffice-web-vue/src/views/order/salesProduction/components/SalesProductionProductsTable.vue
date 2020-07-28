@@ -26,8 +26,8 @@
           <span>{{getEntryTotalAmount(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="unitPrice" label="预计销售单价/元" min-width="100"></el-table-column>
-      <el-table-column label="预计销售总价/元" min-width="100">
+      <el-table-column prop="unitPrice" label="接单单价/元" min-width="100"></el-table-column>
+      <el-table-column label="接单总价/元" min-width="100">
         <template slot-scope="scope">
           {{getEntryTotalPrice(scope.row)}}
         </template>

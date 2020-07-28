@@ -2,15 +2,15 @@
   <div>
     <div class="over-tabs">
       <el-row type="flex">
-          <el-button class="material-btn" @click="appendOrder" v-if="belongTo == 'PAYABLE_PAGE'">创建付款申请单</el-button>
+        <el-button class="material-btn" @click="appendOrder" v-if="belongTo == 'PAYABLE_PAGE'">创建付款申请单</el-button>
       </el-row>
     </div>
     <el-tabs type="border-card">
-      <el-tab-pane label="收付款"> 
+      <el-tab-pane label="收付款">
         <financial-invoice-info v-if="belongTo == 'PAYABLE_PAGE'" :formData="formData" @callback="callback" />
-        <financial-reconciliation-table :belongTo="belongTo" :formData="formData"/>
-        <financial-record-list :belongTo="belongTo" :content="formData.requestList" 
-                                @onConfirmReceipt="onConfirmReceipt"/>
+        <financial-reconciliation-table :belongTo="belongTo" :formData="formData" />
+        <financial-record-list :belongTo="belongTo" :content="formData.requestList"
+          @onConfirmReceipt="onConfirmReceipt" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -32,10 +32,10 @@
 
     },
     methods: {
-      appendOrder () {
+      appendOrder() {
         this.$router.push('/financial/create/paymentRequest');
       },
-      async onConfirmReceipt (row) {
+      async onConfirmReceipt(row) {
         const url = this.apis().paymentRequestPayConfirm(row.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -49,16 +49,20 @@
         this.$message.success('确认收款成功！');
         this.$emit('callback');
       },
+      callback() {
+        this.$emit('callback');
+      }
     },
-    data () {
+    data() {
       return {
 
       }
     },
-    created () {
+    created() {
 
     }
   }
+
 </script>
 
 <style scoped>
@@ -77,4 +81,5 @@
     height: 35px;
     border-radius: 5px;
   }
+
 </style>

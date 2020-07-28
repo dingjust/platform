@@ -21,7 +21,7 @@
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code" :key="index" :label="tabName(item)">
-            <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :isOutProduction="true"/>
+            <production-order-list mode='export' :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :isOutProduction="true" />
           </el-tab-pane>
         </template>
       </el-tabs>

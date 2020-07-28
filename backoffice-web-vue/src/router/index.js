@@ -274,7 +274,7 @@ const router = new Router({
             },
             {
               path: 'order/:id',
-              name: '销售订单详情',
+              name: '业务订单',
               props: true,
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/details/SalesOrderDetail')
             },

@@ -157,7 +157,6 @@
         this.$refs.resultTable.clearSelection();
       },
       onDetails(row) {
-        // this.$router.push({name:'销售订单详情',params:{}});
         this.$router.push('/order/sales/' + row.code);
       },
       countTotalQuantity(entries) {

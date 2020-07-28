@@ -6,11 +6,14 @@
           <h6 class="sales-plan-triangle_text">{{getEnum('SalesProductionAuditStatus', formData.auditState)}}</h6>
         </div>
       </div>
-      <el-row type="flex" justify="space-between">
+      <el-row type="flex" justify="start">
         <el-col :span="6">
           <div class="sales-plan-form-title">
-            <h6>销售订单详情</h6>
+            <h6>业务订单详情</h6>
           </div>
+        </el-col>
+        <el-col :span="6" :offset="2">
+          <h6>销售业务：{{formData.code}}</h6>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
@@ -21,12 +24,12 @@
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
           @appendProduct="appendProduct" />
       </div>
-      <div v-if="showFinancial">
-        <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
+      <div v-if="showFinancial" style="margin-top:20px">
+        <!-- <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
           <el-row v-if="formData.payPlan != null">
             <purchase-order-info-receipt-finance :slotData="formData" />
           </el-row>
-        </div>
+        </div> -->
         <div v-if="formData.originCompany && formData.paymentBill != null">
           <financial-tabs :formData="formData.paymentBill" belongTo="RECEIVABLE_PAGE" @callback="callback"/>
         </div>

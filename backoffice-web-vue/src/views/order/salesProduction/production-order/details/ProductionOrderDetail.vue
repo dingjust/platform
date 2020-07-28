@@ -180,6 +180,7 @@
     position: absolute;
     right: 0;
     top: 0;
+    right: 15px;
   }
 
   .sales-plan-triangle {

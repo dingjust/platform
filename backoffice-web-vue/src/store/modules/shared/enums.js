@@ -1517,7 +1517,7 @@ const state = {
     },
     {
       code: 'SALES_ORDER',
-      name: '销售订单'
+      name: '业务订单'
     }
   ],
   // 销售企划订单行审核状态
@@ -1676,7 +1676,7 @@ const state = {
   }],
   AuditLabel: [{
     code: 'SalesOrder',
-    name: '销售订单'
+    name: '业务订单'
   }, {
     code: 'SalesPlan',
     name: '销售计划'

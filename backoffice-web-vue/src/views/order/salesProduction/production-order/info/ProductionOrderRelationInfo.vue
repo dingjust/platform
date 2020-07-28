@@ -4,8 +4,11 @@
       <el-tab-pane label="外发订单" v-if="showOutbound&&isMySelf">
         <production-order-outbound-list :page="page" :pageType="pageType" />
       </el-tab-pane>
-      <el-tab-pane label="发货任务" :lazy="true" v-if="receiveDispatchTaskId">
+      <el-tab-pane label="收发货" :lazy="true" v-if="receiveDispatchTaskId">
         <shipping-tasks-detail :id="receiveDispatchTaskId" shadow="hover" :showOrderInfo="false" />
+      </el-tab-pane>
+      <el-tab-pane label="对账单" :lazy="true" v-if="reconciliationTaskId">
+        <reconciliation-tasks-detail :id="reconciliationTaskId" shadow="hover" :showOrderInfo="false" />
       </el-tab-pane>
       <el-tab-pane label="采购订单" :lazy="true" v-if="isMySelf">
         <purchase-order-basic-table :data="[]" />
@@ -33,7 +36,8 @@
   import ProductionOrderOutboundList from '../list/ProductionOrderOutboundList'
 
   import {
-    ShippingTasksDetail
+    ShippingTasksDetail,
+    ReconciliationTasksDetail
   } from '../../../../shipping-receipt/index';
 
   export default {
@@ -44,7 +48,8 @@
       PurchaseOrderInfoReceiptFinance,
       PurchaseOrderBasicTable,
       ProductionOrderOutboundList,
-      ShippingTasksDetail
+      ShippingTasksDetail,
+      ReconciliationTasksDetail
     },
     computed: {
       showOutbound: function () {
@@ -59,6 +64,16 @@
           .taskOrderEntries[0].receiveDispatchTask !=
           null) {
           return this.slotData.taskOrderEntries[0].receiveDispatchTask.id;
+        } else {
+          return null;
+        }
+      },
+      //对账任务id
+      reconciliationTaskId: function () {
+        if (this.slotData.taskOrderEntries && this.slotData.taskOrderEntries[0] != null && this.slotData
+          .taskOrderEntries[0].reconciliationTask !=
+          null) {
+          return this.slotData.taskOrderEntries[0].reconciliationTask.id;
         } else {
           return null;
         }
