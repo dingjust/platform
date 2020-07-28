@@ -113,8 +113,8 @@
       </el-row>
     </el-card>
     <el-dialog :visible.sync="shippingDetailVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <shipping-orders-detail :id="formData.logisticsSheet.id" v-if="shippingDetailVisible" />
+      :close-on-click-modal="false">      
+      <shipping-orders-detail :id="formData.logisticsSheet.id" v-if="shippingDetailVisible"/>
     </el-dialog>
   </div>
 </template>
@@ -140,7 +140,7 @@
       ColorSizeTable,
       ShippingOrdersDetail
     },
-    computed: {
+    computed: {  
       //是收货方
       isReceiveParty: function () {
         if (this.formData.receiveParty != null && this.currentUser != null) {

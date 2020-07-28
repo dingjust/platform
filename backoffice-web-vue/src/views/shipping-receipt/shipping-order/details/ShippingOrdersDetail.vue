@@ -130,6 +130,10 @@
             <el-button class="sumbit-btn" @click="onReconsider">提出复议</el-button>
             <el-button class="sumbit-btn" @click="onNoReconsider">无复议</el-button>
           </template>
+          <!-- 待对账(收货方) -->
+          <template v-if="formData.state=='PENDING_RECONCILED'&&isReceiveOperator">
+            <el-button class="sumbit-btn" @click="onReconciled">去对账</el-button>
+          </template>
         </el-row>
       </div>
       <el-dialog :visible.sync="receDialogVisible" width="80%" class="purchase-dialog" append-to-body
@@ -307,6 +311,16 @@
       //创建复议单
       onReconsider() {
         this.$router.push("/reconsiders/create/orders/" + this.formData.id);
+      },
+      //去对账
+      onReconciled() {
+        this.$router.push({
+          name: '创建对账单',
+          params: {
+            productionTaskOrderId: this.formData.productionTaskOrder.id,
+            selectShipOrder: [this.formData]
+          }
+        });
       }
     },
     data() {

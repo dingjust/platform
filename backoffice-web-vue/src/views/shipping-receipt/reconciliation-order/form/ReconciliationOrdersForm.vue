@@ -160,14 +160,14 @@
       async _onSubmit() {
         const form = {
           shippingSheets: this.formData.shippingSheets,
-          increases: this.formData.increases.filter(item => item.amount != null && item.remarks != null).map(
+          increases: this.formData.increases.filter(item => item.amount != null || item.remarks != null).map(
             item => {
               return {
                 amount: item.amount ? item.amount : 0,
                 remarks: item.remarks ? item.remarks : ''
               };
             }),
-          deductions: this.formData.deductions.filter(item => item.amount != null && item.remarks != null).map(
+          deductions: this.formData.deductions.filter(item => item.amount != null || item.remarks != null).map(
             item => {
               return {
                 amount: item.amount ? item.amount : 0,

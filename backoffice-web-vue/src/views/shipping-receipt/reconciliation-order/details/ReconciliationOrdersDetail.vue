@@ -7,6 +7,9 @@
             <h6>对账单详情</h6>
           </div>
         </el-col>
+        <el-col :span="6">
+          <h6>单号：{{formData.code}}</h6>
+        </el-col>
         <el-col :span="4">
           <div>
             <h6>状态: {{getEnum('ReconciliationOrderState',formData.state)}}</h6>
@@ -256,7 +259,7 @@
         let submitForm = Object.assign({}, this.formData);
 
         //除去空字符
-        submitForm.increases = submitForm.increases.filter(item => item.amount != null && item.remarks != null)
+        submitForm.increases = submitForm.increases.filter(item => item.amount != null || item.remarks != null)
           .map(
             item => {
               return {
@@ -264,7 +267,7 @@
                 remarks: item.remarks ? item.remarks : ''
               };
             });
-        submitForm.deductions = submitForm.deductions.filter(item => item.amount != null && item.remarks != null)
+        submitForm.deductions = submitForm.deductions.filter(item => item.amount != null || item.remarks != null)
           .map(
             item => {
               return {
@@ -372,7 +375,7 @@
         this.getDetail();
         //通知对账任务刷新
         Bus.$emit('reconciliation-task-details_onRefresh');
-      }
+      },
     },
     data() {
       return {

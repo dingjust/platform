@@ -15,6 +15,11 @@ const COMMON_APIS = {
   validateCaptcha() {
     return '/b2b/sms/validate';
   },
+  //短信重置密码
+  resetPasswordByCaptcha(id) {
+    return '/b2b/users/anonymous/resetPasswordByCaptcha/' + id;
+  },
+
   getAmapTips(key, keyWord, city) {
     return '/amap/v3/assistant/inputtips?key=' + key + '&keywords=' + keyWord + '&city=' + city;
   },

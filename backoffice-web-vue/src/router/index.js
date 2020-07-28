@@ -998,6 +998,26 @@ const router = new Router({
       component: () => import( /* webpackChunkName: 'register' */ 'shared/account/register/RegisterPage')
     },
     {
+      path: '/password',
+      name: '密码',
+      component: {
+        render(c) {
+          return c('router-view');
+        }
+      },
+      children: [{
+          path: 'reset',
+          name: '密码重置',
+          component: () => import( /* webpackChunkName: 'password' */ 'shared/account/password/PasswordResetPage'),
+        },
+        {
+          path: 'success',
+          name: '密码重置成功',
+          component: () => import( /* webpackChunkName: 'password' */ 'shared/account/password/ResetSuccessPage')
+        },
+      ]
+    },
+    {
       path: '/404',
       component: () => import('@/views/error-page/404'),
       hidden: true
@@ -1010,14 +1030,21 @@ const router = new Router({
   ]
 });
 
-const LOGIN_URL = '/login';
-const LOGOUT_URL = '/logout';
-const REGISTER_URL = '/register';
+// const LOGIN_URL = '/login';
+// const LOGOUT_URL = '/logout';
+// const REGISTER_URL = '/register';
+// const PASSWORD_RESET_URL = '/password/reset';
+// const RESET_SUCCESS_URL = '/password/success';
+
+//公开路径,不校验
+const OPEN_URL = [
+  '/login', '/logout', '/register', '/password/reset', '/password/success'
+];
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
   const authorized = sessionStorage.getItem('authorized');
-  if (!authorized && (to.path === LOGIN_URL || to.path === LOGOUT_URL || to.path === REGISTER_URL)) {
+  if (!authorized && (OPEN_URL.findIndex(val => val == to.path) != -1)) {
     next();
     return;
   }
@@ -1037,7 +1064,7 @@ router.beforeEach((to, from, next) => {
   }
 
   next({
-    path: LOGIN_URL,
+    path: '/login',
     query: {
       backUrl: to.fullPath
     }
