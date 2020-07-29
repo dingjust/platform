@@ -75,7 +75,9 @@ export default {
   },
   computed: {
     contactPhone: function () {
-      return this.formData.contactPhone.split(':')[1];
+      if (this.formData.contactPhone) {
+        return this.formData.contactPhone.split(':')[1];
+      }
     },
     role: function () {
       let str = '';
@@ -185,6 +187,7 @@ export default {
     }
   },
   created () {
+    console.log(this.$route);
     this.getDetail();
     this.getDeptList();
   } 
