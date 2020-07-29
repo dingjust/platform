@@ -18,22 +18,18 @@
       <el-table-column label="操作" min-width="180px">
         <template slot-scope="scope" v-if="!scope.row.root">
           <el-button size="mini" @click="onEdit(scope.row)">编辑信息</el-button>
-          <el-dropdown @command="handleCommand($event, scope.row)">
+          <!-- <el-dropdown @command="handleCommand($event, scope.row)">
             <el-button size="mini">
               更多<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <!-- <el-dropdown-item command="SET_DEPT_CHARGE">设为部门负责人</el-dropdown-item> -->
+              <el-dropdown-item command="SET_DEPT_CHARGE">设为部门负责人</el-dropdown-item>
               <el-dropdown-item v-if="!scope.row.loginDisabled" command="FORBIDDEN_ACCOUNT">禁用账号</el-dropdown-item>
               <el-dropdown-item v-if="scope.row.loginDisabled" command="ENABLE_ACCOUNT">启用账号</el-dropdown-item>
-              <!-- <el-dropdown-item command="WORK_HANDOVER">工作交接</el-dropdown-item> -->
+              <el-dropdown-item command="WORK_HANDOVER">工作交接</el-dropdown-item>
               <el-dropdown-item command="DELETE_PERSONNEL">删除员工</el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown>
-          <!-- <el-button type="text" @click="onDetail(scope.row)">查看</el-button>
-          <el-button type="text" v-if="!scope.row.loginDisabled" @click="onForbidden(scope.row)">禁用</el-button>
-          <el-button type="text" v-else @click="onEnable(scope.row)">启用</el-button>
-          <el-button type="text" @click="onDelete(scope.row)">删除</el-button> -->
+          </el-dropdown> -->
         </template>
       </el-table-column>
     </el-table>
@@ -102,12 +98,7 @@
         }
       },
       onEdit (row) {
-        this.$router.push({
-          name:'员工详情',
-          params:{
-            data: Object.assign({}, row)
-          }
-        });
+        this.$router.push('/account/personnel/' + row.id);
       },
       setDeptCharge (row) {
 

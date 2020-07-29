@@ -85,6 +85,8 @@ export default {
 <style scoped>
   .personnel-role-info-main {
     border: 2px solid #E5E5E5;
+    height: 350px;
+    overflow-x: auto;
   }
 
   .personnel-role-btn {

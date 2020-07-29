@@ -65,6 +65,7 @@ export default {
       if (this.originData && this.originData.length > 0) {
         return this.originData.findIndex(item => item.id === row.id) < 0;
       }
+      return true;
     },
     onPageSizeChanged (val) {
       this.getRoleGroupList(0 ,val);

@@ -11,6 +11,13 @@
       <div class="pt-2"></div>
       <personnel-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" 
                       @onCreate="onCreate" />
+      <el-row type="flex" justify="start">
+        <template v-for="(item, index) in statuses">
+          <el-button @click="handleClick(item.code, index)" :key="item.code" class="state-btn" :style="item.backgroundColor">
+            {{item.name}}
+          </el-button>
+        </template>
+      </el-row>
       <personnel-list :page="page" @onAdvancedSearch="onAdvancedSearch" 
                       @onDetail="onDetail" @onForbidden="onForbidden" @onEnable="onEnable" @onDelete="onDelete" />
     </el-card>
@@ -53,6 +60,12 @@
         const query = this.queryFormData;
         const url = this.apis().getB2BCustomers();
         this.searchAdvanced({url, query, page, size});
+      },
+      handleClick (code, index) {
+        this.statuses.forEach(item => item.backgroundColor = 'background-color: #FFFFFF');
+        this.statuses[index].backgroundColor = 'background-color: #ffd60c';
+        this.queryFormData.state = code;
+        this.onAdvancedSearch(0, 10);
       },
       onCreate () {
         this.$router.push('/account/create/personnel');
@@ -122,8 +135,22 @@
         queryFormData: {
           keyword: '',
           roleGroupName: '',
-          deptName: ''
-        }
+          deptName: '',
+          state: ''
+        },
+        statuses: [{
+          code: '',
+          name: '全部',
+          backgroundColor: 'background-color: #ffd60c'
+        }, {
+          code: 'enabled',
+          name: '启用',
+          backgroundColor: 'background-color: #FFFFFF'
+        }, {
+          code: 'forbidden',
+          name: '禁用',
+          backgroundColor: 'background-color: #FFFFFF'
+        }] 
       }
     },
     created () {
@@ -139,5 +166,13 @@
   .organization-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+  }
+
+  .state-btn {
+    /* background-color: #ffd60c; */
+    color: #000;
+    width: 75px;
+    height: 30px;
+    border-radius: 5px;
   }
 </style>
