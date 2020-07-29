@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <address-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+    <!-- <address-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/> -->
     <div class="pt-2"></div>
     <address-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
     <div class="pt-2"></div>
@@ -47,6 +47,8 @@
         this.refresh();
 
         this.fn.closeSlider();
+
+        this.$emit('callback');
       }
     },
     computed: {

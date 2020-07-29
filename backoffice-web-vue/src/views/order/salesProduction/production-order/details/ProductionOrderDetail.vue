@@ -1,11 +1,6 @@
 <template>
   <div class="animated fadeIn">
     <el-card>
-      <div class="sales-plan-triangle_box" v-if="isMySelf">
-        <div class="sales-plan-triangle" :style="isShowTag ? 'border-right: 70px solid #ffd60c' : 'border-right: 70px solid #ffffff'">
-          <h6 class="sales-plan-triangle_text">{{orderType}}</h6>
-        </div>
-      </div>
       <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="production-order-list-title">
@@ -18,6 +13,11 @@
         <el-col :span="6">
           <h6>订单状态：{{orderState}}</h6>
         </el-col>
+        <el-col :span="2" v-if="orderType">
+          <el-tag effect="dark">
+            {{ orderType }}
+          </el-tag>
+        </el-col>
       </el-row>
       <div class="pt-2"></div>
       <el-row class="production-order-basic-row">
@@ -29,8 +29,9 @@
               :productsColors="colors" />
           </el-row>
         </div> -->
-        <progress-order :slotData="progressOrder" :order="productionOrder" @callback="onCallBack" :formData="formData"/>
-        <production-order-relation-info :slotData="formData" :id="id"/>
+        <progress-order :slotData="progressOrder" :order="productionOrder" @callback="onCallBack"
+          :formData="formData" />
+        <production-order-relation-info :slotData="formData" :id="id" />
         <!-- <production-order-button-group style="margin-top:50px" :slotData="formData" @callback="getDetail" /> -->
       </el-row>
     </el-card>
@@ -104,15 +105,16 @@
         }
         if (this.formData.taskOrderEntries[0].type == 'SELF_PRODUCED') {
           return '自\xa0\xa0\xa0\xa0\xa0产';
-        } else if (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.formData.taskOrderEntries[0].outboundOrderCode) {
-          return '已外发'; 
+        } else if (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.formData.taskOrderEntries[0]
+          .outboundOrderCode) {
+          return '已外发';
         }
       },
       isShowTag: function () {
-        return this.formData.taskOrderEntries.length > 0 && 
-                this.formData.taskOrderEntries[0].type == 'SELF_PRODUCED' ||
-                (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' &&
-                 this.formData.taskOrderEntries[0].outboundOrderCode != undefined);
+        return this.formData.taskOrderEntries.length > 0 &&
+          this.formData.taskOrderEntries[0].type == 'SELF_PRODUCED' ||
+          (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' &&
+            this.formData.taskOrderEntries[0].outboundOrderCode != undefined);
       },
       isMySelf: function () {
         if (!this.formData.taskOrderEntries) {
@@ -159,7 +161,7 @@
     created() {
       this.getDetail(this.id);
     },
-    beforeRouteUpdate (to, from, next) {
+    beforeRouteUpdate(to, from, next) {
       if (to.name === from.name && to.params.id != from.params.id) {
         this.getDetail(to.params.id);
       }
@@ -199,4 +201,5 @@
     color: white;
     font-size: 12px;
   }
+
 </style>

@@ -3,6 +3,7 @@
     <el-table :data="data" stripe style="width: 100%">
       <el-table-column type="selection" width="55">
       </el-table-column>
+      <el-table-column label="生产工单号" prop="code" />
       <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
@@ -49,20 +50,28 @@
         <template slot-scope="scope">
           <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
-      </el-table-column>      
+      </el-table-column>
       <el-table-column label="操作" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onProductionOrderDetail(scope.row.id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <production-order-detail :id="openId" v-if="dialogVisible" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import ProductionOrderDetail from '../production-order/details/ProductionOrderDetail'
+
   export default {
     name: 'SalesProductionTasksTable',
-    components: {},
+    components: {
+      ProductionOrderDetail
+    },
     props: {
       data: {
         type: Array
@@ -80,7 +89,9 @@
         this.$router.push('/sales/production/' + id);
       },
       onProductionOrderDetail(id) {
-        this.$router.push('/sales/productionOrder/' + id);
+        // this.$router.push('/sales/productionOrder/' + id);
+        this.openId=id;
+        this.dialogVisible=true;
       },
       onClose() {
 
@@ -102,7 +113,8 @@
     },
     data() {
       return {
-
+        dialogVisible: false,
+        openId: ''
       }
     }
   }

@@ -3,7 +3,7 @@
   <div>
     <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <address-select @onSelect="onAddressSelect" />
+      <address-select @onSelect="onAddressSelect" v-if="addressSelectVisible"/>
     </el-dialog>
     <el-form :inline="true" ref="address" :model="address" label-position="left" :disabled="readOnly">
       <el-row type="flex" align="middle" :gutter="10" justify="space-between">
