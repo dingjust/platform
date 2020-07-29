@@ -51,7 +51,7 @@
                 <h6 class="basic-label">发货方式：{{formData.consignment.carrierDetails.name}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="basic-label">发货单号：{{formData.consignment.trackingID}}</h6>
+                <h6 class="basic-label">物流单号：{{formData.consignment.trackingID}}</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px" v-else>

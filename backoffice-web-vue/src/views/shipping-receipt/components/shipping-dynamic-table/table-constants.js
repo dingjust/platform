@@ -28,7 +28,7 @@ import ReceiptOrderDetail from '../../receipt-order/details/ReceiptOrderDetail'
 
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" :prop="prop" min-width="110px" :key="sortKey"></el-table-column>
+  <el-table-column label="发货单" :prop="prop" min-width="110px" :key="sortKey"></el-table-column>
   `,
   props: {
     prop: {
@@ -317,7 +317,7 @@ const UnitPrice = {
 
 const ShipNum = {
   template: `
-  <el-table-column label="发货数量" :key="sortKey">
+  <el-table-column label="发货数" :key="sortKey">
     <template slot-scope="scope">
       <span>{{getTotalNum(scope.row)}}</span>
     </template>
@@ -559,7 +559,7 @@ const ReceiptDate = {
 }
 
 const ReturnOrder = {
-  template: `<el-table-column label="退货单号" :prop="prop" :key="sortKey" ></el-table-column>`,
+  template: `<el-table-column label="退货单" :prop="prop" :key="sortKey" ></el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -760,7 +760,7 @@ const ReturnOperation = {
 // 复议单号
 const ReconsiderOrderCode = {
   template: `
-  <el-table-column label="复议单号" :prop="prop" min-width="120"  :key="sortKey" ></el-table-column>
+  <el-table-column label="复议单" :prop="prop" min-width="120"  :key="sortKey" ></el-table-column>
 `,
   props: {
     prop: {

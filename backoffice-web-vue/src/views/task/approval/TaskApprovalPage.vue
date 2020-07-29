@@ -24,7 +24,7 @@
             </el-tabs>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="采购任务" name="PURCHASE_TASK">
+        <!-- <el-tab-pane label="采购任务" name="PURCHASE_TASK">
           <div class="tab-basic-row">
             <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset"
               @onAdvancedSearch="onAdvancedSearch" />
@@ -37,7 +37,7 @@
               </template>
             </el-tabs>
           </div>
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
     </el-card>
   </div>
