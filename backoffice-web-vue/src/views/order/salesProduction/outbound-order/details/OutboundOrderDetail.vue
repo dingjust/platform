@@ -7,32 +7,35 @@
             <h6>外发订单详情</h6>
           </div>
         </el-col>
+        <el-col :span="6" :offset="2">
+          <h6>单号：{{formData.code}}</h6>
+        </el-col>
       </el-row>
-      <outbound-order-top-info :slotData="formData" :payPlan="payPlan" @callback="callback"/>
+      <outbound-order-top-info :slotData="formData" :payPlan="payPlan" @callback="callback" />
       <div style="margin: 20px 0px 0px 10px;">
-        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"/>
+        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData" />
       </div>
       <el-row class="basic-form-row" type="flex" align="middle">
         <h6>备注及附件</h6>
       </el-row>
       <el-row type="flex" style="padding-left: 20px">
         <el-col>
-          <el-input type="textarea" autosize v-model="formData.remarks" :disabled="true"
+          <el-input type="textarea" v-model="formData.remarks" :disabled="true"
             :autosize="{ minRows: 4, maxRows: 6 }" />
         </el-col>
       </el-row>
-      <el-row class="basic-form-row" type="flex" align="middle" 
+      <el-row class="basic-form-row" type="flex" align="middle"
         v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED'">
         <h6>唯一码：<span style="color: #F56C6C">{{formData.uniqueCode}}</span></h6>
       </el-row>
-      <div v-if="showFinancial">
-        <div style="padding-left: 10px;margin-top: 20px">
+      <div v-if="showFinancial" style="margin-top:20px">
+        <!-- <div style="padding-left: 10px;margin-top: 20px">
           <el-row v-if="formData.payPlan != null">
             <purchase-order-info-payment-finance :slotData="formData" />
           </el-row>
-        </div>
+        </div> -->
         <div v-if="formData.paymentBill != null">
-          <financial-tabs :formData="formData.paymentBill" belongTo="PAYABLE_PAGE"/>
+          <financial-tabs :formData="formData.paymentBill" belongTo="PAYABLE_PAGE" />
         </div>
       </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">
@@ -72,8 +75,12 @@
   import OutboundOrderTopInfo from '../form/OutboundOrderTopInfo';
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
-  import { SalesProductionTabs } from '@/views/order/salesProduction/components/'
-  import { FinancialTabs } from '@/views/financial/index.js'
+  import {
+    SalesProductionTabs
+  } from '@/views/order/salesProduction/components/'
+  import {
+    FinancialTabs
+  } from '@/views/financial/index.js'
 
   export default {
     name: 'OutboundOrderDetail',
@@ -111,20 +118,20 @@
       },
       canAudit: function () {
         // 订单审核状态在审核中且登陆账号为审核人
-        return this.formData.sendAuditState == 'AUDITING' && 
+        return this.formData.sendAuditState == 'AUDITING' &&
           this.formData.sendApprovers[0].uid == this.$store.getters.currentUser.uid;
       },
       showFinancial: function () {
         return this.formData.sendAuditState == 'PASSED' &&
-                this.formData.state != 'TO_BE_ACCEPTED' && 
-                this.formData.state != 'TO_BE_SUBMITTED';
+          this.formData.state != 'TO_BE_ACCEPTED' &&
+          this.formData.state != 'TO_BE_SUBMITTED';
       }
     },
     methods: {
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
-      callback () {
+      callback() {
         this.getDetail();
       },
       async getDetail() {
@@ -137,7 +144,7 @@
         this.$store.state.OutboundOrderModule.formData = Object.assign({}, result.data);
         this.setPayPlan(result.data.payPlan);
       },
-      setPayPlan (payPlan) {
+      setPayPlan(payPlan) {
         this.payPlan.name = payPlan.name;
         this.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
         this.payPlan.payPlanType = payPlan.payPlanType;
@@ -167,7 +174,7 @@
               break;
           }
         });
-        this.$set(this.payPlan,'1',1);
+        this.$set(this.payPlan, '1', 1);
       },
       //审批
       onApproval(isPass) {

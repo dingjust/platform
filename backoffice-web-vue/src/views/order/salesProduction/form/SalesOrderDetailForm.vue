@@ -1,104 +1,107 @@
 <template>
   <div>
     <div class="sales-plan-box">
-      <el-row type="flex">
+      <el-row type="flex" :gutter="10" justify="space-between">
         <el-col :span="10">
-          <!-- <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
+          <div class="info-box">
+            <!-- <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
             :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" /> -->
-          <el-row type="flex" justify="start" class="basic-form-row">
-            <el-col :span="8">
-              <el-row type="flex" align="middle">
-                <h6 class="sales-plan-h6"><span class="info-title">单号：</span>{{form.code}}
-                </h6>
-              </el-row>
-            </el-col>
-            <el-col :span="8">
-              <el-row type="flex" align="middle">
-                <h6 class="sales-plan-h6"><span
-                    class="info-title">合作方式：</span>{{getEnum('cooperationModes', form.cooperationMode)}}
-                </h6>
-              </el-row>
-            </el-col>
-            <el-col :span="8">
-              <el-row type="flex" align="middle">
-                <h6 class="sales-plan-h6"><span class="info-title">是否开发票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
-                </h6>
-              </el-row>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" class="basic-form-row">
-            <el-col :span="8">
-              <el-row type="flex" align="middle">
-                <h6 class="sales-plan-h6"><span class="info-title">生产总数：</span>{{totalAmount}}</h6>
-              </el-row>
-            </el-col>
-            <el-col :span="8">
-              <el-row type="flex" align="middle">
-                <h6 class="sales-plan-h6"><span class="info-title">生产总价：</span>{{totalPrice}}元</h6>
-              </el-row>
-            </el-col>
-          </el-row>
-          <template v-if="form.type == 'SALES_ORDER'">
             <el-row type="flex" justify="start" class="basic-form-row">
-              <h6 class="sales-plan-h6"><span class="info-title">财务</span></h6>
-            </el-row>
-            <el-row type="flex" justify="start" class="basic-form-row" v-popover:popover>
-              <el-col :span="8">
-                <h6 class="sales-plan-h6"><span
-                    class="info-title">有无定金：</span>{{form.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
+              <el-col :span="12">
+                <el-row type="flex" align="middle">
+                  <h6 class="sales-plan-h6"><span
+                      class="info-title">合作方式：</span>{{getEnum('cooperationModes', form.cooperationMode)}}
+                  </h6>
+                </el-row>
               </el-col>
-              <el-col :span="8">
-                <h6 class="sales-plan-h6"><span class="info-title">尾款期数：</span>{{payPlanType[form.payPlan.payPlanType]}}
-                </h6>
+              <el-col :span="12">
+                <el-row type="flex" align="middle">
+                  <h6 class="sales-plan-h6"><span
+                      class="info-title">是否开发票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
+                    <span style="margin-left:5px" v-if="form.invoiceNeeded">{{slotData.invoiceTaxPoint * 100}}%</span>
+                  </h6>
+                </el-row>
               </el-col>
             </el-row>
-            <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
-              <pay-plan-info :form="payPlan"></pay-plan-info>
-            </el-popover>
-          </template>
+            <el-row type="flex" justify="start" class="basic-form-row">
+              <el-col :span="12">
+                <el-row type="flex" align="middle">
+                  <h6 class="sales-plan-h6"><span class="info-title">订单数量：</span>{{totalAmount}}</h6>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row type="flex" align="middle">
+                  <h6 class="sales-plan-h6"><span class="info-title">订单总金额（元）：</span>{{totalPrice}}元</h6>
+                </el-row>
+              </el-col>
+            </el-row>
+            <template v-if="form.type == 'SALES_ORDER'">
+              <el-row type="flex" justify="start" class="basic-form-row">
+                <h6 class="sales-plan-h6"><span class="info-title">财务</span></h6>
+              </el-row>
+              <el-row type="flex" justify="start" class="basic-form-row" v-popover:popover>
+                <el-col :span="12">
+                  <h6 class="sales-plan-h6"><span
+                      class="info-title">定金：</span>{{form.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
+                </el-col>
+                <el-col :span="12">
+                  <h6 class="sales-plan-h6"><span
+                      class="info-title">尾款期数：</span>{{payPlanType[form.payPlan.payPlanType]}}
+                  </h6>
+                </el-col>
+              </el-row>
+              <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
+                <pay-plan-info :form="payPlan"></pay-plan-info>
+              </el-popover>
+            </template>
+          </div>
         </el-col>
-        <el-divider direction="vertical"></el-divider>
         <el-col :span="8">
-          <template v-if="form.type==='SALES_ORDER'">
-            <el-row type="flex" justify="start" class="basic-form-row">
-              <el-col :span="24">
-                <h6 class="sales-plan-h6"><span class="info-title">合作商：</span>{{cooperator.name}}</h6>
-              </el-col>
+          <div class="info-box">
+            <template v-if="form.type==='SALES_ORDER'">
+              <el-row type="flex" justify="start" class="basic-form-row">
+                <el-col :span="24">
+                  <h6 class="sales-plan-h6"><span class="info-title">合作商：</span>{{cooperator.name}}</h6>
+                </el-col>
+              </el-row>
+              <el-row type="flex" justify="start" class="basic-form-row">
+                <el-col :span="12">
+                  <h6 class="sales-plan-h6"><span class="info-title">联系人：</span>{{cooperator.contactPerson}}</h6>
+                </el-col>
+                <el-col :span="12">
+                  <h6 class="sales-plan-h6"><span class="info-title">联系电话：</span>
+                    {{cooperator.contactPhone}}</h6>
+                </el-col>
+              </el-row>
+            </template>
+            <el-row type="flex" justify="start" class="basic-form-row" style="margin-top:10px">
+              <h6 class="info-title">人员设置</h6>
             </el-row>
             <el-row type="flex" justify="start" class="basic-form-row">
               <el-col :span="12">
-                <h6 class="sales-plan-h6"><span class="info-title">联系人：</span>{{cooperator.contactPerson}}</h6>
+                <h6 class="sales-plan-h6"><span
+                    class="info-title">创建人：</span>{{form.creator!=null?form.creator.name:''}}
+                </h6>
               </el-col>
               <el-col :span="12">
-                <h6 class="sales-plan-h6"><span class="info-title">联系电话：</span>
-                  {{cooperator.contactPhone}}</h6>
+                <h6 class="sales-plan-h6"><span class="info-title">审批负责人：</span>
+                  {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
               </el-col>
             </el-row>
-          </template>
-          <el-row type="flex" justify="start" class="basic-form-row" style="margin-top:10px">
-            <h6 class="info-title">人员设置</h6>
-          </el-row>
-          <el-row type="flex" justify="start" class="basic-form-row">
-            <el-col :span="12">
-              <h6 class="sales-plan-h6"><span class="info-title">创建人：</span>{{form.creator!=null?form.creator.name:''}}
-              </h6>
-            </el-col>
-            <el-col :span="12">
-              <h6 class="sales-plan-h6"><span class="info-title">审批负责人：</span>
-                {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" class="basic-form-row">
-            <el-row type="flex" align="middle">
-              <h6 class="sales-plan-h6"><span class="info-title">生产负责人：</span>
-                {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
+            <el-row type="flex" justify="start" class="basic-form-row">
+              <el-row type="flex" align="middle">
+                <h6 class="sales-plan-h6"><span class="info-title">生产负责人：</span>
+                  {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
+              </el-row>
             </el-row>
-          </el-row>
+          </div>
+
         </el-col>
-        <el-divider direction="vertical"></el-divider>
         <el-col :span="6">
-          <contract-com v-if="form.type == 'SALES_ORDER'" @callback="callback" 
-                        :slotData="form" :contracts="contracts" :canSign="canSign" />
+          <div class="info-box" style="padding:10px">
+            <contract-com v-if="form.type == 'SALES_ORDER'" @callback="callback" :slotData="form" :contracts="contracts"
+              :canSign="canSign" />
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -207,7 +210,7 @@
       }
     },
     methods: {
-      callback () {
+      callback() {
         this.$emit('callback');
       }
     },
@@ -335,6 +338,13 @@
 
   .sales-plan-box>>>.el-divider--vertical {
     height: auto;
+  }
+
+  .info-box {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #dcdfe6;
+    border-radius: 10px;
   }
 
 </style>

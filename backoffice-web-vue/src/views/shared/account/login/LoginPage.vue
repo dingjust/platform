@@ -100,7 +100,20 @@
     },
     computed: {
       captchaPass: function () {
-        // 人机验证通过 TODO:后端服务调用阿里云验证签名
+        // 人机验证通过 TODO:后端服务调用阿里云验证签名        
+
+        //员工账号
+        if (this.activeTabName == 'employee') {
+          return (
+            this.NC_RESULT.csessionid != '' &&
+            this.NC_RESULT.sig != '' &&
+            this.username != '' &&
+            this.password != '' &&
+            this.employeeUserName != '' &&
+            this.NC_RESULT.value == 'pass'
+          );
+        }
+        
         return (
           this.NC_RESULT.csessionid != '' &&
           this.NC_RESULT.sig != '' &&
@@ -116,6 +129,11 @@
       let localUserName = localStorage.getItem('userName');
       if (localUserName != null && localUserName != '') {
         this.username = localUserName;
+      }
+
+      let employeeUserName = localStorage.getItem('employeeUserName');
+      if (employeeUserName != null && employeeUserName != '') {
+        this.employeeUserName = employeeUserName;
       }
     },
     mounted() {
@@ -162,7 +180,10 @@
     },
     methods: {
       async login() {
-        const username = this.username.replace(/(\s*$)/g, '');
+        let username = this.username.replace(/(\s*$)/g, '');
+        if (this.activeTabName == 'employee') {
+          username = username + ':' + this.employeeUserName;
+        }
         const password = this.password;
 
         await this.$store.dispatch('login', {
@@ -188,7 +209,7 @@
       },
       onPasswordReset() {
         this.$router.push({
-          path:'/password/reset',
+          path: '/password/reset',
           query: {
             accountType: this.activeTabName
           }

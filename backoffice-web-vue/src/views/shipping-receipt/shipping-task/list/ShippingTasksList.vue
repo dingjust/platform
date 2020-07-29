@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column :label="mode == 'import'  ? '发货任务单号' : '收货任务单号'" prop="code" min-width="120px"></el-table-column>
-      <el-table-column :label="mode == 'import' ? '生产工单' : '关联订单号'" prop="productionTaskOrder.code" min-width="120px">
+      <!-- <el-table-column :label="mode == 'import'  ? '发货任务单号' : '收货任务单号'" prop="code" min-width="120px"></el-table-column> -->
+      <el-table-column :label="mode == 'import' ? '生产工单' : '外发工单'" prop="productionTaskOrder.code" min-width="120px">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
             @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
@@ -38,12 +38,12 @@
         </template>
       </el-table-column>
       <template v-if="mode=='import'">
-        <el-table-column label="创建人" prop="creator.name"></el-table-column>
-        <el-table-column label="负责人" prop="merchandiser.name"></el-table-column>
+        <!-- <el-table-column label="创建人" prop="creator.name"></el-table-column> -->
+        <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
       </template>
       <template v-if="mode=='export'">
-        <el-table-column label="合作商" prop="shipParty.name"></el-table-column>
-        <el-table-column label="负责人" prop="originMerchandiser.name"></el-table-column>
+        <!-- <el-table-column label="合作商" prop="shipParty.name"></el-table-column> -->
+        <el-table-column label="跟单员" prop="originMerchandiser.name"></el-table-column>
       </template>
       <el-table-column label="交货时间">
         <template slot-scope="scope">

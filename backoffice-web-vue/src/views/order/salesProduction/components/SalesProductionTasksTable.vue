@@ -21,6 +21,8 @@
           </el-row>
         </template>
       </el-table-column>
+      <el-table-column label="货号" prop="product.skuID" />
+      <el-table-column label="价格" prop="unitPrice" />
       <el-table-column label="数量">
         <template slot-scope="scope">
           <span>{{getEntryTotalAmount(scope.row)}}</span>
@@ -32,7 +34,7 @@
           </el-button>
         </template>
       </el-table-column> -->
-      <el-table-column label="关联外发单" min-width="120">
+      <!-- <el-table-column label="关联外发单" min-width="120">
       </el-table-column>
       <el-table-column label="关联生产单" min-width="120">
         <template slot-scope="scope">
@@ -42,17 +44,12 @@
         </template>
       </el-table-column>
       <el-table-column label="关联采购任务" min-width="120">
-      </el-table-column>
-      <el-table-column label="交货时间">
+      </el-table-column> -->
+      <el-table-column label="交期">
         <template slot-scope="scope">
           <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="订单状态">
-        <!-- <template slot-scope="scope">
-          <span>{{scope.row.status!=null? getEnum('SalesProductionAuditStatus', scope.row.auditState):''}}</span>
-        </template> -->
-      </el-table-column>
+      </el-table-column>      
       <el-table-column label="操作" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onProductionOrderDetail(scope.row.id)">详情</el-button>

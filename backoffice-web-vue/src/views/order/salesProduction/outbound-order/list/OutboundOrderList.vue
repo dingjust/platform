@@ -10,7 +10,6 @@
         </template>
       </el-table-column>
       <el-table-column label="关联产品数" prop="entrySize"></el-table-column>
-      <el-table-column label="创建人" prop="creator.name"></el-table-column>
       <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
       <el-table-column label="创建时间" min-width="120">
         <template slot-scope="scope">
@@ -27,8 +26,8 @@
           <span>{{getEnum('OutboundOrderStatuses', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签" min-width="70">
-      </el-table-column>
+      <!-- <el-table-column label="订单标签" min-width="70">
+      </el-table-column> -->
       <el-table-column label="操作" min-width="70">
         <template slot-scope="scope">
           <el-row>

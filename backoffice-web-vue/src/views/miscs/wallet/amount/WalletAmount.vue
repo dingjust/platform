@@ -6,7 +6,7 @@
           总金额：<span>{{sum}}</span>
         </el-card>
         <!--<el-form-item label="总金额">-->
-          <!--<el-input type="text" :rows="2" :value="sum"></el-input>-->
+        <!--<el-input type="text" :rows="2" :value="sum"></el-input>-->
         <!--</el-form-item>-->
       </el-col>
       <el-col :span="6">
@@ -29,9 +29,14 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
-  const {mapMutations, mapGetters} = createNamespacedHelpers('WalletModule');
+  const {
+    mapMutations,
+    mapGetters
+  } = createNamespacedHelpers('WalletModule');
 
   export default {
     name: 'WalletAmount',
@@ -42,7 +47,11 @@
         // walletData: 'walletData'
       }),
       sum: function () {
-        return this.walletData.auditing + this.walletData.canCashOut + this.walletData.cashOuting;
+        if (this.walletData != null) {
+          return this.walletData.auditing + this.walletData.canCashOut + this.walletData.cashOuting;
+        } else {
+          return 0;
+        }
       }
     },
     methods: {
@@ -50,9 +59,9 @@
 
       }),
     },
-    data () {
-      return {
-      }
+    data() {
+      return {}
     },
   }
+
 </script>

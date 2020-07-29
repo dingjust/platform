@@ -178,8 +178,9 @@ class RecommendProductItem extends StatelessWidget {
                                           model.belongTo.contactAddress !=
                                               null
                                               ? '${model.belongTo.contactAddress
-                                              .region.name}${model.belongTo
-                                              .contactAddress.city.name}'
+                                              ?.region?.name ?? ''}${model
+                                              .belongTo.contactAddress?.city
+                                              ?.name ?? ''}'
                                               : '',
                                           style: TextStyle(
                                               fontSize: 12,

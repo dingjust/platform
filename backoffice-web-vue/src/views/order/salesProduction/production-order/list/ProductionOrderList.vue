@@ -1,8 +1,10 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed" :row-key="'id'"
-      :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick" :reserve-selection="true">
-      <el-table-column type="selection" width="50px" :selectable="rowDisabled" v-if="!isOutProduction" fixed></el-table-column>
+    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
+      :row-key="'id'" :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick"
+      :reserve-selection="true">
+      <el-table-column type="selection" width="50px" :selectable="rowDisabled" v-if="!isOutProduction" fixed>
+      </el-table-column>
       <el-table-column label="生产订单号" min-width="115">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" v-if="!isAllocating && !isOutProduction">
@@ -41,7 +43,13 @@
             scope.row.product.category.parent.name + '-' + scope.row.product.category.name : ''}}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="客户"></el-table-column> -->
+      <el-table-column label="合作商" v-if="mode=='import'">
+        <template slot-scope="scope" v-if="scope.row.originCooperator">
+          <span v-if="scope.row.originCooperator.type=='ONLINE'">{{scope.row.originCooperator.partner.name}}</span>
+          <span v-else>{{scope.row.originCooperator.partner.name?scope.row.originCooperator.partner.name:''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="合作商" v-if="mode=='export'" prop="belongTo.name" />        
       <el-table-column label="订单数量" prop="quantity" min-width="70"></el-table-column>
       <el-table-column label="负责人" prop="productionLeader.name" min-width="60"></el-table-column>
       <el-table-column label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating"></el-table-column>
@@ -55,7 +63,7 @@
           <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签" v-if="!isOutProduction && !isAllocating">
+      <el-table-column label="标签" v-if="!isOutProduction && !isAllocating">
         <template slot-scope="scope">
           <el-tag color="#FFD60C" style="color: #303133" v-if="scope.row.type == 'SELF_PRODUCED'">自产</el-tag>
           <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133" v-else>
@@ -110,25 +118,29 @@
       isAllocating: {
         type: Boolean,
         default: false
+      },
+      //类型, import为自己生产,export为外发生产
+      mode:{
+        type:String,
+        default:'import'
       }
     },
     components: {},
-    computed: {
-    },
+    computed: {},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
-      stateName (row) {
+      stateName(row) {
         if (row.state == 'TO_BE_ALLOCATED') {
           return '待生产';
         }
         return this.getEnum('ProductionTaskOrderState', row.state)
       },
-      isOuted (row) {
+      isOuted(row) {
         if (row.outboundOrderCode) {
           return true;
-        } 
+        }
         return false;
       },
       handleFilterChange(val) {
@@ -172,16 +184,16 @@
         });
         return amount;
       },
-      rowDisabled (row, index) {
+      rowDisabled(row, index) {
         if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
           return false;
         }
         return true;
       },
-      handleSelectionChange (val) {
+      handleSelectionChange(val) {
         this.selectRow = val;
       },
-      rowClick (row, column, event) {
+      rowClick(row, column, event) {
         if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
           return;
         }
@@ -234,7 +246,7 @@
         }
       }
     },
-    created () {
+    created() {
       this.selectRow = this.vSelectRow;
     }
   }

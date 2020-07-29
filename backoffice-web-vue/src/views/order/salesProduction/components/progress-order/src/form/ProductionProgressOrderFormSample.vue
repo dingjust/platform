@@ -312,6 +312,7 @@
     },
     created() {
       if (!this.readOnly) {
+        this.progressOrder.reportTime=Date.now();
         this.addRow();
       }
     },
