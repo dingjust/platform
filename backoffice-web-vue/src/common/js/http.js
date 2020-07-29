@@ -34,7 +34,7 @@ function errorHandler(resolve, error, loading) {
   // }
 
   // 401错误处理
-  if (error.response.status === 401) {
+  if (error.response && error.response.status === 401) {
     if (error.response.data && error.response.data['errors'][0].type === 'InvalidTokenError') {
       // token无效
       Message.closeAll();

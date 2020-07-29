@@ -10,7 +10,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" 
+      <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onAllocating="onAllocating"
                                 @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating"/>
       <div>
         <div class="tag-container" v-if="!isAllocating">
@@ -40,6 +40,10 @@
       :close-on-click-modal="false">
       <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData" />
     </el-dialog>
+    <el-dialog :visible.sync="allocatingVisible" width="40%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <allocating-form v-if="allocatingVisible" :slotData="selectRow" @onCallback="onCallback"></allocating-form>  
+    </el-dialog>
   </div>
 </template>
 
@@ -60,13 +64,15 @@
   import ProductionOrderList from './list/ProductionOrderList';
   import ProductionOrderToolbar from './toolbar/ProductionOrderToolbar';
   import OutboundOrderTypeSelectForm from '../outbound-order/form/OutboundOrderTypeSelectForm'
+  import AllocatingForm from './components/AllocatingForm'
 
   export default {
     name: 'ProductionOrders',
     components: {
       ProductionOrderList,
       ProductionOrderToolbar,
-      OutboundOrderTypeSelectForm
+      OutboundOrderTypeSelectForm,
+      AllocatingForm
     },
     computed: {
       ...mapGetters({
@@ -161,6 +167,20 @@
         this.queryFormData.type = flag;
         this.onAdvancedSearch();
       },
+      // 分配跟单员
+      onAllocating () {
+        if (this.selectRow.length <= 0) {
+          this.$message.warning('请选择要进行分配操作的工单');
+          return;
+        }
+        this.allocatingVisible = true;
+      },
+      onCallback (flag) {
+        if (flag) {
+          this.onAdvancedSearch(0, 10);
+        }
+        this.allocatingVisible = false;
+      },
       onCreate() {
         let row = [];
         this.selectRow.forEach(item => {
@@ -225,6 +245,7 @@
         statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
         outboundOrderTypeSelect: false,
         selectRow: [],
+        allocatingVisible: false,
         queryFormData: {
           createdDateFrom: null,
           createdDateTo: null,
