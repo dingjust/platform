@@ -9,12 +9,16 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" />
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{scope.row.enabled ? '启用' : '禁用'}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" min-width="180px">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">查看</el-button>
           <el-button type="text" @click="onEdit(scope.row)">编辑</el-button>
-          <el-button type="text" @click="onChangeState(scope.row)">禁用</el-button>
+          <el-button type="text" @click="onChangeState(scope.row)">{{roleState(scope.row)}}</el-button>
           <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -35,7 +39,6 @@
 
     },
     computed: {
-
     },
     methods: {
       onPageSizeChanged (val) {
@@ -52,14 +55,31 @@
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
+      roleState (row) {
+        if (row.enabled == null || row.enabled) {
+          return '禁用';
+        }
+        return '启用';
+      },
       onDetail (row) {
         this.$router.push('/account/organizationRole/' + row.id + '/edit');
       },
       onEdit (row) {
         this.$router.push('/account/organizationRole/' + row.id + '/edit');
       },
-      onChangeState (row) {
-
+      async onChangeState (row) {
+        const url = this.apis().changeRoleState(row.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('修改角色状态成功！');
+        this.$emit('onAdvancedSearch', this.page.number);
       },
       onDelete (row) {
         this.$confirm('是否删除此角色?', '提示', {
@@ -82,7 +102,7 @@
         if (this.page.content.length == 1) {
           page = this.page.number - 1;
         }
-        this.$emit('onAdvancedSearch', this.page.number);
+        this.$emit('onAdvancedSearch', page);
       }
     },
     data () {

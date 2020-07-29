@@ -26,12 +26,38 @@ function setAuthorization() {
 ///错误处理
 function errorHandler(resolve, error, loading) {
   loading.close();
-  //登录token失效
-  if (error.response.status == 401) {
-    Message.closeAll();
-    Message.error('登录过期，请重新登陆');
-    router.push("/login");
+  // //登录token失效
+  // if (error.response.status == 401) {
+  //   Message.closeAll();
+  //   Message.error('登录过期，请重新登陆');
+  //   router.push("/login");
+  // }
+
+  // 401错误处理
+  if (error.response.status === 401) {
+    if (error.response.data && error.response.data['errors'][0].type === 'InvalidTokenError') {
+      // token无效
+      Message.closeAll();
+      Message.error('登陆过期，请重新登陆！');
+      router.push('/login');
+      // 清除sessionStorage
+      sessionStorage.clear();
+      return;
+    } else if (error.response.data && error.response.data['errors'][0].type === 'AccessDeniedError') {
+      // 权限缺失
+      Message.closeAll();
+      Message.error('此账号没有权限执行此操作，请联系主账号负责人进行处理！');
+      return;
+    } else {
+      Message.closeAll();
+      Message.error('账号登陆状态异常，请重新登陆！');
+      router.push('/login');
+      // 清除sessionStorage
+      sessionStorage.clear();
+      return;
+    }
   }
+
   if (error.response && error.response.data) {
     return resolve(error.response.data);
   } else {

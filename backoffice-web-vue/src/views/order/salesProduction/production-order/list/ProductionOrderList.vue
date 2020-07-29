@@ -3,9 +3,8 @@
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :row-key="'id'" :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick"
       :reserve-selection="true">
-      <el-table-column type="selection" width="50px" :selectable="rowDisabled" v-if="!isOutProduction" fixed>
-      </el-table-column>
-      <el-table-column label="生产订单号" min-width="115">
+      <el-table-column :key="1" type="selection" width="50px" :selectable="rowDisabled" v-if="!isOutProduction" fixed />
+      <el-table-column :key="2" label="生产订单号" min-width="115">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" v-if="!isAllocating && !isOutProduction">
             <el-tag type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
@@ -16,7 +15,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="产品" min-width="180">
+      <el-table-column :key="3" label="产品" min-width="180">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
@@ -37,33 +36,33 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品类" min-width="115">
+      <el-table-column :key="4" label="品类" min-width="115">
         <template slot-scope="scope">
           <span>{{scope.row.product !=null ? 
             scope.row.product.category.parent.name + '-' + scope.row.product.category.name : ''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合作商" v-if="mode=='import'">
+      <el-table-column :key="5" label="合作商" v-if="mode=='import'">
         <template slot-scope="scope" v-if="scope.row.originCooperator">
           <span v-if="scope.row.originCooperator.type=='ONLINE'">{{scope.row.originCooperator.partner.name}}</span>
           <span v-else>{{scope.row.originCooperator.partner.name?scope.row.originCooperator.partner.name:''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合作商" v-if="mode=='export'" prop="belongTo.name" />        
-      <el-table-column label="订单数量" prop="quantity" min-width="70"></el-table-column>
-      <el-table-column label="负责人" prop="productionLeader.name" min-width="60"></el-table-column>
-      <el-table-column label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating"></el-table-column>
-      <el-table-column label="创建时间" min-width="120">
+      <el-table-column :key="6" label="合作商" v-if="mode=='export'" prop="belongTo.name" />        
+      <el-table-column :key="7" label="订单数量" prop="quantity" min-width="70"></el-table-column>
+      <el-table-column :key="8" label="负责人" prop="productionLeader.name" min-width="60"></el-table-column>
+      <el-table-column :key="9"  label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating"></el-table-column>
+      <el-table-column :key="10"  label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交货时间" min-width="90">
+      <el-table-column :key="11" label="交货时间" min-width="90">
         <template slot-scope="scope">
           <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签" v-if="!isOutProduction && !isAllocating">
+      <el-table-column :key="12" label="标签" v-if="!isOutProduction && !isAllocating">
         <template slot-scope="scope">
           <el-tag color="#FFD60C" style="color: #303133" v-if="scope.row.type == 'SELF_PRODUCED'">自产</el-tag>
           <el-tag :color="isOuted(scope.row) ? '#FFD60C':'#ffffff'" style="color: #303133" v-else>
@@ -71,12 +70,12 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="状态" min-width="60" v-if="!isAllocating">
+      <el-table-column :key="13" label="状态" min-width="60" v-if="!isAllocating">
         <template slot-scope="scope">
           <span>{{stateName(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="80">
+      <el-table-column :key="14" label="操作" min-width="80">
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>

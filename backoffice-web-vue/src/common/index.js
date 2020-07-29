@@ -239,6 +239,10 @@ const COMMON_APIS = {
   getB2BCustomerRoleGroupDetails(id) {
     return '/b2b/role/group/get/' + id;
   },
+  // 启/禁用角色
+  changeRoleState (id) {
+    return '/b2b/role/group/enable/or/disable/' + id;
+  },
   getB2BCustomer(uid) {
     return '/b2b/b2bCustomers/' + uid;
   },

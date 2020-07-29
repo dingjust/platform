@@ -9,54 +9,71 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="基本信息" name="BASIC">
-          <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
-            <el-col :span="8">
-              <h6>姓名：{{this.formData.name}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>联系方式：{{contactPhone}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>状态：{{this.formData.loginDisabled ? '禁用' : '启用'}}</h6>
-            </el-col>
-          </el-row> 
-          <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
-            <el-col :span="8">
-              <h6>登陆账号：{{this.formData.uid}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>所属部门：{{this.formData.b2bDept ? this.formData.b2bDept.name : ''}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>角色：{{role}}</h6>
-            </el-col>
-          </el-row>
-        </el-tab-pane>
-        <el-tab-pane label="组织架构" name="ORGANIZATION">
-          <el-form>
-            <el-row type="flex" justify="center" align="middle">
-              <el-col :span="8">
-                <el-form-item label="当前部门：">
-                  <h6 class="basic-title">{{this.originData.b2bDept ? this.originData.b2bDept.name : ''}}</h6>
-                </el-form-item>
-              </el-col>
+      <div style="height: 400px">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="基本信息" name="BASIC">
+            <el-row type="flex" justify="end">
+              <el-button @click="onEdit">编辑</el-button>
+              <el-button @click="onForbidden">禁用</el-button>
+              <el-button @click="onEnabled">启用</el-button>
             </el-row>
-            <el-row type="flex" justify="center" align="middle">
-              <el-col :span="8">
-                <el-form-item label="编辑部门：">
-                  <select-tree :treeData="deptList" :vSelectData.sync="formData.b2bDept"/>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="权限配置" name="AUTHORITY">
-          <personnel-role-info :formData="formData"/>
-        </el-tab-pane>
-      </el-tabs>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="activeName !== 'BASIC'">
+            <el-form :inline="true">
+              <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
+                <el-col :span="12">
+                  <el-form-item label="姓名：">
+                    <h6 class="basic-title" v-if="!editState">{{this.formData.name}}</h6>
+                    <el-input v-else v-model="formData.name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="联系方式：">
+                    <h6 class="basic-title" v-if="!editState">{{this.formData.contactPhone}}</h6>
+                    <el-input v-else v-model="formData.contactPhone"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row> 
+              <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row" style="margin-bottom: 20px">
+                <el-col :span="12">
+                  <h6 class="basic-title">登陆账号：{{this.formData.uid}}</h6>
+                </el-col>
+                <el-col :span="12">
+                  <h6 class="basic-title">状态：{{this.formData.loginDisabled ? '禁用' : '启用'}}</h6>
+                </el-col>
+              </el-row>
+              <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
+                <el-col :span="12">
+                  <el-form-item label="所属部门：">
+                    <h6 class="basic-title" v-if="!editState">{{this.formData.b2bDept ? this.formData.b2bDept.name : ''}}</h6>
+                    <select-tree v-else :treeData="deptList" :vSelectData.sync="formData.b2bDept"/>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </el-tab-pane>
+          <!-- <el-tab-pane label="组织架构" name="ORGANIZATION">
+            <el-form>
+              <el-row type="flex" justify="center" align="middle">
+                <el-col :span="8">
+                  <el-form-item label="当前部门：">
+                    <h6 class="basic-title">{{this.originData.b2bDept ? this.originData.b2bDept.name : ''}}</h6>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row type="flex" justify="center" align="middle">
+                <el-col :span="8">
+                  <el-form-item label="编辑部门：">
+                    <select-tree :treeData="deptList" :vSelectData.sync="formData.b2bDept"/>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </el-tab-pane> -->
+          <el-tab-pane label="权限配置" name="AUTHORITY">
+            <personnel-role-info :formData="formData"/>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
         <el-button class="personnel-role-btn" @click="onConfirm">确定</el-button>
       </el-row>
     </el-card>
@@ -74,9 +91,6 @@ export default {
     PersonnelRoleInfo
   },
   computed: {
-    contactPhone: function () {
-      return this.formData.contactPhone.split(':')[1];
-    },
     role: function () {
       let str = '';
       if (this.formData.b2bRoleGroupList && this.formData.b2bRoleGroupList.length > 0) {
@@ -102,7 +116,6 @@ export default {
         this.$message.error(result.msg);
         return;
       }
-      this.originData = Object.assign({}, result.data);
       this.formData = result.data;
       if (this.formData.b2bRoleGroupList == null) {
         this.formData.b2bRoleGroupList = [];
@@ -117,11 +130,46 @@ export default {
       }
       this.deptList = result.data;
     },
+    onEdit () {
+      this.editState = true;
+    },
+    onForbidden () {
+      if (this.formData.loginDisabled === true) {
+        this.$message.warning('此账号已禁用！');
+        return;
+      }
+      this._changeLoginDisabled();
+    },
+    onEnabled () {
+      if (this.formData.loginDisabled === false) {
+        this.$message.warning('此账号已启用！');
+        return;
+      }
+      this._changeLoginDisabled();
+    },
+    async _changeLoginDisabled () {
+      let data = {
+        id: this.formData.id,
+        uid: this.formData.uid
+      }
+      const currentUser = this.$store.getters.currentUser;
+      const url = this.apis().changeLoginDisabled(currentUser.uid);
+      const result = await this.$http.put(url, data);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code == 0) {
+        this.$message.error(result.msg);
+        return;
+      }
+      this.$message.success('更改员工账号状态成功');
+      this.getDetail();
+    },
     handleClick (tab, event) {
 
     },
     onConfirm () {
-      return;
       this.$confirm('是否确认更新员工信息?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -139,8 +187,6 @@ export default {
       let data = {
         id: this.formData.id,
         name: this.formData.name,
-        uid: this.formData.uid,
-        // password: this.formData.password,
         contactPhone: this.formData.contactPhone,
         b2bDept: {
           id: this.formData.b2bDept.id != '' ? this.formData.b2bDept.id : null 
@@ -164,6 +210,7 @@ export default {
   data () {
     return {
       activeName: 'BASIC',
+      editState: false,
       deptList: [],
       formData: {
         uid: '',
@@ -174,11 +221,6 @@ export default {
           name: ''
         },
         b2bRoleGroup: {
-          name: ''
-        }
-      },
-      originData: {
-        b2bDept: {
           name: ''
         }
       }
@@ -198,7 +240,7 @@ export default {
   }
 
   .personnel-detail-basic-row {
-    margin: 20px 0px 0px 20px;
+    margin-left: 20px;
   }
 
   .personnel-role-btn {

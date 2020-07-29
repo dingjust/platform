@@ -122,7 +122,28 @@
       return {
         formData: this.$store.state.ProductionOrderModule.formData,
         activeStatus: 'TO_BE_PRODUCED',
-        statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
+        statues: [{
+          code: 'TO_BE_PRODUCED',
+          name: '待生产'
+        }, {
+          code: 'PRODUCING',
+          name: '生产中'
+        }, {
+          code: 'TO_BE_DELIVERED',
+          name: '待出库'
+        }, {
+          code: 'TO_BE_RECONCILED',
+          name: '待对账'
+        }, {
+          code: 'COMPLETED',
+          name: '已完成'
+        }, {
+          code: 'CANCED',
+          name: '已取消'
+        }, {
+          code: '',
+          name: '全部'
+        }],
         queryFormData: {
           createdDateFrom: null,
           createdDateTo: null,
@@ -135,10 +156,6 @@
     },
     created() {
       this.onAdvancedSearch();
-      this.statues.push({
-        code: '',
-        name: '全部'
-      })
     },
     mounted() {
 
