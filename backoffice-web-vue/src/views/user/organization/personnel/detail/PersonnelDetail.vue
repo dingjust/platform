@@ -186,6 +186,7 @@ export default {
       });
       let data = {
         id: this.formData.id,
+        uid: this.formData.uid,
         name: this.formData.name,
         contactPhone: this.formData.contactPhone,
         b2bDept: {

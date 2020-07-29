@@ -64,7 +64,14 @@
       handleClick (code, index) {
         this.statuses.forEach(item => item.backgroundColor = 'background-color: #FFFFFF');
         this.statuses[index].backgroundColor = 'background-color: #ffd60c';
-        this.queryFormData.state = code;
+        if (code === '') {
+          this.$delete(this.queryFormData, 'enable');
+        } else if (code === 'enabled') {
+          this.$set(this.queryFormData, 'enable', false);
+        } else if (code === 'forbidden') {
+          this.$set(this.queryFormData, 'enable', true);
+        }
+        // this.queryFormData.state = code;
         this.onAdvancedSearch(0, 10);
       },
       onCreate () {
@@ -135,8 +142,7 @@
         queryFormData: {
           keyword: '',
           roleGroupName: '',
-          deptName: '',
-          state: ''
+          deptName: ''
         },
         statuses: [{
           code: '',
