@@ -44,15 +44,17 @@
       </el-table-column>
       <el-table-column :key="5" label="合作商" v-if="mode=='import'">
         <template slot-scope="scope" v-if="scope.row.originCooperator">
-          <span v-if="scope.row.originCooperator.type=='ONLINE'">{{scope.row.originCooperator.partner.name}}</span>
-          <span v-else>{{scope.row.originCooperator.partner.name?scope.row.originCooperator.partner.name:''}}</span>
+          <span
+            v-if="scope.row.originCooperator.type=='ONLINE'">{{scope.row.originCooperator.partner?scope.row.originCooperator.partner.name:''}}</span>
+          <span v-else>{{scope.row.originCooperator.partner?scope.row.originCooperator.partner.name:''}}</span>
         </template>
       </el-table-column>
-      <el-table-column :key="6" label="合作商" v-if="mode=='export'" prop="belongTo.name" />        
+      <el-table-column :key="6" label="合作商" v-if="mode=='export'" prop="belongTo.name" />
       <el-table-column :key="7" label="订单数量" prop="quantity" min-width="70"></el-table-column>
       <el-table-column :key="8" label="负责人" prop="productionLeader.name" min-width="60"></el-table-column>
-      <el-table-column :key="9"  label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating"></el-table-column>
-      <el-table-column :key="10"  label="创建时间" min-width="120">
+      <el-table-column :key="9" label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating">
+      </el-table-column>
+      <el-table-column :key="10" label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
@@ -119,9 +121,9 @@
         default: false
       },
       //类型, import为自己生产,export为外发生产
-      mode:{
-        type:String,
-        default:'import'
+      mode: {
+        type: String,
+        default: 'import'
       }
     },
     components: {},
