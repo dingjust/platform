@@ -106,7 +106,13 @@ const actions = {
     }
     commit('permissions', res.data);
     //存储登录用户username
-    localStorage.setItem('userName', username);
+
+    //分割子账号名称
+    let strArray=username.split(':');
+    localStorage.setItem('userName', strArray[0]);
+    if(strArray.length==2){
+      localStorage.setItem('employeeUserName', strArray[1]);
+    }    
     router.push('/');
   },
   async getProfile({
