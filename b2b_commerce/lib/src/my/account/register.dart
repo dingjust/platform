@@ -576,6 +576,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ..contactPerson = _contactPersonController.text
       ..contactPhone = _phoneController.text
       ..mobileNumber = _phoneController.text
+      ..captchaCode = _captchaController.text
       ..password = _passwordController.text;
 
     // 加载条
