@@ -11,26 +11,23 @@
       </el-row>
       <div class="pt-2"></div>
       <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onAllocating="onAllocating"
-                                @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating"/>
+        @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating" />
       <div>
         <div class="tag-container" v-if="!isAllocating">
           <el-row type="flex" justify="start" align="middle">
             <h6 style="margin-bottom: 0px">标签：</h6>
-            <el-button type="text" class="type-btn" :style="allBtnColor" 
-              @click="setQueryOrderType('')">全部
+            <el-button class="type-btn" :style="allBtnColor" @click="setQueryOrderType('')">全部
             </el-button>
-            <el-button type="text" class="type-btn" :style="outBtnColor" 
-              @click="setQueryOrderType('FOUNDRY_PRODUCTION')">外发
+            <el-button class="type-btn" :style="outBtnColor" @click="setQueryOrderType('FOUNDRY_PRODUCTION')">外发
             </el-button>
-            <el-button type="text" class="type-btn" :style="selfBtnColor"
-              @click="setQueryOrderType('SELF_PRODUCED')">自产</el-button>
+            <el-button class="type-btn" :style="selfBtnColor" @click="setQueryOrderType('SELF_PRODUCED')">自产</el-button>
           </el-row>
         </div>
         <el-tabs v-model="activeStatus" @tab-click="handleClick">
           <template v-for="(item, index) in statues">
             <el-tab-pane :name="item.code" :key="index" :label="tabName(item)">
               <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-                :vSelectRow.sync="selectRow" :isAllocating="isAllocating"/>
+                :vSelectRow.sync="selectRow" :isAllocating="isAllocating" />
             </el-tab-pane>
           </template>
         </el-tabs>
@@ -42,7 +39,7 @@
     </el-dialog>
     <el-dialog :visible.sync="allocatingVisible" width="40%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <allocating-form v-if="allocatingVisible" :slotData="selectRow" @onCallback="onCallback"></allocating-form>  
+      <allocating-form v-if="allocatingVisible" :slotData="selectRow" @onCallback="onCallback"></allocating-form>
     </el-dialog>
   </div>
 </template>
@@ -133,7 +130,7 @@
         });
         this.productionOrderStateCount();
       },
-      async productionOrderStateCount () {
+      async productionOrderStateCount() {
         const url = this.apis().productionOrderStateCount();
         const result = await this.$http.post(url, this.queryFormData);
         if (result['errors']) {
@@ -148,9 +145,9 @@
         }
         this.stateCount = result.data;
       },
-      tabName (tab) {
+      tabName(tab) {
         if (this.stateCount.hasOwnProperty(tab.code)) {
-          return tab.name +'('+ this.stateCount[tab.code] +')';  
+          return tab.name + '(' + this.stateCount[tab.code] + ')';
         }
         return tab.name;
       },
@@ -163,19 +160,19 @@
         }
         this.onAdvancedSearch();
       },
-      setQueryOrderType (flag) {
+      setQueryOrderType(flag) {
         this.queryFormData.type = flag;
         this.onAdvancedSearch();
       },
       // 分配跟单员
-      onAllocating () {
+      onAllocating() {
         if (this.selectRow.length <= 0) {
           this.$message.warning('请选择要进行分配操作的工单');
           return;
         }
         this.allocatingVisible = true;
       },
-      onCallback (flag) {
+      onCallback(flag) {
         if (flag) {
           this.onAdvancedSearch(0, 10);
         }
@@ -314,8 +311,7 @@
     mounted() {
 
     },
-    destroyed() {
-    }
+    destroyed() {}
   };
 
 </script>

@@ -11,7 +11,7 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="4">
           <div class="title">
-            <h6>收货单详情</h6>
+            <h6>退货单详情</h6>
           </div>
         </el-col>
         <el-col :span="6">
@@ -34,18 +34,21 @@
               <h6 class="basic-label">产品名称：{{formData.product.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
+              <h6 class="basic-label">退货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">收货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
             <el-col :span="8">
-              <h6 class="basic-label">发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
+              <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
+              <h6 class="basic-label">退货人：{{formData.creator.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">发货负责人：{{formData.merchandiser.name}}</h6>
+              <h6 class="basic-label">联系方式：{{formData.creator.contactPhone}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
@@ -94,7 +97,8 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="8" :offset="2">
-          发货单：<el-button type="text" @click="onShipDetail" v-if="formData.logisticsSheet">{{formData.logisticsSheet.code}}</el-button>
+          发货单：<el-button type="text" @click="onShipDetail" v-if="formData.logisticsSheet">
+            {{formData.logisticsSheet.code}}</el-button>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">

@@ -83,14 +83,14 @@
       </el-table-column>
       <el-table-column label="差异数/复议数/通过数">
         <template slot-scope="scope">
-          <span>{{scope.row.diffQuantity?scope.row.diffQuantity:0}}/{{scope.row.reconsiderQuantity?scope.row.reconsiderQuantity:0}}/</span>
+          <span>{{scope.row.diffQuantity?scope.row.diffQuantity:0}}/{{getReconsiderQuantity(scope.row)}}/{{getReconsiderPassQuantity(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
+      <!-- <el-table-column label="状态">
         <template slot-scope="scope">
           <span>{{getEnum('ShippingSheetState', scope.row.state)}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
@@ -152,8 +152,8 @@
       },
       onProductionOrderDetail(id) {
         // this.$router.push('/sales/productionOrder/' + id);
-        this.openId=id;
-        this.dialogVisible=true;
+        this.openId = id;
+        this.dialogVisible = true;
       },
       onReceiptDetail(id) {
         this.$router.push('/receipt/orders/' + id);
@@ -213,18 +213,49 @@
           });
         }
         return result;
-      }
+      },
+      //复议数
+      getReconsiderQuantity(row) {
+        let result = 0;
+        if (row.reconsiderSheets) {
+          row.reconsiderSheets.forEach(sheet => {
+            if (sheet.reconsiderQuantity) {
+              result += sheet.reconsiderQuantity;
+            }
+          });
+        }
+        return result;
+      },
+      //复议通过
+      getReconsiderPassQuantity(row) {
+        let result = 0;
+        if (row.reconsiderSheets) {
+          row.reconsiderSheets.forEach(sheet => {
+            if (sheet.reconsiderPassQuantity) {
+              result += sheet.reconsiderPassQuantity;
+            }
+          });
+        }
+        return result;
+      },
     },
     data() {
       return {
         selectionRow: '',
-        openId:'',
-        dialogVisible:false
+        openId: '',
+        dialogVisible: false
       }
     },
     create() {
 
-    }
+    },
+    watch: {
+      'page.content': function (n, o) {
+        this.$nextTick(() => {
+          this.$refs.resultTable.doLayout()
+        })
+      },
+    },
   }
 
 </script>

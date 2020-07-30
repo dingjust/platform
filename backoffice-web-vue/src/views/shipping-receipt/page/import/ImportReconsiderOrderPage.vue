@@ -116,6 +116,9 @@
                 key: "差异数"
               },
               {
+                key: "发货单状态"
+              },
+              {
                 key: "发货操作",
                 props: {
                   operationName: '复议'
@@ -171,6 +174,9 @@
                 }
               },
               {
+                key: "发货单状态"
+              },
+              {
                 key: "复议单操作"
               }
             ],
@@ -218,6 +224,9 @@
                 props: {
                   diffProp: "logisticsSheet.diffQuantity",
                 }
+              },
+              {
+                key: "发货单状态"
               },
               {
                 key: "复议单操作"
@@ -269,6 +278,9 @@
                 }
               },
               {
+                key: "发货单状态"
+              },
+              {
                 key: "复议单操作"
               }
             ],
@@ -309,6 +321,9 @@
                 props: {
                   prop: "logisticsSheet.diffQuantity"
                 }
+              },
+              {
+                key: "发货单状态"
               },
               {
                 key: "发货操作"

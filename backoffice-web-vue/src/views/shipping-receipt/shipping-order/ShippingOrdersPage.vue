@@ -129,7 +129,7 @@
       },
       handleClick(tab, event) {
         //已完成状态为 已对账和完成状态
-        if (tab.label == '已完成') {
+        if (tab.name == '已完成') {
           this.queryFormData.states = ['RECONCILED', 'COMPLETED'];
         } else {
           this.queryFormData.states = tab.name;

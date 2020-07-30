@@ -39,7 +39,7 @@
           <span v-if="mode=='export'">{{scope.row.originMerchandiser?scope.row.originMerchandiser.name:''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退货数/退货已收数">
+      <el-table-column label="退货数/收退数">
         <template slot-scope="scope">
           <span>{{scope.row.totalQuantity}}/{{scope.row.state=='RETURN_RECEIVED'?scope.row.totalQuantity:0}}</span>
         </template>
