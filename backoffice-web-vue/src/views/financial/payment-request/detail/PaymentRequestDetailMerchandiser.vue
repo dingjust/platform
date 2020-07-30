@@ -12,9 +12,9 @@
             <h6>付款申请单</h6>
           </div>
         </el-col>
-        <!-- <el-col :span="6"> -->
-          <!-- <h6 style="color: #F56C6C">申请金额超过未付款金额</h6> -->
-        <!-- </el-col> -->
+        <el-col :span="6">
+          <h6 style="color: #F56C6C" v-if="showTips">申请金额超过未付款金额</h6>
+        </el-col>
         <el-col :span="4">
           <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
@@ -88,6 +88,11 @@
           </el-row>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="center" v-if="formData.state === 'PAID'">
+        <el-col :span="23">
+          <payment-records-list :formData="formData" :tableData="[formData.paymentRecords]" />
+        </el-col>
+      </el-row>
       <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canAudit">
         <el-col :span="3">
           <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
@@ -105,6 +110,7 @@
 
 <script>
   import {PersonnelSelection, ImagesUpload} from '@/components/index.js'
+  import { PaymentRecordsList } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
   export default {
     name: 'PaymentRequestDetailMerchandiser',
@@ -112,7 +118,8 @@
     components: {
       PersonnelSelection,
       ImagesUpload,
-      PaymentForm
+      PaymentForm,
+      PaymentRecordsList
     },
     computed: { 
       canAudit: function () {
@@ -168,6 +175,12 @@
       },
       canPay: function () {
         return this.formData.state === 'WAIT_TO_PAY';
+      },
+      showTips: function () {
+        if (this.preApplyAmount != '') {
+          return this.formData.requestAmount > this.preApplyAmount;
+        }
+        return false;
       }
     },
     methods: {
@@ -183,6 +196,28 @@
           return;
         }
         this.formData = result.data;
+        this.countRequestAmount(result.data.productionOrder.id);
+      },
+      async countRequestAmount (id) {
+        const url = this.apis().getRequestAmount(id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) - 
+                              this.parseFloatNotParNaN(result.data.paidAmount);
+      },
+      parseFloatNotParNaN (data) {
+        if (isNaN(parseFloat(data))) {
+          return 0;
+        } else {
+          return parseFloat(data);
+        }
       },
       callback () {
         this.paymentVisible = !this.paymentVisible;
@@ -314,6 +349,7 @@
     data () {
       return {
         paymentVisible: false,
+        preApplyAmount: '',
         formData: {
           productionOrder: {
             code: '',
