@@ -40,7 +40,7 @@
         </el-row>
       </div>
       <b-navbar-nav class="ml-auto">
-        <el-dropdown style="margin-right:50px;" @command="handleCommand">
+        <!-- <el-dropdown style="margin-right:50px;" @command="handleCommand">
         <span class="el-dropdown-link navbar-dropdown">
           快捷功能<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
@@ -49,7 +49,7 @@
             <el-dropdown-item v-if="hasper(permission.purchaseOrderUniqueCodeImport)" command="2">唯一码导入</el-dropdown-item>
             <el-dropdown-item command="3">认证中心</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown>
+        </el-dropdown> -->
         <div class="input">
           <el-input placeholder="搜索..." prefix-icon="el-icon-search" v-model="input2" size="small"
                     id="header-input__inner">
