@@ -156,23 +156,6 @@ Vue.mixin({
         return '';
       }
     },
-    //
-    // hasPermission (authority) {
-    //   if (authority && authority instanceof Array && authority.length) {
-    //     const roles = store.getters['PermissionModule/permissions'];
-    //     const permissionRoles = authority;
-    //     const flag = roles.some(role => {
-    //       return permissionRoles.includes(role);
-    //     });
-    //     if (!flag) {
-    //       return false;
-    //     }
-    //     return true;
-    //   } else {
-    //     this.$message.error(`need roles! Like v-permission="['admin','editor']"`);
-    //     return false;
-    //   }
-    // }
   }
 });
 /* eslint-disable no-new */

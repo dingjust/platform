@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="!hasPermission">
-      <div @click.stop="onCheck">
+      <div @click.capture="onCheck">
         <slot></slot>
       </div>
     </template>
@@ -12,6 +12,10 @@
 </template>
 
 <script>
+  import {
+    check
+  } from "./auth";
+
   export default {
     name: 'Authorized',
     props: {
@@ -24,13 +28,13 @@
     },
     computed: {
       hasPermission: function () {
-        return false;
+        return check(this.permission);
       }
     },
     methods: {
       onCheck() {
-        this.$message('这是一条消息提示');
         event.stopPropagation();
+        this.$message('没有权限操作');
       }
     },
     data() {
