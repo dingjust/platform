@@ -1,6 +1,5 @@
 export default {
-  items: [
-    {
+  items: [{
       name: '首页',
       url: '/dashboard',
       icon: 'el-icon-s-home'
@@ -8,19 +7,23 @@ export default {
     {
       name: '任务中心',
       icon: 'el-icon-notebook-1',
-      children: [{
-        name: '待我处理',
-        url: '/task/handle',
-        icon: 'iconNone'
-      }, {
+      children: [
+      //   {
+      //   name: '待我处理',
+      //   url: '/task/handle',
+      //   icon: 'iconNone'
+      // }, 
+      {
         name: '我的审批',
         url: '/task/approval',
         icon: 'iconNone'
-      }, {
-        name: '待我分配',
-        url: '/task/assign',
-        icon: 'iconNone'
-      }]
+      }, 
+      // {
+      //   name: '待我分配',
+      //   url: '/task/assign',
+      //   icon: 'iconNone'
+      // }
+    ]
     },
     {
       name: '订单管理',
@@ -31,42 +34,43 @@ export default {
       }, {
         name: '外接订单',
         url: '/sales/pending-order'
-      },{
+      }, {
         name: '销售订单',
         url: '/order/sales',
         icon: 'iconNone'
-      },]
+      }, ]
     },
     {
       name: '生产管理',
       icon: 'el-icon-notebook-2',
       children: [
-      //   {
-      //   name: '工单分配',
-      //   url: '/sales/allocating/productionOrder'
-      // },
-      {
-        name: '生产工单',
-        url: '/sales/productionOrder',
-      }, {
-        name: '生产进度工单',
-        url: '/sales/progressOrder'
-      }, {
-        name: '发货任务',
-        url: '/shipping/tasks',
-      }, {
-        name: '发货管理',
-        url: '/shipping/shipping-receipt-sheet',
-      }, {
-        name: '差异复议',
-        url: '/shipping/reconsider-order',
-      }, {
-        name: '对账任务',
-        url: '/reconciliation/tasks/import',
-      },{
-        name: '对账管理',
-        url: '/shipping/reconciliation-manage',
-      }]
+        //   {
+        //   name: '工单分配',
+        //   url: '/sales/allocating/productionOrder'
+        // },
+        {
+          name: '生产工单',
+          url: '/sales/productionOrder',
+        }, {
+          name: '生产进度工单',
+          url: '/sales/progressOrder'
+        }, {
+          name: '发货任务',
+          url: '/shipping/tasks',
+        }, {
+          name: '发货管理',
+          url: '/shipping/shipping-receipt-sheet',
+        }, {
+          name: '差异复议',
+          url: '/shipping/reconsider-order',
+        }, {
+          name: '对账任务',
+          url: '/reconciliation/tasks/import',
+        }, {
+          name: '对账管理',
+          url: '/shipping/reconciliation-manage',
+        }
+      ]
     },
     {
       name: '外发管理',
@@ -108,7 +112,11 @@ export default {
         name: '款式管理',
         url: '/product/sample',
         icon: 'iconNone'
-      }]
+      }, {
+        name: '物料管理',
+        url: '/product/material',
+        icon: 'iconNone'
+      }, ]
     },
     {
       name: '财务管理',
@@ -126,23 +134,6 @@ export default {
         name: '付款申请单(跟单)',
         url: '/financial/merchandiser/paymentRequest'
       }]
-    },
-    {
-      name: '资料中心',
-      icon: 'el-icon-tickets',
-      children: [{
-        name: '供应商资料',
-        url: '/account/cooperator',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['COMPANY_COOPERATOR']
-        }
-      }, {
-        name: '物料管理',
-        url: '/product/material',
-        icon: 'iconNone'
-      }, ]
     },
     {
       name: '企业管理',
@@ -180,16 +171,25 @@ export default {
             permissions: ['COMPANY_B2BCUSTOMER']
           }
         },
-         {
-           name: '组织架构',
-           url: '/account/organization',
-           icon: 'iconNone'
-         },
-         {
-           name: '角色',
-           url: '/account/organizationRole',
-           icon: 'iconNone'
-         },
+        {
+          name: '组织架构',
+          url: '/account/organization',
+          icon: 'iconNone'
+        },
+        {
+          name: '角色',
+          url: '/account/organizationRole',
+          icon: 'iconNone'
+        },
+        {
+          name: '供应商管理',
+          url: '/account/cooperator',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['COMPANY_COOPERATOR']
+          }
+        },
       ]
     },
     {
@@ -313,9 +313,9 @@ export default {
         //   icon: 'iconNone'
         // }
         // {
-          //     name: '采购任务',
-          //     url: '/sales/purchaseTask'
-          //   }
+        //     name: '采购任务',
+        //     url: '/sales/purchaseTask'
+        //   }
       ]
     }
   ]

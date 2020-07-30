@@ -34,18 +34,21 @@
               <h6 class="basic-label">产品名称：{{formData.product.name}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" style="padding-bottom: 10px">
-            <el-col :span="8">
               <h6 class="basic-label">发货方：{{formData.shipParty!=null?formData.shipParty.name:''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6 class="basic-label">收货方：{{formData.receiveParty!=null?formData.receiveParty.name:''}}</h6>
             </el-col>
+          </el-row>
+          <el-row type="flex" style="padding-bottom: 10px">
+            <el-col :span="8">
+              <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
+            </el-col>
             <el-col :span="8">
               <h6 class="basic-label">发货负责人：{{formData.merchandiser.name}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">联系方式：{{formData.merchandiser.contactPhone?formData.merchandiser.contactPhone:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
@@ -66,12 +69,12 @@
             <el-col :span="8">
               <h6 class="basic-label">物流方式：{{formData.offlineConsignorMode}}</h6>
             </el-col>
-            <el-col :span="8">
+            <!-- <el-col :span="8">
               <h6 class="basic-label">送货人：{{formData.offlineConsignorName}}</h6>
             </el-col>
             <el-col :span="8">
               <h6 class="basic-label">联系方式：{{formData.offlineConsignorPhone}}</h6>
-            </el-col>
+            </el-col> -->
           </el-row>
         </el-col>
       </el-row>
@@ -113,8 +116,8 @@
       </el-row>
     </el-card>
     <el-dialog :visible.sync="shippingDetailVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">      
-      <shipping-orders-detail :id="formData.logisticsSheet.id" v-if="shippingDetailVisible"/>
+      :close-on-click-modal="false">
+      <shipping-orders-detail :id="formData.logisticsSheet.id" v-if="shippingDetailVisible" />
     </el-dialog>
   </div>
 </template>
@@ -140,7 +143,7 @@
       ColorSizeTable,
       ShippingOrdersDetail
     },
-    computed: {  
+    computed: {
       //是收货方
       isReceiveParty: function () {
         if (this.formData.receiveParty != null && this.currentUser != null) {

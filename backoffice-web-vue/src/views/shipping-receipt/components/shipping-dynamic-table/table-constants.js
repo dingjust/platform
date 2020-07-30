@@ -8,6 +8,7 @@ import {
   ReconciliationDate,
   ReconciliationState,
   ReconciliationDetail,
+  ReconciliationAmountDue,
   RECONCILIATION_COMPONENT_NAME_MAP
 } from './reconciliation-table-constants';
 
@@ -28,7 +29,7 @@ import ReceiptOrderDetail from '../../receipt-order/details/ReceiptOrderDetail'
 
 const ShippingOrderCode = {
   template: `
-  <el-table-column label="发货单号" :prop="prop" min-width="110px" :key="sortKey"></el-table-column>
+  <el-table-column label="发货单" :prop="prop" min-width="110px" :key="sortKey"></el-table-column>
   `,
   props: {
     prop: {
@@ -165,9 +166,9 @@ const ShipState = {
 }
 
 
-const RelationOrder = { 
+const RelationOrder = {
   template: `
-  <el-table-column label="生产工单" min-width="120px" :key="sortKey">
+  <el-table-column :label="label" min-width="120px" :key="sortKey">
   <template slot-scope="scope">
     <el-button type="text" v-if="getProductionOrder(scope.row)!=null"
       @click="onProductionOrderDetail(scope.row)">{{getProductionOrder(scope.row).code}}
@@ -185,6 +186,10 @@ const RelationOrder = {
     },
     sortKey: {
       default: 10
+    },
+    label:{
+      type:String,
+      default:'生产工单'
     }
   },
   components: {
@@ -317,7 +322,7 @@ const UnitPrice = {
 
 const ShipNum = {
   template: `
-  <el-table-column label="发货数量" :key="sortKey">
+  <el-table-column label="发货数" :key="sortKey">
     <template slot-scope="scope">
       <span>{{getTotalNum(scope.row)}}</span>
     </template>
@@ -559,7 +564,7 @@ const ReceiptDate = {
 }
 
 const ReturnOrder = {
-  template: `<el-table-column label="退货单号" :prop="prop" :key="sortKey" ></el-table-column>`,
+  template: `<el-table-column label="退货单" :prop="prop" :key="sortKey" ></el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -699,8 +704,8 @@ const ShippingOperation = {
     sortKey: {
       default: 10
     },
-    operationName:{
-      type:String,
+    operationName: {
+      type: String,
       default: '详情'
     }
   },
@@ -760,7 +765,7 @@ const ReturnOperation = {
 // 复议单号
 const ReconsiderOrderCode = {
   template: `
-  <el-table-column label="复议单号" :prop="prop" min-width="120"  :key="sortKey" ></el-table-column>
+  <el-table-column label="复议单" :prop="prop" min-width="120"  :key="sortKey" ></el-table-column>
 `,
   props: {
     prop: {
@@ -976,7 +981,23 @@ const DifferentReconsiderAdopt = {
       return result;
     },
     getAdopt(row) {
-      return 0;
+      let result = 0;
+      try {
+        let sheets = eval('row.' + this.reconsiderProp);
+        if (sheets != null) {
+          sheets.forEach(element => {
+            if (element.reconsiderPassQuantity != null) {
+              let num = parseInt(element.reconsiderPassQuantity);
+              if (!Number.isNaN(num)) {
+                result += num;
+              }
+            }
+          });
+        }
+      } catch (e) {
+        // TODO 空值处理
+      }
+      return result;
     }
   }
 }
@@ -1041,6 +1062,35 @@ const ReturnPerson = {
 //   },
 // }
 
+// 供应商(发货方)
+const SupplierShipParty = {
+  template: `<el-table-column label="供应商" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'shipParty.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  }
+}
+
+// 供应商(收货方)
+const SupplierReceParty = {
+  template: `<el-table-column label="供应商" :prop="prop" :key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'receiveParty.name'
+    },
+    sortKey: {
+      default: 10
+    }
+  }
+}
+
+
 const MAIN_COMPONENT_NAME_MAP = {
   // '多选': 'selection',
   '发货单号': 'shipping-order-code',
@@ -1083,6 +1133,8 @@ const MAIN_COMPONENT_NAME_MAP = {
   // 退货
   '退货方': 'return-party',
   '退货人': 'return-person',
+  '发货供应商': 'supplier-ship-party',
+  '收货供应商': 'supplier-rece-party'
 }
 
 const COMPONENT_NAME_MAP = Object.assign(MAIN_COMPONENT_NAME_MAP, RECONCILIATION_COMPONENT_NAME_MAP);
@@ -1128,6 +1180,8 @@ export {
   ReturnDate,
   DifferentReconsider,
   DifferentReconsiderAdopt,
+  SupplierShipParty,
+  SupplierReceParty,
   //对账单
   ReconciliationOrderCode,
   ReconciliationShipOrders,
@@ -1138,6 +1192,7 @@ export {
   ReconciliationDate,
   ReconciliationState,
   ReconciliationDetail,
+  ReconciliationAmountDue,
   //MAP
   COMPONENT_NAME_MAP
 }

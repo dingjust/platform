@@ -22,17 +22,28 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="" min-width="110px">
+      <el-table-column :label="mode=='import'?'生产工单':'关联外发工单'" min-width="110px">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.productionTaskOrder!=null"
             @click="onProductionOrderDetail(scope.row.productionTaskOrder.id)">{{scope.row.productionTaskOrder.code}}
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="发货人" prop="creator.name"></el-table-column>
-      <el-table-column label="发货数量" min-width="70px">
+      <el-table-column label="合作商">
         <template slot-scope="scope">
-          <span>{{getTotalNum(scope.row)}}</span>
+          <span v-if="mode=='import'">{{scope.row.receiveParty?scope.row.receiveParty.name:''}}</span>
+          <span v-if="mode=='export'">{{scope.row.shipParty?scope.row.shipParty.name:''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="跟单员">
+        <template slot-scope="scope">
+          <span v-if="mode=='import'">{{scope.row.merchandiser?scope.row.merchandiser.name:''}}</span>
+          <span v-if="mode=='export'">{{scope.row.originMerchandiser?scope.row.originMerchandiser.name:''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="发货数/收货数" min-width="70px">
+        <template slot-scope="scope">
+          <span>{{getTotalNum(scope.row)}}/{{countTotalSheetsNum(scope.row.receiptSheets)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="发货日期">
@@ -40,7 +51,7 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收货单" min-width="110px">
+      <!-- <el-table-column label="收货单" min-width="110px">
         <template slot-scope="scope" v-if="scope.row.receiptSheets!=null">
           <template v-for="(sheet,sheetIndex) in scope.row.receiptSheets">
             <el-row :key="'sheet'+sheetIndex" type="flex">
@@ -64,22 +75,22 @@
             </el-row>
           </template>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="退货数/退货已收数">
         <template slot-scope="scope">
           <span>{{scope.row.returnQuantity}}/{{scope.row.returnReceivedQuantity}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="差异数">
+      <el-table-column label="差异数/复议数/通过数">
         <template slot-scope="scope">
-          <span>{{scope.row.diffQuantity}}</span>
+          <span>{{scope.row.diffQuantity?scope.row.diffQuantity:0}}/{{getReconsiderQuantity(scope.row)}}/{{getReconsiderPassQuantity(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
+      <!-- <el-table-column label="状态">
         <template slot-scope="scope">
           <span>{{getEnum('ShippingSheetState', scope.row.state)}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
@@ -91,10 +102,16 @@
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <production-order-detail :id="openId" v-if="dialogVisible" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import ProductionOrderDetail from '../../../order/salesProduction/production-order/details/ProductionOrderDetail'
+
   export default {
     name: 'ShippingOrdersList',
     props: {
@@ -105,10 +122,14 @@
       canCreateReceipt: {
         type: Boolean,
         default: false
+      },
+      mode: {
+        type: String,
+        default: 'import'
       }
     },
     components: {
-
+      ProductionOrderDetail
     },
     computed: {
 
@@ -130,7 +151,9 @@
         });
       },
       onProductionOrderDetail(id) {
-        this.$router.push('/sales/productionOrder/' + id);
+        // this.$router.push('/sales/productionOrder/' + id);
+        this.openId = id;
+        this.dialogVisible = true;
       },
       onReceiptDetail(id) {
         this.$router.push('/receipt/orders/' + id);
@@ -164,12 +187,14 @@
       //统计单数
       countTotalSheetsNum(sheets) {
         let result = 0;
-        sheets.forEach(element => {
-          let num = parseInt(element.totalQuantity);
-          if (!Number.isNaN(num)) {
-            result += num;
-          }
-        });
+        if (sheets != null) {
+          sheets.forEach(element => {
+            let num = parseInt(element.totalQuantity);
+            if (!Number.isNaN(num)) {
+              result += num;
+            }
+          });
+        }
         return result;
       },
       //统计发货数量
@@ -188,16 +213,49 @@
           });
         }
         return result;
-      }
+      },
+      //复议数
+      getReconsiderQuantity(row) {
+        let result = 0;
+        if (row.reconsiderSheets) {
+          row.reconsiderSheets.forEach(sheet => {
+            if (sheet.reconsiderQuantity) {
+              result += sheet.reconsiderQuantity;
+            }
+          });
+        }
+        return result;
+      },
+      //复议通过
+      getReconsiderPassQuantity(row) {
+        let result = 0;
+        if (row.reconsiderSheets) {
+          row.reconsiderSheets.forEach(sheet => {
+            if (sheet.reconsiderPassQuantity) {
+              result += sheet.reconsiderPassQuantity;
+            }
+          });
+        }
+        return result;
+      },
     },
     data() {
       return {
-        selectionRow: ''
+        selectionRow: '',
+        openId: '',
+        dialogVisible: false
       }
     },
     create() {
 
-    }
+    },
+    watch: {
+      'page.content': function (n, o) {
+        this.$nextTick(() => {
+          this.$refs.resultTable.doLayout()
+        })
+      },
+    },
   }
 
 </script>

@@ -20,7 +20,7 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
+          <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" :mode="mode"/>
         </el-tab-pane>
       </template>
     </el-tabs>

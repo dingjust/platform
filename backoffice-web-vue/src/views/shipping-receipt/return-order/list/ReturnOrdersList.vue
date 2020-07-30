@@ -20,11 +20,31 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="关联发货单"></el-table-column>
-      <el-table-column label="退货人" prop="creator.name"></el-table-column>
-      <el-table-column label="单价"></el-table-column>
-      <el-table-column label="退货数量" prop="totalQuantity" />
-      <el-table-column label="退货总额" prop="" />
+      <el-table-column :label="mode=='import'?'发货单':'关联发货单'" min-width="110px">
+        <template slot-scope="scope">
+          <el-button type="text" v-if="scope.row.logisticsSheet!=null"
+            @click="onShipDetail(scope.row.logisticsSheet.id)">{{scope.row.logisticsSheet.code}}
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="合作商">
+        <template slot-scope="scope">
+          <span v-if="mode=='import'">{{scope.row.receiveParty?scope.row.receiveParty.name:''}}</span>
+          <span v-if="mode=='export'">{{scope.row.shipParty?scope.row.shipParty.name:''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="跟单员">
+        <template slot-scope="scope">
+          <span v-if="mode=='import'">{{scope.row.merchandiser?scope.row.merchandiser.name:''}}</span>
+          <span v-if="mode=='export'">{{scope.row.originMerchandiser?scope.row.originMerchandiser.name:''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="退货数/收退数">
+        <template slot-scope="scope">
+          <span>{{scope.row.totalQuantity}}/{{scope.row.state=='RETURN_RECEIVED'?scope.row.totalQuantity:0}}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="退货总额" prop="" /> -->
       <el-table-column label="退货日期">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
@@ -46,15 +66,30 @@
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <shipping-orders-detail :id="openId" v-if="dialogVisible" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import ShippingOrdersDetail from '../../shipping-order/details/ShippingOrdersDetail'
+
   export default {
     name: 'ReturnOrdersList',
-    props: ['page'],
+    props: {
+      page: {
+        type: Object,
+        required: true
+      },
+      mode: {
+        type: String,
+        default: 'import'
+      }
+    },
     components: {
-
+      ShippingOrdersDetail
     },
     computed: {
 
@@ -74,11 +109,16 @@
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
+      },
+      onShipDetail(id) {
+        this.openId = id;
+        this.dialogVisible = true;
       }
     },
     data() {
       return {
-
+        dialogVisible: false,
+        openId: '',
       }
     },
     create() {

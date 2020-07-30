@@ -4,16 +4,16 @@
       @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch" />
     <el-row type="flex" justify="end">
       <el-col :span="3">
-        <el-button type="text" class="list-btn" @click="shippingListVisible = !shippingListVisible">发货单</el-button>
+        <el-button class="list-btn" @click="shippingListVisible = !shippingListVisible">发货单</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="text" class="list-btn" @click="receiptListVisible = !receiptListVisible">收货单</el-button>
+        <el-button class="list-btn" @click="receiptListVisible = !receiptListVisible">收货单</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="text" class="list-btn" @click="returnListVisible = !returnListVisible">退货单</el-button>
+        <el-button class="list-btn" @click="returnListVisible = !returnListVisible">退货单</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="text" class="list-btn" @click="reconsiderListVisible = !reconsiderListVisible">复议单</el-button>
+        <el-button class="list-btn" @click="reconsiderListVisible = !reconsiderListVisible">复议单</el-button>
       </el-col>
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -21,7 +21,7 @@
         <el-tab-pane :label="tabName(map)" :name="status" :key="status">
           <shipping-dynamic-table :page="page" :columns="map.columns" @onAdvancedSearch="onAdvancedSearch" />
         </el-tab-pane>
-      </template> 
+      </template>
     </el-tabs>
     <el-dialog :visible.sync="shippingListVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -160,7 +160,7 @@
             break;
             //退货单
           case this.apis().returnOrderList():
-            if (!this.stateCount.return.hasOwnProperty(map.status)) {        
+            if (!this.stateCount.return.hasOwnProperty(map.status)) {
               break;
             }
             tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.return[map.status] +

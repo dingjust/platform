@@ -17,14 +17,15 @@
         :unitPrice="openAccountingSheetUnitPrice" v-if="viewDialogVisible" :readOnly="readOnly"
         :needMaterialAccounting="needMaterialsSpec" />
     </el-dialog>
-    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="setProgressPlan"/>
+    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="setProgressPlan" />
     </el-dialog>
     <el-form :model="appendProductForm" ref="appendProductForm" label-position="left" :disabled="readOnly">
       <template v-for="(entry, productIndex) in appendProductForm.sampleList">
         <div :key="productIndex">
           <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20">
-            <el-col :span="16">
+            <el-col :span="20">
               <el-row type="flex" align="middle">
                 <el-col :span="14" style="padding-top:25px">
                   <el-form-item :prop="'sampleList.' + productIndex + '.product.name'" label="产品名" label-width="100px"
@@ -32,10 +33,11 @@
                     <el-input placeholder="名称" v-model="entry.product.name" size="mini" :disabled="true"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="2">
+                <el-col :span="4">
                   <el-button style="margin-left: 10px" @click="appendSample(productIndex)" size="mini"
                     :disabled="isUpdate">点击选择</el-button>
                 </el-col>
+                <el-col :span="2"><span style="color:#ff1744">(选择款式)</span></el-col>
               </el-row>
             </el-col>
             <el-col :span="2">
@@ -116,14 +118,15 @@
             <el-col :span="8" v-if="orderType == 'SALES_ORDER'">
               <el-row type="flex" align="top">
                 <el-col :span="16">
-                  <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案" label-width="100px"
-                    :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true"></el-input>
+                  <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案"
+                    label-width="100px" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true">
+                    </el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-button style="margin-left: 10px;padding-top: 10px" @click="appendProgressPlan(productIndex)" size="mini"
-                    :disabled="isUpdate">点击选择</el-button>
+                  <el-button style="margin-left: 10px;padding-top: 10px" @click="appendProgressPlan(productIndex)"
+                    size="mini" :disabled="isUpdate">点击选择</el-button>
                 </el-col>
               </el-row>
             </el-col>
@@ -256,8 +259,7 @@
             product: {
 
             },
-            progressPlan: {
-            },
+            progressPlan: {},
             colorSizeEntries: [],
             unitPrice: '',
             deliveryDate: '',
@@ -293,7 +295,7 @@
         this.currentProductIndex = index;
         this.progressPlanVisible = true;
       },
-      setProgressPlan (val) {
+      setProgressPlan(val) {
         let row = {
           name: val.name,
           remarks: val.remarks,
@@ -311,7 +313,7 @@
           })
         })
         this.appendProductForm.sampleList[this.currentProductIndex].progressPlan = row;
-        this.progressPlanVisible = false; 
+        this.progressPlanVisible = false;
       },
       onSelectSample(data) {
         //构建颜色尺码行

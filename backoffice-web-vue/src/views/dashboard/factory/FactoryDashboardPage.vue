@@ -11,9 +11,9 @@
         <el-row>
           <business-card/>
         </el-row>
-        <el-row>
+        <!-- <el-row>
           <toolbar-card/>
-        </el-row>
+        </el-row> -->
         <el-row>
           <chart-card/>
         </el-row>

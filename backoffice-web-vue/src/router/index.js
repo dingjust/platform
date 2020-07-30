@@ -128,8 +128,8 @@ const router = new Router({
                   name: '物料管理',
                   component: () => import( /* webpackChunkName: 'material' */ '@/views/product/material/MaterialPage'),
                   meta: {
-                    breadCrumbParentUrl:'/account/cooperator',
-                    breadCrumbParentName:'资料中心',
+                    breadCrumbParentUrl:'/product',
+                    breadCrumbParentName:'产品中心',
                     breadCrumbSkip:1
                   }
                 },
@@ -726,8 +726,8 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     permissions: ['COMPANY_COOPERATOR'],
-                    breadCrumbParentUrl:'/account/cooperator',
-                    breadCrumbParentName:'资料中心',
+                    breadCrumbParentUrl:'/account/index',
+                    breadCrumbParentName:'企业管理',
                     breadCrumbSkip:1
                   }
                 }

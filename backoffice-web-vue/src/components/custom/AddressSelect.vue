@@ -1,6 +1,13 @@
 <template>
   <div class="animated fadeIn">
-    <h6 class="product-info">选择地址</h6>
+    <el-row type="flex">
+      <el-col :span="8">
+        <h6 class="product-info">选择地址</h6>
+      </el-col>
+      <el-col :span="4">
+        <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+      </el-col>
+    </el-row>
     <el-table ref="resultTable" stripe :data="address" highlight-current-row @current-change="handleCurrentChange"
       @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="32"></el-table-column> -->
@@ -29,12 +36,21 @@
     <el-row type="flex" justify="center" style="margin-top:20px;">
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-row>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <address-details-page :slotData="form" v-if="dialogVisible" @callback="oncallback"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import AddressDetailsPage from '../../views/user/address/details/AddressDetailsPage';
+
   export default {
     name: 'AddressSelect',
+    components: {
+      AddressDetailsPage
+    },
     computed: {
 
     },
@@ -61,6 +77,15 @@
       },
       onSure() {
         this.$emit('onSelect', this.selectAddress);
+      },
+      onNew() {
+        // this.fn.openSlider('新建地址', AddressDetailsPage, this.form);
+        this.form = Object.assign({}, this.formData);
+        this.dialogVisible=true;
+      },
+      oncallback(){
+        this.dialogVisible=false;
+        this.onSearch();
       }
     },
     created() {
@@ -70,7 +95,28 @@
       return {
         address: [],
         multipleSelection: [],
-        selectAddress: ''
+        selectAddress: '',
+        dialogVisible: false,
+        form: {},
+        formData: {
+          "id": null,
+          "fullname": "",
+          "cellphone": "",
+          "region": {
+            "isocode": "",
+            "name": ""
+          },
+          "city": {
+            "code": "",
+            "name": ""
+          },
+          "cityDistrict": {
+            "code": "",
+            "name": ""
+          },
+          "line1": "",
+          "defaultAddress": false
+        }
       }
     }
   }

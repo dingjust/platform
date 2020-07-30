@@ -1,24 +1,28 @@
 <template>
   <div class="animated fadeIn">
+    <el-row type="flex" style="margin-bottom:10px">
+      <div class="title-box">
+        款式选择:
+      </div>
+    </el-row>
     <el-row type="flex" :gutter="20">
       <el-col :span="8">
-        <el-input v-model="keyword" placeholder="根据产品名/编号/款号"
-                  @keyup.enter.native="onSubmit"></el-input>
+        <el-input v-model="keyword" placeholder="根据产品名/编号/款号" @keyup.enter.native="onSubmit"></el-input>
       </el-col>
       <el-col :span="16">
         <el-button type="text" @click="onSearch">查找</el-button>
-        <el-button type="text" @click="onNew">创建产品</el-button>
+        <el-button type="text" @click="onNew">创建款式</el-button>
         <el-button class="sample-slelct-btn" size="mini" @click="onConfirm">确定</el-button>
       </el-col>
     </el-row>
     <el-row type="flex">
       <el-table ref="resultTable" stripe :data="page.content" highlight-current-row
-                @current-change="handleCurrentChange" :height="autoHeight" :row-key="getRowKeys">
-<!--        <el-table-column type="selection" width="55"></el-table-column>-->
+        @current-change="handleCurrentChange" :height="autoHeight" :row-key="getRowKeys">
+        <!--        <el-table-column type="selection" width="55"></el-table-column>-->
         <el-table-column label="产品图片" width="120">
           <template slot-scope="scope">
             <img width="54px" height="54px"
-                 :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'">
+              :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'">
           </template>
         </el-table-column>
         <el-table-column label="产品名" prop="name" min-width="200"></el-table-column>
@@ -35,9 +39,9 @@
         </el-table-column>
       </el-table>
     </el-row>
-    <el-dialog :visible.sync="detailsVisiable" width="80%" class="purchase-dialog"
-               append-to-body :close-on-click-modal="false" >
-      <sample-product-details-page v-if="detailsVisiable" @closeDialog="closeDialog"/>
+    <el-dialog :visible.sync="detailsVisiable" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sample-product-details-page v-if="detailsVisiable" @closeDialog="closeDialog" />
     </el-dialog>
   </div>
 </template>
@@ -56,7 +60,9 @@
 
   export default {
     name: 'SampleProductsSelectDialog',
-    components: {SampleProductDetailsPage},
+    components: {
+      SampleProductDetailsPage
+    },
     computed: {
       ...mapGetters({
         page: 'page'
@@ -70,7 +76,7 @@
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         this.setAdvancedSearch(false);
         const keyword = this.keyword;
         const url = this.apis().getSampleProducts();
@@ -81,37 +87,38 @@
           size
         });
       },
-      getRowKeys (row) {
+      getRowKeys(row) {
         return row.id;
       },
-      handleCurrentChange (newRow, oldRow) {
+      handleCurrentChange(newRow, oldRow) {
         this.multipleSelection = newRow;
       },
-      onNew () {
+      onNew() {
         this.detailsVisiable = true;
       },
-      closeDialog () {
+      closeDialog() {
         this.onSearch(this.page.number);
         this.detailsVisiable = false;
       },
-      onSubmit () {
+      onSubmit() {
         this.onSearch();
       },
-      onConfirm () {
+      onConfirm() {
         this.$emit('onSelectSample', this.multipleSelection);
       }
     },
-    data () {
+    data() {
       return {
         multipleSelection: '',
         keyword: '',
         detailsVisiable: false
       }
     },
-    created () {
+    created() {
       this.onSearch();
     }
   }
+
 </script>
 
 <style scoped>
@@ -121,11 +128,12 @@
   }
 
   /deep/ .el-table tbody tr:hover>td {
-    background-color:#FFD60C!important
+    background-color: #FFD60C !important
   }
 
-  /deep/ .el-table__footer-wrapper tbody td, .el-table__header-wrapper tbody td {
-    background-color:#FFD60C!important
+  /deep/ .el-table__footer-wrapper tbody td,
+  .el-table__header-wrapper tbody td {
+    background-color: #FFD60C !important
   }
 
   /deep/ .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
@@ -134,6 +142,11 @@
 
   /deep/ .el-table__body tr.current-row>td {
     background-color: #ffc107;
+  }
+
+  .title-box{
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
   }
 
 </style>

@@ -12,7 +12,7 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" />
+          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" :mode="mode"/>
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -129,7 +129,7 @@
       },
       handleClick(tab, event) {
         //已完成状态为 已对账和完成状态
-        if (tab.label == '已完成') {
+        if (tab.name == '已完成') {
           this.queryFormData.states = ['RECONCILED', 'COMPLETED'];
         } else {
           this.queryFormData.states = tab.name;

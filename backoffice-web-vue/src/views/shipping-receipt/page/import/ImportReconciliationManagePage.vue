@@ -62,19 +62,19 @@
         });
       },
       onAdvancedSearch(page, size) {
-        let query ;
+        let query;
         //针对发货方的确认审核状态处理
         if (this.queryFormData.states == 'PENDING_APPROVAL') {
-          query=Object.assign({},this.queryFormData);
+          query = Object.assign({}, this.queryFormData);
           query['states'] = 'PENDING_CONFIRM';
           query['auditStates'] = 'AUDITING';
         } else if (this.queryFormData.states == 'REJECTED') {
-          query=Object.assign({},this.queryFormData);
+          query = Object.assign({}, this.queryFormData);
           query['states'] = 'PENDING_CONFIRM';
           query['auditStates'] = 'AUDITED_FAILED';
-        }else{
-          query=Object.assign({},this.queryFormData);
-          this.$delete(query,'auditStates');
+        } else {
+          query = Object.assign({}, this.queryFormData);
+          this.$delete(query, 'auditStates');
         }
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
@@ -108,13 +108,13 @@
             }, {
               key: '产品名称'
             }, {
-              key: '单价'
+              key: '关联订单'
             }, {
-              key: '发货数'
+              key: '收货供应商'
             }, {
-              key: '关联收货单'
+              key: '发货收货数'
             }, {
-              key: '收货数'
+              key: '跟单员'
             }, {
               key: '收货日期'
             }, {
@@ -132,17 +132,11 @@
             }, {
               key: '关联订单'
             }, {
-              key: '对账发货单'
+              key: '收货供应商'
             }, {
-              key: '单价',
+              key: '跟单员'
             }, {
-              key: '对账数量',
-            }, {
-              key: '对账总额',
-            }, {
-              key: '扣款金额',
-            }, {
-              key: '增款金额',
+              key: '账单金额'
             }, {
               key: '对账日期',
             }, {
@@ -161,17 +155,11 @@
             }, {
               key: '关联订单'
             }, {
-              key: '对账发货单'
+              key: '收货供应商'
             }, {
-              key: '单价',
+              key: '跟单员'
             }, {
-              key: '对账数量',
-            }, {
-              key: '对账总额',
-            }, {
-              key: '扣款金额',
-            }, {
-              key: '增款金额',
+              key: '账单金额'
             }, {
               key: '对账日期',
             }, {
@@ -189,17 +177,11 @@
             }, {
               key: '关联订单'
             }, {
-              key: '对账发货单'
+              key: '收货供应商'
             }, {
-              key: '单价',
+              key: '跟单员'
             }, {
-              key: '对账数量',
-            }, {
-              key: '对账总额',
-            }, {
-              key: '扣款金额',
-            }, {
-              key: '增款金额',
+              key: '账单金额'
             }, {
               key: '对账日期',
             }, {
@@ -217,17 +199,11 @@
             }, {
               key: '关联订单'
             }, {
-              key: '对账发货单'
+              key: '收货供应商'
             }, {
-              key: '单价',
+              key: '跟单员'
             }, {
-              key: '对账数量',
-            }, {
-              key: '对账总额',
-            }, {
-              key: '扣款金额',
-            }, {
-              key: '增款金额',
+              key: '账单金额'
             }, {
               key: '对账日期',
             }, {

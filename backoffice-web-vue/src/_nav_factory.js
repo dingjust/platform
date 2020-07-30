@@ -7,19 +7,23 @@ export default {
     {
       name: '任务中心',
       icon: 'el-icon-notebook-1',
-      children: [{
-        name: '待我处理',
-        url: '/task/handle',
-        icon: 'iconNone'
-      }, {
+      children: [
+      //   {
+      //   name: '待我处理',
+      //   url: '/task/handle',
+      //   icon: 'iconNone'
+      // }, 
+      {
         name: '我的审批',
         url: '/task/approval',
         icon: 'iconNone'
-      }, {
-        name: '待我分配',
-        url: '/task/assign',
-        icon: 'iconNone'
-      }]
+      }, 
+      // {
+      //   name: '待我分配',
+      //   url: '/task/assign',
+      //   icon: 'iconNone'
+      // }
+    ]
     },
     {
       name: '订单管理',
@@ -46,7 +50,7 @@ export default {
         // }, 
         {
           name: '生产工单',
-          url: '/sales/productionOrder',          
+          url: '/sales/productionOrder',
         }, {
           name: '生产进度工单',
           url: '/sales/progressOrder'
@@ -114,7 +118,11 @@ export default {
         //   requiresAuth: true,
         //   permissions: ['PRODUCT_SAMPLEPRODUCT']
         // }
-      }]
+      }, {
+        name: '物料管理',
+        url: '/product/material',
+        icon: 'iconNone'
+      }, ]
     },
     {
       name: '财务管理',
@@ -132,23 +140,6 @@ export default {
         name: '付款申请单(跟单)',
         url: '/financial/merchandiser/paymentRequest'
       }]
-    },
-    {
-      name: '资料中心',
-      icon: 'el-icon-tickets',
-      children: [{
-        name: '供应商资料',
-        url: '/account/cooperator',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['COMPANY_COOPERATOR']
-        }
-      }, {
-        name: '物料管理',
-        url: '/product/material',
-        icon: 'iconNone'
-      }, ]
     },
     {
       name: '企业管理',
@@ -195,6 +186,15 @@ export default {
           name: '角色',
           url: '/account/organizationRole',
           icon: 'iconNone'
+        },
+        {
+          name: '供应商管理',
+          url: '/account/cooperator',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['COMPANY_COOPERATOR']
+          }
         },
       ]
     },

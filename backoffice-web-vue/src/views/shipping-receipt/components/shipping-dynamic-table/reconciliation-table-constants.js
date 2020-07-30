@@ -202,13 +202,27 @@ const ReconciliationDetail = {
   }
 }
 
-
+//账单金额
+const ReconciliationAmountDue = {
+  template: `
+  <el-table-column label="账单金额" :prop="prop":key="sortKey"></el-table-column>`,
+  props: {
+    prop: {
+      type: String,
+      default: 'amountDue'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+}
 
 const RECONCILIATION_COMPONENT_NAME_MAP = {
   '对账单号': 'reconciliation-order-code',
   '对账发货单': 'reconciliation-ship-orders',
   '对账数量': 'reconciliation-num',
   '对账总额': 'reconciliation-amount',
+  '账单金额':'reconciliation-amount-due',
   '扣款金额': 'reconciliation-deduct',
   '增款金额': 'reconciliation-increase',
   '对账日期': 'reconciliation-date',
@@ -226,5 +240,6 @@ export {
   ReconciliationDate,
   ReconciliationState,
   ReconciliationDetail,
+  ReconciliationAmountDue,
   RECONCILIATION_COMPONENT_NAME_MAP
 }
