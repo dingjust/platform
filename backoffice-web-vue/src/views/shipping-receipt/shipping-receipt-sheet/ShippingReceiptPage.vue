@@ -2,24 +2,25 @@
   <div>
     <shipping-receipt-toolbar :queryFormData="queryFormData" :canCreateReceipt="canCreateReceipt"
       @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch" />
-    <el-row type="flex" justify="end">
-      <el-col :span="3">
-        <el-button class="list-btn" @click="shippingListVisible = !shippingListVisible">发货单</el-button>
+    <el-row type="flex" justify="end" align="middle">
+      <el-col :span="3"><span>单据分类：</span></el-col>
+      <el-col :span="2">
+        <el-button class="list-btn" @click="shippingListVisible = !shippingListVisible" size="mini">发货单</el-button>
       </el-col>
-      <el-col :span="3">
-        <el-button class="list-btn" @click="receiptListVisible = !receiptListVisible">收货单</el-button>
+      <el-col :span="2">
+        <el-button class="list-btn" @click="receiptListVisible = !receiptListVisible" size="mini">收货单</el-button>
       </el-col>
-      <el-col :span="3">
-        <el-button class="list-btn" @click="returnListVisible = !returnListVisible">退货单</el-button>
+      <el-col :span="2">
+        <el-button class="list-btn" @click="returnListVisible = !returnListVisible" size="mini">退货单</el-button>
       </el-col>
-      <el-col :span="3">
-        <el-button class="list-btn" @click="reconsiderListVisible = !reconsiderListVisible">复议单</el-button>
+      <el-col :span="2">
+        <el-button class="list-btn" @click="reconsiderListVisible = !reconsiderListVisible" size="mini">复议单</el-button>
       </el-col>
-      <el-col :span="3" v-if="mode=='import'">
-        <el-button class="list-btn" @click="shipTaskVisible = !shipTaskVisible">发货任务</el-button>
+      <el-col :span="2" v-if="mode=='import'">
+        <el-button class="list-btn" @click="shipTaskVisible = !shipTaskVisible" size="mini">收发任务单</el-button>
       </el-col>
-      <el-col :span="3" v-if="mode=='export'">
-        <el-button class="list-btn" @click="receTaskVisible = !receTaskVisible">收货任务</el-button>
+      <el-col :span="2" v-if="mode=='export'" :offset="-1">
+        <el-button class="list-btn" @click="receTaskVisible = !receTaskVisible" size="mini">收发任务单</el-button>
       </el-col>
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">

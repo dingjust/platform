@@ -1,10 +1,22 @@
 <template>
   <div>
-    <reconciliation-manage-toolbar :queryFormData="queryFormData" :canCreate="canCreate" @onCreate="onCreate"
-      @onAdvancedSearch="onAdvancedSearch" />
-    <el-row type="flex" justify="end">
+    <reconciliation-manage-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+    <el-row type="flex" justify="end" align="middle" :gutter="10">
+      <el-col :span="2"><span>单据明细：</span></el-col>
+      <el-col :span="2">
+        <el-button class="list-btn" @click="orderListVisible = !orderListVisible" size="mini">对账单
+        </el-button>
+      </el-col>
       <el-col :span="3">
-        <el-button type="text" class="list-btn" @click="orderListVisible = !orderListVisible">对账单</el-button>
+        <el-button v-if="mode=='import'" class="list-btn" @click="importTaskVisible = !importTaskVisible" size="mini">
+          对账任务
+        </el-button>
+        <el-button v-if="mode=='export'" class="list-btn" @click="exportTaskVisible = !exportTaskVisible" size="mini">
+          对账任务
+        </el-button>
+      </el-col>
+      <el-col :span="3" v-if="canCreate">
+        <el-button class="create-btn" @click="onCreate">创建对账单</el-button>
       </el-col>
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -15,9 +27,17 @@
         </el-tab-pane>
       </template>
     </el-tabs>
-    <el-dialog :visible.sync="orderListVisible" width="80%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="orderListVisible" width="90%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <reconciliation-orders-page v-if="orderListVisible" :mode="mode" />
+    </el-dialog>
+    <el-dialog :visible.sync="importTaskVisible" width="90%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <import-reconciliation-tasks-page v-if="importTaskVisible" />
+    </el-dialog>
+    <el-dialog :visible.sync="exportTaskVisible" width="90%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <export-reconciliation-tasks-page v-if="exportTaskVisible" />
     </el-dialog>
   </div>
 </template>
@@ -25,6 +45,9 @@
 <script>
   import ReconciliationManageToolbar from './toolbar/ReconciliationManageToolbar'
   import ReconciliationOrdersPage from '../reconciliation-order/ReconciliationOrdersPage'
+  import ImportReconciliationTasksPage from '../page/import/ImportReconciliationTasksPage'
+  import ExportReconciliationTasksPage from '../page/export/ExportReconciliationTasksPage'
+
   import {
     ShippingDynamicTable
   } from '../components/index'
@@ -51,7 +74,9 @@
     components: {
       ReconciliationManageToolbar,
       ReconciliationOrdersPage,
-      ShippingDynamicTable
+      ShippingDynamicTable,
+      ImportReconciliationTasksPage,
+      ExportReconciliationTasksPage
     },
     computed: {
       canCreate: function () {
@@ -243,6 +268,8 @@
       return {
         activeName: 'PENDING_RECONCILED',
         orderListVisible: false,
+        importTaskVisible: false,
+        exportTaskVisible: false,
         stateCount: {
           shipping: {},
           reconciliation: {},
@@ -272,6 +299,12 @@
   .list-btn {
     font-size: 16px;
     color: #606266;
+  }
+
+  .create-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
   }
 
 </style>
