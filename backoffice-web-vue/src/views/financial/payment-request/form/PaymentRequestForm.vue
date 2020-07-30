@@ -9,7 +9,8 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" :inline="true" :model="formData" label-position="right" label-width="100px" :hide-required-asterisk="true">
+      <el-form ref="form" :inline="true" :model="formData" label-position="right" label-width="100px"
+        :hide-required-asterisk="true">
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="7">
             <el-form-item label="付款申请单号">
@@ -17,8 +18,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="9">
-            <el-form-item label="订单号" prop="productionOrder" :rules="[{type: Object, validator: validateProductionOrder, trigger: 'change'}]">
-              <el-input class="payment-request-input" v-model="formData.productionOrder.code" :disabled="true"></el-input>
+            <el-form-item label="订单号" prop="productionOrder"
+              :rules="[{type: Object, validator: validateProductionOrder, trigger: 'change'}]">
+              <el-input class="payment-request-input" v-model="formData.productionOrder.code" :disabled="true">
+              </el-input>
               <el-button @click="saleProdutionVisible = !saleProdutionVisible">选择</el-button>
             </el-form-item>
           </el-col>
@@ -40,7 +43,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="付款内容" prop="paymentFor" :rules="[{required: true, message: '请填写付款内容', trigger: 'change'}]">
+            <el-form-item label="付款内容" prop="paymentFor"
+              :rules="[{required: true, message: '请填写付款内容', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.paymentFor"></el-input>
             </el-form-item>
           </el-col>
@@ -52,13 +56,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="9">
-            <el-form-item label="申请金额" style="margin-bottom: 17px" prop="requestAmount" 
+            <el-form-item label="申请金额" style="margin-bottom: 17px" prop="requestAmount"
               :rules="[{required: true, message: '请填写申请金额', trigger: 'change'}]">
-              <el-input class="payment-request-input" v-model="formData.requestAmount" @input="onChange" 
+              <el-input class="payment-request-input" v-model="formData.requestAmount" @input="onChange"
                 v-number-input.float="{min: 0 ,decimal:2}" @blur="onBlur">
                 <span slot="suffix">元</span>
               </el-input>
-              <h6 v-if="preApplyAmount !== '' || preApplyAmount === 0" style="color: #909399;margin-bottom: 0px">可申请金额{{preApplyAmount}}元</h6>
+              <h6 v-if="preApplyAmount !== '' || preApplyAmount === 0" style="color: #909399;margin-bottom: 0px">
+                可申请金额{{preApplyAmount}}元</h6>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -69,12 +74,14 @@
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="7">
-            <el-form-item label="收款人" prop="bankCardAccount" :rules="[{required: true, message: '请填写收款人', trigger: 'change'}]">
+            <el-form-item label="收款人" prop="bankCardAccount"
+              :rules="[{required: true, message: '请填写收款人', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.bankCardAccount"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="9">
-            <el-form-item label="收款账号" prop="bankCardNo" :rules="[{required: true, message: '请填写收款账号', trigger: 'change'}]">
+            <el-form-item label="收款账号" prop="bankCardNo"
+              :rules="[{required: true, message: '请填写收款账号', trigger: 'change'}]">
               <el-input class="payment-request-input" v-model="formData.bankCardNo"></el-input>
             </el-form-item>
           </el-col>
@@ -87,8 +94,9 @@
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <template v-for="(item, index) in formData.approvers">
             <el-col :span="7" :key="index">
-              <el-form-item label="审批人" prop="approvers" :rules="[{type: Array, validator: validateAppeovers, trigger: 'change'}]">
-                <personnel-selection :vPerson.sync="formData.approvers[index]"/>
+              <el-form-item label="审批人" prop="approvers"
+                :rules="[{type: Array, validator: validateAppeovers, trigger: 'change'}]">
+                <personnel-selection :vPerson.sync="formData.approvers[index]" />
               </el-form-item>
             </el-col>
           </template>
@@ -114,19 +122,27 @@
         <el-button class="create-btn" @click="onConfirm">提交</el-button>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="saleProdutionVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="saleProdutionVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <outbound-order-select-page v-if="saleProdutionVisible" @setSelectOrder="setSelectOrder" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import {PersonnelSelection, ImagesUpload} from '@/components/index.js'
-  import {OutboundOrderSelectPage} from '@/views/order/salesProduction/outbound-order/index.js'
+  import {
+    PersonnelSelection,
+    ImagesUpload
+  } from '@/components/index.js'
+  import {
+    OutboundOrderSelectPage
+  } from '@/views/order/salesProduction/outbound-order/index.js'
   export default {
     name: 'PaymentRequestForm',
     props: {
-
+      orderData: {
+        type: Object
+      }
     },
     components: {
       PersonnelSelection,
@@ -137,7 +153,7 @@
 
     },
     methods: {
-      async countRequestAmount (id) {
+      async countRequestAmount(id) {
         const url = this.apis().getRequestAmount(id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -148,23 +164,25 @@
           this.$message.error(result.msg);
           return;
         }
-        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) - 
-                              this.parseFloatNotParNaN(result.data.paidAmount);
+        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) -
+          this.parseFloatNotParNaN(result.data.paidAmount);
       },
-      parseFloatNotParNaN (data) {
+      parseFloatNotParNaN(data) {
         if (isNaN(parseFloat(data))) {
           return 0;
         } else {
           return parseFloat(data);
         }
       },
-      setSelectOrder (row) {
-        this.saleProdutionVisible = !this.saleProdutionVisible;
+      setSelectOrder(row) {
+        this.saleProdutionVisible = false;
         this.formData.productionOrder.id = row.id;
         this.formData.productionOrder.code = row.code;
-        this.receiver = row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
-        this.formData.bankCardAccount = 
-              row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.contactPerson : row.targetCooperator.contactPerson;
+        this.receiver = row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator
+          .name;
+        this.formData.bankCardAccount =
+          row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.contactPerson : row.targetCooperator
+          .contactPerson;
         this.formData.bankCardNo = row.targetCooperator.bankAccount;
         this.formData.bank = row.targetCooperator.bankOfDeposit;
         row.agreements.forEach((item, index) => {
@@ -175,30 +193,30 @@
         })
         this.countRequestAmount(row.id);
       },
-      addApprover () {
+      addApprover() {
         this.formData.approvers.push({});
         this.$nextTick(() => {
           this.$refs.form.clearValidate();
         })
       },
-      validateField (name) {
+      validateField(name) {
         this.$refs.form.validateField(name);
       },
-      validateProductionOrder (rule, value, callback) {
+      validateProductionOrder(rule, value, callback) {
         if (value.code != undefined && value.code != '') {
           callback();
         } else {
           callback(new Error('请选择订单'));
         }
       },
-      validateAppeovers (rule, value, callback) {
+      validateAppeovers(rule, value, callback) {
         if (value[0].name != undefined && value[0].name != '') {
           callback();
         } else {
           callback(new Error('请选择审批人'));
         }
       },
-      onConfirm () {
+      onConfirm() {
         this.$refs.form.validate((valid) => {
           if (valid) {
             this._onConfirm();
@@ -208,7 +226,7 @@
           }
         });
       },
-      async _onConfirm () {
+      async _onConfirm() {
         const url = this.apis().appendPaymentRequest();
         const result = await this.$http.post(url, this.formData, {
           submit: true
@@ -224,7 +242,7 @@
         this.$message.success('创建付款申请单成功');
         this.$router.go(-1);
       },
-      onChange (val) {
+      onChange(val) {
         // if (this.preApplyAmount == '') {
         //   return;
         // }
@@ -233,7 +251,7 @@
         // }
         this.chineseAmount = this.convertCurrency(this.formData.requestAmount);
       },
-      onBlur () {
+      onBlur() {
         var reg = /\.$/;
         if (reg.test(this.formData.requestAmount)) {
           // this.$set(row, attribute, parseFloat(row[attribute] + '00'));
@@ -264,7 +282,9 @@
         var chineseStr = '';
         //分离金额后用的数组，预定义
         var parts;
-        if (money == '') { return ''; }
+        if (money == '') {
+          return '';
+        }
         money = parseFloat(money);
         if (money >= maxNum) {
           //超出最大处理数字
@@ -325,9 +345,9 @@
           chineseStr += cnInteger;
         }
         return chineseStr;
-      }               
+      }
     },
-    data () {
+    data() {
       return {
         preApplyAmount: '',
         contactCode: '',
@@ -362,15 +382,19 @@
         this.validateField('approvers');
       }
     },
-    created () {
+    created() {
+      if (this.orderData != null) {
+        this.setSelectOrder(this.orderData);
+      }
       this.$nextTick(() => {
         this.$refs.form.clearValidate();
       })
     },
-    destroyed () {
-      
+    destroyed() {
+
     }
   }
+
 </script>
 
 <style scoped>
@@ -383,13 +407,13 @@
     width: 194px;
   }
 
-  .payment-request-container >>> .el-upload--picture-card {
+  .payment-request-container>>>.el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  .payment-request-container >>> .el-upload-list--picture-card .el-upload-list__item {
+  .payment-request-container>>>.el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }
@@ -402,4 +426,5 @@
     height: 40px;
     border-radius: 10px;
   }
+
 </style>

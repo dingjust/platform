@@ -1,5 +1,6 @@
 // shared
 import EnumsModule from './shared/enums';
+import GlobalSizesModule from './shared/sizes';
 
 // user
 import UsersModule from './user/users';
@@ -98,6 +99,7 @@ import MessageModule from './message/message';
 export {
   // shared
   EnumsModule,
+  GlobalSizesModule,
   // user
   AddressesModule,
   B2BCustomersModule,

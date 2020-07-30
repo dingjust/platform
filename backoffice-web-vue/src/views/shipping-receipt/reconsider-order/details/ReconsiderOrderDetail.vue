@@ -16,7 +16,7 @@
         </el-col>
         <el-col :span="4">
           <div>
-            <h6>时间：{{formData.creationtime|timestampToTime}}</h6>
+            <h6>单号：{{formData.code}}</h6>
           </div>
         </el-col>
         <el-col :span="4">
@@ -37,6 +37,9 @@
             </el-col>
             <el-col :span="8">
               <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
+            </el-col>
+            <el-col :span="8">
+              <h6 class="basic-label">时间：{{formData.creationtime|timestampToTime}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">
@@ -153,7 +156,7 @@
     </el-dialog>
     <el-dialog :visible.sync="returnDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <receipt-order-detail :id="returnId" v-if="returnDialogVisible" />
+      <return-order-detail :id="returnId" v-if="returnDialogVisible" />
     </el-dialog>
   </div>
 </template>

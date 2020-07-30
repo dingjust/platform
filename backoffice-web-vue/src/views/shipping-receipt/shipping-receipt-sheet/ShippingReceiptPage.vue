@@ -15,6 +15,12 @@
       <el-col :span="3">
         <el-button class="list-btn" @click="reconsiderListVisible = !reconsiderListVisible">复议单</el-button>
       </el-col>
+      <el-col :span="3" v-if="mode=='import'">
+        <el-button class="list-btn" @click="shipTaskVisible = !shipTaskVisible">发货任务</el-button>
+      </el-col>
+      <el-col :span="3" v-if="mode=='export'">
+        <el-button class="list-btn" @click="receTaskVisible = !receTaskVisible">收货任务</el-button>
+      </el-col>
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="(map,status) in statusMap">
@@ -39,6 +45,14 @@
       :close-on-click-modal="false">
       <reconsider-order-mode-page :mode="mode" v-if="reconsiderListVisible" />
     </el-dialog>
+    <el-dialog :visible.sync="shipTaskVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <import-shipping-tasks-page :mode="mode" v-if="shipTaskVisible" />
+    </el-dialog>
+    <el-dialog :visible.sync="receTaskVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <export-shipping-tasks-page :mode="mode" v-if="receTaskVisible" />
+    </el-dialog>
   </div>
 </template>
 
@@ -53,6 +67,8 @@
   } from '../components/index'
   import ReceiptOrdersList from '../receipt-order/list/ReceiptOrdersList'
   import ReturnOrdersList from '../return-order/list/ReturnOrdersList'
+  import ImportShippingTasksPage from '../page/import/ImportShippingTasksPage'
+  import ExportShippingTasksPage from '../page/export/ExportShippingTasksPage'
   export default {
     name: 'ShippingReceiptPage',
     props: {
@@ -81,7 +97,9 @@
       ShippingDynamicTable,
       ReceiptOrdersList,
       ReturnOrdersList,
-      ReconsiderOrderModePage
+      ReconsiderOrderModePage,
+      ImportShippingTasksPage,
+      ExportShippingTasksPage
     },
     computed: {
       canCreateReceipt: function () {
@@ -256,6 +274,8 @@
         receiptListVisible: false,
         returnListVisible: false,
         reconsiderListVisible: false,
+        shipTaskVisible: false,
+        receTaskVisible: false
       }
     },
     created() {

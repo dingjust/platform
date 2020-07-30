@@ -73,13 +73,13 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="送货人" prop="offlineConsignorName" label-width="80px"
-                  :rules="{required: formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
+                  :rules="{required: false, message: '不能为空', trigger: 'blur'}">
                   <el-input style="width: 194px" v-model="formData.offlineConsignorName"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="联系方式" prop="offlineConsignorPhone" label-width="80px"
-                  :rules="{required: formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
+                  :rules="{required: false, message: '不能为空', trigger: 'blur'}">
                   <el-input style="width: 194px" v-model="formData.offlineConsignorPhone"></el-input>
                 </el-form-item>
               </el-col>

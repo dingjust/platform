@@ -477,6 +477,7 @@ const router = new Router({
           }, {
             path: 'create/paymentRequest',
             name: '创建付款申请单',
+            props: true,
             component: () => import( /* webpackChunkName: 'financial' */ '@/views/financial/payment-request/form/PaymentRequestForm')
           }, {
             path: 'merchandiser/paymentRequest/:id',

@@ -20,8 +20,9 @@
       </el-row>
       <el-row type="flex" style="padding-left: 20px">
         <el-col>
-          <el-input type="textarea" v-model="formData.remarks" :disabled="true"
-            :autosize="{ minRows: 4, maxRows: 6 }" />
+          <h6>{{formData.remarks?formData.remarks:''}}</h6>
+          <!-- <el-input type="textarea" v-model="formData.remarks" :disabled="true"
+            :autosize="{ minRows: 4, maxRows: 6 }" /> -->
         </el-col>
       </el-row>
       <el-row class="basic-form-row" type="flex" align="middle"
@@ -35,7 +36,7 @@
           </el-row>
         </div> -->
         <div v-if="formData.paymentBill != null">
-          <financial-tabs :formData="formData.paymentBill" belongTo="PAYABLE_PAGE" />
+          <financial-tabs :formData="formData.paymentBill" belongTo="PAYABLE_PAGE" :outboundOrder="formData" />
         </div>
       </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">

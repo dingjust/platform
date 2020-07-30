@@ -29,14 +29,14 @@
           <el-row type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="名称:">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.name" :disabled="!isMainUser"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="联系方式:">
-                <el-input v-model="form.contact"></el-input>
+                <el-input v-model="form.contact" :disabled="!isMainUser"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -73,11 +73,19 @@
       ChangePasswordPage
     },
     computed: {
-      attachments:function() {
-        if(this.$store.getters.currentUser.profilePicture!=null){
+      attachments: function () {
+        if (this.$store.getters.currentUser.profilePicture != null) {
           return [this.$store.getters.currentUser.profilePicture];
-        }else{
+        } else {
           return [];
+        }
+      },
+      //是否主账号
+      isMainUser: function () {
+        if (this.$store.getters.currentUser.mainUser) {
+          return this.$store.getters.currentUser.mainUser;
+        } else {
+          return false;
         }
       }
     },
@@ -116,8 +124,10 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-        const uid=this.currentUser.uid;
-        this.$store.dispatch("getProfile",{uid});
+        const uid = this.currentUser.uid;
+        this.$store.dispatch("getProfile", {
+          uid
+        });
         this.$message.success("修改成功");
       }
     },

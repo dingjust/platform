@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="title">
-            <h6>发货任务单</h6>
+            <h6>{{isShipParty?'发货':'收货'}}任务单</h6>
           </div>
         </el-col>
         <el-col :span="6">

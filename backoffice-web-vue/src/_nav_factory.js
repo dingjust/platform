@@ -183,7 +183,7 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '角色',
+          name: '角色管理',
           url: '/account/organizationRole',
           icon: 'iconNone'
         },
