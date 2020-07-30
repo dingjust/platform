@@ -5,17 +5,19 @@
         <h6 class="permission-form-hear" style="min-width: 298px">权限菜单</h6>
         <el-menu @select="selectAuth" @open="menuOpen" 
           :unique-opened="true" style="border-right: 0px">
-          <template v-for="item in authData">
+          <template v-for="(item, parentIndex) in authData">
             <!-- 一级 -->
             <el-submenu :index="item.id + ''" :key="item.id"> 
               <template slot="title">
+                <el-checkbox v-model="item.checked" :indeterminate="item.indeterminate"
+                            @change="handleOneAll($event, item)" class="second-enum"></el-checkbox>
                 <span>{{item.name}}</span>
               </template>
               <template v-for="val in item.children">
                 <!-- 二级 -->
                 <el-menu-item :index="val.id + ''" :key="val.id">
-                  <el-checkbox v-model="checkState[val.id].checked" :indeterminate="checkState[val.id].indeterminate" 
-                               @change="handleAll($event, val)" class="second-enum"></el-checkbox>
+                  <el-checkbox v-model="val.checked" :indeterminate="val.indeterminate" 
+                               @change="handleAll($event, val, parentIndex)" class="second-enum"></el-checkbox>
                   {{val.name}}
                 </el-menu-item>
               </template>
@@ -62,20 +64,49 @@
           this.$message.error(result.msg);
           return;
         }
-        this.authData = result.data;
-        result.data.forEach(item => {
+        this.authData = this.sortList(result.data);
+
+        this.authData.forEach(item => {
           if (item.children && item.children.length > 0) {
             this.secondList.push.apply(this.secondList, item.children);
           }
           item.children.forEach(val => {
             this.$set(this.checkData, val.id, []);
-            this.$set(this.checkState, val.id, {
-              checked: false,
-              indeterminate: false
-            })
           })
         })
-        this.initData();
+
+        this.authData.forEach(item => {
+          this.$set(item, 'checked', false);
+          this.$set(item, 'indeterminate', false);
+          item.children.forEach(val => {
+            this.$set(val, 'checked', false);
+            this.$set(val, 'indeterminate', false);
+          })
+        })
+
+        if (this.roleIds && this.roleIds.length > 0) {
+          this.initData();
+        }
+      },
+      sortList (data) {
+        let copyData = Object.assign([], data);
+        let arr = [];
+        let index;
+        let copyIndex;
+        this.sequence.forEach(item => {
+          index = data.findIndex(val => val.name === item);
+          if (index >= 0) {
+            arr.push(data[index]);
+          }
+          copyIndex = copyData.findIndex(val => val.name === item);
+          if (copyIndex >= 0) {
+            copyData.splice(copyIndex, 1);
+          }
+        })
+        if (copyData.length > 0) {
+          arr.push.apply(arr, copyData);
+        }
+        return arr;
       },
       menuOpen (index) {
         let id = Number(index);
@@ -91,38 +122,70 @@
         }
       },
       checkboxChange (list, item) {
-        this.checkState[item.id].checked = list.length == item.children.length;
-        this.checkState[item.id].indeterminate = list.length > 0 && list.length < item.children.length;
+        let parentIndex = this.authData.findIndex(val => val.id === item.parentId);
+        let index = this.authData[parentIndex].children.findIndex(val => val.id === item.id);
+        // 处理二级
+        this.authData[parentIndex].children[index].checked = list.length == item.children.length;
+        this.authData[parentIndex].children[index].indeterminate = list.length > 0 && list.length < item.children.length;
+        // 处理一级
+        this.changeParentState(parentIndex);
       },
-      handleAll (flag, item) {
-        this.checkState[item.id].indeterminate = false;
-        if (flag) {
-          this.checkData[item.id] = item.children.map(item => item.id);
-        } else {
-          this.checkData[item.id] = [];
-        }
-      },
-      initData () {
-        this.secondList.forEach(item => {
-          item.children.forEach(val => {
-            if (this.roleIds.indexOf(val.id) >= 0) {
-              this.checkData[item.id].push(val.id);
+      changeParentState (parentIndex) {
+        // 处理一级
+        let count = 0;
+        if (this.authData[parentIndex] && this.authData[parentIndex].children.length > 0) {
+          this.authData[parentIndex].children.forEach(value => {
+            if (value.checked) {
+              count += 1;
             }
           })
-          this.checkState[item.id].checked = this.checkData[item.id].length == item.children.length;
-          this.checkState[item.id].indeterminate = 
-              this.checkData[item.id].length > 0 && this.checkData[item.id].length < item.children.length;
-        })
+          this.authData[parentIndex].checked = count == this.authData[parentIndex].children.length;
+          this.authData[parentIndex].indeterminate = count > 0 && count < this.authData[parentIndex].children.length;
+        }
+      },
+      handleOneAll (flag, item) {
+        item.indeterminate = false;
+        if (item.children && item.children.length > 0) {
+          item.children.forEach(val => {
+            this.handleAll(flag, val, item.id);
+            val.indeterminate = false;
+            val.checked = flag;
+          })
+        }
+      },
+      handleAll (flag, val, parentIndex) {
+        // 处理二级
+        val.indeterminate = false;
+        if (flag == true && val.children && val.children.length > 0) {
+          this.checkData[val.id] = val.children.map(item => item.id);
+        } else if (flag == false) {
+          this.checkData[val.id] = [];
+        }
+
+        this.changeParentState(parentIndex);
+      },
+      // 数据回显
+      initData () {
+        // checkboxChange (list, item) 
+        // let list;
+        // this.roleIds.forEach(parent => {
+        //   parent.children.forEach(item => {
+        //     if (item.children && item.children.length > 0) {
+        //       list = item.children.map(val => val.id);
+        //       this.checkboxChange(list, item);
+        //     }
+        //   })
+        // })
       }
     },
     data () {
       return {
-        defaultActive: '',
         authData: [],
         secondList: [],
         authList: [],
         checkData: {},
-        checkState: {}
+        checkState: {},
+        sequence: ['任务中心', '订单管理', '生产管理', '外发管理', '产品管理', '财务管理', '企业管理', '合同管理', '设置中心']
       }
     },
     created () {
@@ -154,7 +217,7 @@
   }
 
   .permission-checkbox {
-    width: 130px;
+    width: 150px;
   }
 
   .second-enum {

@@ -27,6 +27,8 @@ class CompanyRegisterDTO {
 
   String locationAddress;
 
+  String captchaCode;
+
   ///地址
   @JsonKey(toJson: _addressToJson)
   AddressModel contactAddress;
@@ -37,6 +39,7 @@ class CompanyRegisterDTO {
       this.name,
       this.contactPerson,
       this.contactPhone,
+      this.captchaCode,
         this.latitude,
         this.longitude,
         this.locationAddress,

@@ -13,7 +13,8 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="基本信息" name="BASIC">
             <el-row type="flex" justify="end">
-              <el-button @click="onEdit">编辑</el-button>
+              <!-- <el-button v-aClick="{auth: 'REPORT_PRODUCTION_PROGRESS', method: clickDD, arg1: '123123123'}"></el-button> -->
+              <el-button @click="onEdit('345365', '4236748238')">编辑</el-button>
               <el-button @click="onForbidden">禁用</el-button>
               <el-button @click="onEnabled">启用</el-button>
             </el-row>
@@ -105,6 +106,9 @@ export default {
     }
   },
   methods: {
+    clickDD (val) {
+      this.$message(val);
+    },
     async getDetail () {
       const url = this.apis().getPersonnelDetail(this.id);
       const result = await this.$http.get(url);
@@ -210,6 +214,7 @@ export default {
   },
   data () {
     return {
+      per: 'sys',
       activeName: 'BASIC',
       editState: false,
       deptList: [],

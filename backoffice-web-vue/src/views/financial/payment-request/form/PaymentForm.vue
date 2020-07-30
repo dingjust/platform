@@ -64,7 +64,13 @@
       onConfirm () {
         this.$refs.form.validate((valid) => {
           if (valid) {
-            this._onConfirm();
+            this.$confirm('你是否确认付款操作，操作一旦提交将不能修改?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._onConfirm();
+            });
           } else {
             this.$message.error('请完善表单信息！');
             return false;
