@@ -254,7 +254,7 @@
         });
       },
       async _onSave(submitAudit) {
-        const url = this.apis().salesPlanSave(submitAudit);
+        const url = this.apis().salesOrderSave(submitAudit);
         const result = await this.$http.post(url, this.formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

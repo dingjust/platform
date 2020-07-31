@@ -215,7 +215,7 @@ const COMMON_APIS = {
   getB2BCustomers() {
     return '/b2b/b2bCustomers';
   },
-  getPersonnelDetail (id) {
+  getPersonnelDetail(id) {
     return '/b2b/b2bCustomers/get/' + id;
   },
   getB2BCustomerDeptList() {
@@ -240,7 +240,7 @@ const COMMON_APIS = {
     return '/b2b/role/group/get/' + id;
   },
   // 启/禁用角色
-  changeRoleState (id) {
+  changeRoleState(id) {
     return '/b2b/role/group/enable/or/disable/' + id;
   },
   getB2BCustomer(uid) {
@@ -1054,6 +1054,11 @@ let TENANT_APIS = {
   salesPlanSave(needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
   },
+
+  //销售订单
+  salesOrderSave(needAudit) {
+    return '/b2b/sales/production/order/save/order?submitAudit=' + needAudit;
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
@@ -1222,6 +1227,10 @@ let NONE_TENANT_APIS = {
   //销售计划
   salesPlanSave(needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
+  },
+  //销售订单
+  salesOrderSave(needAudit) {
+    return '/b2b/sales/production/order/save/order?submitAudit=' + needAudit;
   },
   // 更新销售订单行
   updateSalesOrderRow() {

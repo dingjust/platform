@@ -83,17 +83,22 @@
       <sales-production-tabs :form="form" @appendProduct="appendProduct" />
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
-          <el-button class="material-btn" @click="onSave(false)">保存</el-button>
+          <authorized :permission="['SALES_PLAN_CREATE']">
+            <el-button class="material-btn" @click="onSave(false)">保存</el-button>
+          </authorized>
         </el-col>
         <el-col :span="5">
-          <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
+          <authorized :permission="['SALES_PLAN_CREATE']">
+            <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
+          </authorized>
         </el-col>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :orderType="'SALES_PLAN'"
-        :needMaterialsSpec="needMaterialsSpec" :isUpdate="false" :productionLeader="form.productionLeader" />
+      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
+        :orderType="'SALES_PLAN'" :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
+        :productionLeader="form.productionLeader" />
     </el-dialog>
   </div>
 </template>
