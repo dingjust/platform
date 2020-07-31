@@ -1,7 +1,9 @@
 <template>
   <div class="task-order-container">
     <el-row type="flex" justify="end" v-if="showDeliveryBtn">
-      <el-button @click="onCreate">创建发货订单</el-button>
+      <authorized :permission="['SHIPPING_SHEET_CREATE']">
+        <el-button @click="onCreate">创建发货订单</el-button>
+      </authorized>
     </el-row>
     <el-table ref="resultTable" stripe :data="formData.shippingSheets" :height="autoHeight">
       <el-table-column label="发货单号" prop="code" min-width="230px">
@@ -10,8 +12,8 @@
             <el-button type="text" @click="onShippingSheetDetail(scope.row.id)">{{scope.row.code}}</el-button>
             <el-tag size="mini" style="margin-left:10px" type="info" effect="plain">
               {{getEnum('ShippingSheetState', scope.row.state)}}</el-tag>
-            <el-tag v-if="hasAllReturnOrder(scope.row)" size="mini" style="margin-left:10px"
-              type="warning" effect="plain">整单退货</el-tag>
+            <el-tag v-if="hasAllReturnOrder(scope.row)" size="mini" style="margin-left:10px" type="warning"
+              effect="plain">整单退货</el-tag>
           </el-row>
         </template>
       </el-table-column>
@@ -62,14 +64,18 @@
       <!-- 发货方 -->
       <el-table-column align="center" fixed="right" v-if="isShipParty">
         <template slot-scope="scope">
-          <el-button type="text" @click="onReconsider(scope.row.id)" v-if="scope.row.state=='PENDING_RECONSIDER'">复议
-          </el-button>
+          <authorized :permission="['RECONSIDER_SHEET_CREATE']">
+            <el-button type="text" @click="onReconsider(scope.row.id)" v-if="scope.row.state=='PENDING_RECONSIDER'">复议
+            </el-button>
+          </authorized>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" v-if="isReceiptParty">
         <template slot-scope="scope">
-          <el-button type="text" @click="onReceive(scope.row.id)" v-if="scope.row.state=='PENDING_RECEIVED'">收货
-          </el-button>
+          <authorized :permission="['RECEIPT_SHEET_CREATE']">
+            <el-button type="text" @click="onReceive(scope.row.id)" v-if="scope.row.state=='PENDING_RECEIVED'">收货
+            </el-button>
+          </authorized>
         </template>
       </el-table-column>
     </el-table>
@@ -143,11 +149,11 @@
         return result;
       },
       //是否有整单退货
-      hasAllReturnOrder(row){
-        if(row.returnSheets){
-          let index= row.returnSheets.findIndex(sheet=>sheet.isAllReturn);
-          return index>-1;      
-        }else{
+      hasAllReturnOrder(row) {
+        if (row.returnSheets) {
+          let index = row.returnSheets.findIndex(sheet => sheet.isAllReturn);
+          return index > -1;
+        } else {
           return false;
         }
 

@@ -2,8 +2,8 @@
   <div>
     <shipping-receipt-toolbar :queryFormData="queryFormData" :canCreateReceipt="canCreateReceipt"
       @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch" />
-    <el-row type="flex" justify="end" align="middle">
-      <el-col :span="3"><span>单据分类：</span></el-col>
+    <el-row type="flex" justify="end" align="middle" style="padding-right:10px">
+      <el-col :span="2"><span>单据分类：</span></el-col>
       <el-col :span="2">
         <el-button class="list-btn" @click="shippingListVisible = !shippingListVisible" size="mini">发货单</el-button>
       </el-col>
@@ -17,10 +17,14 @@
         <el-button class="list-btn" @click="reconsiderListVisible = !reconsiderListVisible" size="mini">复议单</el-button>
       </el-col>
       <el-col :span="2" v-if="mode=='import'">
-        <el-button class="list-btn" @click="shipTaskVisible = !shipTaskVisible" size="mini">收发任务单</el-button>
+        <authorized :permission="['DISPATCH_TASK']">
+          <el-button class="list-btn" @click="shipTaskVisible = !shipTaskVisible" size="mini">发货任务单</el-button>
+        </authorized>
       </el-col>
       <el-col :span="2" v-if="mode=='export'" :offset="-1">
-        <el-button class="list-btn" @click="receTaskVisible = !receTaskVisible" size="mini">收发任务单</el-button>
+        <authorized :permission="['RECEIVE_TASK']">
+          <el-button class="list-btn" @click="receTaskVisible = !receTaskVisible" size="mini">收货任务单</el-button>
+        </authorized>
       </el-col>
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -295,7 +299,7 @@
   }
 
   .list-btn {
-    font-size: 16px;
+    font-size: 12px;
     color: #606266;
   }
 

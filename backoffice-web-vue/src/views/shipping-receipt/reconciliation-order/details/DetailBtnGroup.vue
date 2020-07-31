@@ -7,10 +7,14 @@
         v-if="formData.state=='PENDING_CONFIRM'&&(formData.originAuditWorkOrder==null||formData.originAuditWorkOrder.state=='AUDITED_FAILED')&&isShipOperator">
         <!-- 未确认提交以及审核失败 -->
         <el-col :span="4">
-          <el-button class="create-btn" @click="onReject">拒绝</el-button>
+          <authorized :permission="['RECONCILIATION_SHEET_CONFIRM_REJECT']">
+            <el-button class="create-btn" @click="onReject">拒绝</el-button>
+          </authorized>
         </el-col>
         <el-col :span="4">
-          <el-button class="create-btn" @click="onAccept">确认</el-button>
+          <authorized :permission="['RECONCILIATION_SHEET_CONFIRM_REJECT']">
+            <el-button class="create-btn" @click="onAccept">确认</el-button>
+          </authorized>
         </el-col>
       </el-row>
       <!-- 确认审核（审核人） -->
@@ -34,10 +38,14 @@
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
         v-if="formData.state=='REJECTED'||formData.state=='APPROVAL_RETURN'&&isCreator">
         <el-col :span="4" v-if="readOnly">
-          <el-button class="create-btn" @click="onUpdate">修改</el-button>
+          <authorized :permission="['RECONCILIATION_SHEET_CREATE_UPDATE']">
+            <el-button class="create-btn" @click="onUpdate">修改</el-button>
+          </authorized>
         </el-col>
         <el-col :span="4" v-if="!readOnly">
-          <el-button class="create-btn" @click="onSave">提交</el-button>
+          <authorized :permission="['RECONCILIATION_SHEET_CREATE_UPDATE']">
+            <el-button class="create-btn" @click="onSave">提交</el-button>
+          </authorized>
         </el-col>
       </el-row>
       <!-- 创建/更新审核(审核人) -->

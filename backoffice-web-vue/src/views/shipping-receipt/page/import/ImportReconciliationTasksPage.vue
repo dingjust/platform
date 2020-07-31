@@ -16,7 +16,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <reconciliation-tasks-page :page="page" :queryFormData="queryFormData" :canCreate="false" @onCreate="onCreate" mode='import'
+      <reconciliation-tasks-page :page="page" :queryFormData="queryFormData" :canCreate="false" mode='import'
         @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
     </el-card>
   </div>
@@ -78,9 +78,6 @@
           companyCode
         });
       },
-      onCreate() {
-        // TODO 创建对账单
-      }
     },
     data() {
       return {

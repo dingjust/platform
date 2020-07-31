@@ -198,7 +198,7 @@ export default {
         name: this.formData.name,
         contactPhone: this.formData.contactPhone,
         b2bDept: {
-          id: this.formData.b2bDept.id != '' ? this.formData.b2bDept.id : null 
+          id: this.formData.b2bDept ? this.formData.b2bDept.id : null 
         },
         b2bRoleGroupList: b2bRoleGroupList
       };

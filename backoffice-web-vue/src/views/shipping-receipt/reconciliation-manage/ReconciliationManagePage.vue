@@ -8,15 +8,21 @@
         </el-button>
       </el-col>
       <el-col :span="3">
-        <el-button v-if="mode=='import'" class="list-btn" @click="importTaskVisible = !importTaskVisible" size="mini">
-          对账任务
-        </el-button>
-        <el-button v-if="mode=='export'" class="list-btn" @click="exportTaskVisible = !exportTaskVisible" size="mini">
-          对账任务
-        </el-button>
+        <authorized :permission="['RECONCILIATION_TASK']" v-if="mode=='import'">
+          <el-button class="list-btn" @click="importTaskVisible = !importTaskVisible" size="mini">
+            对账任务
+          </el-button>
+        </authorized>
+        <authorized :permission="['RECONCILIATION_TASK_OUT']" v-if="mode=='export'">
+          <el-button class="list-btn" @click="exportTaskVisible = !exportTaskVisible" size="mini">
+            对账任务
+          </el-button>
+        </authorized>
       </el-col>
       <el-col :span="3" v-if="canCreate">
-        <el-button class="create-btn" @click="onCreate">创建对账单</el-button>
+        <authorized :permission="['RECONCILIATION_SHEET_CREATE_UPDATE']">
+          <el-button class="create-btn" @click="onCreate">创建对账单</el-button>
+        </authorized>
       </el-col>
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">

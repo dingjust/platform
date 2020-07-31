@@ -2,7 +2,9 @@
   <div class="table-body">
     <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
       <span>{{noteVariantTotal}}/{{orderEntriesTotal}}</span>
-      <el-button size="mini" class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
+      <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
+        <el-button size="mini" class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
+      </authorized>
     </el-row>
     <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
       <tr class="order-table-th_row">
@@ -39,9 +41,9 @@
         type: Number,
         default: 0
       },
-      readonly:{
-        type:Boolean,
-        default:false
+      readonly: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -63,7 +65,7 @@
       },
       noteVariantTotal: function () {
         var result = 0;
-        this.noteEntries.filter(entry=>entry.status=='PASS').forEach((entry) => {
+        this.noteEntries.filter(entry => entry.status == 'PASS').forEach((entry) => {
           entry.entries.forEach(item => {
             if (this.colors.has(item.color)) {
               result += item.quantity;
@@ -87,7 +89,7 @@
       },
       getNoteVariantSum(color, size) {
         var sum = 0;
-        this.noteEntries.filter(entry=>entry.status=='PASS').forEach((entry) => {
+        this.noteEntries.filter(entry => entry.status == 'PASS').forEach((entry) => {
           var result = entry.entries.filter(
             item => item.color == color && item.size == size
           );

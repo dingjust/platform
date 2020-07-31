@@ -71,7 +71,9 @@
       <el-col :span="22">
         <el-row type="flex" justify="end">
           <!--          <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>-->
-          <el-button class="form-btn" @click="onOrder" v-if="isMySelf">上报数量</el-button>
+          <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
+            <el-button class="form-btn" @click="onOrder" v-if="isMySelf">上报数量</el-button>
+          </authorized>
         </el-row>
         <progress-report-material v-if="slotData.progressPhase.name=='备料'"
           :productionProgressOrders="slotData.productionProgressOrders"
@@ -110,7 +112,9 @@
     </el-row>
     <el-row type="flex" justify="center" align="top">
       <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
-      <el-button size="mini" class="update-form-finish" @click="onFinish" v-if="!readonly&&isMySelf">完成</el-button>
+      <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
+        <el-button size="mini" class="update-form-finish" @click="onFinish" v-if="!readonly&&isMySelf">完成</el-button>
+      </authorized>
     </el-row>
   </div>
 </template>
@@ -276,7 +280,7 @@
           }).then(() => {
             this._onFinish();
           }).catch(() => {
-            
+
           });
         } else {
           this._onFinish();

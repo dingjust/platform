@@ -58,7 +58,9 @@
         </el-row>
         <el-row type="flex" justify="end">
           <el-col :span="2" v-if="isReceiveOperator">
-            <el-button @click="onCreate">创建对账单</el-button>
+            <authorized :permission="['RECONCILIATION_SHEET_CREATE_UPDATE']">
+              <el-button @click="onCreate">创建对账单</el-button>
+            </authorized>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start">

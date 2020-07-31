@@ -45,7 +45,7 @@
               <h6 class="basic-label">货号：{{formData.product.skuID}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">退货人：{{formData.creator.name}}</h6>
+              <h6 class="basic-label">退货人：{{formData.creator?formData.creator.name:''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6 class="basic-label">联系方式：{{formData.creator.contactPhone}}</h6>
@@ -105,7 +105,9 @@
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
         <!-- 待退货收货 -->
         <template v-if="formData.state=='RETURN_TO_BE_RECEIVED'&&isShipOperator">
-          <el-button class="sumbit-btn" @click="onConfirm">确认收货</el-button>
+          <authorized :permission="['RETURN_SHEET_CONFIRM']">
+            <el-button class="sumbit-btn" @click="onConfirm">确认收货</el-button>
+          </authorized>
         </template>
       </el-row>
     </el-card>

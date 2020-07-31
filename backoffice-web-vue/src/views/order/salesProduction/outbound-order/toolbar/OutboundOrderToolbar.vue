@@ -19,12 +19,14 @@
         </el-col>
         <el-col :span="4" v-if="!isSelect">
           <el-row type="flex" justify="end">
-            <el-button type="primary" class="create-button" @click="createOutboundOrder">创建外发订单</el-button>
+            <authorized :permission="['OUT_ORDER_CREATE']">
+              <el-button type="primary" class="create-button" @click="createOutboundOrder">创建外发订单</el-button>
+            </authorized>
           </el-row>
         </el-col>
       </el-row>
     </el-form>
-<!--    <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses"/>-->
+    <!--    <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses"/>-->
   </div>
 </template>
 
@@ -52,28 +54,30 @@
         default: false
       }
     },
-    components: {SalesProductionStatusBar},
-    computed: {
+    components: {
+      SalesProductionStatusBar
     },
+    computed: {},
     methods: {
-      onAdvancedSearch () {
+      onAdvancedSearch() {
         this.$emit('onAdvancedSearch');
       },
-      onReset () {
+      onReset() {
         this.queryFormData.name = '';
         this.queryFormData.merchandiser = '';
         this.queryFormData.targetCooperator = '';
       },
-      createOutboundOrder () {
+      createOutboundOrder() {
         this.$emit('createOutboundOrder');
       }
     },
-    data () {
+    data() {
       return {
         // queryFormData: this.$store.state.OutboundOrderModule.queryFormData
       }
     }
   }
+
 </script>
 
 <style scoped>
@@ -93,4 +97,5 @@
   /deep/ .el-form-item {
     margin-bottom: 5px;
   }
+
 </style>

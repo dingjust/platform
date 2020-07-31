@@ -40,7 +40,7 @@
       async onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
-        const url = this.apis().getProductionOrders();
+        const url = this.apis().getoutboundProductionList();
         const result = await this.$http.post(url, query, {
           page: page,
           size: size
@@ -53,7 +53,7 @@
       },
       async onAdvancedSearch(page, size) {
         const query = this.queryFormData;
-        const url = this.apis().getProductionOrders();
+        const url = this.apis().getoutboundProductionList();
         const result = await this.$http.post(url, query, {
           page: page,
           size: size

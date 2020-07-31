@@ -19,7 +19,9 @@
         </el-col>
         <el-col :span="4" v-if="!isSelect">
           <el-row type="flex" justify="end">
-            <el-button type="primary" class="create-button" @click="createOutboundOrder">创建外发订单</el-button>
+            <authorized :permission="['OUT_ORDER_CREATE']">
+              <el-button type="primary" class="create-button" @click="createOutboundOrder">创建外发订单</el-button>
+            </authorized>
             <el-button type="primary" class="create-button" @click="createProductionOrder">创建生产工单</el-button>
           </el-row>
         </el-col>
@@ -63,23 +65,23 @@
         setKeyword: 'keyword',
         setQueryFormData: 'queryFormData'
       }),
-      onAdvancedSearch () {
+      onAdvancedSearch() {
         this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
-      onReset () {
+      onReset() {
         this.queryFormData.keywords = '';
         this.queryFormData.productionLeaderName = '';
         this.queryFormData.cooperator = '';
       },
-      createOutboundOrder () {
+      createOutboundOrder() {
         this.$emit('createOutboundOrder');
       },
-      createProductionOrder () {
+      createProductionOrder() {
         this.$emit('createProductionOrder');
       }
     },
-    data () {
+    data() {
       return {
         // queryFormData: {
         //   keywords: '',
@@ -91,6 +93,7 @@
       }
     }
   }
+
 </script>
 
 <style scoped>

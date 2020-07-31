@@ -245,18 +245,6 @@
           this.$emit('callback', this.formData);
         }
       },
-      //提示是否创建退货单
-      onReturnedMessage() {
-        this.$confirm('是否马上创建退货单？', '提示', {
-          confirmButtonText: '马上创建',
-          cancelButtonText: '下次再说',
-          type: 'info'
-        }).then(() => {
-
-        }).catch(() => {
-
-        });
-      }
     },
     data() {
       return {
