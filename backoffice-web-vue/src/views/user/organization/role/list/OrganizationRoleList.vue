@@ -2,8 +2,8 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="角色名称" prop="name" />
-      <el-table-column label="角色描述" />
-      <el-table-column label="创建人" />
+      <el-table-column label="角色描述" prop="remark"/>
+      <el-table-column label="创建人" prop="creator.name"/>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
