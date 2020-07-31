@@ -5,14 +5,15 @@
         <h6 style="margin-bottom: 0px;margin-top: 2px;">生产进度工单</h6>
       </el-col>
       <el-col :span="2">
-        <el-button class="pp-edit-btn" @click="onEdit" v-if="canEdit">编辑</el-button>
+        <authorized :permission="['PROGRESS_WORK_ORDER_CREATE']">
+          <el-button class="pp-edit-btn" @click="onEdit" v-if="canEdit">编辑</el-button>
+        </authorized>
       </el-col>
     </el-row>
     <el-row type="flex" justify="center" class="pp-basic-row">
       <el-col :span="23">
         <el-card>
-          <production-progress-node v-if="hasData" :slotData="slotData" :canEdit="canEdit"
-            @callback="onCallBack" />
+          <production-progress-node v-if="hasData" :slotData="slotData" :canEdit="canEdit" @callback="onCallBack" />
           <el-row v-else type="flex" justify="center">暂无数据</el-row>
         </el-card>
       </el-col>
@@ -64,9 +65,11 @@
       canEdit: function () {
         if (this.order != null) {
           return (this.order.state == 'TO_BE_PRODUCED' ||
-                  this.order.state == 'PRODUCING') && 
-                  (this.$store.getters.currentUser.uid == this.order.merchandiser.uid || 
-                  this.$store.getters.currentUser.uid == this.order.productionLeader.uid)
+              this.order.state == 'PRODUCING' ||
+              this.order.state == 'IN_PRODUCTION') &&
+            (this.$store.getters.currentUser.uid == this.order.merchandiser.uid ||
+              this.$store.getters.currentUser.uid == this.order.productionLeader.uid || this.$store.getters
+              .currentUser.uid == this.order.personInCharge.uid)
         }
       }
     },
@@ -86,7 +89,7 @@
         }
       },
       onCallBack(data) {
-        this.$emit('callback',data);
+        this.$emit('callback', data);
       }
     },
     created() {}

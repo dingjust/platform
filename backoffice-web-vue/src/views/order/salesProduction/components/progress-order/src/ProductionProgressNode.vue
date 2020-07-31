@@ -5,12 +5,15 @@
     </el-row>
     <div class="progress-modal" v-show="showButton" v-if="modalExist">
       <el-row type="flex" justify="center" align="middle" class="progress-modal-row">
-        <el-button type="primary" plain @click="estimatedFormVisible=true" :disabled="!canEdit">设置预计完成时间</el-button>
+        <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
+          <el-button type="primary" plain @click="estimatedFormVisible=true" :disabled="!canEdit">设置预计完成时间</el-button>
+        </authorized>
       </el-row>
     </div>
     <el-dialog :visible.sync="estimatedFormVisible" width="30%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <production-progress-date-setting-form v-if="estimatedFormVisible" :slotData="slotData" @afterSubmit="onAfterSubmit" />
+      <production-progress-date-setting-form v-if="estimatedFormVisible" :slotData="slotData"
+        @afterSubmit="onAfterSubmit" />
     </el-dialog>
   </div>
 </template>
@@ -52,7 +55,7 @@
         this.$emit('callback');
       },
       onCallback(data) {
-        this.$emit('callback',data);
+        this.$emit('callback', data);
       }
     },
     data() {

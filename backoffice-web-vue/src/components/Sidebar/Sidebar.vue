@@ -1,31 +1,37 @@
 <template>
   <div class="sidebar">
-    <el-menu default-active="0" class="el-menu-vertical-demo" active-text-color="#FEB026" @open="handleOpen" @close="handleClose" :collapse="false" :unique-opened="true">
+    <el-menu default-active="0" class="el-menu-vertical-demo" active-text-color="#FEB026" @open="handleOpen"
+      @close="handleClose" :collapse="false" :unique-opened="true">
       <template v-for="(item,index) in navItems">
         <template v-if="item.children!=null">
-          <el-submenu :key="index" :index="''+index">
-            <template slot="title">
-              <i :class="item.icon">
-                <!-- <i >{{item.name}}</i> -->
-              </i>
-              <span slot="title">{{item.name}}</span>
-            </template>
-            <template v-for="(subItem,subIndex) in item.children">
-              <router-link :key="subIndex" :to="subItem.url" v-if="routeCheck(subItem)">
-                <el-menu-item :key="index+'-'+subIndex" :index="index+'-'+subIndex" :route="item.url" class="child-el-menu">
-                  {{subItem.name}}
-                </el-menu-item>
-              </router-link>
-            </template>
-          </el-submenu>
+          <template v-if="routeCheck(item)">
+            <el-submenu :key="index" :index="''+index">
+              <template slot="title">
+                <i :class="item.icon">
+                  <!-- <i >{{item.name}}</i> -->
+                </i>
+                <span slot="title">{{item.name}}</span>
+              </template>
+              <template v-for="(subItem,subIndex) in item.children">
+                <router-link :key="subIndex" :to="subItem.url" v-if="routeCheck(subItem)">
+                  <el-menu-item :key="index+'-'+subIndex" :index="index+'-'+subIndex" :route="item.url"
+                    class="child-el-menu">
+                    {{subItem.name}}
+                  </el-menu-item>
+                </router-link>
+              </template>
+            </el-submenu>
+          </template>
         </template>
         <template v-else>
-          <router-link :key="index" :to="item.url">
-            <el-menu-item :index="''+index">
-              <i v-if="item.icon!=null" :class="item.icon"></i>
-              <span slot="title">{{item.name}}</span>
-            </el-menu-item>
-          </router-link>
+          <template v-if="routeCheck(item)">
+            <router-link :key="index" :to="item.url">
+              <el-menu-item :index="''+index">
+                <i v-if="item.icon!=null" :class="item.icon"></i>
+                <span slot="title">{{item.name}}</span>
+              </el-menu-item>
+            </router-link>
+          </template>
         </template>
       </template>
     </el-menu>
@@ -43,7 +49,9 @@
   import SidebarNavItem from './SidebarNavItem';
   import SidebarNavLabel from './SidebarNavLabel';
 
-  import {hasPermission} from '@/auth/auth';
+  import {
+    hasPermission
+  } from '@/auth/auth';
 
   export default {
     name: 'sidebar',
@@ -67,18 +75,18 @@
       SidebarNavLabel
     },
     methods: {
-      handleClick (e) {
+      handleClick(e) {
         e.preventDefault();
         e.target.parentElement.classList.toggle('open')
       },
-      handleOpen (key, keyPath) {
+      handleOpen(key, keyPath) {
         console.log(key, keyPath);
       },
-      handleClose (key, keyPath) {
+      handleClose(key, keyPath) {
         console.log(key, keyPath);
       },
       // 路由权限检测
-      routeCheck (nav) {
+      routeCheck(nav) {
         if (nav.meta != null && nav.meta.requiresAuth != null && nav.meta.requiresAuth) {
           if (hasPermission(nav.meta.permissions)) {
             return true;
@@ -91,6 +99,7 @@
       }
     }
   }
+
 </script>
 
 <style scoped lang="css">
@@ -113,19 +122,20 @@
     min-width: 0px;
   }
 
-  .sidebar .el-menu-item:focus, .el-menu-item:hover {
+  .sidebar .el-menu-item:focus,
+  .el-menu-item:hover {
     outline: 0;
-    background-color: rgba(254,176,38,0.15);
+    background-color: rgba(254, 176, 38, 0.15);
   }
 
-.sidebar{
-  overflow: auto;
-  /* height: 100%; */
-  
-}
+  .sidebar {
+    overflow: auto;
+    /* height: 100%; */
 
-.sidebar .el-menu{
-  border:none
-}
+  }
+
+  .sidebar .el-menu {
+    border: none
+  }
 
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="production-order-toolbar-container">
-    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body
+      :close-on-click-modal="false">
       <uniquecode-import-form />
     </el-dialog>
     <el-form :inline="true">
@@ -19,8 +20,8 @@
           <!-- <el-form-item label="跟单员">
         <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
       </el-form-item> -->
-            <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
-            <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
+          <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
+          <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
           reserve-keyword clearable>
           <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
             <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name" :value="level2.name">
@@ -29,8 +30,8 @@
         </el-select> -->
           <el-form-item label="分类">
             <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories"
-                :props="{ label: 'name',value:'code'}" clearable>
-              </el-cascader>
+              :props="{ label: 'name',value:'code'}" clearable>
+            </el-cascader>
           </el-form-item>
           <el-button-group>
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
@@ -39,8 +40,14 @@
         </el-col>
         <el-col :span="4">
           <el-row type="flex" justify="end">
-            <el-button v-if="!isOutProduction  && !isAllocating" type="primary" class="create-button" @click="onCreate">创建外发订单</el-button>
-            <el-button v-if="isAllocating" type="primary" class="create-button" @click="onAllocating">去分配</el-button> 
+            <authorized :permission="['OUT_ORDER_CREATE']">
+              <el-button v-if="!isOutProduction  && !isAllocating" type="primary" class="create-button"
+                @click="onCreate">
+                创建外发订单</el-button>
+            </authorized>
+            <authorized :permission="['PRODUCTION_TASK_ASSIGN']">
+              <el-button v-if="isAllocating" type="primary" class="create-button" @click="onAllocating">去分配</el-button>
+            </authorized>
           </el-row>
         </el-col>
       </el-row>
@@ -77,8 +84,7 @@
     components: {
       UniquecodeImportForm
     },
-    computed: {
-    },
+    computed: {},
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
@@ -89,16 +95,16 @@
       //   this.setKeyword(this.keyword);
       //   this.$emit('onAdvancedSearch', 0);
       // },
-      onAdvancedSearch () {
+      onAdvancedSearch() {
         // this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
-      onReset () {
+      onReset() {
         this.dateTime = null;
         this.queryFormData.keyword = '';
         this.queryFormData.categories = [];
       },
-      async getFactories (query) {
+      async getFactories(query) {
         const url = this.apis().getFactories();
         const result = await this.$http.post(url, {
           keyword: query
@@ -112,7 +118,7 @@
         }
         this.factories = result.content;
       },
-      async getBrands (query) {
+      async getBrands(query) {
         const url = this.apis().getBrands();
         const result = await this.$http.post(url, {
           keyword: query
@@ -126,37 +132,37 @@
         }
         this.brands = result.content;
       },
-      onDateChange (values) {
+      onDateChange(values) {
         // console.log(values[0]);
         this.queryFormData.createdDateFrom = values[0];
         this.queryFormData.createdDateTo = values[1];
         this.onAdvancedSearch();
       },
-      async getCategories () {
+      async getCategories() {
         const url = this.apis().getMinorCategories();
         const results = await this.$http.get(url);
         if (!results['errors']) {
           this.categories = results;
         }
       },
-      jumpToOrderPurchase () {
+      jumpToOrderPurchase() {
         this.$router.push('/orderPurchase');
       },
-      onCreate () {
+      onCreate() {
         // this.$router.push('/sales/create/productionOrder');
         this.$emit('onCreate');
       },
-      onAllocating () {
+      onAllocating() {
         this.$emit('onAllocating');
       }
     },
-    data () {
+    data() {
       return {
         uniquecodeFormVisible: false,
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
@@ -164,7 +170,7 @@
             }
           }, {
             text: '最近一个月',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
@@ -172,7 +178,7 @@
             }
           }, {
             text: '最近三个月',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
@@ -189,7 +195,7 @@
         // queryFormData: this.$store.state.ProductionOrderModule.queryFormData,
       }
     },
-    created () {
+    created() {
       this.getCategories();
       if (this.isTenant()) {
         this.getFactories();
@@ -208,6 +214,7 @@
       }
     }
   }
+
 </script>
 <style scoped>
   .el-input__inner {
@@ -258,4 +265,5 @@
   /deep/ .el-form-item {
     margin-bottom: 5px;
   }
+
 </style>

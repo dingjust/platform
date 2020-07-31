@@ -23,9 +23,13 @@
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="onDetail(scope.row)">查看</el-button>
-          <el-button type="text" size="small" @click="onUpdate(scope.row)" v-if="!readonly && isMySelf">修改</el-button>
-          <el-button v-if="(scope.row.status != 'CANCEL')&&!readonly&&isMySelf" type="text" size="small"
-            @click="onCencel(scope.row.id)">作废</el-button>
+          <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
+            <el-button type="text" size="small" @click="onUpdate(scope.row)" v-if="!readonly && isMySelf">修改</el-button>
+          </authorized>
+          <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
+            <el-button v-if="(scope.row.status != 'CANCEL')&&!readonly&&isMySelf" type="text" size="small"
+              @click="onCencel(scope.row.id)">作废</el-button>
+          </authorized>
         </template>
       </el-table-column>
     </el-table>

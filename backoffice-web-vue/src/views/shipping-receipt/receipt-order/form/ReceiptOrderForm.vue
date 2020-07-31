@@ -121,6 +121,10 @@
 
 <script>
   import {
+    hasPermission
+  } from "@/auth/auth";
+
+  import {
     ColorSizeBoxTable,
     ColorSizeTable
   } from '@/components/'
@@ -277,15 +281,21 @@
           cancelButtonText: '下次再说',
           type: 'info'
         }).then(() => {
-          this.$router.push({
-            name: '创建退货单',
-            params: {
-              shippingOrder: this.shippingOrder,
-            }
-          });
-        }).catch(() => {
-          this.$router.go(-1);
-        });
+          if (hasPermission(['RETURN_SHEET_CREATE'])) {
+            this.$router.push({
+              name: '创建退货单',
+              params: {
+                shippingOrder: this.shippingOrder,
+              }
+            });
+          } else {
+            this.$message({
+              message: '没有权限操作',
+              type: 'warning'
+            });
+            this.$router.go(-1);
+          }
+        }).catch(() => {});
       }
     },
     data() {

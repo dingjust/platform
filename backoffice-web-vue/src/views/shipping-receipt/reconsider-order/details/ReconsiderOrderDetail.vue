@@ -133,10 +133,14 @@
         v-if="formData.state=='IN_RECONSIDER'&&isReceiveParty">
         <template>
           <el-col :span="4">
-            <el-button class="material-btn" @click="onSure">同意</el-button>
+            <authorized :permission="['RECONSIDER_SHEET_CONFIRM_REJECT']">
+              <el-button class="material-btn" @click="onSure">同意</el-button>
+            </authorized>
           </el-col>
           <el-col :span="4">
-            <el-button class="material-btn" @click="onReject">拒绝</el-button>
+            <authorized :permission="['RECONSIDER_SHEET_CONFIRM_REJECT']">
+              <el-button class="material-btn" @click="onReject">拒绝</el-button>
+            </authorized>
           </el-col>
         </template>
       </el-row>

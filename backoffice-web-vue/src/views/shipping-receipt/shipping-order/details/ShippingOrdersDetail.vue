@@ -117,22 +117,36 @@
         </el-row>
         <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
           <template v-if="!hasReceiptOrder&&isReceiveOperator&&formData.state=='PENDING_RECEIVED'">
-            <el-button class="sumbit-btn" @click="onCreate">创建收货单</el-button>
-            <el-button style="margin-left:50px" type="text" @click="onReturnAll">整单退货 >></el-button>
+            <authorized :permission="['RECEIPT_SHEET_CREATE']">
+              <el-button class="sumbit-btn" @click="onCreate">创建收货单</el-button>
+            </authorized>
+            <authorized :permission="['RETURN_SHEET_CREATE']">
+              <el-button style="margin-left:50px" type="text" @click="onReturnAll">整单退货 >></el-button>
+            </authorized>
           </template>
           <!-- 待退货 -->
           <template v-if="formData.state=='PENDING_RETURNED'&&isReceiveOperator">
-            <el-button class="sumbit-btn" @click="onReturn">创建退货单</el-button>
-            <el-button class="sumbit-btn" @click="onNoReturn">无退货</el-button>
+            <authorized :permission="['RETURN_SHEET_CREATE']">
+              <el-button class="sumbit-btn" @click="onReturn">创建退货单</el-button>
+            </authorized>
+            <authorized :permission="['RETURN_SHEET_CREATE']">
+              <el-button class="sumbit-btn" @click="onNoReturn">无退货</el-button>
+            </authorized>
           </template>
           <!-- 待复议 -->
           <template v-if="formData.state=='PENDING_RECONSIDER'&&isShipOperator">
-            <el-button class="sumbit-btn" @click="onReconsider">提出复议</el-button>
-            <el-button class="sumbit-btn" @click="onNoReconsider">无复议</el-button>
+            <authorized :permission="['RECONSIDER_SHEET_CREATE']">
+              <el-button class="sumbit-btn" @click="onReconsider">提出复议</el-button>
+            </authorized>
+            <authorized :permission="['RECONSIDER_SHEET_CREATE']">
+              <el-button class="sumbit-btn" @click="onNoReconsider">无复议</el-button>
+            </authorized>
           </template>
           <!-- 待对账(收货方) -->
           <template v-if="formData.state=='PENDING_RECONCILED'&&isReceiveOperator">
-            <el-button class="sumbit-btn" @click="onReconciled">去对账</el-button>
+            <authorized :permission="['RECONCILIATION_SHEET_CREATE_UPDATE']">
+              <el-button class="sumbit-btn" @click="onReconciled">去对账</el-button>
+            </authorized>
           </template>
         </el-row>
       </div>

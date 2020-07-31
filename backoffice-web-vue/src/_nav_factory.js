@@ -67,9 +67,17 @@ export default {
         {
           name: '生产工单',
           url: '/sales/productionOrder',
+          meta: {
+            requiresAuth: true,
+            permissions: ['PRODUCTION_TASK_ORDER']
+          }
         }, {
           name: '生产进度工单',
-          url: '/sales/progressOrder'
+          url: '/sales/progressOrder',
+          meta: {
+            requiresAuth: true,
+            permissions: ['PROGRESS_WORK_ORDER']
+          }
         },
         //  {
         //   name: '发货任务',
@@ -78,9 +86,17 @@ export default {
         {
           name: '发货管理',
           url: '/shipping/shipping-receipt-sheet',
+          meta: {
+            requiresAuth: true,
+            permissions: ['DISPATCH_TASK']
+          }
         }, {
           name: '差异复议',
           url: '/shipping/reconsider-order',
+          meta: {
+            requiresAuth: true,
+            permissions: ['RECONSIDER_SHEET']
+          }
         },
         // {
         //   name: '对账任务',
@@ -89,6 +105,10 @@ export default {
         {
           name: '对账管理',
           url: '/shipping/reconciliation-manage',
+          meta: {
+            requiresAuth: true,
+            permissions: ['RECONCILIATION_SHEET']
+          }
         }
       ]
     },
@@ -98,9 +118,17 @@ export default {
       children: [{
           name: '外发订单',
           url: '/sales/outboundOrder',
+          meta: {
+            requiresAuth: true,
+            permissions: ['SALES_OUT_ORDER']
+          }
         }, {
           name: '外发生产工单',
-          url: '/sales/outboundProductionOrder'
+          url: '/sales/outboundProductionOrder',
+          meta: {
+            requiresAuth: true,
+            permissions: ['OUT_PRODUCTION_TASK_ORDER']
+          }
         },
         // {
         //   name: '收货任务',
@@ -109,10 +137,18 @@ export default {
         {
           name: '收货管理',
           url: '/receipt/shipping-receipt-sheet',
+          meta: {
+            requiresAuth: true,
+            permissions: ['RECEIPT_SHEET']
+          }
         },
         {
           name: '差异复议',
           url: '/receipt/reconsider-order',
+          meta: {
+            requiresAuth: true,
+            permissions: ['RECONSIDER_SHEET_OUT']
+          }
         },
         // {
         //   name: '对账任务',
@@ -121,6 +157,10 @@ export default {
         {
           name: '对账管理',
           url: '/receipt/reconciliation-manage',
+          meta: {
+            requiresAuth: true,
+            permissions: ['RECONCILIATION_SHEET_OUT']
+          }
         }
       ]
     },
@@ -132,16 +172,16 @@ export default {
         url: '/product/apparel',
         meta: {
           requiresAuth: true,
-          permissions: ['PRODUCT']
+          permissions: ['PRODUCTION_PRODUCT']
         }
       }, {
         name: '款式管理',
         url: '/product/sample',
-        icon: 'iconNone'
-        // meta: {
-        //   requiresAuth: true,
-        //   permissions: ['PRODUCT_SAMPLEPRODUCT']
-        // }
+        icon: 'iconNone',
+        meta: {
+          requiresAuth: true,
+          permissions: ['SAMPLE_CLOTHES_PRODUCT']
+        }
       }, {
         name: '物料管理',
         url: '/product/material',
@@ -153,16 +193,32 @@ export default {
       icon: 'el-icon-s-finance',
       children: [{
         name: '应收账款',
-        url: '/financial/receivable'
+        url: '/financial/receivable',
+        meta: {
+          requiresAuth: true,
+          permissions: ['PAYMENT_BILL_RECEIVABLES']
+        }
       }, {
         name: '应付账款',
-        url: '/financial/payable'
+        url: '/financial/payable',
+        meta: {
+          requiresAuth: true,
+          permissions: ['PAYMENT_BILL']
+        }
       }, {
         name: '付款申请单(财务)',
-        url: '/financial/finance/paymentRequest'
+        url: '/financial/finance/paymentRequest',
+        meta: {
+          requiresAuth: true,
+          permissions: ['PAYMENT_REQUEST_FINANCE']
+        }
       }, {
         name: '付款申请单(跟单)',
-        url: '/financial/merchandiser/paymentRequest'
+        url: '/financial/merchandiser/paymentRequest',
+        meta: {
+          requiresAuth: true,
+          permissions: ['PAYMENT_REQUEST']
+        }
       }]
     },
     {
@@ -180,7 +236,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ENT_INFO']
+            permissions: ['COMPANY_INFO']
           }
         },
         {
@@ -198,18 +254,26 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['COMPANY_B2BCUSTOMER']
+            permissions: ['COMPANY_CUSTOMER']
           }
         },
         {
           name: '组织架构',
           url: '/account/organization',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['COMPANY_B2BDEPT']
+          }
         },
         {
           name: '角色管理',
           url: '/account/organizationRole',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['COMPANY_ROLE']
+          }
         },
         {
           name: '供应商管理',
@@ -232,7 +296,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['AGREEMENT']
+            permissions: ['COMPANY_AGREEMENT']
           }
         },
         {
@@ -241,7 +305,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['AGREEMENT_TMPL']
+            permissions: ['AGREEMENT_TPML']
           }
         },
         {
@@ -261,14 +325,18 @@ export default {
       children: [{
         name: '节点配置',
         url: '/account/setting/progress-plan',
-        icon: 'iconNone'
+        icon: 'iconNone',
+        meta: {
+          requiresAuth: true,
+          permissions: ['PROGRESS_PLAN']
+        }
       }, {
         name: '账务配置',
         url: '/account/setting/payPlan',
         icon: 'iconNone',
         meta: {
           requiresAuth: true,
-          permissions: ['FACTORY_PAYPLAN']
+          permissions: ['PAY_PLAN']
         }
       }, {
         name: '我的钱包',

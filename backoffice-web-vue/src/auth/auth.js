@@ -32,27 +32,27 @@ export function getCurrentAuthority() {
 // }
 
 export function hasPermission(authority) {
-  // const roles = getCurrentAuthority();
-  // //先校验是否拥有管理员权限
-  // if (roles.includes(ADMIN_PERMISSION)) {
-  //   return true;
-  // }
+  const roles = getCurrentAuthority();
+  //先校验是否拥有管理员权限
+  if (roles.includes(ADMIN_PERMISSION)) {
+    return true;
+  }
 
-  // if (authority && authority instanceof Array && authority.length) {
-  //   const permissionRoles = authority;
+  if (authority && authority instanceof Array && authority.length) {
+    const permissionRoles = authority;
 
-  //   const hasPermission = roles.some(role => {
-  //     return permissionRoles.includes(role);
-  //   })
+    const hasPermission = roles.some(role => {
+      return permissionRoles.includes(role);
+    })
 
-  //   if (!hasPermission) {
-  //     return false;
-  //   }
-  //   return true;
-  // } else {
-  //   return false;
-  // }
-  return true;
+    if (!hasPermission) {
+      return false;
+    }
+    return true;
+  } else {
+    return false;
+  }
+  // return true;
 }
 
 // export function isLogin () {
