@@ -50,10 +50,8 @@
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true && !isTenant()">
-                <authorized :authority="permission.purchaseOrderPayplanOp">
-                  <el-button class="info-finance-logistics_info-btn3" @click="onReceipt(payPlanItem)">收款
-                  </el-button>
-                </authorized>
+                <el-button class="info-finance-logistics_info-btn3" @click="onReceipt(payPlanItem)">收款
+                </el-button>
                 <el-button type="text" style="font-size:10px;">发送催款通知</el-button>
               </el-row>
             </el-col>

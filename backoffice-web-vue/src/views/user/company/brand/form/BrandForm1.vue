@@ -30,7 +30,6 @@
 
   import BrandBasicInfoForm from './BrandBasicInfoForm';
   import BrandCapacityForm from './BrandCapacityForm';
-  import {hasPermission} from '../../../../../auth/auth';
 
   export default {
     name: 'BrandFrom1',
@@ -68,7 +67,7 @@
         brandFormVisible: 'brandFormVisible'
       }),
       saveShow: function () {
-        return !this.readOnly && hasPermission(this.permission.entInfoModify);
+        return !this.readOnly;
       },
       tranData: function () {
         if (this.readOnly) {

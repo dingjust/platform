@@ -133,7 +133,6 @@
   import QuoteDetailsPage from '../../quote/details/QuoteDetailsPage';
   import FactoryCooperatorTransfer from '../../../../components/custom/FactoryCooperatorTransfer';
   import RequirementOrderForm from '../form/RequirementOrderForm';
-  import {hasPermission} from '../../../../auth/auth';
 
   const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
@@ -165,13 +164,13 @@
         regions: 'regions'
       }),
       pendingShow: function() {
-        return this.slotData.status == 'PENDING_QUOTE' && hasPermission(this.permission.requirementOrderRecommended) && !this.isTenant();
+        return this.slotData.status == 'PENDING_QUOTE' && !this.isTenant();
       },
       modifyShow: function() {
-        return this.slotData.status == 'PENDING_QUOTE' && this.quotePage.totalElements <= 0 && hasPermission(this.permission.requirementOrderModify) && !this.isTenant();
+        return this.slotData.status == 'PENDING_QUOTE' && this.quotePage.totalElements <= 0 && !this.isTenant();
       },
       closeShow: function() {
-        return this.slotData.status == 'PENDING_QUOTE' && hasPermission(this.permission.requirementOrderClose) && !this.isTenant();
+        return this.slotData.status == 'PENDING_QUOTE' && !this.isTenant();
       },
       statusColor: function () {
         var color = '';

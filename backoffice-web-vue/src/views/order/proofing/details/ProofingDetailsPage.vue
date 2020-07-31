@@ -76,7 +76,6 @@
   import ProofingQCInfoPage from '../info/ProofingQCInfoPage';
   import ProofingPaymentPage from '../payment/ProofingPaymentPage';
   import ConsignmentForm from '../../../../components/custom/ConsignmentForm';
-  import {hasPermission} from '../../../../auth/auth';
 
   const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('ProofingsModule');
 
@@ -107,7 +106,7 @@
         return this.isFactory() && this.slotData.status == 'PENDING_DELIVERY';
       },
       confirmReceive: function () {
-        return this.isBrand() && this.slotData.status == 'SHIPPED' && hasPermission(this.permission.purchaseOrderConfirmReceived);
+        return this.isBrand() && this.slotData.status == 'SHIPPED';
       },
       statusColor: function () {
         var color = '';

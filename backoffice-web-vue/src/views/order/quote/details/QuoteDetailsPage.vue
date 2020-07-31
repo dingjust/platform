@@ -77,12 +77,8 @@
       </el-row>
     </div>
     <el-row type="flex" justify="space-around" style="margin-top: 30px" v-if="slotData.state === 'BUYER_APPROVED' && !isTenant()">
-      <authorized :authority="permission.proofingOrderCreate">
-        <el-button class="btn-class" style="width: 200px" @click="onCreatedProofingOrder" :disabled="true">创建打样订单</el-button>
-      </authorized>
-      <authorized :authority="permission.purchaseOrderCreate">
-        <el-button class="btn-class" style="width: 200px" @click="onCreatedPurchaseOrder">创建生产订单</el-button>
-      </authorized>
+      <el-button class="btn-class" style="width: 200px" @click="onCreatedProofingOrder" :disabled="true">创建打样订单</el-button>
+      <el-button class="btn-class" style="width: 200px" @click="onCreatedPurchaseOrder">创建生产订单</el-button>
     </el-row>
   </div>
 </template>

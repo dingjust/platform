@@ -19,10 +19,8 @@
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
 <!--                <el-divider direction="vertical"></el-divider>-->
 <!--                <el-button type="text" class="list-button" @click="onDetails(props.item)" v-if="!isTenant()">修改</el-button>-->
-                <authorized :authority="permission.quoteOrderClose">
-                  <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
-                  <el-button type="text" class="list-button" @click="onCannel(props.item)">关闭</el-button>
-                </authorized>
+                <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
+                <el-button type="text" class="list-button" @click="onCannel(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>

@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column label="操作" min-width="240">
         <template slot-scope="scope">
-          <el-button v-if="modifyShow()" type="text" icon="el-icon-edit" @click="onDetails(scope.row)">详情</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">详情</el-button>
           <el-button v-if="remove(scope.row)" type="text" icon="el-icon-edit" @click="onDelete(scope.row)">删除
           </el-button>
         </template>
@@ -44,26 +44,19 @@
 </template>
 
 <script>
-  import {
-    hasPermission
-  } from '../../../../auth/auth';
-
   export default {
     name: 'SampleProductList',
     props: ['page'],
     computed: {},
     methods: {
-      modifyShow() {
-        return hasPermission(this.permission.productModify)
-      },
       approvedShow(row) {
-        return this.isFactory() && row.approvalStatus === 'unapproved' && hasPermission(this.permission.productModify);
+        return this.isFactory() && row.approvalStatus === 'unapproved';
       },
       unapprovedShow(row) {
-        return this.isFactory() && row.approvalStatus === 'approved' && hasPermission(this.permission.productModify);
+        return this.isFactory() && row.approvalStatus === 'approved';
       },
       remove(row) {
-        return row.approvalStatus === 'unapproved' && hasPermission(this.permission.productCreate);
+        return row.approvalStatus === 'unapproved';
       },
       onPageSizeChanged(val) {
         this._reset();

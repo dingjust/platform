@@ -2,17 +2,17 @@
   <el-row class="purchase-order-row" type="flex" justify="center" align="middle" :gutter="50">
     <el-button class="purchase-order-btn" v-if="isMyself&&isPending&&isOffline" @click="onUniqueCode">唯一码
     </el-button>
-    <el-button class="purchase-order-btn" v-if="isBrand()&&!isPending&&!isCompleted&&hasPer(permission.purchaseOrderConfirmReceived)"
+    <el-button class="purchase-order-btn" v-if="isBrand()&&!isPending&&!isCompleted"
                @click="onCreateReceive">收货
     </el-button>
-    <el-button class="purchase-order-btn" v-if="isBrand()&&isCompleted&&hasPer(permission.purchaseOrderReconciliation)" @click="onCreateReconciliation">对账单</el-button>
+    <el-button class="purchase-order-btn" v-if="isBrand()&&isCompleted" @click="onCreateReconciliation">对账单</el-button>
     <!-- <el-button class="purchase-order-btn" v-if="slotData.status=='COMPLETED'" @click="onCreateAgain">
       {{isBrand()?'再下一单':'重新创建'}}</el-button> -->
           <!-- <el-button class="purchase-order-btn" v-if="isPending&&isMyself" @click="onUpdate">修改订单</el-button> -->
     <el-button class="purchase-order-btn2" @click="onCancel" v-if="isPending && judgeType">{{isMyself?'取消订单':'拒单'}}
     </el-button>
-    <el-button class="purchase-order-btn" v-if="!isMyself&&isPending&&hasPer(permission.purchaseOrderConfirm)" @click="onConfirm">接单</el-button>
-    <el-button class="purchase-order-btn" v-if="isFactory()&&(isProduction||isWaitForOutOfStore)&&hasPer(permission.purchaseOrderConfirmDelivering)"
+    <el-button class="purchase-order-btn" v-if="!isMyself&&isPending" @click="onConfirm">接单</el-button>
+    <el-button class="purchase-order-btn" v-if="isFactory()&&(isProduction||isWaitForOutOfStore)"
                @click="onDeliverViewsOpen">发货</el-button>
     <el-button class="purchase-order-btn" v-if="isFactory()&&isOutStore" @click="onCreateReceive"
       :disabled="!hasDeliveryOrders">
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-  import {hasPermission} from '../../../../auth/auth';
 
   export default {
     name: 'PurchaseOrdersButtonGroup',
@@ -45,11 +44,7 @@
         } else {
           flag = false;
         }
-        if (flag) {
-          return hasPermission(this.permission.purchaseOrderOfflineCreate)
-        } else {
-          return hasPermission(this.permission.purchaseOrderConfirm);
-        }
+        return;
       },
       isProduction: function () {
         return this.slotData.status == 'IN_PRODUCTION';
@@ -95,9 +90,6 @@
       }
     },
     methods: {
-      hasPer (permission) {
-        return hasPermission(permission);
-      },
       isBrand () {
         return this.$store.getters.currentUser.type == 'BRAND';
       },

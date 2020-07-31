@@ -19,7 +19,7 @@
         type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning"
         class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && hasPer(permission.agreementSign)" type="warning"
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
                  class="toolbar-search_input" @click="onSearchSeal">签署
       </el-button>
     </div>
@@ -57,7 +57,6 @@
   import Bus from '@/common/js/bus.js';
   import ContractSealList from '../../../../contract/manage/components/ContractSealList';
   import PurchaseContractSupplementForm from './PurchaseContractSupplementForm';
-  import {hasPermission} from '../../../../../auth/auth';
 
   export default {
     name: 'PurchaseContractPreviewPdf',
@@ -80,9 +79,6 @@
       }
     },
     methods: {
-      hasPer (permission) {
-        return hasPermission(permission);
-      },
       closeDialogOrderVisible () {
         this.dialogOrderVisible = false;
       },

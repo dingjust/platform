@@ -49,7 +49,6 @@
 
 <script>
   import http from '@/common/js/http';
-  import {hasPermission} from '../../../auth/auth';
 
   export default {
     name: 'AuthenticationBusinessFrom',
@@ -59,7 +58,7 @@
     mixins: [],
     computed: {
       reverificationShow: function () {
-        return this.companyState == 'SUCCESS' && hasPermission(this.permission.certReverification);
+        return this.companyState == 'SUCCESS';
       }
     },
     methods: {

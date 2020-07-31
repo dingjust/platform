@@ -22,7 +22,7 @@
       <el-table-column label="操作">
           <template  slot-scope="scope">
             <!--<el-button type="text" icon="el-icon-edit" @click="on1">编辑</el-button>-->
-            <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row.code)" v-if="hasper(permission.agreementSealRemove)">删除</el-button>
+            <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row.code)">删除</el-button>
           </template>
       </el-table-column>
     </el-table>
@@ -39,15 +39,10 @@
 </template>
 
 <script>
-  import {hasPermission} from '../../../../auth/auth';
-
   export default {
     name: 'SealSearchResultList',
     props: ['page'],
     methods: {
-      hasper (permission) {
-        return hasPermission(permission);
-      },
       onPageSizeChanged (val) {
         this._reset();
 

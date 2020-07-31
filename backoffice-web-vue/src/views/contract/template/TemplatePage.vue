@@ -7,11 +7,9 @@
       <template-detail v-if="templateDetailVisible" :slotData="templateData" @closeDetails="closeDetails"/>
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <authorized :authority="permission.agreementTmplView">
-        <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
-          <el-button type="warning" @click="onDetails" class="toolbar-search_input">编辑</el-button>
-        </div>
-      </authorized>
+      <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
+        <el-button type="warning" @click="onDetails" class="toolbar-search_input">编辑</el-button>
+      </div>
       <iframe id='previewPdf' :src="'static/pdf/web/viewer.html?file=' + fileUrl"
               height="480" width="100%">
       </iframe>

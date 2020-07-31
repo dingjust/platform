@@ -43,7 +43,6 @@
   import FactoryScaleForm from './FactoryScaleForm';
   import FactoryCapacityForm from './FactoryCapacityForm';
   import FactoryServiceForm from './FactoryServiceForm';
-  import {hasPermission} from "../../../../../auth/auth";
 
   export default {
     name: 'FactoryFrom',
@@ -61,7 +60,7 @@
         factoryFormVisible: 'factoryFormVisible'
       }),
       saveShow: function () {
-        return !this.readOnly && hasPermission(this.permission.entInfoModify);
+        return !this.readOnly;
       },
       tranData: function () {
         if (this.readOnly) {

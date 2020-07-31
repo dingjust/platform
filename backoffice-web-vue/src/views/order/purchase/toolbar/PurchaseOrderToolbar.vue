@@ -40,12 +40,8 @@
         <el-col :span="4">
           <el-row type="flex" align="top" justify="space-between" v-if="!isTenant()">
 <!--            <el-row v-if="!isTenant()">-->
-              <authorized :authority="permission.purchaseOrderOfflineCreate">
-                <el-button class="dashboard-toolbar-btn" @click="jumpToOrderPurchase">创建线下订单</el-button>
-              </authorized>
-              <authorized :authority="permission.purchaseOrderUniqueCodeImport">
-                <el-button class="dashboard-toolbar-btn" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入</el-button>
-              </authorized>
+            <el-button class="dashboard-toolbar-btn" @click="jumpToOrderPurchase">创建线下订单</el-button>
+            <el-button class="dashboard-toolbar-btn" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入</el-button>
 <!--            </el-row>-->
           </el-row>
         </el-col>

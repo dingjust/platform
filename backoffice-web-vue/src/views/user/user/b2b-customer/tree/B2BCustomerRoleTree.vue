@@ -31,7 +31,6 @@
 </template>
 
 <script>
-    import {hasPermission} from '../../../../../auth/auth';
     var time;
     export default {
       name: 'B2BCustomerRoleTree',
@@ -62,7 +61,7 @@
           }, 200)
         },
         showDropdown (data) {
-          return !data.hasOwnProperty('depth') && (hasPermission(this.permission.companyB2bRoleModify) || hasPermission(this.permission.companyB2bRoleRemove))
+          return !data.hasOwnProperty('depth');
         },
         handleCommand (command, data) {
           if (command == 'modify') {
@@ -72,13 +71,13 @@
           }
         },
         appendShow (data) {
-          return hasPermission(this.permission.companyB2bRoleCreate) && data.depth == 0;
+          return data.depth == 0;
         },
         modifyShow (data) {
-          return hasPermission(this.permission.companyB2bRoleModify) && data.depth != 0;
+          return data.depth != 0;
         },
         removeShow (data) {
-          return hasPermission(this.permission.companyB2bRoleRemove) && data.depth != 0;
+          return data.depth != 0;
         },
         append () {
           event.stopPropagation();
@@ -98,7 +97,7 @@
         },
         dblclick (data) {
           clearTimeout(time);
-          if (data.depth === 0 || !hasPermission(this.permission.companyB2bRoleModify)) {
+          if (data.depth === 0) {
             return
           }
           this.showInput = true;
@@ -165,7 +164,7 @@
           this.isActive = false;
         },
         nodeClassShow (data) {
-          if (data.depth === 0 || !hasPermission(this.permission.companyB2bRoleModify)) {
+          if (data.depth === 0) {
             return;
           }
           if (this.applyId == data.id && !this.showInput && this.isActive) {

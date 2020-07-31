@@ -18,9 +18,7 @@
         </el-col>
         <el-col :span="2">
           <div>
-            <authorized :authority="permission.companyCooperatorCreate">
-              <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加合作商</el-button>
-            </authorized>
+            <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加合作商</el-button>
           </div>
         </el-col>
       </el-row>

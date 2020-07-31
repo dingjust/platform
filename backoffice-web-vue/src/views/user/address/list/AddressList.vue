@@ -16,9 +16,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onSetDefault(scope.row)">设置为默认</el-button>
-          <authorized :authority="permission.companyAddressRemove">
-            <el-button type="text" icon="el-icon-delete" @click="onRemove(scope.row)">删除</el-button>
-          </authorized>
+          <el-button type="text" icon="el-icon-delete" @click="onRemove(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

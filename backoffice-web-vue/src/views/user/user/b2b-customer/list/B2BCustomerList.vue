@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column label="操作" min-width="24%">
         <template slot-scope="scope" v-if="!scope.row.root">
-          <el-button @click="editInfo(scope.row, scope)" size="mini" v-if="hasper(permission.companyB2bCustomerModify)">
+          <el-button @click="editInfo(scope.row, scope)" size="mini">
             编辑信息
           </el-button>
           <el-select v-model="operation" placeholder="更多" size="mini" style="width: 40%"
@@ -53,7 +53,6 @@
 </template>
 
 <script>
-  import {hasPermission} from '@/auth/auth';
   export default {
     name: 'B2BCustomerList',
     props: ['page'],
@@ -61,9 +60,6 @@
 
     },
     methods: {
-      hasper (permission) {
-        return hasPermission(permission);
-      },
       onPageSizeChanged (val) {
         this._reset();
 
@@ -90,42 +86,30 @@
           this.options = [];
           return;
         }
-        if (hasPermission(this.permission.companyB2bCustomerHandOff)) {
-          this.options.push({
-            value: 'workHandover',
-            label: '工作交接'
-          });
-        }
-        if (hasPermission(this.permission.companyB2bCustomerRemove)) {
-          this.options.push({
-            value: 'deleteUser',
-            label: '删除账号'
-          });
-        }
-        if (row.b2bDept != null && !row.manager && hasPermission(this.permission.companyB2bDeptSetManager)) {
-          this.options.push({
-            value: 'setDepartmentHead',
-            label: '设为部门负责人'
-          });
-        }
-        if (row.b2bDept != null && row.manager && hasPermission(this.permission.companyB2bDeptSetManager)) {
-          this.options.push({
-            value: 'removeDepartmentHead',
-            label: '移除部门负责人'
-          });
-        }
-        if (row.loginDisabled && hasPermission(this.permission.companyB2bCustomerEnableState)) {
-          this.options.push({
-            value: 'enableUser',
-            label: '启用账号'
-          });
-        }
-        if (!row.loginDisabled && hasPermission(this.permission.companyB2bCustomerEnableState)) {
-          this.options.push({
-            value: 'forbiddenUser',
-            label: '禁用账号'
-          });
-        }
+        this.options.push({
+          value: 'workHandover',
+          label: '工作交接'
+        });
+        this.options.push({
+          value: 'deleteUser',
+          label: '删除账号'
+        });
+        this.options.push({
+          value: 'setDepartmentHead',
+          label: '设为部门负责人'
+        });
+        this.options.push({
+          value: 'removeDepartmentHead',
+          label: '移除部门负责人'
+        });
+        this.options.push({
+          value: 'enableUser',
+          label: '启用账号'
+        });
+        this.options.push({
+          value: 'forbiddenUser',
+          label: '禁用账号'
+        });
         this.slotData = row;
       }
     },
