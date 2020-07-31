@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  created(){
+    // this.$store.dispatch
+  }
 }
 </script>
 

@@ -8,22 +8,22 @@ export default {
       name: '任务中心',
       icon: 'el-icon-notebook-1',
       children: [
-      //   {
-      //   name: '待我处理',
-      //   url: '/task/handle',
-      //   icon: 'iconNone'
-      // }, 
-      {
-        name: '我的审批',
-        url: '/task/approval',
-        icon: 'iconNone'
-      }, 
-      // {
-      //   name: '待我分配',
-      //   url: '/task/assign',
-      //   icon: 'iconNone'
-      // }
-    ]
+        //   {
+        //   name: '待我处理',
+        //   url: '/task/handle',
+        //   icon: 'iconNone'
+        // }, 
+        {
+          name: '我的审批',
+          url: '/task/approval',
+          icon: 'iconNone'
+        },
+        // {
+        //   name: '待我分配',
+        //   url: '/task/assign',
+        //   icon: 'iconNone'
+        // }
+      ]
     },
     {
       name: '订单管理',
@@ -65,12 +65,12 @@ export default {
         }, {
           name: '差异复议',
           url: '/shipping/reconsider-order',
-        }, 
+        },
         // {
         //   name: '对账任务',
         //   url: '/reconciliation/tasks/import',
         // },
-         {
+        {
           name: '对账管理',
           url: '/shipping/reconciliation-manage',
         }
@@ -85,7 +85,7 @@ export default {
         }, {
           name: '外发生产工单',
           url: '/sales/outboundProductionOrder'
-        }, 
+        },
         // {
         //   name: '收货任务',
         //   url: '/receipt/tasks',
@@ -97,7 +97,7 @@ export default {
         {
           name: '差异复议',
           url: '/receipt/reconsider-order',
-        }, 
+        },
         // {
         //   name: '对账任务',
         //   url: '/reconciliation/tasks/export',
@@ -277,6 +277,10 @@ export default {
       // url: '/miscs',
       icon: 'el-icon-coin',
       children: [{
+          name: '需求订单',
+          url: '/order/requirement',
+          icon: 'iconNone',
+        }, {
           name: '报价订单',
           url: '/order/quote',
           icon: 'iconNone',

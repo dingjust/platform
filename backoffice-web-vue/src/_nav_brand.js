@@ -8,22 +8,22 @@ export default {
       name: '任务中心',
       icon: 'el-icon-notebook-1',
       children: [
-      //   {
-      //   name: '待我处理',
-      //   url: '/task/handle',
-      //   icon: 'iconNone'
-      // }, 
-      {
-        name: '我的审批',
-        url: '/task/approval',
-        icon: 'iconNone'
-      }, 
-      // {
-      //   name: '待我分配',
-      //   url: '/task/assign',
-      //   icon: 'iconNone'
-      // }
-    ]
+        //   {
+        //   name: '待我处理',
+        //   url: '/task/handle',
+        //   icon: 'iconNone'
+        // }, 
+        {
+          name: '我的审批',
+          url: '/task/approval',
+          icon: 'iconNone'
+        },
+        // {
+        //   name: '待我分配',
+        //   url: '/task/assign',
+        //   icon: 'iconNone'
+        // }
+      ]
     },
     {
       name: '订单管理',
@@ -54,7 +54,7 @@ export default {
         }, {
           name: '生产进度工单',
           url: '/sales/progressOrder'
-        }, 
+        },
         // {
         //   name: '发货任务',
         //   url: '/shipping/tasks',
@@ -80,31 +80,32 @@ export default {
       name: '外发管理',
       icon: 'el-icon-notebook-2',
       children: [{
-        name: '外发订单',
-        url: '/sales/outboundOrder',
-      }, {
-        name: '外发生产工单',
-        url: '/sales/outboundProductionOrder'
-      }, 
-      // {
-      //   name: '收货任务',
-      //   url: '/receipt/tasks',
-      // }, 
-      {
-        name: '收货管理',
-        url: '/receipt/shipping-receipt-sheet',
-      }, {
-        name: '差异复议',
-        url: '/receipt/reconsider-order',
-      }, 
-      // {
-      //   name: '对账任务',
-      //   url: '/reconciliation/tasks/export',
-      // },
-       {
-        name: '对账管理',
-        url: '/receipt/reconciliation-manage',
-      }]
+          name: '外发订单',
+          url: '/sales/outboundOrder',
+        }, {
+          name: '外发生产工单',
+          url: '/sales/outboundProductionOrder'
+        },
+        // {
+        //   name: '收货任务',
+        //   url: '/receipt/tasks',
+        // }, 
+        {
+          name: '收货管理',
+          url: '/receipt/shipping-receipt-sheet',
+        }, {
+          name: '差异复议',
+          url: '/receipt/reconsider-order',
+        },
+        // {
+        //   name: '对账任务',
+        //   url: '/reconciliation/tasks/export',
+        // },
+        {
+          name: '对账管理',
+          url: '/receipt/reconciliation-manage',
+        }
+      ]
     },
     {
       name: '产品中心',
@@ -271,6 +272,10 @@ export default {
       // url: '/miscs',
       icon: 'el-icon-coin',
       children: [{
+          name: '需求订单',
+          url: '/order/requirement',
+          icon: 'iconNone',
+        }, {
           name: '报价订单',
           url: '/order/quote',
           icon: 'iconNone',
@@ -314,7 +319,7 @@ export default {
             requiresAuth: true,
             permissions: ['REPORT_PRODUCTION_PROGRESS']
           }
-        }
+        },
         // {
         //   name: '生产进度',
         //   url: '/order/production',
