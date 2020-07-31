@@ -39,7 +39,7 @@
                   <template slot="label">
                     <span>员工账号<span style="color: #F56C6C">*</span></span>
                   </template>
-                  <el-input v-model="formData.uid" class="personnel-input"></el-input>
+                  <el-input v-model="formData.uid" class="personnel-input" placeholder="请输入员工账号"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -47,7 +47,7 @@
                   <template slot="label">
                     <span>登陆密码<span style="color: #F56C6C">*</span></span>
                   </template>
-                  <el-input v-model="formData.password" class="personnel-input"></el-input>
+                  <el-input v-model="formData.password" class="personnel-input" placeholder="请输入登陆密码"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -171,11 +171,21 @@
       }
     },
     data () {
+      var validatePhone = async (rule, value, callback) => {
+        const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+        if (value === '') {
+          callback(new Error('请输入手机号码'));
+        } else if (!reg.test(value)) {
+          callback(new Error('请输入合法手机号码'));
+        } else {
+          callback();
+        }
+      };
       return {
         rules: {
           name: [{ required: true, message: '必填', trigger: 'blur' }],
           uid: [{ required: true, message: '必填', trigger: 'blur' }],
-          contactPhone: [{ required: true, message: '必填', trigger: 'blur' }],
+          contactPhone: [{ required: true, validator: validatePhone, trigger: 'blur' }],
           password: [{ required: true, message: '必填', trigger: 'blur' }],
         },
         formData: {
