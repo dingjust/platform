@@ -68,7 +68,6 @@
   import RequirementOrderDetailsPage from '../requirement/details/RequirementOrderDetailsPage';
   import ProofingDetailsPage from './details/ProofingDetailsPage';
   import ProofingCloseDialog from './form/ProofingCloseDialog';
-  import {hasPermission} from '../../../auth/auth';
 
   export default {
     name: 'ProofingPage',
@@ -87,7 +86,7 @@
         page: 'page'
       }),
       closeShow: function () {
-        return (this.isFactory() && hasPermission(this.permission.proofingOrderClose)) || this.isTenant()
+        return this.isFactory() || this.isTenant()
       }
     },
     methods: {

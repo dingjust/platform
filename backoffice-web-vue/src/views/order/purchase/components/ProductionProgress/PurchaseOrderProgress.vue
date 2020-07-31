@@ -57,10 +57,8 @@
           <div style="height:20%;">
             <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
               v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-              <authorized :authority="permission.purchaseOrderOperate">
-                <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
-                  {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
-              </authorized>
+              <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
+                {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
             </el-row>
           </div>
         </el-col>
@@ -84,7 +82,6 @@
   );
 
   import OrderProgressUpdateForm from './OrderProgressUpdateForm';
-  import {hasPermission} from '../../../../../auth/auth';
 
   export default {
     name: 'PurchaseOrderProgress',
@@ -111,7 +108,7 @@
         refreshDetail: 'refreshDetail'
       }),
       readEditShow (item) {
-        return (!this.judgeReadonly(item) && !hasPermission(this.permission.purchaseOrderOperate)) || this.isTenant();
+        return (!this.judgeReadonly(item)) || this.isTenant();
       },
       /// 判断左边线样式
       getLeftLine (index, data) {

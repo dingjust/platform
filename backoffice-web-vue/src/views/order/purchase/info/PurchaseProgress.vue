@@ -13,8 +13,7 @@
     </el-row>
     <div class="progress-modal" v-show="showButton" v-if="modalExist">
       <el-row type="flex" justify="center" align="middle" class="progress-modal-row">
-        <el-button type="primary" plain @click="estimatedFormVisible=true"
-                   :disabled="!hasPer(permission.purchaseOrderOperate)">设置预计完成时间</el-button>
+        <el-button type="primary" plain @click="estimatedFormVisible=true">设置预计完成时间</el-button>
       </el-row>
     </div>
   </div>
@@ -23,7 +22,6 @@
 <script>
   import PurchaseOrderProgress from '../components/ProductionProgress/PurchaseOrderProgress';
   import ProgressDateSettingForm from '../components/ProgressDateSettingForm';
-  import {hasPermission} from '../../../../auth/auth';
 
   export default {
     name: 'PurchaseOrderInfoProgress',
@@ -49,9 +47,6 @@
       }
     },
     methods: {
-      hasPer (permission) {
-        return hasPermission(permission);
-      },
       onAfterCreate () {
         this.deliverFormVisible = false;
       },

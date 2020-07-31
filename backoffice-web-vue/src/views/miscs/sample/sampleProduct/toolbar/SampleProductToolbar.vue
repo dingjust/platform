@@ -5,9 +5,7 @@
     </el-form-item>
       <el-button-group>
         <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-        <authorized :authority="permission.productSampleProductCreate">
-          <el-button type="primary" icon="el-icon-plus" @click="onNew">创建样衣</el-button>
-        </authorized>
+        <el-button type="primary" icon="el-icon-plus" @click="onNew">创建样衣</el-button>
       </el-button-group>
   </el-form>
 </template>

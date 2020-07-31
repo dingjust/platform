@@ -45,8 +45,8 @@
           快捷功能<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-if="hasper(permission.purchaseOrderOfflineCreate)" command="1">创建线下订单</el-dropdown-item>
-            <el-dropdown-item v-if="hasper(permission.purchaseOrderUniqueCodeImport)" command="2">唯一码导入</el-dropdown-item>
+            <el-dropdown-item command="1">创建线下订单</el-dropdown-item>
+            <el-dropdown-item command="2">唯一码导入</el-dropdown-item>
             <el-dropdown-item command="3">认证中心</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown> -->
@@ -69,7 +69,6 @@
 
 </template>
 <script>
-  import {hasPermission} from '../auth/auth';
   import HeaderDropdownAccnt from './Header/HeaderDropdownAccnt';
   import UniquecodeImportForm from '@/components/custom/UniquecodeImportForm';
 
@@ -114,9 +113,6 @@
       };
     },
     methods: {
-      hasper(permission) {
-        return hasPermission(permission);
-      },
       sidebarToggle (e) {
         e.preventDefault();
         document.body.classList.toggle('sidebar-hidden');

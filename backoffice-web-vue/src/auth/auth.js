@@ -6,12 +6,16 @@ import store from '@/store';
 
 export function getCurrentAuthority() {
   //   return currentAuth;
-  return JSON.parse(sessionStorage.getItem('permissions'));
+  const permissionStr = sessionStorage.getItem('permissions');
+  if (permissionStr != undefined || permissionStr != null || permissionStr != 'undefined' || permissionStr != 'null') {
+    return JSON.parse(permissionStr);
+  }
+  return [];
 }
 
 // 检查是否拥有权限
-export function hasPermission(authority) {
-  // if (authority!=null && authority instanceof Array && authority.length>0) {
+// export function hasPermission(authority) {
+  // if (authority != null && authority instanceof Array && authority.length > 0) {
   //   const permissions = JSON.parse(sessionStorage.getItem('permissions'));
   //   const flag = authority.every(val => permissions.indexOf(val)>-1);
   //   if (flag != null && flag) {
@@ -20,11 +24,11 @@ export function hasPermission(authority) {
   //     return false;
   //   }
   // } else {
-    return true;
+    // return true;/
   // }
-}
+// }
 
-export function check(authority) {
+export function hasPermission(authority) {
   if (authority && authority instanceof Array && authority.length) {
     const roles = getCurrentAuthority();
     const permissionRoles = authority;
@@ -38,15 +42,8 @@ export function check(authority) {
     }
     return true;
   } else {
-    // this.$message.error('没有操作权限');
     return false;
   }
-
-  return current.indexOf(authority) > -1;
-  return current.some(item => authority.includes(item));
-
-  return true;
-
 }
 
 // export function isLogin () {

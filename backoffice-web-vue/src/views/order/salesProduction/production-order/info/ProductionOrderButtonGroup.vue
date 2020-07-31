@@ -31,10 +31,6 @@
 </template>
 
 <script>
-  import {
-    hasPermission
-  } from '@/auth/auth';
-
   import ReceiveOrderForm from '../form/ReceiveOrderForm';
   import DeliverOrderForm from '../form/DeliverOrderForm';
   import DeliverOrderViews from './DeliverOrderViews';
@@ -102,11 +98,7 @@
         } else {
           flag = false;
         }
-        if (flag) {
-          return hasPermission(this.permission.purchaseOrderOfflineCreate)
-        } else {
-          return hasPermission(this.permission.purchaseOrderConfirm);
-        }
+        return flag;
       },
       isProduction: function () {
         return this.slotData.status == 'IN_PRODUCTION';
@@ -137,9 +129,6 @@
       }
     },
     methods: {
-      hasPer(permission) {
-        return hasPermission(permission);
-      },
       isBrand() {
         return this.$store.getters.currentUser.type == 'BRAND';
       },

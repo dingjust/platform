@@ -5,9 +5,7 @@
         <div class="capacity-list-title1">
           <h6>空闲产能</h6>
         </div>
-        <Authorized :authority="permission.factoryCapacityPublish">
-          <el-button class="capacity-btn" @click="onNew">发布新产能</el-button>
-        </Authorized>
+        <el-button class="capacity-btn" @click="onNew">发布新产能</el-button>
       </el-row>
       <capacity-search-result-list class="capacity-list" :page="page" @onDetails="onDetails" @onSearch="onSearch" />
     </el-card>

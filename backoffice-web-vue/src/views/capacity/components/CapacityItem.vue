@@ -60,9 +60,7 @@
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="center">
-                <authorized :authority="permission.factoryCapacityModify">
-                  <el-button class="capacity-edit" @click="onDetails">编辑</el-button>
-                </authorized>
+                <el-button class="capacity-edit" @click="onDetails">编辑</el-button>
               </el-row>
               <el-row type="flex" justify="center">
                 <el-button class="capacity-refresh" @click="onRefresh"

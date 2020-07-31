@@ -17,7 +17,7 @@
           <el-button type="text" size="mini" v-if="topAppendShow(data)">
             <i class="el-icon-circle-plus-outline" @click="append(node, data)"/>
           </el-button>
-          <el-dropdown trigger="click" v-if="data.depth > 0 && (hasPer(permission.companyB2bDeptCreate) || hasPer(permission.companyB2bDeptRemove))"
+          <el-dropdown trigger="click" v-if="data.depth > 0"
                        @command="handleCommand($event, node, data)">
             <span @click="showIcon(data)">
               <i class="el-icon-setting" style="color: #409eff"/>
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-    import {hasPermission} from '../../../../../auth/auth';
     var time = null;
     export default {
       name: 'B2BCustomerDeptTree',
@@ -65,9 +64,6 @@
             this.$emit('searchInAside', deptName, '');
           }, 200)
         },
-        hasPer (permission) {
-          return hasPermission(permission);
-        },
         handleCommand (command, node, data) {
           if (command == 'append') {
             this.append(node, data);
@@ -76,13 +72,13 @@
           }
         },
         topAppendShow (data) {
-          return hasPermission(this.permission.companyB2bDeptCreate) && data.depth == 0;
+          return data.depth == 0;
         },
         appendShow (data) {
-          return data.depth < 3 && !this.appendInputVisible && hasPermission(this.permission.companyB2bDeptCreate);
+          return data.depth < 3 && !this.appendInputVisible;
         },
         removeShow (data) {
-          return data.depth > 0 && !this.appendInputVisible && hasPermission(this.permission.companyB2bDeptRemove);
+          return data.depth > 0 && !this.appendInputVisible;
         },
         append (node, data) {
           event.stopPropagation();
@@ -132,7 +128,7 @@
         },
         dblclick (data) {
           clearTimeout(time);
-          if (data.depth === 0 || !hasPermission(this.permission.companyB2bDeptRename)) {
+          if (data.depth === 0) {
             return
           }
           this.showInput = true;
@@ -241,7 +237,7 @@
           this.isActive = false;
         },
         nodeClassShow (data) {
-          if (data.depth === 0 || !hasPermission(this.permission.companyB2bDeptRename)) {
+          if (data.depth === 0) {
             return;
           }
           if (this.name == data.name && !this.showInput && this.isActive) {

@@ -22,12 +22,8 @@
           <h6 class="dashboard-title_text">工具直通车：</h6>
         </div>
       </el-col>
-      <authorized :authority="permission.purchaseOrderOfflineCreate">
-        <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToOrderPurchase">创建线下订单</el-button>
-      </authorized>
-      <authorized :authority="permission.purchaseOrderUniqueCodeImport">
-        <el-button class="dashboard-toolbar-btn" size="mini" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入</el-button>
-      </authorized>
+      <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToOrderPurchase">创建线下订单</el-button>
+      <el-button class="dashboard-toolbar-btn" size="mini" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入</el-button>
       <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToAuthentication">认证中心
       </el-button>
       <!-- <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToTemplate">电子合同模板</el-button> -->

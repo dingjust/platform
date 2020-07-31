@@ -1,10 +1,8 @@
 <template>
   <el-form :inline="true">
-    <authorized :authority="permission.companyAddressCreate">
-      <el-button-group>
-        <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
-      </el-button-group>
-    </authorized>
+    <el-button-group>
+      <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+    </el-button-group>
   </el-form>
 </template>
 
