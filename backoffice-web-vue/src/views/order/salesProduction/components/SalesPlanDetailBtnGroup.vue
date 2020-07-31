@@ -17,10 +17,14 @@
       <!-- 审核人员按钮 -->
       <template v-if="isApprover&&slotData.auditState=='AUDITING'">
         <el-col :span="3">
-          <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+          <authorized :permission="['DO_AUDIT']">
+            <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+          </authorized>
         </el-col>
         <el-col :span="3">
-          <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+          <authorized :permission="['DO_AUDIT']">
+            <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+          </authorized>
         </el-col>
       </template>
       <!-- 制定交接人或创建者按钮 -->
@@ -28,10 +32,14 @@
         <!-- 销售订单按钮 -->
         <template v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin">
           <el-col :span="3">
-            <el-button class="material-btn_red" @click="onRefuse">拒单</el-button>
+            <authorized :permission="['ACCEPT_REJECT_ORDER']">
+              <el-button class="material-btn_red" @click="onRefuse">拒单</el-button>
+            </authorized>
           </el-col>
           <el-col :span="3">
-            <el-button class="material-btn" @click="onCommit">接单</el-button>
+            <authorized :permission="['ACCEPT_REJECT_ORDER']">
+              <el-button class="material-btn" @click="onCommit">接单</el-button>
+            </authorized>
           </el-col>
         </template>
         <!-- 销售计划 -->

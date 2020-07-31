@@ -46,7 +46,8 @@ function errorHandler(resolve, error, loading) {
     } else if (error.response.data && error.response.data['errors'][0].type === 'AccessDeniedError') {
       // 权限缺失
       Message.closeAll();
-      Message.error('此账号没有权限执行此操作，请联系主账号负责人进行处理！');
+      // Message.error('此账号没有权限执行此操作！');
+      Message.warning('此账号没有权限执行此操作！');
       return;
     } else {
       Message.closeAll();

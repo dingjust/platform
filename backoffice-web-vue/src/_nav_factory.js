@@ -16,7 +16,11 @@ export default {
         {
           name: '我的审批',
           url: '/task/approval',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['AUDIT_TASK']
+          }
         },
         // {
         //   name: '待我分配',
@@ -30,14 +34,26 @@ export default {
       icon: 'el-icon-s-order',
       children: [{
         name: '企划订单',
-        url: '/sales/plan'
+        url: '/sales/plan',
+        meta: {
+          requiresAuth: true,
+          permissions: ['SALES_PLAN']
+        }
       }, {
         name: '外接订单',
-        url: '/sales/pending-order'
+        url: '/sales/pending-order',
+        meta: {
+          requiresAuth: true,
+          permissions: ['SALES_OUT_ORDER']
+        }
       }, {
         name: '销售订单',
         url: '/order/sales',
-        icon: 'iconNone'
+        icon: 'iconNone',
+        meta: {
+          requiresAuth: true,
+          permissions: ['SALES_ORDER']
+        }
       }, ]
     },
     {

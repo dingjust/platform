@@ -207,7 +207,7 @@
                 .status] +
               ')';
             break;
-          case 'PENDING_APPROVAL': //审核单-审核中
+          case 'PENDING_APPROVAL': //审核单-待审核
             if (!this.stateCount.reconciliationAudit.hasOwnProperty('AUDITING')) {
               tabName = this.getEnum('ReconciliationOrderState', map.status);
               break;
