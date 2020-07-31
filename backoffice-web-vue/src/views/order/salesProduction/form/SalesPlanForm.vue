@@ -5,7 +5,7 @@
         <el-row>
           <el-col :span="4">
             <div class="sales-plan-form-title">
-              <h6>录入销售计划</h6>
+              <h6>录入企划订单</h6>
             </div>
           </el-col>
         </el-row>

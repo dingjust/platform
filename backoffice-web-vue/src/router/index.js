@@ -258,7 +258,7 @@ const router = new Router({
             },
             {
               path: 'create/plan',
-              name: '录入销售计划',
+              name: '录入企划订单',
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/form/SalesPlanForm')
             },
             {
@@ -269,7 +269,7 @@ const router = new Router({
             },
             {
               path: 'create/order',
-              name: '录入销售订单',
+              name: '录入业务订单',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/form/SalesOrderForm')
             },
             {
