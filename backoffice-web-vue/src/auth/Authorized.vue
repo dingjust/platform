@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="!hasPermission">
+    <template v-if="!hasPer">
       <div @click.capture="onCheck">
         <slot></slot>
       </div>
@@ -13,7 +13,7 @@
 
 <script>
   import {
-    check
+    hasPermission
   } from "./auth";
 
   export default {
@@ -27,13 +27,21 @@
       }
     },
     computed: {
-      hasPermission: function () {
-        return check(this.permission);
+      hasPer: function () {
+        return hasPermission(this.permission);
       }
     },
     methods: {
       onCheck() {
-        event.stopPropagation();
+        //如果提供了事件对象，则这是一个非IE浏览器 
+        if ( event && event.stopPropagation ) {
+          //因此它支持W3C的stopPropagation()方法 
+          event.stopPropagation(); 
+        } else {
+          //否则，我们需要使用IE的方式来取消事件冒泡 
+          window.event.cancelBubble = true; 
+        } 
+        
         this.$message('没有权限操作');
       }
     },
