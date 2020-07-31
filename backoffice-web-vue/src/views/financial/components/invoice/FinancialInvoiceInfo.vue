@@ -67,7 +67,7 @@
       },
       onUpload() {
         if (!hasPermission('PAYMENT_BILL_UPLOAD_INVOICE')) {
-          this.$message('没有权限操作');
+          this.$message.warning('没有权限操作');
           return;
         }
 
