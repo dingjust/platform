@@ -133,14 +133,19 @@
       changeParentState (parentIndex) {
         // 处理一级
         let count = 0;
+        let indeterminateCount = 0;
         if (this.authData[parentIndex] && this.authData[parentIndex].children.length > 0) {
           this.authData[parentIndex].children.forEach(value => {
             if (value.checked) {
               count += 1;
             }
+            if (value.indeterminate) {
+              indeterminateCount += 1;
+            } 
           })
           this.authData[parentIndex].checked = count == this.authData[parentIndex].children.length;
-          this.authData[parentIndex].indeterminate = count > 0 && count < this.authData[parentIndex].children.length;
+          this.authData[parentIndex].indeterminate = (count > 0 && count < this.authData[parentIndex].children.length) || 
+                                                      (indeterminateCount > 0 && indeterminateCount <= this.authData[parentIndex].children.length);
         }
       },
       handleOneAll (flag, item) {
@@ -176,6 +181,29 @@
         //     }
         //   })
         // })
+        let list;
+        let parentIndex;
+        let childIndex;
+        this.roleIds.forEach(parent => {
+          if (parent.children && parent.children.length > 0) {
+            parent.children.forEach(item => {
+              if (item.children && item.children.length > 0) {
+                list = item.children.map(val => val.id);
+                // 回显一二级
+                this.checkboxChange(list, item);
+                
+                // 回显三级
+                this.checkData[item.id] = list;
+              } else {
+                // 回显二级无子权限
+                parentIndex = this.authData.findIndex(i => i.id == parent.id);
+                childIndex = this.authData[parentIndex].children.findIndex(c => c.id == item.id);
+                this.authData[parentIndex].children[childIndex].checked = true;
+                this.authData[parentIndex].children[childIndex].indeterminate = false;
+              }
+            })
+          }
+        })
       }
     },
     data () {

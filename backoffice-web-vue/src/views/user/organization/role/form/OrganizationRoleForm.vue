@@ -35,7 +35,7 @@
           </el-row>
           <el-row type="flex">
             <el-col :span="24">
-              <permission-form ref="permissionForm" :roleIds="this.formData.roleIds"/>
+              <permission-form ref="permissionForm" :roleIds="this.formData.roleList"/>
             </el-col>
           </el-row>
         </div>
@@ -69,15 +69,16 @@
           this.$message.error(result.msg);
           return;
         }
-        this.formData.id = result.data.id;
-        this.formData.name = result.data.name;
-        result.data.roleList.forEach(item => {
-          this.formData.roleIds.push(item.id);
-          this.getId(item);
-          item.children.forEach(val => {
-            this.getId(val);
-          })
-        })
+        this.formData = result.data;
+        // this.formData.id = result.data.id;
+        // this.formData.name = result.data.name;
+        // result.data.roleList.forEach(item => {
+        //   this.formData.roleIds.push(item.id);
+        //   this.getId(item);
+        //   item.children.forEach(val => {
+        //     this.getId(val);
+        //   })
+        // })
       },
       getId (arr) {
         let list = arr.children.map(item => item.id);
@@ -90,17 +91,31 @@
         let flag;
         for (const key in checkData) {
           if (checkData.hasOwnProperty(key) && checkData[key].length > 0) {
-            roleIds.push(Number(key));
+            // roleIds.push(Number(key));
+            // 保存三级菜单
             roleIds.push.apply(roleIds, checkData[key]);
 
-            authData.forEach(item => {
-              flag = item.children.some(val => val.id == Number(key));
-              if (flag && roleIds.indexOf(item.id) < 0) {
-                roleIds.push(item.id);
-              }
-            })
+            // authData.forEach(item => {
+            //   flag = item.children.some(val => val.id == Number(key));
+            //   if (flag && roleIds.indexOf(item.id) < 0) {
+            //     roleIds.push(item.id);
+            //   }
+            // })
           }
         }
+
+        authData.forEach(parent => {
+          // 保存一级菜单
+          if (parent.checked || parent.indeterminate) {
+            roleIds.push(parent.id)
+          }
+          parent.children.forEach(item => {
+            // 保存二级菜单
+            if (item.checked || item.indeterminate) {
+              roleIds.push(item.id)
+            }
+          })
+        })
 
         let data = {
           id: this.formData.id,
