@@ -66,10 +66,6 @@ const router = new Router({
               path: 'apparel',
               name: 'B2B产品',
               component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/ApparelProductPage'),
-              meta: {
-                requiresAuth: true,
-                permissions: ['PRODUCT']
-              }
             },
             {
               path: 'sample',
@@ -94,9 +90,7 @@ const router = new Router({
               path: 'capacity',
               name: '产能配置',
               component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/capacity/capacityPage'),
-              meta: {
-                requiresAuth: true,
-                permissions: ['FACTORY_CAPACITY'],
+              meta: {                
                 breadCrumbParentUrl:'/order/quote',
                 breadCrumbParentName:'其他',   
               }
@@ -109,10 +103,6 @@ const router = new Router({
               path: 'sample/sampleProduct',
               name: '样衣管理',
               component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/miscs/sample/sampleProduct/SampleProductPage'),
-              meta: {
-                requiresAuth: true,
-                permissions: ['PRODUCT_SAMPLEPRODUCT']
-              }
             },
             {
               path: 'material',
@@ -181,18 +171,12 @@ const router = new Router({
               path: 'requirement',
               name: '需求订单',
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/requirement/RequirementOrderPage'),
-              meta: {
-                requiresAuth: true,
-                permissions: ['REQUIREMENT_ORDER']
-              }
             },
             {
               path: 'quote',
               name: '报价单',
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/quote/QuotePage'),
               meta: {
-                requiresAuth: true,
-                permissions: ['QUOTE_ORDER'],
                 breadCrumbParentUrl:'/order/quote',
                 breadCrumbParentName:'其他',                
               }
@@ -202,8 +186,6 @@ const router = new Router({
               name: '打样订单',
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/proofing/ProofingPage'),
               meta: {
-                requiresAuth: true,
-                permissions: ['PROOFING_ORDER'],
                 breadCrumbParentUrl:'/order/quote',
                 breadCrumbParentName:'其他',    
               }
@@ -213,8 +195,6 @@ const router = new Router({
               name: '生产订单',
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/purchase/PurchaseOrderPage'),
               meta: {
-                requiresAuth: true,
-                permissions: ['PURCHASE_ORDER'],
                 breadCrumbParentUrl:'/order/quote',
                 breadCrumbParentName:'其他',    
               }
@@ -428,8 +408,6 @@ const router = new Router({
             name: '生产进度报表',
             component: () => import( /* webpackChunkName: 'reports' */ '@/views/report/production-progress/ProductionProgressReportPage'),
             meta: {
-              requiresAuth: true,
-              permissions: ['REPORT_PRODUCTION_PROGRESS'],
               breadCrumbParentUrl:'/order/quote',
               breadCrumbParentName:'其他',   
             }
@@ -504,13 +482,9 @@ const router = new Router({
               path: 'index',
               name: '公司介绍',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
-              meta: {
-                requiresAuth: true,
-                permissions: ['ENT_INFO'],
-                meta: {                  
-                  breadCrumbParentUrl:'/account/index',
-                  breadCrumbParentName:'资料中心',
-                }
+              meta: {                  
+                breadCrumbParentUrl:'/account/index',
+                breadCrumbParentName:'资料中心',
               }
             },
             {
@@ -528,8 +502,6 @@ const router = new Router({
               name: '认证中心',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/dashboard/authentication/AuthenticationPage'),
               meta: {
-                requiresAuth: true,
-                permissions: ['CERT'],
                 breadCrumbParentUrl:'/account/index',
                 breadCrumbParentName:'企业管理',
               }
@@ -544,49 +516,47 @@ const router = new Router({
               name: '用户组',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/group/user-group/UserGroupPage')
             },
-            {
-              path: 'b2b-customer',
-              redirect: '/account/b2b-customer',
-              name: '员工',
-              component: {
-                render(c) {
-                  return c('router-view');
-                }
-              },
-              children: [{
-                  path: '',
-                  name: '员工列表',
-                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
-                  meta: {
-                    requiresAuth: true,
-                    permissions: ['COMPANY_B2BCUSTOMER'],
-                    breadCrumbParentUrl:'/account/index',
-                    breadCrumbParentName:'企业管理',
-                    breadCrumbSkip:1
-                  }
-                },
-                {
-                  path: 'customerDetail',
-                  name: '添加员工',
-                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/form/B2BCustomerBasicForm')
-                }
-              ]
-            },
-            {
-              path: 'b2b-unit',
-              name: '组织架构',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/group/b2b-unit/B2BUnitPage')
-            },
+            // {
+            //   path: 'b2b-customer',
+            //   redirect: '/account/b2b-customer',
+            //   name: '员工',
+            //   component: {
+            //     render(c) {
+            //       return c('router-view');
+            //     }
+            //   },
+            //   children: [{
+            //       path: '',
+            //       name: '员工列表',
+            //       component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
+            //       meta: {
+            //         breadCrumbParentUrl:'/account/index',
+            //         breadCrumbParentName:'企业管理',
+            //         breadCrumbSkip:1
+            //       }
+            //     },
+            //     {
+            //       path: 'customerDetail',
+            //       name: '添加员工',
+            //       component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/form/B2BCustomerBasicForm')
+            //     }
+            //   ]
+            // },
+            // {
+            //   path: 'b2b-unit',
+            //   name: '组织架构',
+            //   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/group/b2b-unit/B2BUnitPage')
+            // },
             {
               path: 'organization',
               name: '组织架构',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/OrganizationPage')
             },
-            {
-              path: 'role',
-              name: '角色',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/role/RolePage')
-            },
+            // {
+            //   path: 'role',
+            //   name: '角色',
+            //   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/role/RolePage')
+            // },
             {
               path: 'organizationRole',
               name: '角色管理',
@@ -624,8 +594,6 @@ const router = new Router({
               name: '地址管理',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/address/AddressPage'),
               meta: {
-                requiresAuth: true,
-                permissions: ['COMPANY_ADDRESS'],
                 breadCrumbParentUrl:'/account/setting/progress-plan',
                 breadCrumbParentName:'设置',
               }
@@ -651,8 +619,6 @@ const router = new Router({
                     name: '账务方案列表',
                     component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/PayPlanPage'),
                     meta: {
-                      requiresAuth: true,
-                      permissions: ['FACTORY_PAYPLAN'],
                       breadCrumbParentUrl:'/account/setting/progress-plan',
                       breadCrumbParentName:'设置',
                       breadCrumbSkip:2
@@ -725,8 +691,6 @@ const router = new Router({
                   name: '供应商列表',
                   component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/CooperatorPage'),
                   meta: {
-                    requiresAuth: true,
-                    permissions: ['COMPANY_COOPERATOR'],
                     breadCrumbParentUrl:'/account/index',
                     breadCrumbParentName:'企业管理',
                     breadCrumbSkip:1
@@ -800,8 +764,6 @@ const router = new Router({
               name: '钱包',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/wallet/WalletPage'),
               meta: {
-                requiresAuth: true,
-                permissions: ['COMPANY_WALLET'],
                 breadCrumbParentUrl:'/account/setting/progress-plan',
                 breadCrumbParentName:'设置',                
               }
@@ -825,19 +787,11 @@ const router = new Router({
               path: 'manage',
               name: '合同签订',
               component: () => import( /* webpackChunkName: 'contract' */ '@/views/contract/manage/ContractPage'),
-              meta: {
-                requiresAuth: true,
-                permissions: ['AGREEMENT']
-              }
             },
             {
               path: 'template',
               name: '合同模板',
               component: () => import( /* webpackChunkName: 'contract' */ '@/views/contract/template/TemplatePage'),
-              meta: {
-                requiresAuth: true,
-                permissions: ['AGREEMENT_TMPL']
-              }
             },
             {
               path: 'templateForm',
@@ -848,10 +802,6 @@ const router = new Router({
               path: 'seal',
               name: '印章管理',
               component: () => import( /* webpackChunkName: 'contract' */ '@/views/contract/seal/SealPage'),
-              meta: {
-                requiresAuth: true,
-                permissions: ['AGREEMENT_SEAL']
-              }
             }, {
               path: 'sealForm',
               name: '印章创建',

@@ -7,6 +7,10 @@ export default {
     {
       name: '任务中心',
       icon: 'el-icon-notebook-1',
+      meta: {
+        requiresAuth: true,
+        permissions: ['TO_DO_TASK']
+      },
       children: [
         //   {
         //   name: '待我处理',
@@ -32,6 +36,10 @@ export default {
     {
       name: '订单管理',
       icon: 'el-icon-s-order',
+      meta: {
+        requiresAuth: true,
+        permissions: ['ORDER']
+      },
       children: [{
         name: '企划订单',
         url: '/sales/plan',
@@ -59,6 +67,10 @@ export default {
     {
       name: '生产管理',
       icon: 'el-icon-notebook-2',
+      meta: {
+        requiresAuth: true,
+        permissions: ['WORK_SHEEET']
+      },
       children: [
         //   {
         //   name: '工单分配',
@@ -115,6 +127,10 @@ export default {
     {
       name: '外发管理',
       icon: 'el-icon-notebook-2',
+      meta: {
+        requiresAuth: true,
+        permissions: ['OUT_ORDER']
+      },
       children: [{
           name: '外发订单',
           url: '/sales/outboundOrder',
@@ -167,6 +183,10 @@ export default {
     {
       name: '产品中心',
       icon: 'el-icon-shopping-bag-1',
+      meta: {
+        requiresAuth: true,
+        permissions: ['PRODUCT']
+      },
       children: [{
         name: 'B2B产品',
         url: '/product/apparel',
@@ -191,6 +211,10 @@ export default {
     {
       name: '财务管理',
       icon: 'el-icon-s-finance',
+      meta: {
+        requiresAuth: true,
+        permissions: ['FINANCE']
+      },
       children: [{
         name: '应收账款',
         url: '/financial/receivable',
@@ -224,6 +248,10 @@ export default {
     {
       name: '企业管理',
       icon: 'el-icon-office-building',
+      meta: {
+        requiresAuth: true,
+        permissions: ['COMPANY']
+      },
       children: [
         // {
         //   name: '认证信息',
@@ -290,6 +318,10 @@ export default {
       name: '合同管理',
       // url: '/contract',
       icon: 'el-icon-s-marketing',
+      meta: {
+        requiresAuth: true,
+        permissions: ['AGREEMENT']
+      },
       children: [{
           name: '合同签订',
           url: '/contract/manage',
@@ -322,6 +354,10 @@ export default {
     {
       name: '设置',
       icon: 'el-icon-setting',
+      meta: {
+        requiresAuth: true,
+        permissions: ['SETTING']
+      },
       children: [{
         name: '节点配置',
         url: '/account/setting/progress-plan',
