@@ -535,4 +535,7 @@
     margin-left: 5px;
   }
 
+  /deep/ .el-date-editor .el-range-separator {
+    width: 10%;
+  }
 </style>
