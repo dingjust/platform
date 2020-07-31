@@ -136,7 +136,7 @@ export default {
           url: '/sales/outboundOrder',
           meta: {
             requiresAuth: true,
-            permissions: ['SALES_OUT_ORDER']
+            permissions: ['SEND_SALES_OUT_ORDER']
           }
         }, {
           name: '外发生产工单',

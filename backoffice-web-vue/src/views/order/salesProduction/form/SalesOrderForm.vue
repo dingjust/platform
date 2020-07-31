@@ -146,22 +146,27 @@
           <el-col :span="4">订单总数：<span style="color:red;">{{totalAmount}}</span></el-col>
           <el-col :span="4">订单金额：<span style="color:red;">{{totalPrice}}</span></el-col>
         </el-row>
-        <sales-production-tabs :canChangeProduct="canChangeProduct" :canUpdate="!hasOrigin" style="margin-top:20px;" :form="form" 
-          @appendProduct="appendProduct" />
+        <sales-production-tabs :canChangeProduct="canChangeProduct" :canUpdate="!hasOrigin" style="margin-top:20px;"
+          :form="form" @appendProduct="appendProduct" />
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
-          <el-button class="material-btn" @click="onSave(false)">保存</el-button>
+          <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
+            <el-button class="material-btn" @click="onSave(false)">保存</el-button>
+          <!-- </authorized> -->
         </el-col>
         <el-col :span="5">
-          <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
+          <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
+            <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
+          <!-- </authorized> -->
         </el-col>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :orderType="'SALES_ORDER'"
-        :needMaterialsSpec="needMaterialsSpec" :isUpdate="false" :productionLeader="form.productionLeader" />
+      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
+        :orderType="'SALES_ORDER'" :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
+        :productionLeader="form.productionLeader" />
     </el-dialog>
     <!-- <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="setProgressPlan"/>
@@ -333,7 +338,7 @@
         }
       },
       async _Save(submitAudit) {
-        const url = this.apis().salesPlanSave(submitAudit);
+        const url = this.apis().salesOrderSave(submitAudit);
         let submitForm = Object.assign({}, this.form);
         if (!submitForm.auditNeeded) {
           submitForm.approvers = [];
