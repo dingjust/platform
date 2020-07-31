@@ -85,8 +85,9 @@
       </el-row>
       <el-row type="flex" :gutter="20" style="margin-top:20px">
         <el-col :span="24">
-          <el-input type="textarea" placeholder="输入退货原因" v-model="formData.remarks" :rows="5" :disabled="true">
-          </el-input>
+          <!-- <el-input type="textarea"  v-model="formData.remarks" :rows="5" :disabled="true">
+          </el-input> -->
+          <h6>退货原因：{{formData.remarks?formData.remarks:''}}</h6>
         </el-col>
       </el-row>
       <el-row type="flex" style="margin-top:20px">

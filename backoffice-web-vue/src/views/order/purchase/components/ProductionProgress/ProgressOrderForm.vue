@@ -66,8 +66,8 @@
                 <td>{{sizeArray[0].color}}</td>
                 <template v-for="(item,sizeIndex) in sizeArray">
                   <td style="width:80px" :key="sizeIndex">
-                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent v-model="item.quantity" :min="1"
-                      :placeholder="countRemainNum(item.color,item.size)"></el-input>
+                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent v-model="item.quantity"
+                      :min="1" :placeholder="countRemainNum(item.color,item.size)"></el-input>
                   </td>
                 </template>
               </tr>
@@ -254,7 +254,7 @@
         operator: this.$store.getters.currentUser.username,
         entries: [],
         form: {
-          reportTime: '',
+          reportTime: Date.now(),
 
         },
         rules: {
@@ -299,7 +299,9 @@
         this.entries.push(sizeArray);
       });
     },
-    mounted() {}
+    mounted() {
+      
+    }
 
   }
 

@@ -25,25 +25,25 @@ export function hasPermission(authority) {
 }
 
 export function check(authority) {
-  // if (authority && authority instanceof Array && authority.length) {
-  //   const roles = getCurrentAuthority();
-  //   const permissionRoles = authority;
+  if (authority && authority instanceof Array && authority.length) {
+    const roles = getCurrentAuthority();
+    const permissionRoles = authority;
 
-  //   const hasPermission = roles.some(role => {
-  //     return permissionRoles.includes(role);
-  //   })
+    const hasPermission = roles.some(role => {
+      return permissionRoles.includes(role);
+    })
 
-  //   if (!hasPermission) {
-  //     return false;
-  //   }
-  //   return true;
-  // } else {
-  //   this.$message.error('没有操作权限');
-    // return false;
-  // }
+    if (!hasPermission) {
+      return false;
+    }
+    return true;
+  } else {
+    // this.$message.error('没有操作权限');
+    return false;
+  }
 
-  // return current.indexOf(authority) > -1;
-  // return current.some(item => authority.includes(item));
+  return current.indexOf(authority) > -1;
+  return current.some(item => authority.includes(item));
 
   return true;
 

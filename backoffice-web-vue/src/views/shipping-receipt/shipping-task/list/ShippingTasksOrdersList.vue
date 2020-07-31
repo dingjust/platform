@@ -4,7 +4,7 @@
       <el-button @click="onCreate">创建发货订单</el-button>
     </el-row>
     <el-table ref="resultTable" stripe :data="formData.shippingSheets" :height="autoHeight">
-      <el-table-column label="发货单号" prop="code" min-width="160px">
+      <el-table-column label="发货单号" prop="code" min-width="230px">
         <template slot-scope="scope">
           <el-row type="flex" align="middle">
             <el-button type="text" @click="onShippingSheetDetail(scope.row.id)">{{scope.row.code}}</el-button>
@@ -16,7 +16,7 @@
         </template>
       </el-table-column>
       <el-table-column label="发货数量" prop="totalQuantity"></el-table-column>
-      <el-table-column label="发货时间">
+      <el-table-column label="发货时间" min-width="85px">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDateInday}}</span>
         </template>
@@ -36,7 +36,7 @@
           <span>{{countTotalSheetsNum(scope.row.receiptSheets)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收货时间">
+      <el-table-column label="收货时间" min-width="85px">
         <template slot-scope="scope" v-if="scope.row.receiptSheets!=null">
           <span>{{scope.row.receiptSheets[0].creationtime | formatDateInday}}</span>
         </template>

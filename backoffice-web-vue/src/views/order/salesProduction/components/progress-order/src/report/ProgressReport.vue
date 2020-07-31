@@ -240,7 +240,7 @@
           operator: {
             id: ''
           },
-          reportTime: '',
+          reportTime: Date.now(),
           remarks: '',
           entries: [],
           materialPreparationEntries: [],

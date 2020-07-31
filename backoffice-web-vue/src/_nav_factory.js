@@ -54,19 +54,23 @@ export default {
         }, {
           name: '生产进度工单',
           url: '/sales/progressOrder'
-        }, {
-          name: '发货任务',
-          url: '/shipping/tasks',
-        }, {
+        },
+        //  {
+        //   name: '发货任务',
+        //   url: '/shipping/tasks',
+        // }, 
+        {
           name: '发货管理',
           url: '/shipping/shipping-receipt-sheet',
         }, {
           name: '差异复议',
           url: '/shipping/reconsider-order',
-        }, {
-          name: '对账任务',
-          url: '/reconciliation/tasks/import',
-        }, {
+        }, 
+        // {
+        //   name: '对账任务',
+        //   url: '/reconciliation/tasks/import',
+        // },
+         {
           name: '对账管理',
           url: '/shipping/reconciliation-manage',
         }
@@ -81,20 +85,24 @@ export default {
         }, {
           name: '外发生产工单',
           url: '/sales/outboundProductionOrder'
-        }, {
-          name: '收货任务',
-          url: '/receipt/tasks',
-        }, {
+        }, 
+        // {
+        //   name: '收货任务',
+        //   url: '/receipt/tasks',
+        // }, 
+        {
           name: '收货管理',
           url: '/receipt/shipping-receipt-sheet',
         },
         {
           name: '差异复议',
           url: '/receipt/reconsider-order',
-        }, {
-          name: '对账任务',
-          url: '/reconciliation/tasks/export',
-        }, {
+        }, 
+        // {
+        //   name: '对账任务',
+        //   url: '/reconciliation/tasks/export',
+        // }, 
+        {
           name: '对账管理',
           url: '/receipt/reconciliation-manage',
         }
@@ -183,7 +191,7 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '角色',
+          name: '角色管理',
           url: '/account/organizationRole',
           icon: 'iconNone'
         },

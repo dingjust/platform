@@ -66,12 +66,12 @@
               <MTAVAT :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
                 :readOnly="hasOrigin" :tax.sync="form.invoiceTaxPoint" />
             </el-col>
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-form-item label="是否需要产前：" label-width="120" prop="needVoice">
                 <el-radio v-model="form.needPreproduction" :label="true" :disabled="hasOrigin">是</el-radio>
                 <el-radio v-model="form.needPreproduction" :label="false" :disabled="hasOrigin">否</el-radio>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
           <!-- <el-row type="flex">
             <el-col :span="8">

@@ -28,9 +28,6 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
-        <el-col :span="2">
-          <el-button class="create-btn" @click="onCreate" v-if="canCreate">创建对账单</el-button>
-        </el-col>
       </el-row>
     </el-form>
   </div>
@@ -85,12 +82,6 @@
   .toolbar-search_input{
     background-color: #ffd60c;
     border-color: #ffd60c;
-  }
-
-  .create-btn {
-    background-color: #ffd60c;
-    border-color: #FFD5CE;
-    color: #000;
   }
 
   /deep/ .el-date-editor .el-range-separator {

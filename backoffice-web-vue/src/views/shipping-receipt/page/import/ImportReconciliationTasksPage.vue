@@ -6,7 +6,7 @@
  * @version: V1.0.0 
 !-->
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card>
       <el-row>
         <el-col :span="4">

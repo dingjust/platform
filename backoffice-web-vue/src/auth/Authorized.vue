@@ -1,27 +1,47 @@
-<script>
-import { check } from "./auth";
-import { Empty } from "./Empty";
+<template>
+  <div>
+    <template v-if="!hasPermission">
+      <div @click.capture="onCheck">
+        <slot></slot>
+      </div>
+    </template>
+    <template v-else>
+      <slot></slot>
+    </template>
+  </div>
+</template>
 
-export default {
-  functional: true,
-  components: {
-    Empty
-  },
-  props: {
-    authority: {
-      type: Array,
-      required: true
-    }
-  },
-  render(h, context) {
-    const { props, scopedSlots } = context;
-    // 如果校验通过，则返回子组件/插槽内容；否则返回null;
-    // return check(props.authority) ? scopedSlots.default() : null;
-    if (scopedSlots.default!=null ) {
-      return scopedSlots.default();
-    } else {
-      return Empty;
-    }
+<script>
+  import {
+    check
+  } from "./auth";
+
+  export default {
+    name: 'Authorized',
+    props: {
+      permission: {
+        type: Array,
+        default: () => {
+          return [];
+        }
+      }
+    },
+    computed: {
+      hasPermission: function () {
+        return check(this.permission);
+      }
+    },
+    methods: {
+      onCheck() {
+        event.stopPropagation();
+        this.$message('没有权限操作');
+      }
+    },
+    data() {
+      return {
+
+      }
+    },
   }
-};
+
 </script>
