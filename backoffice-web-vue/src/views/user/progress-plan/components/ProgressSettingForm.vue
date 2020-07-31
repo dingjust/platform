@@ -67,7 +67,7 @@
         }
         this.phaseData = result.data.content;
 
-        if (this.isCreate || this.isFormCreate) {
+        if (this.isCreate && this.isFormCreate) {
           this.formData.productionProgresses = [];
           this.phaseData.forEach(item => {
             if (item.name === '裁剪') {
