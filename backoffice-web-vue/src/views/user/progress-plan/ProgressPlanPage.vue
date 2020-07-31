@@ -8,7 +8,9 @@
           </div>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" class="toolbar-search_input" @click="createNode">创建节点方案</el-button>
+          <Authorized :permission="['PROGRESS_PLAN_OPERATE']">
+            <el-button type="primary" class="toolbar-search_input" @click="createNode">创建节点方案</el-button>
+          </Authorized>
         </el-col>
       </el-row>
       <div class="pt-2"></div>

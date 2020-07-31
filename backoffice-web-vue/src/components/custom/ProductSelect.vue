@@ -9,8 +9,9 @@
       </el-form-item>
       <!-- <el-button-group> -->
       <el-button type="text" @click="onSearch">查找</el-button>
-
-      <el-button type="text" @click="onNew">创建产品</el-button>
+      <Authorized :permission="['PRODUCT_CREATE']">
+        <el-button type="text" @click="onNew">创建产品</el-button>
+      </Authorized>
       <!-- </el-button-group> -->
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-form>

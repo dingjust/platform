@@ -16,16 +16,24 @@
 <!--      </el-row>-->
 <!--    </el-dialog>-->
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
-      <el-button type="warning" v-if="slotData.state != 'INVALID'" @click="onBCXY" class="toolbar-search_input">增加补充协议
-      </el-button>
+      <Authorized :permission="['AGREEMENT_CREATE']">
+        <el-button type="warning" v-if="slotData.state != 'INVALID'" @click="onBCXY" class="toolbar-search_input">增加补充协议
+        </el-button>
+      </Authorized>
       <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && !slotData.isCreator"
-        type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning"
-        class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
-                 class="toolbar-search_input" @click="onSearchSeal">签署
-      </el-button>
+      <Authorized :permission="['AGREEMENT_SIGN']">
+        <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && !slotData.isCreator"
+          type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
+      </Authorized>
+      <Authorized :permission="['AGREEMENT_SIGN']">
+        <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning"
+          class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
+      </Authorized>
+      <Authorized :permission="['AGREEMENT_SIGN']">
+        <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
+                  class="toolbar-search_input" @click="onSearchSeal">签署
+        </el-button>
+      </Authorized>
     </div>
     <!--<center>-->
     <!--<table height="150px" border="0" id='waitPage'>-->

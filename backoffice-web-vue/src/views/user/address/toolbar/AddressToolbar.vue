@@ -1,7 +1,9 @@
 <template>
   <el-form :inline="true">
     <el-button-group>
-      <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+      <Authorized :permission="['COMPANY_ADDRESS_CREATE']">
+        <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+      </Authorized>
     </el-button-group>
   </el-form>
 </template>

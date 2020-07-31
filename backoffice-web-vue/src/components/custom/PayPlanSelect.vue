@@ -5,8 +5,9 @@
         <el-input placeholder="请输入账务方案名称查询" v-model="queryFormData.keyword"></el-input>
       </el-form-item>
       <el-button type="text" @click="onSearch">搜索</el-button>
-
-      <el-button type="text" @click="onNew">创建账务方案</el-button>
+      <Authorized :permission="['PAY_PLAN_OPERATE']">
+        <el-button type="text" @click="onNew">创建账务方案</el-button>
+      </Authorized>
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-form>
     <!--v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"-->

@@ -8,15 +8,27 @@
         <span class="custom-tree-node" slot-scope="{ node, data }" @click="onClick(data)">
           <span>{{ data.name }}</span>
           <span>
-            <el-button v-if="data.depth < 3 || data.depth === 0" type="text" size="mini" @click="appendDept(data)">
-              <i class="el-icon-plus" style="border: 1px solid"/>
-            </el-button>
-            <el-button v-if="data.depth > 0" type="text" size="mini" @click="editDept(data, node)">
-              <i class="el-icon-edit"/>
-            </el-button>
-            <el-button v-if="data.depth > 0" type="text" size="mini" @click="deleteDept(data)">
-              <i class="el-icon-delete"/>
-            </el-button>
+            <template v-if="data.depth < 3 || data.depth === 0">
+              <Authorized :permission="['COMPANY_B2BDEPT_CREATE']">
+                <el-button type="text" size="mini" @click="appendDept(data)">
+                  <i class="el-icon-plus" style="border: 1px solid"/>
+                </el-button>
+              </Authorized>
+            </template>
+            <template v-if="data.depth > 0">
+              <Authorized :permission="['COMPANY_B2BDEPT_CREATE']">
+                <el-button type="text" size="mini" @click="editDept(data, node)">
+                  <i class="el-icon-edit"/>
+                </el-button>
+              </Authorized>
+            </template>
+            <template v-if="data.depth > 0">
+              <Authorized :permission="['COMPANY_B2BDEPT_REMOVE']">
+                <el-button type="text" size="mini" @click="deleteDept(data)">
+                  <i class="el-icon-delete"/>
+                </el-button>
+              </Authorized>
+            </template>
           </span>
         </span>
       </el-tree>

@@ -8,7 +8,9 @@
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
-        <el-button type="warning" @click="onDetails" class="toolbar-search_input">编辑</el-button>
+        <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
+          <el-button type="warning" @click="onDetails" class="toolbar-search_input">编辑</el-button>
+        </Authorized>
       </div>
       <iframe id='previewPdf' :src="'static/pdf/web/viewer.html?file=' + fileUrl"
               height="480" width="100%">

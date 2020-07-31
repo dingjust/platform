@@ -18,11 +18,15 @@
       </el-col>
     </el-row>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button v-if="personalState == 'UNCERTIFIED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+      <Authorized :permission="['CERT_APPLY']">
+        <el-button v-if="personalState == 'UNCERTIFIED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+      </Authorized>
     </el-row>
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button v-if="personalState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
+      <Authorized :permission="['CERT_APPLY']">
+        <el-button v-if="personalState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
+      </Authorized>
     </el-row>
   </div>
 </template>

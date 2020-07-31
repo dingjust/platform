@@ -2,7 +2,9 @@
   <div>
     <el-row type="flex" justify="space-between" align="middle">
       <h6 style="font-size: 14px">{{title}}</h6>
-      <el-button class="material-btn" @click="appendOrder" v-if="belongTo=='PAYABLE_PAGE'">创建付款申请单</el-button>
+      <Authorized :permission="['PAYMENT_REQUEST_CREATE']">
+        <el-button class="material-btn" @click="appendOrder" v-if="belongTo=='PAYABLE_PAGE'">创建付款申请单</el-button>
+      </Authorized>
     </el-row>
     <el-table ref="resultTable" stripe :data="content">
       <el-table-column label="收款次数" v-if="belongTo == 'RECEIVABLE_PAGE'" type="index" width="80px" />

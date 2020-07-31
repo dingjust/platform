@@ -12,8 +12,12 @@
         </div>
       </el-col>
       <el-col :span="4">
-        <el-button class="personnel-role-btn" @click="dialogVisible = !dialogVisible">添加</el-button>
-        <el-button class="personnel-role-btn1" @click="onDelete">删除</el-button>
+        <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
+          <el-button class="personnel-role-btn" @click="dialogVisible = !dialogVisible">添加</el-button>
+        </Authorized>
+        <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
+          <el-button class="personnel-role-btn1" @click="onDelete">删除</el-button>
+        </Authorized>
       </el-col>
     </el-row>
     <el-dialog :visible.sync="dialogVisible" width="50%" append-to-body :close-on-click-modal="false" :show-close="false">
@@ -90,6 +94,7 @@ export default {
   }
 
   .personnel-role-btn {
+    margin-left: 10px;
     background-color: #ffd60c;
     color: #000;
     width: 80px;

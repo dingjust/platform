@@ -9,7 +9,9 @@
       </el-col>
       <el-col :span="2">
         <el-button-group>
-          <el-button @click="onCreate">新建印章</el-button>
+          <Authorized :permission="['AGREEMENT_SEAL_CREATE_DELETE']">
+            <el-button @click="onCreate">新建印章</el-button>
+          </Authorized>
           <!--<el-button>管理设置</el-button>-->
         </el-button-group>
       </el-col>

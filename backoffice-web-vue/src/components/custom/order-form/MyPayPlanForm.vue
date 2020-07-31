@@ -48,7 +48,9 @@
             <h6 style="margin-top: 3px;">{{currentFinancialPlan!=''?'当前选中方案：'+currentFinancialPlan:'当前未选择账务方案'}}</h6>
             <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain
                        size="mini">选择财务方案</el-button>
-            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
+            <Authorized :permission="['PAY_PLAN_OPERATE']">
+              <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
+            </Authorized>
           </el-row>
         </el-col>
       </el-row>

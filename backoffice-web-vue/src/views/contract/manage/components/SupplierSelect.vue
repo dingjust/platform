@@ -5,7 +5,9 @@
         <el-input placeholder="请输入名称查询" v-model="queryFormData.keyword"></el-input>
       </el-form-item>
       <el-button type="text" @click="onSearch">查找</el-button>
-      <el-button type="text" @click="jumpToCreate">添加合作商</el-button>
+      <Authorized :permission="['COMPANY_COOPERATOR_CREATE']">
+        <el-button type="text" @click="jumpToCreate">添加合作商</el-button>
+      </Authorized>
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-form>
     <el-table ref="resultTable" stripe :data="page.content" highlight-current-row @current-change="handleCurrentChange"

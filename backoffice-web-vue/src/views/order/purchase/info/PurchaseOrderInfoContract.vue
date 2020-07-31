@@ -25,10 +25,12 @@
         <h6 class="info-title_text">合同（{{contracts==null || contracts == '' || contracts.length <= 0?'未签署':'已有合同'}}）
         </h6>
       </div>
-      <el-button
-        v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED' && !isTenant()"
-        type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
-      </el-button>
+      <Authorized :permission="['AGREEMENT_CREATE']">
+        <el-button
+          v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED' && !isTenant()"
+          type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
+        </el-button>
+      </Authorized>
       <!--<el-button v-if="contract !=null && contract.state != 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同-->
       <!--</el-button>-->
     </el-row>

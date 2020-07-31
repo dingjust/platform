@@ -20,7 +20,9 @@
       </el-select>
     </el-form-item>
     <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
-    <el-button type="primary" class="toolbar-search_input" @click="onCreate">新建</el-button>
+    <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
+      <el-button type="primary" class="toolbar-search_input" @click="onCreate">新建</el-button>
+    </Authorized>
   </el-form>
   <!--<el-form :inline="true">-->
     <!--<el-row type="flex" justify="space-between">-->

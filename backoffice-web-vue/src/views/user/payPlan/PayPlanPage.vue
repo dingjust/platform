@@ -13,7 +13,9 @@
         </el-col>
         <el-col :span="2">
           <div>
-             <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加新方案</el-button>
+            <Authorized :permission="['PAY_PLAN_OPERATE']">
+              <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加新方案</el-button>
+            </Authorized>
           </div>
         </el-col>
       </el-row>

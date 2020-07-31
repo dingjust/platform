@@ -41,7 +41,9 @@
     </el-form-item>
       <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
       <el-button  native-type="reset" @click="onReset">重置</el-button>
-      <el-button type="primary" class="toolbar-search_input" @click="dialogVisible = true">创建合同</el-button>
+      <Authorized :permission="['AGREEMENT_CREATE']">
+        <el-button type="primary" class="toolbar-search_input" @click="dialogVisible = true">创建合同</el-button>
+      </Authorized>
   </el-form>
   </div>
 </template>

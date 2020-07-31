@@ -5,7 +5,9 @@
         <h6 class="product-info">选择地址</h6>
       </el-col>
       <el-col :span="4">
-        <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+        <Authorized :permission="['COMPANY_ADDRESS_CREATE']">
+          <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+        </Authorized>
       </el-col>
     </el-row>
     <el-table ref="resultTable" stripe :data="address" highlight-current-row @current-change="handleCurrentChange"
