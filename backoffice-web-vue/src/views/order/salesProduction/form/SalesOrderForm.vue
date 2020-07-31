@@ -151,14 +151,14 @@
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
-          <authorized :permission="['ROLE_SALES_ORDER_CREATE']">
+          <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
             <el-button class="material-btn" @click="onSave(false)">保存</el-button>
-          </authorized>
+          <!-- </authorized> -->
         </el-col>
         <el-col :span="5">
-          <authorized :permission="['ROLE_SALES_ORDER_CREATE']">
+          <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
             <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
-          </authorized>
+          <!-- </authorized> -->
         </el-col>
       </el-row>
     </el-card>
