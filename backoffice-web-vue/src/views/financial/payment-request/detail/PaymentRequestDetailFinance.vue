@@ -133,7 +133,7 @@
       auditState: function () {
         switch (this.formData.state) {
           case 'AUDITING':
-            return '审核中';
+            return '待审核';
           case 'AUDIT_FAIL':
             return '已驳回';
           default:

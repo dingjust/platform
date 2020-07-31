@@ -76,13 +76,13 @@
               <h6>备注：{{formData.remark}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px" 
+          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px"
             v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
             <el-col :span="8">
               <h6>上传凭证</h6>
               <el-row style="margin-left: 20px">
-                <images-upload :slotData="formData.requestVouchers" 
-                  :limit="formData.requestVouchers.length" :disabled="true" />
+                <images-upload :slotData="formData.requestVouchers" :limit="formData.requestVouchers.length"
+                  :disabled="true" />
               </el-row>
             </el-col>
           </el-row>
@@ -95,22 +95,32 @@
       </el-row>
       <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canAudit">
         <el-col :span="3">
-          <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+          <authorized :permission="['DO_AUDIT']">
+            <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+          </authorized>
         </el-col>
         <el-col :span="3">
-          <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+          <authorized :permission="['DO_AUDIT']">
+            <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+          </authorized>
         </el-col>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <payment-form v-if="paymentVisible" :id="id" @callback="callback"/>
+    <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <payment-form v-if="paymentVisible" :id="id" @callback="callback" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import {PersonnelSelection, ImagesUpload} from '@/components/index.js'
-  import { PaymentRecordsList } from '@/views/financial'
+  import {
+    PersonnelSelection,
+    ImagesUpload
+  } from '@/components/index.js'
+  import {
+    PaymentRecordsList
+  } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
   export default {
     name: 'PaymentRequestDetailMerchandiser',
@@ -121,11 +131,11 @@
       PaymentForm,
       PaymentRecordsList
     },
-    computed: { 
+    computed: {
       canAudit: function () {
         const id = this.$store.getters.currentUser.id;
         let index = this.formData.approvers.findIndex(item => item.id == id);
-        return this.formData.state == 'AUDITING' && index >= 0; 
+        return this.formData.state == 'AUDITING' && index >= 0;
       },
       agreementsCode: function () {
         if (!this.formData.productionOrder.agreements && this.formData.productionOrder.agreements.length <= 0) {
@@ -143,7 +153,7 @@
       auditState: function () {
         switch (this.formData.state) {
           case 'AUDITING':
-            return '审核中';
+            return '待审核';
           case 'AUDIT_FAIL':
             return '已驳回';
           default:
@@ -184,7 +194,7 @@
       }
     },
     methods: {
-      async getDetail () {
+      async getDetail() {
         const url = this.apis().getPaymentRequestDetail(this.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -198,7 +208,7 @@
         this.formData = result.data;
         this.countRequestAmount(result.data.productionOrder.id);
       },
-      async countRequestAmount (id) {
+      async countRequestAmount(id) {
         const url = this.apis().getRequestAmount(id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -209,17 +219,17 @@
           this.$message.error(result.msg);
           return;
         }
-        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) - 
-                              this.parseFloatNotParNaN(result.data.paidAmount);
+        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) -
+          this.parseFloatNotParNaN(result.data.paidAmount);
       },
-      parseFloatNotParNaN (data) {
+      parseFloatNotParNaN(data) {
         if (isNaN(parseFloat(data))) {
           return 0;
         } else {
           return parseFloat(data);
         }
       },
-      callback () {
+      callback() {
         this.paymentVisible = !this.paymentVisible;
         this.getDetail();
       },
@@ -283,7 +293,9 @@
         var chineseStr = '';
         //分离金额后用的数组，预定义
         var parts;
-        if (money === '') { return ''; }
+        if (money === '') {
+          return '';
+        }
         money = parseFloat(money);
         if (money >= maxNum) {
           //超出最大处理数字
@@ -344,9 +356,9 @@
           chineseStr += cnInteger;
         }
         return chineseStr;
-      } 
+      }
     },
-    data () {
+    data() {
       return {
         paymentVisible: false,
         preApplyAmount: '',
@@ -372,13 +384,14 @@
         isFormFincance: false
       }
     },
-    created () {
+    created() {
       this.getDetail();
     },
-    destroyed () {
-      
+    destroyed() {
+
     }
   }
+
 </script>
 
 <style scoped>
@@ -407,13 +420,13 @@
     width: 194px;
   }
 
-  .payment-request-container >>> .el-upload--picture-card {
+  .payment-request-container>>>.el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  .payment-request-container >>> .el-upload-list--picture-card .el-upload-list__item {
+  .payment-request-container>>>.el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }
@@ -450,4 +463,5 @@
     color: white;
     font-size: 12px;
   }
+
 </style>

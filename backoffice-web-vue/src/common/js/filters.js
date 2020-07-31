@@ -267,7 +267,7 @@ const ENUMS = {
     },
     IN_REVIEW: {
       code: 'IN_REVIEW',
-      name: '审核中'
+      name: '待审核'
     },
     REVIEWED: {
       code: 'REVIEWED',

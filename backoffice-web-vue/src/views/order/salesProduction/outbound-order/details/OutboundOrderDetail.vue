@@ -45,10 +45,14 @@
       </el-row>
       <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
         <el-col :span="3">
-          <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+          <authorized :permission="['DO_AUDIT']">
+            <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+          </authorized>
         </el-col>
         <el-col :span="3">
-          <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+          <authorized :permission="['DO_AUDIT']">
+            <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+          </authorized>
         </el-col>
       </el-row>
     </el-card>
@@ -118,7 +122,7 @@
         // }
       },
       canAudit: function () {
-        // 订单审核状态在审核中且登陆账号为审核人
+        // 订单审核状态在待审核且登陆账号为审核人
         return this.formData.sendAuditState == 'AUDITING' &&
           this.formData.sendApprovers[0].uid == this.$store.getters.currentUser.uid;
       },

@@ -26,17 +26,23 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
-          <el-divider v-if="scope.row.state == 'AUDITING'" direction="vertical"/>
-          <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onApproval(scope.row)">通过</el-button>
-          <el-divider v-if="scope.row.state == 'AUDITING'" direction="vertical"/>
-          <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onRefuse(scope.row)">驳回</el-button>
+          <el-divider v-if="scope.row.state == 'AUDITING'" direction="vertical" />
+          <authorized :permission="['DO_AUDIT']">
+            <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onApproval(scope.row)">通过
+            </el-button>
+          </authorized>
+          <el-divider v-if="scope.row.state == 'AUDITING'" direction="vertical" />
+          <authorized :permission="['DO_AUDIT']">
+            <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onRefuse(scope.row)">驳回
+            </el-button>
+          </authorized>
         </template>
       </el-table-column>
     </el-table>
     <div class="pt-2"></div>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-                   :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
   </div>
 </template>
@@ -46,13 +52,13 @@
     name: 'TaskApprovalList',
     props: ['page'],
     methods: {
-      onDetail (row) {
+      onDetail(row) {
         this.$emit('onDetail', row);
       },
-      onApproval (row) {
+      onApproval(row) {
         this.$emit('onApproval', row);
       },
-      onRefuse (row) {
+      onRefuse(row) {
         this.$emit('onRefuse', row)
       },
       onPageSizeChanged(val) {
@@ -69,6 +75,7 @@
       }
     }
   }
+
 </script>
 
 <style scoped>

@@ -47,7 +47,7 @@ const state = {
     },
     {
       code: 'IN_REVIEW',
-      name: '审核中'
+      name: '待审核'
     },
     {
       code: 'REVIEWED',
@@ -1527,7 +1527,7 @@ const state = {
     },
     {
       code: 'AUDITING',
-      name: '审核中'
+      name: '待审核'
     },
     {
       code: 'PASSED',
@@ -1557,7 +1557,7 @@ const state = {
     name: '待接单'
   }, {
     code: 'AUDITING',
-    name: '审核中'
+    name: '待审核'
   }, {
     code: 'AUDIT_REJECTED',
     name: '审核驳回'
@@ -1608,7 +1608,7 @@ const state = {
     name: '待提交'
   }, {
     code: 'AUDITING',
-    name: '审核中'
+    name: '待审核'
   }, {
     code: 'AUDIT_REJECTED',
     name: '审核驳回'
@@ -1642,7 +1642,7 @@ const state = {
   // 进度工单单据-产前样类型状态
   ProgressReportSampleStatus: [{
       code: 'IN_APPROVAL',
-      name: '审核中'
+      name: '待审核'
     },
     {
       code: 'APPROVED',
@@ -1655,7 +1655,7 @@ const state = {
     name: '无'
   }, {
     code: 'AUDITING',
-    name: '审核中'
+    name: '待审核'
   }, {
     code: 'PASSED',
     name: '审核通过'

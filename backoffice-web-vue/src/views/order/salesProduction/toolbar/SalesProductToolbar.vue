@@ -6,18 +6,18 @@
           <el-form-item label="订单信息" prop="name">
             <el-input placeholder="订单号，订单名称" v-model="queryFormData.keyword" class="input-item"></el-input>
           </el-form-item>
-        <!-- </el-col> -->
-        <!-- <el-col :span="5"> -->
+          <!-- </el-col> -->
+          <!-- <el-col :span="5"> -->
           <el-form-item label="负责人" prop="name">
             <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input>
           </el-form-item>
-        <!-- </el-col> -->
-        <!-- <el-col :span="5"> -->
+          <!-- </el-col> -->
+          <!-- <el-col :span="5"> -->
           <el-form-item label="合作商" prop="name">
             <el-input placeholder="合作商名称" v-model="queryFormData.originCooperator" class="input-item"></el-input>
           </el-form-item>
-        <!-- </el-col> -->
-        <!-- <el-col :span="1" style="margin-right:10px"> -->
+          <!-- </el-col> -->
+          <!-- <el-col :span="1" style="margin-right:10px"> -->
           <el-button-group>
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
             <el-button native-type="reset" @click="onReset">重置</el-button>
@@ -26,15 +26,21 @@
         <el-col :span="5" v-if="isPending">
           <el-row type="flex" justify="end">
             <el-button-group>
-              <el-button size="small" @click="createSalesOrder">创建业务订单</el-button>
-              <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入</el-button>
+              <authorized :permission="['SALES_PLAN_CREATE']">
+                <el-button size="small" @click="createSalesOrder">创建业务订单</el-button>
+              </authorized>
+              <authorized :permission="['SALES_PLAN_CREATE']">
+                <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入</el-button>
+              </authorized>
             </el-button-group>
           </el-row>
         </el-col>
         <el-col :span="5" v-if="!isPending">
           <el-row type="flex" justify="end">
             <el-button-group>
-              <el-button size="small" @click="createSalesPlan">创建企划订单</el-button>
+              <authorized :permission="['SALES_PLAN_CREATE']">
+                <el-button size="small" @click="createSalesPlan">创建企划订单</el-button>
+              </authorized>
             </el-button-group>
           </el-row>
         </el-col>
@@ -169,7 +175,7 @@
 </script>
 <style scoped>
   .input-item {
-    width: 170px;    
+    width: 170px;
   }
 
   .toolbar-search_input {

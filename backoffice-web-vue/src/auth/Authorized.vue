@@ -42,7 +42,10 @@
           window.event.cancelBubble = true;
         }
 
-        this.$message('没有权限操作');
+        this.$message({
+          message: '没有权限操作',
+          type: 'warning'
+        });
       }
     },
     data() {
