@@ -13,9 +13,15 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="基本信息" name="BASIC">
             <el-row type="flex" justify="end">
-              <el-button @click="onEdit">编辑</el-button>
-              <el-button @click="onForbidden">禁用</el-button>
-              <el-button @click="onEnabled">启用</el-button>
+              <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
+                <el-button @click="onEdit">编辑</el-button>
+              </Authorized>
+              <Authorized :permission="['COMPANY_CUSTOMER_ENABLE']">
+                <el-button @click="onForbidden">禁用</el-button>
+              </Authorized>
+              <Authorized :permission="['COMPANY_CUSTOMER_ENABLE']">
+                <el-button @click="onEnabled">启用</el-button>
+              </Authorized>
             </el-row>
             <el-form :inline="true">
               <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
@@ -74,7 +80,9 @@
         </el-tabs>
       </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-        <el-button class="personnel-role-btn" @click="onConfirm">确定</el-button>
+        <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
+          <el-button class="personnel-role-btn" @click="onConfirm">确定</el-button>
+        </Authorized>
       </el-row>
     </el-card>
   </div>

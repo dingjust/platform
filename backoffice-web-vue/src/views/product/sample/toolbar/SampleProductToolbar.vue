@@ -36,7 +36,9 @@
       </el-form-item>
         <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
         <el-button native-type="reset" @click="onReset">重置</el-button>
-        <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
+        <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
+          <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
+        </Authorized>
   </el-form>
 </template>
 

@@ -22,6 +22,7 @@
   import {
     ImagesUpload
   } from '@/components/index.js'
+  import {hasPermission} from '@/auth/auth'
 
   export default {
     name: 'FinancialInvoiceInfo',
@@ -65,6 +66,11 @@
         this.invoiceFormVisible = false;
       },
       onUpload() {
+        if (!hasPermission('PAYMENT_BILL_UPLOAD_INVOICE')) {
+          this.$message.warning('没有权限操作');
+          return;
+        }
+
         this.readOnly = false;
         this.invoiceFormVisible = true;
         this.invoiceData = {

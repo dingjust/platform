@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="node-list-title">
-            <h6>创建节点方案</h6>
+            <h6>{{isCreate ? '创建节点方案' : '编辑节点方案'}}</h6>
           </div>
         </el-col>
         <el-col :span="2">
@@ -12,7 +12,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <progress-plan-form-info ref="infoForm" :formData="formData"/>
+      <progress-plan-form-info ref="infoForm" :formData="formData" :isCreate="isCreate"/>
     </el-card>
   </div>
 </template>
@@ -65,6 +65,7 @@
     },
     data () {
       return {
+        isCreate: true,
         formData: {
           name: '',
           remarks: '',
@@ -75,6 +76,7 @@
     created () {
       if (this.$route.params.formData != null) {
         this.formData = this.$route.params.formData;
+        this.isCreate = false;
       }
     }
   }

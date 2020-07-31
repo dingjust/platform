@@ -94,7 +94,9 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-        <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
+        <Authorized :permission="['PAYMENT_REQUEST_FINANCE_PAY']">
+          <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
+        </Authorized>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">

@@ -27,9 +27,13 @@
           <el-row>
             <el-button type="text" @click="onDetails(scope.row)" class="cooperator-list-button">明细</el-button>
             <el-divider direction="vertical"></el-divider>
-            <el-button type="text" @click="onEdit(scope.row)" class="cooperator-list-button">编辑</el-button>
+            <Authorized :permission="['PAY_PLAN_OPERATE']">
+              <el-button type="text" @click="onEdit(scope.row)" class="cooperator-list-button">编辑</el-button>
+            </Authorized>
             <el-divider direction="vertical"></el-divider>
-            <el-button type="text" @click="onDelete(scope.row)" class="cooperator-list-button">删除</el-button>
+            <Authorized :permission="['PAY_PLAN_OPERATE']">
+              <el-button type="text" @click="onDelete(scope.row)" class="cooperator-list-button">删除</el-button>
+            </Authorized>
           </el-row>
         </template>
       </el-table-column>

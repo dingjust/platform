@@ -16,10 +16,16 @@
       </el-table-column>
       <el-table-column label="操作" min-width="180px">
         <template slot-scope="scope">
-          <el-button type="text" @click="onDetail(scope.row)">查看</el-button>
-          <el-button type="text" @click="onEdit(scope.row)">编辑</el-button>
-          <el-button type="text" @click="onChangeState(scope.row)">{{roleState(scope.row)}}</el-button>
-          <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
+          <!-- <el-button type="text" @click="onDetail(scope.row)">查看</el-button> -->
+          <Authorized :permission="['COMPANY_ROLE_CREATE']">
+            <el-button type="text" @click="onEdit(scope.row)">编辑</el-button>
+          </Authorized>
+          <Authorized :permission="['COMPANY_ROLE_REMOVE']">
+            <el-button type="text" @click="onChangeState(scope.row)">{{roleState(scope.row)}}</el-button>
+          </Authorized>
+          <Authorized :permission="['COMPANY_ROLE_REMOVE']">
+            <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
+          </Authorized>
         </template>
       </el-table-column>
     </el-table>

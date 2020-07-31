@@ -10,7 +10,9 @@
             <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
             <el-button native-type="reset" @click="queryFormData.keyword=''">重置</el-button>
           </el-button-group>
-          <el-button type="primary" class="toolbar-search_input" @click="onNew">新建节点</el-button>
+          <Authorized :permission="['PROGRESS_PLAN_OPERATE']">
+            <el-button type="primary" class="toolbar-search_input" @click="onNew">新建节点</el-button>
+          </Authorized>
         </el-col>
         <el-col :span="4">
           <el-button type="primary" class="toolbar-search_input" @click="onSure">确定</el-button>

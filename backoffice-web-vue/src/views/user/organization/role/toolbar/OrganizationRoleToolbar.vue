@@ -18,7 +18,9 @@
           </el-button-group>
         </el-col>
         <el-col :span="2">
-          <el-button class="material-btn" @click="onCreate">创建角色</el-button>
+          <Authorized :permission="['COMPANY_ROLE_CREATE']">
+            <el-button class="material-btn" @click="onCreate">创建角色</el-button>
+          </Authorized>
         </el-col>
       </el-row>
     </el-form>

@@ -11,7 +11,9 @@
       </el-col>
       <el-col :span="16">
         <el-button type="text" @click="onSearch">查找</el-button>
-        <el-button type="text" @click="onNew">创建款式</el-button>
+        <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
+          <el-button type="text" @click="onNew">创建款式</el-button>
+        </Authorized>
         <el-button class="sample-slelct-btn" size="mini" @click="onConfirm">确定</el-button>
       </el-col>
     </el-row>

@@ -26,9 +26,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-button v-if="!readOnly" size="medium" type="primary" class="toolbar-search_input" @click="openProfiles">
-            手机头像设置
-          </el-button>
+          <Authorized :permission="['COMPANY_INFO_MODIFY']">
+            <el-button v-if="!readOnly" size="medium" type="primary" class="toolbar-search_input" @click="openProfiles">
+              手机头像设置
+            </el-button>
+          </Authorized>
         </el-col>
       </el-row>
       <el-row type="flex" justify="start" align="middle">

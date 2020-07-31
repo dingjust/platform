@@ -17,7 +17,9 @@
       </el-table-column>
       <el-table-column label="操作" min-width="180px">
         <template slot-scope="scope" v-if="!scope.row.root">
-          <el-button size="mini" @click="onEdit(scope.row)">编辑信息</el-button>
+          <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
+            <el-button size="mini" @click="onEdit(scope.row)">编辑信息</el-button>
+          </Authorized>
           <!-- <el-dropdown @command="handleCommand($event, scope.row)">
             <el-button size="mini">
               更多<i class="el-icon-arrow-down el-icon--right"></i>

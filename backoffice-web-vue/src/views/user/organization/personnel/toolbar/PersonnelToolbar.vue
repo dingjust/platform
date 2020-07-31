@@ -18,7 +18,9 @@
           </el-button-group>
         </el-col>
         <el-col :span="2">
-          <el-button class="material-btn" @click="onCreate">创建员工</el-button>
+          <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
+            <el-button class="material-btn" @click="onCreate">创建员工</el-button>
+          </Authorized>
         </el-col>
       </el-row>
     </el-form>

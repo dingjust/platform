@@ -4,7 +4,9 @@
                class="purchase-dialog" append-to-body :close-on-click-modal="false">
         <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
         <el-divider direction="vertical"></el-divider>
-        <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
+        <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
+          <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
+        </Authorized>
         <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">

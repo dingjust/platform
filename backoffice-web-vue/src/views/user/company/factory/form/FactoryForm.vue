@@ -26,9 +26,11 @@
     </div>
 
     <el-row type="flex" justify="center">
-      <el-button v-if="saveShow" class="buttonClass" @click="onSave">
-        <h6>保存</h6>
-      </el-button>
+      <Authorized :permission="['COMPANY_INFO_MODIFY']">
+        <el-button v-if="saveShow" class="buttonClass" @click="onSave">
+          <h6>保存</h6>
+        </el-button>
+      </Authorized>
     </el-row>
   </div>
 </template>

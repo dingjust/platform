@@ -25,7 +25,9 @@
 <!--          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row.code)">编辑</el-button>-->
           <el-button type="text" icon="el-icon-edit" @click="openPreviewPdf(scope.row.code)">查看</el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row.code)">删除</el-button>
+          <Authorized :permission="['AGREEMENT_TPML_DELETE']">
+            <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row.code)">删除</el-button>
+          </Authorized>
           <!--<el-divider direction="vertical"></el-divider>-->
           <!--<el-button type="text" icon="el-icon-edit" @click="">启用</el-button>-->
           <!--<el-divider direction="vertical"></el-divider>-->

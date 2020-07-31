@@ -64,10 +64,14 @@
         <!--</apparel-product-attributes-form>-->
       <!--</el-card>-->
       <el-row type="flex" justify="center" class="product-form-row">
-        <el-button class="product-form-btn" @click="onUpdate()"
-          v-if="this.slotData.code!=null&&this.slotData.code!=''&&!isRead">更新产品信息</el-button>
-        <el-button class="product-form-btn" @click="onCreate()"
-          v-if="(this.slotData.code==null||this.slotData.code=='')&&!isRead">确认创建产品</el-button>
+        <Authorized :permission="['PRODUCT_CREATE']">
+          <el-button class="product-form-btn" @click="onUpdate()"
+            v-if="this.slotData.code!=null&&this.slotData.code!=''&&!isRead">更新产品信息</el-button>
+        </Authorized>
+        <Authorized :permission="['PRODUCT_CREATE']">
+          <el-button class="product-form-btn" @click="onCreate()"
+            v-if="(this.slotData.code==null||this.slotData.code=='')&&!isRead">确认创建产品</el-button>
+        </Authorized>
       </el-row>
     </el-form>
   </div>
