@@ -9,7 +9,7 @@
           <el-input placeholder="" v-model="formData.remarks"></el-input>
         </el-form-item>
       </el-row>
-      <progress-setting-form :formData="formData"/>
+      <progress-setting-form :formData="formData" :isFormCreate="isCreate"/>
       <el-row class="progress-basic-row">
         <el-form-item prop="productionProgresses" label-width="100">
           <div></div>
@@ -30,6 +30,10 @@
       fromDialog: {
         type: Boolean,
         default: false
+      },
+      isCreate: {
+        type: Boolean,
+        default: true
       }
     },
     components: {ProgressSettingForm},

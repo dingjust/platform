@@ -269,7 +269,9 @@
         clearFormData: 'clearFormData'
       }),
       getProgressPlan(val) {
-        this.formData.taskOrderEntries[this.selectIndex].progressPlan = this.copyProgressPlan(val);
+        if (val) {
+          this.formData.taskOrderEntries[this.selectIndex].progressPlan = this.copyProgressPlan(val);
+        }
         this.progressPlanVisible = false;
       },
       onEditProgress(val) {

@@ -30,7 +30,7 @@
             <el-table-column align="right" v-if="!isCreate" min-width="150">
               <template slot="header" slot-scope="scope">
                 <el-row>
-                  <el-button size="mini">添加节点</el-button>
+                  <!-- <el-button size="mini">添加节点</el-button> -->
                   <el-button size="mini" @saveProgressPlan="saveProgressPlan">保存节点方案</el-button>
                 </el-row>
               </template>
@@ -52,6 +52,10 @@
       isCreate: {
         type: Boolean,
         default: true
+      },
+      isFormCreate: {
+        type: Boolean,
+        default: true
       }
     },
     methods: {
@@ -62,6 +66,15 @@
           this.$message.error(result.msg);
         }
         this.phaseData = result.data.content;
+
+        if (this.isCreate || this.isFormCreate) {
+          this.formData.productionProgresses = [];
+          this.phaseData.forEach(item => {
+            if (item.name === '裁剪') {
+              this.onAppend(item);
+            }
+          })
+        }
       },
       onAppend (row) {
         let item = {
@@ -90,6 +103,9 @@
         return this.formData.productionProgresses.findIndex(val => val.progressPhase.id == row.id) > -1;
       },
       isDeleteDisabled (row) {
+        if (row.progressPhase.name === '裁剪') {
+          return true;
+        }
         if (this.isCreate) {
           return false;
         }
