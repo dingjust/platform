@@ -31,11 +31,12 @@
         <template slot-scope="scope">
           <el-button v-if="belongTo == 'RECEIVABLE_PAGE' && scope.row.confirmState == 'PENDING'" type="text"
             @click="onConfirm(scope.row)">确认收款</el-button>
+          <span v-if="belongTo == 'RECEIVABLE_PAGE' && scope.row.confirmState == 'CONFIRMED'">已确认收款</span>
           <!-- <el-button v-if="belongTo == 'PAYABLE_PAGE'" type="text" @click="onConfirm(scope.row)">确认付款</el-button> -->
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="dialogVisible" width="50%">
+    <el-dialog :visible.sync="dialogVisible" width="30%">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
   </div>

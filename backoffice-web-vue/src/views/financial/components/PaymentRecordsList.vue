@@ -26,7 +26,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="dialogVisible" width="50%">
+    <el-dialog :visible.sync="dialogVisible" width="30%">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
   </div>
