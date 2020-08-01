@@ -1,23 +1,23 @@
 import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
 import 'package:b2b_commerce/src/business/products/brand/apparel_product_brand_form.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
+import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ApparelProductsBrandPage extends StatefulWidget {
-
   ApparelProductsBrandPage();
 
-  _ApparelProductsBrandPageState createState() => _ApparelProductsBrandPageState();
+  _ApparelProductsBrandPageState createState() =>
+      _ApparelProductsBrandPageState();
 }
 
 class _ApparelProductsBrandPageState extends State<ApparelProductsBrandPage> {
-
   @override
   void initState() {
-
     // TODO: implement initState
     super.initState();
   }
@@ -62,23 +62,24 @@ class _ApparelProductsBrandPageState extends State<ApparelProductsBrandPage> {
         body: Container(
           padding: EdgeInsets.only(top: 10),
           color: Colors.grey[100],
-          child: ApparelProductList(
-          ),
+          child: ApparelProductList(),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ApparelProductBrandFormPage(
-                        item: ApparelProductBLoC.instance.newProduct,
-                        isCreate: true,
-                        enabled: true,
-                      )),
-            ).then((val) {
-
-            });
+            Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+                context: context,
+                onJump: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ApparelProductBrandFormPage(
+                                item: ApparelProductBLoC.instance.newProduct,
+                                isCreate: true,
+                                enabled: true,
+                              ))).then((val) {});
+                });
           },
         ),
       ),

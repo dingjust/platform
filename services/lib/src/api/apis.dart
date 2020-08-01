@@ -105,20 +105,21 @@ class Apis {
   static get shareRequirement =>
           (String code) {
         return '${GlobalConfigs
-            .CONTEXT_PATH}:9091/RequirementSharePage.html?code=$code';
+            .SHARE_CONTEXT_PATH}/RequirementSharePage.html?code=$code';
       };
 
   ///分享-生产进度
   static get shareProductionProgress =>
           (String code) {
         return '${GlobalConfigs
-            .CONTEXT_PATH}:9091/productionProgressShare.html?code=$code';
+            .SHARE_CONTEXT_PATH}/productionProgressShare.html?code=$code';
       };
 
   ///分享-工厂
   static get shareFactory =>
           (String code) {
-        return '${GlobalConfigs.CONTEXT_PATH}:9091/factoryInfo.html?code=$code';
+        return '${GlobalConfigs
+            .SHARE_CONTEXT_PATH}/factoryInfo.html?code=$code';
       };
 
   ///银行卡号查询

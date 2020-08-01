@@ -45,7 +45,7 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pop(context,_isToRefreshList);
+        Navigator.pop(context, _isToRefreshList);
         return Future.value(false);
       },
       child: Scaffold(
@@ -55,16 +55,22 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
           title: Text('产品明细'),
           actions: <Widget>[
             Offstage(
-              offstage: widget.item.approvalStatus == ArticleApprovalStatus.approved,
+              offstage:
+              widget.item.approvalStatus == ArticleApprovalStatus.approved,
               child: IconButton(
                 icon: Text('编辑'),
-                onPressed: () async{
-                  dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ApparelProductFormPage(
-                    item: widget.item,
-                    isCreate: false,
-                  )));
-                  if(result != null && result){
-                    ApparelProductModel model = await ProductRepositoryImpl().detail(widget.item.code);
+                onPressed: () async {
+                  dynamic result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ApparelProductFormPage(
+                                item: widget.item,
+                                isCreate: false,
+                              )));
+                  if (result != null && result) {
+                    ApparelProductModel model =
+                    await ProductRepositoryImpl().detail(widget.item.code);
                     setState(() {
                       widget.item = model;
                       _isToRefreshList = true;
@@ -85,15 +91,31 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
               widget.item,
               enabled: _enabled,
             ),
-           _buildProductType(context),
+            _buildProductType(context),
             Container(
               color: Colors.white,
               padding: EdgeInsets.all(15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('产品标题',style: TextStyle(fontSize: 16,),),
-                  Text('${widget.item.name ?? ''}',style: TextStyle(fontSize: 16,color: Colors.grey,),),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Text(
+                      '产品标题',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      '${widget.item.name ?? ''}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -103,8 +125,19 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('产品货号',style: TextStyle(fontSize: 16,),),
-                  Text('${widget.item.skuID ?? ''}',style: TextStyle(fontSize: 16,color: Colors.grey,),),
+                  Text(
+                    '产品货号',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    '${widget.item.skuID ?? ''}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -123,11 +156,21 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Text('颜色',style: TextStyle(fontSize: 16),),
+                    child: Text(
+                      '颜色',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                   Expanded(
                     flex: 3,
-                    child: Text('${colorInfo()}',style: TextStyle(fontSize: 16,color: Colors.grey,),textAlign: TextAlign.right,),
+                    child: Text(
+                      '${colorInfo()}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                      textAlign: TextAlign.right,
+                    ),
                   )
                 ],
               ),
@@ -140,42 +183,69 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Text('尺码',style: TextStyle(fontSize: 16),),
+                    child: Text(
+                      '尺码',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                   Expanded(
                     flex: 3,
-                    child: Text('${sizeInfo()}',style: TextStyle(fontSize: 16,color: Colors.grey,),textDirection: TextDirection.rtl,),
+                    child: Text(
+                      '${sizeInfo()}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                      textDirection: TextDirection.rtl,
+                    ),
                   )
                 ],
               ),
             ),
             Offstage(
-              offstage: !(widget.item.productType.contains(ProductType.SPOT_GOODS) || widget.item.productType.contains(ProductType.TAIL_GOODS)),
+              offstage:
+              !(widget.item.productType.contains(ProductType.SPOT_GOODS) ||
+                  widget.item.productType.contains(ProductType.TAIL_GOODS)),
               child: Container(
                 color: Colors.white,
                 padding: EdgeInsets.all(15),
                 child: GestureDetector(
-                  behavior:HitTestBehavior.opaque,
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => StocksField(widget.item,enabled: false,)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                StocksField(
+                                  widget.item,
+                                  enabled: false,
+                                )));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
                         child: RichText(
-                          text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: '库存明细',
-                                    style: TextStyle(color: Colors.black,fontSize: 16,)
-                                ),
-                              ]
-                          ),
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: '库存明细',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                )),
+                          ]),
                         ),
                       ),
-                      Text('库存总数量：${_colorTotalNum()}',style: TextStyle(color: Colors.grey,),),
-                      Icon(Icons.chevron_right,color: Colors.blueGrey,),
+                      Text(
+                        '库存总数量：${_colorTotalNum()}',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: Colors.blueGrey,
+                      ),
                     ],
                   ),
                 ),
@@ -190,17 +260,25 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
                   Expanded(
                     flex: 1,
                     child: RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: '面料成分',
-                                style: TextStyle(color: Colors.black,fontSize: 16,)
-                            ),
-                          ]
-                      ),
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: '面料成分',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                            )),
+                      ]),
                     ),
                   ),
-                  Expanded(flex: 3,child: Text('${fabricSelectText()}',style: TextStyle(color: Colors.grey,),textDirection: TextDirection.rtl,)),
+                  Expanded(
+                      flex: 3,
+                      child: Text(
+                        '${fabricSelectText()}',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        textDirection: TextDirection.rtl,
+                      )),
                 ],
               ),
             ),
@@ -210,8 +288,19 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('品牌',style: TextStyle(fontSize: 16,),),
-                  Text('${widget.item.brand ?? ''}',style: TextStyle(fontSize: 16,color: Colors.grey,),),
+                  Text(
+                    '品牌',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    '${widget.item.brand ?? ''}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -219,9 +308,13 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
               color: Colors.white,
               child: InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                      ApparelProductPricesInputPage(
-                        widget.item,)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ApparelProductPricesInputPage(
+                                widget.item,
+                              )));
                 },
                 child: ShowSelectTile(
                   leadingText: '价格明细',
@@ -234,8 +327,19 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('重量',style: TextStyle(fontSize: 16,),),
-                  Text('${widget.item.gramWeight ?? ''}',style: TextStyle(fontSize: 16,color: Colors.grey,),),
+                  Text(
+                    '重量',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    '${widget.item.gramWeight ?? ''}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -255,7 +359,7 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
   Container _buildProductType(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -263,14 +367,14 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
             child: Row(
               children: <Widget>[
                 RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: '产品类型',
-                            style: TextStyle(color: Colors.black,fontSize: 16,)
-                        ),
-                      ]
-                  ),
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: '产品类型',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        )),
+                  ]),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -285,11 +389,9 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
                             message: RichText(
                               text: TextSpan(children: [
                                 TextSpan(
-                                    text:
-                                    '注：库存尾货不能和现货、期货同时选择',
+                                    text: '注：库存尾货不能和现货、期货同时选择',
                                     style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black)),
+                                        fontSize: 16, color: Colors.black)),
                               ]),
                             ),
                             onCloseEvent: () {
@@ -312,7 +414,9 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
             ),
           ),
           Row(
-              children: ProductType.values.where((v) => v != ProductType.DEFAULT_GOODS).map((type){
+              children: ProductType.values
+                  .where((v) => v != ProductType.DEFAULT_GOODS)
+                  .map((type) {
                 return Row(
                   children: <Widget>[
                     Checkbox(
@@ -326,12 +430,14 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
                       ProductTypeLocalizedMap[type],
                       softWrap: false,
                       overflow: TextOverflow.visible,
-                      style: TextStyle(color: widget.item.productType.contains(type) ? Colors.black : Colors.grey),
+                      style: TextStyle(
+                          color: widget.item.productType.contains(type)
+                              ? Colors.black
+                              : Colors.grey),
                     )
                   ],
                 );
-              }).toList()
-          )
+              }).toList())
         ],
       ),
     );
@@ -340,7 +446,7 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
   int _colorTotalNum() {
     int result = 0;
     widget.item.colorSizes?.forEach((colorSize) {
-      colorSize.sizes.forEach((size){
+      colorSize.sizes.forEach((size) {
         result += size.quality ?? 0;
       });
     });
@@ -350,8 +456,9 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
   //格式化颜色(明细)
   String colorInfo() {
     String colorText = '';
-    if(widget.item.colorSizes != null && widget.item.colorSizes.length > 0){
-      colorText = widget.item.colorSizes.map((color)=>color.colorName).join('、');
+    if (widget.item.colorSizes != null && widget.item.colorSizes.length > 0) {
+      colorText =
+          widget.item.colorSizes.map((color) => color.colorName).join('、');
     }
 
     return colorText;
@@ -360,10 +467,14 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
   //格式化尺码(明细)
   String sizeInfo() {
     String sizeText = '';
-    if(widget.item.colorSizes != null && widget.item.colorSizes.length > 0){
-      for(int i=0;i < widget.item.colorSizes.length;i++){
-        if(sizeText == '' && widget.item.colorSizes[i].sizes != null && widget.item.colorSizes[i].sizes.length > 0){
-          sizeText = widget.item.colorSizes[i].sizes.map((size) => size.name).join('、');
+    if (widget.item.colorSizes != null && widget.item.colorSizes.length > 0) {
+      for (int i = 0; i < widget.item.colorSizes.length; i++) {
+        if (sizeText == '' &&
+            widget.item.colorSizes[i].sizes != null &&
+            widget.item.colorSizes[i].sizes.length > 0) {
+          sizeText = widget.item.colorSizes[i].sizes
+              .map((size) => size.name)
+              .join('、');
         }
       }
     }
@@ -374,8 +485,11 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
   //格式化选中的面料成分
   String fabricSelectText() {
     String text = '';
-    if(widget.item.attributes != null && widget.item.attributes.fabricCompositions != null){
-      text = enumCodesToNames(widget.item.attributes.fabricCompositions, FabricCompositionEnum).join('、');
+    if (widget.item.attributes != null &&
+        widget.item.attributes.fabricCompositions != null) {
+      text = enumCodesToNames(
+          widget.item.attributes.fabricCompositions, FabricCompositionEnum)
+          .join('、');
     }
     return text;
   }

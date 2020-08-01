@@ -238,12 +238,18 @@ class _RequirementOrderDetailPageState
               child: Row(
                 children: <Widget>[
                   RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(text: '发布于：',style: TextStyle(color: Colors.black),),
-                        TextSpan(text: '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',style: TextStyle(color: Colors.black),),
-                      ]
-                    ),
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: '发布于：',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text:
+                        '${DateFormatUtil.formatYMDHM(
+                            orderModel.creationTime)}',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ]),
                   ),
                 ],
               ),
@@ -308,11 +314,14 @@ class _RequirementOrderDetailPageState
     }
   }
 
-  Widget _buildTitle(){
+  Widget _buildTitle() {
     return Container(
       padding: EdgeInsets.all(15),
       color: Colors.white,
-      child: Text(orderModel.details?.productName ?? '无标题',style: TextStyle(fontSize: 20),),
+      child: Text(
+        orderModel.details?.productName ?? '无标题',
+        style: TextStyle(fontSize: 20),
+      ),
     );
   }
 
@@ -381,7 +390,11 @@ class _RequirementOrderDetailPageState
 //            height: 0,
 //          ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -395,8 +408,10 @@ class _RequirementOrderDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                          '${orderModel.details?.majorCategory?.name}-'
-                          '${orderModel.details?.category?.parent != null ? orderModel.details.category.parent.name + '-' : ''}'
+                      '${orderModel.details?.majorCategory?.name}-'
+                          '${orderModel.details?.category?.parent != null
+                          ? orderModel.details.category.parent.name + '-'
+                          : ''}'
                           '${orderModel.details?.category?.name}',
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
@@ -407,7 +422,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -421,7 +440,7 @@ class _RequirementOrderDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                          '${orderModel.details.expectedMachiningQuantity ?? 0}件',
+                      '${orderModel.details.expectedMachiningQuantity ?? 0}件',
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
               ],
@@ -431,7 +450,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -445,9 +468,10 @@ class _RequirementOrderDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    orderModel.details.maxExpectedPrice == -1 ? '面议' :'￥${orderModel.details.maxExpectedPrice ?? 0}',
+                    orderModel.details.maxExpectedPrice == -1
+                        ? '面议'
+                        : '￥${orderModel.details.maxExpectedPrice ?? 0}',
                     style: TextStyle(color: Colors.red, fontSize: 14),
-
                   ),
                 ),
               ],
@@ -457,7 +481,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -485,7 +513,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -501,7 +533,8 @@ class _RequirementOrderDetailPageState
                   child: Text(
                     orderModel.details.machiningType == null
                         ? ''
-                        : MachiningTypeLocalizedMap[orderModel.details.machiningType],
+                        : MachiningTypeLocalizedMap[
+                    orderModel.details.machiningType],
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -514,7 +547,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -528,7 +565,10 @@ class _RequirementOrderDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    formatEnumSelectsText(orderModel.details.salesMarket, FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length),
+                    formatEnumSelectsText(
+                        orderModel.details.salesMarket,
+                        FactoryQualityLevelsEnum,
+                        FactoryQualityLevelsEnum.length),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -541,7 +581,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -556,7 +600,8 @@ class _RequirementOrderDetailPageState
                   flex: _flexR,
                   child: Text(
                     formatAreaSelectsText(
-                        orderModel.details.productiveOrientations, orderModel.details.productiveOrientations.length),
+                        orderModel.details.productiveOrientations,
+                        orderModel.details.productiveOrientations.length),
 //                  overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 14,
@@ -570,7 +615,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -599,7 +648,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -628,7 +681,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -642,7 +699,8 @@ class _RequirementOrderDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    enumMap(PublishingModesEnum,orderModel.details.publishingMode),
+                    enumMap(
+                        PublishingModesEnum, orderModel.details.publishingMode),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -655,7 +713,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -669,7 +731,11 @@ class _RequirementOrderDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    enumMap(EffectiveDaysEnum, orderModel.details.effectiveDays == null ? '-1' : orderModel.details.effectiveDays.toString()),
+                    enumMap(
+                        EffectiveDaysEnum,
+                        orderModel.details.effectiveDays == null
+                            ? '-1'
+                            : orderModel.details.effectiveDays.toString()),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -682,7 +748,11 @@ class _RequirementOrderDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Text('参考图片：'),
@@ -690,14 +760,25 @@ class _RequirementOrderDetailPageState
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: EditableAttachments(list: orderModel.details.pictures,editable: false,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
+            child: EditableAttachments(
+              list: orderModel.attachments,
+              editable: false,
+            ),
           ),
           Divider(
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Text('备注：'),
@@ -705,7 +786,7 @@ class _RequirementOrderDetailPageState
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,right: 5),
+            padding: EdgeInsets.only(left: 15, bottom: 15, right: 5),
             child: Row(
               children: <Widget>[
                 Expanded(child: Text(orderModel.remarks ?? '')),
@@ -719,7 +800,6 @@ class _RequirementOrderDetailPageState
       ),
     );
   }
-
 
   Widget _buildQuote() {
     return Container(
@@ -766,7 +846,6 @@ class _RequirementOrderDetailPageState
         MaterialPageRoute(builder: (context) => RequirementOrdersPage()),
         ModalRoute.withName('/'));
   }
-
 
   Widget _buildButtonGroups() {
     //品牌端显示
@@ -994,12 +1073,12 @@ class _RequirementOrderDetailPageState
     }
   }
 
-  Future<bool> _onCancle(){
+  Future<bool> _onCancle() {
     bool result = false;
-    try{
+    try {
       widget.onRequirementCancle();
       result = true;
-    }catch(e){
+    } catch (e) {
       result = false;
     }
 
@@ -1066,18 +1145,21 @@ class _RequirementOrderDetailPageState
 
   void onEdit() {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              builder: (_) => RequirementOrderFormState(detailModel: orderModel),
-            ),
-          ],
-          child: Builder(
-            builder: (context) {
-              RequirementOrderFormState state = Provider.of<RequirementOrderFormState>(context);
-              return RequirementOrderSecondEditForm(formState: state,);
-            }
-          ),
+      builder: (context) =>
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                builder: (_) =>
+                    RequirementOrderFormState(detailModel: orderModel),
+              ),
+            ],
+            child: Builder(builder: (context) {
+              RequirementOrderFormState state =
+              Provider.of<RequirementOrderFormState>(context);
+              return RequirementOrderSecondEditForm(
+                formState: state,
+              );
+            }),
 //          child: Consumer(
 //            builder: (context, RequirementOrderFormState state, _) {
 //              state.model = orderModel;
@@ -1085,7 +1167,8 @@ class _RequirementOrderDetailPageState
 //              return RequirementOrderSecondEditForm(formState: state,);
 //            }
 //          ),
-        ),));
+          ),
+    ));
   }
 
   ///TODO分享
@@ -1194,4 +1277,3 @@ class _RequirementOrderDetailPageState
     return text;
   }
 }
-

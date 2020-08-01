@@ -680,7 +680,7 @@ class _RequirementOrderDetailByFactoryPageState
               top: 15,
             ),
             child: EditableAttachments(
-              list: orderModel.details.pictures,
+              list: orderModel.attachments,
               editable: false,
             ),
           ),

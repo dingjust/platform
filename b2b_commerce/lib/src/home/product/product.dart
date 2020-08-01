@@ -133,11 +133,18 @@ class RecommendProductItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Container(
-                            child: Text(
-                              '${model.name}',
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  child: Text(
+                                    '${model.name}',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,

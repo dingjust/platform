@@ -1,8 +1,10 @@
 import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
+import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -104,16 +106,21 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ApparelProductFormPage(
-                        item: ApparelProductBLoC.instance.newProduct,
-                        isCreate: true,
-                      )),
-            ).then((val) {
-              setState(() {});
-            });
+            Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+                context: context,
+                onJump: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ApparelProductFormPage(
+                              item: ApparelProductBLoC.instance.newProduct,
+                              isCreate: true,
+                            )),
+                  ).then((val) {
+                    setState(() {});
+                  });
+                });
           },
         ),
       ),
