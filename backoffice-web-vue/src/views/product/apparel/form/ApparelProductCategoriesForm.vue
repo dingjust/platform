@@ -40,7 +40,7 @@
     }
   };
 </script>
-<style>
+<style scoped>
   .product-form-item small.el-form-item {
     margin-bottom: 0px !important;
   }
