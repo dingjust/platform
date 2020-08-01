@@ -18,7 +18,7 @@
                 <el-row type="flex" align="middle">
                   <h6 class="sales-plan-h6"><span
                       class="info-title">是否开发票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
-                    <span style="margin-left:5px" v-if="form.invoiceNeeded">{{slotData.invoiceTaxPoint * 100}}%</span>
+                    <span style="margin-left:5px" v-if="form.invoiceNeeded">{{form.invoiceTaxPoint * 100}}%</span>
                   </h6>
                 </el-row>
               </el-col>
@@ -99,8 +99,10 @@
         </el-col>
         <el-col :span="6">
           <div class="info-box" style="padding:10px">
-            <contract-com v-if="form.type == 'SALES_ORDER'" @callback="callback" :slotData="form" :contracts="contracts"
-              :canSign="canSign" />
+            <template v-if="form.type == 'SALES_ORDER' && form.state != 'TO_BE_ACCEPTED'">
+              <contract-com @callback="callback" :slotData="form" :contracts="contracts"
+                :canSign="canSign" />
+            </template>
           </div>
         </el-col>
       </el-row>
