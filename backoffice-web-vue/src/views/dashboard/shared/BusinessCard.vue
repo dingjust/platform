@@ -142,7 +142,7 @@
   };
 
 </script>
-<style>
+<style scoped>
   .dashboard-row {
     margin-bottom: 20px;
   }

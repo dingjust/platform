@@ -784,7 +784,7 @@
   }
 
 </script>
-<style>
+<style scoped>
   .info-title {
     width: 100%;
     border-left: 2px solid #FFD60C;

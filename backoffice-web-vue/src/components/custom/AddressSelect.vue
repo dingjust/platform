@@ -127,7 +127,7 @@
   }
 
 </script>
-<style>
+<style scoped>
   .product-info {
     font-weight: 400;
     color: rgba(0, 0, 0, 0.65);
@@ -150,9 +150,9 @@
   }
 
   .product-select-btn:focus, .product-select-btn:hover {
-    color: rgba(0, 0, 0, 0.85);
-    border-color: #FFD60C;
-    background-color: #FFD60C;
+    color: rgba(0, 0, 0, 0.85)!important;
+    border-color: #FFD60C!important;
+    background-color: #FFD60C!important;
   }
 
   .el-table__body tr.current-row>td {

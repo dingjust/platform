@@ -103,7 +103,7 @@
   }
 
 </script>
-<style>
+<style scoped>
   .product-info {
     font-weight: 400;
     color: rgba(0, 0, 0, 0.65);

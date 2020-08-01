@@ -177,14 +177,14 @@
   }
 
   .product-select-btn {
-    width: 70px;
+    width: 70px!important;
     /* height: 25px; */
-    background: #FFD60C;
+    background: #FFD60C!important;
     /* font-weight: 400; */
-    color: rgba(0, 0, 0, 0.85);
+    color: rgba(0, 0, 0, 0.85)!important;
     /* font-size: 10px; */
     /* border-radius: 0px; */
-    border: 0px solid #FFD60C;
+    border: 0px solid #FFD60C!important;
   }
 
   .el-table__body tr.current-row>td {
