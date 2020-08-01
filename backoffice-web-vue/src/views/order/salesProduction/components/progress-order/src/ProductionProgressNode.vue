@@ -5,7 +5,7 @@
     </el-row>
     <div class="progress-modal" v-show="showButton" v-if="modalExist">
       <el-row type="flex" justify="center" align="middle" class="progress-modal-row">
-        <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
+        <authorized :permission="['PROGRESS_WORK_ORDER_CREATE']">
           <el-button type="primary" plain @click="estimatedFormVisible=true" :disabled="!canEdit">设置预计完成时间</el-button>
         </authorized>
       </el-row>

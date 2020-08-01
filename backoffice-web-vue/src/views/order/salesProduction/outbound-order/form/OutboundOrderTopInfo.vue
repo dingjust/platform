@@ -121,14 +121,19 @@
       // 判断是否能签署合同
       canSign: function () {
         if (!this.slotData.merchandiser) {
-          return;
+          return false;
         }
         // 未签合同 && 账号为merchandiser && 审核状态为 PASSED
-        return this.slotData.agreements &&
-          this.slotData.agreements.length <= 0 &&
-          this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
-          this.slotData.sendAuditState == 'PASSED' &&
-          this.slotData.acceptState == 'ACCEPTED';
+        if (this.slotData.agreements == undefined || this.slotData.agreements == null || this.slotData.agreements.length <= 0) {
+          return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
+                  this.slotData.sendAuditState == 'PASSED' &&
+                  this.slotData.acceptState == 'ACCEPTED';
+        }
+        // return this.slotData.agreements &&
+        //   this.slotData.agreements.length <= 0 &&
+        //   this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
+        //   this.slotData.sendAuditState == 'PASSED' &&
+        //   this.slotData.acceptState == 'ACCEPTED';
       }
     },
     methods: {

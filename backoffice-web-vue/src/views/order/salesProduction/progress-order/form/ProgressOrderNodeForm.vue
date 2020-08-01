@@ -93,6 +93,14 @@
           this.$message.error(result.msg);
         }
         this.phaseData = Object.assign([], result.data.content);
+        if (this.formData.progresses.length <= 0) {
+          this.phaseData.forEach(item => {
+            if (item.name === '裁剪') {
+              this.onAppend(item);
+            }
+          })
+        }
+        this.$set(this.formData.progresses[0], 'isCannotRemove', true);
       },
       onDelete (row, index) {
         this.formData.progresses.splice(index, 1);
@@ -160,7 +168,7 @@
     watch: {
     },
     created () {
-      this.getPhaseList();
+      // this.getPhaseList();
     },
     mounted () {
     }

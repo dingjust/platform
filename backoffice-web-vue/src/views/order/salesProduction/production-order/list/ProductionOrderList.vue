@@ -186,6 +186,10 @@
         return amount;
       },
       rowDisabled(row, index) {
+        // 待分配列表非自身负责人不能勾选
+        if (this.isAllocating) {
+          return this.$store.getters.currentUser.uid == row.productionLeader.uid;
+        }
         if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
           return false;
         }
@@ -195,6 +199,9 @@
         this.selectRow = val;
       },
       rowClick(row, column, event) {
+        if (this.isAllocating && !(this.$store.getters.currentUser.uid == row.productionLeader.uid)) {
+          return;
+        }
         if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
           return;
         }

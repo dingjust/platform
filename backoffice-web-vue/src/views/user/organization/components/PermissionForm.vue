@@ -84,9 +84,11 @@
           })
         })
 
-        if (this.roleIds && this.roleIds.length > 0) {
-          this.initData();
-        }
+        this.$nextTick(() => {
+          if (this.roleIds && this.roleIds.length > 0) {
+            this.initData();
+          }
+        })
       },
       sortList (data) {
         let copyData = Object.assign([], data);
@@ -194,7 +196,7 @@
             })
           }
           // 回显一级
-          if (this.authData[parentIndex].length === parent.children.length) {
+          if (this.authData[parentIndex].children.length === parent.children.length) {
             this.authData[parentIndex].checked = true;
             this.authData[parentIndex].indeterminate = false;
           } else {

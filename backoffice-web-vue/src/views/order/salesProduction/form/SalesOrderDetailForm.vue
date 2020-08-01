@@ -179,15 +179,23 @@
       },
       // 判断是否能签署合同
       canSign: function () {
-        // 未签合同 && 账号为productionleader && 审核状态为 PASSED
-        if (this.form.productionLeader != null) {
-          return this.form.agreements.length <= 0 &&
-            this.$store.getters.currentUser.uid == this.form.productionLeader.uid &&
-            this.form.auditState == 'PASSED' &&
-            this.form.acceptState == 'ACCEPTED';
+        // 未签合同 && 订单创建人 && 审核状态为 PASSED
+        if (this.form.agreements == undefined || this.form.agreements == null || this.form.agreements.length <= 0) {
+          return this.$store.getters.currentUser.uid == this.form.creator.uid &&
+                  this.form.auditState == 'PASSED' &&
+                  this.form.acceptState == 'ACCEPTED';
         } else {
           return false;
         }
+        
+        // if (this.form.creator != null) {
+        //   return this.form.agreements.length <= 0 &&
+        //     this.$store.getters.currentUser.uid == this.form.creator.uid &&
+        //     this.form.auditState == 'PASSED' &&
+        //     this.form.acceptState == 'ACCEPTED';
+        // } else {
+        //   return false;
+        // }
       }
     },
     components: {

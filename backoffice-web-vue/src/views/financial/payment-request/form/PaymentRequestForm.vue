@@ -102,6 +102,7 @@
           </template>
           <el-col :span="2">
             <el-button @click="addApprover" v-if="formData.approvers.length < 2">+ 添加审核员</el-button>
+            <el-button @click="deleteApprover" v-if="formData.approvers.length >= 2">删除</el-button>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
@@ -195,6 +196,12 @@
       },
       addApprover() {
         this.formData.approvers.push({});
+        this.$nextTick(() => {
+          this.$refs.form.clearValidate();
+        })
+      },
+      deleteApprover () {
+        this.formData.approvers.splice(1, 1);
         this.$nextTick(() => {
           this.$refs.form.clearValidate();
         })

@@ -9,11 +9,11 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form :model="formData" :inline="true" label-position="right">
+      <el-form ref="form" :model="formData" :inline="true" label-position="right" :rules="rules">
         <div class="main-container">
           <el-row type="flex">
             <el-col :span="12">
-              <el-form-item>
+              <el-form-item prop="name">
                 <template slot="label">
                   <span>角色名称<span style="color: #F56C6C">*</span></span>
                 </template>
@@ -84,7 +84,17 @@
         let list = arr.children.map(item => item.id);
         this.formData.roleIds.push.apply(this.formData.roleIds, list);
       },
-      async onConfirm () {
+      onConfirm () {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this._onConfirm();
+          } else {
+            this.$message.error('请完善需求信息');
+            return false;
+          }
+        });
+      },
+      async _onConfirm () {
         let checkData = this.$refs.permissionForm.checkData;
         let authData = this.$refs.permissionForm.authData;
         let roleIds = [];
@@ -136,16 +146,35 @@
         }
         this.$message.success(data.id ? '编辑角色成功' : '创建角色成功');
         this.$router.go(-1);
+      },
+      validateField (name) {
+        this.$refs.brandForm.validateField(name);
       }
     },
     data () {
+      var validateRoleIds = (rule, value, callback) => {
+        if (value && value.length > 0) {
+          callback();
+        } else {
+          return callback(new Error('请选择权限'));
+        }
+      };
       return {
         formData: {
           id: null,
           name: '',
           remark: '',
           roleIds: []
+        },
+        rules: {
+          name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+          roleIds: [{ validator: validateRoleIds, trigger: 'blur' }],
         }
+      }
+    },
+    watch: {
+      'formData.roleIds': function (n, o) {
+        this.validateField('roleIds');
       }
     },
     created () {

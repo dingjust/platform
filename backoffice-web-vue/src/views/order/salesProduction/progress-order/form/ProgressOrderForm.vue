@@ -12,7 +12,7 @@
       <el-form :inline="true">
         <progress-order-receiving-form :formData="formData" :isRead="false"/>
         <progress-order-production-info-form :formData="formData" :isRead="false"/>
-        <progress-order-node-form :formData="formData"/>
+        <progress-order-node-form ref="nodeForm" :formData="formData"/>
       </el-form>
       <el-row type="flex" justify="center" align="middle">
         <el-button class="material-btn" @click="updateProgress">保存</el-button>
@@ -122,8 +122,14 @@
         this.formData.expectedDeliveryDate = order.taskOrderEntries[0].deliveryDate;
         this.formData.colorSizeEntries = order.taskOrderEntries[0].colorSizeEntries;
         this.formData.progresses = [];
+        this.$nextTick(() => {
+          this.$refs.nodeForm.getPhaseList();
+        })
       } else if (this.code != undefined){
         this.getDetail();
+        this.$nextTick(() => {
+          this.$refs.nodeForm.getPhaseList();
+        })
       }
     },
     destroyed () {
