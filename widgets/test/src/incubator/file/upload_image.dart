@@ -32,17 +32,19 @@ class _MyHomePageState extends State<MyHomePage> {
   File _headImage;
   List<File> _papersImages = [];
 
-  _commitForm() {
+  _commitForm() async {
     Dio dio = Dio();
 
     //上次多张图片
-    List<UploadFileInfo> uploadFiles = <UploadFileInfo>[];
+    List<MultipartFile> uploadFiles = <MultipartFile>[];
 
     for (File file in _papersImages) {
-      uploadFiles.add(UploadFileInfo(file, file.absolute.path));
+      // uploadFiles.add(MultipartFile(file, file.absolute.path));
+      MultipartFile multipartFile = await MultipartFile.fromFile(file.path);
+      uploadFiles.add(multipartFile);
     }
 
-    FormData formData = FormData.from({
+    FormData formData = FormData.fromMap({
       'id': 8796093075377,
       'files': uploadFiles,
     });
@@ -225,7 +227,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void selectPapersImages() async {
-  Future<void> x = showModalBottomSheet(
+    Future<void> x = showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return new Column(
@@ -265,5 +267,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     x.then((void value) => print('close'));
   }
-
 }

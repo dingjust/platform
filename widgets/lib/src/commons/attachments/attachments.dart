@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -938,7 +939,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                   //  await _uploadFile(cropFile);
                   //  }
                   // } else {
-                    await _uploadFile(imageFile);
+                  await _uploadFile(imageFile);
                   // }
                 }
               },
@@ -963,7 +964,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                   //      await _uploadFile(cropFile);
                   //    }
                   // } else {
-                    await _uploadFile(imageFile);
+                  await _uploadFile(imageFile);
                   // }
                 }
               },
@@ -1024,9 +1025,10 @@ class _EditableAttachmentsState extends State<EditableAttachments>
     int index = _addFile(file);
     //调用上传接口,更新上传进度条
     try {
-      FormData formData = FormData.from({
-        "file": UploadFileInfo(file, "file",
-            contentType: ContentType.parse('image/jpeg')),
+      FormData formData = FormData.fromMap({
+        // "file": UploadFileInfo(file, "file",
+        //     contentType: ContentType.parse('image/jpeg')),
+        "file": await MultipartFile.fromFile(file.path, filename: "file"),
         "conversionGroup": "DefaultProductConversionGroup",
         "imageFormat": "DefaultImageFormat"
       });
@@ -1386,9 +1388,10 @@ class _SingleAttachmentState extends State<SingleAttachment>
   Future _uploadFile(File file) async {
     // TODO： 引入StreamBuilder实时更新进度条
     try {
-      FormData formData = FormData.from({
-        "file": UploadFileInfo(file, "file",
-            contentType: ContentType.parse('image/jpeg')),
+      FormData formData = FormData.fromMap({
+        // "file": UploadFileInfo(file, "file",
+        //     contentType: ContentType.parse('image/jpeg')),
+        "file": await MultipartFile.fromFile(file.path, filename: "file"),
         "conversionGroup": "DefaultProductConversionGroup",
         "imageFormat": "DefaultImageFormat"
       });

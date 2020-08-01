@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
-import 'package:b2b_commerce/src/my/contract/webview_page.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';

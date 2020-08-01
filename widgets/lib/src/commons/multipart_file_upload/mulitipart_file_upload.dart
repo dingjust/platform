@@ -65,8 +65,13 @@ class MultipartFileUpload {
     try {
       List<double> progress = [0, 0, 0, 0, 0];
       for (int i = 0; i < files.length; i++) {
-        FormData formData =
-            FormData.from({"file": UploadFileInfo(files[i], "file")});
+        // FormData formData =
+        //     FormData.fromFile({"file": MultipartFile(files[i], "file")});
+        //           FormData formData = FormData.fromMap({
+        // "file":MultipartFile.fromFile(files[i].path,filename: "file"),
+        FormData formData = FormData.fromMap({
+          "file": await MultipartFile.fromFile(files[i].path, filename: "file")
+        });
         Response<Map<String, dynamic>> response = await http$.post(
           Apis.upload(),
           data: formData,

@@ -2,14 +2,15 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:bot_toast/bot_toast.dart';
 
 class ContractItemPage extends StatefulWidget {
   ContractModel model;
