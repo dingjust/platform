@@ -100,7 +100,7 @@ export default {
           url: '/shipping/shipping-receipt-sheet',
           meta: {
             requiresAuth: true,
-            permissions: ['DISPATCH_TASK']
+            permissions: ['SHIPPING_SHEET']
           }
         }, {
           name: '差异复议',
