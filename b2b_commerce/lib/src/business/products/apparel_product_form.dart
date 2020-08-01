@@ -55,7 +55,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ..id = widget.item.id
       ..name = widget.item.name
       ..code = widget.item.code
-      ..attributes = widget.item.attributes ?? ApparelProductAttributesModel(fabricCompositions: [])
+      ..attributes = widget.item.attributes ??
+          ApparelProductAttributesModel(fabricCompositions: [])
       ..category = widget.item.category
       ..approvalStatus = widget.item.approvalStatus
       ..thumbnail = widget.item.thumbnail
@@ -79,7 +80,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ..productType = widget.item.productType ?? [ProductType.FUTURE_GOODS]
       ..colorSizes = widget.item.colorSizes ?? []
       ..salesVolume = widget.item.salesVolume;
-    if(_product.attributes.fabricCompositions == null){
+    if (_product.attributes.fabricCompositions == null) {
       _product.attributes.fabricCompositions = [];
     }
     _nameController.text = widget.item?.name;
@@ -92,26 +93,27 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   }
 
   //判断产品类型是否可选
-  bool isCanSelect(ProductType type){
+  bool isCanSelect(ProductType type) {
     bool result = true;
-    switch(type){
+    switch (type) {
       case ProductType.DEFAULT_GOODS:
-          break;
+        break;
       case ProductType.SPOT_GOODS:
-        if(_product.productType.contains(ProductType.TAIL_GOODS)){
+        if (_product.productType.contains(ProductType.TAIL_GOODS)) {
           result = false;
         }
-          break;
+        break;
       case ProductType.FUTURE_GOODS:
-        if(_product.productType.contains(ProductType.TAIL_GOODS)){
+        if (_product.productType.contains(ProductType.TAIL_GOODS)) {
           result = false;
         }
-          break;
+        break;
       case ProductType.TAIL_GOODS:
-        if(_product.productType.contains(ProductType.SPOT_GOODS) || _product.productType.contains(ProductType.FUTURE_GOODS)){
+        if (_product.productType.contains(ProductType.SPOT_GOODS) ||
+            _product.productType.contains(ProductType.FUTURE_GOODS)) {
           result = false;
         }
-          break;
+        break;
     }
     return result;
   }
@@ -120,27 +122,27 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return CustomizeDialog(
-                  dialogType: DialogType.CONFIRM_DIALOG,
-                  contentText2:
-                      widget.isCreate ? '正在创建产品，是否确认退出' : '正在编辑产品，是否确认退出',
-                  isNeedConfirmButton: true,
-                  isNeedCancelButton: true,
-                  confirmButtonText: '退出',
-                  cancelButtonText: '再看看',
-                  dialogHeight: 180,
-                  confirmAction: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                );
-              }).then((_) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2:
+                widget.isCreate ? '正在创建产品，是否确认退出' : '正在编辑产品，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }).then((_) {
 //            Navigator.of(context).pop();
-          });
+        });
 
         return Future.value(false);
       },
@@ -152,23 +154,23 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
           actions: <Widget>[],
         ),
         bottomNavigationBar: Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                height: 50,
-                child: RaisedButton(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  child: Text(
-                    '确定',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  onPressed: onPublish,
-                ),
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
               ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: onPublish,
+          ),
+        ),
         body: ListView(
           children: <Widget>[
             NormalPictureField(
@@ -245,110 +247,168 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               color: Colors.white,
               padding: EdgeInsets.all(15),
               child: GestureDetector(
-                behavior:HitTestBehavior.opaque,
-                onTap: () async{
-                  List<ColorSizeModel> colors = await Provider.of<ColorState>(context).getPartColors();
-                  List<ColorSizeEntryModel> sizes = await Provider.of<SizeState>(context).getPartSizes();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ColorsSizesField(_product,colors: colors,sizes: sizes,)));
+                behavior: HitTestBehavior.opaque,
+                onTap: () async {
+                  List<ColorSizeModel> colors =
+                  await Provider.of<ColorState>(context).getPartColors();
+                  List<ColorSizeEntryModel> sizes =
+                  await Provider.of<SizeState>(context).getPartSizes();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ColorsSizesField(
+                                _product,
+                                colors: colors,
+                                sizes: sizes,
+                              ))).then((value) {
+                    setState(() {});
+                  });
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
                       child: RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: '颜色/尺码',
-                                  style: TextStyle(color: Colors.black,fontSize: 16,)
-                              ),
-                              TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(color: Colors.red,)
-                              ),
-                            ]
-                        ),
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '颜色/尺码',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              )),
+                          TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                color: Colors.red,
+                              )),
+                        ]),
                       ),
                     ),
-                    Text(colorSizeSelectText(_product.colorSizes),style: TextStyle(color: Colors.grey,),),
-                    Icon(Icons.chevron_right,color: Colors.blueGrey,),
+                    Text(
+                      colorSizeSelectText(_product.colorSizes),
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.blueGrey,
+                    ),
                   ],
                 ),
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             Offstage(
-              offstage: !(_product.productType.contains(ProductType.SPOT_GOODS) || _product.productType.contains(ProductType.TAIL_GOODS)),
+              offstage:
+              !(_product.productType.contains(ProductType.SPOT_GOODS) ||
+                  _product.productType.contains(ProductType.TAIL_GOODS)),
               child: Container(
                 color: Colors.white,
                 padding: EdgeInsets.all(15),
                 child: GestureDetector(
-                  behavior:HitTestBehavior.opaque,
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => StocksField(_product,enabled: true)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                StocksField(_product, enabled: true)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
                         child: RichText(
-                          text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: '库存设置',
-                                    style: TextStyle(color: Colors.black,fontSize: 16,)
-                                ),
-                              ]
-                          ),
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: '库存设置',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                )),
+                          ]),
                         ),
                       ),
-                      Text('库存总数量：${_colorTotalNum()}',style: TextStyle(color: Colors.grey,),),
-                      Icon(Icons.chevron_right,color: Colors.blueGrey,),
+                      Text(
+                        '库存总数量：${_colorTotalNum()}',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: Colors.blueGrey,
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             Container(
               color: Colors.white,
               padding: EdgeInsets.all(15),
               child: GestureDetector(
-                behavior:HitTestBehavior.opaque,
-                onTap: () async{
-                  dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FabricCompositionsField(_product.attributes.fabricCompositions,enabled: true)));
-                  if(result != null){
+                behavior: HitTestBehavior.opaque,
+                onTap: () async {
+                  dynamic result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              FabricCompositionsField(
+                                  _product.attributes.fabricCompositions,
+                                  enabled: true)));
+                  if (result != null) {
                     setState(() {
                       _product.attributes.fabricCompositions = result;
                     });
                   }
-                  },
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
                       child: RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: '面料成分',
-                                  style: TextStyle(color: Colors.black,fontSize: 16,)
-                              ),
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '面料成分',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              )),
 //                              TextSpan(
 //                                  text: '*',
 //                                  style: TextStyle(color: Colors.red,fontSize: 16,)
 //                              ),
-                            ]
-                        ),
+                        ]),
                       ),
                     ),
-                    Text('${fabricSelectText()}',style: TextStyle(color: Colors.grey,),),
-                    Icon(Icons.chevron_right,color: Colors.blueGrey,),
+                    Text(
+                      '${fabricSelectText()}',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.blueGrey,
+                    ),
                   ],
                 ),
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
@@ -376,9 +436,14 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 color: Colors.white,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                        ApparelProductPricesInputPage(
-                          _product, enabled: true,)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ApparelProductPricesInputPage(
+                                  _product,
+                                  enabled: true,
+                                )));
                   },
                   child: ShowSelectTile(
                     leadingText: '价格设置',
@@ -430,117 +495,119 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 
   Container _buildProductType(BuildContext context) {
     return Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
             child: Row(
               children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '产品类型',
-                              style: TextStyle(color: Colors.black,fontSize: 16,)
+                RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: '产品类型',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        )),
+                    TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                          color: Colors.red,
+                        )),
+                  ]),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: (context),
+                        builder: (context) {
+                          return MessageDialog(
+                            title: Text(
+                              '如何选择产品类型',
+                              style: TextStyle(fontSize: 18),
                             ),
-                            TextSpan(
-                              text: ' *',
-                              style: TextStyle(color: Colors.red,)
+                            message: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: '注：库存尾货不能和现货、期货同时选择',
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.black)),
+                              ]),
                             ),
-                          ]
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: (context),
-                              builder: (context) {
-                                return MessageDialog(
-                                  title: Text(
-                                    '如何选择产品类型',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  message: RichText(
-                                    text: TextSpan(children: [
-                                      TextSpan(
-                                          text:
-                                          '注：库存尾货不能和现货、期货同时选择',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black)),
-                                    ]),
-                                  ),
-                                  onCloseEvent: () {
-                                    Navigator.pop(context);
-                                  },
-                                  negativeText: '我知道了',
-                                );
-                              });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(left: 0),
-                          child: Icon(
-                            Icons.help,
-                            color: Colors.red,
-                            size: 15,
-                          ),
-                        ),
-                      ),
-                    ],
+                            onCloseEvent: () {
+                              Navigator.pop(context);
+                            },
+                            negativeText: '我知道了',
+                          );
+                        });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(left: 0),
+                    child: Icon(
+                      Icons.help,
+                      color: Colors.red,
+                      size: 15,
+                    ),
                   ),
                 ),
-                Row(
-                  children: ProductType.values.where((v) => v != ProductType.DEFAULT_GOODS).map((type){
-                    return GestureDetector(
-                      onTap: () {
-                        if(!isCanSelect(type)){
-                          return;
-                        }
-                        setState(() {
-                          if (!_product.productType.contains(type)) {
-                            _product.productType.add(type);
-                          } else {
-                            _product.productType.remove(type);
-                          }
-                        });
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Checkbox(
-                            onChanged: (v) {
-                              if(!isCanSelect(type)){
-                                return;
-                              }
-                              print(type);
-                              print(_product.productType);
-                              print(type == _product.productType);
-                              setState(() {
-                                if (v) {
-                                  _product.productType.add(type);
-                                } else {
-                                  _product.productType.remove(type);
-                                }
-                              });
-                            },
-                            activeColor: Colors.orange,
-                            value: _product.productType.contains(type),
-                          ),
-                          Text(
-                            ProductTypeLocalizedMap[type],
-                            softWrap: false,
-                            overflow: TextOverflow.visible,
-                            style: TextStyle(color: isCanSelect(type) ? Colors.black : Colors.grey),
-                          )
-                        ],
-                      ),
-                    );
-                  }).toList()
-                )
               ],
             ),
-          );
+          ),
+          Row(
+              children: ProductType.values
+                  .where((v) => v != ProductType.DEFAULT_GOODS)
+                  .map((type) {
+                return GestureDetector(
+                  onTap: () {
+                    if (!isCanSelect(type)) {
+                      return;
+                    }
+                    setState(() {
+                      if (!_product.productType.contains(type)) {
+                        _product.productType.add(type);
+                      } else {
+                        _product.productType.remove(type);
+                      }
+                    });
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Checkbox(
+                        onChanged: (v) {
+                          if (!isCanSelect(type)) {
+                            return;
+                          }
+                          print(type);
+                          print(_product.productType);
+                          print(type == _product.productType);
+                          setState(() {
+                            if (v) {
+                              _product.productType.add(type);
+                            } else {
+                              _product.productType.remove(type);
+                            }
+                          });
+                        },
+                        activeColor: Colors.orange,
+                        value: _product.productType.contains(type),
+                      ),
+                      Text(
+                        ProductTypeLocalizedMap[type],
+                        softWrap: false,
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(
+                            color: isCanSelect(type) ? Colors.black : Colors
+                                .grey),
+                      )
+                    ],
+                  ),
+                );
+              }).toList())
+        ],
+      ),
+    );
   }
 
   onPublish() {
@@ -568,18 +635,20 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       _showValidateMsg(context, '请选择颜色尺码');
       return;
     }
-    if(_product.productType.contains(ProductType.SPOT_GOODS) || _product.productType.contains(ProductType.TAIL_GOODS)){
-      for(int i=0;i<_product.spotSteppedPrices.length;i++){
-        if(_product.spotSteppedPrices[i].price == null && _product.spotSteppedPrices[i].minimumQuantity == null){
+    if (_product.productType.contains(ProductType.SPOT_GOODS) ||
+        _product.productType.contains(ProductType.TAIL_GOODS)) {
+      for (int i = 0; i < _product.spotSteppedPrices.length; i++) {
+        if (_product.spotSteppedPrices[i].price == null &&
+            _product.spotSteppedPrices[i].minimumQuantity == null) {
           _product.spotSteppedPrices.remove(_product.spotSteppedPrices[i]);
-        }else if(_product.spotSteppedPrices[i].price != null && _product.spotSteppedPrices[i].minimumQuantity != null){
-
-        }else{
+        } else if (_product.spotSteppedPrices[i].price != null &&
+            _product.spotSteppedPrices[i].minimumQuantity != null) {} else {
           ShowDialogUtil.showValidateMsg(context, '请完善期货阶梯起订量和价格');
           return;
         }
       }
-      if(_product.spotSteppedPrices == null || _product.spotSteppedPrices.isEmpty){
+      if (_product.spotSteppedPrices == null ||
+          _product.spotSteppedPrices.isEmpty) {
         _showValidateMsg(context, '请填写现货/尾货阶梯价');
         return;
       }
@@ -588,67 +657,84 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       //   return;
       // }
 
-
-      if(_product.spotSteppedPrices.length >1){
-        for(int i=0;i<_product.spotSteppedPrices.length;i++){
-          if(i == _product.spotSteppedPrices.length - 1){
+      if (_product.spotSteppedPrices.length > 1) {
+        for (int i = 0; i < _product.spotSteppedPrices.length; i++) {
+          if (i == _product.spotSteppedPrices.length - 1) {
             break;
           }
 
-          if(_product.spotSteppedPrices[i + 1].minimumQuantity != null && _product.spotSteppedPrices[i].minimumQuantity != null){
-            if(_product.spotSteppedPrices[i + 1].minimumQuantity <= _product.spotSteppedPrices[i].minimumQuantity){
-              ShowDialogUtil.showValidateMsg(context, '现货/尾货第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
+          if (_product.spotSteppedPrices[i + 1].minimumQuantity != null &&
+              _product.spotSteppedPrices[i].minimumQuantity != null) {
+            if (_product.spotSteppedPrices[i + 1].minimumQuantity <=
+                _product.spotSteppedPrices[i].minimumQuantity) {
+              ShowDialogUtil.showValidateMsg(
+                  context,
+                  '现货/尾货第' +
+                      enumMap(DightEnum, i + 2) +
+                      '阶梯的起订量不可小于或等于' +
+                      '第' +
+                      enumMap(DightEnum, i + 1) +
+                      '阶梯的起订量');
               return;
             }
           }
-
         }
       }
     }
-    if(_product.productType.contains(ProductType.FUTURE_GOODS)){
-      if(_product.steppedPrices == null || _product.steppedPrices.isEmpty){
+    if (_product.productType.contains(ProductType.FUTURE_GOODS)) {
+      if (_product.steppedPrices == null || _product.steppedPrices.isEmpty) {
         _showValidateMsg(context, '请填写期货阶梯价');
         return;
       }
-      for(int i=0;i<_product.steppedPrices.length;i++){
-        if(_product.steppedPrices[i].price == null && _product.steppedPrices[i].minimumQuantity == null){
+      for (int i = 0; i < _product.steppedPrices.length; i++) {
+        if (_product.steppedPrices[i].price == null &&
+            _product.steppedPrices[i].minimumQuantity == null) {
           _product.steppedPrices.remove(_product.steppedPrices[i]);
-        }else if(_product.steppedPrices[i].price != null && _product.steppedPrices[i].minimumQuantity != null){
-
-        }else{
+        } else if (_product.steppedPrices[i].price != null &&
+            _product.steppedPrices[i].minimumQuantity != null) {} else {
           ShowDialogUtil.showValidateMsg(context, '请完善期货阶梯起订量和价格');
           return;
         }
       }
-      if(_product.basicProduction == null || _product.productionIncrement == null || _product.productionDays == null) {
+      if (_product.basicProduction == null ||
+          _product.productionIncrement == null ||
+          _product.productionDays == null) {
         _showValidateMsg(context, '请填写期货生产天数');
         return;
       }
 
-      for(int i=0;i<_product.steppedPrices.length;i++){
-        if(_product.steppedPrices[i].price == null && _product.steppedPrices[i].minimumQuantity == null){
+      for (int i = 0; i < _product.steppedPrices.length; i++) {
+        if (_product.steppedPrices[i].price == null &&
+            _product.steppedPrices[i].minimumQuantity == null) {
           _product.steppedPrices.remove(_product.steppedPrices[i]);
-        }else if(_product.steppedPrices[i].price != null && _product.steppedPrices[i].minimumQuantity != null){
-
-        }else{
+        } else if (_product.steppedPrices[i].price != null &&
+            _product.steppedPrices[i].minimumQuantity != null) {} else {
           ShowDialogUtil.showValidateMsg(context, '请完善期货阶梯起订量和价格');
           return;
         }
       }
 
-      if(_product.steppedPrices.length >1){
-        for(int i=0;i<_product.steppedPrices.length;i++){
-          if(i == _product.steppedPrices.length - 1){
+      if (_product.steppedPrices.length > 1) {
+        for (int i = 0; i < _product.steppedPrices.length; i++) {
+          if (i == _product.steppedPrices.length - 1) {
             break;
           }
 
-          if(_product.steppedPrices[i + 1].minimumQuantity != null && _product.steppedPrices[i].minimumQuantity != null){
-            if(_product.steppedPrices[i + 1].minimumQuantity <= _product.steppedPrices[i].minimumQuantity){
-              ShowDialogUtil.showValidateMsg(context, '期货第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
+          if (_product.steppedPrices[i + 1].minimumQuantity != null &&
+              _product.steppedPrices[i].minimumQuantity != null) {
+            if (_product.steppedPrices[i + 1].minimumQuantity <=
+                _product.steppedPrices[i].minimumQuantity) {
+              ShowDialogUtil.showValidateMsg(
+                  context,
+                  '期货第' +
+                      enumMap(DightEnum, i + 2) +
+                      '阶梯的起订量不可小于或等于' +
+                      '第' +
+                      enumMap(DightEnum, i + 1) +
+                      '阶梯的起订量');
               return;
             }
           }
-
         }
       }
     }
@@ -680,13 +766,13 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               entrance: 'apparelProduct',
               keyword: widget.keyword,
             );
-          }).then((value){
-            if(value){
-              Navigator.pop(context,value);
-              ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-            }else{
-              BotToast.showText(text: '系统错误，创建产品失败');
-            }
+          }).then((value) {
+        if (value) {
+          Navigator.pop(context, value);
+          ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+        } else {
+          BotToast.showText(text: '系统错误，创建产品失败');
+        }
       });
     } else {
       showDialog(
@@ -700,15 +786,15 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               entrance: 'apparelProduct',
               keyword: widget.keyword,
             );
-          }).then((value){
-            print('${value}-==============');
-            if(value){
-              Navigator.of(context).pop(value);
-              ApparelProductBLoC.instance.clearProductsMap();
-              ApparelProductBLoC.instance.getDatas();
-            }else{
-              BotToast.showText(text: '系统错误，更新产品失败');
-            }
+          }).then((value) {
+        print('${value}-==============');
+        if (value) {
+          Navigator.of(context).pop(value);
+          ApparelProductBLoC.instance.clearProductsMap();
+          ApparelProductBLoC.instance.getDatas();
+        } else {
+          BotToast.showText(text: '系统错误，更新产品失败');
+        }
       });
     }
   }
@@ -716,7 +802,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   int _colorTotalNum() {
     int result = 0;
     _product.colorSizes.forEach((colorSize) {
-      colorSize.sizes.forEach((size){
+      colorSize.sizes.forEach((size) {
         result += size.quality ?? 0;
       });
     });
@@ -727,33 +813,34 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   String colorSizeSelectText(List<ColorSizeModel> colorsSizes) {
     String text = '';
     List<ColorSizeEntryModel> sizes;
-    if(colorsSizes != null && colorsSizes.length > 0){
+    if (colorsSizes != null && colorsSizes.length > 0) {
       sizes = colorsSizes[0].sizes;
-      for(int i=0;i < colorsSizes.length;i++){
-        if(i > 1){
+      for (int i = 0; i < colorsSizes.length; i++) {
+        if (i > 1) {
           text += '...';
           break;
         }
 
-        if(i == colorsSizes.length-1){
+        if (i == colorsSizes.length - 1) {
           text += colorsSizes[i].colorName;
-        }else{
+        } else {
           text += colorsSizes[i].colorName + '、';
         }
       }
     }
-    if(colorsSizes.length >0 || (sizes != null && sizes.length>0)) text += '/';
+    if (colorsSizes.length > 0 || (sizes != null && sizes.length > 0))
+      text += '/';
 
-    if(sizes != null && sizes.length > 0){
-      for(int i=0;i<sizes.length;i++){
-        if(i > 1){
+    if (sizes != null && sizes.length > 0) {
+      for (int i = 0; i < sizes.length; i++) {
+        if (i > 1) {
           text += '...';
           break;
         }
 
-        if(i == sizes.length-1){
+        if (i == sizes.length - 1) {
           text += sizes[i].name;
-        }else{
+        } else {
           text += sizes[i].name + '、';
         }
       }
@@ -765,12 +852,13 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   //格式化选中的面料成分
   String fabricSelectText() {
     String text = '';
-    if(_product.attributes.fabricCompositions != null){
-      var names = enumCodesToNames(_product.attributes.fabricCompositions, FabricCompositionEnum);
-      if(names.length > 2){
-        text = names.sublist(0,2).join('、');
+    if (_product.attributes.fabricCompositions != null) {
+      var names = enumCodesToNames(
+          _product.attributes.fabricCompositions, FabricCompositionEnum);
+      if (names.length > 2) {
+        text = names.sublist(0, 2).join('、');
         text += '...';
-      }else{
+      } else {
         text = names.join('、');
       }
     }

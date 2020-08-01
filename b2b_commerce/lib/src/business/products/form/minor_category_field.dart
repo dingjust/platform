@@ -6,7 +6,7 @@ import 'package:widgets/widgets.dart';
 import '../product_category.dart';
 
 class MinorCategoryField extends StatefulWidget {
-  MinorCategoryField(this.item,{this.enabled});
+  MinorCategoryField(this.item, {this.enabled});
 
   final ApparelProductModel item;
   final bool enabled;
@@ -28,7 +28,9 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
       _minCategorySelect = [widget.item?.category];
     }
 
-    ProductRepositoryImpl().cascadedCategories().then((categories) => _categories = categories);
+    ProductRepositoryImpl()
+        .cascadedCategories()
+        .then((categories) => _categories = categories);
   }
 
   @override
@@ -37,11 +39,14 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap:  !widget.enabled ? null : () async {
+          onTap: !widget.enabled
+              ? null
+              : () async {
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CategorySelectPage(
+                builder: (context) =>
+                    CategorySelectPage(
                       minCategorySelect: _minCategorySelect,
                       categories: _categories,
                       categoryActionType: CategoryActionType.TO_POP,
@@ -49,15 +54,17 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
               ),
             );
 
-            if (result != null) _minCategorySelect = result;
+            setState(() {
+              if (result != null) _minCategorySelect = result;
 
-            if (_minCategorySelect.length > 0) {
-              widget.item.category = _minCategorySelect[0];
-              _minorCategoryText = productCategoryInfo();
-            } else {
-              _minorCategoryText = '';
-              widget.item.category = null;
-            }
+              if (_minCategorySelect.length > 0) {
+                widget.item.category = _minCategorySelect[0];
+                _minorCategoryText = productCategoryInfo();
+              } else {
+                _minorCategoryText = '';
+                widget.item.category = null;
+              }
+            });
           },
           child: ShowSelectTile(
             isRequired: widget.enabled,
@@ -73,7 +80,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
   //格式化产品分类(明细)
   String productCategoryInfo() {
     String text = '';
-    if(widget.item.category?.parent != null){
+    if (widget.item.category?.parent != null) {
       text += widget.item.category.parent.name;
       text += '-';
     }

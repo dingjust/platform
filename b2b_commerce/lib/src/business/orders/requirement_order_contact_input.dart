@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +63,12 @@ class _RequirmentOrderContactInputState
                       _phoneController.text == ''
                           ? null
                           : _phoneController.text;
-                      Navigator.pop(context);
+
+                      List<String> result = [
+                        _nameController.text,
+                        _phoneController.text
+                      ];
+                      Navigator.pop(context, result);
                     }
                   })
             ]),
