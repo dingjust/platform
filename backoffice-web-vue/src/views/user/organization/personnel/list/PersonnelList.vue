@@ -4,7 +4,11 @@
       <el-table-column label="员工姓名" prop="name" />
       <el-table-column label="员工账号" prop="uid" />
       <el-table-column label="所属部门" prop="b2bDept.name" />
-      <el-table-column label="员工角色" prop="b2bRoleGroup.name" />
+      <el-table-column label="员工角色" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span>{{roleListName(scope.row)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
@@ -43,6 +47,18 @@
 
     },
     methods: {
+      roleListName (row) {
+        let str = '';
+        if (row.b2bRoleGroupList && row.b2bRoleGroupList.length > 0) {
+          row.b2bRoleGroupList.forEach((item, index) => {
+            str += item.name;
+            if (index < row.b2bRoleGroupList.length - 1) {
+              str += '/';
+            }
+          })
+          return str;
+        }
+      },
       onPageSizeChanged (val) {
         this.$emit('onAdvancedSearch', 0, val);
 

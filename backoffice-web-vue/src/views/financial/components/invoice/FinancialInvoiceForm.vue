@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="6">
         <div class="financial-list-title">
-          <h6>上传发票</h6>
+          <h6>{{readOnly ? '发票详情' : '上传发票'}}</h6>
         </div>
       </el-col>
     </el-row>
@@ -35,7 +35,7 @@
         <el-button @click="onCancel" class="invoice-btn">取消</el-button>
       </el-col>
       <el-col :span="4">
-        <el-button @click="onConfirm" class="invoice-btn">确认</el-button>
+        <el-button @click="onConfirm" class="invoice-confirm-btn">确认</el-button>
       </el-col>
     </el-row>
   </div> 
@@ -122,5 +122,11 @@
   .invoice-btn {
     width: 100px;
     border-radius: 5px;
+  }
+  .invoice-confirm-btn {
+    width: 100px;
+    border-radius: 5px;
+    color: #606266;
+    background-color: #ffd500;
   }
 </style>

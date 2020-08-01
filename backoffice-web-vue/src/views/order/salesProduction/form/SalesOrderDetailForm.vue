@@ -79,20 +79,31 @@
             </el-row>
             <el-row type="flex" justify="start" class="basic-form-row">
               <el-col :span="12">
-                <h6 class="sales-plan-h6"><span
-                    class="info-title">创建人：</span>{{form.creator!=null?form.creator.name:''}}
+                <h6 class="sales-plan-h6-hide">
+                  <span class="info-title">创建人：</span>
+                  <span :title="form.creator!=null?form.creator.name:''">
+                    {{form.creator!=null?form.creator.name:''}}sdfklasdlfkjasdlkfjasdjflkasdjflksdjfklsajdfklsdjlkj
+                  </span>
                 </h6>
               </el-col>
               <el-col :span="12">
-                <h6 class="sales-plan-h6"><span class="info-title">审批负责人：</span>
-                  {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
+                <h6 class="sales-plan-h6-hide">
+                  <span class="info-title">审批负责人：</span>
+                  <span :title="(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''">
+                    {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}
+                  </span>
+                </h6>
               </el-col>
             </el-row>
             <el-row type="flex" justify="start" class="basic-form-row">
-              <el-row type="flex" align="middle">
-                <h6 class="sales-plan-h6"><span class="info-title">生产负责人：</span>
-                  {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
-              </el-row>
+              <!-- <el-row type="flex" align="middle"> -->
+                <h6 class="sales-plan-h6-hide">
+                  <span class="info-title">生产负责人：</span>
+                  <span :title="form.productionLeader!=null?form.productionLeader.name:''">
+                    {{form.productionLeader!=null?form.productionLeader.name:''}}
+                  </span>
+                </h6>
+              <!-- </el-row> -->
             </el-row>
           </div>
 
@@ -319,8 +330,17 @@
   }
 
   .sales-plan-h6 {
+    white-space: nowrap;
     padding-top: 8px;
     font-size: 12px;
+  }
+
+  .sales-plan-h6-hide {
+    padding-top: 8px;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .sales-plan-box>>>.el-input__inner {
