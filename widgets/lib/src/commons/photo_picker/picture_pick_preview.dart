@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -434,9 +435,10 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
 
     // /// TODO: 调用上传接口,更新上传进度条
     try {
-      FormData formData = FormData.from({
-        "file": UploadFileInfo(file, "file",
-            contentType: ContentType.parse('image/jpeg')),
+      FormData formData = FormData.fromMap({
+        // "file": UploadFileInfo(file, "file",
+        //     contentType: ContentType.parse('image/jpeg')),
+        "file": await MultipartFile.fromFile(file.path, filename: "file"),
         "conversionGroup": "DefaultProductConversionGroup",
         "imageFormat": "DefaultImageFormat"
       });

@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:b2b_commerce/src/_shared/contract/contract_purchase_order_select.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/contract/contract_kjxy_select_page.dart';
-import 'package:b2b_commerce/src/my/contract/contract_temp_page.dart';
 import 'package:b2b_commerce/src/my/contract/contract_temp_select_page.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
+import 'package:core/core.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 class ContractCGDDFrom extends StatefulWidget {
   _ContractCGDDFromState createState() => _ContractCGDDFromState();

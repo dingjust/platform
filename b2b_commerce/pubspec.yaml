@@ -33,7 +33,7 @@ dependencies:
   json_annotation: ^3.0.1
   cupertino_icons: ^0.1.2
   font_awesome_flutter: 8.2.0
-  dio: 2.0.18
+  dio: ^3.0.9
   # dio: 2.2.2
   shared_preferences: ^0.4.2
   transparent_image: ^0.1.0
