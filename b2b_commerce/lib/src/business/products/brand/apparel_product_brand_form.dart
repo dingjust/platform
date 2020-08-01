@@ -235,6 +235,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
+                  // print('=============qweqwe');
                   List<ColorSizeModel> colors =
                   await Provider.of<ColorState>(context).getPartColors();
                   List<ColorSizeEntryModel> sizes =
@@ -266,12 +267,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                         ]),
                       ),
                     ),
-                    Text(
-                      colorSizeSelectText(_product.colorSizes),
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
+                    colorSizeSelectText(_product.colorSizes),
                     Icon(
                       Icons.chevron_right,
                       color: Colors.blueGrey,
@@ -290,6 +286,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
+                  print('wqwqe');
                   dynamic result = await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -493,7 +490,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
   }
 
   //格式化选中的颜色尺码
-  String colorSizeSelectText(List<ColorSizeModel> colorsSizes) {
+  Widget colorSizeSelectText(List<ColorSizeModel> colorsSizes) {
     String text = '';
     List<ColorSizeEntryModel> sizes;
     if (colorsSizes != null && colorsSizes.length > 0) {
@@ -529,7 +526,11 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
       }
     }
 
-    return text;
+    // return text;
+    return Text(text,
+        style: TextStyle(
+          color: Colors.grey,
+        ));
   }
 
   //格式化选中的面料成分

@@ -98,7 +98,7 @@ const RelationShippingOrder = {
 
 const Product = {
   template: `
-  <el-table-column label="产品名称" min-width="150" :key="sortKey">
+  <el-table-column label="产品名称" min-width="150" :key="sortKey" :show-overflow-tooltip="true">
   <template slot-scope="scope">
     <el-row type="flex" justify="space-between" align="middle" :gutter="50">
       <el-col :span="6">
@@ -389,7 +389,7 @@ const ReceiptOrder = {
 
 // 收货单创建人
 const Creator = {
-  template: `<el-table-column label="创建人" :prop="prop" :key="sortKey"></el-table-column>`,
+  template: `<el-table-column label="创建人" :prop="prop" :key="sortKey" :show-overflow-tooltip="true"></el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -820,7 +820,7 @@ const ReconsiderNum = {
 // 合作商-发货
 const ShippingCooperator = {
   template: `
-    <el-table-column label="合作商" prop="receiveParty.name" :key="sortKey" />
+    <el-table-column label="合作商" prop="receiveParty.name" :key="sortKey" :show-overflow-tooltip="true"/>
   `,
   props: {
     sortKey: {
@@ -832,7 +832,7 @@ const ShippingCooperator = {
 // 合作商-收货
 const ReceiptCooperator = {
   template: `
-    <el-table-column label="合作商" prop="shipParty.name" :key="sortKey" />
+    <el-table-column label="合作商" prop="shipParty.name" :key="sortKey" :show-overflow-tooltip="true"/>
   `,
   props: {
     sortKey: {
@@ -844,7 +844,7 @@ const ReceiptCooperator = {
 // 跟单员
 const Merchandiser = {
   template: `
-    <el-table-column label="跟单员" prop="merchandiser.name" :key="sortKey" />
+    <el-table-column label="跟单员" prop="merchandiser.name" :key="sortKey" :show-overflow-tooltip="true"/>
   `,
   props: {
     sortKey: {
@@ -856,7 +856,7 @@ const Merchandiser = {
 // 收货跟单员
 const OriginMerchandiser = {
   template: `
-    <el-table-column label="跟单员" prop="originMerchandiser.name" :key="sortKey" />
+    <el-table-column label="跟单员" prop="originMerchandiser.name" :key="sortKey" :show-overflow-tooltip="true"/>
   `,
   props: {
     sortKey: {
@@ -1064,7 +1064,7 @@ const ReturnPerson = {
 
 // 供应商(发货方)
 const SupplierShipParty = {
-  template: `<el-table-column label="供应商" :prop="prop" :key="sortKey"></el-table-column>`,
+  template: `<el-table-column label="供应商" :prop="prop" :key="sortKey" :show-overflow-tooltip="true"></el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -1078,7 +1078,7 @@ const SupplierShipParty = {
 
 // 供应商(收货方)
 const SupplierReceParty = {
-  template: `<el-table-column label="供应商" :prop="prop" :key="sortKey"></el-table-column>`,
+  template: `<el-table-column label="供应商" :prop="prop" :key="sortKey" :show-overflow-tooltip="true"></el-table-column>`,
   props: {
     prop: {
       type: String,

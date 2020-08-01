@@ -88,7 +88,7 @@ class _ColorsSizesFieldState extends State<ColorsSizesField> {
               widget.item.colorSizes.forEach((colorSize){
                 colorSize.sizes = _selectSizes.map((size) => ColorSizeEntryModel.fromJson(ColorSizeEntryModel.toJson(size))).toList();
               });
-              Navigator.pop(context);
+              Navigator.pop(context, widget.item);
             })
           ],
           elevation: 0.5,

@@ -249,11 +249,12 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
+                  print('========qweqeqwe========');
                   List<ColorSizeModel> colors =
                   await Provider.of<ColorState>(context).getPartColors();
                   List<ColorSizeEntryModel> sizes =
                   await Provider.of<SizeState>(context).getPartSizes();
-                  Navigator.push(
+                  ApparelProductModel result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
@@ -261,8 +262,10 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                                 _product,
                                 colors: colors,
                                 sizes: sizes,
-                              ))).then((value) {
-                    setState(() {});
+                              )));
+                  setState(() {
+                    print(ApparelProductModel.toJson(_product));
+                    _product.colorSizes = result.colorSizes;
                   });
                 },
                 child: Row(
@@ -285,12 +288,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                         ]),
                       ),
                     ),
-                    Text(
-                      colorSizeSelectText(_product.colorSizes),
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
+                    colorSizeSelectText(_product.colorSizes),
                     Icon(
                       Icons.chevron_right,
                       color: Colors.blueGrey,
@@ -810,7 +808,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   }
 
   //格式化选中的颜色尺码
-  String colorSizeSelectText(List<ColorSizeModel> colorsSizes) {
+  Widget colorSizeSelectText(List<ColorSizeModel> colorsSizes) {
     String text = '';
     List<ColorSizeEntryModel> sizes;
     if (colorsSizes != null && colorsSizes.length > 0) {
@@ -846,7 +844,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       }
     }
 
-    return text;
+    // return text;
+    return Text(text,
+        style: TextStyle(
+          color: Colors.grey,
+        ));
   }
 
   //格式化选中的面料成分

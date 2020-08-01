@@ -77,7 +77,7 @@
         </el-row>
       </template>
       <!-- 确认方(发货方) -->
-      <template v-if="isShipPart">
+      <!-- <template v-if="isShipPart">
         <template v-if="showShipApproverSelect">
           <el-row type="flex" style="margin-top:20px">
             <el-col :span="2">
@@ -107,7 +107,7 @@
             </el-col>
           </el-row>
         </template>
-      </template>
+      </template> -->
     </el-form>
   </div>
 </template>

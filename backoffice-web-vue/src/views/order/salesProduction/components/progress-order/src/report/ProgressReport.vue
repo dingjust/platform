@@ -72,7 +72,7 @@
         <el-row type="flex" justify="end">
           <!--          <el-button class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>-->
           <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
-            <el-button class="form-btn" @click="onOrder" v-if="isMySelf">上报数量</el-button>
+            <el-button class="form-btn" @click="onOrder" v-if="isMySelf&&canReport">上报数量</el-button>
           </authorized>
         </el-row>
         <progress-report-material v-if="slotData.progressPhase.name=='备料'"
@@ -177,6 +177,14 @@
           return true;
         }
         return false;
+      },
+      //能否上报数量
+      canReport: function () {
+        if (this.belong.status == 'IN_PRODUCTION') {
+          return this.slotData.sequence >= this.belong.currentPhase.sequence;
+        } else {
+          return false;
+        }
       },
       isMySelf: function () {
         return this.belong.belongTo.uid == this.$store.getters.currentUser.companyCode;
