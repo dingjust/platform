@@ -70,15 +70,9 @@
           return;
         }
         this.formData = result.data;
-        // this.formData.id = result.data.id;
-        // this.formData.name = result.data.name;
-        // result.data.roleList.forEach(item => {
-        //   this.formData.roleIds.push(item.id);
-        //   this.getId(item);
-        //   item.children.forEach(val => {
-        //     this.getId(val);
-        //   })
-        // })
+        this.$nextTick(() => {
+          this.$refs.permissionForm.getList();
+        })
       },
       getId (arr) {
         let list = arr.children.map(item => item.id);
@@ -168,18 +162,18 @@
         },
         rules: {
           name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
-          roleIds: [{ validator: validateRoleIds, trigger: 'blur' }],
         }
       }
     },
     watch: {
-      'formData.roleIds': function (n, o) {
-        this.validateField('roleIds');
-      }
     },
     created () {
       if (this.id != null) {
         this.getRoleDetail();
+      } else {
+        this.$nextTick(() => {
+          this.$refs.permissionForm.getList();
+        })
       }
     },
     destroyed () {
