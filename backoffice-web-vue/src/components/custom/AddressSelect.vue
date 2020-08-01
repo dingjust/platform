@@ -1,14 +1,17 @@
 <template>
   <div class="animated fadeIn">
-    <el-row type="flex">
+    <el-row type="flex" justify="space-between">
       <el-col :span="8">
         <h6 class="product-info">选择地址</h6>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="8">
         <Authorized :permission="['COMPANY_ADDRESS_CREATE']">
-          <el-button type="primary" icon="el-icon-plus" @click="onNew">新增</el-button>
+          <el-button type="text" icon="el-icon-plus" @click="onNew">新增</el-button>
         </Authorized>
+        <el-button class="product-select-btn" @click="onSure">确定</el-button>
       </el-col>
+      <!-- <el-col :span="4"> -->
+      <!-- </el-col> -->
     </el-row>
     <el-table ref="resultTable" stripe :data="address" highlight-current-row @current-change="handleCurrentChange"
       @selection-change="handleSelectionChange">
@@ -35,9 +38,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-row type="flex" justify="center" style="margin-top:20px;">
+    <!-- <el-row type="flex" justify="center" style="margin-top:20px;">
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
-    </el-row>
+    </el-row> -->
     <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <address-details-page :slotData="form" v-if="dialogVisible" @callback="oncallback"/>
@@ -137,13 +140,19 @@
 
   .product-select-btn {
     width: 70px;
-    height: 25px;
-    background: #FFD60C;
-    font-weight: 400;
+    /* height: 25px; */
+    background-color: #FFD60C;
+    /* font-weight: 400; */
     color: rgba(0, 0, 0, 0.85);
-    font-size: 10px;
-    border-radius: 0px;
+    /* font-size: 10px; */
+    /* border-radius: 0px; */
     border: 0px solid #FFD60C;
+  }
+
+  .product-select-btn:focus, .product-select-btn:hover {
+    color: rgba(0, 0, 0, 0.85);
+    border-color: #FFD60C;
+    background-color: #FFD60C;
   }
 
   .el-table__body tr.current-row>td {

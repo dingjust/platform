@@ -172,7 +172,7 @@
   }
 
 </script>
-<style>
+<style scoped>
   .product-info {
     font-weight: 400;
     color: rgba(0, 0, 0, 0.65);
@@ -185,12 +185,12 @@
 
   .product-select-btn {
     width: 70px;
-    height: 25px;
+    /* height: 25px; */
     background: #FFD60C;
-    font-weight: 400;
+    /* font-weight: 400; */
     color: rgba(0, 0, 0, 0.85);
-    font-size: 10px;
-    border-radius: 0px;
+    /* font-size: 10px; */
+    /* border-radius: 0px; */
     border: 0px solid #FFD60C;
   }
 

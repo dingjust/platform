@@ -38,7 +38,9 @@
       // 获取人员列表
       async getPersonnelList() {
         const url = this.apis().getB2BCustomers();
-        const result = await this.$http.post(url, {}, {
+        const result = await this.$http.post(url, {
+          enable: false
+        }, {
           page: 0,
           size: 99
         })
