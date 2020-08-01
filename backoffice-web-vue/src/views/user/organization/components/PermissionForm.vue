@@ -180,16 +180,16 @@
           if (parent.children && parent.children.length > 0) {
             parentIndex = this.authData.findIndex(i => i.id == parent.id);
             parent.children.forEach(item => {
+              childIndex = this.authData[parentIndex].children.findIndex(c => c.id == item.id);
               if (item.children && item.children.length > 0) {
                 list = item.children.map(val => val.id);
                 // 回显一二级
-                this.checkboxChange(list, item);
+                this.checkboxChange(list, this.authData[parentIndex].children[childIndex]);
                 
                 // 回显三级
                 this.checkData[item.id] = list;
               } else {
                 // 回显二级无子权限
-                childIndex = this.authData[parentIndex].children.findIndex(c => c.id == item.id);
                 this.authData[parentIndex].children[childIndex].checked = true;
                 this.authData[parentIndex].children[childIndex].indeterminate = false;
               }
