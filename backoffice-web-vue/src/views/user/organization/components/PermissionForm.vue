@@ -171,21 +171,12 @@
       },
       // 数据回显
       initData () {
-        // checkboxChange (list, item) 
-        // let list;
-        // this.roleIds.forEach(parent => {
-        //   parent.children.forEach(item => {
-        //     if (item.children && item.children.length > 0) {
-        //       list = item.children.map(val => val.id);
-        //       this.checkboxChange(list, item);
-        //     }
-        //   })
-        // })
         let list;
         let parentIndex;
         let childIndex;
         this.roleIds.forEach(parent => {
           if (parent.children && parent.children.length > 0) {
+            parentIndex = this.authData.findIndex(i => i.id == parent.id);
             parent.children.forEach(item => {
               if (item.children && item.children.length > 0) {
                 list = item.children.map(val => val.id);
@@ -196,12 +187,19 @@
                 this.checkData[item.id] = list;
               } else {
                 // 回显二级无子权限
-                parentIndex = this.authData.findIndex(i => i.id == parent.id);
                 childIndex = this.authData[parentIndex].children.findIndex(c => c.id == item.id);
                 this.authData[parentIndex].children[childIndex].checked = true;
                 this.authData[parentIndex].children[childIndex].indeterminate = false;
               }
             })
+          }
+          // 回显一级
+          if (this.authData[parentIndex].length === parent.children.length) {
+            this.authData[parentIndex].checked = true;
+            this.authData[parentIndex].indeterminate = false;
+          } else {
+            this.authData[parentIndex].checked = false;
+            this.authData[parentIndex].indeterminate = true;
           }
         })
       }

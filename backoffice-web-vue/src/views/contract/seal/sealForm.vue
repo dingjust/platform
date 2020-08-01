@@ -201,6 +201,10 @@
           this.$message.error(result.msg);
           return;
         }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
         this.$message.success(result.msg);
         Bus.$emit('closeFrom');
         this.refresh();
