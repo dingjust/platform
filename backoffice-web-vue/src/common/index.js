@@ -1195,6 +1195,9 @@ let NONE_TENANT_APIS = {
   orderContractClick() {
     return '/b2b/user/agreement/order/validate';
   },
+  getOldSalesOrderList() {
+    return '/b2b/b2b/orders/sales';
+  },
   getSalesOrderDetails(code) {
     return '/b2b/b2b/orders/sales/' + code;
   },

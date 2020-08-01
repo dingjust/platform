@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true">
       <el-row type="flex">
-        <el-col :span="17">
+        <el-col :span="24">
         <el-input style="width:220px;" placeholder="订单号/产品名称/款号"
                   v-model="queryFormData.keyword" class="purchase-toolbar-input">
         </el-input>
@@ -17,14 +17,14 @@
               :props="{ label: 'name',value:'code'}" clearable>
             </el-cascader>
         </el-form-item>
-        </el-col>
-        <el-col :span="7">
-        <el-row type="flex" align="top" justify="space-between" :gutter="20">
+        <!-- </el-col> -->
+        <!-- <el-col :span="7"> -->
+        <!-- <el-row type="flex" align="top" justify="space-between" :gutter="20"> -->
           <el-button-group>
               <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
               <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
-        </el-row>
+        <!-- </el-row> -->
         </el-col>
       </el-row>
     </el-form>
