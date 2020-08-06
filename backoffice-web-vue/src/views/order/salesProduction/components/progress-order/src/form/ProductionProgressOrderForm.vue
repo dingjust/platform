@@ -114,7 +114,10 @@
 
 <script>
   import ImagesUpload from '@/components/custom/ImagesUpload';
-
+  import {
+    getSizeSequence
+  } from '@/components/'
+  
   export default {
     name: 'ProductionProgressOrderForm',
     props: ['progressOrder', 'belong', 'progress', 'readOnly'],
@@ -147,7 +150,21 @@
         });
         const res = new Map();
         var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
-        return result.sort((o1, o2) => o1.sequence - o2.sequence);
+        //排序
+        result.sort((o1, o2) => {
+          let o1Sequence = getSizeSequence(o1.code);
+          let o2Sequence = getSizeSequence(o2.code);
+          if (o1Sequence && o2Sequence) {
+            return o1Sequence - o2Sequence;
+          } else if (o1Sequence && !o2Sequence) {
+            return -1;
+          } else if (!o1Sequence && o2Sequence) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+        return result;
       },
       colors: function () {
         var colors = new Set([]);
@@ -322,8 +339,8 @@
     margin-bottom: 20px;
   }
 
-  .order-table >>> tr td,
-  .order-table >>> tr th {
+  .order-table>>>tr td,
+  .order-table>>>tr th {
     border: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
     height: 30px;
@@ -334,7 +351,7 @@
     height: 80px;
   } */
 
-  .order-table-input >>> .el-input__inner {
+  .order-table-input>>>.el-input__inner {
     /* width: 60px; */
     border: 0px solid #fff;
   }

@@ -77,6 +77,10 @@
 </template>
 
 <script>
+  import {
+    getSizeSequence
+  } from './table'
+
   export default {
     name: 'ColorSizeBoxTable',
     props: {
@@ -97,9 +101,9 @@
         type: Boolean,
         default: false
       },
-      canAddBox:{
-        type:Boolean,
-        default:true
+      canAddBox: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -110,6 +114,20 @@
           if (!sizeKeySet.has(element.size.code)) {
             sizes.push(element.size);
             sizeKeySet.add(element.size.code);
+          }
+        });
+        //排序
+        sizes.sort((o1, o2) => {
+          let o1Sequence = getSizeSequence(o1.code);
+          let o2Sequence = getSizeSequence(o2.code);
+          if (o1Sequence && o2Sequence) {
+            return o1Sequence - o2Sequence;
+          } else if (o1Sequence && !o2Sequence) {
+            return -1;
+          } else if (!o1Sequence && o2Sequence) {
+            return 1;
+          } else {
+            return -1;
           }
         });
         return sizes;
@@ -271,6 +289,7 @@
           return colorIndex == 0;
         }
       },
+      //      
     },
     created() {
       if (this.vdata.length != 0) {

@@ -126,11 +126,11 @@
                 <el-checkbox v-model="form.auditNeeded">需审核</el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="6" v-if="form.auditNeeded">
+            <el-col :span="6">
               <template v-for="(item,itemIndex) in form.approvers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="100px"
-                  :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                  <personnel-selection :vPerson.sync="form.approvers[itemIndex]" />
+                  :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
+                  <personnel-selection :vPerson.sync="form.approvers[itemIndex]" :readOnly="!form.auditNeeded"/>
                 </el-form-item>
               </template>
             </el-col>

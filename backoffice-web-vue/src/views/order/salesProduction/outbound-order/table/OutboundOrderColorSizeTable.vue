@@ -17,6 +17,10 @@
 </template>
 
 <script>
+  import {
+    getSizeSequence
+  } from '@/components/'
+  
   export default {
     name: 'OutboundOrderColorSizeTable',
     props: ['product'],
@@ -46,7 +50,21 @@
           if (index < 0) {
             data.push(item.size);
           }
-        })
+        });
+        //排序
+        data.sort((o1, o2) => {
+          let o1Sequence = getSizeSequence(o1.code);
+          let o2Sequence = getSizeSequence(o2.code);
+          if (o1Sequence && o2Sequence) {
+            return o1Sequence - o2Sequence;
+          } else if (o1Sequence && !o2Sequence) {
+            return -1;
+          } else if (!o1Sequence && o2Sequence) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
         return data;
       }
     }

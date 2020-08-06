@@ -18,6 +18,9 @@ import ColorSizeTable from '@/components/custom/table/ColorSizeTable'
 import ColorSizeBoxTable from '@/components/custom/table/ColorSizeBoxTable'
 import ColorSizeBoxChangeTable from '@/components/custom/table/ColorSizeBoxChangeTable'
 import ColorSizeChangeTable from '@/components/custom/table/ColorSizeChangeTable'
+import {
+  getSizeSequence
+} from '@/components/custom/table/table.js'
 
 // Custom/upload
 import PDFUpload from './custom/upload/PDFUpload';
@@ -125,5 +128,6 @@ export {
   ColorSizeBoxTable,
   ColorSizeBoxChangeTable,
   ColorSizeChangeTable,
-  SelectTree
+  SelectTree,
+  getSizeSequence
 }

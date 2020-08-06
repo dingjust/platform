@@ -5,7 +5,7 @@
     </el-dialog>
   <div class="animated fadeIn" >
       <el-button class="product-select-btn" @click="onSelected">确定</el-button>
-      <el-button class="product-select-btn" @click="onCreate">新建印章</el-button>
+      <el-button class="product-select-btn" @click="onCreate" @callback="onCallBack">新建印章</el-button>
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight"
               highlight-current-row @current-change="handleCurrentChange" @selection-change="handleSelectionChange">
       <el-table-column  label="印章" fixed>
@@ -107,6 +107,9 @@
       handleCurrentChange(val) {
         this.selectedItem = val;
       },
+      onCallBack(){
+        this.$$emit('onSearchSeal');
+      }
     },
     data() {
       return {

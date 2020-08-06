@@ -11,6 +11,10 @@ const COMMON_APIS = {
   sendCaptcha(phone) {
     return '/b2b/sms/captcha/' + phone;
   },
+  // 发送员工绑定手机号短信验证码
+  sendCaptchaByChild(uid) {
+    return '/b2b/sms/captchaByChild/' + uid;
+  },
   // 校验短信验证码
   validateCaptcha() {
     return '/b2b/sms/validate';
@@ -18,6 +22,11 @@ const COMMON_APIS = {
   //短信重置密码
   resetPasswordByCaptcha(id) {
     return '/b2b/users/anonymous/resetPasswordByCaptcha/' + id;
+  },
+
+  //员工账号短信重置密码
+  resetPasswordByCaptchaForChild(uid) {
+    return '/b2b/users/anonymous/resetPasswordByCaptchaChild/' + uid;
   },
 
   getAmapTips(key, keyWord, city) {

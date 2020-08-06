@@ -23,8 +23,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="9">
-                <el-form-item prop="phone" label="" label-width="10px" v-if="accountType=='employee'">
-                  <el-input v-model="slotData.phone" placeholder="员工账号" style="width:100%">
+                <el-form-item prop="employeeUserName" label="" label-width="10px" v-if="accountType=='employee'">
+                  <el-input v-model="slotData.employeeUserName" placeholder="员工账号" style="width:100%">
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -108,9 +108,6 @@
         disable: false,
         serviceProtocolVisible: false,
         paymentProtocolVisible: false,
-        formData: {
-
-        },
         rules: {
           phone: [{
             required: true,
@@ -150,7 +147,18 @@
           this.$message.error('请填写手机号码');
           return;
         }
-        this.sendCaptcha();
+        //若员工账号校验子账号
+        if (this.accountType == 'employee' && this.slotData.employeeUserName == '') {
+          this.$message.error('请填写员工账号');
+          return;
+        }
+        if (this.accountType == 'main') { //发送主账号
+          this.sendCaptcha();
+        } else if (this.accountType == 'employee') { //发送员工账号
+          this.sendCaptchaByChild();
+        } else {
+          return false;
+        }
         var countDown = setInterval(() => {
           if (this.count < 1) {
             this.isGeting = false;
@@ -176,20 +184,58 @@
           console.log('发送成功');
         }
       },
+      //发送员工绑定手机号验证码
+      async sendCaptchaByChild() {
+        let phone = this.slotData.phone.replace(/(\s*$)/g, '');
+        let employeeUserName = this.slotData.employeeUserName.replace(/(\s*$)/g, '');
+        let uid = phone + ':' + employeeUserName;
+        const url = this.apis().sendCaptchaByChild(uid);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        } else {
+          console.log('发送成功');
+        }
+      },
       onSubmit() {
         //校验
         this.$refs['form'].validate((valid) => {
           if (valid) {
-            this._onSubmit();
+            if (this.accountType == 'main') {
+              this._onSubmit(); //主账号修改
+            } else if (this.accountType == 'employee') {
+              this._onSubmitByChild(); //子账号修改
+            }
           }
         });
       },
+      //主账号修改密码
       async _onSubmit() {
         let form = {
           newPassword: this.slotData.password,
           captcha: this.slotData.code
         }
         const url = this.apis().resetPasswordByCaptcha(this.slotData.phone);
+        const result = await this.$http.put(url, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('重置成功！');
+        this.$router.push("/password/success");
+      },
+      //子账号修改密码
+      async _onSubmitByChild() {
+        let phone = this.slotData.phone.replace(/(\s*$)/g, '');
+        let employeeUserName = this.slotData.employeeUserName.replace(/(\s*$)/g, '');
+        let uid = phone + ':' + employeeUserName;
+        let form = {
+          newPassword: this.slotData.password,
+          captcha: this.slotData.code
+        }
+        const url = this.apis().resetPasswordByCaptchaForChild(uid);
         const result = await this.$http.put(url, form);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

@@ -142,7 +142,7 @@
         </el-row> -->
         <el-row>
           <el-col :span="24">
-            <contract-com :slotData="slotData" :contracts="slotData.agreements" :canSign="false"/>
+            <contract-com :slotData="slotData" :contracts="slotData.agreements" :canSign="false" />
           </el-col>
         </el-row>
         <!-- <el-row class="info-row-title_row" type="flex">
@@ -156,6 +156,10 @@
 </template>
 
 <script>
+  import {
+    getSizeSequence
+  } from '@/components/'
+
   import PDFUpload from '@/components/custom/upload/PDFUpload';
   import OrderViewButtonGroup from './OrderViewButtonGroup';
   import ContractCom from '@/views/order/salesProduction/contract/ContractCom'
@@ -223,6 +227,20 @@
             }
           });
         }
+        //排序
+        sizes.sort((o1, o2) => {
+          let o1Sequence = getSizeSequence(o1.code);
+          let o2Sequence = getSizeSequence(o2.code);
+          if (o1Sequence && o2Sequence) {
+            return o1Sequence - o2Sequence;
+          } else if (o1Sequence && !o2Sequence) {
+            return -1;
+          } else if (!o1Sequence && o2Sequence) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
         return sizes;
       },
       dataTable: function () {
@@ -334,4 +352,3 @@
   }
 
 </style>
-

@@ -82,7 +82,7 @@
                 <h6 class="sales-plan-h6-hide">
                   <span class="info-title">创建人：</span>
                   <span :title="form.creator!=null?form.creator.name:''">
-                    {{form.creator!=null?form.creator.name:''}}sdfklasdlfkjasdlkfjasdjflkasdjflksdjfklsajdfklsdjlkj
+                    {{form.creator!=null?form.creator.name:''}}
                   </span>
                 </h6>
               </el-col>

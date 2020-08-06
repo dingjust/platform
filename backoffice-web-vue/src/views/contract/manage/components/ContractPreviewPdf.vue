@@ -5,7 +5,7 @@
       <contract-supplement-form :slotData="slotData" />
     </el-dialog>
     <el-dialog :visible.sync="dialogSealVisible" :show-close="true" :close-on-click-modal="false">
-      <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
+      <contract-seal-list :page="sealPage" @onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
 <!--    <el-dialog :visible.sync="dialogOrderVisible" width="50%" class="purchase-dialog" append-to-body>-->
 <!--      <el-row :justify="center">-->
@@ -139,6 +139,7 @@
         // window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
       async onSearchSeal (vel, keyword, page, size) {
+        console.log('====================');
         if (vel != null) {
           this.contractCode = vel.code;
         }

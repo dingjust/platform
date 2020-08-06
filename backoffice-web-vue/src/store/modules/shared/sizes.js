@@ -1,4 +1,5 @@
 import http from '@/common/js/http';
+import api from '@/common/index';
 
 const state = {
   sizes: [],
@@ -9,13 +10,13 @@ const mutations = {
 };
 
 const actions = {
-  async getData({
+  async getSizesData({
     dispatch,
     commit,
     state
   }) {
     //获取尺码数据
-    const url = this.apis().getAllSizes();          
+    const url = '/b2b/sizes/all';
     const response = await http.get(url);
     if (!response['errors']) {
       commit('sizes', response);
@@ -24,9 +25,7 @@ const actions = {
 };
 
 const getters = {
-  sizes: state => {
-    state.sizes
-  },
+  sizes: state => state.sizes,
 };
 
 export default {
