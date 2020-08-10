@@ -67,13 +67,13 @@
             </el-col>
             <el-col :span="2">
               <el-form-item label="" label-width="5px">
-                <el-checkbox v-model="form.auditNeeded">需审核</el-checkbox>
+                <el-checkbox v-model="form.auditNeeded" @change="handleClick">需审核</el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="6" v-if="form.auditNeeded">
+            <el-col :span="6">
               <template v-for="(item,itemIndex) in form.approvers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="100px"
-                  :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
+                  :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
                   <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
                   <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded"/>
                 </el-form-item>
@@ -148,6 +148,11 @@
       }
     },
     methods: {
+      handleClick (value) {
+        if (!value) {
+          this.form.approvers = [null];
+        }
+      },
       onDateRangeChange(val) {
         this.form.salesDateStart = val[0];
         this.form.salesDateEnd = val[1];
