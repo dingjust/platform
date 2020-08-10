@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/common/webview_page.dart';
+import 'package:b2b_commerce/src/helper/permission_helper.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_business_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_enterprise_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
@@ -32,6 +33,9 @@ class _MyAuthenticationState extends State<MyAuthentication> {
       "my_authentication",
     );
     _futureBuilderFuture = _getData();
+
+    //权限预获取
+    PermissionHelper.check();
 
     super.initState();
   }
@@ -335,8 +339,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
       onTap: () async {
         if (model.companyState == AuthenticationState.CHECK) {
           promptingDialog();
-        } else if (bloc.isBrandUser &&
-            model.companyState != AuthenticationState.SUCCESS) {
+        } else if (model.companyState != AuthenticationState.SUCCESS) {
           if (model.personalState == AuthenticationState.UNCERTIFIED) {
             Navigator.push(
               context,
