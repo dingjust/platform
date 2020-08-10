@@ -47,6 +47,10 @@
 </template>
 
 <script>
+  import {
+    getSizeSequence
+  } from './table'
+
   export default {
     name: 'ColorSizeTable',
     props: {
@@ -59,6 +63,11 @@
       readOnly: {
         type: Boolean,
         default: false
+      },
+      //是否隐藏数量为0的颜色行
+      hideEmptyColors: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -71,12 +80,26 @@
             sizeKeySet.add(element.size.code);
           }
         });
+        //排序
+        sizes.sort((o1, o2) => {
+          let o1Sequence = getSizeSequence(o1.code);
+          let o2Sequence = getSizeSequence(o2.code);
+          if (o1Sequence && o2Sequence) {
+            return o1Sequence - o2Sequence;
+          } else if (o1Sequence && !o2Sequence) {
+            return -1;
+          } else if (!o1Sequence && o2Sequence) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
         return sizes;
       },
       colors: function () {
         let colors = [];
         let colorKeySet = new Set([]);
-        this.data.forEach(element => {
+        this.data.filter(entry => this.hideEmptyColors ? entry.quantity > 0 : true).forEach(element => {
           if (!colorKeySet.has(element.color.code)) {
             colors.push(element.color);
             colorKeySet.add(element.color.code);

@@ -25,7 +25,7 @@ class _WebviewPageState extends State<WebviewPage> {
       print(url);
       print(url.contains('result_code=3000'));
       if (url.contains('result_code=3000')) {
-        Navigator.of(context).pop();
+        _goContractListPage = true;
       }
     });
   }

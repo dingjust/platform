@@ -25,7 +25,7 @@ class GlobalConfigs {
   /// 通过nginx代理所有b2b前缀的请求
   static const B2B_API_PREFIX = 'b2b';
 
-  // static const B2B_API_PREFIX = 'b2b-apparel-zh';
+  // static const B2B_API_PREFIX = 'b2b-apparel-zh';//本地
 
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
 

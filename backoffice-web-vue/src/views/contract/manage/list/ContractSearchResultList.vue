@@ -1,15 +1,17 @@
 <template>
   <div class="animated fadeIn">
-    <el-dialog :visible.sync="dialogSealVisible" class="purchase-dialog" :show-close="true" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogSealVisible" class="purchase-dialog" :show-close="true"
+      :close-on-click-modal="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <contract-supplement-form v-if="dialogOrderVisible" @openPreviewPdf="previewPdf"
-                                :slotData="thisContract" @onSearch="onSearch" @closeDialogOrderVisible="closeDialogOrderVisible"/>
+    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <contract-supplement-form v-if="dialogOrderVisible" @openPreviewPdf="previewPdf" :slotData="thisContract"
+        @onSearch="onSearch" @closeDialogOrderVisible="closeDialogOrderVisible" />
     </el-dialog>
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
-              :height="autoHeight">
+      :height="autoHeight">
       <el-table-column label="合同名称" fixed>
         <template slot-scope="scope">
           <span class="ellipsis-name" :title="scope.row.title">
@@ -27,7 +29,8 @@
                 <span>{{code}}</span>
               </el-row>
             </div>
-            <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && isMore" @click="turnIsMore()">显示更多>></h6>
+            <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && isMore"
+              @click="turnIsMore()">显示更多>></h6>
           </div>
           <div v-else>
             <div v-for="(code,index) in scope.row.orderCodes">
@@ -35,7 +38,8 @@
                 <span>{{code}}</span>
               </el-row>
             </div>
-            <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && !isMore" @click="turnIsMore()">点击拉起>></h6>
+            <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && !isMore"
+              @click="turnIsMore()">点击拉起>></h6>
           </div>
         </template>
       </el-table-column>
@@ -49,7 +53,7 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="当前状态" prop="state" :column-key="'state'" >
+      <el-table-column label="当前状态" prop="state" :column-key="'state'">
         <template slot-scope="scope">
           <!-- <el-tag disable-transitions></el-tag> -->
           {{getEnum('contractStates', scope.row.state)}}
@@ -63,7 +67,7 @@
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="text" @click="previewPdf(scope.row,'')">查看</el-button>
-          <el-button type="text"  @click="onDownload(scope.row.code)">下载</el-button>
+          <el-button type="text" @click="onDownload(scope.row.code)">下载</el-button>
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>-->
@@ -71,7 +75,7 @@
             <el-button type="text" v-if="scope.row.state != 'INVALID'" @click="onBCXY(scope.row)">增加补充协议</el-button>
           </Authorized>
           <Authorized :permission="['AGREEMENT_REMOVE']">
-           <el-button type="text" v-if="scope.row.isOffline == true" @click="onDelete(scope.row)">删除</el-button>
+            <el-button type="text" v-if="scope.row.isOffline == true" @click="onDelete(scope.row)">删除</el-button>
           </Authorized>
         </template>
       </el-table-column>
@@ -79,8 +83,8 @@
     <div class="pt-2"></div>
     <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-                   :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
     <!-- </div> -->
   </div>
@@ -99,7 +103,10 @@
   const {
     mapActions
   } = createNamespacedHelpers('ContractModule');
-  const {mapGettersSeal, mapActionsSeal} = createNamespacedHelpers('ContractSealModule');
+  const {
+    mapGettersSeal,
+    mapActionsSeal
+  } = createNamespacedHelpers('ContractSealModule');
 
   import ContractDetails from '../components/ContractDetails';
 
@@ -117,12 +124,12 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      handleFilterChange (val) {
+      handleFilterChange(val) {
         this.statuses = val.status;
 
         this.$emit('onSearch', 0);
       },
-      onPageSizeChanged (val) {
+      onPageSizeChanged(val) {
         this._reset();
 
         if (this.$store.state.ContractModule.isAdvancedSearch) {
@@ -132,7 +139,7 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged (val) {
+      onCurrentPageChanged(val) {
         if (this.$store.state.ContractModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
@@ -143,15 +150,15 @@
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         })
       },
-      _reset () {
+      _reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails (row) {
+      onDetails(row) {
         this.$emit('onDetails', row);
       },
-      async onDownload (code) {
+      async onDownload(code) {
         const url = this.apis().downContract(code);
         const result = await http.get(url);
 
@@ -160,7 +167,7 @@
 
         // window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
-      onConfirm () {
+      onConfirm() {
         this.$confirm('是否确认接单?', '接单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -169,17 +176,17 @@
           console.log('ffff');
         });
       },
-      async onRefuse (code) {
+      async onRefuse(code) {
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
         this.$message.error(result.msg);
       },
-      async onRevoke (code) {
+      async onRevoke(code) {
         const url = this.apis().revokeContract(code);
         const result = await this.$http.get(url);
         this.$message.error(result.msg);
       },
-      async onSearchSeal (vel, keyword, page, size) {
+      async onSearchSeal(vel, keyword, page, size) {
         if (vel != null) {
           this.contractCode = vel.code;
         }
@@ -201,7 +208,7 @@
         this.sealPage = result;
         this.dialogSealVisible = true
       },
-      async onSealSelectChange (data) {
+      async onSealSelectChange(data) {
         console.log(data);
         this.dialogSealVisible = false;
         const sealCode = data.code;
@@ -215,10 +222,10 @@
           this.$message.success(result.msg);
         }
       },
-      closePdfVisible () {
+      closePdfVisible() {
         this.$emit('closePdfVisible');
       },
-      async previewPdf (val, code) {
+      async previewPdf(val, code) {
         this.$emit('previewPdf', val, code);
         // this.thisContract = val;
         // console.log(this.thisContract);
@@ -240,11 +247,11 @@
         // this.pdfVisible = true;
         // this.fileUrl = encodeURIComponent(aa)
       },
-      onBCXY (val) {
+      onBCXY(val) {
         this.thisContract = val;
         this.dialogOrderVisible = true;
       },
-      onDelete (val) {
+      onDelete(val) {
         this.$confirm('此操作将永久删除该合同, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -253,7 +260,7 @@
           this.DeleteContract(val.code);
         })
       },
-      async  DeleteContract (code) {
+      async DeleteContract(code) {
         const url = this.apis().deleteContract(code);
         const result = await http.get(url);
         if (result.code == 1) {
@@ -263,24 +270,24 @@
         }
         this.$emit('onSearch');
       },
-      isShowMore (codes) {
+      isShowMore(codes) {
         if (codes.length > 5) {
           return true;
         } else {
           return false;
         }
       },
-      turnIsMore () {
+      turnIsMore() {
         this.isMore = !this.isMore;
       },
-      onSearch () {
+      onSearch() {
         this.$emit('onSearch');
       },
-      closeDialogOrderVisible () {
+      closeDialogOrderVisible() {
         this.dialogOrderVisible = false;
       }
     },
-    data () {
+    data() {
       return {
         statuses: this.$store.state.ContractModule.statuses,
         dialogTableVisible: false,
@@ -295,7 +302,7 @@
         isMore: true
       }
     },
-    created () {
+    created() {
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
         this.closePdfVisible();
@@ -320,12 +327,14 @@
       });
     }
   }
+
 </script>
 <style>
   .el-table th {
     background-color: #FAFBFC;
   }
-  .el-dialog{
+
+  .el-dialog {
     width: 80%;
   }
 
@@ -340,8 +349,9 @@
   /*}*/
   .ellipsis-name {
     width: 50px;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
+
 </style>

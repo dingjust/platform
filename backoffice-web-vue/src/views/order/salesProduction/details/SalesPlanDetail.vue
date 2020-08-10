@@ -19,7 +19,7 @@
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :form="formData" @getDetails="getDetails" :canUpdate="false"
-          @onSaveRow="onSaveRow" @appendProduct="appendProduct" />
+          @appendProduct="appendProduct" />
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">

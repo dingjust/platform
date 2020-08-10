@@ -156,7 +156,7 @@ Vue.mixin({
         return '';
       }
     },
-  }
+  },
 });
 /* eslint-disable no-new */
 new Vue({
@@ -166,5 +166,8 @@ new Vue({
   template: '<App/>',
   components: {
     App
+  },
+  created() {
+    this.$store.dispatch('GlobalSizesModule/getSizesData');
   }
 });

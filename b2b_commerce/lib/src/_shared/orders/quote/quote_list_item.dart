@@ -119,7 +119,7 @@ class QuoteListItem extends StatelessWidget {
                       style: TextStyle(fontSize: 14, color: Colors.red),
                     ),
                     TextSpan(
-                      text: '${model.unitPrice}',
+                      text: '${model?.unitPrice ?? ''}',
                       style: TextStyle(color: Colors.red),
                     ),
                   ],

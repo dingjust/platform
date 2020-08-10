@@ -209,6 +209,7 @@
         Bus.$emit('closeFrom');
         this.refresh();
         this.fn.closeSlider(true);
+        this.$emit('callback');
       },
       async getAuthenticationState() {
         const url = this.apis().getAuthenticationState();

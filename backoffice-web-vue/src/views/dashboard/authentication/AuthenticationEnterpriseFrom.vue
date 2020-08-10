@@ -1,65 +1,79 @@
 <template>
   <div class="uniquecode-form-body">
-    <el-form ref="form" label-position="top" :model="enterpriseSlotData" :rules="rules" :disabled="readOnly">
-    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
-      <el-col :span="3" >
-        <el-button type="info" style="width: 120px" disabled >企业名称</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-input size="small" v-model="enterpriseSlotData.companyName" placeholder="企业名称" />
-      </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
-      <el-col :span="3" >
-        <el-button style="width: 120px" type="info" disabled >社会统一信用代码</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-input size="small" v-model="enterpriseSlotData.organization" placeholder="税号" />
-      </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
-      <el-col :span="3" >
-        <el-button type="info" style="width: 120px" disabled >选择办理人身份</el-button>
-      </el-col>
-      <el-col :span="12">
-      <el-radio-group v-model="enterpriseSlotData.role"  size="mini">
-        <el-radio-button style="margin-left: 5px"  label="LEGAL">我是法人</el-radio-button>
-        <el-radio-button style="margin-right: 15px " label="AGENT">我是代理人</el-radio-button>
-      </el-radio-group>
-      </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
-      <el-col :span="3" >
-        <el-button type="info" v-if="enterpriseSlotData.role=='AGENT'" style="width: 120px" disabled >代理人姓名</el-button>
-        <el-button type="info" v-if="enterpriseSlotData.role=='LEGAL'" style="width: 120px" disabled >法定代表人</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-input size="small" v-model="enterpriseSlotData.username" placeholder="姓名(与身份证一致)" />
-      </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
-      <el-col :span="3" >
-        <el-button type="info" style="width: 120px" disabled >身份证号</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-input size="small" v-model="enterpriseSlotData.idCardNum" placeholder="身份证号" />
-      </el-col>
-    </el-row>
-    <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <Authorized :permission="['CERT_APPLY']">
-        <el-button v-if="companyState == 'UNCERTIFIED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
-      </Authorized>
-    </el-row>
+    <el-form ref="form" label-position="top" :model="enterpriseSlotData" :rules="rules" :disabled="enterpriseReadOnly">
+      <el-row type="flex" justify="center" :gutter=15>
+        <el-col :span="3">
+          <h6 class="enterprise-form-title">企业信息</h6>
+        </el-col>
+        <el-col :span="12" />
+      </el-row>
+      <el-row class="form-row" type="flex" justify="center" :gutter=15>
+        <el-col :span="3">
+          <el-button type="info" style="width: 120px" disabled>企业名称</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-input size="small" v-model="enterpriseSlotData.companyName" placeholder="企业名称" />
+        </el-col>
+      </el-row>
+      <el-row class="form-row" type="flex" justify="center" :gutter=15>
+        <el-col :span="3">
+          <el-button style="width: 120px" type="info" disabled>信用代码</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-input size="small" v-model="enterpriseSlotData.organization" placeholder="信用代码" />
+        </el-col>
+      </el-row>
+      <el-row class="form-row" type="flex" justify="center" :gutter=15>
+        <el-col :span="3">
+          <el-button type="info" style="width: 120px" disabled>法定代表人</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-input size="small" v-model="enterpriseSlotData.username" placeholder="姓名(与身份证一致)" />
+        </el-col>
+      </el-row>
+      <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
+        <Authorized :permission="['CERT_APPLY']">
+          <el-button v-if="companyState == 'UNCERTIFIED'" class="form-submit_btn submit" size="mini" round @click="onSave">提交认证
+          </el-button>
+        </Authorized>
+      </el-row>
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
       <Authorized :permission="['CERT_APPLY']">
-        <el-button v-if="companyState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
+        <el-button v-if="companyState == 'CHECK'" class="form-submit_btn" size="mini" type="warning" round
+          @click="onSave">继续认证</el-button>
       </Authorized>
       <Authorized :permission="['CERT_APPLY']">
-        <el-button v-if="reverificationShow" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="reAuthentication" >重新认证</el-button>
+        <el-button v-if="reverificationShow" class="form-submit_btn" size="mini" type="danger" round @click="onSave">
+          重新认证</el-button>
       </Authorized>
     </el-row>
     <a id="a" href="" target="_blank"></a>
+    <el-dialog :visible.sync="dialogVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <el-row type="flex" justify="center" style="margin-bottom:30px">
+        <h6>再次确认</h6>
+      </el-row>
+      <el-row type="flex" class="confirm-row">
+        <el-col :span="12" :offset="8">
+          <h6>企业名称：{{enterpriseSlotData.companyName}}</h6>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="confirm-row">
+        <el-col :span="12" :offset="8">
+          <h6>信用代码：{{enterpriseSlotData.organization}}</h6>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="confirm-row">
+        <el-col :span="12" :offset="8">
+          <h6>法定代表人：{{enterpriseSlotData.username}}</h6>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="space-around" style="margin-top:30px">
+        <el-button class="auth-confirm-btn" round @click="dialogVisible=false">取消</el-button>
+        <el-button class="auth-confirm-btn submit" round @click="_onSave">确认</el-button>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,70 +92,75 @@
       }
     },
     methods: {
-      async onSave () {
+      async onSave() {
         if (this.enterpriseSlotData.companyName == null || this.enterpriseSlotData.companyName == '') {
           this.$message.error('请填写企业名称');
         } else if (this.enterpriseSlotData.organization == null || this.enterpriseSlotData.organization == '') {
           this.$message.error('请填写税号');
-        } else if (this.enterpriseSlotData.role == null || this.enterpriseSlotData.role == '') {
-          this.$message.error('请选择办理人身份');
         } else if (this.enterpriseSlotData.username == null || this.enterpriseSlotData.username == '') {
           this.$message.error('请填写办理人姓名');
-        } else if (this.enterpriseSlotData.idCardNum == null || this.enterpriseSlotData.idCardNum == '') {
-          this.$message.error('请填写办理人身份证');
         } else {
-          const url = this.apis().enterpriseAuthentication();
-          const tempData = {
-  companyName: this.enterpriseSlotData.companyName,
-  organization: this.enterpriseSlotData.organization,
-  role: this.enterpriseSlotData.role,
-  username: this.enterpriseSlotData.username,
-  idCardNum: this.enterpriseSlotData.idCardNum,
-  verifyWay: 'WAY1',
-  companyType: 'TYPE1'
-          };
-          let formData = Object.assign({}, tempData);
-          const result = await http.post(url, formData);
-          if (result.data != null) {
-  this.$confirm('是否跳转到认证页面？', '', {
-              confirmButtonText: '是',
-              cancelButtonText: '否',
-              type: 'warning'
-  }).then(() => {
-              window.open(result.data);
-  });
-          } else {
-  this.$message.success(result.msg);
-          }
+          this.dialogVisible = true;
         }
       },
-      reAuthentication () {
-        this.readOnly = false;
+      async _onSave() {
+        this.dialogVisible=false;
+        const url = this.apis().enterpriseAuthentication();
+        const tempData = {
+          companyName: this.enterpriseSlotData.companyName,
+          organization: this.enterpriseSlotData.organization,
+          username: this.enterpriseSlotData.username,
+          verifyWay: 'WAY1',
+          companyType: 'TYPE1'
+        };
+        let formData = Object.assign({}, tempData);
+        const result = await http.post(url, formData);
+        if (result.data != null) {
+          // this.$confirm('是否跳转到认证页面？', '', {
+          //   confirmButtonText: '是',
+          //   cancelButtonText: '否',
+          //   type: 'warning'
+          // }).then(() => {
+            window.open(result.data);
+          // });
+        } else {
+          this.$message.success(result.msg);
+        }
       }
     },
-    data () {
+    data() {
       return {
+        dialogVisible: false,
         rules: {
-          companyName: [{required: true, message: '必填', trigger: 'blur'}],
-          username: [{required: true, message: '必填', trigger: 'blur'}],
-          idCardNum: [{required: true, message: '必填', trigger: 'blur'}],
-          role: [{required: true, message: '必填', trigger: 'blur'}],
-          organization: [{required: true, message: '必填', trigger: 'blur'}]
+          companyName: [{
+            required: true,
+            message: '必填',
+            trigger: 'blur'
+          }],
+          username: [{
+            required: true,
+            message: '必填',
+            trigger: 'blur'
+          }],
+          organization: [{
+            required: true,
+            message: '必填',
+            trigger: 'blur'
+          }]
         },
-        readOnly: false
       }
     },
-    created () {
-      this.readOnly = this.enterpriseReadOnly;
-    },
-    mounted () {}
+    created() {},
+    mounted() {}
 
   }
+
 </script>
 <style>
-  .form-row{
+  .form-row {
     margin-top: 10px;
   }
+
   .uniquecode-form-body {
     width: 100%;
   }
@@ -183,6 +202,32 @@
     color: rgba(0, 0, 0, 0.85);
     width: 200px;
     margin-top: 20px;
+  }
+
+  .enterprise-form-title {
+    font-size: 10px;
+    color: #c8c9cc;
+  }
+
+  .form-submit_btn {
+    margin-top: 10px;
+    width: 400px;
+    height: 40px;
+  }
+
+  .auth-confirm-btn {
+    width: 150px;
+    height: 40px;
+  }
+
+  .submit {
+    background-color: #ffd60c;
+    border-color: #ffd60c;
+  }
+
+
+  .confirm-row {
+    margin-bottom: 10px;
   }
 
 </style>

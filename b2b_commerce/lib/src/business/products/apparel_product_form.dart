@@ -249,7 +249,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
-                  print('========qweqeqwe========');
                   List<ColorSizeModel> colors =
                   await Provider.of<ColorState>(context).getPartColors();
                   List<ColorSizeEntryModel> sizes =

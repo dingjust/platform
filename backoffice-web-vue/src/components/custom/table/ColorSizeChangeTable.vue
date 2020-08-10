@@ -25,7 +25,7 @@
               </template>
               <template v-else>
                 <span class="order-table-input_prefix">{{getOldEntryByColorSize(color, size).quantity}}<i
-                    class="el-icon-plus icon-plus"/></span>
+                    class="el-icon-plus icon-plus" /></span>
                 <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="0"
                   v-number-input.float="{ min: 0,decimal:0}" :disabled="readOnly"
                   v-model="getEntryByColorSize(color, size).quantity">
@@ -49,6 +49,10 @@
 </template>
 
 <script>
+  import {
+    getSizeSequence
+  } from './table'
+
   export default {
     name: 'ColorSizeChangeTable',
     props: {
@@ -77,6 +81,20 @@
           if (!sizeKeySet.has(element.size.code)) {
             sizes.push(element.size);
             sizeKeySet.add(element.size.code);
+          }
+        });
+        //排序
+        sizes.sort((o1, o2) => {
+          let o1Sequence = getSizeSequence(o1.code);
+          let o2Sequence = getSizeSequence(o2.code);
+          if (o1Sequence && o2Sequence) {
+            return o1Sequence - o2Sequence;
+          } else if (o1Sequence && !o2Sequence) {
+            return -1;
+          } else if (!o1Sequence && o2Sequence) {
+            return 1;
+          } else {
+            return -1;
           }
         });
         return sizes;
@@ -195,19 +213,19 @@
     color: rgba(0, 0, 0, 0.65);
   }
 
-  .order-table-input >>> .el-input__inner {
+  .order-table-input>>>.el-input__inner {
     width: auto;
     border: 0px solid #fff;
     /* padding: 0px; */
     text-align: start;
   }
 
-  .table-container >>> .el-input {
+  .table-container>>>.el-input {
     /* width: unset !important; */
     width: min-content;
   }
 
-  .order-table-input >>> .el-input__prefix {
+  .order-table-input>>>.el-input__prefix {
     /* left: 30%; */
     top: 16%;
     text-align: center;
@@ -220,8 +238,9 @@
     margin-left: 20px;
   }
 
-  .icon-plus{
+  .icon-plus {
     color: red;
     margin-left: 10px;
   }
+
 </style>

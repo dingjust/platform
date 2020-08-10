@@ -21,10 +21,10 @@
               </el-row>
               <el-tabs v-model="form.type" @tab-click="handleClick" :stretch="true" class="register-form-tabs">
                 <el-tab-pane label="主账号" name="main">
-                  <password-reset-form :slot-data="form" accountType='main'/>
+                  <password-reset-form :slot-data="form" accountType="main" />
                 </el-tab-pane>
                 <el-tab-pane label="员工账号" name="employee">
-                  <password-reset-form :slot-data="form" accountType='employee'/>
+                  <password-reset-form :slot-data="form" accountType="employee" />
                 </el-tab-pane>
               </el-tabs>
             </el-card>
@@ -39,28 +39,31 @@
 
   export default {
     name: "PasswordResetPage",
-    props: {
-
-    },
+    props: {},
     data() {
       return {
         form: {
           type: "main",
           phone: "",
+          //员工账号,
+          employeeUserName: "",
           name: "",
           code: "",
           password: "",
           againPassword: "",
-          companyName: ""
-        }
+          companyName: "",
+        },
       };
     },
     components: {
-      PasswordResetForm
+      PasswordResetForm,
     },
     computed: {},
     created() {
-      if (this.$route.query.accountType != null && this.$route.query.accountType != '') {
+      if (
+        this.$route.query.accountType != null &&
+        this.$route.query.accountType != ""
+      ) {
         this.form.type = this.$route.query.accountType;
       }
     },
@@ -71,8 +74,8 @@
       },
       toLogin() {
         this.$router.push("/login");
-      }
-    }
+      },
+    },
   };
 
 </script>

@@ -23,6 +23,10 @@
 </template>
 
 <script>
+  import {
+    getSizeSequence
+  } from '@/components/'
+
   export default {
     name: 'ProgressReportCommon',
     props: {
@@ -51,11 +55,25 @@
         });
         const res = new Map();
         var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
-        return result.sort((o1, o2) => o1.sequence - o2.sequence);
+        //排序
+        result.sort((o1, o2) => {
+          let o1Sequence = getSizeSequence(o1.code);
+          let o2Sequence = getSizeSequence(o2.code);
+          if (o1Sequence && o2Sequence) {
+            return o1Sequence - o2Sequence;
+          } else if (o1Sequence && !o2Sequence) {
+            return -1;
+          } else if (!o1Sequence && o2Sequence) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+        return result;      
       },
       colors: function () {
         var colors = new Set([]);
-        this.orderEntries.forEach(element => {
+        this.orderEntries.filter(entry=>entry.quantity>0).forEach(element => {
           colors.add(element.color.name);
         });
         return colors;
@@ -74,7 +92,7 @@
       }
     },
     methods: {
-      getOrderVariant (color, size) {
+      getOrderVariant(color, size) {
         var result = this.orderEntries.filter(
           item => item.color.name == color && item.size.name == size
         );
@@ -84,7 +102,7 @@
           return '';
         }
       },
-      getNoteVariantSum (color, size) {
+      getNoteVariantSum(color, size) {
         var sum = 0;
         this.noteEntries.filter(entry => entry.status == 'PASS').forEach((entry) => {
           var result = entry.entries.filter(
@@ -96,7 +114,7 @@
         });
         return sum;
       },
-      getVarinatStr (color, size) {
+      getVarinatStr(color, size) {
         if (this.getOrderVariant(color, size) == '') {
           if (this.getNoteVariantSum(color, size) != 0) {
             return '+' + this.getNoteVariantSum(color, size);
@@ -107,17 +125,18 @@
           return this.getNoteVariantSum(color, size) + '/' + this.getOrderVariant(color, size);
         }
       },
-      onOrder () {
+      onOrder() {
         this.$emit('onOrder')
       }
     },
-    created () {},
-    data () {
+    created() {},
+    data() {
       return {
 
       }
     }
   }
+
 </script>
 <style scoped>
   .table-body {
@@ -165,4 +184,5 @@
     border-color: #ffd60c;
     color: #000;
   }
+
 </style>

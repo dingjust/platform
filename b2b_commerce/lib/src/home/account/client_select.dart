@@ -3,11 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class ClientSelectPage extends StatelessWidget {
+class ClientSelectPage extends StatefulWidget {
+  @override
+  _ClientSelectPageState createState() => _ClientSelectPageState();
+}
+
+class _ClientSelectPageState extends State<ClientSelectPage> {
+  GlobalKey homePageKey = GlobalKey();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => homeInit());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        key: homePageKey,
         body: Container(
           color: Colors.white,
           child: Column(
@@ -26,7 +40,7 @@ class ClientSelectPage extends StatelessWidget {
                     child: Text(
                       '请选择用户身份注册或登录',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   )
                 ],
@@ -159,5 +173,13 @@ class ClientSelectPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  void homeInit() async {
+    //版本检查
+    bool isNew = await AppVersion(homePageKey.currentContext,
+        ignoreVersionNotification:
+        UserBLoC.instance.ignoreVersionNotification)
+        .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
   }
 }

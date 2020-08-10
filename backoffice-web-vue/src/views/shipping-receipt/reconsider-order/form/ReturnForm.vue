@@ -68,7 +68,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <color-size-table :data="curData.packageSheets[0].colorSizeEntries" />
+      <color-size-table :data="curData.packageSheets[0].colorSizeEntries" :hideEmptyColors="false" />
       <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">
         <template>
           <el-col :span="4">
@@ -215,6 +215,15 @@
           });
         }
       }
+      //无数量颜色处理
+      let colorKeySet = new Set([]);
+      this.colorSizeEntries.filter(entry => entry.quantity > 0).forEach(element => {
+        if (!colorKeySet.has(element.color.code)) {
+          colorKeySet.add(element.color.code);
+        }
+      });
+      this.curData.packageSheets[0].colorSizeEntries = this.curData.packageSheets[0].colorSizeEntries.filter(entry =>
+        colorKeySet.has(entry.color.code));
     },
     destroyed() {
 

@@ -123,7 +123,7 @@
         );
       }
     },
-    created() {
+    created() {      
       var ua = navigator.userAgent.toLowerCase(); // 判断浏览器的类型
       //本地是否存储userName
       let localUserName = localStorage.getItem('userName');

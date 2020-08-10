@@ -132,12 +132,7 @@
 
   export default {
     name: 'ReceiptOrderDetail',
-    props: {
-      //收货单id
-      id: {
-        require: true
-      }
-    },
+    props: ['id'],
     components: {
       ColorSizeBoxTable,
       ColorSizeTable,

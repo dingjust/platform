@@ -2,7 +2,8 @@
   <div style="margin-bottom: 10px">
     <el-row type="flex" justify="start">
       <el-col :span="3" :offset="1">
-        <img :src="product.product.thumbnail ? product.product.thumbnail.url : 'static/img/nopicture.png'" style="width: 100px;height: 100px;border-radius: 8px;"/>
+        <img :src="product.product.thumbnail ? product.product.thumbnail.url : 'static/img/nopicture.png'"
+          style="width: 100px;height: 100px;border-radius: 8px;" />
       </el-col>
       <el-col :span="12">
         <el-table ref="resultTable" :data="getColorSizeTableData" border>
@@ -17,6 +18,10 @@
 </template>
 
 <script>
+  import {
+    getSizeSequence
+  } from '@/components/'
+
   export default {
     name: 'OutboundOrderColorSizeTable',
     props: ['product'],
@@ -35,7 +40,17 @@
             data.push(row);
             row = {};
           }
-        })
+        });
+        //颜色为空处理
+        data = data.filter(item => {
+          let values = Object.values(item);
+          if (values) {
+            let numberArry = values.filter(val => Number.isInteger(val));
+            return !numberArry.every(val => val == 0);
+          } else {
+            return false;
+          }
+        });
         return data;
       },
       getSizeList: function () {
@@ -46,15 +61,31 @@
           if (index < 0) {
             data.push(item.size);
           }
-        })
+        });
+        //排序
+        data.sort((o1, o2) => {
+          let o1Sequence = getSizeSequence(o1.code);
+          let o2Sequence = getSizeSequence(o2.code);
+          if (o1Sequence && o2Sequence) {
+            return o1Sequence - o2Sequence;
+          } else if (o1Sequence && !o2Sequence) {
+            return -1;
+          } else if (!o1Sequence && o2Sequence) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
         return data;
       }
     }
   }
+
 </script>
 
 <style scoped>
   /deep/ .el-table--enable-row-hover .el-table__body tr:hover>td {
     background-color: #FFFFFF !important;
   }
+
 </style>

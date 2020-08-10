@@ -130,75 +130,78 @@ class AppVersion {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.only(top: 10),
-          content: Container(
-            height: 250,
-            width: double.maxFinite,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '更新',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView(
-                        children: <Widget>[
-                          Text('版本更新'),
-                          Text('新版本：${releaseVersion}'),
-                          Text('版本说明：'),
-                          Column(children: getDecriptionRows(description)),
-                          Text('钉单最新版本来啦，马上更新吧！'),
-                        ],
-                      ),
-                    )),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          top:
-                          BorderSide(color: Colors.grey[300], width: 0.5))),
-                  child: Row(
-                    children: <Widget>[
-                      (force != null && force)
-                          ? Container()
-                          : Expanded(
-                        child: FlatButton(
-                          child: Text('稍后再说',
-                              style: TextStyle(color: Colors.grey)),
-                          onPressed: () {
-                            UserBLoC.instance.ignoreVersionNotification =
-                            true;
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ),
-                      (force != null && force)
-                          ? Container()
-                          : Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                            border: Border(
-                                left: BorderSide(
-                                    color: Colors.grey[300],
-                                    width: 0.5))),
-                      ),
-                      Expanded(
-                        child: FlatButton(
-                          child: Text('前往AppStore',
-                              style: TextStyle(color: Colors.blue)),
-                          onPressed: () {
-                            _jumpToAppStore();
-                          },
-                        ),
-                      )
-                    ],
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            contentPadding: EdgeInsets.only(top: 10),
+            content: Container(
+              height: 250,
+              width: double.maxFinite,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    '更新',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                )
-              ],
+                  Expanded(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: ListView(
+                          children: <Widget>[
+                            Text('版本更新'),
+                            Text('新版本：${releaseVersion}'),
+                            Text('版本说明：'),
+                            Column(children: getDecriptionRows(description)),
+                            Text('钉单最新版本来啦，马上更新吧！'),
+                          ],
+                        ),
+                      )),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            top: BorderSide(
+                                color: Colors.grey[300], width: 0.5))),
+                    child: Row(
+                      children: <Widget>[
+                        (force != null && force)
+                            ? Container()
+                            : Expanded(
+                          child: FlatButton(
+                            child: Text('稍后再说',
+                                style: TextStyle(color: Colors.grey)),
+                            onPressed: () {
+                              UserBLoC.instance
+                                  .ignoreVersionNotification = true;
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        (force != null && force)
+                            ? Container()
+                            : Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(
+                                      color: Colors.grey[300],
+                                      width: 0.5))),
+                        ),
+                        Expanded(
+                          child: FlatButton(
+                            child: Text('前往AppStore',
+                                style: TextStyle(color: Colors.blue)),
+                            onPressed: () {
+                              _jumpToAppStore();
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -213,81 +216,84 @@ class AppVersion {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.only(top: 10),
-          content: Container(
-            height: 250,
-            width: double.maxFinite,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                // Image.asset(
-                //   'temp/login_logo.png',
-                //   package: 'assets',
-                //   width: 100.0,
-                //   height: 100.0,
-                // ),
-                Text(
-                  '更新',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView(
-                        children: <Widget>[
-                          Text('版本更新'),
-                          Text('新版本：${releaseVersion}'),
-                          Text('版本说明：'),
-                          Column(children: getDecriptionRows(description)),
-                          Text('钉单最新版本来啦，马上更新吧！'),
-                        ],
-                      ),
-                    )),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          top:
-                          BorderSide(color: Colors.grey[300], width: 0.5))),
-                  child: Row(
-                    children: <Widget>[
-                      (force != null && force)
-                          ? Container()
-                          : Expanded(
-                        child: FlatButton(
-                          child: Text('稍后再说',
-                              style: TextStyle(color: Colors.grey)),
-                          onPressed: () {
-                            UserBLoC.instance.ignoreVersionNotification =
-                            true;
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ),
-                      (force != null && force)
-                          ? Container()
-                          : Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                            border: Border(
-                                left: BorderSide(
-                                    color: Colors.grey[300],
-                                    width: 0.5))),
-                      ),
-                      Expanded(
-                        child: FlatButton(
-                          child:
-                          Text('立即更新', style: TextStyle(color: Colors.red)),
-                          onPressed: () async {
-                            updateApp(url);
-                          },
-                        ),
-                      )
-                    ],
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            contentPadding: EdgeInsets.only(top: 10),
+            content: Container(
+              height: 250,
+              width: double.maxFinite,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  // Image.asset(
+                  //   'temp/login_logo.png',
+                  //   package: 'assets',
+                  //   width: 100.0,
+                  //   height: 100.0,
+                  // ),
+                  Text(
+                    '更新',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                )
-              ],
+                  Expanded(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: ListView(
+                          children: <Widget>[
+                            Text('版本更新'),
+                            Text('新版本：${releaseVersion}'),
+                            Text('版本说明：'),
+                            Column(children: getDecriptionRows(description)),
+                            Text('钉单最新版本来啦，马上更新吧！'),
+                          ],
+                        ),
+                      )),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            top: BorderSide(
+                                color: Colors.grey[300], width: 0.5))),
+                    child: Row(
+                      children: <Widget>[
+                        (force != null && force)
+                            ? Container()
+                            : Expanded(
+                          child: FlatButton(
+                            child: Text('稍后再说',
+                                style: TextStyle(color: Colors.grey)),
+                            onPressed: () {
+                              UserBLoC.instance
+                                  .ignoreVersionNotification = true;
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        (force != null && force)
+                            ? Container()
+                            : Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(
+                                      color: Colors.grey[300],
+                                      width: 0.5))),
+                        ),
+                        Expanded(
+                          child: FlatButton(
+                            child: Text('立即更新',
+                                style: TextStyle(color: Colors.red)),
+                            onPressed: () async {
+                              updateApp(url);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );

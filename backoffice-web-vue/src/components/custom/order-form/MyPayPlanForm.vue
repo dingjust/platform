@@ -63,7 +63,7 @@
             <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
             <el-select v-model="form.deposit.event" placeholder="请选择">
               <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key"></el-option>
+                <el-option :label="value" :value="key" :key="'deposit'+key"></el-option>
               </template>
             </el-select>
           </el-row>
@@ -100,7 +100,7 @@
             <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
             <el-select v-model="form.balance1.event" placeholder="请选择">
               <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key"></el-option>
+                <el-option :label="value" :value="key" :key="key"></el-option>
               </template>
             </el-select>
           </el-row>
