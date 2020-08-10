@@ -263,6 +263,17 @@
             }
           });
         }
+        //颜色为空处理
+        result = result.filter(item => {
+          let values = Object.values(item);
+          if (values) {
+            let numberArry = values.filter(val => Number.isInteger(val));
+            return !numberArry.every(val => val == 0);
+          } else {
+            return false;
+          }
+        });
+
         return result;
       },
     },

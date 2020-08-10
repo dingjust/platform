@@ -73,7 +73,7 @@
       },
       colors: function () {
         var colors = new Set([]);
-        this.orderEntries.forEach(element => {
+        this.orderEntries.filter(entry=>entry.quantity>0).forEach(element => {
           colors.add(element.color.name);
         });
         return colors;

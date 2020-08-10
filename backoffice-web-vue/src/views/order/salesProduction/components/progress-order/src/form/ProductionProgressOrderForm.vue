@@ -117,7 +117,7 @@
   import {
     getSizeSequence
   } from '@/components/'
-  
+
   export default {
     name: 'ProductionProgressOrderForm',
     props: ['progressOrder', 'belong', 'progress', 'readOnly'],
@@ -168,7 +168,7 @@
       },
       colors: function () {
         var colors = new Set([]);
-        this.belong.colorSizeEntries.forEach(element => {
+        this.belong.colorSizeEntries.filter(entry => entry.quantity).forEach(element => {
           colors.add(element.color.name);
         });
         return colors;

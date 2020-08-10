@@ -96,9 +96,14 @@
           return [];
         }
       },
-      readOnly: { 
+      readOnly: {
         type: Boolean,
         default: false
+      },
+      //是否隐藏数量为0的颜色行
+      hideEmptyColors: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -130,7 +135,7 @@
       colors: function () {
         let colors = [];
         let colorKeySet = new Set([]);
-        this.colorSizeEntries.forEach(element => {
+        this.colorSizeEntries.filter(entry => this.hideEmptyColors ? entry.quantity > 0 : true).forEach(element => {
           if (!colorKeySet.has(element.color.code)) {
             colors.push(element.color);
             colorKeySet.add(element.color.code);

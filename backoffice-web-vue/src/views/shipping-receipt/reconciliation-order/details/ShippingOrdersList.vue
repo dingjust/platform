@@ -29,7 +29,7 @@
     </el-table>
     <el-dialog :visible.sync="receiptOrderVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <receipt-order-detail v-if="receiptOrderVisible" :id="receiptId" />
+      <receipt-order-detail v-if="receiptOrderVisible" :id="receiptId"/>
     </el-dialog>
   </div>
 </template>
@@ -45,7 +45,7 @@
         required: true
       },
     },
-    components: {
+    components:{
       ReceiptOrderDetail
     },
     computed: {},

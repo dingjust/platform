@@ -2,7 +2,8 @@
   <div style="margin-bottom: 10px">
     <el-row type="flex" justify="start">
       <el-col :span="3" :offset="1">
-        <img :src="product.product.thumbnail ? product.product.thumbnail.url : 'static/img/nopicture.png'" style="width: 100px;height: 100px;border-radius: 8px;"/>
+        <img :src="product.product.thumbnail ? product.product.thumbnail.url : 'static/img/nopicture.png'"
+          style="width: 100px;height: 100px;border-radius: 8px;" />
       </el-col>
       <el-col :span="12">
         <el-table ref="resultTable" :data="getColorSizeTableData" border>
@@ -20,7 +21,7 @@
   import {
     getSizeSequence
   } from '@/components/'
-  
+
   export default {
     name: 'OutboundOrderColorSizeTable',
     props: ['product'],
@@ -39,7 +40,17 @@
             data.push(row);
             row = {};
           }
-        })
+        });
+        //颜色为空处理
+        data = data.filter(item => {
+          let values = Object.values(item);
+          if (values) {
+            let numberArry = values.filter(val => Number.isInteger(val));
+            return !numberArry.every(val => val == 0);
+          } else {
+            return false;
+          }
+        });
         return data;
       },
       getSizeList: function () {
@@ -69,10 +80,12 @@
       }
     }
   }
+
 </script>
 
 <style scoped>
   /deep/ .el-table--enable-row-hover .el-table__body tr:hover>td {
     background-color: #FFFFFF !important;
   }
+
 </style>

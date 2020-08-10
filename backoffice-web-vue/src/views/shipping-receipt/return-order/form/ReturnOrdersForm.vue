@@ -103,7 +103,7 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="24">
-            <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="formData.isAllReturn" />
+            <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="formData.isAllReturn" :hideEmptyColors="false"/>
           </el-col>
         </el-row>
         <el-row type="flex" style="margin-top:20px;">
