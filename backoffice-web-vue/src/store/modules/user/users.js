@@ -67,14 +67,29 @@ const actions = {
       '&client_id=' + CLIENT_ID +
       '&client_secret=' + CLIENT_SECRET +
       '&grant_type=' + GRANT_TYPE_PASSWORD);
+
+    //请求报错
     if (response['errors']) {
       alert(response['errors'][0].message);
       return;
     }
-    if (!response['access_token']) {
-      alert('账号密码不正确');
+
+    //密码校验不正确
+    if (response['error']) {
+      console.log(JSON.stringify(response));
+      if (response['error'] == 'invalid_grant') {
+        alert('账号密码不正确');        
+      }
       return;
     }
+    
+    //其他情况
+    if (!response['access_token']) {
+      alert('网络连接错误');
+      return;
+    }
+
+
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response['access_token'];
 
     commit('token', response['access_token']);
@@ -108,11 +123,11 @@ const actions = {
     //存储登录用户username
 
     //分割子账号名称
-    let strArray=username.split(':');
+    let strArray = username.split(':');
     localStorage.setItem('userName', strArray[0]);
-    if(strArray.length==2){
+    if (strArray.length == 2) {
       localStorage.setItem('employeeUserName', strArray[1]);
-    }    
+    }
     router.push('/');
   },
   async getProfile({
