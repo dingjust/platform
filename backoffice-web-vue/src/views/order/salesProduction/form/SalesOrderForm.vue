@@ -116,9 +116,10 @@
               </el-form-item>
             </el-col> -->
             <el-col :span="6">
-              <el-form-item label="生产负责人" label-width="100px" prop="productionLeader"
-                :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                <personnel-selection :vPerson.sync="form.productionLeader" />
+              <el-form-item label="生产部" label-width="100px" prop="productionDept"
+                :rules="{ required:true, validator: validateProductionDept, trigger: 'change'}">
+                <!-- <personnel-selection :vPerson.sync="form.productionLeader" /> -->
+                <dept-selection :vDept.sync=form.productionDept />
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -130,7 +131,8 @@
               <template v-for="(item,itemIndex) in form.approvers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="100px"
                   :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                  <personnel-selection :vPerson.sync="form.approvers[itemIndex]" />
+                  <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
+                  <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded"/>
                 </el-form-item>
               </template>
             </el-col>
@@ -164,9 +166,13 @@
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
+      <sales-plan-append-product-form ref="appendProductForm" v-if="salesProductAppendVisible" @onSave="onAppendProduct"
         :orderType="'SALES_ORDER'" :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
         :productionLeader="form.productionLeader" />
+    </el-dialog>
+    <el-dialog :visible.sync="materialDialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" />
     </el-dialog>
     <!-- <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="setProgressPlan"/>
@@ -181,9 +187,13 @@
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ProgressPlanSelectDialog from '@/views/user/progress-plan/components/ProgressPlanSelectDialog'
+  import SampleProductsSelectDialog from '@/views/product/sample/components/SampleProductsSelectDialog';
+
   import {
-    PayPlanFormV2
-  } from '@/components/'
+    PayPlanFormV2,
+    DeptSelection,
+    PersonnalSelectionV2
+  } from '@/components'
 
   import {
     getEntryTotalAmount,
@@ -199,7 +209,10 @@
       SupplierSelect,
       SalesProductionTabs,
       PersonnelSelection,
-      ProgressPlanSelectDialog
+      ProgressPlanSelectDialog,
+      DeptSelection,
+      PersonnalSelectionV2,
+      SampleProductsSelectDialog
     },
     computed: {
       // 根据订单类型，加工类型判断是否需要物料清单等
@@ -264,12 +277,20 @@
       }
     },
     methods: {
+      onSelectSample (data) {
+        this.materialDialogVisible = false;
+        this.salesProductAppendVisible = true;
+        this.$nextTick(() => {
+          this.$refs.appendProductForm.onSelectSample(data);
+        })
+      },
       appendProduct() {
-        this.$refs.form.validateField('productionLeader', errMsg => {
+        this.$refs.form.validateField('productionDept', errMsg => {
           if (errMsg) {
-            this.$message.error('请先选择生产负责人');
+            this.$message.error('请先选择生产部门');
           } else {
-            this.salesProductAppendVisible = true;
+            this.materialDialogVisible = true;
+            // this.salesProductAppendVisible = true;
           }
         });
       },
@@ -342,7 +363,18 @@
         let submitForm = Object.assign({}, this.form);
         if (!submitForm.auditNeeded) {
           submitForm.approvers = [];
+        } else {
+          for (let i = 0; i < submitForm.approvers.length; i++) {
+            submitForm.approvers[i] = {
+              id: this.form.approvers[i][this.form.approvers[i].length -1]
+            }
+          }
         }
+        // 处理级联选择数据
+        submitForm.productionDept = {
+          id: this.form.productionDept[this.form.productionDept.length - 1]
+        }
+
         const result = await this.$http.post(url, submitForm);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -386,6 +418,16 @@
             resolve(res);
           })
         })
+      },
+      validateField (name) {
+        this.$refs.form.validateField(name);
+      },
+      validateProductionDept (rule, value, callback) {
+        if (value.length <= 0) {
+          callback(new Error('请选择生产部门'));
+        } else {
+          callback()
+        }
       }
     },
     data() {
@@ -394,6 +436,7 @@
         suppliersSelectVisible: false,
         payPlanSelectDialogVisible: false,
         dialogPayPlanFormVisible: false,
+        materialDialogVisible: false,
         // progressPlanVisible: false,
         form: {
           name: '',
@@ -404,6 +447,7 @@
           invoiceTaxPoint: 0.03,
           taskOrderEntries: [],
           cooperationMode: 'LABOR_AND_MATERIAL',
+          productionDept: [],
           payPlan: {
             isHaveDeposit: false,
             payPlanType: 'PHASEONE',
@@ -434,7 +478,15 @@
           productionLeader: null,
           approvers: [null],
           purchasingLeader: null
-        }
+        },
+      }
+    },
+    watch: {
+      'form.productionDept': function (nval, oval) {
+        this.validateField('productionDept');
+      },
+      'form.approvers': function (nval, oval) {
+        this.validateField('approvers.0');
       }
     },
     created() {

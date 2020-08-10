@@ -47,36 +47,43 @@
             </el-col>
           </el-row>
           <el-row type="flex" v-if="entry.product.code != null" class="info-order-row">
-            <img class="purchase-product-img"
-              :src="entry.product.thumbnail!=null&&entry.product.thumbnail.length!=0?entry.product.thumbnail.url:'static/img/nopicture.png'">
-            <table cellspacing="2" width="100%" :height="(appendProductForm.sampleList.length+1)*50"
-              class="order-table">
-              <tr class="order-table-th_row">
-                <td style="width: 40px">颜色</td>
-                <template v-for="size in entry.sizes">
-                  <th :key="size.name">{{size.name}}</th>
-                </template>
-                <th>小计</th>
-              </tr>
-              <template v-for="color in entry.colors">
-                <tr :key="'tr'+color.code">
-                  <td>{{color.name}}</td>
+            <el-col :span="4">
+              <el-row type="flxe">
+                <img class="purchase-product-img"
+                  :src="entry.product.thumbnail!=null&&entry.product.thumbnail.length!=0?entry.product.thumbnail.url:'static/img/nopicture.png'">
+                <h6 style="padding-top: 5px;">货号：{{entry.product.skuID}}</h6>
+              </el-row>
+            </el-col>
+            <el-col :span="20">
+              <table cellspacing="2" width="100%" :height="(appendProductForm.sampleList.length+1)*50"
+                class="order-table">
+                <tr class="order-table-th_row">
+                  <td style="width: 40px">颜色</td>
                   <template v-for="size in entry.sizes">
-                    <td style="width:80px" :key="'td'+size.name">
-                      <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="1"
-                        :disabled="fromOrigin"
-                        v-model="getEntryByColorSize(color, size, entry.colorSizeEntries).quantity">
-                      </el-input>
-                    </td>
+                    <th :key="size.name">{{size.name}}</th>
                   </template>
-                  <td style="width:100px">{{countColorsAmount(color, entry.colorSizeEntries)}}</td>
+                  <th>小计</th>
                 </tr>
-              </template>
-              <tr>
-                <td :colspan="getColspanLength(entry.sizes.length)">合计</td>
-                <td>{{countTotalAmount(entry.colorSizeEntries)}}</td>
-              </tr>
-            </table>
+                <template v-for="color in entry.colors">
+                  <tr :key="'tr'+color.code">
+                    <td>{{color.name}}</td>
+                    <template v-for="size in entry.sizes">
+                      <td style="width:80px" :key="'td'+size.name">
+                        <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="1"
+                          :disabled="fromOrigin"
+                          v-model="getEntryByColorSize(color, size, entry.colorSizeEntries).quantity">
+                        </el-input>
+                      </td>
+                    </template>
+                    <td style="width:100px">{{countColorsAmount(color, entry.colorSizeEntries)}}</td>
+                  </tr>
+                </template>
+                <tr>
+                  <td :colspan="getColspanLength(entry.sizes.length)">合计</td>
+                  <td>{{countTotalAmount(entry.colorSizeEntries)}}</td>
+                </tr>
+              </table>
+            </el-col>
           </el-row>
           <!-- <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20" v-if="orderType == 'SALES_ORDER'">
             <el-col :span="16">
@@ -174,7 +181,7 @@
       </el-row>
     </el-form>
     <el-row type="flex" justify="center" style="margin-top: 20px" v-if="!readOnly">
-      <el-button class="material-btn" @click="onSubmit">{{isUpdate?'保存':'添加产品'}}</el-button>
+      <el-button class="material-btn" @click="onSubmit">{{isUpdate?'保存':'确定'}}</el-button>
     </el-row>
   </div>
 </template>
@@ -250,6 +257,7 @@
     },
     data() {
       return {
+        isAddRow: false,
         materialDialogVisible: false,
         openAccountingSheet: {},
         openAccountingSheetUnitPrice: null,
@@ -316,6 +324,10 @@
         this.progressPlanVisible = false;
       },
       onSelectSample(data) {
+        if (this.isAddRow) {
+          this._addRow();
+          this.isAddRow = false;
+        }
         //构建颜色尺码行
         var colorSizeEntries = [];
         data.colorSizes.forEach(color => {
@@ -365,6 +377,33 @@
         this.$set(this.appendProductForm.sampleList, this.currentProductIndex, newEntry);
 
         this.materialDialogVisible = false;
+      },
+      _addRow () {
+        var newEntry = {
+          product: {
+
+          },
+          progressPlan: {},
+          colorSizeEntries: [],
+          unitPrice: '',
+          deliveryDate: '',
+          materialsSpecEntrie: [],
+          productionProcessContent: '',
+          medias: [],
+          costOrder: null,
+          shippingAddress: {},
+          productionTask: {
+            price: '',
+            deliveryTime: '',
+            populationScale: '',
+            cooperationMode: "LABOR_AND_MATERIAL",
+            invoiceTaxPoint: 0.03,
+            invoiceNeeded: false,
+            remarks: "",
+            appointFactory: null,
+          }
+        };
+        this.appendProductForm.sampleList.push(newEntry);
       },
       //获取样衣颜色
       getColorsByEntries(colorSizeEntries) {
@@ -512,32 +551,10 @@
         this.$set(this.appendProductForm.sampleList[this.currentProductIndex], 'costOrder', sheet);
         this.dialogVisible = false;
       },
-      addRow() {
-        var newEntry = {
-          product: {
-
-          },
-          progressPlan: {},
-          colorSizeEntries: [],
-          unitPrice: '',
-          deliveryDate: '',
-          materialsSpecEntrie: [],
-          productionProcessContent: '',
-          medias: [],
-          costOrder: null,
-          shippingAddress: {},
-          productionTask: {
-            price: '',
-            deliveryTime: '',
-            populationScale: '',
-            cooperationMode: "LABOR_AND_MATERIAL",
-            invoiceTaxPoint: 0.03,
-            invoiceNeeded: false,
-            remarks: "",
-            appointFactory: null,
-          }
-        };
-        this.appendProductForm.sampleList.push(newEntry);
+      addRow () {
+        this.isAddRow = true;
+        this.currentProductIndex = this.appendProductForm.sampleList.length;
+        this.materialDialogVisible = true;
       },
       onSubmit() {
         let amountValidate = true;

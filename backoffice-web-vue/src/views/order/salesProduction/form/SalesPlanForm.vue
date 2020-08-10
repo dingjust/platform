@@ -59,9 +59,10 @@
         <div class="form-block-content">
           <el-row type="flex" align="center" :gutter="10">
             <el-col :span="6">
-              <el-form-item label="生产负责人" label-width="100px" prop="productionLeader"
-                :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                <personnel-selection :vPerson.sync="form.productionLeader" />
+              <el-form-item label="生产部" label-width="100px" prop="productionDept"
+                :rules="{ required:true, validator: validateProductionDept, trigger: 'change'}">
+                <!-- <personnel-selection :vPerson.sync="form.productionLeader" /> -->
+                <dept-selection :vDept.sync=form.productionDept />
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -73,7 +74,8 @@
               <template v-for="(item,itemIndex) in form.approvers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="100px"
                   :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                  <personnel-selection :vPerson.sync="form.approvers[itemIndex]" />
+                  <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
+                  <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded"/>
                 </el-form-item>
               </template>
             </el-col>
@@ -96,9 +98,13 @@
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
+      <sales-plan-append-product-form ref="appendProductForm" v-if="salesProductAppendVisible" @onSave="onAppendProduct"
         :orderType="'SALES_PLAN'" :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
         :productionLeader="form.productionLeader" />
+    </el-dialog>
+    <el-dialog :visible.sync="materialDialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" />
     </el-dialog>
   </div>
 </template>
@@ -108,6 +114,12 @@
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
+  import SampleProductsSelectDialog from '@/views/product/sample/components/SampleProductsSelectDialog';
+
+  import {
+    DeptSelection,
+    PersonnalSelectionV2
+  } from '@/components'
 
   export default {
     name: 'SalesPlanForm',
@@ -116,7 +128,10 @@
       SalesPlanAppendProductForm,
       MTAVAT,
       SalesProductionTabs,
-      PersonnelSelection
+      PersonnelSelection,
+      SampleProductsSelectDialog,
+      DeptSelection,
+      PersonnalSelectionV2
     },
     computed: {
       //根据订单类型，加工类型判断是否需要物料清单等
@@ -137,12 +152,20 @@
         this.form.salesDateStart = val[0];
         this.form.salesDateEnd = val[1];
       },
+      onSelectSample (data) {
+        this.materialDialogVisible = false;
+        this.salesProductAppendVisible = true;
+        this.$nextTick(() => {
+          this.$refs.appendProductForm.onSelectSample(data);
+        })
+      },
       appendProduct() {
-        this.$refs.form.validateField('productionLeader', errMsg => {
+        this.$refs.form.validateField('productionDept', errMsg => {
           if (errMsg) {
             this.$message.error('请先选择生产负责人');
           } else {
-            this.salesProductAppendVisible = true;
+            this.materialDialogVisible = true;
+            // this.salesProductAppendVisible = true;
           }
         }, );
       },
@@ -195,11 +218,24 @@
         this.form.taskOrderEntries.forEach(item => {
           this.$delete(item, 'progressPlan');
         })
-        const url = this.apis().salesPlanSave(submitAudit);
         let submitForm = Object.assign({}, this.form);
         if (!submitForm.auditNeeded) {
           submitForm.approvers = [];
+        } else {
+          // 处理级联选择数据
+          for (let i = 0; i < submitForm.approvers.length; i++) {
+            submitForm.approvers[i] = {
+              id: this.form.approvers[i][this.form.approvers[i].length -1]
+            }
+          }
         }
+        
+        // 处理级联选择数据
+        submitForm.productionDept = {
+          id: this.form.productionDept[this.form.productionDept.length - 1]
+        }
+
+        const url = this.apis().salesPlanSave(submitAudit);
         const result = await this.$http.post(url, submitForm);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -213,6 +249,16 @@
           this.$router.go(-1);
         }
       },
+      validateField (name) {
+        this.$refs.form.validateField(name);
+      },
+      validateProductionDept (rule, value, callback) {
+        if (value.length <= 0) {
+          callback(new Error('请选择生产部门'));
+        } else {
+          callback()
+        }
+      }
     },
     data() {
       return {
@@ -232,9 +278,18 @@
           productionLeader: null,
           approvers: [null],
           auditNeeded: true,
-        }
-
+          productionDept: []
+        },
+        materialDialogVisible: false
       };
+    },
+    watch: {
+      'form.productionDept': function (nval, oval) {
+        this.validateField('productionDept');
+      },
+      'form.approvers': function (nval, oval) {
+        this.validateField('approvers.0');
+      }
     },
     created() {
       if (this.$route.params.order != null) {
