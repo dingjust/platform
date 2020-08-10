@@ -142,19 +142,20 @@
         queryFormData: {
           keyword: '',
           roleGroupName: '',
-          deptName: ''
+          deptName: '',
+          enable: false
         },
         statuses: [{
-          code: '',
-          name: '全部',
-          backgroundColor: 'background-color: #ffd60c'
-        }, {
           code: 'enabled',
           name: '启用',
-          backgroundColor: 'background-color: #FFFFFF'
+          backgroundColor: 'background-color: #ffd60c'
         }, {
           code: 'forbidden',
           name: '禁用',
+          backgroundColor: 'background-color: #FFFFFF'
+        }, {
+          code: '',
+          name: '全部',
           backgroundColor: 'background-color: #FFFFFF'
         }] 
       }

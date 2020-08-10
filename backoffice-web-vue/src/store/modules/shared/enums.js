@@ -1860,6 +1860,26 @@ const state = {
   }, {
     code: 'WECHAT_PAY',
     name: '微信支付'
+  }],
+  // 部门类型
+  B2BDeptFunctionType: [{
+    code: 'MANAGER',
+    name: '管理类'
+  }, {
+    code: 'PRODUCT',
+    name: '商品类'
+  }, {
+    code: 'MARKET',
+    name: '销售类'
+  }, {
+    code: 'PRODUCTION',
+    name: '生产类'
+  }, {
+    code: 'PURCHASE',
+    name: '采购类'
+  }, {
+    code: 'FINANCE',
+    name: '财务类'
   }]
 };
 

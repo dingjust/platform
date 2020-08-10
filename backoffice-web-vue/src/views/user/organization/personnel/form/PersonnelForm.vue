@@ -66,9 +66,7 @@
                   <template slot="label">
                     <span style="padding-right: 6px;">选择角色</span>
                   </template>
-                  <el-select v-model="formData.b2bRoleGroupList[0]" placeholder="请选择角色" value-key="id" clearable >
-                    <el-option v-for="item in roleGroupList" :key="item.id" :label="item.name" :value="item" />
-                  </el-select>
+                  <dj-multiple-select :vSelectData.sync="formData.b2bRoleGroupList" :options="roleGroupList" />
                 </el-form-item>
                 <!-- <el-button class="personnel-form-btn" @click="createRole">创建角色</el-button> -->
               </el-col>
@@ -80,33 +78,23 @@
         <el-button class="personnel-confirm-btn" @click="onConfirm">保存提交</el-button>
       </el-row>
     </el-card>
-    <!-- <el-dialog :visible.sync="deptVisible" class="purchase-dialog" width="40%" append-to-body :close-on-click-modal="false">
-    </el-dialog> -->
   </div>
 </template>
 
 <script>
-  import {SelectTree} from '@/components/index.js'
-
+  import { SelectTree, DjMultipleSelect, DeptPersonSelect } from '@/components/index.js'
   export default {
     name: 'PersonnelForm',
     props: [],
     components: {
-      SelectTree
+      SelectTree,
+      DjMultipleSelect,
+      DeptPersonSelect
     },
     computed: {
 
     },
     methods: {
-      async getDeptList () {
-        const url = this.apis().getB2BCustomerDeptList();
-        const result = await this.$http.post(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.deptList = result.data;
-      },
       async getRoleGroupList () {
         let formData = {};
         const url = this.apis().getB2BCustomerRoleGroupList();
@@ -119,6 +107,19 @@
           return;
         }
         this.roleGroupList = result.content;
+      },
+      async getDeptList () {
+        const url = this.apis().getB2BCustomerDeptList();
+        const result = await this.$http.post(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.deptList = result.data;
       },
       createDept () {
         this.deptVisible = true;
@@ -192,19 +193,19 @@
           id: null,
           name: '',
           uid: '',
-          b2bRoleGroupList: [{
-            id: ''
-          }],
+          b2bRoleGroupList: [],
           b2bDept: {
             id: ''
           },
           contactPhone: '',
           password: ''
         },
-        roleGroupList: '',
+        roleGroupList: [],
         deptList: [],
         deptVisible: false,
-        roleVisible: false
+        roleVisible: false,
+        deptValue: {id: null},
+        person: {}
       }
     },
     created () {

@@ -53,8 +53,13 @@
           remarks: this.formData.remarks,
           productionProgresses: productionProgresses
         }
-        const url = this.apis().createProgressPlan();
-        const result = await this.$http.post(url, data);
+        // if (this.formData.id) {
+        //   const url = this.apis().updateProgressPlan(this.formData.id);
+        //   const result = await this.$http.put(url, data);
+        // } else {
+          const url = this.apis().createProgressPlan();
+          const result = await this.$http.post(url, data);
+        // }
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;

@@ -166,6 +166,10 @@
   transform: rotate(-45deg);
 }
 
+.el-cascader-node > label{
+  margin-bottom: 0px!important;
+}
+
 @font-face {
   font-family: 'iconfont';  /* project id 1329132 */
   src: url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.eot');
