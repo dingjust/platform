@@ -51,6 +51,8 @@
       },
       onLogout () {
         axios.post('/logout').finally(() => {
+          //刷新清除缓存
+          this.$router.go(0);
           this.$router.push('/login');
         });
 
