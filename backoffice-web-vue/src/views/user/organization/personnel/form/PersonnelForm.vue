@@ -96,7 +96,6 @@
     },
     methods: {
       async getRoleGroupList () {
-        let formData = {};
         const url = this.apis().getB2BCustomerRoleGroupList();
         const result = await this.$http.post(url, formData, {
           page: 0,

@@ -24,6 +24,7 @@ const state = {
     creationtimeEnd: '',
     type: '',
     state: '',
+    partner: ''
   }
 };
 var creationtimeStart = '';

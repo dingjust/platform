@@ -21,7 +21,8 @@ const state = {
     companyType: '',
     personalState: ''
   },
-  permissions: []
+  permissions: [],
+  dataPermission: []
 };
 const mutations = {
   authorized(state, authorized) {
@@ -50,6 +51,10 @@ const mutations = {
   permissions(state, permissions) {
     sessionStorage.setItem('permissions', JSON.stringify(permissions));
     state.permissions = permissions;
+  },
+  dataPermission(state, dataPermission) {
+    sessionStorage.setItem('dataPermission', JSON.stringify(dataPermission));
+    state.dataPermission = dataPermission;
   }
 };
 const actions = {
@@ -119,7 +124,8 @@ const actions = {
       this.$message.error(res.msg);
       return;
     }
-    commit('permissions', res.data);
+    commit('permissions', res.data.roleList);
+    commit('dataPermission', res.data.dataPermissionList);
     //存储登录用户username
 
     //分割子账号名称
@@ -188,6 +194,12 @@ const getters = {
       return JSON.parse(sessionStorage.getItem('permissions'));
     }
     return state.permissions;
+  },
+  dataPermission() {
+    if (state.dataPermission.length <= 0) {
+      return JSON.parse(sessionStorage.getItem('dataPermission'));
+    }
+    return state.dataPermission;
   }
 };
 

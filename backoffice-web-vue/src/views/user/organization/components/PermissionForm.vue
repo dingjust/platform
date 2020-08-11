@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-container class="permission-form-container">
-      <el-aside style="border-right: 2px solid #E6E6E6;">
-        <h6 class="permission-form-hear" style="min-width: 298px">权限菜单</h6>
+      <el-aside style="width: 220px;border-right: 2px solid #E6E6E6;">
+        <h6 class="permission-form-hear" style="min-width: 218px">权限菜单</h6>
         <el-menu @select="selectAuth" @open="menuOpen" 
           :unique-opened="true" style="border-right: 0px">
           <template v-for="(item, parentIndex) in authData">
@@ -26,17 +26,33 @@
         </el-menu>
       </el-aside>
       <el-main style="padding: 0px">
-        <h6 class="permission-form-hear">权限设置</h6>
-        <div class="checkbox-container">
-          <template v-for="item in secondList">
-            <el-checkbox-group v-model="checkData[item.id]" :key="item.id" 
-              v-show="item.id == authList.id" @change="checkboxChange($event, item)">
-              <template v-for="val in authList.children">
-                <el-checkbox :label="val.id" :key="val.id" class="permission-checkbox">{{val.name}}</el-checkbox>
+        <el-row type="flex">
+          <el-col :span="12">
+            <h6 class="permission-form-hear">操作权限</h6>
+            <div class="checkbox-container">
+              <template v-for="item in secondList">
+                <el-checkbox-group v-model="checkData[item.id]" :key="item.id" 
+                  v-show="item.id == authList.id" @change="checkboxChange($event, item)">
+                  <template v-for="val in authList.children">
+                    <el-checkbox :label="val.id" :key="val.id" class="permission-checkbox">{{val.name}}</el-checkbox>
+                  </template>
+                </el-checkbox-group>
               </template>
-            </el-checkbox-group>
-          </template>
-        </div>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <h6 class="permission-form-hear">数据权限</h6>
+            <div class="checkbox-container">
+              <template v-if="authList.dataPermissionAvl">
+                <el-checkbox-group v-model="checkPerdata[authList.id]" @change="handlePer">
+                  <el-checkbox v-for="item in dataPermission" :label="item.code" :key="item.code">
+                    {{item.name}}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </template>
+            </div>
+          </el-col>
+        </el-row>
       </el-main>
     </el-container>
   </div>
@@ -45,7 +61,7 @@
 <script>
   export default {
     name: 'PermissionForm',
-    props: ['roleIds'],
+    props: ['roleIds', 'dataPermissions'],
     components: {
 
     },
@@ -72,6 +88,9 @@
           }
           item.children.forEach(val => {
             this.$set(this.checkData, val.id, []);
+            if (val.dataPermissionAvl) {
+              this.$set(this.checkPerdata, val.id, []);
+            }
           })
         })
 
@@ -123,14 +142,22 @@
           this.authList = this.secondList[i];
         }
       },
-      checkboxChange (list, item) {
+      checkboxChange (list, item, isEcho) {
         let parentIndex = this.authData.findIndex(val => val.id === item.parentId);
         let index = this.authData[parentIndex].children.findIndex(val => val.id === item.id);
         // 处理二级
         this.authData[parentIndex].children[index].checked = list.length == item.children.length;
-        this.authData[parentIndex].children[index].indeterminate = list.length > 0 && list.length < item.children.length;
+        this.authData[parentIndex].children[index].indeterminate = (list.length > 0 && list.length < item.children.length) 
+                                                                    || (list.length <= 0 &&  this.checkPerdata[item.id] && this.checkPerdata[item.id].length > 0);
         // 处理一级
         this.changeParentState(parentIndex);
+
+        // 处理数据权限
+        if (item.dataPermissionAvl && !isEcho) {
+          if (list.length > 0 && this.checkPerdata[item.id].length <= 0) {
+            this.checkPerdata[item.id] = ['SELF_DATA'];
+          }
+        }
       },
       changeParentState (parentIndex) {
         // 处理一级
@@ -169,41 +196,109 @@
           this.checkData[val.id] = [];
         }
 
+        this.handlePerData(flag, val);
+
         this.changeParentState(parentIndex);
+      },
+      handlePerData (flag, val) {
+        // 处理数据权限
+        if (val.dataPermissionAvl) {
+          if (flag && this.checkPerdata[val.id].length <= 0) {
+            this.checkPerdata[val.id] = ['SELF_DATA'];
+          } else if (!flag) {
+            this.checkPerdata[val.id] = [];
+          }
+        }
+      },
+      handlePer (list) {
+        if (list.length > 1) {
+          this.checkPerdata[this.authList.id] = [list.pop()];
+        }
+        if (this.checkData[this.authList.id].length <= 0) {
+          let parentIndex = this.authData.findIndex(item => item.id === this.authList.parentId);
+          let childIndex;
+          if (parentIndex >= 0) {
+            childIndex = this.authData[parentIndex].children.findIndex(item => item.id === this.authList.id);
+          }
+
+          let flag = list.length > 0;
+          if (childIndex >= 0) {
+            // 判断二级权限是否拥有三级权限列表
+            let thirdList = this.authData[parentIndex].children[childIndex].children;
+            if (thirdList && thirdList.length > 0) {
+              this.authData[parentIndex].children[childIndex].indeterminate = flag;
+            } else if (thirdList == null || thirdList.length <= 0) {
+              this.authData[parentIndex].children[childIndex].indeterminate = false;
+              this.authData[parentIndex].children[childIndex].checked = flag;
+            }  
+          }
+
+          if (parentIndex >= 0) {
+            // this.authData[parentIndex].indeterminate = flag;
+            this.echoFirstData(this.authData[parentIndex].children, parentIndex);
+          }
+        }
       },
       // 数据回显
       initData () {
+        let index;
+        if (this.dataPermissions) {
+          this.dataPermissions.forEach(item => {
+            index = this.secondList.findIndex(val => val.code === item.code);
+            if (index >= 0) {
+              this.checkPerdata[this.secondList[index].id] = [item.permission];
+            }
+          })
+        }
         let list;
         let parentIndex;
         let childIndex;
         this.roleIds.forEach(parent => {
+          parentIndex = this.authData.findIndex(i => i.id == parent.id);
           if (parent.children && parent.children.length > 0) {
-            parentIndex = this.authData.findIndex(i => i.id == parent.id);
             parent.children.forEach(item => {
               childIndex = this.authData[parentIndex].children.findIndex(c => c.id == item.id);
               if (item.children && item.children.length > 0) {
                 list = item.children.map(val => val.id);
-                // 回显一二级
-                this.checkboxChange(list, this.authData[parentIndex].children[childIndex]);
+                // 回显一二级,回显不需要自动勾选数据权限，加一个参数进行判断
+                this.checkboxChange(list, this.authData[parentIndex].children[childIndex], true);
                 
                 // 回显三级
                 this.checkData[item.id] = list;
               } else {
+                let perLength = [];
+                if (this.checkPerdata[item.id]) {
+                  perLength = this.checkPerdata[item.id].length;
+                }
+                let length = [];
+                if (this.authData[parentIndex].children[childIndex].children) {
+                  length = this.authData[parentIndex].children[childIndex].children.length;
+                }
                 // 回显二级无子权限
-                this.authData[parentIndex].children[childIndex].checked = true;
-                this.authData[parentIndex].children[childIndex].indeterminate = false;
+
+                this.authData[parentIndex].children[childIndex].checked = (perLength > 0 && length <= 0) || length <= 0;
+                this.authData[parentIndex].children[childIndex].indeterminate = perLength > 0 && length > 0;
               }
             })
           }
           // 回显一级
-          if (this.authData[parentIndex].children.length === parent.children.length) {
-            this.authData[parentIndex].checked = true;
-            this.authData[parentIndex].indeterminate = false;
-          } else {
-            this.authData[parentIndex].checked = false;
-            this.authData[parentIndex].indeterminate = true;
+          this.echoFirstData(this.authData[parentIndex].children, parentIndex);
+        })
+      },
+      echoFirstData (secondList, parentIndex) {
+        let checkedCount = 0;
+        let indeterminateCount = 0;
+        secondList.forEach(item => {
+          if (item.checked) {
+            checkedCount++;
+          }
+          if (item.indeterminate) {
+            indeterminateCount++;
           }
         })
+        this.authData[parentIndex].checked = this.authData[parentIndex].children.length === checkedCount;
+        this.authData[parentIndex].indeterminate = indeterminateCount > 0 || 
+                                                  (checkedCount < this.authData[parentIndex].children.length && checkedCount > 0);
       }
     },
     data () {
@@ -213,7 +308,18 @@
         authList: [],
         checkData: {},
         checkState: {},
-        sequence: ['任务中心', '订单管理', '生产管理', '外发管理', '产品管理', '财务管理', '企业管理', '合同管理', '设置中心']
+        checkPerdata: {},
+        sequence: ['任务中心', '订单管理', '生产管理', '外发管理', '产品管理', '财务管理', '企业管理', '合同管理', '设置中心'],
+        dataPermission: [{
+          code: 'ALL_DATA',
+          name: '全部数据'
+        }, {
+          code: 'BELONG_DEPT_DATA',
+          name: '部门数据'
+        }, {
+          code: 'SELF_DATA',
+          name: '个人数据'
+        }]
       }
     },
     created () {

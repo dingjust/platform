@@ -35,7 +35,7 @@
           </el-row>
           <el-row type="flex">
             <el-col :span="24">
-              <permission-form ref="permissionForm" :roleIds="this.formData.roleList"/>
+              <permission-form ref="permissionForm" :roleIds="formData.roleList" :dataPermissions="formData.dataPermissions"/>
             </el-col>
           </el-row>
         </div>
@@ -90,21 +90,15 @@
       },
       async _onConfirm () {
         let checkData = this.$refs.permissionForm.checkData;
+        let checkPerdata = this.$refs.permissionForm.checkPerdata;
         let authData = this.$refs.permissionForm.authData;
+        
         let roleIds = [];
         let flag;
         for (const key in checkData) {
           if (checkData.hasOwnProperty(key) && checkData[key].length > 0) {
-            // roleIds.push(Number(key));
             // 保存三级菜单
             roleIds.push.apply(roleIds, checkData[key]);
-
-            // authData.forEach(item => {
-            //   flag = item.children.some(val => val.id == Number(key));
-            //   if (flag && roleIds.indexOf(item.id) < 0) {
-            //     roleIds.push(item.id);
-            //   }
-            // })
           }
         }
 
@@ -121,13 +115,24 @@
           })
         })
 
+        // 保存数据权限
+        let dataPermissions = [];
+        for (const key in checkPerdata) {
+          if (checkPerdata.hasOwnProperty(key) && checkPerdata[key].length > 0) {
+            dataPermissions.push({
+              id: key,
+              permission: checkPerdata[key][0]
+            })
+          }
+        }
+
         let data = {
           id: this.formData.id,
           name: this.formData.name,
           remark: this.formData.remark,
-          roleIds: roleIds
+          roleIds: roleIds,
+          dataPermissions: dataPermissions
         }
-
         const url = this.apis().saveB2BCustomerRoleGroup();
         const result = await this.$http.post(url, data);
         if (result['errors']) {
@@ -158,7 +163,8 @@
           id: null,
           name: '',
           remark: '',
-          roleIds: []
+          roleIds: [],
+          dataPermissions: []
         },
         rules: {
           name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
