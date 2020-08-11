@@ -59,6 +59,7 @@ export default {
           }
         })
       }
+      this.$emit('onSave');
     },
     onAppendRole (data) {
       // let val= Object.assign([],this.formData.b2bRoleGroupList);
@@ -69,6 +70,7 @@ export default {
       // this.$set(this.formData,'b2bRoleGroupList',val);
       this.formData.b2bRoleGroupList.push.apply(this.formData.b2bRoleGroupList, data);
       this.dialogVisible = false;
+      this.$emit('onSave');
     },
     onCancel () {
       this.dialogVisible = false;

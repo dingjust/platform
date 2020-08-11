@@ -47,6 +47,11 @@ import EnumSelect from './custom/EnumSelect';
 import FactoryCooperatorTransfer from './custom/FactoryCooperatorTransfer';
 import FilesUpload from './custom/FilesUpload';
 import FormLabel from './custom/FormLabel';
+import DjMultipleSelect from './custom/DjSelect/DjMultipleSelect'
+import DeptPersonSelect from './custom/DjComplexSelect/DeptPersonSelect'
+import DeptSelection from './custom/DjComplexSelect/DeptSelection'
+import PersonnalSelectionV2 from './custom/DjComplexSelect/PersonnalSelectionV2'
+
 // import ImagesCropper from './custom/ImagesCropper';
 import ImagesUpload from './custom/ImagesUpload';
 import ImagesUploadSingle from './custom/ImagesUploadSingle';
@@ -129,5 +134,9 @@ export {
   ColorSizeBoxChangeTable,
   ColorSizeChangeTable,
   SelectTree,
-  getSizeSequence
+  getSizeSequence,
+    DjMultipleSelect,
+    DeptPersonSelect,
+    DeptSelection,
+    PersonnalSelectionV2
 }

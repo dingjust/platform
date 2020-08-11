@@ -45,7 +45,7 @@
         </el-row>
       </div>
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
-        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" />
+        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw"/>
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -294,6 +294,30 @@
         } else if (result.code == '1') {
           this.$message.success('拒单成功');
           this.$router.go(-1);
+        }
+      },
+      onWithdraw() {
+        this.$confirm('确认撤回?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onWithdraw();
+        });
+      },
+      async _onWithdraw() {
+        const url = this.apis().salesPlanWithdraw(this.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == '0') {
+          this.$message.error(result.msg);
+          return;
+        } else if (result.code == '1') {
+          this.$message.success('撤回成功');
+          this.getDetails();
         }
       },
       onRefresh() {

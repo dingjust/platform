@@ -66,7 +66,8 @@
         this.formData = {
           id: null,
           parentId: row.id !== 0 ? row.id : null,
-          deptName: ''
+          name: '',
+          functionTypes: []
         }
         this.deptFormVisible = true;
       },
@@ -74,14 +75,15 @@
         event.stopPropagation();
         this.formData = {
           id: row.id,
-          parentId: node.parent.data.id !== 0 ? node.parent.data.id : null,
-          deptName: row.name
-        }
+          parentId: row.parentId,
+          name: row.name,
+          functionTypes: row.functionTypes
+        };
         this.deptFormVisible = true;
       },
       async onConfirm (form) {
         const url = this.apis().createB2BCustomerDept();
-        const result = await this.$http.put(url, form, form);
+        const result = await this.$http.put(url, form);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -125,7 +127,8 @@
         formData: {
           id: null,
           parentId: null,
-          deptName: ''
+          deptName: '',
+          deptType: ''
         }
       }
     },
@@ -145,9 +148,9 @@
     margin-left: 0px;
   }
 
-  /deep/ .el-tree-node__content {
+  /* /deep/ .el-tree-node__content {
     padding-left: 0px !important;
-  }
+  } */
 
   .custom-tree-node {
     flex: 1;
@@ -159,7 +162,7 @@
   }
 
   /*!* 树形结构节点添加连线 *!*/
-  .tree /deep/ .el-tree-node {
+  /* .tree /deep/ .el-tree-node {
     position: relative;
     padding-left: 8px;
   }
@@ -167,7 +170,7 @@
   .tree /deep/ .el-tree-node__children {
     padding-left: 16px;
   }
-
+  
   .tree /deep/ .el-tree-node :last-child:before {
     height: 38px;
   }
@@ -194,12 +197,12 @@
     position: absolute;
     right: auto;
     border-width: 1px;
-  }
+  } */
   /*.tree /deep/ .el-tree-node__expand-icon.is-leaf {*/
   /*  display: none;*/
   /*}*/
 
-  .tree /deep/ .el-tree-node:before {
+  /* .tree /deep/ .el-tree-node:before {
     border-left: 1px dashed #b8b9bb;
     bottom: 0px;
     height: 100%;
@@ -212,5 +215,5 @@
     height: 20px;
     top: 12px;
     width: 24px;
-  }
+  } */
 </style>

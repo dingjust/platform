@@ -55,35 +55,17 @@
                 </el-col>
               </el-row>
             </el-form>
+            <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+              <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
+                <el-button class="personnel-role-btn" @click="onConfirm">确定</el-button>
+              </Authorized>
+            </el-row>
           </el-tab-pane>
-          <!-- <el-tab-pane label="组织架构" name="ORGANIZATION">
-            <el-form>
-              <el-row type="flex" justify="center" align="middle">
-                <el-col :span="8">
-                  <el-form-item label="当前部门：">
-                    <h6 class="basic-title">{{this.originData.b2bDept ? this.originData.b2bDept.name : ''}}</h6>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row type="flex" justify="center" align="middle">
-                <el-col :span="8">
-                  <el-form-item label="编辑部门：">
-                    <select-tree :treeData="deptList" :vSelectData.sync="formData.b2bDept"/>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-          </el-tab-pane> -->
           <el-tab-pane label="权限配置" name="AUTHORITY">
-            <personnel-role-info :formData="formData"/>
+            <personnel-role-info :formData="formData" @onSave="_onConfirm"/>
           </el-tab-pane>
         </el-tabs>
       </div>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-        <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
-          <el-button class="personnel-role-btn" @click="onConfirm">确定</el-button>
-        </Authorized>
-      </el-row>
     </el-card>
   </div>
 </template>
@@ -212,8 +194,9 @@ export default {
         this.$message.error(result.msg);
         return;
       }
-      this.$message.success('添加员工成功');
-      this.$router.go(-1);
+      this.$message.success('编辑员工信息成功');
+      this.getDetail();
+      // this.$router.go(-1);
     }
   },
   data () {

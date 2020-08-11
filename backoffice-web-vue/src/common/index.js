@@ -721,6 +721,10 @@ const COMMON_APIS = {
   createProgressPlan() {
     return '/b2b/progress/plan/create';
   },
+  // 更新节点方案
+  updateProgressPlan(id) {
+    return '/b2b/progress/plan/update/' + id;
+  },
   // 获取节点方案详情
   getProgressPlanDetail(id) {
     return '/b2b/progress/plan/' + id;

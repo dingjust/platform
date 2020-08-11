@@ -65,7 +65,7 @@
   }
 
   /deep/ .el-tree-node__content {
-    padding-left: 0px !important;
+    /* padding-left: 0px !important; */
     height: 32px;
   }
 
@@ -74,12 +74,12 @@
   }
 
   /*!* 树形结构节点添加连线 *!*/
-  .tree /deep/ .el-tree-node {
+  /* .tree /deep/ .el-tree-node { */
     position: relative;
     /* padding-left: 8px; */
-  }
+  /* } */
 
-  .tree /deep/ .el-tree-node__children {
+  /* .tree /deep/ .el-tree-node__children {
     padding-left: 16px;
   }
 
@@ -109,12 +109,12 @@
     position: absolute;
     right: auto;
     border-width: 1px;
-  }
+  } */
   /*.tree /deep/ .el-tree-node__expand-icon.is-leaf {*/
   /*  display: none;*/
   /*}*/
 
-  .tree /deep/ .el-tree-node:before {
+  /* .tree /deep/ .el-tree-node:before {
     border-left: 1px dashed #b8b9bb;
     bottom: 0px;
     height: 100%;
@@ -127,5 +127,5 @@
     height: 20px;
     top: 16px;
     width: 18px;
-  }
+  } */
 </style>
