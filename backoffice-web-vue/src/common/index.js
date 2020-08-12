@@ -47,6 +47,9 @@ const COMMON_APIS = {
   getCarriers() {
     return '/b2b/carriers';
   },
+  findBrandAndFactory(){
+    return '/b2b/companies/findBrandAndFactory';
+  },
   createColor() {
     return '/b2b/colors/create';
   },

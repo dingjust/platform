@@ -1347,11 +1347,15 @@ const state = {
   ],
   CooperatorCategory: [{
       code: 'SUPPLIER',
-      name: '供应商'
+      name: '加工厂'
     },
     {
       code: 'CUSTOMER',
       name: '客户'
+    },
+    {
+      code: 'FABRIC_SUPPLIER',
+      name: '面辅料商'
     }
   ],
   // 收货单、对账单状态

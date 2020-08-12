@@ -688,7 +688,7 @@ const router = new Router({
                 },
                 {
                   path: '',
-                  name: '供应商列表',
+                  name: '合作商列表',
                   component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/CooperatorPage'),
                   meta: {
                     breadCrumbParentUrl:'/account/index',
