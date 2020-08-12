@@ -19,17 +19,26 @@
       </el-row>
       <div class="pt-2"></div>
       <contract-toolbar @openPreviewPdf="openPreviewPdf" :queryFormData="queryFormData" style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <template v-for="(item, index) in contractStatues">
-          <el-tab-pane :name="item">
-            <span slot="label">
-              <tab-label-bubble :label="item" :num="index" />
-            </span>
-            <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @closePdfVisible="pdfVisible = false" @previewPdf="openPreviewPdf"/>
-          </el-tab-pane>
-        </template>
-      </el-tabs>
+      <div>
+        <Authorized :permission="['AGREEMENT_CREATE']">
+          <el-button class="pr-create-btn" @click="dialogVisible = true">创建合同</el-button>
+        </Authorized>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <template v-for="(item, index) in contractStatues">
+            <el-tab-pane :name="item" :key="item">
+              <span slot="label">
+                <tab-label-bubble :label="item" :num="index" />
+              </span>
+              <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @closePdfVisible="pdfVisible = false" @previewPdf="openPreviewPdf"/>
+            </el-tab-pane>
+          </template>
+        </el-tabs>
+      </div>
     </el-card>
+    <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" :close-on-click-modal="false">
+      <contract-type v-if="dialogVisible" @onSearch="onSearch" 
+                      @closeContractTypeDialog="this.dialogVisible = false" @openPreviewPdf="openPreviewPdf"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -52,6 +61,7 @@
   import ContractDetails from './components/ContractDetails';
   import TabLabelBubble from './components/TabLabelBubble';
   import ContractPreviewPdf from './components/ContractPreviewPdf';
+  import ContractType from './components/ContractType'
 
   // import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
@@ -63,7 +73,8 @@
       ContractSearchResultList,
       ContractReport,
       TabLabelBubble,
-      ContractDetails
+      ContractDetails,
+      ContractType
     },
     provide: {
       onSearch: this.onSearch
@@ -172,12 +183,13 @@
       return {
         formData: this.$store.state.PurchaseOrdersModule.formData,
         activeName: '全部',
-        contractStatues: ['全部', '待我签署', '待他签署', '已签署', '已作废'],
+        contractStatues: ['待我签署', '待他签署', '已签署', '已作废', '全部'],
         dialogTableVisible: false,
         contractData: '',
         pdfVisible: false,
         fileUrl: '',
-        thisContract: ''
+        thisContract: '',
+        dialogVisible: false
       };
     },
     created () {
@@ -208,4 +220,21 @@
     padding-left: 10px;
   }
 
+  .pr-create-btn {
+    position: absolute;
+    right: 21px;
+    z-index: 999;
+    background-color: #ffd60c;
+    width: 110px;
+  } 
+
+  .pr-create-btn:focus {
+    background: #ffd60c;
+    color: #606266;
+  }
+
+  .pr-create-btn:hover {
+    background: #ffd60c;
+    color: #606266;
+  }
 </style>

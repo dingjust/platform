@@ -4,7 +4,7 @@
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-supplement-form :slotData="slotData" />
     </el-dialog>
-    <el-dialog :visible.sync="dialogSealVisible" :show-close="true" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogSealVisible" :show-close="true" :close-on-click-modal="false" append-to-body>
       <contract-seal-list :page="sealPage" @onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
 <!--    <el-dialog :visible.sync="dialogOrderVisible" width="50%" class="purchase-dialog" append-to-body>-->
@@ -31,7 +31,7 @@
       </Authorized>
       <Authorized :permission="['AGREEMENT_SIGN']">
         <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
-                  class="toolbar-search_input" @click="onSearchSeal">签署
+                  class="toolbar-search_input" @click="onSign">签署
         </el-button>
       </Authorized>
     </div>
@@ -138,10 +138,13 @@
 
         // window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
-      async onSearchSeal (vel, keyword, page, size) {
-        console.log('====================');
-        if (vel != null) {
-          this.contractCode = vel.code;
+      async onSign () {
+        await this.onSearchSeal(0, 10);
+        this.dialogSealVisible = true;
+      },
+      async onSearchSeal (page, size, val, keyword) {
+        if (val != null) {
+          this.contractCode = val.code;
         }
 
         if (keyword == null) {
@@ -159,7 +162,6 @@
           return;
         }
         this.sealPage = result;
-        this.dialogSealVisible = true;
       },
       async onSealSelectChange (data) {
         console.log(data);

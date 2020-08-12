@@ -21,36 +21,37 @@
         </template>
       </el-table-column>
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
-      <el-table-column label="生产单号" prop="orderCode">
+      <el-table-column label="合同类型"></el-table-column>
+      <el-table-column label="合作商" prop="belongTo.name">
+        <template slot-scope="scope">
+          <span>{{scope.row.partner}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="对应单号" prop="orderCode">
         <template slot-scope="scope">
           <div v-if="isShowMore(scope.row.orderCodes) && isMore">
-            <div v-for="(code,index) in scope.row.orderCodes">
+            <template v-for="(code,index) in scope.row.orderCodes">
               <el-row v-if="index < 5" :key="index">
                 <span>{{code}}</span>
               </el-row>
-            </div>
+            </template>
             <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && isMore"
               @click="turnIsMore()">显示更多>></h6>
           </div>
           <div v-else>
-            <div v-for="(code,index) in scope.row.orderCodes">
+            <template v-for="(code,index) in scope.row.orderCodes">
               <el-row :key="index">
                 <span>{{code}}</span>
               </el-row>
-            </div>
+            </template>
             <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && !isMore"
               @click="turnIsMore()">点击拉起>></h6>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="签署对象" prop="belongTo.name">
-        <template slot-scope="scope">
-          <span>{{scope.row.partner}}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
+          <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
       <el-table-column label="当前状态" prop="state" :column-key="'state'">
@@ -64,19 +65,19 @@
           <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="操作" width="250">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="previewPdf(scope.row,'')">查看</el-button>
-          <el-button type="text" @click="onDownload(scope.row.code)">下载</el-button>
+          <!-- <el-button type="text" @click="onDownload(scope.row.code)">下载</el-button> -->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>-->
-          <Authorized :permission="['AGREEMENT_CREATE']">
+          <!-- <Authorized :permission="['AGREEMENT_CREATE']">
             <el-button type="text" v-if="scope.row.state != 'INVALID'" @click="onBCXY(scope.row)">增加补充协议</el-button>
           </Authorized>
           <Authorized :permission="['AGREEMENT_REMOVE']">
             <el-button type="text" v-if="scope.row.isOffline == true" @click="onDelete(scope.row)">删除</el-button>
-          </Authorized>
+          </Authorized> -->
         </template>
       </el-table-column>
     </el-table>
