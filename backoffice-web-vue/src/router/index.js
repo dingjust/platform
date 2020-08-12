@@ -684,7 +684,7 @@ const router = new Router({
                 {
                   path: 'cooperatorUpdate',
                   name: '编辑合作商',
-                  component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/form/CooperatorEditFormPage')
+                  component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/form/CooperatorFormPage')
                 },
                 {
                   path: '',

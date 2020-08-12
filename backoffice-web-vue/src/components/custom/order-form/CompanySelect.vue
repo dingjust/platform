@@ -6,11 +6,39 @@
  * @version: V1.0.0 
 !-->
 <template>
-  <div style="width:100%">
-    <el-button @click="onSearch">搜索</el-button>
-    <el-table :data="data" height="500">
-      <el-table-column label="uid" prop="uid"></el-table-column>
-    </el-table>
+  <div style="width:100%" class="company-select">
+    <el-row type="flex" align="middle" justify="center" style="margin-bottom:20px">
+      <el-col :span="8">
+        <el-input v-model.trim="keyword" placeholder="输入公司名称或账号"></el-input>
+      </el-col>
+      <el-button @click="onSearch" style="margin-left:10px" type="warning" plain>搜索</el-button>
+    </el-row>
+    <el-row type="flex" justify="center">
+      <h6 class="message">注：确保公司名称与账号都对，避免选错用户</h6>
+    </el-row>
+    <el-row type="flex" justify="center">
+      <el-col :span="20">
+        <el-card shadow="hover">
+          <el-table :data="data" height="500" v-loadmore="loadMore" stripe highlight-current-row ref="table"
+            @current-change="handleCurrentChange">
+            <el-table-column label="公司名称" prop="name" align="center"></el-table-column>
+            <el-table-column label="账号" align="center">
+              <template slot-scope="scope">
+                {{phoneNumEncode(scope.row.contactUid)}}
+              </template>
+            </el-table-column>
+            <el-table-column label="认证状态" align="center">
+              <template slot-scope="scope">
+                {{scope.row.approvalStatus!=null?getEnum('AuthApprovalStatus', scope.row.approvalStatus):''}}
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row type="flex" justify="center" style="margin-top:20px">
+      <el-button round class="submit-btn" @click="onSubmit">确定</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -25,29 +53,87 @@
 
     },
     methods: {
-      async onSearch() {
+      async onSearch(page, size) {
+        if (!this.validate()) {
+          return null;
+        }
+        //重置页面数据
+        this.page = 0;
         const url = this.apis().findBrandAndFactory();
         const result = await this.$http.post(url, {
           keyword: this.keyword
+        }, {
+          page: this.page,
+          size: this.size
         });
-        
+
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.data = result; 
+        this.data = result.content;
+
+        //回滚顶部
+        this.$refs.table.bodyWrapper.scrollTop = 0;
       },
+      validate() {
+        if (this.keyword == '') {
+          this.$message.error('请输入关键字');
+          return false;
+        }
+        return true;
+      },
+      async loadMore() {
+        this.page++;
+        const url = this.apis().findBrandAndFactory();
+        const result = await this.$http.post(url, {
+          keyword: this.keyword
+        }, {
+          page: this.page,
+          size: this.size
+        });
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.data = this.data.concat(result.content);
+      },
+      handleCurrentChange(val) {
+        this.selectedData = val;
+      },
+      onSubmit() {
+        this.$emit('onSubmit', this.selectedData);
+      },
+      phoneNumEncode(str) {
+        if (str == null) {
+          return '';
+        }
+
+        if (str.length > 6) {
+          return str.substr(0, 3) + '*****' + str.substr(str.length - 4, 3);
+        } else if (str.length > 3) {
+          return str.substr(0, 1) + '***' + str.substr(str.length - 1, 1);
+        } else {
+          return '***';
+        }
+      }
     },
     data() {
       return {
         keyword: '',
-        data: []
+        page: 0,
+        size: 20,
+        data: [],
+        selectedData: ''
       };
     },
     created() {
 
     },
     directives: {
+      //el-table滚动加载更多
       loadmore: {
         // 指令的定义
         bind(el, binding) {
@@ -66,6 +152,19 @@
 
 </script>
 
-<style>
+<style scoped>
+  .company-select>>>.current-row td {
+    background-color: #FFD60C !important;
+  }
+
+  .submit-btn {
+    background-color: #FFD60C;
+    border-color: #FFD60C;
+    width: 200px;
+  }
+
+  .message{
+    color: red;
+  }
 
 </style>

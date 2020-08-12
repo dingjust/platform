@@ -67,7 +67,6 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        queryFormData: 'queryFormData',
         ordersQueryFormData: 'ordersQueryFormData'
       })
     },
@@ -75,16 +74,16 @@
       ...mapMutations({
         setOrdersPageNumber: 'setOrdersPageNumber',
         setOrdersPageSize: 'setOrdersPageSize',
-        setEditFormData: 'setEditFormData'
+        setFormData: 'setFormData'
       }),
       ...mapActions({
         searchAdvanced: 'searchAdvanced',
         searchOrdersAdvanced: 'searchOrdersAdvanced',
-        clearOrderPageData: 'clearOrderPageData'
+        clearOrderPageData: 'clearOrderPageData',
+        clearFormData:'clearFormData'
       }),
       onSearch(page, size) {
         const queryFormData = this.queryFormData;
-
         const url = this.apis().getCooperators();
         this.searchAdvanced({
           url,
@@ -121,13 +120,9 @@
         } else if (this.isBrand() && this.itemData.type === 'ONLINE') {
           this.ordersQueryFormData.belongTos = [this.itemData.partner.uid];
         }
-
         this.searchOrdersAdvanced({
           url
         });
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        // }
       },
       async onDelete(item) {
         const url = this.apis().deleteCooperator(item.id);
@@ -152,9 +147,10 @@
           this.queryFormData.type = [item.code];
         }
         this.onSearch();
-
       },
       onJumpTo() {
+        //重置formData
+        this.clearFormData();
         this.$router.push('/account/cooperator/cooperatorCreate');
       },
       onDialogClose() {
@@ -168,7 +164,7 @@
           return;
         }
 
-        this.setEditFormData(result);
+        this.setFormData(result);
 
         this.$router.push('/account/cooperator/cooperatorUpdate');
       }
@@ -184,6 +180,11 @@
         }],
         activeCategory: 'SUPPLIER',
         cooperatorCategories: this.$store.state.EnumsModule.CooperatorCategory,
+        queryFormData: {
+          type: '',
+          keyword: '',
+          category:['SUPPLIER']
+        },
       };
     },
     created() {

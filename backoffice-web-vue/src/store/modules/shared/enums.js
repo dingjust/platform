@@ -1884,7 +1884,18 @@ const state = {
   }, {
     code: 'FINANCE',
     name: '财务类'
-  }]
+  }],
+  // 认证状态
+  AuthApprovalStatus: [{
+    code: 'check',
+    name: '认证中'
+  }, {
+    code: 'unapproved',
+    name: '未认证'
+  }, {
+    code: 'approved',
+    name: '已认证'
+  }, ]
 };
 
 const mutations = {};
