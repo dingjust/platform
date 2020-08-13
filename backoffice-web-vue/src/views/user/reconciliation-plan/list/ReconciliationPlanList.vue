@@ -71,17 +71,26 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success(row.isEnable ? '禁用节点方案成功' : '启用节点方案成功');
+        this.$message.success(row.isEnable ? '禁用对账方案成功' : '启用对账方案成功');
         this.$emit('onSearch', this.page.number, this.page.size);
       },
       async onDelete (row) {
+        this.$confirm('是否删除对账方案', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.delete(row);
+        });
+      },
+      async delete(row) {
         const url = this.apis().deleteReconciliationPlan(row.id);
         const result = await this.$http.put(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('删除节点方案成功');
+        this.$message.success('删除对账方案成功');
         this.$emit('onSearch', this.page.number, this.page.size);
       }
     }
