@@ -100,7 +100,6 @@
 </template>
 
 <script>
-  import ReconciliationSettingForm from '../components/ReconciliationSettingForm';
   export default {
     name: 'ReconciliationPlanFormInfo',
     props: {
