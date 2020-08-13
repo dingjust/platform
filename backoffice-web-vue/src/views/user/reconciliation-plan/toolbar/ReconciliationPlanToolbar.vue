@@ -12,7 +12,7 @@
 
 <script>
   export default {
-    name: 'ProgressPlanToolbar',
+    name: 'ReconciliationPlanToolbar',
     props: ['queryFormData'],
     methods: {
       onSearch () {
