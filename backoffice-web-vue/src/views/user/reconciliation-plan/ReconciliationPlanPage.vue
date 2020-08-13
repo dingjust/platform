@@ -15,6 +15,13 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-plan-toolbar :queryFormData="queryFormData" @onSearch="onSearch"/>
+      <el-row type="flex" justify="start">
+        <template v-for="(item, index) in statuses">
+          <el-button @click="handleClick(item.code, index)" :key="item.code" class="state-btn" :style="item.backgroundColor">
+            {{item.name}}
+          </el-button>
+        </template>
+      </el-row>
       <reconciliation-plan-list :page="page" @onSearch="onSearch"/>
     </el-card>
   </div>
@@ -41,14 +48,41 @@
       },
       createNode () {
         this.$router.push('/account/setting/reconciliation-plan/create');
-      }
+      },
+      handleClick (code, index) {
+        // eslint-disable-next-line no-return-assign
+        this.statuses.forEach(item => item.backgroundColor = 'background-color: #FFFFFF');
+        this.statuses[index].backgroundColor = 'background-color: #ffd60c';
+        if (code === '') {
+          this.$delete(this.queryFormData, 'isEnable');
+        } else if (code === 'enabled') {
+          this.$set(this.queryFormData, 'isEnable', true);
+        } else if (code === 'forbidden') {
+          this.$set(this.queryFormData, 'isEnable', false);
+        }
+        // this.queryFormData.state = code;
+        this.onSearch(0, 10);
+      },
     },
     data () {
       return {
         queryFormData: {
           keyword: ''
         },
-        page: {}
+        page: {},
+        statuses: [{
+          code: 'enabled',
+          name: '启用',
+          backgroundColor: 'background-color: #ffd60c'
+        }, {
+          code: 'forbidden',
+          name: '禁用',
+          backgroundColor: 'background-color: #FFFFFF'
+        }, {
+          code: '',
+          name: '全部',
+          backgroundColor: 'background-color: #FFFFFF'
+        }]
       }
     },
     created() {
