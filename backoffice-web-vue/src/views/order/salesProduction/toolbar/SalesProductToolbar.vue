@@ -10,6 +10,7 @@
           <!-- <el-col :span="5"> -->
           <el-form-item label="负责人" prop="name">
             <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input>
+            <!-- <dept-person-select from="SALES_PLAN"/> -->
           </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="5"> -->
@@ -59,6 +60,7 @@
   } from 'vuex';
   import SalesProductionStatusBar from '../components/SalesProductionStatusBar';
   import UniqueCodeImportForm from '../form/UniqueCodeImportForm';
+  import { DeptPersonSelect } from '@/components'
 
   const {
     mapMutations
@@ -77,7 +79,8 @@
     },
     components: {
       SalesProductionStatusBar,
-      UniqueCodeImportForm
+      UniqueCodeImportForm,
+      DeptPersonSelect
     },
     computed: {},
     data() {

@@ -34,7 +34,7 @@
         <template slot="label">
           <h6 class="formLabel">合同类型</h6>
         </template>
-        <el-select v-model="queryFormData.type" clearable placeholder="选择合同类型" style="width: 150px">
+        <el-select v-model="queryFormData.type" clearable placeholder="选择合同类型" style="width: 130px">
           <el-option
             v-for="item in TemplateType"
             :key="item.value"

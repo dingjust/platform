@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-cascader v-model="data" :options="deptList"
+    <el-cascader v-model="selectData" :options="deptList"
                 :props=" { 
                   multiple: true,
                   checkStrictly: checkStrictly,
@@ -25,16 +25,35 @@ export default {
     },
     checkStrictly: {
       type: Boolean,
-      default: false
-    },
-    onlyDept: {
-      type: Boolean,
       default: true
+    },
+    from: {
+      type: String,
+      default: ''
     }
   },
   components: {
   },
   methods: {
+    initData () {
+      // const dataPermission = JSON.parse(sessionStorage.getItem('dataPermission'));
+      // let index = dataPermission.findIndex(item => item.code === this.from);
+      // let permission = '';
+      // if (index > -1) {
+      //   permission = dataPermission[index].permission;
+      // }
+
+      // switch (permission) {
+      //   case 'ALL_DATA':
+      //     break;
+      //   case 'BELONG_DEPT_DATA':
+      //     break;
+      //   case 'SELF_DATA':
+      //     break;
+      //   default:
+      //     break;
+      // }
+    },
     async getDeptList () {
       const url = this.apis().getB2BCustomerDeptList();
       const result = await this.$http.post(url);
@@ -49,9 +68,7 @@ export default {
       this.deptList = result.data;
       this.setMark(this.deptList, 'dept');
 
-      if (!this.onlyDept) {
-        await this.getPersonList();
-      }
+      await this.getPersonList();
     },
     async getPersonList () {
       const url = this.apis().getB2BCustomers();
@@ -150,8 +167,7 @@ export default {
     return {
       deptList: [],
       personList: [],
-      selectData: [],
-      data: ''
+      selectData: []
     }
   },
   watch: {
@@ -162,7 +178,8 @@ export default {
     }
   },
   created () {
-    this.getDeptList();
+    this.initData();
+    // this.getDeptList();
   }
 }
 </script>

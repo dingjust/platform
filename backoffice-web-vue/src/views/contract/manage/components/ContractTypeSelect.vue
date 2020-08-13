@@ -1,57 +1,37 @@
 <template>
   <el-row type="flex" justify="space-around">
     <el-col :span="8">
-<!--      <el-popover placement="bottom" width="320" trigger="hover" v-model="visible">-->
-<!--        <template v-for="item in data">-->
-<!--          <el-row justify="space-between" type="flex">-->
-<!--            <el-col :span="24">-->
-<!--              <div class="create-contract-type_option" @click="onSelectOption(item.value)">-->
-<!--                <el-row justify="space-between" type="flex" align="middle">-->
-<!--                  <el-col :span="2">-->
-<!--                  </el-col>-->
-<!--                  <el-col :span="22">-->
-<!--                    <el-radio v-model="contractType" :label="item.value">{{item.label}}</el-radio>-->
-<!--                  </el-col>-->
-<!--                </el-row>-->
-<!--              </div>-->
-<!--            </el-col>-->
-<!--          </el-row>-->
-<!--        </template>-->
-        <div  @click="contractType='1'"
-          :class="contractType!='3'?'create-contract-type_select':'create-contract-type_not_select'">
-          <el-row>
-            <el-col :span="24">
-              <h5
-                :class="contractType!='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-                新建合同（电子签章）——— 纸质合同</h5>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="20">
-              <h6
-                :class="contractType!='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
-                新创建电子合同或上传未签署的纸质合同文件使用在线电子签章签署合同</h6>
-            </el-col>
-          </el-row>
-<!--          <el-row type="flex" justify="center" align="center">-->
-<!--            <div class="create-contract-type_icon" :class="visible?'el-icon-arrow-down':'el-icon-arrow-up'"></div>-->
-<!--          </el-row>-->
-        </div>
-<!--      </el-popover>-->
-    </el-col>
-    <el-col :span="8">
-      <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
-        @click="contractType='3'">
+      <div  @click="handleClick('1')"
+        :class="contractType === '1' ? 'create-contract-type_select' : 'create-contract-type_not_select'">
         <el-row>
           <el-col :span="24">
-            <h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+            <h5
+              :class="contractType === '1' ? 'create-contract-type_option_title' : 'create-contract-type_option_title_not'">
+              新建合同（电子签章）——— 纸质合同</h5>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="20">
+            <h6
+              :class="contractType ==='1'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              新创建电子合同或上传未签署的纸质合同文件使用在线电子签章签署合同</h6>
+          </el-col>
+        </el-row>
+      </div>
+    </el-col>
+    <el-col :span="8">
+      <div :class="contractType === '3' ?'create-contract-type_select':'create-contract-type_not_select'"
+        @click="handleClick('3')">
+        <el-row>
+          <el-col :span="24">
+            <h5 :class="contractType === '3' ?'create-contract-type_option_title':'create-contract-type_option_title_not'">
               已签纸质合同</h5>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="20">
             <h6
-              :class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              :class="contractType === '3' ?'create-contract-type_option_content':'create-contract-type_option_content_not'">
               把已签署的合同文件扫描件上传到订单附件中作为备份</h6>
           </el-col>
         </el-row>
@@ -63,7 +43,16 @@
 <script>
   export default {
     name: 'ContractTypeSelect',
+    props: ['isSignedPaper'],
+    computed: {
+    },
     methods: {
+      handleClick (type) {
+        if (!this.isSignedPaper) {
+          this.contractType = type;
+          this.$emit('contractTypeChange', type);
+        }
+      },
       onSelectOption (val) {
         this.contractType = val;
       }
@@ -83,9 +72,16 @@
         ]
       };
     },
-    watch: {
-      contractType: function (newType, oldType) {
-        this.$emit('contractTypeChange', newType);
+    // watch: {
+    //   contractType: function (newType, oldType) {
+    //     this.$emit('contractTypeChange', newType);
+    //   }
+    // },
+    created () {
+      if (this.isSignedPaper) {
+        this.contractType = '3';
+      } else {
+        this.contractType = '1';
       }
     }
   };

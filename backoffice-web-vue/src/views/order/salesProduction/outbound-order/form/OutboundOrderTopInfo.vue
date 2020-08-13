@@ -81,9 +81,10 @@
       </el-col>
       <el-col :span="6">
         <div class="info-box">
-          <el-row class="info-basic-row" type="flex" align="middle" justify="start">
+          <production-contract :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback"/>
+          <!-- <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback" />
-          </el-row>
+          </el-row> -->
         </div>
       </el-col>
     </el-row>
@@ -94,6 +95,7 @@
 </template>
 
 <script>
+  import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
   import ContractCom from '../../contract/ContractCom';
   import {
     PayPlanInfo
@@ -103,7 +105,8 @@
     name: 'OutboundOrderTopInfo',
     components: {
       ContractCom,
-      PayPlanInfo
+      PayPlanInfo,
+      ProductionContract
     },
     props: ['slotData', 'payPlan'],
     computed: {

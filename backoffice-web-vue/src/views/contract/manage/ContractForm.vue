@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 合同模板选择 -->
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog"
                append-to-body :close-on-click-modal="false">
       <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
@@ -9,35 +10,40 @@
       </Authorized>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
+    <!-- 合同模板 创建 -->
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
       <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect"
                      :tempFormVisible="tempFormVisible" :slotData="templateData" :templateId="templateId"
                      v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
+    <!-- 订单选择 -->
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <contract-order-select :page="orderPage" @onSearchOrder="onSearchOrder"
-                             @onOrderSelectChange="onOrderSelectChange"/>
+      <contract-order-select v-if="dialogOrderVisible" @onOrderSelectChange="onOrderSelectChange"/>
     </el-dialog>
+    <!-- 选择框架合同 -->
     <el-dialog :visible.sync="dialogContractVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <el-button-group>
         <el-button class="product-select-btn" @click="onContractSelectSure">确定</el-button>
       </el-button-group>
       <contract-select :mockData="mockData" @fileSelectChange="onContractSelectChange"/>
     </el-dialog>
+    <!-- 预览合同 -->
     <el-dialog :visible.sync="dialogPreviewVisible" width="80%" :close-on-click-modal="false">
       <el-row slot="title">
         <el-button>生成合同</el-button>
       </el-row>
       <contract-preview/>
     </el-dialog>
+    <!-- 合同详情pdf -->
     <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%" :close-on-click-modal="false">
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract"/>
     </el-dialog>
+    
     <el-form ref="requirementForm" label-position="left" label-width="88px" hide-required-asterisk>
       <el-row type="flex" justify="center" align="middle">
         <span class="create-contract-title">委托生产合同</span>
       </el-row>
-      <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect"/>
+      <contract-type-select :isSignedPaper="isSignedPaper" @contractTypeChange="onContractTypeChange" class="contractTypeSelect"/>
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
@@ -145,7 +151,7 @@
 
   export default {
     name: 'ContractForm',
-    props: ['slotData', 'templateData', 'templateId'],
+    props: ['slotData', 'templateData', 'templateId', 'isSignedPaper'],
     components: {
       ContractTypeSelect,
       ContractTemplateSelect,
@@ -193,32 +199,12 @@
         }
         this.dialogTemplateVisible = true;
       },
-      async onSearchOrder (page, size, keyword) {
-        var _page = 0;
-        var _size = 10;
-        if (page) {
-          _page = page;
-        }
-        if (size) {
-          _size = size;
-        }
-        const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url, {
-          statuses: ['PENDING_PAYMENT', 'IN_PRODUCTION', 'WAIT_FOR_OUT_OF_STORE', 'OUT_OF_STORE', 'COMPLETED'],
-          keyword: keyword,
-        }, {
-          page: _page,
-          size: _size
-        });
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.orderPage = result;
-      },
       onContractTypeChange (val) {
         if (val != null || val != '') {
           this.contractType = val;
+        }
+        if (val !== '3') {
+          this.orderSelectFiles = [];
         }
       },
       // 文件选择（缓存，并未确定）
@@ -230,13 +216,15 @@
       },
       // 订单选择
       onOrderSelectChange (data) {
-        if (data != null) {
-          this.orderSelectFiles = data;
+        if (!data || data[0] == '' || data.length <= 0) {
+          this.$message.warning('请选择订单！');
+          return;
         }
 
-        this.orderContractClick().then(value => {
+        this.orderContractClick(data).then(value => {
           if (value) {
             this.dialogOrderVisible = false;
+            this.orderSelectFiles = data;
           }
         });
       },
@@ -408,7 +396,7 @@
         this.$emit('closeContractTypeDialog');
       },
       onSetOrderCode () {
-        if (this.slotData != null && this.slotData != '') {
+        if (this.slotData && this.slotData.code) {
           this.orderSelectFiles.push(this.slotData);
           this.orderReadOnly = true;
           if (this.currentUser.type == 'BRAND') {
@@ -469,13 +457,17 @@
         this.dialogContractVisible = true;
       },
       //  订单验证
-      async orderContractClick () {
+      async orderContractClick (selectFile) {
+        // 选择 已签纸质合同不需要订单校验
+        if (this.contractType === '3') {
+          return true;
+        }
         var flag = false
         if (this.contractType != '1') {
           flag = true
         }
         let data = {
-          'orderCodes': this.orderSelectFiles.map((order) => order.code),
+          'orderCodes': selectFile.map((order) => order.code),
           'type': 'WTSCHT',
           'isPdfAgreement': flag
         }
@@ -523,7 +515,7 @@
         orderReadOnly: false,
         input1: '',
         mockData: [],
-        orderPage: [],
+        // orderPage: [],
         disabled: false,
         pdfFile: '',
         pdfVisible: false,
@@ -542,7 +534,8 @@
       };
     },
     created () {
-      this.onSearchOrder(0, 10);
+    },
+    mounted () {
       this.onSetOrderCode();
     },
     watch: {
