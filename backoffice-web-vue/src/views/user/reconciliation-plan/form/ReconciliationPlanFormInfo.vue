@@ -115,7 +115,7 @@
         default: true
       }
     },
-    components: {ReconciliationSettingForm},
+    components: {},
     methods: {
       onSubmit () {
         this.$emit('onSubmit');
