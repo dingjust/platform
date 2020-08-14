@@ -80,7 +80,7 @@
         </div>
       </el-col>
       <el-col :span="6">
-        <div class="info-box">
+        <div class="info-box" style="padding: 10px 0px 0px 5px;">
           <production-contract :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback"/>
           <!-- <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback" />
@@ -119,19 +119,27 @@
       },
       // 已签合同列表
       contracts: function () {
-        return this.slotData.agreements ? this.slotData.agreements : [];
+        if (this.slotData.agreements) {
+          return this.slotData.agreements.filter(item => item.state !== 'INVALID');
+        }
+        return [];
       },
       // 判断是否能签署合同
       canSign: function () {
+        if (this.contracts.length > 0) {
+          return false;
+        }
         if (!this.slotData.merchandiser) {
           return false;
         }
+        return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid && 
+              (this.slotData.state === 'AUDIT_PASSED' || this.slotData.state === 'COMPLETED')
         // 未签合同 && 账号为merchandiser && 审核状态为 PASSED
-        if (this.slotData.agreements == undefined || this.slotData.agreements == null || this.slotData.agreements.length <= 0) {
-          return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
-                  this.slotData.sendAuditState == 'PASSED' &&
-                  this.slotData.acceptState == 'ACCEPTED';
-        }
+        // if (this.slotData.agreements == undefined || this.slotData.agreements == null || this.slotData.agreements.length <= 0) {
+        //   return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
+        //           this.slotData.sendAuditState == 'PASSED' &&
+        //           this.slotData.acceptState == 'ACCEPTED';
+        // }
         // return this.slotData.agreements &&
         //   this.slotData.agreements.length <= 0 &&
         //   this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&

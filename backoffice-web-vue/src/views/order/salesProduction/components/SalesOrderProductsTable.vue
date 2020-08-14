@@ -8,7 +8,7 @@
     <el-tabs type="border-card">
       <el-tab-pane label="产品明细">
         <el-table :data="tableData.content" stripe style="width: 100%">
-          <el-table-column type="selection" width="55">
+          <el-table-column type="selection" :reserve-selection="true" width="55">
           </el-table-column>
           <el-table-column prop="date" label="产品名称" ></el-table-column>
           <el-table-column prop="name" label="数量"></el-table-column>

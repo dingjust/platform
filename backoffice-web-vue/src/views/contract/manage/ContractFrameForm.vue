@@ -132,8 +132,8 @@
   import TemplateForm from '../../contract/template/components/TemplateForm';
   import Bus from '@/common/js/bus.js';
   import ContractPreviewPdf from './components/ContractPreviewPdf'
-  import SupplierSelect from './components/SupplierSelect';
-
+  // import SupplierSelect from './components/SupplierSelect';
+  import { SupplierSelect } from '@/components'
   const {
     mapGetters,
     mapActions
@@ -461,7 +461,7 @@
     },
     created () {
       // this.onSearchOrder('', 0, 10);
-      this.onSetOrderCode();
+      // this.onSetOrderCode();
     }
   };
 </script>

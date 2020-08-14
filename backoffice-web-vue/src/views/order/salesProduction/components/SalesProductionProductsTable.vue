@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-table :data="data" stripe style="width: 100%">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
+    <el-table :data="data" stripe style="width: 100%" row-key="id">
+      <!-- <el-table-column type="selection" :reserve-selection="true" width="55">
+      </el-table-column> -->
       <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">

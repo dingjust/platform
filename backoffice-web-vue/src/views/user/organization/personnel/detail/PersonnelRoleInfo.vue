@@ -5,7 +5,7 @@
         <div class="personnel-role-info-main">
           <el-table ref="resultTable" :data="formData.b2bRoleGroupList" style="width: 100%" row-key="id" 
                     @row-click="rowClick" @selection-change="selectionChange">
-            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
             <el-table-column label="角色名称" prop="name"></el-table-column>
             <el-table-column label="角色描述" prop="name"></el-table-column>
           </el-table>

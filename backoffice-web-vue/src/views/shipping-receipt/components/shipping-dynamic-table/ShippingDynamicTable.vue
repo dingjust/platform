@@ -2,7 +2,7 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" row-key="id" @selection-change="handleSelectionChange"
       @row-click="rowClick">
-      <el-table-column type="selection" v-if="hasSelection" fixed="left" :key="1" :selectable="selectableFuc">
+      <el-table-column type="selection" :reserve-selection="true" v-if="hasSelection" fixed="left" :key="1" :selectable="selectableFuc">
       </el-table-column>
       <el-table-column v-else :key="1"></el-table-column>
       <shipping-dynamic-table-list :columns="columns" />

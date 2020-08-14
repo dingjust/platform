@@ -23,7 +23,7 @@
     </el-tabs> -->
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange"  @row-click="rowClick">
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
       <el-table-column label="外发订单号" prop="code"></el-table-column>
       <el-table-column label="合作商">
         <template slot-scope="scope">

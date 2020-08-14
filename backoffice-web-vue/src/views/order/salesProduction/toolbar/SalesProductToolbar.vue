@@ -9,8 +9,8 @@
           <!-- </el-col> -->
           <!-- <el-col :span="5"> -->
           <el-form-item label="负责人" prop="name">
-            <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input>
-            <!-- <dept-person-select from="SALES_PLAN"/> -->
+            <!-- <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input> -->
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="5"> -->
@@ -74,6 +74,9 @@
         default: false
       },
       queryFormData: {
+        type: Object
+      },
+      dataQuery: {
         type: Object
       }
     },
@@ -153,6 +156,8 @@
         this.queryFormData.keyword = '';
         this.queryFormData.planLeader = '';
         this.queryFormData.originCooperator = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       }
     },
     created() {

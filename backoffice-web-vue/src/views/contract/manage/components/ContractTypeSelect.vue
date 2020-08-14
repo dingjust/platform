@@ -2,18 +2,18 @@
   <el-row type="flex" justify="space-around">
     <el-col :span="8">
       <div  @click="handleClick('1')"
-        :class="contractType === '1' ? 'create-contract-type_select' : 'create-contract-type_not_select'">
+        :class="econtractSelect">
         <el-row>
           <el-col :span="24">
             <h5
-              :class="contractType === '1' ? 'create-contract-type_option_title' : 'create-contract-type_option_title_not'">
+              :class="econtractTitle">
               新建合同（电子签章）——— 纸质合同</h5>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="20">
             <h6
-              :class="contractType ==='1'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              :class="econtractTitle">
               新创建电子合同或上传未签署的纸质合同文件使用在线电子签章签署合同</h6>
           </el-col>
         </el-row>
@@ -45,6 +45,24 @@
     name: 'ContractTypeSelect',
     props: ['isSignedPaper'],
     computed: {
+      econtractSelect: function () {
+        if (this.isSignedPaper) {
+          return 'isSignedPaper-select';
+        }
+        return this.contractType === '1' ? 'create-contract-type_select' : 'create-contract-type_not_select';
+      },
+      econtractTitle: function () {
+        if (this.isSignedPaper) {
+          return 'isSignedPaper-title';
+        }
+        return this.contractType === '1' ? 'create-contract-type_option_title' : 'create-contract-type_option_title_not';
+      },
+      econtractTitle: function () {
+        if (this.isSignedPaper) {
+          return 'isSignedPaper-content';
+        }
+        return this.contractType ==='1'?'create-contract-type_option_content':'create-contract-type_option_content_not';
+      },
     },
     methods: {
       handleClick (type) {
@@ -209,4 +227,32 @@
     /* font-size: 20px; */
   }
 
+  .isSignedPaper-select {
+    border: 1px solid black;
+    width: 350px;
+    height: 110px;
+    background-color: #fff;
+    opacity: 0.85;
+    border-radius: 9px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 20px;
+    cursor: pointer;
+  }
+  .isSignedPaper-select:hover {
+    cursor:not-allowed
+  }
+
+  .isSignedPaper-title {
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.65;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .isSignedPaper-content {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.65;
+  }
 </style>

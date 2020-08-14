@@ -3,7 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :row-key="'id'" :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick"
       :reserve-selection="true">
-      <el-table-column type="selection" width="50px" fixed></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="50px" fixed></el-table-column>
       <el-table-column label="生产订单号" min-width="115">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" v-if="!isAllocating && !isOutProduction">

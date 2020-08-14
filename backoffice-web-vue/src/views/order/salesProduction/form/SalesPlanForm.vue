@@ -59,10 +59,11 @@
         <div class="form-block-content">
           <el-row type="flex" align="center" :gutter="10">
             <el-col :span="6">
-              <el-form-item label="生产部" label-width="100px" prop="productionDept"
-                :rules="{ required:true, validator: validateProductionDept, trigger: 'change'}">
+              <el-form-item label="跟单员" label-width="100px" prop="productionLeader"
+                :rules="{required: true, message: '不能为空', trigger: 'change'}">
                 <!-- <personnel-selection :vPerson.sync="form.productionLeader" /> -->
-                <dept-selection :vDept.sync=form.productionDept />
+                <!-- <dept-selection :vDept.sync=form.productionDept /> -->
+                <personnal-selection-v2 :vPerson.sync="form.productionLeader"/>
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -70,14 +71,17 @@
                 <el-checkbox v-model="form.auditNeeded" @change="handleClick">需审核</el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <template v-for="(item,itemIndex) in form.approvers">
-                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="100px"
-                  :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
-                  <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
-                  <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded"/>
-                </el-form-item>
-              </template>
+            <el-col :span="16">
+              <div style="display: flex;flex-wrap: wrap;">
+                <template v-for="(item,itemIndex) in form.approvers">
+                  <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
+                    :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
+                    <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
+                    <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded" style="width: 194px"/>
+                  </el-form-item>
+                </template>
+                <el-button style="height: 32px;margin-left: 10px;" @click="appendApprover">+ 添加审批人</el-button>
+              </div>
             </el-col>
           </el-row>
         </div>
@@ -100,7 +104,7 @@
       :close-on-click-modal="false">
       <sales-plan-append-product-form ref="appendProductForm" v-if="salesProductAppendVisible" @onSave="onAppendProduct"
         :orderType="'SALES_PLAN'" :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
-        :productionLeader="form.productionLeader" />
+        :productionLeader="fromProductionLeader" />
     </el-dialog>
     <el-dialog :visible.sync="materialDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -145,9 +149,17 @@
           default:
             return false;
         }
+      },
+      fromProductionLeader: function () {
+        return {
+          id: this.form.productionLeader[this.form.productionLeader.length - 1]
+        }
       }
     },
     methods: {
+      appendApprover () {
+        this.form.approvers.push({});
+      },
       handleClick (value) {
         if (!value) {
           this.form.approvers = [null];
@@ -165,7 +177,7 @@
         })
       },
       appendProduct() {
-        this.$refs.form.validateField('productionDept', errMsg => {
+        this.$refs.form.validateField('productionLeader', errMsg => {
           if (errMsg) {
             this.$message.error('请先选择生产负责人');
           } else {
@@ -223,23 +235,24 @@
         this.form.taskOrderEntries.forEach(item => {
           this.$delete(item, 'progressPlan');
         })
-        let submitForm = Object.assign({}, this.form);
+        let submitForm = JSON.parse(JSON.stringify(this.form));
         if (!submitForm.auditNeeded) {
           submitForm.approvers = [];
         } else {
           // 处理级联选择数据
           for (let i = 0; i < submitForm.approvers.length; i++) {
-            submitForm.approvers[i] = {
-              id: this.form.approvers[i][this.form.approvers[i].length -1]
+            if (submitForm.approvers instanceof Array && submitForm.approvers[i].length > 0) {
+              submitForm.approvers[i] = {
+                id: this.form.approvers[i][this.form.approvers[i].length -1]
+              }
             }
           }
         }
         
         // 处理级联选择数据
-        submitForm.productionDept = {
-          id: this.form.productionDept[this.form.productionDept.length - 1]
+        submitForm.productionLeader = {
+          id: this.form.productionLeader[this.form.productionLeader.length - 1]
         }
-
         const url = this.apis().salesPlanSave(submitAudit);
         const result = await this.$http.post(url, submitForm);
         if (result['errors']) {
@@ -257,13 +270,13 @@
       validateField (name) {
         this.$refs.form.validateField(name);
       },
-      validateProductionDept (rule, value, callback) {
-        if (value.length <= 0) {
-          callback(new Error('请选择生产部门'));
-        } else {
-          callback()
-        }
-      }
+      // validateProductionDept (rule, value, callback) {
+      //   if (value.length <= 0) {
+      //     callback(new Error('请选择生产部门'));
+      //   } else {
+      //     callback()
+      //   }
+      // }
     },
     data() {
       return {
@@ -283,17 +296,19 @@
           productionLeader: null,
           approvers: [null],
           auditNeeded: true,
-          productionDept: []
+          // productionDept: []
         },
         materialDialogVisible: false
       };
     },
     watch: {
-      'form.productionDept': function (nval, oval) {
-        this.validateField('productionDept');
+      'form.productionLeader': function (nval, oval) {
+        this.validateField('productionLeader');
       },
       'form.approvers': function (nval, oval) {
-        this.validateField('approvers.0');
+        this.form.approvers.forEach((item, index) => {
+          this.validateField('approvers.' + index);
+        })
       }
     },
     created() {

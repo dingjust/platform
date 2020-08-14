@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight" row-key="id" 
       @selection-change="handleSelectionChange"  @row-click="rowClick">
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
       <el-table-column label="业务订单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
