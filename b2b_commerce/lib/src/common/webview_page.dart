@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class WebviewPage extends StatefulWidget {
   String url;
@@ -19,6 +20,7 @@ class _WebviewPageState extends State<WebviewPage> {
   @override
   void initState() {
     super.initState();
+    _permissionsInit();
     flutterWebviewPlugin.onUrlChanged.listen((String url) async {
       print(url);
       print(url.contains('result_code=3000'));
@@ -50,6 +52,20 @@ class _WebviewPageState extends State<WebviewPage> {
           }
           return Future.value(false);
         });
+  }
+
+  void _permissionsInit() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.mediaLibrary,
+      Permission.photos,
+      Permission.storage,
+      Permission.accessMediaLocation,
+    ].request();
+
+    statuses.forEach((permission, status) {
+      print('${permission}:${status}');
+    });
   }
 
   @override
