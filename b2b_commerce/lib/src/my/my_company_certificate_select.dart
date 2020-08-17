@@ -11,10 +11,12 @@ class MyCompanyCertificateSelectPage extends StatefulWidget {
 
   CompanyModel company;
 
-  MyCompanyCertificateSelectPageState createState() => MyCompanyCertificateSelectPageState();
+  MyCompanyCertificateSelectPageState createState() =>
+      MyCompanyCertificateSelectPageState();
 }
 
-class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSelectPage> {
+class MyCompanyCertificateSelectPageState
+    extends State<MyCompanyCertificateSelectPage> {
   //选的是否是个人认证
   bool _isPersonal = false;
 
@@ -61,7 +63,7 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
       _statusText = Text(
         '认证通过',
         style: TextStyle(
-          color: Color.fromRGBO(255, 214, 12, 1),
+          color: Colors.green,
         ),
       );
     if (widget.company.approvalStatus == ArticleApprovalStatus.unapproved)
@@ -92,9 +94,9 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
                         context,
                         MaterialPageRoute(
                           builder: (context) => MyCompanyCertificatePage(
-                                widget.company,
-                                onlyRead: _onlyRead,
-                              ),
+                            widget.company,
+                            onlyRead: _onlyRead,
+                          ),
                         ),
                       );
 
@@ -118,7 +120,10 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
                               style: const TextStyle(fontSize: 17),
                             ),
                           ),
-                          Container(padding: const EdgeInsets.only(right: 15), child: _statusText),
+                          Container(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 15),
+                              child: _statusText),
                           Text(
                             '企业四要素认证',
                             style: const TextStyle(color: Colors.grey),
@@ -162,9 +167,9 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MyPersonalCertificatePage(
-                                      widget.company,
-                                      onlyRead: _onlyRead,
-                                    ),
+                                  widget.company,
+                                  onlyRead: _onlyRead,
+                                ),
                               ),
                             );
                           },
@@ -179,7 +184,8 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
                                   style: const TextStyle(fontSize: 17),
                                 )),
                                 Offstage(
-                                  offstage: widget.company.type != CompanyType.INDIVIDUAL_HOUSEHOLD &&
+                                  offstage: widget.company.type !=
+                                      CompanyType.INDIVIDUAL_HOUSEHOLD &&
                                       widget.company.type != null,
                                   child: Container(
                                     padding: const EdgeInsets.only(right: 15),
@@ -212,7 +218,8 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
                                 '个人三要素认证',
                                 style: const TextStyle(color: Colors.grey),
                               ),
-                              const Icon(Icons.chevron_right, color: Colors.grey),
+                              const Icon(Icons.chevron_right,
+                                  color: Colors.grey),
                             ],
                           ),
                         ),
@@ -220,12 +227,18 @@ class MyCompanyCertificateSelectPageState extends State<MyCompanyCertificateSele
               ),
             ),
             Offstage(
-              offstage: !_onlyRead || widget.company.approvalStatus == ArticleApprovalStatus.check,
+              offstage: !_onlyRead ||
+                  widget.company.approvalStatus == ArticleApprovalStatus.check,
               child: Container(
                 padding: const EdgeInsets.only(top: 20),
                 width: MediaQuery.of(context).size.width - 16,
                 child: ActionChip(
-                  labelPadding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 3.5, vertical: 8),
+                  labelPadding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 3.5,
+                      vertical: 8),
                   backgroundColor: Colors.red,
                   label: const Text(
                     '重新认证',

@@ -1,6 +1,7 @@
 // Custom styles for this template
 
-.card, .social-box {
+.card,
+.social-box {
   border-top-width: 0;
   border-bottom-width: 2 * $card-border-width;
 }
@@ -14,6 +15,7 @@
 }
 
 .aside-menu {
+
   .nav-tabs .nav-link,
   .callout {
     border-radius: 0;
@@ -30,8 +32,8 @@
   margin-bottom: 0;
 }
 
-.el-table--enable-row-hover .el-table__body tr:hover>td{
-  background-color: #ffc107  !important;
+.el-table--enable-row-hover .el-table__body tr:hover>td {
+  background-color: #ffc107 !important;
 }
 
 .main .container-fluid {
@@ -72,25 +74,27 @@
 .purchase-dialog .el-dialog__header {
   padding: 0px !important;
 }
+
 .el-dialog__body {
   padding-top: 40px !important;
- }
+}
 
-.list-button{
+.list-button {
   color: #FFA403;
 }
 
-.orders-list-title{
+.orders-list-title {
   border-left: 2px solid #ffd60c;
   padding-left: 10px;
 }
 
-.btn-class{
+.btn-class {
   background-color: #FFD60C;
   color: black;
   width: 100px;
 }
-.btn-class-1{
+
+.btn-class-1 {
   background-color: red;
   color: white;
   width: 100px;
@@ -109,39 +113,44 @@
 //蓝底圆圈中白勾
 
 .hook {
-  width:30px;
-  height:30px;
-  border-radius:50% ;
-  background:blue;
-  display:block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: blue;
+  display: block;
   position: relative;
   cursor: pointer;
 }
+
 .hook:before,
 .hook::after {
-  content:"";
-  height:17px;
-  width:2px;
+  content: "";
+  height: 17px;
+  width: 2px;
   border-radius: 10px;
-  display:block;
-  background:white;
+  display: block;
+  background: white;
   position: absolute;
-  top:6px;/*40-6=34*/
-  left:17px;/*make the two rects in the middle of the cycle */
-  transform:rotate(45deg);
-  -ms-transform:rotate(45deg);
+  top: 6px;
+  /*40-6=34*/
+  left: 17px;
+  /*make the two rects in the middle of the cycle */
+  transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
 }
+
 .hook::before {
-  height:8px;
+  height: 8px;
   transform: rotate(-45deg);
-  -ms-transform:rotate(-45deg);
+  -ms-transform: rotate(-45deg);
   position: absolute;
-  top:13px;/*40-18=12 */
-  left:9px;
+  top: 13px;
+  /*40-18=12 */
+  left: 9px;
 }
 
 //×
-.cha{
+.cha {
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -149,89 +158,125 @@
   background-color: white;
   position: relative;
 }
+
 .cha::before,
-.cha::after{
+.cha::after {
   content: "";
-  position: absolute;  /*方便进行定位*/
+  position: absolute;
+  /*方便进行定位*/
   height: 20px;
   width: 1.5px;
   top: 2px;
-  right: 9px;  /*设置top和right使图像在20*20框中居中*/
+  right: 9px;
+  /*设置top和right使图像在20*20框中居中*/
   background: #0b0e0f;
 }
-.cha::before{
-  transform: rotate(45deg);  /*进行旋转*/
+
+.cha::before {
+  transform: rotate(45deg);
+  /*进行旋转*/
 }
-.cha::after{
+
+.cha::after {
   transform: rotate(-45deg);
 }
 
-.el-cascader-node > label{
-  margin-bottom: 0px!important;
+.el-cascader-node>label {
+  margin-bottom: 0px !important;
 }
 
 @font-face {
-  font-family: 'iconfont';  /* project id 1329132 */
+  font-family: 'iconfont';
+  /* project id 1329132 */
   src: url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.eot');
   src: url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.svg#iconfont') format('svg');
+    url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.svg#iconfont') format('svg');
 }
 
 @font-face {
-  font-family: 'iconfont2';  /* project id 1347992 */
+  font-family: 'iconfont2';
+  /* project id 1347992 */
   src: url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.eot');
   src: url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.svg#iconfont') format('svg');
+    url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1347992_qeb8kksdywc.svg#iconfont') format('svg');
 }
 
 @font-face {
-  font-family: 'factory-info';  /* project id 1347992 */
+  font-family: 'factory-info';
+  /* project id 1347992 */
   src: url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.eot');
   src: url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.svg#iconfont') format('svg');
+    url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.svg#iconfont') format('svg');
 }
 
 @font-face {
-  font-family: 'factory-card-info';  /* project id 1347992 */
+  font-family: 'factory-card-info';
+  /* project id 1347992 */
   src: url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.eot');
   src: url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.svg#iconfont') format('svg');
+    url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1347992_bsi0dxgvco.svg#iconfont') format('svg');
 }
 
-.iconfont{
-  font-family:"iconfont" !important;
-  font-size:16px;font-style:normal;
+@font-face {
+  font-family: 'iconfont2_2';
+  /* project id 1983198 */
+  src: url('//at.alicdn.com/t/font_1983198_3jus9uy1q07.eot');
+  src: url('//at.alicdn.com/t/font_1983198_3jus9uy1q07.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1983198_3jus9uy1q07.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1983198_3jus9uy1q07.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1983198_3jus9uy1q07.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1983198_3jus9uy1q07.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
   -webkit-font-smoothing: antialiased;
   -webkit-text-stroke-width: 0.2px;
-  -moz-osx-font-smoothing: grayscale;}
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  .iconfont2{
-    font-family:"iconfont2" !important;
-    font-size:16px;font-style:normal;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-stroke-width: 0.2px;
-    -moz-osx-font-smoothing: grayscale;}
+.iconfont2 {
+  font-family: "iconfont2" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  .factory-info{
-    font-family:"factory-info" !important;
-    font-size:38px;font-style:normal;
-    color: #00bfff;
-   }
+.factory-info {
+  font-family: "factory-info" !important;
+  font-size: 38px;
+  font-style: normal;
+  color: #00bfff;
+}
 
-  .factory-card-info{
-    font-family:"factory-info" !important;
-    font-size:20px;font-style:normal;
-    color: #ffd60c;
-   }
+.factory-card-info {
+  font-family: "factory-info" !important;
+  font-size: 20px;
+  font-style: normal;
+  color: #ffd60c;
+}
+
+.iconfont2_2 {
+  font-family: "iconfont2_2" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}

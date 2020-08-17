@@ -715,11 +715,11 @@ const router = new Router({
                 {
                   path: 'cooperatorUpdate',
                   name: '编辑合作商',
-                  component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/form/CooperatorEditFormPage')
+                  component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/form/CooperatorFormPage')
                 },
                 {
                   path: '',
-                  name: '供应商列表',
+                  name: '合作商列表',
                   component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/CooperatorPage'),
                   meta: {
                     breadCrumbParentUrl:'/account/index',

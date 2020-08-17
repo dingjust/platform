@@ -1,13 +1,9 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="cooperatorDetailsDialogVisible" @close="onDialogClose" width="80%"
-               class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <cooperator-details-page :itemData="itemData"
-                               @onSearch="onSearch"
-                               @onDetails="onDetails"
-                               @onDelete="onDelete"
-                               @onSearchOrders="onSearchOrders"
-      />
+    <el-dialog :visible.sync="cooperatorDetailsDialogVisible" @close="onDialogClose" width="80%" class="purchase-dialog"
+      append-to-body :close-on-click-modal="false">
+      <cooperator-details-page :itemData="itemData" @onSearch="onSearch" @onDetails="onDetails" @onDelete="onDelete"
+        @onSearchOrders="onSearchOrders" />
     </el-dialog>
     <el-card>
       <el-row type="flex" justify="space-between">
@@ -19,39 +15,41 @@
         <el-col :span="2">
           <div>
             <Authorized :permission="['COMPANY_COOPERATOR_CREATE']">
-              <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加合作商</el-button>
+                  <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加合作商</el-button>
             </Authorized>
           </div>
         </el-col>
       </el-row>
-      <cooperator-toolbar @onSearch="onSearch" @onDetail="onDetails"/>
-      <el-row>
-        <!--<el-col :span="1">-->
-        <!--<div>-->
-        <!--<h6>类型：</h6>-->
-        <!--</div>-->
-        <!--</el-col>-->
-        <el-tabs v-model="activeStatus" @tab-click="handleClick">
-          <template v-for="(item, index) in statues">
-            <el-tab-pane :name="item.code">
-            <span slot="label">
-              <tab-label-bubble :label="item.name" :num="0" />
-            </span>
-              <cooperator-search-result-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onSearch"
-              @onDetails="onDetails" @onDelete="onDelete" @onEdit="onEdit"/>
-            </el-tab-pane>
-          </template>
-        </el-tabs>
+      <cooperator-toolbar @onSearch="onSearch" @onDetail="onDetails" />
+      <el-row type="flex" style="margin-bottom:10px">
+        <h6 style="color:#9da0a8">类型：</h6>
+        <template v-for="item in statues">
+          <h6 :key="item.name" class="type-btn" :class="{'active':item.code==activeStatus}"
+            @click="onStatusClick(item)">{{item.name}}</h6>
+        </template>
       </el-row>
-
+      <el-tabs v-model="activeCategory" @tab-click="handleClick" type="card">
+        <template v-for="(item, index) in cooperatorCategories">
+          <el-tab-pane :name="item.code" :key="'pane'+index" :label="item.name">
+            <cooperator-search-result-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onSearch"
+              @onDetails="onDetails" @onDelete="onDelete" @onEdit="onEdit" />
+          </el-tab-pane>
+        </template>
+      </el-tabs>
     </el-card>
   </div>
 
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('CooperatorModule');
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers('CooperatorModule');
   import CooperatorToolbar from '@/views/miscs/cooperator/toolbar/CooperatorToolbar';
   import CooperatorSearchResultList from '@/views/miscs/cooperator/list/CooperatorSearchResultList';
   import TabLabelBubble from '@/components/custom/TabLabelBubble';
@@ -60,11 +58,15 @@
   export default {
     name: 'CooperatorPage',
     props: [],
-    components: {CooperatorDetailsPage, CooperatorToolbar, CooperatorSearchResultList, TabLabelBubble},
+    components: {
+      CooperatorDetailsPage,
+      CooperatorToolbar,
+      CooperatorSearchResultList,
+      TabLabelBubble
+    },
     computed: {
       ...mapGetters({
         page: 'page',
-        queryFormData: 'queryFormData',
         ordersQueryFormData: 'ordersQueryFormData'
       })
     },
@@ -72,20 +74,25 @@
       ...mapMutations({
         setOrdersPageNumber: 'setOrdersPageNumber',
         setOrdersPageSize: 'setOrdersPageSize',
-        setEditFormData: 'setEditFormData'
+        setFormData: 'setFormData'
       }),
       ...mapActions({
         searchAdvanced: 'searchAdvanced',
         searchOrdersAdvanced: 'searchOrdersAdvanced',
-        clearOrderPageData: 'clearOrderPageData'
+        clearOrderPageData: 'clearOrderPageData',
+        clearFormData:'clearFormData'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         const queryFormData = this.queryFormData;
-
         const url = this.apis().getCooperators();
-        this.searchAdvanced({url, queryFormData, page, size});
+        this.searchAdvanced({
+          url,
+          queryFormData,
+          page,
+          size
+        });
       },
-      async onDetails (item) {
+      async onDetails(item) {
         const url = this.apis().getCooperator(item.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -99,7 +106,7 @@
         //查询合作过的订单
         this.onSearchOrders(0, 8);
       },
-      async onSearchOrders (page, size) {
+      async onSearchOrders(page, size) {
         if (page != null) {
           this.setOrdersPageNumber(page);
         }
@@ -113,13 +120,11 @@
         } else if (this.isBrand() && this.itemData.type === 'ONLINE') {
           this.ordersQueryFormData.belongTos = [this.itemData.partner.uid];
         }
-
-        this.searchOrdersAdvanced({url});
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        // }
+        this.searchOrdersAdvanced({
+          url
+        });
       },
-      async onDelete (item) {
+      async onDelete(item) {
         const url = this.apis().deleteCooperator(item.id);
         var result = await this.$http.put(url);
         if (result['errors']) {
@@ -129,22 +134,29 @@
 
         this.onSearch();
       },
-      handleClick (tab, event) {
-        // console.log(tab.name);
-        if (tab.name === 'ALL') {
+      handleClick(tab, event) {
+        this.queryFormData.category = [tab.name];
+        this.onSearch();
+      },
+      //线上线下类型类型选择
+      onStatusClick(item) {
+        this.activeStatus = item.code;
+        if (item.code === 'ALL') {
           this.queryFormData.type = null;
         } else {
-          this.queryFormData.type = [tab.name];
+          this.queryFormData.type = [item.code];
         }
         this.onSearch();
       },
-      onJumpTo () {
+      onJumpTo() {
+        //重置formData
+        this.clearFormData();
         this.$router.push('/account/cooperator/cooperatorCreate');
       },
-      onDialogClose(){
+      onDialogClose() {
         this.clearOrderPageData();
       },
-      async onEdit(item){
+      async onEdit(item) {
         const url = this.apis().getCooperator(item.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -152,12 +164,12 @@
           return;
         }
 
-        this.setEditFormData(result);
+        this.setFormData(result);
 
         this.$router.push('/account/cooperator/cooperatorUpdate');
       }
     },
-    data () {
+    data() {
       return {
         itemData: {},
         cooperatorDetailsDialogVisible: false,
@@ -165,20 +177,24 @@
         statues: [{
           code: 'ALL',
           name: '全部'
-        }]
+        }],
+        activeCategory: 'SUPPLIER',
+        cooperatorCategories: this.$store.state.EnumsModule.CooperatorCategory,
+        queryFormData: {
+          type: '',
+          keyword: '',
+          category:['SUPPLIER']
+        },
       };
     },
-    created () {
+    created() {
       this.$store.state.EnumsModule.CooperatorType.forEach(element => {
         this.statues.push(element);
       });
-      // Bus.$on('my-event', args => {
-      //   this.dialogDetailVisible = !this.dialogDetailVisible;
-      // }),
-
       this.onSearch();
     }
   };
+
 </script>
 
 <style scoped>
@@ -186,4 +202,18 @@
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
+
+  .type-btn {
+    margin-right: 15px;
+    color: #9da0a8;
+  }
+
+  .type-btn:hover {
+    cursor: pointer;
+  }
+
+  .active {
+    color: #ffd60c;
+  }
+
 </style>

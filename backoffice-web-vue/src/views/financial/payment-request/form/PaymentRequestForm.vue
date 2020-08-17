@@ -128,7 +128,7 @@
         <el-row type="flex" justify="start" align="middle" style="margin-top: 20px;padding-left: 10px">
           <el-col :span="24">
             <el-form-item label="上传凭证">
-              <images-upload :slotData="formData.requestVouchers"></images-upload>
+              <images-upload :slotData="formData.requestVouchers" ref="upload"></images-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -246,6 +246,11 @@
         }
       },
       onConfirm() {
+        if (this.$refs.upload.isUploading()) {
+          this.$message.error('请等待图片上传完毕');
+          return null;
+        };
+
         this.$refs.form.validate((valid) => {
           if (valid) {
             this._onConfirm();
@@ -415,9 +420,11 @@
       if (this.orderData != null) {
         this.setSelectOrder(this.orderData);
       }
+    },
+    mounted() {
       this.$nextTick(() => {
         this.$refs.form.clearValidate();
-      })
+      });
     },
     destroyed() {
 

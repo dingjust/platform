@@ -18,9 +18,9 @@
       </el-col>
     </el-row>
     <el-row type="flex">
-      <el-table ref="resultTable" stripe :data="page.content" highlight-current-row
+      <el-table ref="resultTable" stripe :data="page.content" @selection-change="handleSelectionChange"
         @current-change="handleCurrentChange" :height="autoHeight" :row-key="getRowKeys">
-        <!--        <el-table-column type="selection" width="55"></el-table-column>-->
+        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="产品图片" width="120">
           <template slot-scope="scope">
             <img width="54px" height="54px"
@@ -41,6 +41,11 @@
         </el-table-column>
       </el-table>
     </el-row>
+    <div class="pt-2"></div>
+    <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+    </el-pagination>
     <el-dialog :visible.sync="detailsVisiable" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sample-product-details-page v-if="detailsVisiable" @closeDialog="closeDialog" />
@@ -89,8 +94,17 @@
           size
         });
       },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
       getRowKeys(row) {
         return row.id;
+      },
+      onPageSizeChanged(val) {
+        this.onSearch(0, val);
+      },
+      onCurrentPageChanged(val) {
+        this.onSearch(val - 1);
       },
       handleCurrentChange(newRow, oldRow) {
         this.multipleSelection = newRow;
@@ -111,7 +125,7 @@
     },
     data() {
       return {
-        multipleSelection: '',
+        multipleSelection: [],
         keyword: '',
         detailsVisiable: false
       }
@@ -146,7 +160,7 @@
     background-color: #ffc107;
   }
 
-  .title-box{
+  .title-box {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }

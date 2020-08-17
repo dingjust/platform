@@ -69,8 +69,13 @@
         this.fileList.splice(index, 1);
       },
       onDownload(file) {
-        console.log(JSON.stringify(file));
-        window.open(file.url);
+        this.$confirm('是否打开页面?', '', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          window.open(file.url);
+        });
       }
     },
     computed: {

@@ -2,7 +2,7 @@
   <div class="animated fadeIn image-upload">
     <el-row :gutter="10">
       <el-col :span="24">
-        <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+        <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData" ref="upload"
           :disabled="disabled" :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
           :file-list="fileList" :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit"
           :on-remove="handleRemove" :class="{disabled:uploadDisabled,picClass:picClass}">
@@ -54,8 +54,8 @@
     },
     methods: {
       onBeforeUpload(file) {
-        if (file.size > 1024 * 1024 * 5) {
-          this.$message.error('上传的文件不允许超过5M');
+        if (file.size > 1024 * 1024 * 10) {
+          this.$message.error('上传的文件不允许超过10M');
           return false;
         } else {
           return new Promise((resolve, reject) => {
@@ -128,6 +128,12 @@
         if (this.custom) {
           this.$emit('onUpload');
         }
+      },
+      //是否还有正在上传文件
+      isUploading() {
+        let index = this.$refs.upload.uploadFiles.findIndex(file => file.status == 'uploading' || file.status ==
+          'ready');
+        return index != -1;
       }
     },
     computed: {
@@ -172,7 +178,7 @@
         };
       },
       headers: function () {
-        
+
         const token = sessionStorage.getItem('token');
         return {
           //TODO:  store没刷新token
@@ -185,7 +191,7 @@
       return {
         dialogImageUrl: '',
         dialogVisible: false,
-        uploadDisabled: false
+        uploadDisabled: false,
       }
     }
   };

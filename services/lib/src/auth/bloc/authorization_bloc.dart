@@ -1,7 +1,5 @@
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:services/src/auth/response/authorization_response.dart';
-import 'package:services/src/auth/respository/authorization_respository.dart';
 
 class AuthorizationBLoC extends BLoCBase {
   // 工厂模式
@@ -26,16 +24,16 @@ class AuthorizationBLoC extends BLoCBase {
   List<Authorization> get authorizations => _authorizations;
 
   Future<List<Authorization>> getAuthorizations(String id) async {
-    AuthorizationResponse response =
-        await AuthorizationRespository().getAuthorizations(id);
+    // AuthorizationResponse response =
+    //     await AuthorizationRespository().getAuthorizations(id);
 
-    if (response != null && response.code == 1) {
-      _authorizations = response.data;
-      // _authorizations.remove(Authorization.REQUIREMENT_ORDER_PUBLISH);
-      return _authorizations;
-    } else {
-      return null;
-    }
+    // if (response != null && response.code == 1) {
+    //   _authorizations = response.data;
+    //   // _authorizations.remove(Authorization.REQUIREMENT_ORDER_PUBLISH);
+    //   return _authorizations;
+    // } else {
+    //   return null;
+    // }
   }
 
   @override

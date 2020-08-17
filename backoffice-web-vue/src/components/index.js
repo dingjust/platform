@@ -11,7 +11,8 @@ import AddressForm from './custom/order-form/AddressForm';
 import MyAddressForm from './custom/order-form/MyAddressForm';
 import MyPayPlanForm from './custom/order-form/MyPayPlanForm';
 import PayPlanFormV2 from './custom/order-form/PayPlanFormV2';
-import PayPlanInfo from '@/components/custom/order-form/PayPlanInfo'
+import PayPlanInfo from '@/components/custom/order-form/PayPlanInfo';
+import CompanySelect from '@/components/custom/order-form/CompanySelect';
 
 // table
 import ColorSizeTable from '@/components/custom/table/ColorSizeTable'
@@ -87,6 +88,7 @@ export {
   MyPayPlanForm,
   PayPlanFormV2,
   PayPlanInfo,
+  CompanySelect,
   PDFUpload,
   AddressForm,
   AddressSelect,
@@ -135,8 +137,8 @@ export {
   ColorSizeChangeTable,
   SelectTree,
   getSizeSequence,
-    DjMultipleSelect,
-    DeptPersonSelect,
-    DeptSelection,
-    PersonnalSelectionV2
+  DjMultipleSelect,
+  DeptPersonSelect,
+  DeptSelection,
+  PersonnalSelectionV2
 }

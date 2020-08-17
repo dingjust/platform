@@ -15,7 +15,7 @@
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
           <el-row>
-            <Authorized :permission="['PROGRESS_PLAN_OPERATE']">
+            <!-- <Authorized :permission="['PROGRESS_PLAN_OPERATE']"> -->
               <el-button type="text" @click="onEdit(scope.row)" class="cooperator-list-button">编辑</el-button>
               <el-divider direction="vertical"></el-divider>
               <el-button type="text" @click="onEnable(scope.row)" class="cooperator-list-button">
@@ -23,7 +23,7 @@
               </el-button>
               <el-divider direction="vertical"></el-divider>
               <el-button type="text" @click="onDelete(scope.row)" class="cooperator-list-button">删除</el-button>
-            </Authorized>
+            <!-- </Authorized> -->
           </el-row>
         </template>
       </el-table-column>

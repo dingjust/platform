@@ -303,7 +303,7 @@ export default {
           }
         },
         {
-          name: '供应商管理',
+          name: '合作商管理',
           url: '/account/cooperator',
           icon: 'iconNone',
           meta: {
