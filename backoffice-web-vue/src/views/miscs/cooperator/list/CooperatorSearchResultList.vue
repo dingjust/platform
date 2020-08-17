@@ -8,16 +8,16 @@
         </template>
       </el-table-column>
       <el-table-column label="联系人" prop="contactPerson">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <span v-if="scope.row.partner != null"> {{scope.row.partner.contactPerson}}</span>
           <span v-else> {{scope.row.contactPerson}}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="联系方式" prop="contactPhone">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <span v-if="scope.row.partner != null"> {{scope.row.partner.contactPhone}}</span>
           <span v-else> {{scope.row.contactPhone}}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <!-- <el-table-column label="类别" prop="category">
         <template slot-scope="scope">

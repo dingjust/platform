@@ -1895,11 +1895,9 @@ const state = {
   }, {
     code: 'approved',
     name: '已认证'
-  }, ]
-  }],
+  }, ],
   // 对账月类型
-  MonthType: [
-    {
+  MonthType: [{
       code: 'CURRENT_MONTH',
       name: '本月'
     },

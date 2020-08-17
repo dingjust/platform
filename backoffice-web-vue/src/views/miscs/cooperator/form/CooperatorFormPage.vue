@@ -112,10 +112,10 @@
                 </el-input>
               </el-col>
               <el-col :span="8">
-                <el-input placeholder="" :value="formData.payPlan != null ? formData.payPlan.name : ''" size="mini"
+                <el-input placeholder="" :value="formData.reconciliationPlan != null ? formData.reconciliationPlan.name : ''" size="mini"
                   :disabled="false">
                   <template slot="prepend">绑定对账方案</template>
-                  <el-button slot="append">选择
+                  <el-button slot="append" @click="reconciliationVisible=true">选择
                   </el-button>
                 </el-input>
               </el-col>
@@ -141,6 +141,10 @@
       :close-on-click-modal="false">
       <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="getProgressPlan" />
     </el-dialog>
+    <el-dialog :visible.sync="reconciliationVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <reconciliation-plan-selector v-if="reconciliationVisible" @onSelect="onReconciliationSelect" />
+    </el-dialog>
   </div>
 
 
@@ -164,6 +168,7 @@
   } from '@/components/'
 
   import ProgressPlanSelectDialog from '@/views/user/progress-plan/components/ProgressPlanSelectDialog';
+  import ReconciliationPlanSelector from '@/views/user/reconciliation-plan/components/ReconciliationPlanSelector';
 
   export default {
     name: 'CooperatorFormPage',
@@ -173,6 +178,7 @@
       PayPlanSelect,
       AddressForm,
       CompanySelect,
+      ReconciliationPlanSelector,
       ProgressPlanSelectDialog
     },
     computed: {
@@ -286,12 +292,18 @@
         })
         return row;
       },
+      //对账方案选择
+      onReconciliationSelect(val) {
+        this.reconciliationVisible=false;
+        this.formData.reconciliationPlan=val;
+      }
     },
     data() {
       return {
         payPlanSelectDialogVisible: false,
         companyDialogVisible: false,
         progressPlanVisible: false,
+        reconciliationVisible: false,
         cooperatorCategorys: this.$store.state.EnumsModule.CooperatorCategory,
         companies: [],
         payPlans: [],
