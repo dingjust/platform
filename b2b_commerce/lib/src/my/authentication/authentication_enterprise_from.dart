@@ -5,6 +5,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class AuthenticationEnterpriseFromPage extends StatefulWidget {
+  final AuthenticationInfoModel model;
+
+  const AuthenticationEnterpriseFromPage({Key key, this.model})
+      : super(key: key);
+
   _AuthenticationEnterpriseFromPageState createState() =>
       _AuthenticationEnterpriseFromPageState();
 }
@@ -17,6 +22,16 @@ class _AuthenticationEnterpriseFromPageState
   TextEditingController _enterpriseNameController = TextEditingController();
   TextEditingController _xydmController = TextEditingController();
   TextEditingController _fddbrController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.model != null) {
+      _enterpriseNameController.text = widget.model.name ?? '';
+      _xydmController.text = widget.model.organization ?? '';
+      _fddbrController.text = widget.model.legal?.name ?? '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +139,7 @@ class _AuthenticationEnterpriseFromPageState
               textAlign: TextAlign.right,
               focusNode: _enterpriseNameFocusNode,
               controller: _enterpriseNameController,
+              enabled: widget.model == null,
               leadingText: Text('企业名称',
                   style: TextStyle(
                     fontSize: 16,
@@ -136,6 +152,7 @@ class _AuthenticationEnterpriseFromPageState
               textAlign: TextAlign.right,
               focusNode: _xydmFocusNode,
               controller: _xydmController,
+              enabled: widget.model == null,
               leadingText: Text('信用代码',
                   style: TextStyle(
                     fontSize: 16,
@@ -148,6 +165,7 @@ class _AuthenticationEnterpriseFromPageState
               textAlign: TextAlign.right,
               focusNode: _fddbrFocusNode,
               controller: _fddbrController,
+              enabled: widget.model == null,
               leadingText: Text('法定代表人',
                   style: TextStyle(
                     fontSize: 16,

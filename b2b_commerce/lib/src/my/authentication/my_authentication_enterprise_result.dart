@@ -11,7 +11,8 @@ class MyAuthenticationEnterpriseResult extends StatefulWidget {
   bool isCompany;
   AuthenticationModel authenticationModel;
 
-  MyAuthenticationEnterpriseResult({this.isCompany: false, this.authenticationModel});
+  MyAuthenticationEnterpriseResult(
+      {this.isCompany: false, this.authenticationModel});
 
   @override
   _MyAuthenticationEnterpriseResultState createState() =>
@@ -41,33 +42,41 @@ class _MyAuthenticationEnterpriseResultState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('企业认证'),
-          centerTitle: true,
-          elevation: 0.5,
-        ),
-        body: FutureBuilder<CertificationInfo>(
-          builder: (BuildContext context,
-              AsyncSnapshot<CertificationInfo> snapshot) {
-            if (snapshot.data != null) {
-              return Container(
+    return FutureBuilder<CertificationInfo>(
+      builder:
+          (BuildContext context, AsyncSnapshot<CertificationInfo> snapshot) {
+        if (snapshot.data != null) {
+          return Scaffold(
+              appBar: AppBar(
+                title: Text('企业认证'),
+                centerTitle: true,
+                elevation: 0.5,
+              ),
+              body: Container(
                   child: Stack(
                     children: [
                       _buildEnterprise(snapshot.data.data),
                       Positioned(right: 20, top: 10, child: _getAuthStateIcon())
                     ],
-                  ));
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-          initialData: null,
-          future: _futureBuilderFuture,
-        ),
-        bottomNavigationBar: _buildButton());
+                  )),
+              bottomNavigationBar: _buildButton(snapshot.data.data));
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('企业认证'),
+              centerTitle: true,
+              elevation: 0.5,
+            ),
+            body: Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                )),
+          );
+        }
+      },
+      initialData: null,
+      future: _futureBuilderFuture,
+    );
   }
 
   Widget _getAuthStateIcon() {
@@ -82,7 +91,7 @@ class _MyAuthenticationEnterpriseResultState
     }
   }
 
-  Widget _buildButton() {
+  Widget _buildButton(AuthenticationInfoModel model) {
     if (widget.authenticationModel.companyState ==
         AuthenticationState.SUCCESS) {
       return Container(
@@ -102,10 +111,46 @@ class _MyAuthenticationEnterpriseResultState
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5))),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AuthenticationEnterpriseFromPage()),
+            showDialog<void>(
+              context: context,
+              barrierDismissible: true, // user must tap button!
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(
+                    '提示',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  content: Text('重新认证将取消认证状态，是否确定？'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text(
+                        '取消',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    FlatButton(
+                      child: Text(
+                        '确定',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  AuthenticationEnterpriseFromPage(
+                                    model: model,
+                                  )),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
             );
           },
         ),
