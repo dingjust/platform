@@ -157,7 +157,7 @@
                 this.formData.state != 'TO_BE_SUBMITTED' && 
                 this.formData.state != 'AUDITING' &&
                 this.formData.state != 'AUDIT_REJECTED';
-      }
+      },
     },
     methods: {
       callback () {

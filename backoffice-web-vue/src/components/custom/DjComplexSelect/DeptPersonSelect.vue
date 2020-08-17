@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-cascader v-model="data" :options="deptList"
+    <el-cascader v-model="selectData" :options="deptList"
+                :disabled="cascaderDisabled"
                 :props=" { 
                   multiple: true,
                   checkStrictly: checkStrictly,
@@ -25,14 +26,19 @@ export default {
     },
     checkStrictly: {
       type: Boolean,
-      default: false
-    },
-    onlyDept: {
-      type: Boolean,
       default: true
+    },
+    dataQuery: {
+      type: Object,
+      default: () => {}
     }
   },
   components: {
+  },
+  computed: {
+    cascaderDisabled: function () {
+      return this.dataQuery.users.length > 0;
+    }
   },
   methods: {
     async getDeptList () {
@@ -49,9 +55,7 @@ export default {
       this.deptList = result.data;
       this.setMark(this.deptList, 'dept');
 
-      if (!this.onlyDept) {
-        await this.getPersonList();
-      }
+      await this.getPersonList();
     },
     async getPersonList () {
       const url = this.apis().getB2BCustomers();
@@ -100,6 +104,25 @@ export default {
           temp.children.push(item);
         }
       })
+
+      // 回显
+      if (this.dataQuery.depts.length > 0 || this.dataQuery.users.length > 0) {
+        this.echoData();
+      }
+    },
+    echoData () {
+      let arr = [];
+      if (this.dataQuery.depts.length > 0 && this.dataQuery.depts[0] !== 0) {
+        arr = this.familyTree(this.deptList, this.dataQuery.depts[0]);
+      } else if (this.dataQuery.depts.length > 0 && this.dataQuery.depts[0] === 0) {
+        arr = this.deptList;
+      } else if (this.dataQuery.users.length > 0) {
+        arr = this.familyTree(this.deptList, this.dataQuery.users[0]);
+      }
+      if (arr.length > 0) {
+        let echo = arr.map(item => item.mark)
+        this.selectData = [echo];
+      }
     },
     breadthQuery (tree, id) {
       let stark = [];
@@ -117,8 +140,8 @@ export default {
       }
     },
     setSelect (tree) {
-      this.selectDept = [];
-      this.selectPerson = [];
+      this.selectDept.length = [];
+      this.selectPerson.length = [];
       let stark = [];
       stark = stark.concat(tree);
       stark.sort((o1,o2)=>o1.length-o2.length);
@@ -145,13 +168,39 @@ export default {
         stark = middleStark;
       }
     },
+    // 回显数据处理
+    familyTree (arr1, id) {
+      var temp = []
+      var forFn = function (arr, id) {
+        for (var i = 0; i < arr.length; i++) {
+          var item = arr[i]
+          if (item.id === id) {
+            temp.unshift(item)
+            if (item.parentId) {
+              forFn(arr1, item.parentId)
+            } else if (item.parentId == null && item.b2bDept) {
+              forFn(arr1, item.b2bDept.id)
+            }
+            break
+          } else {
+            if (item.children) {
+              forFn(item.children, id)
+            }
+          }
+        }
+      }
+      forFn(arr1, id)
+      return temp
+    },
+    clearSelectData () {
+      this.selectData = [];
+    }
   },
   data () {
     return {
       deptList: [],
       personList: [],
-      selectData: [],
-      data: ''
+      selectData: []
     }
   },
   watch: {

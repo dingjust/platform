@@ -1752,7 +1752,7 @@ const state = {
       name: '待对账'
     },
 
-    //退货单状态  
+    //退货单状态
     {
       code: 'RETURN_TO_BE_RECEIVED',
       name: '退货待收'
@@ -1896,6 +1896,18 @@ const state = {
     code: 'approved',
     name: '已认证'
   }, ]
+  }],
+  // 对账月类型
+  MonthType: [
+    {
+      code: 'CURRENT_MONTH',
+      name: '本月'
+    },
+    {
+      code: 'NEXT_MONTH',
+      name: '下月'
+    }
+  ]
 };
 
 const mutations = {};

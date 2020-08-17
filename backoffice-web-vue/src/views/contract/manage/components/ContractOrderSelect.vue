@@ -3,7 +3,7 @@
     <div style="height: 50px;">
       <el-form :inline="true">
         <el-form-item label="">
-          <el-input placeholder="请输入生产订单号/产品货啊好/品牌查询" v-model="keyword"></el-input>
+          <el-input placeholder="请输入生产订单号/产品货号/品牌查询" v-model="queryFormData.name"></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" class="toolbar-search_input" @click="onSearch">查找</el-button>
@@ -16,205 +16,188 @@
         </el-form-item>
       </el-form>
     </div>
-    <!--<el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"-->
-    <!--:height="autoHeight">-->
-    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
-        @selection-change="handleSelectionChange" @row-click="clickRow" :row-key="getRowKeys">
-      <el-table-column type="selection" width="55" :reserve-selection="true">
-      </el-table-column>
-      <el-table-column label="生产订单号" min-width="130">
+    <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
+      <template v-for="item in statuses">
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code"></el-tab-pane>
+      </template>
+    </el-tabs> -->
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
+      @selection-change="handleSelectionChange"  @row-click="rowClick">
+      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+      <el-table-column label="外发订单号" prop="code"></el-table-column>
+      <el-table-column label="合作商">
         <template slot-scope="scope">
-          <el-row type="flex" justify="space-between" align="middle">
-            <span>{{scope.row.code}}</span>
-            <el-tag>{{getEnum('salesApplication', scope.row.salesApplication)}}</el-tag>
-          </el-row>
+          <span>{{getCooperator(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品" min-width="150">
-        <template slot-scope="scope">
-          <el-row type="flex" justify="space-between" align="middle" :gutter="50">
-            <el-col :span="6">
-              <img width="54px" v-if="scope.row.product!=null" height="54px"
-                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'">
-            </el-col>
-            <el-col :span="16">
-              <el-row>
-                <span>货号:{{scope.row.product!=null?scope.row.product.skuID:''}}</span>
-              </el-row>
-              <el-row>
-                <span>数量:{{countTotalQuantity(scope.row.entries)}}</span>
-              </el-row>
-            </el-col>
-          </el-row>
-        </template>
-      </el-table-column>
-      <el-table-column label="品牌" v-if="!isBrand()" prop="belongTo.name">
-        <template slot-scope="scope">
-          <span v-if="scope.row.purchaser">{{scope.row.purchaser.name}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="工厂" v-if="!isFactory()" prop="belongTo.name">
-        <template slot-scope="scope">
-          <span v-if="scope.row.belongTo">{{scope.row.belongTo.name}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="生产订单状态" prop="status" :column-key="'status'" :filters="statuses">
-        <template slot-scope="scope">
-          <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-          <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
-        </template>
-      </el-table-column>
-      <!--<el-table-column label="跟单员">-->
-      <!--</el-table-column>-->
-      <!-- <el-table-column label="预计交货时间" prop="expectedDeliveryDate">
-        <template slot-scope="scope">
-          <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="订单生成时间">
+      <el-table-column label="关联产品数" prop="entrySize"></el-table-column>
+      <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
+      <el-table-column label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签">
+      <el-table-column label="审批状态">
         <template slot-scope="scope">
-          <el-row>
-            <img width="40px" height="15px" :src="getPaymentStatusTag(scope.row)" />
-          </el-row>
-          <el-row>
-            <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
-          </el-row>
+          <span>{{getEnum('SalesProductionAuditStatus', scope.row.sendAuditState)}}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column label="操作" min-width="100">-->
-      <!--<template slot-scope="scope">-->
-      <!--<el-row>-->
-      <!--<el-button type="text" @click="onSelected(scope.row)" class="purchase-list-button">选择</el-button>-->
-      <!--</el-row>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('OutboundOrderStatuses', scope.row.state)}}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pt-2"></div>
-    <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
-    <!-- </div> -->
   </div>
 </template>
 
 <script>
-  import {
-    createNamespacedHelpers
-  } from 'vuex';
-
-  const {
-    mapActions
-  } = createNamespacedHelpers('PurchaseOrdersModule');
-
   export default {
     name: 'ContractOrderSelect',
-    props: ['page'],
+    props: ['isSelectFile'],
     components: {},
-    computed: {},
+    computed: {
+    },
     methods: {
-      ...mapActions({
-        refresh: 'refresh'
-      }),
-      async handleFilterChange (val) {
-        this.statuses = val.status;
-
-        // this.$emit('onSearchOrder','', 0,10);
-        const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url, {
-          keyword: ''
-        }, {
-          page: this.page.number,
-          size: this.page.size
+      async onSearch (page, size) {
+        let _page = 0;
+        let _size = 10;
+        if (page && page instanceof Number) {
+          _page = page;
+        }
+        if (size) {
+          _size = size;
+        }
+        console.log(_page);
+        const query = this.queryFormData;
+        const url = this.apis().getoutboundOrdersList();
+        const result = await this.$http.post(url, query, {
+          page: _page,
+          size: _size
         });
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
         this.page = result;
+        // this.outboundOrderStateCount();
       },
-      async onSearch () {
-        this.$emit('onSearchOrder', null, null, this.keyword);
+      async outboundOrderStateCount() {
+        const url = this.apis().outboundOrderStateCount();
+        const result = await this.$http.post(url, this.queryFormData);
+        if (result['errors']) {
+          this.stateCount = {};
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          this.$message.error(result.msg);
+          return;
+        }
+        this.stateCount = result.data;
+      },
+      tabName(tab) {
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name + '(' + this.stateCount[tab.code] + ')';
+        }
+        return tab.name;
+      },
+      handleClick(tab, event) {
+        this.queryFormData.state = tab.name;
+        this.onSearch(0, 10);
       },
       onReset () {
-        this.keyword = '';
-        this._reset();
-        this.onSearch();
+        this.queryFormData.keyword = '';
       },
-      async onPageSizeChanged (val) {
-        this._reset();
-        this.$emit('onSearchOrder', 0, val);
-      },
-      async onCurrentPageChanged (val) {
-        this.$emit('onSearchOrder', val - 1, null, this.keyword);
+      onPageSizeChanged (val) {
+        this.onSearch(0, val);
+
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
-      _reset () {
-        this.$refs.resultTable.clearSort();
-        this.$refs.resultTable.clearFilter();
-        this.$refs.resultTable.clearSelection();
-      },
-      onDetails (row) {
-        this.$emit('onDetails', row);
-      },
-      countTotalQuantity (entries) {
-        let amount = 0;
-        entries.forEach(element => {
-          amount += element.quantity;
+      onCurrentPageChanged (val) {
+        this.onSearch(val - 1, 10);
+
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
-        return amount;
       },
-      onSelected () {
-        // if (item.code == this.selectedItem.code) {
-        //   //空选择
-        //   this.selectedItem = {};
-        // } else {
-        //   this.selectedItem = item;
-        // }
-        this.$emit('onOrderSelectChange', this.selectedItems);
+      getCooperator(row) {
+        return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
       },
       handleSelectionChange (val) {
-        this.selectedItems = val;
-      },
-      // 选中行
-      handleCurrentChange (val) {
-        this.selectedItems = val;
-      },
-      getPaymentStatusTag (row) {
-        return row.balancePaid ? 'static/img/paid.png' : 'static/img/arrears.png';
-      },
-      getSignedTag (row) {
-        if (row.userAgreementIsSigned == null) {
-          return 'static/img/not_signed.png';
-        } else {
-          return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
+        // 限制单选
+        if (val.length > 1) {
+          this.$refs.resultTable.toggleRowSelection(val[0], false);
+          this.selectionRow = val[val.length - 1];
+        } else if (val.length == 1) {
+          this.selectionRow = val[val.length - 1];
+        } else if (val.length == 0) {
+          this.selectionRow = "";
         }
       },
-      clickRow (row) {
-        this.$refs.resultTable.toggleRowSelection(row);
+      rowClick (row) {
+        if (this.selectionRow == "") {
+          this.$refs.resultTable.toggleRowSelection(row, true);
+        } else {
+          if (this.selectionRow.id == row.id) {
+            this.$refs.resultTable.toggleRowSelection(row, false);
+          } else {
+            this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
+            this.$refs.resultTable.toggleRowSelection(row, true);
+          }
+        }
       },
-      getRowKeys (row) {
-        return row.id;
+      onSelected () {
+        this.$emit('onOrderSelectChange', [this.selectionRow]);
       }
     },
     data () {
       return {
-        statuses: this.$store.state.PurchaseOrdersModule.statuses,
-        selectedItems: [],
-        keyword: ''
+        selectionRow: '',
+        activeName: 'AUDIT_PASSED',
+        stateCount: {},
+        statuses: [{
+          code: 'AUDIT_PASSED',
+          name: '生产中'
+        }, {
+          code: 'COMPLETED',
+          name: '已完成'
+        }],
+        page: {
+          number: 0, // 当前页，从0开始
+          size: 10, // 每页显示条数
+          totalPages: 1, // 总页数
+          totalElements: 0, // 总数目数
+          content: [] // 当前页数据
+        },
+        queryFormData: {
+          keyword: '',
+          name: '',
+          // state: 'AUDIT_PASSED',
+          merchandiserPk: 'isMyself',
+          states: ['AUDIT_PASSED', 'COMPLETED'],
+          agreement: 'NOT_HAVE'
+        },
       }
+    },
+    created () {
+      this.onSearch(0, 10);
     }
   }
 </script>
-<style>
+<style scoped>
   .purchase-list-button {
     color: #FFA403;
   }
@@ -248,6 +231,10 @@
   .toolbar-search_input{
     background-color: #ffd60c;
     border-color: #ffd60c;
+  }
+
+  /deep/ .el-table th>.cell .el-checkbox {
+    display: none;
   }
 
 </style>

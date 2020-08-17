@@ -90,9 +90,9 @@ const router = new Router({
               path: 'capacity',
               name: '产能配置',
               component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/capacity/capacityPage'),
-              meta: {                
+              meta: {
                 breadCrumbParentUrl:'/order/quote',
-                breadCrumbParentName:'其他',   
+                breadCrumbParentName:'其他',
               }
             }, {
               path: 'capacityPublish',
@@ -178,7 +178,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/quote/QuotePage'),
               meta: {
                 breadCrumbParentUrl:'/order/quote',
-                breadCrumbParentName:'其他',                
+                breadCrumbParentName:'其他',
               }
             },
             {
@@ -187,7 +187,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/proofing/ProofingPage'),
               meta: {
                 breadCrumbParentUrl:'/order/quote',
-                breadCrumbParentName:'其他',    
+                breadCrumbParentName:'其他',
               }
             },
             {
@@ -196,7 +196,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/purchase/PurchaseOrderPage'),
               meta: {
                 breadCrumbParentUrl:'/order/quote',
-                breadCrumbParentName:'其他',    
+                breadCrumbParentName:'其他',
               }
             },
             {
@@ -409,7 +409,7 @@ const router = new Router({
             component: () => import( /* webpackChunkName: 'reports' */ '@/views/report/production-progress/ProductionProgressReportPage'),
             meta: {
               breadCrumbParentUrl:'/order/quote',
-              breadCrumbParentName:'其他',   
+              breadCrumbParentName:'其他',
             }
           }, {
             path: 'receipt',
@@ -482,7 +482,7 @@ const router = new Router({
               path: 'index',
               name: '公司介绍',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
-              meta: {                  
+              meta: {
                 breadCrumbParentUrl:'/account/index',
                 breadCrumbParentName:'资料中心',
               }
@@ -560,18 +560,18 @@ const router = new Router({
             {
               path: 'organizationRole',
               name: '角色管理',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/OrganizationRolePage')  
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/OrganizationRolePage')
             },
             {
               path: 'create/organizationRole',
               name: '创建角色',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/form/OrganizationRoleForm')  
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/form/OrganizationRoleForm')
             },
             {
               path: 'organizationRole/:id/edit',
               name: '编辑角色',
               props: true,
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/form/OrganizationRoleForm')  
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/organization/role/form/OrganizationRoleForm')
             },
             {
               path: 'personnel',
@@ -665,7 +665,38 @@ const router = new Router({
                     component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/progress-plan/form/ProgressPlanForm')
                   }
                 ]
-              }]
+              },
+                {
+                  path: 'reconciliation-plan',
+                  name: '对账配置',
+                  redirect: '/account/setting/reconciliation-plan',
+                  component: {
+                    render(c) {
+                      return c('router-view');
+                    }
+                  },
+                  children: [{
+                    path: '',
+                    name: '对账方案列表',
+                    component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/reconciliation-plan/ReconciliationPlanPage'),
+                    meta:{
+                      breadCrumbParentUrl:'/account/setting/reconciliation-plan',
+                      breadCrumbParentName:'设置',
+                      breadCrumbSkip:2
+                    }
+                  },
+                    {
+                      path: 'create',
+                      name: '添加新方案',
+                      component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/reconciliation-plan/form/ReconciliationPlanForm')
+                    },
+                    {
+                      path: 'update',
+                      name: '编辑方案',
+                      component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/reconciliation-plan/form/ReconciliationPlanForm')
+                    }
+                  ]
+                }]
             },
             {
               path: 'cooperator',
@@ -765,7 +796,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/wallet/WalletPage'),
               meta: {
                 breadCrumbParentUrl:'/account/setting/progress-plan',
-                breadCrumbParentName:'设置',                
+                breadCrumbParentName:'设置',
               }
             }, {
               path: '/miscs/cashOutManager',

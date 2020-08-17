@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="slotData" style="width: 100%" border @selection-change="handleSelectionChange">
-      <el-table-column type="selection">
+      <el-table-column type="selection" :reserve-selection="true">
       </el-table-column>
       <el-table-column prop="materialsName" label="物料名称">
       </el-table-column>

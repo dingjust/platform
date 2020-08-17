@@ -1,36 +1,42 @@
 <template>
   <div>
+    <!-- 合同模板选择 -->
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%"
                class="purchase-dialog" append-to-body :close-on-click-modal="false">
-        <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
-        <el-divider direction="vertical"></el-divider>
-        <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
-          <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-        </Authorized>
-        <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
+      <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
+      <el-divider direction="vertical"></el-divider>
+      <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
+        <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
+      </Authorized>
+      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
+    <!-- 合同模板 创建 -->
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
       <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect"
                      :slotData="templateData" :templateId="templateId"
                      :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
+    <!-- 选择合作商 -->
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
+    <!-- 预览合同 -->
     <el-dialog :visible.sync="dialogPreviewVisible" width="80%" :close-on-click-modal="false">
       <el-row slot="title">
         <el-button>生成合同</el-button>
       </el-row>
       <contract-preview />
     </el-dialog>
+    <!-- 合同详情pdf -->
     <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%" :close-on-click-modal="false">
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
     </el-dialog>
+    
     <div>
       <el-row type="flex" justify="center" align="middle">
         <span class="create-contract-title">框架协议</span>
       </el-row>
-      <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
+      <contract-type-select :isSignedPaper="isSignedPaper" @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
@@ -126,8 +132,8 @@
   import TemplateForm from '../../contract/template/components/TemplateForm';
   import Bus from '@/common/js/bus.js';
   import ContractPreviewPdf from './components/ContractPreviewPdf'
-  import SupplierSelect from './components/SupplierSelect';
-
+  // import SupplierSelect from './components/SupplierSelect';
+  import { SupplierSelect } from '@/components'
   const {
     mapGetters,
     mapActions
@@ -137,7 +143,7 @@
 
   export default {
     name: 'ContractFrameForm',
-    props: ['slotData', 'templateData', 'templateId'],
+    props: ['slotData', 'templateData', 'templateId', 'isSignedPaper'],
     components: {
       ContractTypeSelect,
       ContractTemplateSelect,
@@ -176,23 +182,23 @@
 
         this.dialogTemplateVisible = true;
       },
-      async onSearchOrder (keyword, page, size) {
-        if (keyword == null) {
-          keyword = '';
-        }
-        const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url, {
-          keyword: keyword
-        }, {
-          page: page,
-          size: 10
-        });
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.orderPage = result;
-      },
+      // async onSearchOrder (keyword, page, size) {
+      //   if (keyword == null) {
+      //     keyword = '';
+      //   }
+      //   const url = this.apis().getPurchaseOrders();
+      //   const result = await this.$http.post(url, {
+      //     keyword: keyword
+      //   }, {
+      //     page: page,
+      //     size: 10
+      //   });
+      //   if (result['errors']) {
+      //     this.$message.error(result['errors'][0].message);
+      //     return;
+      //   }
+      //   this.orderPage = result;
+      // },
       onContractTypeChange (val) {
         this.contractType = val;
       },
@@ -348,7 +354,7 @@
         this.$emit('closeContractTypeDialog');
       },
       onSetOrderCode () {
-        if (this.slotData != null && this.slotData != '') {
+        if (this.slotData && this.slotData.code) {
           this.orderSelectFile = this.slotData;
           this.orderReadOnly = true;
           if (this.currentUser.type == 'BRAND') {
@@ -454,8 +460,8 @@
       };
     },
     created () {
-      this.onSearchOrder('', 0, 10);
-      this.onSetOrderCode();
+      // this.onSearchOrder('', 0, 10);
+      // this.onSetOrderCode();
     }
   };
 </script>

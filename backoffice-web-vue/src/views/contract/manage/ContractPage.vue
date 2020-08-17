@@ -35,9 +35,9 @@
         </el-tabs>
       </div>
     </el-card>
-    <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" :close-on-click-modal="false" append-to-body>
       <contract-type v-if="dialogVisible" @onSearch="onSearch" 
-                      @closeContractTypeDialog="this.dialogVisible = false" @openPreviewPdf="openPreviewPdf"/>
+                      @closeContractTypeDialog="dialogVisible = false" @openPreviewPdf="openPreviewPdf"/>
     </el-dialog>
   </div>
 </template>
@@ -193,7 +193,7 @@
       };
     },
     created () {
-      this.onSearch('');
+      this.onSearch(0, 10);
     }
   };
 </script>

@@ -748,6 +748,34 @@ const COMMON_APIS = {
   getProgressPhaseList() {
     return '/b2b/progress/phase';
   },
+  // 获取对账方案列表
+  getReconciliationPlan() {
+    return '/b2b/reconciliationPlan';
+  },
+  // 新建对账方案
+  createReconciliationPlan() {
+    return '/b2b/reconciliationPlan/create';
+  },
+  // 更新对账方案
+  updateReconciliationPlan(id) {
+    return '/b2b/reconciliationPlan/update/' + id;
+  },
+  // 获取对账方案详情
+  getReconciliationPlanDetail(id) {
+    return '/b2b/reconciliationPlan/' + id;
+  },
+  // 启用对账方案
+  enableReconciliationPlan(id) {
+    return '/b2b/reconciliationPlan/enable/' + id;
+  },
+  // 禁用对账方案
+  disableReconciliationPlan(id) {
+    return '/b2b/reconciliationPlan/disEnable/' + id;
+  },
+  // 删除对账方案
+  deleteReconciliationPlan(id) {
+    return '/b2b/reconciliationPlan/delete/' + id;
+  },
   // 获取代办列表
   getToDoList() {
     return '/b2b/todo/task/list';

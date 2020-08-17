@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="sales-plan-box">
-      <el-row type="flex" :gutter="10" justify="space-between">
+    <!-- <div class="sales-plan-box"> -->
+      <el-row type="flex" :gutter="10">
         <el-col :span="10">
           <div class="info-box">
             <!-- <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
@@ -106,18 +106,19 @@
               <!-- </el-row> -->
             </el-row>
           </div>
-
         </el-col>
         <el-col :span="6">
-          <div class="info-box" style="padding:10px">
-            <template v-if="form.type == 'SALES_ORDER' && form.state != 'TO_BE_ACCEPTED'">
+          <div class="info-box" >
+            <!-- <template v-if="form.type == 'SALES_ORDER' && form.state != 'TO_BE_ACCEPTED'">
               <contract-com @callback="callback" :slotData="form" :contracts="contracts"
                 :canSign="canSign" />
-            </template>
+            </template> -->
+            <production-contract :slotData="form" :contracts="contracts" :canSign="canSign" 
+                                  :isSignedPaper="isSignedPaper" @callback="callback"/>
           </div>
         </el-col>
       </el-row>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -138,6 +139,7 @@
   import PurchaseOrderInfoContract from '@/views/order/purchase/info/PurchaseOrderInfoContract';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ContractCom from '../contract/ContractCom';
+  import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
   import {
     PayPlanInfo
   } from '@/components/'
@@ -188,27 +190,34 @@
       },
       // 已签的合同列表
       contracts: function () {
-        return this.form.agreements ? this.form.agreements : [];
+        if (this.form.agreements) {
+          return this.form.agreements.filter(item => item.state !== 'INVALID');
+        }
+        return [];
       },
-      // 判断是否能签署合同
+      // 判断是否能创建合同
       canSign: function () {
-        // 未签合同 && 订单创建人 && 审核状态为 PASSED
-        if (this.form.agreements == undefined || this.form.agreements == null || this.form.agreements.length <= 0) {
-          return this.$store.getters.currentUser.uid == this.form.creator.uid &&
-                  this.form.auditState == 'PASSED' &&
-                  this.form.acceptState == 'ACCEPTED';
-        } else {
+        if (this.contracts.length > 0) {
           return false;
         }
-        
-        // if (this.form.creator != null) {
-        //   return this.form.agreements.length <= 0 &&
-        //     this.$store.getters.currentUser.uid == this.form.creator.uid &&
-        //     this.form.auditState == 'PASSED' &&
-        //     this.form.acceptState == 'ACCEPTED';
-        // } else {
-        //   return false;
-        // }
+
+        // 销售计划没有上流，随意可以添加纸质合同
+        if (!this.form.originCompany) {
+          return true;
+        } else {
+          return (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED') &&
+                   (this.$store.getters.currentUser.uid === this.form.sendBy.uid || 
+                   this.$store.getters.currentUser.uid === this.form.creator.uid);
+        }
+      },
+      isSignedPaper: function () {
+        console.log('--------------------------------------')
+        console.log(this.form.originCompany);
+        // 没有来源公司，只能签署纸质合同
+        if (this.form.originCompany) {
+          return false;
+        }
+        return true;
       }
     },
     components: {
@@ -216,7 +225,8 @@
       MTAVAT,
       PurchaseOrderInfoContract,
       PersonnelSelection,
-      PayPlanInfo
+      PayPlanInfo,
+      ProductionContract
     },
     props: {
       form: {
@@ -375,6 +385,7 @@
     height: 100%;
     border: 1px solid #dcdfe6;
     border-radius: 10px;
+    padding: 5px 0px 0px 5px;
   }
 
 </style>

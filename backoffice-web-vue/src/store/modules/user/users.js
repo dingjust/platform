@@ -52,9 +52,15 @@ const mutations = {
     sessionStorage.setItem('permissions', JSON.stringify(permissions));
     state.permissions = permissions;
   },
-  dataPermission(state, dataPermission) {
-    sessionStorage.setItem('dataPermission', JSON.stringify(dataPermission));
-    state.dataPermission = dataPermission;
+  dataPermission(state, data) {
+    if (data.length > 0) {
+      let dataPermission = {};
+      data.forEach(item => {
+        dataPermission[item.code] = item.permission;
+      })
+      sessionStorage.setItem('dataPermission', JSON.stringify(dataPermission));
+      state.dataPermission = dataPermission;
+    }
   }
 };
 const actions = {

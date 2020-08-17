@@ -65,35 +65,43 @@
 </template>
 
 <script>
-  import {
-    createNamespacedHelpers
-  } from 'vuex';
-
-  const {
-    mapActions
-  } = createNamespacedHelpers('PurchaseOrdersModule');
-
   export default {
     name: 'ContractFrameSelect',
-    props: ['page'],
+    props: [],
     components: {},
     computed: {},
     methods: {
-      ...mapActions({
-        refresh: 'refresh'
-      }),
-      onSearch () {
-        this.$emit('onSearchFrameContract', 0, 10, this.keyword);
+      async onSearch (page, size) {
+        const keyword = this.keyword;
+        const url = this.apis().getContractsList();
+        const result = await this.$http.post(url, {
+          type: 'KJXY',
+          // partyACompany: this.companyUid,
+          state: 'COMPLETE',
+          title: keyword
+        }, {
+          page: page,
+          size: size
+        });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.page = result;
       },
       onReset () {
-        this.$emit('onSearchFrameContract', 0, 10, '');
+        this.keyword = '';
       },
       async onPageSizeChanged (val) {
-        this._reset();
-        this.$emit('onSearchFrameContract', 0, val);
+        this.onSearch(0, val);
+        
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       async onCurrentPageChanged (val) {
-        this.$emit('onSearchFrameContract', val - 1, null, this.keyword);
+        this.onSearch(val - 1, 10)
+
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
@@ -120,8 +128,18 @@
       return {
         statuses: this.$store.state.PurchaseOrdersModule.statuses,
         selectedItem: {},
-        keyword: ''
+        keyword: '',
+        page: {
+          number: 0, // 当前页，从0开始
+          size: 10, // 每页显示条数
+          totalPages: 1, // 总页数
+          totalElements: 0, // 总数目数
+          content: [] // 当前页数据
+        }
       }
+    },
+    created () {
+      this.onSearch(0, 10);
     }
   }
 </script>

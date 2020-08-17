@@ -2,7 +2,7 @@
   <div class="table-container">
     <el-table ref="table" :data="reconciliationShippingOrders" style="width: 100%"
       @selection-change="handleSelectionChange" show-summary :summary-method="getSummaries">
-      <el-table-column type="selection" width="55" v-if="!readOnly"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="55" v-if="!readOnly"></el-table-column>
       <el-table-column label="发货单号" prop="code"></el-table-column>
       <el-table-column label="发货数" prop="totalQuantity"></el-table-column>
       <el-table-column label="收货单">

@@ -16,7 +16,7 @@ export default {
         //   name: '待我处理',
         //   url: '/task/handle',
         //   icon: 'iconNone'
-        // }, 
+        // },
         {
           name: '我的审批',
           url: '/task/approval',
@@ -94,7 +94,7 @@ export default {
         // {
         //   name: '发货任务',
         //   url: '/shipping/tasks',
-        // }, 
+        // },
         {
           name: '发货管理',
           url: '/shipping/shipping-receipt-sheet',
@@ -113,7 +113,7 @@ export default {
         //  {
         //   name: '对账任务',
         //   url: '/reconciliation/tasks/import',
-        // }, 
+        // },
         {
           name: '对账管理',
           url: '/shipping/reconciliation-manage',
@@ -149,7 +149,7 @@ export default {
         // {
         //   name: '收货任务',
         //   url: '/receipt/tasks',
-        // }, 
+        // },
         {
           name: '收货管理',
           url: '/receipt/shipping-receipt-sheet',
@@ -365,6 +365,14 @@ export default {
           requiresAuth: true,
           permissions: ['PROGRESS_PLAN']
         }
+      }, {
+        name: '对账配置',
+        url: '/account/setting/reconciliation-plan',
+        icon: 'iconNone',
+        // meta: {
+        //   requiresAuth: true,
+        //   permissions: ['RECONCILIATION_PLAN']
+        // }
       }, {
         name: '账务配置',
         url: '/account/setting/payPlan',
