@@ -148,7 +148,7 @@
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
           <el-col :span="24">
             <!-- <pay-plan-form-v4 :vPayPlan.sync="formData.payPlan" :showPreview="true"/> -->
-            <pay-plan-form-v2 :vPayPlan.sync="formData.payPlan" :showPreview="true" />
+            <pay-plan-form :formData="formData.payPlan" :showPreview="true" />
           </el-col>
         </el-row>
         <el-row>
@@ -249,9 +249,11 @@
     PayPlanFormV2,
     SupplierSelect
   } from '@/components/'
+  import PayPlanForm from "../../../../../components/custom/PayPlanForm";
   export default {
     name: 'OutboundOrderForm',
     components: {
+      PayPlanForm,
       PersonnelSelection,
       OutboundOrderColorSizeTable,
       ProductionTaskSelectDialog,
