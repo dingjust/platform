@@ -116,13 +116,13 @@
         let formData = Object.assign({}, tempData);
         const result = await http.post(url, formData);
         if (result.data != null) {
-          // this.$confirm('是否跳转到认证页面？', '', {
-          //   confirmButtonText: '是',
-          //   cancelButtonText: '否',
-          //   type: 'warning'
-          // }).then(() => {
+          this.$confirm('是否跳转到认证页面？', '', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
             window.open(result.data);
-          // });
+          });
         } else {
           this.$message.success(result.msg);
         }
