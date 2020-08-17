@@ -287,4 +287,14 @@ class B2BImage {
   static Image recommend_requirement({double width, double height}) {
     return getImage('temp/20200414163706.png', width: width, height: height);
   }
+
+  ///认证失败
+  static Image auth_fail({double width, double height}) {
+    return getImage('temp/auth_fail.png', width: width, height: height);
+  }
+
+  ///认证成功
+  static Image auth_success({double width, double height}) {
+    return getImage('temp/auth_success.png', width: width, height: height);
+  }
 }
