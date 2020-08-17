@@ -92,7 +92,21 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
-          <template v-for="(item, index) in formData.approvers">
+          <el-col :span="24">
+            <div style="display: flex;flex-wrap: wrap;">
+              <template v-for="(item,itemIndex) in formData.approvers">
+                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
+                  :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
+                  <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" style="width: 194px"/>
+                </el-form-item>
+              </template>
+              <el-button-group>
+                <el-button style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+                <el-button v-if="formData.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+              </el-button-group>
+            </div>
+          </el-col>
+          <!-- <template v-for="(item, index) in formData.approvers">
             <el-col :span="7" :key="index">
               <el-form-item label="审批人" prop="approvers"
                 :rules="[{type: Array, validator: validateAppeovers, trigger: 'change'}]">
@@ -103,7 +117,7 @@
           <el-col :span="2">
             <el-button @click="addApprover" v-if="formData.approvers.length < 2">+ 添加审核员</el-button>
             <el-button @click="deleteApprover" v-if="formData.approvers.length >= 2">删除</el-button>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="21">
@@ -133,8 +147,9 @@
 <script>
   import {
     PersonnelSelection,
-    ImagesUpload
-  } from '@/components/index.js'
+    ImagesUpload,
+    PersonnalSelectionV2
+  } from '@/components'
   import {
     OutboundOrderSelectPage
   } from '@/views/order/salesProduction/outbound-order/index.js'
@@ -148,7 +163,8 @@
     components: {
       PersonnelSelection,
       ImagesUpload,
-      OutboundOrderSelectPage
+      OutboundOrderSelectPage,
+      PersonnalSelectionV2
     },
     computed: {
 
@@ -194,18 +210,24 @@
         })
         this.countRequestAmount(row.id);
       },
-      addApprover() {
+      appendApprover () {
         this.formData.approvers.push({});
-        this.$nextTick(() => {
-          this.$refs.form.clearValidate();
-        })
       },
-      deleteApprover () {
-        this.formData.approvers.splice(1, 1);
-        this.$nextTick(() => {
-          this.$refs.form.clearValidate();
-        })
+      removeApprover () {
+        this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
       },
+      // addApprover() {
+      //   this.formData.approvers.push({});
+      //   this.$nextTick(() => {
+      //     this.$refs.form.clearValidate();
+      //   })
+      // },
+      // deleteApprover () {
+      //   this.formData.approvers.splice(1, 1);
+      //   this.$nextTick(() => {
+      //     this.$refs.form.clearValidate();
+      //   })
+      // },
       validateField(name) {
         this.$refs.form.validateField(name);
       },
