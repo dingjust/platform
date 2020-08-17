@@ -218,7 +218,14 @@
         const result = await http.get(url);
 
         if (result.data != null) {
-          window.open(result.data, '_blank');
+          this.$confirm('是否打开页面?', '', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            window.open(result.data, '_blank');
+          });
+
         } else {
           this.$message.success(result.msg);
         }

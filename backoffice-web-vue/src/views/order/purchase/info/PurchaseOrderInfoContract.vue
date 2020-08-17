@@ -1,21 +1,21 @@
 <template>
   <div class="info-detail-staff-body">
-    <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-contract-type @closeContractT="onCloseDialog" :slotData="slotData" v-if="hackSet"
-                              @onSaveContractForm="onSaveContractForm"
-                              @onSaveContractFormPdf="onSaveContractFormPdf"
-                              @onSaveContractPurchaseForm="onSaveContractPurchaseForm"
-                              @onSaveContractPurchaseFormPdf="onSaveContractPurchaseFormPdf"
-                              @onSaveContractFrameForm="onSaveContractFrameForm"
-                              @onSaveContractFrameFormPdf="onSaveContractFrameFormPdf"/>
+        @onSaveContractForm="onSaveContractForm" @onSaveContractFormPdf="onSaveContractFormPdf"
+        @onSaveContractPurchaseForm="onSaveContractPurchaseForm"
+        @onSaveContractPurchaseFormPdf="onSaveContractPurchaseFormPdf"
+        @onSaveContractFrameForm="onSaveContractFrameForm" @onSaveContractFrameFormPdf="onSaveContractFrameFormPdf" />
     </el-dialog>
-<!--    <el-dialog :visible.sync="dialogContractVisible" width="85%" :show-close="true" class="purchase-dialog"-->
-<!--      append-to-body :modal="true">-->
-<!--      <contract-form @closeContractFormDialog="closeContractFormDialog" :slotData="slotData" v-if="hackSet"></contract-form>-->
-<!--    </el-dialog>-->
+    <!--    <el-dialog :visible.sync="dialogContractVisible" width="85%" :show-close="true" class="purchase-dialog"-->
+    <!--      append-to-body :modal="true">-->
+    <!--      <contract-form @closeContractFormDialog="closeContractFormDialog" :slotData="slotData" v-if="hackSet"></contract-form>-->
+    <!--    </el-dialog>-->
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="85%" class="purchase-dialog" append-to-body
       :modal="true" :close-on-click-modal="false">
-      <purchase-contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @getContractsList="getContractsList" @showContract="showContract"/>
+      <purchase-contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @getContractsList="getContractsList"
+        @showContract="showContract" />
     </el-dialog>
     <el-dialog :visible.sync="dialogSealVisible" :show-close="false" :close-on-click-modal="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
@@ -38,13 +38,14 @@
       <el-row>
         <el-col v-if="contracts!=null && contracts!= []" :span="4" v-for="(item, index) in contracts" :key="index"
           :offset="0">
-          <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)" :title="item.title">
+          <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)"
+            :title="item.title">
             <el-row type="flex" justify="center">
-              <img src="static/img/word.png" class="info-img-word" alt="" :title="item.title"/>
+              <img src="static/img/word.png" class="info-img-word" alt="" :title="item.title" />
             </el-row>
             <el-row type="flex" justify="center">
               <el-col :span="16">
-                <h6 class="info-template-name" >{{ item.title }}</h6>
+                <h6 class="info-template-name">{{ item.title }}</h6>
               </el-col>
             </el-row>
           </div>
@@ -79,7 +80,7 @@
 
     },
     methods: {
-      async onSaveContractForm (formData) {
+      async onSaveContractForm(formData) {
         const url = this.apis().saveContract();
         const result = await http.post(url, formData);
 
@@ -103,33 +104,7 @@
         }
         this.getContractsList();
       },
-      async onSaveContractFormPdf (formData) {
-        const url = this.apis().saveContract();
-        const result = await http.post(url, formData);
-
-        if (result.code == 1) {
-          this.$message.success(result.msg);
-        } else if (result.code == 0) {
-          this.$message.error(result.msg);
-          return;
-        }
-
-        if (result.data != null && result.data != '') {
-          var url1 = this.apis().getContractDetail(result.data);
-          const result1 = await http.get(url1);
-          if (result1['errors']) {
-            this.$message.error(result1['errors'][0].message);
-            return;
-          }
-          this.thisContract = result1.data;
-          console.log(this.thisContract);
-
-          this.showContract(this.thisContract);
-        }
-
-        this.getContractsList();
-      },
-      async onSaveContractPurchaseForm (formData) {
+      async onSaveContractFormPdf(formData) {
         const url = this.apis().saveContract();
         const result = await http.post(url, formData);
 
@@ -155,7 +130,7 @@
 
         this.getContractsList();
       },
-      async onSaveContractPurchaseFormPdf (formData) {
+      async onSaveContractPurchaseForm(formData) {
         const url = this.apis().saveContract();
         const result = await http.post(url, formData);
 
@@ -181,7 +156,7 @@
 
         this.getContractsList();
       },
-      async onSaveContractFrameForm (formData) {
+      async onSaveContractPurchaseFormPdf(formData) {
         const url = this.apis().saveContract();
         const result = await http.post(url, formData);
 
@@ -207,7 +182,7 @@
 
         this.getContractsList();
       },
-      async onSaveContractFrameFormPdf (formData) {
+      async onSaveContractFrameForm(formData) {
         const url = this.apis().saveContract();
         const result = await http.post(url, formData);
 
@@ -233,7 +208,33 @@
 
         this.getContractsList();
       },
-      async onCreate () {
+      async onSaveContractFrameFormPdf(formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.showContract(this.thisContract);
+        }
+
+        this.getContractsList();
+      },
+      async onCreate() {
         const url = this.apis().getAuthenticationState();
         const result = await http.get(url);
         console.log(result);
@@ -261,7 +262,7 @@
       //   }
       //
       // },
-      async showContract (item) {
+      async showContract(item) {
         this.thisContract = item;
 
         const url = this.apis().downContract(item.code);
@@ -280,7 +281,7 @@
         this.pdfVisible = true;
         this.fileUrl = encodeURIComponent(aa)
       },
-      async onSearchSeal (vel, keyword, page, size) {
+      async onSearchSeal(vel, keyword, page, size) {
         if (vel != null) {
           this.contractCode = vel.code;
         }
@@ -303,7 +304,7 @@
         this.sealPage = result;
         this.dialogSealVisible = true
       },
-      async onSealSelectChange (data) {
+      async onSealSelectChange(data) {
         this.dialogSealVisible = false;
         const sealCode = data.code;
 
@@ -311,12 +312,18 @@
         const result = await http.get(url);
 
         if (result.data != null) {
-          window.open(result.data, '_blank');
+          this.$confirm('是否打开页面?', '', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            window.open(result.data, '_blank');
+          });
         } else {
           this.$message.success(result.msg);
         }
       },
-      async previewPdf (code) {
+      async previewPdf(code) {
         this.thisContract = await this.getContractDetail(code);
         const url = this.apis().downContract(code);
         const result = await http.get(url);
@@ -330,20 +337,20 @@
         this.fileUrl = encodeURIComponent(aa)
         this.pdfVisible = true;
       },
-      async getContractDetail (code) {
+      async getContractDetail(code) {
         const url = this.apis().getContractDetail(code);
         const result = await http.get(url);
         return result.data;
       },
-      async closeContractFormDialog () {
+      async closeContractFormDialog() {
         this.dialogContractVisible = false;
         this.getContractsList();
       },
-      async closeContractPdfViewDialog () {
+      async closeContractPdfViewDialog() {
         this.pdfVisible = false;
         this.getContractsList();
       },
-      async getContractsList () {
+      async getContractsList() {
         const url = this.apis().getContractsList();
         const result = await http.post(url, {
           orderCode: this.slotData.code
@@ -358,11 +365,11 @@
           }
         }
       },
-      onCloseDialog () {
+      onCloseDialog() {
         this.dialogVisible = false;
       }
     },
-    data () {
+    data() {
       return {
         dialogVisible: false,
         dialogContractVisible: false,
@@ -377,7 +384,7 @@
         hackSet: true
       }
     },
-    created () {
+    created() {
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
         this.pdfVisible = false;
@@ -400,7 +407,7 @@
       });
     },
     watch: {
-      dialogContractVisible (newValue, oldValue) {
+      dialogContractVisible(newValue, oldValue) {
         if (!newValue && oldValue) {
           this.hackSet = false;
           this.$nextTick(() => {
@@ -410,6 +417,7 @@
       }
     }
   }
+
 </script>
 <style>
   .info-detail-staff-body {
@@ -426,9 +434,9 @@
     font-size: 12px;
     width: 35px;
     height: 15px;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   .info-img-word {
