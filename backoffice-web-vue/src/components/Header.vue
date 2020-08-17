@@ -1,169 +1,148 @@
 <template>
-  <div >
-    <!--<el-dialog title="" :modal="true" :visible.sync="messageDialogVisible"  width="80%" class="radius-dialog "-->
-               <!--:close-on-click-modal="false" >-->
-      <!--<message-page />-->
-    <!--</el-dialog>-->
+  <div>
     <header class="app-header navbar">
-      <!-- <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
-        <span class="navbar-toggler-icon"></span>
-      </button> -->
-      <!-- <b-link class="navbar-brand" to="#"></b-link> -->
-      <!-- <button class="navbar-toggler sidebar-toggler d-md-down-none mr-auto" type="button" @click="sidebarToggle">
-        <span class="navbar-toggler-icon"></span>
-      </button> -->
-      <!-- <div>
-        <span class="navbar-brand" to="#"></span>
-      </div>
-      <div class="navbar-toggler aside-menu-toggler">
-        <span>宁波衣加衣供应链有限公司</span>
-      </div>
-      <b-navbar-nav class="ml-auto">
-        <HeaderDropdownAccnt />
-      </b-navbar-nav> -->
-      <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
-        <uniquecode-import-form />
-      </el-dialog>
-      <div class="navbar-logo">
-        <!-- <span class="navbar-brand" to="#"></span> -->
-        <el-row type="flex" justify="center">
-          <img class="navbar-logo-img" src="static/img/logo.51f4203.png" />
-        </el-row>
-        <el-row type="flex" justify="center">
-          <span class="navbar-logo-title">钉单{{clientName}}端</span>
-        </el-row>
-      </div>
-      <div class="navbar-toggler aside-menu-toggler">
-        <el-row type="flex" align="middle">
-          <span>{{currentUser.companyName}}</span>
-          <img class="navbar-authentication-img" :src="authenticated" />
-        </el-row>
-      </div>
-      <b-navbar-nav class="ml-auto">
-        <!-- <el-dropdown style="margin-right:50px;" @command="handleCommand">
-        <span class="el-dropdown-link navbar-dropdown">
-          快捷功能<i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="1">创建线下订单</el-dropdown-item>
-            <el-dropdown-item command="2">唯一码导入</el-dropdown-item>
-            <el-dropdown-item command="3">认证中心</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown> -->
-        <div class="input">
-          <el-input placeholder="搜索..." prefix-icon="el-icon-search" v-model="input2" size="small"
-                    id="header-input__inner">
-          </el-input>
-        </div>
-        <div class="icon-1">
-          <i class="iconfont icon_font">&#xe63f;</i>
-        </div>
-        <div class="icon-2">
-          <i class="iconfont icon_font_notification" @click="jumpToMessagePage">&#xe605;</i>
-        </div>
-        <div class="vertical-divider" />
-        <HeaderDropdownAccnt />
-      </b-navbar-nav>
+      <el-row type="flex" style="width:100%">
+        <el-col :xs="8" :sm="8" :md="10" :lg="12" :xl="12">
+          <el-row type="flex">
+            <div class="navbar-logo">
+              <img class="navbar-logo-img" src="static/img/logo.51f4203.png" />
+              <span class="navbar-logo-title">钉单{{clientName}}端</span>
+            </div>
+            <div class="navbar-toggler aside-menu-toggler">
+              <el-row type="flex" align="middle">
+                <span>{{currentUser.companyName}}</span>
+                <el-tag :type="authenticated?'success':'info'" effect="dark" style="margin-left:10px" size="mini">
+                  {{ authenticated?'已认证':'未认证'}}
+                </el-tag>
+              </el-row>
+            </div>
+          </el-row>
+        </el-col>
+        <el-col :xs="16" :sm="16" :md="14" :lg="12" :xl="12">
+          <el-row type="flex" justify="space-between" align="middle" style="padding-top:5px">
+            <el-col :xs="1" :sm="5" :md="8" :lg="10" :xl="10">
+              <div class="input">
+                <el-input placeholder="搜索..." prefix-icon="el-icon-search" v-model="input2" size="small"
+                  id="header-input__inner"></el-input>
+              </div>
+            </el-col>
+            <el-col :xs="23" :sm="19" :md="16" :lg="14" :xl="14">
+              <el-row type="flex" justify="end">
+                <i class="iconfont icon_font_notification" @click="jumpToMessagePage">&#xe605;</i>
+                <h6 class="qr_code-title">APP下载</h6>
+                <el-popover placement="bottom" width="280" v-model="qrVisible" trigger="hover">
+                  <el-image style="width: 250px; height: 250px"
+                    src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/app_qr.png" fit="fill"></el-image>
+                  <el-row type="flex" justify="center">钉单APP下载</el-row>
+                  <i class="iconfont2_2 icon-qr_code" slot="reference" @click="jumpToMessagePage">&#xe642;</i>
+                </el-popover>
+                <div class="vertical-divider" />
+                <HeaderDropdownAccnt />
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
     </header>
   </div>
-
 </template>
 <script>
-  import HeaderDropdownAccnt from './Header/HeaderDropdownAccnt';
-  import UniquecodeImportForm from '@/components/custom/UniquecodeImportForm';
+  import HeaderDropdownAccnt from "./Header/HeaderDropdownAccnt";
+  import UniquecodeImportForm from "@/components/custom/UniquecodeImportForm";
 
   export default {
-    name: 'AppHeader',
+    name: "AppHeader",
     components: {
       HeaderDropdownAccnt,
-      UniquecodeImportForm
+      UniquecodeImportForm,
     },
     computed: {
       authenticated: function () {
         if (this.authenticationInfo == null) {
-          return 'static/img/uncertified.png';
+          return false;
         } else {
-          if (this.authenticationInfo.companyState != null && this.authenticationInfo.companyState == 'SUCCESS') {
-            return 'static/img/certified.png';
-          } else if (this.authenticationInfo.personalState != null && this.authenticationInfo.personalState ==
-            'SUCCESS') {
-            return 'static/img/certified.png';
+          if (
+            this.authenticationInfo.companyState != null &&
+            this.authenticationInfo.companyState == "SUCCESS"
+          ) {
+            return true;
+          } else if (
+            this.authenticationInfo.personalState != null &&
+            this.authenticationInfo.personalState == "SUCCESS"
+          ) {
+            return true;
           } else {
-            return 'static/img/uncertified.png';
+            return false;
           }
         }
       },
       clientName: function () {
-        if (this.currentUser.type != null && this.currentUser.type == 'BRAND') {
-          return '品牌';
-        } else if (this.currentUser.type != null && this.currentUser.type == 'FACTORY') {
-          return '工厂';
+        if (this.currentUser.type != null && this.currentUser.type == "BRAND") {
+          return "品牌";
+        } else if (
+          this.currentUser.type != null &&
+          this.currentUser.type == "FACTORY"
+        ) {
+          return "工厂";
         } else {
-          return '平台';
+          return "平台";
         }
-      }
+      },
     },
-    data () {
+    data() {
       return {
-        input2: '',
+        input2: "",
         uniquecodeFormVisible: false,
         authenticationInfo: this.$store.getters.authenticationInfo,
         currentUser: this.$store.getters.currentUser,
-        messageDialogVisible: false
+        messageDialogVisible: false,
+        qrVisible: false,
       };
     },
     methods: {
-      sidebarToggle (e) {
+      sidebarToggle(e) {
         e.preventDefault();
-        document.body.classList.toggle('sidebar-hidden');
+        document.body.classList.toggle("sidebar-hidden");
       },
-      sidebarMinimize (e) {
+      sidebarMinimize(e) {
         e.preventDefault();
-        document.body.classList.toggle('sidebar-minimized');
+        document.body.classList.toggle("sidebar-minimized");
       },
-      mobileSidebarToggle (e) {
+      mobileSidebarToggle(e) {
         e.preventDefault();
-        document.body.classList.toggle('sidebar-mobile-show');
+        document.body.classList.toggle("sidebar-mobile-show");
       },
-      asideToggle (e) {
+      asideToggle(e) {
         e.preventDefault();
-        document.body.classList.toggle('aside-menu-hidden');
+        document.body.classList.toggle("aside-menu-hidden");
       },
-      handleCommand (command) {
+      handleCommand(command) {
         switch (command) {
-          case '1':
-            this.$router.push('/orderPurchase');
+          case "1":
+            this.$router.push("/orderPurchase");
             break;
-          case '2':
+          case "2":
             this.uniquecodeFormVisible = !this.uniquecodeFormVisible;
             break;
-          case '3':
-            this.$router.push('/account/Authentication');
+          case "3":
+            this.$router.push("/account/Authentication");
             break;
           default:
             break;
         }
       },
-      jumpToMessagePage () {
-        this.$router.push('/message');
-      }
-    }
+      jumpToMessagePage() {
+        this.$router.push("/message");
+      },
+    },
   };
+
 </script>
 
 <style>
   .icon-1 {
     margin-left: 40px;
     margin-right: 20px;
-  }
-
-  .icon-2 {
-    margin-left: 20px;
-    margin-right: 40px;
-  }
-
-  .icon_font {
-    font-size: 24px;
   }
 
   .icon_font_notification {
@@ -176,6 +155,20 @@
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
     cursor: pointer;
+    margin-right: 20px;
+    line-height: 20px;
+    padding-top: 5px;
+  }
+
+  .icon-qr_code {
+    margin-right: 20px;
+    line-height: 28px;
+    padding-top: 5px;
+    font-size: 28px;
+  }
+
+  .icon-qr_code:hover {
+    cursor: pointer;
   }
 
   #header-input__inner {
@@ -184,7 +177,7 @@
   }
 
   .vertical-divider {
-    height: 20px;
+    height: 30px;
     width: 0.3px;
     border: solid #000 0.3px;
     margin-right: 20px;
@@ -194,7 +187,7 @@
     margin-left: 20px;
     margin-right: 80px;
     margin-bottom: 5px;
-    width: 80px;
+    width: 120px;
   }
 
   .navbar-authentication-img {
@@ -218,9 +211,9 @@
     font-weight: 600;
   }
 
-</style>
-<style scoped>
-  /deep/ .el-dialog__body{
-    padding-top: 0px !important;
+  .qr_code-title {
+    padding-top: 5px;
+    line-height: 20px;
+    margin-right: 5px;
   }
 </style>
