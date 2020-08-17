@@ -58,13 +58,19 @@
               <el-checkbox v-model="formData.isApproval" @change="onIsApprovalChange">需审核</el-checkbox>
             </el-form-item>
           </el-col>
-          <el-col :span="20">
-            <template v-for="(item,itemIndex) in formData.approvers">
-              <el-form-item :key="'a'+itemIndex" :label="'审批人'" label-width="100px" :prop="'approvers.' + itemIndex"
-                :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
-                <personnel-selection :vPerson.sync="formData.approvers[itemIndex]" :readOnly="!formData.isApproval" />
-              </el-form-item>
-            </template>
+          <el-col :span="22">
+            <div style="display: flex;flex-wrap: wrap;">
+              <template v-for="(item,itemIndex) in formData.approvers">
+                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
+                  :prop="'approvers.' + itemIndex" :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
+                  <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" :disabled="!formData.isApproval" style="width: 194px"/>
+                </el-form-item>
+              </template>
+              <el-button-group>
+                <el-button style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+                <el-button v-if="formData.approvers.length > 1" stfyle="height: 32px" @click="removeApprover">删除</el-button>
+              </el-button-group>
+            </div>
           </el-col>
         </el-row>
         <el-row type="flex" v-else style="margin-top:20px">
@@ -114,8 +120,9 @@
 
 <script>
   import {
-    PersonnelSelection
-  } from '@/components/'
+    PersonnelSelection,
+    PersonnalSelectionV2
+  } from '@/components'
 
   export default {
     name: 'ReconciliationOrdersFormFoot',
@@ -134,9 +141,16 @@
       }
     },
     components: {
-      PersonnelSelection
+      PersonnelSelection,
+      PersonnalSelectionV2
     },
     computed: {
+      appendApprover () {
+        this.formData.approvers.push({});
+      },
+      removeApprover () {
+        this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
+      },
       //发货方
       isShipPart: function () {
         if (this.formData.shipParty) {
@@ -238,4 +252,7 @@
     transform: scale(0.8, 0.8);
   }
 
+  .form-foot >>> .el-form-item__content {
+    margin-left: 0px!important;
+  }
 </style>

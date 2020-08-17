@@ -137,13 +137,13 @@
     },
     data() {
       return {
-        pageSign: 'SALES_PLAN',
         activeName: 'TO_BE_SUBMITTED',
         statuses: [],
         queryFormData: {
           keyword: '',
           planLeader: '',
           originCooperator: '',
+          cooperator: '',
           state: 'TO_BE_SUBMITTED'
         },
         stateCount: {},
@@ -151,7 +151,7 @@
       }
     },
     created() {
-      this.dataQuery = this.getDataPerQuery(this.pageSign);
+      this.dataQuery = this.getDataPerQuery('SALES_PLAN');
       this.onResetQuery();
       this.onAdvancedSearch(0, 10);
       this.statuses = Object.assign([], this.$store.state.EnumsModule.SalesProductionOrderState);

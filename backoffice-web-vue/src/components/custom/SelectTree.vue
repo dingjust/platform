@@ -21,7 +21,7 @@
         default: () => []
       },
       vSelectData: {
-        type: Object
+        required: true
       }
     },
     components: {

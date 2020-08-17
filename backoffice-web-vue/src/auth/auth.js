@@ -73,7 +73,8 @@ export function hasPermission(authority) {
 }
 
 export function getDataPermissionQuery (from) {
-
+  console.log('--------------------------------------')
+  console.log(from)
   const currentUser = getCurrentUser();
   
   if (currentUser == null) {
@@ -102,7 +103,7 @@ export function getDataPermissionQuery (from) {
     }
   } else if (dataPer[from] === 'BELONG_DEPT_DATA') {
     query = {
-      depts: currentUser.dept ? [currentUser.dept] : [],
+      depts: currentUser.dept ? [currentUser.dept.id] : [],
       users: currentUser.dept ? [] : [currentUser.id] 
     }
   } else if (dataPer[from] === 'SELF_DATA') {

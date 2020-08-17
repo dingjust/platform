@@ -108,7 +108,7 @@
           </el-col>
         </el-row>
         <div class="form-block-content">
-          <el-row type="flex" align="center" :gutter="10">
+          <el-row type="flex" align="center" :gutter="10" style="margin-bottom: 10px">
             <!-- <el-col :span="5">
               <el-form-item label="总负责人" label-width="85px">
                 <el-input v-model="form.productionLeader.name" :disabled="true">
@@ -138,7 +138,10 @@
                     <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded" style="width: 194px"/>
                   </el-form-item>
                 </template>
-                <el-button style="height: 32px;margin-left: 10px;" @click="appendApprover">+ 添加审批人</el-button>
+                <el-button-group>
+                  <el-button style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+                  <el-button v-if="form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+                </el-button-group>
               </div>
             </el-col>
           </el-row>
@@ -283,6 +286,9 @@
     methods: {
       appendApprover () {
         this.form.approvers.push({});
+      },
+      removeApprover () {
+        this.form.approvers.splice(this.form.approvers.length - 1, 1);
       },
       handleClick (value) {
         // if (!value) {

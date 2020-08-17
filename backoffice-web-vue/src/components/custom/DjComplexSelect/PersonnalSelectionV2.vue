@@ -8,6 +8,15 @@
 </template>
 
 <script>
+import {
+  createNamespacedHelpers
+} from "vuex";
+
+const {
+  mapState,
+} = createNamespacedHelpers(
+  "OrganizationModule"
+);
 export default {
   name: 'PersonnalSelectionV2',
   props: {
@@ -23,46 +32,22 @@ export default {
   data () {
     return {
       deptList: [],
-      person: []
+      person: [],
+      personList: []
     }
   },
+  computed: {
+    ...mapState({
+      deptOptions: state => state.deptList.options,
+      loading: state => state.deptList.loading,
+      personOptions: state => state.personList.options,
+    })
+  },
   methods: {
-    async getDeptList () {
-      const url = this.apis().getB2BCustomerDeptList();
-      const result = await this.$http.post(url);
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
-      this.deptList = result.data;
-
-      await this.getPersonList();
-    },
-    async getPersonList () {
-      const url = this.apis().getB2BCustomers();
-      const result = await this.$http.post(url, {
-        enable: false
-      }, {
-        page: 0,
-        size: 99
-      })
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
-
-      this.personList = result.content;
-
-      // 组建tree
-      await this.createDeptPersonTree();
+    initData () {
+      this.deptList = JSON.parse(JSON.stringify(this.deptOptions));
+      this.personList = JSON.parse(JSON.stringify(this.personOptions));
+      this.createDeptPersonTree();
     },
     createDeptPersonTree () {
       this.personList.forEach(item => {
@@ -76,9 +61,9 @@ export default {
         }
 
         // 主账号没所属部门时，跟一级部门同级
-        if (item.root && item.b2bDept == null) {
+        if (item.root && item.uid === this.$store.getters.currentUser.uid && item.b2bDept == null) {
           this.deptList.push(item);
-        }
+        } 
       })
 
       // 处理数据回显
@@ -132,10 +117,26 @@ export default {
     },
     person: function (newVal, oldVal) {
       this.$emit('update:vPerson', newVal);
+    },
+    loading: function (nval, oval) {
+      if (nval === false) {
+        this.initData();
+      }
     }
   },
   created () {
-    this.getDeptList();
+    if (this.loading === false) {
+      this.initData();
+    }
+  },
+  beforeCreate () {
+    this.$store.commit('OrganizationModule/deptList', {cmd: 'plusRef'});
+    if (this.$store.state.OrganizationModule.deptList.refNum <= 1) {
+      this.$store.dispatch('OrganizationModule/loadDeptList', this);
+    }
+  },
+  destroyed() {
+    this.$store.commit('OrganizationModule/deptList', {cmd: "minusRef"});
   }
 }
 </script>

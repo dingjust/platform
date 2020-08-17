@@ -6,9 +6,11 @@
           <el-form-item label="订单信息">
             <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 130px"></el-input>
           </el-form-item>
-          <el-form-item label="负责人">
-            <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 120px">
-            </el-input>
+          <el-form-item label="部门/人员">
+            <!-- <el-input placeholder="输入负责人名称" v-model="queryFormData.productionLeaderName" style="width: 120px">
+            </el-input> -->
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="120"
+                                :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <el-form-item label="合作商">
             <el-input placeholder="输入合作商名称" v-model="queryFormData.operatorName" style="width: 120px"></el-input>
@@ -34,11 +36,13 @@
 </template>
 
 <script>
+  import { DeptPersonSelect } from '@/components'
+
   export default {
     name: 'ReconciliationTasksToolbar',
-    props: ['queryFormData', 'canCreate'],
+    props: ['queryFormData', 'canCreate', 'dataQuery'],
     components: {
-
+      DeptPersonSelect
     },
     computed: {
 
@@ -54,6 +58,8 @@
         this.queryFormData.operatorName = '';
         this.queryFormData.creationtimeStart = '';
         this.queryFormData.creationtimeEnd = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       },
       onCreate() {
         this.$emit('onCreate');

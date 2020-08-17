@@ -8,9 +8,10 @@
           </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="5"> -->
-          <el-form-item label="负责人" prop="name">
+          <el-form-item label="部门/人员" prop="name">
             <!-- <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input> -->
-            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                                :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="5"> -->

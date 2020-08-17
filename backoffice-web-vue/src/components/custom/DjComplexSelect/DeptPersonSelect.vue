@@ -1,18 +1,31 @@
 <template>
   <div>
-    <el-cascader v-model="selectData" :options="deptList"
-                :disabled="cascaderDisabled"
-                :props=" { 
-                  multiple: true,
-                  checkStrictly: checkStrictly,
-                  value: 'mark',
-                  label: 'name'
-                }" collapse-tags clearable>
-    </el-cascader>
+    <el-tooltip :content="tipTilte" placement="top" effect="light" :disabled="selectData.length <= 0">
+      <el-cascader v-model="selectData" :options="deptList"
+                  :style="'width:' + width + 'px'"
+                  :disabled="cascaderDisabled"
+                  :props=" { 
+                    multiple: true,
+                    checkStrictly: checkStrictly,
+                    value: 'mark',
+                    label: 'name'
+                  }" clearable>
+      </el-cascader>
+    </el-tooltip>
   </div>
 </template>
 
 <script>
+import {
+  createNamespacedHelpers
+} from "vuex";
+
+const {
+  mapState,
+} = createNamespacedHelpers(
+  "OrganizationModule"
+);
+
 export default {
   name: 'DeptPersonSelect',
   props: {
@@ -31,51 +44,39 @@ export default {
     dataQuery: {
       type: Object,
       default: () => {}
+    },
+    width: {
+      type: String,
+      default: '194'
     }
   },
   components: {
   },
   computed: {
+    ...mapState({
+      deptOptions: state => state.deptList.options,
+      loading: state => state.deptList.loading,
+      personOptions: state => state.personList.options,
+    }),
     cascaderDisabled: function () {
       return this.dataQuery.users.length > 0;
+    },
+    tipTilte: function () {
+      let str = '';
+      str = this.selectData.map(item => {
+        return item.map(val => {
+          return val.name;
+        }).join('/');
+      }).join(', ');
+      return str;
     }
   },
   methods: {
-    async getDeptList () {
-      const url = this.apis().getB2BCustomerDeptList();
-      const result = await this.$http.post(url);
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
-      this.deptList = result.data;
+    initData () {
+      this.deptList = JSON.parse(JSON.stringify(this.deptOptions));
       this.setMark(this.deptList, 'dept');
-
-      await this.getPersonList();
-    },
-    async getPersonList () {
-      const url = this.apis().getB2BCustomers();
-      const result = await this.$http.post(url, {}, {
-        page: 0,
-        size: 99
-      })
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
-
-      this.personList = result.content;
-
-      // 组建tree
-      await this.createDeptPersonTree();
+      this.personList = JSON.parse(JSON.stringify(this.personOptions));
+      this.createDeptPersonTree();
     },
     setMark (tree, type) {
       let stark = [];
@@ -86,7 +87,8 @@ export default {
         let temp = stark.shift();
         this.$set(temp, 'mark', {
           type: type,
-          id: temp.id
+          id: temp.id,
+          name: temp.name
         })
         if (temp.children) {
           stark = stark.concat(temp.children);
@@ -97,14 +99,20 @@ export default {
       this.personList.forEach(item => {
         this.$set(item, 'mark', {
           type: 'person',
-          id: item.id
+          id: item.id,
+          name: item.name
         })
         if (item.b2bDept) {
           let temp = this.breadthQuery(this.deptList, item.b2bDept.id);
           temp.children.push(item);
         }
+        
+        // 主账号没所属部门时，跟一级部门同级
+        if (item.root && item.uid === this.$store.getters.currentUser.uid && item.b2bDept == null) {
+          this.deptList.push(item);
+        } 
       })
-
+       
       // 回显
       if (this.dataQuery.depts.length > 0 || this.dataQuery.users.length > 0) {
         this.echoData();
@@ -115,7 +123,7 @@ export default {
       if (this.dataQuery.depts.length > 0 && this.dataQuery.depts[0] !== 0) {
         arr = this.familyTree(this.deptList, this.dataQuery.depts[0]);
       } else if (this.dataQuery.depts.length > 0 && this.dataQuery.depts[0] === 0) {
-        arr = this.deptList;
+        return;
       } else if (this.dataQuery.users.length > 0) {
         arr = this.familyTree(this.deptList, this.dataQuery.users[0]);
       }
@@ -205,17 +213,45 @@ export default {
   },
   watch: {
     selectData: function (nval, oval) {
+      // 数据清空,恢复默认权限
+      if (nval.length <= 0) {
+        this.selectDept.length = 0;
+        this.selectPerson.length = 0;
+        this.echoData();
+        return;
+      }
       if (nval) {
         this.setSelect(this.selectData);
+      }
+    },
+    loading: function (nval, oval) {
+      if (nval === false) {
+        this.initData();
       }
     }
   },
   created () {
-    this.getDeptList();
+    if (this.loading === false) {
+      this.initData();
+    }
+  },
+  beforeCreate () {
+    this.$store.commit('OrganizationModule/deptList', {cmd: 'plusRef'});
+    if (this.$store.state.OrganizationModule.deptList.refNum <= 1) {
+      this.$store.dispatch('OrganizationModule/loadDeptList', this);
+    }
+  },
+  destroyed() {
+    this.$store.commit('OrganizationModule/deptList', {cmd: "minusRef"});
   }
 }
 </script>
 
 <style scoped>
-
+  /deep/ .el-cascader__tags {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 </style>

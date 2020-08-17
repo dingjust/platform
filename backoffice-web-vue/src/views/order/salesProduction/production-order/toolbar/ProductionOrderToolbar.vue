@@ -6,39 +6,36 @@
     </el-dialog>
     <el-form :inline="true">
       <el-row type="flex">
-        <!-- <el-form-item label="品牌名"> -->
-        <el-col :span="20">
-          <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword"
-            class="purchase-toolbar-input"></el-input>
-          <!-- </el-form-item> -->
+        <el-col :span="24">
+          <el-form-item label="订单信息">
+            <el-input style="width:170px;" placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword"
+              class="purchase-toolbar-input"></el-input>
+          </el-form-item>
+          <el-form-item label="部门/人员" v-if="!isOutProduction">
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="160"
+                                :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
+          </el-form-item>
+          <el-form-item label="合作商">
+            <el-input style="width:140px;" placeholder="输入合作商名称" v-model="queryFormData.cooperator"
+              class="purchase-toolbar-input"></el-input>
+          </el-form-item>
           <el-form-item label="日期">
-            <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
+            <el-date-picker style="width:220px;" v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
               value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
               :picker-options="pickerOptions">
             </el-date-picker>
           </el-form-item>
-          <!-- <el-form-item label="跟单员">
-        <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
-      </el-form-item> -->
-          <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
-          <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
-          reserve-keyword clearable>
-          <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
-            <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name" :value="level2.name">
-            </el-option>
-          </el-option-group>
-        </el-select> -->
-          <el-form-item label="分类">
+          <!-- <el-form-item label="分类">
             <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories"
               :props="{ label: 'name',value:'code'}" clearable>
             </el-cascader>
-          </el-form-item>
+          </el-form-item> -->
           <el-button-group>
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
-        <el-col :span="4">
+        <!-- <el-col :span="2">
           <el-row type="flex" justify="end">
             <authorized :permission="['OUT_ORDER_CREATE']">
               <el-button v-if="!isOutProduction  && !isAllocating" type="primary" class="create-button"
@@ -49,7 +46,7 @@
               <el-button v-if="isAllocating" type="primary" class="create-button" @click="onAllocating">去分配</el-button>
             </authorized>
           </el-row>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-form>
   </div>
@@ -65,6 +62,7 @@
   const {
     mapMutations
   } = createNamespacedHelpers('ProductionOrderModule');
+  import { DeptPersonSelect } from '@/components'
 
   export default {
     name: 'ProductionOrderToolbar',
@@ -79,10 +77,14 @@
       isAllocating: {
         type: Boolean,
         default: false
+      },
+      dataQuery: {
+        type: Object
       }
     },
     components: {
-      UniquecodeImportForm
+      UniquecodeImportForm,
+      DeptPersonSelect
     },
     computed: {},
     methods: {
@@ -103,6 +105,8 @@
         this.dateTime = null;
         this.queryFormData.keyword = '';
         this.queryFormData.categories = [];
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       },
       async getFactories(query) {
         const url = this.apis().getFactories();

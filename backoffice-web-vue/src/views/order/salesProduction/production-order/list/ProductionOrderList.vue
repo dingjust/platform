@@ -189,6 +189,9 @@
         return amount;
       },
       rowDisabled(row, index) {
+        if (!row.productionLeader) {
+          return false;
+        }
         // 待分配列表非自身负责人不能勾选
         if (this.isAllocating) {
           return this.$store.getters.currentUser.uid == row.productionLeader.uid;

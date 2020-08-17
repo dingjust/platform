@@ -1,7 +1,8 @@
 <template>
   <div>
     <reconsider-orders-toolbar :queryFormData="queryFormData" :ableToApply="ableToApply"
-      @onAdvancedSearch="onAdvancedSearch" @onApply="onApply" />
+                                @onAdvancedSearch="onAdvancedSearch" @onApply="onApply" 
+                                :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-row type="flex" justify="start">
       <h6 style="color: #F56C6C">注明：待复议中的发货订单，申请复议时间为5天，如5天内没有申请复议，则视为放弃复议，此发货单将不再接受复议</h6>
     </el-row>
@@ -55,6 +56,10 @@
       mode: {
         type: String,
         default: 'import'
+      },
+      dataQuery: {
+        type: Object,
+        default: () => {}
       }
     },
     components: {
@@ -152,6 +157,9 @@
           return;
         }
         this.$set(this.stateCount, 'reconsider', result.data);
+      },
+      onResetQuery () {
+        this.$emit('onResetQuery');
       }
     },
     created() {
