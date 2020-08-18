@@ -48,7 +48,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-dialog :visible.sync="uniqueCodeImportFormVisible" width="30%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="uniqueCodeImportFormVisible" width="50%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <unique-code-import-form @callback="onImportCallback" />
     </el-dialog>

@@ -11,8 +11,8 @@
       </el-row>
       <div class="pt-2"></div>
       <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onAllocating="onAllocating"
-                                @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating" 
-                                :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
+        @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating" :dataQuery="dataQuery"
+        @onResetQuery="onResetQuery" />
       <div>
         <div class="tag-container" v-if="!isAllocating">
           <el-row type="flex" justify="end" align="middle">
@@ -23,12 +23,14 @@
                 </el-button>
                 <el-button class="type-btn" :style="outBtnColor" @click="setQueryOrderType('FOUNDRY_PRODUCTION')">外发
                 </el-button>
-                <el-button class="type-btn" :style="selfBtnColor" @click="setQueryOrderType('SELF_PRODUCED')">自产</el-button>
+                <el-button class="type-btn" :style="selfBtnColor" @click="setQueryOrderType('SELF_PRODUCED')">自产
+                </el-button>
               </el-row>
             </el-col>
             <el-col :span="6">
               <authorized :permission="['OUT_ORDER_CREATE']">
-                <el-button v-if="!isAllocating" type="primary" class="create-button" @click="onCreate">创建外发订单</el-button>
+                <el-button v-if="!isAllocating" type="primary" class="create-button" @click="onCreate">创建外发订单
+                </el-button>
               </authorized>
             </el-col>
           </el-row>
@@ -129,7 +131,7 @@
         });
       },
       async onAdvancedSearch(page, size) {
-       if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
           this.onResetQuery();
         }
         this.setIsAdvancedSearch(true);
@@ -211,8 +213,8 @@
             originOrder: {
               id: item.id
             },
-            unitPrice: '',
-            deliveryDate: '',
+            unitPrice: item.unitPrice,
+            deliveryDate: item.deliveryDate,
             shippingAddress: item.shippingAddress,
             product: item.product,
             progressPlan: progressPlan,
@@ -248,7 +250,7 @@
         })
         return row;
       },
-      onResetQuery () {
+      onResetQuery() {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
@@ -386,4 +388,5 @@
     width: 100px;
     color: #606266;
   }
+
 </style>

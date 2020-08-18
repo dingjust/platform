@@ -19,7 +19,7 @@
     </el-row>
     <el-row type="flex">
       <el-table ref="resultTable" stripe :data="page.content" @selection-change="handleSelectionChange"
-        @current-change="handleCurrentChange" :height="autoHeight" :row-key="getRowKeys">
+        :height="autoHeight" :row-key="getRowKeys">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="产品图片" width="120">
           <template slot-scope="scope">
@@ -106,9 +106,6 @@
       onCurrentPageChanged(val) {
         this.onSearch(val - 1);
       },
-      handleCurrentChange(newRow, oldRow) {
-        this.multipleSelection = newRow;
-      },
       onNew() {
         this.detailsVisiable = true;
       },
@@ -120,7 +117,11 @@
         this.onSearch();
       },
       onConfirm() {
-        this.$emit('onSelectSample', this.multipleSelection);
+        if (this.multipleSelection != null && this.multipleSelection.length > 0) {
+          this.$emit('onSelectSample', this.multipleSelection);
+        } else {
+          this.$message('请选择产品');
+        }
       }
     },
     data() {

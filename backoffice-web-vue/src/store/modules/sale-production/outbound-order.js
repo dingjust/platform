@@ -71,7 +71,8 @@ const state = {
     merchandiser: {
       id: '',
       name: ''
-    }
+    },
+    manageWay:''
   },
   queryFormData: {
     keyword: '',

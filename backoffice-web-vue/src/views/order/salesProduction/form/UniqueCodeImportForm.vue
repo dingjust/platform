@@ -7,9 +7,10 @@
     </el-row>
     <el-row type="flex" justify="center">
       <el-input v-model="uniqueCode" placeholder="输入唯一码">
-        <el-button slot="append" @click="onSure">确定</el-button>
+        <el-button slot="append" @click="onSearch">检索</el-button>
       </el-input>
     </el-row>
+    
   </div>
 </template>
 
@@ -22,7 +23,17 @@
 
     },
     methods: {
-      async onSure() {
+      async onSearch() {
+
+      },
+      onSure() {
+        this.$confirm('确认导入？')
+          .then(_ => {
+            this._onSure();
+          })
+          .catch(_ => {});
+      },
+      async _onSure() {
         const url = this.apis().importSalesOrderByUniqueCode(this.uniqueCode);
         const result = await this.$http.get(url);
         if (result["errors"]) {

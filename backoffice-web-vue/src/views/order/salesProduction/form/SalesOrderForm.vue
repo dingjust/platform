@@ -97,7 +97,8 @@
         </el-row>
         <el-row type="flex" style="padding-left: 20px">
           <el-col :span="24">
-            <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" />
+            <!-- <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" /> -->
+            <pay-plan-form :formData="form.payPlan" :isUseForOrder="true" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="space-between" align="middle">
@@ -192,7 +193,7 @@
   import SampleProductsSelectDialog from '@/views/product/sample/components/SampleProductsSelectDialog';
 
   import {
-    PayPlanFormV2,
+    PayPlanForm,
     DeptSelection,
     PersonnalSelectionV2
   } from '@/components'
@@ -205,7 +206,7 @@
   export default {
     name: 'SalesOrderForm',
     components: {
-      PayPlanFormV2,
+      PayPlanForm,
       SalesPlanAppendProductForm,
       MTAVAT,
       SupplierSelect,

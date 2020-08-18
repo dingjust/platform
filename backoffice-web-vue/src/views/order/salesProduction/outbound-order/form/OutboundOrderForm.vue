@@ -13,7 +13,8 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
+      <el-form ref="form" label-width="80px" :rules="rules" :model="formData" label-position="left">
+        <outbound-type-select :formData="formData" />
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -42,7 +43,7 @@
           </el-col>
         </el-row>
         <template v-for="(item, index) in formData.taskOrderEntries">
-          <el-form ref="itemForm" label-width="80px" :model="item">
+          <el-form ref="itemForm" label-width="80px" :model="item" :key="'form'+index">
             <el-row type="flex" justify="end" v-if="index > 0">
               <el-col :span="2">
                 <el-button class="outbound-btn" @click="deleteRow(index)">删除</el-button>
@@ -100,7 +101,7 @@
               </el-col>
             </el-row>
           </el-form>
-          <el-divider />
+          <el-divider :key="'divider'+index" />
         </template>
         <el-row type="flex" justify="center" class="info-order-row" align="middle">
           <el-col :span="24">
@@ -146,8 +147,7 @@
           </el-col>
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
-          <el-col :span="24">
-            <!-- <pay-plan-form-v4 :vPayPlan.sync="formData.payPlan" :showPreview="true"/> -->
+          <el-col :span="24">          
             <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" />
           </el-col>
         </el-row>
@@ -260,12 +260,13 @@
   import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ProgressPlanEditForm from '@/views/user/progress-plan/components/ProgressPlanEditForm'
+  import OutboundTypeSelect from '../components/OutboundTypeSelect'
   import {
-    PayPlanFormV2,
     SupplierSelect,
-    PersonnalSelectionV2
+    PersonnalSelectionV2,
+    PayPlanForm
   } from '@/components'
-  import PayPlanForm from "../../../../../components/custom/PayPlanForm";
+  
   export default {
     name: 'OutboundOrderForm',
     components: {
@@ -279,8 +280,8 @@
       MTAVAT,
       MyAddressForm,
       SupplierSelect,
-      PayPlanFormV2,
       ProgressPlanEditForm,
+      OutboundTypeSelect,
       PersonnalSelectionV2
     },
     methods: {
@@ -385,8 +386,8 @@
               originOrder: {
                 id: item.id
               },
-              unitPrice: '',
-              deliveryDate: '',
+              unitPrice: item.unitPrice,
+              deliveryDate: item.deliveryDate,
               shippingAddress: item.shippingAddress,
               product: {
                 id: item.product.id,
