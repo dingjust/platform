@@ -423,7 +423,9 @@
         this.validateField('productionOrder');
       },
       'formData.approvers': function (nval, oval) {
-        this.validateField('approvers');
+        this.formData.approvers.forEach((item, index) => {
+          this.validateField('approvers.' + index);
+        })
       }
     },
     created() {

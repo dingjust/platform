@@ -59,8 +59,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="22">
-            <!-- <div style="display: flex;flex-wrap: wrap;">
-              <template v-for="(item,itemIndex) in formData.approvers">
+            <div style="display: flex;flex-wrap: wrap;">
+              <template v-for="(item, itemIndex) in formData.approvers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
                   :prop="'approvers.' + itemIndex" :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
                   <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" :disabled="!formData.isApproval" style="width: 194px"/>
@@ -70,7 +70,7 @@
                 <el-button style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
                 <el-button v-if="formData.approvers.length > 1" stfyle="height: 32px" @click="removeApprover">删除</el-button>
               </el-button-group>
-            </div> -->
+            </div>
           </el-col>
         </el-row>
         <el-row type="flex" v-else style="margin-top:20px">
@@ -145,12 +145,6 @@
       PersonnalSelectionV2
     },
     computed: {
-      appendApprover () {
-        this.formData.approvers.push({});
-      },
-      removeApprover () {
-        this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
-      },
       //发货方
       isShipPart: function () {
         if (this.formData.shipParty) {
@@ -191,6 +185,12 @@
       },
     },
     methods: {
+      appendApprover () {
+        this.formData.approvers.push({});
+      },
+      removeApprover () {
+        this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
+      },
       addReduceRow() {
         this.formData.deductions.push({
           amount: null,
@@ -217,19 +217,29 @@
         }
       },
       onIsOriginApprovalChange(val) {
-        // this.$set(this,'selectDisable',!val);
+        this.$set(this,'selectDisable',!val);
         this.selectDisable = !val;
         if (val) {
           if (this.formData.originApprovers == null || this.formData.originApprovers.length == 0) {
             this.$set(this.formData, 'originApprovers', [null]);
           }
         }
-      }
+      },
+      validateField (name) {
+        this.$refs.footForm.validateField(name);
+      },
     },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
         selectDisable: true
+      }
+    },
+    watch: {
+      'formData.approvers': function (nval, oval) {
+        this.formData.approvers.forEach((item, index) => {
+          this.validateField('approvers.' + index);
+        })
       }
     },
     created() {

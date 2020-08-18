@@ -592,6 +592,11 @@
     watch: {
       'formData.progressPlan': function (n, o) {
         this.validateField('progressPlan', this.currentUser);
+      },
+      'formData.sendApprovers': function (nval, oval) {
+        this.formData.sendApprovers.forEach((item, index) => {
+          this.validateField('sendApprovers.' + index);
+        })
       }
     },
     created() {

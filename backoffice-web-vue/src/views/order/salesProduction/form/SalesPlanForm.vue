@@ -176,6 +176,8 @@
         this.form.salesDateEnd = val[1];
       },
       onSelectSample (data) {
+        console.log('-----------------------------------')
+        console.log(data);
         this.materialDialogVisible = false;
         this.salesProductAppendVisible = true;
         this.$nextTick(() => {
