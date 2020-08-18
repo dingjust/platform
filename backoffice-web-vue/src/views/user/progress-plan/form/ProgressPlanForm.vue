@@ -53,18 +53,19 @@
           remarks: this.formData.remarks,
           productionProgresses: productionProgresses
         }
-        // if (this.formData.id) {
-        //   const url = this.apis().updateProgressPlan(this.formData.id);
-        //   const result = await this.$http.put(url, data);
-        // } else {
+        var result;
+        if (this.formData.id) {
+          const url = this.apis().updateProgressPlan(this.formData.id);
+          result = await this.$http.put(url, data);
+        } else {
           const url = this.apis().createProgressPlan();
-          const result = await this.$http.post(url, data);
-        // }
+          result = await this.$http.post(url, data);
+        }
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;
         }
-        this.$message.success(this.formData.id ? '添加节点成功' : '编辑节点成功');
+        this.$message.success(this.formData.id ? '编辑节点成功' : '添加节点成功');
         await this.$router.push('/account/setting/progress-plan');
       }
     },

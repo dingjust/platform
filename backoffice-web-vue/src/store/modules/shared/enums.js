@@ -1286,8 +1286,43 @@ const state = {
     {
       code: 'MONTHLY_SETTLEMENT',
       name: '月结'
-    }
+    },
+    {
+      code: 'PHASETHREE',
+      name: '三期款'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_ONE',
+      name: '一月一结'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_TWO',
+      name: '一月两结'
+    },
   ],
+  // 账期支付方式
+    // 账期支付方式
+    PayPlanTypeV2: [{
+      code: 'PHASEONE',
+      name: '一期款'
+    },
+      {
+        code: 'PHASETWO',
+        name: '二期款'
+      },
+      {
+        code: 'PHASETHREE',
+        name: '三期款'
+      },
+      {
+        code: 'MONTHLY_SETTLEMENT_ONE',
+        name: '一月一结'
+      },
+      {
+        code: 'MONTHLY_SETTLEMENT_TWO',
+        name: '一月两结'
+      },
+    ],
   // 账期支付类型
   PayMoneyType: [{
       code: 'DEPOSIT',
@@ -1302,10 +1337,52 @@ const state = {
       name: '2期尾款'
     },
     {
+      code: 'PHASETHREE',
+      name: '3期尾款'
+    },
+    {
       code: 'MONTHLY_SETTLEMENT',
       name: '月结'
-    }
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_ONE',
+      name: '一月一结'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_TWO',
+      name: '一月两结'
+    },
   ],
+  // PayMoneyTypeV2: [
+  //   {
+  //     code: 'DEPOSIT',
+  //     name: '定金'
+  //   },
+  //   {
+  //     code: 'PHASEONE',
+  //     name: '1期尾款'
+  //   },
+  //   {
+  //     code: 'PHASETWO',
+  //     name: '2期尾款'
+  //   },
+  //   {
+  //     code: 'PHASETHREE',
+  //     name: '3期尾款'
+  //   },
+  //   {
+  //     code: 'MONTHLY_SETTLEMENT',
+  //     name: '月结'
+  //   },
+  //   {
+  //     code: 'MONTHLY_SETTLEMENT_ONE',
+  //     name: '一月一结'
+  //   },
+  //   {
+  //     code: 'MONTHLY_SETTLEMENT_TWO',
+  //     name: '一月两结'
+  //   },
+  // ],
   TriggerEvent: [{
       code: 'ORDER_CONFIRMED',
       name: '确认订单'
@@ -1314,6 +1391,20 @@ const state = {
       code: 'CONTRACT_SIGNED',
       name: '签署合同'
     },
+    {
+      code: 'DELIVERY_CONFIRMED',
+      name: '确认收货'
+    },
+    {
+      code: 'RECONCILIATION_CONFIRMED',
+      name: '确认对账'
+    },
+    {
+      code: 'INVOICE_RECEIVED',
+      name: '收到发票'
+    }
+  ],
+  TriggerEventV2: [
     {
       code: 'DELIVERY_CONFIRMED',
       name: '确认收货'
