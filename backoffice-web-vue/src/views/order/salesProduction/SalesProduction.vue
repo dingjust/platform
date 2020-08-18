@@ -10,8 +10,8 @@
       </el-row>
       <div class="pt-2"></div>
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"
-        @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder" :dataQuery="dataQuery" @onResetQuery="onResetQuery"
-        @onUniqueCodeImport="onUniqueCodeImport" />
+                                @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder" @onUniqueCodeImport="onUniqueCodeImport"
+                                :dataQuery="dataQuery" @onResetQuery="onResetQuery" />
       <!-- <el-divider class="sales-divider"></el-divider> -->
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
@@ -137,13 +137,13 @@
     },
     data() {
       return {
-        pageSign: 'SALES_PLAN',
         activeName: 'TO_BE_SUBMITTED',
         statuses: [],
         queryFormData: {
           keyword: '',
           planLeader: '',
           originCooperator: '',
+          cooperator: '',
           state: 'TO_BE_SUBMITTED'
         },
         stateCount: {},
@@ -151,7 +151,7 @@
       }
     },
     created() {
-      this.dataQuery = this.getDataPerQuery(this.pageSign);
+      this.dataQuery = this.getDataPerQuery('SALES_PLAN');
       this.onResetQuery();
       this.onAdvancedSearch(0, 10);
       this.statuses = Object.assign([], this.$store.state.EnumsModule.SalesProductionOrderState);

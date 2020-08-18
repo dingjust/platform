@@ -53,7 +53,7 @@
             </el-row>
             <el-row type="flex">
               <el-col :span="12">
-                <el-form-item>
+                <el-form-item prop="b2bDept">
                   <template slot="label">
                     <span style="padding-right: 6px;">所属部门</span>
                   </template>
@@ -97,9 +97,9 @@
     methods: {
       async getRoleGroupList () {
         const url = this.apis().getB2BCustomerRoleGroupList();
-        const result = await this.$http.post(url, formData, {
+        const result = await this.$http.post(url, {}, {
           page: 0,
-          size: 100
+          size: 99
         });
         if (result.code == 0) {
           this.$message.error(result.msg);
@@ -187,15 +187,14 @@
           uid: [{ required: true, message: '必填', trigger: 'blur' }],
           contactPhone: [{ required: true, validator: validatePhone, trigger: 'blur' }],
           password: [{ required: true, message: '必填', trigger: 'blur' }],
+          b2bDept: [{ required: true, message: '必填', trigger: 'change' }],
         },
         formData: {
           id: null,
           name: '',
           uid: '',
           b2bRoleGroupList: [],
-          b2bDept: {
-            id: ''
-          },
+          b2bDept: '',
           contactPhone: '',
           password: ''
         },

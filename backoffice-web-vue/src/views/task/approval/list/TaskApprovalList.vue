@@ -26,16 +26,16 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
-          <el-divider v-if="scope.row.state == 'AUDITING'" direction="vertical" />
-          <authorized :permission="['DO_AUDIT']">
-            <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onApproval(scope.row)">通过
-            </el-button>
-          </authorized>
-          <el-divider v-if="scope.row.state == 'AUDITING'" direction="vertical" />
-          <authorized :permission="['DO_AUDIT']">
-            <el-button v-if="scope.row.state == 'AUDITING'" type="text" size="mini" @click="onRefuse(scope.row)">驳回
-            </el-button>
-          </authorized>
+          <template v-if="canAudit(scope.row)">
+            <el-divider direction="vertical" />
+            <authorized :permission="['DO_AUDIT']">
+              <el-button type="text" size="mini" @click="onAudit(scope.row, true)">通过</el-button>
+            </authorized>
+            <el-divider direction="vertical" />
+            <authorized :permission="['DO_AUDIT']">
+              <el-button type="text" size="mini" @click="onAudit(scope.row, false)">驳回</el-button>
+            </authorized>
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -52,15 +52,38 @@
     name: 'TaskApprovalList',
     props: ['page'],
     methods: {
+      canAudit (row) {
+        return row.state === 'AUDITING' && row.currentUserAuditState === 'AUDITING';
+      },
       onDetail(row) {
         this.$emit('onDetail', row);
       },
-      onApproval(row) {
-        this.$emit('onApproval', row);
+      onAudit (row, flag) {
+        if (row.auditingUser.uid === this.$store.getters.currentUser.uid) {
+          if (flag) {
+            this.$emit('onApproval', row);
+          } else {
+            this.$emit('onRefuse', row)
+          }
+        } else {
+          this.$message.warning('此订单暂未轮到您进行审批。');
+        }
       },
-      onRefuse(row) {
-        this.$emit('onRefuse', row)
-      },
+      // onApproval(row) {
+      //   if (this.isAuditUser(row)) {
+      //     this.$emit('onApproval', row);
+      //   }
+      // },
+      // onRefuse(row) {
+      //   if (this.isAuditUser(row)) {
+      //     this.$emit('onRefuse', row)
+      //   }
+      // },
+      // isAuditUser (row) {
+      //   if (row.auditingUser.uid === this.) {
+
+      //   }
+      // },
       onPageSizeChanged(val) {
         this.$emit('onAdvancedSearch', 0, val);
         this.$nextTick(() => {

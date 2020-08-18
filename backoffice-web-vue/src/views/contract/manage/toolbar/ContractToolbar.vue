@@ -5,10 +5,18 @@
     </el-dialog> -->
     <el-form :inline="true">
       <el-form-item label="合同信息">
-        <el-input placeholder="输入合同名称、编号、单号" style="width: 140px" v-model="queryFormData.title"></el-input>
+        <el-input placeholder="输入合同名称、编号、单号、合作商" style="width: 140px" v-model="queryFormData.title"></el-input>
       </el-form-item>
-      <el-form-item>
-        <template slot="label">
+      <el-form-item label="日期">
+        <el-date-picker v-model="dateArr" 
+                        style="width: 220px"
+                        type="daterange" 
+                        value-format="timestamp"
+                        range-separator="至" 
+                        start-placeholder="开始日期" 
+                        end-placeholder="结束日期">
+        </el-date-picker>
+        <!-- <template slot="label">
           <h6 class="formLabel">日期</h6>
         </template>
         <el-date-picker
@@ -25,10 +33,15 @@
           style="width: 130px"
           value-format="yyyy-MM-dd"
           placeholder="截止日期">
-        </el-date-picker>
+        </el-date-picker> -->
       </el-form-item>
-      <el-form-item label="合作商">
+      <!-- <el-form-item label="合作商">
         <el-input placeholder="输入合作商名称" style="width: 140px;" v-model="queryFormData.partner"></el-input>
+      </el-form-item> -->
+      <el-form-item label="部门/人员" prop="name">
+        <!-- <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input> -->
+        <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                            :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
       </el-form-item>
       <el-form-item>
         <template slot="label">
@@ -61,6 +74,7 @@
   import ContractForm from '../ContractForm'
   import ContractType from '../components/ContractType'
   import Bus from '@/common/js/bus.js';
+  import { DeptPersonSelect } from '@/components'
 
   const {
     mapMutations
@@ -68,8 +82,8 @@
 
   export default {
     name: 'ContractToolbar',
-    props: ['queryFormData'],
-    components: {ContractType},
+    props: ['queryFormData', 'dataQuery'],
+    components: { ContractType, DeptPersonSelect },
     computed: {},
     methods: {
       ...mapMutations({
@@ -83,9 +97,10 @@
       onReset () {
         this.queryFormData.title = '';
         this.queryFormData.partner = '';
-        this.queryFormData.creationtimeStart = '';
-        this.queryFormData.creationtimeEnd = '';
         this.queryFormData.type = '';
+        this.dateArr = [];
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       },
       onCloseDialog () {
         this.dialogVisible = false;
@@ -131,23 +146,32 @@
         formData: this.$store.state.ContractModule.formData,
         dialogVisible: false,
         type: this.$store.state.ContractModule.type,
+        dateArr: [],
         TemplateType: [{
-          code: 'BCXY',
-          name: '补充协议'
-        },
-        {
-          code: 'WTSCHT',
-          name: '委托生产合同'
-        },
-        {
-          code: 'CGDD',
-          name: '采购订单'
-        },
-        {
-          code: 'KJXY',
-          name: '框架协议'
-        }
+            code: 'BCXY',
+            name: '补充协议'
+          }, {
+            code: 'WTSCHT',
+            name: '委托生产合同'
+          }, {
+            code: 'CGDD',
+            name: '采购订单'
+          }, {
+            code: 'KJXY',
+            name: '框架协议'
+          }
         ]
+      }
+    },
+    watch: {
+      dateArr: function (nval, oval) {
+        if (nval.length > 0) {
+          this.queryFormData.creationtimeStart = nval[0];
+          this.queryFormData.creationtimeEnd = nval[1];
+        } else {
+          this.queryFormData.creationtimeStart = '';
+          this.queryFormData.creationtimeEnd = '';
+        }
       }
     },
     created () {
@@ -176,4 +200,7 @@
     margin-bottom: 0px;
   }
 
+  .contract-toolbar-container >>> .el-date-editor .el-range-separator {
+    width: 12%;
+  }
 </style>

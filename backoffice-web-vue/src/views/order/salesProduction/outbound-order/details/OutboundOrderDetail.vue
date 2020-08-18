@@ -147,7 +147,8 @@
           return;
         }
         this.$store.state.OutboundOrderModule.formData = Object.assign({}, result.data);
-        this.setPayPlan(result.data.payPlan);
+        this.payPlan = result.data.payPlan;
+        // this.setPayPlan(result.data.payPlan);
       },
       setPayPlan(payPlan) {
         this.payPlan.name = payPlan.name;

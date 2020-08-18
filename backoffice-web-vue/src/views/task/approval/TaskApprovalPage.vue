@@ -12,8 +12,8 @@
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="订单任务" name="ORDER_TASK">
           <div class="tab-basic-row">
-            <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset"
-              @onAdvancedSearch="onAdvancedSearch" />
+            <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset" :dataQuery="dataQuery"
+              @onAdvancedSearch="onAdvancedSearch" @onResetQuery="onResetQuery"/>
             <el-tabs v-model="activeStatus" @tab-click="handleClick">
               <template v-for="item in statuses">
                 <el-tab-pane :name="item.code" :label="item.name" :key="item.code">
@@ -94,6 +94,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getAuditList();
         this.searchAdvanced({
@@ -102,6 +105,9 @@
           page,
           size
         });
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       },
       onReset() {},
       handleClick(tab, event) {
@@ -193,11 +199,14 @@
         }, {
           code: 'AUDITED_FAILED',
           name: '审核驳回'
-        }]
+        }],
+        dataQuery: {}
       }
     },
     created() {
-      this.onSearch();
+      this.dataQuery = this.getDataPerQuery('AUDIT_TASK');
+      this.onResetQuery();
+      this.onAdvancedSearch(0, 10);
     },
     mounted() {
 

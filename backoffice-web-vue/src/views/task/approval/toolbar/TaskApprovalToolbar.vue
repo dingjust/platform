@@ -6,8 +6,9 @@
           <el-form-item label="任务关键词" class="toolbar-form-item">
             <el-input placeholder="输入任务编号、名称" v-model="queryFormData.keyword"></el-input>
           </el-form-item>
-          <el-form-item label="负责人" class="toolbar-form-item">
-            <el-input placeholder="输入负责人名称" v-model="queryFormData.charge"></el-input>
+          <el-form-item label="部门/人员" class="toolbar-form-item">
+            <!-- <el-input placeholder="输入负责人名称" v-model="queryFormData.charge"></el-input> -->
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <el-form-item label="创建时间" class="toolbar-form-item">
             <el-date-picker v-model="queryFormData.creationtime" type="date" placeholder="选择日期"/>
@@ -36,15 +37,23 @@
 </template>
 
 <script>
+  import { DeptPersonSelect } from '@/components'
+
   export default {
     name: 'TaskApprovalToolbar',
-    props: ['queryFormData', 'statuses'],
+    props: ['queryFormData', 'statuses', 'dataQuery'],
+    components: {
+      DeptPersonSelect
+    },
     computed: {
 
     },
     methods: {
       onReset () {
-        this.$emit('onReset');
+        this.queryFormData.keyword = '';
+        this.queryFormData.creationtime = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       },
       onAdvancedSearch () {
         this.$emit('onAdvancedSearch');

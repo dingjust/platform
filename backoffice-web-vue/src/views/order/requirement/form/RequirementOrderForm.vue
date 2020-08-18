@@ -175,6 +175,12 @@
           </template>
           <images-upload :limit="5" :slot-data="formData.attachments" />
         </el-form-item>
+        <el-form-item prop="attachments">
+          <template slot="label">
+            <h6 class="titleTextClass">参考图片</h6>
+          </template>
+          <images-upload :limit="5" :slot-data="formData.details.pictures" />
+        </el-form-item>
         <el-form-item prop="remarks">
           <template slot="label">
             <h6 class="titleTextClass">备注</h6>

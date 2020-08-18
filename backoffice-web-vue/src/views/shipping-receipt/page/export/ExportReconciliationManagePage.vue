@@ -10,7 +10,8 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-manage-page mode="export" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onSelect="onSelect" :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
+        @onSelect="onSelect" :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" 
+        :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     </el-card>
   </div>
 </template>
@@ -62,6 +63,10 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
+
         let query = Object.assign({}, this.queryFormData);
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
@@ -75,6 +80,9 @@
       },
       onSelect(val) {
         this.$set(this, 'selectData', val);
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data() {
@@ -242,9 +250,12 @@
             url: this.apis().reconciliationList()
           },
         },
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('RECONCILIATION_SHEET_OUT');
+      this.onResetQuery();
       this.onAdvancedSearch(0, 10);
     },
   }

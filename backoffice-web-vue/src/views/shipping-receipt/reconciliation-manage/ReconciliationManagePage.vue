@@ -1,6 +1,7 @@
 <template>
   <div>
-    <reconciliation-manage-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+    <reconciliation-manage-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" 
+                                   :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-row type="flex" justify="end" align="middle" :gutter="10">
       <el-col :span="2"><span>单据明细：</span></el-col>
       <el-col :span="2">
@@ -75,6 +76,10 @@
       statusMap: {
         type: Object,
         required: true
+      },
+      dataQuery: {
+        type: Object,
+        default: () => {}
       }
     },
     components: {
@@ -268,6 +273,9 @@
             break;
         }
         return tabName;
+      },
+      onResetQuery () {
+        this.$emit('onResetQuery');
       }
     },
     data() {

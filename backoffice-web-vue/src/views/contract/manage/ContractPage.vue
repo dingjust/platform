@@ -18,7 +18,9 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <contract-toolbar @openPreviewPdf="openPreviewPdf" :queryFormData="queryFormData" style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
+      <contract-toolbar @openPreviewPdf="openPreviewPdf" :queryFormData="queryFormData" 
+                        style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch" 
+                        :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <div>
         <Authorized :permission="['AGREEMENT_CREATE']">
           <el-button class="pr-create-btn" @click="dialogVisible = true">创建合同</el-button>
@@ -85,7 +87,6 @@
         keyword: 'keyword',
         orderCode: 'orderCode',
         dateTime: 'dateTime',
-        queryFormData: 'queryFormData',
         type: 'type'
       })
     },
@@ -96,6 +97,9 @@
       ...mapMutations({
       }),
       onSearch (page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getContractsList();
         this.search({
@@ -177,7 +181,10 @@
         // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
         this.pdfVisible = true;
         this.fileUrl = encodeURIComponent(aa)
-      }
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data () {
       return {
@@ -189,10 +196,22 @@
         pdfVisible: false,
         fileUrl: '',
         thisContract: '',
-        dialogVisible: false
+        dialogVisible: false,
+        queryFormData: {
+          title: '',
+          orderCode: '',
+          creationtimeStart: '',
+          creationtimeEnd: '',
+          type: '',
+          state: '',
+          partner: ''
+        },
+        dataQuery: {}
       };
     },
     created () {
+      this.dataQuery = this.getDataPerQuery('COMPANY_AGREEMENT');
+      this.onResetQuery();
       this.onSearch(0, 10);
     }
   };

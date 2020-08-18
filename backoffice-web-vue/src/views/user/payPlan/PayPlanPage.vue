@@ -87,7 +87,7 @@
       },
       async onDelete(item) {
         const url = this.apis().deletePayPlan(item.id);
-        var result = this.$http.put(url);
+        var result = await this.$http.put(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
         } else {

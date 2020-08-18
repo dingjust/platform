@@ -9,7 +9,8 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <sample-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+      <sample-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" 
+                              :queryFormData="queryFormData" :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <sample-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onBelongDetail="onBelongDetail"
@@ -64,7 +65,6 @@
         keyword: 'keyword',
         queryFormData: 'queryFormData',
         newFormData: 'newFormData',
-
       })
     },
     methods: {
@@ -89,7 +89,9 @@
       },
       onAdvancedSearch(page, size) {
         this.setAdvancedSearch(true);
-
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getSampleProducts();
         this.searchAdvanced({
@@ -216,6 +218,9 @@
       },
       onDeleteCancel() {
         this.apparelProductForbiddenPageVisible = false;
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data() {
@@ -235,10 +240,21 @@
         forbiddenItem: {},
         offShelfItem: {},
         formData: this.$store.state.SampleProductsModule.newFormData,
+        queryFormData: {
+          code: '',
+          skuID: '',
+          name: '',
+          approvalStatuses: '',
+          categories: [],
+          belongToName: ''
+        },
+        dataQuery: {}
       }
     },
     created() {
-      this.onSearch();
+      this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
+      this.onResetQuery();
+      this.onAdvancedSearch();
     }
   };
 

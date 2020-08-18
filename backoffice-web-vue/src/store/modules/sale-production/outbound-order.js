@@ -58,7 +58,7 @@ const state = {
       payPlanType: 'PHASEONE',
       payPlanItems: [{
         moneyType: 'PHASEONE',
-        payPercent: 0.003,
+        payPercent: 0.3,
         triggerDays: 5,
         triggerEvent: 'ORDER_CONFIRMED',
         triggerType: 'INSIDE'
@@ -194,7 +194,7 @@ const actions = {
         deliveryDate: '',
         shippingAddress: {},
         product: {
-  
+
         },
         progressPlan: {
           name: ''
@@ -213,7 +213,7 @@ const actions = {
         payPlanType: 'PHASEONE',
         payPlanItems: [{
           moneyType: 'PHASEONE',
-          payPercent: 0.003,
+          payPercent: 0.3,
           triggerDays: 5,
           triggerEvent: 'ORDER_CONFIRMED',
           triggerType: 'INSIDE'
