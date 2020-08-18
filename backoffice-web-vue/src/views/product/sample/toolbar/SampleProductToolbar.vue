@@ -1,60 +1,79 @@
 <template>
   <el-form :inline="true">
+    <el-row type="flex" justify="space-between">
     <!--      <el-form-item label="">-->
     <!--        <el-input placeholder="请输入产品货号/名称查询" v-model="keyword" style="width: 250px"></el-input>-->
     <!--      </el-form-item>-->
 <!--    <el-row type="flex"  justify="space-between">-->
 <!--      <el-col :span="20">-->
-      <el-form-item label="产品名">
-        <el-input placeholder="输入产品名" v-model="queryFormData.name"></el-input>
-      </el-form-item>
-      <el-form-item label="款号">
-        <el-input placeholder="输入款号" v-model="queryFormData.skuID"></el-input>
-      </el-form-item>
-      <el-form-item label="编号">
-        <el-input placeholder="输入编号" v-model="queryFormData.code"></el-input>
-      </el-form-item>
-      <el-form-item v-if="isTenant()" label="所属公司">
-        <el-input placeholder="输入公司名称" v-model="queryFormData.belongToName"></el-input>
-      </el-form-item>
-      <el-form-item label="品类">
-        <el-select v-model="queryFormData.categories" placeholder="请选择" class="w-80"
-                   filterable reserve-keyword clearable collapse-tags
-                   multiple>
-          <el-option-group
-            v-for="level1 in categories"
-            :key="level1.code"
-            :label="level1.name">
-            <el-option
-              v-for="level2 in level1.children"
-              :key="level2.code"
-              :label="level2.name"
-              :value="level2.code">
-            </el-option>
-          </el-option-group>
-        </el-select>
-      </el-form-item>
-        <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
-        <el-button native-type="reset" @click="onReset">重置</el-button>
+      <el-col :span="22">
+        <el-form-item label="产品信息">
+          <el-input v-model="queryFormData.keyword" placeholder="输入产品名、款号、编号"></el-input>
+        </el-form-item>
+        <el-form-item label="部门/人员" prop="name">
+          <!-- <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input> -->
+          <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                              :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
+        </el-form-item>
+        <!-- <el-form-item label="产品名">
+          <el-input placeholder="输入产品名" v-model="queryFormData.name"></el-input>
+        </el-form-item>
+        <el-form-item label="款号">
+          <el-input placeholder="输入款号" v-model="queryFormData.skuID"></el-input>
+        </el-form-item>
+        <el-form-item label="编号">
+          <el-input placeholder="输入编号" v-model="queryFormData.code"></el-input>
+        </el-form-item> -->
+        <el-form-item v-if="isTenant()" label="所属公司">
+          <el-input placeholder="输入公司名称" v-model="queryFormData.belongToName"></el-input>
+        </el-form-item>
+        <el-form-item label="品类">
+          <el-select v-model="queryFormData.categories" placeholder="请选择" class="w-80"
+                    filterable reserve-keyword clearable collapse-tags
+                    multiple>
+            <el-option-group
+              v-for="level1 in categories"
+              :key="level1.code"
+              :label="level1.name">
+              <el-option
+                v-for="level2 in level1.children"
+                :key="level2.code"
+                :label="level2.name"
+                :value="level2.code">
+              </el-option>
+            </el-option-group>
+          </el-select>
+        </el-form-item>
+        <el-button-group>
+          <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+          <el-button native-type="reset" @click="onReset">重置</el-button>
+        </el-button-group>
+      </el-col>
+      <el-col :span="2">
         <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
-          <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
+          <el-button v-if="!isTenant()" class="create-btn" size="medium" @click="onNew">创建产品</el-button>
         </Authorized>
+      </el-col>
+    </el-row>
   </el-form>
 </template>
 
 <script>
     import {createNamespacedHelpers} from 'vuex';
+    import { DeptPersonSelect } from '@/components'
 
     const {mapMutations} = createNamespacedHelpers('SampleProductsModule');
 
     export default {
       name: 'SampleProductToolbar',
-      components: {},
+      props: ['queryFormData', 'dataQuery'],
+      components: {
+        DeptPersonSelect
+      },
       computed: {},
       methods: {
         ...mapMutations({
           setKeyword: 'keyword',
-          setQueryFormData: 'queryFormData'
         }),
         onSearch () {
           this.setKeyword(this.keyword);
@@ -83,6 +102,8 @@
           this.queryFormData.categories = '';
           this.queryFormData.approvalStatuses = '';
           this.queryFormData.belongToName = '';
+          this.$refs.deptPersonSelect.clearSelectData();
+          this.$emit('onResetQuery');
         },
         showStatus (val) {
           if (this.queryFormData.approvalStatuses === val.code) {
@@ -144,5 +165,20 @@
   }
   .el-tag{
     border-color: white;
+  }
+
+  .create-btn {
+    background-color: #ffd60c;
+    color: #606266;
+  } 
+
+  .create-btn:focus {
+    background: #ffd60c;
+    color: #606266;
+  }
+
+  .create-btn:hover {
+    background: #ffd60c;
+    color: #606266;
   }
 </style>

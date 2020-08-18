@@ -205,7 +205,6 @@
     },
     created() {
       this.dataQuery = this.getDataPerQuery('AUDIT_TASK');
-      console.log(this.dataQuery);
       this.onResetQuery();
       this.onAdvancedSearch(0, 10);
     },

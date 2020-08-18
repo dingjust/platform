@@ -157,6 +157,7 @@
     },
     created () {
       this.dataQuery = this.getDataPerQuery('PAYMENT_REQUEST');
+      this.onResetQuery();
       this.onAdvancedSearch(0, 10);
     },
     destroyed () {

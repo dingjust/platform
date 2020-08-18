@@ -118,6 +118,7 @@
     },
     created () {
       this.dataQuery = this.getDataPerQuery('PAYMENT_BILL_RECEIVABLES');
+      this.onResetQuery();
       this.onAdvancedSearch(0, 10);
     },
     destroyed () {
