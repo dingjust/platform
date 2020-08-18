@@ -63,7 +63,7 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData',
+        // queryFormData: 'queryFormData',
         newFormData: 'newFormData',
       })
     },

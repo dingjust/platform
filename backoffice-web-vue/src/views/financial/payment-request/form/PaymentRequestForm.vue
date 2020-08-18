@@ -261,8 +261,18 @@
         });
       },
       async _onConfirm() {
+        let data = Object.assign({}, this.formData);
+        // 人员设置数据处理
+        for (let i = 0; i < data.approvers.length; i++) {
+          if (data.approvers instanceof Array && data.approvers[i].length > 0) {
+            data.approvers[i] = {
+              id: this.formData.approvers[i][this.formData.approvers[i].length -1]
+            }
+          }
+        }
+
         const url = this.apis().appendPaymentRequest();
-        const result = await this.$http.post(url, this.formData, {
+        const result = await this.$http.post(url, data, {
           submit: true
         });
         if (result['errors']) {
@@ -413,7 +423,9 @@
         this.validateField('productionOrder');
       },
       'formData.approvers': function (nval, oval) {
-        this.validateField('approvers');
+        this.formData.approvers.forEach((item, index) => {
+          this.validateField('approvers.' + index);
+        })
       }
     },
     created() {

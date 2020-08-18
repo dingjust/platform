@@ -176,12 +176,24 @@
             }),
         };
 
+        // if (this.formData.isApproval) {
+        //   Object.assign(form, {
+        //     isApproval: true,
+        //     approvers: this.formData.approvers
+        //   })
+        // }
         //是否需要审核
         if (this.formData.isApproval) {
-          Object.assign(form, {
-            isApproval: true,
-            approvers: this.formData.approvers
-          })
+          form.isApproval = true;
+          form.approvers = [];
+          // 处理级联选择数据
+          for (let i = 0; i < this.formData.approvers.length; i++) {
+            if (this.formData.approvers instanceof Array && this.formData.approvers[i].length > 0) {
+              form.approvers[i] = {
+                id: this.formData.approvers[i][this.formData.approvers[i].length -1]
+              }
+            }
+          }
         }
 
         //TODO:对账任务id处理
@@ -189,8 +201,6 @@
         const result = await this.$http.post(url, form, {
           taskId: this.reconciliationTaskId
         });
-
-
 
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);

@@ -76,11 +76,11 @@
           setKeyword: 'keyword',
         }),
         onSearch () {
-          this.setKeyword(this.keyword);
+          // this.setKeyword(this.keyword);
           this.$emit('onSearch', 0);
         },
         onAdvancedSearch () {
-          this.setQueryFormData(this.queryFormData);
+          // this.setQueryFormData(this.queryFormData);
           this.$emit('onAdvancedSearch', 0);
         },
         onNew () {
@@ -97,6 +97,7 @@
           }
         },
         onReset () {
+          this.queryFormData.keyword = '';
           this.queryFormData.name = '';
           this.queryFormData.skuID = '';
           this.queryFormData.categories = '';
@@ -120,7 +121,6 @@
         return {
           keyword: '',
           formData: this.$store.state.SampleProductsModule.newFormData,
-          queryFormData: this.$store.state.SampleProductsModule.queryFormData,
           approvalStatuses: [{
             code: '',
             name: '全部'
