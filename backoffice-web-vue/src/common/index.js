@@ -47,7 +47,7 @@ const COMMON_APIS = {
   getCarriers() {
     return '/b2b/carriers';
   },
-  findBrandAndFactory(){
+  findBrandAndFactory() {
     return '/b2b/companies/findBrandAndFactory';
   },
   createColor() {
@@ -1568,6 +1568,11 @@ let NONE_TENANT_APIS = {
   reconciliationReject(id) {
     return '/b2b/sheets/reconciliation/reject/' + id;
   },
+
+  //唯一码检索
+  uniqueCodeCheck(code) {
+    return '/b2b/out/order/preview/' + code;
+  }
 
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
