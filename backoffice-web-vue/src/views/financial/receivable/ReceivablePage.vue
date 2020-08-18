@@ -9,7 +9,8 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <receivable-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
+      <receivable-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" 
+                          :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
           <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
@@ -57,6 +58,9 @@
         this.search({url, keyword, page, size});
       },
       onAdvancedSearch (page, size, isTab) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getReceivableList();
         this.searchAdvanced({url, query, page, size});
@@ -91,6 +95,9 @@
       },
       onDetail (row) {
         this.$router.push('/financial/receivable/' + row.id);
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data () {
@@ -105,10 +112,12 @@
           createdDateTo: '',
           state: 'WAIT_TO_PAY'
         },
-        statuses: this.$store.state.EnumsModule.financialState
+        statuses: this.$store.state.EnumsModule.financialState,
+        dataQuery: {}
       }
     },
     created () {
+      this.dataQuery = this.getDataPerQuery('PAYMENT_BILL_RECEIVABLES');
       this.onAdvancedSearch(0, 10);
     },
     destroyed () {

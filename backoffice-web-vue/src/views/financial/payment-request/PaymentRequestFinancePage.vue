@@ -9,7 +9,8 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <payment-request-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
+      <payment-request-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" 
+                               :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <div>
         <!-- <el-button class="pr-create-btn" v-if="userRole == 'MERCHANDISER'" @click="onCreate">创建付款申请单</el-button> -->
         <!-- <el-button class="pr-create-btn" v-if="userRole == 'FINANCE'" @click="onCreate">去付款</el-button> -->
@@ -102,6 +103,9 @@
       },
       onCreate () {
         this.$router.push('/financial/create/paymentRequest');
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data () {
@@ -146,10 +150,12 @@
               name: '已付款'
             }]
           }
-        }
+        },
+        dataQuery: {}
       }
     },
     created () {
+      this.dataQuery = this.getDataPerQuery('PAYMENT_REQUEST_FINANCE');
       this.onAdvancedSearch(0, 10);
     },
     destroyed () {
