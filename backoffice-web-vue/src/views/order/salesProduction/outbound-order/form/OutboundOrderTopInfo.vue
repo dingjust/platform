@@ -89,7 +89,8 @@
       </el-col>
     </el-row>
     <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
-      <pay-plan-info :form="payPlan"></pay-plan-info>
+<!--      <pay-plan-info :form="payPlan"></pay-plan-info>-->
+      <h6 v-html="payPlan.previewText"></h6>
     </el-popover>
   </div>
 </template>
@@ -132,7 +133,7 @@
         if (!this.slotData.merchandiser) {
           return false;
         }
-        return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid && 
+        return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
               (this.slotData.state === 'AUDIT_PASSED' || this.slotData.state === 'COMPLETED')
         // 未签合同 && 账号为merchandiser && 审核状态为 PASSED
         // if (this.slotData.agreements == undefined || this.slotData.agreements == null || this.slotData.agreements.length <= 0) {
@@ -158,7 +159,10 @@
         payPlanType: {
           'PHASEONE': '一期尾款',
           'PHASETWO': '二期尾款',
-          'MONTHLY_SETTLEMENT': '月结'
+          'PHASETHREE': '三期尾款',
+          'MONTHLY_SETTLEMENT': '月结',
+          'MONTHLY_SETTLEMENT_ONE': '一月一结',
+          'MONTHLY_SETTLEMENT_TWO': '一月两结',
         }
       }
     },

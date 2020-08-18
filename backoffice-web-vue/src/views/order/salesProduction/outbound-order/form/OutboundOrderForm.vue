@@ -148,7 +148,7 @@
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
           <el-col :span="24">
             <!-- <pay-plan-form-v4 :vPayPlan.sync="formData.payPlan" :showPreview="true"/> -->
-            <pay-plan-form :formData="formData.payPlan" :showPreview="true" />
+            <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" />
           </el-col>
         </el-row>
         <el-row>

@@ -1,7 +1,24 @@
 <!--suppress ALL -->
 <template>
   <div class="animated fadeIn">
-
+    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body
+               :close-on-click-modal="false">
+      <pay-plan-select @onSelect="onPayPlanSelect" v-if="payPlanSelectDialogVisible"/>
+    </el-dialog>
+    <el-dialog title="保存账务方案" :visible.sync="dialogPayPlanFormVisible" :close-on-click-modal="false">
+      <el-form :model="payPlanForm">
+        <el-form-item label="方案名称">
+          <el-input v-model="payPlanForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input type="textarea" :rows="3" placeholder="请输入备注留言..." v-model="payPlanForm.remarks" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogPayPlanFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onPayPlanSave">确 定</el-button>
+      </div>
+    </el-dialog>
     <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
       <el-col :span="6">
         <el-row type="flex" align="middle">
@@ -10,12 +27,21 @@
           <el-radio class="info-radio" v-model="formData.isHaveDeposit" :label="false">无定金</el-radio>
         </el-row>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">尾款期数</h6>
           <template v-for="item in payPlanTypes">
             <el-radio class="info-radio" v-model="formData.payPlanType" :label="item.code">{{item.name}}</el-radio>
           </template>
+        </el-row>
+      </el-col>
+      <el-col :span="9" :offset="1" v-if="isUseForOrder">
+        <el-row type="flex" align="start" justify="space-between">
+          <h6 style="margin-top: 3px;">{{formData.name!=undefined?'当前选中方案：'+formData.name:'当前未选择账务方案'}}</h6>
+          <el-button @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用账务方案</el-button>
+          <Authorized :permission="['PAY_PLAN_OPERATE']">
+            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
+          </Authorized>
         </el-row>
       </el-col>
     </el-row>
@@ -167,6 +193,7 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
+  import PayPlanSelect from "./PayPlanSelect";
 
   const {
     mapGetters
@@ -174,7 +201,16 @@
 
   export default {
     name: 'PayPlanForm',
-    props: ['formData'],
+    components: {PayPlanSelect},
+    props: {
+      isUseForOrder:{
+        type: Boolean,
+        default: false
+      },
+      formData:{
+        type: Object,
+      }
+    },
     computed: {
       ...mapGetters({}),
       payPlanItems: function () {
@@ -458,6 +494,42 @@
       }
     },
     methods: {
+      onPayPlanSelect(item) {
+        // 删除原有id
+        this.$delete(item, 'id');
+        item.payPlanItems.forEach(element => {
+          this.$delete(element, 'id');
+        });
+        this.formData.name = item.name;
+        this.formData.previewText = item.previewText;
+        this.formData.remarks = item.remarks;
+        this.formData.payPlanItems = item.payPlanItems;
+        this.formData.payPlanType = item.payPlanType;
+        this.formData.isHaveDeposit = item.isHaveDeposit;
+        // this.updateCurForm(item);
+        this.payPlanSelectDialogVisible = false;
+      },
+      async onPayPlanSave(item){
+        var payPlanForm = {
+          name: this.payPlanForm.name,
+          payPlanType: this.formData.payPlanType,
+          isHaveDeposit: this.formData.isHaveDeposit,
+          payPlanItems: this.formData.payPlanItems,
+          remarks: this.payPlanForm.remarks
+        }
+
+        // 提交数据
+        const url = this.apis().createPayPlan();
+        const result = await this.$http.post(url, payPlanForm);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('创建账务方案成功');
+        this.payPlanForm.name = '';
+        this.payPlanForm.remarks = '';
+        this.dialogPayPlanFormVisible = false;
+      },
       startDayNumChange(item,index){
         let i = this.payPlanItems.findIndex((data) => data.moneyType == 'MONTHLY_SETTLEMENT_TWO' && data.isRange);
         if(i > -1){
@@ -524,6 +596,8 @@
     },
     data() {
       return {
+        payPlanSelectDialogVisible: false,
+        dialogPayPlanFormVisible: false,
         monthTypes: this.$store.state.EnumsModule.MonthType,
         payPlanTypes: this.$store.state.EnumsModule.PayPlanTypeV2,
         payMoneyTypes: this.$store.state.EnumsModule.PayMoneyType,
@@ -533,6 +607,10 @@
         triggerDays: [
           5, 7, 15
         ],
+        payPlanForm: {
+          name: '',
+          remarks: ''
+        },
       }
     }
   }
