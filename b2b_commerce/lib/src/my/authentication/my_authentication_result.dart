@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,10 @@ import 'package:photo_view/photo_view.dart';
 import 'package:services/services.dart';
 
 class MyAuthenticationResult extends StatefulWidget {
+  final AuthenticationState state;
+
+  const MyAuthenticationResult({Key key, this.state}) : super(key: key);
+
   @override
   _MyAuthenticationResultState createState() => _MyAuthenticationResultState();
 }
@@ -34,11 +39,16 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult> {
               AsyncSnapshot<CertificationInfo> snapshot) {
             if (snapshot.data != null) {
               return Container(
-                  child: Column(
-                children: <Widget>[
-                  _buildName(snapshot.data.data),
-                  _buildIdCard(snapshot.data.data),
-                ],
+                  child: Stack(
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          _buildName(snapshot.data.data),
+                          _buildIdCard(snapshot.data.data),
+                        ],
+                      ),
+                      Positioned(right: 20, top: 10, child: _getAuthStateIcon())
+                    ],
                   ));
             } else {
               return Center(
@@ -54,7 +64,10 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult> {
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           height: 50,
-          child: RaisedButton(
+          //个人认证通过后不可重新认证
+          child: widget.state == AuthenticationState.SUCCESS
+              ? Container()
+              : RaisedButton(
             color: Colors.red,
             child: Text(
               '重新认证',
@@ -74,6 +87,16 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult> {
             },
           ),
         ));
+  }
+
+  Widget _getAuthStateIcon() {
+    if (widget.state == AuthenticationState.SUCCESS) {
+      return B2BImage.auth_success(width: 150, height: 150);
+    } else if (widget.state == AuthenticationState.FAILED) {
+      return B2BImage.auth_fail(width: 150, height: 150);
+    } else {
+      return Container();
+    }
   }
 
   Future<CertificationInfo> _getData() async {

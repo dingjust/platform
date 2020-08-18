@@ -1,11 +1,15 @@
 import 'package:b2b_commerce/src/common/webview_page.dart';
-import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class AuthenticationEnterpriseFromPage extends StatefulWidget {
+  final AuthenticationInfoModel model;
+
+  const AuthenticationEnterpriseFromPage({Key key, this.model})
+      : super(key: key);
+
   _AuthenticationEnterpriseFromPageState createState() =>
       _AuthenticationEnterpriseFromPageState();
 }
@@ -15,15 +19,19 @@ class _AuthenticationEnterpriseFromPageState
   FocusNode _enterpriseNameFocusNode = FocusNode();
   FocusNode _xydmFocusNode = FocusNode();
   FocusNode _fddbrFocusNode = FocusNode();
-  FocusNode _nameFocusNode = FocusNode();
-  FocusNode _idCardFocusNode = FocusNode();
   TextEditingController _enterpriseNameController = TextEditingController();
   TextEditingController _xydmController = TextEditingController();
   TextEditingController _fddbrController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _idCardController = TextEditingController();
-  String roleName;
-  String role;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.model != null) {
+      _enterpriseNameController.text = widget.model.name ?? '';
+      _xydmController.text = widget.model.organization ?? '';
+      _fddbrController.text = widget.model.legal?.name ?? '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +42,12 @@ class _AuthenticationEnterpriseFromPageState
           elevation: 0.5,
         ),
         body: Container(
+          color: Colors.white,
           child: ListView(
             children: <Widget>[
               _buildEnterpriseInfo(),
-              _buildAgentInfo(),
+              _buildWarning(),
+              _buildWarningInfo()
             ],
           ),
         ),
@@ -105,58 +115,11 @@ class _AuthenticationEnterpriseFromPageState
                     },
                   );
                 });
-          } else if (_nameController == null || _nameController.text == '') {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return CustomizeDialog(
-                    dialogType: DialogType.RESULT_DIALOG,
-                    failTips: '我的姓名不能为空',
-                    callbackResult: false,
-                    confirmAction: () {
-                      Navigator.of(context).pop();
-                    },
-                  );
-                });
-          } else if (_idCardController == null ||
-              _idCardController.text == '') {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return CustomizeDialog(
-                    dialogType: DialogType.RESULT_DIALOG,
-                    failTips: '身份证号码不能为空',
-                    callbackResult: false,
-                    confirmAction: () {
-                      Navigator.of(context).pop();
-                    },
-                  );
-                });
-          } else if (role == null || role == '') {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return CustomizeDialog(
-                    dialogType: DialogType.RESULT_DIALOG,
-                    failTips: '请选择身份',
-                    callbackResult: false,
-                    confirmAction: () {
-                      Navigator.of(context).pop();
-                    },
-                  );
-                });
           } else {
             Map map = {
               'companyName': _enterpriseNameController.text,
               'organization': _xydmController.text,
-              'role': role,
-              'username': _nameController.text,
-              'idCardNum': _idCardController.text,
-              'verifyWay': 'WAY1',
-              'companyType': 'TYPE1'
+              'legal': {'name': _fddbrController.text}
             };
             enterprise(map);
           }
@@ -167,21 +130,16 @@ class _AuthenticationEnterpriseFromPageState
 
   Widget _buildEnterpriseInfo() {
     return Container(
+      margin: EdgeInsets.only(top: 10),
       color: Colors.white,
       child: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            color: Colors.grey[100],
-            child: Center(
-              child: Text('企业信息'),
-            ),
-          ),
           Container(
             child: TextFieldComponent(
               textAlign: TextAlign.right,
               focusNode: _enterpriseNameFocusNode,
               controller: _enterpriseNameController,
+              enabled: widget.model == null,
               leadingText: Text('企业名称',
                   style: TextStyle(
                     fontSize: 16,
@@ -194,6 +152,7 @@ class _AuthenticationEnterpriseFromPageState
               textAlign: TextAlign.right,
               focusNode: _xydmFocusNode,
               controller: _xydmController,
+              enabled: widget.model == null,
               leadingText: Text('信用代码',
                   style: TextStyle(
                     fontSize: 16,
@@ -206,6 +165,7 @@ class _AuthenticationEnterpriseFromPageState
               textAlign: TextAlign.right,
               focusNode: _fddbrFocusNode,
               controller: _fddbrController,
+              enabled: widget.model == null,
               leadingText: Text('法定代表人',
                   style: TextStyle(
                     fontSize: 16,
@@ -219,109 +179,34 @@ class _AuthenticationEnterpriseFromPageState
     );
   }
 
-  Widget _buildAgentInfo() {
+  Widget _buildWarning() {
     return Container(
-      color: Colors.white,
-      child: Column(
+      margin: EdgeInsets.symmetric(vertical: 20),
+      child: Row(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            color: Colors.grey[100],
-            child: Center(
-              child: Text('经办人信息'),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              _showTypeSelect();
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text('我的身份',
-                          style: TextStyle(
-                            fontSize: 16,
-                          )),
-                    ),
-                  ),
-                  Container(
-                    child: Text('${roleName != null ? roleName : '选择身份'}',
-                        style: TextStyle(fontSize: 16, color: Colors.grey)),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(
-                height: 0,
-              )),
-          Container(
-            child: TextFieldComponent(
-              textAlign: TextAlign.right,
-              focusNode: _nameFocusNode,
-              controller: _nameController,
-              leadingText: Text('我的姓名',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              hintText: '输入经办人姓名',
-            ),
-          ),
-          Container(
-            child: TextFieldComponent(
-              textAlign: TextAlign.right,
-              focusNode: _idCardFocusNode,
-              controller: _idCardController,
-              leadingText: Text('身份证号码',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              hintText: '输入身份证号码',
-              hideDivider: true,
-            ),
-          ),
+          Expanded(
+              child: Text(
+                '填写企业营业执照上的真实信息',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.red),
+              ))
         ],
       ),
     );
   }
 
-  void _showTypeSelect() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-            height: 250,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  title: Text('我是法人'),
-                  onTap: () async {
-                    setState(() {
-                      role = 'LEGAL';
-                      roleName = '我是法人';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('我是经办人'),
-                  onTap: () async {
-                    setState(() {
-                      role = 'AGENT';
-                      roleName = '我是经办人';
-                    });
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            ));
-      },
+  Widget _buildWarningInfo() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+              child: Text(
+                '$AUTHENTICATION_INFO',
+              ))
+        ],
+      ),
     );
   }
 
@@ -378,3 +263,8 @@ class _AuthenticationEnterpriseFromPageState
     });
   }
 }
+
+///认证提示信息
+const AUTHENTICATION_INFO = '1.一个企业有3次认证机会，超过三次需要收费。' +
+    '\n2.企业一旦认证成功，再次申请认证后不可以修改企业认证信息，如因工商变更需要修改信息请联系平台客服人员。' +
+    '\n3企业信息发生变更（如名称、法人等)，请第一时间完成新的认证，如未重新认证导致的一切问题由企业自己承担。';

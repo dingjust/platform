@@ -16,6 +16,9 @@ pubspec.lock
 # If you don't generate documentation locally you can remove this line.
 doc/api/
 
+#flutter-plugins-dependencies
+*.flutter-plugins-dependencies
+
 .idea/
 *.iml
 .metadata

@@ -1438,11 +1438,15 @@ const state = {
   ],
   CooperatorCategory: [{
       code: 'SUPPLIER',
-      name: '供应商'
+      name: '加工厂'
     },
     {
       code: 'CUSTOMER',
       name: '客户'
+    },
+    {
+      code: 'FABRIC_SUPPLIER',
+      name: '面辅料商'
     }
   ],
   // 收货单、对账单状态
@@ -1972,9 +1976,19 @@ const state = {
     code: 'FINANCE',
     name: '财务类'
   }],
+  // 认证状态
+  AuthApprovalStatus: [{
+    code: 'check',
+    name: '认证中'
+  }, {
+    code: 'unapproved',
+    name: '未认证'
+  }, {
+    code: 'approved',
+    name: '已认证'
+  }, ],
   // 对账月类型
-  MonthType: [
-    {
+  MonthType: [{
       code: 'CURRENT_MONTH',
       name: '本月'
     },

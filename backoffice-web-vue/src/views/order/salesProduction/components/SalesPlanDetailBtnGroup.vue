@@ -43,7 +43,7 @@
           </el-col>
         </template>
         <!-- 销售计划 -->
-        <template v-else-if="(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')">
+        <template v-else-if="slotData.auditState=='NONE' || (slotData.auditState=='AUDITED_FAILED' && isCreator)">
           <el-col :span="3">
             <el-button class="material-btn" @click="onCommit">提交</el-button>
           </el-col>

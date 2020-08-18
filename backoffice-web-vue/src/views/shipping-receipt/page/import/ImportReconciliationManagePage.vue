@@ -10,7 +10,8 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-manage-page mode="import" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
+        :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" 
+        :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     </el-card>
   </div>
 </template>
@@ -62,6 +63,10 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
+        
         let query;
         //针对发货方的确认审核状态处理
         if (this.queryFormData.states == 'PENDING_APPROVAL') {
@@ -86,6 +91,9 @@
           companyCode
         });
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      }
     },
     data() {
       return {
@@ -214,9 +222,12 @@
             url: this.apis().reconciliationList()
           },
         },
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('RECONCILIATION_SHEET');
+      this.onResetQuery();
       this.onAdvancedSearch(0, 10);
     },
   }

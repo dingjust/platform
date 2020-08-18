@@ -122,7 +122,7 @@
                 </el-form-item>
               </el-row>
             </el-col>
-            <el-col :span="8" v-if="orderType == 'SALES_ORDER'">
+            <el-col :span="8">
               <el-row type="flex" align="top">
                 <el-col :span="16">
                   <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案"
@@ -261,38 +261,14 @@
     },
     data() {
       return {
-        isAddRow: false,
         materialDialogVisible: false,
         openAccountingSheet: {},
         openAccountingSheetUnitPrice: null,
         openSampleSpecEntries: [],
         appendProductForm: {
-          sampleList: [{
-            product: {
-
-            },
-            progressPlan: {},
-            colorSizeEntries: [],
-            unitPrice: '',
-            deliveryDate: '',
-            materialsSpecEntries: [],
-            productionProcessContent: '',
-            medias: [],
-            costOrder: null,
-            shippingAddress: {},
-            productionTask: {
-              price: '',
-              deliveryTime: '',
-              populationScale: '',
-              cooperationMode: "LABOR_AND_MATERIAL",
-              invoiceTaxPoint: 0.03,
-              invoiceNeeded: false,
-              remarks: "",
-              appointFactory: null,
-            }
-          }],
+          sampleList: [],
         },
-        currentProductIndex: 0,
+        currentProductIndex: -1,
         dialogVisible: false,
         viewDialogVisible: false,
         progressPlanVisible: false
@@ -327,88 +303,90 @@
         this.appendProductForm.sampleList[this.currentProductIndex].progressPlan = row;
         this.progressPlanVisible = false;
       },
-      onSelectSample(data) {
-        if (this.isAddRow) {
-          this._addRow();
-          this.isAddRow = false;
-        }
-        //构建颜色尺码行
-        var colorSizeEntries = [];
-        data.colorSizes.forEach(color => {
-          color.sizes.forEach(size => {
-            colorSizeEntries.push({
-              color: {
-                code: color.colorCode,
-                name: color.colorName,
-                id: color.colorId
-              },
-              size: {
-                code: size.code,
-                name: size.name,
-                id: size.id
-              },
-              quantity: ''
-            })
+      onSelectSample(val) {
+        val.forEach(data => {
+          //构建颜色尺码行
+          var colorSizeEntries = [];
+          data.colorSizes.forEach(color => {
+            color.sizes.forEach(size => {
+              colorSizeEntries.push({
+                color: {
+                  code: color.colorCode,
+                  name: color.colorName,
+                  id: color.colorId
+                },
+                size: {
+                  code: size.code,
+                  name: size.name,
+                  id: size.id
+                },
+                quantity: ''
+              })
+            });
           });
-        });
 
-        //设置对应颜色，尺码数组                    
-        var entry = {
-          product: data,
-          colorSizeEntries: colorSizeEntries,
-          unitPrice: '',
-          deliveryDate: '',
-          // materialsSpecEntries: data.entries,
-          productionProcessContent: '',
-          medias: [],
-          costOrder: null,
-          colors: this.getColorsByEntries(colorSizeEntries),
-          sizes: this.getSizesByEntries(colorSizeEntries),
-        }
-
-        //若需要物料清单
-        if (this.needMaterialsSpec) {
-          entry['materialsSpecEntries'] = data.entries;
-          //若有成本核算单                  
-          if (data.costingSheets != null && data.costingSheets[0] != null) {
-            entry['sampleCostOrder'] = data.costingSheets[0];
+          //设置对应颜色，尺码数组                    
+          var entry = {
+            product: data,
+            colorSizeEntries: colorSizeEntries,
+            unitPrice: '',
+            deliveryDate: '',
+            // materialsSpecEntries: data.entries,
+            productionProcessContent: '',
+            medias: [],
+            costOrder: null,
+            colors: this.getColorsByEntries(colorSizeEntries),
+            sizes: this.getSizesByEntries(colorSizeEntries),
           }
-        }
 
-        var newEntry = Object.assign(this.appendProductForm.sampleList[this.currentProductIndex], entry);
+          //若需要物料清单
+          if (this.needMaterialsSpec) {
+            entry['materialsSpecEntries'] = data.entries;
+            //若有成本核算单                  
+            if (data.costingSheets != null && data.costingSheets[0] != null) {
+              entry['sampleCostOrder'] = data.costingSheets[0];
+            }
+          }
 
-        //通过set 赋值刷新渲染视图
-        this.$set(this.appendProductForm.sampleList, this.currentProductIndex, newEntry);
+          //选择，指定Index
+          if (this.currentProductIndex != -1) {
+            var newEntry = Object.assign(this.appendProductForm.sampleList[this.currentProductIndex], entry);
+            //通过set 赋值刷新渲染视图
+            this.$set(this.appendProductForm.sampleList, this.currentProductIndex, newEntry);
+          } else {
+            this.appendProductForm.sampleList.push(Object.assign({}, entry));
+          }
+        });
 
         this.materialDialogVisible = false;
       },
-      _addRow () {
-        var newEntry = {
-          product: {
+      // _addRow() {
+      //   var newEntry = {
+      //     product: {
 
-          },
-          progressPlan: {},
-          colorSizeEntries: [],
-          unitPrice: '',
-          deliveryDate: '',
-          materialsSpecEntrie: [],
-          productionProcessContent: '',
-          medias: [],
-          costOrder: null,
-          shippingAddress: {},
-          productionTask: {
-            price: '',
-            deliveryTime: '',
-            populationScale: '',
-            cooperationMode: "LABOR_AND_MATERIAL",
-            invoiceTaxPoint: 0.03,
-            invoiceNeeded: false,
-            remarks: "",
-            appointFactory: null,
-          }
-        };
-        this.appendProductForm.sampleList.push(newEntry);
-      },
+      //     },
+      //     progressPlan: {},
+      //     colorSizeEntries: [],
+      //     unitPrice: '',
+      //     deliveryDate: '',
+      //     materialsSpecEntrie: [],
+      //     productionProcessContent: '',
+      //     medias: [],
+      //     costOrder: null,
+      //     shippingAddress: {},
+      //     productionTask: {
+      //       price: '',
+      //       deliveryTime: '',
+      //       populationScale: '',
+      //       cooperationMode: "LABOR_AND_MATERIAL",
+      //       invoiceTaxPoint: 0.03,
+      //       invoiceNeeded: false,
+      //       remarks: "",
+      //       appointFactory: null,
+      //     }
+      //   };
+      //   this.appendProductForm.sampleList.push(newEntry);
+      // },
       //获取样衣颜色
       getColorsByEntries(colorSizeEntries) {
         var colors = [];
@@ -569,9 +547,8 @@
         this.$set(this.appendProductForm.sampleList[this.currentProductIndex], 'costOrder', sheet);
         this.dialogVisible = false;
       },
-      addRow () {
-        this.isAddRow = true;
-        this.currentProductIndex = this.appendProductForm.sampleList.length;
+      addRow() {
+        this.currentProductIndex = -1;
         this.materialDialogVisible = true;
       },
       onSubmit() {

@@ -2,7 +2,7 @@
   <div class="personnel-toolbar-container">
     <el-form :inline="true">
       <el-row type="flex" justify="space-between">
-        <el-col :span="22">
+        <el-col :span="20">
           <el-form-item label="员工信息">
             <el-input placeholder="输入员工信息" v-model="queryFormData.keyword"></el-input>
           </el-form-item>

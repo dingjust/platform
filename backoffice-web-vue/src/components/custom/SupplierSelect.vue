@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-form :inline="true">
       <el-form-item label="">
-        <el-input placeholder="请输入名称查询" :value="queryFormData.keyword" @input="setKeyword"></el-input>
+        <el-input placeholder="请输入名称查询" :v-model="queryFormData.keyword"></el-input>
       </el-form-item>
       <el-button type="text" @click="onSearch">查找</el-button>
       <Authorized :permission="['COMPANY_COOPERATOR_CREATE']">
@@ -60,15 +60,11 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        queryFormData: 'queryFormData'
       })
     },
     methods: {
       ...mapActions({
         searchAdvanced: 'searchAdvanced'
-      }),
-      ...mapMutations({
-        setKeyword: 'setQueryFormDataKeyword'
       }),
       onPageSizeChanged(val) {
         this._reset();
@@ -78,7 +74,7 @@
           this.onSearch(0, val);
           return;
         }
-        this.onSearch(0 ,val);
+        this.onSearch(0, val);
         // this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
@@ -167,6 +163,11 @@
         suppliers: [],
         multipleSelection: [],
         selectSupplier: '',
+        queryFormData: {
+          type: '',
+          keyword: '',
+          category: []
+        },
       }
     }
   }
@@ -184,14 +185,14 @@
   }
 
   .product-select-btn {
-    width: 70px!important;
+    width: 70px !important;
     /* height: 25px; */
-    background: #FFD60C!important;
+    background: #FFD60C !important;
     /* font-weight: 400; */
-    color: rgba(0, 0, 0, 0.85)!important;
+    color: rgba(0, 0, 0, 0.85) !important;
     /* font-size: 10px; */
     /* border-radius: 0px; */
-    border: 0px solid #FFD60C!important;
+    border: 0px solid #FFD60C !important;
   }
 
   .el-table__body tr.current-row>td {

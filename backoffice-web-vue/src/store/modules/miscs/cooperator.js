@@ -22,7 +22,7 @@ const state = {
   },
   queryFormData: {
     type: '',
-    keyword: ''
+    keyword: '',
   },
   ordersQueryFormData: {
     belongTos: null,
@@ -41,7 +41,14 @@ const state = {
     category: null,
     detailedIdentity: '',
     payPlan: null,
-    remarks: ''
+    remarks: '',
+    accountName: '',
+    address: {
+      region: '',
+      city: '',
+      cityDistrict: '',
+      line1: ''
+    },
   },
   editFormData: {
     id: null,
@@ -56,7 +63,8 @@ const state = {
     category: null,
     detailedIdentity: '',
     payPlan: null,
-    remarks: ''
+    remarks: '',
+    accountName: ''
   },
 };
 
@@ -68,6 +76,7 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   page: (state, page) => state.page = page,
   orderPage: (state, page) => state.orderPage = page,
+  queryFormData: (state, data) => state.queryFormData = data,
   setQueryFormData: (state, query) => state.queryFormData = query,
   setQueryFormDataKeyword: (state, keyword) => state.queryFormData.keyword = keyword,
   setOrdersQueryFormData: (state, query) => state.ordersQueryFormData = query,
@@ -76,7 +85,16 @@ const mutations = {
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    keyword,
+    page,
+    size
+  }) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
@@ -94,14 +112,23 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
-    commit('queryFormData', query);
+  async searchAdvanced({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    queryFormData,
+    page,
+    size
+  }) {
+    commit('queryFormData', queryFormData);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post(url, state.queryFormData, {
+    const response = await http.post(url, queryFormData, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -111,7 +138,16 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchOrdersAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
+  async searchOrdersAdvanced({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    query,
+    page,
+    size
+  }) {
     const response = await http.post(url, state.ordersQueryFormData, {
       page: state.ordersPageNumber,
       size: state.ordersPageSize
@@ -122,15 +158,27 @@ const actions = {
       commit('orderPage', response);
     }
   },
-  refresh ({dispatch, commit, state}) {
+  refresh({
+    dispatch,
+    commit,
+    state
+  }) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {
+      keyword,
+      page: currentPageNumber,
+      size: currentPageSize
+    });
   },
   //清空订单列表数据
-  clearOrderPageData ({dispatch, commit, state}) {
+  clearOrderPageData({
+    dispatch,
+    commit,
+    state
+  }) {
     commit('orderPage', {
       number: 0, // 当前页，从0开始
       size: 8, // 每页显示条数
@@ -139,7 +187,11 @@ const actions = {
       content: [] // 当前页数据
     });
   },
-  clearFormData({dispatch, commit, state}){
+  clearFormData({
+    dispatch,
+    commit,
+    state
+  }) {
     commit('setFormData', {
       id: null,
       name: '',
@@ -153,10 +205,17 @@ const actions = {
       category: null,
       detailedIdentity: '',
       payPlan: null,
-      remarks: ''
+      remarks: '',
+      accountName: '',
+      address: {
+        region: '',
+        city: '',
+        cityDistrict: '',
+        line1: ''
+      },
     });
-    console.log(state.formData);
-  }
+  },
+
 };
 
 const getters = {

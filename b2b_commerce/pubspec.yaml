@@ -224,6 +224,8 @@ flutter:
     - packages/assets/temp/20200411161233.png
     - packages/assets/temp/20200411161325.png
     - packages/assets/temp/20200414163706.png
+    - packages/assets/temp/auth_fail.png
+    - packages/assets/temp/auth_success.png
 
   fonts:
     - family: b2bIcons

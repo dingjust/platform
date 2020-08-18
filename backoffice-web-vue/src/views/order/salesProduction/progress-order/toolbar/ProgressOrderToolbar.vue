@@ -4,8 +4,10 @@
         <el-form-item label="工单信息" prop="name">
           <el-input placeholder="工单号，产品名或货号" v-model="queryFormData.keyword"></el-input>
         </el-form-item>
-        <el-form-item label="跟单员" prop="name">
-          <el-input placeholder="跟单员姓名" v-model="queryFormData.operatorName"></el-input>
+        <el-form-item label="部门/人员" prop="name">
+          <!-- <el-input placeholder="跟单员姓名" v-model="queryFormData.operatorName"></el-input> -->
+          <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                                :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
         </el-form-item>
         <el-form-item label="交货日期">
           <el-date-picker
@@ -26,9 +28,13 @@
 </template>
 
 <script>
+  import { DeptPersonSelect } from '@/components'
   export default {
     name: 'ProgressOrderToolbar',
-    props: ['queryFormData'],
+    props: ['queryFormData', 'dataQuery'],
+    components: {
+      DeptPersonSelect
+    },
     computed: {
 
     },
@@ -41,6 +47,8 @@
         this.queryFormData.statuses = '';
         this.queryFormData.operatorName = '';
         this.dateArr = null;
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       }
     },
     data () {

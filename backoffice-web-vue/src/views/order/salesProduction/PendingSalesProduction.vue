@@ -17,7 +17,7 @@
       </el-row>
       <div class="pt-2"></div>
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"
-        @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"
+        @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder" @onResetQuery="onResetQuery"
         @onUniqueCodeImport="onUniqueCodeImport" :isPending="true" :dataQuery="dataQuery"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
@@ -86,7 +86,7 @@
       onAdvancedSearch(page, size) {
         this.setIsAdvancedSearch(true);
         if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-          this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+          this.onResetQuery();
         }
         const query = this.queryFormData;
         const url = this.apis().getPendingSalesOrderList();
@@ -139,11 +139,13 @@
           name: '录入业务订单'
         });
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
       onUniqueCodeImport() {},
     },
     data() {
       return {
-        pageSign: 'SALES_OUT_ORDER',
         activeName: 'TO_BE_ACCEPTED',
         statuses: [],
         queryFormData: {
@@ -157,8 +159,8 @@
       }
     },
     created() {
-      this.dataQuery = this.getDataPerQuery(this.pageSign);
-      this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      this.dataQuery = this.getDataPerQuery('SALES_OUT_ORDER');
+      this.onResetQuery();
       this.onAdvancedSearch();
       this.statuses = Object.assign([], this.$store.state.EnumsModule.SalesProductionOrderState);
       // 去除未提交

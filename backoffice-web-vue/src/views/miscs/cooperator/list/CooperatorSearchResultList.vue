@@ -1,7 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange"
-      :height="autoHeight">
+    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" :height="autoHeight">
       <el-table-column label="合作商名称" prop="name">
         <template slot-scope="scope">
           <span v-if="scope.row.partner != null"> {{scope.row.partner.name}}</span>
@@ -9,31 +8,31 @@
         </template>
       </el-table-column>
       <el-table-column label="联系人" prop="contactPerson">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <span v-if="scope.row.partner != null"> {{scope.row.partner.contactPerson}}</span>
           <span v-else> {{scope.row.contactPerson}}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="联系方式" prop="contactPhone">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <span v-if="scope.row.partner != null"> {{scope.row.partner.contactPhone}}</span>
           <span v-else> {{scope.row.contactPhone}}</span>
-        </template>
+        </template> -->
       </el-table-column>
-      <el-table-column label="类别"prop="category">
+      <!-- <el-table-column label="类别" prop="category">
         <template slot-scope="scope">
           <span> {{getEnum('CooperatorCategory',scope.row.category)}}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="类型"prop="type">
+      </el-table-column> -->
+      <el-table-column label="类型" prop="type">
         <template slot-scope="scope">
           <span> {{getEnum('CooperatorType',scope.row.type)}}</span>
         </template>
       </el-table-column>
       <!--<el-table-column label="合作次数" v-if="!isFactory()" prop="belongTo.name">-->
-        <!--<template slot-scope="scope">-->
-          <!--<span v-if="scope.row.belongTo">{{scope.row.belongTo.name}}</span>-->
-        <!--</template>-->
+      <!--<template slot-scope="scope">-->
+      <!--<span v-if="scope.row.belongTo">{{scope.row.belongTo.name}}</span>-->
+      <!--</template>-->
       <!--</el-table-column>-->
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
@@ -129,6 +128,7 @@
       }
     }
   }
+
 </script>
 <style>
   .cooperator-list-button {
