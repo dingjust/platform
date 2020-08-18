@@ -140,6 +140,7 @@
           }
         },
         onReset () {
+          this.queryFormData.keyword = '';
           this.queryFormData.name = '';
           this.queryFormData.skuID = '';
           this.queryFormData.categories = '';
