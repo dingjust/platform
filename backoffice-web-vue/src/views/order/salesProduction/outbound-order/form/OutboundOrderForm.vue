@@ -458,8 +458,16 @@
         let data = Object.assign({}, this.formData);
 
         // 人员设置数据处理
-        if (!this.formData.sendAuditNeeded) {
+        if (!data.sendAuditNeeded) {
           data.sendApprovers = [];
+        } else {
+          for (let i = 0; i < data.sendApprovers.length; i++) {
+            if (data.sendApprovers instanceof Array && data.sendApprovers[i].length > 0) {
+              data.sendApprovers[i] = {
+                id: this.formData.sendApprovers[i][this.formData.sendApprovers[i].length -1]
+              }
+            }
+          }
         }
         if (!data.invoiceNeeded) {
           data.invoiceTaxPoint = null;

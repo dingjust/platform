@@ -59,7 +59,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="22">
-            <div style="display: flex;flex-wrap: wrap;">
+            <!-- <div style="display: flex;flex-wrap: wrap;">
               <template v-for="(item,itemIndex) in formData.approvers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
                   :prop="'approvers.' + itemIndex" :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
@@ -70,7 +70,7 @@
                 <el-button style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
                 <el-button v-if="formData.approvers.length > 1" stfyle="height: 32px" @click="removeApprover">删除</el-button>
               </el-button-group>
-            </div>
+            </div> -->
           </el-col>
         </el-row>
         <el-row type="flex" v-else style="margin-top:20px">
