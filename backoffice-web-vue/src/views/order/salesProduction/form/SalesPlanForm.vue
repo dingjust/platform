@@ -176,8 +176,6 @@
         this.form.salesDateEnd = val[1];
       },
       onSelectSample (data) {
-        console.log('-----------------------------------')
-        console.log(data);
         this.materialDialogVisible = false;
         this.salesProductAppendVisible = true;
         this.$nextTick(() => {
@@ -314,6 +312,9 @@
         this.validateField('productionLeader');
       },
       'form.approvers': function (nval, oval) {
+        if (nval.length === 1 && nval[0] == null) {
+          return;
+        }
         this.form.approvers.forEach((item, index) => {
           this.validateField('approvers.' + index);
         })

@@ -42,7 +42,7 @@
                       @closeContractTypeDialog="dialogVisible=false" @openPreviewPdf="openPreviewPdf"/>
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
-      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract"/>
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @onSearch="onSearch"/>
     </el-dialog>
   </div>
 </template>
@@ -102,6 +102,10 @@ export default {
 
       this.pdfVisible = true;
       this.fileUrl = encodeURIComponent(aa)
+    },
+    onSearch () {
+      this.pdfVisible = false;
+      this.$emit('callback');
     }
   },
   data () {

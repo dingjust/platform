@@ -42,8 +42,10 @@
           <el-button v-if="unapprovedShow(scope.row)" type="text" icon="el-icon-edit" @click="onOffShelf(scope.row)">
             下架
           </el-button>
-          <el-button :disabled="!remove(scope.row)" type="text" icon="el-icon-edit"
-                     @click="onDelete(scope.row)">删除</el-button>
+          <Authorized :permission="['PRODUCT_CREATE']">
+            <el-button :disabled="!remove(scope.row)" type="text" icon="el-icon-edit"
+                      @click="onDelete(scope.row)">删除</el-button>
+          </Authorized>
         </template>
       </el-table-column>
     </el-table>

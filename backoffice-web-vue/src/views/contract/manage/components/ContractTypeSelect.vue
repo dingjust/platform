@@ -228,10 +228,11 @@
   }
 
   .isSignedPaper-select {
-    border: 1px solid black;
+    /* border: 1px solid black; */
+    border-color: #E4E7ED;
     width: 350px;
     height: 110px;
-    background-color: #fff;
+    background-color: #F5F7FA;
     opacity: 0.85;
     border-radius: 9px;
     padding-left: 15px;
@@ -244,7 +245,8 @@
   }
 
   .isSignedPaper-title {
-    color: rgba(0, 0, 0, 1);
+    /* color: rgba(0, 0, 0, 1); */
+    color: #C0C4CC;
     opacity: 0.65;
     font-size: 15px;
     font-weight: bold;
@@ -252,7 +254,8 @@
 
   .isSignedPaper-content {
     font-size: 14px;
-    color: rgba(0, 0, 0, 1);
+    /* color: rgba(0, 0, 0, 1); */
+    color: #C0C4CC;
     opacity: 0.65;
   }
 </style>
