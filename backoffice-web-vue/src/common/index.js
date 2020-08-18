@@ -1113,6 +1113,9 @@ let NONE_TENANT_APIS = {
   getSampleProducts() {
     return '/b2b/sample/clothes';
   },
+  deleteSampleProduct (code) {
+    return '/b2b/sample/clothes/' + code + '/deleted';
+  },
   getRequirementOrders() {
     return '/b2b/orders/requirement';
   },

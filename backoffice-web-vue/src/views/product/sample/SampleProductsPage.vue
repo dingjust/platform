@@ -162,22 +162,21 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (this.isTenant()) {
-            this.platformDeleted(item);
-          } else {
+          // if (this.isTenant()) {
+          //   this.platformDeleted(item);
+          // } else {
             this._onDelete(item);
-          }
+          // }
         });
       },
       async _onDelete(item) {
-        const url = this.apis().deleteProduct(item.code);
+        const url = this.apis().deleteSampleProduct(item.code);
         const result = await this.$http.delete(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
         this.$message.success('样衣删除成功');
-        // this.refresh();
         this.onAdvancedSearch();
       },
       platformDeleted(item) {

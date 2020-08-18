@@ -31,8 +31,9 @@
       <el-table-column label="操作" min-width="240">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">详情</el-button>
-          <el-button v-if="remove(scope.row)" type="text" icon="el-icon-edit" @click="onDelete(scope.row)">删除
-          </el-button>
+          <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
+            <el-button type="text" icon="el-icon-edit" @click="onDelete(scope.row)">删除</el-button>
+          </Authorized>
         </template>
       </el-table-column>
     </el-table>
