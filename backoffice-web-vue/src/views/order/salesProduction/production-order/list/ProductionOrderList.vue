@@ -3,11 +3,12 @@
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :row-key="'id'" :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick"
       :reserve-selection="true">
-      <el-table-column :key="1" type="selection" :reserve-selection="true" width="50px" :selectable="rowDisabled" v-if="!isOutProduction" fixed />
+      <el-table-column :key="1" type="selection" :reserve-selection="true" width="50px" :selectable="rowDisabled"
+        v-if="!isOutProduction" fixed />
       <el-table-column :key="2" label="生产订单号" min-width="115">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" v-if="!isAllocating && !isOutProduction">
-            <el-tag type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
+            <el-tag v-if="scope.row.type!=null" type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
               {{getEnum('ProductionTaskOrderType', scope.row.type)}}</el-tag>
           </el-row>
           <el-row type="flex" justify="space-between" align="middle">

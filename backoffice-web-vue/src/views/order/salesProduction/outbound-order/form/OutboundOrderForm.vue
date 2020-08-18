@@ -147,8 +147,7 @@
           </el-col>
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
-          <el-col :span="24">
-            <!-- <pay-plan-form-v4 :vPayPlan.sync="formData.payPlan" :showPreview="true"/> -->
+          <el-col :span="24">          
             <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" />
           </el-col>
         </el-row>
@@ -263,11 +262,11 @@
   import ProgressPlanEditForm from '@/views/user/progress-plan/components/ProgressPlanEditForm'
   import OutboundTypeSelect from '../components/OutboundTypeSelect'
   import {
-    PayPlanFormV2,
     SupplierSelect,
-    PersonnalSelectionV2
+    PersonnalSelectionV2,
+    PayPlanForm
   } from '@/components'
-  import PayPlanForm from "../../../../../components/custom/PayPlanForm";
+  
   export default {
     name: 'OutboundOrderForm',
     components: {
@@ -281,9 +280,8 @@
       MTAVAT,
       MyAddressForm,
       SupplierSelect,
-      PayPlanFormV2,
       ProgressPlanEditForm,
-      OutboundTypeSelect
+      OutboundTypeSelect,
       PersonnalSelectionV2
     },
     methods: {
@@ -388,8 +386,8 @@
               originOrder: {
                 id: item.id
               },
-              unitPrice: '',
-              deliveryDate: '',
+              unitPrice: item.unitPrice,
+              deliveryDate: item.deliveryDate,
               shippingAddress: item.shippingAddress,
               product: {
                 id: item.product.id,

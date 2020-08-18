@@ -127,7 +127,7 @@
                 <el-col :span="16">
                   <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案"
                     label-width="100px" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true">
+                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true" v-if="entry.progressPlan!=null">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -337,6 +337,9 @@
             costOrder: null,
             colors: this.getColorsByEntries(colorSizeEntries),
             sizes: this.getSizesByEntries(colorSizeEntries),
+            progressPlan:{
+              name:''
+            }
           }
 
           //若需要物料清单
