@@ -337,6 +337,10 @@
         this.formData.outboundContactPhone = val.phone;
         this.formData.targetCooperator.id = val.id;
         if (val.payPlan != null) {
+          this.$delete(val.payPlan, 'id');
+          val.payPlan.payPlanItems.forEach(element => {
+            this.$delete(element, 'id');
+          });
           // this.formData.payPlan = JSON.parse(JSON.stringify(val.payPlan));
           this.formData.payPlan = Object.assign({}, val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
