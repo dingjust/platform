@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <supplier-select @onSelect="onSuppliersSelect" />
+      <supplier-select @onSelect="onSuppliersSelect"/>
     </el-dialog>
     <el-card>
       <el-row>
@@ -147,7 +147,7 @@
           </el-col>
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
-          <el-col :span="24">          
+          <el-col :span="24">
             <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" />
           </el-col>
         </el-row>
@@ -250,7 +250,7 @@
     'OutboundOrderModule'
   );
 
-  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
+  // import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
   import MyAddressForm from '../../../../../components/custom/order-form/MyAddressForm';
   import MTAVAT from '../../../../../components/custom/order-form/MTAVAT';
   import MyPayPlanForm from '../../../../../components/custom/order-form/MyPayPlanForm';
@@ -266,7 +266,7 @@
     PersonnalSelectionV2,
     PayPlanForm
   } from '@/components'
-  
+
   export default {
     name: 'OutboundOrderForm',
     components: {
@@ -337,7 +337,8 @@
         this.formData.outboundContactPhone = val.phone;
         this.formData.targetCooperator.id = val.id;
         if (val.payPlan != null) {
-          this.formData.payPlan = val.payPlan;
+          // this.formData.payPlan = JSON.parse(JSON.stringify(val.payPlan));
+          this.formData.payPlan = Object.assign({}, val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },

@@ -163,7 +163,7 @@
               </template>
             </el-select>
             <el-select v-model="item.payDayNum" placeholder="请选择" class="number-select">
-              <template v-if="item.monthType == 'CURRENT_MONTH' && item.monthlyEndDayNum">
+               <template v-if="item.monthType == 'CURRENT_MONTH' && item.monthlyEndDayNum">
                 <el-option v-for="val in 28" v-if="item.monthlyEndDayNum != -1 && val >= item.monthlyEndDayNum" :label="val+'号'" :value="val" :key="val"></el-option>
               </template>
               <template v-else>
@@ -308,6 +308,7 @@
             }
             index0 = this.formData.payPlanItems.findIndex((data) => data.moneyType === 'PHASETHREE');
             if (index0 > -1) {
+              this.formData.payPlanItems[index0].isLast = true;
               result.push(this.formData.payPlanItems[index0]);
             }else{
               result.push({
