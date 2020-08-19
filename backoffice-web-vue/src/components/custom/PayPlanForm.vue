@@ -2,8 +2,8 @@
 <template>
   <div class="animated fadeIn">
     <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body
-               :close-on-click-modal="false">
-      <pay-plan-select @onSelect="onPayPlanSelect" v-if="payPlanSelectDialogVisible"/>
+      :close-on-click-modal="false">
+      <pay-plan-select @onSelect="onPayPlanSelect" v-if="payPlanSelectDialogVisible" />
     </el-dialog>
     <el-dialog title="保存账务方案" :visible.sync="dialogPayPlanFormVisible" :close-on-click-modal="false">
       <el-form :model="payPlanForm">
@@ -19,170 +19,195 @@
         <el-button type="primary" @click="onPayPlanSave">确 定</el-button>
       </div>
     </el-dialog>
-    <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">有无定金</h6>
-          <el-radio class="info-radio" v-model="formData.isHaveDeposit" :label="true">有定金</el-radio>
-          <el-radio class="info-radio" v-model="formData.isHaveDeposit" :label="false">无定金</el-radio>
-        </el-row>
-      </el-col>
-      <el-col :span="8">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">尾款期数</h6>
-          <template v-for="item in payPlanTypes">
-            <el-radio class="info-radio" v-model="formData.payPlanType" :label="item.code">{{item.name}}</el-radio>
-          </template>
-        </el-row>
-      </el-col>
-      <el-col :span="9" :offset="1" v-if="isUseForOrder">
-        <el-row type="flex" align="start" justify="space-between">
-          <h6 style="margin-top: 3px;">{{formData.name!=undefined?'当前选中方案：'+formData.name:'当前未选择账务方案'}}</h6>
-          <el-button @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用账务方案</el-button>
-          <Authorized :permission="['PAY_PLAN_OPERATE']">
-            <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
-          </Authorized>
-        </el-row>
-      </el-col>
+    <el-row type="flex" v-if="isUseForOrder" justify="end" class="info-order-row">
+      <h6 class="form-plane-name">{{formData.name!=undefined?'当前选中方案：'+formData.name:'当前未选择账务方案'}}</h6>
+      <el-button @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用账务方案</el-button>
+      <Authorized :permission="['PAY_PLAN_OPERATE']">
+        <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
+      </Authorized>
     </el-row>
-
-    <div v-for="(item,index) in payPlanItems">
-      <el-row v-if="!(item.moneyType === 'MONTHLY_SETTLEMENT_ONE' || item.moneyType === 'MONTHLY_SETTLEMENT_TWO')"
-              class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
-        <el-col :span="7" align="middle">
-          <el-row type="flex" align="middle">
-            <h6 class="info-input-prepend" style="width: 60px;">{{getEnum('PayMoneyType',item.moneyType)}}</h6>
-            <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
-            <el-select v-model="item.triggerEvent" filterable @change="$forceUpdate()" placeholder="请选择">
-              <el-option v-for="event in triggerEvents" :label="event.name" :value="event.code"></el-option>
-            </el-select>
-          </el-row>
+    <el-form :model="formData" ref="payPlanForm">
+      <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
+        <el-col :span="8">
+          <el-form-item label="有无定金" label-width="120">
+            <el-radio :label="true" v-model="formData.isHaveDeposit">有定金</el-radio>
+            <el-radio :label="false" v-model="formData.isHaveDeposit">无定金</el-radio>
+          </el-form-item>
         </el-col>
-        <el-col :span="4" v-if="!item.isLast || item.isLast">
-          <el-row type="flex" align="middle" justify="start">
-            <el-col :span="6">
+        <el-col :span="16">
+          <el-form-item label="尾款期数" label-width="120">
+            <template v-for="item in payPlanTypes">
+              <el-radio :label="item.code" :key="item.code" v-model="formData.payPlanType">{{item.name}}</el-radio>
+            </template>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <div v-for="(item,index) in payPlanItems" :key="'item'+index">
+        <el-row v-if="!(item.moneyType === 'MONTHLY_SETTLEMENT_ONE' || item.moneyType === 'MONTHLY_SETTLEMENT_TWO')"
+          class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
+          <el-col :span="7" align="middle">
+            <el-row type="flex" align="middle">
+              <h6 class="info-input-prepend" style="width: 60px;">{{getEnum('PayMoneyType',item.moneyType)}}</h6>
+              <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
+              <el-select v-model="item.triggerEvent" filterable @change="$forceUpdate()" placeholder="请选择">
+                <el-option v-for="event in triggerEvents" :label="event.name" :value="event.code"
+                  :key="'event'+event.code"></el-option>
+              </el-select>
+            </el-row>
+          </el-col>
+          <el-col :span="4" v-if="!item.isLast || item.isLast">
+            <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2" style="width:50px;">后时长</h6>
-            </el-col>
-            <el-col :span="18">
               <el-input-number v-model="item.triggerDays" :precision="0" :step="1" :min="1" size="mini">
               </el-input-number>
-            </el-col>
-          </el-row>
-        </el-col>
-        <h6 v-if="item.isLast && formData.payPlanType == 'MONTHLY_SETTLEMENT'" class="info-input-prepend2"
+            </el-row>
+          </el-col>
+          <h6 v-if="item.isLast && formData.payPlanType == 'MONTHLY_SETTLEMENT'" class="info-input-prepend2"
             style="width: 200px">后, 次月{{item.triggerDays}}号支付剩余全部款项</h6>
-        <el-col v-if="!item.isLast || item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" :span="4">
-          <el-row type="flex" align="middle" justify="start">
-            <el-col :span="6">
-              <h6 class="info-input-prepend2">天付款</h6>
-            </el-col>
-          </el-row>
-        </el-col>
-        <h6 v-if="item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" class="info-input-prepend2"
+          <el-col v-if="!item.isLast || item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" :span="4">
+            <el-row type="flex" align="middle" justify="start">
+              <el-col :span="6">
+                <h6 class="info-input-prepend2">天付款</h6>
+              </el-col>
+            </el-row>
+          </el-col>
+          <h6 v-if="item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" class="info-input-prepend2"
             style="width: 200px;">剩余全部款项</h6>
-        <el-col v-if="!item.isLast" :span="4">
-          <el-row v-if="!item.isLast" type="flex" align="middle" justify="start">
-            <!-- <el-col :span="6">
+          <el-col v-if="!item.isLast" :span="4">
+            <el-row v-if="!item.isLast" type="flex" align="middle" justify="start">
+              <!-- <el-col :span="6">
               <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
             </el-col> -->
-            <el-col :span="18">
-              <el-select v-model="item.payPercent" @change="$forceUpdate()">
-                <el-option v-for="percent in 99" :value="percent*0.01" :label="percent+'%'"></el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row v-else type="flex" align="middle" class="info-order-row">
-        <el-col :span="2">
-          <h6 class="info-input-prepend" style="width: 60px;"
+              <el-col :span="18">
+                <el-select v-model="item.payPercent" @change="$forceUpdate()">
+                  <el-option v-for="percent in 99" :value="percent*0.01" :label="percent+'%'" :key="'percent'+percent">
+                  </el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row v-else type="flex" class="info-order-row" align="top">
+          <el-col :span="2">
+            <h6 class="info-input-prepend" style="width: 60px;padding-top:8px"
               v-if="!(item.moneyType == 'MONTHLY_SETTLEMENT_TWO' && item.isRange == true)">
-            {{getEnum('PayMoneyType',item.moneyType)}}
-          </h6>
-          <!--            <h6 class="info-input-prepend2" style="width:30px;">事件</h6>-->
-          <!--            <el-select v-model="item.triggerEvent" filterable @change="$forceUpdate()" placeholder="请选择">-->
-          <!--              <el-option v-for="event in triggerEvents" :label="event.name" :value="event.code"></el-option>-->
-          <!--            </el-select>-->
-        </el-col>
-        <el-col :span="22">
-          <el-row v-if="item.isRange" type="flex" style="align-items: baseline;">
-            <h6>当月</h6>
-            <el-select v-model="item.monthlyStartDayNum" placeholder="请选择" class="number-select" :disabled="true" @change="startDayNumChange(item,index)">
-              <template v-for="val in 28">
-                <el-option :label="val+'号'" :value="val" :key="val"></el-option>
-              </template>
-              <el-option label="月底" :value="-1" :key="-1"></el-option>
-            </el-select>
-            <h6>至</h6>
-            <el-select v-model="item.monthlyEndDayNum" placeholder="请选择" class="number-select" @change="endDayNumChange(item,index)">
-              <template v-if="item.monthlyStartDayNum">
-                <el-option v-for="val in 28" v-if="item.monthlyStartDayNum != -1 && val > item.monthlyStartDayNum" :label="val+'号'" :value="val" :key="val"></el-option>
-              </template>
-              <template v-else>
-                <el-option v-for="val in 28" :label="val+'号'" :value="val" :key="val"></el-option>
-              </template>
-              <el-option label="月底" :value="-1" :key="-1"></el-option>
-            </el-select>
-            <h6>前完成事件</h6>
-            <el-select v-model="item.triggerEvent" filterable placeholder="请选择" style="margin: 0 5px" :disabled="true">
-              <el-option v-for="event in triggerEventsV2" :label="event.name" :value="event.code"></el-option>
-            </el-select>
-            <h6>后于</h6>
-            <el-select v-model="item.monthType" placeholder="请选择" class="number-select">
-              <template v-for="val in monthTypes">
-                <el-option :label="val.name" :value="val.code" :key="val.code"></el-option>
-              </template>
-            </el-select>
-            <el-select v-model="item.payDayNum" placeholder="请选择" class="number-select">
-              <template v-if="item.monthType == 'CURRENT_MONTH' && item.monthlyEndDayNum">
-                <el-option v-for="val in 28" v-if="item.monthlyEndDayNum != -1 && val >= item.monthlyEndDayNum" :label="val+'号'" :value="val" :key="val"></el-option>
-              </template>
-              <template v-else>
-                <el-option v-for="val in 28" :label="val+'号'" :value="val" :key="val"></el-option>
-              </template>
-              <el-option label="月底" :value="-1" :key="-1"></el-option>
-            </el-select>
-            <h6>支付相应款项</h6>
-          </el-row>
-          <el-row v-else type="flex" style="align-items: baseline;">
-            <h6>每月</h6>
-            <el-select v-model="item.monthlyEndDayNum" placeholder="请选择" class="number-select" @change="endDayNumChange(item,index)">
-              <template v-for="val in 28">
-                <el-option :label="val+'号'" :value="val" :key="val"></el-option>
-              </template>
-              <el-option label="月底" :value="-1" :key="-1"></el-option>
-            </el-select>
-            <h6>前完成事件</h6>
-            <el-select v-model="item.triggerEvent" filterable placeholder="请选择" style="margin: 0 5px" @change="triggerEventChange(item,index)">
-              <el-option v-for="event in triggerEventsV2" :label="event.name" :value="event.code"></el-option>
-            </el-select>
-            <h6>后于</h6>
-            <el-select v-model="item.monthType" placeholder="请选择" class="number-select" @change="monthTypeChange(item,index)">
-              <template v-for="val in monthTypes">
-                <el-option :label="val.name" :value="val.code" :key="val.code"></el-option>
-              </template>
-            </el-select>
-            <el-select v-model="item.payDayNum" placeholder="请选择" class="number-select">
-               <template v-if="item.monthType == 'CURRENT_MONTH' && item.monthlyEndDayNum">
-                <el-option v-for="val in 28" v-if="item.monthlyEndDayNum != -1 && val >= item.monthlyEndDayNum" :label="val+'号'" :value="val" :key="val"></el-option>
-              </template>
-              <template v-else>
-                <el-option v-for="val in 28" :label="val+'号'" :value="val" :key="val"></el-option>
-              </template>
-              <el-option label="月底" :value="-1" :key="-1"></el-option>
-            </el-select>
-            <h6>支付相应款项</h6>
-          </el-row>
-        </el-col>
-      </el-row>
-    </div>
+              {{getEnum('PayMoneyType',item.moneyType)}}：
+            </h6>
+          </el-col>
+          <el-col :span="22">
+            <el-row v-if="item.isRange" type="flex">
+              <el-form-item label="当月" label-width="55px">
+                <el-select v-model="item.monthlyStartDayNum" placeholder="请选择" class="number-select" :disabled="true"
+                  @change="startDayNumChange(item,index)">
+                  <template v-for="val in 28">
+                    <el-option :label="val+'号'" :value="val" :key="val"></el-option>
+                  </template>
+                  <el-option label="月底" :value="-1" :key="-1"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="至" label-width="40px" style="margin-left:10px" prop="payPlanItems.1.monthlyEndDayNum"
+                :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
+                <el-select v-model="item.monthlyEndDayNum" placeholder="请选择" class="number-select"
+                  @change="endDayNumChange(item,index)">
+                  <template v-if="item.monthlyStartDayNum">
+                    <template v-for="val in 28">
+                      <el-option v-if="item.monthlyStartDayNum != -1 && val > item.monthlyStartDayNum" :label="val+'号'"
+                        :value="val" :key="val"></el-option>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <el-option v-for="val in 28" :label="val+'号'" :value="val" :key="val"></el-option>
+                  </template>
+                  <el-option label="月底" :value="-1" :key="-1"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="前完成事件" label-width="100px" style="margin-left:10px">
+                <el-select v-model="item.triggerEvent" filterable placeholder="请选择" class="form-event-select"
+                  :disabled="true">
+                  <el-option v-for="event in triggerEventsV2" :label="event.name" :value="event.code" :key="event.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="后于" label-width="55px" prop="payPlanItems.1.monthType"
+                :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
+                <el-select v-model="item.monthType" placeholder="请选择" class="number-select">
+                  <template v-for="val in monthTypes">
+                    <el-option :label="val.name" :value="val.code" :key="val.code"></el-option>
+                  </template>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="" label-width="10px" prop="payPlanItems.1.payDayNum"
+                :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
+                <el-select v-model="item.payDayNum" placeholder="请选择" class="number-select">
+                  <template v-if="item.monthType == 'CURRENT_MONTH' && item.monthlyEndDayNum">
+                    <template v-for="val in 28">
+                      <el-option v-if="item.monthlyEndDayNum != -1 && val >= item.monthlyEndDayNum" :label="val+'号'"
+                        :value="val" :key="val"></el-option>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <el-option v-for="val in 28" :label="val+'号'" :value="val" :key="val"></el-option>
+                  </template>
+                  <el-option label="月底" :value="-1" :key="-1"></el-option>
+                </el-select>
+              </el-form-item>
+              <h6 class="end-text">支付相应款项</h6>
+            </el-row>
+            <el-row v-else type="flex">
+              <el-form-item label="每月" label-width="55px" prop="payPlanItems.0.monthlyEndDayNum"
+                :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
+                <el-select v-model="item.monthlyEndDayNum" placeholder="请选择" class="number-select"
+                  @change="endDayNumChange(item,index)">
+                  <template v-for="val in 28">
+                    <el-option :label="val+'号'" :value="val" :key="val"></el-option>
+                  </template>
+                  <el-option label="月底" :value="-1" :key="-1"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="前完成事件" label-width="100px" style="margin-left:10px;"
+                prop="payPlanItems.0.triggerEvent" :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
+                <el-select v-model="item.triggerEvent" filterable placeholder="请选择" class="form-event-select"
+                  @change="triggerEventChange(item,index)">
+                  <el-option v-for="event in triggerEventsV2" :label="event.name" :value="event.code" :key="event.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="后于" label-width="55px" prop="payPlanItems.0.monthType"
+                :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
+                <el-select v-model="item.monthType" placeholder="请选择" class="number-select"
+                  @change="monthTypeChange(item,index)">
+                  <template v-for="val in monthTypes">
+                    <el-option :label="val.name" :value="val.code" :key="val.code"></el-option>
+                  </template>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="" label-width="10px" prop="payPlanItems.0.payDayNum"
+                :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
+                <el-select v-model="item.payDayNum" placeholder="请选择" class="number-select">
+                  <template v-if="item.monthType == 'CURRENT_MONTH' && item.monthlyEndDayNum">
+                    <template v-for="val in 28">
+                      <el-option v-if="item.monthlyEndDayNum != -1 && val >= item.monthlyEndDayNum" :label="val+'号'"
+                        :value="val" :key="val"></el-option>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <el-option v-for="val in 28" :label="val+'号'" :value="val" :key="val"></el-option>
+                  </template>
+                  <el-option label="月底" :value="-1" :key="-1"></el-option>
+                </el-select>
+              </el-form-item>
+              <h6 class="end-text">支付相应款项</h6>
+            </el-row>
+          </el-col>
+        </el-row>
+      </div>
+    </el-form>
 
     <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
       <el-col :span="24">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend" style="width:60px">结果预览</h6>
-          <el-input type="textarea" autosize v-model="resultPreview"/>
-          </el-input>
+          <el-input type="textarea" autosize v-model="resultPreview" />
         </el-row>
       </el-col>
     </el-row>
@@ -201,13 +226,15 @@
 
   export default {
     name: 'PayPlanForm',
-    components: {PayPlanSelect},
+    components: {
+      PayPlanSelect
+    },
     props: {
-      isUseForOrder:{
+      isUseForOrder: {
         type: Boolean,
         default: false
       },
-      formData:{
+      formData: {
         type: Object,
       }
     },
@@ -219,7 +246,7 @@
           var index0 = this.formData.payPlanItems.findIndex((data) => data.moneyType === 'DEPOSIT');
           if (index0 > -1) {
             result.push(this.formData.payPlanItems[index0]);
-          }else{
+          } else {
             result.push({
               payPercent: 0.3,
               triggerEvent: 'ORDER_CONFIRMED',
@@ -236,7 +263,7 @@
             if (index0 > -1) {
               this.formData.payPlanItems[index0].isLast = true;
               result.push(this.formData.payPlanItems[index0]);
-            }else{
+            } else {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -252,7 +279,7 @@
             if (index0 > -1) {
               this.formData.payPlanItems[index0].isLast = false;
               result.push(this.formData.payPlanItems[index0]);
-            }else{
+            } else {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -266,7 +293,7 @@
             if (index0 > -1) {
               this.formData.payPlanItems[index0].isLast = true;
               result.push(this.formData.payPlanItems[index0]);
-            }else{
+            } else {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -282,7 +309,7 @@
             if (index0 > -1) {
               this.formData.payPlanItems[index0].isLast = false;
               result.push(this.formData.payPlanItems[index0]);
-            }else{
+            } else {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -296,7 +323,7 @@
             if (index0 > -1) {
               this.formData.payPlanItems[index0].isLast = false;
               result.push(this.formData.payPlanItems[index0]);
-            }else{
+            } else {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -310,7 +337,7 @@
             if (index0 > -1) {
               this.formData.payPlanItems[index0].isLast = true;
               result.push(this.formData.payPlanItems[index0]);
-            }else{
+            } else {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -348,7 +375,8 @@
               result.push(this.formData.payPlanItems[index0]);
               break;
             }
-            var index = this.formData.payPlanItems.findIndex((data) => data.moneyType === 'MONTHLY_SETTLEMENT_TWO' && !data.isRange);
+            var index = this.formData.payPlanItems.findIndex((data) => data.moneyType === 'MONTHLY_SETTLEMENT_TWO' &&
+              !data.isRange);
             if (index > -1) {
               this.formData.payPlanItems[index].isLast = true;
               this.formData.payPlanItems[index].moneyType = 'MONTHLY_SETTLEMENT_ONE';
@@ -363,7 +391,8 @@
             }
             break;
           case 'MONTHLY_SETTLEMENT_TWO':
-            var index0 = this.formData.payPlanItems.findIndex((data) => data.moneyType === 'MONTHLY_SETTLEMENT_TWO' && !data.isRange);
+            var index0 = this.formData.payPlanItems.findIndex((data) => data.moneyType === 'MONTHLY_SETTLEMENT_TWO' &&
+              !data.isRange);
             var data_one;
             var index1;
             if (index0 > -1) {
@@ -387,10 +416,12 @@
                 result.push(data_one);
               }
             }
-            var index00 = this.formData.payPlanItems.findIndex((data) => data.moneyType === 'MONTHLY_SETTLEMENT_TWO' && data.isRange);
+            var index00 = this.formData.payPlanItems.findIndex((data) => data.moneyType ===
+              'MONTHLY_SETTLEMENT_TWO' && data.isRange);
             if (index00 > -1) {
               this.formData.payPlanItems[index00].triggerEvent = this.formData.payPlanItems[index0].triggerEvent;
-              this.formData.payPlanItems[index00].monthlyStartDayNum = this.formData.payPlanItems[index0].monthlyEndDayNum;
+              this.formData.payPlanItems[index00].monthlyStartDayNum = this.formData.payPlanItems[index0]
+                .monthlyEndDayNum;
               result.push(this.formData.payPlanItems[index00]);
             } else {
               var d = {
@@ -399,10 +430,10 @@
                 triggerType: 'INSIDE',
                 isLast: true,
               };
-              if(index1 > -1){
+              if (index1 > -1) {
                 d.triggerEvent = this.formData.payPlanItems[index1].triggerEvent;
                 d.monthlyStartDayNum = this.formData.payPlanItems[index1].monthlyEndDayNum;
-              }else{
+              } else {
                 d.triggerEvent = data_one.triggerEvent;
                 d.monthlyStartDayNum = data_one.monthlyEndDayNum;
               }
@@ -429,13 +460,15 @@
 
           switch (payPlanItem.moneyType) {
             case 'DEPOSIT':
-              result += '：在双方' + this.getEnum('TriggerEvent', payPlanItem.triggerEvent) + '后' + payPlanItem.triggerDays +
+              result += '：在双方' + this.getEnum('TriggerEvent', payPlanItem.triggerEvent) + '后' + payPlanItem
+                .triggerDays +
                 '天以内，甲方应向乙方支付订单总金额的' + (payPlanItem.payPercent * 100).toFixed(0) + '%为定金\n';
               break;
             case 'PHASEONE':
             case 'PHASETWO':
             case 'PHASETHREE':
-              result += '：在双方' + this.getEnum('TriggerEvent', payPlanItem.triggerEvent) + '后' + payPlanItem.triggerDays + '天以内，';
+              result += '：在双方' + this.getEnum('TriggerEvent', payPlanItem.triggerEvent) + '后' + payPlanItem
+                .triggerDays + '天以内，';
               if (payPlanItem.isLast) {
                 result += '甲方应向乙方支付合同剩余部分款项（以上所有款项金额以双方对账金额为准）';
               } else {
@@ -446,18 +479,22 @@
             case 'MONTHLY_SETTLEMENT_TWO':
               if (payPlanItem.isRange) {
                 result += '，' + (payPlanItem.monthlyStartDayNum ?
-                  (payPlanItem.monthlyStartDayNum == -1 ? '月底' : payPlanItem.monthlyStartDayNum + '号') : '*')
-                  + '后至' + (payPlanItem.monthlyEndDayNum ?
-                    (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*')
-                  + '前完成' + (payPlanItem.triggerEvent ? this.getEnum('TriggerEvent', payPlanItem.triggerEvent) : '****')
-                  + '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**')
-                  + (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') : ' *') + '支付相应款项';
+                    (payPlanItem.monthlyStartDayNum == -1 ? '月底' : payPlanItem.monthlyStartDayNum + '号') : '*') +
+                  '后至' + (payPlanItem.monthlyEndDayNum ?
+                    (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*') +
+                  '前完成' + (payPlanItem.triggerEvent ? this.getEnum('TriggerEvent', payPlanItem.triggerEvent) :
+                    '****') +
+                  '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
+                  (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
+                    ' *') + '支付相应款项';
               } else {
                 result += '：每月' + (payPlanItem.monthlyEndDayNum ?
-                  (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*')
-                  + '前完成' + (payPlanItem.triggerEvent ? this.getEnum('TriggerEvent', payPlanItem.triggerEvent) : '****')
-                  + '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**')
-                  + (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') : ' *') + '支付相应款项';
+                    (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*') +
+                  '前完成' + (payPlanItem.triggerEvent ? this.getEnum('TriggerEvent', payPlanItem.triggerEvent) :
+                    '****') +
+                  '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
+                  (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
+                    ' *') + '支付相应款项';
               }
               break;
           }
@@ -510,7 +547,7 @@
         // this.updateCurForm(item);
         this.payPlanSelectDialogVisible = false;
       },
-      async onPayPlanSave(item){
+      async onPayPlanSave(item) {
         var payPlanForm = {
           name: this.payPlanForm.name,
           payPlanType: this.formData.payPlanType,
@@ -531,60 +568,61 @@
         this.payPlanForm.remarks = '';
         this.dialogPayPlanFormVisible = false;
       },
-      startDayNumChange(item,index){
+      startDayNumChange(item, index) {
         let i = this.payPlanItems.findIndex((data) => data.moneyType == 'MONTHLY_SETTLEMENT_TWO' && data.isRange);
-        if(i > -1){
+        if (i > -1) {
           this.payPlanItems[i].monthlyStartDayNum = item.monthlyStartDayNum;
-          if(this.payPlanItems[i].monthlyStartDayNum == -1){
-            if(this.payPlanItems[i].monthlyEndDayNum != -1){
+          if (this.payPlanItems[i].monthlyStartDayNum == -1) {
+            if (this.payPlanItems[i].monthlyEndDayNum != -1) {
               delete this.payPlanItems[i].monthlyEndDayNum;
             }
-          }else if(this.payPlanItems[i].monthlyStartDayNum > this.payPlanItems[i].monthlyEndDayNum){
+          } else if (this.payPlanItems[i].monthlyStartDayNum > this.payPlanItems[i].monthlyEndDayNum) {
             delete this.payPlanItems[i].monthlyEndDayNum;
           }
         }
 
 
       },
-      endDayNumChange(item,index){
-        if(!item.isRange){
+      endDayNumChange(item, index) {
+        if (!item.isRange) {
           let i = this.payPlanItems.findIndex((data) => data.moneyType == 'MONTHLY_SETTLEMENT_TWO' && data.isRange);
-          if(i > -1){
+          if (i > -1) {
             this.payPlanItems[i].monthlyStartDayNum = item.monthlyEndDayNum;
             // this.startDayNumChange(this.payPlanItems[i],i);
-            if(this.payPlanItems[i].monthlyStartDayNum == -1){
-              if(this.payPlanItems[i].monthlyEndDayNum != -1){
+            if (this.payPlanItems[i].monthlyStartDayNum == -1) {
+              if (this.payPlanItems[i].monthlyEndDayNum != -1) {
                 delete this.payPlanItems[i].monthlyEndDayNum;
               }
-            }else if(this.payPlanItems[i].monthlyEndDayNum != -1 &&
-              this.payPlanItems[i].monthlyStartDayNum > this.payPlanItems[i].monthlyEndDayNum){
+            } else if (this.payPlanItems[i].monthlyEndDayNum != -1 &&
+              this.payPlanItems[i].monthlyStartDayNum > this.payPlanItems[i].monthlyEndDayNum) {
               delete this.payPlanItems[i].monthlyEndDayNum;
             }
           }
         }
 
-        if(item.monthType == 'CURRENT_MONTH' && item.payDayNum){
-          if(item.monthlyEndDayNum == -1 && item.payDayNum != -1){
+        if (item.monthType == 'CURRENT_MONTH' && item.payDayNum) {
+          if (item.monthlyEndDayNum == -1 && item.payDayNum != -1) {
             delete this.payPlanItems[index].payDayNum;
-          }else{
-            if(item.payDayNum != -1 && item.monthlyEndDayNum > item.payDayNum){
+          } else {
+            if (item.payDayNum != -1 && item.monthlyEndDayNum > item.payDayNum) {
               delete this.payPlanItems[index].payDayNum;
             }
           }
         }
       },
-      monthTypeChange(item,index){
-        if(item.monthlyEndDayNum == -1 && item.payDayNum != -1){
+      monthTypeChange(item, index) {
+        if (item.monthlyEndDayNum == -1 && item.payDayNum != -1) {
           delete this.payPlanItems[index].payDayNum;
-        }else {
-          if(item.monthType == 'CURRENT_MONTH' && item.payDayNum && item.payDayNum != -1 && item.monthlyEndDayNum > item.payDayNum){
+        } else {
+          if (item.monthType == 'CURRENT_MONTH' && item.payDayNum && item.payDayNum != -1 && item.monthlyEndDayNum >
+            item.payDayNum) {
             delete this.payPlanItems[index].payDayNum;
           }
         }
       },
-      triggerEventChange(item,index){
+      triggerEventChange(item, index) {
         let i = this.payPlanItems.findIndex((data) => data.moneyType == 'MONTHLY_SETTLEMENT_TWO' && data.isRange);
-        if(i > -1){
+        if (i > -1) {
           this.payPlanItems[i].triggerEvent = item.triggerEvent;
         }
       },
@@ -788,7 +826,7 @@
     height: 100px;
   }
 
-  .purchase-form-item small.el-form-item {
+  /* .purchase-form-item small.el-form-item {
     margin-bottom: 0px !important;
   }
 
@@ -799,11 +837,26 @@
 
   .purchase-form-item .el-form-item__error {
     padding-left: 70px !important;
-  }
+  } */
 
   .number-select {
     width: 100px;
+    /* margin: 0 5px; */
+  }
+
+  .form-plane-name {
+    padding-top: 8px;
+    margin-right: 10px;
+  }
+
+  .end-text {
+    padding-top: 7px;
+    margin-left: 10px;
+  }
+
+  .form-event-select {
     margin: 0 5px;
+    width: 120px
   }
 
 </style>

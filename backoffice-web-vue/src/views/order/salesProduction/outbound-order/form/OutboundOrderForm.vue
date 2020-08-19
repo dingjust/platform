@@ -120,7 +120,7 @@
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="18">
             <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
-              :tax.sync="formData.invoiceTaxPoint" />
+              :tax.sync="formData.invoiceTaxPoint" :layoutScale="[9,10,5]"/>
           </el-col>
           <el-col :span="6">
             <el-form-item label="运费承担：" label-width="120">
@@ -148,7 +148,7 @@
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
           <el-col :span="24">
-            <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" />
+            <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom"/>
           </el-col>
         </el-row>
         <el-row>
@@ -445,6 +445,7 @@
         this.$refs['addressForm'].forEach(item => {
           formArr.push(item.$refs['address']);
         })
+        formArr.push(this.$refs['payPlanCom'].$refs['payPlanForm']);
         // 使用Promise.all 并行去校验结果
         let res = await Promise.all(formArr.map(this.getFormPromise));
 
@@ -652,10 +653,11 @@
     text-align: center;
     align-content: center;
     color: rgba(0, 0, 0, 0.65);
+    background: rgba(247, 247, 247, 1);
   }
 
   .order-purchase-table-btn_add:hover {
-    background: rgba(247, 247, 247, 1);
+    background: #fff9c4;
     cursor: pointer;
   }
 
