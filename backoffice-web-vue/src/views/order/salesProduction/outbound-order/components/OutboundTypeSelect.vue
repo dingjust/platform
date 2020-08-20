@@ -30,7 +30,7 @@
     },
     methods: {
       onClick(val) {
-        this.$confirm('我的订单管理方式一旦选择后期不能更改, 你是否确认选择?', '提示', {
+        this.$confirm('订单管理方式一旦选择后期不能更改, 你是否确认选择?', '提示', {
           confirmButtonText: '是',
           cancelButtonText: '否',
           type: 'warning'

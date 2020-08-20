@@ -331,7 +331,13 @@
         this.form.originCooperator.contactPhone = val.phone;
         this.form.originCooperator.contactPerson = val.person;
         if (val.payPlan != null) {
-          this.setPayPlan(val.payPlan);
+          // this.setPayPlan(val.payPlan);
+          // 删除原有id
+          this.$delete(val.payPlan, 'id');
+          val.payPlan.payPlanItems.forEach(element => {
+            this.$delete(element, 'id');
+          });
+          this.form.payPlan = Object.assign({}, val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },

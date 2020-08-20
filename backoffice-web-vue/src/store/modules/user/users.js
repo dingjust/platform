@@ -53,7 +53,7 @@ const mutations = {
     state.permissions = permissions;
   },
   dataPermission(state, data) {
-    if (data && data.length > 0) {
+    if (data != null && data.length > 0) {
       let dataPermission = {};
       data.forEach(item => {
         dataPermission[item.code] = item.permission;
@@ -89,11 +89,11 @@ const actions = {
     if (response['error']) {
       console.log(JSON.stringify(response));
       if (response['error'] == 'invalid_grant') {
-        alert('账号密码不正确');        
+        alert('账号密码不正确');
       }
       return;
     }
-    
+
     //其他情况
     if (!response['access_token']) {
       alert('网络连接错误');
@@ -191,8 +191,8 @@ const getters = {
     return state.currentUser;
   },
   token() {
-    // return 'Bearer ' + sessionStorage.getItem('token');
-    return 'Bearer ' + state.token;
+    return 'Bearer ' + sessionStorage.getItem('token');
+    // return 'Bearer ' + state.token;
   },
   authenticationInfo: state => state.authenticationInfo,
   permissions() {

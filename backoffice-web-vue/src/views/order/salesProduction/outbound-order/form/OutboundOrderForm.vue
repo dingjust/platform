@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <supplier-select @onSelect="onSuppliersSelect" />
+      <supplier-select @onSelect="onSuppliersSelect"/>
     </el-dialog>
     <el-card>
       <el-row>
@@ -120,7 +120,7 @@
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="18">
             <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
-              :tax.sync="formData.invoiceTaxPoint" />
+              :tax.sync="formData.invoiceTaxPoint" :layoutScale="[9,10,5]"/>
           </el-col>
           <el-col :span="6">
             <el-form-item label="运费承担：" label-width="120">
@@ -147,8 +147,8 @@
           </el-col>
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
-          <el-col :span="24">          
-            <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" />
+          <el-col :span="24">
+            <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom"/>
           </el-col>
         </el-row>
         <el-row>
@@ -243,7 +243,7 @@
     'OutboundOrderModule'
   );
 
-  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
+  // import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
   import MyAddressForm from '../../../../../components/custom/order-form/MyAddressForm';
   import MTAVAT from '../../../../../components/custom/order-form/MTAVAT';
   import MyPayPlanForm from '../../../../../components/custom/order-form/MyPayPlanForm';
@@ -259,7 +259,7 @@
     PersonnalSelectionV2,
     PayPlanForm
   } from '@/components'
-  
+
   export default {
     name: 'OutboundOrderForm',
     components: {
@@ -330,7 +330,12 @@
         this.formData.outboundContactPhone = val.phone;
         this.formData.targetCooperator.id = val.id;
         if (val.payPlan != null) {
-          this.formData.payPlan = val.payPlan;
+          this.$delete(val.payPlan, 'id');
+          val.payPlan.payPlanItems.forEach(element => {
+            this.$delete(element, 'id');
+          });
+          // this.formData.payPlan = JSON.parse(JSON.stringify(val.payPlan));
+          this.formData.payPlan = Object.assign({}, val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
@@ -437,6 +442,7 @@
         this.$refs['addressForm'].forEach(item => {
           formArr.push(item.$refs['address']);
         })
+        formArr.push(this.$refs['payPlanCom'].$refs['payPlanForm']);
         // 使用Promise.all 并行去校验结果
         let res = await Promise.all(formArr.map(this.getFormPromise));
 
@@ -644,10 +650,11 @@
     text-align: center;
     align-content: center;
     color: rgba(0, 0, 0, 0.65);
+    background: rgba(247, 247, 247, 1);
   }
 
   .order-purchase-table-btn_add:hover {
-    background: rgba(247, 247, 247, 1);
+    background: #fff9c4;
     cursor: pointer;
   }
 

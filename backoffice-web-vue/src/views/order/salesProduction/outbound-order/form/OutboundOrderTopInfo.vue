@@ -90,7 +90,7 @@
     </el-row>
     <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
 <!--      <pay-plan-info :form="payPlan"></pay-plan-info>-->
-      <h6 v-html="payPlan.previewText"></h6>
+      <h6 v-html="getHtmlText(payPlan.previewText)"></h6>
     </el-popover>
   </div>
 </template>
@@ -151,6 +151,12 @@
     methods: {
       callback() {
         this.$emit('callback');
+      },
+      getHtmlText(text) {
+        if (text === undefined) {
+          return '';
+        }
+        return text.replace(/\n/g, '</br></br>');
       }
     },
     data() {
