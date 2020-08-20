@@ -24,6 +24,7 @@ import {
   numberInput
 } from './directives';
 import Authorized from '@/auth/Authorized';
+import Print from 'vue-print-nb'
 
 import {
   getDataPermissionQuery
@@ -86,6 +87,8 @@ Vue.use(HttpServletPlugin);
 Vue.use(ElementUI, {
   size: 'small'
 });
+Vue.use(Print);
+
 // Vue.use(directives);
 //数字输入框指令
 Vue.directive('number-input', numberInput);

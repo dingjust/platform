@@ -1,6 +1,9 @@
 // Chat
 import ChatPage from './Chat/ChatPage';
 
+// Button
+import PrinterButton from './custom/button/PrinterButton'
+
 // Custom/item
 import CooperatorItem from './custom/item/CooperatorItem';
 import FactoryItem from './custom/item/FactoryItem';
@@ -81,6 +84,8 @@ import main from './webchat/main';
 
 export {
   ChatPage,
+  //Button
+  PrinterButton,
   CooperatorItem,
   FactoryItem,
   MTAVAT,

@@ -1,113 +1,123 @@
 <template>
   <div class="animated fadeIn content payment-request-container">
     <el-card>
-      <div class="financial-plan-triangle_box">
-        <div class="financial-plan-triangle" :style="getTriangleColor">
-          <h6 class="financial-plan-triangle_text">{{auditState}}</h6>
-        </div>
-      </div>
-      <el-row type="flex" justify="space-between">
-        <el-col :span="4">
-          <div class="financial-list-title">
-            <h6>付款申请单</h6>
+      <div id="printContent">
+        <div class="financial-plan-triangle_box">
+          <div class="financial-plan-triangle" :style="getTriangleColor">
+            <h6 class="financial-plan-triangle_text">{{auditState}}</h6>
           </div>
-        </el-col>
-        <el-col :span="6">
-          <h6 style="color: #F56C6C" v-if="showTips">申请金额超过未付款金额</h6>
-        </el-col>
-        <el-col :span="4">
-          <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
-        </el-col>
-      </el-row>
-      <div class="pt-2"></div>
-      <el-row type="flex" justify="center">
-        <el-col :span="22">
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
-            <el-col :span="8">
-              <h6>申请单号：{{formData.code}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>订单号：{{formData.productionOrder.code}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>合同号：{{agreementsCode}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
-            <el-col :span="8">
-              <h6>申请部门：</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>申请人：{{formData.applyUser.name}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>付款内容：{{formData.paymentFor}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
-            <el-col :span="8">
-              <h6>收款对象：{{formData.payable.name}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>申请金额：{{formData.requestAmount}}元</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>金额大写：{{convertCurrency(formData.requestAmount)}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
-            <el-col :span="8">
-              <h6>收款人：{{formData.bankCardAccount}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>收款账号：{{formData.bankCardNo}}</h6>
-            </el-col>
-            <el-col :span="8">
-              <h6>开户行：{{formData.bank}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
-            <el-col :span="8">
-              <h6>审批人：{{approvers}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
-            <el-col :span="8">
-              <h6>备注：{{formData.remark}}</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px" 
-            v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
-            <el-col :span="8">
-              <h6>上传凭证</h6>
-              <el-row style="margin-left: 20px">
-                <images-upload :slotData="formData.requestVouchers" 
-                  :limit="formData.requestVouchers.length" :disabled="true" />
-              </el-row>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="center" v-if="formData.state === 'PAID'">
-        <el-col :span="23">
-          <payment-records-list :formData="formData" :tableData="[formData.paymentRecords]" />
-        </el-col>
-      </el-row>
+        </div>
+        <el-row type="flex" justify="space-between">
+          <el-col :span="4">
+            <div class="financial-list-title">
+              <h6>付款申请单</h6>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <h6 style="color: #F56C6C" v-if="showTips">申请金额超过未付款金额</h6>
+          </el-col>
+          <el-col :span="4">
+            <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
+          </el-col>
+        </el-row>
+        <div class="pt-2"></div>
+        <el-row type="flex" justify="center">
+          <el-col :span="22">
+            <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+              <el-col :span="8">
+                <h6>申请单号：{{formData.code}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>订单号：{{formData.productionOrder.code}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>合同号：{{agreementsCode}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+              <el-col :span="8">
+                <h6>申请部门：</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>申请人：{{formData.applyUser.name}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>付款内容：{{formData.paymentFor}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+              <el-col :span="8">
+                <h6>收款对象：{{formData.payable.name}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>申请金额：{{formData.requestAmount}}元</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>金额大写：{{convertCurrency(formData.requestAmount)}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+              <el-col :span="8">
+                <h6>收款人：{{formData.bankCardAccount}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>收款账号：{{formData.bankCardNo}}</h6>
+              </el-col>
+              <el-col :span="8">
+                <h6>开户行：{{formData.bank}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+              <el-col :span="8">
+                <h6>审批人：{{approvers}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+              <el-col :span="8">
+                <h6>备注：{{formData.remark}}</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="start" align="middle" style="margin-top: 20px"
+              v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
+              <el-col :span="8">
+                <h6>上传凭证</h6>
+                <el-row style="margin-left: 20px">
+                  <images-upload :slotData="formData.requestVouchers" :limit="formData.requestVouchers.length"
+                    :disabled="true" />
+                </el-row>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="center" v-if="formData.state === 'PAID'">
+          <el-col :span="23">
+            <payment-records-list :formData="formData" :tableData="[formData.paymentRecords]" />
+          </el-col>
+        </el-row>
+      </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
         <Authorized :permission="['PAYMENT_REQUEST_FINANCE_PAY']">
           <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
         </Authorized>
+        <printer-button v-print="'#printContent'"/>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <payment-form v-if="paymentVisible" :id="id" @callback="callback"/>
+    <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <payment-form v-if="paymentVisible" :id="id" @callback="callback" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import { PersonnelSelection, ImagesUpload } from '@/components/index.js'
-  import { PaymentRecordsList } from '@/views/financial'
+  import {
+    PersonnelSelection,
+    ImagesUpload,
+    PrinterButton
+  } from '@/components/index.js'
+  import {
+    PaymentRecordsList
+  } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
   export default {
     name: 'PaymentRequestDetailFinance',
@@ -116,9 +126,10 @@
       PersonnelSelection,
       ImagesUpload,
       PaymentForm,
-      PaymentRecordsList
+      PaymentRecordsList,
+      PrinterButton
     },
-    computed: { 
+    computed: {
       agreementsCode: function () {
         if (!this.formData.productionOrder.agreements && this.formData.productionOrder.agreements.length <= 0) {
           return '';
@@ -176,7 +187,7 @@
       }
     },
     methods: {
-      async getDetail () {
+      async getDetail() {
         const url = this.apis().getPaymentRequestDetail(this.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -190,7 +201,7 @@
         this.formData = result.data;
         this.countRequestAmount(result.data.productionOrder.id);
       },
-      async countRequestAmount (id) {
+      async countRequestAmount(id) {
         const url = this.apis().getRequestAmount(id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -201,17 +212,17 @@
           this.$message.error(result.msg);
           return;
         }
-        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) - 
-                              this.parseFloatNotParNaN(result.data.paidAmount);
+        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) -
+          this.parseFloatNotParNaN(result.data.paidAmount);
       },
-      parseFloatNotParNaN (data) {
+      parseFloatNotParNaN(data) {
         if (isNaN(parseFloat(data))) {
           return 0;
         } else {
           return parseFloat(data);
         }
       },
-      callback () {
+      callback() {
         this.paymentVisible = !this.paymentVisible;
         this.getDetail();
       },
@@ -238,7 +249,9 @@
         var chineseStr = '';
         //分离金额后用的数组，预定义
         var parts;
-        if (money === '') { return ''; }
+        if (money === '') {
+          return '';
+        }
         money = parseFloat(money);
         if (money >= maxNum) {
           //超出最大处理数字
@@ -299,9 +312,9 @@
           chineseStr += cnInteger;
         }
         return chineseStr;
-      } 
+      }
     },
-    data () {
+    data() {
       return {
         paymentVisible: false,
         preApplyAmount: '',
@@ -327,13 +340,14 @@
         isFormFincance: false
       }
     },
-    created () {
+    created() {
       this.getDetail();
     },
-    destroyed () {
-      
+    destroyed() {
+
     }
   }
+
 </script>
 
 <style scoped>
@@ -346,13 +360,13 @@
     width: 194px;
   }
 
-  .payment-request-container >>> .el-upload--picture-card {
+  .payment-request-container>>>.el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  .payment-request-container >>> .el-upload-list--picture-card .el-upload-list__item {
+  .payment-request-container>>>.el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }
@@ -389,4 +403,5 @@
     color: white;
     font-size: 12px;
   }
+
 </style>
