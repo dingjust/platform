@@ -173,7 +173,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
           );
         },
         child: CachedNetworkImage(
-          imageUrl: item.url,
+          imageUrl: item.actualUrl,
           fit: BoxFit.cover,
           placeholder: (context, url) =>
               SpinKitRing(
