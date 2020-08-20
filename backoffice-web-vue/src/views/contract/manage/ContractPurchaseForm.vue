@@ -82,13 +82,14 @@
           </el-input>
         </el-col>
       </el-row>
-      <el-row class="create-contract-row" v-if="contractType!='1'">
+      <el-row class="create-contract-row" v-if="contractType === '2'">
         <el-col :span="8" :offset="2">
-          <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+          <p-d-f-upload ref="pdfUpload" :vFileList.sync="pdfFile" :fileLimit="1"></p-d-f-upload>
+          <!-- <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
                      :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
-                     :on-exceed="handleExceed" :on-progress="uploadVideoProcess"
+                     :on-exceed="handleExceed"
                      :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
-            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
+            <div slot="tip" class="el-upload__tip" v-if="contractType !== '3'">只能上传PDF文件</div>
             <i class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
               <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
@@ -101,7 +102,12 @@
                 </span>
               </span>
             </div>
-          </el-upload>
+          </el-upload> -->
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType === '3'">
+        <el-col :span="22" :offset="2">
+          <images-upload ref="imagesUpload" :slotData="paperList" :limit="99"></images-upload>
         </el-col>
       </el-row>
 
@@ -153,6 +159,7 @@
     import ContractPreviewPdf from './components/ContractPreviewPdf'
     import ContractSelect from './components/ContractSelect';
     import ContractFrameSelect from './components/ContractFrameSelect';
+    import { ImagesUpload, PDFUpload } from '@/components'
 
     const {
       mapGetters,
@@ -172,7 +179,9 @@
         ContractOrderSelect,
         TemplateForm,
         ContractPreviewPdf,
-        ContractSelect
+        ContractSelect,
+        ImagesUpload,
+        PDFUpload
       },
       computed: {
         ...mapGetters({
@@ -212,55 +221,6 @@
 
           this.dialogTemplateVisible = true;
         },
-        // async onSearchOrder (page, size, keyword) {
-        //   var _page = 0;
-        //   var _size = 10;
-        //   if (page) {
-        //     _page = page;
-        //   }
-        //   if (size) {
-        //     _size = size;
-        //   }
-        //   const url = this.apis().getPurchaseOrders();
-        //   const result = await this.$http.post(url, {
-        //     statuses: ['PENDING_PAYMENT', 'IN_PRODUCTION', 'WAIT_FOR_OUT_OF_STORE', 'OUT_OF_STORE', 'COMPLETED'],
-        //     keyword: keyword
-        //   }, {
-        //     page: _page,
-        //     size: _size
-        //   });
-        //   if (result['errors']) {
-        //     this.$message.error(result['errors'][0].message);
-        //     return;
-        //   }
-        //   this.orderPage = result;
-        // },
-        // async onSearchFrameContract (page, size, keyword) {
-        //   var _page = 0;
-        //   var _size = 10;
-        //   if (page) {
-        //     _page = page;
-        //   }
-        //   if (size) {
-        //     _size = size;
-        //   }
-        //   const url = this.apis().getContractsList();
-        //   const result = await http.post(url, {
-        //     type: 'KJXY',
-        //     // partyACompany: this.companyUid,
-        //     state: 'COMPLETE',
-        //     title: keyword
-        //   }, {
-        //     page: _page,
-        //     size: _size
-        //   });
-        //   if (result['errors']) {
-        //     this.$message.error(result['errors'][0].message);
-        //     return;
-        //   }
-        //   this.framePage = result;
-        //   console.log(this.framePage);
-        // },
         onContractTypeChange (val) {
           if (val != null || val != '') {
             this.contractType = val;
@@ -307,19 +267,23 @@
         },
         handleRemove (file) {
           this.fileList = [];
-          this.pdfFile = '';
+          this.pdfFile = [];
         },
         async onSavePdf () {
-          // if (!this.isOrderClickPass) {
-          //   this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
-          //   return;
-          // }
           var agreementType = null;
           if (this.contractType == '3') {
             agreementType = 'CUSTOMIZE_COMPLETED';
+            if (this.$refs.imagesUpload.isUploading()) {
+              this.$message.warning('图片正在上传，请稍后再试！');
+              return;
+            }
           }
           if (this.contractType == '2') {
             agreementType = 'CUSTOMIZE';
+            if (this.$refs.pdfUpload.isUploading()) {
+              this.$message.warning('PDF文件正在上传，请稍后再试！');
+              return;
+            }
           }
           if (this.orderSelectFiles.length == 0) {
             this.$message.error('请选择订单');
@@ -329,7 +293,7 @@
             this.$message.error('请选择框架协议');
             return;
           }
-          if (this.pdfFile.id == null || this.pdfFile.id == '') {
+          if (!this.pdfFile && this.pdfFile.length <= 0) {
             this.$message.error('请先上传PDF文件');
             return;
           }
@@ -337,23 +301,24 @@
             this.$message.error('请输入自定义合同编号');
             return;
           }
+          var frameAgreementCode = '';
+          if (this.selectContract && this.selectContract.code && this.selectContract.code !== '') {
+            frameAgreementCode = this.selectContract.code;
+          } else {
+            this.$message.error('请选择框架协议');
+            return;
+          }
+
           let role = '';
           if (this.partyA) {
             role = 'PARTYA';
           } else {
             role = 'PARTYB';
           }
+          
 
-          var frameAgreementCode = '';
-          if (this.selectContract.code == null || this.selectContract.code == '') {
-            return;
-          }
-
-          if (this.selectContract.code != null && this.selectContract.code != '') {
-            frameAgreementCode = this.selectContract.code;
-          }
           let data = {
-            'pdf': this.pdfFile,
+            // 'pdf': this.pdfFile,
             'role': role,
             'title': '',
             'customizeCode': this.contractCode,
@@ -361,6 +326,12 @@
             'frameAgreementCode': frameAgreementCode,
             // 'orderCodes': this.orderSelectFiles.map((order) => order.code)
             'items': this.orderSelectFiles.map((order) => order.id)
+          }
+
+          if (this.contractType === '2') {
+            this.$set(data, 'pdf', this.pdfFile[0]);
+          } else if (this.contractType === '3') {
+            this.$set(data, 'files', this.paperList)
           }
 
           const url = this.apis().saveContract();
@@ -588,7 +559,7 @@
           orderPage: [],
           framePage: [],
           disabled: false,
-          pdfFile: '',
+          pdfFile: [],
           pdfVisible: false,
           fileUrl: '',
           thisContract: '',
@@ -601,7 +572,8 @@
           cacheSelectContract: '',
           contractCode: '',
           isOrderClickPass: false,
-          tempFormVisible: false
+          tempFormVisible: false,
+          paperList: []
         };
       },
       created () {

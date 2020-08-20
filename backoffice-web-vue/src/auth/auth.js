@@ -73,8 +73,6 @@ export function hasPermission(authority) {
 }
 
 export function getDataPermissionQuery (from) {
-  console.log('--------------------------------------')
-  console.log(from)
   const currentUser = getCurrentUser();
   
   if (currentUser == null) {
