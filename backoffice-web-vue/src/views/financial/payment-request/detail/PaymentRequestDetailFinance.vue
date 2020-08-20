@@ -16,6 +16,9 @@
           <h6 style="color: #F56C6C" v-if="showTips">申请金额超过未付款金额</h6>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
       </el-row>
@@ -30,7 +33,11 @@
               <h6>订单号：{{formData.productionOrder.code}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>合同号：{{agreementsCode}}</h6>
+              <h6>合同号：
+                <template v-for="item in agreementsCode">
+                  <el-button type="text" :key="item.code" @click="openPreviewPdf(item)">{{item.code}}</el-button>
+                </template>
+              </h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
@@ -76,13 +83,12 @@
               <h6>备注：{{formData.remark}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px" 
-            v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
-            <el-col :span="8">
-              <h6>上传凭证</h6>
-              <el-row style="margin-left: 20px">
-                <images-upload :slotData="formData.requestVouchers" 
-                  :limit="formData.requestVouchers.length" :disabled="true" />
+          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
+            <el-col :span="24">
+              <h6>上传凭证：</h6>
+              <el-row style="margin-left: 20px" v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
+                <images-upload :slotData="formData.requestVouchers" :limit="formData.requestVouchers.length"
+                  :disabled="true" />
               </el-row>
             </el-col>
           </el-row>
@@ -102,11 +108,14 @@
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <payment-form v-if="paymentVisible" :id="id" @callback="callback"/>
     </el-dialog>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { PersonnelSelection, ImagesUpload } from '@/components/index.js'
+  import { PersonnelSelection, ImagesUpload, PdfPreview } from '@/components/index.js'
   import { PaymentRecordsList } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
   export default {
@@ -116,21 +125,16 @@
       PersonnelSelection,
       ImagesUpload,
       PaymentForm,
-      PaymentRecordsList
+      PaymentRecordsList,
+      PdfPreview
     },
     computed: { 
       agreementsCode: function () {
+        let arr = [];
         if (!this.formData.productionOrder.agreements && this.formData.productionOrder.agreements.length <= 0) {
-          return '';
+          return [];
         }
-        let contactCode = '';
-        this.formData.productionOrder.agreements.forEach((item, index) => {
-          contactCode += item.code;
-          if (index != this.formData.productionOrder.agreements.length - 1) {
-            this.contactCode += ', ';
-          }
-        })
-        return contactCode;
+        return this.formData.productionOrder.agreements.filter(item => item.state !== 'INVALID');
       },
       auditState: function () {
         switch (this.formData.state) {
@@ -214,6 +218,15 @@
       callback () {
         this.paymentVisible = !this.paymentVisible;
         this.getDetail();
+      },
+      async openPreviewPdf (item) {
+        const url = this.apis().downContract(item.code);
+        const result = await this.$http.get(url);
+
+        const aa = '/b2b/user/agreement/download/' + result.data;
+
+        this.fileUrl = 'static/pdf/web/viewer.html?file=' + encodeURIComponent(aa)
+        this.pdfVisible = true;
       },
       convertCurrency(money) {
         //汉字的数字
@@ -324,7 +337,9 @@
           }
         },
         detailId: '',
-        isFormFincance: false
+        isFormFincance: false,
+        pdfVisible: false,
+        fileUrl: ''
       }
     },
     created () {

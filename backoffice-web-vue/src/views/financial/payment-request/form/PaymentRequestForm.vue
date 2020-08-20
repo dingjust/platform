@@ -191,9 +191,11 @@
         this.formData.bankCardNo = row.targetCooperator.bankAccount;
         this.formData.bank = row.targetCooperator.bankOfDeposit;
         row.agreements.forEach((item, index) => {
-          this.contactCode += item.code;
-          if (!(index == row.agreements.length - 1)) {
-            this.contactCode += ', ';
+          if (item.state !== 'INVALID') {
+            this.contactCode += item.code;
+            if (!(index == row.agreements.length - 1)) {
+              this.contactCode += ', ';
+            }
           }
         })
         this.countRequestAmount(row.id);

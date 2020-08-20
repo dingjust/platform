@@ -274,9 +274,6 @@
           this.$set(data, 'files', this.paperList)
         }
 
-        console.log(data);
-        return;
-
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
