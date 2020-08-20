@@ -40,7 +40,7 @@
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
-          <el-radio v-model="contractType" label="1">模板合同</el-radio>
+          <el-radio v-model="contractType" label="1" :disabled="isSignedPaper">模板合同</el-radio>
           <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
         </el-col>
       </el-row>
@@ -460,6 +460,9 @@
       };
     },
     created () {
+      if (this.isSignedPaper) {
+        this.contractType = '2';
+      }
       // this.onSearchOrder('', 0, 10);
       // this.onSetOrderCode();
     }

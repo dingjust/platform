@@ -53,7 +53,7 @@ const mutations = {
     state.permissions = permissions;
   },
   dataPermission(state, data) {
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       let dataPermission = {};
       data.forEach(item => {
         dataPermission[item.code] = item.permission;

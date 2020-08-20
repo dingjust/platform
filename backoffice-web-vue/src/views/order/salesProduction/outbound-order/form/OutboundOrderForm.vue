@@ -13,7 +13,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" label-width="80px" :rules="rules" :model="formData" label-position="left">
+      <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
         <outbound-type-select :formData="formData" />
         <el-row>
           <el-col :span="4">
@@ -158,18 +158,19 @@
             </div>
           </el-col>
         </el-row>
-        <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20"
-          align="top">
-          <el-col :span="6">
+        <!-- <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top"> -->
+          <!-- <el-col :span="6"> -->
+            <div style="display: flex;flex-wrap: wrap;">
             <el-form-item label="跟单员" prop="merchandiser">
               <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
             </el-form-item>
-          </el-col>
-          <el-col :span="2">
-            <el-checkbox v-model="formData.sendAuditNeeded" style="padding-top: 5px">需审核</el-checkbox>
-          </el-col>
-          <el-col :span="16">
-            <div style="display: flex;flex-wrap: wrap;">
+          <!-- </el-col> -->
+          <!-- <el-col :span="2"> -->
+            <el-form-item label="" label-width="10px">
+              <el-checkbox v-model="formData.sendAuditNeeded">需审核</el-checkbox>
+            </el-form-item>
+          <!-- </el-col> -->
+          <!-- <el-col :span="16"> -->
               <template v-for="(item,itemIndex) in formData.sendApprovers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
                   :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
@@ -177,21 +178,13 @@
                   <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded" style="width: 194px"/>
                 </el-form-item>
               </template>
-              <el-button-group>
-                <el-button style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+              <el-button-group style="padding-bottom: 26px;">
+                <el-button v-if="formData.sendApprovers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
                 <el-button v-if="formData.sendApprovers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
               </el-button-group>
             </div>
-          </el-col>
-          <!-- <template v-for="(item, index) in formData.sendApprovers">
-            <el-col :span="6" v-if="formData.sendAuditNeeded">
-              <el-form-item label="审核员" prop="sendApprovers"
-                :rules="[{ type: 'object', validator: checkApprover, trigger: 'change' }]">
-                <personnel-selection :vPerson.sync="formData.sendApprovers[index]" />
-              </el-form-item>
-            </el-col>
-          </template> -->
-        </el-row>
+          <!-- </el-col> -->
+        <!-- </el-row> -->
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">

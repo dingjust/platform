@@ -6,7 +6,7 @@
           <span style="color: #909399">{{this.contracts.length > 0 ? '(已创建)' : '(未上传)'}}</span>
         </h6>
       </div>
-      <div v-if="canSign">
+      <div>
         <el-button type="text" @click="onUpload">
           <template v-if="isSignedPaper">
             <el-row type="flex" justify="center" align="middle">
@@ -82,6 +82,10 @@ export default {
       this.$emit('callback');
     },
     onUpload () {
+      if (!this.canSign) {
+        this.$message.warning('此订单暂时不能创建合同或者此账号无为此订单创建合同权限');
+        return;
+      }
       this.dialogVisible = true;
     },
     showContract (item) {

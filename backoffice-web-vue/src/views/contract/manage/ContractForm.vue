@@ -47,7 +47,7 @@
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
-          <el-radio v-model="contractType" label="1">模板合同</el-radio>
+          <el-radio v-model="contractType" label="1" :disabled="isSignedPaper">模板合同</el-radio>
           <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
         </el-col>
       </el-row>
@@ -78,7 +78,7 @@
                      :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
                      :on-exceed="handleExceed"
                      :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
-            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
+            <div slot="tip" class="el-upload__tip" v-if="contractType !== '3'">只能上传PDF文件</div>
             <i class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
               <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
@@ -106,13 +106,13 @@
       <!--          </el-input>-->
       <!--        </el-col>-->
       <!--      </el-row>-->
-      <el-row class="create-contract-row" type="flex" justify="start">
+      <!-- <el-row class="create-contract-row" type="flex" justify="start">
         <el-col :push="2" :span="8">
           <span class="tips">我的身份</span>
           <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
           <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
         </el-col>
-      </el-row>
+      </el-row> -->
 
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
@@ -536,6 +536,9 @@
       };
     },
     created () {
+      if (this.isSignedPaper) {
+        this.contractType = '2';
+      }
     },
     mounted () {
       this.onSetOrderCode();

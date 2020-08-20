@@ -50,7 +50,7 @@
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
-          <el-radio v-model="contractType" label="1">模板合同</el-radio>
+          <el-radio v-model="contractType" label="1" :disabled="isSignedPaper">模板合同</el-radio>
           <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
         </el-col>
       </el-row>
@@ -117,13 +117,13 @@
       <!--          </el-input>-->
       <!--        </el-col>-->
       <!--      </el-row>-->
-      <el-row class="create-contract-row" type="flex" justify="start">
+      <!-- <el-row class="create-contract-row" type="flex" justify="start">
         <el-col :push="2" :span="8">
           <span class="tips">我的身份</span>
           <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
           <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
         </el-col>
-      </el-row>
+      </el-row> -->
 
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
@@ -607,6 +607,9 @@
       created () {
         // this.onSearchOrder(0, 10);
         this.onSetOrderCode();
+        if (this.isSignedPaper) {
+          this.contractType = '2';
+        }
       },
       watch: {
         dialogOrderVisible: function (n, o) {
