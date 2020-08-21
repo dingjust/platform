@@ -2,11 +2,6 @@
   <div class="animated fadeIn content payment-request-container">
     <el-card>
       <div id="printContent">
-        <div class="financial-plan-triangle_box">
-          <div class="financial-plan-triangle" :style="getTriangleColor">
-            <h6 class="financial-plan-triangle_text">{{auditState}}</h6>
-          </div>
-        </div>
         <el-row type="flex" justify="space-between">
           <el-col :span="4">
             <div class="financial-list-title">
@@ -18,6 +13,9 @@
           </el-col>
           <el-col :span="4">
             <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
+          </el-col>
+          <el-col :span="4">
+            <el-tag effect="plain" size="medium">{{auditState}}</el-tag>
           </el-col>
         </el-row>
         <div class="pt-2"></div>
@@ -95,11 +93,15 @@
           </el-col>
         </el-row>
       </div>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-        <Authorized :permission="['PAYMENT_REQUEST_FINANCE_PAY']">
-          <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
-        </Authorized>
-        <printer-button v-print="'#printContent'"/>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" :gutter="20">
+        <el-col :span="4">
+          <Authorized :permission="['PAYMENT_REQUEST_FINANCE_PAY']">
+            <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
+          </Authorized>
+        </el-col>
+        <el-col :span="4">
+          <printer-button v-print="'#printContent'" />
+        </el-col>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body
@@ -379,29 +381,4 @@
     height: 40px;
     border-radius: 10px;
   }
-
-  .financial-plan-triangle_box {
-    margin-top: 1px;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .financial-plan-triangle {
-    width: 0;
-    height: 0;
-    border-right: 70px solid white;
-    border-bottom: 70px solid transparent;
-    z-index: 0;
-  }
-
-  .financial-plan-triangle_text {
-    width: 80px;
-    padding-top: 10px;
-    padding-left: 37px;
-    transform: rotateZ(45deg);
-    color: white;
-    font-size: 12px;
-  }
-
 </style>

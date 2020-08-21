@@ -39,9 +39,11 @@
           <financial-tabs :formData="formData.paymentBill" belongTo="PAYABLE_PAGE" :outboundOrder="formData" />
         </div>
       </div>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isBelongTo">
-        <el-button class="purchase-order-btn2" @click="onGenerateUniqueCode" v-if="canGenerate">唯一码</el-button>
-        <el-button class="purchase-order-btn2" @click="onCancel" v-if="this.formData.status != ''">取消订单</el-button>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isSendBy">
+        <el-button class="purchase-order-btn2" @click="onOrderWithdraw" v-if="canOrderWithdraw" type="text">撤回
+        </el-button>
+        <el-button class="purchase-order-btn2" @click="cancelFormVisible=true" v-if="canCancel" type="text">取消订单
+        </el-button>
       </el-row>
       <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
         <el-col :span="3">
@@ -56,9 +58,9 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="uniqueCodeFormVisible" width="30%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="cancelFormVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <unique-code-generate-form :order="formData" />
+      <outbound-cancel-form :order="formData" />
     </el-dialog>
   </div>
 </template>
@@ -80,6 +82,8 @@
   import OutboundOrderTopInfo from '../form/OutboundOrderTopInfo';
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
+  import OutboundCancelForm from '../form/OutboundCancelForm';
+
   import {
     SalesProductionTabs
   } from '@/views/order/salesProduction/components/'
@@ -97,7 +101,8 @@
       SalesProductionTabs,
       PurchaseOrderInfoPaymentFinance,
       PurchaseOrderInfoReceiptFinance,
-      FinancialTabs
+      FinancialTabs,
+      OutboundCancelForm
     },
     computed: {
       ...mapGetters({
@@ -107,19 +112,17 @@
         // const uid = this.$store.getters.currentUser.companyCode;
         // return !(uid == this.formData.belongTo.uid) && this.formData.status == 'PENDING_CONFIRM';
       },
-      isBelongTo: function () {
-        // const uid = this.$store.getters.currentUser.companyCode;
-        // return uid == this.formData.belongTo.uid && this.formData.status != 'CONFIRMED' && this.formData.status !=
-        //   'CANCELLED';
+      //能否接单撤回(待接单)
+      canOrderWithdraw: function () {
+        return this.formData.state == 'TO_BE_ACCEPTED';
       },
-      canGenerate: function () {
-        // if (this.formData.cooperator != null && this.formData.cooperator.type == 'OFFLINE' && this.formData.status ==
-        //   'PENDING_CONFIRM') {
-        //   //TODO判断有无唯一码
-        //   return true;
-        // } else {
-        //   return false;
-        // }
+      //是否外发单创建人（不是接单方creator）
+      isSendBy: function () {
+        return this.currentUser.id == this.formData.sendBy.id;
+      },
+      canCancel: function () {
+        //生产中
+        return this.formData.state == 'AUDIT_PASSED';
       },
       canAudit: function () {
         // 订单审核状态在待审核且登陆账号为审核人
@@ -221,16 +224,6 @@
         // this.$router.go(-1);
         this.getDetail();
       },
-      async onCancel() {
-        const url = this.apis().cancelOutboundOrder(this.formData.code);
-        const result = await this.$http.put(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('取消订单成功');
-        await this.getDetail();
-      },
       async onConfirm() {
         const url = this.apis().acceptOutboundOrder(this.formData.code);
         const result = await this.$http.put(url);
@@ -251,13 +244,37 @@
         this.$message.success('拒绝接单成功');
         await this.getDetail();
       },
-      async onGenerateUniqueCode() {
-        this.uniqueCodeFormVisible = true;
+      //订单撤回
+      onOrderWithdraw() {
+        this.$confirm('是否确撤回订单?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onOrderWithdraw();
+        });
+      },
+      async _onOrderWithdraw() {
+        const url = this.apis().outboundOrderWithdraw(this.formData.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result['code'] == '1') {
+          this.$message.success('撤回成功');
+          await this.getDetail();
+          return true;
+        } else {
+          this.$message.error(result['msg']);
+          return false;
+        }
       }
     },
     data() {
       return {
-        uniqueCodeFormVisible: false,
+        cancelFormVisible: false,
+        currentUser: this.$store.getters.currentUser,
         payPlan: {
           deposit: {},
           balance1: {},
