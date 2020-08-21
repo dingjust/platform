@@ -29,7 +29,7 @@
             </el-table-column>
             <el-table-column label="认证状态" align="center">
               <template slot-scope="scope">
-                {{scope.row.approvalStatus!=null?getEnum('AuthApprovalStatus', scope.row.approvalStatus):''}}
+                {{scope.row.approvalStatus!=null?getEnum('AuthApprovalStatus', scope.row.approvalStatus):'未认证'}}
               </template>
             </el-table-column>
           </el-table>

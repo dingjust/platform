@@ -40,7 +40,7 @@
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
-          <el-radio v-model="contractType" label="1">模板合同</el-radio>
+          <el-radio v-model="contractType" label="1" :disabled="isSignedPaper">模板合同</el-radio>
           <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
         </el-col>
       </el-row>
@@ -65,12 +65,14 @@
           </el-input>
         </el-col>
       </el-row>
-      <el-row class="create-contract-row" v-if="contractType!='1'">
+      <el-row class="create-contract-row" v-if="contractType === '2'">
         <el-col :span="8" :offset="2">
-          <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
-                     :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
+          <p-d-f-upload ref="pdfUpload" :vFileList.sync="pdfFile" :fileLimit="1"></p-d-f-upload>
+          <!-- <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+                     :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
+                     :on-exceed="handleExceed"
                      :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
-            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
+            <div slot="tip" class="el-upload__tip" v-if="contractType !== '3'">只能上传PDF文件</div>
             <i class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
               <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
@@ -83,7 +85,12 @@
                 </span>
               </span>
             </div>
-          </el-upload>
+          </el-upload> -->
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType === '3'">
+        <el-col :span="22" :offset="2">
+          <images-upload ref="imagesUpload" :slotData="paperList" :limit="99"></images-upload>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" type="flex" justify="start">
@@ -133,7 +140,7 @@
   import Bus from '@/common/js/bus.js';
   import ContractPreviewPdf from './components/ContractPreviewPdf'
   // import SupplierSelect from './components/SupplierSelect';
-  import { SupplierSelect } from '@/components'
+  import { SupplierSelect, ImagesUpload, PDFUpload } from '@/components'
   const {
     mapGetters,
     mapActions
@@ -151,7 +158,9 @@
       ContractOrderSelect,
       TemplateForm,
       ContractPreviewPdf,
-      SupplierSelect
+      SupplierSelect,
+      ImagesUpload,
+      PDFUpload
     },
     computed: {
       ...mapGetters({
@@ -182,23 +191,6 @@
 
         this.dialogTemplateVisible = true;
       },
-      // async onSearchOrder (keyword, page, size) {
-      //   if (keyword == null) {
-      //     keyword = '';
-      //   }
-      //   const url = this.apis().getPurchaseOrders();
-      //   const result = await this.$http.post(url, {
-      //     keyword: keyword
-      //   }, {
-      //     page: page,
-      //     size: 10
-      //   });
-      //   if (result['errors']) {
-      //     this.$message.error(result['errors'][0].message);
-      //     return;
-      //   }
-      //   this.orderPage = result;
-      // },
       onContractTypeChange (val) {
         this.contractType = val;
       },
@@ -224,11 +216,11 @@
       },
       handleRemove (file) {
         this.fileList = [];
-        this.pdfFile = '';
+        this.pdfFile = [];
       },
       async onSavePdf () {
-        if (this.pdfFile.id == null || this.pdfFile.id == '') {
-          this.$message.error('请上传PDF');
+        if (!this.pdfFile && this.pdfFile.length <= 0) {
+          this.$message.error('请先上传PDF文件');
           return;
         }
         if (this.suppliers.id == null || this.suppliers.id == '') {
@@ -252,12 +244,20 @@
         var agreementType = null;
         if (this.contractType == '3') {
           agreementType = 'CUSTOMIZE_COMPLETED';
+          if (this.$refs.imagesUpload.isUploading()) {
+            this.$message.warning('图片正在上传，请稍后再试！');
+            return;
+          }
         }
         if (this.contractType == '2') {
           agreementType = 'CUSTOMIZE';
+          if (this.$refs.pdfUpload.isUploading()) {
+            this.$message.warning('PDF文件正在上传，请稍后再试！');
+            return;
+          }
         }
         let data = {
-          'pdf': this.pdfFile,
+          // 'pdf': this.pdfFile,
           'role': role,
           'title': '',
           'validityEnd': this.dateTime[1],
@@ -266,6 +266,12 @@
           'agreementType': agreementType,
           'customizeCode': this.contractCode,
           'partnerCompanyCode': this.suppliers.id
+        }
+
+        if (this.contractType === '2') {
+          this.$set(data, 'pdf', this.pdfFile[0]);
+        } else if (this.contractType === '3') {
+          this.$set(data, 'files', this.paperList)
         }
 
         const url = this.apis().saveContract();
@@ -383,7 +389,7 @@
         return true;
       },
       onSuccess (response) {
-        this.pdfFile = response;
+        // this.pdfFile[0] = response;
       },
       onSuppliersSelect (val) {
         this.suppliers = val;
@@ -417,7 +423,7 @@
         mockData: [],
         orderPage: [],
         disabled: false,
-        pdfFile: '',
+        pdfFile: [],
         pdfVisible: false,
         fileUrl: '',
         thisContract: '',
@@ -456,10 +462,14 @@
         },
         suppliersSelectVisible: false,
         tempFormVisible: false,
-        suppliers: ''
+        suppliers: '',
+        paperList: []
       };
     },
     created () {
+      if (this.isSignedPaper) {
+        this.contractType = '2';
+      }
       // this.onSearchOrder('', 0, 10);
       // this.onSetOrderCode();
     }
@@ -532,7 +542,7 @@
     background-color: #FFF
   } */
 
-  .el-upload-list--picture-card .el-upload-list__item {
+  /deep/ .el-upload-list--picture-card .el-upload-list__item {
     overflow: hidden;
     background-color: #fff;
     border: 0px solid #c0ccda !important;
@@ -545,7 +555,7 @@
     display: inline-block;
   }
 
-  .el-upload--picture-card {
+  /deep/ .el-upload--picture-card {
     background-color: #fbfdff;
     border: 1px dashed #c0ccda;
     border-radius: 6px;

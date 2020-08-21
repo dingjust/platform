@@ -204,21 +204,18 @@
         }
 
         // 销售计划没有上流，随意可以添加纸质合同
-        if (!this.form.originCompany) {
+        if (!this.form.originCompany && (this.$store.getters.currentUser.uid === this.form.creator.uid)) {
           return true;
         } else {
           return (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED') &&
-            (this.$store.getters.currentUser.uid === this.form.sendBy.uid ||
-              this.$store.getters.currentUser.uid === this.form.creator.uid);
+                   this.$store.getters.currentUser.uid === this.form.creator.uid;
         }
       },
       isSignedPaper: function () {
-        console.log('--------------------------------------')
-        console.log(this.form.originCompany);
-        // 没有来源公司，只能签署纸质合同
         if (this.form.originCompany) {
           return false;
         }
+        // 没有来源公司，只能签署纸质合同
         return true;
       }
     },

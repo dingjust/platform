@@ -92,9 +92,6 @@
     },
     computed: {
       cooperatorName: function () {
-        console.log(this.belongTo);
-        console.log(this.formData.productionOrder.originCooperator);
-        console.log(this.formData.productionOrder.targetCooperator);
         if (this.belongTo == 'RECEIVABLE_PAGE' && this.formData.productionOrder.originCooperator) {
           return this.formData.productionOrder.originCooperator.type === 'ONLINE' ? 
             this.formData.productionOrder.originCooperator.partner.name : this.formData.productionOrder.originCooperator.name; 

@@ -53,25 +53,25 @@
       <!-- 创建方(收货方) -->
       <template v-if="isReceiptPart||isForm">
         <el-row type="flex" v-if="!readOnly" style="margin-top:20px">
-          <el-col :span="2">
-            <el-form-item label="" label-width="5px">
+          <!-- <el-col :span="2"> -->
+          <div style="display: flex;flex-wrap: wrap;">
+            <el-form-item label="" label-width="10px">
               <el-checkbox v-model="formData.isApproval" @change="onIsApprovalChange">需审核</el-checkbox>
             </el-form-item>
-          </el-col>
-          <el-col :span="22">
-            <div style="display: flex;flex-wrap: wrap;">
-              <template v-for="(item, itemIndex) in formData.approvers">
-                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
-                  :prop="'approvers.' + itemIndex" :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
-                  <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" :disabled="!formData.isApproval" style="width: 194px"/>
-                </el-form-item>
-              </template>
-              <el-button-group>
-                <el-button style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
-                <el-button v-if="formData.approvers.length > 1" stfyle="height: 32px" @click="removeApprover">删除</el-button>
-              </el-button-group>
-            </div>
-          </el-col>
+          <!-- </el-col> -->
+          <!-- <el-col :span="22"> -->
+            <template v-for="(item, itemIndex) in formData.approvers">
+              <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
+                :prop="'approvers.' + itemIndex" :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
+                <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" :disabled="!formData.isApproval" style="width: 194px"/>
+              </el-form-item>
+            </template>
+            <el-button-group>
+              <el-button v-if="formData.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+              <el-button v-if="formData.approvers.length > 1" stfyle="height: 32px" @click="removeApprover">删除</el-button>
+            </el-button-group>
+          </div>
+          <!-- </el-col> -->
         </el-row>
         <el-row type="flex" v-else style="margin-top:20px">
           <el-col :span="2"><span>审核人:</span></el-col>

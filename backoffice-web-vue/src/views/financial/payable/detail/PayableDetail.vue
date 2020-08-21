@@ -12,7 +12,7 @@
       <financial-order-info belongTo="PAYABLE_PAGE" :payPlan="payPlanData" :formData="formData"/>
       <financial-invoice-info belongTo="PAYABLE_PAGE" :formData="formData" @callback="callback" />
       <financial-reconciliation-table belongTo="PAYABLE_PAGE" :formData="formData"/>
-      <financial-record-list belongTo="PAYABLE_PAGE" :content="formData.requestList" />
+      <financial-record-list belongTo="PAYABLE_PAGE" :content="formData.requestList" :outboundOrder="formData.productionOrder"/>
     </el-card>
   </div>
 </template>

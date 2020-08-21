@@ -28,6 +28,7 @@ import {
 
 // Custom/upload
 import PDFUpload from './custom/upload/PDFUpload';
+import PdfPreview from './custom/upload/PdfPreview'
 
 import Aside from './Aside.vue';
 import Breadcrumb from './Breadcrumb.vue';
@@ -145,5 +146,6 @@ export {
   DjMultipleSelect,
   DeptPersonSelect,
   DeptSelection,
-  PersonnalSelectionV2
+  PersonnalSelectionV2,
+  PdfPreview
 }

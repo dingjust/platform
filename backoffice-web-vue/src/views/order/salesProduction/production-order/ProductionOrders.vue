@@ -35,6 +35,15 @@
             </el-col>
           </el-row>
         </div>
+        <div class="tag-container" style="right: 96px" v-else>
+          <el-row type="flex" justify="end" align="middle">
+            <el-col :span="6">
+              <authorized :permission="['PRODUCTION_TASK_ASSIGN']">
+                <el-button v-if="isAllocating" type="primary" class="create-button" @click="onAllocating">去分配</el-button>
+              </authorized>
+            </el-col>
+          </el-row>
+        </div>
         <el-tabs v-model="activeStatus" @tab-click="handleClick">
           <template v-for="(item, index) in statues">
             <el-tab-pane :name="item.code" :key="index" :label="tabName(item)">

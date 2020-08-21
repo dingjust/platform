@@ -47,7 +47,7 @@
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
-          <el-radio v-model="contractType" label="1">模板合同</el-radio>
+          <el-radio v-model="contractType" label="1" :disabled="isSignedPaper">模板合同</el-radio>
           <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
         </el-col>
       </el-row>
@@ -72,13 +72,14 @@
           </el-input>
         </el-col>
       </el-row>
-      <el-row class="create-contract-row" v-if="contractType!='1'">
+      <el-row class="create-contract-row" v-if="contractType === '2'">
         <el-col :span="8" :offset="2">
-          <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+          <p-d-f-upload ref="pdfUpload" :vFileList.sync="pdfFile" :fileLimit="1"></p-d-f-upload>
+          <!-- <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
                      :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
                      :on-exceed="handleExceed"
                      :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
-            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
+            <div slot="tip" class="el-upload__tip" v-if="contractType !== '3'">只能上传PDF文件</div>
             <i class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
               <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
@@ -91,7 +92,12 @@
                 </span>
               </span>
             </div>
-          </el-upload>
+          </el-upload> -->
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType === '3'">
+        <el-col :span="22" :offset="2">
+          <images-upload ref="imagesUpload" :slotData="paperList" :limit="99"></images-upload>
         </el-col>
       </el-row>
       <!--      <el-row class="create-contract-row" v-if="contractType=='1'" type="flex" justify="start">-->
@@ -106,21 +112,19 @@
       <!--          </el-input>-->
       <!--        </el-col>-->
       <!--      </el-row>-->
-      <el-row class="create-contract-row" type="flex" justify="start">
+      <!-- <el-row class="create-contract-row" type="flex" justify="start">
         <el-col :push="2" :span="8">
           <span class="tips">我的身份</span>
           <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
           <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
         </el-col>
-      </el-row>
-
+      </el-row> -->
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
           <!--          <el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
         </el-col>
         <el-col :span="4" :offset="2">
           <el-button v-if="contractType == '1'" class="create-contract-button" @click="onSave">生成合同</el-button>
-
           <el-button v-else class="create-contract-button" @click="onSavePdf">生成合同</el-button>
         </el-col>
       </el-row>
@@ -141,7 +145,7 @@
   import Bus from '@/common/js/bus.js';
   import ContractPreviewPdf from './components/ContractPreviewPdf'
   import ContractSelect from './components/ContractSelect';
-
+  import { ImagesUpload, PDFUpload } from '@/components'
   const {
     mapGetters,
     mapActions
@@ -159,7 +163,9 @@
       ContractOrderSelect,
       TemplateForm,
       ContractPreviewPdf,
-      ContractSelect
+      ContractSelect,
+      ImagesUpload,
+      PDFUpload
     },
     computed: {
       ...mapGetters({
@@ -245,25 +251,29 @@
       },
       handleRemove (file) {
         this.fileList = [];
-        this.pdfFile = '';
+        this.pdfFile = [];
       },
       async onSavePdf () {
-        // if (!this.isOrderClickPass) {
-        //   this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
-        //   return;
-        // }
         var agreementType = null;
         if (this.contractType == '3') {
           agreementType = 'CUSTOMIZE_COMPLETED';
+          if (this.$refs.imagesUpload.isUploading()) {
+            this.$message.warning('图片正在上传，请稍后再试！');
+            return;
+          }
         }
         if (this.contractType == '2') {
           agreementType = 'CUSTOMIZE';
+          if (this.$refs.pdfUpload.isUploading()) {
+            this.$message.warning('PDF文件正在上传，请稍后再试！');
+            return;
+          }
         }
         if (this.orderSelectFiles.length == 0) {
           this.$message.error('请选择订单');
           return;
         }
-        if (this.pdfFile.id == null || this.pdfFile.id == '') {
+        if (!this.pdfFile && this.pdfFile.length <= 0) {
           this.$message.error('请先上传PDF文件');
           return;
         }
@@ -271,6 +281,7 @@
           this.$message.error('请输入自定义合同编号');
           return;
         }
+        
         let role = '';
         if (this.partyA) {
           role = 'PARTYA';
@@ -279,7 +290,7 @@
         }
 
         let data = {
-          'pdf': this.pdfFile,
+          // 'pdf': this.pdfFile[0],
           'role': role,
           'title': '',
           'customizeCode': this.contractCode,
@@ -288,6 +299,12 @@
           'items': this.orderSelectFiles.map((order) => order.id)
         }
 
+        if (this.contractType === '2') {
+          this.$set(data, 'pdf', this.pdfFile[0]);
+        } else if (this.contractType === '3') {
+          this.$set(data, 'files', this.paperList)
+        }
+        
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
@@ -427,7 +444,7 @@
         return true;
       },
       onSuccess (response) {
-        this.pdfFile = response;
+        this.pdfFile[0] = response;
       },
       async getContractList (uid) {
         const url = this.apis().getContractsList();
@@ -513,13 +530,14 @@
         selectFile: {},
         selectContract: {},
         fileList: [],
+        paperList: [],
         dialogPreviewVisible: false,
         orderReadOnly: false,
         input1: '',
         mockData: [],
         // orderPage: [],
         disabled: false,
-        pdfFile: '',
+        pdfFile: [],
         pdfVisible: false,
         fileUrl: '',
         thisContract: '',
@@ -536,6 +554,9 @@
       };
     },
     created () {
+      if (this.isSignedPaper) {
+        this.contractType = '2';
+      }
     },
     mounted () {
       this.onSetOrderCode();

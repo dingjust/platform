@@ -134,25 +134,33 @@
       },
       //审批
       onApproval(isPass) {
-        if (isPass) {
-          this.$confirm('是否确认审核通过?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this._onApproval(isPass, '');
-          });
-        } else {
-          this.$prompt('请输入不通过原因', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-          }).then(({
-            value
-          }) => {
-            this._onApproval(isPass, value);
-          }).catch(() => {
-            //TODO:取消操作
-          });
+        if (this.slotData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid && 
+            this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+          if (isPass) {
+            this.$confirm('是否确认审核通过?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._onApproval(isPass, '');
+            });
+          } else {
+            this.$prompt('请输入不通过原因', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(({
+              value
+            }) => {
+              this._onApproval(isPass, value);
+            }).catch(() => {
+              //TODO:取消操作
+            });
+          }
+        } else if (this.slotData.auditWorkOrder.currentUserAuditState === 'AUDITING' && 
+                    this.slotData.auditWorkOrder.auditingUser.uid !== this.$store.getters.currentUser.uid) {
+          this.$message.warning('此订单暂未轮到您进行审批。')
+        } else if (this.slotData.auditWorkOrder.currentUserAuditState === 'PASSED') {
+          this.$message.warning('您已对此订单进行了审批。');
         }
       },
       async _onApproval(isPass, auditMsg) {

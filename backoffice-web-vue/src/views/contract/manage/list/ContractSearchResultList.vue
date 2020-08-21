@@ -21,7 +21,7 @@
         </template>
       </el-table-column>
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
-      <el-table-column label="合同类型"></el-table-column>
+      <!-- <el-table-column label="合同类型"></el-table-column> -->
       <el-table-column label="合作商" prop="belongTo.name">
         <template slot-scope="scope">
           <span>{{scope.row.partner}}</span>

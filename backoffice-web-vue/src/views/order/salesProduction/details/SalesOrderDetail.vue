@@ -194,8 +194,9 @@
         this.formData = Object.assign({
           approvers: [null]
         }, result.data);
-
-        this.setPayPlan(result.data.payPlan);
+        if (result.data.type === 'SALES_ORDER') {
+          this.setPayPlan(result.data.payPlan);
+        }
       },
       setPayPlan (payPlan) {
         // this.payPlan.name = payPlan.name;
@@ -321,8 +322,16 @@
         }
       },
       onRefresh() {
-        // this.getDetails();
-        this.$router.go(0);
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+          this.getDetails();
+        }, 1000);
       },
       validate(callback) {
         this.$refs.form.validate(callback);
@@ -349,6 +358,7 @@
           payPlan: {},
           quality: '',
           seller: {},
+          creator: {},
           approvers: [null],
           productionLeader: null
         },

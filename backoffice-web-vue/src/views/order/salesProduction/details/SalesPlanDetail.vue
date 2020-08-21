@@ -208,8 +208,16 @@
         })
       },
       onRefresh() {
-        // this.$router.go(0);
-        this.getDetails();
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+          this.getDetails();
+        }, 1000);
       },
     },
     data() {
@@ -226,6 +234,7 @@
           user: {},
           quality: '',
           seller: {},
+          creator: {},
           approvers: [null],
           productionLeader: null
         },
