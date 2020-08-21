@@ -20,13 +20,13 @@
         </el-col>
         <el-col :xs="16" :sm="16" :md="14" :lg="12" :xl="12">
           <el-row type="flex" justify="space-between" align="middle" style="padding-top:5px">
-            <el-col :xs="1" :sm="5" :md="8" :lg="9" :xl="10">
-              <div class="input">
+            <el-col :xs="1" :sm="5" :md="6" :lg="7" :xl="8">
+              <!-- <div class="input">
                 <el-input placeholder="搜索..." prefix-icon="el-icon-search" v-model="input2" size="small"
                   id="header-input__inner"></el-input>
-              </div>
+              </div> -->
             </el-col>
-            <el-col :xs="23" :sm="19" :md="16" :lg="15" :xl="14">
+            <el-col :xs="23" :sm="19" :md="18" :lg="17" :xl="16">
               <el-row type="flex" justify="end">
                 <i class="iconfont icon_font_notification" @click="jumpToMessagePage">&#xe605;</i>
                 <h6 class="qr_code-title">APP下载</h6>

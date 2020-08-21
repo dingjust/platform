@@ -118,7 +118,7 @@
       },
       //是否外发单创建人（不是接单方creator）
       isSendBy: function () {
-        if (this.currentUser && this.formData) {
+        if (this.currentUser.id != null && this.formData.sendBy != null) {
           return this.currentUser.id == this.formData.sendBy.id;
         } else {
           return false;

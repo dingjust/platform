@@ -95,7 +95,7 @@
   };
 
 </script>
-<style>
+<style scoped>
   .arrow {
     color: #000;
     font-size: 16px;
@@ -111,5 +111,4 @@
     width: 30px;
     border-radius: 50%;
   }
-
 </style>

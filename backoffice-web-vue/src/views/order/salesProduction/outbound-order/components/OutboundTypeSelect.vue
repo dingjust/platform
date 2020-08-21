@@ -65,7 +65,7 @@
 
   .text-icon {
     color: red;
-    font-size: 18px;
+    font-size: 15px;
     padding-top: 5px;
     margin-right: 10px;
   }

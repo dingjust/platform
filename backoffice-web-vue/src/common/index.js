@@ -1585,6 +1585,11 @@ let NONE_TENANT_APIS = {
   //外发订单-撤回
   outboundOrderWithdraw(id) {
     return '/b2b/out/order/revoke/' + id;
+  },
+
+  //外发订单-撤回
+  outboundOrderDelete(id) {
+    return '/b2b/sales/production/order/' + id;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
