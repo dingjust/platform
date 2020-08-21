@@ -84,7 +84,6 @@
         // }).then(() => {
         //   window.open(file.url);
         // });
-        console.log(file);
         this.fileUrl = file.url;
         this.pdfVisible = true;
       },

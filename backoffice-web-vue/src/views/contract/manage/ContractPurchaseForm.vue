@@ -57,28 +57,32 @@
      <el-row class="create-contract-row">
        <el-col :span="20" :offset="2">
          <el-input size="small" placeholder="选择订单" :value="ordersCodeStr" :disabled="true">
-           <el-button slot="prepend" :disabled="orderReadOnly" @click="dialogOrderVisible=true">关联订单</el-button>
+          <template slot="prepend">关联订单</template>
+          <el-button slot="append" :disabled="orderReadOnly" @click="dialogOrderVisible=true" class="select-btn">选择订单</el-button>
          </el-input>
        </el-col>
      </el-row>
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择框架协议" v-model="selectContract.title" :disabled="true">
-            <el-button slot="prepend" @click="openKJHTSelect">选择已签协议</el-button>
+            <template slot="prepend">框架协议</template>
+            <el-button slot="append" @click="openKJHTSelect" class="select-btn">选择已签协议</el-button>
           </el-input>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType=='1'">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择合同模板" v-model="selectFile.title" :disabled="true">
-            <el-button slot="prepend" @click="selectTemp('')">合同模板</el-button>
+            <template slot="prepend">合同模板</template>
+            <el-button slot="append" @click="selectTemp('')" class="select-btn">选择模板</el-button>
           </el-input>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="请输入合同编号" v-model="contractCode">
-            <el-button slot="prepend" :disabled="true">合同编号</el-button>
+            <!-- <el-button slot="prepend" :disabled="true">合同编号</el-button> -->
+            <template slot="prepend">合同编号</template>
           </el-input>
         </el-col>
       </el-row>
@@ -711,4 +715,8 @@
     margin-left: 5px;
   }
 
+  .select-btn {
+    background-color: #ffd60c!important;
+    color: #606266!important;
+  }
 </style>

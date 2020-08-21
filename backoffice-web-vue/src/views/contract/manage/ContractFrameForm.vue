@@ -47,21 +47,24 @@
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择合作商" v-model="suppliers.name" :disabled="true">
-            <el-button slot="prepend" :disabled="orderReadOnly" @click="suppliersSelectVisible=true">合作商</el-button>
+            <template slot="prepend">合作商</template>
+            <el-button slot="append" :disabled="orderReadOnly" @click="suppliersSelectVisible=true" class="select-btn">选择合作商</el-button>
           </el-input>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType=='1'">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择合同模板" v-model="selectFile.title" :disabled="true">
-            <el-button slot="prepend" @click="selectTemp('')">合同模板</el-button>
+            <template slot="prepend">合同模板</template>
+            <el-button slot="append" @click="selectTemp('')" class="select-btn">合同模板</el-button>
           </el-input>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="请输入合同编号" v-model="contractCode">
-            <el-button slot="prepend" :disabled="true">合同编号</el-button>
+            <template slot="prepend">合同编号</template>
+            <!-- <el-button slot="prepend" :disabled="true">合同编号</el-button> -->
           </el-input>
         </el-col>
       </el-row>
@@ -596,5 +599,10 @@
 
   /deep/ .el-date-editor .el-range-separator {
     width: 10%;
+  }
+
+  .select-btn {
+    background-color: #ffd60c!important;
+    color: #606266!important;
   }
 </style>
