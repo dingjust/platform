@@ -173,7 +173,7 @@ class ProductsView extends StatelessWidget {
                             crossAxisCount: 2, //Grid按两列显示
                             mainAxisSpacing: 10.0,
                             crossAxisSpacing: 10.0,
-                                childAspectRatio: 0.65,
+                                childAspectRatio: 0.60,
                           ),
                           delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
@@ -211,7 +211,7 @@ class ProductsView extends StatelessWidget {
               //     // );
               //     return
               //   },
-              // ),
+              // ), 
               StreamBuilder<bool>(
                 stream: bloc.loadingStream,
                 initialData: false,
