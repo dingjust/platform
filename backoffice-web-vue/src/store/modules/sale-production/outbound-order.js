@@ -72,7 +72,10 @@ const state = {
       id: '',
       name: ''
     },
-    manageWay:''
+    manageWay:'',
+    sendAuditWorkOrder: {
+      processes: []
+    }
   },
   queryFormData: {
     keyword: '',

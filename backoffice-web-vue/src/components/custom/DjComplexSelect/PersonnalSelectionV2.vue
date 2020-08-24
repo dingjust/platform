@@ -27,6 +27,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    // 是否需要排除本账号
+    excludeMySelf: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -51,17 +56,18 @@ export default {
     },
     createDeptPersonTree () {
       this.personList.forEach(item => {
+        if (item.uid === this.$store.getters.currentUser.uid && this.excludeMySelf) {
+          return;
+        }
 
         if (item.b2bDept) {
           this.$set(item, 'parentId', item.b2bDept.id);
-        }
-        if (item.b2bDept) {
           let temp = this.breadthQuery(this.deptList, item.b2bDept.id);
           temp.children.push(item);
         }
 
         // 主账号没所属部门时，跟一级部门同级
-        if (item.root && item.uid === this.$store.getters.currentUser.uid && item.b2bDept == null) {
+        if (item.root && item.b2bDept == null) {
           this.deptList.push(item);
         } 
       })

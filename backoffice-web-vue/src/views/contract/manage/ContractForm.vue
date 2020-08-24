@@ -488,7 +488,8 @@
           flag = true
         }
         let data = {
-          'orderCodes': selectFile.map((order) => order.code),
+          // 'orderCodes': selectFile.map((order) => order.code),
+          'items': selectFile.map((order) => order.id),
           'type': 'WTSCHT',
           'isPdfAgreement': flag
         }

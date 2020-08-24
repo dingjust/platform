@@ -108,7 +108,7 @@ export default {
         }
         
         // 主账号没所属部门时，跟一级部门同级
-        if (item.root && item.uid === this.$store.getters.currentUser.uid && item.b2bDept == null) {
+        if (item.root && item.b2bDept == null) {
           this.deptList.push(item);
         } 
       })

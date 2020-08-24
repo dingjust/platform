@@ -7,20 +7,22 @@
           <span>{{getEnum('AuditLabel', scope.row.type)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" prop="creationPerson"></el-table-column>
+      <el-table-column label="创建人" prop="submitUser.name"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | timestampToTime}}</span>
+          <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交货时间">
+      <el-table-column label="审批时间">
         <template slot-scope="scope">
-          <span>{{scope.row.deliverytime | timestampToTime}}</span>
+          <template v-if="scope.row.currentUserAuditTime">
+            <span>{{scope.row.currentUserAuditTime | formatDate}}</span>
+          </template>
         </template>
       </el-table-column>
       <el-table-column label="任务状态">
         <template slot-scope="scope">
-          <span>{{getEnum('AuditState', scope.row.state)}}</span>
+          <span>{{getEnum('AuditState', scope.row.currentUserAuditState)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">

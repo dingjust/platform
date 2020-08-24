@@ -94,6 +94,13 @@
           </el-row>
         </el-col>
       </el-row>
+      <template v-if="formData.currentAuditWork && formData.currentAuditWork.processes.length > 0">
+        <el-row type="flex" justify="center">
+          <el-col :span="22">
+            <order-audit-detail style="padding-left: 10px" :processes="formData.currentAuditWork.processes"/>
+          </el-col>
+        </el-row>
+      </template>
       <el-row type="flex" justify="center" v-if="formData.state === 'PAID'">
         <el-col :span="23">
           <payment-records-list :formData="formData" :tableData="[formData.paymentRecords]" />
@@ -132,6 +139,7 @@
     PaymentRecordsList
   } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
+  import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
   export default {
     name: 'PaymentRequestDetailMerchandiser',
     props: ['id'],
@@ -140,14 +148,16 @@
       ImagesUpload,
       PaymentForm,
       PaymentRecordsList,
-      PdfPreview
+      PdfPreview,
+      OrderAuditDetail
     },
     computed: {
       canAudit: function () {
-        const id = this.$store.getters.currentUser.id;
-        if (this.formData.approvers && this.formData.approvers.length) {
-          let index = this.formData.approvers.findIndex(item => item.id == id);
-          return this.formData.state == 'AUDITING' && index >= 0;
+        const uid = this.$store.getters.currentUser.uid;
+        if (this.formData.approvers && this.formData.approvers.length > 0) {
+          let flag = this.formData.approvers.some(item => item.uid === uid);
+          console.log(flag);
+          return this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && flag;
         }
       },
       agreementsCode: function () {
@@ -250,25 +260,33 @@
         this.pdfVisible = true;
       },
       onApproval(isPass) {
-        if (isPass) {
-          this.$confirm('是否确认审核通过?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this._onApproval(isPass, '');
-          });
-        } else {
-          this.$prompt('请输入不通过原因', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-          }).then(({
-            value
-          }) => {
-            this._onApproval(isPass, value);
-          }).catch(() => {
-            //TODO:取消操作
-          });
+        if (this.formData.currentAuditWork.auditingUser.uid === this.$store.getters.currentUser.uid &&
+            this.formData.currentAuditWork.currentUserAuditState === 'AUDITING') {
+          if (isPass) {
+            this.$confirm('是否确认审核通过?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._onApproval(isPass, '');
+            });
+          } else {
+            this.$prompt('请输入不通过原因', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(({
+              value
+            }) => {
+              this._onApproval(isPass, value);
+            }).catch(() => {
+              //TODO:取消操作
+            });
+          }
+        } else if (this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && 
+            this.formData.currentAuditWork.auditingUser.uid !== this.$store.getters.currentUser.uid) {
+          this.$message.warning('此订单暂未轮到您进行审批。')
+        } else if (this.formData.currentAuditWork.currentUserAuditState === 'PASSED') {
+          this.$message.warning('您已对此订单进行了审批。');
         }
       },
       async _onApproval(isPass, auditMsg) {

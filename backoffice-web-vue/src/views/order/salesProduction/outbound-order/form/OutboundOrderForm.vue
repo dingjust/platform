@@ -175,7 +175,8 @@
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
                   :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
                   <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
-                  <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded" style="width: 194px"/>
+                  <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded" 
+                                          :excludeMySelf="true" style="width: 194px"/>
                 </el-form-item>
               </template>
               <el-button-group style="padding-bottom: 26px;">

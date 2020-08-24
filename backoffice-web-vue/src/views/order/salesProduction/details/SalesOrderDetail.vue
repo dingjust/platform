@@ -24,6 +24,9 @@
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
           @appendProduct="appendProduct" />
       </div>
+      <template v-if="formData.auditWorkOrder && formData.auditWorkOrder.processes.length > 0">
+        <order-audit-detail :processes="formData.auditWorkOrder.processes"/>
+      </template>
       <div v-if="showFinancial" style="margin-top:20px">
         <!-- <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
           <el-row v-if="formData.payPlan != null">
@@ -78,6 +81,7 @@
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
   import {FinancialTabs} from '@/views/financial/index'
+  import { OrderAuditDetail } from '@/views/order/salesProduction/components'
 
   export default {
     name: 'SalesOrderDetail',
@@ -89,7 +93,8 @@
       SalesPlanAppendProductForm,
       PurchaseOrderInfoPaymentFinance,
       PurchaseOrderInfoReceiptFinance,
-      FinancialTabs
+      FinancialTabs,
+      OrderAuditDetail
     },
     computed: {
       // ...mapGetters({
@@ -360,7 +365,10 @@
           seller: {},
           creator: {},
           approvers: [null],
-          productionLeader: null
+          productionLeader: null,
+          auditWorkOrder: {
+            processes: []
+          }
         },
       }
     },
