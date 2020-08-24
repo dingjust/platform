@@ -1,9 +1,9 @@
-<!-- 
+<!--
  * @description: 产品外发
- * @fileName: ProductOutboundOrderForm.vue 
- * @author: yj 
+ * @fileName: ProductOutboundOrderForm.vue
+ * @author: yj
  * @date: 2020-08-24 10:01:45
- * @version: V1.0.0 
+ * @version: V1.0.0
 !-->
 <template>
   <div class="animated fadeIn content">
@@ -167,7 +167,7 @@
         </el-row>
         <!-- <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top"> -->
         <!-- <el-col :span="6"> -->
-        <div style="display: flex;flex-wrap: wrap;">
+        <div style="display: flex;flex-wrap: wrap;padding-left: 20px">
           <el-form-item label="跟单员" prop="merchandiser">
             <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
           </el-form-item>
@@ -178,24 +178,20 @@
           </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="16"> -->
-          <template v-for="(item,itemIndex) in formData.sendApprovers">
-            <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px"
-              style="margin-right:10px;" :prop="'sendApprovers.' + itemIndex"
-              :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
-              <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
-              <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]"
-                :disabled="!formData.sendAuditNeeded" style="width: 194px" />
-            </el-form-item>
-          </template>
-          <el-button-group style="padding-bottom: 26px;">
-            <el-button v-if="formData.sendApprovers==null||formData.sendApprovers.length < 5" style="height: 32px"
-              @click="appendApprover">+ 添加审批人</el-button>
-            <el-button v-if="formData.sendApprovers!=null&&formData.sendApprovers.length > 1" style="height: 32px"
-              @click="removeApprover">删除
-            </el-button>
-          </el-button-group>
-        </div>
-        <!-- </el-col> -->
+              <template v-for="(item,itemIndex) in formData.sendApprovers">
+                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
+                  :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
+                  <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
+                  <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded"
+                                          :excludeMySelf="true" style="width: 194px"/>
+                </el-form-item>
+              </template>
+              <el-button-group style="padding-bottom: 26px;">
+                <el-button v-if="formData.sendApprovers && formData.sendApprovers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+                <el-button v-if="formData.sendApprovers && formData.sendApprovers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+              </el-button-group>
+            </div>
+          <!-- </el-col> -->
         <!-- </el-row> -->
         <el-row>
           <el-col :span="4">
@@ -204,7 +200,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row style="padding-left: 10px" type="flex" justify="start" :gutter="20">
+        <el-row style="padding-left: 20px" type="flex" justify="start" :gutter="20">
           <el-col :span="24">
             <el-form-item label="备注">
               <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="formData.remarks">
@@ -212,7 +208,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
+        <el-row class="outbound-basic-row" type="flex" justify="start" >
           <el-form-item label="附件">
             <images-upload class="order-purchase-upload" :slot-data="formData.attachments" />
           </el-form-item>
@@ -232,8 +228,9 @@
     </el-card>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"
-        :selectType="'OUTBOUND_ORDER'" />
+      <sample-products-select-dialog v-if="taskDialogVisible" @onSelectSample="onSelectSample"/>
+      <!-- <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"
+        :selectType="'OUTBOUND_ORDER'" /> -->
     </el-dialog>
     <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -258,7 +255,6 @@
     'OutboundOrderModule'
   );
 
-  // import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
   import MyAddressForm from '../../../../../components/custom/order-form/MyAddressForm';
   import MTAVAT from '../../../../../components/custom/order-form/MTAVAT';
   import MyPayPlanForm from '../../../../../components/custom/order-form/MyPayPlanForm';
@@ -274,6 +270,7 @@
     PersonnalSelectionV2,
     PayPlanForm
   } from '@/components'
+  import { SampleProductsSelectDialog } from '@/views/product/sample'
 
   export default {
     name: 'ProductOutboundOrderForm',
@@ -290,7 +287,8 @@
       SupplierSelect,
       ProgressPlanEditForm,
       OutboundTypeSelect,
-      PersonnalSelectionV2
+      PersonnalSelectionV2,
+      SampleProductsSelectDialog
     },
     computed: {
       canDelete: function () {
@@ -394,6 +392,55 @@
       },
       deleteRow(index) {
         this.formData.taskOrderEntries.splice(index, 1);
+      },
+      onSelectSample (selectList) {
+        let row;
+        let index;
+        let entries = [];
+        let colorSizeEntries;
+        selectList.forEach(item => {
+          index = this.formData.taskOrderEntries.findIndex(val => val.originOrder.id === item.id);
+          if (index > -1) {
+            entries.push(this.formData.taskOrderEntries[index]);
+          } else {
+            colorSizeEntries = this.convertColorSize(item.colorSizes);
+            row = {
+              originOrder: {
+                id: item.id
+              },
+              unitPrice: '',
+              deliveryDate: '',
+              shippingAddress: {},
+              product: {
+                id: item.id,
+                name: item.name,
+                thumbnail: item.thumbnail
+              },
+              progressPlan: {
+                name: ''
+              },
+              colorSizeEntries: item.colorSizes
+            }
+
+            entries.push(row);
+            row = null;
+          }
+        })
+        this.formData.taskOrderEntries = entries;
+        
+        this.taskDialogVisible = false;
+      },
+      convertColorSize (colorSizes) {
+        // let colorSizeEntries = [];
+        // colorSizes.forEach(item => {
+        //   colorSizeEntries.push({
+        //     quantity: '',
+        //     color: {
+        //       id: item.colorId,
+        //       name: item.colorName,
+        //     }
+        //   })
+        // })
       },
       onSelectTask(selectTaskList) {
         let row = {}

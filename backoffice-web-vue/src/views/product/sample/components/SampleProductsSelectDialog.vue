@@ -5,22 +5,31 @@
         款式选择:
       </div>
     </el-row>
-    <el-row type="flex" :gutter="20">
-      <el-col :span="8">
-        <el-input v-model="keyword" placeholder="根据产品名/编号/款号" @keyup.enter.native="onSubmit"></el-input>
-      </el-col>
-      <el-col :span="16">
-        <el-button type="text" @click="onSearch">查找</el-button>
+    <div style="display: flex;">
+      <div>
+        <el-form :inline="true">
+          <el-form-item label="">
+            <el-input  nput v-model="queryFormData.keyword" placeholder="根据产品名/编号/款号" @keyup.enter.native="onSubmit"></el-input>
+          </el-form-item>
+          <el-form-item label="部门/人员">
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                        :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div>
+        <el-button type="text" @click="onSearch(0, 10)">查找</el-button>
+        <el-button type="text" @click="onReset">重置</el-button>
         <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
           <el-button type="text" @click="onNew">创建款式</el-button>
         </Authorized>
         <el-button class="sample-slelct-btn" size="mini" @click="onConfirm">确定</el-button>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <el-row type="flex">
       <el-table ref="resultTable" stripe :data="page.content" @selection-change="handleSelectionChange"
-        :height="autoHeight" :row-key="getRowKeys">
-        <el-table-column type="selection" width="55"></el-table-column>
+        :height="autoHeight" :row-key="getRowKeys" @row-click="handleClick">
+        <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
         <el-table-column label="产品图片" width="120">
           <template slot-scope="scope">
             <img width="54px" height="54px"
@@ -58,6 +67,7 @@
     createNamespacedHelpers
   } from 'vuex';
   import SampleProductDetailsPage from "../details/SampleProductDetailsPage";
+  import { DeptPersonSelect } from '@/components'
 
   const {
     mapGetters,
@@ -68,7 +78,8 @@
   export default {
     name: 'SampleProductsSelectDialog',
     components: {
-      SampleProductDetailsPage
+      SampleProductDetailsPage,
+      DeptPersonSelect
     },
     computed: {
       ...mapGetters({
@@ -84,18 +95,29 @@
         setAdvancedSearch: 'isAdvancedSearch'
       }),
       onSearch(page, size) {
-        this.setAdvancedSearch(false);
-        const keyword = this.keyword;
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
+        const query = this.queryFormData;
         const url = this.apis().getSampleProducts();
-        this.search({
+        this.searchAdvanced({
           url,
-          keyword,
+          query,
           page,
           size
         });
       },
+      onReset () {
+        this.queryFormData.keyword = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.onResetQuery();
+      },
       handleSelectionChange(val) {
         this.multipleSelection = val;
+      },
+      handleClick (row) {
+        console.log(row);
+        this.$refs.resultTable.toggleRowSelection(row);
       },
       getRowKeys(row) {
         return row.id;
@@ -122,16 +144,25 @@
         } else {
           this.$message('请选择产品');
         }
-      }
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data() {
       return {
         multipleSelection: [],
         keyword: '',
-        detailsVisiable: false
+        detailsVisiable: false,
+        queryFormData: {
+          keyword: ''
+        },
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
+      this.onResetQuery();
       this.onSearch();
     }
   }

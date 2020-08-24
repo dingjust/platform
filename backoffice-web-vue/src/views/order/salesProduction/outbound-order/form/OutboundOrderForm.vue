@@ -160,7 +160,7 @@
         </el-row>
         <!-- <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top"> -->
         <!-- <el-col :span="6"> -->
-        <div style="display: flex;flex-wrap: wrap;">
+        <div style="display: flex;flex-wrap: wrap;padding-left: 20px">
           <el-form-item label="跟单员" prop="merchandiser">
             <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
           </el-form-item>
@@ -193,7 +193,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row style="padding-left: 10px" type="flex" justify="start" :gutter="20">
+        <el-row style="padding-left: 20px" type="flex" justify="start" :gutter="20">
           <el-col :span="24">
             <el-form-item label="备注">
               <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="formData.remarks">
@@ -201,7 +201,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
+        <el-row class="outbound-basic-row" type="flex" justify="start">
           <el-form-item label="附件">
             <images-upload class="order-purchase-upload" :slot-data="formData.attachments" />
           </el-form-item>

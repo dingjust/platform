@@ -196,7 +196,7 @@
         if (this.isAllocating) {
           return this.$store.getters.currentUser.uid == row.productionLeader.uid;
         }
-        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
+        if (row.outboundOrderCode) {
           return false;
         }
         return true;
@@ -206,9 +206,9 @@
       },
       rowClick(row, column, event) {
         if (this.isAllocating && !(this.$store.getters.currentUser.uid == row.productionLeader.uid)) {
-          return;
+          return ;
         }
-        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
+        if (row.outboundOrderCode) {
           return;
         }
         this.$refs.resultTable.toggleRowSelection(row);
