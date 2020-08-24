@@ -82,8 +82,8 @@
                   </el-form-item>
                 </template>
                 <el-button-group style="padding-bottom: 26px;">
-                  <el-button v-if="form.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
-                  <el-button v-if="form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+                  <el-button v-if="form.approvers && form.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+                  <el-button v-if="form.approvers && form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
                 </el-button-group>
               </div>
             <!-- </el-col> -->

@@ -29,7 +29,7 @@
         v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED'">
         <h6>唯一码：<span style="color: #F56C6C">{{formData.uniqueCode}}</span></h6>
       </el-row>
-      <template v-if="formData.sendAuditWorkOrder && formData.sendAuditWorkOrder.processes.length > 0">
+      <template v-if="formData.sendAuditWorkOrder && formData.sendAuditWorkOrder.processes && formData.sendAuditWorkOrder.processes.length > 0">
         <order-audit-detail style="padding-left: 10px" :processes="formData.sendAuditWorkOrder.processes"/>
       </template>
       <div v-if="showFinancial" style="margin-top:20px">
@@ -134,6 +134,9 @@
         return this.formData.state == 'AUDIT_PASSED';
       },
       canAudit: function () {
+        if (this.formData.state !== 'AUDITING') {
+          return false;
+        }
         // 订单审核状态在待审核且登陆账号为审核人
         if (this.formData.sendApprovers != null) {
           let flag = this.formData.sendApprovers.some(item => item.uid === this.$store.getters.currentUser.uid);
