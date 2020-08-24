@@ -22,7 +22,7 @@
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="6">
         <h6 style="margin-top: 4px;">订单管理方式</h6>
-        <i class="el-icon-question" style="margin-left: 35px" v-popover:popover/>
+        <i class="el-icon-question" style="margin-left: 35px" v-popover:popover />
       </el-col>
       <el-col :span="8">
         <el-radio v-model="formData.managementMode" :label="'COLLABORATION'">协同订单</el-radio>
@@ -57,19 +57,18 @@
   export default {
     name: 'OutboundOrderTypeSelectForm',
     props: ['formData'],
-    data () {
+    data() {
       return {
         collaborationTitle: '是由甲乙双方共同配合完成的订单管理方式，' +
           '订单需要双方确认，“生产进度” “发货”等动作由乙方' +
           '完成，任何一方的缺席订单无法顺利完成。',
-        selfmanageTitle: '是由甲乙任何一方单方面完成订单的所有流程，' +
-          '不需要双方共同参与，此类订单适合自我单方面管理订单。',
+        selfmanageTitle: '是有甲单方面完成订单的所有流程，不需要双方共同参与， 此类订单适合自我单方面管理订单。 ',
         confirmTiTle: '订单管理方式一旦选择后期不能更改，' +
           '你是否确认选择。'
       }
     },
     methods: {
-      onSelectType () {
+      onSelectType() {
         this.$confirm(this.confirmTiTle, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -84,9 +83,9 @@
         });
       }
     },
-    created() {
-    }
+    created() {}
   }
+
 </script>
 
 <style scoped>
