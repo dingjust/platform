@@ -295,6 +295,11 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/outbound-order/form/OutboundOrderForm')
             },
             {
+              path: 'create/outboundOrder/product',
+              name: '创建产品外发',
+              component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/outbound-order/form/ProductOutboundOrderForm')
+            },
+            {
               path: 'outboundOrder/:code',
               name: '外发订单详情',
               props: true,

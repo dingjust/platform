@@ -11,7 +11,7 @@
       </el-row>
       <div class="pt-2"></div>
       <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"
-        :queryFormData="queryFormData" />
+        @createProductOutbound="createProductOutbound" :queryFormData="queryFormData" />
       <div>
         <!-- <div class="tag-container">
           <el-row type="flex" justify="start" align="middle">
@@ -167,13 +167,16 @@
           }
         });
       },
-      setFormData (data) {
+      setFormData(data) {
         let formData = {
           id: data.id,
           managementMode: data.managementMode,
-          outboundCompanyName: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.name : data.targetCooperator.name,
-          outboundContactPerson: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPerson : data.targetCooperator.contactPerson,
-          outboundContactPhone: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPhone : data.targetCooperator.contactPhone,
+          outboundCompanyName: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.name : data
+            .targetCooperator.name,
+          outboundContactPerson: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner
+            .contactPerson : data.targetCooperator.contactPerson,
+          outboundContactPhone: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPhone :
+            data.targetCooperator.contactPhone,
           targetCooperator: {
             id: data.targetCooperator.id
           },
@@ -188,9 +191,17 @@
           attachments: data.attachments ? data.attachments : [],
           sendApprovers: data.sendApprovers,
           merchandiser: data.merchandiser,
-          state:data.state
+          state: data.state
         }
         return formData;
+      },
+      createProductOutbound() {
+        this.$router.push({
+          name: '创建产品外发',
+          params: {
+            formData: Object.assign({}, this.formData)
+          }
+        });
       }
     },
     data() {
