@@ -63,23 +63,27 @@
             <template v-for="(item, itemIndex) in formData.approvers">
               <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
                 :prop="'approvers.' + itemIndex" :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
-                <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" :disabled="!formData.isApproval" style="width: 194px"/>
+                <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" :disabled="!formData.isApproval" 
+                                         :excludeMySelf="true" style="width: 194px"/>
               </el-form-item>
             </template>
             <el-button-group>
-              <el-button v-if="formData.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
-              <el-button v-if="formData.approvers.length > 1" stfyle="height: 32px" @click="removeApprover">删除</el-button>
+              <el-button v-if="formData.approvers && formData.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+              <el-button v-if="formData.approvers && formData.approvers.length > 1" stfyle="height: 32px" @click="removeApprover">删除</el-button>
             </el-button-group>
           </div>
           <!-- </el-col> -->
         </el-row>
         <el-row type="flex" v-else style="margin-top:20px">
-          <el-col :span="2"><span>审核人:</span></el-col>
+          <template v-if="formData.approvers && formData.auditWorkOrder.processes.length > 0">
+            <order-audit-detail style="padding-left: 10px" :processes="formData.auditWorkOrder.processes"/>
+          </template>
+          <!-- <el-col :span="2"><span>审核人:</span></el-col>
           <el-col :span="20" v-if="formData.auditWorkOrder&&formData.approvers">
             <template v-for="(item,itemIndex) in formData.approvers">
               <span :key="'a'+itemIndex">{{item.name}}</span>
             </template>
-          </el-col>
+          </el-col> -->
         </el-row>
       </template>
       <!-- 确认方(发货方) -->
@@ -124,6 +128,10 @@
     PersonnalSelectionV2
   } from '@/components'
 
+  import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components/'
+
   export default {
     name: 'ReconciliationOrdersFormFoot',
     props: {
@@ -142,7 +150,8 @@
     },
     components: {
       PersonnelSelection,
-      PersonnalSelectionV2
+      PersonnalSelectionV2,
+      OrderAuditDetail
     },
     computed: {
       //发货方

@@ -50,7 +50,7 @@
       </el-row>
       <!-- 创建/更新审核(审核人) -->
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
-        v-if="isApprover&&formData.state=='PENDING_APPROVAL'">
+        v-if="isApprover&&formData.state=='PENDING_APPROVAL'&&formData.auditWorkOrder.currentUserAuditState === 'AUDITING'">
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
             <el-button class="create-btn_red" @click="onApproval(false)">驳回</el-button>

@@ -41,7 +41,7 @@
         const keyword = this.keyword;
         const statuses = this.statuses;
         const url = this.apis().getoutboundProductionList();
-        const result = await this.$http.post(url, query, {
+        const result = await this.$http.post(url, {}, {
           page: page,
           size: size
         });
