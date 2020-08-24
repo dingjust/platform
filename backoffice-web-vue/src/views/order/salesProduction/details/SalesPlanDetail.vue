@@ -21,6 +21,9 @@
         <sales-production-tabs :canChangeProduct="false" :form="formData" @getDetails="getDetails" :canUpdate="false"
           @appendProduct="appendProduct" />
       </div>
+      <template v-if="formData.auditWorkOrder && formData.auditWorkOrder.processes.length > 0">
+        <order-audit-detail :processes="formData.auditWorkOrder.processes"/>
+      </template>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
           <h5 style="font-weight: bold">拒绝原因</h5>
@@ -63,6 +66,7 @@
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
+  import { OrderAuditDetail } from '@/views/order/salesProduction/components'
 
   export default {
     name: 'SalesPlanDetail',
@@ -71,7 +75,8 @@
       SalesOrderDetailForm,
       SalesProductionTabs,
       SalesPlanDetailBtnGroup,
-      SalesPlanAppendProductForm
+      SalesPlanAppendProductForm,
+      OrderAuditDetail
     },
     computed: {
       // ...mapGetters({
@@ -236,7 +241,10 @@
           seller: {},
           creator: {},
           approvers: [null],
-          productionLeader: null
+          productionLeader: null,
+          auditWorkOrder: {
+            processes: []
+          }
         },
       }
     },

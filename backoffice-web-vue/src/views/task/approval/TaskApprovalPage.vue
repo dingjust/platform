@@ -112,7 +112,7 @@
       onReset() {},
       handleClick(tab, event) {
         this.onReset();
-        this.queryFormData.state = tab.name;
+        this.queryFormData.searchType = tab.name;
         this.onAdvancedSearch();
       },
       onDetail(row) {
@@ -188,17 +188,21 @@
         activeStatus: '',
         queryFormData: {
           keyword: '',
-          state: ''
+          // state: '',
+          searchType: ''
         },
         statuses: [{
           code: '',
           name: '全部'
         }, {
+          code: 'AUDITING',
+          name: '待审批'
+        }, {
           code: 'PASSED',
-          name: '审核通过'
+          name: '已审批'
         }, {
           code: 'AUDITED_FAILED',
-          name: '审核驳回'
+          name: '已驳回'
         }],
         dataQuery: {}
       }

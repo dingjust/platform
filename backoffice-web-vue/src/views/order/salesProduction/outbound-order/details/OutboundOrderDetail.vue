@@ -29,6 +29,9 @@
         v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED'">
         <h6>唯一码：<span style="color: #F56C6C">{{formData.uniqueCode}}</span></h6>
       </el-row>
+      <template v-if="formData.sendAuditWorkOrder && formData.sendAuditWorkOrder.processes.length > 0">
+        <order-audit-detail style="padding-left: 10px" :processes="formData.sendAuditWorkOrder.processes"/>
+      </template>
       <div v-if="showFinancial" style="margin-top:20px">
         <!-- <div style="padding-left: 10px;margin-top: 20px">
           <el-row v-if="formData.payPlan != null">
@@ -85,7 +88,8 @@
   import OutboundCancelForm from '../form/OutboundCancelForm';
 
   import {
-    SalesProductionTabs
+    SalesProductionTabs,
+    OrderAuditDetail
   } from '@/views/order/salesProduction/components/'
   import {
     FinancialTabs
@@ -102,7 +106,8 @@
       PurchaseOrderInfoPaymentFinance,
       PurchaseOrderInfoReceiptFinance,
       FinancialTabs,
-      OutboundCancelForm
+      OutboundCancelForm,
+      OrderAuditDetail
     },
     computed: {
       ...mapGetters({
@@ -132,7 +137,7 @@
         // 订单审核状态在待审核且登陆账号为审核人
         if (this.formData.sendApprovers != null) {
           let flag = this.formData.sendApprovers.some(item => item.uid === this.$store.getters.currentUser.uid);
-          return this.formData.sendAuditState == 'AUDITING' && flag;
+          return this.formData.sendAuditWorkOrder.currentUserAuditState == 'AUDITING' && flag;
         } else {
           return false;
         }
@@ -196,7 +201,7 @@
       //审批
       onApproval(isPass) {
         if (this.formData.sendAuditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
-          this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+            this.formData.sendAuditWorkOrder.currentUserAuditState === 'AUDITING') {
           if (isPass) {
             this.$confirm('是否确认审核通过?', '提示', {
               confirmButtonText: '确定',
@@ -248,6 +253,16 @@
           loading.close();
           this.getDetail();
         }, 1000);
+      },
+      async onCancel() {
+        const url = this.apis().cancelOutboundOrder(this.formData.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('取消订单成功');
+        await this.getDetail();
       },
       async onConfirm() {
         const url = this.apis().acceptOutboundOrder(this.formData.code);

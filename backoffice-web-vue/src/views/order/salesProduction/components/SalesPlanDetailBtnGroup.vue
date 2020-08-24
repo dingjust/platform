@@ -15,7 +15,7 @@
         </el-col>
       </template>
       <!-- 审核人员按钮 -->
-      <template v-if="isApprover&&slotData.auditState=='AUDITING'">
+      <template v-if="isApprover && slotData.auditWorkOrder && slotData.auditWorkOrder.currentUserAuditState === 'AUDITING'">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
             <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
@@ -135,7 +135,7 @@
       //审批
       onApproval(isPass) {
         if (this.slotData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid && 
-            this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+            this.slotData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
           if (isPass) {
             this.$confirm('是否确认审核通过?', '提示', {
               confirmButtonText: '确定',

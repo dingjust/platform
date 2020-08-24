@@ -171,24 +171,20 @@
           </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="16"> -->
-          <template v-for="(item,itemIndex) in formData.sendApprovers">
-            <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px"
-              style="margin-right:10px;" :prop="'sendApprovers.' + itemIndex"
-              :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
-              <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
-              <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]"
-                :disabled="!formData.sendAuditNeeded" style="width: 194px" />
-            </el-form-item>
-          </template>
-          <el-button-group style="padding-bottom: 26px;">
-            <el-button v-if="formData.sendApprovers==null||formData.sendApprovers.length < 5" style="height: 32px"
-              @click="appendApprover">+ 添加审批人</el-button>
-            <el-button v-if="formData.sendApprovers!=null&&formData.sendApprovers.length > 1" style="height: 32px"
-              @click="removeApprover">删除
-            </el-button>
-          </el-button-group>
-        </div>
-        <!-- </el-col> -->
+              <template v-for="(item,itemIndex) in formData.sendApprovers">
+                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
+                  :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
+                  <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
+                  <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded"
+                                          :excludeMySelf="true" style="width: 194px"/>
+                </el-form-item>
+              </template>
+              <el-button-group style="padding-bottom: 26px;">
+                <el-button v-if="formData.sendApprovers && formData.sendApprovers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+                <el-button v-if="formData.sendApprovers && formData.sendApprovers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+              </el-button-group>
+            </div>
+          <!-- </el-col> -->
         <!-- </el-row> -->
         <el-row>
           <el-col :span="4">

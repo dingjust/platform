@@ -1749,13 +1749,13 @@ const state = {
     name: '无'
   }, {
     code: 'AUDITING',
-    name: '待审核'
+    name: '待审批'
   }, {
     code: 'PASSED',
-    name: '审核通过'
+    name: '已审批'
   }, {
     code: 'AUDITED_FAILED',
-    name: '审核驳回'
+    name: '已驳回'
   }, {
     code: 'REVOKED',
     name: '撤回'

@@ -97,12 +97,13 @@
               <template v-for="(item,itemIndex) in formData.approvers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
                   :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                  <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" style="width: 194px"/>
+                  <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" 
+                                          :excludeMySelf="true" style="width: 194px"/>
                 </el-form-item>
               </template>
               <el-button-group>
-                <el-button v-if="formData.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
-                <el-button v-if="formData.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+                <el-button v-if="formData.approvers && formData.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+                <el-button v-if="formData.approvers && formData.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
               </el-button-group>
             </div>
           </el-col>
