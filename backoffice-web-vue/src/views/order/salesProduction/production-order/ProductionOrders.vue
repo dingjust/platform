@@ -265,7 +265,7 @@
     },
     data() {
       return {
-        activeStatus: 'TO_BE_ALLOCATED',
+        activeStatus: 'TO_BE_PRODUCED',
         statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
         outboundOrderTypeSelect: false,
         selectRow: [],
@@ -275,7 +275,7 @@
           createdDateTo: null,
           keyword: '',
           categories: [],
-          state: 'TO_BE_ALLOCATED',
+          state: 'TO_BE_PRODUCED',
           type: ''
         },
         formData: {

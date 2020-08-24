@@ -23,7 +23,7 @@
       <h6 class="form-plane-name">{{formData.name!=undefined?'当前选中方案：'+formData.name:'当前未选择账务方案'}}</h6>
       <el-button @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用账务方案</el-button>
       <Authorized :permission="['PAY_PLAN_OPERATE']">
-        <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
+        <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini" class="save-plan-btn">保存账务方案</el-button>
       </Authorized>
     </el-row>
     <el-form :model="formData" ref="payPlanForm">
@@ -857,6 +857,10 @@
   .form-event-select {
     margin: 0 5px;
     width: 120px
+  }
+
+  .save-plan-btn{
+    padding: 10px;
   }
 
 </style>

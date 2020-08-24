@@ -98,7 +98,7 @@
         <el-row type="flex" style="padding-left: 20px">
           <el-col :span="24">
             <!-- <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" /> -->
-            <pay-plan-form :formData="form.payPlan" :isUseForOrder="true" />
+            <pay-plan-form :formData="form.payPlan" :isUseForOrder="true" ref="payPlanCom" />
           </el-col>
         </el-row>
         <el-row type="flex" justify="space-between" align="middle">
@@ -132,7 +132,8 @@
                 </template>
                 <el-button-group style="padding-bottom: 26px;">
                   <el-button style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
-                  <el-button v-if="form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+                  <el-button v-if="form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除
+                  </el-button>
                 </el-button-group>
               </div>
             <!-- </el-col> -->
@@ -148,12 +149,12 @@
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
           <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
-            <el-button class="material-btn" @click="onSave(false)">保存</el-button>
+          <el-button class="material-btn" @click="onSave(false)">保存</el-button>
           <!-- </authorized> -->
         </el-col>
         <el-col :span="5">
           <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
-            <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
+          <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
           <!-- </authorized> -->
         </el-col>
       </el-row>
@@ -276,13 +277,13 @@
       }
     },
     methods: {
-      appendApprover () {
+      appendApprover() {
         this.form.approvers.push({});
       },
-      removeApprover () {
+      removeApprover() {
         this.form.approvers.splice(this.form.approvers.length - 1, 1);
       },
-      handleClick (value) {
+      handleClick(value) {
         // if (!value) {
         //   this.form.approvers = [null];
         // }
@@ -290,7 +291,7 @@
           this.$refs.form.clearValidate('approvers.' + index);
         })
       },
-      onSelectSample (data) {
+      onSelectSample(data) {
         this.materialDialogVisible = false;
         this.salesProductAppendVisible = true;
         this.$nextTick(() => {
@@ -385,7 +386,7 @@
         } else {
           for (let i = 0; i < submitForm.approvers.length; i++) {
             submitForm.approvers[i] = {
-              id: this.form.approvers[i][this.form.approvers[i].length -1]
+              id: this.form.approvers[i][this.form.approvers[i].length - 1]
             }
           }
         }
@@ -426,8 +427,10 @@
         // }
 
         const form = this.$refs.form;
+        let forms = [form];
+        forms.push(this.$refs['payPlanCom'].$refs['payPlanForm']);
         // 使用Promise.all 并行去校验结果
-        let res = await Promise.all([form].map(this.getFormPromise));
+        let res = await Promise.all(forms.map(this.getFormPromise));
         return res.every(item => !!item);
       },
       // 封装Promise对象

@@ -1,11 +1,7 @@
 <template>
   <div class="animated fadeIn content payment-request-container">
     <el-card>
-      <div class="financial-plan-triangle_box">
-        <div class="financial-plan-triangle" :style="getTriangleColor">
-          <h6 class="financial-plan-triangle_text">{{auditState}}</h6>
-        </div>
-      </div>
+      <div id="printContent">
       <el-row type="flex" justify="space-between">
         <el-col :span="4">
           <div class="financial-list-title">
@@ -21,6 +17,9 @@
         <el-col :span="4">
           <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
+                  <el-col :span="4">
+                    <el-tag effect="plain" size="medium">{{auditState}}</el-tag>
+                  </el-col>
       </el-row>
       <div class="pt-2"></div>
       <el-row type="flex" justify="center">
@@ -99,10 +98,16 @@
           <payment-records-list :formData="formData" :tableData="[formData.paymentRecords]" />
         </el-col>
       </el-row>
+            </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-        <Authorized :permission="['PAYMENT_REQUEST_FINANCE_PAY']">
-          <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
-        </Authorized>
+        <el-col :span="4">
+          <Authorized :permission="['PAYMENT_REQUEST_FINANCE_PAY']">
+            <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
+          </Authorized>
+        </el-col>
+        <el-col :span="4">
+          <printer-button v-print="'#printContent'" />
+        </el-col>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
@@ -115,8 +120,15 @@
 </template>
 
 <script>
-  import { PersonnelSelection, ImagesUpload, PdfPreview } from '@/components/index.js'
-  import { PaymentRecordsList } from '@/views/financial'
+  import {
+    PersonnelSelection,
+    ImagesUpload,
+    PrinterButton,
+    PdfPreview
+  } from '@/components/index.js'
+  import {
+    PaymentRecordsList
+  } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
   export default {
     name: 'PaymentRequestDetailFinance',
@@ -125,6 +137,8 @@
       PersonnelSelection,
       ImagesUpload,
       PaymentForm,
+      PaymentRecordsList,
+      PrinterButton,
       PaymentRecordsList,
       PdfPreview
     },
@@ -194,7 +208,7 @@
         this.formData = result.data;
         this.countRequestAmount(result.data.productionOrder.id);
       },
-      async countRequestAmount (id) {
+      async countRequestAmount(id) {
         const url = this.apis().getRequestAmount(id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -205,17 +219,17 @@
           this.$message.error(result.msg);
           return;
         }
-        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) - 
-                              this.parseFloatNotParNaN(result.data.paidAmount);
+        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) -
+          this.parseFloatNotParNaN(result.data.paidAmount);
       },
-      parseFloatNotParNaN (data) {
+      parseFloatNotParNaN(data) {
         if (isNaN(parseFloat(data))) {
           return 0;
         } else {
           return parseFloat(data);
         }
       },
-      callback () {
+      callback() {
         this.paymentVisible = !this.paymentVisible;
         this.getDetail();
       },
@@ -251,7 +265,9 @@
         var chineseStr = '';
         //分离金额后用的数组，预定义
         var parts;
-        if (money === '') { return ''; }
+        if (money === '') {
+          return '';
+        }
         money = parseFloat(money);
         if (money >= maxNum) {
           //超出最大处理数字
@@ -312,9 +328,9 @@
           chineseStr += cnInteger;
         }
         return chineseStr;
-      } 
+      }
     },
-    data () {
+    data() {
       return {
         paymentVisible: false,
         preApplyAmount: '',
@@ -342,11 +358,11 @@
         fileUrl: ''
       }
     },
-    created () {
+    created() {
       this.getDetail();
     },
-    destroyed () {
-      
+    destroyed() {
+
     }
   }
 </script>
@@ -361,13 +377,13 @@
     width: 194px;
   }
 
-  .payment-request-container >>> .el-upload--picture-card {
+  .payment-request-container>>>.el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  .payment-request-container >>> .el-upload-list--picture-card .el-upload-list__item {
+  .payment-request-container>>>.el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }
@@ -379,29 +395,5 @@
     width: 120px;
     height: 40px;
     border-radius: 10px;
-  }
-
-  .financial-plan-triangle_box {
-    margin-top: 1px;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .financial-plan-triangle {
-    width: 0;
-    height: 0;
-    border-right: 70px solid white;
-    border-bottom: 70px solid transparent;
-    z-index: 0;
-  }
-
-  .financial-plan-triangle_text {
-    width: 80px;
-    padding-top: 10px;
-    padding-left: 37px;
-    transform: rotateZ(45deg);
-    color: white;
-    font-size: 12px;
   }
 </style>

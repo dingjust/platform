@@ -1000,7 +1000,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 Container(
                   padding: EdgeInsets.only(right: 10),
                   child: Text(
-                    '${productionProgress.delayedDays > 0 ? '已延期${productionProgress.delayedDays}天' : ''}',
+                    (productionProgress.delayedDays ?? -1 > 0)
+                        ? "(已延期${productionProgress.delayedDays}天)"
+                        : '',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.red,

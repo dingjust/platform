@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <supplier-select @onSelect="onSuppliersSelect"/>
+      <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-card>
       <el-row>
@@ -120,7 +120,7 @@
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="18">
             <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
-              :tax.sync="formData.invoiceTaxPoint" :layoutScale="[9,10,5]"/>
+              :tax.sync="formData.invoiceTaxPoint" :layoutScale="[9,10,5]" />
           </el-col>
           <el-col :span="6">
             <el-form-item label="运费承担：" label-width="120">
@@ -148,7 +148,7 @@
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
           <el-col :span="24">
-            <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom"/>
+            <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom" />
           </el-col>
         </el-row>
         <el-row>
@@ -159,23 +159,23 @@
           </el-col>
         </el-row>
         <!-- <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top"> -->
-          <!-- <el-col :span="6"> -->
-            <div style="display: flex;flex-wrap: wrap;">
-            <el-form-item label="跟单员" prop="merchandiser">
-              <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
-            </el-form-item>
+        <!-- <el-col :span="6"> -->
+        <div style="display: flex;flex-wrap: wrap;">
+          <el-form-item label="跟单员" prop="merchandiser">
+            <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
+          </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="2"> -->
-            <el-form-item label="" label-width="10px">
-              <el-checkbox v-model="formData.sendAuditNeeded">需审核</el-checkbox>
-            </el-form-item>
+          <el-form-item label="" label-width="10px">
+            <el-checkbox v-model="formData.sendAuditNeeded">需审核</el-checkbox>
+          </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="16"> -->
               <template v-for="(item,itemIndex) in formData.sendApprovers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
                   :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
                   <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
-                  <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded" 
+                  <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded"
                                           :excludeMySelf="true" style="width: 194px"/>
                 </el-form-item>
               </template>
@@ -213,6 +213,9 @@
         </el-col>
         <el-col :span="5">
           <el-button class="material-btn" @click="onCreate(true)">创建并提交</el-button>
+        </el-col>
+        <el-col :span="5" v-if="canDelete">
+          <el-button @click="onDelete" type="text">作废订单</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -278,14 +281,23 @@
       OutboundTypeSelect,
       PersonnalSelectionV2
     },
+    computed: {
+      canDelete: function () {
+        if (this.formData.state != null && this.formData.state == 'TO_BE_SUBMITTED') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
     methods: {
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
-      appendApprover () {
+      appendApprover() {
         this.formData.sendApprovers.push({});
       },
-      removeApprover () {
+      removeApprover() {
         this.formData.sendApprovers.splice(this.formData.sendApprovers.length - 1, 1);
       },
       getProgressPlan(val) {
@@ -467,7 +479,7 @@
           for (let i = 0; i < data.sendApprovers.length; i++) {
             if (data.sendApprovers instanceof Array && data.sendApprovers[i].length > 0) {
               data.sendApprovers[i] = {
-                id: this.formData.sendApprovers[i][this.formData.sendApprovers[i].length -1]
+                id: this.formData.sendApprovers[i][this.formData.sendApprovers[i].length - 1]
               }
             }
           }
@@ -521,6 +533,9 @@
       initData() {
         if (this.$route.params.formData != null) {
           this.formData = this.$route.params.formData;
+          if(this.formData.sendApprovers==null){
+            this.formData.sendApprovers=[{id:''}];
+          }
           if (this.formData.taskOrderEntries.length <= 0) {
             this.addRow();
           }
@@ -531,11 +546,36 @@
           //   this.formData.attachments = [];
           // }
         } else {
+
           this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
         }
         // //默认设置跟单员为当前账号
         this.$set(this.formData, 'merchandiser', this.currentUser);
-      }
+      },
+      //作废订单
+      onDelete() {
+        this.$confirm('此操作将永久取消订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onDelete();
+        });
+      },
+      async _onDelete() {
+        const url = this.apis().outboundOrderDelete(this.formData.id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('取消订单成功');
+        await this.$router.go(-1);
+      },
     },
     data() {
       var checkPartyAOperator = (rule, value, callback) => {

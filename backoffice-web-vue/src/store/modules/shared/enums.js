@@ -1301,28 +1301,28 @@ const state = {
     },
   ],
   // 账期支付方式
-    // 账期支付方式
-    PayPlanTypeV2: [{
+  // 账期支付方式
+  PayPlanTypeV2: [{
       code: 'PHASEONE',
       name: '一期款'
     },
-      {
-        code: 'PHASETWO',
-        name: '二期款'
-      },
-      {
-        code: 'PHASETHREE',
-        name: '三期款'
-      },
-      {
-        code: 'MONTHLY_SETTLEMENT_ONE',
-        name: '一月一结'
-      },
-      {
-        code: 'MONTHLY_SETTLEMENT_TWO',
-        name: '一月两结'
-      },
-    ],
+    {
+      code: 'PHASETWO',
+      name: '二期款'
+    },
+    {
+      code: 'PHASETHREE',
+      name: '三期款'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_ONE',
+      name: '一月一结'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_TWO',
+      name: '一月两结'
+    },
+  ],
   // 账期支付类型
   PayMoneyType: [{
       code: 'DEPOSIT',
@@ -1404,8 +1404,7 @@ const state = {
       name: '收到发票'
     }
   ],
-  TriggerEventV2: [
-    {
+  TriggerEventV2: [{
       code: 'DELIVERY_CONFIRMED',
       name: '确认收货'
     },
@@ -1668,9 +1667,6 @@ const state = {
   }],
   // 生产工单状态
   ProductionTaskOrderState: [{
-    code: 'TO_BE_ALLOCATED',
-    name: '待分配'
-  }, {
     code: 'TO_BE_PRODUCED',
     name: '待生产'
   }, {
@@ -1685,6 +1681,9 @@ const state = {
   }, {
     code: 'COMPLETED',
     name: '已完成'
+  }, {
+    code: 'TO_BE_ALLOCATED',
+    name: '待分配'
   }, {
     code: 'CANCED',
     name: '已取消'

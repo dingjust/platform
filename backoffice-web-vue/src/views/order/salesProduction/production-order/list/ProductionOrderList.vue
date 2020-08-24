@@ -51,8 +51,7 @@
         </template>
       </el-table-column>
       <el-table-column :key="6" label="合作商" v-if="mode=='export'" prop="belongTo.name" />
-      <el-table-column :key="7" label="订单数量" prop="quantity" min-width="70"></el-table-column>
-      <el-table-column :key="8" label="负责人" prop="productionLeader.name" min-width="60"></el-table-column>
+      <el-table-column :key="7" label="订单数量" prop="quantity" min-width="70"></el-table-column>      
       <el-table-column :key="9" label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating">
       </el-table-column>
       <el-table-column :key="10" label="创建时间" min-width="120">

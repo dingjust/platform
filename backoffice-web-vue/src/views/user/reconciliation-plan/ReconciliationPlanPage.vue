@@ -7,22 +7,25 @@
             <h6>对账方案列表</h6>
           </div>
         </el-col>
-        <el-col :span="2">
-<!--          <Authorized :permission="['PROGRESS_PLAN_OPERATE']">-->
-            <el-button type="primary" class="toolbar-search_input" @click="createNode">创建对账方案</el-button>
-<!--          </Authorized>-->
+        <el-col :span="6">
+          <el-row type="flex" justify="end">
+            <!--          <Authorized :permission="['PROGRESS_PLAN_OPERATE']">-->
+            <el-button type="text" @click="createNode">创建对账方案</el-button>
+            <!--          </Authorized>-->
+          </el-row>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <reconciliation-plan-toolbar :queryFormData="queryFormData" @onSearch="onSearch"/>
+      <reconciliation-plan-toolbar :queryFormData="queryFormData" @onSearch="onSearch" />
       <el-row type="flex" justify="start">
         <template v-for="(item, index) in statuses">
-          <el-button @click="handleClick(item.code, index)" :key="item.code" class="state-btn" :style="item.backgroundColor">
+          <el-button @click="handleClick(item.code, index)" :key="item.code" class="state-btn"
+            :style="item.backgroundColor">
             {{item.name}}
           </el-button>
         </template>
       </el-row>
-      <reconciliation-plan-list :page="page" @onSearch="onSearch"/>
+      <reconciliation-plan-list :page="page" @onSearch="onSearch" />
     </el-card>
   </div>
 </template>
@@ -32,9 +35,12 @@
   import ReconciliationPlanList from './list/ReconciliationPlanList';
   export default {
     name: 'ReconciliationPlanPage',
-    components: {ReconciliationPlanList, ReconciliationPlanToolbar},
+    components: {
+      ReconciliationPlanList,
+      ReconciliationPlanToolbar
+    },
     methods: {
-      async onSearch (page, size) {
+      async onSearch(page, size) {
         const url = this.apis().getReconciliationPlan();
         const result = await this.$http.post(url, this.queryFormData, {
           page: page,
@@ -46,10 +52,10 @@
         }
         this.page = result;
       },
-      createNode () {
+      createNode() {
         this.$router.push('/account/setting/reconciliation-plan/create');
       },
-      handleClick (code, index) {
+      handleClick(code, index) {
         // eslint-disable-next-line no-return-assign
         this.statuses.forEach(item => item.backgroundColor = 'background-color: #FFFFFF');
         this.statuses[index].backgroundColor = 'background-color: #ffd60c';
@@ -64,7 +70,7 @@
         this.onSearch(0, 10);
       },
     },
-    data () {
+    data() {
       return {
         queryFormData: {
           keyword: ''
@@ -89,6 +95,7 @@
       this.onSearch();
     }
   }
+
 </script>
 
 <style scoped>
@@ -101,4 +108,5 @@
     background-color: #ffd60c;
     border-color: #ffd60c;
   }
+
 </style>
