@@ -137,22 +137,26 @@
         this.$emit('onSearch', 0);
       },
       onPageSizeChanged(val) {
-        this._reset();
+        // this._reset();
 
-        if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
-          return;
-        }
+        // if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
+        this.$emit('onAdvancedSearch', 0, val);
 
-        this.$emit('onSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
+          // return;
+        // }
+
+        // this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
-        if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
-          return;
-        }
+        // if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val - 1, 10);
+          // return;
+        // }
 
-        this.$emit('onSearch', val - 1);
+        // this.$emit('onSearch', val - 1);
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
