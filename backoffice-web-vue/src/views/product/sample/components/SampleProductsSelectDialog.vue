@@ -19,7 +19,7 @@
     </el-row>
     <el-row type="flex">
       <el-table ref="resultTable" stripe :data="page.content" @selection-change="handleSelectionChange"
-        :height="autoHeight" :row-key="getRowKeys">
+        @row-click="rowClick" :height="autoHeight" :row-key="getRowKeys">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="产品图片" width="120">
           <template slot-scope="scope">
@@ -122,6 +122,9 @@
         } else {
           this.$message('请选择产品');
         }
+      },
+      rowClick(row) {
+        this.$refs.resultTable.toggleRowSelection(row);
       }
     },
     data() {

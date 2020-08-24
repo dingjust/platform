@@ -97,7 +97,7 @@
       <template v-if="formData.currentAuditWork && formData.currentAuditWork.processes.length > 0">
         <el-row type="flex" justify="center">
           <el-col :span="22">
-            <order-audit-detail style="padding-left: 10px" :processes="formData.currentAuditWork.processes"/>
+            <order-audit-detail style="padding-left: 10px" :processes="formData.currentAuditWork.processes" />
           </el-col>
         </el-row>
       </template>
@@ -123,7 +123,8 @@
       :close-on-click-modal="false">
       <payment-form v-if="paymentVisible" :id="id" @callback="callback" />
     </el-dialog>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body
+      :close-on-click-modal="false">
       <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
     </el-dialog>
   </div>
@@ -139,7 +140,9 @@
     PaymentRecordsList
   } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
-  import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
+  import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components/'
   export default {
     name: 'PaymentRequestDetailMerchandiser',
     props: ['id'],
@@ -157,7 +160,11 @@
         if (this.formData.approvers && this.formData.approvers.length > 0) {
           let flag = this.formData.approvers.some(item => item.uid === uid);
           console.log(flag);
-          return this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && flag;
+          if (this.formData.currentAuditWork) {
+            return this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && flag;
+          } else {
+            return false;
+          }
         }
       },
       agreementsCode: function () {
@@ -250,7 +257,7 @@
         this.paymentVisible = !this.paymentVisible;
         this.getDetail();
       },
-      async openPreviewPdf (item) {
+      async openPreviewPdf(item) {
         const url = this.apis().downContract(item.code);
         const result = await this.$http.get(url);
 
@@ -261,7 +268,7 @@
       },
       onApproval(isPass) {
         if (this.formData.currentAuditWork.auditingUser.uid === this.$store.getters.currentUser.uid &&
-            this.formData.currentAuditWork.currentUserAuditState === 'AUDITING') {
+          this.formData.currentAuditWork.currentUserAuditState === 'AUDITING') {
           if (isPass) {
             this.$confirm('是否确认审核通过?', '提示', {
               confirmButtonText: '确定',
@@ -282,8 +289,8 @@
               //TODO:取消操作
             });
           }
-        } else if (this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && 
-            this.formData.currentAuditWork.auditingUser.uid !== this.$store.getters.currentUser.uid) {
+        } else if (this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' &&
+          this.formData.currentAuditWork.auditingUser.uid !== this.$store.getters.currentUser.uid) {
           this.$message.warning('此订单暂未轮到您进行审批。')
         } else if (this.formData.currentAuditWork.currentUserAuditState === 'PASSED') {
           this.$message.warning('您已对此订单进行了审批。');

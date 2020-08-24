@@ -21,8 +21,9 @@
         <sales-production-tabs :canChangeProduct="false" :form="formData" @getDetails="getDetails" :canUpdate="false"
           @appendProduct="appendProduct" />
       </div>
-      <template v-if="formData.auditWorkOrder && formData.auditWorkOrder.processes.length > 0">
-        <order-audit-detail :processes="formData.auditWorkOrder.processes"/>
+      <template
+        v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">
+        <order-audit-detail :processes="formData.auditWorkOrder.processes" />
       </template>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -66,7 +67,9 @@
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
-  import { OrderAuditDetail } from '@/views/order/salesProduction/components'
+  import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components'
 
   export default {
     name: 'SalesPlanDetail',
