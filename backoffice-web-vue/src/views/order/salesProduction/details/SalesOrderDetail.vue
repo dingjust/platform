@@ -18,14 +18,15 @@
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
-        <sales-order-detail-form :form="formData" :modifyType="modifyType" :payPlan="payPlan" @callback="callback"/>
+        <sales-order-detail-form :form="formData" :modifyType="modifyType" :payPlan="payPlan" @callback="callback" />
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
           @appendProduct="appendProduct" />
       </div>
-      <template v-if="formData.auditWorkOrder && formData.auditWorkOrder.processes.length > 0">
-        <order-audit-detail :processes="formData.auditWorkOrder.processes"/>
+      <template
+        v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">
+        <order-audit-detail :processes="formData.auditWorkOrder.processes" />
       </template>
       <div v-if="showFinancial" style="margin-top:20px">
         <!-- <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
@@ -34,7 +35,7 @@
           </el-row>
         </div> -->
         <div v-if="formData.originCompany && formData.paymentBill != null">
-          <financial-tabs :formData="formData.paymentBill" belongTo="RECEIVABLE_PAGE" @callback="callback"/>
+          <financial-tabs :formData="formData.paymentBill" belongTo="RECEIVABLE_PAGE" @callback="callback" />
         </div>
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
@@ -48,7 +49,7 @@
         </el-row>
       </div>
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
-        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw"/>
+        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw" />
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -80,8 +81,12 @@
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
-  import {FinancialTabs} from '@/views/financial/index'
-  import { OrderAuditDetail } from '@/views/order/salesProduction/components'
+  import {
+    FinancialTabs
+  } from '@/views/financial/index'
+  import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components'
 
   export default {
     name: 'SalesOrderDetail',
@@ -158,14 +163,14 @@
         }
       },
       showFinancial: function () {
-        return this.formData.state != 'TO_BE_ACCEPTED'  && 
-                this.formData.state != 'TO_BE_SUBMITTED' && 
-                this.formData.state != 'AUDITING' &&
-                this.formData.state != 'AUDIT_REJECTED';
+        return this.formData.state != 'TO_BE_ACCEPTED' &&
+          this.formData.state != 'TO_BE_SUBMITTED' &&
+          this.formData.state != 'AUDITING' &&
+          this.formData.state != 'AUDIT_REJECTED';
       },
     },
     methods: {
-      callback () {
+      callback() {
         this.getDetails();
       },
       appendProduct() {
@@ -203,7 +208,7 @@
           this.setPayPlan(result.data.payPlan);
         }
       },
-      setPayPlan (payPlan) {
+      setPayPlan(payPlan) {
         // this.payPlan.name = payPlan.name;
         this.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
         this.payPlan.payPlanType = payPlan.payPlanType;
@@ -233,7 +238,7 @@
               break;
           }
         });
-        this.$set(this.payPlan,'1',1);
+        this.$set(this.payPlan, '1', 1);
       },
       onReturn() {
 
