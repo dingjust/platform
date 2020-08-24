@@ -20,7 +20,10 @@
         <el-col :span="4" v-if="!isSelect">
           <el-row type="flex" justify="end">
             <authorized :permission="['OUT_ORDER_CREATE']">
-              <el-button type="primary" class="create-button" @click="createOutboundOrder">创建外发订单</el-button>
+              <el-button type="primary" class="create-button" @click="createProductOutbound">创建产品外发</el-button>
+            </authorized>
+            <authorized :permission="['OUT_ORDER_CREATE']">
+              <el-button type="primary" class="create-button" @click="createOutboundOrder">创建工单外发</el-button>
             </authorized>
           </el-row>
         </el-col>
@@ -69,6 +72,10 @@
       },
       createOutboundOrder() {
         this.$emit('createOutboundOrder');
+      },
+      //产品外发
+      createProductOutbound(){
+        this.$emit('createProductOutbound');
       }
     },
     data() {
