@@ -23,7 +23,8 @@
       <h6 class="form-plane-name">{{formData.name!=undefined?'当前选中方案：'+formData.name:'当前未选择账务方案'}}</h6>
       <el-button @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用账务方案</el-button>
       <Authorized :permission="['PAY_PLAN_OPERATE']">
-        <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini" class="save-plan-btn">保存账务方案</el-button>
+        <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini" class="save-plan-btn">保存账务方案
+        </el-button>
       </Authorized>
     </el-row>
     <el-form :model="formData" ref="payPlanForm">
@@ -105,7 +106,8 @@
                   <el-option label="月底" :value="-1" :key="-1"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="至" label-width="40px" style="margin-left:10px" prop="payPlanItems.1.monthlyEndDayNum"
+              <el-form-item label="至" label-width="40px" style="margin-left:10px"
+                :prop="'payPlanItems.'+index+'.monthlyEndDayNum'"
                 :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
                 <el-select v-model="item.monthlyEndDayNum" placeholder="请选择" class="number-select"
                   @change="endDayNumChange(item,index)">
@@ -128,7 +130,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="后于" label-width="55px" prop="payPlanItems.1.monthType"
+              <el-form-item label="后于" label-width="55px" :prop="'payPlanItems.'+index+'.monthType'"
                 :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
                 <el-select v-model="item.monthType" placeholder="请选择" class="number-select">
                   <template v-for="val in monthTypes">
@@ -136,7 +138,7 @@
                   </template>
                 </el-select>
               </el-form-item>
-              <el-form-item label="" label-width="10px" prop="payPlanItems.1.payDayNum"
+              <el-form-item label="" label-width="10px" :prop="'payPlanItems.'+index+'.payDayNum'"
                 :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
                 <el-select v-model="item.payDayNum" placeholder="请选择" class="number-select">
                   <template v-if="item.monthType == 'CURRENT_MONTH' && item.monthlyEndDayNum">
@@ -154,7 +156,7 @@
               <h6 class="end-text">支付相应款项</h6>
             </el-row>
             <el-row v-else type="flex">
-              <el-form-item label="每月" label-width="55px" prop="payPlanItems.0.monthlyEndDayNum"
+              <el-form-item label="每月" label-width="55px" :prop="'payPlanItems.'+index+'.monthlyEndDayNum'"
                 :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
                 <el-select v-model="item.monthlyEndDayNum" placeholder="请选择" class="number-select"
                   @change="endDayNumChange(item,index)">
@@ -165,14 +167,15 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="前完成事件" label-width="100px" style="margin-left:10px;"
-                prop="payPlanItems.0.triggerEvent" :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
+                :prop="'payPlanItems.'+index+'.triggerEvent'"
+                :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
                 <el-select v-model="item.triggerEvent" filterable placeholder="请选择" class="form-event-select"
                   @change="triggerEventChange(item,index)">
                   <el-option v-for="event in triggerEventsV2" :label="event.name" :value="event.code" :key="event.code">
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="后于" label-width="55px" prop="payPlanItems.0.monthType"
+              <el-form-item label="后于" label-width="55px" :prop="'payPlanItems.'+index+'.monthType'"
                 :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
                 <el-select v-model="item.monthType" placeholder="请选择" class="number-select"
                   @change="monthTypeChange(item,index)">
@@ -181,7 +184,7 @@
                   </template>
                 </el-select>
               </el-form-item>
-              <el-form-item label="" label-width="10px" prop="payPlanItems.0.payDayNum"
+              <el-form-item label="" label-width="10px" :prop="'payPlanItems.'+index+'.payDayNum'"
                 :rules="[{ required: true, message: '请选择', trigger: 'change'}]">
                 <el-select v-model="item.payDayNum" placeholder="请选择" class="number-select">
                   <template v-if="item.monthType == 'CURRENT_MONTH' && item.monthlyEndDayNum">
@@ -859,7 +862,7 @@
     width: 120px
   }
 
-  .save-plan-btn{
+  .save-plan-btn {
     padding: 10px;
   }
 
