@@ -858,7 +858,7 @@ const COMMON_APIS = {
   },
   // 进度工单状态统计
   progressOrderStateCount() {
-    return '/b2b/orders/production/work/state/count';
+    return '/b2b/orders/production/work/state/phase/count';
   },
   // 发货单状态统计
   shippingOrderStateCount() {

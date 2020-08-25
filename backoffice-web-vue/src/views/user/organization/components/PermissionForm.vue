@@ -44,7 +44,7 @@
             <h6 class="permission-form-hear">数据权限</h6>
             <div class="checkbox-container">
               <template v-if="authList.dataPermissionAvl">
-                <el-checkbox-group v-model="checkPerdata[authList.id]" @change="handlePer">
+                <el-checkbox-group v-model="checkPerdata[authList.id]" @change="handlePer" :min="1">
                   <el-checkbox v-for="item in dataPermission" :label="item.code" :key="item.code">
                     {{item.name}}
                   </el-checkbox>
