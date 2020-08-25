@@ -13,9 +13,9 @@
       <el-table-column label="申请金额" prop="requestAmount"/>
       <el-table-column label="收款对象" prop="payable.name" />
       <el-table-column label="付款时间">
-        <!-- <template slot-scope="scope">
-          <span>{{scope.row.creationtime | timestampToTime}}</span>
-        </template> -->
+        <template slot-scope="scope" v-if="scope.row.paymentRecords && scope.row.paymentRecords.payTime">
+          <span>{{scope.row.paymentRecords.payTime | formatDate}}</span>
+        </template>
       </el-table-column>
       <!-- <el-table-column label="状态">
         <template slot-scope="scope">

@@ -95,7 +95,7 @@
           <el-col :span="24">
             <div style="display: flex;flex-wrap: wrap;">
               <template v-for="(item,itemIndex) in formData.approvers">
-                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
+                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;margin-bottom: 10px"
                   :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
                   <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" 
                                           :excludeMySelf="true" style="width: 194px"/>
@@ -107,6 +107,9 @@
               </el-button-group>
             </div>
           </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" align="top" style="padding-left: 50px">
+          <h6 style="color: #F56C6C">* 审批人将按照你选择的顺序逐级审批</h6>
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="21">
@@ -146,6 +149,9 @@
     name: 'PaymentRequestForm',
     props: {
       orderData: {
+        type: Object
+      },
+      requestData: {
         type: Object
       }
     },
@@ -207,18 +213,6 @@
       removeApprover () {
         this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
       },
-      // addApprover() {
-      //   this.formData.approvers.push({});
-      //   this.$nextTick(() => {
-      //     this.$refs.form.clearValidate();
-      //   })
-      // },
-      // deleteApprover () {
-      //   this.formData.approvers.splice(1, 1);
-      //   this.$nextTick(() => {
-      //     this.$refs.form.clearValidate();
-      //   })
-      // },
       validateField(name) {
         this.$refs.form.validateField(name);
       },
@@ -275,7 +269,11 @@
           return;
         }
         this.$message.success('创建付款申请单成功');
-        this.$router.go(-1);
+        if (this.requestData != null) {
+          this.$router.go(-2);
+        } else {
+          this.$router.go(-1);
+        }
       },
       onChange(val) {
         // if (this.preApplyAmount == '') {
@@ -380,6 +378,25 @@
           chineseStr += cnInteger;
         }
         return chineseStr;
+      },
+      initData () {
+        this.receiver = this.requestData.payable.name;
+        this.formData = {
+          requestAmount: this.requestData.requestAmount,
+          paymentFor: this.requestData.paymentFor,
+          bankCardAccount: this.requestData.bankCardAccount,
+          bankCardNo: this.requestData.bankCardNo,
+          bank: this.requestData.bank,
+          productionOrder: {
+            id: this.requestData.productionOrder.id,
+            code: this.requestData.productionOrder.code
+          },
+          approvers: this.requestData.approvers,
+          remark: this.requestData.remark,
+          requestVouchers: this.requestData.requestVouchers ? this.requestData.requestVouchers : [] 
+        },
+        this.onChange(this.requestData.requestAmount);
+        this.countRequestAmount(this.requestData.productionOrder.id);
       }
     },
     data() {
@@ -422,6 +439,8 @@
     created() {
       if (this.orderData != null) {
         this.setSelectOrder(this.orderData);
+      } else if (this.requestData != null) {
+        this.initData();
       }
     },
     mounted() {

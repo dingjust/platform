@@ -60,6 +60,12 @@
           </authorized>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" 
+              v-if="formData.state === 'AUDIT_REJECTED' && isSendBy">
+        <el-col :span="3">
+          <el-button class="material-btn" @click="onModify">修改</el-button>
+        </el-col>
+      </el-row>
     </el-card>
     <el-dialog :visible.sync="cancelFormVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -157,6 +163,43 @@
       }),
       callback() {
         this.getDetail();
+      },
+      onModify () {
+        let data = this.setFormData(this.formData);
+        this.$router.push({
+          name: '创建外发订单',
+          params: {
+            formData: data
+          }
+        });
+      },
+      setFormData(data) {
+        let formData = {
+          id: data.id,
+          managementMode: data.managementMode,
+          outboundCompanyName: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.name : data
+            .targetCooperator.name,
+          outboundContactPerson: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner
+            .contactPerson : data.targetCooperator.contactPerson,
+          outboundContactPhone: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPhone :
+            data.targetCooperator.contactPhone,
+          targetCooperator: {
+            id: data.targetCooperator.id
+          },
+          taskOrderEntries: data.taskOrderEntries,
+          cooperationMode: data.cooperationMode,
+          invoiceNeeded: data.invoiceNeeded,
+          invoiceTaxPoint: data.invoiceTaxPoint,
+          freightPayer: data.freightPayer,
+          remarks: data.remarks,
+          sendAuditNeeded: data.sendAuditNeeded,
+          payPlan: data.payPlan,
+          attachments: data.attachments ? data.attachments : [],
+          sendApprovers: data.sendApprovers,
+          merchandiser: data.merchandiser,
+          // state: data.state
+        }
+        return formData;
       },
       async getDetail() {
         const url = this.apis().getoutboundOrderDetail(this.code);

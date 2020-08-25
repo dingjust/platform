@@ -6,8 +6,9 @@
       <address-select @onSelect="onAddressSelect" v-if="addressSelectVisible"/>
     </el-dialog>
     <el-form :inline="true" ref="address" :model="address" label-position="left" :disabled="readOnly">
-      <el-row type="flex" align="middle" :gutter="10" justify="space-between">
-        <el-col :span="8">
+      <div class="basic-row">
+      <!-- <el-row type="flex" align="middle" :gutter="10" justify="space-between"> -->
+        <!-- <el-col :span="8"> -->
           <el-form-item label="送货地址" style="padding-top:8px" :rules="[
                 { required: !readOnly, message: '请选择省', trigger: 'change'}]" :prop="'region'">
             <el-select v-model="address.region" value-key="isocode" @change="(val)=>onRegionChanged(val)"
@@ -16,8 +17,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="4">
+        <!-- </el-col> -->
+        <!-- <el-col :span="4"> -->
           <el-form-item :rules="[
                 { required: !readOnly, message: '请选择市', trigger: 'change'}]" prop="city">
             <el-select v-model="address.city" @change="(val)=>onCityChanged(val)" value-key="code" placeholder="选择城市">
@@ -25,8 +26,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="4">
+        <!-- </el-col> -->
+        <!-- <el-col :span="4"> -->
           <el-form-item :rules="[
                 { required: !readOnly, message: '请选择区', trigger: 'change'}]" prop="cityDistrict">
             <el-select v-model="address.cityDistrict" value-key="code" placeholder="选择县区">
@@ -34,36 +35,39 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="6">
+        <!-- </el-col> -->
+        <!-- <el-col :span="6"> -->
           <el-form-item :rules="[
                 { required: !readOnly, message: '请详细地址', trigger: 'change'}]" prop="line1">
-            <el-input placeholder="详细地址" v-model="address.line1" size="mini">
+            <el-input placeholder="详细地址" v-model="address.line1">
             </el-input>
           </el-form-item>
-        </el-col>
-        <el-col :span="2">
+        <!-- </el-col> -->
+        <!-- <el-col :span="2"> -->
           <el-form-item>
-            <el-button size="mini" @click="addressSelect">选择</el-button>
+            <el-button @click="addressSelect" size="mini">选择</el-button>
           </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row type="flex" align="middle" :gutter="10" v-if="!hideContact">
-        <el-col :span="7">
-          <el-form-item label="联系人" label-width="80px" :rules="[
-                { required: !readOnly, message: '请填写收货人', trigger: 'change'}]" prop="fullname">
-            <el-input placeholder="名称" v-model="address.fullname" size="mini">
-            </el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="7">
-          <el-form-item label="联系方式" label-width="80px" :rules="[
-                { required: !readOnly, message: '请填写联系方式', trigger: 'change'}]" prop="cellphone">
-            <el-input placeholder="电话" v-model="address.cellphone" size="mini">
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
+        <!-- </el-col> -->
+      <!-- </el-row> -->
+      </div>
+      <div class="basic-row">
+        <!-- <el-row type="flex" align="middle" :gutter="10" v-if="!hideContact"> -->
+          <!-- <el-col :span="7"> -->
+            <el-form-item label="联系人" label-width="80px" :rules="[
+                  { required: !readOnly, message: '请填写收货人', trigger: 'change'}]" prop="fullname">
+              <el-input placeholder="名称" v-model="address.fullname">
+              </el-input>
+            </el-form-item>
+          <!-- </el-col> -->
+          <!-- <el-col :span="7"> -->
+            <el-form-item label="联系方式" label-width="80px" :rules="[
+                  { required: !readOnly, message: '请填写联系方式', trigger: 'change'}]" prop="cellphone">
+              <el-input placeholder="电话" v-model="address.cellphone">
+              </el-input>
+            </el-form-item>
+          <!-- </el-col> -->
+        <!-- </el-row> -->
+      </div>
     </el-form>
   </div>
 </template>
@@ -213,6 +217,10 @@
 
 </script>
 
-<style>
-
+<style scoped>
+  .basic-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
 </style>

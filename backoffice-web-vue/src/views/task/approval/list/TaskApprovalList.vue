@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column label="任务状态">
         <template slot-scope="scope">
-          <span>{{getEnum('AuditState', scope.row.currentUserAuditState)}}</span>
+          <span>{{getEnum('AuditState', getState(scope.row))}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -70,6 +70,13 @@
         } else {
           this.$message.warning('此订单暂未轮到您进行审批。');
         }
+      },
+      getState (row) {
+        console.log(row);
+        if (row.currentUserAuditState != null) {
+          return row.currentUserAuditState;
+        }
+        return row.state;
       },
       // onApproval(row) {
       //   if (this.isAuditUser(row)) {
