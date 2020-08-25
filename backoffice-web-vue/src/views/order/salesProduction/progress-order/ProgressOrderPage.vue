@@ -99,10 +99,14 @@
         this.stateCount = result.data;
       },
       tabName (tab) {
-        let index = this.stateCount.findIndex(item => item.stateName == tab.name);
-        if (index > -1) {
-          return tab.name +'('+ this.stateCount[index].count +')';
+        console.log(this.stateCount);
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name +'('+ this.stateCount[tab.code] +')';  
         }
+        // let index = this.stateCount.findIndex(item => item.stateName == tab.name);
+        // if (index > -1) {
+        //   return tab.name +'('+ this.stateCount[index].count +')';
+        // }
         // if (this.stateCount.hasOwnProperty(tab.code)) {
         //   return tab.name +'('+ this.stateCount[tab.code] +')';  
         // }

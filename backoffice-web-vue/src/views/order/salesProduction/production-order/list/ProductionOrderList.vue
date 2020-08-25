@@ -189,29 +189,23 @@
         return amount;
       },
       rowDisabled(row, index) {
-        if (!row.productionLeader) {
-          return false;
+        if (this.isAllocating && row.productionLeader) {
+          return this.$store.getters.currentUser.uid === row.productionLeader.uid;
         }
-        // 待分配列表非自身负责人不能勾选
-        if (this.isAllocating) {
-          return this.$store.getters.currentUser.uid == row.productionLeader.uid;
+        if (row.merchandiser && row.outboundOrderCode == null) {
+          return this.$store.getters.currentUser.uid === row.merchandiser.uid
         }
-        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
-          return false;
-        }
-        return true;
+        return false;
       },
       handleSelectionChange(val) {
         this.selectRow = val;
       },
       rowClick(row, column, event) {
-        if (this.isAllocating && !(this.$store.getters.currentUser.uid == row.productionLeader.uid)) {
-          return;
+        if (this.isAllocating && row.productionLeader && this.$store.getters.currentUser.uid === row.productionLeader.uid) {
+          this.$refs.resultTable.toggleRowSelection(row);
+        } else if (row.merchandiser && row.outboundOrderCode == null && this.$store.getters.currentUser.uid === row.merchandiser.uid) {
+          this.$refs.resultTable.toggleRowSelection(row);
         }
-        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
-          return;
-        }
-        this.$refs.resultTable.toggleRowSelection(row);
       },
       // getPaymentStatusTag (row) {
       //   return row.payStatus === 'PAID' ? 'static/img/paid.png' : 'static/img/arrears.png';

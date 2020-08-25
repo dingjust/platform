@@ -275,8 +275,12 @@
           this.$message.error('请选择订单');
           return;
         }
-        if (!this.pdfFile && this.pdfFile.length <= 0) {
+        if (this.contractType == '2' && (!this.pdfFile || this.pdfFile.length <= 0)) {
           this.$message.error('请先上传PDF文件');
+          return;
+        }
+        if (this.contractType == '3' && (!this.paperList || this.paperList.length <= 0)) {
+          this.$message.error('请先上传已签纸质合同');
           return;
         }
         if (this.contractCode == null || this.contractCode == '') {
@@ -310,6 +314,10 @@
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
 
         if (result.code == 1) {
           this.$message.success(result.msg);
@@ -391,6 +399,10 @@
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
 
         if (result.code == 1) {
           this.$message.success(result.msg);
@@ -558,7 +570,7 @@
     },
     created () {
       if (this.isSignedPaper) {
-        this.contractType = '2';
+        this.contractType = '3';
       }
     },
     mounted () {
