@@ -391,7 +391,7 @@
               originOrder: {
                 id: item.id
               },
-              unitPrice: item.unitPrice,
+              unitPrice: '',
               deliveryDate: item.deliveryDate,
               shippingAddress: item.shippingAddress,
               product: {
@@ -563,6 +563,7 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
+        
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;

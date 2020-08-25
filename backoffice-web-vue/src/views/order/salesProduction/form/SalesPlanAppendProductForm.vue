@@ -55,8 +55,7 @@
               </el-row>
             </el-col>
             <el-col :span="20">
-              <table cellspacing="2" width="100%" :height="(appendProductForm.sampleList.length+1)*50"
-                class="order-table">
+              <table cellspacing="2" width="100%" :height="(entry.sizes.length+1)*50" class="order-table">
                 <tr class="order-table-th_row">
                   <td style="width: 40px">颜色</td>
                   <template v-for="size in entry.sizes">
@@ -127,7 +126,8 @@
                 <el-col :span="16">
                   <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案"
                     label-width="100px" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true" v-if="entry.progressPlan!=null">
+                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true"
+                      v-if="entry.progressPlan!=null">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -337,8 +337,8 @@
             costOrder: null,
             colors: this.getColorsByEntries(colorSizeEntries),
             sizes: this.getSizesByEntries(colorSizeEntries),
-            progressPlan:{
-              name:''
+            progressPlan: {
+              name: ''
             }
           }
 
@@ -362,6 +362,9 @@
         });
 
         this.materialDialogVisible = false;
+        this.$nextTick(() => {
+          this.$refs.resultTable.doLayout()
+        });
       },
       // _addRow() {
       //   var newEntry = {

@@ -30,6 +30,7 @@ import {
   getDataPermissionQuery
 } from '@/auth/auth';
 
+// import 'babel-polyfill'
 import Promise from 'babel-polyfill';
 // 解决promise 在ie中未定义的问题
 if (!window.Promise) {

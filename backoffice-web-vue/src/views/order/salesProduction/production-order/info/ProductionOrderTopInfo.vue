@@ -203,6 +203,22 @@
         }
       },
       cooperator: function () {
+        //来源自己情况
+        if (this.slotData.originCompany != null && this.slotData.originCompany.uid == this.currentUser.companyCode) {
+          if (this.slotData.targetCooperator) {
+            if (this.slotData.targetCooperator.type == 'ONLINE') {
+              return {
+                name: this.slotData.targetCooperator.partner.name,
+                contactPerson: this.slotData.targetCooperator.contactPerson,
+                contactPhone: this.slotData.targetCooperator.contactPhone
+              };
+            }else{
+              return this.slotData.targetCooperator;
+            }
+          }
+        }
+
+        //外接情况
         if (this.slotData.originCooperator != null) {
           if (this.slotData.originCooperator.type == 'ONLINE') {
             return Object.assign({}, this.slotData.originCooperator.partner);
@@ -286,6 +302,7 @@
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         defaultDateValueFormat: 'yyyy-MM-dd"T"HH:mm:ssZ',
         VIEW_MODE_LIST: 'LIST',
         VIEW_MODE_TABS: 'TABS',
