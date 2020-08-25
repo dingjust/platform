@@ -65,7 +65,7 @@
           <template v-if="canEdit(scope.row.auditState)">
             <el-button v-if="canUpdate" type="text" @click="onModify(scope.$index)">编辑</el-button>
             <el-button v-if="canDelete" slot="reference" type="text" @click="onDelete(scope.$index)"
-              :disabled="scope.$index==0">删除
+              :disabled="data.length==1">删除
             </el-button>
           </template>
         </template>

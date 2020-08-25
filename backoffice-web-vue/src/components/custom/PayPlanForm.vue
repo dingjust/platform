@@ -19,7 +19,7 @@
         <el-button type="primary" @click="onPayPlanSave">确 定</el-button>
       </div>
     </el-dialog>
-    <el-row type="flex" v-if="isUseForOrder" justify="end" class="info-order-row">
+    <el-row type="flex" v-if="isUseForOrder&&(!readOnly)" justify="end" class="info-order-row">
       <h6 class="form-plane-name">{{formData.name!=undefined?'当前选中方案：'+formData.name:'当前未选择账务方案'}}</h6>
       <el-button @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用账务方案</el-button>
       <Authorized :permission="['PAY_PLAN_OPERATE']">
@@ -27,7 +27,7 @@
         </el-button>
       </Authorized>
     </el-row>
-    <el-form :model="formData" ref="payPlanForm">
+    <el-form :model="formData" ref="payPlanForm" :disabled="readOnly">
       <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
         <el-col :span="8">
           <el-form-item label="有无定金" label-width="120">
@@ -239,6 +239,10 @@
       },
       formData: {
         type: Object,
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
