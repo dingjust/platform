@@ -222,7 +222,7 @@
     </el-card>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sample-products-select-dialog v-if="taskDialogVisible" @onSelectSample="onSelectSample"/>
+      <sample-products-select-dialog v-if="taskDialogVisible" @onSelectSample="onSelectSample" :selectedRow="formData.taskOrderEntries"/>
       <!-- <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"
         :selectType="'OUTBOUND_ORDER'" /> -->
     </el-dialog>
@@ -393,7 +393,7 @@
         let entries = [];
         let colorSizeEntries;
         selectList.forEach(item => {
-          index = this.formData.taskOrderEntries.findIndex(val => val.originOrder.id === item.id);
+          index = this.formData.taskOrderEntries.findIndex(val => val.product.id === item.id);
           if (index > -1) {
             entries.push(this.formData.taskOrderEntries[index]);
           } else {
@@ -407,6 +407,7 @@
               shippingAddress: {},
               product: {
                 id: item.id,
+                code: item.code,
                 name: item.name,
                 thumbnail: item.thumbnail
               },

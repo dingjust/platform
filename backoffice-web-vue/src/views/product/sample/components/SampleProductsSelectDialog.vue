@@ -77,6 +77,7 @@
 
   export default {
     name: 'SampleProductsSelectDialog',
+    props: ['selectedRow'],
     components: {
       SampleProductDetailsPage,
       DeptPersonSelect
@@ -145,6 +146,15 @@
           this.$message('请选择产品');
         }
       },
+      echoData () {
+        let index;
+        this.page.content.filter(item => {
+          index = this.selectedRow.findIndex(val => val.product.id === item.id);
+          if (index > -1) {
+            this.$refs.resultTable.toggleRowSelection(item);
+          }
+        });
+      },
       onResetQuery () {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       },
@@ -160,10 +170,20 @@
         dataQuery: {}
       }
     },
+    watch: {
+      'page': function (nval, oval) {
+        this.echoData();
+      }
+    },
     created() {
       this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
       this.onResetQuery();
       this.onSearch();
+    },
+    mounted () {
+      if (this.selectedRow && this.selectedRow.length > 0) {
+        this.echoData();
+      }
     }
   }
 
