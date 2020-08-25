@@ -12,7 +12,7 @@
     </el-row>
     <el-table ref="multipleTable" :data="canbeCancelOrders" tooltip-effect="dark" style="width: 100%"
       @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55">
+      <el-table-column type="selection" width="55" :reserve-selection="true">
       </el-table-column>
       <el-table-column label="订单号" prop="code" />
       <el-table-column prop="product.name" label="产品" />
@@ -72,8 +72,12 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$message.success("生成成功");
-        this.$set(this.order, 'uniqueCode', result);
+        if (result["code"]==0) {
+          this.$message.error(result["msg"]);
+          return;
+        }
+        this.$message.success("申请成功");
+        this.$emit('callback');
       },
       async onCreate() {
         const url = this.apis().generateUniqueCodeForSale(this.order.code);

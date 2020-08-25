@@ -63,7 +63,7 @@
     </el-card>
     <el-dialog :visible.sync="cancelFormVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <outbound-cancel-form :order="formData" />
+      <outbound-cancel-form :order="formData" @callback="callback" v-if="cancelFormVisible"/>
     </el-dialog>
   </div>
 </template>

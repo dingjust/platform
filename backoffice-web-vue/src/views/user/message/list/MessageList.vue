@@ -29,7 +29,7 @@
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :row-style="{cursor:'pointer'}"
               :height="autoHeight" @row-click="openOrderDialog" @selection-change="handleSelectionChange" :row-key="(row)=> row.code">
       <el-table-column
-        reserve-selection
+        :reserve-selection="true"
         type="selection"
         width="55">
       </el-table-column>

@@ -20,7 +20,7 @@
     <el-row type="flex">
       <el-table ref="resultTable" stripe :data="page.content" @selection-change="handleSelectionChange"
         @row-click="rowClick" :height="autoHeight" :row-key="getRowKeys">
-        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
         <el-table-column label="产品图片" width="120">
           <template slot-scope="scope">
             <img width="54px" height="54px"
@@ -136,7 +136,7 @@
     },
     created() {
       this.onSearch();
-    }
+    },
   }
 
 </script>

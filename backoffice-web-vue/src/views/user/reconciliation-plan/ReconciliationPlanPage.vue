@@ -10,7 +10,7 @@
         <el-col :span="6">
           <el-row type="flex" justify="end">
             <!--          <Authorized :permission="['PROGRESS_PLAN_OPERATE']">-->
-            <el-button type="text" @click="createNode">创建对账方案</el-button>
+            <el-button  @click="createNode" class="material-btn">创建对账方案</el-button>
             <!--          </Authorized>-->
           </el-row>
         </el-col>
@@ -107,6 +107,11 @@
   .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
+  }
+
+  .material-btn {
+    background-color: #FFD60C;
+    border-color: #FFD60C;
   }
 
 </style>

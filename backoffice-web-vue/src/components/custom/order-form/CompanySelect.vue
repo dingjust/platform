@@ -19,7 +19,7 @@
     <el-row type="flex" justify="center">
       <el-col :span="20">
         <el-card shadow="hover">
-          <el-table :data="data" height="500" v-loadmore="loadMore" stripe highlight-current-row ref="table"
+          <el-table :data="data" height="400" v-loadmore="loadMore" stripe highlight-current-row ref="table"
             @current-change="handleCurrentChange">
             <el-table-column label="公司名称" prop="name" align="center"></el-table-column>
             <el-table-column label="账号" align="center">
@@ -104,7 +104,11 @@
         this.selectedData = val;
       },
       onSubmit() {
-        this.$emit('onSubmit', this.selectedData);
+        if (this.selectedData.uid == this.currentUser.companyCode) {
+          this.$message.error('不能选择自己公司作为合作商');
+        } else {
+          this.$emit('onSubmit', this.selectedData);
+        }
       },
       phoneNumEncode(str) {
         if (str == null) {
@@ -122,6 +126,7 @@
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         keyword: '',
         page: 0,
         size: 20,
@@ -163,7 +168,7 @@
     width: 200px;
   }
 
-  .message{
+  .message {
     color: red;
   }
 

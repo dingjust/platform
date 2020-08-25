@@ -1587,7 +1587,7 @@ let NONE_TENANT_APIS = {
     return '/b2b/out/order/revoke/' + id;
   },
 
-  //外发订单-撤回
+  //订单-作废
   outboundOrderDelete(id) {
     return '/b2b/sales/production/order/' + id;
   }
