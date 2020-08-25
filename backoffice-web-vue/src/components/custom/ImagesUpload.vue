@@ -36,7 +36,8 @@
         <el-dialog :visible.sync="dialogVisible" width="50%" append-to-body :close-on-click-modal="false">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
-        <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" append-to-body :close-on-click-modal="false">
+        <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" append-to-body
+          :close-on-click-modal="false">
           <pdf-preview v-if="pdfVisible" :fileUrl="pdfUrl" />
         </el-dialog>
       </el-col>
@@ -81,7 +82,7 @@
       PdfPreview
     },
     methods: {
-      fileUrl (file) {
+      fileUrl(file) {
         if (file.artworkUrl) {
           let fileType = this.getSuffix(file.artworkUrl);
           if (fileType === 'pdf') {
@@ -100,6 +101,12 @@
           return false;
         } else {
           if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png') {
+            //若为Edge浏览器直接返回
+            let userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+            //Edge跳过压缩
+            if (userAgent.indexOf("Edge") > -1) {
+              return true;
+            }
             return new Promise((resolve, reject) => {
               //压缩图片
               let reader = new FileReader();
@@ -112,7 +119,7 @@
                   resolve(newFile);
                 };
               }
-              reader.readAsDataURL(file);
+              reader.readAsDataURL(file);              
             });
           }
           return true;
@@ -179,7 +186,7 @@
           'ready');
         return index != -1;
       },
-      onDetail (file) {
+      onDetail(file) {
         let fileType = this.getSuffix(file.artworkUrl);
         if (fileType === 'pdf') {
           this.pdfUrl = file.url;
@@ -196,7 +203,7 @@
           // window.location.href = file.url;
         }
       },
-      getSuffix (str) {
+      getSuffix(str) {
         let index = str.lastIndexOf('.');
         return str.slice(index + 1);
       }
