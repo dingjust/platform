@@ -56,14 +56,16 @@
       }),
       onSearch(page, size) {
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch (page, size, changeTab) {
         if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
           this.onResetQuery();
         }
         const query = this.queryFormData;
         const url = this.apis().getProgressOrderList();
         this.searchAdvanced({url, query, page, size});
-        this.progressOrderStateCount();
+        if (!changeTab) {
+          this.progressOrderStateCount();
+        }
       },
       async getPhaseList () {
         const url = this.apis().getProgressPhaseList();
@@ -99,8 +101,8 @@
         this.stateCount = result.data;
       },
       tabName (tab) {
-        if (this.stateCount.hasOwnProperty(tab.code)) {
-          return tab.name +'('+ this.stateCount[tab.code] +')';  
+        if (this.stateCount.hasOwnProperty(tab.name)) {
+          return tab.name +'('+ this.stateCount[tab.name] +')';  
         }
         // let index = this.stateCount.findIndex(item => item.stateName == tab.name);
         // if (index > -1) {
@@ -113,7 +115,7 @@
       },
       handleClick (tab, event) {
         this.queryFormData.state = tab.name;
-        this.onAdvancedSearch();
+        this.onAdvancedSearch(0, 10, true);
       },
       onResetQuery () {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
