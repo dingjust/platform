@@ -422,7 +422,6 @@
           }
         })
         this.formData.taskOrderEntries = entries;
-        console.log(this.formData.taskOrderEntries);
         this.taskDialogVisible = false;
       },
       convertColorSize (colorSizes) {

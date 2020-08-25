@@ -95,18 +95,21 @@
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
       }),
-      onSearch(page, size) {
+      async onSearch(page, size) {
         if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
           this.onResetQuery();
         }
         const query = this.queryFormData;
         const url = this.apis().getSampleProducts();
-        this.searchAdvanced({
+        await this.searchAdvanced({
           url,
           query,
           page,
           size
         });
+        if (this.selectedRow && this.selectedRow.length > 0) {
+          this.echoData();
+        }
       },
       onReset () {
         this.queryFormData.keyword = '';
@@ -117,7 +120,6 @@
         this.multipleSelection = val;
       },
       handleClick (row) {
-        console.log(row);
         this.$refs.resultTable.toggleRowSelection(row);
       },
       getRowKeys(row) {
@@ -170,20 +172,10 @@
         dataQuery: {}
       }
     },
-    watch: {
-      'page': function (nval, oval) {
-        this.echoData();
-      }
-    },
     created() {
       this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
       this.onResetQuery();
       this.onSearch();
-    },
-    mounted () {
-      if (this.selectedRow && this.selectedRow.length > 0) {
-        this.echoData();
-      }
     }
   }
 

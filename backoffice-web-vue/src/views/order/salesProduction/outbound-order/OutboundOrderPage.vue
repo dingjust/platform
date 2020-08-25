@@ -211,7 +211,6 @@
         statuses: Object.assign([], this.$store.state.EnumsModule.OutboundOrderStatuses),
         formData: {
           id: null,
-          managementMode: 'COLLABORATION',
           outboundCompanyName: '',
           outboundContactPerson: '',
           outboundContactPhone: '',
