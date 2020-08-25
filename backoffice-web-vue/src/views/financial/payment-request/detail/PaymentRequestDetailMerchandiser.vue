@@ -73,11 +73,11 @@
               <h6>开户行：{{formData.bank}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+          <!-- <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>审批人：{{approvers}}</h6>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>备注：{{formData.remark}}</h6>
@@ -94,7 +94,7 @@
           </el-row>
         </el-col>
       </el-row>
-      <template v-if="formData.currentAuditWork && formData.currentAuditWork.processes.length > 0">
+      <template v-if="formData.currentAuditWork && formData.currentAuditWork.processes && formData.currentAuditWork.processes.length > 0">
         <el-row type="flex" justify="center">
           <el-col :span="22">
             <order-audit-detail style="padding-left: 10px" :processes="formData.currentAuditWork.processes" />
@@ -115,6 +115,13 @@
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
             <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+          </authorized>
+        </el-col>
+      </el-row>
+      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="formData.state === 'AUDIT_FAIL'">
+        <el-col :span="3">
+          <authorized :permission="['DO_AUDIT']">
+            <el-button class="material-btn" @click="onReapply">重新申请</el-button>
           </authorized>
         </el-col>
       </el-row>
@@ -310,6 +317,14 @@
         }
         this.$message.success('审批成功');
         this.getDetail();
+      },
+      onReapply () {
+        this.$router.push({
+          name: '创建付款申请单',
+          params: {
+            requestData: this.formData
+          }
+        });
       },
       convertCurrency(money) {
         //汉字的数字

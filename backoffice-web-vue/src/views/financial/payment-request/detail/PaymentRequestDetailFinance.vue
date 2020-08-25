@@ -72,11 +72,11 @@
               <h6>开户行：{{formData.bank}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+          <!-- <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>审批人：{{approvers}}</h6>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>备注：{{formData.remark}}</h6>
@@ -93,6 +93,13 @@
           </el-row>
         </el-col>
       </el-row>
+      <template v-if="formData.currentAuditWork && formData.currentAuditWork.processes && formData.currentAuditWork.processes.length > 0">
+        <el-row type="flex" justify="center">
+          <el-col :span="22">
+            <order-audit-detail style="padding-left: 10px" :processes="formData.currentAuditWork.processes" />
+          </el-col>
+        </el-row>
+      </template>
       <el-row type="flex" justify="center" v-if="formData.state === 'PAID'">
         <el-col :span="23">
           <payment-records-list :formData="formData" :tableData="[formData.paymentRecords]" />
@@ -130,6 +137,9 @@
     PaymentRecordsList
   } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
+    import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components/'
   export default {
     name: 'PaymentRequestDetailFinance',
     props: ['id'],
@@ -140,7 +150,8 @@
       PaymentRecordsList,
       PrinterButton,
       PaymentRecordsList,
-      PdfPreview
+      PdfPreview,
+      OrderAuditDetail
     },
     computed: { 
       agreementsCode: function () {

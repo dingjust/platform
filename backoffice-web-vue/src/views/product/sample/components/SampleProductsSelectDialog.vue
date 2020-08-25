@@ -77,6 +77,7 @@
 
   export default {
     name: 'SampleProductsSelectDialog',
+    props: ['selectedRow'],
     components: {
       SampleProductDetailsPage,
       DeptPersonSelect
@@ -94,18 +95,21 @@
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
       }),
-      onSearch(page, size) {
+      async onSearch(page, size) {
         if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
           this.onResetQuery();
         }
         const query = this.queryFormData;
         const url = this.apis().getSampleProducts();
-        this.searchAdvanced({
+        await this.searchAdvanced({
           url,
           query,
           page,
           size
         });
+        if (this.selectedRow && this.selectedRow.length > 0) {
+          this.echoData();
+        }
       },
       onReset () {
         this.queryFormData.keyword = '';
@@ -116,7 +120,6 @@
         this.multipleSelection = val;
       },
       handleClick (row) {
-        console.log(row);
         this.$refs.resultTable.toggleRowSelection(row);
       },
       getRowKeys(row) {
@@ -144,6 +147,15 @@
         } else {
           this.$message('请选择产品');
         }
+      },
+      echoData () {
+        let index;
+        this.page.content.filter(item => {
+          index = this.selectedRow.findIndex(val => val.product.id === item.id);
+          if (index > -1) {
+            this.$refs.resultTable.toggleRowSelection(item);
+          }
+        });
       },
       onResetQuery () {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));

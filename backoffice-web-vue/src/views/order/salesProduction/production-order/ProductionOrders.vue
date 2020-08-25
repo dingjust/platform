@@ -280,7 +280,6 @@
         },
         formData: {
           id: null,
-          managementMode: 'COLLABORATION',
           outboundCompanyName: '',
           outboundContactPerson: '',
           outboundContactPhone: '',

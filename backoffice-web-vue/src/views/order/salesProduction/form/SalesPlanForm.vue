@@ -57,37 +57,29 @@
           </el-col>
         </el-row>
         <div class="form-block-content">
-          <!-- <el-row type="flex" align="center" :gutter="10" style="margin-bottom: 10px"> -->
-            <!-- <el-col :span="6"> -->
-              <div style="display: flex;flex-wrap: wrap;">
-              <el-form-item label="跟单员" label-width="80px" prop="productionLeader"
-                :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                <!-- <personnel-selection :vPerson.sync="form.productionLeader" /> -->
-                <!-- <dept-selection :vDept.sync=form.productionDept /> -->
-                <personnal-selection-v2 :vPerson.sync="form.productionLeader"/>
+          <div style="display: flex;flex-wrap: wrap;">
+            <el-form-item label="跟单员" label-width="80px" prop="productionLeader"
+              :rules="{required: true, message: '不能为空', trigger: 'change'}">
+              <personnal-selection-v2 :vPerson.sync="form.productionLeader"/>
+            </el-form-item>
+            <el-form-item label="" label-width="10px" style="margin-right: 10px">
+              <el-checkbox v-model="form.auditNeeded" @change="handleClick">需审核</el-checkbox>
+            </el-form-item>
+            <template v-for="(item,itemIndex) in form.approvers">
+              <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
+                :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
+                <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded" 
+                                        :excludeMySelf="true" style="width: 194px"/>
               </el-form-item>
-            <!-- </el-col> -->
-            <!-- <el-col :span="2"> -->
-              <el-form-item label="" label-width="10px" style="margin-right: 10px">
-                <el-checkbox v-model="form.auditNeeded" @change="handleClick">需审核</el-checkbox>
-              </el-form-item>
-            <!-- </el-col> -->
-            <!-- <el-col :span="16"> -->
-                <template v-for="(item,itemIndex) in form.approvers">
-                  <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
-                    :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
-                    <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
-                    <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded" 
-                                            :excludeMySelf="true" style="width: 194px"/>
-                  </el-form-item>
-                </template>
-                <el-button-group style="padding-bottom: 26px;">
-                  <el-button v-if="form.approvers && form.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
-                  <el-button v-if="form.approvers && form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
-                </el-button-group>
-              </div>
-            <!-- </el-col> -->
-          <!-- </el-row> -->
+            </template>
+            <el-button-group style="padding-bottom: 26px;">
+              <el-button v-if="form.approvers && form.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+              <el-button v-if="form.approvers && form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+            </el-button-group>
+          </div>
+          <div>
+            <h6 style="color: #F56C6C">* 审批人将按照你选择的顺序逐级审批</h6>
+          </div>
         </div>
       </el-form>
       <sales-production-tabs :form="form" @appendProduct="appendProduct" />

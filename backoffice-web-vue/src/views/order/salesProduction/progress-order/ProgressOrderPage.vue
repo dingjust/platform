@@ -99,7 +99,6 @@
         this.stateCount = result.data;
       },
       tabName (tab) {
-        console.log(this.stateCount);
         if (this.stateCount.hasOwnProperty(tab.code)) {
           return tab.name +'('+ this.stateCount[tab.code] +')';  
         }
@@ -134,7 +133,7 @@
           expectedDeliveryDateTo: '',
           operatorName: ''
         },
-        stateCount: [],
+        stateCount: {},
         dataQuery: {}
       }
     },

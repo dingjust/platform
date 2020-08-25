@@ -789,8 +789,12 @@ const COMMON_APIS = {
     return '/b2b/audit/order/order/list';
   },
   // 审核任务
-  taskAudit() {
-    return '/b2b/audit/order/order/audit'
+  taskAudit () {
+    return '/b2b/audit/order/order/audit';
+  },
+  // 审核撤回
+  revokeTask (id) {
+    return '/b2b/audit/order/order/revoke/' + id;
   },
   // 获取进度工单列表
   getProgressOrderList() {
