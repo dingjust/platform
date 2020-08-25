@@ -1,6 +1,6 @@
 <template>
   <el-row type="flex" style="padding-left:10px">
-    <el-form-item label="订单管理方式" prop="manageWay" label-width="130px"
+    <el-form-item label="订单管理方式" prop="managementMode" label-width="130px"
       :rules="[{ required: true, message: '请选择订单管理方式', trigger: 'change' },]">
       <el-popover placement="right" width="350" trigger="hover">
         <el-row type="flex" justify="center">
@@ -14,8 +14,8 @@
         </div>
         <i class="el-icon-question text-icon" slot="reference"></i>
       </el-popover>
-      <el-radio @change="onClick('1')" :value="formData.manageWay" label="1">协同订单</el-radio>
-      <el-radio @change="onClick('2')" :value="formData.manageWay" label="2">自管订单</el-radio>
+      <el-radio @change="onClick('COLLABORATION')" :value="formData.managementMode" label="COLLABORATION">协同订单</el-radio>
+      <el-radio @change="onClick('AUTOGESTION')" :value="formData.managementMode" label="AUTOGESTION">自管订单</el-radio>
     </el-form-item>
   </el-row>
 </template>
@@ -35,7 +35,7 @@
           cancelButtonText: '否',
           type: 'warning'
         }).then(() => {
-          this.$set(this.formData, 'manageWay', val);
+          this.$set(this.formData, 'managementMode', val);
         }).catch(() => {
 
         });

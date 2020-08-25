@@ -1,83 +1,36 @@
 <template>
   <div style="margin-bottom: 10px">
-    <el-row type="flex" justify="start">
-      <el-col :span="3" :offset="1">
+    <div class="outbound-order-table">
+      <div>
         <img :src="product.product.thumbnail ? product.product.thumbnail.url : 'static/img/nopicture.png'"
           style="width: 100px;height: 100px;border-radius: 8px;" />
-      </el-col>
-      <el-col :span="12">
-        <el-table ref="resultTable" :data="getColorSizeTableData" border>
-          <el-table-column label="颜色" prop="colorName"></el-table-column>
-          <template v-for="(val, index) in getSizeList">
-            <el-table-column :label="val.name" :prop="val.name"></el-table-column>
-          </template>
-        </el-table>
-      </el-col>
-    </el-row>
+      </div>
+      <div style="margin-left: 20px;width: 100%">
+        <color-size-table :data="product.colorSizeEntries" :readOnly="!isFromProduct" :hideEmptyColors="!isFromProduct" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  import {
-    getSizeSequence
-  } from '@/components/'
-
+  import { ColorSizeTable } from '@/components'
   export default {
     name: 'OutboundOrderColorSizeTable',
-    props: ['product'],
-    computed: {
-      getColorSizeTableData: function () {
-        let row = {};
-        let data = [];
-        let index;
-        this.product.colorSizeEntries.forEach(val => {
-          index = data.findIndex(item => item.colorName == val.color.name);
-          if (index > -1) {
-            data[index][val.size.name] = val.quantity;
-          } else {
-            row.colorName = val.color.name;
-            row[val.size.name] = val.quantity;
-            data.push(row);
-            row = {};
-          }
-        });
-        //颜色为空处理
-        data = data.filter(item => {
-          let values = Object.values(item);
-          if (values) {
-            let numberArry = values.filter(val => Number.isInteger(val));
-            return !numberArry.every(val => val == 0);
-          } else {
-            return false;
-          }
-        });
-        return data;
+    props: {
+      product: {
+        required: true
       },
-      getSizeList: function () {
-        let data = [];
-        let index;
-        this.product.colorSizeEntries.forEach(item => {
-          index = data.findIndex(val => val.code == item.size.code);
-          if (index < 0) {
-            data.push(item.size);
-          }
-        });
-        //排序
-        data.sort((o1, o2) => {
-          let o1Sequence = getSizeSequence(o1.code);
-          let o2Sequence = getSizeSequence(o2.code);
-          if (o1Sequence && o2Sequence) {
-            return o1Sequence - o2Sequence;
-          } else if (o1Sequence && !o2Sequence) {
-            return -1;
-          } else if (!o1Sequence && o2Sequence) {
-            return 1;
-          } else {
-            return -1;
-          }
-        });
-        return data;
+      isFromProduct: {
+        type: Boolean,
+        default: false
       }
+    },
+    components: {
+      ColorSizeTable
+    },
+    computed: {
+    },
+    methods: {
     }
   }
 
@@ -86,6 +39,13 @@
 <style scoped>
   /deep/ .el-table--enable-row-hover .el-table__body tr:hover>td {
     background-color: #FFFFFF !important;
+  }
+
+  .outbound-order-table {
+    margin-left: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 
 </style>

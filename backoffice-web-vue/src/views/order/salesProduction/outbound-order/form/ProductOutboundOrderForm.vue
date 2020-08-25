@@ -71,10 +71,10 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4">
-                <el-button @click="onProductSelect(index)" size="mini">选择任务</el-button>
+                <el-button @click="onProductSelect(index)" size="mini">选择产品</el-button>
               </el-col>
             </el-row>
-            <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" />
+            <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" :isFromProduct="true"/>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="8">
                 <el-form-item label="发单价格" prop="unitPrice"
@@ -165,34 +165,28 @@
             </div>
           </el-col>
         </el-row>
-        <!-- <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top"> -->
-        <!-- <el-col :span="6"> -->
         <div style="display: flex;flex-wrap: wrap;padding-left: 20px">
           <el-form-item label="跟单员" prop="merchandiser">
             <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
           </el-form-item>
-          <!-- </el-col> -->
-          <!-- <el-col :span="2"> -->
           <el-form-item label="" label-width="10px">
             <el-checkbox v-model="formData.sendAuditNeeded">需审核</el-checkbox>
           </el-form-item>
-          <!-- </el-col> -->
-          <!-- <el-col :span="16"> -->
-              <template v-for="(item,itemIndex) in formData.sendApprovers">
-                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
-                  :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
-                  <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
-                  <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded"
-                                          :excludeMySelf="true" style="width: 194px"/>
-                </el-form-item>
-              </template>
-              <el-button-group style="padding-bottom: 26px;">
-                <el-button v-if="formData.sendApprovers && formData.sendApprovers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
-                <el-button v-if="formData.sendApprovers && formData.sendApprovers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
-              </el-button-group>
-            </div>
-          <!-- </el-col> -->
-        <!-- </el-row> -->
+          <template v-for="(item,itemIndex) in formData.sendApprovers">
+            <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
+              :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
+              <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded"
+                                      :excludeMySelf="true" style="width: 194px"/>
+            </el-form-item>
+          </template>
+          <el-button-group style="padding-bottom: 26px;">
+            <el-button v-if="formData.sendApprovers && formData.sendApprovers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+            <el-button v-if="formData.sendApprovers && formData.sendApprovers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+          </el-button-group>
+        </div>
+        <div style="padding-left: 20px">
+          <h6 style="color: #F56C6C">* 审批人将按照你选择的顺序逐级审批</h6>
+        </div>
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -405,9 +399,9 @@
           } else {
             colorSizeEntries = this.convertColorSize(item.colorSizes);
             row = {
-              originOrder: {
-                id: item.id
-              },
+              // originOrder: {
+              //   id: item.id
+              // },
               unitPrice: '',
               deliveryDate: '',
               shippingAddress: {},
@@ -419,7 +413,7 @@
               progressPlan: {
                 name: ''
               },
-              colorSizeEntries: item.colorSizes
+              colorSizeEntries: colorSizeEntries
             }
 
             entries.push(row);
@@ -427,20 +421,29 @@
           }
         })
         this.formData.taskOrderEntries = entries;
-        
+        console.log(this.formData.taskOrderEntries);
         this.taskDialogVisible = false;
       },
       convertColorSize (colorSizes) {
-        // let colorSizeEntries = [];
-        // colorSizes.forEach(item => {
-        //   colorSizeEntries.push({
-        //     quantity: '',
-        //     color: {
-        //       id: item.colorId,
-        //       name: item.colorName,
-        //     }
-        //   })
-        // })
+        let colorSizeEntries = [];
+        colorSizes.forEach(item => {
+          item.sizes.forEach(val => {
+            colorSizeEntries.push({
+              color: {
+                id: item.colorId,
+                code: item.colorCode,
+                name: item.colorName,
+                customize: item.customize
+              },
+              quantity: 0,
+              size: {
+                code: val.code,
+                name: val.name
+              }
+            })
+          })
+        })
+        return colorSizeEntries;
       },
       onSelectTask(selectTaskList) {
         let row = {}
