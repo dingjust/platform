@@ -15,6 +15,9 @@
         <el-col :span="6" :offset="2">
           <h6>销售业务：{{formData.code}}</h6>
         </el-col>
+        <el-col :span="4" :offset="6" v-if="isApplyCanceling">
+          <twinkle-warning-button @click="canelingDialogVisible=true" label="订单取消申请处理" />
+        </el-col>
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
@@ -56,6 +59,10 @@
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :isUpdate="false"
         :needMaterialsSpec="needMaterialsSpec" :productionLeader="formData.productionLeader" />
     </el-dialog>
+    <el-dialog :visible.sync="canelingDialogVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sales-order-cancel-dialog v-if="canelingDialogVisible" :order="formData" @callback="callback" />
+    </el-dialog>
   </div>
 </template>
 
@@ -78,6 +85,7 @@
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
+  import SalesOrderCancelDialog from '../components/SalesOrderCancelDialog';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
@@ -87,6 +95,9 @@
   import {
     OrderAuditDetail
   } from '@/views/order/salesProduction/components'
+  import {
+    TwinkleWarningButton
+  } from '@/components'
 
   export default {
     name: 'SalesOrderDetail',
@@ -99,7 +110,9 @@
       PurchaseOrderInfoPaymentFinance,
       PurchaseOrderInfoReceiptFinance,
       FinancialTabs,
-      OrderAuditDetail
+      OrderAuditDetail,
+      SalesOrderCancelDialog,
+      TwinkleWarningButton
     },
     computed: {
       // ...mapGetters({
@@ -168,9 +181,19 @@
           this.formData.state != 'AUDITING' &&
           this.formData.state != 'AUDIT_REJECTED';
       },
+      //是否有正在申请取消订单
+      isApplyCanceling: function () {
+        if (this.formData.currentCancelApply != null && this.formData.currentCancelApply.state == 'PENDING') {
+          return true;
+        }
+
+        return false;
+      }
     },
     methods: {
       callback() {
+        this.salesProductAppendVisible = false;
+        this.canelingDialogVisible = false;
         this.getDetails();
       },
       appendProduct() {
@@ -206,6 +229,14 @@
         }, result.data);
         if (result.data.type === 'SALES_ORDER') {
           this.setPayPlan(result.data.payPlan);
+        }
+        //检测是否有取消申请
+        if (this.formData.currentCancelApply != null && this.formData.currentCancelApply.state == 'PENDING') {
+          setTimeout(() => {
+            this.$nextTick(() => {
+              this.canelingDialogVisible = true;
+            });
+          }, 1000);
         }
       },
       setPayPlan(payPlan) {
@@ -350,6 +381,7 @@
     data() {
       return {
         salesProductAppendVisible: false,
+        canelingDialogVisible: false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
         payPlan: {
@@ -380,9 +412,6 @@
     created() {
       this.getDetails();
     },
-    mounted() {
-
-    }
   };
 
 </script>

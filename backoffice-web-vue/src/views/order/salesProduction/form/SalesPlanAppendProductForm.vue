@@ -362,9 +362,6 @@
         });
 
         this.materialDialogVisible = false;
-        this.$nextTick(() => {
-          this.$refs.resultTable.doLayout()
-        });
       },
       // _addRow() {
       //   var newEntry = {

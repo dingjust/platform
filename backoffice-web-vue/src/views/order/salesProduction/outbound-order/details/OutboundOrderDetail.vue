@@ -29,8 +29,9 @@
         v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED'">
         <h6>唯一码：<span style="color: #F56C6C">{{formData.uniqueCode}}</span></h6>
       </el-row>
-      <template v-if="formData.sendAuditWorkOrder && formData.sendAuditWorkOrder.processes && formData.sendAuditWorkOrder.processes.length > 0">
-        <order-audit-detail style="padding-left: 10px" :processes="formData.sendAuditWorkOrder.processes"/>
+      <template
+        v-if="formData.sendAuditWorkOrder && formData.sendAuditWorkOrder.processes && formData.sendAuditWorkOrder.processes.length > 0">
+        <order-audit-detail style="padding-left: 10px" :processes="formData.sendAuditWorkOrder.processes" />
       </template>
       <div v-if="showFinancial" style="margin-top:20px">
         <!-- <div style="padding-left: 10px;margin-top: 20px">
@@ -63,7 +64,7 @@
     </el-card>
     <el-dialog :visible.sync="cancelFormVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <outbound-cancel-form :order="formData" @callback="callback" v-if="cancelFormVisible"/>
+      <outbound-cancel-form :order="formData" @callback="callback" v-if="cancelFormVisible" />
     </el-dialog>
   </div>
 </template>
@@ -129,9 +130,16 @@
           return false;
         }
       },
+      //是否在申请取消
+      isCanceling: function () {
+        if (this.formData.currentCancelApply) {
+          return this.formData.currentCancelApply.state == 'PENDING';
+        }
+        return false;
+      },
       canCancel: function () {
-        //生产中
-        return this.formData.state == 'AUDIT_PASSED';
+        //无未处理的申请单
+        return this.formData.state == 'AUDIT_PASSED' && !this.isCanceling;
       },
       canAudit: function () {
         if (this.formData.state !== 'AUDITING') {
@@ -156,6 +164,7 @@
         clearFormData: 'clearFormData'
       }),
       callback() {
+        this.cancelFormVisible = false;
         this.getDetail();
       },
       async getDetail() {
@@ -204,7 +213,7 @@
       //审批
       onApproval(isPass) {
         if (this.formData.sendAuditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
-            this.formData.sendAuditWorkOrder.currentUserAuditState === 'AUDITING') {
+          this.formData.sendAuditWorkOrder.currentUserAuditState === 'AUDITING') {
           if (isPass) {
             this.$confirm('是否确认审核通过?', '提示', {
               confirmButtonText: '确定',
