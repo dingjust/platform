@@ -98,15 +98,11 @@
       payable: function () {
         let totalNum = 0;
         //选中发货单收货总额
-        if (this.formData.shippingSheets != null) {
-          this.formData.shippingSheets.forEach(sheet => {
-            if (sheet.receiptSheets != null) {
-              sheet.receiptSheets.forEach(entry => {
-                let num = parseInt(entry.totalQuantity);
-                if (!Number.isNaN(num)) {
-                  totalNum += num;
-                }
-              });
+        if (this.formData.receiptSheets != null) {
+          this.formData.receiptSheets.forEach(sheet => {
+            let num = parseInt(sheet.totalQuantity);
+            if (!Number.isNaN(num)) {
+              totalNum += num;
             }
           });
         }
@@ -143,8 +139,8 @@
     methods: {
       onSubmit() {
         //校验选中发货单数量
-        if (this.formData.shippingSheets.length < 1) {
-          this.$message.error('请选择发货单');
+        if (this.formData.receiptSheets.length < 1) {
+          this.$message.error('请选择收货单');
           return false;
         }
 
@@ -159,7 +155,7 @@
       },
       async _onSubmit() {
         const form = {
-          shippingSheets: this.formData.shippingSheets,
+          receiptSheets: this.formData.receiptSheets,
           increases: this.formData.increases.filter(item => item.amount != null || item.remarks != null).map(
             item => {
               return {
@@ -190,7 +186,7 @@
           for (let i = 0; i < this.formData.approvers.length; i++) {
             if (this.formData.approvers instanceof Array && this.formData.approvers[i].length > 0) {
               form.approvers[i] = {
-                id: this.formData.approvers[i][this.formData.approvers[i].length -1]
+                id: this.formData.approvers[i][this.formData.approvers[i].length - 1]
               }
             }
           }
@@ -267,9 +263,7 @@
         formData: {
           isApproval: false,
           approvers: [null],
-          shippingSheets: [
-
-          ],
+          receiptSheets: [],
           increases: [{
             amount: null,
             remarks: null
@@ -282,7 +276,7 @@
             code: ''
           },
           shippingTask: {
-            shippingSheets: []
+            receiptSheets: [],
           }
         }
       }
@@ -308,7 +302,7 @@
       }
       if (this.selectShipOrder.length > 0) {
         this.selectShipOrder.forEach(order => {
-          this.formData.shippingSheets.push(order);
+          this.formData.receiptSheets.push(order);
         });
       }
     }

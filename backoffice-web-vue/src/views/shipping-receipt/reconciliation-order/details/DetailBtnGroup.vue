@@ -121,8 +121,9 @@
       },
       //确认方审核人员
       isOriginApprover: function () {
-        if (this.formData.originApprovers) {
-          let index = this.formData.originApprovers.findIndex(element => element.uid == this.currentUser.uid);
+        if (this.formData.originApprovers && this.currentUser) {
+          let index = this.formData.originApprovers.findIndex(element => element != null && element.uid == this
+            .currentUser.uid);
           return index != -1;
         } else {
           return false;

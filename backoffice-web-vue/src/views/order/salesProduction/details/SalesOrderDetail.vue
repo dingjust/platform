@@ -52,7 +52,8 @@
         </el-row>
       </div>
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
-        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw" />
+        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw"
+        @onCancel="onDelete" />
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -376,7 +377,31 @@
       },
       validate(callback) {
         this.$refs.form.validate(callback);
-      }
+      },
+      //作废订单
+      onDelete() {
+        this.$confirm('此操作将永久作废订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onDelete();
+        });
+      },
+      async _onDelete() {
+        const url = this.apis().outboundOrderDelete(this.formData.id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('作废订单成功');
+        await this.$router.go(-1);
+      },
     },
     data() {
       return {

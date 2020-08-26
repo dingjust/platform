@@ -1,15 +1,12 @@
 <template>
   <div class="table-container">
-    <el-table ref="table" :data="reconciliationShippingOrders" style="width: 100%"
-      @selection-change="handleSelectionChange" show-summary :summary-method="getSummaries">
-      <el-table-column type="selection" :reserve-selection="true" width="55" v-if="!readOnly"></el-table-column>
-      <!-- <el-table-column label="发货单号" prop="code"></el-table-column>
-      <el-table-column label="发货数" prop="totalQuantity"></el-table-column> -->
+    <el-table ref="table" :data="formData.receiptSheets" style="width: 100%" show-summary
+      :summary-method="getSummaries">
+      <el-table-column label="发货单号" prop="code"></el-table-column>
+      <el-table-column label="发货数" prop="totalQuantity"></el-table-column>
       <el-table-column label="收货单">
         <template slot-scope="scope">
-          <!-- <el-row v-for="item in scope.row.receiptSheets" :key="item.id"> -->
-            <el-button type="text" @click="onReceiptDetail(scope.row)">{{scope.row.code}}</el-button>
-          <!-- </el-row> -->
+          <el-button type="text" @click="onReceiptDetail(scope.row)">{{scope.row.code}}</el-button>
         </template>
       </el-table-column>
       <el-table-column label="收货时间">
@@ -17,11 +14,7 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收货数量" prop="totalQuantity">
-        <!-- <template slot-scope="scope">
-          {{receiptNum(scope.row.receiptSheets)}}
-        </template> -->
-      </el-table-column>
+      <el-table-column label="收货数量" prop="totalQuantity" />
       <el-table-column label="收货总额" prop="totalPrice">
         <template slot-scope="scope">
           <span>{{totalReceiptAmount(scope.row)}}</span>
@@ -39,31 +32,17 @@
   import ReceiptOrderDetail from '../../receipt-order/details/ReceiptOrderDetail'
 
   export default {
-    name: 'ReconciliationShippingOrdersList',
+    name: 'ReceiptOrdersList',
     props: {
       formData: {
         type: Object,
         required: true
       },
-      readOnly: {
-        type: Boolean,
-        default: false
-      }
     },
     components: {
       ReceiptOrderDetail
     },
-    computed: {
-      //筛选待对账发货单
-      reconciliationShippingOrders: function () {
-        let data = this.formData.shippingTask.receiptSheets.filter(sheet => sheet.state == 'PENDING_RECONCILED');
-        if (data != null && data.length > 0) {
-          return data;
-        } else {
-          return [];
-        }
-      }
-    },
+    computed: {},
     methods: {
       handleSelectionChange(selectionList) {
         this.$set(this.formData, 'receiptSheets', selectionList);
@@ -93,7 +72,7 @@
         let unitPrice = 0;
         if (this.formData.productionTaskOrder.unitPrice) {
           unitPrice = this.formData.productionTaskOrder.unitPrice;
-        }        
+        }
         return unitPrice * sheet.totalQuantity;
       },
       getSummaries(param) {
@@ -108,38 +87,28 @@
             return;
           }
           //合计选中收货总数
-          if (index === 5) {
+          if (index === 4) {
             let result = 0;
-            this.formData.receiptSheets.forEach(element => {
-              element.receiptSheets.forEach(entry => {
-                let num = parseInt(entry.totalQuantity);
+            if (this.formData.receiptSheets) {
+              this.formData.receiptSheets.forEach(element => {
+                let num = parseInt(element.totalQuantity);
                 if (!Number.isNaN(num)) {
                   result += num;
                 }
-              })
-            });
+              });
+            }
             sums[index] = result;
 
             //总额
             let unitPrice = 0;
-            if (this.formData.productionTaskOrder.unitPrice) {
+            if (this.formData.productionTaskOrder && this.formData.productionTaskOrder.unitPrice) {
               unitPrice = this.formData.productionTaskOrder.unitPrice;
             }
             sums[index + 1] = result * unitPrice;
             return;
           }
         });
-
         return sums;
-      },
-      //回显选择
-      currentSelect() {
-        this.formData.receiptSheets.forEach(sheet => {
-          let index = this.reconciliationShippingOrders.findIndex(order => order.code == sheet.code);
-          if (index > -1) {
-            this.$refs.table.toggleRowSelection(this.reconciliationShippingOrders[index], true);
-          }
-        });
       }
     },
     data() {
@@ -148,13 +117,7 @@
         receiptId: '',
       }
     },
-    watch: {
-      'formData.shippingTask.receiptSheets': function (newVal, oldVal) {
-        this.$nextTick(() => {
-          this.currentSelect();
-        })
-      }
-    }
+    created() {}
   }
 
 </script>

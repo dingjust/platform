@@ -1841,6 +1841,10 @@ const state = {
       code: 'PENDING_RECONCILED',
       name: '待对账'
     },
+    {
+      code: 'PENDING_CONFIRM',
+      name: '待确认'
+    },
 
     //退货单状态
     {
