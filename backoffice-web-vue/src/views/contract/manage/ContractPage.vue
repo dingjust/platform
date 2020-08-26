@@ -19,7 +19,7 @@
       </el-row>
       <div class="pt-2"></div>
       <contract-toolbar @openPreviewPdf="openPreviewPdf" :queryFormData="queryFormData" 
-                        style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch" 
+                        style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onSearch"
                         :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <div>
         <Authorized :permission="['AGREEMENT_CREATE']">
@@ -31,14 +31,15 @@
               <span slot="label">
                 <tab-label-bubble :label="item" :num="index" />
               </span>
-              <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @closePdfVisible="pdfVisible = false" @previewPdf="openPreviewPdf"/>
+              <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onSearch"
+                                            @closePdfVisible="pdfVisible = false" @previewPdf="openPreviewPdf"/>
             </el-tab-pane>
           </template>
         </el-tabs>
       </div>
     </el-card>
     <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" :close-on-click-modal="false" append-to-body>
-      <contract-type v-if="dialogVisible" @onSearch="onSearch" 
+      <contract-type v-if="dialogVisible" @onSearch="onSearch" @onAdvancedSearch="onSearch"
                       @closeContractTypeDialog="dialogVisible = false" @openPreviewPdf="openPreviewPdf"/>
     </el-dialog>
   </div>
@@ -138,10 +139,10 @@
         var state = this.getEnumCode(tab.name);
         if (tab.name === '全部') {
           this.queryFormData.state = '';
-          this.onSearch();
+          this.onSearch(0, 10);
         } else {
           this.queryFormData.state = state;
-          this.onSearch();
+          this.onSearch(0, 10);
         }
       },
       getEnumCode (name) {

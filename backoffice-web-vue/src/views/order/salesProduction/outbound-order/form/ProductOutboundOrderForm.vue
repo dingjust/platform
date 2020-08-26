@@ -549,7 +549,7 @@
           data.invoiceTaxPoint = null;
         }
 
-        const url = this.apis().createOutboundOrder();
+        const url = this.apis().createOutboundOrderWithClothes();
         const result = await this.$http.post(url, data, {
           submitAudit: flag
         });

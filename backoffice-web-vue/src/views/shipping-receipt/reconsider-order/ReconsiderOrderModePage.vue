@@ -10,7 +10,7 @@
     <div class="pt-2"></div>
     <reconsider-orders-page :page="page" :queryFormData="queryFormData" @onSearch="onSearch" :mode="mode"
       currentState="IN_RECONSIDER" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick"
-      :statusMap="statusMap" />
+      :statusMap="statusMap" :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
   </div>
 </template>
 
@@ -70,6 +70,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         // TODO 查询自身的收发任务
         const query = this.queryFormData;
         const url = this.searchUrl;
@@ -83,6 +86,9 @@
           mode,
           companyCode
         });
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data() {
@@ -300,9 +306,13 @@
             url: this.apis().shippingOrderList()
           }
         },
+        dataQuery: {}
       }
     },
     created() {
+      const pageSign = this.mode === 'import' ? 'SHIPPING_SHEET' : 'RECEIPT_SHEET';
+      this.dataQuery = this.getDataPerQuery(pageSign);
+      this.onResetQuery();
       this.onAdvancedSearch();
     },
   }

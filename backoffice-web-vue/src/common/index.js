@@ -696,6 +696,10 @@ const COMMON_APIS = {
   createOutboundOrder() {
     return '/b2b/out/order/save';
   },
+  // 创建外发订单(款式外发)
+  createOutboundOrderWithClothes() {
+    return '/b2b/out/order/save/with/clothes';
+  },
   // 获取外发订单详情
   getoutboundOrderDetail(id) {
     return '/b2b/out/order/' + id;

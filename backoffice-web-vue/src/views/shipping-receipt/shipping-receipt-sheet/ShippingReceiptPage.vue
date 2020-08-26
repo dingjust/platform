@@ -145,6 +145,7 @@
         this.$emit('onAdvancedSearch');
         this.shippingOrderStateCount();
         this.reconsiderOrderStateCount();
+        this.returnOrderStateCount();
       },
       // 创建发货单
       onCreateReceiptOrder() {

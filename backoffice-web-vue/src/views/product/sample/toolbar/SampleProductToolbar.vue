@@ -10,11 +10,11 @@
         <el-form-item label="产品信息">
           <el-input v-model="queryFormData.keyword" placeholder="输入产品名、款号、编号"></el-input>
         </el-form-item>
-        <el-form-item label="部门/人员" prop="name">
+        <!-- <el-form-item label="部门/人员" prop="name"> -->
           <!-- <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input> -->
-          <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
-            :selectDept="queryFormData.depts" :selectPerson="queryFormData.users" />
-        </el-form-item>
+          <!-- <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170" -->
+            <!-- :selectDept="queryFormData.depts" :selectPerson="queryFormData.users" /> -->
+        <!-- </el-form-item> -->
         <!-- <el-form-item label="产品名">
           <el-input placeholder="输入产品名" v-model="queryFormData.name"></el-input>
         </el-form-item>
@@ -114,8 +114,8 @@
         this.queryFormData.categories = '';
         this.queryFormData.approvalStatuses = '';
         this.queryFormData.belongToName = '';
-        this.$refs.deptPersonSelect.clearSelectData();
-        this.$emit('onResetQuery');
+        // this.$refs.deptPersonSelect.clearSelectData();
+        // this.$emit('onResetQuery');
       },
       showStatus(val) {
         if (this.queryFormData.approvalStatuses === val.code) {

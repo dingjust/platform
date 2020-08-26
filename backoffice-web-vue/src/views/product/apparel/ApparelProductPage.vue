@@ -101,9 +101,9 @@
       },
       onAdvancedSearch(page, size) {
         this.setAdvancedSearch(true);
-        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-          this.onResetQuery();
-        }
+        // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        //   this.onResetQuery();
+        // }
         const query = this.queryFormData;
         const url = this.apis().getApparelProducts();
         this.searchAdvanced({
@@ -332,8 +332,8 @@
       }
     },
     created() {
-      this.dataQuery = this.getDataPerQuery('PRODUCTION_PRODUCT');
-      this.onResetQuery();
+      // this.dataQuery = this.getDataPerQuery('PRODUCTION_PRODUCT');
+      // this.onResetQuery();
       this.onAdvancedSearch();
       if (this.isTenant()) {
         this.statuses.push({

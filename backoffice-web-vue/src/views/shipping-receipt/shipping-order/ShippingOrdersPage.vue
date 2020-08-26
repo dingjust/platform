@@ -8,7 +8,8 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <shipping-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+    <shipping-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" 
+                             :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
@@ -72,6 +73,9 @@
         });
       },
       onAdvancedSearch(page, size, isTab) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().shippingOrderList();
         const mode = this.mode;
@@ -139,6 +143,9 @@
       onDetail(row) {
         this.$router.push('/shipping/orders/' + row.id);
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      }
     },
     data() {
       return {
@@ -174,10 +181,14 @@
           createdDateFrom: '',
           createdDateTo: '',
           states: 'PENDING_RECEIVED'
-        }
+        },
+        dataQuery: {}
       }
     },
     created() {
+      const pageSign = this.mode === 'import' ? 'SHIPPING_SHEET' : 'RECEIPT_SHEET';
+      this.dataQuery = this.getDataPerQuery(pageSign);
+      this.onResetQuery();
       this.onAdvancedSearch();
     },
     destroyed() {

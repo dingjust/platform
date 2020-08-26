@@ -15,7 +15,7 @@
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData">
-        <sales-order-detail-form :form="formData" :modifyType="modifyType" />
+        <sales-order-detail-form :form="formData" :modifyType="modifyType" @callback="getDetails"/>
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :form="formData" @getDetails="getDetails" :canUpdate="false"
