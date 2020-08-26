@@ -117,16 +117,17 @@
         this.$emit('onSelect', this.selectionRow);
       },
       rowClick(row) {
-        if (this.selectionRow == "") {
-          this.$refs.resultTable.toggleRowSelection(row, true);
-        } else {
-          if (this.selectionRow.id == row.id) {
-            this.$refs.resultTable.toggleRowSelection(row, false);
-          } else {
-            this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
-            this.$refs.resultTable.toggleRowSelection(row, true);
-          }
-        }
+        // console.log(JSON.stringify(row));
+        // if (this.selectionRow == "") {
+        //   this.$refs.resultTable.toggleRowSelection(row, true);
+        // } else {
+        //   if (this.selectionRow.id == row.id) {
+        //     this.$refs.resultTable.toggleRowSelection(row, false);
+        //   } else {
+        //     this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
+        //     this.$refs.resultTable.toggleRowSelection(row, true);
+        //   }
+        // }
       }
     },
     watch: {

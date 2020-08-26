@@ -98,7 +98,7 @@
         <el-row type="flex" style="padding-left: 20px">
           <el-col :span="24">
             <!-- <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" /> -->
-            <pay-plan-form :formData="form.payPlan" :isUseForOrder="true" ref="payPlanCom" />
+            <pay-plan-form :formData="form.payPlan" :isUseForOrder="true" ref="payPlanCom" :readOnly="hasOrigin"/>
           </el-col>
         </el-row>
         <el-row type="flex" justify="space-between" align="middle">

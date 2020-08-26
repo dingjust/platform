@@ -201,7 +201,7 @@
         let tabName = '';
 
         switch (map.status) {
-          case 'PENDING_RECONCILED': //发货单
+          case 'PENDING_RECONCILED': //收货单
             if (!this.stateCount.shipping.hasOwnProperty(map.status)) {
               tabName = this.getEnum('ShippingSheetState', map.status);
               break;

@@ -25,7 +25,7 @@
         </el-row>
         <el-row type="flex" style="padding-left: 10px">
           <el-col :span="24">
-            <shipping-orders-list :formData="formData" />
+            <receipt-orders-list :formData="formData" />
           </el-col>
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
@@ -70,7 +70,7 @@
 
   import ReconciliationOrdersDetailHead from './ReconciliationOrdersDetailHead'
   import ReconciliationOrdersFormFoot from '../form/ReconciliationOrdersFormFoot'
-  import ShippingOrdersList from './ShippingOrdersList'
+  import ReceiptOrdersList from './ReceiptOrdersList'
   import DetailBtnGroup from './DetailBtnGroup'
 
   export default {
@@ -79,7 +79,7 @@
     components: {
       ReconciliationOrdersDetailHead,
       ReconciliationOrdersFormFoot,
-      ShippingOrdersList,
+      ReceiptOrdersList,
       DetailBtnGroup
     },
     computed: {
