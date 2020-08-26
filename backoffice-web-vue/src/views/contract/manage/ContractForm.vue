@@ -99,7 +99,7 @@
       </el-row>
       <el-row class="create-contract-row" v-if="contractType === '3'">
         <el-col :span="22" :offset="2">
-          <images-upload ref="imagesUpload" :slotData="paperList" :limit="99"></images-upload>
+          <images-upload ref="imagesUpload" :slotData="paperList" :limit="99" :uploadType="uploadType"></images-upload>
         </el-col>
       </el-row>
       <!--      <el-row class="create-contract-row" v-if="contractType=='1'" type="flex" justify="start">-->
@@ -565,7 +565,8 @@
         cacheSelectContract: '',
         contractCode: '',
         isOrderClickPass: false,
-        tempFormVisible: false
+        tempFormVisible: false,
+        uploadType: ''
       };
     },
     created () {
@@ -577,6 +578,13 @@
       this.onSetOrderCode();
     },
     watch: {
+      paperList: function (nval, oval) {
+        if (nval && nval.length === 1) {
+          this.uploadType = nval[0].mediaType;
+        } else if (nval && nval.length === 0) {
+          this.uploadType = '';
+        }
+      }
       // dialogOrderVisible: function (n, o) {
       //   if (!n) {
       //     this.orderContractClick();

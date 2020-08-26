@@ -93,7 +93,7 @@
       </el-row>
       <el-row class="create-contract-row" v-if="contractType === '3'">
         <el-col :span="22" :offset="2">
-          <images-upload ref="imagesUpload" :slotData="paperList" :limit="99"></images-upload>
+          <images-upload ref="imagesUpload" :slotData="paperList" :limit="99" :uploadType="uploadType"></images-upload>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" type="flex" justify="start">
@@ -482,8 +482,18 @@
         suppliersSelectVisible: false,
         tempFormVisible: false,
         suppliers: '',
-        paperList: []
+        paperList: [],
+        uploadType: ''
       };
+    },
+    watch: {
+      paperList: function (nval, oval) {
+        if (nval && nval.length === 1) {
+          this.uploadType = nval[0].mediaType;
+        } else if (nval && nval.length === 0) {
+          this.uploadType = '';
+        }
+      }
     },
     created () {
       if (this.isSignedPaper) {
