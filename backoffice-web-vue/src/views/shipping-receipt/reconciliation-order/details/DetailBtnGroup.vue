@@ -3,8 +3,7 @@
     <!--确认方(发货方) -->
     <template v-if="isShipPart">
       <!-- 接单确认(跟单员) -->
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
-        v-if="formData.state=='PENDING_CONFIRM'&&(formData.originAuditWorkOrder==null||formData.originAuditWorkOrder.state=='AUDITED_FAILED')&&isShipOperator">
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="showShipOperation">
         <!-- 未确认提交以及审核失败 -->
         <el-col :span="4">
           <authorized :permission="['RECONCILIATION_SHEET_CONFIRM_REJECT']">
@@ -129,7 +128,13 @@
           return false;
         }
       },
-
+      //发货方是否显示确认拒绝
+      showShipOperation: function () {
+        return this.formData.state == 'PENDING_CONFIRM' && (this.formData.originAuditWorkOrder == null || this
+            .formData
+            .originAuditWorkOrder.id == null || this.formData.originAuditWorkOrder.state == 'AUDITED_FAILED') &&
+          this.isShipOperator;
+      }
     },
     methods: {
       onReject() {
@@ -150,7 +155,7 @@
       //确认方审核
       onOriginApproval(val) {
         this.$emit('onOriginApproval', val);
-      }
+      },
     },
     data() {
       return {

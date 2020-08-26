@@ -99,7 +99,7 @@ const RelationShippingOrder = {
 const Product = {
   template: `
   <el-table-column label="产品名称" min-width="150" :key="sortKey" :show-overflow-tooltip="true">
-  <template slot-scope="scope">
+  <template slot-scope="scope" v-if="getProduct(scope.row)!=null">
     <el-row type="flex" justify="space-between" align="middle" :gutter="50">
       <el-col :span="6">
         <img width="54px" v-if="getProduct(scope.row)!=null" height="54px"
@@ -187,9 +187,9 @@ const RelationOrder = {
     sortKey: {
       default: 10
     },
-    label:{
-      type:String,
-      default:'生产工单'
+    label: {
+      type: String,
+      default: '生产工单'
     }
   },
   components: {
@@ -563,6 +563,20 @@ const ReceiptDate = {
   },
 }
 
+const ReceiptDateV2 = {
+  template: `
+  <el-table-column label="收货日期" :key="sortKey">
+    <template slot-scope="scope">
+      <span>{{scope.row.creationtime | timestampToTime}}</span>
+    </template>
+  </el-table-column>`,
+  props: {
+    sortKey: {
+      default: 10
+    }
+  },
+}
+
 const ReturnOrder = {
   template: `<el-table-column label="退货单" :prop="prop" :key="sortKey" ></el-table-column>`,
   props: {
@@ -733,7 +747,7 @@ const ReceiptOperation = {
   },
   methods: {
     onDetail(row) {
-      this.$router.push('/shipping/orders/' + row.id);
+      this.$router.push('/receipt/orders/' + row.id);
     }
   }
 }
@@ -1118,6 +1132,7 @@ const MAIN_COMPONENT_NAME_MAP = {
   '退货操作': 'return-operation',
   '发货收货数': 'ship-rece-num',
   '收货日期': 'receipt-date',
+  '收货日期v2': 'receipt-date-v2',
   '合作商-发货': 'shipping-cooperator',
   '合作商-收货': 'receipt-cooperator',
   '跟单员': 'merchandiser',
@@ -1166,6 +1181,7 @@ export {
   ReturnOperation,
   ShipReceNum,
   ReceiptDate,
+  ReceiptDateV2,
   ReconsiderOrderCode,
   ReconsiderNum,
   ReconsiderOperation,

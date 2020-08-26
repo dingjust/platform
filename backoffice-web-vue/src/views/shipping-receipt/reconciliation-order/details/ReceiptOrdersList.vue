@@ -2,8 +2,8 @@
   <div class="table-container">
     <el-table ref="table" :data="formData.receiptSheets" style="width: 100%" show-summary
       :summary-method="getSummaries">
-      <el-table-column label="发货单号" prop="code"></el-table-column>
-      <el-table-column label="发货数" prop="totalQuantity"></el-table-column>
+      <!-- <el-table-column label="收货单号" prop="code"></el-table-column>
+      <el-table-column label="收货数" prop="totalQuantity"></el-table-column> -->
       <el-table-column label="收货单">
         <template slot-scope="scope">
           <el-button type="text" @click="onReceiptDetail(scope.row)">{{scope.row.code}}</el-button>
@@ -82,12 +82,12 @@
         } = param;
         const sums = [];
         columns.forEach((column, index) => {
-          if (index === 2) {
+          if (index === 1) {
             sums[index] = '合计';
             return;
           }
           //合计选中收货总数
-          if (index === 4) {
+          if (index === 2) {
             let result = 0;
             if (this.formData.receiptSheets) {
               this.formData.receiptSheets.forEach(element => {

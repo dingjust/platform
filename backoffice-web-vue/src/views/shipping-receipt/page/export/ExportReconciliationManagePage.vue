@@ -29,7 +29,7 @@
 
   import ReconciliationManagePage from '../../reconciliation-manage/ReconciliationManagePage'
   export default {
-    name: 'ImportShippingReceiptPage',
+    name: 'ExportReconciliationManagePage',
     components: {
       ReconciliationManagePage
     },
@@ -88,7 +88,7 @@
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
-        searchUrl: this.apis().shippingOrderList(),
+        searchUrl: this.apis().receiptOrderList(),
         queryFormData: {
           keyword: '',
           cooperatorName: '',
@@ -126,7 +126,7 @@
                 }
               }
             }, {
-              key: '发货单号'
+              key: '收货单'
             }, {
               key: '产品名称'
             }, {
@@ -141,13 +141,13 @@
             }, {
               key: '收货跟单员'
             }, {
-              key: '收货日期'
+              key: '收货日期v2'
             }, {
               key: '发货单状态'
             }, {
-              key: '发货操作'
+              key: '收货操作'
             }],
-            url: this.apis().shippingOrderList()
+            url: this.apis().receiptOrderList()
           },
           PENDING_APPROVAL: {
             status: 'PENDING_APPROVAL',
