@@ -8,7 +8,8 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <return-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+    <return-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" 
+                            :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <div>
       <!-- <div class="good-btn">
         <el-button class="check-btn" v-if="canClick" @click="onReceiptReturn">收退货</el-button>
@@ -81,6 +82,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().returnOrderList();
         const mode = this.mode;
@@ -136,6 +140,9 @@
           ')';
         return tabName;
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      }
     },
     data() {
       return {
@@ -160,10 +167,14 @@
         },
         stateCount: {
 
-        }
+        },
+        dataQuery: {}
       }
     },
     created() {
+      const pageSign = this.mode === 'import' ? 'SHIPPING_SHEET' : 'RECEIPT_SHEET';
+      this.dataQuery = this.getDataPerQuery(pageSign);
+      this.onResetQuery();
       this.onAdvancedSearch();
       this.returnOrderStateCount();
     },

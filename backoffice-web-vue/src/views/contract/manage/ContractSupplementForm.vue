@@ -9,7 +9,9 @@
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
-      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" 
+                      :slotData="mockData" :templateId="3"
+                      :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <supplier-select @onSelect="onSuppliersSelect" />
@@ -246,7 +248,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.$emit('openPreviewPdf', this.thisContract, '');
         }
@@ -306,7 +307,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.$emit('openPreviewPdf', this.thisContract, '');
         }
@@ -334,9 +334,10 @@
       },
       onCreateTemp () {
         // this.dialogTemplateVisible = false;
-        Bus.$emit('closeBCXYFrom');
+        // Bus.$emit('closeBCXYFrom');
         // this.$router.push("templateForm");
         // this.fn.openSlider('创建', TemplateForm);
+        // this.tempFormVisible = true;
         this.tempFormVisible = true;
       },
       handlePreview (file) {
@@ -365,6 +366,35 @@
       },
       contractTemplateSelect () {
         this.$refs.contractTemplateSelect.onSearchTemp();
+      },
+      async getTemplateListPt () {
+        const url = this.apis().getTemplatesListPt();
+        const result = await http.post(url, {
+          keyword: ''
+        }, {
+          page: 0,
+          size: 10
+        });
+        this.mockData = result.content;
+        this.sortData();
+      },
+      sortData () {
+        let arr = new Array(4);
+        this.mockData.map(value => {
+          if (value.title === '委托生产合同') {
+            arr[0] = value;
+          }
+          if (value.title === '采购订单') {
+            arr[1] = value;
+          }
+          if (value.title === '框架协议') {
+            arr[2] = value;
+          }
+          if (value.title === '补充协议') {
+            arr[3] = value;
+          }
+        });
+        this.mockData = arr;
       }
     },
     data () {
@@ -428,8 +458,9 @@
       };
     },
     created () {
-      this.onSearchOrder('', 0, 10);
-      this.onSetOrderCode();
+      this.getTemplateListPt();
+      // this.onSearchOrder('', 0, 10);
+      // this.onSetOrderCode();
     }
   };
 </script>

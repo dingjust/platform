@@ -101,7 +101,7 @@
       }
     },
     created() {
-      this.dataQuery = this.getDataPerQuery('RECONCILIATION_TASK_OUT');
+      this.dataQuery = this.getDataPerQuery('RECONCILIATION_SHEET_OUT');
       this.onResetQuery();
       this.onAdvancedSearch();
     },

@@ -25,18 +25,20 @@
         <el-main>
     <div class="main-content" style="">
       <el-row >
-        <el-col v-if="mockData!=null && mockData!= []" :span="4" v-for="(item, index) in mockData" :key="index" :offset="0">
-          <div v-if="item.title!=null && item.title!=''" :class="item.code==selectedItem.code?'template-file_selected':'template-file'" @click="onSelect(item)">
-            <el-row  type="flex" justify="center">
-              <img src="static/img/word.png" class="img-word" alt="" />
-            </el-row>
-            <el-row type="flex" justify="center">
-              <el-col :span="23">
-                <h6 class="template-name">{{item.title}}</h6>
-              </el-col>
-            </el-row>
-          </div>
-        </el-col>
+        <template v-if="mockData!=null && mockData!= []">
+          <el-col :span="4" v-for="(item, index) in mockData" :key="index" :offset="0">
+            <div v-if="item.title!=null && item.title!=''" :class="item.code==selectedItem.code?'template-file_selected':'template-file'" @click="onSelect(item)">
+              <el-row  type="flex" justify="center">
+                <img src="static/img/word.png" class="img-word" alt="" />
+              </el-row>
+              <el-row type="flex" justify="center">
+                <el-col :span="23">
+                  <h6 class="template-name">{{item.title}}</h6>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </template>
       </el-row>
     </div>
         </el-main>

@@ -8,7 +8,8 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <receipt-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+    <receipt-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" 
+                            :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-row type="flex" justify="space-between" align="middle">
       <el-col :span="22">
         <h6 style="color: #F56C6C;margin-bottom: 0px">{{this.tips}}</h6>
@@ -84,6 +85,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().receiptOrderList();
         const mode = this.mode;
@@ -107,6 +111,9 @@
       },
       isStockIn () {
         // TODO 入库
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data() {
@@ -116,6 +123,18 @@
         statuses: [{
             code: '',
             name: '全部'
+          }, {
+            code: 'PENDING_CONFIRM',
+            name: '待确认'
+          }, {
+            code: 'PENDING_RECONCILED',
+            name: '待对账'
+          }, {
+            code: 'IN_RECONCILED',
+            name: '对账中'
+          }, {
+            code: 'COMPLETED',
+            name: '已完成'
           }
         ],
         queryFormData: {
@@ -126,11 +145,16 @@
           createdDateTo: '',
           states: ''
         },
-        tips: '注明：核验时间为收货单创建之日起5天内完成，若5天内没有操作收货单核验，收货单将自动完成核验。核验后的收货单不能修改。'
+        tips: '注明：核验时间为收货单创建之日起5天内完成，若5天内没有操作收货单核验，收货单将自动完成核验。核验后的收货单不能修改。',
+        dataQuery: {}
       }
     },
     created() {
-      this.onSearch();
+      const pageSign = this.mode === 'import' ? 'SHIPPING_SHEET' : 'RECEIPT_SHEET';
+      this.dataQuery = this.getDataPerQuery(pageSign);
+      this.onResetQuery();
+      this.onAdvancedSearch();
+      // this.onSearch();
     },
     destroyed() {
 

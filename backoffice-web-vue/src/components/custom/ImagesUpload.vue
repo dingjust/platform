@@ -28,8 +28,6 @@
               <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
                 <i class="el-icon-delete"></i>
               </span>
-              <!-- <span v-if="!disabled" class="el-upload-list__item-file-name">
-              </span> -->
             </span>
           </div>
         </el-upload>
@@ -76,6 +74,10 @@
       custom: {
         type: Boolean,
         default: false
+      },
+      uploadType: {
+        type: String,
+        default: ''
       }
     },
     components: {
@@ -96,6 +98,14 @@
         return '';
       },
       onBeforeUpload(file) {
+        if (this.uploadType && this.uploadType !== '') {
+          if (file.type !== this.uploadType && !((file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png') 
+            && (this.uploadType === 'image/jpeg' || this.uploadType === 'image/jpg' || this.uploadType === 'image/png'))) {
+            this.$message.warning('请选择与上一数据格式相同的文件');
+            return false;
+          }
+        }
+
         if (file.size > 1024 * 1024 * 10) {
           this.$message.error('上传的文件不允许超过10M');
           return false;
@@ -153,7 +163,10 @@
         // });
         // this.slotData = newImages;
         // this.$message.success("删除成功");
-
+        if (file.status === 'ready') {
+          return false;
+        }
+        
         const images = this.fileList || [];
         const index = images.indexOf(file);
         this.slotData.splice(index, 1);

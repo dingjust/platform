@@ -1,7 +1,7 @@
 <template>
   <div>
-    <shipping-tasks-toolbar :queryFormData="queryFormData" 
-                              @onAdvancedSearch="onAdvancedSearch"/>
+    <shipping-tasks-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"
+                            :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
@@ -34,6 +34,9 @@
       mode: {
         type: String,
         default: 'import'
+      },
+      dataQuery: {
+        type: Object
       }
     },
     components: {
@@ -88,6 +91,9 @@
       onDetail (row) {
         this.$router.push('/shipping/tasks/' + row.id);
       },
+      onResetQuery () {
+        this.$emit('onResetQuery');
+      }
     },
     data() {
       return {

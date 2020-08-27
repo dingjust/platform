@@ -3,28 +3,28 @@
     <el-form :inline="true">
       <el-row type="flex">
         <el-col :span="24">
-        <el-input style="width:220px;" placeholder="订单号/产品名称/款号"
-                  v-model="queryFormData.keyword" class="purchase-toolbar-input">
-        </el-input>
-        <el-form-item label="日期">
-          <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
-            value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
-            :picker-options="pickerOptions">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="分类">
-          <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories"
-              :props="{ label: 'name',value:'code'}" clearable>
-            </el-cascader>
-        </el-form-item>
-        <!-- </el-col> -->
-        <!-- <el-col :span="7"> -->
-        <!-- <el-row type="flex" align="top" justify="space-between" :gutter="20"> -->
+          <el-input style="width:180px;" placeholder="订单号/产品名称/款号"
+                    v-model="queryFormData.keyword" class="purchase-toolbar-input">
+          </el-input>
+          <!-- <el-form-item label="部门/人员" prop="name">
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                                :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
+          </el-form-item> -->
+          <el-form-item label="日期">
+            <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
+              value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="分类">
+            <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories"
+                :props="{ label: 'name',value:'code'}" clearable style="width: 150px">
+              </el-cascader>
+          </el-form-item>
           <el-button-group>
               <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
               <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
-        <!-- </el-row> -->
         </el-col>
       </el-row>
     </el-form>
@@ -39,25 +39,26 @@
   const {
     mapMutations
   } = createNamespacedHelpers('ContractModule');
+  import { DeptPersonSelect } from '@/components'
 
   export default {
     name: 'SalesOrderToolbar',
+    props: ['queryFormData', 'dataQuery'],
     components: {
+      DeptPersonSelect
     },
     computed: {},
     methods: {
       ...mapMutations({
-        setKeyword: 'keyword',
-        setQueryFormData: 'queryFormData'
       }),
       onSearch () {
         this.$store.state.SalesOrdersModule.keyword = this.keyword;
-        this.setKeyword(this.keyword);
+        // this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
       onAdvancedSearch () {
-        this.setQueryFormData(this.queryFormData);
-        this.$emit('onAdvancedSearch', 0);
+        // this.setQueryFormData(this.queryFormData);
+        this.$emit('onAdvancedSearch', 0, 10);
       },
       async getFactories (query) {
         const url = this.apis().getFactories();
@@ -105,8 +106,8 @@
         this.queryFormData.createdDateFrom = '';
         this.queryFormData.createdDateTo = '';
         this.queryFormData.categories = [];
-        // this.setQueryFormData(this.queryFormData);
-        // this.setKeyword('');
+        // this.$refs.deptPersonSelect.clearSelectData();
+        // this.$emit('onResetQuery');
       }
     },
     data () {
@@ -168,7 +169,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .el-input__inner {
     /* border-radius: 5px; */
     line-height: 30px;

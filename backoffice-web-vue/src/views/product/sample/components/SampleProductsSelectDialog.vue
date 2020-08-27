@@ -11,15 +11,15 @@
           <el-form-item label="">
             <el-input  nput v-model="queryFormData.keyword" placeholder="根据产品名/编号/款号" @keyup.enter.native="onSubmit"></el-input>
           </el-form-item>
-          <el-form-item label="部门/人员">
+          <!-- <el-form-item label="部门/人员">
             <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
                         :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
       </div>
       <div>
         <el-button type="text" @click="onSearch(0, 10)">查找</el-button>
-        <el-button type="text" @click="onReset">重置</el-button>
+        <!-- <el-button type="text" @click="onReset">重置</el-button> -->
         <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
           <el-button type="text" @click="onNew">创建款式</el-button>
         </Authorized>
@@ -96,9 +96,9 @@
         setAdvancedSearch: 'isAdvancedSearch'
       }),
       async onSearch(page, size) {
-        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-          this.onResetQuery();
-        }
+        // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        //   this.onResetQuery();
+        // }
         const query = this.queryFormData;
         const url = this.apis().getSampleProducts();
         await this.searchAdvanced({
@@ -113,8 +113,8 @@
       },
       onReset () {
         this.queryFormData.keyword = '';
-        this.$refs.deptPersonSelect.clearSelectData();
-        this.onResetQuery();
+        // this.$refs.deptPersonSelect.clearSelectData();
+        // this.onResetQuery();
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -173,8 +173,8 @@
       }
     },
     created() {
-      this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
-      this.onResetQuery();
+      // this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
+      // this.onResetQuery();
       this.onSearch();
     }
   }

@@ -89,9 +89,9 @@
       },
       onAdvancedSearch(page, size) {
         this.setAdvancedSearch(true);
-        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-          this.onResetQuery();
-        }
+        // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        //   this.onResetQuery();
+        // }
         const query = this.queryFormData;
         const url = this.apis().getSampleProducts();
         this.searchAdvanced({
@@ -251,8 +251,8 @@
       }
     },
     created() {
-      this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
-      this.onResetQuery();
+      // this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
+      // this.onResetQuery();
       this.onAdvancedSearch();
     }
   };

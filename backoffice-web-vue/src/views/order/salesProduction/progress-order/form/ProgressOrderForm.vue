@@ -128,7 +128,6 @@
     created () {
       if (this.code == undefined && this.$route.params.order != null) {
         const order = this.$route.params.order;
-        console.log(order);
         this.formData.belongTo = order.creator;
         this.formData.machiningType = order.cooperationMode;
         this.formData.orderCode = order.code;
