@@ -1,15 +1,19 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-row>
-        <el-col :span="6">
-          <div class="outbound-list-title">
-            <h6>外发订单详情</h6>
-          </div>
-        </el-col>
-        <el-col :span="6" :offset="2">
-          <h6>单号：{{formData.code}}</h6>
-        </el-col>
+      <el-row type="flex" justify="space-between" align="middle">
+        <div class="sales-plan-form-title">
+          <h6 class="title-info">外发订单详情</h6>
+        </div>
+        <h6 class="title-info">订单号：{{formData.code}}</h6>
+        <h6 class="title-info">创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        <div>
+          <el-row type="flex">
+            <h6 class="title-info">标签/状态：{{getEnum('SalesProductionOrderState', formData.state)}}</h6>
+            <audit-tag :state="formData.auditState" class="audit-tag" />
+          </el-row>
+        </div>
+        <twinkle-warning-button v-if="isApplyCanceling" @click="canelingDialogVisible=true" label="订单取消申请处理" />
       </el-row>
       <outbound-order-top-info :slotData="formData" :payPlan="payPlan" @callback="callback" />
       <div style="margin: 20px 0px 0px 10px;">
@@ -61,8 +65,8 @@
           </authorized>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" 
-              v-if="formData.state === 'AUDIT_REJECTED' && isSendBy">
+      <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px"
+        v-if="formData.state === 'AUDIT_REJECTED' && isSendBy">
         <el-col :span="3">
           <el-button class="material-btn" @click="onModify">修改</el-button>
         </el-col>
@@ -71,6 +75,10 @@
     <el-dialog :visible.sync="cancelFormVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <outbound-cancel-form :order="formData" @callback="callback" v-if="cancelFormVisible" />
+    </el-dialog>
+    <el-dialog :visible.sync="canelingDialogVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sales-order-cancel-dialog v-if="canelingDialogVisible" :order="formData" @callback="callback" />
     </el-dialog>
   </div>
 </template>
@@ -93,6 +101,7 @@
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
   import OutboundCancelForm from '../form/OutboundCancelForm';
+  import SalesOrderCancelDialog from '../../components/SalesOrderCancelDialog';
 
   import {
     SalesProductionTabs,
@@ -101,6 +110,10 @@
   import {
     FinancialTabs
   } from '@/views/financial/index.js'
+  import {
+    TwinkleWarningButton
+  } from '@/components'
+
 
   export default {
     name: 'OutboundOrderDetail',
@@ -114,7 +127,9 @@
       PurchaseOrderInfoReceiptFinance,
       FinancialTabs,
       OutboundCancelForm,
-      OrderAuditDetail
+      OrderAuditDetail,
+      TwinkleWarningButton,
+      SalesOrderCancelDialog
     },
     computed: {
       ...mapGetters({
@@ -163,6 +178,13 @@
         return this.formData.sendAuditState == 'PASSED' &&
           this.formData.state != 'TO_BE_ACCEPTED' &&
           this.formData.state != 'TO_BE_SUBMITTED';
+      },
+      //是否有正在申请取消订单
+      isApplyCanceling: function () {
+        if (this.formData.currentCancelApply != null && this.formData.currentCancelApply.state == 'PENDING') {
+          return true;
+        }
+        return false;
       }
     },
     methods: {
@@ -173,7 +195,7 @@
         this.cancelFormVisible = false;
         this.getDetail();
       },
-      onModify () {
+      onModify() {
         let data = this.setFormData(this.formData);
         this.$router.push({
           name: '创建外发订单',
@@ -369,6 +391,7 @@
     data() {
       return {
         cancelFormVisible: false,
+        canelingDialogVisible: false,
         currentUser: this.$store.getters.currentUser,
         payPlan: {
           deposit: {},
@@ -425,6 +448,14 @@
     color: white;
     width: 90px;
     height: 35px;
+  }
+
+  .audit-tag {
+    margin-left: 10px;
+  }
+
+  .title-info {
+    margin-top: 5px;
   }
 
 </style>

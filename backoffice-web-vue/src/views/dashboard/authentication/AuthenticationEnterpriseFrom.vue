@@ -44,7 +44,7 @@
           @click="onSave">继续认证</el-button>
       </Authorized>
       <Authorized :permission="['CERT_APPLY']">
-        <el-button v-if="reverificationShow" class="form-submit_btn" size="mini" type="danger" round @click="onSave">
+        <el-button v-if="reverificationShow" class="form-submit_btn" size="mini" type="text" round @click="onSave">
           重新认证</el-button>
       </Authorized>
     </el-row>

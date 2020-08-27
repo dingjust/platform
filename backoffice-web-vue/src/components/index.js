@@ -1,3 +1,6 @@
+
+import Vue from 'vue';
+
 // Chat
 import ChatPage from './Chat/ChatPage';
 
@@ -48,6 +51,7 @@ import ConsignmentForm from './custom/ConsignmentForm';
 import DeliverForm from './custom/DeliverForm';
 import DjCheckbox from './custom/DjCheckbox';
 import DjTag from './custom/DjTag';
+import AuditTag from './custom/AuditTag';
 import EmployeeSelect from './custom/EmployeeSelect';
 import EnumSelect from './custom/EnumSelect';
 import FactoryCooperatorTransfer from './custom/FactoryCooperatorTransfer';
@@ -107,6 +111,7 @@ export {
   DeliverForm,
   DjCheckbox,
   DjTag,
+  AuditTag,
   EmployeeSelect,
   EnumSelect,
   FactoryCooperatorTransfer,
@@ -152,3 +157,6 @@ export {
   PersonnalSelectionV2,
   PdfPreview
 }
+
+//全局注册组件
+Vue.component("AuditTag", AuditTag);
