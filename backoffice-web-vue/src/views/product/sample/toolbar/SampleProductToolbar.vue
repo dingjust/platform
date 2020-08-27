@@ -71,6 +71,8 @@
     DeptPersonSelect
   } from '@/components'
 
+  import ProductImport from '../../excel/ProductImport'
+
   const {
     mapMutations
   } = createNamespacedHelpers('SampleProductsModule');
@@ -79,7 +81,8 @@
     name: 'SampleProductToolbar',
     props: ['queryFormData', 'dataQuery'],
     components: {
-      DeptPersonSelect
+      DeptPersonSelect,
+      ProductImport
     },
     computed: {},
     methods: {
@@ -128,14 +131,15 @@
         this.onAdvancedSearch();
       },
       handleCommand(val) {
-        if (val == '1') {
-
+        if (val == '0') {
+          this.importDialogVisible = true;
         }
       }
     },
     data() {
       return {
         keyword: '',
+        importDialogVisible: false,
         formData: this.$store.state.SampleProductsModule.newFormData,
         approvalStatuses: [{
             code: '',

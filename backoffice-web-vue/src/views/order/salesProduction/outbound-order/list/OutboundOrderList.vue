@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
-      @selection-change="handleSelectionChange"  @row-click="rowClick">
+      @selection-change="handleSelectionChange" @row-click="rowClick">
       <el-table-column type="selection" :reserve-selection="true" width="55" v-if="isSelect"></el-table-column>
       <el-table-column label="外发订单号" prop="code"></el-table-column>
       <el-table-column label="合作商">
@@ -16,18 +16,18 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="审批状态">
-        <template slot-scope="scope">
-          <span>{{getEnum('SalesProductionAuditStatus', scope.row.sendAuditState)}}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
           <span>{{getEnum('OutboundOrderStatuses', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="订单标签" min-width="70">
-      </el-table-column> -->
+      <el-table-column label="订单标签">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
+            <i class="el-icon-warning warning-icon"></i>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" min-width="70">
         <template slot-scope="scope">
           <el-row>
@@ -66,7 +66,8 @@
     computed: {},
     methods: {
       canModify(row) {
-        if (!row.merchandiser || row.state == 'CANCELED' || row.merchandiser.uid != this.$store.getters.currentUser.uid) {
+        if (!row.merchandiser || row.state == 'CANCELED' || row.merchandiser.uid != this.$store.getters.currentUser
+          .uid) {
           return false;
         }
         return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
@@ -111,8 +112,15 @@
           }
         }
       },
-      setSelectOrder () {
+      setSelectOrder() {
         this.$emit('setSelectOrder', this.selectionRow);
+      },
+      //判断是否正在申请取消订单
+      isApplyCanceling(row) {
+        if (row.currentCancelApply != null && row.currentCancelApply.state == 'PENDING') {
+          return true;
+        }
+        return false;
       }
     },
     data() {
@@ -130,4 +138,10 @@
   /deep/ .el-table th>.cell .el-checkbox {
     display: none;
   }
+
+  .warning-icon {
+    color: #ff1744;
+    font-size: 20px;
+  }
+
 </style>

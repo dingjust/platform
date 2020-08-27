@@ -19,16 +19,8 @@
         <el-button type="primary" @click="onPayPlanSave">确 定</el-button>
       </div>
     </el-dialog>
-    <el-row type="flex" v-if="isUseForOrder&&(!readOnly)" justify="end" class="info-order-row">
-      <h6 class="form-plane-name">{{formData.name!=undefined?'当前选中方案：'+formData.name:'当前未选择账务方案'}}</h6>
-      <el-button @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用账务方案</el-button>
-      <Authorized :permission="['PAY_PLAN_OPERATE']">
-        <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini" class="save-plan-btn">保存账务方案
-        </el-button>
-      </Authorized>
-    </el-row>
     <el-form :model="formData" ref="payPlanForm" :disabled="readOnly">
-      <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
+      <el-row type="flex" justify="start" align="middle" :gutter="35">
         <el-col :span="8">
           <el-form-item label="有无定金" label-width="120">
             <el-radio :label="true" v-model="formData.isHaveDeposit">有定金</el-radio>
@@ -42,6 +34,15 @@
             </template>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row type="flex" v-if="isUseForOrder&&(!readOnly)" justify="end" class="info-order-row">
+        <h6 class="form-plane-name">账务方案</h6>
+        <el-button @click="payPlanSelectDialogVisible=true" plain size="mini" class="select-payplan-btn">
+          {{formData.name!=undefined?formData.name:'点击选择已有账务方案'}}</el-button>
+        <!-- <Authorized :permission="['PAY_PLAN_OPERATE']">
+        <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini" class="save-plan-btn">保存账务方案
+        </el-button>
+      </Authorized> -->
       </el-row>
       <div v-for="(item,index) in payPlanItems" :key="'item'+index">
         <el-row v-if="!(item.moneyType === 'MONTHLY_SETTLEMENT_ONE' || item.moneyType === 'MONTHLY_SETTLEMENT_TWO')"
@@ -81,7 +82,7 @@
             </el-col> -->
               <el-col :span="18">
                 <el-select v-model="item.payPercent" @change="$forceUpdate()">
-                  <el-option v-for="percent in 99" :value="percent*0.01" :label="percent+'%'" :key="'percent'+percent">
+                  <el-option v-for="percent in 99" :value="(percent*0.01).toFixed(2)" :label="percent+'%'" :key="'percent'+percent">
                   </el-option>
                 </el-select>
               </el-col>
@@ -205,7 +206,6 @@
         </el-row>
       </div>
     </el-form>
-
     <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
       <el-col :span="24">
         <el-row type="flex" align="middle">
@@ -450,6 +450,12 @@
             break;
         }
 
+        result.forEach((data) => {
+          if(data.payPercent){
+            data.payPercent = parseFloat(data.payPercent).toFixed(2);
+          }
+
+        });
         this.formData.payPlanItems = result;
         return result;
       },
@@ -494,6 +500,7 @@
                   '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
                   (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
                     ' *') + '支付相应款项';
+                  result += '（以上所有款项金额以双方对账金额为准）';
               } else {
                 result += '：每月' + (payPlanItem.monthlyEndDayNum ?
                     (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*') +
@@ -502,6 +509,9 @@
                   '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
                   (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
                     ' *') + '支付相应款项';
+                  if(payPlanItem.moneyType === 'MONTHLY_SETTLEMENT_ONE'){
+                    result += '（以上所有款项金额以双方对账金额为准）';
+                  }
               }
               break;
           }
@@ -868,6 +878,11 @@
 
   .save-plan-btn {
     padding: 10px;
+  }
+
+  .select-payplan-btn {
+    width: 150px;
+    height: 30px;
   }
 
 </style>
