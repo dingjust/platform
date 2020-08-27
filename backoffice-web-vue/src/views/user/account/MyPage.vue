@@ -73,13 +73,13 @@
       ChangePasswordPage
     },
     computed: {
-      attachments: function () {
-        if (this.$store.getters.currentUser.profilePicture != null) {
-          return [this.$store.getters.currentUser.profilePicture];
-        } else {
-          return [];
-        }
-      },
+      // attachments: function () {
+      //   if (this.$store.getters.currentUser.profilePicture != null) {
+      //     return [this.$store.getters.currentUser.profilePicture];
+      //   } else {
+      //     return [];
+      //   }
+      // },
       //是否主账号
       isMainUser: function () {
         if (this.$store.getters.currentUser.mainUser) {
@@ -145,10 +145,15 @@
             message: "请填写合作商名称",
             trigger: "blur"
           }]
-        }
+        },
+        attachments: []
       };
     },
-    created() {}
+    created() {
+      if (this.$store.getters.currentUser.profilePicture != null) {
+        return this.attachments.push(this.$store.getters.currentUser.profilePicture);
+      }
+    }
   };
 
 </script>

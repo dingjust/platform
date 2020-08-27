@@ -98,7 +98,7 @@
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;margin-bottom: 10px"
                   :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
                   <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" 
-                                          :excludeMySelf="true" style="width: 194px"/>
+                                          :excludeMySelf="true" style="width: 194px" :selectedRow="formData.approvers"/>
                 </el-form-item>
               </template>
               <el-button-group>
@@ -248,13 +248,22 @@
       async _onConfirm() {
         let data = Object.assign({}, this.formData);
         // 人员设置数据处理
-        for (let i = 0; i < data.approvers.length; i++) {
-          if (data.approvers instanceof Array && data.approvers[i].length > 0) {
-            data.approvers[i] = {
-              id: this.formData.approvers[i][this.formData.approvers[i].length -1]
-            }
+        data.approvers = [];
+        this.formData.approvers.forEach(item => {
+          if (item instanceof Array && item.length > 0) {
+            data.approvers.push({
+              id: item[item.length - 1]
+            });
           }
-        }
+        })
+        // // 人员设置数据处理
+        // for (let i = 0; i < data.approvers.length; i++) {
+        //   if (data.approvers instanceof Array && data.approvers[i].length > 0) {
+        //     data.approvers[i] = {
+        //       id: this.formData.approvers[i][this.formData.approvers[i].length -1]
+        //     }
+        //   }
+        // }
 
         const url = this.apis().appendPaymentRequest();
         const result = await this.$http.post(url, data, {

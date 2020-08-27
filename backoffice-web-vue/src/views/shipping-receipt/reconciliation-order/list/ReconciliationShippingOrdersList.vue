@@ -1,6 +1,6 @@
 <template>
   <div class="table-container">
-    <el-table ref="table" :data="reconciliationShippingOrders" style="width: 100%"
+    <el-table ref="table" :data="reconciliationShippingOrders" style="width: 100%" row-key="id"
       @selection-change="handleSelectionChange" show-summary :summary-method="getSummaries">
       <el-table-column type="selection" :reserve-selection="true" width="55" v-if="!readOnly"></el-table-column>
       <!-- <el-table-column label="发货单号" prop="code"></el-table-column>
