@@ -2,11 +2,12 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :height="autoHeight">
-      <el-table-column label="主订单号" prop="code" min-width="130" v-if="!isPending"/>
+      <el-table-column label="主订单号" prop="code" min-width="130" v-if="!isPending" />
       <el-table-column label="业务订单号" min-width="130" v-if="isPending">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
-            <el-tag type="info" effect="plain" :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
+            <el-tag type="info" effect="plain"
+              :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
               {{scope.row.originCompany == null ? '业务订单' : '线上接单'}}</el-tag>
           </el-row>
           <el-row type="flex" justify="space-between" align="middle">
@@ -39,6 +40,11 @@
         </template>
       </el-table-column>
       <el-table-column label="订单标签" min-width="100">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
+            <i class="el-icon-warning warning-icon"></i>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
@@ -86,7 +92,7 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      cooperatorName (row) {
+      cooperatorName(row) {
         if (row.originCompany != null) {
           return row.originCompany.name;
         } else {
@@ -184,6 +190,13 @@
       },
       onDeliverySubmit(row) {
         this.$emit('onDeliveryForm', row);
+      },
+      //判断是否正在申请取消订单
+      isApplyCanceling(row) {
+        if (row.currentCancelApply != null && row.currentCancelApply.state == 'PENDING') {
+          return true;
+        }
+        return false;
       }
       // getPaymentStatusTag(row) {
       //   return row.payStatus === 'PAID' ? 'static/img/paid.png' : 'static/img/arrears.png';
@@ -244,4 +257,10 @@
     color: #ffd60c;
     border-Color: #ffd60c
   }
+
+  .warning-icon {
+    color: #ff1744;
+    font-size: 20px;
+  }
+
 </style>

@@ -2,7 +2,7 @@
   <el-row type="flex" style="padding-left:10px">
     <el-form-item label="订单管理方式" prop="managementMode" label-width="130px"
       :rules="[{ required: true, message: '请选择订单管理方式', trigger: 'change' },]">
-      <el-popover placement="right" width="350" trigger="hover">
+      <el-popover placement="right" width="350" trigger="hover" style="margin-right:50px">
         <el-row type="flex" justify="center">
           <h6>订单管理方式</h6>
         </el-row>

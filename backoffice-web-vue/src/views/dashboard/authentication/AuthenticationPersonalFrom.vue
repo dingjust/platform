@@ -37,7 +37,7 @@
           继续认证</el-button>
       </Authorized>
       <Authorized :permission="['CERT_APPLY']">
-        <el-button v-if="personalState == 'FAIL'" class="form-submit_btn" size="mini" type="danger" round
+        <el-button v-if="personalState == 'FAIL'" class="form-submit_btn" size="mini" type="text" round
           @click="onSave">
           重新认证</el-button>
       </Authorized>

@@ -21,7 +21,7 @@
         <el-form-item label="取消的原因">
           <el-input type="textarea" readonly v-model="order.currentCancelApply.reason"></el-input>
         </el-form-item>
-        <el-row type="flex" justify="space-around">
+        <el-row type="flex" justify="space-around" v-if="operable">
           <el-button @click="onSubmit(true)" class="material-btn">同意</el-button>
           <el-button @click="onSubmit(false)" class="material-btn">拒绝</el-button>
         </el-row>
@@ -42,6 +42,13 @@
       //可以取消的订单(待生产订单)
       canbeCancelOrders: function () {
         return this.order.taskOrderEntries.filter(entry => entry.canceling);
+      },
+      //接单人可操作
+      operable: function () {
+        if (this.$store.getters.currentUser&&this.order.creator) {
+          return this.$store.getters.currentUser.uid == this.order.creator.uid;
+        }
+        return false;
       }
     },
     methods: {
@@ -91,5 +98,4 @@
     width: 120px;
     height: 40px;
   }
-
 </style>

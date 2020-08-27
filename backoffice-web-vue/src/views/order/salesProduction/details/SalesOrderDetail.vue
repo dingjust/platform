@@ -1,23 +1,19 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <div class="sales-plan-triangle_box">
-        <div class="sales-plan-triangle" :style="getTriangleColor">
-          <h6 class="sales-plan-triangle_text">{{getEnum('SalesProductionAuditStatus', formData.auditState)}}</h6>
+      <el-row type="flex" justify="space-between" align="middle">
+        <div class="sales-plan-form-title">
+          <h6 class="title-info">业务订单详情</h6>
         </div>
-      </div>
-      <el-row type="flex" justify="start">
-        <el-col :span="6">
-          <div class="sales-plan-form-title">
-            <h6>业务订单详情</h6>
-          </div>
-        </el-col>
-        <el-col :span="6" :offset="2">
-          <h6>销售业务：{{formData.code}}</h6>
-        </el-col>
-        <el-col :span="4" :offset="6" v-if="isApplyCanceling">
-          <twinkle-warning-button @click="canelingDialogVisible=true" label="订单取消申请处理" />
-        </el-col>
+        <h6 class="title-info">订单号：{{formData.code}}</h6>
+        <h6 class="title-info">创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        <div>
+          <el-row type="flex">
+            <h6 class="title-info">标签/状态：{{getEnum('SalesProductionOrderState', formData.state)}}</h6>
+            <audit-tag :state="formData.auditState" class="audit-tag" />
+          </el-row>
+        </div>
+        <twinkle-warning-button v-if="isApplyCanceling" @click="canelingDialogVisible=true" label="订单取消申请处理" />
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
@@ -187,7 +183,6 @@
         if (this.formData.currentCancelApply != null && this.formData.currentCancelApply.state == 'PENDING') {
           return true;
         }
-
         return false;
       }
     },
@@ -469,30 +464,6 @@
     z-index: 100;
   }
 
-  .sales-plan-triangle_box {
-    /* margin-top: 1px; */
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .sales-plan-triangle {
-    width: 0;
-    height: 0;
-    border-right: 70px solid white;
-    border-bottom: 70px solid transparent;
-    z-index: 0;
-  }
-
-  .sales-plan-triangle_text {
-    width: 80px;
-    padding-top: 10px;
-    padding-left: 30px;
-    transform: rotateZ(45deg);
-    color: white;
-    font-size: 12px;
-  }
-
   .sales-border-container {
     border: 1px solid #DCDFE6;
     border-radius: 5px;
@@ -541,6 +512,14 @@
   .reject_reason {
     color: #606266;
     padding-bottom: 10px;
+  }
+
+  .audit-tag {
+    margin-left: 10px;
+  }
+
+  .title-info {
+    margin-top: 5px;
   }
 
 </style>
