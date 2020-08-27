@@ -11,7 +11,7 @@
           <div slot="tip" class="el-upload__tip">
             <slot name="picBtn"></slot>
           </div>
-          <div slot="file" slot-scope="{file}">
+          <div slot="file" slot-scope="{file}" style="height: 100%">
             <template v-if="fileUrl(file) !== ''">
               <label class="el-upload-list__item-status-label">
                 <i class="el-icon-upload-success el-icon-check" />

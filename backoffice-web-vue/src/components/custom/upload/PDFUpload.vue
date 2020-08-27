@@ -103,7 +103,7 @@
       },
       headers: function () {
         return {
-          Authorization: this.$store.getters.token
+          Authorization: 'Bearer ' + sessionStorage.getItem('token')
         }
       },
       canUpload: function () {
