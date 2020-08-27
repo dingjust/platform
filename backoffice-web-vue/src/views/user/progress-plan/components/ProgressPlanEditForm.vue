@@ -55,7 +55,7 @@
         if (result.code === 0) {
           this.$message.error(result.msg);
         }
-        this.phaseData = result.data.content;
+        this.phaseData = result.data.content.filter(item => item.name !== '产前样' && item.name !== '备料');
       },
       onDelete (row) {
         let index = this.showData.findIndex(item => item.progressPhase.id == row.progressPhase.id);

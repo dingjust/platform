@@ -153,26 +153,28 @@ export default {
       let stark = [];
       stark = stark.concat(tree);
       stark.sort((o1,o2)=>o1.length-o2.length);
-
       let temp;
       let index;
       let middleStark;
 
       while (stark.length) {
         temp = stark.shift();
-        middleStark = JSON.parse(JSON.stringify(stark));
+        // middleStark = JSON.parse(JSON.stringify(stark));
+        
+        middleStark = stark.filter(item => item.findIndex(val => val.id === temp[temp.length - 1].id) <= -1);
+        // stark.forEach((item, starkIndex) => {
+        //   if (item.findIndex(val => val.id === temp[temp.length - 1].id) > -1) {
+        //     middleStark.splice(starkIndex, 1);
+        //   }
+        // })
 
-        stark.forEach(item => {
-          index = item.findIndex(val => val.id == temp[temp.length -1].id);
-          if (index > -1) {
-            middleStark.splice(index, 1);
-          }
-        })
+
         if (temp[temp.length -1].type === 'dept') {
           this.selectDept.push(temp[temp.length -1].id);
         } else {
           this.selectPerson.push(temp[temp.length -1].id);
         }
+
         stark = middleStark;
       }
     },
