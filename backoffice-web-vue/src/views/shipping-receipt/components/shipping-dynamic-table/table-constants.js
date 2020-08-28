@@ -495,6 +495,56 @@ const ShipReceNum = {
   },
 }
 
+//发货收货数V2（收货单列表）
+const ShipReceNumV2 = {
+  template: `
+  <el-table-column label="发货数/收货数" :key="sortKey" min-width="110">
+    <template slot-scope="scope">
+      <span>{{getShipNum(scope.row)}}/{{getReceNum(scope.row)}}</span>
+    </template> 
+  </el-table-column>`,
+  props: {
+    /// 发货数
+    shipProp: {
+      type: String,
+      default: 'logisticsSheet.totalQuantity'
+    },
+    receSheetProp: {
+      type: String,
+      default: 'totalQuantity'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+  methods: {
+    // 发货数
+    getShipNum(row) {
+      let num = 0;
+      try {
+        if (eval('row.' + this.shipProp) != null) {
+          num = eval('row.' + this.shipProp);
+        }
+      } catch (e) {
+        // TODO:空值处理        
+      }
+      return num;
+    },
+    // 收货数
+    getReceNum(row) {
+      let num = 0;
+      try {
+        if (eval('row.' + this.receSheetProp) != null) {
+          num = eval('row.' + this.receSheetProp);
+        }
+      } catch (e) {
+        // TODO:空值处理        
+      }
+      return num;
+    }
+  },
+}
+
 const ReceiptNum = {
   template: `
     <el-table-column label="收货数" :key="sortKey">
@@ -1131,6 +1181,7 @@ const MAIN_COMPONENT_NAME_MAP = {
   '收货操作': 'receipt-operation',
   '退货操作': 'return-operation',
   '发货收货数': 'ship-rece-num',
+  '发货收货数v2': 'ship-rece-num-v2',
   '收货日期': 'receipt-date',
   '收货日期v2': 'receipt-date-v2',
   '合作商-发货': 'shipping-cooperator',
@@ -1180,6 +1231,7 @@ export {
   ReceiptOperation,
   ReturnOperation,
   ShipReceNum,
+  ShipReceNumV2,
   ReceiptDate,
   ReceiptDateV2,
   ReconsiderOrderCode,
