@@ -1128,7 +1128,11 @@ const ReturnPerson = {
 
 // 供应商(发货方)
 const SupplierShipParty = {
-  template: `<el-table-column label="供应商" :prop="prop" :key="sortKey" :show-overflow-tooltip="true"></el-table-column>`,
+  template: `<el-table-column label="供应商"  :key="sortKey" :show-overflow-tooltip="true">
+    <template slot-scope="scope">
+      <span>{{getCooperatorName(scope.row)}}</span>
+    </template>
+  </el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -1136,6 +1140,26 @@ const SupplierShipParty = {
     },
     sortKey: {
       default: 10
+    }
+  },
+  methods:{
+    getCooperatorName(row) {
+      //是否自管类型的
+      if (row.productionTaskOrder) {
+        if(row.productionTaskOrder.managementMode == 'AUTOGESTION'){
+          return row.targetCooperator.name;
+        }
+      }      
+      try {
+        let name = eval('row.' + this.prop);
+        if (name != null) {
+          return name;
+        }
+      } catch (e) {
+        // TODO 空值处理
+        return '';
+      }
+      return '';
     }
   }
 }
