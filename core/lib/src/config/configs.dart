@@ -12,11 +12,11 @@ class GlobalConfigs {
   // static const SHARE_CONTEXT_PATH = 'https://share.sc.nbyjy.net';//测试
   static const SHARE_CONTEXT_PATH = 'https://share.ht.nbyjy.net'; //生产
 
-  // static const CONTEXT_PATH = 'https://192.168.31.180:9002/djwebservices/v2';
-  // static const MEDIA_CONTEXT_PATH =
-  //     'https://192.168.31.180:9002/djwebservices/v2';
-  // static const MEDIA_CONTEXT_PATH =
-  //     'http://192.168.31.180';
+//   static const CONTEXT_PATH = 'https://192.168.31.59:9002/djwebservices/v2';
+//   static const MEDIA_CONTEXT_PATH =
+//       'https://192.168.31.59:9002/djwebservices/v2';
+//   static const MEDIA_CONTEXT_PATH =
+//       'http://192.168.31.59';
 
   // 生产
   static const CONTEXT_PATH = 'https://ht.nbyjy.net';
@@ -25,12 +25,12 @@ class GlobalConfigs {
   /// 通过nginx代理所有b2b前缀的请求
   static const B2B_API_PREFIX = 'b2b';
 
-  // static const B2B_API_PREFIX = 'b2b-apparel-zh';//本地
+//   static const B2B_API_PREFIX = 'b2b-apparel-zh';//本地
 
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
 
-  // static const AUTH_SERVER_URL =
-  //     'https://192.168.31.180:9002/authorizationserver';
+//   static const AUTH_SERVER_URL =
+//       'https://192.168.31.59:9002/authorizationserver';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
