@@ -70,31 +70,32 @@ class _MyContractManagePageState extends State<MyContractManagePage> {
           initialData: null,
           future: _futureBuilderFuture,
         ),
-        bottomNavigationBar: Container(
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
-          child: FlatButton(
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                '发起签署',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ContractSelectFromItemPage()));
-            },
-          ),
-        ));
+      // bottomNavigationBar: Container(
+      //   color: Colors.white,
+      //   padding: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
+      //   child: FlatButton(
+      //     color: Color.fromRGBO(255, 214, 12, 1),
+      //     child: Padding(
+      //       padding: EdgeInsets.symmetric(vertical: 10),
+      //       child: Text(
+      //         '发起签署',
+      //         style: TextStyle(
+      //           color: Colors.black,
+      //           fontSize: 18,
+      //         ),
+      //       ),
+      //     ),
+      //     shape: RoundedRectangleBorder(
+      //         borderRadius: BorderRadius.all(Radius.circular(5))),
+      //     onPressed: () {
+      //       Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //               builder: (context) => ContractSelectFromItemPage()));
+      //     },
+      //   ),
+      // )
+    );
   }
 
   Widget _buildHead() {

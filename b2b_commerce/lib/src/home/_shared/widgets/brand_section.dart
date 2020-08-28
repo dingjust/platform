@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
@@ -321,7 +322,8 @@ class BrandButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.orderCoordination(),
         onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_COORDINATION);
+          // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_COORDINATION);
+          BotToast.showText(text: '功能完善中');
         },
         title: '订单协同',
       ),
