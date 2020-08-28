@@ -1,17 +1,19 @@
 <template>
   <div class="po-relation-box">
     <el-tabs type="border-card" @tab-click="handleClick" :lazy="true">
-      <el-tab-pane label="外发订单" v-if="showOutbound&&isMySelf">
-        <production-order-outbound-list :page="page" :pageType="pageType" />
+      <el-tab-pane label="外发订单">
+        <production-order-outbound-list v-if="showOutbound&&isMySelf" :page="page" :pageType="pageType" />
       </el-tab-pane>
-      <el-tab-pane label="收发货" :lazy="true" v-if="receiveDispatchTaskId">
-        <shipping-tasks-detail :id="receiveDispatchTaskId" shadow="hover" :showOrderInfo="false" />
+      <el-tab-pane label="收发货">
+        <shipping-tasks-detail :lazy="true" v-if="receiveDispatchTaskId" :id="receiveDispatchTaskId" shadow="hover"
+          :showOrderInfo="false" />
       </el-tab-pane>
-      <el-tab-pane label="对账单" :lazy="true" v-if="reconciliationTaskId">
-        <reconciliation-tasks-detail :id="reconciliationTaskId" shadow="hover" :showOrderInfo="false" />
+      <el-tab-pane label="对账单" :lazy="true">
+        <reconciliation-tasks-detail v-if="reconciliationTaskId" :id="reconciliationTaskId" shadow="hover"
+          :showOrderInfo="false" />
       </el-tab-pane>
-      <el-tab-pane label="采购订单" :lazy="true" v-if="isMySelf">
-        <purchase-order-basic-table :data="[]" />
+      <el-tab-pane label="采购订单" :lazy="true">
+        <purchase-order-basic-table :data="[]" v-if="isMySelf" />
       </el-tab-pane>
       <!-- <el-tab-pane label="财务" :lazy="true" v-if="isMySelf">
         <el-row v-if="isBrand()">

@@ -19,6 +19,9 @@
         <el-col :span="3" v-if="canDelete">
           <el-button type="text" @click="onCancel">作废订单</el-button>
         </el-col>
+        <el-col :span="3" v-if="canCancelProductionOrder">
+          <el-button type="text" @click="onCancelProdcution">取消订单</el-button>
+        </el-col>
       </template>
       <!-- 审核人员按钮 -->
       <template
@@ -37,8 +40,7 @@
       <!-- 外接来源订单 -->
       <template v-if="slotData.state != 'CANCELED'">
         <!-- 销售订单按钮 -->
-        <template
-          v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin">
+        <template v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin">
           <el-col :span="3">
             <authorized :permission="['ACCEPT_REJECT_ORDER']">
               <el-button class="material-btn_red" @click="onRefuse">拒单</el-button>
@@ -116,6 +118,11 @@
       },
       canDelete: function () {
         return this.slotData.state == 'TO_BE_SUBMITTED';
+      },
+      //自创-取消工单
+      canCancelProductionOrder: function () {
+        //限定自创
+        return this.slotData.state == 'AUDIT_PASSED';
       }
     },
     methods: {
@@ -136,6 +143,9 @@
       },
       onCancel() {
         this.$emit('onCancel');
+      },
+      onCancelProdcution(){
+        this.$emit('onCancelProdcution');
       },
       //跳转接单页面
       onCommit() {

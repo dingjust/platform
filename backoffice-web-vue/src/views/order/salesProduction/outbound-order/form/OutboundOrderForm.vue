@@ -394,7 +394,8 @@
               product: {
                 id: item.product.id,
                 name: item.product.name,
-                thumbnail: item.product.thumbnail
+                thumbnail: item.product.thumbnail,
+                skuID:item.product.skuID
               },
               progressPlan: {
                 name: ''
