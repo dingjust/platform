@@ -145,7 +145,7 @@ const state = {
     machiningType: 'LABOR_AND_MATERIAL',
     invoiceNeeded: false,
     invoiceTaxPoint: 0.03,
-    freightPayer: 'PARTYA',
+    freightPayer: 'PARTYB',
     progressWorkSheet: {
       name: '',
       progresses: []
@@ -369,7 +369,7 @@ const actions = {
       machiningType: 'LABOR_AND_MATERIAL',
       invoiceNeeded: false,
       invoiceTaxPoint: 0.03,
-      freightPayer: 'PARTYA',
+      freightPayer: 'PARTYB',
       progressWorkSheet: {
         name: '',
         progresses: []

@@ -13,7 +13,7 @@
       <el-tab-pane label="采购订单" :lazy="true" v-if="isMySelf">
         <purchase-order-basic-table :data="[]" />
       </el-tab-pane>
-      <el-tab-pane label="财务" :lazy="true" v-if="isMySelf">
+      <!-- <el-tab-pane label="财务" :lazy="true" v-if="isMySelf">
         <el-row v-if="isBrand()">
           <purchase-order-info-payment-finance :slotData="slotData" v-if="isBrand() && slotData.payPlan!= null" />
         </el-row>
@@ -22,7 +22,7 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="利润核算" :lazy="true" v-if="isMySelf">
-      </el-tab-pane>
+      </el-tab-pane> -->
       <el-tab-pane label="操作日志" :lazy="true" v-if="isMySelf">
       </el-tab-pane>
     </el-tabs>

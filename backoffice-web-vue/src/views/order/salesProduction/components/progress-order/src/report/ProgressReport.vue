@@ -369,17 +369,16 @@
   }
 
   .update-form-submit {
-    background-color: #FFD60C;
-    border-color: #FFD60C;
+    /* background-color: #FFD60C;
+    border-color: #FFD60C; */
     color: #000;
     width: 150px;
     margin-top: 50px;
   }
 
   .update-form-finish {
-    /* background-color: #FFD60C;
-    border-color: #FFD60C; */
-    /* color: ; */
+    background-color: #FFD60C;
+    border-color: #FFD60C;
     width: 150px;
     margin-top: 50px;
   }
