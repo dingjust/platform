@@ -888,6 +888,10 @@ const COMMON_APIS = {
   reconciliationSheetStateCount() {
     return '/b2b/sheets/reconciliation/state/count';
   },
+  // 收货单列表状态统计
+  receiptSheetStateCount() {
+    return '/b2b/sheets/receipt/state/count';
+  },
   // 对账单（收货方审核）列表状态统计
   reconciliationSheetAuditStateCount() {
     return '/b2b/sheets/reconciliation/auditState/count';
