@@ -8,7 +8,7 @@
         <span class="custom-tree-node" slot-scope="{ node, data }" @click="onClick(data)">
           <span>{{ data.name }}</span>
           <span>
-            <template v-if="data.depth < 3 || data.depth === 0">
+            <template v-if="data.depth < 2 || data.depth === 0">
               <Authorized :permission="['COMPANY_B2BDEPT_CREATE']">
                 <el-button type="text" size="mini" @click="appendDept(data)">
                   <i class="el-icon-plus" style="border: 1px solid"/>
