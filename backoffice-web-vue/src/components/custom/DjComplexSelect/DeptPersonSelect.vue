@@ -73,7 +73,14 @@ export default {
   },
   methods: {
     initData () {
-      this.deptList = JSON.parse(JSON.stringify(this.deptOptions));
+      let depts = JSON.parse(JSON.stringify(this.deptOptions));
+      // 数据权限未部门权限，过滤其他部门数据
+      if (this.dataQuery && this.dataQuery.depts.length === 1 && this.dataQuery.depts[0] != 0) {
+        depts = [this.breadthQuery(depts, this.dataQuery.depts[0])];
+      } else if (this.dataQuery && this.dataQuery.depts.length <= 0 && this.dataQuery.users.length > 0) {
+        depts = [];
+      }
+      this.deptList = depts;
       this.setMark(this.deptList, 'dept');
       this.personList = JSON.parse(JSON.stringify(this.personOptions));
       this.createDeptPersonTree();
@@ -96,23 +103,38 @@ export default {
       }
     },
     createDeptPersonTree () {
-      this.personList.forEach(item => {
-        this.$set(item, 'mark', {
-          type: 'person',
-          id: item.id,
-          name: item.name
+      if (this.dataQuery && this.dataQuery.depts.length <= 0 && this.dataQuery.users.length > 0) {
+        this.personList.forEach(item => {
+          if (item.id === this.dataQuery.users[0]) {
+            this.$set(item, 'mark', {
+              type: 'person',
+              id: item.id,
+              name: item.name
+            })
+            this.deptList.push(item);
+          }
         })
-        if (item.b2bDept) {
-          let temp = this.breadthQuery(this.deptList, item.b2bDept.id);
-          temp.children.push(item);
-        }
-        
-        // 主账号没所属部门时，跟一级部门同级
-        if (item.root && item.b2bDept == null) {
-          this.deptList.push(item);
-        } 
-      })
-       
+      } else {
+        this.personList.forEach(item => {
+          this.$set(item, 'mark', {
+            type: 'person',
+            id: item.id,
+            name: item.name
+          })
+          if (item.b2bDept) {
+            let temp = this.breadthQuery(this.deptList, item.b2bDept.id);
+            if (temp && temp.children) {
+              temp.children.push(item);
+            }
+          }
+          
+          // 主账号没所属部门时，跟一级部门同级
+          if (item.root && item.b2bDept == null && this.dataQuery.depts[0] == 0) {
+            this.deptList.push(item);
+          } 
+        })
+      }
+      
       // 回显
       if (this.dataQuery.depts.length > 0 || this.dataQuery.users.length > 0) {
         this.echoData();

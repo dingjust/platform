@@ -32,6 +32,10 @@ export default {
     excludeMySelf: {
       type: Boolean,
       default: false
+    },
+    selectedRow: {
+      type: Array,
+      default: []
     }
   },
   data () {
@@ -55,10 +59,27 @@ export default {
       this.createDeptPersonTree();
     },
     createDeptPersonTree () {
+      let index;
       this.personList.forEach(item => {
         if (item.uid === this.$store.getters.currentUser.uid && this.excludeMySelf) {
           return;
         }
+
+        index = this.selectedRow.findIndex(val => {
+          if (val) {
+            return item.id === val[val.length - 1];
+          }
+        })
+
+        if (index > -1 && item.id !== this.person[this.person.length - 1]) {
+          return;
+        }
+
+        // this.selectedRow.forEach(val => {
+        //   if (JSON.stringify(item) === JSON.stringify(this.person)) {
+        //     return;
+        //   }
+        // })
 
         if (item.b2bDept) {
           this.$set(item, 'parentId', item.b2bDept.id);
@@ -123,6 +144,9 @@ export default {
     },
     person: function (newVal, oldVal) {
       this.$emit('update:vPerson', newVal);
+    },
+    selectedRow: function (newVal, oldVal) {
+      this.initData();
     },
     loading: function (nval, oval) {
       if (nval === false) {

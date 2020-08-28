@@ -19,7 +19,7 @@
         </el-col>
         <el-col :span="4" v-if="!isSelect">
           <el-row type="flex" justify="end">
-            <authorized :permission="['OUT_ORDER_CREATE']">
+            <authorized :permission="['CLOTHES_OUT_ORDER_CREATE']">
               <el-button type="primary" class="create-button" @click="createProductOutbound">创建产品外发</el-button>
             </authorized>
             <authorized :permission="['OUT_ORDER_CREATE']">

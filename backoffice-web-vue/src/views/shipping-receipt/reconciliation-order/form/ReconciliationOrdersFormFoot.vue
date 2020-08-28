@@ -62,7 +62,7 @@
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;"
                   :prop="'approvers.' + itemIndex" :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
                   <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" :disabled="!formData.isApproval" 
-                                          :excludeMySelf="true" style="width: 194px"/>
+                                          :excludeMySelf="true" style="width: 194px" :selectedRow="formData.approvers"/>
                 </el-form-item>
               </template>
               <el-button-group>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="data" stripe style="width: 100%">
+    <el-table :data="data" stripe style="width: 100%" row-key="id">
       <el-table-column type="selection" :reserve-selection="true" width="55">
       </el-table-column>
       <el-table-column label="生产工单号" prop="code" />

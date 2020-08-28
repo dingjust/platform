@@ -21,7 +21,6 @@
         </template>
       </el-table-column>
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
-      <!-- <el-table-column label="合同类型"></el-table-column> -->
       <el-table-column label="合作商" prop="belongTo.name">
         <template slot-scope="scope">
           <span>{{scope.row.partner}}</span>
@@ -54,6 +53,11 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="合同类型">
+        <template slot-scope="scope">
+          <span>{{getEnum('TemplateType', scope.row.type)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="当前状态" prop="state" :column-key="'state'">
         <template slot-scope="scope">
           <!-- <el-tag disable-transitions></el-tag> -->
@@ -73,7 +77,7 @@
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>-->
           <Authorized :permission="['AGREEMENT_CREATE']">
-            <el-button type="text" v-if="scope.row.state != 'INVALID'" @click="onBCXY(scope.row)">增加补充协议</el-button>
+            <el-button type="text" v-if="scope.row.state != 'INVALID' && scope.row.type !== 'BCXY'" @click="onBCXY(scope.row)">增加补充协议</el-button>
           </Authorized>
           <Authorized :permission="['AGREEMENT_REMOVE']">
             <el-button type="text" v-if="scope.row.isOffline == true" @click="onDelete(scope.row)">删除</el-button>

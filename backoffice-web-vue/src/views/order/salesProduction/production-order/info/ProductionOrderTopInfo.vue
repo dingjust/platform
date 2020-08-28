@@ -140,9 +140,10 @@
             </div>
           </el-col>
         </el-row> -->
-        <el-row>
+        <el-row style="margin-top: 10px;">
           <el-col :span="24">
-            <contract-com :slotData="slotData" :contracts="slotData.agreements" :canSign="false" />
+            <production-contract :slotData="slotData" :contracts="contracts" :canSign="false" :readOnly="true"/>
+            <!-- <contract-com :slotData="slotData" :contracts="slotData.agreements" :canSign="false" /> -->
           </el-col>
         </el-row>
         <!-- <el-row class="info-row-title_row" type="flex">
@@ -163,6 +164,7 @@
   import PDFUpload from '@/components/custom/upload/PDFUpload';
   import OrderViewButtonGroup from './OrderViewButtonGroup';
   import ContractCom from '@/views/order/salesProduction/contract/ContractCom'
+  import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
 
   export default {
     name: 'ProductionOrderTopInfo',
@@ -170,9 +172,17 @@
     components: {
       PDFUpload,
       OrderViewButtonGroup,
-      ContractCom
+      ContractCom,
+      ProductionContract
     },
     computed: {
+      // 已签合同列表
+      contracts: function () {
+        if (this.slotData.agreements) {
+          return this.slotData.agreements.filter(item => item.state !== 'INVALID');
+        }
+        return [];
+      },
       productionOrder: function () {
         if (this.slotData.taskOrderEntries != null && this.slotData.taskOrderEntries[0]) {
           return this.slotData.taskOrderEntries[0];

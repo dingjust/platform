@@ -162,7 +162,7 @@
             <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
               :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
               <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded"
-                                      :excludeMySelf="true" style="width: 194px"/>
+                                      :excludeMySelf="true" style="width: 194px" :selectedRow="formData.sendApprovers"/>
             </el-form-item>
           </template>
           <el-button-group style="padding-bottom: 26px;">
@@ -463,18 +463,19 @@
         if (!data.sendAuditNeeded) {
           data.sendApprovers = [];
         } else {
-          for (let i = 0; i < data.sendApprovers.length; i++) {
-            if (data.sendApprovers instanceof Array && data.sendApprovers[i].length > 0) {
-              data.sendApprovers[i] = {
-                id: this.formData.sendApprovers[i][this.formData.sendApprovers[i].length - 1]
-              }
+          // 处理级联选择数据
+          data.sendApprovers = [];
+          this.formData.sendApprovers.forEach(item => {
+            if (item instanceof Array && item.length > 0) {
+              data.sendApprovers.push({
+                id: item[item.length - 1]
+              });
             }
-          }
+          })
         }
         if (!data.invoiceNeeded) {
           data.invoiceTaxPoint = null;
         }
-
         const url = this.apis().createOutboundOrder();
         const result = await this.$http.post(url, data, {
           submitAudit: flag

@@ -69,7 +69,7 @@
               <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
                 :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
                 <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded" 
-                                        :excludeMySelf="true" style="width: 194px"/>
+                                        :excludeMySelf="true" style="width: 194px" :selectedRow="form.approvers"/>
               </el-form-item>
             </template>
             <el-button-group style="padding-bottom: 26px;">
@@ -231,21 +231,19 @@
         }
       },
       async _Save(submitAudit) {
-        // this.form.taskOrderEntries.forEach(item => {
-        //   this.$delete(item, 'progressPlan');
-        // })
         let submitForm = JSON.parse(JSON.stringify(this.form));
         if (!submitForm.auditNeeded) {
           submitForm.approvers = [];
         } else {
           // 处理级联选择数据
-          for (let i = 0; i < submitForm.approvers.length; i++) {
-            if (submitForm.approvers instanceof Array && submitForm.approvers[i].length > 0) {
-              submitForm.approvers[i] = {
-                id: this.form.approvers[i][this.form.approvers[i].length -1]
-              }
+          submitForm.approvers = [];
+          this.form.approvers.forEach(item => {
+            if (item instanceof Array && item.length > 0) {
+              submitForm.approvers.push({
+                id: item[item.length - 1]
+              });
             }
-          }
+          })
         }
         
         // 处理级联选择数据

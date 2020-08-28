@@ -15,7 +15,7 @@
     <el-dialog :visible.sync="materialdetailsVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false" :before-close="beforeClose">
       <material-details-dialog v-if="materialdetailsVisible" ref="materielPage"
-        @closeMaterialdetailsVisible="closeMaterialdetailsVisible" />
+        @closeMaterialdetailsVisible="closeMaterialdetailsVisible" @callback="callback"/>
     </el-dialog>
   </div>
 </template>
@@ -126,6 +126,10 @@
         } else {
           done();
         }
+      },
+      callback () {
+        this.onSearch();
+        this.materialdetailsVisible = false;
       }
     },
     data() {

@@ -57,6 +57,15 @@
 
   export default {
     name: 'SuppliersSelect',
+    props: {
+      //合作商类型
+      categories: {
+        type: Array,
+        default: () => {
+          return [];
+        }
+      }
+    },
     computed: {
       ...mapGetters({
         page: 'page',
@@ -93,7 +102,10 @@
         this.$refs.resultTable.clearSelection();
       },
       onSearch(page, size) {
-        const queryFormData = this.queryFormData;
+        let queryFormData = this.queryFormData;
+        if (this.categories != null) {
+          queryFormData.category = this.categories
+        }
         const url = this.apis().getCooperators();
         this.searchAdvanced({
           url,
