@@ -1,12 +1,12 @@
 <template>
   <div class="production-contract">
     <div class="contract-title">
-      <div>
-        <h6 style="margin: 0px">合同：
+      <div :class="readOnly ? 'contract-list-title': ''">
+        <h6 :class="readOnly ? 'info-title_text' : ''">合同：
           <span style="color: #909399">{{this.contracts.length > 0 ? '(已创建)' : '(未上传)'}}</span>
         </h6>
       </div>
-      <div>
+      <div v-if="!readOnly">
         <el-button type="text" @click="onUpload">
           <template v-if="isSignedPaper">
             <el-row type="flex" justify="center" align="middle">
@@ -67,6 +67,10 @@ export default {
       default: false
     },
     canSign: {
+      type: Boolean,
+      default: false
+    },
+    readOnly: {
       type: Boolean,
       default: false
     }
@@ -171,5 +175,18 @@ export default {
     width: 100%;
     margin-bottom: 0px;
     margin-top: 10px;
+  }
+
+  .info-title_text {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.85;
+    margin: 0px;
+  }
+
+  .contract-list-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
   }
 </style>

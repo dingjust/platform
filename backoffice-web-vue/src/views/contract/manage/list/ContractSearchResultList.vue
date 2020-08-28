@@ -77,7 +77,7 @@
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>-->
           <Authorized :permission="['AGREEMENT_CREATE']">
-            <el-button type="text" v-if="scope.row.state != 'INVALID'" @click="onBCXY(scope.row)">增加补充协议</el-button>
+            <el-button type="text" v-if="scope.row.state != 'INVALID' && scope.row.type !== 'BCXY'" @click="onBCXY(scope.row)">增加补充协议</el-button>
           </Authorized>
           <Authorized :permission="['AGREEMENT_REMOVE']">
             <el-button type="text" v-if="scope.row.isOffline == true" @click="onDelete(scope.row)">删除</el-button>
