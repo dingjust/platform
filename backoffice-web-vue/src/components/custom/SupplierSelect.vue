@@ -14,8 +14,17 @@
       @selection-change="handleSelectionChange" :height="autoHeight">
       <el-table-column label="合作商名称" prop="name">
         <template slot-scope="scope">
-          <span v-if="scope.row.partner != null"> {{scope.row.partner.name}}</span>
-          <span v-else> {{scope.row.name}}</span>
+          <el-row type="flex">
+            <span v-if="scope.row.partner != null"> {{scope.row.partner.name}}</span>
+            <span v-else> {{scope.row.name}}</span>
+          </el-row>
+        </template>
+      </el-table-column>
+      <el-table-column label="">
+        <template slot-scope="scope">
+          <el-row type="flex">
+            <el-tag :type="getTagType(scope.row.category)">{{getEnum('CooperatorCategory',scope.row.category)}}</el-tag>
+          </el-row>
         </template>
       </el-table-column>
       <el-table-column label="联系人" prop="contactPerson">
@@ -164,6 +173,21 @@
       },
       jumpToCreate() {
         this.$router.push('/account/cooperator/cooperatorCreate');
+      },
+      getTagType(category) {
+        switch (category) {
+          case 'SUPPLIER':
+            return 'success';
+            break;
+          case 'CUSTOMER':
+            return 'warning';
+            break;
+          case 'FABRIC_SUPPLIER':
+            return '';
+          default:
+            return 'info';
+            break;
+        }
       }
     },
     created() {
