@@ -1,6 +1,46 @@
 <template>
   <div>
-    <div class="financial-info-box">
+    <el-row type="flex" :gutter="10">
+      <el-col :span="18">
+        <el-row type="flex" justify="start" style="margin-left: 15px;">
+          <h6 style="margin: 0px;">订单基本信息</h6>
+        </el-row>
+        <el-row type="flex" justify="start" style="margin: 15px 0px 0px 24px;">
+          <el-col :span="9">
+            <h6>合作商：{{cooperatorName}}</h6>
+          </el-col>
+          <el-col :span="5">
+            <h6>合作方式：{{getEnum('machiningTypes', formData.productionOrder.cooperationMode)}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>是否开票：{{formData.productionOrder.invoiceNeeded ? '是' : '否'}}<span style="margin-left:5px"
+                v-if="formData.productionOrder.invoiceNeeded">{{formData.productionOrder.invoiceTaxPoint * 100}}%</span></h6>
+          </el-col>
+          <el-col :span="4">
+            <h6>订单数量：{{productionCount}}</h6>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" style="margin: 10px 0px 0px 24px;">
+          <el-col :span="9">
+            <h6>订单金额：{{formData.orderAmount}}</h6>
+          </el-col>
+          <el-col :span="5">
+            <h6 class="hide-text" :title="charge">
+              负责人：{{charge}}
+            </h6>
+          </el-col>
+          <el-col :span="6">
+            <h6 class="hide-text" :title="approver">
+              审批人：{{approver}}
+            </h6>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="6" class="financial-border-container">
+          <production-contract :slotData="formData.productionOrder" :contracts="contracts" :canSign="false" :readOnly="true"/>
+      </el-col>
+    </el-row>
+    <!-- <div class="financial-info-box">
       <div class="financial-border-container financial-info-one">
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <h6>订单基本信息</h6>
@@ -75,9 +115,8 @@
       <div style="margin-left: 10px"></div>
       <div class="financial-border-container financial-info-three">
             <production-contract :slotData="formData.productionOrder" :contracts="contracts" :canSign="false" :readOnly="true"/>
-        <!-- <contract-com :slotData="formData.productionOrder" :contracts="formData.productionOrder.agreements" :canSign="false"/> -->
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

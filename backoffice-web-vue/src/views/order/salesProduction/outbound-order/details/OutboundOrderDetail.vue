@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
-        <div class="sales-plan-form-title">
+        <div class="outbound-list-title">
           <h6 class="title-info">外发订单详情</h6>
         </div>
         <h6 class="title-info">订单号：{{formData.code}}</h6>
