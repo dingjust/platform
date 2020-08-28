@@ -168,4 +168,11 @@
     font-size: 20px;
   }
 
+  .sure-btn {
+    background-color: #ffd60c;
+    border-color: #ffd60c;
+    width: 150px;
+    height: 35px;
+  }
+
 </style>

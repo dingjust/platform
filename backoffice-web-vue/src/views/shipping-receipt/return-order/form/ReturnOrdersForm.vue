@@ -57,7 +57,7 @@
             </el-row>
             <el-row type="flex" align="middle">
               <el-col :span="8">
-                <el-form-item label="发货方式" prop="consignment.carrierDetails.code" label-width="120px"
+                <el-form-item label="发货方式" prop="consignment.carrierDetails.code" label-width="100px"
                   :rules="{required: !formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-select v-model="formData.consignment.carrierDetails.code"
                     :disabled="formData.isOfflineConsignment" :placeholder="''">
@@ -68,13 +68,13 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="物流单号" prop="consignment.trackingID" label-width="120px"
+                <el-form-item label="物流单号" prop="consignment.trackingID" label-width="100px"
                   :rules="{required: !formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
                   <el-input v-model="formData.consignment.trackingID" style="width: 194px"
                     :disabled="formData.isOfflineConsignment"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8" style="padding-bottom:22px">
                 <el-checkbox v-model="formData.isOfflineConsignment" @change="isOnline"></el-checkbox>
                 <span class="basci-label">线下物流<span style="color: #F56C6C">(勾选后无需填写发货方式和单号)</span></span>
               </el-col>

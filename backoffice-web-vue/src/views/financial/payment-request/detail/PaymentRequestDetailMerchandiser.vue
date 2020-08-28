@@ -109,7 +109,7 @@
       <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canAudit">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+            <el-button class="material-btn_red" @click="onApproval(false)">审核驳回</el-button>
           </authorized>
         </el-col>
         <el-col :span="3">

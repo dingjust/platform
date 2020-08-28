@@ -27,7 +27,7 @@
                 <h6 class="baisc-lable">产品名称：{{taskData.product?taskData.product.name:''}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">发货方：{{taskData.shipParty!=null?taskData.shipParty.name:''}}</h6>
+                <h6 class="baisc-lable">发货方：{{taskData.targetCooperator!=null?taskData.targetCooperator.name:''}}</h6>
               </el-col>
               <el-col :span="8">
                 <h6 class="baisc-lable">收货方：{{taskData.receiveParty!=null?taskData.receiveParty.name:''}}</h6>
@@ -38,10 +38,12 @@
                 <h6 class="baisc-lable">货号：{{taskData.product.skuID!=null?taskData.product.skuID:''}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">发货负责人：{{taskData.merchandiser!=null?taskData.merchandiser.name:''}}</h6>
+                <h6 class="baisc-lable">
+                  发货负责人：{{taskData.targetCooperator!=null?taskData.targetCooperator.contactPerson:''}}</h6>
               </el-col>
               <el-col :span="8">
-                <h6 class="baisc-lable">联系方式：{{taskData.merchandiser.mobileNumber}}</h6>
+                <h6 class="baisc-lable">
+                  联系方式：{{taskData.targetCooperator!=null?taskData.targetCooperator.contactPhone:''}}</h6>
               </el-col>
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
@@ -156,7 +158,7 @@
       return {
         formData: {
           packageSheets: [],
-          receivingMode:'BY_LIST'
+          receivingMode: 'BY_LIST'
         },
         carriers: ''
       }
