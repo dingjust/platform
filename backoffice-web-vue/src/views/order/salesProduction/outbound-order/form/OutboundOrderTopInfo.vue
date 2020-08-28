@@ -81,10 +81,8 @@
       </el-col>
       <el-col :span="6">
         <div class="info-box" style="padding: 10px 0px 0px 5px;">
-          <production-contract :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback"/>
-          <!-- <el-row class="info-basic-row" type="flex" align="middle" justify="start">
-            <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback" />
-          </el-row> -->
+          <production-contract :slotData="slotData" :contracts="contracts" 
+                                :canSign="canSign" @callback="callback" :isSignedPaper="isSignedPaper"/>
         </div>
       </el-col>
     </el-row>
@@ -146,6 +144,13 @@
         //   this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
         //   this.slotData.sendAuditState == 'PASSED' &&
         //   this.slotData.acceptState == 'ACCEPTED';
+      },
+      isSignedPaper: function () {
+        let flag = false;
+        if (this.slotData.managementMode === 'AUTOGESTION') {
+          flag = true;
+        }
+        return flag;
       }
     },
     methods: {

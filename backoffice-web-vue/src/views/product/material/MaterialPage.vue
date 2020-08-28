@@ -22,7 +22,7 @@
 <!--    </el-dialog>-->
     <el-dialog :visible.sync="detailsVisiable" width="80%" class="purchase-dialog"
                append-to-body :close-on-click-modal="false" :before-close="beforeClose">
-      <material-details-dialog v-if="detailsVisiable" ref="materielPage"
+      <material-details-dialog v-if="detailsVisiable" ref="materielPage" @callback="callback"
                                @closeMaterialdetailsVisible="closeMaterialdetailsVisible"/>
     </el-dialog>
   </div>
@@ -116,6 +116,10 @@
         } else {
           done();
         }
+      },
+      callback () {
+        this.onSearch();
+        this.detailsVisiable = false;
       }
       // onDialog () {
       //   this.dialog = true;

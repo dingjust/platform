@@ -14,17 +14,14 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <el-row type="flex" justify="center" style="margin-top: 20px">
+    <!-- <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-col :span="16">
         <el-form-item label="部门类型" prop="functionTypes">
           <dj-multiple-select :vSelectData.sync="formData.functionTypes" :options="options" 
                               keyName="code" :selectedCallBack="selectDataCallback"/>
-          <!-- <el-select v-model="formData.deptType" placeholder="请选择" value-key="id">
-            <el-option v-for="item in options" :label="item.name" :value="item" :key="item.id"></el-option>
-          </el-select> -->
         </el-form-item>
       </el-col>
-    </el-row>
+    </el-row> -->
     <el-row type="flex" justify="center" align="middle">
       <el-button @click="onCreate">确认</el-button>
     </el-row>
@@ -51,12 +48,12 @@
         });
       },
       _onCreate () {
-        let functionTypes = this.formData.functionTypes.map(item => item.code)
+        // let functionTypes = this.formData.functionTypes.map(item => item.code);
         let data = {
           id: this.formData.id ? this.formData.id : null,
           name: this.formData.name,
           parentId: this.formData.parentId ? this.formData.parentId : null, 
-          functionTypes: functionTypes
+          // functionTypes: functionTypes
         }
         this.$emit('onConfirm', data);
       },

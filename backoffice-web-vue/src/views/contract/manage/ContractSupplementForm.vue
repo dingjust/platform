@@ -33,7 +33,7 @@
       <el-row type="flex" justify="center" align="middle">
         <span class="create-contract-title">补充协议</span>
       </el-row>
-      <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
+      <contract-type-select :isSignedPaper="isSignedPaper" @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
@@ -133,7 +133,15 @@
   );
 
   export default {
-    props: ['slotData'],
+    props: {
+      slotData: {
+        required: true
+      },
+      isSignedPaper: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       ContractTypeSelect,
       ContractTemplateSelect,
@@ -516,8 +524,9 @@
     },
     created () {
       this.getTemplateListPt();
-      // this.onSearchOrder('', 0, 10);
-      // this.onSetOrderCode();
+      if (this.isSignedPaper) {
+        this.contractType = '3';
+      }
     }
   };
 </script>

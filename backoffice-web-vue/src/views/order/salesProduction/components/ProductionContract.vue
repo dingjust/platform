@@ -10,7 +10,7 @@
         <el-button type="text" @click="onUpload">
           <template v-if="isSignedPaper">
             <el-row type="flex" justify="center" align="middle">
-              <i class="el-icon-upload" style="font-size: 20px"></i>
+              <i class="iconfont2_2" style="font-size: 30px;">&#xe6b9;</i>
             </el-row>
             <el-row type="flex" justify="center" align="middle">
               <h6 class="upload-text">点击上传</h6>
@@ -24,11 +24,11 @@
       <template v-for="item in contracts">
         <el-col :span="8" :key="item.code" :title="item.title" @click.native="showContract(item)" class="contract-item">
           <el-row type="flex" justify="center" align="middle">
-            <!-- <div class="sign-icon">
-              <img style="width: 80%" src="static/img/signed.png" />
-            </div> -->
+            <div style="position: absolute;">
+              <h6 class="state-title">{{item.state === 'COMPLETE' ? '已签署' : '未签署'}}</h6>
+            </div>
             <div>
-              <img style="width: 100%" src="static/img/pdf.png"/>
+              <img style="width: 100%" src="static/img/file-icon.png"/>
             </div>
           </el-row>
           <el-row type="flex" justify="center" align="middle">
@@ -83,7 +83,22 @@ export default {
     },
     onUpload () {
       if (!this.canSign) {
-        this.$message.warning('此订单暂时不能创建合同或者此账号无为此订单创建合同权限');
+        if (this.slotData.state === 'TO_BE_ACCEPTED') {
+          if (this.slotData.merchandiser && this.$store.getters.currentUser.uid === this.slotData.merchandiser.uid) {
+            this.$message.warning('请等待对方执行接单操作！');
+          } else {
+            this.$message.warning('请先接单！');
+          }
+          return;
+        } else if ((this.slotData.creator && this.$store.getters.currentUser.uid !== this.slotData.creator.uid) && 
+            (this.slotData.merchandiser && this.$store.getters.currentUser.uid !== this.slotData.merchandiser.uid)) {
+          this.$message.warning('此账号没有为此订单创建合同的权限！');
+          return;
+        } else if (this.contracts && this.contracts.length > 0) {
+          this.$message.warning('此订单已创建合同！');
+          return;
+        }
+        this.$message.warning('只有生产中或者已完成的订单能创建合同！');
         return;
       }
       this.dialogVisible = true;
@@ -151,9 +166,10 @@ export default {
     background-color: #ffd60c;
   }
 
-  .sign-icon {
-    display: flex;
-    position: absolute;
-    justify-content: flex-end;
+  .state-title {
+    font-size: 12px;
+    width: 100%;
+    margin-bottom: 0px;
+    margin-top: 10px;
   }
 </style>

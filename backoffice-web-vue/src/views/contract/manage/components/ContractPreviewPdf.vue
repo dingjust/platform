@@ -2,7 +2,8 @@
 
   <div>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <contract-supplement-form :slotData="slotData" />
+      <contract-supplement-form v-if="dialogOrderVisible" :slotData="slotData" @openPreviewPdf="showContract" 
+                                @onSearch="onSearch" :isSignedPaper="slotData.offlinePartner"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogSealVisible" :show-close="true" :close-on-click-modal="false" append-to-body>
       <contract-seal-list :page="sealPage" @onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
@@ -17,7 +18,7 @@
 <!--    </el-dialog>-->
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
       <Authorized :permission="['AGREEMENT_CREATE']">
-        <el-button type="warning" v-if="slotData.state != 'INVALID'" @click="onBCXY" class="toolbar-search_input">增加补充协议
+        <el-button type="warning" v-if="slotData.state != 'INVALID' && slotData.type && slotData.type != 'BCXY'" @click="onBCXY" class="toolbar-search_input">增加补充协议
         </el-button>
       </Authorized>
       <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
@@ -32,6 +33,10 @@
       <Authorized :permission="['AGREEMENT_SIGN']">
         <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
                   class="toolbar-search_input" @click="onSign">签署
+        </el-button>
+      </Authorized>
+      <Authorized :permission="['AGREEMENT_REMOVE']">
+        <el-button v-if="slotData.isOffline && slotData.isCreator" type="warning" class="toolbar-search_input" @click="onDelete">删除
         </el-button>
       </Authorized>
     </div>
@@ -61,6 +66,9 @@
     <!--height="480" width="100%">-->
     <!--</iframe>-->
     <a id="a"  target="_blank"></a>
+    <el-dialog :visible.sync="bcPdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <contract-preview-pdf v-if="bcPdfVisible" :fileUrl="bcFileUrl" :slotData="bcContract" @onSearch="onSearch"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -89,7 +97,10 @@
         dialogOrderVisible: false,
         dialogSealVisible: false,
         isLoading: false,
-        openUrl: ''
+        openUrl: '',
+        bcPdfVisible: false,
+        bcFileUrl: '',
+        bcContract: ''
       }
     },
     methods: {
@@ -111,6 +122,7 @@
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
         this.$message.success(result.msg);
+        this.$emit('onSearch');
       },
       async onRevokeConfirm (code) {
         this.$confirm('是否撤回合同?', '撤回', {
@@ -183,6 +195,48 @@
         } else {
           this.$message.error(result.msg);
         }
+      },
+      onDelete() {
+        this.$confirm('此操作将永久删除该合同, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.DeleteContract();
+        })
+      },
+      async DeleteContract(code) {
+        const url = this.apis().deleteContract(this.slotData.code);
+        const result = await http.get(url);
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+        }
+        this.$emit('onSearch');
+      },
+      showContract (item) {
+        this.openPreviewPdf(item, item.code);
+      },
+      async openPreviewPdf (val, code) {
+        this.bcContract = val;
+        let queryCode = '';
+        if (code != null && code != '') {
+          queryCode = code;
+        } else {
+          queryCode = val.code;
+        }
+        const url = this.apis().downContract(queryCode);
+        const result = await this.$http.get(url);
+
+        const aa = '/b2b/user/agreement/download/' + result.data;
+
+        this.bcPdfVisible = true;
+        this.bcFileUrl = encodeURIComponent(aa)
+        this.dialogOrderVisible = false;
+      },
+      onSearch () {
+        this.$emit('onSearch');
       }
     },
     created () {

@@ -21,7 +21,6 @@
         </template>
       </el-table-column>
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
-      <!-- <el-table-column label="合同类型"></el-table-column> -->
       <el-table-column label="合作商" prop="belongTo.name">
         <template slot-scope="scope">
           <span>{{scope.row.partner}}</span>
@@ -52,6 +51,11 @@
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="合同类型">
+        <template slot-scope="scope">
+          <span>{{getEnum('TemplateType', scope.row.type)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="当前状态" prop="state" :column-key="'state'">
