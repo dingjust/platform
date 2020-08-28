@@ -276,7 +276,8 @@
           'isFrame': true,
           'agreementType': agreementType,
           'customizeCode': this.contractCode,
-          'partnerCompanyCode': this.suppliers.id
+          'partnerCompanyCode': this.suppliers.id,
+          'customizeType': 'KJXY'
         }
 
         if (this.contractType === '2') {
@@ -343,7 +344,8 @@
           'role': role,
           'title': '',
           'isFrame': true,
-          'partnerCompanyCode': this.suppliers.id
+          'partnerCompanyCode': this.suppliers.id,
+          'customizeType': 'KJXY'
         }
 
         const url = this.apis().saveContract();
@@ -422,6 +424,13 @@
       },
       contractTemplateSelect () {
         this.$refs.contractTemplateSelect.onSearchTemp();
+      },
+      gCooperator (cooperator) {
+        if (cooperator.type === 'ONLINE') {
+          return cooperator.partner;
+        } else {
+          return cooperator;
+        }
       }
     },
     data () {
@@ -498,6 +507,17 @@
     created () {
       if (this.isSignedPaper) {
         this.contractType = '3';
+      }
+      if (this.slotData.originCooperator && this.slotData.targetCooperator) {
+        let originCooperator = this.gCooperator(this.slotData.originCooperator);
+        let targetCooperator = this.gCooperator(this.slotData.targetCooperator);
+        if (originCooperator.uid === this.$store.getters.currentUser.companyCode) {
+          this.onSuppliersSelect(targetCooperator);
+          this.orderReadOnly = true;
+        } else if (targetCooperator.uid === this.$store.getters.currentUser.companyCode) {
+          this.onSuppliersSelect(originCooperator);
+          this.orderReadOnly = true;
+        }
       }
       // this.onSearchOrder('', 0, 10);
       // this.onSetOrderCode();

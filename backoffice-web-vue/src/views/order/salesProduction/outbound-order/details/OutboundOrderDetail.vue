@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
         <div class="sales-plan-form-title">

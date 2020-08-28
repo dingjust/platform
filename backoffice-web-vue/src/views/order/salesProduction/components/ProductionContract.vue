@@ -22,17 +22,20 @@
     </div>
     <el-row type="flex" justify="start" align="middle">
       <template v-for="item in contracts">
-        <el-col :span="8" :key="item.code" :title="item.title" @click.native="showContract(item)" class="contract-item">
+        <el-col :span="8" :key="item.code" :title="item.title" @click.native="showContract(item)" class="contract-item" style="width: 80px">
           <el-row type="flex" justify="center" align="middle">
-            <div style="position: absolute;">
+            <!-- <div style="position: absolute;">
               <h6 class="state-title">{{item.state === 'COMPLETE' ? '已签署' : '未签署'}}</h6>
-            </div>
+            </div> -->
             <div>
-              <img style="width: 100%" src="static/img/file-icon.png"/>
+              <img style="width: 100%" src="static/img/word.png"/>
             </div>
           </el-row>
           <el-row type="flex" justify="center" align="middle">
             <h6 class="upload-text nowrap-text">{{item.title}}</h6>
+          </el-row>
+          <el-row type="flex" justify="center" align="middle">
+            <h6 class="state-title">{{item.state === 'COMPLETE' ? '(已签署)' : '(未签署)'}}</h6>
           </el-row>
         </el-col>
       </template>
@@ -42,7 +45,7 @@
                       @closeContractTypeDialog="dialogVisible=false" @openPreviewPdf="openPreviewPdf"/>
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
-      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @onSearch="onSearch"/>
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @onSearch="onSearch" :readOnly="readOnly"/>
     </el-dialog>
   </div>
 </template>
@@ -171,10 +174,11 @@ export default {
   }
 
   .state-title {
+    display: contents;
     font-size: 12px;
     width: 100%;
     margin-bottom: 0px;
-    margin-top: 10px;
+    color: #606266;
   }
 
   .info-title_text {

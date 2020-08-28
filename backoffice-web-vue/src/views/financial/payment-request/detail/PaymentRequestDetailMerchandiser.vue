@@ -30,7 +30,9 @@
               <h6>申请单号：{{formData.code}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>订单号：{{formData.productionOrder.code}}</h6>
+              <h6>订单号：
+                <el-button type="text" style="font-size: 14px;" @click="orderVisible = true">{{formData.productionOrder.code}}</el-button>
+              </h6>
             </el-col>
             <el-col :span="8">
               <h6>合同号：
@@ -42,7 +44,7 @@
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>申请部门：</h6>
+              <h6>申请部门：{{formData.applyUser.b2bDept ? formData.applyUser.b2bDept.name : ''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6>申请人：{{formData.applyUser.name}}</h6>
@@ -118,7 +120,7 @@
           </authorized>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="formData.state === 'AUDIT_FAIL'">
+      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canReapply">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
             <el-button class="material-btn" @click="onReapply">重新申请</el-button>
@@ -133,6 +135,9 @@
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body
       :close-on-click-modal="false">
       <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
+    </el-dialog>
+    <el-dialog :visible.sync="orderVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <outbound-order-detail v-if="orderVisible" :code="formData.productionOrder.id" />
     </el-dialog>
   </div>
 </template>
@@ -150,6 +155,7 @@
   import {
     OrderAuditDetail
   } from '@/views/order/salesProduction/components/'
+  import OutboundOrderDetail from '@/views/order/salesProduction/outbound-order/details/OutboundOrderDetail'
   export default {
     name: 'PaymentRequestDetailMerchandiser',
     props: ['id'],
@@ -159,9 +165,13 @@
       PaymentForm,
       PaymentRecordsList,
       PdfPreview,
-      OrderAuditDetail
+      OrderAuditDetail,
+      OutboundOrderDetail
     },
     computed: {
+      canReapply: function () {
+        return this.formData.state === 'AUDIT_FAIL' && this.formData.applyUser.uid === this.$store.getters.currentUser.uid;
+      },
       canAudit: function () {
         const uid = this.$store.getters.currentUser.uid;
         if (this.formData.approvers && this.formData.approvers.length > 0) {
@@ -439,7 +449,8 @@
         detailId: '',
         isFormFincance: false,
         pdfVisible: false,
-        fileUrl: ''
+        fileUrl: '',
+        orderVisible: false
       }
     },
     created() {

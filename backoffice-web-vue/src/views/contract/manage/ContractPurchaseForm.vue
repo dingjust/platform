@@ -333,7 +333,8 @@
             'agreementType': agreementType,
             'frameAgreementCode': frameAgreementCode,
             // 'orderCodes': this.orderSelectFiles.map((order) => order.code)
-            'items': this.orderSelectFiles.map((order) => order.id)
+            'items': this.orderSelectFiles.map((order) => order.id),
+            'customizeType': 'CGDD'
           }
 
           if (this.contractType === '2') {
@@ -426,7 +427,8 @@
             'title': '',
             'frameAgreementCode': frameAgreementCode,
             // 'orderCodes': this.orderSelectFiles.map((order) => order.code)
-            'items': this.orderSelectFiles.map((order) => order.id)
+            'items': this.orderSelectFiles.map((order) => order.id),
+            'customizeType': 'CGDD'
           }
           const url = this.apis().saveContract();
           let formData = Object.assign({}, data);

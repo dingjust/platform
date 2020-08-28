@@ -29,7 +29,9 @@
               <h6>申请单号：{{formData.code}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>订单号：{{formData.productionOrder.code}}</h6>
+              <h6>订单号：
+                <el-button type="text" style="font-size: 14px;" @click="orderVisible = true">{{formData.productionOrder.code}}</el-button>
+              </h6>
             </el-col>
             <el-col :span="8">
               <h6>合同号：
@@ -41,7 +43,7 @@
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>申请部门：</h6>
+              <h6>申请部门：{{formData.applyUser.b2bDept ? formData.applyUser.b2bDept.name : ''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6>申请人：{{formData.applyUser.name}}</h6>
@@ -123,6 +125,9 @@
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
       <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
     </el-dialog>
+    <el-dialog :visible.sync="orderVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <outbound-order-detail v-if="orderVisible" :code="formData.productionOrder.id" />
+    </el-dialog>
   </div>
 </template>
 
@@ -140,6 +145,7 @@
     import {
     OrderAuditDetail
   } from '@/views/order/salesProduction/components/'
+  import OutboundOrderDetail from '@/views/order/salesProduction/outbound-order/details/OutboundOrderDetail'
   export default {
     name: 'PaymentRequestDetailFinance',
     props: ['id'],
@@ -151,7 +157,8 @@
       PrinterButton,
       PaymentRecordsList,
       PdfPreview,
-      OrderAuditDetail
+      OrderAuditDetail,
+      OutboundOrderDetail
     },
     computed: { 
       agreementsCode: function () {
@@ -366,7 +373,8 @@
         detailId: '',
         isFormFincance: false,
         pdfVisible: false,
-        fileUrl: ''
+        fileUrl: '',
+        orderVisible: false
       }
     },
     created() {

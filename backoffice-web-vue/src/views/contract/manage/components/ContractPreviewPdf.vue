@@ -16,7 +16,7 @@
 <!--        <h6>是否跳转到合同签署页面？</h6>-->
 <!--      </el-row>-->
 <!--    </el-dialog>-->
-    <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
+    <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;" v-if="!readOnly">
       <Authorized :permission="['AGREEMENT_CREATE']">
         <el-button type="warning" v-if="slotData.state != 'INVALID' && slotData.type && slotData.type != 'BCXY'" @click="onBCXY" class="toolbar-search_input">增加补充协议
         </el-button>
@@ -81,7 +81,19 @@
 
   export default {
     name: 'ContractPreviewPdf',
-    props: ['slotData', 'fileUrl'],
+    props: {
+      slotData: {
+        required: true
+      },
+      fileUrl: {
+        required: true
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
+      }
+    },
+    // props: ['slotData', 'fileUrl'],
     components: {
       ContractSealList,
       ContractSupplementForm

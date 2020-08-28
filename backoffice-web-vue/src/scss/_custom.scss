@@ -185,6 +185,10 @@
   margin-bottom: 0px !important;
 }
 
+.el-table__body tr.current-row>td {
+  background-color: #ffd60c!important;
+}
+
 @font-face {
   font-family: 'iconfont';
   /* project id 1329132 */
