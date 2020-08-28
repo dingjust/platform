@@ -76,7 +76,7 @@
             </el-col> -->
               <el-col :span="18">
                 <el-select v-model="item.payPercent" @change="$forceUpdate()">
-                  <el-option v-for="percent in 99" :value="percent*0.01" :label="percent+'%'" :key="'percent'+percent">
+                  <el-option v-for="percent in 99" :value="(percent*0.01).toFixed(2)" :label="percent+'%'" :key="'percent'+percent">
                   </el-option>
                 </el-select>
               </el-col>
@@ -444,6 +444,12 @@
             break;
         }
 
+        result.forEach((data) => {
+          if(data.payPercent){
+            data.payPercent = parseFloat(data.payPercent).toFixed(2);
+          }
+
+        });
         this.formData.payPlanItems = result;
         return result;
       },
@@ -488,6 +494,7 @@
                   '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
                   (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
                     ' *') + '支付相应款项';
+                  result += '（以上所有款项金额以双方对账金额为准）';
               } else {
                 result += '：每月' + (payPlanItem.monthlyEndDayNum ?
                     (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*') +
@@ -496,6 +503,9 @@
                   '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
                   (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
                     ' *') + '支付相应款项';
+                  if(payPlanItem.moneyType === 'MONTHLY_SETTLEMENT_ONE'){
+                    result += '（以上所有款项金额以双方对账金额为准）';
+                  }
               }
               break;
           }
