@@ -4,13 +4,13 @@
       @selection-change="handleSelectionChange" @row-click="rowClick">
       <el-table-column type="selection" :reserve-selection="true" width="55" v-if="isSelect"></el-table-column>
       <el-table-column label="外发订单号" prop="code"></el-table-column>
-      <el-table-column label="合作商">
+      <el-table-column label="合作商" :show-overflow-tooltip="true" min-width="120">
         <template slot-scope="scope">
           <span>{{getCooperator(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联产品数" prop="entrySize"></el-table-column>
-      <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
+      <el-table-column label="跟单员" prop="merchandiser.name" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
@@ -23,9 +23,9 @@
       </el-table-column>
       <el-table-column label="订单标签">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
-            <i class="el-icon-warning warning-icon"></i>
-          </el-tooltip>
+          <el-tag :type="isAgreementsComplete(scope.row)?'success':'info'">
+            {{isAgreementsComplete(scope.row)?'已签合同':'未签合同'}}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="70">
@@ -35,6 +35,13 @@
             <el-button v-if="canModify(scope.row)" type="text" @click="onModify(scope.row)"
               class="purchase-list-button">修改</el-button>
           </el-row>
+        </template>
+      </el-table-column>
+      <el-table-column label="">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
+            <i class="el-icon-warning warning-icon"></i>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -119,6 +126,14 @@
       isApplyCanceling(row) {
         if (row.currentCancelApply != null && row.currentCancelApply.state == 'PENDING') {
           return true;
+        }
+        return false;
+      },
+      //判断是否已签合同
+      isAgreementsComplete(row) {
+        if (row.agreements) {
+          let index = row.agreements.findIndex(entry => entry.state == 'COMPLETE');
+          return index != -1;
         }
         return false;
       }

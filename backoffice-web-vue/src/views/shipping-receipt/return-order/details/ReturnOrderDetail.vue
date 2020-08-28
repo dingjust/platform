@@ -48,7 +48,7 @@
               <h6 class="basic-label">退货人：{{formData.creator?formData.creator.name:''}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">联系方式：{{formData.creator.contactPhone}}</h6>
+              <h6 class="basic-label">联系方式：{{formData.creator?formData.creator.contactPhone:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">

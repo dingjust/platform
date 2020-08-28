@@ -20,29 +20,23 @@
       </div>
     </el-dialog>
     <el-form :model="formData" ref="payPlanForm" :disabled="readOnly">
-      <el-row type="flex" justify="start" align="middle" :gutter="35">
-        <el-col :span="8">
-          <el-form-item label="有无定金" label-width="120">
-            <el-radio :label="true" v-model="formData.isHaveDeposit">有定金</el-radio>
-            <el-radio :label="false" v-model="formData.isHaveDeposit">无定金</el-radio>
-          </el-form-item>
-        </el-col>
-        <el-col :span="16">
-          <el-form-item label="尾款期数" label-width="120">
-            <template v-for="item in payPlanTypes">
-              <el-radio :label="item.code" :key="item.code" v-model="formData.payPlanType">{{item.name}}</el-radio>
-            </template>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row type="flex" v-if="isUseForOrder&&(!readOnly)" justify="end" class="info-order-row">
-        <h6 class="form-plane-name">账务方案</h6>
-        <el-button @click="payPlanSelectDialogVisible=true" plain size="mini" class="select-payplan-btn">
-          {{formData.name!=undefined?formData.name:'点击选择已有账务方案'}}</el-button>
-        <!-- <Authorized :permission="['PAY_PLAN_OPERATE']">
-        <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini" class="save-plan-btn">保存账务方案
-        </el-button>
-      </Authorized> -->
+      <el-row type="flex" justify="start" align="middle">
+        <el-form-item label="有无定金" label-width="80px">
+          <el-radio :label="true" v-model="formData.isHaveDeposit">有定金</el-radio>
+          <el-radio :label="false" v-model="formData.isHaveDeposit">无定金</el-radio>
+        </el-form-item>
+        <el-form-item label="尾款期数" label-width="80px" style="margin-left:20px;margin-right:20px">
+          <template v-for="item in payPlanTypes">
+            <el-radio :label="item.code" :key="item.code" v-model="formData.payPlanType">{{item.name}}</el-radio>
+          </template>
+        </el-form-item>
+        <div style="margin: 0 0 8px 20px">
+          <el-row type="flex" v-if="isUseForOrder&&(!readOnly)" justify="end" class="info-order-row" align="middle">
+            <h6 class="form-plane-name">账务方案</h6>
+            <el-button @click="payPlanSelectDialogVisible=true" plain size="mini" class="select-payplan-btn">
+              {{formData.name!=undefined?formData.name:'选择已有账务方案'}}</el-button>
+          </el-row>
+        </div>
       </el-row>
       <div v-for="(item,index) in payPlanItems" :key="'item'+index">
         <el-row v-if="!(item.moneyType === 'MONTHLY_SETTLEMENT_ONE' || item.moneyType === 'MONTHLY_SETTLEMENT_TWO')"

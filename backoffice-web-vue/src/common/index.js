@@ -793,11 +793,11 @@ const COMMON_APIS = {
     return '/b2b/audit/order/order/list';
   },
   // 审核任务
-  taskAudit () {
+  taskAudit() {
     return '/b2b/audit/order/order/audit';
   },
   // 审核撤回
-  revokeTask (id) {
+  revokeTask(id) {
     return '/b2b/audit/order/order/revoke/' + id;
   },
   // 获取进度工单列表
@@ -1471,6 +1471,10 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/receipt/create';
   },
 
+  //创建自管收货单
+  selfReceiptOrderCreate() {
+    return '/b2b/sheets/receipt/createByTask';
+  },
 
   //收货单列表
   receiptOrderList() {

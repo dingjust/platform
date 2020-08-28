@@ -49,7 +49,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini" :disabled="hasOrigin">选择供应商
+            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini" :disabled="hasOrigin">选择合作商
             </el-button>
           </el-col>
         </el-row>

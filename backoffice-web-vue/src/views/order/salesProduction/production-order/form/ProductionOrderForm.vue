@@ -34,7 +34,7 @@
             </el-col>
             <el-col :span="4" :offset="1">
               <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini"
-                         :disabled="formData.isSelfProduction">选择供应商</el-button>
+                         :disabled="formData.isSelfProduction">选择合作商</el-button>
             </el-col>
           </el-row>
           <el-row>

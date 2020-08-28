@@ -91,10 +91,14 @@
       //收货总额
       totalReceiptAmount(sheet) {
         let unitPrice = 0;
+        let quantity=0;
         if (this.formData.productionTaskOrder.unitPrice) {
           unitPrice = this.formData.productionTaskOrder.unitPrice;
         }        
-        return unitPrice * sheet.totalQuantity;
+        if(sheet.totalQuantity){
+          quantity=sheet.totalQuantity;
+        }
+        return (unitPrice * quantity).toFixed(2);
       },
       getSummaries(param) {
         const {

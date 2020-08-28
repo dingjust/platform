@@ -23,16 +23,18 @@
       <el-col :span="3">
         <h6>应发数：{{cropTotalNum}}</h6>
       </el-col>
-      <el-col :span="3">
-        <h6>已发数：{{totalShippingNum}}</h6>
-      </el-col>
-      <el-col :span="3">
-        <h6>已退数：{{totalReturnNum}}</h6>
-      </el-col>
+      <template v-if="!isAutogestion">
+        <el-col :span="3">
+          <h6>已发数：{{totalShippingNum}}</h6>
+        </el-col>
+        <el-col :span="3">
+          <h6>已退数：{{totalReturnNum}}</h6>
+        </el-col>
+      </template>
       <el-col :span="3">
         <h6>实收数：{{totalReceiptNum}}</h6>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="3" v-if="!isAutogestion">
         <h6>差异数：{{totalDiffNum}}</h6>
       </el-col>
     </el-row>
@@ -50,6 +52,13 @@
       ColorSizeTable
     },
     computed: {
+      //是否自管类型
+      isAutogestion: function () {
+        if (this.formData.productionTaskOrder && this.formData.productionTaskOrder.managementMode) {
+          return this.formData.productionTaskOrder.managementMode == 'AUTOGESTION';
+        }
+        return false;
+      },
       // 处理裁剪数量数据
       cropColorSizeEntry: function () {
         if (this.formData.colorSizeEntries != null) {
@@ -128,16 +137,11 @@
       //统计收货总数
       totalReceiptNum: function () {
         let result = 0;
-        if (this.formData.shippingSheets != null) {
-          this.formData.shippingSheets.forEach(element => {
-            //统计对应退货单数
-            if (element.receiptSheets != null) {
-              element.receiptSheets.forEach(sheet => {
-                let num = parseInt(sheet.totalQuantity);
-                if (!Number.isNaN(num)) {
-                  result += num;
-                }
-              });
+        if (this.formData.receiptSheets != null) {
+          this.formData.receiptSheets.filter(sheet => sheet.totalQuantity).forEach(element => {
+            let num = parseInt(element.totalQuantity);
+            if (!Number.isNaN(num)) {
+              result += num;
             }
           });
         }
