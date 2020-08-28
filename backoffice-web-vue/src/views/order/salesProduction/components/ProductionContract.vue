@@ -2,27 +2,29 @@
   <div class="production-contract">
     <div class="contract-title">
       <div :class="readOnly ? 'contract-list-title': ''">
-        <h6 :class="readOnly ? 'info-title_text' : ''">合同：
+        <h6 style="margin: 0px" :class="readOnly ? 'info-title_text' : ''">合同：
           <span style="color: #909399">{{this.contracts.length > 0 ? '(已创建)' : '(未上传)'}}</span>
         </h6>
       </div>
       <div v-if="!readOnly">
-        <el-button type="text" @click="onUpload">
-          <template v-if="isSignedPaper">
-            <el-row type="flex" justify="center" align="middle">
-              <i class="iconfont2_2" style="font-size: 30px;">&#xe6b9;</i>
-            </el-row>
-            <el-row type="flex" justify="center" align="middle">
-              <h6 class="upload-text">点击上传</h6>
-            </el-row>
-          </template>
-          <template v-else>去创建合同</template>
-        </el-button>
+        <Authorized :permission="['AGREEMENT_CREATE']">
+          <el-button type="text" @click="onUpload" style="padding: 0px;">
+            <template v-if="isSignedPaper">
+              <el-row type="flex" justify="center" align="middle">
+                <i class="iconfont2_2" style="font-size: 20px;">&#xe6b9;</i>
+              </el-row>
+              <el-row type="flex" justify="center" align="middle">
+                <h6 class="upload-text">点击上传</h6>
+              </el-row>
+            </template>
+            <template v-else>去创建合同</template>
+          </el-button>
+        </Authorized>
       </div>
     </div>
     <el-row type="flex" justify="start" align="middle">
       <template v-for="item in contracts">
-        <el-col :span="8" :key="item.code" :title="item.title" @click.native="showContract(item)" class="contract-item" style="width: 80px">
+        <el-col :span="6" :key="item.code" :title="item.title" @click.native="showContract(item)" class="contract-item" style="width: 60px">
           <el-row type="flex" justify="center" align="middle">
             <!-- <div style="position: absolute;">
               <h6 class="state-title">{{item.state === 'COMPLETE' ? '已签署' : '未签署'}}</h6>
@@ -147,6 +149,10 @@ export default {
 </script>
 
 <style scoped>
+  .production-contract {
+    height: 130px;
+  }
+
   .contract-title {
     display: flex;
     justify-content: space-between;
