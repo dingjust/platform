@@ -11,6 +11,9 @@
           <h6>单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <h6>状态：{{getEnum('ReceiveDispatchTaskState', formData.state)}}</h6>
         </el-col>
       </el-row>
