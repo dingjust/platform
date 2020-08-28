@@ -333,7 +333,6 @@
         this.$set(this, 'shippingOrder', JSON.parse(JSON.stringify(this.$route.params.shippingOrder)));
         this.initSummaryData();
       } else if (this.$route.params.shippingOrderId != null) {
-
         this.getShippingOrderDetail(this.$route.params.shippingOrderId);
       } else {
         this.$router.go(-1);

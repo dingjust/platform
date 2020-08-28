@@ -1,10 +1,17 @@
+<!-- 
+ * @description: 自管发货订单
+ * @fileName: SelfReceiptOrderForm.vue 
+ * @author: yj 
+ * @date: 2020-08-27 16:58:55
+ * @version: V1.0.0 
+!-->
 <template>
-  <div class="animated fadeIn content form-container">
+  <div class="animated fadeIn form-container">
     <el-card>
       <el-row>
         <el-col :span="4">
           <div class="title">
-            <h6>创建发货单</h6>
+            <h6>创建收货单</h6>
           </div>
         </el-col>
       </el-row>
@@ -40,50 +47,6 @@
             <el-row type="flex" style="padding-bottom: 10px">
               <h6 class="baisc-lable">收货地址：{{taskData.deliveryAddress!=null?taskData.deliveryAddress.details:''}}</h6>
             </el-row>
-            <el-row type="flex" align="middle">
-              <el-col :span="8">
-                <el-form-item label="发货方式" prop="consignment.carrierDetails.code" label-width="80px"
-                  :rules="{required: !formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
-                  <el-select v-model="formData.consignment.carrierDetails.code"
-                    :disabled="formData.isOfflineConsignment" :placeholder="''">
-                    <template v-for="item in carriers">
-                      <el-option :label="item.name" :value="item.code" :key="item.code"></el-option>
-                    </template>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="物流单号" prop="consignment.trackingID" label-width="80px"
-                  :rules="{required: !formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
-                  <el-input v-model="formData.consignment.trackingID" style="width: 194px"
-                    :disabled="formData.isOfflineConsignment"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-checkbox v-model="formData.isOfflineConsignment" @change="isOnline"></el-checkbox>
-                <span class="basci-label">线下物流<span style="color: #F56C6C">(勾选后无需填写发货方式和单号)</span></span>
-              </el-col>
-            </el-row>
-            <el-row type="flex" align="middle" v-if="formData.isOfflineConsignment" style="margin-top:20px">
-              <el-col :span="8">
-                <el-form-item label="物流方式" prop="offlineConsignorMode" label-width="80px"
-                  :rules="{required: formData.isOfflineConsignment, message: '不能为空', trigger: 'blur'}">
-                  <el-input style="width: 194px" v-model="formData.offlineConsignorMode"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="送货人" prop="offlineConsignorName" label-width="80px"
-                  :rules="{required: false, message: '不能为空', trigger: 'blur'}">
-                  <el-input style="width: 194px" v-model="formData.offlineConsignorName"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="联系方式" prop="offlineConsignorPhone" label-width="80px"
-                  :rules="{required: false, message: '不能为空', trigger: 'blur'}">
-                  <el-input style="width: 194px" v-model="formData.offlineConsignorPhone"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" class="basic-row">
@@ -104,7 +67,8 @@
     ColorSizeBoxTable
   } from '@/components/'
   export default {
-    name: 'ShippingOrdersPage',
+    name: 'SelfReceiptOrderForm',
+    props: ['taskData'],
     components: {
       ColorSizeBoxTable
     },
@@ -128,20 +92,20 @@
         }
         this.carriers = result;
       },
-      isOnline(flag) {
-        if (flag) {
-          this.formData.consignment.carrierDetails = {
-            code: '',
-            name: ''
-          };
-          this.formData.consignment.trackingID = '';
-        }
-        //校验线上表单字段
-        this.$nextTick(() => {
-          this.$refs.form.validateField('consignment.carrierDetails.code');
-          this.$refs.form.validateField('consignment.trackingID');
-        });
-      },
+      // isOnline(flag) {
+      //   if (flag) {
+      //     this.formData.consignment.carrierDetails = {
+      //       code: '',
+      //       name: ''
+      //     };
+      //     this.formData.consignment.trackingID = '';
+      //   }
+      //   //校验线上表单字段
+      //   this.$nextTick(() => {
+      //     this.$refs.form.validateField('consignment.carrierDetails.code');
+      //     this.$refs.form.validateField('consignment.trackingID');
+      //   });
+      // },
       valiadteForm() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
@@ -157,7 +121,7 @@
         this.$refs['form'].validate((valid) => {
           if (valid) {
             //校验通过
-            this.$confirm('是否确定创建发货单', '提示', {
+            this.$confirm('是否确定创建收货单', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
@@ -171,7 +135,7 @@
         });
       },
       async _onSubmit() {
-        const url = this.apis().shippingOrderCreate();
+        const url = this.apis().selfReceiptOrderCreate();
         let submitForm = Object.assign({}, this.formData);
         const result = await this.$http.post(url, submitForm, {
           taskId: this.taskData.id
@@ -191,34 +155,17 @@
     data() {
       return {
         formData: {
-          consignment: {
-            trackingID: '',
-            carrierDetails: {
-              code: '',
-              name: ''
-            }
-          },
-          isOfflineConsignment: false,
-          offlineConsignorName: '',
-          offlineConsignorPhone: '',
-          offlineConsignorMode: "",
-          packageSheets: []
+          packageSheets: [],
+          receivingMode:'BY_LIST'
         },
-        taskData: '',
         carriers: ''
       }
     },
     created() {
-      if (this.$route.params.taskData) {
-        this.taskData = this.$route.params.taskData;
-        this.getCarriers();
-      } else {
+      if (!this.taskData) {
         this.$router.go(-1);
       }
     },
-    destroyed() {
-
-    }
   }
 
 </script>

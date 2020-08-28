@@ -2,25 +2,23 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :height="autoHeight">
-      <el-table-column label="主订单号" prop="code" min-width="130" v-if="!isPending" />
-      <el-table-column label="业务订单号" min-width="130" v-if="isPending">
+      <el-table-column label="主订单号" prop="code" min-width="110" v-if="!isPending" />
+      <el-table-column label="业务订单号" min-width="110" v-if="isPending">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
+            <span>{{scope.row.code}}</span>
             <el-tag type="info" effect="plain"
               :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
-              {{scope.row.originCompany == null ? '业务订单' : '线上接单'}}</el-tag>
-          </el-row>
-          <el-row type="flex" justify="space-between" align="middle">
-            <span>{{scope.row.code}}</span>
+              {{scope.row.originCompany == null ? '自创' : '线上'}}</el-tag>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="客户" v-if="isPending">
+      <el-table-column label="客户" v-if="isPending" :show-overflow-tooltip="true" min-width="120">
         <template slot-scope="scope">
           <span>{{cooperatorName(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" prop="creator.name">
+      <el-table-column label="创建人" prop="creator.name" :show-overflow-tooltip="true">
       </el-table-column>
       <el-table-column label="生产负责人" prop="productionLeader.name" v-if="!isPending">
       </el-table-column>
@@ -41,9 +39,9 @@
       </el-table-column>
       <el-table-column label="订单标签" min-width="100">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
-            <i class="el-icon-warning warning-icon"></i>
-          </el-tooltip>
+          <el-tag :type="isAgreementsComplete(scope.row)?'success':'info'">
+            {{isAgreementsComplete(scope.row)?'已签合同':'未签合同'}}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
@@ -53,6 +51,13 @@
             <!-- <el-divider direction="vertical"></el-divider>
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">删除</el-button> -->
           </el-row>
+        </template>
+      </el-table-column>
+      <el-table-column label="">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
+            <i class="el-icon-warning warning-icon"></i>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -195,6 +200,14 @@
       isApplyCanceling(row) {
         if (row.currentCancelApply != null && row.currentCancelApply.state == 'PENDING') {
           return true;
+        }
+        return false;
+      },
+      //判断是否已签合同
+      isAgreementsComplete(row) {
+        if (row.agreements) {
+          let index = row.agreements.findIndex(entry => entry.state == 'COMPLETE');
+          return index != -1;
         }
         return false;
       }
