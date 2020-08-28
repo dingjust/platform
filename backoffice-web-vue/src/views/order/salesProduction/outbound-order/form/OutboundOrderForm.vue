@@ -138,14 +138,7 @@
           <el-col :span="2">
             <el-button class="outbound-btn" @click="progressPlanVisible = !progressPlanVisible">选择</el-button>
           </el-col>
-        </el-row> -->
-        <el-row>
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>财务设置</h6>
-            </div>
-          </el-col>
-        </el-row>
+        </el-row> -->        
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
           <el-col :span="24">
             <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom" />
