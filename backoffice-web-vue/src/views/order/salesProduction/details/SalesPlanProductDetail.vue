@@ -105,7 +105,7 @@
               <h6 class="info-input-prepend">外发合作方式:&#12288;{{product.outPrice}}</h6>
             </el-col>
             <el-col :span="5">
-              <h6 class="info-input-prepend">是否开发票:&#12288;{{product.date}}</h6>
+              <h6 class="info-input-prepend">是否开票:&#12288;{{product.date}}</h6>
             </el-col>
             <el-col :span="5">
               <h6 class="info-input-prepend">税点:&#12288;{{product.scale}}</h6>

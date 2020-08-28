@@ -11,6 +11,10 @@
             <el-tag v-if="scope.row.type!=null" type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
               {{getEnum('ProductionTaskOrderType', scope.row.type)}}</el-tag>
           </el-row>
+          <el-row type="flex" justify="space-between" align="middle" v-if="isOutProduction">            
+            <el-tag v-if="scope.row.managementMode=='AUTOGESTION'" type="warning">自管</el-tag>
+            <el-tag v-else type="success">协同</el-tag>
+          </el-row>
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
           </el-row>

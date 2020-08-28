@@ -19,7 +19,7 @@
         <h6>合作方式:&#12288;{{getEnum('cooperationModes', form.type)}}</h6>
       </el-col>
       <el-col :span="8">
-        <h6>是否开发票:&#12288;{{form.fapiao}}</h6>
+        <h6>是否开票:&#12288;{{form.fapiao}}</h6>
       </el-col>
       <el-col :span="8">
         <h6>入仓方式:&#12288;{{form.warehouse}}</h6>

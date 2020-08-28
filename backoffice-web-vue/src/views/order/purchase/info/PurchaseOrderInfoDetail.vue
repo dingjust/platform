@@ -44,7 +44,7 @@
               </orders-info-item>
             </el-col>
             <el-col :span="6">
-              <orders-info-item :slotData="'是否开发票'">
+              <orders-info-item :slotData="'是否开票'">
                 {{slotData.invoiceNeeded?('开发票'+slotData.invoiceTaxPoint*100+'%税点'):'不开发票'}}</orders-info-item>
             </el-col>
           </el-row>
