@@ -56,7 +56,7 @@
         <template slot-scope="scope">
           <!-- 自管类型 -->
           <template v-if="scope.row.managementMode!=null&&scope.row.managementMode=='AUTOGESTION'">
-            <span>{{scope.row.targetCooperator.name}}</span>
+            <span>{{scope.row.targetCooperator?scope.row.targetCooperator.name:''}}</span>
           </template>
           <template v-else>
             <span>{{scope.row.belongTo.name}}</span>

@@ -1,8 +1,8 @@
 <template>
   <div class="po-relation-box">
     <el-tabs type="border-card" @tab-click="handleClick" :lazy="true">
-      <el-tab-pane label="外发订单">
-        <production-order-outbound-list v-if="showOutbound&&isMySelf" :page="page" :pageType="pageType" />
+      <el-tab-pane label="外发订单" v-if="showOutbound&&isMySelf">
+        <production-order-outbound-list  :page="page" :pageType="pageType" />
       </el-tab-pane>
       <el-tab-pane label="收发货">
         <shipping-tasks-detail :lazy="true" v-if="receiveDispatchTaskId" :id="receiveDispatchTaskId" shadow="hover"

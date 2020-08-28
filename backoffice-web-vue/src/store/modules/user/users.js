@@ -46,6 +46,7 @@ const mutations = {
     state.currentUser = currentUser;
   },
   authenticationInfo(state, authenticationInfo) {
+    sessionStorage.setItem('authenticationInfo', JSON.stringify(authenticationInfo));
     state.authenticationInfo = authenticationInfo;
   },
   permissions(state, permissions) {
@@ -121,6 +122,7 @@ const actions = {
     const result = await http.get('/b2b/cert/state');
     if (!result['errors']) {
       commit('authenticationInfo', result.data);
+
     }
 
     // 获取用户权限
@@ -194,7 +196,9 @@ const getters = {
     return 'Bearer ' + sessionStorage.getItem('token');
     // return 'Bearer ' + state.token;
   },
-  authenticationInfo: state => state.authenticationInfo,
+  authenticationInfo(){
+    return JSON.parse(sessionStorage.getItem('authenticationInfo'));
+  },
   permissions() {
     if (state.permissions.length <= 0) {
       return JSON.parse(sessionStorage.getItem('permissions'));

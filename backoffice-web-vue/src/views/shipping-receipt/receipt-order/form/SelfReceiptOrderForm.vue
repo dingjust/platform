@@ -119,6 +119,26 @@
         });
       },
       onSubmit() {
+        //校验数量
+        let totalNum = 0;
+        if (this.formData.packageSheets) {
+          this.formData.packageSheets.forEach(sheet => {
+            if (sheet.colorSizeEntries) {
+              sheet.colorSizeEntries.forEach(entry => {
+                let num = parseFloat(entry.quantity);
+                if (!Number.isNaN(num)) {
+                  totalNum += num;
+                }
+              });
+            }
+          });
+        }
+
+        if (totalNum < 1) {
+          this.$message.error('请填写数量');
+          return false;
+        }
+
         //校验表单
         this.$refs['form'].validate((valid) => {
           if (valid) {
