@@ -5,37 +5,37 @@
         <div class="info-box">
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col :span="12">
-              <h6>合作方式：{{getEnum('machiningTypes', slotData.cooperationMode)}}</h6>
+              <h6 class="sales-plan-h6"><span>合作方式：</span>{{getEnum('machiningTypes', slotData.cooperationMode)}}</h6>
             </el-col>
             <el-col :span="12">
-              <h6>是否开票：{{slotData.invoiceNeeded ? '是' : '否'}}<span style="margin-left:5px"
-                  v-if="slotData.invoiceNeeded">{{slotData.invoiceTaxPoint * 100}}%</span></h6>
+              <h6 class="sales-plan-h6"><span>是否开票：</span>{{slotData.invoiceNeeded ? '是' : '否'}}<span
+                  style="margin-left:5px" v-if="slotData.invoiceNeeded">{{slotData.invoiceTaxPoint * 100}}%</span></h6>
             </el-col>
           </el-row>
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col :span="9">
-              <h6>生产总数：{{slotData.totalQuantity}}</h6>
+              <h6 class="sales-plan-h6"><span>生产总数：</span>{{slotData.totalQuantity}}</h6>
             </el-col>
             <el-col :span="15">
-              <h6>生产总价：{{totalAmount}}元</h6>
+              <h6 class="sales-plan-h6"><span>生产总价：</span>{{totalAmount}}元</h6>
             </el-col>
           </el-row>
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col :span="24">
-              <h6>送货地址：{{slotData.taskOrderEntries[0].shippingAddress.details}}</h6>
+              <h6 class="sales-plan-h6"><span>送货地址：</span>{{slotData.taskOrderEntries[0].shippingAddress.details}}</h6>
             </el-col>
           </el-row>
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col :span="24">
-              <h6>财务</h6>
+              <h6 class="sales-plan-h6"><span>财务</span></h6>
             </el-col>
           </el-row>
           <el-row class="info-basic-row" type="flex" align="middle" justify="start" v-popover:popover>
             <el-col :span="9">
-              <h6>有无定金：{{slotData.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
+              <h6 class="sales-plan-h6"><span>有无定金：</span>{{slotData.payPlan.isHaveDeposit ? '有定金' : '无定金'}}</h6>
             </el-col>
             <el-col :span="9">
-              <h6>尾款期数：{{payPlanType[slotData.payPlan.payPlanType]}}</h6>
+              <h6 class="sales-plan-h6"><span>尾款期数：</span>{{payPlanType[slotData.payPlan.payPlanType]}}</h6>
             </el-col>
           </el-row>
         </div>
@@ -44,44 +44,41 @@
         <div class="info-box">
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col>
-              <h5 style="font-weight: bold">合作商信息</h5>
-            </el-col>
-          </el-row>
-          <el-row class="info-basic-row" type="flex" align="middle" justify="start">
-            <el-col>
-              <h6>合作工厂：{{slotData.targetCooperator.type == 'ONLINE' ?
+              <h6 class="sales-plan-h6"><span>合作商：</span>{{slotData.targetCooperator.type == 'ONLINE' ?
               slotData.targetCooperator.partner.name : slotData.targetCooperator.name}}</h6>
             </el-col>
           </el-row>
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col :span="12">
-              <h6>联系人：{{slotData.targetCooperator.type == 'ONLINE' ?
+              <h6 class="sales-plan-h6"><span>联系人：</span>{{slotData.targetCooperator.type == 'ONLINE' ?
               slotData.targetCooperator.partner.contactPerson : slotData.targetCooperator.contactPerson}}</h6>
             </el-col>
             <el-col :span="12">
-              <h6>联系方式：{{slotData.targetCooperator.type == 'ONLINE' ?
+              <h6 class="sales-plan-h6"><span>联系方式：</span>{{slotData.targetCooperator.type == 'ONLINE' ?
               slotData.targetCooperator.partner.contactPhone : slotData.targetCooperator.contactPhone}}</h6>
             </el-col>
           </el-row>
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col>
-              <h5 style="font-weight: bold">人员设置</h5>
+              <h6 style="font-weight: bold" class="sales-plan-h6"><span>人员设置</span></h6>
             </el-col>
           </el-row>
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col :span="12">
-              <h6 class="hide-text" :title="slotData.merchandiser ? slotData.merchandiser.name : ''">
-                跟单员：{{slotData.merchandiser ? slotData.merchandiser.name : ''}}</h6>
+              <h6 class="hide-text sales-plan-h6" :title="slotData.merchandiser ? slotData.merchandiser.name : ''">
+                <span>
+                  跟单员：</span>{{slotData.merchandiser ? slotData.merchandiser.name : ''}}</h6>
             </el-col>
             <el-col :span="12">
-              <h6>联系方式：{{slotData.merchandiser ? slotData.merchandiser.mobileNumber : ''}}</h6>
+              <h6 class="sales-plan-h6">
+                <span>联系方式：</span>{{slotData.merchandiser ? slotData.merchandiser.mobileNumber : ''}}</h6>
             </el-col>
           </el-row>
         </div>
       </el-col>
       <el-col :span="6">
         <div class="info-box" style="padding: 10px 0px 0px 5px;">
-          <production-contract :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback"/>
+          <production-contract :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback" />
           <!-- <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <contract-com :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback" />
           </el-row> -->
@@ -89,7 +86,7 @@
       </el-col>
     </el-row>
     <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
-<!--      <pay-plan-info :form="payPlan"></pay-plan-info>-->
+      <!--      <pay-plan-info :form="payPlan"></pay-plan-info>-->
       <h6 v-html="getHtmlText(payPlan.previewText)"></h6>
     </el-popover>
   </div>
@@ -134,7 +131,7 @@
           return false;
         }
         return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
-              (this.slotData.state === 'AUDIT_PASSED' || this.slotData.state === 'COMPLETED')
+          (this.slotData.state === 'AUDIT_PASSED' || this.slotData.state === 'COMPLETED')
         // 未签合同 && 账号为merchandiser && 审核状态为 PASSED
         // if (this.slotData.agreements == undefined || this.slotData.agreements == null || this.slotData.agreements.length <= 0) {
         //   return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
@@ -206,6 +203,26 @@
     border: 1px solid #dcdfe6;
     border-radius: 10px;
     padding-right: 10px;
+  }
+
+  .sales-plan-h6 {
+    white-space: nowrap;
+    padding-top: 8px;
+    font-size: 12px;
+  }
+
+  .sales-plan-h6-hide {
+    padding-top: 8px;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .sales-plan-h6 span {
+    font-weight: bold;
+    font-size: 14px;
+    border: none
   }
 
 </style>
