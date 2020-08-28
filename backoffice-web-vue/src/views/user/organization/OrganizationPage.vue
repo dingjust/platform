@@ -79,7 +79,7 @@
         }
         this.deptList = [{
           id: 0,
-          name: '全部',
+          name: this.$store.getters.currentUser.companyName,
           depth: 0,
           children: result.data 
         }];
