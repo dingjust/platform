@@ -55,7 +55,7 @@
       <el-col :span="8">
         <el-form-item label="跟单人">
 <!--          <el-input v-model="formData.personInCharge.name" :disabled="isRead"></el-input>-->
-          <personnel-selection :vPerson.sync="formData.personInCharge" :read-only="isRead"/>
+          <personnel-selection :vPerson.sync="formData.personInCharge" :read-only="true"/>
         </el-form-item>
       </el-col>
     </el-row>

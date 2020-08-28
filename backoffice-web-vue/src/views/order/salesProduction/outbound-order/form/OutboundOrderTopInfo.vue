@@ -1,7 +1,52 @@
 <template>
   <div>
     <el-row type="flex" :gutter="10">
-      <el-col :span="10">
+      <el-col :span="18">
+        <el-row type="flex" justify="start" style="margin-left: 15px;margin-top: 10px">
+          <h6 style="margin: 0px;">订单基本信息</h6>
+        </el-row>
+        <el-row type="flex" justify="start" style="margin: 15px 0px 0px 24px;">
+          <el-col :span="9">
+            <h6>合作商：{{slotData.targetCooperator.type == 'ONLINE' ?
+              slotData.targetCooperator.partner.name : slotData.targetCooperator.name}}</h6>
+          </el-col>
+          <el-col :span="5">
+            <h6>合作方式：{{getEnum('machiningTypes', slotData.cooperationMode)}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>是否开票：{{slotData.invoiceNeeded ? '是' : '否'}}<span style="margin-left:5px"
+                v-if="slotData.invoiceNeeded">{{slotData.invoiceTaxPoint * 100}}%</span></h6>
+          </el-col>
+          <el-col :span="4">
+            <h6>生产总数：{{slotData.totalQuantity}}</h6>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" style="margin: 10px 0px 0px 24px;">
+          <el-col :span="9">
+            <h6>生产总价：{{totalAmount}}元</h6>
+          </el-col>
+          <el-col :span="5">
+            <h6 class="hide-text" :title="slotData.merchandiser ? slotData.merchandiser.name : ''">
+                跟单员：{{slotData.merchandiser ? slotData.merchandiser.name : ''}}</h6>
+          </el-col>
+          <el-col :span="10">
+            <h6>送货地址：{{slotData.taskOrderEntries[0].shippingAddress.details}}</h6>
+          </el-col>
+        </el-row>
+        <!-- <el-row type="flex" justify="start" style="margin: 10px 0px 0px 24px;">
+          <el-col :span="9">
+            <h6>送货地址：{{slotData.taskOrderEntries[0].shippingAddress.details}}</h6>
+          </el-col>
+        </el-row> -->
+        <el-row type="flex" align="middle" justify="start" style="margin: 10px 0px 0px 24px;">
+          <el-col :span="12">
+            <h6 style="display: inline-block;" v-popover:popover>
+              有无定金：{{slotData.payPlan.isHaveDeposit ? '有定金' : '无定金'}} + {{payPlanType[slotData.payPlan.payPlanType]}}
+            </h6>
+          </el-col>
+        </el-row>
+      </el-col>
+      <!-- <el-col :span="10">
         <div class="info-box">
           <el-row class="info-basic-row" type="flex" align="middle" justify="start">
             <el-col :span="12">
@@ -78,16 +123,15 @@
             </el-col>
           </el-row>
         </div>
-      </el-col>
+      </el-col> -->
       <el-col :span="6">
-        <div class="info-box" style="padding: 10px 0px 0px 5px;">
+        <div class="info-box" style="padding: 5px 0px 0px 5px;">
           <production-contract :slotData="slotData" :contracts="contracts" 
                                 :canSign="canSign" @callback="callback" :isSignedPaper="isSignedPaper"/>
         </div>
       </el-col>
     </el-row>
     <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
-<!--      <pay-plan-info :form="payPlan"></pay-plan-info>-->
       <h6 v-html="getHtmlText(payPlan.previewText)"></h6>
     </el-popover>
   </div>
