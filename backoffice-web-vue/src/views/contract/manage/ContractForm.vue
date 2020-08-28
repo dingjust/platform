@@ -302,7 +302,8 @@
           'customizeCode': this.contractCode,
           'agreementType': agreementType,
           // 'orderCodes': this.orderSelectFiles.map((order) => order.code)
-          'items': this.orderSelectFiles.map((order) => order.id)
+          'items': this.orderSelectFiles.map((order) => order.id),
+          'customizeType': 'WTSCHT'
         }
 
         if (this.contractType === '2') {
@@ -393,7 +394,8 @@
           'title': '',
           'frameAgreementCode': frameAgreementCode,
           // 'orderCodes': this.orderSelectFiles.map((order) => order.code)
-          'items': this.orderSelectFiles.map((order) => order.id)
+          'items': this.orderSelectFiles.map((order) => order.id),
+          'customizeType': 'WTSCHT'
         }
         console.log(data);
         const url = this.apis().saveContract();

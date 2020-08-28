@@ -34,7 +34,7 @@
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="7">
             <el-form-item label="申请部门">
-              <el-input class="payment-request-input" :disabled="true"></el-input>
+              <el-input class="payment-request-input" v-model="this.deptName" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="9">
@@ -205,6 +205,7 @@
             }
           }
         })
+        this.deptName = row.merchandiser.b2bDept ? row.merchandiser.b2bDept.name : '';
         this.countRequestAmount(row.id);
       },
       appendApprover () {
@@ -404,6 +405,7 @@
           remark: this.requestData.remark,
           requestVouchers: this.requestData.requestVouchers ? this.requestData.requestVouchers : [] 
         },
+        this.deptName = this.requestData.applyUser.b2bDept ? this.requestData.applyUser.b2bDept.name : '';
         this.onChange(this.requestData.requestAmount);
         this.countRequestAmount(this.requestData.productionOrder.id);
       }
@@ -432,7 +434,8 @@
           }],
           remark: '',
           requestVouchers: []
-        }
+        },
+        deptName: ''
       }
     },
     watch: {

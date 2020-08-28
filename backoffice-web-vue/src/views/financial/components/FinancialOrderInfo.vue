@@ -74,7 +74,8 @@
       </div>
       <div style="margin-left: 10px"></div>
       <div class="financial-border-container financial-info-three">
-        <contract-com :slotData="formData.productionOrder" :contracts="formData.productionOrder.agreements" :canSign="false"/>
+            <production-contract :slotData="formData.productionOrder" :contracts="contracts" :canSign="false" :readOnly="true"/>
+        <!-- <contract-com :slotData="formData.productionOrder" :contracts="formData.productionOrder.agreements" :canSign="false"/> -->
       </div>
     </div>
   </div>
@@ -83,14 +84,24 @@
 <script>
   import ContractCom from '../../order/salesProduction/contract/ContractCom'
   import {PayPlanInfo} from '@/components/index.js'
+  import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
+
   export default {
     name: 'FinancialOrderInfo',
     props: ['formData', 'payPlan', 'belongTo'],
     components: {
       PayPlanInfo,
-      ContractCom
+      ContractCom,
+      ProductionContract
     },
     computed: {
+      // 已签合同列表
+      contracts: function () {
+        if (this.formData.productionOrder.agreements) {
+          return this.formData.productionOrder.agreements.filter(item => item.state !== 'INVALID');
+        }
+        return [];
+      },
       cooperatorName: function () {
         if (this.belongTo == 'RECEIVABLE_PAGE' && this.formData.productionOrder.originCooperator) {
           return this.formData.productionOrder.originCooperator.type === 'ONLINE' ? 

@@ -42,7 +42,7 @@
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>申请部门：</h6>
+              <h6>申请部门：{{formData.applyUser.b2bDept ? formData.applyUser.b2bDept.name : ''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6>申请人：{{formData.applyUser.name}}</h6>
@@ -109,7 +109,7 @@
       <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canAudit">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+            <el-button class="material-btn_red" @click="onApproval(false)">审核驳回</el-button>
           </authorized>
         </el-col>
         <el-col :span="3">
@@ -118,7 +118,7 @@
           </authorized>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="formData.state === 'AUDIT_FAIL'">
+      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canReapply">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
             <el-button class="material-btn" @click="onReapply">重新申请</el-button>
@@ -162,6 +162,9 @@
       OrderAuditDetail
     },
     computed: {
+      canReapply: function () {
+        return this.formData.state === 'AUDIT_FAIL' && this.formData.applyUser.uid === this.$store.getters.currentUser.uid;
+      },
       canAudit: function () {
         const uid = this.$store.getters.currentUser.uid;
         if (this.formData.approvers && this.formData.approvers.length > 0) {

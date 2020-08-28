@@ -35,7 +35,7 @@ export default {
     },
     selectedRow: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
   data () {

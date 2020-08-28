@@ -41,7 +41,7 @@
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>申请部门：</h6>
+              <h6>申请部门：{{formData.applyUser.b2bDept ? formData.applyUser.b2bDept.name : ''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6>申请人：{{formData.applyUser.name}}</h6>

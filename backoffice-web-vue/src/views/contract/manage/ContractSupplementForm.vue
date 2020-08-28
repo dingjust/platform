@@ -266,7 +266,8 @@
           'mainAgreementCode': this.slotData.code,
           'customizeCode': this.contractCode,
           'agreementType': agreementType,
-          'isSupplementary': true
+          'isSupplementary': true,
+          'customizeType': 'BCXY'
         }
 
         if (this.contractType === '2') {
@@ -335,7 +336,8 @@
           'mainAgreementCode': this.slotData.code,
           'isSupplementary': true,
           'isFrame': false,
-          'userTempCode': this.selectFile.code
+          'userTempCode': this.selectFile.code,
+          'customizeType': 'BCXY'
         }
 
         const url = this.apis().saveContract();
