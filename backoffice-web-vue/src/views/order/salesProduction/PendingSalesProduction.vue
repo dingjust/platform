@@ -136,7 +136,7 @@
       },
       createSalesOrder() {
         this.$router.push({
-          name: '录入业务订单'
+          name: '录入外接订单'
         });
       },
       onResetQuery () {

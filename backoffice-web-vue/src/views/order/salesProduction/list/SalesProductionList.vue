@@ -3,7 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :height="autoHeight">
       <el-table-column label="主订单号" prop="code" min-width="110" v-if="!isPending" />
-      <el-table-column label="业务订单号" min-width="110" v-if="isPending">
+      <el-table-column label="外接订单号" min-width="110" v-if="isPending">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>

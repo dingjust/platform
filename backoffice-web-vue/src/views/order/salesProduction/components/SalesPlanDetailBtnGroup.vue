@@ -140,7 +140,7 @@
       //跳转接单页面
       onCommit() {
         this.$router.push({
-          name: this.slotData.type == 'SALES_ORDER' ? '录入业务订单' : '录入企划订单',
+          name: this.slotData.type == 'SALES_ORDER' ? '录入外接订单' : '录入企划订单',
           params: {
             order: this.slotData
           }

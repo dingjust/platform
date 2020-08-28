@@ -3,7 +3,7 @@
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
         <div class="sales-plan-form-title">
-          <h6 class="title-info">业务订单详情</h6>
+          <h6 class="title-info">外接订单详情</h6>
         </div>
         <h6 class="title-info">订单号：{{formData.code}}</h6>
         <h6 class="title-info">创建时间：{{formData.creationtime | timestampToTime}}</h6>

@@ -9,7 +9,7 @@
         <el-row>
           <el-col :span="4">
             <div class="sales-plan-form-title">
-              <h6>录入业务订单</h6>
+              <h6>录入外接订单</h6>
             </div>
           </el-col>
         </el-row>

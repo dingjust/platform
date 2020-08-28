@@ -29,7 +29,7 @@
           <el-row type="flex" justify="end">
             <el-button-group>
               <authorized :permission="['SALES_PLAN_CREATE']">
-                <el-button size="small" @click="createSalesOrder">创建业务订单</el-button>
+                <el-button size="small" @click="createSalesOrder">创建外接订单</el-button>
               </authorized>
               <authorized :permission="['SALES_PLAN_CREATE']">
                 <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入</el-button>

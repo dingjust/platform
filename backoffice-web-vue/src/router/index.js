@@ -249,12 +249,12 @@ const router = new Router({
             },
             {
               path: 'create/order',
-              name: '录入业务订单',
+              name: '录入外接订单',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/form/SalesOrderForm')
             },
             {
               path: 'order/:id',
-              name: '业务订单',
+              name: '外接订单',
               props: true,
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/details/SalesOrderDetail')
             },
