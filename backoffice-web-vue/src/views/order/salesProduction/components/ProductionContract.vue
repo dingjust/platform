@@ -149,6 +149,10 @@ export default {
 </script>
 
 <style scoped>
+  .production-contract {
+    height: 130px;
+  }
+
   .contract-title {
     display: flex;
     justify-content: space-between;
