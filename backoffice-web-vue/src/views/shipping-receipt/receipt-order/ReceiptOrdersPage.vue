@@ -20,7 +20,7 @@
     </el-row>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
           <receipt-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" :mode="mode"/>
         </el-tab-pane>
       </template>
@@ -84,7 +84,7 @@
           companyCode
         });
       },
-      onAdvancedSearch(page, size) {
+      onAdvancedSearch(page, size, isTab) {
         if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
           this.onResetQuery();
         }
@@ -100,10 +100,42 @@
           mode,
           companyCode
         });
+        if (!isTab) {
+          this.receiptOrderStateCount();
+        }
+      },
+      async receiptOrderStateCount () {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = '';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().receiptSheetStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.stateCount = {};
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.stateCount = {};
+          this.$message.error(result.msg);
+          return;
+        }
+        this.stateCount = result.data;
+      },
+      tabName (tab) {
+        if (this.stateCount.hasOwnProperty(tab.code)) {
+          return tab.name +'('+ this.stateCount[tab.code] +')';  
+        }
+        return tab.name;
       },
       handleClick(tab, event) {
         this.queryFormData.states = tab.name;
-        this.onAdvancedSearch(0, 10);
+        this.onAdvancedSearch(0, 10, true);
       },
       onDetail(row) {
         // TODO 发货单详情
@@ -146,6 +178,7 @@
           states: ''
         },
         tips: '注明：核验时间为收货单创建之日起5天内完成，若5天内没有操作收货单核验，收货单将自动完成核验。核验后的收货单不能修改。',
+        stateCount: {},
         dataQuery: {}
       }
     },

@@ -10,6 +10,9 @@
         <el-col :span="6">
           <h6>工单号：{{formData.taskOrderEntries!=null?formData.taskOrderEntries[0].code:''}}</h6>
         </el-col>
+        <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
         <el-col :span="6">
           <h6>订单状态：{{orderState}}</h6>
         </el-col>
