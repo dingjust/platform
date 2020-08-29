@@ -307,23 +307,27 @@
         val.forEach(data => {
           //构建颜色尺码行
           var colorSizeEntries = [];
-          data.colorSizes.forEach(color => {
-            color.sizes.forEach(size => {
-              colorSizeEntries.push({
-                color: {
-                  code: color.colorCode,
-                  name: color.colorName,
-                  id: color.colorId
-                },
-                size: {
-                  code: size.code,
-                  name: size.name,
-                  id: size.id
-                },
-                quantity: ''
-              })
+          if (data.colorSizes) {
+            data.colorSizes.forEach(color => {
+              if (color.sizes) {
+                color.sizes.forEach(size => {
+                  colorSizeEntries.push({
+                    color: {
+                      code: color.colorCode,
+                      name: color.colorName,
+                      id: color.colorId
+                    },
+                    size: {
+                      code: size.code,
+                      name: size.name,
+                      id: size.id
+                    },
+                    quantity: ''
+                  })
+                });
+              }
             });
-          });
+          }
 
           //设置对应颜色，尺码数组                    
           var entry = {

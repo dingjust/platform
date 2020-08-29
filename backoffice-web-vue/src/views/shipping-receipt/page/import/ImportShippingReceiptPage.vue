@@ -301,13 +301,13 @@
             }, {
               key: '发货收货数',
               props: {
-                shipProp: 'logisticsSheet.totalQuantity',
-                receSheetProp: 'logisticsSheet.receiptSheets'
+                shipProp: 'totalQuantity',
+                receSheetProp: 'receiptSheets'
               }
             }, {
               key: '退货收货数',
               props: {
-                prop: 'logisticsSheet.returnSheets'
+                prop: 'returnSheets'
               }
             }, {
               key: '差异-复议-通过'
