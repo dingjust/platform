@@ -2,7 +2,7 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" row-key="id" @selection-change="handleSelectionChange"
       @row-click="rowClick">
-      <el-table-column type="selection" v-if="hasSelection" fixed="left" :key="1" :selectable="selectableFuc">
+      <el-table-column type="selection" :reserve-selection="true" v-if="hasSelection" fixed="left" :key="1" :selectable="selectableFuc">
       </el-table-column>
       <el-table-column v-else :key="1"></el-table-column>
       <shipping-dynamic-table-list :columns="columns" />
@@ -117,16 +117,17 @@
         this.$emit('onSelect', this.selectionRow);
       },
       rowClick(row) {
-        if (this.selectionRow == "") {
-          this.$refs.resultTable.toggleRowSelection(row, true);
-        } else {
-          if (this.selectionRow.id == row.id) {
-            this.$refs.resultTable.toggleRowSelection(row, false);
-          } else {
-            this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
-            this.$refs.resultTable.toggleRowSelection(row, true);
-          }
-        }
+        // console.log(JSON.stringify(row));
+        // if (this.selectionRow == "") {
+        //   this.$refs.resultTable.toggleRowSelection(row, true);
+        // } else {
+        //   if (this.selectionRow.id == row.id) {
+        //     this.$refs.resultTable.toggleRowSelection(row, false);
+        //   } else {
+        //     this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
+        //     this.$refs.resultTable.toggleRowSelection(row, true);
+        //   }
+        // }
       }
     },
     watch: {

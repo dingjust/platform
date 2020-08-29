@@ -8,7 +8,8 @@
 <template>
   <div>
     <reconciliation-tasks-toolbar :queryFormData="queryFormData" :canCreate="canCreate"
-      @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate" />
+                                  @onAdvancedSearch="onAdvancedSearch" @onCreate="onCreate" 
+                                  :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
@@ -44,6 +45,10 @@
       mode: {
         type: String,
         default: 'import'
+      },
+      dataQuery: {
+        type: Object,
+        default: () => {}
       }
     },
     components: {
@@ -96,6 +101,9 @@
           ')';
         return tabName;
       },
+      onResetQuery () {
+        this.$emit('onResetQuery');
+      }
     },
     data() {
       return {

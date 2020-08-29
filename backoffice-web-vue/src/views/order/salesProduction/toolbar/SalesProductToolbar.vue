@@ -2,14 +2,16 @@
   <div>
     <el-form :inline="true" label-position="left">
       <el-row type="flex" justify="space-between">
-        <el-col :span="19">
+        <el-col :span="20">
           <el-form-item label="订单信息" prop="name">
             <el-input placeholder="订单号，订单名称" v-model="queryFormData.keyword" class="input-item"></el-input>
           </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="5"> -->
-          <el-form-item label="负责人" prop="name">
-            <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input>
+          <el-form-item label="部门/人员" prop="name">
+            <!-- <el-input placeholder="跟单员姓名" v-model="queryFormData.planLeader" class="input-item"></el-input> -->
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                                :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="5"> -->
@@ -27,7 +29,7 @@
           <el-row type="flex" justify="end">
             <el-button-group>
               <authorized :permission="['SALES_PLAN_CREATE']">
-                <el-button size="small" @click="createSalesOrder">创建业务订单</el-button>
+                <el-button size="small" @click="createSalesOrder">创建外接订单</el-button>
               </authorized>
               <authorized :permission="['SALES_PLAN_CREATE']">
                 <el-button type="primary" size="small" @click="onUniqueCodeImport">唯一码导入</el-button>
@@ -35,7 +37,7 @@
             </el-button-group>
           </el-row>
         </el-col>
-        <el-col :span="5" v-if="!isPending">
+        <el-col :span="4" v-if="!isPending">
           <el-row type="flex" justify="end">
             <el-button-group>
               <authorized :permission="['SALES_PLAN_CREATE']">
@@ -46,7 +48,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-dialog :visible.sync="uniqueCodeImportFormVisible" width="30%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="uniqueCodeImportFormVisible" width="50%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <unique-code-import-form @callback="onImportCallback" />
     </el-dialog>
@@ -59,6 +61,7 @@
   } from 'vuex';
   import SalesProductionStatusBar from '../components/SalesProductionStatusBar';
   import UniqueCodeImportForm from '../form/UniqueCodeImportForm';
+  import { DeptPersonSelect } from '@/components'
 
   const {
     mapMutations
@@ -73,11 +76,15 @@
       },
       queryFormData: {
         type: Object
+      },
+      dataQuery: {
+        type: Object
       }
     },
     components: {
       SalesProductionStatusBar,
-      UniqueCodeImportForm
+      UniqueCodeImportForm,
+      DeptPersonSelect
     },
     computed: {},
     data() {
@@ -150,6 +157,8 @@
         this.queryFormData.keyword = '';
         this.queryFormData.planLeader = '';
         this.queryFormData.originCooperator = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       }
     },
     created() {

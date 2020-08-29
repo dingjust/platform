@@ -35,7 +35,7 @@
         <el-col :span="8">
           <el-form-item label="指定生产工厂" label-width="110px" prop='appointFactory.name'>
             <span style="color:orange">{{slotData.appointFactory!=null?slotData.appointFactory.name:''}}</span>
-            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商
+            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择合作商
             </el-button>
           </el-form-item>
         </el-col>

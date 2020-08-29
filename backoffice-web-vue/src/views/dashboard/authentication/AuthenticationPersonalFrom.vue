@@ -37,7 +37,7 @@
           继续认证</el-button>
       </Authorized>
       <Authorized :permission="['CERT_APPLY']">
-        <el-button v-if="personalState == 'FAIL'" class="form-submit_btn" size="mini" type="danger" round
+        <el-button v-if="personalState == 'FAIL'" class="form-submit_btn" size="mini" type="text" round
           @click="onSave">
           重新认证</el-button>
       </Authorized>
@@ -99,10 +99,14 @@
         };
         let formData = Object.assign({}, tempData);
         const result = await http.post(url, formData);
-        console.log(result);
-        // this.$message.success(result.msg);
         if (result.data != null) {
-          window.open(result.data, '_blank');
+          this.$confirm('是否跳转到认证页面?', '', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            window.open(result.data, '_blank');
+          });
         } else {
           this.$message.success(result.msg);
         }

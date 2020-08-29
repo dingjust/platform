@@ -7,15 +7,17 @@
             <h6>节点方案列表</h6>
           </div>
         </el-col>
-        <el-col :span="2">
-          <Authorized :permission="['PROGRESS_PLAN_OPERATE']">
-            <el-button type="primary" class="toolbar-search_input" @click="createNode">创建节点方案</el-button>
-          </Authorized>
+        <el-col :span="6">
+          <el-row type="flex" justify="end">
+            <Authorized :permission="['PROGRESS_PLAN_OPERATE']">
+              <el-button type="primary" class="toolbar-search_input" @click="createNode">创建节点方案</el-button>
+            </Authorized>
+          </el-row>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <progress-plan-toolbar :queryFormData="queryFormData" @onSearch="onSearch"/>
-      <progress-plan-list :page="page" @onSearch="onSearch"/>
+      <progress-plan-toolbar :queryFormData="queryFormData" @onSearch="onSearch" />
+      <progress-plan-list :page="page" @onSearch="onSearch" />
     </el-card>
   </div>
 </template>
@@ -25,9 +27,12 @@
   import ProgressPlanList from './list/ProgressPlanList';
   export default {
     name: 'ProgressPlanPage',
-    components: {ProgressPlanList, ProgressPlanToolbar},
+    components: {
+      ProgressPlanList,
+      ProgressPlanToolbar
+    },
     methods: {
-      async onSearch (page, size) {
+      async onSearch(page, size) {
         const url = this.apis().getProgressPlan();
         const result = await this.$http.post(url, this.queryFormData, {
           page: page,
@@ -39,11 +44,11 @@
         }
         this.page = result;
       },
-      createNode () {
+      createNode() {
         this.$router.push('/account/setting/progress-plan/create');
       }
     },
-    data () {
+    data() {
       return {
         queryFormData: {
           keyword: ''
@@ -55,6 +60,7 @@
       this.onSearch();
     }
   }
+
 </script>
 
 <style scoped>
@@ -67,4 +73,5 @@
     background-color: #ffd60c;
     border-color: #ffd60c;
   }
+
 </style>

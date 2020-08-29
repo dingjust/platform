@@ -13,9 +13,13 @@
               <el-row type="flex" justify="space-between" v-if="itemData.type == 'ONLINE'">
                 <div>
                   {{itemData.partner == null ? itemData.name : itemData.partner.name}}
-                  <img width="40px" height="15px" :src="getPaymentStatusTag(itemData.partner)" />
+                  <template v-if="itemData.partner!=null">
+                    <el-tag type="success" v-if="itemData.partner.approvalStatus === 'approved'">已认证</el-tag>
+                    <el-tag type="info" v-else>未认证</el-tag>
+                  </template>
                 </div>
-                <el-button v-if="itemData.partner.type === 'FACTORY'" class="btn-class" style="padding: 3px 4px;" @click="onFactoryDetail">
+                <el-button v-if="itemData.partner.type === 'FACTORY'" class="btn-class" style="padding: 3px 4px;"
+                  @click="onFactoryDetail">
                   查看公司详情
                 </el-button>
                 <el-button v-else class="btn-class" style="padding: 3px 4px;" @click="onBrandDetail">
@@ -29,17 +33,20 @@
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
             <el-col :span="6">联系人</el-col>
-            <el-col :span="18">{{itemData.partner == null ? itemData.contactPerson : itemData.partner.contactPerson}}</el-col>
+            <el-col :span="18">{{itemData.partner == null ? itemData.contactPerson : itemData.partner.contactPerson}}
+            </el-col>
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
             <el-col :span="6">联系方式</el-col>
-            <el-col :span="18">{{itemData.partner == null ? itemData.contactPhone : itemData.partner.contactPhone}}</el-col>
+            <el-col :span="18">{{itemData.partner == null ? itemData.contactPhone : itemData.partner.contactPhone}}
+            </el-col>
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
             <el-col :span="6">身份类型</el-col>
             <el-col :span="18">
               {{getEnum('CooperatorCategory',itemData.category)}}
-              <span v-if="itemData.detailedIdentity != null && itemData.detailedIdentity != ''">{{'('}}{{itemData.detailedIdentity}}{{')'}}</span>
+              <span
+                v-if="itemData.detailedIdentity != null && itemData.detailedIdentity != ''">{{'('}}{{itemData.detailedIdentity}}{{')'}}</span>
             </el-col>
           </el-row>
         </el-col>
@@ -70,42 +77,43 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="factoryDetailsDialogVisible" v-if="factoryDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="factoryDetailsDialogVisible" v-if="factoryDetailsDialogVisible" width="80%"
+      class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <div class="pt-3"></div>
       <factory-from :slotData="factoryDetailsData" :readOnly="readOnly"></factory-from>
     </el-dialog>
-    <el-dialog :visible.sync="brandDetailsDialogVisible" v-if="brandDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="brandDetailsDialogVisible" v-if="brandDetailsDialogVisible" width="80%"
+      class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <brand-from1 :slotData="brandDetailsData" :read-only="readOnly"></brand-from1>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
   import FactoryFrom from '../../../user/company/factory/form/FactoryForm';
   import BrandFrom1 from '../../../user/company/brand/form/BrandForm1';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('CooperatorModule');
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers('CooperatorModule');
 
   export default {
     name: 'CooperatorInfoPage',
     props: ['itemData'],
-    components: {BrandFrom1, FactoryFrom},
+    components: {
+      BrandFrom1,
+      FactoryFrom
+    },
     computed: {
-      ...mapGetters({
-      })
+      ...mapGetters({})
     },
     methods: {
-      ...mapActions({
-      }),
-      getPaymentStatusTag (item) {
-        if (item.approvalStatus === 'approved') {
-          return 'static/img/certified.png';
-        } else {
-          return 'static/img/uncertified.png';
-        }
-      },
-      async onFactoryDetail () {
+      ...mapActions({}),
+      async onFactoryDetail() {
         let url = this.apis().getFactory(this.itemData.partner.uid);
         if (this.isTenant()) {
           url += '?sort=creationtime,desc';
@@ -124,7 +132,7 @@
         this.readOnly = true;
         this.factoryDetailsDialogVisible = !this.factoryDetailsDialogVisible;
       },
-      async onBrandDetail () {
+      async onBrandDetail() {
         let url = this.apis().getBrand(this.itemData.partner.uid);
         if (this.isTenant()) {
           url += '?sort=creationtime,desc';
@@ -143,7 +151,7 @@
         this.brandDetailsDialogVisible = !this.brandDetailsDialogVisible;
       },
     },
-    data () {
+    data() {
       return {
         factoryDetailsDialogVisible: false,
         factoryDetailsData: '',
@@ -152,10 +160,11 @@
         readOnly: false
       };
     },
-    created () {
+    created() {
 
     }
   };
+
 </script>
 
 <style scoped>
@@ -214,7 +223,8 @@
     margin-top: 30px;
   }
 
-  .el-divider--vertical{
+  .el-divider--vertical {
     height: auto;
   }
+
 </style>

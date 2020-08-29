@@ -3,12 +3,17 @@
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :row-key="'id'" :height="autoHeight" @selection-change="handleSelectionChange" @row-click="rowClick"
       :reserve-selection="true">
-      <el-table-column :key="1" type="selection" width="50px" :selectable="rowDisabled" v-if="!isOutProduction" fixed />
+      <el-table-column :key="1" type="selection" :reserve-selection="true" width="50px" :selectable="rowDisabled"
+        v-if="!isOutProduction" fixed />
       <el-table-column :key="2" label="生产订单号" min-width="115">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" v-if="!isAllocating && !isOutProduction">
-            <el-tag type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
+            <el-tag v-if="scope.row.type!=null" type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
               {{getEnum('ProductionTaskOrderType', scope.row.type)}}</el-tag>
+          </el-row>
+          <el-row type="flex" justify="space-between" align="middle" v-if="isOutProduction">            
+            <el-tag v-if="scope.row.managementMode=='AUTOGESTION'" type="warning">自管</el-tag>
+            <el-tag v-else type="success">协同</el-tag>
           </el-row>
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
@@ -42,17 +47,29 @@
             scope.row.product.category.parent.name + '-' + scope.row.product.category.name : ''}}</span>
         </template>
       </el-table-column>
-      <el-table-column :key="5" label="合作商" v-if="mode=='import'">
-        <template slot-scope="scope" v-if="scope.row.originCooperator">
-          <span
-            v-if="scope.row.originCooperator.type=='ONLINE'">{{scope.row.originCooperator.partner?scope.row.originCooperator.partner.name:''}}</span>
-          <span v-else>{{scope.row.originCooperator.partner?scope.row.originCooperator.partner.name:''}}</span>
+      <el-table-column :key="5" label="合作商" v-if="mode=='import'" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <template v-if="scope.row.originCooperator">
+            <span
+              v-if="scope.row.originCooperator.type=='ONLINE'">{{scope.row.originCooperator.partner?scope.row.originCooperator.partner.name:''}}</span>
+            <span v-else>{{scope.row.originCooperator.partner?scope.row.originCooperator.partner.name:''}}</span>
+          </template>
         </template>
       </el-table-column>
-      <el-table-column :key="6" label="合作商" v-if="mode=='export'" prop="belongTo.name" />
+      <el-table-column :key="6" label="合作商" v-if="mode=='export'" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <!-- 自管类型 -->
+          <template v-if="scope.row.managementMode!=null&&scope.row.managementMode=='AUTOGESTION'">
+            <span>{{scope.row.targetCooperator?scope.row.targetCooperator.name:''}}</span>
+          </template>
+          <template v-else>
+            <span>{{scope.row.belongTo.name}}</span>
+          </template>
+        </template>
+      </el-table-column>
       <el-table-column :key="7" label="订单数量" prop="quantity" min-width="70"></el-table-column>
-      <el-table-column :key="8" label="负责人" prop="productionLeader.name" min-width="60"></el-table-column>
-      <el-table-column :key="9" label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating">
+      <el-table-column :key="9" label="跟单员" prop="merchandiser.name" min-width="60" v-if="!isAllocating"
+        :show-overflow-tooltip="true">
       </el-table-column>
       <el-table-column :key="10" label="创建时间" min-width="120">
         <template slot-scope="scope">
@@ -150,22 +167,25 @@
         this.$emit('onSearch', 0);
       },
       onPageSizeChanged(val) {
-        this._reset();
+        // this._reset();
 
-        if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
-          return;
-        }
+        // if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
+        //   this.$emit('onAdvancedSearch', val);
+        //   return;
+        // }
 
-        this.$emit('onSearch', 0, val);
+        this.$emit('onAdvancedSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       onCurrentPageChanged(val) {
-        if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
-          return;
-        }
+        // if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
+        //   this.$emit('onAdvancedSearch', val - 1);
+        //   return;
+        // }
 
-        this.$emit('onSearch', val - 1);
+        this.$emit('onAdvancedSearch', val - 1, 10);
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
@@ -186,26 +206,25 @@
         return amount;
       },
       rowDisabled(row, index) {
-        // 待分配列表非自身负责人不能勾选
-        if (this.isAllocating) {
-          return this.$store.getters.currentUser.uid == row.productionLeader.uid;
+        if (this.isAllocating && row.productionLeader) {
+          return this.$store.getters.currentUser.uid === row.productionLeader.uid;
         }
-        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
-          return false;
+        if (row.merchandiser && row.outboundOrderCode == null) {
+          return this.$store.getters.currentUser.uid === row.merchandiser.uid
         }
-        return true;
+        return false;
       },
       handleSelectionChange(val) {
         this.selectRow = val;
       },
       rowClick(row, column, event) {
-        if (this.isAllocating && !(this.$store.getters.currentUser.uid == row.productionLeader.uid)) {
-          return;
+        if (this.isAllocating && row.productionLeader && this.$store.getters.currentUser.uid === row.productionLeader
+          .uid) {
+          this.$refs.resultTable.toggleRowSelection(row);
+        } else if (row.merchandiser && row.outboundOrderCode == null && this.$store.getters.currentUser.uid === row
+          .merchandiser.uid) {
+          this.$refs.resultTable.toggleRowSelection(row);
         }
-        if (row.outboundOrderCode || row.type == 'SELF_PRODUCED') {
-          return;
-        }
-        this.$refs.resultTable.toggleRowSelection(row);
       },
       // getPaymentStatusTag (row) {
       //   return row.payStatus === 'PAID' ? 'static/img/paid.png' : 'static/img/arrears.png';

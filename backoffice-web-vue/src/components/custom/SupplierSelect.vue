@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-form :inline="true">
       <el-form-item label="">
-        <el-input placeholder="请输入名称查询" :value="queryFormData.keyword" @input="setKeyword"></el-input>
+        <el-input placeholder="请输入名称查询" :v-model="queryFormData.keyword"></el-input>
       </el-form-item>
       <el-button type="text" @click="onSearch">查找</el-button>
       <Authorized :permission="['COMPANY_COOPERATOR_CREATE']">
@@ -14,8 +14,17 @@
       @selection-change="handleSelectionChange" :height="autoHeight">
       <el-table-column label="合作商名称" prop="name">
         <template slot-scope="scope">
-          <span v-if="scope.row.partner != null"> {{scope.row.partner.name}}</span>
-          <span v-else> {{scope.row.name}}</span>
+          <el-row type="flex">
+            <span v-if="scope.row.partner != null"> {{scope.row.partner.name}}</span>
+            <span v-else> {{scope.row.name}}</span>
+          </el-row>
+        </template>
+      </el-table-column>
+      <el-table-column label="">
+        <template slot-scope="scope">
+          <el-row type="flex">
+            <el-tag :type="getTagType(scope.row.category)">{{getEnum('CooperatorCategory',scope.row.category)}}</el-tag>
+          </el-row>
         </template>
       </el-table-column>
       <el-table-column label="联系人" prop="contactPerson">
@@ -57,18 +66,23 @@
 
   export default {
     name: 'SuppliersSelect',
+    props: {
+      //合作商类型
+      categories: {
+        type: Array,
+        default: () => {
+          return [];
+        }
+      }
+    },
     computed: {
       ...mapGetters({
         page: 'page',
-        queryFormData: 'queryFormData'
       })
     },
     methods: {
       ...mapActions({
         searchAdvanced: 'searchAdvanced'
-      }),
-      ...mapMutations({
-        setKeyword: 'setQueryFormDataKeyword'
       }),
       onPageSizeChanged(val) {
         this._reset();
@@ -78,7 +92,7 @@
           this.onSearch(0, val);
           return;
         }
-        this.onSearch(0 ,val);
+        this.onSearch(0, val);
         // this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
@@ -97,7 +111,10 @@
         this.$refs.resultTable.clearSelection();
       },
       onSearch(page, size) {
-        const queryFormData = this.queryFormData;
+        let queryFormData = this.queryFormData;
+        if (this.categories != null) {
+          queryFormData.category = this.categories
+        }
         const url = this.apis().getCooperators();
         this.searchAdvanced({
           url,
@@ -156,6 +173,21 @@
       },
       jumpToCreate() {
         this.$router.push('/account/cooperator/cooperatorCreate');
+      },
+      getTagType(category) {
+        switch (category) {
+          case 'SUPPLIER':
+            return 'success';
+            break;
+          case 'CUSTOMER':
+            return 'warning';
+            break;
+          case 'FABRIC_SUPPLIER':
+            return '';
+          default:
+            return 'info';
+            break;
+        }
       }
     },
     created() {
@@ -167,6 +199,11 @@
         suppliers: [],
         multipleSelection: [],
         selectSupplier: '',
+        queryFormData: {
+          type: '',
+          keyword: '',
+          category: []
+        },
       }
     }
   }
@@ -184,14 +221,14 @@
   }
 
   .product-select-btn {
-    width: 70px!important;
+    width: 70px !important;
     /* height: 25px; */
-    background: #FFD60C!important;
+    background: #FFD60C !important;
     /* font-weight: 400; */
-    color: rgba(0, 0, 0, 0.85)!important;
+    color: rgba(0, 0, 0, 0.85) !important;
     /* font-size: 10px; */
     /* border-radius: 0px; */
-    border: 0px solid #FFD60C!important;
+    border: 0px solid #FFD60C !important;
   }
 
   .el-table__body tr.current-row>td {

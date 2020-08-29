@@ -11,6 +11,9 @@
           <h6>单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <div>
             <h6>状态: {{getEnum('ReconciliationOrderState',formData.state)}}</h6>
           </div>
@@ -25,7 +28,7 @@
         </el-row>
         <el-row type="flex" style="padding-left: 10px">
           <el-col :span="24">
-            <shipping-orders-list :formData="formData" />
+            <receipt-orders-list :formData="formData" />
           </el-col>
         </el-row>
         <el-row type="flex" style="padding-left: 10px;margin-top: 20px">
@@ -70,7 +73,7 @@
 
   import ReconciliationOrdersDetailHead from './ReconciliationOrdersDetailHead'
   import ReconciliationOrdersFormFoot from '../form/ReconciliationOrdersFormFoot'
-  import ShippingOrdersList from './ShippingOrdersList'
+  import ReceiptOrdersList from './ReceiptOrdersList'
   import DetailBtnGroup from './DetailBtnGroup'
 
   export default {
@@ -79,7 +82,7 @@
     components: {
       ReconciliationOrdersDetailHead,
       ReconciliationOrdersFormFoot,
-      ShippingOrdersList,
+      ReceiptOrdersList,
       DetailBtnGroup
     },
     computed: {
@@ -258,6 +261,13 @@
 
         let submitForm = Object.assign({}, this.formData);
 
+        //去除审核人为null
+        if (submitForm.originApprovers) {
+          console.log('/.///')
+          let originApprovers = submitForm.originApprovers.filter(item => item != null);
+          submitForm.originApprovers = originApprovers;
+        }
+
         //除去空字符
         submitForm.increases = submitForm.increases.filter(item => item.amount != null || item.remarks != null)
           .map(
@@ -280,8 +290,17 @@
         //若不需要审核，则删除字段
         if (!submitForm.isApproval) {
           this.$delete(submitForm, 'approvers');
+        } else {
+          let approvers = submitForm.approvers.filter(item => (item instanceof Array) && item.length > 0).map(
+            item => {
+              return {
+                id: item[item.length - 1]
+              }
+            });
+          submitForm.approvers = approvers;
         }
-        const result = await this.$http.put(url, this.formData);
+
+        const result = await this.$http.put(url, submitForm);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -298,25 +317,35 @@
       },
       //审批
       onApproval(isPass) {
-        if (isPass) {
-          this.$confirm('是否确认审核通过?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this._onApproval(isPass, '');
-          });
+        if (this.formData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
+          this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+          if (isPass) {
+            this.$confirm('是否确认审核通过?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._onApproval(isPass, '');
+            });
+          } else {
+            this.$prompt('请输入不通过原因', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(({
+              value
+            }) => {
+              this._onApproval(isPass, value);
+            }).catch(() => {
+              //TODO:取消操作
+            });
+          }
+        } else if (this.formData.auditWorkOrder.auditingUser.uid !== this.$store.getters.currentUser.uid &&
+          this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+          this.$message.warning('此订单暂未轮到您进行审批。')
+        } else if (this.formData.auditWorkOrder.currentUserAuditState === 'PASSED') {
+          this.$message.warning('您已对此订单进行了审批。');
         } else {
-          this.$prompt('请输入不通过原因', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-          }).then(({
-            value
-          }) => {
-            this._onApproval(isPass, value);
-          }).catch(() => {
-            //TODO:取消操作
-          });
+          this.$message.error('审批状态有误，请刷新再试');
         }
       },
       async _onApproval(isPass, auditMsg) {
@@ -332,9 +361,19 @@
           return
         }
         this.$message.success('审批成功');
-        this.getDetail();
-        //通知对账任务刷新
-        Bus.$emit('reconciliation-task-details_onRefresh');
+
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+          this.getDetail();
+          //通知对账任务刷新
+          Bus.$emit('reconciliation-task-details_onRefresh');
+        }, 1000);
       },
       //确认方审批
       onOriginApproval(isPass) {

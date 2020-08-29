@@ -2,16 +2,18 @@
   <div class="shipping-receipt-toolbar-container">
     <el-form :inline="true">
       <el-row type="flex" justify="space-between">
-        <el-col :span="22">
+        <el-col :span="24">
           <el-form-item label="订单信息">
-            <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 140px"></el-input>
+            <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 160px"></el-input>
           </el-form-item>
-          <el-form-item label="负责人">
-            <el-input placeholder="输入负责人名称" v-model="queryFormData.merchandiserName" style="width: 110px">
-            </el-input>
+          <el-form-item label="部门/人员">
+            <!-- <el-input placeholder="输入负责人名称" v-model="queryFormData.merchandiserName" style="width: 140px">
+            </el-input> -->
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="160"
+                    :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <el-form-item label="合作商">
-            <el-input placeholder="输入合作商名称" v-model="queryFormData.cooperatorName" style="width: 110px"></el-input>
+            <el-input placeholder="输入合作商名称" v-model="queryFormData.cooperatorName" style="width: 140px"></el-input>
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker v-model="dateArr" style="width: 215px" type="daterange" value-format="timestamp"
@@ -23,20 +25,22 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
-        <el-col :span="2">
+        <!-- <el-col :span="2"> -->
           <!-- <el-button class="create-btn" @click="onCreate" v-if="canCreateReceipt">创建收货单</el-button> -->
-        </el-col>
+        <!-- </el-col> -->
       </el-row>
     </el-form>
   </div>
 </template>
 
 <script>
+  import { DeptPersonSelect } from '@/components'
+
   export default {
     name: 'ShippingReceiptToolbar',
-    props: ['queryFormData', 'canCreateReceipt'],
+    props: ['queryFormData', 'canCreateReceipt', 'dataQuery'],
     components: {
-
+      DeptPersonSelect
     },
     computed: {
 
@@ -50,6 +54,8 @@
         this.queryFormData.keyword = '';
         this.queryFormData.cooperatorName = '';
         this.queryFormData.merchandiserName = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       },
       onCreate() {
         this.$emit('onCreate');

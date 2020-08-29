@@ -1,30 +1,30 @@
 <template>
   <div class="table-container">
-    <el-table ref="table" :data="reconciliationShippingOrders" style="width: 100%"
+    <el-table ref="table" :data="reconciliationShippingOrders" style="width: 100%" row-key="id"
       @selection-change="handleSelectionChange" show-summary :summary-method="getSummaries">
-      <el-table-column type="selection" width="55" v-if="!readOnly"></el-table-column>
-      <el-table-column label="发货单号" prop="code"></el-table-column>
-      <el-table-column label="发货数" prop="totalQuantity"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="55" v-if="!readOnly"></el-table-column>
+      <!-- <el-table-column label="发货单号" prop="code"></el-table-column>
+      <el-table-column label="发货数" prop="totalQuantity"></el-table-column> -->
       <el-table-column label="收货单">
         <template slot-scope="scope">
-          <el-row v-for="item in scope.row.receiptSheets" :key="item.id">
-            <el-button type="text" @click="onReceiptDetail(item)">{{item.code}}</el-button>
-          </el-row>
+          <!-- <el-row v-for="item in scope.row.receiptSheets" :key="item.id"> -->
+            <el-button type="text" @click="onReceiptDetail(scope.row)">{{scope.row.code}}</el-button>
+          <!-- </el-row> -->
         </template>
       </el-table-column>
       <el-table-column label="收货时间">
         <template slot-scope="scope">
-          <span>{{scope.row.receiptSheets[0].creationtime | timestampToTime}}</span>
+          <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收货数量" prop="expectedQuantity">
-        <template slot-scope="scope">
+      <el-table-column label="收货数量" prop="totalQuantity">
+        <!-- <template slot-scope="scope">
           {{receiptNum(scope.row.receiptSheets)}}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="收货总额" prop="totalPrice">
         <template slot-scope="scope">
-          <span>{{totalReceiptAmount(scope.row.receiptSheets)}}</span>
+          <span>{{totalReceiptAmount(scope.row)}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -56,7 +56,7 @@
     computed: {
       //筛选待对账发货单
       reconciliationShippingOrders: function () {
-        let data = this.formData.shippingTask.shippingSheets.filter(sheet => sheet.state == 'PENDING_RECONCILED');
+        let data = this.formData.shippingTask.receiptSheets.filter(sheet => sheet.state == 'PENDING_RECONCILED');
         if (data != null && data.length > 0) {
           return data;
         } else {
@@ -66,7 +66,7 @@
     },
     methods: {
       handleSelectionChange(selectionList) {
-        this.$set(this.formData, 'shippingSheets', selectionList);
+        this.$set(this.formData, 'receiptSheets', selectionList);
       },
       onReceiptDetail(item) {
         // this.$router.push('/receipt/orders/' + item.id);
@@ -89,13 +89,16 @@
         return result;
       },
       //收货总额
-      totalReceiptAmount(sheets) {
+      totalReceiptAmount(sheet) {
         let unitPrice = 0;
+        let quantity=0;
         if (this.formData.productionTaskOrder.unitPrice) {
           unitPrice = this.formData.productionTaskOrder.unitPrice;
+        }        
+        if(sheet.totalQuantity){
+          quantity=sheet.totalQuantity;
         }
-        let totalNum = this.receiptNum(sheets);
-        return unitPrice * totalNum;
+        return (unitPrice * quantity).toFixed(2);
       },
       getSummaries(param) {
         const {
@@ -111,7 +114,7 @@
           //合计选中收货总数
           if (index === 5) {
             let result = 0;
-            this.formData.shippingSheets.forEach(element => {
+            this.formData.receiptSheets.forEach(element => {
               element.receiptSheets.forEach(entry => {
                 let num = parseInt(entry.totalQuantity);
                 if (!Number.isNaN(num)) {
@@ -135,7 +138,7 @@
       },
       //回显选择
       currentSelect() {
-        this.formData.shippingSheets.forEach(sheet => {
+        this.formData.receiptSheets.forEach(sheet => {
           let index = this.reconciliationShippingOrders.findIndex(order => order.code == sheet.code);
           if (index > -1) {
             this.$refs.table.toggleRowSelection(this.reconciliationShippingOrders[index], true);
@@ -150,7 +153,7 @@
       }
     },
     watch: {
-      'formData.shippingTask.shippingSheets': function (newVal, oldVal) {
+      'formData.shippingTask.receiptSheets': function (newVal, oldVal) {
         this.$nextTick(() => {
           this.currentSelect();
         })

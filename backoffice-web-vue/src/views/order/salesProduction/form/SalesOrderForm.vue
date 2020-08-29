@@ -2,14 +2,14 @@
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <supplier-select @onSelect="onSuppliersSelect" />
+      <supplier-select @onSelect="onSuppliersSelect" :categories="['CUSTOMER']"/>
     </el-dialog>
     <el-card>
       <el-form ref="form" :model="form" label-width="80px">
         <el-row>
           <el-col :span="4">
             <div class="sales-plan-form-title">
-              <h6>录入业务订单</h6>
+              <h6>录入外接订单</h6>
             </div>
           </el-col>
         </el-row>
@@ -49,7 +49,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini" :disabled="hasOrigin">选择供应商
+            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini" :disabled="hasOrigin">选择合作商
             </el-button>
           </el-col>
         </el-row>
@@ -85,19 +85,10 @@
           </el-row> -->
         </div>
         <el-divider />
-        <el-row type="flex" justify="space-between" align="middle">
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>财务设置</h6>
-            </div>
-          </el-col>
-          <!--          <el-col :span="4">-->
-          <!--            <el-button class="contract-btn">添加合同</el-button>-->
-          <!--          </el-col>-->
-        </el-row>
         <el-row type="flex" style="padding-left: 20px">
           <el-col :span="24">
-            <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" />
+            <!-- <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" /> -->
+            <pay-plan-form :formData="form.payPlan" :isUseForOrder="true" ref="payPlanCom" :readOnly="hasOrigin"/>
           </el-col>
         </el-row>
         <el-row type="flex" justify="space-between" align="middle">
@@ -108,41 +99,30 @@
           </el-col>
         </el-row>
         <div class="form-block-content">
-          <el-row type="flex" align="center" :gutter="10">
-            <!-- <el-col :span="5">
-              <el-form-item label="总负责人" label-width="85px">
-                <el-input v-model="form.productionLeader.name" :disabled="true">
-                </el-input>
-              </el-form-item>
-            </el-col> -->
-            <el-col :span="6">
-              <el-form-item label="生产部" label-width="100px" prop="productionDept"
-                :rules="{ required:true, validator: validateProductionDept, trigger: 'change'}">
-                <!-- <personnel-selection :vPerson.sync="form.productionLeader" /> -->
-                <dept-selection :vDept.sync=form.productionDept />
-              </el-form-item>
-            </el-col>
-            <el-col :span="2">
-              <el-form-item label="" label-width="5px">
-                <el-checkbox v-model="form.auditNeeded" @change="handleClick">需审核</el-checkbox>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <template v-for="(item,itemIndex) in form.approvers">
-                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="100px"
-                  :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
-                  <!-- <personnel-selection :vPerson.sync="form.approvers[itemIndex]" /> -->
-                  <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded"/>
-                </el-form-item>
-              </template>
-            </el-col>
-            <!-- <el-col :span="6">
-              <el-form-item label="采购负责人" label-width="100px" prop="purchasingLeader"
-                :rules="{required: true, message: '不能为空', trigger: 'change'}">
-                <personnel-selection :vPerson.sync="form.purchasingLeader" />
-              </el-form-item>
-            </el-col> -->
-          </el-row>
+          <div style="display: flex;flex-wrap: wrap;">
+          <el-form-item label="跟单员" prop="productionLeader"
+            :rules="{required: true, message: '不能为空', trigger: 'change'}">
+            <personnal-selection-v2 :vPerson.sync="form.productionLeader"/>
+          </el-form-item>
+          <el-form-item label="" label-width="10px">
+            <el-checkbox v-model="form.auditNeeded" @change="handleClick">需审核</el-checkbox>
+          </el-form-item>
+          <template v-for="(item,itemIndex) in form.approvers">
+            <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
+              :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
+              <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded" 
+                                      :excludeMySelf="true" style="width: 194px" :selectedRow="form.approvers"/>
+            </el-form-item>
+          </template>
+          <el-button-group style="padding-bottom: 26px;">
+            <el-button v-if="form.approvers && form.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+            <el-button v-if="form.approvers && form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除
+            </el-button>
+          </el-button-group>
+          </div>
+          <div>
+            <h6 style="color: #F56C6C">* 审批人将按照你选择的顺序逐级审批</h6>
+          </div>
         </div>
         <el-row type="flex" justify="end" style="margin-top:20px;">
           <el-col :span="4">订单总数：<span style="color:red;">{{totalAmount}}</span></el-col>
@@ -154,12 +134,12 @@
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
           <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
-            <el-button class="material-btn" @click="onSave(false)">保存</el-button>
+          <el-button class="material-btn" @click="onSave(false)">保存</el-button>
           <!-- </authorized> -->
         </el-col>
         <el-col :span="5">
           <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
-            <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
+          <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
           <!-- </authorized> -->
         </el-col>
       </el-row>
@@ -168,7 +148,7 @@
       :close-on-click-modal="false">
       <sales-plan-append-product-form ref="appendProductForm" v-if="salesProductAppendVisible" @onSave="onAppendProduct"
         :orderType="'SALES_ORDER'" :needMaterialsSpec="needMaterialsSpec" :isUpdate="false"
-        :productionLeader="form.productionLeader" />
+        :productionLeader="fromProductionLeader" />
     </el-dialog>
     <el-dialog :visible.sync="materialDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -190,7 +170,7 @@
   import SampleProductsSelectDialog from '@/views/product/sample/components/SampleProductsSelectDialog';
 
   import {
-    PayPlanFormV2,
+    PayPlanForm,
     DeptSelection,
     PersonnalSelectionV2
   } from '@/components'
@@ -203,7 +183,7 @@
   export default {
     name: 'SalesOrderForm',
     components: {
-      PayPlanFormV2,
+      PayPlanForm,
       SalesPlanAppendProductForm,
       MTAVAT,
       SupplierSelect,
@@ -274,15 +254,29 @@
       hasOrigin: function () {
         //来源公司
         return this.form.originCompany != null && this.form.originCompany != '';
+      },
+      fromProductionLeader: function () {
+        return {
+          id: this.form.productionLeader[this.form.productionLeader.length - 1]
+        }
       }
     },
     methods: {
-      handleClick (value) {
-        if (!value) {
-          this.form.approvers = [null];
-        }
+      appendApprover() {
+        this.form.approvers.push({});
       },
-      onSelectSample (data) {
+      removeApprover() {
+        this.form.approvers.splice(this.form.approvers.length - 1, 1);
+      },
+      handleClick(value) {
+        // if (!value) {
+        //   this.form.approvers = [null];
+        // }
+        this.form.approvers.forEach((item, index) => {
+          this.$refs.form.clearValidate('approvers.' + index);
+        })
+      },
+      onSelectSample(data) {
         this.materialDialogVisible = false;
         this.salesProductAppendVisible = true;
         this.$nextTick(() => {
@@ -290,9 +284,9 @@
         })
       },
       appendProduct() {
-        this.$refs.form.validateField('productionDept', errMsg => {
+        this.$refs.form.validateField('productionLeader', errMsg => {
           if (errMsg) {
-            this.$message.error('请先选择生产部门');
+            this.$message.error('请先选择生产负责人');
           } else {
             this.materialDialogVisible = true;
             // this.salesProductAppendVisible = true;
@@ -324,7 +318,13 @@
         this.form.originCooperator.contactPhone = val.phone;
         this.form.originCooperator.contactPerson = val.person;
         if (val.payPlan != null) {
-          this.setPayPlan(val.payPlan);
+          // this.setPayPlan(val.payPlan);
+          // 删除原有id
+          this.$delete(val.payPlan, 'id');
+          val.payPlan.payPlanItems.forEach(element => {
+            this.$delete(element, 'id');
+          });
+          this.form.payPlan = Object.assign({}, val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
@@ -369,15 +369,19 @@
         if (!submitForm.auditNeeded) {
           submitForm.approvers = [];
         } else {
-          for (let i = 0; i < submitForm.approvers.length; i++) {
-            submitForm.approvers[i] = {
-              id: this.form.approvers[i][this.form.approvers[i].length -1]
+          // 处理级联选择数据
+          submitForm.approvers = [];
+          this.form.approvers.forEach(item => {
+            if (item instanceof Array && item.length > 0) {
+              submitForm.approvers.push({
+                id: item[item.length - 1]
+              });
             }
-          }
+          })
         }
         // 处理级联选择数据
-        submitForm.productionDept = {
-          id: this.form.productionDept[this.form.productionDept.length - 1]
+        submitForm.productionLeader = {
+          id: this.form.productionLeader[this.form.productionLeader.length - 1]
         }
 
         const result = await this.$http.post(url, submitForm);
@@ -412,8 +416,10 @@
         // }
 
         const form = this.$refs.form;
+        let forms = [form];
+        forms.push(this.$refs['payPlanCom'].$refs['payPlanForm']);
         // 使用Promise.all 并行去校验结果
-        let res = await Promise.all([form].map(this.getFormPromise));
+        let res = await Promise.all(forms.map(this.getFormPromise));
         return res.every(item => !!item);
       },
       // 封装Promise对象
@@ -452,7 +458,7 @@
           invoiceTaxPoint: 0.03,
           taskOrderEntries: [],
           cooperationMode: 'LABOR_AND_MATERIAL',
-          productionDept: [],
+          // productionDept: [],
           payPlan: {
             isHaveDeposit: false,
             payPlanType: 'PHASEONE',
@@ -487,11 +493,13 @@
       }
     },
     watch: {
-      'form.productionDept': function (nval, oval) {
-        this.validateField('productionDept');
+      'form.productionLeader': function (nval, oval) {
+        this.validateField('productionLeader');
       },
       'form.approvers': function (nval, oval) {
-        this.validateField('approvers.0');
+        this.form.approvers.forEach((item, index) => {
+          this.validateField('approvers.' + index);
+        })
       }
     },
     created() {

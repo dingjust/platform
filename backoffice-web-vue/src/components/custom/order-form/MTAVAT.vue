@@ -12,9 +12,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="layoutScale[1]">
-        <el-form-item label="是否开发票：" label-width="120" prop="needVoice">
-          <el-radio v-model="curNeedVoice" :label="true" :disabled="readOnly">开发票</el-radio>
+        <el-form-item label="是否开票：" label-width="120" prop="needVoice">
           <el-radio v-model="curNeedVoice" :label="false" :disabled="readOnly">不开发票</el-radio>
+          <el-radio v-model="curNeedVoice" :label="true" :disabled="readOnly">开发票</el-radio>
         </el-form-item>
       </el-col>
       <el-col :span="layoutScale[2]" v-if="curNeedVoice">

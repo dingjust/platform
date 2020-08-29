@@ -10,7 +10,8 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <progress-order-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"/>
+      <progress-order-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" 
+                              :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
           <el-tab-pane :name="item.code" :key="item.code" :label="tabName(item)">
@@ -55,11 +56,16 @@
       }),
       onSearch(page, size) {
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch (page, size, changeTab) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getProgressOrderList();
         this.searchAdvanced({url, query, page, size});
-        this.progressOrderStateCount();
+        if (!changeTab) {
+          this.progressOrderStateCount();
+        }
       },
       async getPhaseList () {
         const url = this.apis().getProgressPhaseList();
@@ -95,10 +101,13 @@
         this.stateCount = result.data;
       },
       tabName (tab) {
-        let index = this.stateCount.findIndex(item => item.stateName == tab.name);
-        if (index > -1) {
-          return tab.name +'('+ this.stateCount[index].count +')';
+        if (this.stateCount.hasOwnProperty(tab.name)) {
+          return tab.name +'('+ this.stateCount[tab.name] +')';  
         }
+        // let index = this.stateCount.findIndex(item => item.stateName == tab.name);
+        // if (index > -1) {
+        //   return tab.name +'('+ this.stateCount[index].count +')';
+        // }
         // if (this.stateCount.hasOwnProperty(tab.code)) {
         //   return tab.name +'('+ this.stateCount[tab.code] +')';  
         // }
@@ -106,8 +115,11 @@
       },
       handleClick (tab, event) {
         this.queryFormData.state = tab.name;
-        this.onAdvancedSearch();
-      }
+        this.onAdvancedSearch(0, 10, true);
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data () {
       return {
@@ -123,10 +135,13 @@
           expectedDeliveryDateTo: '',
           operatorName: ''
         },
-        stateCount: []
+        stateCount: {},
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('PROGRESS_WORK_ORDER');
+      this.onResetQuery();
       this.onAdvancedSearch();
       this.getPhaseList();
     },

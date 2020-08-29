@@ -59,6 +59,9 @@
       async getDetail () {
         const code = this.code;
         await this.getOrderDetail(code);
+        if (!this.formData.personInCharge) {
+          this.$set(this.formData, 'personInCharge', this.$store.getters.currentUser);
+        }
       },
       updateProgress () {
         if (this.formData.id) {
@@ -104,6 +107,20 @@
           return;
         }
         await this.$router.go(-1);
+      },
+      changeProgress (productionProgresses) {
+        return productionProgresses.map(item => {
+          return {
+            medias: item.medias,
+            progressPhase: item.progressPhase,
+            quantity: item.quantity,
+            sequence: item.sequence,
+            warningDays: item.warningDays,
+            completeAmount: item.completeAmount,
+            productionProgressOrders: item.productionProgressOrders,
+            isCannotRemove: item.isCannotRemove
+          }
+        })
       }
     },
     data () {
@@ -112,7 +129,6 @@
       }
     },
     created () {
-      console.log(this.$route.params.order);
       if (this.code == undefined && this.$route.params.order != null) {
         const order = this.$route.params.order;
         this.formData.belongTo = order.creator;
@@ -121,7 +137,8 @@
         this.formData.product = order.taskOrderEntries[0].product;
         this.formData.expectedDeliveryDate = order.taskOrderEntries[0].deliveryDate;
         this.formData.colorSizeEntries = order.taskOrderEntries[0].colorSizeEntries;
-        this.formData.progresses = [];
+        this.formData.progresses = this.changeProgress(order.taskOrderEntries[0].progressPlan.productionProgresses);
+        this.$set(this.formData, 'personInCharge', this.$store.getters.currentUser);
         this.$nextTick(() => {
           this.$refs.nodeForm.getPhaseList();
         })

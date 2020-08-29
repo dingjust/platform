@@ -1,20 +1,19 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight" row-key="id" 
-      @selection-change="handleSelectionChange"  @row-click="rowClick">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column label="业务订单号" min-width="130">
+    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight" row-key="id"
+      @selection-change="handleSelectionChange" @row-click="rowClick">
+      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+      <el-table-column label="外接订单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
-            <el-tag type="info" effect="plain" :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
-              {{scope.row.originCompany == null ? '业务订单' : '线上接单'}}</el-tag>
-          </el-row>
-          <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
+            <el-tag type="info" effect="plain"
+              :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
+              {{scope.row.originCompany == null ? '自创' : '线上'}}</el-tag>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="客户">
+      <el-table-column label="客户" v-if="isPending" :show-overflow-tooltip="true" min-width="120">
         <template slot-scope="scope">
           <span>{{cooperatorName(scope.row)}}</span>
         </template>
@@ -67,10 +66,9 @@
       }
     },
     components: {},
-    computed: {
-    },
+    computed: {},
     methods: {
-      cooperatorName (row) {
+      cooperatorName(row) {
         if (row.originCompany != null) {
           return row.originCompany.name;
         } else {
@@ -122,7 +120,7 @@
           }
         }
       },
-      onSelectOrder () {
+      onSelectOrder() {
         this.$emit('onSelectOrder', this.selectionRow);
       }
     },
@@ -178,4 +176,5 @@
   /deep/ .el-table th>.cell .el-checkbox {
     display: none;
   }
+
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <reconciliation-manage-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+    <reconciliation-manage-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" 
+                                   :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-row type="flex" justify="end" align="middle" :gutter="10">
       <el-col :span="2"><span>单据明细：</span></el-col>
       <el-col :span="2">
@@ -75,6 +76,10 @@
       statusMap: {
         type: Object,
         required: true
+      },
+      dataQuery: {
+        type: Object,
+        default: () => {}
       }
     },
     components: {
@@ -191,17 +196,39 @@
         }
         this.$set(this.stateCount, 'reconciliationAudit', result.data);
       },
+      // 查询收货单状态统计
+      async receiptSheetStateCount() {
+        let query = Object.assign({}, this.queryFormData);
+        query.states = 'PENDING_RECONCILED';
+        if (this.mode == 'import') {
+          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+        } else {
+          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+        }
+
+        const url = this.apis().receiptSheetStateCount();
+        const result = await this.$http.post(url, query);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$set(this.stateCount, 'receiptSheet', result.data);
+      },
       //发货方
       importTabName(map) {
         let tabName = '';
 
         switch (map.status) {
-          case 'PENDING_RECONCILED': //发货单
-            if (!this.stateCount.shipping.hasOwnProperty(map.status)) {
+          case 'PENDING_RECONCILED': //收货单
+            if (!this.stateCount.receiptSheet.hasOwnProperty(map.status)) {
               tabName = this.getEnum('ShippingSheetState', map.status);
               break;
             }
-            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] +
+            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.receiptSheet[map.status] +
               ')';
             break;
           case 'PENDING_CONFIRM': //对账单
@@ -256,7 +283,15 @@
             tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.shipping[map.status] +
               ')';
             break;
-            //对账单
+          //收货单
+          case this.apis().receiptOrderList():
+            if (this.stateCount.receiptSheet == null || !this.stateCount.receiptSheet.hasOwnProperty(map.status)) {
+              break;
+            }
+            tabName = this.getEnum('ShippingSheetState', map.status) + '(' + this.stateCount.receiptSheet[map.status] +
+              ')';
+            break;
+          //对账单
           case this.apis().reconciliationList():
             if (this.stateCount.reconciliation == null || !this.stateCount.reconciliation.hasOwnProperty(map.status)) {
               tabName = this.getEnum('ReconciliationOrderState', map.status);
@@ -268,6 +303,9 @@
             break;
         }
         return tabName;
+      },
+      onResetQuery () {
+        this.$emit('onResetQuery');
       }
     },
     data() {
@@ -279,15 +317,16 @@
         stateCount: {
           shipping: {},
           reconciliation: {},
-          reconciliationAudit: {}
+          reconciliationAudit: {},
+          receiptSheet: {}
         },
         selectData: []
       }
     },
     created() {
+      this.receiptSheetStateCount();
       this.shippingOrderStateCount();
       this.reconciliationStateCount();
-
       if (this.mode == 'import') {
         this.reconciliationSheetAuditStateCount();
       }

@@ -16,7 +16,6 @@ const state = {
   },
   formData: {
     id: null,
-    managementMode: 'COLLABORATION',
     outboundCompanyName: '',
     outboundContactPerson: '',
     outboundContactPhone: '',
@@ -49,7 +48,7 @@ const state = {
     cooperationMode: 'LABOR_AND_MATERIAL',
     invoiceNeeded: false,
     invoiceTaxPoint: 0.03,
-    freightPayer: 'PARTYA',
+    freightPayer: 'PARTYB',
     remarks: '',
     sendAuditNeeded: false,
     progressPlan: {},
@@ -58,7 +57,7 @@ const state = {
       payPlanType: 'PHASEONE',
       payPlanItems: [{
         moneyType: 'PHASEONE',
-        payPercent: 0.003,
+        payPercent: 0.3,
         triggerDays: 5,
         triggerEvent: 'ORDER_CONFIRMED',
         triggerType: 'INSIDE'
@@ -71,6 +70,10 @@ const state = {
     merchandiser: {
       id: '',
       name: ''
+    },
+    manageWay:'',
+    sendAuditWorkOrder: {
+      processes: []
     }
   },
   queryFormData: {
@@ -126,11 +129,9 @@ const mutations = {
 
 const actions = {
   async search ({dispatch, commit, state}, {url, keyword, page, size}) {
-    console.log(keyword + 'test' + page + 'test' + size);
     commit('url', url);
     commit('keyword', keyword);
     if (page || page === 0) {
-      console.log(page);
       commit('currentPageNumber', page);
     }
 
@@ -145,7 +146,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -162,7 +162,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -170,7 +169,6 @@ const actions = {
   clearFormData ({dispatch, commit, state}) {
     commit('formData', {
       id: null,
-      managementMode: 'COLLABORATION',
       outboundCompanyName: '',
       outboundContactPerson: '',
       outboundContactPhone: '',
@@ -193,7 +191,7 @@ const actions = {
         deliveryDate: '',
         shippingAddress: {},
         product: {
-  
+
         },
         progressPlan: {
           name: ''
@@ -203,7 +201,7 @@ const actions = {
       cooperationMode: 'LABOR_AND_MATERIAL',
       invoiceNeeded: false,
       invoiceTaxPoint: 0.03,
-      freightPayer: 'PARTYA',
+      freightPayer: 'PARTYB',
       remarks: '',
       sendAuditNeeded: false,
       progressPlan: {},
@@ -212,7 +210,7 @@ const actions = {
         payPlanType: 'PHASEONE',
         payPlanItems: [{
           moneyType: 'PHASEONE',
-          payPercent: 0.003,
+          payPercent: 0.3,
           triggerDays: 5,
           triggerEvent: 'ORDER_CONFIRMED',
           triggerType: 'INSIDE'

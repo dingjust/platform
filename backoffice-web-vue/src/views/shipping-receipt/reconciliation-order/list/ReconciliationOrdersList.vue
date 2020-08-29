@@ -21,7 +21,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="关联发货单" min-width="120px">
+      <!-- <el-table-column label="关联发货单" min-width="120px">
         <template slot-scope="scope">
           <el-row v-for="item in scope.row.shippingSheets" :key="item.id">
             <el-button type="text" @click="onShipDetail(item.id)">{{item.code}}</el-button>
@@ -35,8 +35,13 @@
             </el-button>
           </el-row>
         </template>
+      </el-table-column> -->
+      <el-table-column label="关联对账任务" min-width="120px">
+        <template slot-scope="scope">
+          <el-button type="text" @click="onReconciliationTaskDetail(scope.row.reconciliationTask.id)">
+            {{scope.row.reconciliationTask.code}}</el-button>
+        </template>
       </el-table-column>
-      <el-table-column label="关联对账任务" min-width="120px"></el-table-column>
       <el-table-column label="关联订单" min-width="120px">
         <template slot-scope="scope">
           <el-button type="text" @click="onProductionOrderDetai(scope.row.productionTaskOrder.id)"
@@ -116,6 +121,9 @@
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
+      },
+      onReconciliationTaskDetail(id) {
+        this.$router.push('/reconciliation/tasks/detail/' + id);
       },
       handleSelectionChange(val) {
         console.log(val);

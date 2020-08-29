@@ -1,29 +1,32 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <div class="sales-plan-triangle_box">
-        <div class="sales-plan-triangle" :style="getTriangleColor">
-          <h6 class="sales-plan-triangle_text">{{getEnum('SalesProductionAuditStatus', formData.auditState)}}</h6>
+      <el-row type="flex" justify="space-between" align="middle">
+        <div class="sales-plan-form-title">
+          <h6 class="title-info">外接订单详情</h6>
         </div>
-      </div>
-      <el-row type="flex" justify="start">
-        <el-col :span="6">
-          <div class="sales-plan-form-title">
-            <h6>业务订单详情</h6>
-          </div>
-        </el-col>
-        <el-col :span="6" :offset="2">
-          <h6>销售业务：{{formData.code}}</h6>
-        </el-col>
+        <h6 class="title-info">订单号：{{formData.code}}</h6>
+        <h6 class="title-info">创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        <div>
+          <el-row type="flex">
+            <h6 class="title-info">标签/状态：{{getEnum('SalesProductionOrderState', formData.state)}}</h6>
+            <audit-tag :state="formData.auditState" class="audit-tag" />
+          </el-row>
+        </div>
+        <twinkle-warning-button v-if="isApplyCanceling" @click="canelingDialogVisible=true" label="订单取消申请处理" />
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
-        <sales-order-detail-form :form="formData" :modifyType="modifyType" :payPlan="payPlan" @callback="callback"/>
+        <sales-order-detail-form :form="formData" :modifyType="modifyType" :payPlan="payPlan" @callback="callback" />
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
           @appendProduct="appendProduct" />
       </div>
+      <template
+        v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">
+        <order-audit-detail :processes="formData.auditWorkOrder.processes" />
+      </template>
       <div v-if="showFinancial" style="margin-top:20px">
         <!-- <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
           <el-row v-if="formData.payPlan != null">
@@ -31,7 +34,7 @@
           </el-row>
         </div> -->
         <div v-if="formData.originCompany && formData.paymentBill != null">
-          <financial-tabs :formData="formData.paymentBill" belongTo="RECEIVABLE_PAGE" @callback="callback"/>
+          <financial-tabs :formData="formData.paymentBill" belongTo="RECEIVABLE_PAGE" @callback="callback" />
         </div>
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
@@ -45,12 +48,21 @@
         </el-row>
       </div>
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
-        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw"/>
+        @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw"
+        @onCancelProdcution="canelingProductionDialogVisible=true" @onCancel="onDelete" />
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :isUpdate="false"
         :needMaterialsSpec="needMaterialsSpec" :productionLeader="formData.productionLeader" />
+    </el-dialog>
+    <el-dialog :visible.sync="canelingDialogVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sales-order-cancel-dialog v-if="canelingDialogVisible" :order="formData" @callback="callback" />
+    </el-dialog>
+    <el-dialog :visible.sync="canelingProductionDialogVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sale-order-production-cancel-form v-if="canelingProductionDialogVisible" :order="formData" @callback="callback" />
     </el-dialog>
   </div>
 </template>
@@ -74,10 +86,21 @@
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
+  import SalesOrderCancelDialog from '../components/SalesOrderCancelDialog';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
-  import {FinancialTabs} from '@/views/financial/index'
+  import SaleOrderProductionCancelForm from '../form/SaleOrderProductionCancelForm';
+
+  import {
+    FinancialTabs
+  } from '@/views/financial/index'
+  import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components'
+  import {
+    TwinkleWarningButton
+  } from '@/components'
 
   export default {
     name: 'SalesOrderDetail',
@@ -89,7 +112,11 @@
       SalesPlanAppendProductForm,
       PurchaseOrderInfoPaymentFinance,
       PurchaseOrderInfoReceiptFinance,
-      FinancialTabs
+      FinancialTabs,
+      OrderAuditDetail,
+      SalesOrderCancelDialog,
+      TwinkleWarningButton,
+      SaleOrderProductionCancelForm
     },
     computed: {
       // ...mapGetters({
@@ -153,14 +180,24 @@
         }
       },
       showFinancial: function () {
-        return this.formData.state != 'TO_BE_ACCEPTED'  && 
-                this.formData.state != 'TO_BE_SUBMITTED' && 
-                this.formData.state != 'AUDITING' &&
-                this.formData.state != 'AUDIT_REJECTED';
+        return this.formData.state != 'TO_BE_ACCEPTED' &&
+          this.formData.state != 'TO_BE_SUBMITTED' &&
+          this.formData.state != 'AUDITING' &&
+          this.formData.state != 'AUDIT_REJECTED';
+      },
+      //是否有正在申请取消订单
+      isApplyCanceling: function () {
+        if (this.formData.currentCancelApply != null && this.formData.currentCancelApply.state == 'PENDING') {
+          return true;
+        }
+        return false;
       }
     },
     methods: {
-      callback () {
+      callback() {
+        this.salesProductAppendVisible = false;
+        this.canelingDialogVisible = false;
+        this.canelingProductionDialogVisible=false;
         this.getDetails();
       },
       appendProduct() {
@@ -194,10 +231,19 @@
         this.formData = Object.assign({
           approvers: [null]
         }, result.data);
-
-        this.setPayPlan(result.data.payPlan);
+        if (result.data.type === 'SALES_ORDER') {
+          this.setPayPlan(result.data.payPlan);
+        }
+        //检测是否有取消申请
+        if (this.formData.currentCancelApply != null && this.formData.currentCancelApply.state == 'PENDING') {
+          setTimeout(() => {
+            this.$nextTick(() => {
+              this.canelingDialogVisible = true;
+            });
+          }, 1000);
+        }
       },
-      setPayPlan (payPlan) {
+      setPayPlan(payPlan) {
         // this.payPlan.name = payPlan.name;
         this.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
         this.payPlan.payPlanType = payPlan.payPlanType;
@@ -227,7 +273,7 @@
               break;
           }
         });
-        this.$set(this.payPlan,'1',1);
+        this.$set(this.payPlan, '1', 1);
       },
       onReturn() {
 
@@ -321,16 +367,50 @@
         }
       },
       onRefresh() {
-        // this.getDetails();
-        this.$router.go(0);
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+          this.getDetails();
+        }, 1000);
       },
       validate(callback) {
         this.$refs.form.validate(callback);
-      }
+      },
+      //作废订单
+      onDelete() {
+        this.$confirm('此操作将永久作废订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onDelete();
+        });
+      },
+      async _onDelete() {
+        const url = this.apis().outboundOrderDelete(this.formData.id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('作废订单成功');
+        await this.$router.go(-1);
+      },
     },
     data() {
       return {
         salesProductAppendVisible: false,
+        canelingDialogVisible: false,
+        canelingProductionDialogVisible:false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
         payPlan: {
@@ -349,17 +429,18 @@
           payPlan: {},
           quality: '',
           seller: {},
+          creator: {},
           approvers: [null],
-          productionLeader: null
+          productionLeader: null,
+          auditWorkOrder: {
+            processes: []
+          }
         },
       }
     },
     created() {
       this.getDetails();
     },
-    mounted() {
-
-    }
   };
 
 </script>
@@ -390,30 +471,6 @@
     width: 24%;
     display: table-cell;
     z-index: 100;
-  }
-
-  .sales-plan-triangle_box {
-    /* margin-top: 1px; */
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .sales-plan-triangle {
-    width: 0;
-    height: 0;
-    border-right: 70px solid white;
-    border-bottom: 70px solid transparent;
-    z-index: 0;
-  }
-
-  .sales-plan-triangle_text {
-    width: 80px;
-    padding-top: 10px;
-    padding-left: 30px;
-    transform: rotateZ(45deg);
-    color: white;
-    font-size: 12px;
   }
 
   .sales-border-container {
@@ -464,6 +521,14 @@
   .reject_reason {
     color: #606266;
     padding-bottom: 10px;
+  }
+
+  .audit-tag {
+    margin-left: 10px;
+  }
+
+  .title-info {
+    margin-top: 5px;
   }
 
 </style>

@@ -1,24 +1,28 @@
 <template>
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
-      @selection-change="handleSelectionChange"  @row-click="rowClick">
-      <el-table-column type="selection" width="55" v-if="isSelect"></el-table-column>
-      <el-table-column label="外发订单号" prop="code"></el-table-column>
-      <el-table-column label="合作商">
+      @selection-change="handleSelectionChange" @row-click="rowClick">
+      <el-table-column type="selection" :reserve-selection="true" width="55" v-if="isSelect"></el-table-column>
+      <el-table-column label="外发订单号" prop="code" min-width="150">
+        <template slot-scope="scope">
+          <el-row type="flex" justify="space-between" align="middle">
+            <span style="margin-right:5px">{{scope.row.code}}</span>
+            <el-tag v-if="scope.row.managementMode=='AUTOGESTION'" type="warning">自管</el-tag>
+            <el-tag v-else type="success">协同</el-tag>
+          </el-row>
+        </template>
+      </el-table-column>
+      <el-table-column label="合作商" :show-overflow-tooltip="true" min-width="120">
         <template slot-scope="scope">
           <span>{{getCooperator(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联产品数" prop="entrySize"></el-table-column>
-      <el-table-column label="跟单员" prop="merchandiser.name"></el-table-column>
+      <el-table-column label="跟单员" prop="merchandiser.name" :show-overflow-tooltip="true" min-width="100">
+      </el-table-column>
       <el-table-column label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="审批状态">
-        <template slot-scope="scope">
-          <span>{{getEnum('SalesProductionAuditStatus', scope.row.sendAuditState)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态">
@@ -26,9 +30,21 @@
           <span>{{getEnum('OutboundOrderStatuses', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="订单标签" min-width="70">
-      </el-table-column> -->
-      <el-table-column label="操作" min-width="70">
+      <el-table-column label="订单标签">
+        <template slot-scope="scope">
+          <el-tag :type="isAgreementsComplete(scope.row)?'success':'info'">
+            {{isAgreementsComplete(scope.row)?'已签合同':'未签合同'}}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
+            <i class="el-icon-warning warning-icon"></i>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" min-width="110">
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetail(scope.row)" class="purchase-list-button">详情</el-button>
@@ -66,7 +82,8 @@
     computed: {},
     methods: {
       canModify(row) {
-        if (!row.merchandiser || row.state == 'CANCELED' || row.merchandiser.uid != this.$store.getters.currentUser.uid) {
+        if (!row.merchandiser || row.state == 'CANCELED' || row.merchandiser.uid != this.$store.getters.currentUser
+          .uid) {
           return false;
         }
         return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
@@ -111,8 +128,23 @@
           }
         }
       },
-      setSelectOrder () {
+      setSelectOrder() {
         this.$emit('setSelectOrder', this.selectionRow);
+      },
+      //判断是否正在申请取消订单
+      isApplyCanceling(row) {
+        if (row.currentCancelApply != null && row.currentCancelApply.state == 'PENDING') {
+          return true;
+        }
+        return false;
+      },
+      //判断是否已签合同
+      isAgreementsComplete(row) {
+        if (row.agreements) {
+          let index = row.agreements.findIndex(entry => entry.state == 'COMPLETE');
+          return index != -1;
+        }
+        return false;
       }
     },
     data() {
@@ -130,4 +162,17 @@
   /deep/ .el-table th>.cell .el-checkbox {
     display: none;
   }
+
+  .warning-icon {
+    color: #ff1744;
+    font-size: 20px;
+  }
+
+  .sure-btn {
+    background-color: #ffd60c;
+    border-color: #ffd60c;
+    width: 150px;
+    height: 35px;
+  }
+
 </style>

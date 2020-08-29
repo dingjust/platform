@@ -34,7 +34,7 @@
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="7">
             <el-form-item label="申请部门">
-              <el-input class="payment-request-input" :disabled="true"></el-input>
+              <el-input class="payment-request-input" v-model="this.deptName" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="9">
@@ -92,18 +92,24 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
-          <template v-for="(item, index) in formData.approvers">
-            <el-col :span="7" :key="index">
-              <el-form-item label="审批人" prop="approvers"
-                :rules="[{type: Array, validator: validateAppeovers, trigger: 'change'}]">
-                <personnel-selection :vPerson.sync="formData.approvers[index]" />
-              </el-form-item>
-            </el-col>
-          </template>
-          <el-col :span="2">
-            <el-button @click="addApprover" v-if="formData.approvers.length < 2">+ 添加审核员</el-button>
-            <el-button @click="deleteApprover" v-if="formData.approvers.length >= 2">删除</el-button>
+          <el-col :span="24">
+            <div style="display: flex;flex-wrap: wrap;">
+              <template v-for="(item,itemIndex) in formData.approvers">
+                <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;margin-bottom: 10px"
+                  :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
+                  <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" 
+                                          :excludeMySelf="true" style="width: 194px" :selectedRow="formData.approvers"/>
+                </el-form-item>
+              </template>
+              <el-button-group>
+                <el-button v-if="formData.approvers && formData.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
+                <el-button v-if="formData.approvers && formData.approvers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+              </el-button-group>
+            </div>
           </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" align="top" style="padding-left: 50px">
+          <h6 style="color: #F56C6C">* 审批人将按照你选择的顺序逐级审批</h6>
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="21">
@@ -114,7 +120,7 @@
         <el-row type="flex" justify="start" align="middle" style="margin-top: 20px;padding-left: 10px">
           <el-col :span="24">
             <el-form-item label="上传凭证">
-              <images-upload :slotData="formData.requestVouchers"></images-upload>
+              <images-upload :slotData="formData.requestVouchers" ref="upload"></images-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -133,8 +139,9 @@
 <script>
   import {
     PersonnelSelection,
-    ImagesUpload
-  } from '@/components/index.js'
+    ImagesUpload,
+    PersonnalSelectionV2
+  } from '@/components'
   import {
     OutboundOrderSelectPage
   } from '@/views/order/salesProduction/outbound-order/index.js'
@@ -143,12 +150,16 @@
     props: {
       orderData: {
         type: Object
+      },
+      requestData: {
+        type: Object
       }
     },
     components: {
       PersonnelSelection,
       ImagesUpload,
-      OutboundOrderSelectPage
+      OutboundOrderSelectPage,
+      PersonnalSelectionV2
     },
     computed: {
 
@@ -187,24 +198,21 @@
         this.formData.bankCardNo = row.targetCooperator.bankAccount;
         this.formData.bank = row.targetCooperator.bankOfDeposit;
         row.agreements.forEach((item, index) => {
-          this.contactCode += item.code;
-          if (!(index == row.agreements.length - 1)) {
-            this.contactCode += ', ';
+          if (item.state !== 'INVALID') {
+            this.contactCode += item.code;
+            if (!(index == row.agreements.length - 1)) {
+              this.contactCode += ', ';
+            }
           }
         })
+        this.deptName = row.merchandiser.b2bDept ? row.merchandiser.b2bDept.name : '';
         this.countRequestAmount(row.id);
       },
-      addApprover() {
+      appendApprover () {
         this.formData.approvers.push({});
-        this.$nextTick(() => {
-          this.$refs.form.clearValidate();
-        })
       },
-      deleteApprover () {
-        this.formData.approvers.splice(1, 1);
-        this.$nextTick(() => {
-          this.$refs.form.clearValidate();
-        })
+      removeApprover () {
+        this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
       },
       validateField(name) {
         this.$refs.form.validateField(name);
@@ -224,6 +232,11 @@
         }
       },
       onConfirm() {
+        if (this.$refs.upload.isUploading()) {
+          this.$message.error('请等待图片上传完毕');
+          return null;
+        };
+
         this.$refs.form.validate((valid) => {
           if (valid) {
             this._onConfirm();
@@ -234,8 +247,27 @@
         });
       },
       async _onConfirm() {
+        let data = Object.assign({}, this.formData);
+        // 人员设置数据处理
+        data.approvers = [];
+        this.formData.approvers.forEach(item => {
+          if (item instanceof Array && item.length > 0) {
+            data.approvers.push({
+              id: item[item.length - 1]
+            });
+          }
+        })
+        // // 人员设置数据处理
+        // for (let i = 0; i < data.approvers.length; i++) {
+        //   if (data.approvers instanceof Array && data.approvers[i].length > 0) {
+        //     data.approvers[i] = {
+        //       id: this.formData.approvers[i][this.formData.approvers[i].length -1]
+        //     }
+        //   }
+        // }
+
         const url = this.apis().appendPaymentRequest();
-        const result = await this.$http.post(url, this.formData, {
+        const result = await this.$http.post(url, data, {
           submit: true
         });
         if (result['errors']) {
@@ -247,7 +279,11 @@
           return;
         }
         this.$message.success('创建付款申请单成功');
-        this.$router.go(-1);
+        if (this.requestData != null) {
+          this.$router.go(-2);
+        } else {
+          this.$router.go(-1);
+        }
       },
       onChange(val) {
         // if (this.preApplyAmount == '') {
@@ -352,6 +388,26 @@
           chineseStr += cnInteger;
         }
         return chineseStr;
+      },
+      initData () {
+        this.receiver = this.requestData.payable.name;
+        this.formData = {
+          requestAmount: this.requestData.requestAmount,
+          paymentFor: this.requestData.paymentFor,
+          bankCardAccount: this.requestData.bankCardAccount,
+          bankCardNo: this.requestData.bankCardNo,
+          bank: this.requestData.bank,
+          productionOrder: {
+            id: this.requestData.productionOrder.id,
+            code: this.requestData.productionOrder.code
+          },
+          approvers: this.requestData.approvers,
+          remark: this.requestData.remark,
+          requestVouchers: this.requestData.requestVouchers ? this.requestData.requestVouchers : [] 
+        },
+        this.deptName = this.requestData.applyUser.b2bDept ? this.requestData.applyUser.b2bDept.name : '';
+        this.onChange(this.requestData.requestAmount);
+        this.countRequestAmount(this.requestData.productionOrder.id);
       }
     },
     data() {
@@ -378,7 +434,8 @@
           }],
           remark: '',
           requestVouchers: []
-        }
+        },
+        deptName: ''
       }
     },
     watch: {
@@ -386,16 +443,22 @@
         this.validateField('productionOrder');
       },
       'formData.approvers': function (nval, oval) {
-        this.validateField('approvers');
+        this.formData.approvers.forEach((item, index) => {
+          this.validateField('approvers.' + index);
+        })
       }
     },
     created() {
       if (this.orderData != null) {
         this.setSelectOrder(this.orderData);
+      } else if (this.requestData != null) {
+        this.initData();
       }
+    },
+    mounted() {
       this.$nextTick(() => {
         this.$refs.form.clearValidate();
-      })
+      });
     },
     destroyed() {
 

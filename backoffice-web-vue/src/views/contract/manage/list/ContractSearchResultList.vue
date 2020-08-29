@@ -21,7 +21,6 @@
         </template>
       </el-table-column>
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
-      <el-table-column label="合同类型"></el-table-column>
       <el-table-column label="合作商" prop="belongTo.name">
         <template slot-scope="scope">
           <span>{{scope.row.partner}}</span>
@@ -54,6 +53,11 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="合同类型">
+        <template slot-scope="scope">
+          <span>{{getEnum('TemplateType', scope.row.type)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="当前状态" prop="state" :column-key="'state'">
         <template slot-scope="scope">
           <!-- <el-tag disable-transitions></el-tag> -->
@@ -65,19 +69,19 @@
           <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="操作">
+      <el-table-column label="操作" min-width="180px">
         <template slot-scope="scope">
           <el-button type="text" @click="previewPdf(scope.row,'')">查看</el-button>
           <!-- <el-button type="text" @click="onDownload(scope.row.code)">下载</el-button> -->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>-->
-          <!-- <Authorized :permission="['AGREEMENT_CREATE']">
-            <el-button type="text" v-if="scope.row.state != 'INVALID'" @click="onBCXY(scope.row)">增加补充协议</el-button>
+          <Authorized :permission="['AGREEMENT_CREATE']">
+            <el-button type="text" v-if="scope.row.state != 'INVALID' && scope.row.type !== 'BCXY'" @click="onBCXY(scope.row)">增加补充协议</el-button>
           </Authorized>
           <Authorized :permission="['AGREEMENT_REMOVE']">
             <el-button type="text" v-if="scope.row.isOffline == true" @click="onDelete(scope.row)">删除</el-button>
-          </Authorized> -->
+          </Authorized>
         </template>
       </el-table-column>
     </el-table>
@@ -134,19 +138,22 @@
         this._reset();
 
         if (this.$store.state.ContractModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
+          this.$emit('onAdvancedSearch', 0, val);
           return;
         }
 
         this.$emit('onSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        })
       },
       onCurrentPageChanged(val) {
         if (this.$store.state.ContractModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
+          this.$emit('onAdvancedSearch', val - 1, 10);
           return;
         }
 
-        this.$emit('onSearch', val - 1);
+        this.$emit('onSearch', val - 1, 10);
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         })
@@ -218,7 +225,14 @@
         const result = await http.get(url);
 
         if (result.data != null) {
-          window.open(result.data, '_blank');
+          this.$confirm('是否打开页面?', '', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            window.open(result.data, '_blank');
+          });
+
         } else {
           this.$message.success(result.msg);
         }

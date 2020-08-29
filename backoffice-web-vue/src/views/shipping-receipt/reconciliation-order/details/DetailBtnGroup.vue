@@ -3,8 +3,7 @@
     <!--确认方(发货方) -->
     <template v-if="isShipPart">
       <!-- 接单确认(跟单员) -->
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
-        v-if="formData.state=='PENDING_CONFIRM'&&(formData.originAuditWorkOrder==null||formData.originAuditWorkOrder.state=='AUDITED_FAILED')&&isShipOperator">
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="showShipOperation">
         <!-- 未确认提交以及审核失败 -->
         <el-col :span="4">
           <authorized :permission="['RECONCILIATION_SHEET_CONFIRM_REJECT']">
@@ -22,12 +21,12 @@
         v-if="formData.originAuditWorkOrder!=null&&isOriginApprover&&formData.originAuditWorkOrder.state=='AUDITING'">
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="create-btn_red" @click="onOriginApproval(false)">驳回</el-button>
+            <el-button class="create-btn_red" @click="onOriginApproval(false)">审核驳回</el-button>
           </authorized>
         </el-col>
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="create-btn" @click="onOriginApproval(true)">通过</el-button>
+            <el-button class="create-btn" @click="onOriginApproval(true)">审核通过</el-button>
           </authorized>
         </el-col>
       </el-row>
@@ -50,15 +49,15 @@
       </el-row>
       <!-- 创建/更新审核(审核人) -->
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
-        v-if="isApprover&&formData.state=='PENDING_APPROVAL'">
+        v-if="isApprover&&formData.state=='PENDING_APPROVAL'&&formData.auditWorkOrder.currentUserAuditState === 'AUDITING'">
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="create-btn_red" @click="onApproval(false)">驳回</el-button>
+            <el-button class="create-btn_red" @click="onApproval(false)">审核驳回</el-button>
           </authorized>
         </el-col>
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="create-btn" @click="onApproval(true)">通过</el-button>
+            <el-button class="create-btn" @click="onApproval(true)">审核通过</el-button>
           </authorized>
         </el-col>
       </el-row>
@@ -121,14 +120,21 @@
       },
       //确认方审核人员
       isOriginApprover: function () {
-        if (this.formData.originApprovers) {
-          let index = this.formData.originApprovers.findIndex(element => element.uid == this.currentUser.uid);
+        if (this.formData.originApprovers && this.currentUser) {
+          let index = this.formData.originApprovers.findIndex(element => element != null && element.uid == this
+            .currentUser.uid);
           return index != -1;
         } else {
           return false;
         }
       },
-
+      //发货方是否显示确认拒绝
+      showShipOperation: function () {
+        return this.formData.state == 'PENDING_CONFIRM' && (this.formData.originAuditWorkOrder == null || this
+            .formData
+            .originAuditWorkOrder.id == null || this.formData.originAuditWorkOrder.state == 'AUDITED_FAILED') &&
+          this.isShipOperator;
+      }
     },
     methods: {
       onReject() {
@@ -149,7 +155,7 @@
       //确认方审核
       onOriginApproval(val) {
         this.$emit('onOriginApproval', val);
-      }
+      },
     },
     data() {
       return {

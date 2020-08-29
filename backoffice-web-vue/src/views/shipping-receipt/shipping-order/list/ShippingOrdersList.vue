@@ -2,7 +2,7 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange" @row-click="rowClick">
-      <el-table-column type="selection" width="55" v-if="canCreateReceipt"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="55" v-if="canCreateReceipt"></el-table-column>
       <el-table-column label="发货单号" prop="code" min-width="110px" fixed="left"></el-table-column>
       <el-table-column label="产品名称" min-width="150px">
         <template slot-scope="scope">

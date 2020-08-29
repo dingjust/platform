@@ -15,7 +15,8 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <reconciliation-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
+    <reconciliation-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" 
+                                    :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
@@ -64,6 +65,9 @@
         searchAdvanced: 'searchAdvanced'
       }),
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().reconciliationList();
         const mode = this.mode;
@@ -78,11 +82,11 @@
         });
       },
       handleClick(tab, event) {
-        if (this.mode == 'import') {
+        if (this.mode == 'export') {
           this.queryFormData.states = tab.name;
         }
         //收货方，状态查询处理
-        else if (this.mode == 'export') {
+        else if (this.mode == 'import') {
           switch (tab.name) {
             case 'PENDING_APPROVAL':
               this.queryFormData.auditStates = 'AUDITING';
@@ -134,6 +138,9 @@
           ')';
         return tabName;
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      }
     },
     data() {
       return {
@@ -148,10 +155,14 @@
           creationtimeStart: '',
           creationtimeEnd: '',
           states: 'PENDING_CONFIRM'
-        }
+        },
+        dataQuery: {}
       }
     },
     created() {
+      const pageSign = this.mode === 'import' ? 'RECONCILIATION_SHEET' : 'RECONCILIATION_SHEET_OUT';
+      this.dataQuery = this.getDataPerQuery(pageSign);
+      this.onResetQuery();
       this.onAdvancedSearch();
       this.reconciliationStateCount();
     },

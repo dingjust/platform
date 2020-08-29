@@ -1,5 +1,12 @@
+
+import Vue from 'vue';
+
 // Chat
 import ChatPage from './Chat/ChatPage';
+
+// Button
+import PrinterButton from './custom/button/PrinterButton';
+import TwinkleWarningButton from './custom/button/TwinkleWarningButton';
 
 // Custom/item
 import CooperatorItem from './custom/item/CooperatorItem';
@@ -11,7 +18,8 @@ import AddressForm from './custom/order-form/AddressForm';
 import MyAddressForm from './custom/order-form/MyAddressForm';
 import MyPayPlanForm from './custom/order-form/MyPayPlanForm';
 import PayPlanFormV2 from './custom/order-form/PayPlanFormV2';
-import PayPlanInfo from '@/components/custom/order-form/PayPlanInfo'
+import PayPlanInfo from '@/components/custom/order-form/PayPlanInfo';
+import CompanySelect from '@/components/custom/order-form/CompanySelect';
 
 // table
 import ColorSizeTable from '@/components/custom/table/ColorSizeTable'
@@ -24,6 +32,7 @@ import {
 
 // Custom/upload
 import PDFUpload from './custom/upload/PDFUpload';
+import PdfPreview from './custom/upload/PdfPreview'
 
 import Aside from './Aside.vue';
 import Breadcrumb from './Breadcrumb.vue';
@@ -42,6 +51,7 @@ import ConsignmentForm from './custom/ConsignmentForm';
 import DeliverForm from './custom/DeliverForm';
 import DjCheckbox from './custom/DjCheckbox';
 import DjTag from './custom/DjTag';
+import AuditTag from './custom/AuditTag';
 import EmployeeSelect from './custom/EmployeeSelect';
 import EnumSelect from './custom/EnumSelect';
 import FactoryCooperatorTransfer from './custom/FactoryCooperatorTransfer';
@@ -80,6 +90,10 @@ import main from './webchat/main';
 
 export {
   ChatPage,
+  //Button
+  PrinterButton,
+  TwinkleWarningButton,
+  //
   CooperatorItem,
   FactoryItem,
   MTAVAT,
@@ -87,6 +101,7 @@ export {
   MyPayPlanForm,
   PayPlanFormV2,
   PayPlanInfo,
+  CompanySelect,
   PDFUpload,
   AddressForm,
   AddressSelect,
@@ -96,6 +111,7 @@ export {
   DeliverForm,
   DjCheckbox,
   DjTag,
+  AuditTag,
   EmployeeSelect,
   EnumSelect,
   FactoryCooperatorTransfer,
@@ -135,8 +151,12 @@ export {
   ColorSizeChangeTable,
   SelectTree,
   getSizeSequence,
-    DjMultipleSelect,
-    DeptPersonSelect,
-    DeptSelection,
-    PersonnalSelectionV2
+  DjMultipleSelect,
+  DeptPersonSelect,
+  DeptSelection,
+  PersonnalSelectionV2,
+  PdfPreview
 }
+
+//全局注册组件
+Vue.component("AuditTag", AuditTag);

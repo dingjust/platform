@@ -64,18 +64,24 @@
       },
       canEdit: function () {
         if (this.order != null) {
+          let isOperator = false;
+          let operators = [
+            this.order.merchandiser ? this.order.merchandiser.uid : '',
+            this.order.productionLeader ? this.order.productionLeader.uid : '',
+            this.order.personInCharge ? this.order.personInCharge.uid : ''
+          ];
+          isOperator = operators.findIndex(item => item == this.$store.getters.currentUser.uid) != -1;
           return (this.order.state == 'TO_BE_PRODUCED' ||
-              this.order.state == 'PRODUCING' ||
-              this.order.state == 'IN_PRODUCTION') &&
-            (this.$store.getters.currentUser.uid == this.order.merchandiser.uid ||
-              this.$store.getters.currentUser.uid == this.order.productionLeader.uid || this.$store.getters
-              .currentUser.uid == this.order.personInCharge.uid)
+            this.order.state == 'PRODUCING' ||
+            this.order.state == 'IN_PRODUCTION') && isOperator
         }
       }
     },
     methods: {
       onEdit() {
         console.log(this.slotData);
+        console.log(this.order);
+        console.log(this.formData);
         // this.$router.push('/sales/progressOrder/' + this.slotData.code);        
         if (this.slotData.code != null && "" != this.slotData.code) {
           this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');

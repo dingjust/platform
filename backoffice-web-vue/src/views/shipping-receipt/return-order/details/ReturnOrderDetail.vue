@@ -18,6 +18,9 @@
           <h6>单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <div>
             <h6>状态：{{getEnum('ShippingSheetState', formData.state)}}</h6>
           </div>
@@ -48,7 +51,7 @@
               <h6 class="basic-label">退货人：{{formData.creator?formData.creator.name:''}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6 class="basic-label">联系方式：{{formData.creator.contactPhone}}</h6>
+              <h6 class="basic-label">联系方式：{{formData.creator?formData.creator.contactPhone:''}}</h6>
             </el-col>
           </el-row>
           <el-row type="flex" style="padding-bottom: 10px">

@@ -11,6 +11,9 @@
           <h6>单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <h6>状态：{{getEnum('ReceiveDispatchTaskState', formData.state)}}</h6>
         </el-col>
       </el-row>
@@ -56,12 +59,16 @@
       </el-row>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="24">
-          <shipping-tasks-orders-list :formData="formData" :readOnly="!isShipParty" @onCreate="onCreate" />
+          <self-tasks-orders-list :formData="formData" :readOnly="!isShipParty" @onCreate="onCreate"
+            v-if="isAutogestion" @onReceiptCreate="onReceiptCreate" />
+          <shipping-tasks-orders-list :formData="formData" :readOnly="!isShipParty" @onCreate="onCreate" v-else
+            @onReceiptCreate="onReceiptCreate" />
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px"
         v-if="isShipParty&&formData.state=='IN_DELIVERY'">
-        <el-button class="shipping-btn" :disabled="!finshiBtnEnable" @click="onFinish">发货完结</el-button>
+        <el-button class="shipping-btn" :disabled="!finshiBtnEnable" @click="onFinish"> {{isAutogestion?'收货完结':'发货完结'}}
+        </el-button>
       </el-row>
     </el-card>
   </div>
@@ -70,6 +77,8 @@
 <script>
   import ShippingTasksQuantityTable from '../table/ShippingTasksQuantityTable'
   import ShippingTasksOrdersList from '../list/ShippingTasksOrdersList'
+  import SelfTasksOrdersList from '../list/SelfTasksOrdersList'
+
   export default {
     name: 'ShippingTasksDetail',
     props: {
@@ -87,7 +96,8 @@
     },
     components: {
       ShippingTasksQuantityTable,
-      ShippingTasksOrdersList
+      ShippingTasksOrdersList,
+      SelfTasksOrdersList
     },
     computed: {
       //发货完结按钮显示状态
@@ -95,18 +105,23 @@
         //TODO:生产单状态为待出库
         if (this.formData.productionTaskOrder != null && this.formData.productionTaskOrder.state ==
           'TO_BE_DELIVERED') {
-          if (this.isShipParty) {
-            if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
-              let pass = true;
-              this.formData.shippingSheets.forEach(sheet => {
-                if (!(sheet.state == 'PENDING_RECONCILED' || sheet.state == 'COMPLETED' || sheet.state ==
-                    'IN_RECONCILED')) {
-                  pass = false;
-                  return false;
-                }
-              });
-              return pass;
+          //协同型
+          if (!this.isAutogestion) {
+            if (this.isShipParty) {
+              if (this.formData.shippingSheets != null && this.formData.shippingSheets.length > 0) {
+                let pass = true;
+                this.formData.shippingSheets.forEach(sheet => {
+                  if (!(sheet.state == 'PENDING_RECONCILED' || sheet.state == 'COMPLETED' || sheet.state ==
+                      'IN_RECONCILED')) {
+                    pass = false;
+                    return false;
+                  }
+                });
+                return pass;
+              }
             }
+          } else {
+            return true;
           }
         }
         return false;
@@ -131,6 +146,13 @@
         // TODO 判断是否所有发货单都已收货
         return false;
       },
+      //是否自管类型
+      isAutogestion: function () {
+        if (this.formData.productionTaskOrder && this.formData.productionTaskOrder.managementMode) {
+          return this.formData.productionTaskOrder.managementMode == 'AUTOGESTION';
+        }
+        return false;
+      }
     },
     methods: {
       async getDetail() {
@@ -151,6 +173,16 @@
         let taskData = this.formData;
         this.$router.push({
           name: '创建发货单',
+          params: {
+            taskData: taskData
+          }
+        });
+      },
+      //创建自管类型收货单
+      onReceiptCreate() {
+        let taskData = this.formData;
+        this.$router.push({
+          name: '创建自管收货单',
           params: {
             taskData: taskData
           }

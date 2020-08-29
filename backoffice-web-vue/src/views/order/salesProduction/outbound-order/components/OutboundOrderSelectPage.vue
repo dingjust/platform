@@ -185,7 +185,6 @@
         }],
         formData: {
           id: null,
-          managementMode: 'COLLABORATION',
           outboundCompanyName: '',
           outboundContactPerson: '',
           outboundContactPhone: '',
@@ -210,7 +209,7 @@
           cooperationMode: 'LABOR_AND_MATERIAL',
           invoiceNeeded: false,
           invoiceTaxPoint: 0.03,
-          freightPayer: 'PARTYA',
+          freightPayer: 'PARTYB',
           remarks: '',
           sendAuditNeeded: false,
           payPlan: {

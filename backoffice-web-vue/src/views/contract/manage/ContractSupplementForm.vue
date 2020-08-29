@@ -1,16 +1,22 @@
 <template>
   <div>
-    <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <!-- 合同模板选择 -->
+    <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" 
+               append-to-body :close-on-click-modal="false">
       <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
-        <el-divider direction="vertical"></el-divider>
+      <el-divider direction="vertical"></el-divider>
       <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
         <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
       </Authorized>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
+    <!-- 合同模板 创建 -->
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
-      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" 
+                      :slotData="mockData" :templateId="3"
+                      :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
+    <!-- 订单选择 -->
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
@@ -27,7 +33,7 @@
       <el-row type="flex" justify="center" align="middle">
         <span class="create-contract-title">补充协议</span>
       </el-row>
-      <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
+      <contract-type-select :isSignedPaper="isSignedPaper" @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
@@ -45,7 +51,9 @@
       <el-row class="create-contract-row" v-if="contractType=='1'">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择合同模板" v-model="selectFile.title" :disabled="true">
-            <el-button slot="prepend" @click="selectTemp('')">合同模板</el-button>
+            <template slot="prepend">合同模板</template>
+            <el-button slot="append" @click="selectTemp('')" class="select-btn">选择模板</el-button>
+            <!-- <el-button slot="prepend" @click="selectTemp('')">合同模板</el-button> -->
           </el-input>
         </el-col>
       </el-row>
@@ -56,7 +64,17 @@
           </el-input>
         </el-col>
       </el-row>
-      <el-row class="create-contract-row" v-if="contractType!='1'">
+      <el-row class="create-contract-row" v-if="contractType === '2'">
+        <el-col :span="8" :offset="2">
+          <p-d-f-upload ref="pdfUpload" :vFileList.sync="pdfFile" :fileLimit="1"></p-d-f-upload>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType === '3'">
+        <el-col :span="22" :offset="2">
+          <images-upload ref="imagesUpload" :slotData="paperList" :limit="99" :uploadType="uploadType"></images-upload>
+        </el-col>
+      </el-row>
+      <!-- <el-row class="create-contract-row" v-if="contractType!='1'">
         <el-col :span="8" :offset="2">
           <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
                      :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
@@ -76,7 +94,7 @@
             </div>
           </el-upload>
         </el-col>
-      </el-row>
+      </el-row> -->
 
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
@@ -105,6 +123,7 @@
   import Bus from '@/common/js/bus.js';
   import ContractPreviewPdf from './components/ContractPreviewPdf'
   import SupplierSelect from '@/components/custom/SupplierSelect';
+  import { ImagesUpload, PDFUpload } from '@/components'
 
   const {
     mapGetters,
@@ -114,7 +133,15 @@
   );
 
   export default {
-    props: ['slotData'],
+    props: {
+      slotData: {
+        required: true
+      },
+      isSignedPaper: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       ContractTypeSelect,
       ContractTemplateSelect,
@@ -122,7 +149,9 @@
       ContractOrderSelect,
       TemplateForm,
       ContractPreviewPdf,
-      SupplierSelect
+      SupplierSelect,
+      ImagesUpload,
+      PDFUpload
     },
     computed: {
       ...mapGetters({
@@ -195,41 +224,65 @@
       },
       handleRemove (file) {
         this.fileList = [];
-        this.pdfFile = '';
+        this.pdfFile = [];
       },
       async onSavePdf () {
-        if (this.contractCode == null || this.contractCode == '') {
-          this.$message.error('请输入自定义合同编号');
-          return;
-        }
-        if (this.pdfFile.id == null || this.pdfFile.id == '') {
-          this.$message.error('请上传PDF文件');
-          return;
-        }
         // if (this.suppliers.uid == null || this.suppliers.uid) {
-        //   this.$message.error('请选择合作商');
+          //   this.$message.error('请选择合作商');
         //   return;
         // }
         var agreementType = null;
         if (this.contractType == '3') {
           agreementType = 'CUSTOMIZE_COMPLETED';
+          if (this.$refs.imagesUpload.isUploading()) {
+            this.$message.warning('图片正在上传，请稍后再试！');
+            return;
+          }
         }
         if (this.contractType == '2') {
           agreementType = 'CUSTOMIZE';
+          if (this.$refs.pdfUpload.isUploading()) {
+            this.$message.warning('PDF文件正在上传，请稍后再试！');
+            return;
+          }
         }
+        if (this.contractType == '2' && (!this.pdfFile || this.pdfFile.length <= 0)) {
+          this.$message.error('请先上传PDF文件');
+          return;
+        }
+        if (this.contractType == '3' && (!this.paperList || this.paperList.length <= 0)) {
+          this.$message.error('请先上传已签纸质合同');
+          return;
+        }
+        if (this.contractCode == null || this.contractCode == '') {
+          this.$message.error('请输入自定义合同编号');
+          return;
+        }
+
         let data = {
-          'pdf': this.pdfFile,
+          // 'pdf': this.pdfFile[0],
           'title': '',
           'isFrame': false,
           'mainAgreementCode': this.slotData.code,
           'customizeCode': this.contractCode,
           'agreementType': agreementType,
-          'isSupplementary': true
+          'isSupplementary': true,
+          'customizeType': 'BCXY'
+        }
+
+        if (this.contractType === '2') {
+          this.$set(data, 'pdf', this.pdfFile[0]);
+        } else if (this.contractType === '3') {
+          this.$set(data, 'files', this.paperList)
         }
 
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
 
         if (result.code == 1) {
           this.$message.success(result.msg);
@@ -246,7 +299,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.$emit('openPreviewPdf', this.thisContract, '');
         }
@@ -284,12 +336,17 @@
           'mainAgreementCode': this.slotData.code,
           'isSupplementary': true,
           'isFrame': false,
-          'userTempCode': this.selectFile.code
+          'userTempCode': this.selectFile.code,
+          'customizeType': 'BCXY'
         }
 
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
 
         if (result.code == 1) {
           this.$message.success(result.msg);
@@ -306,7 +363,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.$emit('openPreviewPdf', this.thisContract, '');
         }
@@ -334,9 +390,10 @@
       },
       onCreateTemp () {
         // this.dialogTemplateVisible = false;
-        Bus.$emit('closeBCXYFrom');
+        // Bus.$emit('closeBCXYFrom');
         // this.$router.push("templateForm");
         // this.fn.openSlider('创建', TemplateForm);
+        // this.tempFormVisible = true;
         this.tempFormVisible = true;
       },
       handlePreview (file) {
@@ -365,6 +422,35 @@
       },
       contractTemplateSelect () {
         this.$refs.contractTemplateSelect.onSearchTemp();
+      },
+      async getTemplateListPt () {
+        const url = this.apis().getTemplatesListPt();
+        const result = await http.post(url, {
+          keyword: ''
+        }, {
+          page: 0,
+          size: 10
+        });
+        this.mockData = result.content;
+        this.sortData();
+      },
+      sortData () {
+        let arr = new Array(4);
+        this.mockData.map(value => {
+          if (value.title === '委托生产合同') {
+            arr[0] = value;
+          }
+          if (value.title === '采购订单') {
+            arr[1] = value;
+          }
+          if (value.title === '框架协议') {
+            arr[2] = value;
+          }
+          if (value.title === '补充协议') {
+            arr[3] = value;
+          }
+        });
+        this.mockData = arr;
       }
     },
     data () {
@@ -385,7 +471,7 @@
         mockData: [],
         orderPage: [],
         disabled: false,
-        pdfFile: '',
+        pdfFile: [],
         pdfVisible: false,
         fileUrl: '',
         thisContract: '',
@@ -424,12 +510,25 @@
         },
         suppliersSelectVisible: false,
         tempFormVisible: false,
-        suppliers: ''
+        suppliers: '',
+        paperList: [],
+        uploadType: ''
       };
     },
+    watch: {
+      paperList: function (nval, oval) {
+        if (nval && nval.length === 1) {
+          this.uploadType = nval[0].mediaType;
+        } else if (nval && nval.length === 0) {
+          this.uploadType = '';
+        }
+      }
+    },
     created () {
-      this.onSearchOrder('', 0, 10);
-      this.onSetOrderCode();
+      this.getTemplateListPt();
+      if (this.isSignedPaper) {
+        this.contractType = '3';
+      }
     }
   };
 </script>
@@ -500,28 +599,28 @@
     background-color: #FFF
   } */
 
-  .el-upload-list--picture-card .el-upload-list__item {
-    overflow: hidden;
+  /deep/ .el-upload-list--picture-card .el-upload-list__item {
+    /* overflow: hidden;
     background-color: #fff;
     border: 0px solid #c0ccda !important;
     border-radius: 6px;
     -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+    box-sizing: border-box; */
     width: 100px;
     height: 100px;
-    margin: 0 8px 8px 0;
-    display: inline-block;
+    /* margin: 0 8px 8px 0; */
+    /* display: inline-block; */
   }
 
-  .el-upload--picture-card {
-    background-color: #fbfdff;
-    border: 1px dashed #c0ccda;
-    border-radius: 6px;
-    box-sizing: border-box;
+  /deep/ .el-upload--picture-card {
+    /* background-color: #fbfdff; */
+    /* border: 1px dashed #c0ccda; */
+    /* border-radius: 6px; */
+    /* box-sizing: border-box; */
     width: 100px;
     height: 100px;
     line-height: 100px;
-    vertical-align: top;
+    /* vertical-align: top; */
   }
 
   .el-upload-list__item-file-name {
@@ -550,6 +649,11 @@
   .tips {
     margin-right: 15px;
     margin-left: 5px;
+  }
+
+  .select-btn {
+    background-color: #ffd60c!important;
+    color: #606266!important;
   }
 
 </style>

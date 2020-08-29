@@ -10,7 +10,8 @@
       </el-row>
       <div class="pt-2"></div>
       <shipping-receipt-page mode="import" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
+                            :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" 
+                            :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     </el-card>
   </div>
 </template>
@@ -62,6 +63,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
@@ -72,6 +76,9 @@
           size,
           companyCode
         });
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data() {
@@ -309,10 +316,13 @@
             }],
             url: this.apis().shippingOrderList()
           }
-        }
+        },
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('SHIPPING_SHEET');
+      this.onResetQuery();
       this.onAdvancedSearch();
     },
   }

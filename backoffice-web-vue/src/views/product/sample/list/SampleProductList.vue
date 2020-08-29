@@ -3,6 +3,7 @@
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
       @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="32"></el-table-column> -->
+      <el-table-column label="产品编号" prop="code" min-width="100"></el-table-column>
       <el-table-column label="产品图片" width="120">
         <template slot-scope="scope">
           <img width="54px" height="54px"
@@ -10,7 +11,6 @@
         </template>
       </el-table-column>
       <el-table-column label="产品名" prop="name" min-width="200"></el-table-column>
-      <el-table-column label="编号" prop="code" min-width="100"></el-table-column>
       <el-table-column label="款号" prop="skuID" min-width="120"></el-table-column>
       <el-table-column label="品类" min-width="120">
         <template slot-scope="scope">
@@ -23,6 +23,7 @@
           </el-button>
         </template>
       </el-table-column>
+      <el-table-column label="创建人" prop="creator.name"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
@@ -31,8 +32,9 @@
       <el-table-column label="操作" min-width="240">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">详情</el-button>
-          <el-button v-if="remove(scope.row)" type="text" icon="el-icon-edit" @click="onDelete(scope.row)">删除
-          </el-button>
+          <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
+            <el-button type="text" icon="el-icon-edit" @click="onDelete(scope.row)">删除</el-button>
+          </Authorized>
         </template>
       </el-table-column>
     </el-table>

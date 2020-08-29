@@ -7,18 +7,28 @@
 !-->
 <template>
   <div>
-    <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50">
-      <!-- 创建人员控制按钮 -->
-      <template v-if="isCreator">
+    <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">
+      <!-- 创建人员控制按钮(非外接来源) -->
+      <template v-if="isCreator&&!hasOrigin">
         <el-col :span="3" v-if="slotData.auditState=='AUDITING'">
           <el-button class="material-btn" @click="onWithdraw">撤回</el-button>
         </el-col>
+        <el-col :span="3" v-if="slotData.auditState=='NONE' || slotData.auditState=='AUDITED_FAILED'">
+          <el-button class="material-btn" @click="onCommit">提交</el-button>
+        </el-col>
+        <el-col :span="3" v-if="canDelete">
+          <el-button type="text" @click="onCancel">作废订单</el-button>
+        </el-col>
+        <el-col :span="3" v-if="canCancelProductionOrder">
+          <el-button type="text" @click="onCancelProdcution">取消订单</el-button>
+        </el-col>
       </template>
       <!-- 审核人员按钮 -->
-      <template v-if="isApprover&&slotData.auditState=='AUDITING'">
+      <template
+        v-if="isApprover && slotData.auditWorkOrder && slotData.auditWorkOrder.currentUserAuditState === 'AUDITING'">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+            <el-button class="material-btn_red" @click="onApproval(false)">审核驳回</el-button>
           </authorized>
         </el-col>
         <el-col :span="3">
@@ -27,7 +37,7 @@
           </authorized>
         </el-col>
       </template>
-      <!-- 制定交接人或创建者按钮 -->
+      <!-- 外接来源订单 -->
       <template v-if="slotData.state != 'CANCELED'">
         <!-- 销售订单按钮 -->
         <template v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin">
@@ -43,11 +53,11 @@
           </el-col>
         </template>
         <!-- 销售计划 -->
-        <template v-else-if="(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')">
+        <!-- <template v-else-if="slotData.auditState=='NONE' || (slotData.auditState=='AUDITED_FAILED' && isCreator)">
           <el-col :span="3">
             <el-button class="material-btn" @click="onCommit">提交</el-button>
           </el-col>
-        </template>
+        </template> -->
       </template>
       <!-- <el-col :span="3">
         <el-button class="material-btn" @click="onGoback">返回</el-button>
@@ -105,6 +115,14 @@
       },
       isSalesOrder: function () {
         return this.slotData.type == 'SALES_ORDER';
+      },
+      canDelete: function () {
+        return this.slotData.state == 'TO_BE_SUBMITTED';
+      },
+      //自创-取消工单
+      canCancelProductionOrder: function () {
+        //限定自创
+        return this.slotData.state == 'AUDIT_PASSED';
       }
     },
     methods: {
@@ -123,10 +141,16 @@
       onRefuse() {
         this.$emit('onRefuse');
       },
+      onCancel() {
+        this.$emit('onCancel');
+      },
+      onCancelProdcution(){
+        this.$emit('onCancelProdcution');
+      },
       //跳转接单页面
       onCommit() {
         this.$router.push({
-          name: this.slotData.type == 'SALES_ORDER' ? '录入业务订单' : '录入企划订单',
+          name: this.slotData.type == 'SALES_ORDER' ? '录入外接订单' : '录入企划订单',
           params: {
             order: this.slotData
           }
@@ -134,25 +158,33 @@
       },
       //审批
       onApproval(isPass) {
-        if (isPass) {
-          this.$confirm('是否确认审核通过?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this._onApproval(isPass, '');
-          });
-        } else {
-          this.$prompt('请输入不通过原因', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-          }).then(({
-            value
-          }) => {
-            this._onApproval(isPass, value);
-          }).catch(() => {
-            //TODO:取消操作
-          });
+        if (this.slotData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
+          this.slotData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+          if (isPass) {
+            this.$confirm('是否确认审核通过?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._onApproval(isPass, '');
+            });
+          } else {
+            this.$prompt('请输入不通过原因', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(({
+              value
+            }) => {
+              this._onApproval(isPass, value);
+            }).catch(() => {
+              //TODO:取消操作
+            });
+          }
+        } else if (this.slotData.auditWorkOrder.currentUserAuditState === 'AUDITING' &&
+          this.slotData.auditWorkOrder.auditingUser.uid !== this.$store.getters.currentUser.uid) {
+          this.$message.warning('此订单暂未轮到您进行审批。')
+        } else if (this.slotData.auditWorkOrder.currentUserAuditState === 'PASSED') {
+          this.$message.warning('您已对此订单进行了审批。');
         }
       },
       async _onApproval(isPass, auditMsg) {

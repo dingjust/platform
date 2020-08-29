@@ -12,8 +12,8 @@
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="订单任务" name="ORDER_TASK">
           <div class="tab-basic-row">
-            <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset"
-              @onAdvancedSearch="onAdvancedSearch" />
+            <task-approval-toolbar :queryFormData="queryFormData" @onReset="onReset" :dataQuery="dataQuery"
+              @onAdvancedSearch="onAdvancedSearch" @onResetQuery="onResetQuery"/>
             <el-tabs v-model="activeStatus" @tab-click="handleClick">
               <template v-for="item in statuses">
                 <el-tab-pane :name="item.code" :label="item.name" :key="item.code">
@@ -94,6 +94,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getAuditList();
         this.searchAdvanced({
@@ -103,10 +106,13 @@
           size
         });
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
       onReset() {},
       handleClick(tab, event) {
         this.onReset();
-        this.queryFormData.state = tab.name;
+        this.queryFormData.searchType = tab.name;
         this.onAdvancedSearch();
       },
       onDetail(row) {
@@ -182,22 +188,29 @@
         activeStatus: '',
         queryFormData: {
           keyword: '',
-          state: ''
+          // state: '',
+          searchType: ''
         },
         statuses: [{
           code: '',
           name: '全部'
         }, {
+          code: 'AUDITING',
+          name: '待审批'
+        }, {
           code: 'PASSED',
-          name: '审核通过'
+          name: '已审批'
         }, {
           code: 'AUDITED_FAILED',
-          name: '审核驳回'
-        }]
+          name: '已驳回'
+        }],
+        dataQuery: {}
       }
     },
     created() {
-      this.onSearch();
+      this.dataQuery = this.getDataPerQuery('AUDIT_TASK');
+      this.onResetQuery();
+      this.onAdvancedSearch(0, 10);
     },
     mounted() {
 

@@ -15,6 +15,7 @@ import BrandsModule from './user/brands';
 import PermissionModule from './user/permission';
 import PersonnelModule from './user/personnel';
 import OrganizationRoleModule from './user/organization-role';
+import OrganizationModule from './user/organization';
 // product
 import ColorsModule from './product/colors';
 import SizesModule from './product/sizes';
@@ -113,6 +114,7 @@ export {
   UserGroupsModule,
   PersonnelModule,
   OrganizationRoleModule,
+  OrganizationModule,
   // product
   ApparelProductsModule,
   CategoriesModule,

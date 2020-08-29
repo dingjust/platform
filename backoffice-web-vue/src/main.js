@@ -24,8 +24,13 @@ import {
   numberInput
 } from './directives';
 import Authorized from '@/auth/Authorized';
-import permission from './common/js/permission';
+import Print from 'vue-print-nb'
 
+import {
+  getDataPermissionQuery
+} from '@/auth/auth';
+
+// import 'babel-polyfill'
 import Promise from 'babel-polyfill';
 // 解决promise 在ie中未定义的问题
 if (!window.Promise) {
@@ -83,13 +88,14 @@ Vue.use(HttpServletPlugin);
 Vue.use(ElementUI, {
   size: 'small'
 });
+Vue.use(Print);
+
 // Vue.use(directives);
 //数字输入框指令
 Vue.directive('number-input', numberInput);
 
 Vue.prototype.fn = {};
 Vue.prototype.$http = http;
-Vue.prototype.permission = permission;
 
 // 根据命令设置导航数据
 import _nav from '@/_nav.js';
@@ -156,6 +162,11 @@ Vue.mixin({
         return '';
       }
     },
+
+    // 根据页面信息获取查询数据权限
+    getDataPerQuery (from) {
+      return getDataPermissionQuery(from);
+    }
   },
 });
 /* eslint-disable no-new */

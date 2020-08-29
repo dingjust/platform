@@ -19,8 +19,9 @@ class _WebviewPageState extends State<WebviewPage> {
 
   @override
   void initState() {
-    _permissionsInit();
     super.initState();
+    _permissionsInit();
+    // flutterWebviewPlugin.
     flutterWebviewPlugin.onUrlChanged.listen((String url) async {
       print(url);
       print(url.contains('result_code=3000'));

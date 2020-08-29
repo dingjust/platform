@@ -125,7 +125,8 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>生产负责人：{{slotData.productionLeader!=null?slotData.productionLeader.name:''}}</h6>
+            <!-- <h6>生产负责人：{{slotData.productionLeader!=null?slotData.productionLeader.name:''}}</h6> -->
+            <h6>跟单员：{{operator}}</h6>
           </el-col>
           <el-col :span="12">
             <h6>审批人：{{slotData.approvers!=null?slotData.approvers[0].name:''}}</h6>
@@ -140,9 +141,10 @@
             </div>
           </el-col>
         </el-row> -->
-        <el-row>
+        <el-row style="margin-top: 10px;">
           <el-col :span="24">
-            <contract-com :slotData="slotData" :contracts="slotData.agreements" :canSign="false" />
+            <production-contract :slotData="slotData" :contracts="contracts" :canSign="false" :readOnly="true"/>
+            <!-- <contract-com :slotData="slotData" :contracts="slotData.agreements" :canSign="false" /> -->
           </el-col>
         </el-row>
         <!-- <el-row class="info-row-title_row" type="flex">
@@ -163,6 +165,7 @@
   import PDFUpload from '@/components/custom/upload/PDFUpload';
   import OrderViewButtonGroup from './OrderViewButtonGroup';
   import ContractCom from '@/views/order/salesProduction/contract/ContractCom'
+  import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
 
   export default {
     name: 'ProductionOrderTopInfo',
@@ -170,9 +173,17 @@
     components: {
       PDFUpload,
       OrderViewButtonGroup,
-      ContractCom
+      ContractCom,
+      ProductionContract
     },
     computed: {
+      // 已签合同列表
+      contracts: function () {
+        if (this.slotData.agreements) {
+          return this.slotData.agreements.filter(item => item.state !== 'INVALID');
+        }
+        return [];
+      },
       productionOrder: function () {
         if (this.slotData.taskOrderEntries != null && this.slotData.taskOrderEntries[0]) {
           return this.slotData.taskOrderEntries[0];
@@ -203,6 +214,22 @@
         }
       },
       cooperator: function () {
+        //来源自己情况
+        if (this.slotData.originCompany != null && this.slotData.originCompany.uid == this.currentUser.companyCode) {
+          if (this.slotData.targetCooperator) {
+            if (this.slotData.targetCooperator.type == 'ONLINE') {
+              return {
+                name: this.slotData.targetCooperator.partner.name,
+                contactPerson: this.slotData.targetCooperator.contactPerson,
+                contactPhone: this.slotData.targetCooperator.contactPhone
+              };
+            }else{
+              return this.slotData.targetCooperator;
+            }
+          }
+        }
+
+        //外接情况
         if (this.slotData.originCooperator != null) {
           if (this.slotData.originCooperator.type == 'ONLINE') {
             return Object.assign({}, this.slotData.originCooperator.partner);
@@ -276,6 +303,13 @@
 
         return result;
       },
+      //跟单员
+      operator:function(){
+        if(this.slotData.taskOrderEntries&&this.slotData.taskOrderEntries[0].merchandiser){
+          return this.slotData.taskOrderEntries[0].merchandiser.name;
+        }
+        return '';
+      }
     },
     methods: {
       // 展开/收起列表行
@@ -286,6 +320,7 @@
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         defaultDateValueFormat: 'yyyy-MM-dd"T"HH:mm:ssZ',
         VIEW_MODE_LIST: 'LIST',
         VIEW_MODE_TABS: 'TABS',

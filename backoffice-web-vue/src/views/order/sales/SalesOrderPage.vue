@@ -9,14 +9,15 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <sales-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+      <sales-order-toolbar @onSearch="onAdvancedSearch" @onAdvancedSearch="onAdvancedSearch" 
+                          :dataQuery="dataQuery" @onResetQuery="onResetQuery" :queryFormData="queryFormData"/>
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code" :key="index">
             <span slot="label">
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
-            <sales-order-search-result-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
+            <sales-order-search-result-list :page="page" @onSearch="onAdvancedSearch" @onAdvancedSearch="onAdvancedSearch"
                                             @cannelOrder="cannelOrder" @remindDelivery="remindDelivery"
                                             @confirmDelivery="confirmDelivery" @onDeliveryForm="onDeliveryForm"/>
           </el-tab-pane>
@@ -60,7 +61,6 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData',
         contentData: 'detailData'
       })
     },
@@ -88,6 +88,9 @@
       },
       onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
+        // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        //   this.onResetQuery();
+        // }
         const query = this.queryFormData;
         const url = this.apis().getOldSalesOrderList();
         this.searchAdvanced({
@@ -98,11 +101,10 @@
         });
       },
       handleClick (tab, event) {
-        console.log(tab.name);
         if (tab.name == 'ALL') {
           this.queryFormData.statuses = [];
           this.queryFormData.refunding = false;
-          this.onSearch('');
+          this.onAdvancedSearch();
         } else if (tab.name == 'PENDING_RETURN') {
           this.queryFormData.statuses = [];
           this.queryFormData.refunding = true;
@@ -162,7 +164,10 @@
         }
         this.$message.success('确认收货成功！')
         this.onAdvancedSearch();
-      }
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data () {
       return {
@@ -172,12 +177,21 @@
           code: 'ALL',
           name: '全部'
         }],
+        queryFormData: {
+          createdDateFrom: null,
+          createdDateTo: null,
+          keyword: '',
+          categories: []
+        },
         deliveryFormShow: false,
-        deliveryData: {}
+        deliveryData: {},
+        dataQuery: {}
       };
     },
     created () {
-      this.onSearch();
+      // this.dataQuery = this.getDataPerQuery('SALES_PLAN');
+      // this.onResetQuery();
+      this.onAdvancedSearch();
       this.$store.state.EnumsModule.salesOrderStatuses.forEach(element => {
         this.statues.push(element);
       });

@@ -1,11 +1,7 @@
 <template>
   <div class="animated fadeIn content payment-request-container">
     <el-card>
-      <div class="financial-plan-triangle_box">
-        <div class="financial-plan-triangle" :style="getTriangleColor">
-          <h6 class="financial-plan-triangle_text">{{auditState}}</h6>
-        </div>
-      </div>
+      <div id="printContent">
       <el-row type="flex" justify="space-between">
         <el-col :span="4">
           <div class="financial-list-title">
@@ -16,8 +12,14 @@
           <h6 style="color: #F56C6C" v-if="showTips">申请金额超过未付款金额</h6>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
+                  <el-col :span="4">
+                    <el-tag effect="plain" size="medium">{{auditState}}</el-tag>
+                  </el-col>
       </el-row>
       <div class="pt-2"></div>
       <el-row type="flex" justify="center">
@@ -27,15 +29,21 @@
               <h6>申请单号：{{formData.code}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>订单号：{{formData.productionOrder.code}}</h6>
+              <h6>订单号：
+                <el-button type="text" style="font-size: 14px;" @click="orderVisible = true">{{formData.productionOrder.code}}</el-button>
+              </h6>
             </el-col>
             <el-col :span="8">
-              <h6>合同号：{{agreementsCode}}</h6>
+              <h6>合同号：
+                <template v-for="item in agreementsCode">
+                  <el-button type="text" :key="item.code" @click="openPreviewPdf(item)">{{item.code}}</el-button>
+                </template>
+              </h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>申请部门：</h6>
+              <h6>申请部门：{{formData.applyUser.b2bDept ? formData.applyUser.b2bDept.name : ''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6>申请人：{{formData.applyUser.name}}</h6>
@@ -66,49 +74,78 @@
               <h6>开户行：{{formData.bank}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+          <!-- <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>审批人：{{approvers}}</h6>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>备注：{{formData.remark}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px" 
-            v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
-            <el-col :span="8">
-              <h6>上传凭证</h6>
-              <el-row style="margin-left: 20px">
-                <images-upload :slotData="formData.requestVouchers" 
-                  :limit="formData.requestVouchers.length" :disabled="true" />
+          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
+            <el-col :span="24">
+              <h6>上传凭证：</h6>
+              <el-row style="margin-left: 20px" v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
+                <images-upload :slotData="formData.requestVouchers" :limit="formData.requestVouchers.length"
+                  :disabled="true" />
               </el-row>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
+      <template v-if="formData.currentAuditWork && formData.currentAuditWork.processes && formData.currentAuditWork.processes.length > 0">
+        <el-row type="flex" justify="center">
+          <el-col :span="22">
+            <order-audit-detail style="padding-left: 10px" :processes="formData.currentAuditWork.processes" />
+          </el-col>
+        </el-row>
+      </template>
       <el-row type="flex" justify="center" v-if="formData.state === 'PAID'">
         <el-col :span="23">
           <payment-records-list :formData="formData" :tableData="[formData.paymentRecords]" />
         </el-col>
       </el-row>
+            </div>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
-        <Authorized :permission="['PAYMENT_REQUEST_FINANCE_PAY']">
-          <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
-        </Authorized>
+        <el-col :span="4">
+          <Authorized :permission="['PAYMENT_REQUEST_FINANCE_PAY']">
+            <el-button v-if="canPay" class="create-btn" @click="paymentVisible = !paymentVisible">去付款</el-button>
+          </Authorized>
+        </el-col>
+        <el-col :span="4">
+          <printer-button v-print="'#printContent'" />
+        </el-col>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <payment-form v-if="paymentVisible" :id="id" @callback="callback"/>
     </el-dialog>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
+    </el-dialog>
+    <el-dialog :visible.sync="orderVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <outbound-order-detail v-if="orderVisible" :code="formData.productionOrder.id" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { PersonnelSelection, ImagesUpload } from '@/components/index.js'
-  import { PaymentRecordsList } from '@/views/financial'
+  import {
+    PersonnelSelection,
+    ImagesUpload,
+    PrinterButton,
+    PdfPreview
+  } from '@/components/index.js'
+  import {
+    PaymentRecordsList
+  } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
+    import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components/'
+  import OutboundOrderDetail from '@/views/order/salesProduction/outbound-order/details/OutboundOrderDetail'
   export default {
     name: 'PaymentRequestDetailFinance',
     props: ['id'],
@@ -116,21 +153,20 @@
       PersonnelSelection,
       ImagesUpload,
       PaymentForm,
-      PaymentRecordsList
+      PaymentRecordsList,
+      PrinterButton,
+      PaymentRecordsList,
+      PdfPreview,
+      OrderAuditDetail,
+      OutboundOrderDetail
     },
     computed: { 
       agreementsCode: function () {
+        let arr = [];
         if (!this.formData.productionOrder.agreements && this.formData.productionOrder.agreements.length <= 0) {
-          return '';
+          return [];
         }
-        let contactCode = '';
-        this.formData.productionOrder.agreements.forEach((item, index) => {
-          contactCode += item.code;
-          if (index != this.formData.productionOrder.agreements.length - 1) {
-            this.contactCode += ', ';
-          }
-        })
-        return contactCode;
+        return this.formData.productionOrder.agreements.filter(item => item.state !== 'INVALID');
       },
       auditState: function () {
         switch (this.formData.state) {
@@ -190,7 +226,7 @@
         this.formData = result.data;
         this.countRequestAmount(result.data.productionOrder.id);
       },
-      async countRequestAmount (id) {
+      async countRequestAmount(id) {
         const url = this.apis().getRequestAmount(id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -201,19 +237,28 @@
           this.$message.error(result.msg);
           return;
         }
-        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) - 
-                              this.parseFloatNotParNaN(result.data.paidAmount);
+        this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) -
+          this.parseFloatNotParNaN(result.data.paidAmount);
       },
-      parseFloatNotParNaN (data) {
+      parseFloatNotParNaN(data) {
         if (isNaN(parseFloat(data))) {
           return 0;
         } else {
           return parseFloat(data);
         }
       },
-      callback () {
+      callback() {
         this.paymentVisible = !this.paymentVisible;
         this.getDetail();
+      },
+      async openPreviewPdf (item) {
+        const url = this.apis().downContract(item.code);
+        const result = await this.$http.get(url);
+
+        const aa = '/b2b/user/agreement/download/' + result.data;
+
+        this.fileUrl = 'static/pdf/web/viewer.html?file=' + encodeURIComponent(aa)
+        this.pdfVisible = true;
       },
       convertCurrency(money) {
         //汉字的数字
@@ -238,7 +283,9 @@
         var chineseStr = '';
         //分离金额后用的数组，预定义
         var parts;
-        if (money === '') { return ''; }
+        if (money === '') {
+          return '';
+        }
         money = parseFloat(money);
         if (money >= maxNum) {
           //超出最大处理数字
@@ -299,9 +346,9 @@
           chineseStr += cnInteger;
         }
         return chineseStr;
-      } 
+      }
     },
-    data () {
+    data() {
       return {
         paymentVisible: false,
         preApplyAmount: '',
@@ -324,14 +371,17 @@
           }
         },
         detailId: '',
-        isFormFincance: false
+        isFormFincance: false,
+        pdfVisible: false,
+        fileUrl: '',
+        orderVisible: false
       }
     },
-    created () {
+    created() {
       this.getDetail();
     },
-    destroyed () {
-      
+    destroyed() {
+
     }
   }
 </script>
@@ -346,13 +396,13 @@
     width: 194px;
   }
 
-  .payment-request-container >>> .el-upload--picture-card {
+  .payment-request-container>>>.el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  .payment-request-container >>> .el-upload-list--picture-card .el-upload-list__item {
+  .payment-request-container>>>.el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }
@@ -364,29 +414,5 @@
     width: 120px;
     height: 40px;
     border-radius: 10px;
-  }
-
-  .financial-plan-triangle_box {
-    margin-top: 1px;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .financial-plan-triangle {
-    width: 0;
-    height: 0;
-    border-right: 70px solid white;
-    border-bottom: 70px solid transparent;
-    z-index: 0;
-  }
-
-  .financial-plan-triangle_text {
-    width: 80px;
-    padding-top: 10px;
-    padding-left: 37px;
-    transform: rotateZ(45deg);
-    color: white;
-    font-size: 12px;
   }
 </style>

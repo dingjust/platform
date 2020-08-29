@@ -1,7 +1,8 @@
 <template>
   <div>
     <shipping-receipt-toolbar :queryFormData="queryFormData" :canCreateReceipt="canCreateReceipt"
-      @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch" />
+                              @onCreate="onCreateReceiptOrder" @onAdvancedSearch="onAdvancedSearch" 
+                              :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-row type="flex" justify="end" align="middle" style="padding-right:10px">
       <el-col :span="2"><span>单据分类：</span></el-col>
       <el-col :span="2">
@@ -92,6 +93,10 @@
       statusMap: {
         type: Object,
         required: true
+      },
+      dataQuery: {
+        type: Object,
+        default: () => {}
       }
     },
     components: {
@@ -140,6 +145,7 @@
         this.$emit('onAdvancedSearch');
         this.shippingOrderStateCount();
         this.reconsiderOrderStateCount();
+        this.returnOrderStateCount();
       },
       // 创建发货单
       onCreateReceiptOrder() {
@@ -265,6 +271,9 @@
           return;
         }
         this.$set(this.stateCount, 'return', result.data);
+      },
+      onResetQuery () {
+        this.$emit('onResetQuery');
       }
     },
     data() {

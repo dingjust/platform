@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-table :data="data" stripe style="width: 100%">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
+    <el-table :data="data" stripe style="width: 100%" row-key="id">
+      <!-- <el-table-column type="selection" :reserve-selection="true" width="55">
+      </el-table-column> -->
       <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
@@ -65,7 +65,7 @@
           <template v-if="canEdit(scope.row.auditState)">
             <el-button v-if="canUpdate" type="text" @click="onModify(scope.$index)">编辑</el-button>
             <el-button v-if="canDelete" slot="reference" type="text" @click="onDelete(scope.$index)"
-              :disabled="scope.$index==0">删除
+              :disabled="data.length==1">删除
             </el-button>
           </template>
         </template>

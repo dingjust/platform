@@ -1,7 +1,8 @@
 <template>
   <div class="task-order-container">
     <el-row type="flex" justify="end" v-if="showDeliveryBtn">
-      <authorized :permission="['SHIPPING_SHEET_CREATE']">
+      <el-button @click="onReceiptCreate" v-if="isAutogestion">创建收货订单</el-button>
+      <authorized :permission="['SHIPPING_SHEET_CREATE']" v-else>
         <el-button @click="onCreate">创建发货订单</el-button>
       </authorized>
     </el-row>
@@ -109,11 +110,21 @@
       showDeliveryBtn: function () {
         return this.isShipParty && (this.formData.state == 'IN_DELIVERY' || this.formData.state ==
           'PENDING_DELIVERY');
+      },
+      //是否自管类型
+      isAutogestion: function () {
+        if (this.formData.productionTaskOrder && this.formData.productionTaskOrder.managementMode) {
+          return this.formData.productionTaskOrder.managementMode == 'AUTOGESTION';
+        }
+        return false;
       }
     },
     methods: {
       onCreate() {
         this.$emit('onCreate');
+      },
+      onReceiptCreate() {
+        this.$emit('onReceiptCreate');
       },
       onShippingSheetDetail(id) {
         this.$router.push('/shipping/orders/' + id);
@@ -156,7 +167,6 @@
         } else {
           return false;
         }
-
       }
     },
     watch: {

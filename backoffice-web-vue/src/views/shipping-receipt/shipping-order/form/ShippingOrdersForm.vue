@@ -28,7 +28,7 @@
             </el-row>
             <el-row type="flex" style="padding-bottom: 10px">
               <el-col :span="8">
-                <h6 class="baisc-lable">货号：{{taskData.product.skuId!=null?nulltaskData.product.skuId:''}}</h6>
+                <h6 class="baisc-lable">货号：{{taskData.product.skuID!=null?taskData.product.skuID:''}}</h6>
               </el-col>
               <el-col :span="8">
                 <h6 class="baisc-lable">发货负责人：{{taskData.merchandiser!=null?taskData.merchandiser.name:''}}</h6>

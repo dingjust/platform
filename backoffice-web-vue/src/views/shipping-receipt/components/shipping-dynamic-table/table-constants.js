@@ -99,7 +99,7 @@ const RelationShippingOrder = {
 const Product = {
   template: `
   <el-table-column label="产品名称" min-width="150" :key="sortKey" :show-overflow-tooltip="true">
-  <template slot-scope="scope">
+  <template slot-scope="scope" v-if="getProduct(scope.row)!=null">
     <el-row type="flex" justify="space-between" align="middle" :gutter="50">
       <el-col :span="6">
         <img width="54px" v-if="getProduct(scope.row)!=null" height="54px"
@@ -187,9 +187,9 @@ const RelationOrder = {
     sortKey: {
       default: 10
     },
-    label:{
-      type:String,
-      default:'生产工单'
+    label: {
+      type: String,
+      default: '生产工单'
     }
   },
   components: {
@@ -495,6 +495,56 @@ const ShipReceNum = {
   },
 }
 
+//发货收货数V2（收货单列表）
+const ShipReceNumV2 = {
+  template: `
+  <el-table-column label="发货数/收货数" :key="sortKey" min-width="110">
+    <template slot-scope="scope">
+      <span>{{getShipNum(scope.row)}}/{{getReceNum(scope.row)}}</span>
+    </template> 
+  </el-table-column>`,
+  props: {
+    /// 发货数
+    shipProp: {
+      type: String,
+      default: 'logisticsSheet.totalQuantity'
+    },
+    receSheetProp: {
+      type: String,
+      default: 'totalQuantity'
+    },
+    sortKey: {
+      default: 10
+    }
+  },
+  methods: {
+    // 发货数
+    getShipNum(row) {
+      let num = 0;
+      try {
+        if (eval('row.' + this.shipProp) != null) {
+          num = eval('row.' + this.shipProp);
+        }
+      } catch (e) {
+        // TODO:空值处理        
+      }
+      return num;
+    },
+    // 收货数
+    getReceNum(row) {
+      let num = 0;
+      try {
+        if (eval('row.' + this.receSheetProp) != null) {
+          num = eval('row.' + this.receSheetProp);
+        }
+      } catch (e) {
+        // TODO:空值处理        
+      }
+      return num;
+    }
+  },
+}
+
 const ReceiptNum = {
   template: `
     <el-table-column label="收货数" :key="sortKey">
@@ -559,6 +609,20 @@ const ReceiptDate = {
       } catch (e) {
         return null
       }
+    }
+  },
+}
+
+const ReceiptDateV2 = {
+  template: `
+  <el-table-column label="收货日期" :key="sortKey">
+    <template slot-scope="scope">
+      <span>{{scope.row.creationtime | timestampToTime}}</span>
+    </template>
+  </el-table-column>`,
+  props: {
+    sortKey: {
+      default: 10
     }
   },
 }
@@ -733,7 +797,7 @@ const ReceiptOperation = {
   },
   methods: {
     onDetail(row) {
-      this.$router.push('/shipping/orders/' + row.id);
+      this.$router.push('/receipt/orders/' + row.id);
     }
   }
 }
@@ -1064,7 +1128,11 @@ const ReturnPerson = {
 
 // 供应商(发货方)
 const SupplierShipParty = {
-  template: `<el-table-column label="供应商" :prop="prop" :key="sortKey" :show-overflow-tooltip="true"></el-table-column>`,
+  template: `<el-table-column label="供应商"  :key="sortKey" :show-overflow-tooltip="true">
+    <template slot-scope="scope">
+      <span>{{getCooperatorName(scope.row)}}</span>
+    </template>
+  </el-table-column>`,
   props: {
     prop: {
       type: String,
@@ -1072,6 +1140,26 @@ const SupplierShipParty = {
     },
     sortKey: {
       default: 10
+    }
+  },
+  methods:{
+    getCooperatorName(row) {
+      //是否自管类型的
+      if (row.productionTaskOrder) {
+        if(row.productionTaskOrder.managementMode == 'AUTOGESTION'){
+          return row.targetCooperator.name;
+        }
+      }      
+      try {
+        let name = eval('row.' + this.prop);
+        if (name != null) {
+          return name;
+        }
+      } catch (e) {
+        // TODO 空值处理
+        return '';
+      }
+      return '';
     }
   }
 }
@@ -1117,7 +1205,9 @@ const MAIN_COMPONENT_NAME_MAP = {
   '收货操作': 'receipt-operation',
   '退货操作': 'return-operation',
   '发货收货数': 'ship-rece-num',
+  '发货收货数v2': 'ship-rece-num-v2',
   '收货日期': 'receipt-date',
+  '收货日期v2': 'receipt-date-v2',
   '合作商-发货': 'shipping-cooperator',
   '合作商-收货': 'receipt-cooperator',
   '跟单员': 'merchandiser',
@@ -1165,7 +1255,9 @@ export {
   ReceiptOperation,
   ReturnOperation,
   ShipReceNum,
+  ShipReceNumV2,
   ReceiptDate,
+  ReceiptDateV2,
   ReconsiderOrderCode,
   ReconsiderNum,
   ReconsiderOperation,

@@ -18,7 +18,9 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <contract-toolbar @openPreviewPdf="openPreviewPdf" :queryFormData="queryFormData" style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
+      <contract-toolbar @openPreviewPdf="openPreviewPdf" :queryFormData="queryFormData" 
+                        style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onSearch"
+                        :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <div>
         <Authorized :permission="['AGREEMENT_CREATE']">
           <el-button class="pr-create-btn" @click="dialogVisible = true">创建合同</el-button>
@@ -29,15 +31,16 @@
               <span slot="label">
                 <tab-label-bubble :label="item" :num="index" />
               </span>
-              <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @closePdfVisible="pdfVisible = false" @previewPdf="openPreviewPdf"/>
+              <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onSearch"
+                                            @closePdfVisible="pdfVisible = false" @previewPdf="openPreviewPdf"/>
             </el-tab-pane>
           </template>
         </el-tabs>
       </div>
     </el-card>
-    <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" :close-on-click-modal="false">
-      <contract-type v-if="dialogVisible" @onSearch="onSearch" 
-                      @closeContractTypeDialog="this.dialogVisible = false" @openPreviewPdf="openPreviewPdf"/>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" :close-on-click-modal="false" append-to-body>
+      <contract-type v-if="dialogVisible" @onSearch="onSearch" @onAdvancedSearch="onSearch"
+                      @closeContractTypeDialog="dialogVisible = false" @openPreviewPdf="openPreviewPdf"/>
     </el-dialog>
   </div>
 </template>
@@ -85,7 +88,6 @@
         keyword: 'keyword',
         orderCode: 'orderCode',
         dateTime: 'dateTime',
-        queryFormData: 'queryFormData',
         type: 'type'
       })
     },
@@ -96,6 +98,9 @@
       ...mapMutations({
       }),
       onSearch (page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getContractsList();
         this.search({
@@ -134,10 +139,10 @@
         var state = this.getEnumCode(tab.name);
         if (tab.name === '全部') {
           this.queryFormData.state = '';
-          this.onSearch();
+          this.onSearch(0, 10);
         } else {
           this.queryFormData.state = state;
-          this.onSearch();
+          this.onSearch(0, 10);
         }
       },
       getEnumCode (name) {
@@ -177,7 +182,10 @@
         // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
         this.pdfVisible = true;
         this.fileUrl = encodeURIComponent(aa)
-      }
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data () {
       return {
@@ -189,11 +197,23 @@
         pdfVisible: false,
         fileUrl: '',
         thisContract: '',
-        dialogVisible: false
+        dialogVisible: false,
+        queryFormData: {
+          title: '',
+          orderCode: '',
+          creationtimeStart: '',
+          creationtimeEnd: '',
+          type: '',
+          state: '',
+          partner: ''
+        },
+        dataQuery: {}
       };
     },
     created () {
-      this.onSearch('');
+      this.dataQuery = this.getDataPerQuery('COMPANY_AGREEMENT');
+      this.onResetQuery();
+      this.onSearch(0, 10);
     }
   };
 </script>

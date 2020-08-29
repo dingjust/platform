@@ -10,7 +10,7 @@
       </el-row>
       <div class="pt-2"></div>
       <shipping-tasks-page :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onAdvancedSearch="onAdvancedSearch" mode="export"/>
+        @onAdvancedSearch="onAdvancedSearch" mode="export" :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     </el-card>
   </div>
 </template>
@@ -57,6 +57,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().shippingTaskList();
         const companyCode = this.currentUser.companyCode;
@@ -68,6 +71,9 @@
           size,
           companyCode
         });
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data() {
@@ -80,10 +86,13 @@
           createdDateFrom: '',
           createdDateTo: '',
           states: 'PENDING_DELIVERY'
-        }
+        },
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('RECEIPT_SHEET');
+      this.onResetQuery();
       this.onAdvancedSearch();
     },
     destroyed() {

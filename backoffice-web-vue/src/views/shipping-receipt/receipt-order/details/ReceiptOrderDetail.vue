@@ -18,6 +18,9 @@
           <h6>单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <div>
             <h6>状态：{{getEnum('ShippingSheetState', formData.state)}}</h6>
           </div>
@@ -90,7 +93,7 @@
             :colorSizeEntries="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
         </el-col>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-row" v-if="formData.receivingMode=='BY_LIST'">
+      <el-row type="flex" justify="start" class="basic-row" v-else>
         <el-col :span="24">
           <color-size-table :data="formData.packageSheets[0].colorSizeEntries" :readOnly="true" />
         </el-col>

@@ -2,8 +2,8 @@
   <div>
     <el-row type="flex" :gutter="20">
       <el-col :span="12">
-        <el-table ref="shipTable" stripe :data="formData.shippingSheets" :height="autoHeight">
-          <el-table-column align="left" min-width="120">
+        <el-table ref="shipTable" stripe :data="formData.receiptSheets" :height="autoHeight">
+          <!-- <el-table-column align="left" min-width="120">
             <template slot="header">
               <el-tooltip effect="light" :content="tips" placement="top">
                 <span>发货单号<i class="el-icon-question" /></span>
@@ -13,22 +13,16 @@
               <el-button type="text" @click="onShipDetail(scope.row.id)">{{scope.row.code}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="发货数量" prop="totalQuantity"></el-table-column>
+          <el-table-column label="发货数量" prop="totalQuantity"></el-table-column> -->
           <el-table-column label="收货单">
             <template slot-scope="scope">
-              <el-row v-for="item in scope.row.receiptSheets" :key="item.id">
-                <el-button type="text" @click="onReceiptDetail(item)">{{item.code}}</el-button>
-              </el-row>
+              <el-button type="text" @click="onReceiptDetail(scope.row)">{{scope.row.code}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="收货数量">
-            <template slot-scope="scope">
-              <span>{{receiptNum(scope.row)}}</span>
-            </template>
-          </el-table-column>
+          <el-table-column label="收货数量" prop="totalQuantity" />          
           <el-table-column label="收货时间">
-            <template slot-scope="scope" v-if="scope.row.receiptSheets[0]">
-              <span>{{scope.row.receiptSheets[0].creationtime| timestampToTime}}</span>
+            <template slot-scope="scope">
+              <span>{{scope.row.creationtime| timestampToTime}}</span>
             </template>
           </el-table-column>
           <el-table-column label="状态">
@@ -40,15 +34,15 @@
       </el-col>
       <el-col :span="12">
         <el-table ref="reconciliationTable" stripe :data="formData.reconciliationSheets" :height="autoHeight">
-          <el-table-column label="对账单号">
+          <el-table-column label="对账单号" min-width="110" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <el-button type="text" @click="onReconciliationDetail(scope.row.id)">{{scope.row.code}}</el-button>
             </template>
           </el-table-column>
           <el-table-column label="对账数量" prop="reconciliationQuantity"></el-table-column>
           <el-table-column label="对账金额" prop="reconciliationAmount"></el-table-column>
-          <el-table-column label="扣款金额" prop="deductionAmount"></el-table-column>
-          <el-table-column label="增款金额" prop="increaseAmount"></el-table-column>
+          <!-- <el-table-column label="扣款金额" prop="deductionAmount"></el-table-column>
+          <el-table-column label="增款金额" prop="increaseAmount"></el-table-column> -->
           <el-table-column label="实付金额" prop="amountDue"></el-table-column>
           <el-table-column label="状态">
             <template slot-scope="scope">
@@ -68,7 +62,7 @@
     </el-dialog>
     <el-dialog :visible.sync="reconciliationOrderVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <reconciliation-orders-detail v-if="reconciliationOrderVisible" :id="reconciliationId"/>
+      <reconciliation-orders-detail v-if="reconciliationOrderVisible" :id="reconciliationId" />
     </el-dialog>
   </div>
 </template>

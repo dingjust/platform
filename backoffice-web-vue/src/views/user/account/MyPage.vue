@@ -29,7 +29,7 @@
           <el-row type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="名称:">
-                <el-input v-model="form.name" :disabled="!isMainUser"></el-input>
+                <el-input v-model="form.name" :disabled="!isMainUser||authenticated"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -73,13 +73,13 @@
       ChangePasswordPage
     },
     computed: {
-      attachments: function () {
-        if (this.$store.getters.currentUser.profilePicture != null) {
-          return [this.$store.getters.currentUser.profilePicture];
-        } else {
-          return [];
-        }
-      },
+      // attachments: function () {
+      //   if (this.$store.getters.currentUser.profilePicture != null) {
+      //     return [this.$store.getters.currentUser.profilePicture];
+      //   } else {
+      //     return [];
+      //   }
+      // },
       //是否主账号
       isMainUser: function () {
         if (this.$store.getters.currentUser.mainUser) {
@@ -87,7 +87,27 @@
         } else {
           return false;
         }
-      }
+      },
+      //是否已认证
+      authenticated: function () {
+        if (this.authenticationInfo == null) {
+          return false;
+        } else {
+          if (
+            this.authenticationInfo.companyState != null &&
+            this.authenticationInfo.companyState == "SUCCESS"
+          ) {
+            return true;
+          } else if (
+            this.authenticationInfo.personalState != null &&
+            this.authenticationInfo.personalState == "SUCCESS"
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      },
     },
     methods: {
       onChangePassword() {
@@ -139,16 +159,22 @@
         },
         dialogVisible: false,
         currentUser: this.$store.getters.currentUser,
+        authenticationInfo: this.$store.getters.authenticationInfo,
         rules: {
           companyOfSeller: [{
             required: true,
             message: "请填写合作商名称",
             trigger: "blur"
           }]
-        }
+        },
+        attachments: []
       };
     },
-    created() {}
+    created() {
+      if (this.$store.getters.currentUser.profilePicture != null) {
+        return this.attachments.push(this.$store.getters.currentUser.profilePicture);
+      }
+    }
   };
 
 </script>

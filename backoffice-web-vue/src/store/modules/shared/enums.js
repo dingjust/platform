@@ -1286,7 +1286,42 @@ const state = {
     {
       code: 'MONTHLY_SETTLEMENT',
       name: '月结'
-    }
+    },
+    {
+      code: 'PHASETHREE',
+      name: '三期款'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_ONE',
+      name: '一月一结'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_TWO',
+      name: '一月两结'
+    },
+  ],
+  // 账期支付方式
+  // 账期支付方式
+  PayPlanTypeV2: [{
+      code: 'PHASEONE',
+      name: '一期款'
+    },
+    {
+      code: 'PHASETWO',
+      name: '二期款'
+    },
+    {
+      code: 'PHASETHREE',
+      name: '三期款'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_ONE',
+      name: '一月一结'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_TWO',
+      name: '一月两结'
+    },
   ],
   // 账期支付类型
   PayMoneyType: [{
@@ -1302,10 +1337,52 @@ const state = {
       name: '2期尾款'
     },
     {
+      code: 'PHASETHREE',
+      name: '3期尾款'
+    },
+    {
       code: 'MONTHLY_SETTLEMENT',
       name: '月结'
-    }
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_ONE',
+      name: '一月一结'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT_TWO',
+      name: '一月两结'
+    },
   ],
+  // PayMoneyTypeV2: [
+  //   {
+  //     code: 'DEPOSIT',
+  //     name: '定金'
+  //   },
+  //   {
+  //     code: 'PHASEONE',
+  //     name: '1期尾款'
+  //   },
+  //   {
+  //     code: 'PHASETWO',
+  //     name: '2期尾款'
+  //   },
+  //   {
+  //     code: 'PHASETHREE',
+  //     name: '3期尾款'
+  //   },
+  //   {
+  //     code: 'MONTHLY_SETTLEMENT',
+  //     name: '月结'
+  //   },
+  //   {
+  //     code: 'MONTHLY_SETTLEMENT_ONE',
+  //     name: '一月一结'
+  //   },
+  //   {
+  //     code: 'MONTHLY_SETTLEMENT_TWO',
+  //     name: '一月两结'
+  //   },
+  // ],
   TriggerEvent: [{
       code: 'ORDER_CONFIRMED',
       name: '确认订单'
@@ -1315,6 +1392,19 @@ const state = {
       name: '签署合同'
     },
     {
+      code: 'DELIVERY_CONFIRMED',
+      name: '确认收货'
+    },
+    {
+      code: 'RECONCILIATION_CONFIRMED',
+      name: '确认对账'
+    },
+    {
+      code: 'INVOICE_RECEIVED',
+      name: '收到发票'
+    }
+  ],
+  TriggerEventV2: [{
       code: 'DELIVERY_CONFIRMED',
       name: '确认收货'
     },
@@ -1347,11 +1437,15 @@ const state = {
   ],
   CooperatorCategory: [{
       code: 'SUPPLIER',
-      name: '供应商'
+      name: '加工厂'
     },
     {
       code: 'CUSTOMER',
       name: '客户'
+    },
+    {
+      code: 'FABRIC_SUPPLIER',
+      name: '面辅料商'
     }
   ],
   // 收货单、对账单状态
@@ -1517,7 +1611,7 @@ const state = {
     },
     {
       code: 'SALES_ORDER',
-      name: '业务订单'
+      name: '外接订单'
     }
   ],
   // 销售企划订单行审核状态
@@ -1573,9 +1667,6 @@ const state = {
   }],
   // 生产工单状态
   ProductionTaskOrderState: [{
-    code: 'TO_BE_ALLOCATED',
-    name: '待分配'
-  }, {
     code: 'TO_BE_PRODUCED',
     name: '待生产'
   }, {
@@ -1590,6 +1681,9 @@ const state = {
   }, {
     code: 'COMPLETED',
     name: '已完成'
+  }, {
+    code: 'TO_BE_ALLOCATED',
+    name: '待分配'
   }, {
     code: 'CANCED',
     name: '已取消'
@@ -1655,13 +1749,13 @@ const state = {
     name: '无'
   }, {
     code: 'AUDITING',
-    name: '待审核'
+    name: '待审批'
   }, {
     code: 'PASSED',
-    name: '审核通过'
+    name: '已审批'
   }, {
     code: 'AUDITED_FAILED',
-    name: '审核驳回'
+    name: '已驳回'
   }, {
     code: 'REVOKED',
     name: '撤回'
@@ -1679,7 +1773,7 @@ const state = {
   }],
   AuditLabel: [{
     code: 'SalesOrder',
-    name: '业务订单'
+    name: '外接订单'
   }, {
     code: 'SalesPlan',
     name: '销售计划'
@@ -1746,6 +1840,10 @@ const state = {
     }, {
       code: 'PENDING_RECONCILED',
       name: '待对账'
+    },
+    {
+      code: 'PENDING_CONFIRM',
+      name: '待确认'
     },
 
     //退货单状态
@@ -1881,9 +1979,19 @@ const state = {
     code: 'FINANCE',
     name: '财务类'
   }],
+  // 认证状态
+  AuthApprovalStatus: [{
+    code: 'check',
+    name: '认证中'
+  }, {
+    code: 'unapproved',
+    name: '未认证'
+  }, {
+    code: 'approved',
+    name: '已认证'
+  }, ],
   // 对账月类型
-  MonthType: [
-    {
+  MonthType: [{
       code: 'CURRENT_MONTH',
       name: '本月'
     },

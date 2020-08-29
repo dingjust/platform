@@ -46,15 +46,22 @@ const mutations = {
     state.currentUser = currentUser;
   },
   authenticationInfo(state, authenticationInfo) {
+    sessionStorage.setItem('authenticationInfo', JSON.stringify(authenticationInfo));
     state.authenticationInfo = authenticationInfo;
   },
   permissions(state, permissions) {
     sessionStorage.setItem('permissions', JSON.stringify(permissions));
     state.permissions = permissions;
   },
-  dataPermission(state, dataPermission) {
-    sessionStorage.setItem('dataPermission', JSON.stringify(dataPermission));
-    state.dataPermission = dataPermission;
+  dataPermission(state, data) {
+    if (data != null && data.length > 0) {
+      let dataPermission = {};
+      data.forEach(item => {
+        dataPermission[item.code] = item.permission;
+      })
+      sessionStorage.setItem('dataPermission', JSON.stringify(dataPermission));
+      state.dataPermission = dataPermission;
+    }
   }
 };
 const actions = {
@@ -83,11 +90,11 @@ const actions = {
     if (response['error']) {
       console.log(JSON.stringify(response));
       if (response['error'] == 'invalid_grant') {
-        alert('账号密码不正确');        
+        alert('账号密码不正确');
       }
       return;
     }
-    
+
     //其他情况
     if (!response['access_token']) {
       alert('网络连接错误');
@@ -115,6 +122,7 @@ const actions = {
     const result = await http.get('/b2b/cert/state');
     if (!result['errors']) {
       commit('authenticationInfo', result.data);
+
     }
 
     // 获取用户权限
@@ -185,10 +193,12 @@ const getters = {
     return state.currentUser;
   },
   token() {
-    // return 'Bearer ' + sessionStorage.getItem('token');
-    return 'Bearer ' + state.token;
+    return 'Bearer ' + sessionStorage.getItem('token');
+    // return 'Bearer ' + state.token;
   },
-  authenticationInfo: state => state.authenticationInfo,
+  authenticationInfo(){
+    return JSON.parse(sessionStorage.getItem('authenticationInfo'));
+  },
   permissions() {
     if (state.permissions.length <= 0) {
       return JSON.parse(sessionStorage.getItem('permissions'));

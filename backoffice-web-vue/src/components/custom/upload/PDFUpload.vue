@@ -1,15 +1,15 @@
 <template>
   <div>
-    <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+    <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData" ref="upload"
       :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
-      :file-list="fileList" multiple :limit="5">
+      :file-list="fileList" multiple :limit="fileLimit" :class="{hide:hideUpload}">
       <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
       <i class="el-icon-plus"></i>
       <div slot="file" slot-scope="{file}">
         <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
         <span class="el-upload-list__item-actions">
           <span class="el-upload-list__item-preview" @click="onDownload(file)">
-            <i class="el-icon-download"></i>
+            <i class="el-icon-zoom-in"></i>
           </span>
           <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
             <i class="el-icon-delete"></i>
@@ -22,10 +22,15 @@
         <!-- </el-row> -->
       </div>
     </el-upload>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import PdfPreview from '@/components/custom/upload/PdfPreview'
+
   export default {
     name: 'PDFUpload',
     props: {
@@ -41,6 +46,9 @@
         type: Boolean,
         default: false
       }
+    },
+    components: {
+      PdfPreview
     },
     methods: {
       onBeforeUpload(file) {
@@ -59,18 +67,31 @@
         }
       },
       handleExceed(files, fileList) {
-        if (fileList > 1) {
+        // if (fileList > 1) {
           this.$message.warning(`已达最大文件数`);
-          return false;
-        }
+          // return false;
+        // }
       },
       handleRemove(file) {
         const index = this.fileList.indexOf(file);
         this.fileList.splice(index, 1);
       },
       onDownload(file) {
-        console.log(JSON.stringify(file));
-        window.open(file.url);
+        // this.$confirm('是否打开页面?', '', {
+        //   confirmButtonText: '是',
+        //   cancelButtonText: '否',
+        //   type: 'warning'
+        // }).then(() => {
+        //   window.open(file.url);
+        // });
+        this.fileUrl = file.url;
+        this.pdfVisible = true;
+      },
+      //是否还有正在上传文件
+      isUploading() {
+        let index = this.$refs.upload.uploadFiles.findIndex(file => file.status == 'uploading' || file.status ==
+          'ready');
+        return index != -1;
       }
     },
     computed: {
@@ -82,14 +103,23 @@
       },
       headers: function () {
         return {
-          Authorization: this.$store.getters.token
+          Authorization: 'Bearer ' + sessionStorage.getItem('token')
         }
+      },
+      canUpload: function () {
+        if (this.disabled || this.fileList.length === this.fileLimit) {
+          return false;
+        }
+        return true;
       }
     },
     data() {
       return {
         mediaUploadUrl: '/b2b/media/file/upload',
-        fileList: []
+        fileList: [],
+        pdfVisible: false,
+        fileUrl: '',
+        hideUpload: false
       }
     },
     watch: {
@@ -98,6 +128,7 @@
       },
       fileList: function (newVal, oldVal) {
         this.$emit("update:vFileList", newVal);
+        this.hideUpload = this.fileList.length >= this.fileLimit || this.disabled;
       },
     }
   };
@@ -105,6 +136,10 @@
 </script>
 
 <style scoped>
+  /deep/ .hide .el-upload--picture-card {
+    display: none!important;
+  }
+
   /deep/ .el-upload--picture-card {
     width: 80px;
     height: 80px;

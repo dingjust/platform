@@ -2,10 +2,10 @@
   <div class="animated fadeIn image-upload">
     <el-row :gutter="10">
       <el-col :span="24">
-        <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData"
-          :disabled="disabled" :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
-          :file-list="fileList" :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit"
-          :on-remove="handleRemove" :class="{disabled:uploadDisabled,picClass:picClass}">
+        <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" :disabled="disabled"
+          :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
+          :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
+          :class="{disabled:uploadDisabled,picClass:picClass}">
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip" style="margin-top:10px;">文件大小不超过5M</div>
         </el-upload>
@@ -86,7 +86,13 @@
         }
       },
       handlePreview(file) {
-         window.open(file.url);
+        this.$confirm('是否打开页面?', '', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          window.open(file.url);
+        });
         // this.dialogImageUrl = file.artworkUrl;
         // this.dialogVisible = true;
       },
@@ -103,12 +109,12 @@
               id: '',
               url: '',
               artworkUrl: '',
-              name:''
+              name: ''
             }
             file.id = image.id;
             file.artworkUrl = image.url;
             file.url = image.url;
-            file.name=image.name;
+            file.name = image.name;
             // image.url = '';
             if (image.convertedMedias.length > 0) {
               image.convertedMedias.forEach(convertedMedia => {

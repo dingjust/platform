@@ -98,15 +98,11 @@
       payable: function () {
         let totalNum = 0;
         //选中发货单收货总额
-        if (this.formData.shippingSheets != null) {
-          this.formData.shippingSheets.forEach(sheet => {
-            if (sheet.receiptSheets != null) {
-              sheet.receiptSheets.forEach(entry => {
-                let num = parseInt(entry.totalQuantity);
-                if (!Number.isNaN(num)) {
-                  totalNum += num;
-                }
-              });
+        if (this.formData.receiptSheets != null) {
+          this.formData.receiptSheets.forEach(sheet => {
+            let num = parseInt(sheet.totalQuantity);
+            if (!Number.isNaN(num)) {
+              totalNum += num;
             }
           });
         }
@@ -143,8 +139,8 @@
     methods: {
       onSubmit() {
         //校验选中发货单数量
-        if (this.formData.shippingSheets.length < 1) {
-          this.$message.error('请选择发货单');
+        if (this.formData.receiptSheets.length < 1) {
+          this.$message.error('请选择收货单');
           return false;
         }
 
@@ -159,7 +155,7 @@
       },
       async _onSubmit() {
         const form = {
-          shippingSheets: this.formData.shippingSheets,
+          receiptSheets: this.formData.receiptSheets,
           increases: this.formData.increases.filter(item => item.amount != null || item.remarks != null).map(
             item => {
               return {
@@ -176,21 +172,26 @@
             }),
         };
 
-        //是否需要审核
         if (this.formData.isApproval) {
+          let approvers = [];
+          this.formData.approvers.forEach(item => {
+            if (item instanceof Array && item.length > 0) {
+              approvers.push({
+                id: item[item.length - 1]
+              });
+            }
+          })
           Object.assign(form, {
             isApproval: true,
-            approvers: this.formData.approvers
+            approvers: approvers
           })
         }
-
+        
         //TODO:对账任务id处理
         const url = this.apis().reconciliationCreate();
         const result = await this.$http.post(url, form, {
           taskId: this.reconciliationTaskId
         });
-
-
 
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -257,9 +258,7 @@
         formData: {
           isApproval: false,
           approvers: [null],
-          shippingSheets: [
-
-          ],
+          receiptSheets: [],
           increases: [{
             amount: null,
             remarks: null
@@ -272,7 +271,7 @@
             code: ''
           },
           shippingTask: {
-            shippingSheets: []
+            receiptSheets: [],
           }
         }
       }
@@ -298,7 +297,7 @@
       }
       if (this.selectShipOrder.length > 0) {
         this.selectShipOrder.forEach(order => {
-          this.formData.shippingSheets.push(order);
+          this.formData.receiptSheets.push(order);
         });
       }
     }

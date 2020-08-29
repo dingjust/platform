@@ -2,7 +2,7 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id" 
               @selection-change="handleSelectionChange" @row-click="rowClick">
-      <el-table-column type="selection" width="55" v-if="ableToApply"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="55" v-if="ableToApply"></el-table-column>
       <el-table-column key="1" label="发货单号" prop="code" min-width="120" v-if="searchType == 'SHIPPING_ORDER'"></el-table-column>
       <el-table-column key="2" label="复议单号" prop="code" min-width="120" v-if="searchType == 'RECONSIDER_ORDER'"></el-table-column>
       <el-table-column key="3" label="产品名称" min-width="150">

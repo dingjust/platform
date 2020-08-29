@@ -16,6 +16,9 @@
           <h6 style="color: #F56C6C" v-if="showTips">申请金额超过未付款金额</h6>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
       </el-row>
@@ -27,15 +30,21 @@
               <h6>申请单号：{{formData.code}}</h6>
             </el-col>
             <el-col :span="8">
-              <h6>订单号：{{formData.productionOrder.code}}</h6>
+              <h6>订单号：
+                <el-button type="text" style="font-size: 14px;" @click="orderVisible = true">{{formData.productionOrder.code}}</el-button>
+              </h6>
             </el-col>
             <el-col :span="8">
-              <h6>合同号：{{agreementsCode}}</h6>
+              <h6>合同号：
+                <template v-for="item in agreementsCode">
+                  <el-button type="text" :key="item.code" @click="openPreviewPdf(item)">{{item.code}}</el-button>
+                </template>
+              </h6>
             </el-col>
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>申请部门：</h6>
+              <h6>申请部门：{{formData.applyUser.b2bDept ? formData.applyUser.b2bDept.name : ''}}</h6>
             </el-col>
             <el-col :span="8">
               <h6>申请人：{{formData.applyUser.name}}</h6>
@@ -66,21 +75,20 @@
               <h6>开户行：{{formData.bank}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
+          <!-- <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>审批人：{{approvers}}</h6>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
               <h6>备注：{{formData.remark}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px"
-            v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
-            <el-col :span="8">
-              <h6>上传凭证</h6>
-              <el-row style="margin-left: 20px">
+          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
+            <el-col :span="24">
+              <h6>上传凭证：</h6>
+              <el-row style="margin-left: 20px" v-if="formData.requestVouchers && formData.requestVouchers.length > 0">
                 <images-upload :slotData="formData.requestVouchers" :limit="formData.requestVouchers.length"
                   :disabled="true" />
               </el-row>
@@ -88,6 +96,13 @@
           </el-row>
         </el-col>
       </el-row>
+      <template v-if="formData.currentAuditWork && formData.currentAuditWork.processes && formData.currentAuditWork.processes.length > 0">
+        <el-row type="flex" justify="center">
+          <el-col :span="22">
+            <order-audit-detail style="padding-left: 10px" :processes="formData.currentAuditWork.processes" />
+          </el-col>
+        </el-row>
+      </template>
       <el-row type="flex" justify="center" v-if="formData.state === 'PAID'">
         <el-col :span="23">
           <payment-records-list :formData="formData" :tableData="[formData.paymentRecords]" />
@@ -96,7 +111,7 @@
       <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canAudit">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="material-btn_red" @click="onApproval(false)">审核拒绝</el-button>
+            <el-button class="material-btn_red" @click="onApproval(false)">审核驳回</el-button>
           </authorized>
         </el-col>
         <el-col :span="3">
@@ -105,10 +120,24 @@
           </authorized>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="canReapply">
+        <el-col :span="3">
+          <authorized :permission="['DO_AUDIT']">
+            <el-button class="material-btn" @click="onReapply">重新申请</el-button>
+          </authorized>
+        </el-col>
+      </el-row>
     </el-card>
     <el-dialog :visible.sync="paymentVisible" width="50%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <payment-form v-if="paymentVisible" :id="id" @callback="callback" />
+    </el-dialog>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body
+      :close-on-click-modal="false">
+      <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
+    </el-dialog>
+    <el-dialog :visible.sync="orderVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <outbound-order-detail v-if="orderVisible" :code="formData.productionOrder.id" />
     </el-dialog>
   </div>
 </template>
@@ -116,12 +145,17 @@
 <script>
   import {
     PersonnelSelection,
-    ImagesUpload
+    ImagesUpload,
+    PdfPreview
   } from '@/components/index.js'
   import {
     PaymentRecordsList
   } from '@/views/financial'
   import PaymentForm from '../form/PaymentForm'
+  import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components/'
+  import OutboundOrderDetail from '@/views/order/salesProduction/outbound-order/details/OutboundOrderDetail'
   export default {
     name: 'PaymentRequestDetailMerchandiser',
     props: ['id'],
@@ -129,26 +163,33 @@
       PersonnelSelection,
       ImagesUpload,
       PaymentForm,
-      PaymentRecordsList
+      PaymentRecordsList,
+      PdfPreview,
+      OrderAuditDetail,
+      OutboundOrderDetail
     },
     computed: {
+      canReapply: function () {
+        return this.formData.state === 'AUDIT_FAIL' && this.formData.applyUser.uid === this.$store.getters.currentUser.uid;
+      },
       canAudit: function () {
-        const id = this.$store.getters.currentUser.id;
-        let index = this.formData.approvers.findIndex(item => item.id == id);
-        return this.formData.state == 'AUDITING' && index >= 0;
+        const uid = this.$store.getters.currentUser.uid;
+        if (this.formData.approvers && this.formData.approvers.length > 0) {
+          let flag = this.formData.approvers.some(item => item.uid === uid);
+          console.log(flag);
+          if (this.formData.currentAuditWork) {
+            return this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && flag;
+          } else {
+            return false;
+          }
+        }
       },
       agreementsCode: function () {
+        let arr = [];
         if (!this.formData.productionOrder.agreements && this.formData.productionOrder.agreements.length <= 0) {
-          return '';
+          return [];
         }
-        let contactCode = '';
-        this.formData.productionOrder.agreements.forEach((item, index) => {
-          contactCode += item.code;
-          if (index != this.formData.productionOrder.agreements.length - 1) {
-            this.contactCode += ', ';
-          }
-        })
-        return contactCode;
+        return this.formData.productionOrder.agreements.filter(item => item.state !== 'INVALID');
       },
       auditState: function () {
         switch (this.formData.state) {
@@ -233,26 +274,43 @@
         this.paymentVisible = !this.paymentVisible;
         this.getDetail();
       },
+      async openPreviewPdf(item) {
+        const url = this.apis().downContract(item.code);
+        const result = await this.$http.get(url);
+
+        const aa = '/b2b/user/agreement/download/' + result.data;
+        this.fileUrl = 'static/pdf/web/viewer.html?file=' + encodeURIComponent(aa)
+
+        this.pdfVisible = true;
+      },
       onApproval(isPass) {
-        if (isPass) {
-          this.$confirm('是否确认审核通过?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this._onApproval(isPass, '');
-          });
-        } else {
-          this.$prompt('请输入不通过原因', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-          }).then(({
-            value
-          }) => {
-            this._onApproval(isPass, value);
-          }).catch(() => {
-            //TODO:取消操作
-          });
+        if (this.formData.currentAuditWork.auditingUser.uid === this.$store.getters.currentUser.uid &&
+          this.formData.currentAuditWork.currentUserAuditState === 'AUDITING') {
+          if (isPass) {
+            this.$confirm('是否确认审核通过?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._onApproval(isPass, '');
+            });
+          } else {
+            this.$prompt('请输入不通过原因', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+            }).then(({
+              value
+            }) => {
+              this._onApproval(isPass, value);
+            }).catch(() => {
+              //TODO:取消操作
+            });
+          }
+        } else if (this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' &&
+          this.formData.currentAuditWork.auditingUser.uid !== this.$store.getters.currentUser.uid) {
+          this.$message.warning('此订单暂未轮到您进行审批。')
+        } else if (this.formData.currentAuditWork.currentUserAuditState === 'PASSED') {
+          this.$message.warning('您已对此订单进行了审批。');
         }
       },
       async _onApproval(isPass, auditMsg) {
@@ -269,6 +327,14 @@
         }
         this.$message.success('审批成功');
         this.getDetail();
+      },
+      onReapply () {
+        this.$router.push({
+          name: '创建付款申请单',
+          params: {
+            requestData: this.formData
+          }
+        });
       },
       convertCurrency(money) {
         //汉字的数字
@@ -381,7 +447,10 @@
           }
         },
         detailId: '',
-        isFormFincance: false
+        isFormFincance: false,
+        pdfVisible: false,
+        fileUrl: '',
+        orderVisible: false
       }
     },
     created() {

@@ -1,26 +1,31 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <div class="sales-plan-triangle_box">
-        <div class="sales-plan-triangle" :style="getTriangleColor">
-          <h6 class="sales-plan-triangle_text">{{getEnum('SalesProductionAuditStatus', formData.auditState)}}</h6>
+      <el-row type="flex" justify="space-between" align="middle">
+        <div class="sales-plan-form-title">
+          <h6 class="title-info">销售计划详情</h6>
         </div>
-      </div>
-      <el-row type="flex" justify="space-between">
-        <el-col :span="6">
-          <div class="sales-plan-form-title">
-            <h6>销售计划详情</h6>
-          </div>
-        </el-col>
+        <h6 class="title-info">订单号：{{formData.code}}</h6>
+        <h6 class="title-info">创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        <div>
+          <el-row type="flex">
+            <h6 class="title-info">标签/状态：{{getEnum('SalesProductionOrderState', formData.state)}}</h6>
+            <audit-tag :state="formData.auditState" class="audit-tag" />
+          </el-row>
+        </div>
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" :inline="true" :model="formData">
-        <sales-order-detail-form :form="formData" :modifyType="modifyType" />
+        <sales-order-detail-form :form="formData" :modifyType="modifyType" @callback="getDetails" />
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :form="formData" @getDetails="getDetails" :canUpdate="false"
           @appendProduct="appendProduct" />
       </div>
+      <template
+        v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">
+        <order-audit-detail :processes="formData.auditWorkOrder.processes" />
+      </template>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
           <h5 style="font-weight: bold">拒绝原因</h5>
@@ -32,7 +37,7 @@
         </el-row>
       </div>
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
-        @onWithdraw="onWithdraw" @callback="onRefresh" @onSubmit="onSave(true)" />
+        @onWithdraw="onWithdraw" @callback="onRefresh" @onSubmit="onSave(true)" @onCancel="onDelete" />
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -63,6 +68,9 @@
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
+  import {
+    OrderAuditDetail
+  } from '@/views/order/salesProduction/components'
 
   export default {
     name: 'SalesPlanDetail',
@@ -71,7 +79,8 @@
       SalesOrderDetailForm,
       SalesProductionTabs,
       SalesPlanDetailBtnGroup,
-      SalesPlanAppendProductForm
+      SalesPlanAppendProductForm,
+      OrderAuditDetail,
     },
     computed: {
       // ...mapGetters({
@@ -208,8 +217,40 @@
         })
       },
       onRefresh() {
-        // this.$router.go(0);
-        this.getDetails();
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+          this.getDetails();
+        }, 1000);
+      },
+      //作废订单
+      onDelete() {
+        this.$confirm('此操作将永久作废订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onDelete();
+        });
+      },
+      async _onDelete() {
+        const url = this.apis().outboundOrderDelete(this.formData.id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('作废订单成功');
+        await this.$router.go(-1);
       },
     },
     data() {
@@ -226,8 +267,12 @@
           user: {},
           quality: '',
           seller: {},
+          creator: {},
           approvers: [null],
-          productionLeader: null
+          productionLeader: null,
+          auditWorkOrder: {
+            processes: []
+          }
         },
       }
     },
@@ -267,30 +312,6 @@
     width: 24%;
     display: table-cell;
     z-index: 100;
-  }
-
-  .sales-plan-triangle_box {
-    /* margin-top: 1px; */
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .sales-plan-triangle {
-    width: 0;
-    height: 0;
-    border-right: 70px solid white;
-    border-bottom: 70px solid transparent;
-    z-index: 0;
-  }
-
-  .sales-plan-triangle_text {
-    width: 80px;
-    padding-top: 10px;
-    padding-left: 30px;
-    transform: rotateZ(45deg);
-    color: white;
-    font-size: 12px;
   }
 
   .sales-border-container {
@@ -341,6 +362,14 @@
   .reject_reason {
     color: #606266;
     padding-bottom: 10px;
+  }
+
+  .audit-tag {
+    margin-left: 10px;
+  }
+
+  .title-info {
+    margin-top: 5px;
   }
 
 </style>

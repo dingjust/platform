@@ -17,7 +17,8 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-tasks-page :page="page" :queryFormData="queryFormData" :canCreate="true" mode='export'
-        @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+                                  @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" 
+                                  :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     </el-card>
   </div>
 </template>
@@ -66,7 +67,10 @@
         });
       },
       onAdvancedSearch(page, size) {
-        // TODO 查询外发的收发任务
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
+        
         const query = this.queryFormData;
         const url = this.apis().reconciliationTaskList();
         const companyCode = this.currentUser.companyCode;
@@ -78,6 +82,9 @@
           companyCode
         });
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      }
     },
     data() {
       return {
@@ -89,10 +96,13 @@
           creationtimeStart: '',
           creationtimeEnd: '',
           states: 'PENDING_RECONCILIATION'
-        }
+        },
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('RECONCILIATION_SHEET_OUT');
+      this.onResetQuery();
       this.onAdvancedSearch();
     },
     destroyed() {

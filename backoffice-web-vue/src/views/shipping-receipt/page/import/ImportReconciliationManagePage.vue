@@ -10,7 +10,8 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-manage-page mode="import" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
+        :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" 
+        :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     </el-card>
   </div>
 </template>
@@ -62,6 +63,10 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
+        
         let query;
         //针对发货方的确认审核状态处理
         if (this.queryFormData.states == 'PENDING_APPROVAL') {
@@ -86,11 +91,14 @@
           companyCode
         });
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      }
     },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
-        searchUrl: this.apis().shippingOrderList(),
+        searchUrl: this.apis().receiptOrderList(),
         queryFormData: {
           keyword: '',
           cooperatorName: '',
@@ -104,7 +112,7 @@
             status: 'PENDING_RECONCILED',
             label: '待对账',
             columns: [{
-              key: '发货单号'
+              key: '收货单'
             }, {
               key: '产品名称'
             }, {
@@ -112,17 +120,17 @@
             }, {
               key: '收货供应商'
             }, {
-              key: '发货收货数'
+              key: '发货收货数v2'
             }, {
               key: '跟单员'
             }, {
-              key: '收货日期'
+              key: '收货日期v2'
             }, {
               key: '发货单状态'
             }, {
-              key: '发货操作'
+              key: '收货操作'
             }],
-            url: this.apis().shippingOrderList()
+            url: this.apis().receiptOrderList()
           },
           PENDING_CONFIRM: {
             status: 'PENDING_CONFIRM',
@@ -214,9 +222,12 @@
             url: this.apis().reconciliationList()
           },
         },
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('RECONCILIATION_SHEET');
+      this.onResetQuery();
       this.onAdvancedSearch(0, 10);
     },
   }

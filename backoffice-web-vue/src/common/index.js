@@ -47,6 +47,9 @@ const COMMON_APIS = {
   getCarriers() {
     return '/b2b/carriers';
   },
+  findBrandAndFactory() {
+    return '/b2b/companies/findBrandAndFactory';
+  },
   createColor() {
     return '/b2b/colors/create';
   },
@@ -693,6 +696,10 @@ const COMMON_APIS = {
   createOutboundOrder() {
     return '/b2b/out/order/save';
   },
+  // 创建外发订单(款式外发)
+  createOutboundOrderWithClothes() {
+    return '/b2b/out/order/save/with/clothes';
+  },
   // 获取外发订单详情
   getoutboundOrderDetail(id) {
     return '/b2b/out/order/' + id;
@@ -787,7 +794,11 @@ const COMMON_APIS = {
   },
   // 审核任务
   taskAudit() {
-    return '/b2b/audit/order/order/audit'
+    return '/b2b/audit/order/order/audit';
+  },
+  // 审核撤回
+  revokeTask(id) {
+    return '/b2b/audit/order/order/revoke/' + id;
   },
   // 获取进度工单列表
   getProgressOrderList() {
@@ -851,7 +862,7 @@ const COMMON_APIS = {
   },
   // 进度工单状态统计
   progressOrderStateCount() {
-    return '/b2b/orders/production/work/state/count';
+    return '/b2b/orders/production/work/state/phase/count';
   },
   // 发货单状态统计
   shippingOrderStateCount() {
@@ -876,6 +887,10 @@ const COMMON_APIS = {
   // 对账单列表状态统计
   reconciliationSheetStateCount() {
     return '/b2b/sheets/reconciliation/state/count';
+  },
+  // 收货单列表状态统计
+  receiptSheetStateCount() {
+    return '/b2b/sheets/receipt/state/count';
   },
   // 对账单（收货方审核）列表状态统计
   reconciliationSheetAuditStateCount() {
@@ -1109,6 +1124,9 @@ let NONE_TENANT_APIS = {
   },
   getSampleProducts() {
     return '/b2b/sample/clothes';
+  },
+  deleteSampleProduct(code) {
+    return '/b2b/sample/clothes/' + code + '/deleted';
   },
   getRequirementOrders() {
     return '/b2b/orders/requirement';
@@ -1457,6 +1475,10 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/receipt/create';
   },
 
+  //创建自管收货单
+  selfReceiptOrderCreate() {
+    return '/b2b/sheets/receipt/createByTask';
+  },
 
   //收货单列表
   receiptOrderList() {
@@ -1566,6 +1588,35 @@ let NONE_TENANT_APIS = {
     return '/b2b/sheets/reconciliation/reject/' + id;
   },
 
+  //唯一码检索
+  uniqueCodeCheck(code) {
+    return '/b2b/out/order/preview/' + code;
+  },
+
+  //外发订单-取消订单
+  outboundOrderCancel() {
+    return '/b2b/out/order/cancel';
+  },
+
+  //自创外接订单-取消订单
+  saleOrderProductionCancel() {
+    return '/b2b/sales/production/order/cancel';
+  },
+
+  //外发订单-取消订单-处理
+  outboundOrderCancelHandle() {
+    return '/b2b/out/order/handling/cancel';
+  },
+
+  //外发订单-撤回
+  outboundOrderWithdraw(id) {
+    return '/b2b/out/order/revoke/' + id;
+  },
+
+  //订单-作废
+  outboundOrderDelete(id) {
+    return '/b2b/sales/production/order/' + id;
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

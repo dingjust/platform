@@ -178,7 +178,7 @@
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
   import MaterialStyleDetailsForm from '../form/MaterialStyleDetailsForm';
   export default {
-    name: 'MaterialDetailsPage',
+    name: 'MaterialDetailsDialog',
     components: {MaterialStyleDetailsForm, ImagesUpload},
     props: {
     },
@@ -448,9 +448,10 @@
 
         this.$message.success(this.formData.id != null ? '编辑物料成功' : '创建物料成功');
         this.saveAndEdit = true;
-        await this.$router.push({
-          name: '物料管理'
-        });
+        this.$emit('callback');
+        // await this.$router.push({
+        //   name: '物料管理'
+        // });
       },
       validateField (name) {
         this.$refs.form.validateField(name);

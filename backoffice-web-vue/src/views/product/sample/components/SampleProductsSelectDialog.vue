@@ -5,22 +5,31 @@
         款式选择:
       </div>
     </el-row>
-    <el-row type="flex" :gutter="20">
-      <el-col :span="8">
-        <el-input v-model="keyword" placeholder="根据产品名/编号/款号" @keyup.enter.native="onSubmit"></el-input>
-      </el-col>
-      <el-col :span="16">
-        <el-button type="text" @click="onSearch">查找</el-button>
+    <div style="display: flex;">
+      <div>
+        <el-form :inline="true">
+          <el-form-item label="">
+            <el-input  nput v-model="queryFormData.keyword" placeholder="根据产品名/编号/款号" @keyup.enter.native="onSubmit"></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="部门/人员">
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                        :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
+          </el-form-item> -->
+        </el-form>
+      </div>
+      <div>
+        <el-button type="text" @click="onSearch(0, 10)">查找</el-button>
+        <!-- <el-button type="text" @click="onReset">重置</el-button> -->
         <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
           <el-button type="text" @click="onNew">创建款式</el-button>
         </Authorized>
         <el-button class="sample-slelct-btn" size="mini" @click="onConfirm">确定</el-button>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <el-row type="flex">
-      <el-table ref="resultTable" stripe :data="page.content" highlight-current-row
-        @current-change="handleCurrentChange" :height="autoHeight" :row-key="getRowKeys">
-        <!--        <el-table-column type="selection" width="55"></el-table-column>-->
+      <el-table ref="resultTable" stripe :data="page.content" @selection-change="handleSelectionChange"
+        :height="autoHeight" :row-key="getRowKeys" @row-click="handleClick">
+        <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
         <el-table-column label="产品图片" width="120">
           <template slot-scope="scope">
             <img width="54px" height="54px"
@@ -41,6 +50,11 @@
         </el-table-column>
       </el-table>
     </el-row>
+    <div class="pt-2"></div>
+    <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+    </el-pagination>
     <el-dialog :visible.sync="detailsVisiable" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sample-product-details-page v-if="detailsVisiable" @closeDialog="closeDialog" />
@@ -53,6 +67,7 @@
     createNamespacedHelpers
   } from 'vuex';
   import SampleProductDetailsPage from "../details/SampleProductDetailsPage";
+  import { DeptPersonSelect } from '@/components'
 
   const {
     mapGetters,
@@ -62,8 +77,10 @@
 
   export default {
     name: 'SampleProductsSelectDialog',
+    props: ['selectedRow'],
     components: {
-      SampleProductDetailsPage
+      SampleProductDetailsPage,
+      DeptPersonSelect
     },
     computed: {
       ...mapGetters({
@@ -78,22 +95,41 @@
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
       }),
-      onSearch(page, size) {
-        this.setAdvancedSearch(false);
-        const keyword = this.keyword;
+      async onSearch(page, size) {
+        // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        //   this.onResetQuery();
+        // }
+        const query = this.queryFormData;
         const url = this.apis().getSampleProducts();
-        this.search({
+        await this.searchAdvanced({
           url,
-          keyword,
+          query,
           page,
           size
         });
+        if (this.selectedRow && this.selectedRow.length > 0) {
+          this.echoData();
+        }
+      },
+      onReset () {
+        this.queryFormData.keyword = '';
+        // this.$refs.deptPersonSelect.clearSelectData();
+        // this.onResetQuery();
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      handleClick (row) {
+        this.$refs.resultTable.toggleRowSelection(row);
       },
       getRowKeys(row) {
         return row.id;
       },
-      handleCurrentChange(newRow, oldRow) {
-        this.multipleSelection = newRow;
+      onPageSizeChanged(val) {
+        this.onSearch(0, val);
+      },
+      onCurrentPageChanged(val) {
+        this.onSearch(val - 1);
       },
       onNew() {
         this.detailsVisiable = true;
@@ -106,17 +142,39 @@
         this.onSearch();
       },
       onConfirm() {
-        this.$emit('onSelectSample', this.multipleSelection);
-      }
+        if (this.multipleSelection != null && this.multipleSelection.length > 0) {
+          this.$emit('onSelectSample', this.multipleSelection);
+        } else {
+          this.$message('请选择产品');
+        }
+      },
+      echoData () {
+        let index;
+        this.page.content.filter(item => {
+          index = this.selectedRow.findIndex(val => val.product.id === item.id);
+          if (index > -1) {
+            this.$refs.resultTable.toggleRowSelection(item);
+          }
+        });
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data() {
       return {
-        multipleSelection: '',
+        multipleSelection: [],
         keyword: '',
-        detailsVisiable: false
+        detailsVisiable: false,
+        queryFormData: {
+          keyword: ''
+        },
+        dataQuery: {}
       }
     },
     created() {
+      // this.dataQuery = this.getDataPerQuery('SAMPLE_CLOTHES_PRODUCT');
+      // this.onResetQuery();
       this.onSearch();
     }
   }
@@ -146,7 +204,7 @@
     background-color: #ffc107;
   }
 
-  .title-box{
+  .title-box {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }

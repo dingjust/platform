@@ -34,7 +34,7 @@
             </el-col>
             <el-col :span="4" :offset="1">
               <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini"
-                         :disabled="formData.isSelfProduction">选择供应商</el-button>
+                         :disabled="formData.isSelfProduction">选择合作商</el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -98,7 +98,8 @@
           </el-row>
           <el-row class="basic-form-row" type="flex">
             <el-col :span="24">
-              <pay-plan-form-v2 :vPayPlan.sync="formData.payPlan" :showPreview="true"/>
+              <!-- <pay-plan-form-v2 :vPayPlan.sync="formData.payPlan" :showPreview="true"/> -->
+              <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" />
             </el-col>
           </el-row>
           <el-row>
@@ -166,7 +167,7 @@
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ImagesUpload from '@/components/custom/ImagesUpload';
   import OutboundOrderColorSizeTable from '../../outbound-order/table/OutboundOrderColorSizeTable';
-  import {PayPlanFormV2} from '@/components/'
+  import {PayPlanForm} from '@/components/'
 
   export default {
     name: 'ProductionOrderForm',
@@ -180,7 +181,7 @@
       MyAddressForm,
       ProductionTaskSelectDialog,
       SuppliersSelect,
-      PayPlanFormV2
+      PayPlanForm
     },
     props: [],
     computed: {

@@ -11,16 +11,37 @@
       </el-row>
       <div class="pt-2"></div>
       <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @onAllocating="onAllocating"
-        @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating" />
+        @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating" :dataQuery="dataQuery"
+        @onResetQuery="onResetQuery" />
       <div>
         <div class="tag-container" v-if="!isAllocating">
-          <el-row type="flex" justify="start" align="middle">
-            <h6 style="margin-bottom: 0px">标签：</h6>
-            <el-button class="type-btn" :style="allBtnColor" @click="setQueryOrderType('')">全部
-            </el-button>
-            <el-button class="type-btn" :style="outBtnColor" @click="setQueryOrderType('FOUNDRY_PRODUCTION')">外发
-            </el-button>
-            <el-button class="type-btn" :style="selfBtnColor" @click="setQueryOrderType('SELF_PRODUCED')">自产</el-button>
+          <el-row type="flex" justify="end" align="middle">
+            <el-col :span="18">
+              <el-row type="flex" justify="start" align="middle">
+                <h6 style="margin-bottom: 0px">标签：</h6>
+                <el-button class="type-btn" :style="allBtnColor" @click="setQueryOrderType('')">全部
+                </el-button>
+                <el-button class="type-btn" :style="outBtnColor" @click="setQueryOrderType('FOUNDRY_PRODUCTION')">外发
+                </el-button>
+                <el-button class="type-btn" :style="selfBtnColor" @click="setQueryOrderType('SELF_PRODUCED')">自产
+                </el-button>
+              </el-row>
+            </el-col>
+            <el-col :span="6">
+              <authorized :permission="['OUT_ORDER_CREATE']">
+                <el-button v-if="!isAllocating" type="primary" class="create-button" @click="onCreate">创建外发订单
+                </el-button>
+              </authorized>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="tag-container" style="right: 96px" v-else>
+          <el-row type="flex" justify="end" align="middle">
+            <el-col :span="6">
+              <authorized :permission="['PRODUCTION_TASK_ASSIGN']">
+                <el-button v-if="isAllocating" type="primary" class="create-button" @click="onAllocating">去分配</el-button>
+              </authorized>
+            </el-col>
           </el-row>
         </div>
         <el-tabs v-model="activeStatus" @tab-click="handleClick">
@@ -119,6 +140,9 @@
         });
       },
       async onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getProductionOrders();
@@ -198,8 +222,8 @@
             originOrder: {
               id: item.id
             },
-            unitPrice: '',
-            deliveryDate: '',
+            unitPrice: item.unitPrice,
+            deliveryDate: item.deliveryDate,
             shippingAddress: item.shippingAddress,
             product: item.product,
             progressPlan: progressPlan,
@@ -234,11 +258,14 @@
           })
         })
         return row;
+      },
+      onResetQuery() {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data() {
       return {
-        activeStatus: 'TO_BE_ALLOCATED',
+        activeStatus: 'TO_BE_PRODUCED',
         statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
         outboundOrderTypeSelect: false,
         selectRow: [],
@@ -248,12 +275,11 @@
           createdDateTo: null,
           keyword: '',
           categories: [],
-          state: 'TO_BE_ALLOCATED',
+          state: 'TO_BE_PRODUCED',
           type: ''
         },
         formData: {
           id: null,
-          managementMode: 'COLLABORATION',
           outboundCompanyName: '',
           outboundContactPerson: '',
           outboundContactPhone: '',
@@ -278,7 +304,7 @@
           cooperationMode: 'LABOR_AND_MATERIAL',
           invoiceNeeded: false,
           invoiceTaxPoint: 0.03,
-          freightPayer: 'PARTYA',
+          freightPayer: 'PARTYB',
           remarks: '',
           sendAuditNeeded: false,
           payPlan: {
@@ -298,10 +324,13 @@
             id: ''
           }]
         },
-        stateCount: {}
+        stateCount: {},
+        dataQuery: {}
       };
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('PRODUCTION_TASK_ORDER');
+      this.onResetQuery();
       this.onAdvancedSearch();
       this.statues.push({
         code: '',
@@ -339,7 +368,7 @@
 
   .tag-container {
     position: absolute;
-    right: 150px;
+    right: 35px;
     margin-top: 4px;
     z-index: 999;
   }
@@ -352,6 +381,20 @@
 
   .type-btn:focus {
     outline: 0;
+  }
+
+  .create-button {
+    background-color: #ffd60c;
+    border-color: #DCDFE6;
+    width: 100px;
+    color: #606266;
+  }
+
+  .create-button:hover {
+    background-color: #ffd60c;
+    border-color: #DCDFE6;
+    width: 100px;
+    color: #606266;
   }
 
 </style>

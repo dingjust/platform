@@ -20,6 +20,9 @@
           </div>
         </el-col>
         <el-col :span="4">
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </el-col>
+        <el-col :span="4">
           <div>
             <h6>状态：{{getEnum('ShippingSheetState', formData.state)}}</h6>
           </div>

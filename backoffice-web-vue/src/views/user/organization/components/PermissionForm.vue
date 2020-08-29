@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="permission-form">
     <el-container class="permission-form-container">
       <el-aside style="width: 220px;border-right: 2px solid #E6E6E6;">
         <h6 class="permission-form-hear" style="min-width: 218px">权限菜单</h6>
@@ -44,7 +44,7 @@
             <h6 class="permission-form-hear">数据权限</h6>
             <div class="checkbox-container">
               <template v-if="authList.dataPermissionAvl">
-                <el-checkbox-group v-model="checkPerdata[authList.id]" @change="handlePer">
+                <el-checkbox-group v-model="checkPerdata[authList.id]" @change="handlePer" :min="1">
                   <el-checkbox v-for="item in dataPermission" :label="item.code" :key="item.code">
                     {{item.name}}
                   </el-checkbox>
@@ -106,6 +106,12 @@
         this.$nextTick(() => {
           if (this.roleIds && this.roleIds.length > 0) {
             this.initData();
+          } else {
+            for (const key in this.checkPerdata) {
+              if (this.checkPerdata.hasOwnProperty(key)) {
+                this.checkPerdata[key] = ['SELF_DATA'];
+              }
+            }
           }
         })
       },
@@ -142,22 +148,21 @@
           this.authList = this.secondList[i];
         }
       },
-      checkboxChange (list, item, isEcho) {
+      checkboxChange (list, item) {
         let parentIndex = this.authData.findIndex(val => val.id === item.parentId);
         let index = this.authData[parentIndex].children.findIndex(val => val.id === item.id);
         // 处理二级
-        this.authData[parentIndex].children[index].checked = list.length == item.children.length;
-        this.authData[parentIndex].children[index].indeterminate = (list.length > 0 && list.length < item.children.length) 
-                                                                    || (list.length <= 0 &&  this.checkPerdata[item.id] && this.checkPerdata[item.id].length > 0);
+        this.authData[parentIndex].children[index].checked = list.length >= item.children.length;
+        this.authData[parentIndex].children[index].indeterminate = list.length > 0 && list.length < item.children.length;
         // 处理一级
         this.changeParentState(parentIndex);
 
-        // 处理数据权限
-        if (item.dataPermissionAvl && !isEcho) {
-          if (list.length > 0 && this.checkPerdata[item.id].length <= 0) {
-            this.checkPerdata[item.id] = ['SELF_DATA'];
-          }
-        }
+        // // 处理数据权限
+        // if (item.dataPermissionAvl && !isEcho) {
+        //   if (list.length > 0 && this.checkPerdata[item.id].length <= 0) {
+        //     this.checkPerdata[item.id] = ['SELF_DATA'];
+        //   }
+        // }
       },
       changeParentState (parentIndex) {
         // 处理一级
@@ -196,60 +201,64 @@
           this.checkData[val.id] = [];
         }
 
-        this.handlePerData(flag, val);
+        // this.handlePerData(flag, val);
 
         this.changeParentState(parentIndex);
       },
-      handlePerData (flag, val) {
-        // 处理数据权限
-        if (val.dataPermissionAvl) {
-          if (flag && this.checkPerdata[val.id].length <= 0) {
-            this.checkPerdata[val.id] = ['SELF_DATA'];
-          } else if (!flag) {
-            this.checkPerdata[val.id] = [];
-          }
-        }
-      },
+      // handlePerData (flag, val) {
+      //   // 处理数据权限
+      //   if (val.dataPermissionAvl) {
+      //     if (flag && this.checkPerdata[val.id].length <= 0) {
+      //       this.checkPerdata[val.id] = ['SELF_DATA'];
+      //     } else if (!flag) {
+      //       this.checkPerdata[val.id] = [];
+      //     }
+      //   }
+      // },
       handlePer (list) {
         if (list.length > 1) {
           this.checkPerdata[this.authList.id] = [list.pop()];
         }
-        if (this.checkData[this.authList.id].length <= 0) {
-          let parentIndex = this.authData.findIndex(item => item.id === this.authList.parentId);
-          let childIndex;
-          if (parentIndex >= 0) {
-            childIndex = this.authData[parentIndex].children.findIndex(item => item.id === this.authList.id);
-          }
+        // if (this.checkData[this.authList.id].length <= 0) {
+        //   let parentIndex = this.authData.findIndex(item => item.id === this.authList.parentId);
+        //   let childIndex;
+        //   if (parentIndex >= 0) {
+        //     childIndex = this.authData[parentIndex].children.findIndex(item => item.id === this.authList.id);
+        //   }
 
-          let flag = list.length > 0;
-          if (childIndex >= 0) {
-            // 判断二级权限是否拥有三级权限列表
-            let thirdList = this.authData[parentIndex].children[childIndex].children;
-            if (thirdList && thirdList.length > 0) {
-              this.authData[parentIndex].children[childIndex].indeterminate = flag;
-            } else if (thirdList == null || thirdList.length <= 0) {
-              this.authData[parentIndex].children[childIndex].indeterminate = false;
-              this.authData[parentIndex].children[childIndex].checked = flag;
-            }  
-          }
+        //   let flag = list.length > 0;
+        //   if (childIndex >= 0) {
+        //     // 判断二级权限是否拥有三级权限列表
+        //     let thirdList = this.authData[parentIndex].children[childIndex].children;
+        //     if (thirdList && thirdList.length > 0) {
+        //       this.authData[parentIndex].children[childIndex].indeterminate = flag;
+        //     } else if (thirdList == null || thirdList.length <= 0) {
+        //       this.authData[parentIndex].children[childIndex].indeterminate = false;
+        //       this.authData[parentIndex].children[childIndex].checked = flag;
+        //     }  
+        //   }
 
-          if (parentIndex >= 0) {
-            // this.authData[parentIndex].indeterminate = flag;
-            this.echoFirstData(this.authData[parentIndex].children, parentIndex);
-          }
-        }
+        //   if (parentIndex >= 0) {
+        //     // this.authData[parentIndex].indeterminate = flag;
+        //     this.echoFirstData(this.authData[parentIndex].children, parentIndex);
+        //   }
+        // }
       },
       // 数据回显
       initData () {
         let index;
-        if (this.dataPermissions) {
+
+        if (this.dataPermissions && this.dataPermissions.length > 0) {
           this.dataPermissions.forEach(item => {
             index = this.secondList.findIndex(val => val.code === item.code);
             if (index >= 0) {
               this.checkPerdata[this.secondList[index].id] = [item.permission];
+            } else {
+              this.checkPerdata[this.secondList[index].id] = ['SELF_DATA'];
             }
           })
         }
+
         let list;
         let parentIndex;
         let childIndex;
@@ -261,23 +270,23 @@
               if (item.children && item.children.length > 0) {
                 list = item.children.map(val => val.id);
                 // 回显一二级,回显不需要自动勾选数据权限，加一个参数进行判断
-                this.checkboxChange(list, this.authData[parentIndex].children[childIndex], true);
+                this.checkboxChange(list, this.authData[parentIndex].children[childIndex]);
                 
                 // 回显三级
                 this.checkData[item.id] = list;
               } else {
-                let perLength = [];
-                if (this.checkPerdata[item.id]) {
-                  perLength = this.checkPerdata[item.id].length;
-                }
+                // let perLength = [];
+                // if (this.checkPerdata[item.id]) {
+                //   perLength = this.checkPerdata[item.id].length;
+                // }
                 let length = [];
                 if (this.authData[parentIndex].children[childIndex].children) {
                   length = this.authData[parentIndex].children[childIndex].children.length;
                 }
                 // 回显二级无子权限
 
-                this.authData[parentIndex].children[childIndex].checked = (perLength > 0 && length <= 0) || length <= 0;
-                this.authData[parentIndex].children[childIndex].indeterminate = perLength > 0 && length > 0;
+                this.authData[parentIndex].children[childIndex].checked = length <= 0;
+                this.authData[parentIndex].children[childIndex].indeterminate = false;
               }
             })
           }
@@ -360,5 +369,27 @@
 
   .checkbox-container {
     padding: 10px 20px;
+  }
+
+  /deep/ .el-checkbox__input.is-disabled+span.el-checkbox__label {
+      color: #409EFF;
+      cursor: auto;
+  }
+
+  /deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
+    background-color: #409EFF;
+    border-color: #409EFF;
+  }
+
+  /deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
+    border-color: #fff;
+  }
+
+  /deep/ .el-checkbox__input.is-disabled .el-checkbox__inner {
+    cursor: auto;
+  }
+
+  /deep/ .el-checkbox__input.is-disabled .el-checkbox__inner::after {
+    cursor: auto;
   }
 </style>

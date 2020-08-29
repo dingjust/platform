@@ -6,8 +6,12 @@
           <el-form-item label="订单信息">
             <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 130px"></el-input>
           </el-form-item>
-          <el-form-item label="负责人">
+          <!-- <el-form-item label="负责人">
             <el-input placeholder="输入负责人名称" v-model="queryFormData.merchandiserName" style="width: 120px"></el-input>
+          </el-form-item> -->
+          <el-form-item label="部门/人员" prop="name">
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="120"
+                                :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <el-form-item label="合作商">
             <el-input placeholder="输入合作商名称" v-model="queryFormData.cooperatorName" style="width: 120px"></el-input>
@@ -34,11 +38,13 @@
 </template>
 
 <script>
+  import { DeptPersonSelect } from '@/components'
+
   export default {
     name: 'ShippingOrdersToolbar',
-    props: ['queryFormData'],
+    props: ['queryFormData', 'dataQuery'],
     components: {
-
+      DeptPersonSelect
     },
     computed: {
 
@@ -52,6 +58,8 @@
         this.queryFormData.keyword = '';
         this.queryFormData.cooperatorName = '';
         this.queryFormData.merchandiserName = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       }
     },
     data () {

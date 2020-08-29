@@ -54,6 +54,7 @@
         setFormData: 'setFormData'
       }),
       async onSubmit () {
+        this.formData.previewText.replace(/\//g, '/\n');
         // 提交数据
         const url = this.apis().createPayPlan();
         const result = await this.$http.post(url, this.formData);

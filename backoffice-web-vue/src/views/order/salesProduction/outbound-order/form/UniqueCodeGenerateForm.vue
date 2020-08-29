@@ -17,7 +17,7 @@
 
 <script>
   export default {
-    name: "UniqueCodeImportForm",
+    name: "UniqueCodeGenerateForm",
     props: {
       order: {
         type: Object

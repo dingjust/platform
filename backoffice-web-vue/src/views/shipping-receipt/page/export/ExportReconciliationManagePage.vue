@@ -10,7 +10,8 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-manage-page mode="export" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onSelect="onSelect" :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" />
+        @onSelect="onSelect" :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick"
+        :dataQuery="dataQuery" @onResetQuery="onResetQuery" />
     </el-card>
   </div>
 </template>
@@ -28,7 +29,7 @@
 
   import ReconciliationManagePage from '../../reconciliation-manage/ReconciliationManagePage'
   export default {
-    name: 'ImportShippingReceiptPage',
+    name: 'ExportReconciliationManagePage',
     components: {
       ReconciliationManagePage
     },
@@ -62,6 +63,10 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
+
         let query = Object.assign({}, this.queryFormData);
         const url = this.searchUrl;
         const companyCode = this.currentUser.companyCode;
@@ -75,12 +80,15 @@
       },
       onSelect(val) {
         this.$set(this, 'selectData', val);
+      },
+      onResetQuery() {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
-        searchUrl: this.apis().shippingOrderList(),
+        searchUrl: this.apis().receiptOrderList(),
         queryFormData: {
           keyword: '',
           cooperatorName: '',
@@ -118,7 +126,7 @@
                 }
               }
             }, {
-              key: '发货单号'
+              key: '收货单'
             }, {
               key: '产品名称'
             }, {
@@ -129,17 +137,17 @@
             }, {
               key: '收货供应商'
             }, {
-              key: '发货收货数'
+              key: '发货收货数v2'
             }, {
               key: '收货跟单员'
             }, {
-              key: '收货日期'
+              key: '收货日期v2'
             }, {
               key: '发货单状态'
             }, {
-              key: '发货操作'
+              key: '收货操作'
             }],
-            url: this.apis().shippingOrderList()
+            url: this.apis().receiptOrderList()
           },
           PENDING_APPROVAL: {
             status: 'PENDING_APPROVAL',
@@ -169,6 +177,31 @@
           PENDING_CONFIRM: {
             status: 'PENDING_CONFIRM',
             label: '对账中',
+            columns: [{
+              key: '对账单号'
+            }, {
+              key: '关联订单',
+              props: {
+                label: '关联生产工单'
+              }
+            }, {
+              key: '发货供应商'
+            }, {
+              key: '收货跟单员'
+            }, {
+              key: '账单金额'
+            }, {
+              key: '对账日期',
+            }, {
+              key: '对账状态',
+            }, {
+              key: '对账详情'
+            }],
+            url: this.apis().reconciliationList()
+          },
+          APPROVAL_RETURN: {
+            status: 'APPROVAL_RETURN',
+            label: '审批驳回',
             columns: [{
               key: '对账单号'
             }, {
@@ -242,9 +275,12 @@
             url: this.apis().reconciliationList()
           },
         },
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('RECONCILIATION_SHEET_OUT');
+      this.onResetQuery();
       this.onAdvancedSearch(0, 10);
     },
   }

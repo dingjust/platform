@@ -42,7 +42,7 @@
           <el-col :span="8" style="padding-top: 5px;">
             <span class="info-input-prepend">尾款期数：</span>
             <template v-for="(value,key) in payPlanType">
-              <el-radio class="info-radio" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
+              <el-radio class="info-radio" v-model="form.payPlanType" :label="key" :key="key">{{value}}</el-radio>
             </template>
           </el-col>
           <el-col :span="9" :offset="1">

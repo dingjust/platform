@@ -1,6 +1,46 @@
 <template>
   <div>
-    <div class="financial-info-box">
+    <el-row type="flex" :gutter="10">
+      <el-col :span="18">
+        <el-row type="flex" justify="start" style="margin-left: 15px;">
+          <h6 style="margin: 0px;">订单基本信息</h6>
+        </el-row>
+        <el-row type="flex" justify="start" style="margin: 15px 0px 0px 24px;">
+          <el-col :span="9">
+            <h6>合作商：{{cooperatorName}}</h6>
+          </el-col>
+          <el-col :span="5">
+            <h6>合作方式：{{getEnum('machiningTypes', formData.productionOrder.cooperationMode)}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>是否开票：{{formData.productionOrder.invoiceNeeded ? '是' : '否'}}<span style="margin-left:5px"
+                v-if="formData.productionOrder.invoiceNeeded">{{formData.productionOrder.invoiceTaxPoint * 100}}%</span></h6>
+          </el-col>
+          <el-col :span="4">
+            <h6>订单数量：{{productionCount}}</h6>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" style="margin: 10px 0px 0px 24px;">
+          <el-col :span="9">
+            <h6>订单金额：{{formData.orderAmount}}</h6>
+          </el-col>
+          <el-col :span="5">
+            <h6 class="hide-text" :title="charge">
+              负责人：{{charge}}
+            </h6>
+          </el-col>
+          <el-col :span="6">
+            <h6 class="hide-text" :title="approver">
+              审批人：{{approver}}
+            </h6>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="6" class="financial-border-container">
+          <production-contract :slotData="formData.productionOrder" :contracts="contracts" :canSign="false" :readOnly="true"/>
+      </el-col>
+    </el-row>
+    <!-- <div class="financial-info-box">
       <div class="financial-border-container financial-info-one">
         <el-row type="flex" justify="start" align="middle" class="basic-row">
           <h6>订单基本信息</h6>
@@ -10,7 +50,7 @@
             <h6>合作方式：{{getEnum('machiningTypes', formData.productionOrder.cooperationMode)}}</h6>
           </el-col>
           <el-col :span="8">
-            <h6>是否开发票：{{formData.productionOrder.invoiceNeeded ? '是' : '否'}}</h6>
+            <h6>是否开票：{{formData.productionOrder.invoiceNeeded ? '是' : '否'}}</h6>
           </el-col>
           <el-col :span="5" v-if="formData.productionOrder.invoiceNeeded">
             <h6>税率：{{formData.productionOrder.invoiceTaxPoint}}</h6>
@@ -74,27 +114,34 @@
       </div>
       <div style="margin-left: 10px"></div>
       <div class="financial-border-container financial-info-three">
-        <contract-com :slotData="formData.productionOrder" :contracts="formData.productionOrder.agreements" :canSign="false"/>
+            <production-contract :slotData="formData.productionOrder" :contracts="contracts" :canSign="false" :readOnly="true"/>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
   import ContractCom from '../../order/salesProduction/contract/ContractCom'
   import {PayPlanInfo} from '@/components/index.js'
+  import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
+
   export default {
     name: 'FinancialOrderInfo',
     props: ['formData', 'payPlan', 'belongTo'],
     components: {
       PayPlanInfo,
-      ContractCom
+      ContractCom,
+      ProductionContract
     },
     computed: {
+      // 已签合同列表
+      contracts: function () {
+        if (this.formData.productionOrder.agreements) {
+          return this.formData.productionOrder.agreements.filter(item => item.state !== 'INVALID');
+        }
+        return [];
+      },
       cooperatorName: function () {
-        console.log(this.belongTo);
-        console.log(this.formData.productionOrder.originCooperator);
-        console.log(this.formData.productionOrder.targetCooperator);
         if (this.belongTo == 'RECEIVABLE_PAGE' && this.formData.productionOrder.originCooperator) {
           return this.formData.productionOrder.originCooperator.type === 'ONLINE' ? 
             this.formData.productionOrder.originCooperator.partner.name : this.formData.productionOrder.originCooperator.name; 

@@ -8,71 +8,93 @@
 </template>
 
 <script>
+import {
+  createNamespacedHelpers
+} from "vuex";
+
+const {
+  mapState,
+} = createNamespacedHelpers(
+  "OrganizationModule"
+);
 export default {
   name: 'PersonnalSelectionV2',
   props: {
     // 关联对象为所选择项在 tree 中由 id组成的数组分支，取最后一项为选择项的id，引用处自行处理
     vPerson: {
-      default: () => []
+      default: () => {
+        return [];
+      }
     },
     disabled: {
       type: Boolean,
       default: false
+    },
+    // 是否需要排除本账号
+    excludeMySelf: {
+      type: Boolean,
+      default: false
+    },
+    selectedRow: {
+      type: Array,
+      default: ()=>{
+        return [];
+      }
     }
   },
   data () {
     return {
       deptList: [],
-      person: []
+      person: [],
+      personList: []
     }
   },
+  computed: {
+    ...mapState({
+      deptOptions: state => state.deptList.options,
+      loading: state => state.deptList.loading,
+      personOptions: state => state.personList.options,
+    })
+  },
   methods: {
-    async getDeptList () {
-      const url = this.apis().getB2BCustomerDeptList();
-      const result = await this.$http.post(url);
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
-      this.deptList = result.data;
-
-      await this.getPersonList();
-    },
-    async getPersonList () {
-      const url = this.apis().getB2BCustomers();
-      const result = await this.$http.post(url, {
-        enable: false
-      }, {
-        page: 0,
-        size: 99
-      })
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
-
-      this.personList = result.content;
-
-      // 组建tree
-      await this.createDeptPersonTree();
+    initData () {
+      this.deptList = JSON.parse(JSON.stringify(this.deptOptions));
+      this.personList = JSON.parse(JSON.stringify(this.personOptions));
+      this.createDeptPersonTree();
     },
     createDeptPersonTree () {
+      let index;
       this.personList.forEach(item => {
+        if (item.uid === this.$store.getters.currentUser.uid && this.excludeMySelf) {
+          return;
+        }
+
+        index = this.selectedRow.findIndex(val => {
+          if (val) {
+            return item.id === val[val.length - 1];
+          }
+        })
+
+        if (index > -1 && item.id !== this.person[this.person.length - 1]) {
+          return;
+        }
+
+        // this.selectedRow.forEach(val => {
+        //   if (JSON.stringify(item) === JSON.stringify(this.person)) {
+        //     return;
+        //   }
+        // })
+
         if (item.b2bDept) {
           this.$set(item, 'parentId', item.b2bDept.id);
-        }
-        if (item.b2bDept) {
           let temp = this.breadthQuery(this.deptList, item.b2bDept.id);
           temp.children.push(item);
         }
+
+        // 主账号没所属部门时，跟一级部门同级
+        if (item.root && item.b2bDept == null) {
+          this.deptList.push(item);
+        } 
       })
 
       // 处理数据回显
@@ -126,10 +148,29 @@ export default {
     },
     person: function (newVal, oldVal) {
       this.$emit('update:vPerson', newVal);
+    },
+    selectedRow: function (newVal, oldVal) {
+      this.initData();
+    },
+    loading: function (nval, oval) {
+      if (nval === false) {
+        this.initData();
+      }
     }
   },
   created () {
-    this.getDeptList();
+    if (this.loading === false) {
+      this.initData();
+    }
+  },
+  beforeCreate () {
+    this.$store.commit('OrganizationModule/deptList', {cmd: 'plusRef'});
+    if (this.$store.state.OrganizationModule.deptList.refNum <= 1) {
+      this.$store.dispatch('OrganizationModule/loadDeptList', this);
+    }
+  },
+  destroyed() {
+    this.$store.commit('OrganizationModule/deptList', {cmd: "minusRef"});
   }
 }
 </script>
