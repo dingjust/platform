@@ -43,7 +43,8 @@
     computed: {
       //可以取消的订单(待生产订单)
       canbeCancelOrders: function () {
-        return this.order.taskOrderEntries.filter(entry => entry.state == 'TO_BE_PRODUCED'&&!entry.canceling);
+        return this.order.taskOrderEntries.filter(entry => (entry.state == 'TO_BE_PRODUCED' || entry.state ==
+          'TO_BE_ALLOCATED' || entry.state == 'AUDIT_PASSED') && !entry.canceling);
       }
     },
     methods: {
@@ -72,7 +73,7 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-        if (result["code"]==0) {
+        if (result["code"] == 0) {
           this.$message.error(result["msg"]);
           return;
         }
