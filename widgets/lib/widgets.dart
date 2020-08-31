@@ -38,7 +38,6 @@ export 'src/commons/list_tile/list_title.dart';
 export 'src/commons/menu/enum_select.dart';
 export 'src/commons/menu/menu.dart';
 export 'src/commons/menu/single_enum_select.dart';
-export 'src/commons/multipart_file_upload/mulitipart_file_upload.dart';
 export 'src/commons/photo_picker/photo_picker.dart';
 export 'src/commons/photo_picker/picture_pick_preview.dart';
 export 'src/commons/progress/progress_indicator.dart';

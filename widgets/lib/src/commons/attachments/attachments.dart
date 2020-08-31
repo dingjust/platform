@@ -9,9 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-// import 'package:image_cropper/image_cropper.dart';
-
-// import 'package:image_cropper/image_cropper.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:open_file/open_file.dart';
@@ -1028,7 +1026,8 @@ class _EditableAttachmentsState extends State<EditableAttachments>
       FormData formData = FormData.fromMap({
         // "file": UploadFileInfo(file, "file",
         //     contentType: ContentType.parse('image/jpeg')),
-        "file": await MultipartFile.fromFile(file.path, filename: "file"),
+        "file": await MultipartFile.fromFile(file.path,
+            filename: "file", contentType: MediaType.parse('image/jpeg')),
         "conversionGroup": "DefaultProductConversionGroup",
         "imageFormat": "DefaultImageFormat"
       });
@@ -1037,9 +1036,9 @@ class _EditableAttachmentsState extends State<EditableAttachments>
         data: formData,
         // queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
         // queryParameters: {'imageFormat': 'DefaultImageFormat'},
-        options: Options(
-          headers: {'Content-Type': 'application/json;charset=UTF-8'},
-        ),
+        // options: Options(
+        //   headers: {'Content-Type': 'application/json;charset=UTF-8'},
+        // ),
         onSendProgress: (int sent, int total) {
           _streamControllerList[index].sink.add(sent / total);
         },
@@ -1391,16 +1390,17 @@ class _SingleAttachmentState extends State<SingleAttachment>
       FormData formData = FormData.fromMap({
         // "file": UploadFileInfo(file, "file",
         //     contentType: ContentType.parse('image/jpeg')),
-        "file": await MultipartFile.fromFile(file.path, filename: "file"),
+        "file": await MultipartFile.fromFile(file.path,
+            filename: "file", contentType: MediaType.parse('image/jpeg')),
         "conversionGroup": "DefaultProductConversionGroup",
         "imageFormat": "DefaultImageFormat"
       });
       Response<Map<String, dynamic>> response = await http$.post(
         Apis.upload(),
         data: formData,
-        options: Options(
-          headers: {'Content-Type': 'application/json;charset=UTF-8'},
-        ),
+        // options: Options(
+        //   headers: {'Content-Type': 'application/json;charset=UTF-8'},
+        // ),
         onSendProgress: (int sent, int total) {
           _streamController.sink.add(sent / total);
         },
