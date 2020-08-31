@@ -149,24 +149,22 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         if (NavigatorStack.instance.currentRouteName == AppRoutes.ROUTE_LOGIN) {
           return;
         } else {
-          //获取记录跳转登录页面的时间
-          DateTime loginPageLogTime = AppBLoC.instance.getLoginPageLogTime;
-          DateTime now = DateTime.now();
+          // //获取记录跳转登录页面的时间
+          // DateTime loginPageLogTime = AppBLoC.instance.getLoginPageLogTime;
+          // DateTime now = DateTime.now();
 
-          if (loginPageLogTime == null) {
-            AppBLoC.instance.setloginPageLogTime(now);
-            loginPageLogTime = now;
-          }
+          // int diff = -1;
+          // if (loginPageLogTime != null)
+          //   diff = now.difference(loginPageLogTime).inMilliseconds;
 
-          int diff = now.difference(loginPageLogTime).inMilliseconds;
-          AppBLoC.instance.setloginPageLogTime(now);
-          print('$loginPageLogTime===>$now==>相差:$diff 毫秒');
-          print('HASH:${AppBLoC.instance.hashCode}');
-          if (diff > 1000 || loginPageLogTime == now) {
-            Navigator.of(_navigatorKey.currentState.overlay.context)
-                .pushNamedAndRemoveUntil(
-                    AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'));
-          }
+          // print('$loginPageLogTime===>$now==>相差:$diff 毫秒');
+          // print('HASH:${AppBLoC.instance.hashCode}');
+          // if (loginPageLogTime == null || diff > 1000) {
+          // AppBLoC.instance.setloginPageLogTime(now);
+          Navigator.of(_navigatorKey.currentState.overlay.context)
+              .pushNamedAndRemoveUntil(
+              AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'));
+          // }
         }
       }
     });
