@@ -1,5 +1,7 @@
+import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -140,7 +142,7 @@ class _ClientSelectPageState extends State<ClientSelectPage> {
                       children: <TextSpan>[
                         TextSpan(
                             text:
-                                '服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。',
+                            '服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。',
                             style: TextStyle(color: Colors.black))
                       ]),
                 ),
@@ -153,7 +155,7 @@ class _ClientSelectPageState extends State<ClientSelectPage> {
                         children: <TextSpan>[
                           TextSpan(
                               text:
-                                  '服装生产工厂，需要在钉单APP上寻找各类服装加工订单，管理生产进度的企业选择“工厂”注册。',
+                              '服装生产工厂，需要在钉单APP上寻找各类服装加工订单，管理生产进度的企业选择“工厂”注册。',
                               style: TextStyle(color: Colors.black))
                         ]),
                   ),
@@ -177,9 +179,9 @@ class _ClientSelectPageState extends State<ClientSelectPage> {
 
   void homeInit() async {
     //版本检查
-    bool isNew = await AppVersion(homePageKey.currentContext,
-        ignoreVersionNotification:
-        UserBLoC.instance.ignoreVersionNotification)
-        .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
+    AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
+    await appVersionHelper.getAppVersionInfo('nbyjy');
+    await appVersionHelper.checkVersion(
+        context, AppBLoC.instance.packageInfo.version, 'nbyjy');
   }
 }
