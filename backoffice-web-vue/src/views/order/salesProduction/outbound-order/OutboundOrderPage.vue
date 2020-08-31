@@ -11,7 +11,8 @@
       </el-row>
       <div class="pt-2"></div>
       <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"
-        @createProductOutbound="createProductOutbound" :queryFormData="queryFormData" />
+                              @createProductOutbound="createProductOutbound" :queryFormData="queryFormData" 
+                              :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <div>
         <!-- <div class="tag-container">
           <el-row type="flex" justify="start" align="middle">
@@ -100,6 +101,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getoutboundOrdersList();
         this.setIsAdvancedSearch(true);
@@ -202,7 +206,10 @@
             formData: Object.assign({}, this.formData)
           }
         });
-      }
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data() {
       return {
@@ -262,11 +269,14 @@
           state: 'TO_BE_SUBMITTED',
           name: ''
         },
-        stateCount: {}
+        stateCount: {},
+        dataQuery: {}
       }
     },
     created() {
-      this.onAdvancedSearch();
+      this.dataQuery = this.getDataPerQuery('SALES_OUT_ORDER');
+      this.onResetQuery();
+      this.onAdvancedSearch(0, 10);
       this.statuses.push({
         code: '',
         name: '全部'
