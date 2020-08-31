@@ -55,7 +55,7 @@
               </el-row>
             </el-col>
             <el-col :span="20">
-              <table cellspacing="2" width="100%" :height="(entry.sizes.length+1)*50" class="order-table">
+              <table cellspacing="2" width="100%" class="order-table">
                 <tr class="order-table-th_row">
                   <td style="width: 40px">颜色</td>
                   <template v-for="size in entry.sizes">
@@ -64,7 +64,7 @@
                   <th>小计</th>
                 </tr>
                 <template v-for="color in entry.colors">
-                  <tr :key="'tr'+color.code">
+                  <tr :key="'tr'+color.code" style="height:35px">
                     <td>{{color.name}}</td>
                     <template v-for="size in entry.sizes">
                       <td style="width:80px" :key="'td'+size.name">
@@ -307,23 +307,27 @@
         val.forEach(data => {
           //构建颜色尺码行
           var colorSizeEntries = [];
-          data.colorSizes.forEach(color => {
-            color.sizes.forEach(size => {
-              colorSizeEntries.push({
-                color: {
-                  code: color.colorCode,
-                  name: color.colorName,
-                  id: color.colorId
-                },
-                size: {
-                  code: size.code,
-                  name: size.name,
-                  id: size.id
-                },
-                quantity: ''
-              })
+          if (data.colorSizes) {
+            data.colorSizes.forEach(color => {
+              if (color.sizes) {
+                color.sizes.forEach(size => {
+                  colorSizeEntries.push({
+                    color: {
+                      code: color.colorCode,
+                      name: color.colorName,
+                      id: color.colorId
+                    },
+                    size: {
+                      code: size.code,
+                      name: size.name,
+                      id: size.id
+                    },
+                    quantity: ''
+                  })
+                });
+              }
             });
-          });
+          }
 
           //设置对应颜色，尺码数组                    
           var entry = {

@@ -3,7 +3,7 @@
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
         <div class="sales-plan-form-title">
-          <h6 class="title-info">业务订单详情</h6>
+          <h6 class="title-info">外接订单详情</h6>
         </div>
         <h6 class="title-info">订单号：{{formData.code}}</h6>
         <h6 class="title-info">创建时间：{{formData.creationtime | timestampToTime}}</h6>
@@ -49,7 +49,7 @@
       </div>
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
         @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw"
-        @onCancel="onDelete" />
+        @onCancelProdcution="canelingProductionDialogVisible=true" @onCancel="onDelete" />
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -59,6 +59,10 @@
     <el-dialog :visible.sync="canelingDialogVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-order-cancel-dialog v-if="canelingDialogVisible" :order="formData" @callback="callback" />
+    </el-dialog>
+    <el-dialog :visible.sync="canelingProductionDialogVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sale-order-production-cancel-form v-if="canelingProductionDialogVisible" :order="formData" @callback="callback" />
     </el-dialog>
   </div>
 </template>
@@ -86,6 +90,8 @@
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
+  import SaleOrderProductionCancelForm from '../form/SaleOrderProductionCancelForm';
+
   import {
     FinancialTabs
   } from '@/views/financial/index'
@@ -109,7 +115,8 @@
       FinancialTabs,
       OrderAuditDetail,
       SalesOrderCancelDialog,
-      TwinkleWarningButton
+      TwinkleWarningButton,
+      SaleOrderProductionCancelForm
     },
     computed: {
       // ...mapGetters({
@@ -190,6 +197,7 @@
       callback() {
         this.salesProductAppendVisible = false;
         this.canelingDialogVisible = false;
+        this.canelingProductionDialogVisible=false;
         this.getDetails();
       },
       appendProduct() {
@@ -402,6 +410,7 @@
       return {
         salesProductAppendVisible: false,
         canelingDialogVisible: false,
+        canelingProductionDialogVisible:false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
         payPlan: {

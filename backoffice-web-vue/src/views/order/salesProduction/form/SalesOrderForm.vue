@@ -2,14 +2,14 @@
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <supplier-select @onSelect="onSuppliersSelect" />
+      <supplier-select @onSelect="onSuppliersSelect" :categories="['CUSTOMER']"/>
     </el-dialog>
     <el-card>
       <el-form ref="form" :model="form" label-width="80px">
         <el-row>
           <el-col :span="4">
             <div class="sales-plan-form-title">
-              <h6>录入业务订单</h6>
+              <h6>录入外接订单</h6>
             </div>
           </el-col>
         </el-row>
@@ -85,16 +85,6 @@
           </el-row> -->
         </div>
         <el-divider />
-        <el-row type="flex" justify="space-between" align="middle">
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>财务设置</h6>
-            </div>
-          </el-col>
-          <!--          <el-col :span="4">-->
-          <!--            <el-button class="contract-btn">添加合同</el-button>-->
-          <!--          </el-col>-->
-        </el-row>
         <el-row type="flex" style="padding-left: 20px">
           <el-col :span="24">
             <!-- <pay-plan-form-v2 :vPayPlan.sync="form.payPlan" :readOnly="hasOrigin" /> -->

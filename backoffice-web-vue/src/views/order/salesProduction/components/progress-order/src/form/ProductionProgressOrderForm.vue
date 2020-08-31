@@ -106,8 +106,8 @@
       </div>
     </el-form>
     <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
+      <el-button size="mini" class="update-form-close" @click="onClose">关闭</el-button>
       <el-button size="mini" v-if="!readOnly" class="update-form-submit" @click="onSubmit">确定</el-button>
-      <el-button size="mini" class="update-form-submit" @click="onClose">关闭</el-button>
     </el-row>
   </div>
 </template>
@@ -409,6 +409,13 @@
     width: 150px;
     margin-top: 50px;
   }
+
+  .update-form-close {
+    color: #000;
+    width: 150px;
+    margin-top: 50px;
+  }
+
 
   .form-main {
     padding-left: 50px;

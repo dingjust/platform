@@ -20,6 +20,20 @@
       </div>
     </el-dialog>
     <el-form :model="formData" ref="payPlanForm" :disabled="readOnly">
+      <el-row type="flex" justify="space-between" class="info-order-row" align="middle">
+        <el-col :span="4">
+          <div style="padding-top:5px">
+            <h6>财务设置</h6>
+          </div>
+        </el-col>
+        <el-col :span="20" v-if="isUseForOrder&&(!readOnly)">
+          <el-row type="flex" justify="end">
+            <h6 class="form-plane-name">账务方案</h6>
+            <el-button @click="payPlanSelectDialogVisible=true" plain size="mini" class="select-payplan-btn">
+              {{(formData.name!=null&&formData.name!='')?formData.name:'选择已有账务方案'}}</el-button>
+          </el-row>
+        </el-col>
+      </el-row>
       <el-row type="flex" justify="start" align="middle">
         <el-form-item label="有无定金" label-width="80px">
           <el-radio :label="true" v-model="formData.isHaveDeposit">有定金</el-radio>
@@ -30,13 +44,6 @@
             <el-radio :label="item.code" :key="item.code" v-model="formData.payPlanType">{{item.name}}</el-radio>
           </template>
         </el-form-item>
-        <div style="margin: 0 0 8px 20px">
-          <el-row type="flex" v-if="isUseForOrder&&(!readOnly)" justify="end" class="info-order-row" align="middle">
-            <h6 class="form-plane-name">账务方案</h6>
-            <el-button @click="payPlanSelectDialogVisible=true" plain size="mini" class="select-payplan-btn">
-              {{formData.name!=undefined?formData.name:'选择已有账务方案'}}</el-button>
-          </el-row>
-        </div>
       </el-row>
       <div v-for="(item,index) in payPlanItems" :key="'item'+index">
         <el-row v-if="!(item.moneyType === 'MONTHLY_SETTLEMENT_ONE' || item.moneyType === 'MONTHLY_SETTLEMENT_TWO')"
@@ -76,7 +83,8 @@
             </el-col> -->
               <el-col :span="18">
                 <el-select v-model="item.payPercent" @change="$forceUpdate()">
-                  <el-option v-for="percent in 99" :value="(percent*0.01).toFixed(2)" :label="percent+'%'" :key="'percent'+percent">
+                  <el-option v-for="percent in 99" :value="(percent*0.01).toFixed(2)" :label="percent+'%'"
+                    :key="'percent'+percent">
                   </el-option>
                 </el-select>
               </el-col>
@@ -445,7 +453,7 @@
         }
 
         result.forEach((data) => {
-          if(data.payPercent){
+          if (data.payPercent) {
             data.payPercent = parseFloat(data.payPercent).toFixed(2);
           }
 
@@ -494,7 +502,7 @@
                   '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
                   (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
                     ' *') + '支付相应款项';
-                  result += '（以上所有款项金额以双方对账金额为准）';
+                result += '（以上所有款项金额以双方对账金额为准）';
               } else {
                 result += '：每月' + (payPlanItem.monthlyEndDayNum ?
                     (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*') +
@@ -503,9 +511,9 @@
                   '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
                   (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
                     ' *') + '支付相应款项';
-                  if(payPlanItem.moneyType === 'MONTHLY_SETTLEMENT_ONE'){
-                    result += '（以上所有款项金额以双方对账金额为准）';
-                  }
+                if (payPlanItem.moneyType === 'MONTHLY_SETTLEMENT_ONE') {
+                  result += '（以上所有款项金额以双方对账金额为准）';
+                }
               }
               break;
           }

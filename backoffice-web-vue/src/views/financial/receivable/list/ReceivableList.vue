@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="业务订单号" prop="productionOrder.code"/>
+      <el-table-column label="外接订单号" prop="productionOrder.code"/>
       <!-- <el-table-column label="合同号" min-width="120px">
         <template slot-scope="scope">
           <template v-for="item in scope.row.productionOrder.agreements">

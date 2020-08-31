@@ -4,16 +4,20 @@
       <div>
         <img :src="product.product.thumbnail ? product.product.thumbnail.url : 'static/img/nopicture.png'"
           style="width: 100px;height: 100px;border-radius: 8px;" />
+        <el-row type="flex" justify="center" style="width:100px;margin-top:10px">货号：{{product.product.skuID}}</el-row>
       </div>
       <div style="margin-left: 20px;width: 100%">
-        <color-size-table :data="product.colorSizeEntries" :readOnly="!isFromProduct" :hideEmptyColors="!isFromProduct" />
+        <color-size-table :data="product.colorSizeEntries" :readOnly="!isFromProduct"
+          :hideEmptyColors="!isFromProduct" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { ColorSizeTable } from '@/components'
+  import {
+    ColorSizeTable
+  } from '@/components'
   export default {
     name: 'OutboundOrderColorSizeTable',
     props: {
@@ -28,10 +32,8 @@
     components: {
       ColorSizeTable
     },
-    computed: {
-    },
-    methods: {
-    }
+    computed: {},
+    methods: {}
   }
 
 </script>

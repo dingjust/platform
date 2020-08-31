@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <supplier-select @onSelect="onSuppliersSelect" />
+      <supplier-select @onSelect="onSuppliersSelect" :categories="['SUPPLIER']" />
     </el-dialog>
     <el-card>
       <el-row>
@@ -139,13 +139,6 @@
             <el-button class="outbound-btn" @click="progressPlanVisible = !progressPlanVisible">选择</el-button>
           </el-col>
         </el-row> -->
-        <el-row>
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>财务设置</h6>
-            </div>
-          </el-col>
-        </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
           <el-col :span="24">
             <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom" />
@@ -166,15 +159,19 @@
             <el-checkbox v-model="formData.sendAuditNeeded">需审核</el-checkbox>
           </el-form-item>
           <template v-for="(item,itemIndex) in formData.sendApprovers">
-            <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
-              :prop="'sendApprovers.' + itemIndex" :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
-              <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]" :disabled="!formData.sendAuditNeeded"
-                                      :excludeMySelf="true" style="width: 194px" :selectedRow="formData.sendApprovers"/>
+            <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px"
+              style="margin-right:10px;" :prop="'sendApprovers.' + itemIndex"
+              :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
+              <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]"
+                :disabled="!formData.sendAuditNeeded" :excludeMySelf="true" style="width: 194px"
+                :selectedRow="formData.sendApprovers" />
             </el-form-item>
           </template>
           <el-button-group style="padding-bottom: 26px;">
-            <el-button v-if="formData.sendApprovers && formData.sendApprovers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
-            <el-button v-if="formData.sendApprovers && formData.sendApprovers.length > 1" style="height: 32px" @click="removeApprover">删除</el-button>
+            <el-button v-if="formData.sendApprovers && formData.sendApprovers.length < 5" style="height: 32px"
+              @click="appendApprover">+ 添加审批人</el-button>
+            <el-button v-if="formData.sendApprovers && formData.sendApprovers.length > 1" style="height: 32px"
+              @click="removeApprover">删除</el-button>
           </el-button-group>
         </div>
         <div style="padding-left: 20px">
@@ -397,7 +394,8 @@
               product: {
                 id: item.product.id,
                 name: item.product.name,
-                thumbnail: item.product.thumbnail
+                thumbnail: item.product.thumbnail,
+                skuID:item.product.skuID
               },
               progressPlan: {
                 name: ''
@@ -530,12 +528,14 @@
           this.formData = this.$route.params.formData;
 
           //剔除带过的单价
-          this.formData.taskOrderEntries.forEach(entry=>{
-            entry.unitPrice='';
+          this.formData.taskOrderEntries.forEach(entry => {
+            entry.unitPrice = '';
           });
 
-          if(this.formData.sendApprovers==null){
-            this.formData.sendApprovers=[{id:''}];
+          if (this.formData.sendApprovers == null) {
+            this.formData.sendApprovers = [{
+              id: ''
+            }];
           }
           if (this.formData.taskOrderEntries.length <= 0) {
             this.addRow();
@@ -570,7 +570,7 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        
+
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;

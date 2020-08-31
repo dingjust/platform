@@ -16,7 +16,7 @@
           </el-col>
           <el-col :span="6">
             <h6 class="sales-plan-h6"><span
-              class="info-title">是否开发票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
+              class="info-title">是否开票：</span>{{form.invoiceNeeded ? '开发票' : '不开发票'}}
               <span style="margin-left:5px" v-if="form.invoiceNeeded">{{form.invoiceTaxPoint * 100}}%</span>
             </h6>
           </el-col>
@@ -38,7 +38,7 @@
           </el-col>
           <el-col :span="6">
             <h6 class="sales-plan-h6-hide">
-              <span class="info-title">生产负责人：</span>
+              <span class="info-title">跟单员：</span>
               <span :title="form.productionLeader!=null?form.productionLeader.name:''">
                     {{form.productionLeader!=null?form.productionLeader.name:''}}
                   </span>
@@ -46,7 +46,7 @@
           </el-col>
           <el-col :span="4">
             <h6 class="sales-plan-h6-hide">
-              <span class="info-title">审批负责人：</span>
+              <span class="info-title">审批人：</span>
               <span :title="(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''">
                   {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}
                 </span>

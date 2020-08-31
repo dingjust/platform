@@ -10,8 +10,8 @@
       </el-row>
       <div class="pt-2"></div>
       <reconciliation-manage-page mode="export" :page="page" :queryFormData="queryFormData" @onSearch="onSearch"
-        @onSelect="onSelect" :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick" 
-        :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
+        @onSelect="onSelect" :statusMap="statusMap" @onAdvancedSearch="onAdvancedSearch" @handleClick="onHandleClick"
+        :dataQuery="dataQuery" @onResetQuery="onResetQuery" />
     </el-card>
   </div>
 </template>
@@ -81,7 +81,7 @@
       onSelect(val) {
         this.$set(this, 'selectData', val);
       },
-      onResetQuery () {
+      onResetQuery() {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
     },
@@ -137,7 +137,7 @@
             }, {
               key: '收货供应商'
             }, {
-              key: '发货收货数'
+              key: '发货收货数v2'
             }, {
               key: '收货跟单员'
             }, {
@@ -177,6 +177,31 @@
           PENDING_CONFIRM: {
             status: 'PENDING_CONFIRM',
             label: '对账中',
+            columns: [{
+              key: '对账单号'
+            }, {
+              key: '关联订单',
+              props: {
+                label: '关联生产工单'
+              }
+            }, {
+              key: '发货供应商'
+            }, {
+              key: '收货跟单员'
+            }, {
+              key: '账单金额'
+            }, {
+              key: '对账日期',
+            }, {
+              key: '对账状态',
+            }, {
+              key: '对账详情'
+            }],
+            url: this.apis().reconciliationList()
+          },
+          APPROVAL_RETURN: {
+            status: 'APPROVAL_RETURN',
+            label: '审批驳回',
             columns: [{
               key: '对账单号'
             }, {

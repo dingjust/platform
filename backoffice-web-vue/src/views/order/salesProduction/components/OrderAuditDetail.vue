@@ -39,7 +39,7 @@ export default {
       auditState: {
         AUDITING: '未审',
         PASSED: '通过',
-        AUDITED_FAILED: '驳回'
+        AUDITED_FAILED: '审批驳回'
       }
     }
   },

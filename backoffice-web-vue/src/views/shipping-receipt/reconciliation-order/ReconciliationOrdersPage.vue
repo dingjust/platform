@@ -82,11 +82,11 @@
         });
       },
       handleClick(tab, event) {
-        if (this.mode == 'import') {
+        if (this.mode == 'export') {
           this.queryFormData.states = tab.name;
         }
         //收货方，状态查询处理
-        else if (this.mode == 'export') {
+        else if (this.mode == 'import') {
           switch (tab.name) {
             case 'PENDING_APPROVAL':
               this.queryFormData.auditStates = 'AUDITING';

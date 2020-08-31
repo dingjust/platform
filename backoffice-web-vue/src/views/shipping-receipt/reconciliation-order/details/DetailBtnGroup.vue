@@ -21,12 +21,12 @@
         v-if="formData.originAuditWorkOrder!=null&&isOriginApprover&&formData.originAuditWorkOrder.state=='AUDITING'">
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="create-btn_red" @click="onOriginApproval(false)">驳回</el-button>
+            <el-button class="create-btn_red" @click="onOriginApproval(false)">审核驳回</el-button>
           </authorized>
         </el-col>
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="create-btn" @click="onOriginApproval(true)">通过</el-button>
+            <el-button class="create-btn" @click="onOriginApproval(true)">审核通过</el-button>
           </authorized>
         </el-col>
       </el-row>
@@ -52,12 +52,12 @@
         v-if="isApprover&&formData.state=='PENDING_APPROVAL'&&formData.auditWorkOrder.currentUserAuditState === 'AUDITING'">
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="create-btn_red" @click="onApproval(false)">驳回</el-button>
+            <el-button class="create-btn_red" @click="onApproval(false)">审核驳回</el-button>
           </authorized>
         </el-col>
         <el-col :span="4">
           <authorized :permission="['DO_AUDIT']">
-            <el-button class="create-btn" @click="onApproval(true)">通过</el-button>
+            <el-button class="create-btn" @click="onApproval(true)">审核通过</el-button>
           </authorized>
         </el-col>
       </el-row>

@@ -34,15 +34,15 @@
       </el-col>
       <el-col :span="12">
         <el-table ref="reconciliationTable" stripe :data="formData.reconciliationSheets" :height="autoHeight">
-          <el-table-column label="对账单号">
+          <el-table-column label="对账单号" min-width="110" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <el-button type="text" @click="onReconciliationDetail(scope.row.id)">{{scope.row.code}}</el-button>
             </template>
           </el-table-column>
           <el-table-column label="对账数量" prop="reconciliationQuantity"></el-table-column>
           <el-table-column label="对账金额" prop="reconciliationAmount"></el-table-column>
-          <el-table-column label="扣款金额" prop="deductionAmount"></el-table-column>
-          <el-table-column label="增款金额" prop="increaseAmount"></el-table-column>
+          <!-- <el-table-column label="扣款金额" prop="deductionAmount"></el-table-column>
+          <el-table-column label="增款金额" prop="increaseAmount"></el-table-column> -->
           <el-table-column label="实付金额" prop="amountDue"></el-table-column>
           <el-table-column label="状态">
             <template slot-scope="scope">

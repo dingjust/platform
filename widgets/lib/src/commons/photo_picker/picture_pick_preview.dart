@@ -447,9 +447,9 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
         data: formData,
         // queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
         // queryParameters: {'imageFormat': 'DefaultImageFormat'},
-        options: Options(
-          headers: {'Content-Type': 'application/json;charset=UTF-8'},
-        ),
+        // options: Options(
+        //   headers: {'Content-Type': 'application/json;charset=UTF-8'},
+        // ),
         onSendProgress: (int sent, int total) {
           _streamController.sink.add(sent / total);
         },

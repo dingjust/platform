@@ -99,17 +99,14 @@ class _MyAuthenticationEnterpriseResultState
         margin: EdgeInsets.all(10),
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         height: 50,
-        child: RaisedButton(
-          color: Colors.red,
+        child: FlatButton(
           child: Text(
             '重新认证',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.blue,
               fontSize: 18,
             ),
           ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5))),
           onPressed: () {
             showDialog<void>(
               context: context,
@@ -274,6 +271,7 @@ class _MyAuthenticationEnterpriseResultState
         _buildInfo('社会信用代码', '${model.organization}'),
         _buildInfo(
             '法定代表人', '${model?.legal?.name == null ? '' : model.legal.name}'),
+        _buildRemindInfo()
       ],
     );
   }
@@ -303,6 +301,23 @@ class _MyAuthenticationEnterpriseResultState
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRemindInfo() {
+    return Container(
+      margin: EdgeInsets.only(top: 80),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        children: [
+          Expanded(
+              child: Text(
+                '注：以上所有信息确保与营业执照上信息一致。\n剩余认证次数3次，超过三次后将需要收50元一次的认证费用。',
+                style: TextStyle(color: Color.fromRGBO(245, 108, 108, 1)),
+                textAlign: TextAlign.center,
+              )),
         ],
       ),
     );

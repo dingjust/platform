@@ -22,7 +22,9 @@ export default {
   props: {
     // 关联对象为所选择项在 tree 中由 id组成的数组分支，取最后一项为选择项的id，引用处自行处理
     vPerson: {
-      default: () => []
+      default: () => {
+        return [];
+      }
     },
     disabled: {
       type: Boolean,
@@ -35,7 +37,9 @@ export default {
     },
     selectedRow: {
       type: Array,
-      default: () => []
+      default: ()=>{
+        return [];
+      }
     }
   },
   data () {

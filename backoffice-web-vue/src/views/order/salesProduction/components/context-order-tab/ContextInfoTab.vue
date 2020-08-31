@@ -14,11 +14,11 @@
       <el-tab-pane label="采购订单" :lazy="true" v-if="showPurchase">
         <purchase-order-basic-table :data="[]" />
       </el-tab-pane>
-      <el-tab-pane label="财务" :lazy="true">
+      <!-- <el-tab-pane label="财务" :lazy="true">
       </el-tab-pane>
       <el-tab-pane label="利润核算" :lazy="true">
 
-      </el-tab-pane>
+      </el-tab-pane> -->
       <el-tab-pane label="操作日志" :lazy="true">
 
       </el-tab-pane>

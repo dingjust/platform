@@ -192,9 +192,9 @@
             </el-col>
             <el-col :span="6">
               <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择是否开发票', trigger: 'change'}]" prop="invoice">
+                { required: true, message: '请选择是否开票', trigger: 'change'}]" prop="invoice">
                 <el-row type="flex" align="middle">
-                  <h6 class="info-input-prepend">是否开发票</h6>
+                  <h6 class="info-input-prepend">是否开票</h6>
                   <el-radio class="info-radio" v-model="form.invoice" :label="false">不开发票</el-radio>
                   <el-radio class="info-radio" v-model="form.invoice" :label="true">开发票</el-radio>
                 </el-row>

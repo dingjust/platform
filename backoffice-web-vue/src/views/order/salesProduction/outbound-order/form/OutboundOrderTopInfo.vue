@@ -27,10 +27,13 @@
           </el-col>
           <el-col :span="5">
             <h6 class="hide-text" :title="slotData.merchandiser ? slotData.merchandiser.name : ''">
-                跟单员：{{slotData.merchandiser ? slotData.merchandiser.name : ''}}</h6>
+              跟单员：{{slotData.merchandiser ? slotData.merchandiser.name : ''}}</h6>
           </el-col>
           <el-col :span="10">
-            <h6>送货地址：{{slotData.taskOrderEntries[0].shippingAddress.details}}</h6>
+            <!-- <h6>送货地址：{{slotData.taskOrderEntries[0].shippingAddress.details}}</h6> -->
+            <h6 style="display: inline-block;" v-popover:popover>
+              有无定金：{{slotData.payPlan.isHaveDeposit ? '有定金' : '无定金'}} + {{payPlanType[slotData.payPlan.payPlanType]}}
+            </h6>
           </el-col>
         </el-row>
         <!-- <el-row type="flex" justify="start" style="margin: 10px 0px 0px 24px;">
@@ -38,13 +41,13 @@
             <h6>送货地址：{{slotData.taskOrderEntries[0].shippingAddress.details}}</h6>
           </el-col>
         </el-row> -->
-        <el-row type="flex" align="middle" justify="start" style="margin: 10px 0px 0px 24px;">
+        <!-- <el-row type="flex" align="middle" justify="start" style="margin: 10px 0px 0px 24px;">
           <el-col :span="12">
             <h6 style="display: inline-block;" v-popover:popover>
               有无定金：{{slotData.payPlan.isHaveDeposit ? '有定金' : '无定金'}} + {{payPlanType[slotData.payPlan.payPlanType]}}
             </h6>
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-col>
       <!-- <el-col :span="10">
         <div class="info-box">
@@ -126,8 +129,8 @@
       </el-col> -->
       <el-col :span="6">
         <div class="info-box" style="padding: 5px 0px 0px 5px;">
-          <production-contract :slotData="slotData" :contracts="contracts" 
-                                :canSign="canSign" @callback="callback" :isSignedPaper="isSignedPaper"/>
+          <production-contract :slotData="slotData" :contracts="contracts" :canSign="canSign" @callback="callback"
+            :isSignedPaper="isSignedPaper" />
         </div>
       </el-col>
     </el-row>
@@ -176,7 +179,7 @@
           return false;
         }
         return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&
-              (this.slotData.state === 'AUDIT_PASSED' || this.slotData.state === 'COMPLETED')
+          (this.slotData.state === 'AUDIT_PASSED' || this.slotData.state === 'COMPLETED')
         // 未签合同 && 账号为merchandiser && 审核状态为 PASSED
         // if (this.slotData.agreements == undefined || this.slotData.agreements == null || this.slotData.agreements.length <= 0) {
         //   return this.$store.getters.currentUser.uid == this.slotData.merchandiser.uid &&

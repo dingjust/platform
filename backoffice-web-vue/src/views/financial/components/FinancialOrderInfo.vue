@@ -50,7 +50,7 @@
             <h6>合作方式：{{getEnum('machiningTypes', formData.productionOrder.cooperationMode)}}</h6>
           </el-col>
           <el-col :span="8">
-            <h6>是否开发票：{{formData.productionOrder.invoiceNeeded ? '是' : '否'}}</h6>
+            <h6>是否开票：{{formData.productionOrder.invoiceNeeded ? '是' : '否'}}</h6>
           </el-col>
           <el-col :span="5" v-if="formData.productionOrder.invoiceNeeded">
             <h6>税率：{{formData.productionOrder.invoiceTaxPoint}}</h6>

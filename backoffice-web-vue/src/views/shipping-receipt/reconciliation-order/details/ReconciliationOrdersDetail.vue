@@ -261,6 +261,13 @@
 
         let submitForm = Object.assign({}, this.formData);
 
+        //去除审核人为null
+        if (submitForm.originApprovers) {
+          console.log('/.///')
+          let originApprovers = submitForm.originApprovers.filter(item => item != null);
+          submitForm.originApprovers = originApprovers;
+        }
+
         //除去空字符
         submitForm.increases = submitForm.increases.filter(item => item.amount != null || item.remarks != null)
           .map(
@@ -283,8 +290,17 @@
         //若不需要审核，则删除字段
         if (!submitForm.isApproval) {
           this.$delete(submitForm, 'approvers');
+        } else {
+          let approvers = submitForm.approvers.filter(item => (item instanceof Array) && item.length > 0).map(
+            item => {
+              return {
+                id: item[item.length - 1]
+              }
+            });
+          submitForm.approvers = approvers;
         }
-        const result = await this.$http.put(url, this.formData);
+
+        const result = await this.$http.put(url, submitForm);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
@@ -302,7 +318,7 @@
       //审批
       onApproval(isPass) {
         if (this.formData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
-            this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+          this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
           if (isPass) {
             this.$confirm('是否确认审核通过?', '提示', {
               confirmButtonText: '确定',
@@ -323,8 +339,8 @@
               //TODO:取消操作
             });
           }
-        } else if (this.formData.auditWorkOrder.auditingUser.uid !== this.$store.getters.currentUser.uid && 
-                  this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+        } else if (this.formData.auditWorkOrder.auditingUser.uid !== this.$store.getters.currentUser.uid &&
+          this.formData.auditWorkOrder.currentUserAuditState === 'AUDITING') {
           this.$message.warning('此订单暂未轮到您进行审批。')
         } else if (this.formData.auditWorkOrder.currentUserAuditState === 'PASSED') {
           this.$message.warning('您已对此订单进行了审批。');

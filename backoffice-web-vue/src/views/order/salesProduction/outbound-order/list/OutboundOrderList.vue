@@ -3,14 +3,23 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange" @row-click="rowClick">
       <el-table-column type="selection" :reserve-selection="true" width="55" v-if="isSelect"></el-table-column>
-      <el-table-column label="外发订单号" prop="code"></el-table-column>
+      <el-table-column label="外发订单号" prop="code" min-width="150">
+        <template slot-scope="scope">
+          <el-row type="flex" justify="space-between" align="middle">
+            <span style="margin-right:5px">{{scope.row.code}}</span>
+            <el-tag v-if="scope.row.managementMode=='AUTOGESTION'" type="warning">自管</el-tag>
+            <el-tag v-else type="success">协同</el-tag>
+          </el-row>
+        </template>
+      </el-table-column>
       <el-table-column label="合作商" :show-overflow-tooltip="true" min-width="120">
         <template slot-scope="scope">
           <span>{{getCooperator(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联产品数" prop="entrySize"></el-table-column>
-      <el-table-column label="跟单员" prop="merchandiser.name" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column label="跟单员" prop="merchandiser.name" :show-overflow-tooltip="true" min-width="100">
+      </el-table-column>
       <el-table-column label="创建时间" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
@@ -28,20 +37,20 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="70">
+      <el-table-column label="">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
+            <i class="el-icon-warning warning-icon"></i>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" min-width="110">
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetail(scope.row)" class="purchase-list-button">详情</el-button>
             <el-button v-if="canModify(scope.row)" type="text" @click="onModify(scope.row)"
               class="purchase-list-button">修改</el-button>
           </el-row>
-        </template>
-      </el-table-column>
-      <el-table-column label="">
-        <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="正在申请取消订单" placement="top" v-if="isApplyCanceling(scope.row)">
-            <i class="el-icon-warning warning-icon"></i>
-          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -53,7 +62,7 @@
     </el-pagination>
     <!-- </div> -->
     <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isSelect">
-      <el-button class="create-btn" @click="setSelectOrder">确定</el-button>
+      <el-button class="sure-btn" @click="setSelectOrder">确定</el-button>
     </el-row>
   </div>
 </template>
@@ -159,13 +168,11 @@
     font-size: 20px;
   }
 
-  .create-btn {
+  .sure-btn {
     background-color: #ffd60c;
-    border-color: #FFD5CE;
-    color: #000;
-    width: 120px;
-    height: 40px;
-    border-radius: 10px;
+    border-color: #ffd60c;
+    width: 150px;
+    height: 35px;
   }
 
 </style>

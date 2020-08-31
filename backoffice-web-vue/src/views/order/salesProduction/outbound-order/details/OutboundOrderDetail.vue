@@ -65,10 +65,13 @@
           </authorized>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px"
-        v-if="formData.state === 'AUDIT_REJECTED' && isSendBy">
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" :gutter="50"
+        v-if="(formData.state === 'AUDIT_REJECTED'||formData.state === 'TO_BE_SUBMITTED') && isSendBy">
         <el-col :span="3">
           <el-button class="material-btn" @click="onModify">修改</el-button>
+        </el-col>
+        <el-col :span="3">
+          <el-button type="text" @click="onDelete">作废订单</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -386,7 +389,31 @@
           this.$message.error(result['msg']);
           return false;
         }
-      }
+      },
+      //作废订单
+      onDelete() {
+        this.$confirm('此操作将永久作废订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onDelete();
+        });
+      },
+      async _onDelete() {
+        const url = this.apis().outboundOrderDelete(this.formData.id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('作废订单成功');
+        await this.$router.go(-1);
+      },
     },
     data() {
       return {

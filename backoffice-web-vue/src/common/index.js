@@ -1598,6 +1598,11 @@ let NONE_TENANT_APIS = {
     return '/b2b/out/order/cancel';
   },
 
+  //自创外接订单-取消订单
+  saleOrderProductionCancel() {
+    return '/b2b/sales/production/order/cancel';
+  },
+
   //外发订单-取消订单-处理
   outboundOrderCancelHandle() {
     return '/b2b/out/order/handling/cancel';

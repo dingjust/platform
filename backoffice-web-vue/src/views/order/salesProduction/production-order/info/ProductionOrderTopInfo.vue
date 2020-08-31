@@ -125,7 +125,8 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>生产负责人：{{slotData.productionLeader!=null?slotData.productionLeader.name:''}}</h6>
+            <!-- <h6>生产负责人：{{slotData.productionLeader!=null?slotData.productionLeader.name:''}}</h6> -->
+            <h6>跟单员：{{operator}}</h6>
           </el-col>
           <el-col :span="12">
             <h6>审批人：{{slotData.approvers!=null?slotData.approvers[0].name:''}}</h6>
@@ -302,6 +303,13 @@
 
         return result;
       },
+      //跟单员
+      operator:function(){
+        if(this.slotData.taskOrderEntries&&this.slotData.taskOrderEntries[0].merchandiser){
+          return this.slotData.taskOrderEntries[0].merchandiser.name;
+        }
+        return '';
+      }
     },
     methods: {
       // 展开/收起列表行
