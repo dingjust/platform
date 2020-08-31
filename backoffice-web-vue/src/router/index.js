@@ -840,9 +840,9 @@ const router = new Router({
               name: '印章管理',
               component: () => import( /* webpackChunkName: 'contract' */ '@/views/contract/seal/SealPage'),
             }, {
-              path: 'sealForm',
+              path: 'SealForm',
               name: '印章创建',
-              component: () => import( /* webpackChunkName: 'contract' */ '@/views/contract/seal/sealForm')
+              component: () => import( /* webpackChunkName: 'contract' */ '@/views/contract/seal/SealForm')
             }
             // {
             //   path: '/manage/createContract',

@@ -53,7 +53,7 @@
     </el-pagination>
     <!-- </div> -->
     <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isSelect">
-      <el-button class="sure-btn" @click="setSelectOrder">确定</el-button>
+      <el-button class="create-btn" @click="setSelectOrder">确定</el-button>
     </el-row>
   </div>
 </template>
@@ -157,6 +157,15 @@
   .warning-icon {
     color: #ff1744;
     font-size: 20px;
+  }
+
+  .create-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 120px;
+    height: 40px;
+    border-radius: 10px;
   }
 
 </style>

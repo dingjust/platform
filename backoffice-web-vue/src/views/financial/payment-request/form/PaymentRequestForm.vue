@@ -96,7 +96,7 @@
             <div style="display: flex;flex-wrap: wrap;">
               <template v-for="(item,itemIndex) in formData.approvers">
                 <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" style="margin-right:10px;margin-bottom: 10px"
-                  :prop="'approvers.' + itemIndex" :rules="{required: true, message: '不能为空', trigger: 'change'}">
+                  :prop="'approvers.' + itemIndex" :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
                   <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" 
                                           :excludeMySelf="true" style="width: 194px" :selectedRow="formData.approvers"/>
                 </el-form-item>
@@ -232,6 +232,7 @@
         }
       },
       onConfirm() {
+        console.log(this.$refs.form);
         if (this.$refs.upload.isUploading()) {
           this.$message.error('请等待图片上传完毕');
           return null;
@@ -428,10 +429,7 @@
             id: null,
             name: ''
           },
-          approvers: [{
-            id: null,
-            name: ''
-          }],
+          approvers: [null],
           remark: '',
           requestVouchers: []
         },
