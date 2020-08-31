@@ -1,5 +1,6 @@
 import 'dart:isolate';
 
+import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,36 +11,39 @@ import 'package:services/services.dart';
 class AppProvider {
   static List<SingleChildCloneableWidget> providers =
   <SingleChildCloneableWidget>[
-    ChangeNotifierProvider(builder: (_) => MyCapacityState()),
-    ChangeNotifierProvider(builder: (_) => ProductionProgressState()),
-    ChangeNotifierProvider(builder: (_) => AmapState()),
-    ChangeNotifierProvider(builder: (_) => NetState.instance),
-    ChangeNotifierProvider(builder: (_) => ProductHomeState()),
-    ChangeNotifierProvider(builder: (_) => ProductHomeCarouselsState()),
-    ChangeNotifierProvider(builder: (_) => RecommendProductState()),
+    ChangeNotifierProvider(create: (_) => MyCapacityState()),
+    ChangeNotifierProvider(create: (_) => ProductionProgressState()),
+    ChangeNotifierProvider(create: (_) => AmapState()),
+    ChangeNotifierProvider(create: (_) => NetState.instance),
+    ChangeNotifierProvider(create: (_) => ProductHomeState()),
+    ChangeNotifierProvider(create: (_) => ProductHomeCarouselsState()),
+    ChangeNotifierProvider(create: (_) => RecommendProductState()),
     Provider(
-      builder: (_) => AddressState(),
+      create: (_) => AddressState(),
     ),
     Provider(
-      builder: (_) => CategoryState(),
+      create: (_) => CategoryState(),
     ),
     Provider(
-      builder: (_) => MajorCategoryState(),
+      create: (_) => MajorCategoryState(),
     ),
     Provider(
-      builder: (_) => CarrierState(),
+      create: (_) => CarrierState(),
     ),
     Provider(
-      builder: (_) => CertificationStatusHelper(),
+      create: (_) => CertificationStatusHelper(),
     ),
     Provider(
-      builder: (_) => LabelState(),
+      create: (_) => AppVersionHelper(),
     ),
     Provider(
-      builder: (_) => ColorState(),
+      create: (_) => LabelState(),
     ),
     Provider(
-      builder: (_) => SizeState(),
+      create: (_) => ColorState(),
+    ),
+    Provider(
+      create: (_) => SizeState(),
     ),
   ];
 
@@ -63,6 +67,11 @@ class AppProvider {
     await Provider.of<LabelState>(context).getLabels();
     await Provider.of<ColorState>(context).getAllColors();
     await Provider.of<SizeState>(context).getAllSizes();
+
+    AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
+    await appVersionHelper.getAppVersionInfo('nbyjy');
+    // await appVersionHelper.checkVersion(
+    //     context, AppBLoC.instance.packageInfo.version, 'nbyjy');
     // ReceivePort receivePort = ReceivePort();
     // await Isolate.spawn(dataLoader, receivePort.sendPort);
 

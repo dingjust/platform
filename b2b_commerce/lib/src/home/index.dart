@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
+import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_tab_section.dart';
 import 'package:core/core.dart';
@@ -64,8 +65,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey homePageKey = GlobalKey();
 
-  AppVersion appVersion;
-
   _HomePageState();
 
   @override
@@ -89,10 +88,14 @@ class _HomePageState extends State<HomePage> {
 
   void homeInit() async {
     //版本检查
-    bool isNew = await AppVersion(homePageKey.currentContext,
-        ignoreVersionNotification:
-        UserBLoC.instance.ignoreVersionNotification)
-        .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
+    // bool isNew = await AppVersion(homePageKey.currentContext,
+    //         ignoreVersionNotification:
+    //             UserBLoC.instance.ignoreVersionNotification)
+    //     .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
+
+    AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
+    bool isNew = await appVersionHelper.checkVersion(
+        context, AppBLoC.instance.packageInfo.version, 'nbyjy');
 
     CertificationStatusHelper helper =
     Provider.of<CertificationStatusHelper>(context);

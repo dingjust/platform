@@ -1,6 +1,6 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:package_info/package_info.dart';
 import 'package:services/services.dart';
-import 'package:connectivity/connectivity.dart';
 
 class AppBLoC extends BLoCBase {
   //包信息
@@ -8,6 +8,9 @@ class AppBLoC extends BLoCBase {
 
   ///网络连接状态
   ConnectivityResult _connectivityResult;
+
+  //记录跳转登录时间
+  DateTime _loginPageLogTime;
 
   // 工厂模式
   factory AppBLoC() => _getInstance();
@@ -35,6 +38,12 @@ class AppBLoC extends BLoCBase {
 
   void setConnectivityResult(ConnectivityResult result) {
     _connectivityResult = result;
+  }
+
+  DateTime get getLoginPageLogTime => _loginPageLogTime;
+
+  void setloginPageLogTime(DateTime time) {
+    _loginPageLogTime = time;
   }
 
   @override

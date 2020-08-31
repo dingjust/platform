@@ -66,8 +66,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey homePageKey = GlobalKey();
 
-  AppVersion appVersion;
-
   _HomePageState();
 
   @override
@@ -84,11 +82,11 @@ class _HomePageState extends State<HomePage> {
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
-            homePageKey.currentContext,
-            ignoreVersionNotification:
-                UserBLoC.instance.ignoreVersionNotification)
-        .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy'));
+    // WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
+    //         homePageKey.currentContext,
+    //         ignoreVersionNotification:
+    //             UserBLoC.instance.ignoreVersionNotification)
+    //     .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy'));
     // }
     super.initState();
   }
