@@ -124,7 +124,7 @@
 
         if (row.productType != null && (row.productType.indexOf('SPOT_GOODS') > -1 || row.productType.indexOf(
             'TAIL_GOODS') > -1)) {
-          if (row.spotSteppedPrices == null || row.spotSteppedPrices.length <= 0 || row.deliveryDays == null) {
+          if (row.spotSteppedPrices == null || row.spotSteppedPrices.length <= 0) {
             this.$message.error('现货/库存尾货价格设置资料未完善，不可上架');
             return;
           }
