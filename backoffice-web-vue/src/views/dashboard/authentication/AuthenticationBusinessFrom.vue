@@ -73,9 +73,11 @@
       async onSave() {
         if (this.businessSlotData.companyName == null || this.businessSlotData.companyName == '') {
           this.$message.error('请填写公司名称');
-        } else if (this.businessSlotData.username == null || this.businessSlotData.username == '') {
-          this.$message.error('请填写办理人姓名');
-        } else if (this.businessSlotData.idCardNum == null || this.businessSlotData.idCardNum == '') {
+        }
+        // else if (this.businessSlotData.username == null || this.businessSlotData.username == '') {
+        //   this.$message.error('请填写办理人姓名');
+        // } 
+        else if (this.businessSlotData.idCardNum == null || this.businessSlotData.idCardNum == '') {
           this.$message.error('请填写办理人身份证号');
         } else if (this.businessSlotData.type == null || this.businessSlotData.type == '') {
           this.$message.error('请选择认证方式');
