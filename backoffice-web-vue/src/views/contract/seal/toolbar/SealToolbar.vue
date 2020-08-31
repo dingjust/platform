@@ -1,19 +1,16 @@
 <template>
   <el-form :inline="true">
     <el-row type="flex" justify="space-between">
-      <el-col :span="6">
-        <el-row type="flex" justify="space-between">
+      <el-col :span="12">
+        <el-form-item label="签章名称">
           <el-input v-model="keyword" placeholder="输入印章名称"></el-input>
-          <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
-        </el-row>
+        </el-form-item>
+        <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
       </el-col>
       <el-col :span="2">
-        <el-button-group>
-          <Authorized :permission="['AGREEMENT_SEAL_CREATE_DELETE']">
-            <el-button @click="onCreate">新建印章</el-button>
-          </Authorized>
-          <!--<el-button>管理设置</el-button>-->
-        </el-button-group>
+        <Authorized :permission="['AGREEMENT_SEAL_CREATE_DELETE']">
+          <el-button class="create-button" @click="onCreate">新建印章</el-button>
+        </Authorized>
       </el-col>
     </el-row>
   </el-form>
@@ -23,7 +20,7 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import SealForm from '../sealForm'
+  import SealForm from '../SealForm'
   import http from '@/common/js/http';
 
   const {
@@ -43,8 +40,9 @@
         this.$emit('onSearch', 0);
       },
       onCreate () {
-        // this.$router.push("sealForm");
-        this.fn.openSlider('创建', SealForm, '');
+        this.$emit('onCreate');
+        // this.$router.push("SealForm");
+        // this.fn.openSlider('创建', SealForm, '');
       }
     },
     data () {
@@ -55,12 +53,7 @@
     created () {}
   }
 </script>
-<style>
-  .el-input__inner {
-    /* border-radius: 5px; */
-    line-height: 30px;
-  }
-
+<style scoped>
   .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
@@ -68,4 +61,10 @@
     color:#000000;
   }
 
+  .create-button {
+    background-color: #ffd60c;
+    border-color: #DCDFE6;
+    width: 100px;
+    color: #606266;
+  }
 </style>

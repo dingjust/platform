@@ -68,7 +68,7 @@
 </template>
 
 <script>
-  import SealForm from '../../seal/sealForm'
+  import SealForm from '../../seal/SealForm'
   import Bus from '@/common/js/bus.js';
 
   export default {
@@ -89,7 +89,7 @@
       },
       onCreate() {
         this.dialogOrderVisible = true;
-        // this.$router.push("sealForm");
+        // this.$router.push("SealForm");
         // this.fn.openSlider('创建', SealForm, '');
       },
       async onPageSizeChanged(val) {

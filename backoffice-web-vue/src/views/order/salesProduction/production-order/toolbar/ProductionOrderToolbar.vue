@@ -11,7 +11,7 @@
             <el-input style="width:170px;" placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword"
               class="purchase-toolbar-input"></el-input>
           </el-form-item>
-          <el-form-item label="部门/人员" v-if="!isOutProduction">
+          <el-form-item label="部门/人员">
             <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="160"
                                 :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>

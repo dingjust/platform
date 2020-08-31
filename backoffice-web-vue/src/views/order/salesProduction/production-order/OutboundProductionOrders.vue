@@ -17,7 +17,7 @@
       </el-row>
       <div class="pt-2"></div>
       <production-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData"
-                                :isOutProduction="true"/>
+                                :isOutProduction="true" :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code" :key="index" :label="tabName(item)">
@@ -82,6 +82,9 @@
       },
       onAdvancedSearch(page, size) {
         this.setIsAdvancedSearch(true);
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getoutboundProductionList();
         this.searchAdvanced({
@@ -117,6 +120,9 @@
         this.queryFormData.state = tab.name;
         this.onAdvancedSearch();
       },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data() {
       return {
@@ -151,11 +157,14 @@
           categories: [],
           state: 'TO_BE_PRODUCED'
         },
-        stateCount: {}
+        stateCount: {},
+        dataQuery: {}
       };
     },
     created() {
-      this.onAdvancedSearch();
+      this.dataQuery = this.getDataPerQuery('OUT_PRODUCTION_TASK_ORDER');
+      this.onResetQuery();
+      this.onAdvancedSearch(0, 10);
     },
     mounted() {
 

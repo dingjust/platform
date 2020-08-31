@@ -6,8 +6,12 @@
           <el-form-item label="订单信息" prop="name">
             <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.name"></el-input>
           </el-form-item>
-          <el-form-item label="负责人" prop="name">
+          <!-- <el-form-item label="负责人" prop="name">
             <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.merchandiser"></el-input>
+          </el-form-item> -->
+          <el-form-item label="部门/人员" prop="name">
+            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                                :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <el-form-item label="合作商" prop="name">
             <el-input placeholder="请输入合作商名称" v-model="queryFormData.targetCooperator"></el-input>
@@ -45,6 +49,7 @@
     'OutboundOrderModule'
   );
 
+  import { DeptPersonSelect } from '@/components'
   import SalesProductionStatusBar from '../../components/SalesProductionStatusBar';
   export default {
     name: 'OutboundOrderToolbar',
@@ -55,10 +60,14 @@
       isSelect: {
         type: Boolean,
         default: false
+      },
+      dataQuery: {
+        type: Object
       }
     },
     components: {
-      SalesProductionStatusBar
+      SalesProductionStatusBar,
+      DeptPersonSelect
     },
     computed: {},
     methods: {
@@ -69,6 +78,8 @@
         this.queryFormData.name = '';
         this.queryFormData.merchandiser = '';
         this.queryFormData.targetCooperator = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       },
       createOutboundOrder() {
         this.$emit('createOutboundOrder');

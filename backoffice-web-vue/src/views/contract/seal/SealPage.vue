@@ -9,9 +9,12 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <seal-toolbar  @onSearch="onSearch" class="seal-toolbar"/>
+      <seal-toolbar  @onSearch="onSearch" @onCreate="onCreate"/>
       <seal-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
     </el-card>
+    <el-dialog :visible.sync="dialogVislble" width="80%" append-to-body :close-on-click-modal="false">
+      <seal-form v-if="dialogVislble" />
+    </el-dialog>
   </div>
 </template>
 
@@ -21,13 +24,14 @@
 
   import SealList from './list/SealSearchResultList';
   import SealToolbar from './toolbar/SealToolbar';
-
+  import SealForm from './SealForm'
 
   export default {
     name: 'SealPage',
     components: {
       SealList,
-      SealToolbar
+      SealToolbar,
+      SealForm
     },
     computed: {
       ...mapGetters({
@@ -57,9 +61,15 @@
       onNew(formData) {
         this.fn.openSlider('创建', LabelDetailsPage, formData);
       },
+      onCreate () {
+        console.log('===================================')
+        this.dialogVislble = true;
+      }
     },
     data() {
-      return {};
+      return {
+        dialogVislble: false
+      };
     },
     created() {
       this.onSearch();
