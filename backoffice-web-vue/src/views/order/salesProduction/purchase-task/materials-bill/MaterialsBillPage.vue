@@ -20,7 +20,7 @@
       </el-row>
     </el-card>
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <suppliers-select v-if="suppliersSelectVisible" @onSelect="onSuppliersSelect" />
+      <supplier-select v-if="suppliersSelectVisible" @onSelect="onSuppliersSelect" />
     </el-dialog>
   </div>
 </template>
@@ -29,10 +29,11 @@
   import MaterialsBillTop from './MaterialsBillTop';
   import MaterialsBillMiddle from './MaterialsBillMiddle';
   import MaterialsBillTable from './MaterialsBillTable';
-  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
+  // import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
+  import SupplierSelect from '@/components/custom/SupplierSelect'
   export default {
     name: 'MaterialsBillPage',
-    components: {SuppliersSelect, MaterialsBillTable, MaterialsBillMiddle, MaterialsBillTop},
+    components: {SupplierSelect, MaterialsBillTable, MaterialsBillMiddle, MaterialsBillTop},
     props: [],
     computed: {},
     methods: {

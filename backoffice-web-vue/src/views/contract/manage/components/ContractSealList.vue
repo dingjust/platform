@@ -1,7 +1,7 @@
 <template>
   <div class="contract-seal-list">
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" :close-on-click-modal="false" append-to-body>
-      <seal-form v-if="dialogOrderVisible" @callback="onCallBack"/>
+      <seal-form v-if="dialogOrderVisible" @closeDialog="dialogOrderVisible=false" @callback="onCallBack"/>
     </el-dialog>
     <div>
       <el-row type="flex" justify="center" align="middle">
@@ -22,25 +22,37 @@
             <el-col :span="4" :key="item.code" :class="isSelect(item) ? 'seal-item seal-item-select' : 'seal-item'" 
                     @click.native="handleCurrentChange(item)">
               <el-row type="flex" justify="center" align="middle">
-                <img style="width: 70%" :src="item.media.url">
+                <img style="width: 100px" :src="item.media.url">
               </el-row>
+            </el-col>
+          </template>
+        </el-row>
+        <el-row type="flex" justify="start" align="middle">
+          <template v-for="item in page.content.slice(0, 5)">
+            <el-col :span="4" :key="item.code" style="margin-left: 20px;">
               <el-row type="flex" justify="center" align="middle" style="margin-top: 10px">
-                <h6 style="margin-bottom: 0px">{{item.name}}</h6>
+                <h6 style="margin-bottom: 0px;">{{item.name}}</h6>
               </el-row>
             </el-col>
           </template>
         </el-row>
       </template>
-      <template v-if="page.content.slice(5,10).length > 0">
-        <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
-          <template v-for="item in page.content.slice(5,10)">
-            <el-col :span="4" :key="item.code" :class="isSelect(item) ? 'seal-item seal-item-select' : 'seal-item'"
+      <template v-if="page.content.slice(5, 10).length > 0">
+        <el-row type="flex" justify="start" align="middle" style="margin-top: 10px">
+          <template v-for="item in page.content.slice(5, 10)">
+            <el-col :span="4" :key="item.code" :class="isSelect(item) ? 'seal-item seal-item-select' : 'seal-item'" 
                     @click.native="handleCurrentChange(item)">
               <el-row type="flex" justify="center" align="middle">
-                <img style="width: 70%" :src="item.media.url">
+                <img style="width: 100px" :src="item.media.url">
               </el-row>
+            </el-col>
+          </template>
+        </el-row>
+        <el-row type="flex" justify="start" align="middle">
+          <template v-for="item in page.content.slice(5, 10)">
+            <el-col :span="4" :key="item.code" style="margin-left: 20px;">
               <el-row type="flex" justify="center" align="middle" style="margin-top: 10px">
-                <h6 style="margin-bottom: 0px">{{item.name}}</h6>
+                <h6 style="margin-bottom: 0px;">{{item.name}}</h6>
               </el-row>
             </el-col>
           </template>
@@ -214,6 +226,10 @@
   .seal-item {
     border-radius: 5px;
     margin-left: 20px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .seal-item-select {

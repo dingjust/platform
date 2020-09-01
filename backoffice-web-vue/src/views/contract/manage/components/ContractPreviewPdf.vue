@@ -5,7 +5,7 @@
       <contract-supplement-form v-if="dialogOrderVisible" :slotData="slotData" @openPreviewPdf="showContract" 
                                 @onSearch="onSearch" :isSignedPaper="slotData.offlinePartner"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogSealVisible" :show-close="true" :close-on-click-modal="false" append-to-body>
+    <el-dialog :visible.sync="dialogSealVisible" width="60%" :show-close="true" :close-on-click-modal="false" append-to-body>
       <contract-seal-list :page="sealPage" @onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
 <!--    <el-dialog :visible.sync="dialogOrderVisible" width="50%" class="purchase-dialog" append-to-body>-->
@@ -264,7 +264,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
