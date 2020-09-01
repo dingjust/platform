@@ -1,4 +1,6 @@
+import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
 class ProfileAboutPage extends StatefulWidget {
@@ -77,8 +79,11 @@ class AppActions extends StatelessWidget {
           leading: const Icon(Icons.shopping_basket),
           onTap: () {
             //TODO版本检测
-            AppVersion(context).checkVersion(
-                AppBLoC.instance.packageInfo.version, 'nbyjy');
+            AppVersionHelper appVersionHelper =
+            Provider.of<AppVersionHelper>(context);
+            appVersionHelper.checkVersion(
+                context, AppBLoC.instance.packageInfo.version, 'nbyjy',
+                showNowMessage: true);
           },
         )
       ],
