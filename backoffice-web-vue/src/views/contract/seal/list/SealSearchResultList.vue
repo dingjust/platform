@@ -3,7 +3,9 @@
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
       <el-table-column  label="印章" fixed>
         <template slot-scope="scope">
-          <img width="100px" height="100px" :src="scope.row.media.url">
+          <div class="icon-basic">
+            <img width="100px" :src="scope.row.media.url">
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="印章名称" prop="name" width="220" fixed></el-table-column>
@@ -22,6 +24,7 @@
       <el-table-column label="操作">
           <template  slot-scope="scope">
             <!--<el-button type="text" icon="el-icon-edit" @click="on1">编辑</el-button>-->
+            <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
             <Authorized :permission="['AGREEMENT_SEAL_CREATE_DELETE']">
               <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row.code)">删除</el-button>
             </Authorized>
@@ -71,6 +74,9 @@
       on1 () {
 
       },
+      onDetail (row) {
+        this.$emit('onDetail', row);
+      },
       async onDelete (code) {
         console.log(code);
         const url = this.apis().delSeal(code);
@@ -114,9 +120,16 @@
   }
 </script>
 
-<style>
+<style scoped>
   .toolbar-search_input{
     background-color: #ffd60c;
     border-color: #ffd60c;
+  }
+
+  .icon-basic {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    align-items: center;
   }
 </style>

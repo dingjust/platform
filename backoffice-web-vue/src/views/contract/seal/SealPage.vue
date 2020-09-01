@@ -10,11 +10,17 @@
       </el-row>
       <div class="pt-2"></div>
       <seal-toolbar  @onSearch="onSearch" @onCreate="onCreate"/>
-      <seal-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
+      <seal-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onDetail="onDetail"/>
     </el-card>
     <el-dialog :visible.sync="dialogVislble" width="80%" append-to-body :close-on-click-modal="false">
-      <seal-form v-if="dialogVislble" />
+      <seal-form v-if="dialogVislble" @closeDialog="closeDialog" @callback="callback"/>
     </el-dialog>
+    <el-dialog :visible.sync="detailVisible" width="60%" append-to-body :close-on-click-modal="false">
+      <seal-detail v-if="detailVisible" :slotData="slotData"/>
+    </el-dialog>
+    <!-- <el-dialog :visible.sync="authorizeVislble" width="60%" append-to-body :close-on-click-modal="false">
+      <seal-authorize-form v-if="authorizeVislble" />
+    </el-dialog> -->
   </div>
 </template>
 
@@ -25,13 +31,15 @@
   import SealList from './list/SealSearchResultList';
   import SealToolbar from './toolbar/SealToolbar';
   import SealForm from './SealForm'
+  import SealDetail from './components/SealDetail'
 
   export default {
     name: 'SealPage',
     components: {
       SealList,
       SealToolbar,
-      SealForm
+      SealForm,
+      SealDetail
     },
     computed: {
       ...mapGetters({
@@ -62,13 +70,25 @@
         this.fn.openSlider('创建', LabelDetailsPage, formData);
       },
       onCreate () {
-        console.log('===================================')
         this.dialogVislble = true;
+      },
+      closeDialog () {
+        this.dialogVislble = false;
+      },
+      callback () {
+        this.onSearch();
+        this.dialogVislble = false;
+      },
+      onDetail (row) {
+        this.detailVisible = true;
+        this.slotData = row;
       }
     },
     data() {
       return {
-        dialogVislble: false
+        dialogVislble: false,
+        detailVisible: false,
+        slotData: {}
       };
     },
     created() {
