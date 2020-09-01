@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-dialog :visible.sync="materialDialogVisible" width="95%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" />
+      <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" :isSingleSelect="isSingleSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
       append-to-body>
@@ -271,11 +271,13 @@
         currentProductIndex: -1,
         dialogVisible: false,
         viewDialogVisible: false,
-        progressPlanVisible: false
+        progressPlanVisible: false,
+        isSingleSelect: false
       }
     },
     methods: {
       appendSample(index) {
+        this.isSingleSelect = true;
         this.currentProductIndex = index;
         this.materialDialogVisible = true;
       },
@@ -365,6 +367,7 @@
           }
         });
 
+        this.isSingleSelect = false;
         this.materialDialogVisible = false;
       },
       // _addRow() {

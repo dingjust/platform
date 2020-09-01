@@ -77,7 +77,16 @@
 
   export default {
     name: 'SampleProductsSelectDialog',
-    props: ['selectedRow'],
+    props: {
+      selectedRow: {
+        type: Array,
+        defautl: () => []
+      },
+      isSingleSelect: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       SampleProductDetailsPage,
       DeptPersonSelect
@@ -120,6 +129,9 @@
         this.multipleSelection = val;
       },
       handleClick (row) {
+        // if (this.isSingleSelect && this.multipleSelection.length >= 1) {
+        //   this.$refs.resultTable.toggleRowSelection(this.multipleSelection[0], false);
+        // }
         this.$refs.resultTable.toggleRowSelection(row);
       },
       getRowKeys(row) {

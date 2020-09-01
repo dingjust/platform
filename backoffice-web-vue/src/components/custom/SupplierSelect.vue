@@ -60,13 +60,13 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import CooperatorFormPage from '@/views/miscs/cooperator/form/CooperatorFormPage'
   const {
     mapActions,
     mapGetters,
     mapMutations
   } = createNamespacedHelpers('CooperatorModule');
 
+  import CooperatorFormPage from '@/views/miscs/cooperator/form/CooperatorFormPage'
   export default {
     name: 'SuppliersSelect',
     props: {
