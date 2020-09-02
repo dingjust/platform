@@ -62,6 +62,9 @@
           <!-- <span style="color:red;">{{scope.row.validateMsg!=null?scope.row.validateMsg:''}}</span> -->
           <!-- <i v-if="validateEntry(scope.row)" class="el-icon-warning" style="color:red;font-size:20px;"></i> -->
           <el-button type="text" @click="onDetail(scope.$index)">详情</el-button>
+          <!-- 来源订单详情 -->
+          <el-button type="text" @click="onOriginDetail(scope.row.originOrder.id)" v-if="scope.row.originOrder!=null">来源订单详情
+          </el-button>
           <template v-if="canEdit(scope.row.auditState)">
             <el-button v-if="canUpdate" type="text" @click="onModify(scope.$index)">编辑</el-button>
             <el-button v-if="canDelete" slot="reference" type="text" @click="onDelete(scope.$index)"
@@ -71,6 +74,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog :visible.sync="detailDialog" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <production-order-detail :id="openOrderId" v-if="detailDialog" />
+    </el-dialog>
   </div>
 </template>
 
@@ -84,16 +91,20 @@
     getEntryProfitPercent
   } from '../js/accounting.js';
 
+  import ProductionOrderDetail from '../production-order/details/ProductionOrderDetail'
+
   export default {
     name: 'SalesProductionProductsTable',
-    components: {},
+    components: {
+      ProductionOrderDetail
+    },
     props: {
       data: {
         type: Array
       },
-      canUpdate:{
-        type:Boolean,
-        default:true,
+      canUpdate: {
+        type: Boolean,
+        default: true,
       },
       canDelete: {
         type: Boolean,
@@ -131,10 +142,18 @@
       },
       validateEntry(entry) {
         return entry.costOrder == null;
+      },
+      //来源工单详情
+      onOriginDetail(id) {
+        this.openOrderId = id;
+        this.detailDialog = true;
       }
     },
     data() {
-      return {}
+      return {
+        openOrderId: '',
+        detailDialog: false
+      }
     }
   }
 

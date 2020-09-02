@@ -17,7 +17,7 @@
                 <h6>产品名称：{{slotData.product.name}}</h6>
               </el-col>
               <el-col :span="12">
-                <h6>商品货号：{{slotData.product.code}}</h6>
+                <h6>商品货号：{{slotData.product.skuID}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
@@ -76,15 +76,15 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col>
-            <h6>客户：{{cooperatorName}}</h6>
+            <h6>客户：{{cooperator.name}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>联系人：{{contactPerson}}</h6>
+            <h6>联系人：{{cooperator.contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{contactPhone}}</h6>
+            <h6>联系方式：{{cooperator.contactPhone}}</h6>
           </el-col>
         </el-row>
         <!-- <el-row class="info-row-title_row">
@@ -161,51 +161,65 @@
       ColorSizeTable,
     },
     computed: {
-      cooperatorName: function () {
-        if (this.belongOrder.cooperator != null) {
-          if (this.belongOrder.cooperator.type == 'ONLINE') {
-            return this.belongOrder.cooperator.partner.name;
+      // cooperatorName: function () {
+      //   if (this.belongOrder.cooperator != null) {
+      //     if (this.belongOrder.cooperator.type == 'ONLINE') {
+      //       return this.belongOrder.cooperator.partner.name;
+      //     } else {
+      //       return this.belongOrder.cooperator.name;
+      //     }
+      //   } else if (this.belongOrder.originCooperator != null) {
+      //     if (this.belongOrder.originCooperator.type == 'ONLINE') {
+      //       return this.belongOrder.originCooperator.partner.name;
+      //     } else {
+      //       return this.belongOrder.originCooperator.name;
+      //     }
+      //   }
+      // },
+      // contactPerson: function () {
+      //   if (this.belongOrder.cooperator != null) {
+      //     if (this.belongOrder.cooperator.type == 'ONLINE') {
+      //       return this.belongOrder.cooperator.partner.contactPerson;
+      //     } else {
+      //       return this.belongOrder.cooperator.contactPerson;
+      //     }
+      //   } else if (this.belongOrder.originCooperator != null) {
+      //     if (this.belongOrder.originCooperator.type == 'ONLINE') {
+      //       return this.belongOrder.originCooperator.partner.contactPerson;
+      //     } else {
+      //       return this.belongOrder.originCooperator.contactPerson;
+      //     }
+      //   }
+      // },
+      // contactPhone: function () {
+      //   if (this.belongOrder.cooperator != null) {
+      //     if (this.belongOrder.cooperator.type == 'ONLINE') {
+      //       return this.belongOrder.cooperator.partner.contactPhone;
+      //     } else {
+      //       return this.belongOrder.cooperator.contactPhone;
+      //     }
+      //   } else if (this.belongOrder.originCooperator != null) {
+      //     if (this.belongOrder.originCooperator.type == 'ONLINE') {
+      //       return this.belongOrder.originCooperator.partner.contactPhone;
+      //     } else {
+      //       return this.belongOrder.originCooperator.contactPhone;
+      //     }
+      //   }
+      // },
+      cooperator: function () {
+        if (this.belongOrder.targetCooperator) {
+          if (this.belongOrder.targetCooperator.type == 'ONLINE') {
+            return this.belongOrder.targetCooperator.partner;
           } else {
-            return this.belongOrder.cooperator.name;
-          }
-        } else if (this.belongOrder.originCooperator != null) {
-          if (this.belongOrder.originCooperator.type == 'ONLINE') {
-            return this.belongOrder.originCooperator.partner.name;
-          } else {
-            return this.belongOrder.originCooperator.name;
+            return this.belongOrder.targetCooperator;
           }
         }
-      },
-      contactPerson: function () {
-        if (this.belongOrder.cooperator != null) {
-          if (this.belongOrder.cooperator.type == 'ONLINE') {
-            return this.belongOrder.cooperator.partner.contactPerson;
-          } else {
-            return this.belongOrder.cooperator.contactPerson;
-          }
-        } else if (this.belongOrder.originCooperator != null) {
-          if (this.belongOrder.originCooperator.type == 'ONLINE') {
-            return this.belongOrder.originCooperator.partner.contactPerson;
-          } else {
-            return this.belongOrder.originCooperator.contactPerson;
-          }
+        return {
+          name: '',
+          contactPerson: '',
+          contactPhone: ''
         }
-      },
-      contactPhone: function () {
-        if (this.belongOrder.cooperator != null) {
-          if (this.belongOrder.cooperator.type == 'ONLINE') {
-            return this.belongOrder.cooperator.partner.contactPhone;
-          } else {
-            return this.belongOrder.cooperator.contactPhone;
-          }
-        } else if (this.belongOrder.originCooperator != null) {
-          if (this.belongOrder.originCooperator.type == 'ONLINE') {
-            return this.belongOrder.originCooperator.partner.contactPhone;
-          } else {
-            return this.belongOrder.originCooperator.contactPhone;
-          }
-        }
-      },
+      }
     },
     methods: {
 
