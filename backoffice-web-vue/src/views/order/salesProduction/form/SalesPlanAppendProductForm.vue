@@ -193,7 +193,7 @@
 
   import {
     getSizeSequence
-  } from '@/components/index.js'
+  } from '@/store/modules/shared'
 
   const {
     mapGetters,

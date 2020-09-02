@@ -1,6 +1,8 @@
 // shared
 import EnumsModule from './shared/enums';
 import GlobalSizesModule from './shared/sizes';
+import GlobalColorsModule from './shared/colors';
+import GlobalCategoriesModule from './shared/categories';
 
 // user
 import UsersModule from './user/users';
@@ -101,6 +103,8 @@ export {
   // shared
   EnumsModule,
   GlobalSizesModule,
+  GlobalColorsModule,
+  GlobalCategoriesModule,
   // user
   AddressesModule,
   B2BCustomersModule,

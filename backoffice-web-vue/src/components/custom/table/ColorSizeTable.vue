@@ -49,7 +49,7 @@
 <script>
   import {
     getSizeSequence
-  } from './table'
+  } from '@/store/modules/shared'
 
   export default {
     name: 'ColorSizeTable',

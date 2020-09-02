@@ -180,5 +180,7 @@ new Vue({
   },
   created() {
     this.$store.dispatch('GlobalSizesModule/getSizesData');
+    this.$store.dispatch('GlobalColorsModule/getcolorsData');
+    this.$store.dispatch('GlobalCategoriesModule/getCategoriesData');
   }
 });

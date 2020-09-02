@@ -6,6 +6,8 @@ Vue.use(Vuex);
 import {
   EnumsModule,
   GlobalSizesModule,
+  GlobalColorsModule,
+  GlobalCategoriesModule,
   // user
   AddressesModule,
   B2BCustomersModule,
@@ -123,6 +125,8 @@ export default new Vuex.Store({
   modules: {
     EnumsModule,
     GlobalSizesModule,
+    GlobalColorsModule,
+    GlobalCategoriesModule,
     // user
     AddressesModule,
     B2BCustomersModule,
