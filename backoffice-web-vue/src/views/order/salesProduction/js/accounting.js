@@ -95,7 +95,7 @@ function getEntryTotalAmount(entry) {
 function getEntryTotalPrice(entry) {
   let result = getEntryTotalAmount(entry) * (parseFloat(entry.unitPrice));
   if (!Number.isNaN(result)) {
-    return result;
+    return result.toFixed(2);
   } else {
     return '';
   }
