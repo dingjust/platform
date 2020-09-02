@@ -9,7 +9,7 @@
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <supplier-select @onSelect="onSuppliersSelect" />
+      <supplier-select @onSelect="onSuppliersSelect" :categories="['SUPPLIER']"/>
     </el-dialog>
     <el-card>
       <el-row>
