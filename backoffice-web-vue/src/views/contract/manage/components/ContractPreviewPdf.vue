@@ -1,11 +1,13 @@
 <template>
-
   <div>
+    <template v-if="!readOnly">
+      <contract-steps :step="3"/>
+    </template>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-supplement-form v-if="dialogOrderVisible" :slotData="slotData" @openPreviewPdf="showContract" 
                                 @onSearch="onSearch" :isSignedPaper="slotData.offlinePartner"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogSealVisible" :show-close="true" :close-on-click-modal="false" append-to-body>
+    <el-dialog :visible.sync="dialogSealVisible" width="60%" :show-close="true" :close-on-click-modal="false" append-to-body>
       <contract-seal-list :page="sealPage" @onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
 <!--    <el-dialog :visible.sync="dialogOrderVisible" width="50%" class="purchase-dialog" append-to-body>-->
@@ -78,6 +80,7 @@
   import ContractSealList from '../components/ContractSealList';
   import Bus from '@/common/js/bus.js';
   import ContractSupplementForm from '../ContractSupplementForm'
+  import ContractSteps from '@/views/contract/manage/components/ContractSteps'
 
   export default {
     name: 'ContractPreviewPdf',
@@ -96,7 +99,8 @@
     // props: ['slotData', 'fileUrl'],
     components: {
       ContractSealList,
-      ContractSupplementForm
+      ContractSupplementForm,
+      ContractSteps
     },
     mounted () {
       this.isLoading = true;
@@ -264,7 +268,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;

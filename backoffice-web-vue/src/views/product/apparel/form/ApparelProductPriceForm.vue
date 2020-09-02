@@ -54,7 +54,7 @@
               </el-form-item>
             </el-row>
         </el-col>
-        <el-button type="text" @click="onRemove(index)" v-if="!isRead">删除</el-button>
+        <el-button type="text" @click="onRemove(index)" v-if="!isRead && index > 0">删除</el-button>
       </el-row>
     </template>
     <el-row type="flex" v-if="slotData.steppedPrices.length<3">

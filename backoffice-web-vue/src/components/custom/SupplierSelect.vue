@@ -50,6 +50,9 @@
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <el-dialog :visible.sync="dialogVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <cooperator-form-page v-if="dialogVisible" :isFromDialog="true" @callback="callback"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,13 +60,13 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-
   const {
     mapActions,
     mapGetters,
     mapMutations
   } = createNamespacedHelpers('CooperatorModule');
 
+  import CooperatorFormPage from '@/views/miscs/cooperator/form/CooperatorFormPage'
   export default {
     name: 'SuppliersSelect',
     props: {
@@ -75,6 +78,9 @@
         }
       }
     },
+    components: {
+      CooperatorFormPage
+    },
     computed: {
       ...mapGetters({
         page: 'page',
@@ -84,6 +90,10 @@
       ...mapActions({
         searchAdvanced: 'searchAdvanced'
       }),
+      callback () {
+        this.dialogVisible = false;
+        this.onSearch();
+      },
       onPageSizeChanged(val) {
         this._reset();
 
@@ -172,7 +182,8 @@
         }
       },
       jumpToCreate() {
-        this.$router.push('/account/cooperator/cooperatorCreate');
+        this.dialogVisible = true;
+        // this.$router.push('/account/cooperator/cooperatorCreate');
       },
       getTagType(category) {
         switch (category) {
@@ -204,6 +215,7 @@
           keyword: '',
           category: []
         },
+        dialogVisible: false
       }
     }
   }

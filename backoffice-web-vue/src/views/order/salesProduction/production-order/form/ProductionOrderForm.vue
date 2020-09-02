@@ -134,7 +134,7 @@
       </div>
     </el-card>
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <suppliers-select @onSelect="onSuppliersSelect" />
+      <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <production-task-select-dialog v-if="taskDialogVisible" :isSingleChoice="true" :selectType="'PRODUCTION_ORDER'"
@@ -158,7 +158,8 @@
     'ProductionOrderModule'
   );
 
-  import SuppliersSelect from '@/views/contract/manage/components/SupplierSelect.vue';
+  // import SuppliersSelect from '@/views/contract/manage/components/SupplierSelect.vue';
+  import SupplierSelect from '@/components/custom/SupplierSelect'
   import ProductionTaskSelectDialog from '../../production-task/components/ProductionTaskSelectDialog';
   import MyAddressForm from '@/components/custom/order-form/MyAddressForm';
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
@@ -180,7 +181,7 @@
       MTAVAT,
       MyAddressForm,
       ProductionTaskSelectDialog,
-      SuppliersSelect,
+      SupplierSelect,
       PayPlanForm
     },
     props: [],

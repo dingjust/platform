@@ -5,14 +5,7 @@
     </el-row>
     <div class="pt-2"></div>
     <!-- 步骤条 -->
-    <el-row type="flex" justify="space-between" style="margin: 15px 30px;">
-      <template v-for="item in titleList">
-        <div class="step-block" :key="item.code">
-          <div class="number-icon" :style="item.code === 1 ? 'background-color: #ffd60c;' : ''">{{item.code}}</div>
-          <h6 class="step-title">{{item.title}}</h6>
-        </div>
-      </template>
-    </el-row>
+    <contract-steps :step="1"/>
     <!-- 合同类型框 -->
     <el-row type="flex" justify="space-between" style="margin: 30px 60px">
       <template v-for="item in typeTitle">
@@ -73,11 +66,12 @@
   import ContractFrameForm from '../ContractFrameForm'
   import ContractSupplementForm from '../ContractSupplementForm'
   import ContractPurchaseForm from '../ContractPurchaseForm'
+  import ContractSteps from './ContractSteps'
 
   export default {
     name: 'ContractType',
     props: ['slotData', 'isSignedPaper'],
-    components: {ContractFrameForm, ContractPurchaseForm, ContractForm},
+    components: {ContractFrameForm, ContractPurchaseForm, ContractForm, ContractSteps},
     methods: {
       onClick (type) {
         if (this.selectType === type) {
@@ -187,22 +181,6 @@
         mockData: [],
         templateId: '',
         selectType: '',
-        titleList: [{
-          code: 1,
-          title: '选择合同类型'
-        }, {
-          code: 2,
-          title: '选择签署方式填写对应内容'
-        }, {
-          code: 3,
-          title: '生成合同去签署选择印章'
-        }, {
-          code: 4,
-          title: '短信验证码确认签署'
-        }, {
-          code: 5,
-          title: '对方完成签署'
-        }],
         typeTitle: [{
           name: '委托生产合同',
           title: '以某一份生产订单内容为合同标的的合同',
@@ -231,29 +209,6 @@
   };
 </script>
 <style scoped>
-  .number-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #DCDFE6;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    /* background-color: #ffd60c; */
-    margin-right: 5px;
-    color: #303133;
-  }
-
-  .step-block {
-    display: flex;
-  }
-
-  .step-title {
-    margin: 0px;
-    display: flex;
-    align-items: center;
-  }
-
   .contract-frame {
     width: 200px;
     height: 200px;

@@ -104,7 +104,8 @@
     </el-dialog>
     <el-dialog :visible.sync="materialDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" />
+      <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" 
+                                      :selectedRow="form.taskOrderEntries"/>
     </el-dialog>
   </div>
 </template>
