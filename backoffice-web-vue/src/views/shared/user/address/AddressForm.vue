@@ -188,17 +188,34 @@
       }
     },
     data() {
+      var validateAddress = (rule, value, callback) => {
+        if (!value.name || value.name === '') {
+          callback(new Error('请选择'));
+        } else {
+          callback();
+        }
+      };
+      var validatePhone = async (rule, value, callback) => {
+        const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+        if (value === '') {
+          callback(new Error('请输入手机号码'));
+        } else if (!reg.test(value)) {
+          callback(new Error('请输入合法手机号码'));
+        } else {
+          callback();
+        }
+      };
       return {
         regions: [],
         cities: [],
         cityDistricts: [],
         rules: {
-          fullname: [{required: true, message: '必填', trigger: 'blur'}],
-          cellphone: [{required: true, message: '必填', trigger: 'blur'}],
-          region: [{required: true, message: '必填', trigger: 'blur'}],
-          city: [{required: true, message: '必填', trigger: 'blur'}],
-          cityDistrict: [{required: true, message: '必填', trigger: 'blur'}],
-          line1: [{required: true, message: '必填', trigger: 'blur'}],
+          fullname: [{required: true, message: '必填', trigger: 'change'}],
+          cellphone: [{required: true,validator: validatePhone, trigger: 'change'}],
+          region: [{required: true, validator: validateAddress, trigger: 'change'}],
+          city: [{required: true, validator: validateAddress, trigger: 'change'}],
+          cityDistrict: [{required: true, validator: validateAddress, trigger: 'change'}],
+          line1: [{required: true, message: '必填', trigger: 'change'}],
         },
       }
     },

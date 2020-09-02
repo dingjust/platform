@@ -1,5 +1,6 @@
 <template>
   <div>
+    <contract-steps :step="2"/>
     <!-- 合同模板选择 -->
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog"
                append-to-body :close-on-click-modal="false">
@@ -27,6 +28,7 @@
 <!--      </el-button-group>-->
 <!--      <contract-select :mockData="mockData" @fileSelectChange="onContractSelectChange"/>-->
       <contract-frame-select v-if="dialogContractVisible" :page="framePage"
+                             :orderSelectFiles="orderSelectFiles"
                              @onOrderSelectChange="onOrderSelectChange"
                              @onContractSelectSure="onContractSelectSure"/>
     </el-dialog>
@@ -164,6 +166,7 @@
     import ContractSelect from './components/ContractSelect';
     import ContractFrameSelect from './components/ContractFrameSelect';
     import { ImagesUpload, PDFUpload } from '@/components'
+    import ContractSteps from './components/ContractSteps'
 
     const {
       mapGetters,
@@ -185,7 +188,8 @@
         ContractPreviewPdf,
         ContractSelect,
         ImagesUpload,
-        PDFUpload
+        PDFUpload,
+        ContractSteps
       },
       computed: {
         ...mapGetters({
@@ -536,7 +540,8 @@
             flag = true
           }
           let data = {
-            'orderCodes': orders.map((order) => order.code),
+            // 'orderCodes': orders.map((order) => order.code),
+            'items': orders.map((order) => order.id),
             'type': 'CGDD',
             'isPdfAgreement': flag
           }

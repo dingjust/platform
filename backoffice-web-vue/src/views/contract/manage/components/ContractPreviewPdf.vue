@@ -1,6 +1,8 @@
 <template>
-
   <div>
+    <template v-if="!readOnly">
+      <contract-steps :step="3"/>
+    </template>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-supplement-form v-if="dialogOrderVisible" :slotData="slotData" @openPreviewPdf="showContract" 
                                 @onSearch="onSearch" :isSignedPaper="slotData.offlinePartner"/>
@@ -78,6 +80,7 @@
   import ContractSealList from '../components/ContractSealList';
   import Bus from '@/common/js/bus.js';
   import ContractSupplementForm from '../ContractSupplementForm'
+  import ContractSteps from '@/views/contract/manage/components/ContractSteps'
 
   export default {
     name: 'ContractPreviewPdf',
@@ -96,7 +99,8 @@
     // props: ['slotData', 'fileUrl'],
     components: {
       ContractSealList,
-      ContractSupplementForm
+      ContractSupplementForm,
+      ContractSteps
     },
     mounted () {
       this.isLoading = true;

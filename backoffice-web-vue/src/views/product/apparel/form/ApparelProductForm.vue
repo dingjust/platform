@@ -14,7 +14,7 @@
                 { required: true, message: '请选择货品类型', trigger: 'change'}]">
               <el-checkbox-group v-model="slotData.productType">
                 <template v-for="type in productTypes">
-                  <el-checkbox :label="type.code" :disabled="isDisabled(type.code)">{{type.name}}</el-checkbox>
+                  <el-checkbox :label="type.code" :disabled="isDisabled(type.code)" :key="type.code">{{type.name}}</el-checkbox>
                 </template>
               </el-checkbox-group>
             </el-form-item>

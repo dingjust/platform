@@ -29,7 +29,7 @@
     <el-row type="flex">
       <el-table ref="resultTable" stripe :data="page.content" @selection-change="handleSelectionChange"
         :height="autoHeight" :row-key="getRowKeys" @row-click="handleClick">
-        <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
+        <el-table-column type="selection" width="55" :selectable="canSelect" :reserve-selection="true"></el-table-column>
         <el-table-column label="产品图片" width="120">
           <template slot-scope="scope">
             <img width="54px" height="54px"
@@ -57,7 +57,7 @@
     </el-pagination>
     <el-dialog :visible.sync="detailsVisiable" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sample-product-details-page v-if="detailsVisiable" @closeDialog="closeDialog" />
+      <sample-product-details-page v-if="detailsVisiable" @closeDialog="closeDialog"/>
     </el-dialog>
   </div>
 </template>
@@ -104,6 +104,16 @@
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
       }),
+      canSelect (row) {
+        let index;
+        if (this.selectedRow && this.selectedRow.length > 0) {
+          index = this.selectedRow.findIndex(item => item.product.id === row.id);
+          if (index > -1) {
+            return false
+          }
+        }
+        return true;
+      },
       async onSearch(page, size) {
         // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
         //   this.onResetQuery();
@@ -116,9 +126,9 @@
           page,
           size
         });
-        if (this.selectedRow && this.selectedRow.length > 0) {
-          this.echoData();
-        }
+        // if (this.selectedRow && this.selectedRow.length > 0) {
+        //   this.echoData();
+        // }
       },
       onReset () {
         this.queryFormData.keyword = '';
@@ -126,12 +136,29 @@
         // this.onResetQuery();
       },
       handleSelectionChange(val) {
-        this.multipleSelection = val;
+        if (this.isSingleSelect) {
+          if (val.length > 1) {
+            this.$refs.resultTable.toggleRowSelection(val[0], false);
+            this.multipleSelection = [val[val.length - 1]];
+          } else if (val.length <= 1) {
+            this.multipleSelection = val;
+          }
+        } else {
+          this.multipleSelection = val;
+        }
       },
       handleClick (row) {
-        // if (this.isSingleSelect && this.multipleSelection.length >= 1) {
-        //   this.$refs.resultTable.toggleRowSelection(this.multipleSelection[0], false);
-        // }
+        if (!this.canSelect(row)) {
+          return;
+        }
+
+        if (this.isSingleSelect && this.multipleSelection.length >= 1) {
+          if (row.id === this.multipleSelection[0].id) {
+            this.$refs.resultTable.toggleRowSelection(this.multipleSelection[0], false);
+            return;
+          }
+          this.$refs.resultTable.toggleRowSelection(this.multipleSelection[0], false);
+        }
         this.$refs.resultTable.toggleRowSelection(row);
       },
       getRowKeys(row) {
@@ -160,15 +187,15 @@
           this.$message('请选择产品');
         }
       },
-      echoData () {
-        let index;
-        this.page.content.filter(item => {
-          index = this.selectedRow.findIndex(val => val.product.id === item.id);
-          if (index > -1) {
-            this.$refs.resultTable.toggleRowSelection(item);
-          }
-        });
-      },
+      // echoData () {
+      //   let index;
+      //   this.page.content.filter(item => {
+      //     index = this.selectedRow.findIndex(val => val.product.id === item.id);
+      //     if (index > -1) {
+      //       this.$refs.resultTable.toggleRowSelection(item);
+      //     }
+      //   });
+      // },
       onResetQuery () {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       },
