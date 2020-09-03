@@ -168,6 +168,23 @@ let http = {
         .catch((error) => errorHandler(resolve, error, loading));
     });
   },
+  /** 并发Post
+   * @param  {请求数组{url,data,params}} multipleRequest
+   */
+  multiplePost: function (multipleRequest) {
+    let loading = Loading.service(this.options);
+    setAuthorization();
+    return new Promise((resolve, reject) => {
+      axios.all(multipleRequest.map(element => {
+        return axios.post(element.url, element.data, {
+          params: element.params,
+        });
+      })).then(axios.spread((res) => {
+        loading.close();
+        return resolve(res.map((response) => response.data));
+      })).catch((error) => errorHandler(resolve, error, loading));
+    });
+  },
 };
 
 export default http;
