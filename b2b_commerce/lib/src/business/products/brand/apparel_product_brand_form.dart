@@ -240,12 +240,15 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                   await Provider.of<ColorState>(context).getPartColors();
                   List<ColorSizeEntryModel> sizes =
                   await Provider.of<SizeState>(context).getPartSizes();
-                  Navigator.push(
+                  dynamic result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
                               ColorsSizesField(_product,
                                   colors: colors, sizes: sizes)));
+                  setState(() {
+                    _product.colorSizes = result.colorSizes;
+                  });
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -267,7 +270,10 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                         ]),
                       ),
                     ),
-                    colorSizeSelectText(_product.colorSizes),
+                    Text(colorSizeSelectText(_product.colorSizes),
+                        style: TextStyle(
+                          color: Colors.grey,
+                        )),
                     Icon(
                       Icons.chevron_right,
                       color: Colors.blueGrey,
@@ -295,7 +301,9 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                                   _product.attributes.fabricCompositions,
                                   enabled: true)));
                   if (result != null) {
-                    _product.attributes.fabricCompositions = result;
+                    setState(() {
+                      _product.attributes.fabricCompositions = result;
+                    });
                   }
                 },
                 child: Row(
@@ -490,7 +498,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
   }
 
   //格式化选中的颜色尺码
-  Widget colorSizeSelectText(List<ColorSizeModel> colorsSizes) {
+  String colorSizeSelectText(List<ColorSizeModel> colorsSizes) {
     String text = '';
     List<ColorSizeEntryModel> sizes;
     if (colorsSizes != null && colorsSizes.length > 0) {
@@ -526,11 +534,11 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
       }
     }
 
-    // return text;
-    return Text(text,
-        style: TextStyle(
-          color: Colors.grey,
-        ));
+     return text;
+//    return Text(text,
+//        style: TextStyle(
+//          color: Colors.grey,
+//        ));
   }
 
   //格式化选中的面料成分

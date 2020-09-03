@@ -160,7 +160,7 @@
 <script>
   import {
     getSizeSequence
-  } from '@/components/'
+  } from '@/store/modules/shared'
 
   import PDFUpload from '@/components/custom/upload/PDFUpload';
   import OrderViewButtonGroup from './OrderViewButtonGroup';

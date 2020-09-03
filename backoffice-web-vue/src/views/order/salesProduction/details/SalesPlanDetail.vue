@@ -37,13 +37,19 @@
         </el-row>
       </div>
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
-        @onWithdraw="onWithdraw" @callback="onRefresh" @onSubmit="onSave(true)" @onCancel="onDelete" />
+        @onWithdraw="onWithdraw" @callback="onRefresh" @onSubmit="onSave(true)" @onCancel="onDelete"
+        @onCancelProdcution="canelingProductionDialogVisible=true" />
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
         :needMaterialsSpec="needMaterialsSpec" :defaultAddress="formData.address" :isUpdate="false"
         :productionLeader="formData.productionLeader" />
+    </el-dialog>
+    <el-dialog :visible.sync="canelingProductionDialogVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sale-order-production-cancel-form v-if="canelingProductionDialogVisible" :order="formData"
+        @callback="callback" />
     </el-dialog>
   </div>
 </template>
@@ -68,6 +74,8 @@
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
+  import SaleOrderProductionCancelForm from '../form/SaleOrderProductionCancelForm';
+
   import {
     OrderAuditDetail
   } from '@/views/order/salesProduction/components'
@@ -81,6 +89,7 @@
       SalesPlanDetailBtnGroup,
       SalesPlanAppendProductForm,
       OrderAuditDetail,
+      SaleOrderProductionCancelForm
     },
     computed: {
       // ...mapGetters({
@@ -127,6 +136,10 @@
       }
     },
     methods: {
+      callback() {
+        this.canelingProductionDialogVisible = false;
+        this.getDetails();
+      },
       async getDetails() {
         const url = this.apis().getSalesProductionOrderDetails(this.id);
         const result = await this.$http.get(url);
@@ -256,6 +269,7 @@
     data() {
       return {
         salesProductAppendVisible: false,
+        canelingProductionDialogVisible: false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
         formData: {
