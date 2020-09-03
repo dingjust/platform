@@ -64,7 +64,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4">
-                <el-button @click="onProductSelect(index)" size="mini">选择任务</el-button>
+                <el-button @click="onProductSelect(index)" size="mini">{{item.product.id ? '更换工单' : '添加工单'}}</el-button>
               </el-col>
             </el-row>
             <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" />
@@ -213,7 +213,7 @@
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"
-        :selectType="'OUTBOUND_ORDER'" />
+        :selectType="'OUTBOUND_ORDER'" :isSingleChoice="isSingleSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -357,20 +357,23 @@
         this.selectIndex = index;
       },
       addRow() {
-        let item = {
-          originOrder: {
-            id: ''
-          },
-          unitPrice: '',
-          deliveryDate: '',
-          shippingAddress: {},
-          product: {},
-          progressPlan: {
-            name: ''
-          },
-          colorSizeEntries: []
-        };
-        this.formData.taskOrderEntries.push(item);
+        this.selectIndex = '';
+        this.isSingleSelect = false;
+        this.taskDialogVisible = true;
+        // let item = {
+        //   originOrder: {
+        //     id: ''
+        //   },
+        //   unitPrice: '',
+        //   deliveryDate: '',
+        //   shippingAddress: {},
+        //   product: {},
+        //   progressPlan: {
+        //     name: ''
+        //   },
+        //   colorSizeEntries: []
+        // };
+        // this.formData.taskOrderEntries.push(item);
       },
       deleteRow(index) {
         this.formData.taskOrderEntries.splice(index, 1);
@@ -380,46 +383,40 @@
         let index;
         let entries = [];
         selectTaskList.forEach(item => {
-          index = this.formData.taskOrderEntries.findIndex(val => val.originOrder.id == item.id);
-          if (index > -1) {
-            entries.push(this.formData.taskOrderEntries[index]);
-          } else {
-            row = {
-              originOrder: {
-                id: item.id
-              },
-              unitPrice: '',
-              deliveryDate: item.deliveryDate,
-              shippingAddress: item.shippingAddress,
-              product: {
-                id: item.product.id,
-                name: item.product.name,
-                thumbnail: item.product.thumbnail,
-                skuID:item.product.skuID
-              },
-              progressPlan: {
-                name: ''
-              },
-              colorSizeEntries: item.colorSizeEntries
-            }
-            if (item.progressWorkSheet) {
-              row.progressPlan = this.copyProgressPlan({
-                name: '节点方案1',
-                remarks: '',
-                productionProgresses: item.progressWorkSheet.progresses
-              })
-              row.progressPlan.isFromOrder = true;
-            }
-            entries.push(row);
-            row = {};
+          row = {
+            originOrder: {
+              id: item.id
+            },
+            unitPrice: '',
+            deliveryDate: item.deliveryDate,
+            shippingAddress: item.shippingAddress,
+            product: {
+              id: item.product.id,
+              name: item.product.name,
+              thumbnail: item.product.thumbnail,
+              skuID:item.product.skuID
+            },
+            progressPlan: {
+              name: ''
+            },
+            colorSizeEntries: item.colorSizeEntries
           }
+          if (item.progressWorkSheet) {
+            row.progressPlan = this.copyProgressPlan({
+              name: '节点方案1',
+              remarks: '',
+              productionProgresses: item.progressWorkSheet.progresses
+            })
+            row.progressPlan.isFromOrder = true;
+          }
+          entries.push(row);
+          row = {};
         })
-        this.formData.taskOrderEntries = entries;
-        // 没有选择生产工单添加默认数据
-        if (selectTaskList.length <= 0) {
-          this.addRow();
-          this.taskDialogVisible = false;
-          return;
+        if (this.selectIndex === '') {
+          this.formData.taskOrderEntries = this.formData.taskOrderEntries.concat(entries);
+          this.isSingleSelect = true;
+        } else {
+          this.formData.taskOrderEntries.splice(this.selectIndex, 1, entries[0]);
         }
         // 回显地址
         this.formData.taskOrderEntries.forEach((val, index) => {
@@ -620,16 +617,7 @@
         editProgress: '',
         operator: {},
         count: 0,
-        operatorList: [{
-          id: 1,
-          name: '张三'
-        }, {
-          id: 2,
-          name: '李四'
-        }, {
-          id: 3,
-          name: '王五'
-        }]
+        isSingleSelect: true
       }
     },
     watch: {

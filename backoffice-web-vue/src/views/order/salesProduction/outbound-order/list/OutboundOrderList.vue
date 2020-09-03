@@ -25,7 +25,7 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
+      <el-table-column label="订单状态">
         <template slot-scope="scope">
           <span>{{getEnum('OutboundOrderStatuses', scope.row.state)}}</span>
         </template>

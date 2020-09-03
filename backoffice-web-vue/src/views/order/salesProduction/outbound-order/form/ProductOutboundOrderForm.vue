@@ -71,7 +71,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4">
-                <el-button @click="onProductSelect(index)" size="mini">选择产品</el-button>
+                <el-button @click="onProductSelect(index)" size="mini">{{item.product.id ? '更换产品' : '添加产品'}}</el-button>
               </el-col>
             </el-row>
             <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" :isFromProduct="true"/>
@@ -222,7 +222,8 @@
     </el-card>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sample-products-select-dialog v-if="taskDialogVisible" @onSelectSample="onSelectSample" :selectedRow="formData.taskOrderEntries"/>
+      <sample-products-select-dialog v-if="taskDialogVisible" @onSelectSample="onSelectSample" 
+                                      :selectedRow="formData.taskOrderEntries" :isSingleSelect="isSingleSelect"/>
       <!-- <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"
         :selectType="'OUTBOUND_ORDER'" /> -->
     </el-dialog>
@@ -369,20 +370,9 @@
         this.selectIndex = index;
       },
       addRow() {
-        let item = {
-          originOrder: {
-            id: ''
-          },
-          unitPrice: '',
-          deliveryDate: '',
-          shippingAddress: {},
-          product: {},
-          progressPlan: {
-            name: ''
-          },
-          colorSizeEntries: []
-        };
-        this.formData.taskOrderEntries.push(item);
+        this.selectIndex = '';
+        this.isSingleSelect = false;
+        this.taskDialogVisible = true;
       },
       deleteRow(index) {
         this.formData.taskOrderEntries.splice(index, 1);
@@ -393,35 +383,33 @@
         let entries = [];
         let colorSizeEntries;
         selectList.forEach(item => {
-          index = this.formData.taskOrderEntries.findIndex(val => val.product.id === item.id);
-          if (index > -1) {
-            entries.push(this.formData.taskOrderEntries[index]);
-          } else {
-            colorSizeEntries = this.convertColorSize(item.colorSizes);
-            row = {
-              // originOrder: {
-              //   id: item.id
-              // },
-              unitPrice: '',
-              deliveryDate: '',
-              shippingAddress: {},
-              product: {
-                id: item.id,
-                code: item.code,
-                name: item.name,
-                thumbnail: item.thumbnail
-              },
-              progressPlan: {
-                name: ''
-              },
-              colorSizeEntries: colorSizeEntries
-            }
-
-            entries.push(row);
-            row = null;
+          colorSizeEntries = this.convertColorSize(item.colorSizes);
+          row = {
+            unitPrice: '',
+            deliveryDate: '',
+            shippingAddress: {},
+            product: {
+              id: item.id,
+              code: item.code,
+              name: item.name,
+              thumbnail: item.thumbnail
+            },
+            progressPlan: {
+              name: ''
+            },
+            colorSizeEntries: colorSizeEntries
           }
+
+          entries.push(row);
+          row = null;
         })
-        this.formData.taskOrderEntries = entries;
+        if (this.selectIndex === '') {
+          this.formData.taskOrderEntries = this.formData.taskOrderEntries.concat(entries);
+          this.isSingleSelect = true;
+        } else {
+          entries[0].shippingAddress = this.formData.taskOrderEntries[this.selectIndex].shippingAddress;
+          this.formData.taskOrderEntries.splice(this.selectIndex, 1, entries[0]);
+        }
         this.taskDialogVisible = false;
       },
       convertColorSize (colorSizes) {
@@ -690,7 +678,8 @@
         }, {
           id: 3,
           name: '王五'
-        }]
+        }],
+        isSingleSelect: true
       }
     },
     watch: {

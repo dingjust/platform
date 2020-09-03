@@ -2,7 +2,8 @@
   <div class="animated fadeIn">
     <el-dialog :visible.sync="materialDialogVisible" width="95%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" />
+      <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" 
+                                      :isSingleSelect="isSingleSelect" :selectedRow="appendProductForm.sampleList"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
       append-to-body>
@@ -35,7 +36,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-button style="margin-left: 10px" @click="appendSample(productIndex)" size="mini"
-                    :disabled="isUpdate">点击选择</el-button>
+                    :disabled="isUpdate">{{entry.product.id ? '更换产品' : '添加产品'}}</el-button>
                 </el-col>
                 <el-col :span="2"><span style="color:#ff1744">(选择款式)</span></el-col>
               </el-row>
@@ -271,11 +272,13 @@
         currentProductIndex: -1,
         dialogVisible: false,
         viewDialogVisible: false,
-        progressPlanVisible: false
+        progressPlanVisible: false,
+        isSingleSelect: false
       }
     },
     methods: {
       appendSample(index) {
+        this.isSingleSelect = true;
         this.currentProductIndex = index;
         this.materialDialogVisible = true;
       },
@@ -365,6 +368,7 @@
           }
         });
 
+        this.isSingleSelect = false;
         this.materialDialogVisible = false;
       },
       // _addRow() {

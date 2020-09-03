@@ -1,5 +1,6 @@
 <template>
   <div>
+    <contract-steps :step="2"/>
     <!-- 合同模板选择 -->
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%"
                class="purchase-dialog" append-to-body :close-on-click-modal="false">
@@ -144,6 +145,7 @@
   import ContractPreviewPdf from './components/ContractPreviewPdf'
   // import SupplierSelect from './components/SupplierSelect';
   import { SupplierSelect, ImagesUpload, PDFUpload } from '@/components'
+  import ContractSteps from './components/ContractSteps'
   const {
     mapGetters,
     mapActions
@@ -163,7 +165,8 @@
       ContractPreviewPdf,
       SupplierSelect,
       ImagesUpload,
-      PDFUpload
+      PDFUpload,
+      ContractSteps
     },
     computed: {
       ...mapGetters({
