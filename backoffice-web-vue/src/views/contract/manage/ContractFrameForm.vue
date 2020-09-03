@@ -511,7 +511,7 @@
       if (this.isSignedPaper) {
         this.contractType = '3';
       }
-      if (this.slotData.originCooperator && this.slotData.targetCooperator) {
+      if (this.slotData && this.slotData.originCooperator && this.slotData.targetCooperator) {
         let originCooperator = this.gCooperator(this.slotData.originCooperator);
         let targetCooperator = this.gCooperator(this.slotData.targetCooperator);
         if (originCooperator.uid === this.$store.getters.currentUser.companyCode) {

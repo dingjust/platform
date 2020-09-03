@@ -115,7 +115,7 @@
           quantity: 0,
           sequence: row.sequence,
           completeAmount: 0,
-          warningDays: 0,
+          warningDays: 3,
           productionProgressOrders: []
         });
         this.formData.progresses.sort((o1, o2) => {

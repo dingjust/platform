@@ -83,7 +83,7 @@
         const url = this.apis().getContractsList();
         const result = await this.$http.post(url, {
           type: 'KJXY',
-          partyACompany: companyUid,
+          parnterCooperator: companyUid,
           state: 'COMPLETE',
           title: keyword
         }, {

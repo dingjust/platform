@@ -84,7 +84,7 @@
           },
           sequence: row.sequence,
           medias: [],
-          warningDays: 0,
+          warningDays: 3,
           delayedDays: 0,
           quantity: 0,
           completeAmount: 0,

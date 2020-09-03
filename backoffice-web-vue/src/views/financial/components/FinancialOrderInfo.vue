@@ -121,7 +121,6 @@
 </template>
 
 <script>
-  import ContractCom from '../../order/salesProduction/contract/ContractCom'
   import {PayPlanInfo} from '@/components/index.js'
   import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
 
@@ -130,7 +129,6 @@
     props: ['formData', 'payPlan', 'belongTo'],
     components: {
       PayPlanInfo,
-      ContractCom,
       ProductionContract
     },
     computed: {

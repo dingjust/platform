@@ -55,7 +55,7 @@
   } = createNamespacedHelpers('CooperatorModule');
 
   export default {
-    name: 'SuppliersSelect',
+    name: 'SuppliersSelect(old)',
     computed: {
       ...mapGetters({
         page: 'page',

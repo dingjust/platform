@@ -101,7 +101,7 @@
   import Bus from '@/common/js/bus.js';
   import ContractTemplateSelect from '../../../../contract/manage/components/ContractTemplateSelect';
   import TemplateForm from '../../../../contract/template/components/TemplateForm';
-  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
+  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect(old)';
   import ContractPreview from '../../../../contract/manage/components/ContractPreview';
   import ContractPreviewPdf from '../../../../contract/manage/components/ContractPreviewPdf';
   import PurchaseContractPreviewPdf from './PurchaseContractPreviewPdf';
