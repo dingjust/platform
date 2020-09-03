@@ -50,7 +50,7 @@
     </el-form>
     <el-dialog :visible.sync="importDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <product-import v-if="importDialogVisible" />
+      <product-import v-if="importDialogVisible" @onSuccess="onImportSuccess" />
     </el-dialog>
   </div>
 </template>
@@ -127,6 +127,11 @@
         if (val == '0') {
           this.importDialogVisible = true;
         }
+      },
+      //导入成功回调
+      onImportSuccess() {
+        this.importDialogVisible=false;
+        this.$emit('onSearch', 0);
       }
     },
     data() {

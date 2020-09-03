@@ -1617,6 +1617,11 @@ let NONE_TENANT_APIS = {
   outboundOrderDelete(id) {
     return '/b2b/sales/production/order/' + id;
   },
+
+  //批量导入样衣
+  muliteClothesCreate() {
+    return '/b2b/sample/clothes/multiple/all/create';
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
