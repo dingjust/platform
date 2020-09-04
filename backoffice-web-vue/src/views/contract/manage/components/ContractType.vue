@@ -140,30 +140,20 @@
           page: 0,
           size: 10
         });
-        this.mockData = result.content;
-        this.sortData();
-      },
-      sortData () {
-        let arr = new Array(4);
-        this.mockData.map(value => {
-          if (value.title === '委托生产合同') {
-            arr[0] = value;
-          }
-          if (value.title === '采购订单') {
-            arr[1] = value;
-          }
-          if (value.title === '框架协议') {
-            arr[2] = value;
-          }
-          if (value.title === '补充协议') {
-            arr[3] = value;
-          }
+        this.mockData = result.content.sort((o1, o2) => {
+          return this.templateSequence[o1.type] - this.templateSequence[o2.type]; 
         });
-        this.mockData = arr;
       }
     },
     data () {
       return {
+        templateSequence: {
+          WTSCHT: 0,
+          CGDD: 1,
+          KJXY: 2,
+          BCXY: 3,
+          ZFXY: 4
+        }, 
         contractFormDialogVisible: false,
         contractFormPurchaseDialogVisible: false,
         contractFormFrameDialogVisible: false,

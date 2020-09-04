@@ -525,9 +525,9 @@
           this.formData = this.$route.params.formData;
 
           //剔除带过的单价
-          this.formData.taskOrderEntries.forEach(entry => {
-            entry.unitPrice = '';
-          });
+          // this.formData.taskOrderEntries.forEach(entry => {
+          //   entry.unitPrice = '';
+          // });
 
           if (this.formData.sendApprovers == null) {
             this.formData.sendApprovers = [{

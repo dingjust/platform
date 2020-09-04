@@ -142,7 +142,6 @@
 
 <script>
   import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
-  import ContractCom from '../../contract/ContractCom';
   import {
     PayPlanInfo
   } from '@/components/'
@@ -150,7 +149,6 @@
   export default {
     name: 'OutboundOrderTopInfo',
     components: {
-      ContractCom,
       PayPlanInfo,
       ProductionContract
     },

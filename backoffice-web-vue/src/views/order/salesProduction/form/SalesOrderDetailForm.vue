@@ -91,7 +91,6 @@
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
   import PurchaseOrderInfoContract from '@/views/order/purchase/info/PurchaseOrderInfoContract';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
-  import ContractCom from '../contract/ContractCom';
   import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
   import {
     PayPlanInfo
@@ -171,7 +170,6 @@
       }
     },
     components: {
-      ContractCom,
       MTAVAT,
       PurchaseOrderInfoContract,
       PersonnelSelection,

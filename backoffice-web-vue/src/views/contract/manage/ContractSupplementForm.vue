@@ -3,11 +3,11 @@
     <!-- 合同模板选择 -->
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" 
                append-to-body :close-on-click-modal="false">
-      <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
-      <el-divider direction="vertical"></el-divider>
       <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
         <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
       </Authorized>
+      <el-divider direction="vertical"></el-divider>
+      <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
     <!-- 合同模板 创建 -->
@@ -431,30 +431,20 @@
           page: 0,
           size: 10
         });
-        this.mockData = result.content;
-        this.sortData();
-      },
-      sortData () {
-        let arr = new Array(4);
-        this.mockData.map(value => {
-          if (value.title === '委托生产合同') {
-            arr[0] = value;
-          }
-          if (value.title === '采购订单') {
-            arr[1] = value;
-          }
-          if (value.title === '框架协议') {
-            arr[2] = value;
-          }
-          if (value.title === '补充协议') {
-            arr[3] = value;
-          }
+        this.mockData = result.content.sort((o1, o2) => {
+          return this.templateSequence[o1.type] - this.templateSequence[o2.type]; 
         });
-        this.mockData = arr;
       }
     },
     data () {
       return {
+        templateSequence: {
+          WTSCHT: 0,
+          CGDD: 1,
+          KJXY: 2,
+          BCXY: 3,
+          ZFXY: 4
+        }, 
         currentUser: this.$store.getters.currentUser,
         contractType: '1',
         hasFrameworkContract: false,

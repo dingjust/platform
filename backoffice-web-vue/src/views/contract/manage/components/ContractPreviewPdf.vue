@@ -7,6 +7,10 @@
       <contract-supplement-form v-if="dialogOrderVisible" :slotData="slotData" @openPreviewPdf="showContract" 
                                 @onSearch="onSearch" :isSignedPaper="slotData.offlinePartner"/>
     </el-dialog>
+    <el-dialog :visible.sync="zfxyVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <contract-cancel-form v-if="zfxyVisible" :slotData="slotData" @openPreviewPdf="showContract" 
+                                @onSearch="onSearch" :isSignedPaper="slotData.offlinePartner"/>
+    </el-dialog>
     <el-dialog :visible.sync="dialogSealVisible" width="60%" :show-close="true" :close-on-click-modal="false" append-to-body>
       <contract-seal-list :page="sealPage" @onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
@@ -20,7 +24,15 @@
 <!--    </el-dialog>-->
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;" v-if="!readOnly">
       <Authorized :permission="['AGREEMENT_CREATE']">
-        <el-button type="warning" v-if="slotData.state != 'INVALID' && slotData.type && slotData.type != 'BCXY'" @click="onBCXY" class="toolbar-search_input">增加补充协议
+        <el-button type="warning" v-if="slotData.state === 'COMPLETE' && slotData.type && 
+                    slotData.type != 'BCXY' && slotData.type != 'ZFXY'" @click="onZFXY" class="toolbar-search_input">
+          签订作废协议
+        </el-button>
+      </Authorized>
+      <Authorized :permission="['AGREEMENT_CREATE']">
+        <el-button type="warning" v-if="slotData.state === 'COMPLETE' && slotData.type && 
+                    slotData.type != 'BCXY' && slotData.type != 'ZFXY'" @click="onBCXY" class="toolbar-search_input">
+          增加补充协议
         </el-button>
       </Authorized>
       <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
@@ -81,6 +93,7 @@
   import Bus from '@/common/js/bus.js';
   import ContractSupplementForm from '../ContractSupplementForm'
   import ContractSteps from '@/views/contract/manage/components/ContractSteps'
+  import ContractCancelForm from '../ContractCancelForm'
 
   export default {
     name: 'ContractPreviewPdf',
@@ -100,7 +113,8 @@
     components: {
       ContractSealList,
       ContractSupplementForm,
-      ContractSteps
+      ContractSteps,
+      ContractCancelForm
     },
     mounted () {
       this.isLoading = true;
@@ -116,13 +130,17 @@
         openUrl: '',
         bcPdfVisible: false,
         bcFileUrl: '',
-        bcContract: ''
+        bcContract: '',
+        zfxyVisible: false
       }
     },
     methods: {
       onBCXY () {
         this.dialogOrderVisible = true;
         Bus.$emit('closePdfView');
+      },
+      onZFXY () {
+        this.zfxyVisible = true;
       },
       async onRefuseConfirm (code) {
         this.$confirm('是否拒绝签署合同?', '拒签', {
