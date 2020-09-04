@@ -92,7 +92,7 @@
 
   const {
     mapActions
-  } = createNamespacedHelpers('ProductionOrderModule');
+  } = createNamespacedHelpers('ProductionOrdersModule');
 
   export default {
     name: 'OrderSelectList',
@@ -139,7 +139,7 @@
       onPageSizeChanged(val) {
         // this._reset();
 
-        // if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
+        // if (this.$store.state.ProductionOrdersModule.isAdvancedSearch) {
         this.$emit('onAdvancedSearch', 0, val);
 
         this.$nextTick(() => {
@@ -151,7 +151,7 @@
         // this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
-        // if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
+        // if (this.$store.state.ProductionOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1, 10);
           // return;
         // }
@@ -233,7 +233,7 @@
     },
     data() {
       return {
-        statuses: this.$store.state.ProductionOrderModule.statuses,
+        statuses: this.$store.state.ProductionOrdersModule.statuses,
         selectRow: [],
         orderTypeTagMap: {
           'SELF_PRODUCED': {

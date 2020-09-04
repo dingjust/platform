@@ -51,7 +51,7 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    'ProductionOrderModule'
+    'ProductionOrdersModule'
   );
 
   import ProductionOrderTopInfo from '../info/ProductionOrderTopInfo';
@@ -143,11 +143,11 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$store.state.ProductionOrderModule.formData = Object.assign({}, result.data);
+        this.$store.state.ProductionOrdersModule.formData = Object.assign({}, result.data);
       },
       onCallBack(data) {
         if (data != null) {
-          this.$store.state.ProductionOrderModule.formData = Object.assign({}, data);
+          this.$store.state.ProductionOrdersModule.formData = Object.assign({}, data);
         } else {
           this.getDetail(this.id);
         }

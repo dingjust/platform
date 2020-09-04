@@ -3,97 +3,19 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import {
-  EnumsModule,
-  GlobalSizesModule,
-  GlobalColorsModule,
-  GlobalCategoriesModule,
-  // user
-  AddressesModule,
-  B2BCustomersModule,
-  B2BUnitsModule,
-  BrandsModule,
-  EmployeesModule,
-  FactoriesModule,
-  UserGroupsModule,
-  UsersModule,
-  RolesModule,
-  PermissionModule,
-  PersonnelModule,
-  OrganizationRoleModule,
-  OrganizationModule,
-  // product
-  ColorsModule,
-  SizesModule,
-  CategoriesModule,
-  ApparelProductsModule,
-  MaterialModule,
-  SampleProductsModule,
-  // order
-  RequirementOrdersModule,
-  PurchaseOrdersModule,
-  QuotesModule,
-  ProofingsModule,
-  SalesOrdersModule,
-  // miscs
-  CarouselsModule,
-  IndustrialClustersModule,
-  LabelsModule,
-  SampleCheckoutHistModule,
-  SuppliersModule,
-  CooperatorModule,
-  PayPlanModule,
-  OperationCoursesModule,
-  WalletModule,
-  CashOutManagerModule,
-  PromoteProductModule,
-  // sale-plan
-  SalesProductionOrdersModule,
-  PendingSalesProductionOrdersModule,
-  OutboundOrderModule,
-  ProductionTasksModule,
-  ProductionOrderModule,
-  OutboundProductionOrderModule,
-  ProgressOrderModule,
-  PurchaseTaskModule,
-  // contract
-  ContractModule,
-  ContractTemplateModule,
-  ContractSealModule,
-  // shipping-receipt
-  ImportShippingTasksModule,
-  ExportShippingTasksModule,
-  ShippingOrdersModule,
-  ReceiptOrdersModule,
-  ReturnOrdersModule,
-  ReconsiderOrdersModule,
-  ImportShippingReceiptModule,
-  ExportShippingReceiptModule,
-  ImportReconsiderOrderModule,
-  ExportReconsiderOrderModule,
-  // reconciliation
-  ExportReconciliationModule,
-  ImportReconciliationModule,
-  ImportReconciliationManageModule,
-  ExportReconciliationManageModule,
-  ReconciliationOrdersModule,
-  // financial
-  ReceivableModule,
-  PayableModule,
-  PaymentRequestModule,
-  // 产能
-  CapacityModule,
-  // 报表
-  ReceiptReportModule,
-  ProductionProgressReportModule,
+const modulesFiles = require.context('./modules', true, /\.js$/)
 
-  MessageModule,
-
-  // 任务
-  TaskHandleModule,
-  TaskApprovalModule
-} from './modules';
-
+//自动化导入文件
+const modules = {};
+modulesFiles.keys().forEach((key) => {
+  // 通过 modulesFiles(key)导出文件内容
+  const mod = modulesFiles(key);
+  const path = key.replace(/^\.\/(.*)\.\w+$/, '$1');
+  let strs = path.split('/');
+  //生产Module名
+  const moduleName = generateModulesName(strs[strs.length - 1])+'Module';
+  modules[moduleName] = mod.__esModule && mod.default ? mod.default : mod
+});
 // 状态管理
 const state = {
   sideSliderState: false,
@@ -122,97 +44,19 @@ const actions = {
 };
 
 export default new Vuex.Store({
-  modules: {
-    EnumsModule,
-    GlobalSizesModule,
-    GlobalColorsModule,
-    GlobalCategoriesModule,
-    // user
-    AddressesModule,
-    B2BCustomersModule,
-    B2BUnitsModule,
-    BrandsModule,
-    EmployeesModule,
-    FactoriesModule,
-    UserGroupsModule,
-    UsersModule,
-    RolesModule,
-    PermissionModule,
-    PersonnelModule,
-    OrganizationRoleModule,
-    OrganizationModule,
-    // product
-    ColorsModule,
-    SizesModule,
-    CategoriesModule,
-    ApparelProductsModule,
-    MaterialModule,
-    SampleProductsModule,
-    // order
-    RequirementOrdersModule,
-    PurchaseOrdersModule,
-    QuotesModule,
-    ProofingsModule,
-    SalesOrdersModule,
-    // miscs
-    CarouselsModule,
-    IndustrialClustersModule,
-    LabelsModule,
-    SampleCheckoutHistModule,
-    SuppliersModule,
-    CooperatorModule,
-    PayPlanModule,
-    OperationCoursesModule,
-    WalletModule,
-    CashOutManagerModule,
-    PromoteProductModule,
-    // sale-plan
-    PendingSalesProductionOrdersModule,
-    SalesProductionOrdersModule,
-    OutboundOrderModule,
-    ProductionOrderModule,
-    OutboundProductionOrderModule,
-    ProgressOrderModule,
-    ProductionTasksModule,
-    PurchaseTaskModule,
-    // contract
-    ContractModule,
-    ContractTemplateModule,
-    ContractSealModule,
-    // shipping-receipt
-    ImportShippingTasksModule,
-    ExportShippingTasksModule,
-    ShippingOrdersModule,
-    ReceiptOrdersModule,
-    ReturnOrdersModule,
-    ReconsiderOrdersModule,
-    ImportShippingReceiptModule,
-    ExportShippingReceiptModule,
-    ImportReconsiderOrderModule,
-    ExportReconsiderOrderModule,
-    // reconciliation
-    ExportReconciliationModule,
-    ImportReconciliationModule,
-    ImportReconciliationManageModule,
-    ExportReconciliationManageModule,
-    ReconciliationOrdersModule,
-    // financial
-    ReceivableModule,
-    PayableModule,
-    PaymentRequestModule,
-    // 产能
-    CapacityModule,
-    // 报表
-    ReceiptReportModule,
-    ProductionProgressReportModule,
-    //
-    MessageModule,
-    // 任务
-    TaskHandleModule,
-    TaskApprovalModule
-  },
+  modules,
   state,
   getters,
   mutations,
   actions
 });
+
+function generateModulesName(str) {
+  //转驼峰式
+  let result = str.replace(/([^-])(?:-+([^-]))/g, function ($0, $1, $2) {
+    return $1 + $2.toUpperCase();
+  });
+  //首字母大写
+  result = result.replace(str[0], str[0].toUpperCase());
+  return result;
+}

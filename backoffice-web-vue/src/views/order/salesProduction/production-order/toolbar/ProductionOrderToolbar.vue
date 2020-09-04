@@ -61,7 +61,7 @@
 
   const {
     mapMutations
-  } = createNamespacedHelpers('ProductionOrderModule');
+  } = createNamespacedHelpers('ProductionOrdersModule');
   import { DeptPersonSelect } from '@/components'
 
   export default {
@@ -93,7 +93,7 @@
         // setQueryFormData: 'queryFormData'
       }),
       // onSearch () {
-      //   this.$store.state.ProductionOrderModule.keyword = this.keyword;
+      //   this.$store.state.ProductionOrdersModule.keyword = this.keyword;
       //   this.setKeyword(this.keyword);
       //   this.$emit('onAdvancedSearch', 0);
       // },
@@ -193,10 +193,10 @@
         dateTime: '',
         factories: [],
         brands: [],
-        keyword: this.$store.state.ProductionOrderModule.keyword,
-        formData: this.$store.state.ProductionOrderModule.formData,
+        keyword: this.$store.state.ProductionOrdersModule.keyword,
+        formData: this.$store.state.ProductionOrdersModule.formData,
         categories: []
-        // queryFormData: this.$store.state.ProductionOrderModule.queryFormData,
+        // queryFormData: this.$store.state.ProductionOrdersModule.queryFormData,
       }
     },
     created() {

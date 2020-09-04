@@ -33,7 +33,7 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    'ProgressOrderModule'
+    'ProgressOrdersModule'
   );
 
   import ProgressOrderToolbar from './toolbar/ProgressOrderToolbar';

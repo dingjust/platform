@@ -155,7 +155,7 @@
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    'ProductionOrderModule'
+    'ProductionOrdersModule'
   );
 
   // import SuppliersSelect from '@/views/contract/manage/components/SupplierSelect.vue';
