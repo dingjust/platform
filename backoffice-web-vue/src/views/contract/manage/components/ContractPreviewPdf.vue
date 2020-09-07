@@ -25,7 +25,7 @@
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;" v-if="!readOnly">
       <Authorized :permission="['AGREEMENT_CREATE']">
         <el-button type="warning" v-if="slotData.state === 'COMPLETE' && slotData.type && 
-                    slotData.type != 'BCXY' && slotData.type != 'ZFXY'" @click="onZFXY" class="toolbar-search_input">
+                    slotData.type != 'BCXY' && slotData.type != 'ZFXY' && !slotData.offlinePartner" @click="onZFXY" class="toolbar-search_input">
           签订作废协议
         </el-button>
       </Authorized>
