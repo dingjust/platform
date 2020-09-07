@@ -35,7 +35,7 @@ const router = new Router({
         },
         {
           path: 'dashboard',
-          name: '仪表盘',
+          name: '首页',
           component: () => import( /* webpackChunkName: 'Dashboard' */ '@/views/dashboard/Dashboard')
         },
         {

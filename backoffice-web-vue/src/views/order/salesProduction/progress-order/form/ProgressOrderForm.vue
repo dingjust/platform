@@ -30,7 +30,7 @@
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    'ProgressOrderModule'
+    'ProgressOrdersModule'
   );
 
   import ProgressOrderReceivingForm from '../form/ProgressOrderReceivingForm';

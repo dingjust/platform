@@ -6,19 +6,23 @@
 </style>
 <template>
   <div class="app">
-    <AppHeader/>
+    <AppHeader />
     <div class="app-body">
-      <Sidebar :navItems="nav"/>
-      <SideSlider/>
+      <Sidebar :navItems="nav" />
+      <SideSlider />
       <main class="main">
-        <breadcrumb :list="list" v-if="name!='仪表盘'"/>
+        <!-- <breadcrumb :list="list" v-if="name!='仪表盘'" /> -->
+        <tags-view />
         <div class="container-fluid">
-          <router-view></router-view>
+          <transition name="fade-transform" mode="out-in">
+            <!-- <keep-alive> -->
+            <router-view></router-view>
+            <!-- </keep-alive> -->
+          </transition>
         </div>
       </main>
       <!--<AppAside/>-->
     </div>
-    <!-- <AppFooter/> -->
   </div>
 </template>
 
@@ -26,11 +30,11 @@
   // import nav from '../_nav';
   import {
     AppHeader,
-    // AppFooter,
     Sidebar,
     // Aside as AppAside,
     Breadcrumb,
-    SideSlider
+    SideSlider,
+    TagsView
   } from '../components/';
 
   export default {
@@ -39,20 +43,20 @@
       AppHeader,
       Sidebar,
       // AppAside,
-      // AppFooter,
       Breadcrumb,
-      SideSlider
+      SideSlider,
+      TagsView
     },
-    data () {
+    data() {
       return {
         nav: this.CONFIG.nav(this.$store.getters.currentUser.type).items,
       }
     },
     computed: {
-      name () {
+      name() {
         return this.$route.name
       },
-      list () {
+      list() {
         return this.$route.matched
       }
     }

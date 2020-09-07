@@ -76,7 +76,7 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    'ProductionOrderModule'
+    'ProductionOrdersModule'
   );
 
   import ProductionOrderList from './list/ProductionOrderList';

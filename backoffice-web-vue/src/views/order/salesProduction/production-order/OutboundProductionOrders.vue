@@ -39,7 +39,7 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    'OutboundProductionOrderModule'
+    'OutboundProductionOrdersModule'
   );
 
   import ProductionOrderList from './list/ProductionOrderList';
@@ -126,7 +126,7 @@
     },
     data() {
       return {
-        formData: this.$store.state.ProductionOrderModule.formData,
+        formData: this.$store.state.ProductionOrdersModule.formData,
         activeStatus: 'TO_BE_PRODUCED',
         statues: [{
           code: 'TO_BE_PRODUCED',

@@ -49,7 +49,7 @@
     computed: {
       selectProgressModel: function () {
         return store.currentProgress;
-        // return this.$store.state.ProgressOrderModule.currentProgress;
+        // return this.$store.state.ProgressOrdersModule.currentProgress;
       },
       activeNodeIndex: function () {
         if (this.slotData.status == 'COMPLETED') {
