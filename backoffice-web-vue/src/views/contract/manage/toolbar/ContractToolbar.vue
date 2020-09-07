@@ -159,6 +159,9 @@
           }, {
             code: 'KJXY',
             name: '框架协议'
+          }, {
+            code: 'ZFXY',
+            name: '作废协议'
           }
         ]
       }

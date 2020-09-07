@@ -2,36 +2,36 @@
   <el-row type="flex" justify="space-around">
     <el-col :span="8">
       <div  @click="handleClick('1')"
-        :class="econtractSelect">
+        :class="electronicsSelect">
         <el-row>
           <el-col :span="24">
             <h5
-              :class="econtractTitle">
+              :class="electronicsTitle">
               新建合同（电子签章）——— 纸质合同</h5>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="20">
             <h6
-              :class="econtractTitle">
+              :class="electronicsContent">
               新创建电子合同或上传未签署的纸质合同文件使用在线电子签章签署合同</h6>
           </el-col>
         </el-row>
       </div>
     </el-col>
     <el-col :span="8">
-      <div :class="contractType === '3' ?'create-contract-type_select':'create-contract-type_not_select'"
+      <div :class="paperSelect"
         @click="handleClick('3')">
         <el-row>
           <el-col :span="24">
-            <h5 :class="contractType === '3' ?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+            <h5 :class="paperTitle">
               已签纸质合同</h5>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="20">
             <h6
-              :class="contractType === '3' ?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              :class="paperContent">
               把已签署的合同文件扫描件上传到订单附件中作为备份</h6>
           </el-col>
         </el-row>
@@ -43,29 +43,50 @@
 <script>
   export default {
     name: 'ContractTypeSelect',
-    props: ['isSignedPaper'],
+    props: ['isSignedPaper', 'isCancel'],
     computed: {
-      econtractSelect: function () {
+      electronicsSelect: function () {
         if (this.isSignedPaper) {
           return 'isSignedPaper-select';
         }
         return this.contractType === '1' ? 'create-contract-type_select' : 'create-contract-type_not_select';
       },
-      econtractTitle: function () {
+      electronicsTitle: function () {
         if (this.isSignedPaper) {
           return 'isSignedPaper-title';
         }
         return this.contractType === '1' ? 'create-contract-type_option_title' : 'create-contract-type_option_title_not';
       },
-      econtractTitle: function () {
+      electronicsContent: function () {
         if (this.isSignedPaper) {
           return 'isSignedPaper-content';
         }
         return this.contractType ==='1'?'create-contract-type_option_content':'create-contract-type_option_content_not';
       },
+      paperSelect: function () {
+        if (this.isCancel) {
+          return 'isSignedPaper-select';
+        }
+        return this.contractType === '3' ? 'create-contract-type_select' : 'create-contract-type_not_select';
+      },
+      paperTitle: function () {
+        if (this.isCancel) {
+          return 'isSignedPaper-title';
+        }
+        return this.contractType === '3' ? 'create-contract-type_option_title' : 'create-contract-type_option_title_not';
+      },
+      paperContent: function () {
+        if (this.isCancel) {
+          return 'isSignedPaper-content';
+        }
+        return this.contractType ==='3'?'create-contract-type_option_content':'create-contract-type_option_content_not';
+      },
     },
     methods: {
       handleClick (type) {
+        if (this.isCancel && type === '3') {
+          return;
+        }
         if (!this.isSignedPaper) {
           this.contractType = type;
           this.$emit('contractTypeChange', type);
@@ -90,11 +111,6 @@
         ]
       };
     },
-    // watch: {
-    //   contractType: function (newType, oldType) {
-    //     this.$emit('contractTypeChange', newType);
-    //   }
-    // },
     created () {
       if (this.isSignedPaper) {
         this.contractType = '3';
