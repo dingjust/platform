@@ -45,7 +45,7 @@
           class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
       </Authorized>
       <Authorized :permission="['AGREEMENT_SIGN']">
-        <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
+        <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && !slotData.isSigned" type="warning"
                   class="toolbar-search_input" @click="onSign">签署
         </el-button>
       </Authorized>
