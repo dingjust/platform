@@ -38,6 +38,7 @@ import AppHeader from './AppHeader.vue';
 import Sidebar from './Sidebar/Sidebar.vue';
 import Switch from './Switch.vue';
 import SideSlider from './SideSlider';
+import TagsView from './TagsView';
 
 // Custom
 import AddressSelect from './custom/AddressSelect';
@@ -142,6 +143,7 @@ export {
   Callout,
   AppHeader,
   Sidebar,
+  TagsView,
   Switch,
   SideSlider,
   ColorSizeTable,

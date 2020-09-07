@@ -39,7 +39,7 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    'OutboundProductionOrderModule'
+    'OutboundProductionOrdersModule'
   );
 
   import ProductionOrderList from './list/ProductionOrderList';
