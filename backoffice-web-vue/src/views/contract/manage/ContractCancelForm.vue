@@ -33,7 +33,7 @@
       <el-row type="flex" justify="center" align="middle">
         <span class="create-contract-title">作废协议</span>
       </el-row>
-      <contract-type-select :isSignedPaper="isSignedPaper" @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
+      <contract-type-select :isSignedPaper="isSignedPaper" @contractTypeChange="onContractTypeChange" class="contractTypeSelect" :isCancel="true"/>
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
         <el-col :push="2" :span="8">
           <span class="tips">合同类型</span>
