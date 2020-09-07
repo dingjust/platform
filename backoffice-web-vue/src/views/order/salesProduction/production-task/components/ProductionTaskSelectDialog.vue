@@ -21,8 +21,9 @@
         </el-row>
       </el-form>
     </el-row>
-    <production-task-select-list ref="taskList" :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"
-                          :is-select="true" @onDetails="onDetails" :isSingleChoice="isSingleChoice"/>
+    <production-task-select-list ref="taskList" :page="page" @onSearch="onAdvancedSearch"
+                                :is-select="true" @onDetails="onDetails" :isSingleChoice="isSingleChoice" 
+                                :selectedRow="formData.taskOrderEntries"/>
     <el-row type="flex" justify="center" align="middle">
       <el-col :span="4">
         <el-button class="material-btn" @click="onSelect">确定</el-button>
@@ -92,15 +93,12 @@
         this.queryFormData.productionLeaderName = '';
         this.queryFormData.cooperator = '';
       },
-      getSelectTaskList (val) {
-        this.selectTaskList = val;
-      },
       onDetails (id) {
         this.taskId = id;
         this.taskVisible = true;
       },
       onSelect () {
-        this.$emit('onSelectTask', this.selectTaskList);
+        this.$emit('onSelectTask', this.$refs.taskList.selectTaskList);
       },
       // 回显已选择行
       initSelectRow () {
@@ -119,7 +117,6 @@
         taskId: '',
         taskVisible: false,
         outboundOrderTypeSelect: false,
-        selectTaskList: [],
         queryFormData: {
           code: '',
           skuID: '',

@@ -16,6 +16,9 @@
               <el-row type="flex" justify="center">
                 实际完成日期:{{item.finishDate|timestampToTime}}
               </el-row>
+              <el-row type="flex" justify="center" style="color: #F56C6C">
+                {{getTip(item)}}
+              </el-row>
             </div>
           </step>
         </template>
@@ -46,7 +49,7 @@
     computed: {
       selectProgressModel: function () {
         return store.currentProgress;
-        // return this.$store.state.ProgressOrderModule.currentProgress;
+        // return this.$store.state.ProgressOrdersModule.currentProgress;
       },
       activeNodeIndex: function () {
         if (this.slotData.status == 'COMPLETED') {
@@ -117,6 +120,14 @@
           this.$emit('callback', productionOrder);
         }
       },
+      getTip (item) {
+        if (this.slotData.status === 'COMPLETED') {
+          return '';
+        } else if (this.slotData.currentPhase && this.slotData.currentPhase.name === item.progressPhase.name) {
+          return item.delayedDays > 0 ? '已延期' + item.delayedDays + '天' : '倒计时' + item.delayedDays + '天';
+        }
+        return '';
+      },
     },
     data() {
       return {
@@ -128,7 +139,7 @@
   };
 
 </script>
-<style>
+<style scoped>
   .progress-status {
     font-weight: 500;
     color: rgba(0, 0, 0, 0.85);

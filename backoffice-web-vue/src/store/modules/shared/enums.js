@@ -1253,6 +1253,10 @@ const state = {
     {
       code: 'KJXY',
       name: '框架协议'
+    },
+    {
+      code: 'UNKOWN',
+      name: ''
     }
   ],
   // 支付类型

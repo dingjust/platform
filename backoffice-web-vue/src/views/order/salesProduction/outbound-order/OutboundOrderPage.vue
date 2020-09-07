@@ -164,12 +164,21 @@
           return;
         }
         let formData = this.setFormData(result.data);
-        await this.$router.push({
-          name: '创建外发订单',
-          params: {
-            formData: formData
-          }
-        });
+        if (result.data.taskOrderEntries[0].originOrder) {
+          await this.$router.push({
+            name: '创建外发订单',
+            params: {
+              formData: formData
+            }
+          });
+        } else {
+            await this.$router.push({
+              name: '创建产品外发',
+              params: {
+                formData: formData
+              }
+            });
+        }
       },
       setFormData(data) {
         let formData = {
@@ -184,7 +193,14 @@
           targetCooperator: {
             id: data.targetCooperator.id
           },
-          taskOrderEntries: data.taskOrderEntries,
+          taskOrderEntries: [{
+            unitPrice: data.taskOrderEntries[0].unitPrice,
+            deliveryDate: data.taskOrderEntries[0].deliveryDate,
+            shippingAddress: data.taskOrderEntries[0].shippingAddress,
+            product: data.taskOrderEntries[0].product,
+            progressPlan: data.taskOrderEntries[0].progressPlan,
+            colorSizeEntries: data.taskOrderEntries[0].colorSizeEntries
+          }],
           cooperationMode: data.cooperationMode,
           invoiceNeeded: data.invoiceNeeded,
           invoiceTaxPoint: data.invoiceTaxPoint,
@@ -195,7 +211,6 @@
           attachments: data.attachments ? data.attachments : [],
           sendApprovers: data.sendApprovers,
           merchandiser: data.merchandiser,
-          state: data.state
         }
         return formData;
       },

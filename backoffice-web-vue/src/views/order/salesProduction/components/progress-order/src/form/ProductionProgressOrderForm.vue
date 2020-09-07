@@ -116,7 +116,7 @@
   import ImagesUpload from '@/components/custom/ImagesUpload';
   import {
     getSizeSequence
-  } from '@/components/'
+  } from '@/store/modules/shared'
 
   export default {
     name: 'ProductionProgressOrderForm',

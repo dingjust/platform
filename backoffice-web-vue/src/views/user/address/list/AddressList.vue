@@ -16,6 +16,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onSetDefault(scope.row)">设置为默认</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onModify(scope.row)">修改</el-button>
           <Authorized :permission="['COMPANY_ADDRESS_CREATE']">
             <el-button type="text" icon="el-icon-delete" @click="onRemove(scope.row)">删除</el-button>
           </Authorized>
@@ -45,6 +46,9 @@
         }).then(() => {
           this.$emit('onRemove', row);
         })
+      },
+      onModify (row) {
+        this.$emit('onModify', row);
       }
     },
     data () {

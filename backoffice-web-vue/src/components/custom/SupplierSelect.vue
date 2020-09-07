@@ -9,7 +9,12 @@
         <el-button type="text" @click="jumpToCreate">添加合作商</el-button>
       </Authorized>
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
-    </el-form>
+    </el-form>      
+    <el-tabs v-model="activeName" @tab-click="handleClick" v-if="categories && categories.length <= 0">
+      <template v-for="item in statuses">
+        <el-tab-pane :label="item.name" :name="item.code" :key="item.code"></el-tab-pane>
+      </template>
+    </el-tabs>
     <el-table ref="resultTable" stripe :data="page.content" highlight-current-row @current-change="handleCurrentChange"
       @selection-change="handleSelectionChange" :height="autoHeight">
       <el-table-column label="合作商名称" prop="name">
@@ -60,15 +65,15 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import CooperatorFormPage from '@/views/miscs/cooperator/form/CooperatorFormPage'
   const {
     mapActions,
     mapGetters,
     mapMutations
   } = createNamespacedHelpers('CooperatorModule');
 
+  import CooperatorFormPage from '@/views/miscs/cooperator/form/CooperatorFormPage'
   export default {
-    name: 'SuppliersSelect',
+    name: 'SupplierSelect',
     props: {
       //合作商类型
       categories: {
@@ -95,25 +100,18 @@
         this.onSearch();
       },
       onPageSizeChanged(val) {
-        this._reset();
-
-        if (this.$store.state.CooperatorModule.isAdvancedSearch) {
-          // this.$emit('onAdvancedSearch', val);
-          this.onSearch(0, val);
-          return;
-        }
         this.onSearch(0, val);
-        // this.$emit('onSearch', 0, val);
+
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       onCurrentPageChanged(val) {
-        if (this.$store.state.CooperatorModule.isAdvancedSearch) {
-          // this.$emit('onAdvancedSearch', val - 1);
-          this.onSearch(val - 1);
-          return;
-        }
+        this.onSearch(val - 1, 10);
 
-        // this.$emit('onSearch', val - 1);
-        this.onSearch(val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       _reset() {
         this.$refs.resultTable.clearSort();
@@ -122,7 +120,7 @@
       },
       onSearch(page, size) {
         let queryFormData = this.queryFormData;
-        if (this.categories != null) {
+        if (this.categories != null && this.categories.length > 0) {
           queryFormData.category = this.categories
         }
         const url = this.apis().getCooperators();
@@ -132,6 +130,10 @@
           page,
           size
         });
+      },
+      handleClick (tab, event) {
+        this.queryFormData.category = [tab.name];
+        this.onSearch();
       },
       numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
@@ -206,16 +208,17 @@
     },
     data() {
       return {
-        statuses: this.$store.state.CooperatorModule.statuses,
+        statuses: this.$store.state.EnumsModule.CooperatorCategory,
         suppliers: [],
         multipleSelection: [],
         selectSupplier: '',
         queryFormData: {
           type: '',
           keyword: '',
-          category: []
+          category: ['SUPPLIER']
         },
-        dialogVisible: false
+        dialogVisible: false,
+        activeName: 'SUPPLIER'
       }
     }
   }

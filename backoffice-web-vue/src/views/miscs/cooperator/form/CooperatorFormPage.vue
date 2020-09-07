@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card class="box-card">
       <div class="animated fadeIn">
         <el-form :model="formData" ref="form" label-position="left" :rules="rules">
@@ -146,8 +146,6 @@
       <reconciliation-plan-selector v-if="reconciliationVisible" @onSelect="onReconciliationSelect" />
     </el-dialog>
   </div>
-
-
 </template>
 
 <script>
@@ -160,19 +158,29 @@
     mapMutations
   } = createNamespacedHelpers('CooperatorModule');
 
-  import {
-    AddressForm,
-    FormLabel,
-    PayPlanSelect,
-    CompanySelect
-  } from '@/components/'
+  // import {
+  //   AddressForm,
+  //   FormLabel,
+  //   PayPlanSelect,
+  //   CompanySelect
+  // } from '@/components/'
+
+  import AddressForm from '@/components/custom/order-form/AddressForm'
+  import FormLabel from '@/components/custom/FormLabel'
+  import PayPlanSelect from '@/components/custom/PayPlanSelect'
+  import CompanySelect from '@/components/custom/order-form/CompanySelect'
 
   import ProgressPlanSelectDialog from '@/views/user/progress-plan/components/ProgressPlanSelectDialog';
   import ReconciliationPlanSelector from '@/views/user/reconciliation-plan/components/ReconciliationPlanSelector';
 
   export default {
     name: 'CooperatorFormPage',
-    props: [],
+    props: {
+      isFromDialog: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       FormLabel,
       PayPlanSelect,
@@ -211,6 +219,10 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
+        if (this.isFromDialog) {
+          this.$emit('callback');
+          return;
+        }
         this.$router.push('/account/cooperator');
       },
       async onSave() {
@@ -232,6 +244,10 @@
         const result = await this.$http.put(url, form);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (this.isFromDialog) {
+          this.$emit('callback');
           return;
         }
         this.$router.push('/account/cooperator');

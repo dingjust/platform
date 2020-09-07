@@ -1,5 +1,4 @@
 import http from '@/common/js/http';
-import api from '@/common/index';
 
 const state = {
   sizes: [],

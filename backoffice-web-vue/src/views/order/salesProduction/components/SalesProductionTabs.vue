@@ -21,7 +21,7 @@
       </el-row>
     </div>
     <el-tabs type="border-card">
-      <el-tab-pane label="产品明细" v-if="form.auditState!='PASSED'">
+      <el-tab-pane label="订单明细" v-if="form.auditState!='PASSED'">
         <sales-production-products-table :data="form.taskOrderEntries" :canDelete="canChangeProduct" @onDelete="onProductDelete"
           :canUpdate="canUpdate" @onModify="onProductModify" @onDetail="onProductDetail"/>
       </el-tab-pane>

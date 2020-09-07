@@ -8,8 +8,11 @@
             <h6>付款申请单</h6>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
           <h6 style="color: #F56C6C" v-if="showTips">申请金额超过未付款金额</h6>
+        </el-col>
+        <el-col :span="4">
+          <h6>单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="4">
           <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>

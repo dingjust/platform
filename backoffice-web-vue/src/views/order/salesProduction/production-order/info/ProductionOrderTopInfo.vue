@@ -160,11 +160,10 @@
 <script>
   import {
     getSizeSequence
-  } from '@/components/'
+  } from '@/store/modules/shared'
 
   import PDFUpload from '@/components/custom/upload/PDFUpload';
   import OrderViewButtonGroup from './OrderViewButtonGroup';
-  import ContractCom from '@/views/order/salesProduction/contract/ContractCom'
   import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
 
   export default {
@@ -173,7 +172,6 @@
     components: {
       PDFUpload,
       OrderViewButtonGroup,
-      ContractCom,
       ProductionContract
     },
     computed: {

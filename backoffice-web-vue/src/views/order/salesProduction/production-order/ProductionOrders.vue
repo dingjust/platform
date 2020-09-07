@@ -76,7 +76,7 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    'ProductionOrderModule'
+    'ProductionOrdersModule'
   );
 
   import ProductionOrderList from './list/ProductionOrderList';
@@ -203,39 +203,43 @@
         this.allocatingVisible = false;
       },
       onCreate() {
-        let row = [];
-        this.selectRow.forEach(item => {
-          let progressPlan = {
-            name: '',
-            remarks: '',
-            productionProgresses: []
-          }
-          if (item.progressWorkSheet) {
-            progressPlan = this.copyProgressPlan({
-              name: '节点方案1',
+        let form = null;
+        if (this.selectRow.length > 0) {
+          let row = [];
+          this.selectRow.forEach(item => {
+            let progressPlan = {
+              name: '',
               remarks: '',
-              productionProgresses: item.progressWorkSheet.progresses
+              productionProgresses: []
+            }
+            if (item.progressWorkSheet) {
+              progressPlan = this.copyProgressPlan({
+                name: '节点方案1',
+                remarks: '',
+                productionProgresses: item.progressWorkSheet.progresses
+              })
+              progressPlan.isFromOrder = true;
+            }
+            row.push({
+              originOrder: {
+                id: item.id
+              },
+              unitPrice: '',
+              deliveryDate: item.deliveryDate,
+              shippingAddress: item.shippingAddress,
+              product: item.product,
+              progressPlan: progressPlan,
+              colorSizeEntries: item.colorSizeEntries
             })
-            progressPlan.isFromOrder = true;
-          }
-          row.push({
-            originOrder: {
-              id: item.id
-            },
-            unitPrice: item.unitPrice,
-            deliveryDate: item.deliveryDate,
-            shippingAddress: item.shippingAddress,
-            product: item.product,
-            progressPlan: progressPlan,
-            colorSizeEntries: item.colorSizeEntries
           })
-        })
-        this.formData.taskOrderEntries = row;
-        // this.outboundOrderTypeSelect = true;
+          this.formData.taskOrderEntries = row;
+          // this.outboundOrderTypeSelect = true;
+          form = this.formData;
+        }
         this.$router.push({
           name: '创建外发订单',
           params: {
-            formData: Object.assign({}, this.formData)
+            formData: form
           }
         });
       },

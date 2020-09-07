@@ -27,7 +27,7 @@
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    'ProgressOrderModule'
+    'ProgressOrdersModule'
   );
 
   import ProgressOrderReceivingForm from '../form/ProgressOrderReceivingForm';
@@ -55,7 +55,7 @@
         if (productionOrder == null) {
           this.getDetail();
         } else {
-          this.$store.state.ProgressOrderModule.formData = Object.assign({}, productionOrder.taskOrderEntries[0].progressWorkSheet);
+          this.$store.state.ProgressOrdersModule.formData = Object.assign({}, productionOrder.taskOrderEntries[0].progressWorkSheet);
         }
       }
     },

@@ -26,9 +26,6 @@ import ColorSizeTable from '@/components/custom/table/ColorSizeTable'
 import ColorSizeBoxTable from '@/components/custom/table/ColorSizeBoxTable'
 import ColorSizeBoxChangeTable from '@/components/custom/table/ColorSizeBoxChangeTable'
 import ColorSizeChangeTable from '@/components/custom/table/ColorSizeChangeTable'
-import {
-  getSizeSequence
-} from '@/components/custom/table/table.js'
 
 // Custom/upload
 import PDFUpload from './custom/upload/PDFUpload';
@@ -37,11 +34,11 @@ import PdfPreview from './custom/upload/PdfPreview'
 import Aside from './Aside.vue';
 import Breadcrumb from './Breadcrumb.vue';
 import Callout from './Callout.vue';
-import AppFooter from './Footer.vue';
-import AppHeader from './Header.vue';
+import AppHeader from './AppHeader.vue';
 import Sidebar from './Sidebar/Sidebar.vue';
 import Switch from './Switch.vue';
 import SideSlider from './SideSlider';
+import TagsView from './TagsView';
 
 // Custom
 import AddressSelect from './custom/AddressSelect';
@@ -87,6 +84,10 @@ import HeaderDropdownAccnt from './Header/HeaderDropdownAccnt';
 
 // webchat
 import main from './webchat/main';
+
+//excel
+import UploadExcelComponent from './UploadExcel/index';
+
 
 export {
   ChatPage,
@@ -140,9 +141,9 @@ export {
   Aside,
   Breadcrumb,
   Callout,
-  AppFooter,
   AppHeader,
   Sidebar,
+  TagsView,
   Switch,
   SideSlider,
   ColorSizeTable,
@@ -150,12 +151,13 @@ export {
   ColorSizeBoxChangeTable,
   ColorSizeChangeTable,
   SelectTree,
-  getSizeSequence,
   DjMultipleSelect,
   DeptPersonSelect,
   DeptSelection,
   PersonnalSelectionV2,
-  PdfPreview
+  PdfPreview,
+  //excel
+  UploadExcelComponent
 }
 
 //全局注册组件

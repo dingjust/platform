@@ -33,7 +33,8 @@
       </el-row>
       <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
         <Authorized :permission="['CERT_APPLY']">
-          <el-button v-if="companyState == 'UNCERTIFIED'" class="form-submit_btn submit" size="mini" round @click="onSave">提交认证
+          <el-button v-if="companyState == 'UNCERTIFIED'" class="form-submit_btn submit" size="mini" round
+            @click="onSave">提交认证
           </el-button>
         </Authorized>
       </el-row>
@@ -97,14 +98,16 @@
           this.$message.error('请填写企业名称');
         } else if (this.enterpriseSlotData.organization == null || this.enterpriseSlotData.organization == '') {
           this.$message.error('请填写税号');
-        } else if (this.enterpriseSlotData.username == null || this.enterpriseSlotData.username == '') {
-          this.$message.error('请填写办理人姓名');
-        } else {
+        }
+        // else if (this.enterpriseSlotData.username == null || this.enterpriseSlotData.username == '') {
+        //   this.$message.error('请填写办理人姓名');
+        // } 
+        else {
           this.dialogVisible = true;
         }
       },
       async _onSave() {
-        this.dialogVisible=false;
+        this.dialogVisible = false;
         const url = this.apis().enterpriseAuthentication();
         const tempData = {
           companyName: this.enterpriseSlotData.companyName,

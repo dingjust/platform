@@ -67,16 +67,23 @@
 <script>
   export default {
     name: 'ContractFrameSelect',
-    props: [],
+    props: ['orderSelectFiles'],
     components: {},
     computed: {},
     methods: {
       async onSearch (page, size) {
+        let companyUid = '';
+        if (this.orderSelectFiles && this.orderSelectFiles.length > 0) {
+          if (this.orderSelectFiles[0].targetCooperator.type === 'ONLINE') {
+            companyUid = this.orderSelectFiles[0].targetCooperator.partner.uid;
+          }
+        }
+
         const keyword = this.keyword;
         const url = this.apis().getContractsList();
         const result = await this.$http.post(url, {
           type: 'KJXY',
-          // partyACompany: this.companyUid,
+          parnterCooperator: companyUid,
           state: 'COMPLETE',
           title: keyword
         }, {

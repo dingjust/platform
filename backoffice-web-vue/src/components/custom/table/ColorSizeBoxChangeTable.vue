@@ -72,7 +72,7 @@
 <script>
   import {
     getSizeSequence
-  } from '@/components/'
+  } from '@/store/modules/shared'
 
   export default {
     name: 'ColorSizeBoxChangeTable',

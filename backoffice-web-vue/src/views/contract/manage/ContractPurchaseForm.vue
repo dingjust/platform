@@ -1,13 +1,14 @@
 <template>
   <div>
+    <contract-steps :step="2"/>
     <!-- 合同模板选择 -->
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog"
                append-to-body :close-on-click-modal="false">
-      <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
-      <el-divider direction="vertical"></el-divider>
       <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
         <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
       </Authorized>
+      <el-divider direction="vertical"></el-divider>
+      <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
     <!-- 合同模板 创建 -->
@@ -27,6 +28,7 @@
 <!--      </el-button-group>-->
 <!--      <contract-select :mockData="mockData" @fileSelectChange="onContractSelectChange"/>-->
       <contract-frame-select v-if="dialogContractVisible" :page="framePage"
+                             :orderSelectFiles="orderSelectFiles"
                              @onOrderSelectChange="onOrderSelectChange"
                              @onContractSelectSure="onContractSelectSure"/>
     </el-dialog>
@@ -164,6 +166,7 @@
     import ContractSelect from './components/ContractSelect';
     import ContractFrameSelect from './components/ContractFrameSelect';
     import { ImagesUpload, PDFUpload } from '@/components'
+    import ContractSteps from './components/ContractSteps'
 
     const {
       mapGetters,
@@ -185,7 +188,8 @@
         ContractPreviewPdf,
         ContractSelect,
         ImagesUpload,
-        PDFUpload
+        PDFUpload,
+        ContractSteps
       },
       computed: {
         ...mapGetters({
@@ -536,7 +540,8 @@
             flag = true
           }
           let data = {
-            'orderCodes': orders.map((order) => order.code),
+            // 'orderCodes': orders.map((order) => order.code),
+            'items': orders.map((order) => order.id),
             'type': 'CGDD',
             'isPdfAgreement': flag
           }

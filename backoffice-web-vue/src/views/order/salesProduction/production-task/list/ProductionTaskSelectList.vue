@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight"
               @selection-change="handleSelectionChange" @row-click="clickRow" :row-key="getRowKeys">
-      <el-table-column type="selection" width="55" :reserve-selection="true" v-if="isSelect"/>
+      <el-table-column type="selection" width="55" :selectable="canSelect" :reserve-selection="true" v-if="isSelect"/>
       <el-table-column label="生产单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -48,77 +48,97 @@
           <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="状态" prop="status">
-        <template slot-scope="scope">
-          <span>{{getEnum('ProductionState', scope.row.state)}}</span>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="操作" min-width="100">
-        <template slot-scope="scope">
-          <el-row>
-            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">详情</el-button>
-            <!-- <el-divider direction="vertical"></el-divider>
-                       <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">删除</el-button> -->
-          </el-row>
-        </template>
-      </el-table-column>
     </el-table>
     <div class="pt-2"></div>
-    <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
-    <!-- </div> -->
   </div>
 </template>
 
 <script>
   export default {
     name: 'ProductionTaskSelectList',
-    props: ['page', 'selectTaskList', 'isSelect', 'isSingleChoice'],
+    props: {
+      page: {
+        required: true
+      },
+      selectedRow: {
+        type: Array,
+        default: () => []
+      },
+      isSelect: Boolean,
+      isSingleChoice: {
+        type: Boolean,
+        default: false
+      }
+    },
+    data () {
+      return {
+        selectTaskList: []
+      }
+    },
     methods: {
-      onDetails (row) {
-        if (this.isSelect) {
-          this.$emit('onDetails', row.id);
-          return;
+      // onDetails (row) {
+      //   if (this.isSelect) {
+      //     this.$emit('onDetails', row.id);
+      //     return;
+      //   }
+      //   this.$router.push('/sales/production/' + row.id);
+      // },
+      canSelect (row) {
+        let index;
+        if (this.selectedRow && this.selectedRow.length > 0) {
+          index = this.selectedRow.findIndex(item => item.originOrder.id === row.id);
+          if (index > -1) {
+            return false
+          }
         }
-        this.$router.push('/sales/production/' + row.id);
+        return true;
       },
       onPageSizeChanged (val) {
-        this._reset();
+        this.$emit('onAdvancedSearch', 0, val);
 
-        if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
-          return;
-        }
-        this.$emit('onSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       onCurrentPageChanged (val) {
-        if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
-          return;
-        }
+        this.$emit('onAdvancedSearch', val - 1, 10);
 
-        this.$emit('onSearch', val - 1);
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
       handleSelectionChange (val) {
-        let data = Object.assign([], val);
         if (this.isSingleChoice) {
-          if (data.length > 1) {
-            this.$refs.resultTable.toggleRowSelection(data[0], false);
-            data.splice(0, 1);
+          if (val.length > 1) {
+            this.$refs.resultTable.toggleRowSelection(val[0], false);
+            this.selectTaskList = [val[val.length - 1]];
+          } else if (val.length <= 1) {
+            this.selectTaskList = val;
           }
+        } else {
+          this.selectTaskList = val;
         }
-        this.$emit('getSelectTaskList', data);
       },
       getRowKeys (row) {
         return row.id;
       },
       clickRow (row) {
+        if (!this.canSelect(row)) {
+          return;
+        }
+        if (this.isSingleChoice && this.selectTaskList.length >= 1) {
+          console.log(row);
+          console.log(this.selectTaskList);
+          if (row.id === this.selectTaskList[0].id) {
+            this.$refs.resultTable.toggleRowSelection(this.selectTaskList[0], false);
+            return;
+          }
+          this.$refs.resultTable.toggleRowSelection(this.selectTaskList[0], false);
+        }
         this.$refs.resultTable.toggleRowSelection(row);
       }
     }

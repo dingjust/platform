@@ -117,7 +117,7 @@
 
   const {
     mapActions
-  } = createNamespacedHelpers('ProductionOrderModule');
+  } = createNamespacedHelpers('ProductionOrdersModule');
 
   export default {
     name: 'ProductionOrderList',
@@ -169,7 +169,7 @@
       onPageSizeChanged(val) {
         // this._reset();
 
-        // if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
+        // if (this.$store.state.ProductionOrdersModule.isAdvancedSearch) {
         //   this.$emit('onAdvancedSearch', val);
         //   return;
         // }
@@ -180,7 +180,7 @@
         });
       },
       onCurrentPageChanged(val) {
-        // if (this.$store.state.ProductionOrderModule.isAdvancedSearch) {
+        // if (this.$store.state.ProductionOrdersModule.isAdvancedSearch) {
         //   this.$emit('onAdvancedSearch', val - 1);
         //   return;
         // }
@@ -259,7 +259,7 @@
     },
     data() {
       return {
-        statuses: this.$store.state.ProductionOrderModule.statuses,
+        statuses: this.$store.state.ProductionOrdersModule.statuses,
         selectRow: [],
         orderTypeTagMap: {
           'SELF_PRODUCED': {

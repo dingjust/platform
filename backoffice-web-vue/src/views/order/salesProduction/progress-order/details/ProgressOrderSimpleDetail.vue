@@ -52,13 +52,10 @@
     <el-divider/>
     <el-row type="flex" justify="space-between" align="middle">
       <el-col :span="24">
-<!--        <progress-order-steps :phaseSqeuence="slotData.progressPlan.phaseSqeuence"-->
-<!--                              :progresses="slotData.progressPlan.progress"/>-->
         <el-row type="flex" justify="space-between" v-if="slotData.progresses.length > 0">
-          <template v-for="(item, index) in slotData.progresses">
-            <el-col :span="getSpan">
+          <template v-for="item in slotData.progresses">
+            <el-col :span="getSpan" :key="item.id">
               <el-row type="flex" justify="center" align="middle">
-<!--                <h6 v-if="item.delatedDays" style="color: #F56C6C">延误{{item.delatedDays}}天</h6>-->
                 <h6 v-if="item.finishDate">完成时间：{{item.finishDate | timestampToTime}}</h6>
                 <h6 v-if="item.estimatedDate && !item.finishDate">预计完成：{{item.estimatedDate | timestampToTime}}</h6>
               </el-row>
@@ -69,17 +66,11 @@
           <h6 style="color: #C0C4CC">暂无进度节点</h6>
         </el-row>
         <el-steps :active="getActive" align-center finish-status="success">
-          <template v-for="(item, index) in slotData.progresses">
-            <el-step :title="item.progressPhase.name"/>
+          <template v-for="item in slotData.progresses">
+            <el-step :key="item.id" :title="item.progressPhase.name" :description="getTip(item)"/>
           </template>
         </el-steps>
       </el-col>
-<!--      <el-col :span="4">-->
-<!--        <el-row>-->
-<!--          <el-button class="list-btn">发货</el-button>-->
-<!--          <el-button class="list-btn">入库</el-button>-->
-<!--        </el-row>-->
-<!--      </el-col>-->
     </el-row>
   </div>
 </template>
@@ -112,6 +103,14 @@
       }
     },
     methods: {
+      getTip (item) {
+        if (this.slotData.status === 'COMPLETED') {
+          return '';
+        } else if (this.slotData.currentPhase && this.slotData.currentPhase.name === item.progressPhase.name) {
+          return item.delayedDays > 0 ? '已延期' + item.delayedDays + '天' : '倒计时' + item.delayedDays + '天';
+        }
+        return '';
+      },
       onDetail (row) {
         this.$router.push('/sales/progressOrder/' + this.slotData.code);
       }
@@ -134,5 +133,9 @@
 
   .list-btn {
     width: 80px;
+  }
+
+  /deep/ .el-step__description {
+    color: #F56C6c!important;
   }
 </style>

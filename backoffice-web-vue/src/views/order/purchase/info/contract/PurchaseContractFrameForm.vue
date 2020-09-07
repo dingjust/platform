@@ -126,7 +126,7 @@
   import ContractPreview from '../../../../contract/manage/components/ContractPreview';
   import ContractPreviewPdf from '../../../../contract/manage/components/ContractPreviewPdf';
   import ContractTypeSelect from '../../../../contract/manage/components/ContractTypeSelect';
-  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
+  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect(old)';
 
   const {
     mapGetters,
