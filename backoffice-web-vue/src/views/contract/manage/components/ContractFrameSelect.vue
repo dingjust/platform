@@ -72,10 +72,10 @@
     computed: {},
     methods: {
       async onSearch (page, size) {
-        let companyUid = '';
+        let id = '';
         if (this.orderSelectFiles && this.orderSelectFiles.length > 0) {
           if (this.orderSelectFiles[0].targetCooperator.type === 'ONLINE') {
-            companyUid = this.orderSelectFiles[0].targetCooperator.partner.uid;
+            id = this.orderSelectFiles[0].targetCooperator.partner.id;
           }
         }
 
@@ -83,7 +83,7 @@
         const url = this.apis().getContractsList();
         const result = await this.$http.post(url, {
           type: 'KJXY',
-          parnterCooperator: companyUid,
+          parnterCooperator: id,
           state: 'COMPLETE',
           title: keyword
         }, {
