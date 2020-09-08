@@ -116,7 +116,8 @@ export default {
       this.openPreviewPdf(item, item.code);
     },
     async openPreviewPdf (val, code) {
-      this.thisContract = val;
+      await this.onDetails(val)
+
       let queryCode = '';
       if (code != null && code != '') {
         queryCode = code;
@@ -130,6 +131,19 @@ export default {
 
       this.pdfVisible = true;
       this.fileUrl = encodeURIComponent(aa)
+    },
+    async onDetails (row) {
+      const url = this.apis().getContractDetail(row.code);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      this.thisContract = result.data;
+
+      if (row.state !== result.data.state) {
+        this.$emit('callback')
+      }
     },
     onSearch () {
       this.pdfVisible = false;

@@ -163,6 +163,10 @@
       this.onResetQuery();
       this.onAdvancedSearch();
       this.statuses = Object.assign([], this.$store.state.EnumsModule.SalesProductionOrderState);
+      this.statuses.push({
+        code: '',
+        name: '全部'
+      });
       // 去除未提交
       let index = this.statuses.findIndex(item => item.code == 'TO_BE_SUBMITTED');
       this.statuses.splice(index, 1);

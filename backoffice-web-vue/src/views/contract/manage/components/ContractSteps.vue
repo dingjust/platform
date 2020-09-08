@@ -34,7 +34,7 @@ export default {
         title: '短信验证码确认签署'
       }, {
         code: 5,
-        title: '对方完成签署'
+        title: '完成签署'
       }],
     }
   }
