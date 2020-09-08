@@ -73,9 +73,11 @@
     methods: {
       async onSearch (page, size) {
         let id = '';
+        let companyUid = '';
         if (this.orderSelectFiles && this.orderSelectFiles.length > 0) {
           if (this.orderSelectFiles[0].targetCooperator.type === 'ONLINE') {
             id = this.orderSelectFiles[0].targetCooperator.partner.id;
+            companyUid = this.orderSelectFiles[0].targetCooperator.partner.uid;
           }
         }
 
@@ -84,6 +86,7 @@
         const result = await this.$http.post(url, {
           type: 'KJXY',
           parnterCooperator: id,
+          partyACompany: companyUid,
           state: 'COMPLETE',
           title: keyword
         }, {
