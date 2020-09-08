@@ -125,7 +125,7 @@
       }) {
         let data = results.filter(row => {
             //过滤案例行和注明行
-            let col1 = row[header[0]];
+            let col1 = row[header[0]].toString();
             if (col1 != null && col1 != "") {
               return !(col1.includes('案例：') || col1.includes('注明：'));
             }
