@@ -136,6 +136,9 @@
             }, {
               code: 'PAID',
               name: '已付款'
+            }, {
+              code: '',
+              name: '全部'
             }]
           },
           FINANCE: {
@@ -148,6 +151,9 @@
             }, {
               code: 'PAID',
               name: '已付款'
+            }, {
+              code: '',
+              name: '全部'
             }]
           }
         },

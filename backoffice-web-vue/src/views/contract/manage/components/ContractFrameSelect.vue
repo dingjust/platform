@@ -78,6 +78,8 @@
           if (this.orderSelectFiles[0].targetCooperator.type === 'ONLINE') {
             id = this.orderSelectFiles[0].targetCooperator.partner.id;
             companyUid = this.orderSelectFiles[0].targetCooperator.partner.uid;
+          } else {
+            id = this.orderSelectFiles[0].targetCooperator.id;
           }
         }
 

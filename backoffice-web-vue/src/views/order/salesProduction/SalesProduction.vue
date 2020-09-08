@@ -155,6 +155,10 @@
       this.onResetQuery();
       this.onAdvancedSearch(0, 10);
       this.statuses = Object.assign([], this.$store.state.EnumsModule.SalesProductionOrderState);
+      this.statuses.push({
+        code: '',
+        name: '全部'
+      })
       // 去除未接单
       let index = this.statuses.findIndex(item => item.code == 'TO_BE_ACCEPTED');
       this.statuses.splice(index, 1);
