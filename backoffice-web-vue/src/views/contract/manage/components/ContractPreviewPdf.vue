@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="!readOnly">
-      <contract-steps :step="3"/>
+      <contract-steps :step="slotData.state === 'COMPLETE' ? 5 : 3"/>
     </template>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-supplement-form v-if="dialogOrderVisible" :slotData="slotData" @openPreviewPdf="showContract" 
