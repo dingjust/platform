@@ -68,7 +68,7 @@
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" :gutter="50"
         v-if="(formData.state === 'AUDIT_REJECTED'||formData.state === 'TO_BE_SUBMITTED') && isSendBy">
         <el-col :span="3">
-          <el-button class="material-btn" @click="onModify">修改</el-button>
+          <el-button class="material-btn" @click="onModify">提交</el-button>
         </el-col>
         <el-col :span="3">
           <el-button type="text" @click="onDelete">作废订单</el-button>

@@ -127,6 +127,7 @@
             //过滤案例行和注明行
             let col1 = row[header[0]];
             if (col1 != null && col1 != "") {
+              col1=col1.toString();
               return !(col1.includes('案例：') || col1.includes('注明：'));
             }
             return true;
@@ -154,7 +155,7 @@
               };
             }
             return {
-              name: str
+              name: str.toUpperCase()
             };
           });
         }
