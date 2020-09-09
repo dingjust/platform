@@ -1212,6 +1212,12 @@ let NONE_TENANT_APIS = {
   delSeal(code) {
     return '/b2b/user/seal/delete/' + code;
   },
+  sealGrant (sealCode, customerUid) {
+    return '/b2b/user/seal/' + sealCode + '/grant/to/' + customerUid;
+  },
+  sealRevoke (sealCode, customerUid) {
+    return '/b2b/user/seal/' + sealCode + '/revoke/from/' + customerUid;
+  },
   saveContract() {
     return '/b2b/user/agreement/save';
   },

@@ -4,9 +4,9 @@
       <h6 style="font-size: 20px">印章授权</h6>
     </el-row>
     <el-row type="flex" justify="center">
-      <el-form :model="formData" :inline="true">
+      <el-form :inline="true">
         <el-form-item label="选择授权人员">
-          <el-input v-model="formData.name" placeholder=""></el-input>
+          <personnal-selection-v2 :vPerson.sync="person" value="uid"/>
         </el-form-item>
       </el-form>
     </el-row>
@@ -20,18 +20,40 @@
 </template>
 
 <script>
+import { PersonnalSelectionV2 } from '@/components'
 export default {
   name: 'SealAuthorizeForm',
+  props: ['slotData'],
+  components: {
+    PersonnalSelectionV2
+  },
   methods: {
-    onSumbit () {
+    async onSumbit () {
+      if (this.person.length <= 0 || !this.person[this.person.length - 1]) {
+        this.$message.error('请选择用户');
+        return;
+      }
+      
+      const sealCode = this.slotData.code;
+      const customerUid = this.person[this.person.length - 1]
+
+      const url = this.apis().sealGrant(sealCode, customerUid);
+      const result = await this.$http.post(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      }
+      this.$message.success("授权成功！");
       this.$emit('callback');
     }
   },
   data () {
     return {
-      formData: {
-        name: ''
-      }
+      person: []
     }
   }  
 }

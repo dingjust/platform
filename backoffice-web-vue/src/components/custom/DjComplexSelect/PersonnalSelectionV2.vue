@@ -3,7 +3,7 @@
                 :disabled="disabled"
                 :options="deptList" 
                 :show-all-levels="false"
-                :props="{ label: 'name', value: 'id' }" 
+                :props="{ label: 'name', value: value }" 
                 clearable></el-cascader>
 </template>
 
@@ -40,6 +40,10 @@ export default {
       default: ()=>{
         return [];
       }
+    },
+    value: {
+      type: String,
+      default: 'id'
     }
   },
   data () {
