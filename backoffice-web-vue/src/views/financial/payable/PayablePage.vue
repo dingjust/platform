@@ -122,6 +122,12 @@
       this.onResetQuery();
       this.onAdvancedSearch(0, 10);
     },
+    mounted () {
+      this.statuses.push({
+        code: '',
+        name: '全部'
+      })
+    },
     destroyed () {
       
     }

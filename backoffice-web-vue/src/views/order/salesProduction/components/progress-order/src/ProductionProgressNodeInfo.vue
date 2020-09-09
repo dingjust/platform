@@ -123,8 +123,8 @@
       getTip (item) {
         if (this.slotData.status === 'COMPLETED') {
           return '';
-        } else if (this.slotData.currentPhase && this.slotData.currentPhase.name === item.progressPhase.name) {
-          return item.delayedDays > 0 ? '已延期' + item.delayedDays + '天' : '倒计时' + item.delayedDays + '天';
+        } else if (this.slotData.currentPhase && this.slotData.currentPhase.sequence <= item.progressPhase.sequence) {
+          return item.delayedDays > 0 ? '已延期' + item.delayedDays + '天' : '倒计时' + Math.abs(item.delayedDays) + '天';
         }
         return '';
       },

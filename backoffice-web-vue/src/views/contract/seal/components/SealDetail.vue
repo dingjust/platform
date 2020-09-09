@@ -26,8 +26,8 @@
             </el-row>
           </div>
         </div> -->
-        <!-- <el-row type="flex" justify="start" align="middle">
-          <el-button type="text" style="color: #606266;margin-left: 40px;" @click="authorizeVislble=!authorizeVislble">
+        <el-row type="flex" justify="start" align="middle">
+          <el-button type="text" style="color: #606266;margin-left: 40px;" @click="authorizeVislble=true">
             <div class="append-row">
               <i class="el-icon-plus icon-row"></i>
               <h6 style="margin: 0px">添加用印权限人</h6>
@@ -36,11 +36,11 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
           <h6 style="color: #F56C6C">注：用印授权只有主账号可以执行</h6>
-        </el-row> -->
+        </el-row>
       </el-col>
     </el-row>
     <el-dialog :visible.sync="authorizeVislble" width="40%" append-to-body :close-on-click-modal="false">
-      <seal-authorize-form v-if="authorizeVislble" @callback="authorizeVislble=!authorizeVislble"/>
+      <seal-authorize-form v-if="authorizeVislble" :slotData="slotData" @callback="callback"/>
     </el-dialog>
   </div>
 </template>
@@ -55,7 +55,21 @@ export default {
   },
   methods: {
     onCancel () {
-
+      const url = this.apis().sealRevoke();
+      const result = this.$http.post(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      }
+      this.$emit('callback');
+    },
+    callback () {
+      this.authorizeVislble = false;
+      this.$emit('callback');
     }
   },
   data () {

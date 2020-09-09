@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
   void globalInit() {
     // //初始化helpers
     // Provider.of<CertificationStatusHelper>(context)
-    //     .checkCertificationStatus(context);
+    // .checkCertificationStatus(context);
 
     //友盟初始化
     initUMeng();
@@ -100,17 +100,17 @@ class _MyAppState extends State<MyApp> {
 
 //监听异常消息,dialog
 // void listenMessage() {
-//   MessageBLoC.instance.errorMessageStream.listen((value) {
-//     final appContext = _navigatorKey.currentState.overlay.context;
-//     final dialog = AlertDialog(
-//       content: Text('$value'),
-//     );
-//     try {
-//       showDialog(context: appContext, builder: (x) => dialog);
-//     } catch (e) {
-//       print(e);
-//     }
-//   });
+// MessageBLoC.instance.errorMessageStream.listen((value) {
+// final appContext = _navigatorKey.currentState.overlay.context;
+// final dialog = AlertDialog(
+// content: Text('$value'),
+// );
+// try {
+// showDialog(context: appContext, builder: (x) => dialog);
+// } catch (e) {
+// print(e);
+// }
+// });
 // }
 }
 
@@ -129,6 +129,9 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   int _currentIndex = 0;
 
+  //跳转登录页限制锁
+  bool loginLock = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -145,26 +148,18 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   //监听未登录接口调用跳转登录页
   void listenLogin() {
     UserBLoC.instance.loginJumpStream.listen((value) {
-      if (true) {
+      if (!loginLock) {
+        loginLock = true;
         if (NavigatorStack.instance.currentRouteName == AppRoutes.ROUTE_LOGIN) {
+          loginLock = false;
           return;
         } else {
-          // //获取记录跳转登录页面的时间
-          // DateTime loginPageLogTime = AppBLoC.instance.getLoginPageLogTime;
-          // DateTime now = DateTime.now();
-
-          // int diff = -1;
-          // if (loginPageLogTime != null)
-          //   diff = now.difference(loginPageLogTime).inMilliseconds;
-
-          // print('$loginPageLogTime===>$now==>相差:$diff 毫秒');
-          // print('HASH:${AppBLoC.instance.hashCode}');
-          // if (loginPageLogTime == null || diff > 1000) {
-          // AppBLoC.instance.setloginPageLogTime(now);
           Navigator.of(_navigatorKey.currentState.overlay.context)
               .pushNamedAndRemoveUntil(
-              AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'));
-          // }
+              AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'))
+              .whenComplete(() {
+            loginLock = false;
+          });
         }
       }
     });
@@ -279,7 +274,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       home: Builder(builder: (context) {
         AppVersionHelper appVersionHelper =
             Provider.of<AppVersionHelper>(context);
-        //  appVersionHelper.getAppVersionInfo('nbyjy');
+        // appVersionHelper.getAppVersionInfo('nbyjy');
         appVersionHelper.checkVersion(
             context, AppBLoC.instance.packageInfo.version, 'nbyjy');
 
