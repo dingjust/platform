@@ -1191,6 +1191,9 @@ let NONE_TENANT_APIS = {
   getSealsList() {
     return '/b2b/user/seal/list';
   },
+  getSealGrantList () {
+    return '/b2b/user/seal/grant/list';
+  },
   getTemplatesListPt() {
     return '/b2b/agreement/temp/list';
   },
@@ -1217,6 +1220,9 @@ let NONE_TENANT_APIS = {
   },
   sealRevoke (sealCode, customerUid) {
     return '/b2b/user/seal/' + sealCode + '/revoke/from/' + customerUid;
+  },
+  sealGrantList (code) {
+    return '/b2b/user/seal/grant/list/' + code;
   },
   saveContract() {
     return '/b2b/user/agreement/save';
