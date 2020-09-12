@@ -6,6 +6,8 @@ import 'package:services/src/payment/wechat/wechat_service.dart';
 import 'package:services/src/payment/wechat/wechatpay_constants.dart';
 
 class WechatServiceImpl implements WechatService {
+  static String _wechatAuthState;
+
   // 工厂模式
   factory WechatServiceImpl() => _getInstance();
 
@@ -22,10 +24,21 @@ class WechatServiceImpl implements WechatService {
         doOnIOS: true,
         universalLink: 'https://ht.nbyjy.net/yijiayi/');
 
+    _wechatAuthState = '';
+
     //全局监听微信回调
     weChatResponseEventHandler.listen((res) {
+      print('>>>>>微信回调 ${res}');
+      //支付回调
       if (res is WeChatPaymentResponse) {
-        print('>>>>>微信回调 ${res.errStr}');
+        // print('>>>>>微信支付回调 ${res.errStr}');
+      }
+
+      //授权登录回调
+      if (res is WeChatAuthResponse) {
+        print(
+            '>>>>>微信授权登录回调>>> code:${res.code} , _wechatAuthState: $_wechatAuthState  , state:${res.state} ,${_wechatAuthState == res.state}');
+        //TODO:回调 Code 请求后端获取对应 access_token
       }
     });
   }
@@ -42,7 +55,7 @@ class WechatServiceImpl implements WechatService {
       {PaymentFor paymentFor = PaymentFor.DEFAULT}) async {
     //通过Helper获取预支付信息
     WechatPrepayModel prepayModel =
-        await WechatPayHelper.prepay(orderCode, paymentFor: paymentFor);
+    await WechatPayHelper.prepay(orderCode, paymentFor: paymentFor);
 
     if (prepayModel != null) {
       payWithWeChat(
@@ -85,5 +98,14 @@ class WechatServiceImpl implements WechatService {
       scene: scene,
     );
     shareToWeChat(model);
+  }
+
+  @override
+  Future<bool> sendAuth() {
+    _wechatAuthState = DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString();
+    return sendWeChatAuth(scope: "snsapi_userinfo", state: _wechatAuthState);
   }
 }

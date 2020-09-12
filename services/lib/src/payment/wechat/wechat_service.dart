@@ -12,6 +12,8 @@ abstract class WechatService {
   Future shareWeb(String url, WeChatScene scene, String title,
       String description, String thumbnail);
 
+  Future<bool> sendAuth();
+
   ///检测微信是否安装
   Future<bool> isInstalled();
 }

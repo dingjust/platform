@@ -29,6 +29,9 @@ dependencies:
   services:
     path: ../services/
 
+  flutter_ddshare:
+    path: ../../flutter_ddshare/
+
   # json_annotation: ^2.0.0
   json_annotation: ^3.0.1
   cupertino_icons: ^0.1.2
@@ -226,6 +229,7 @@ flutter:
     - packages/assets/temp/20200414163706.png
     - packages/assets/temp/auth_fail.png
     - packages/assets/temp/auth_success.png
+    - packages/assets/temp/common/dingding_logo.png
 
   fonts:
     - family: b2bIcons
