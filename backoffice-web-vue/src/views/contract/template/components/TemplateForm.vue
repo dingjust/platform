@@ -58,13 +58,15 @@
                 <Viewer :value="viewerText" class="contract_custom-viewer" />
               </div>
             </el-row>
-            <el-row class="contract_custom-row text-align-left"><h6>自定义条款</h6></el-row>
-            <el-row>
-              <div class="contract_custom-custom_terms">
-                <Editor v-model="editorText" :html="editorHtml" :options="editorOptions"
-                        :visible="editorVisible"  class="contract_custom-editor"/>
-              </div>
-            </el-row>
+            <template v-if="tempType != 'ZFXY'">
+              <el-row class="contract_custom-row text-align-left"><h6>自定义条款</h6></el-row>
+              <el-row>
+                <div class="contract_custom-custom_terms">
+                  <Editor v-model="editorText" :html="editorHtml" :options="editorOptions"
+                          :visible="editorVisible"  class="contract_custom-editor"/>
+                </div>
+              </el-row>
+            </template>
           </div>
         </el-main>
       </el-container>
@@ -126,7 +128,7 @@
         const tempData = {
           title: this.tempName,
           content: this.viewerText,
-          customizeContent: this.editorText,
+          customizeContent: this.tempType != 'ZFXY' ? this.editorText : '',
           type: this.tempType,
           available: true,
           originalTmplCode: this.tempCode,

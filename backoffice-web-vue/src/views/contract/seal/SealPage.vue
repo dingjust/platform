@@ -16,7 +16,7 @@
       <seal-form v-if="dialogVislble" @closeDialog="closeDialog" @callback="callback"/>
     </el-dialog>
     <el-dialog :visible.sync="detailVisible" width="60%" append-to-body :close-on-click-modal="false">
-      <seal-detail v-if="detailVisible" :slotData="slotData"/>
+      <seal-detail v-if="detailVisible" :slotData="slotData" @callback="callback"/>
     </el-dialog>
     <!-- <el-dialog :visible.sync="authorizeVislble" width="60%" append-to-body :close-on-click-modal="false">
       <seal-authorize-form v-if="authorizeVislble" />
