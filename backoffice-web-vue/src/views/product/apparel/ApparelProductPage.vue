@@ -296,19 +296,17 @@
     data() {
       return {
         statuses: [{
-            code: '',
-            name: '全部'
-          },
-          {
             code: 'approved',
             name: '已上架'
-          },
-          {
+          }, {
             code: 'unapproved',
             name: '已下架'
+          },  {
+            code: '',
+            name: '全部'
           }
         ],
-        activeName: '',
+        activeName: 'approved',
         belongDetailsData: '',
         factoryDetailsPageVisible: false,
         brandDetailsPageVisible: false,
@@ -324,7 +322,7 @@
           code: '',
           skuID: '',
           name: '',
-          approvalStatuses: '',
+          approvalStatuses: 'approved',
           categories: [],
           belongToName: ''
         },
