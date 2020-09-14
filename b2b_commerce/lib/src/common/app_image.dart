@@ -122,6 +122,11 @@ class B2BImage {
         width: width, height: height);
   }
 
+  static Image wechatLogin({double width, double height}) {
+    return getImage('temp/common/wechat_login.png',
+        width: width, height: height);
+  }
+
   static Image wechatFriend({double width, double height}) {
     return getImage('temp/common/wechat_friend.png',
         width: width, height: height);
@@ -296,5 +301,11 @@ class B2BImage {
   ///认证成功
   static Image auth_success({double width, double height}) {
     return getImage('temp/auth_success.png', width: width, height: height);
+  }
+
+  ///钉钉Logo
+  static Image dingding_logo({double width, double height}) {
+    return getImage('temp/common/dingding_logo.png',
+        width: width, height: height);
   }
 }

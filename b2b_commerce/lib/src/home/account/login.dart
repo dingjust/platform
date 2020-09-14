@@ -1,7 +1,8 @@
 import 'package:b2b_commerce/src/my/account/register.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
+
+import 'login_page.dart';
 
 class B2BLoginPage extends StatelessWidget {
   final String snackBarMessage;
