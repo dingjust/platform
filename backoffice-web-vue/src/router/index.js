@@ -306,22 +306,6 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/outbound-order/details/OutboundOrderDetail')
             },
             {
-              path: 'purchaseTask',
-              name: '采购任务列表',
-              component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/purchase-task/PurchaseTaskPage')
-            },
-            {
-              path: 'create/purchaseTask',
-              name: '创建采购任务',
-              component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/purchase-task/form/PurchaseTaskForm')
-            },
-            {
-              path: 'purchaseTask/:code',
-              name: '采购任务详情',
-              props: true,
-              component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/purchase-task/details/PurchaseTaskDetail')
-            },
-            {
               path: 'materials/detail',
               name: '物料单',
               component: () => import( /* webpackChunkName: 'sales' */ '@/views/order/salesProduction/purchase-task/materials-bill/MaterialsBillPage')

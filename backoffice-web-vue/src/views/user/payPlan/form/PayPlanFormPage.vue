@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-card class="box-card">
       <div class="animated fadeIn">
-        <el-form :model="formData">
+        <el-form ref="form" :model="formData" :inline="true" hide-required-asterisk label-position="left">
           <div class="payPlan-info-order-body">
             <el-row class="payPlan-info-title-row">
               <div class="payPlan-info-title">
@@ -11,10 +11,14 @@
             </el-row>
 
             <el-row class="payPlan-info-order-row" type="flex" justify="start" align="top">
-            <h6 class="payPlan-info-input-prepend" >方案名称</h6>
-            <el-input placeholder="请输入方案名称" v-model="formData.name">
-            </el-input>
-          </el-row>
+              <el-form-item prop="name" :rules="[{ required: true, message: '请填写财务方案名称', trigger: 'blur'}]" label-width="65px">
+                <template slot="label">
+                  <h6 class="payPlan-info-input-prepend" style="width: ">方案名称</h6>
+                </template>
+                <el-input placeholder="请输入方案名称" v-model="formData.name">
+                </el-input>
+              </el-form-item>
+            </el-row>
             <el-row class="payPlan-info-order-row" type="flex" justify="start" align="top">
             <h6 class="payPlan-info-input-prepend" >备注</h6>
             <el-input type="textarea" :rows="3" placeholder="请输入备注留言..." v-model="formData.remarks">
@@ -53,7 +57,21 @@
       ...mapMutations({
         setFormData: 'setFormData'
       }),
-      async onSubmit () {
+      onSubmit () {
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this._onSubmit();
+          } else {
+            this.$message.error('请完善表单信息！');
+            return false;
+          }
+        });
+      },
+      async _onSubmit () {
+        if (this.formData.name.trim() === '') {
+          this.$message.error('请输入财务方案名称');
+          return;
+        }
         this.formData.previewText.replace(/\//g, '/\n');
         // 提交数据
         const url = this.apis().createPayPlan();

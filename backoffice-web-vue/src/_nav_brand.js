@@ -457,10 +457,6 @@ export default {
         //   url: '/order/production',
         //   icon: 'iconNone'
         // }
-        // {
-        //     name: '采购任务',
-        //     url: '/sales/purchaseTask'
-        //   }
       ]
     }
   ]
