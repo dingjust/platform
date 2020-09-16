@@ -20,7 +20,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
     super.initState();
 
     //注册钉钉插件
-    FlutterDdshare.registerApp('dingoaee4mq7tb6luuyugg').then((value) => () {
+    FlutterDdshare.registerApp('dingoaee4mq7tb6luuyugg','com.yjy.yijiayi').then((value) => () {
           print('register App====================$value');
         });
 
@@ -103,9 +103,6 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
               ],
             ),
             onPressed: () async {
-              var value =
-                  await FlutterDdshare.registerApp('dingoaee4mq7tb6luuyugg');
-              print('register App====================$value');
               var installed = await FlutterDdshare.isDDAppInstalled();
               print('installed App====================$installed');
               bool result = await FlutterDdshare.sendDDAppAuth('test');
