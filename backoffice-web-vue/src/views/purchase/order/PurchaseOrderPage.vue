@@ -4,23 +4,30 @@
       <el-row>
         <el-col :span="6">
           <div class="purchase-list-title">
-            <h6>采购需求列表</h6>
+            <h6>采购工单列表</h6>
           </div>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <purchase-requirement-toolbar @onAdvancedSearch="onAdvancedSearch" 
+      <purchase-order-toolbar @onAdvancedSearch="onAdvancedSearch" 
                                     :queryFormData="queryFormData" :dataQuery="dataQuery"/>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-            <purchase-requirement-list :page="page"/>
-          </el-tab-pane>
-        </template>
-      </el-tabs>
+      <div>
+        <div class="tags-container">
+          <el-button>未延期</el-button>
+          <el-button>已延期</el-button>
+        </div>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <template v-for="item in statuses">
+            <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+              <purchase-order-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
+            </el-tab-pane>
+          </template>
+        </el-tabs>
+      </div>
     </el-card>
   </div>
 </template>
+
 <script>
 import { createNamespacedHelpers } from 'vuex';
 
@@ -29,17 +36,17 @@ const {
   mapActions,
   mapMutations
 } = createNamespacedHelpers(
-  'PurchaseRequirementModule'
+  'PurchaseOrderModule'
 );
 
-import PurchaseRequirementToolbar from './toolbar/PurchaseRequirementToolbar'
-import PurchaseRequirementList from './list/PurchaseRequirementList'
+import PurchaseOrderToolbar from './toolbar/PurchaseOrderToolbar'
+import PurchaseOrderList from './list/PurchaseOrderList'
 
 export default {
-  name: 'PurchaseRequirement',
+  name: 'PurchaseOrderPage',
   components: {
-    PurchaseRequirementToolbar,
-    PurchaseRequirementList
+    PurchaseOrderToolbar,
+    PurchaseOrderList
   },
   computed: {
     ...mapGetters({
@@ -90,8 +97,8 @@ export default {
           code: 'AUDITED_FAILED',
           name: '审核驳回'
         }, {
-          code: 'PURCHASING',
-          name: '采购中'
+          code: 'wait_come',
+          name: '待回料'
         }, {
           code: 'COMPLETED',
           name: '采购完成'
@@ -102,7 +109,7 @@ export default {
     }
   },
   created () {
-    this.dataQuery = this.getDataPerQuery('PURCHASE_REQUIREMENT');
+    this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
     this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }
@@ -113,5 +120,11 @@ export default {
   .purchase-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+  }
+
+  .tags-container {
+    position: absolute;
+    right: 20px;    
+    z-index: 999;
   }
 </style>
