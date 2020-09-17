@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:b2b_commerce/src/common/app_image.dart';
+import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
 import 'package:flutter_ddshare/response/ddshare_response.dart';
+import 'package:fluwx/fluwx.dart';
 import 'package:services/services.dart';
 
 ///第三方登录按钮组
@@ -15,21 +20,50 @@ class OtherAuthLoginBtnGroup extends StatefulWidget {
 }
 
 class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
+  AuthLoginHelper authLoginHelper;
+
+  ///微信回调订阅
+  StreamSubscription<BaseWeChatResponse> _weChatSubscription;
+
+  ///钉钉回调订阅
+  StreamSubscription<BaseDDShareResponse> _ddShareSubscription;
+
   @override
   void initState() {
     super.initState();
+    authLoginHelper = AuthLoginHelper();
+    initPluginState();
+  }
 
+  ///初始化
+  Future<void> initPluginState() async {
     //注册钉钉插件
-    FlutterDdshare.registerApp('dingoaee4mq7tb6luuyugg').then((value) => () {
-          print('register App====================$value');
-        });
+    bool registerResult = await FlutterDdshare.registerApp(
+        GlobalConfigs.DINGDING_APPID, GlobalConfigs.IOS_BUNDLE_ID);
 
-    FlutterDdshare.ddResponseEventHandler.listen((resp) async {
-      //授权回调信息
-      if (resp is DDShareAuthResponse) {
-        print('授权回调信息=====> code: ${resp.code}  state:${resp.state}');
+    if (registerResult) {
+      //监听钉钉回调
+      _ddShareSubscription =
+          FlutterDdshare.ddResponseEventHandler.listen((resp) async {
+        //授权回调信息
+        if (resp is DDShareAuthResponse) {
+          print('授权回调信息=====> code: ${resp.code}  state:${resp.state}');
+        }
+      });
+    }
+
+    //监听微信回调
+    _weChatSubscription = weChatResponseEventHandler.listen((res) async {
+      print('=====================================AuthListen!!!${res}');
+      //授权登录回调
+      if (res is WeChatAuthResponse) {
+        print('=====================================Is!!!${res.hashCode}');
+        //回调信息处理
+        authLoginHelper.handlerWeChatAuthLogin(res, context);
       }
     });
+
+    if (!mounted) return;
   }
 
   @override
@@ -51,31 +85,33 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       children: [
         Expanded(
             child: Row(
-          children: [
-            Expanded(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-              ),
-            ),
-            Text(
-              '其他方式登录方式',
-              style: TextStyle(color: Colors.grey),
-            ),
-            Expanded(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-              ),
-            ),
-          ],
-        ))
+              children: [
+                Expanded(
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                ),
+                Text(
+                  '其他方式登录方式',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Expanded(
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                ),
+              ],
+            ))
       ],
     );
   }
 
   //按钮行
   Widget _btnsRow() {
+    const double btnHeight = 62.0;
+
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Row(
@@ -83,40 +119,46 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FlatButton(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                B2BImage.wechatLogin(height: 40, width: 40),
-                Text('微信登录')
-              ],
+            child: Container(
+              height: btnHeight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  B2BImage.wechatLogin(height: 40, width: 40),
+                  Text('微信登录')
+                ],
+              ),
             ),
             onPressed: () {
               WechatServiceImpl.instance.sendAuth();
             },
           ),
           FlatButton(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                B2BImage.dingding_logo(height: 45, width: 45),
-                Text('钉钉登录')
-              ],
+            child: Container(
+              height: btnHeight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  B2BImage.dingding_logo(height: 40, width: 40),
+                  Text('钉钉登录')
+                ],
+              ),
             ),
-            onPressed: () async {
-              var value =
-                  await FlutterDdshare.registerApp('dingoaee4mq7tb6luuyugg');
-              print('register App====================$value');
-              var installed = await FlutterDdshare.isDDAppInstalled();
-              print('installed App====================$installed');
-              bool result = await FlutterDdshare.sendDDAppAuth('test');
-              print('====================$result');
-              // DDSharePlugin.init("dingoaee4mq7tb6luuyugg");
-              // DDSharePlugin.sendTextMessage("一个简单的文本分享");
-              // DDSharePlugin.sendOnlineImage('https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1745805978,2734870652&fm=26&gp=0.jpg');
+            onPressed: () {
+              FlutterDdshare.sendDDAppAuth('test');
             },
           )
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _weChatSubscription.cancel();
+    _ddShareSubscription.cancel();
+    _weChatSubscription = null;
+    _ddShareSubscription = null;
   }
 }

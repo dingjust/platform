@@ -76,6 +76,6 @@ abstract class UserRepository {
   Future<String> employeeDelete(int id);
 
   ///更新个人资料
-  Future<bool> updateUserInfo(String uid, String name, String phone,
-      MediaModel media);
+  Future<bool> updateUserInfo(
+      String uid, String name, String phone, MediaModel media);
 }
