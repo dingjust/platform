@@ -86,12 +86,9 @@
         <el-divider></el-divider>
         <purchase-requirement-table :formData="formData"/>
       </div>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 25px;">
-        <div>
-          <el-button class="sumbit-btn" style="margin-right: 80px;" @click="onSumbit(false)">保存</el-button>
-          <el-button class="sumbit-btn" @click="onSumbit(true)">创建并提交</el-button>
-        </div>
-      </el-row>
+      <div style="margin-top: 30px">
+        <purchase-requirement-btn-group @onSave="onSave" @onDelete="onDelete" @onReturn="onReturn"/>
+      </div>
     </el-card>
   </div>
 </template>
@@ -99,12 +96,14 @@
 <script>
 import { PersonnalSelectionV2, MyAddressForm } from '@/components'
 import PurchaseRequirementTable from '../components/PurchaseRequirementTable'
+import PurchaseRequirementBtnGroup from '../components/PurchaseRequirementBtnGroup'
 export default {
   name: 'PurchaseRequirementForm',
   components: {
     PersonnalSelectionV2,
     MyAddressForm,
-    PurchaseRequirementTable
+    PurchaseRequirementTable,
+    PurchaseRequirementBtnGroup
   },
   methods: {
     onSelect () {
@@ -116,7 +115,13 @@ export default {
     removeApprover () {
       this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
     },
-    onSumbit (flag) {
+    onSave (flag) {
+
+    },
+    onDelete () {
+
+    },
+    onReturn () {
 
     }
   },

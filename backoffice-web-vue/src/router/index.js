@@ -465,11 +465,29 @@ const router = new Router({
       children: [{
         path: 'requirement',
         name: '采购需求',
-        component: () => import(/* webpackChunkName: 'purchase' */ '@/views/purchase/PurchaseRequirement')
+        component: () => import(/* webpackChunkName: 'purchase' */ '@/views/purchase/requirement/PurchaseRequirement')
       }, {
         path: 'requirement/create',
         name: '创建采购需求',
-        component: () => import(/* webpackChunkName: 'purchase */ '@/views/purchase/form/PurchaseRequirementForm')
+        component: () => import(/* webpackChunkName: 'purchase */ '@/views/purchase/requirement/form/PurchaseRequirementForm')
+      }, {
+        path: 'requirement/:id',
+        name: '采购需求详情',
+        props: true,
+        component: () => import(/* webpackChunkName: 'purchase */ '@/views/purchase/requirement/details/PurchaseRequirementDetail')
+      }, {
+        path: 'worksheet',
+        name: '采购工单',
+        component: () => import(/* webpackChunkName: 'purchase' */ '@/views/purchase/worksheet/PurchaseWorksheetPage')
+      }, {
+        path: 'worksheet/:id',
+        name: '采购工单',
+        props: true,
+        component: () => import(/* webpackChunkName: 'purchase' */ '@/views/purchase/worksheet/details/PurchaseWorksheetDetail')
+      }, {
+        path: 'order',
+        name: '采购单',
+        component: () => import(/* webpackChunkName: 'purchase' */ '@/views/purchase/order/PurchaseOrderPage')
       }]
     },
     {
