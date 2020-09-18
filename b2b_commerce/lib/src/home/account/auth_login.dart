@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
 import 'package:flutter_ddshare/response/ddshare_response.dart';
 import 'package:fluwx/fluwx.dart';
@@ -48,16 +50,16 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
         //授权回调信息
         if (resp is DDShareAuthResponse) {
           print('授权回调信息=====> code: ${resp.code}  state:${resp.state}');
+          BotToast.showText(text: '已复制到粘贴板：${resp.code}');
+          Clipboard.setData(ClipboardData(text: resp.code));
         }
       });
     }
 
     //监听微信回调
     _weChatSubscription = weChatResponseEventHandler.listen((res) async {
-      print('=====================================AuthListen!!!${res}');
       //授权登录回调
       if (res is WeChatAuthResponse) {
-        print('=====================================Is!!!${res.hashCode}');
         //回调信息处理
         authLoginHelper.handlerWeChatAuthLogin(res, context);
       }
@@ -85,25 +87,25 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       children: [
         Expanded(
             child: Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    height: 1,
-                    thickness: 1,
-                  ),
-                ),
-                Text(
-                  '其他方式登录方式',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                Expanded(
-                  child: Divider(
-                    height: 1,
-                    thickness: 1,
-                  ),
-                ),
-              ],
-            ))
+          children: [
+            Expanded(
+              child: Divider(
+                height: 1,
+                thickness: 1,
+              ),
+            ),
+            Text(
+              '其他方式登录方式',
+              style: TextStyle(color: Colors.grey),
+            ),
+            Expanded(
+              child: Divider(
+                height: 1,
+                thickness: 1,
+              ),
+            ),
+          ],
+        ))
       ],
     );
   }

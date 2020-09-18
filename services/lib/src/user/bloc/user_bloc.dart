@@ -61,7 +61,7 @@ class UserBLoC extends BLoCBase {
   Stream<String> get loginStream => _loginResultController.stream;
 
   ///跳转登录
-  StreamController loginJumpController = StreamController<bool>.broadcast();
+  StreamController loginJumpController = StreamController<bool>();
 
   Stream<bool> get loginJumpStream => loginJumpController.stream;
 
@@ -146,26 +146,27 @@ class UserBLoC extends BLoCBase {
     return LoginResult.FAIL;
   }
 
-  //授权码登录
+  //授权码登录 传入username则校验账号存在
   Future<LoginResult> loginByAuthorizationCode(
       {String username, String code, bool remember}) async {
     print(code);
     Response loginResponse;
     try {
       //校验账号存在
-      UserType type = await UserRepositoryImpl().phoneExist(username);
-      if (type != null && type != UserType.DEFAULT) {
-        loginResponse = await http$.post(
-            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
-              'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
-              'client_id': 'nbyjy',
-              'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
-              'code': code,
-            }));
-      } else {
-        _loginResultController.sink.add('账号不存在请注册后登录');
-        return LoginResult.FAIL;
+      if (username != null) {
+        UserType type = await UserRepositoryImpl().phoneExist(username);
+        if (type == null || type == UserType.DEFAULT) {
+          _loginResultController.sink.add('账号不存在请注册后登录');
+          return LoginResult.FAIL;
+        }
       }
+      loginResponse = await http$
+          .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+        'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
+        'client_id': 'nbyjy',
+        'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
+        'code': code,
+      }));
     } on DioError catch (e) {
       print(e);
       //登录错误回调
@@ -344,7 +345,7 @@ class UserBLoC extends BLoCBase {
   }
 
   ///刷新用户信息
-  Future<void> refreshUser() async {
+  Future<UserModel> refreshUser() async {
     // 获取用户信息
     Response infoResponse;
     try {
@@ -372,6 +373,8 @@ class UserBLoC extends BLoCBase {
         _user.b2bUnit = factoryModel;
       }
     }
+
+    return _user;
   }
 
   @override

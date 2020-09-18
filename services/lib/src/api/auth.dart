@@ -4,4 +4,12 @@ class AuthApis {
   static get authCodeByWechatCode => (String code) {
         return '/{baseSiteId}/wechat/open/access_login/nbyjy/B2B/$code';
       };
+
+  ///微信授权绑定账号
+  static get wechatAuthBinding => (String code) {
+        return '/{baseSiteId}/wechat/open/access_bind/$code';
+      };
+
+  ///解除微信绑定账号
+  static get wechatAuthUnBinding => '/{baseSiteId}/wechat/open/access_unbind';
 }

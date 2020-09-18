@@ -2,6 +2,7 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
 
   static const DEBUG = true;
+
   // static const DEBUG = false;
 
   //测试
@@ -9,16 +10,16 @@ class GlobalConfigs {
   // static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
 
   //本地
-  static const CONTEXT_PATH = 'https://192.168.31.179:9002/djwebservices/v2';
-  static const MEDIA_CONTEXT_PATH = 'http://192.168.31.179';
+  static const CONTEXT_PATH = 'https://192.168.1.122:9002/djwebservices/v2';
+  static const MEDIA_CONTEXT_PATH = 'http://192.168.1.122';
 
   // 生产
   // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
   // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   //分享域名
-  static const SHARE_CONTEXT_PATH = 'https://share.sc.nbyjy.net'; //测试
-  // static const SHARE_CONTEXT_PATH = 'https://share.ht.nbyjy.net'; //生产
+  // static const SHARE_CONTEXT_PATH = 'https://share.sc.nbyjy.net'; //测试
+  static const SHARE_CONTEXT_PATH = 'https://share.ht.nbyjy.net'; //生产
 
   /// 通过nginx代理所有b2b前缀的请求
   // static const B2B_API_PREFIX = 'b2b';  //测试&生产
@@ -27,7 +28,7 @@ class GlobalConfigs {
   ///验证
   // static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
   static const AUTH_SERVER_URL =
-      'https://192.168.31.179:9002/authorizationserver';
+      'https://192.168.1.122:9002/authorizationserver';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
@@ -118,4 +119,10 @@ class GlobalConfigs {
 
   ///友盟APP Key-ios
   static const UMENG_APP_KEY_IOS = "5e82e0a00cafb27dda0003ce";
+
+  ///钉钉APPID
+  static const DINGDING_APPID = "dingoaee4mq7tb6luuyugg";
+
+  ///IOS BundleId
+  static const IOS_BUNDLE_ID = "com.yjy.yijiayi";
 }
