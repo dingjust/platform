@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:b2b_commerce/src/_shared/widgets/authorization_dector.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
@@ -36,7 +38,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     WidgetsBinding.instance.addPostFrameCallback((_) => globalInit());
     super.initState();
   }
@@ -129,12 +130,14 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   int _currentIndex = 0;
 
+  ///监听登录跳转请求
+  StreamSubscription _loginJumpSubscription;
+
   //跳转登录页限制锁
   bool loginLock = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     WidgetsBinding.instance.addPostFrameCallback((_) => initListener());
     super.initState();
   }
@@ -147,7 +150,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   //监听未登录接口调用跳转登录页
   void listenLogin() {
-    UserBLoC.instance.loginJumpStream.listen((value) {
+    _loginJumpSubscription = UserBLoC.instance.loginJumpStream.listen((value) {
       if (!loginLock) {
         loginLock = true;
         if (NavigatorStack.instance.currentRouteName == AppRoutes.ROUTE_LOGIN) {
@@ -156,7 +159,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         } else {
           Navigator.of(_navigatorKey.currentState.overlay.context)
               .pushNamedAndRemoveUntil(
-              AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'))
+                  AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'))
               .whenComplete(() {
             loginLock = false;
           });
@@ -261,52 +264,59 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     final botToastBuilder = BotToastInit(); //1.调用BotToastInit
 
     return //1.使用BotToastInit直接包裹MaterialApp
-        MaterialApp(
-      navigatorKey: _navigatorKey,
-      title: AppConstants.appTitle,
-      navigatorObservers: [BotToastNavigatorObserver(), B2BNavigatorObserver()],
-      //2.注册路由观察者
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        accentColor: Color.fromRGBO(255, 214, 12, 1),
-        bottomAppBarColor: Colors.grey,
-      ),
-      home: Builder(builder: (context) {
-        AppVersionHelper appVersionHelper =
-            Provider.of<AppVersionHelper>(context);
-        // appVersionHelper.getAppVersionInfo('nbyjy');
-        appVersionHelper.checkVersion(
-            context, AppBLoC.instance.packageInfo.version, 'nbyjy');
+      MaterialApp(
+        navigatorKey: _navigatorKey,
+        title: AppConstants.appTitle,
+        navigatorObservers: [BotToastNavigatorObserver(), B2BNavigatorObserver()],
+        //2.注册路由观察者
+        theme: ThemeData(
+          primaryColor: Colors.white,
+          accentColor: Color.fromRGBO(255, 214, 12, 1),
+          bottomAppBarColor: Colors.grey,
+        ),
+        home: Builder(builder: (context) {
+          AppVersionHelper appVersionHelper =
+          Provider.of<AppVersionHelper>(context);
+          // appVersionHelper.getAppVersionInfo('nbyjy');
+          appVersionHelper.checkVersion(
+              context, AppBLoC.instance.packageInfo.version, 'nbyjy');
 
-        return Scaffold(
-          key: AppKeys.appPage,
-          body: menus[_currentIndex].page,
-          bottomNavigationBar: BottomNavigation(
-            currentIndex: _currentIndex,
-            onChanged: _handleNavigation,
-            items: menus.map((menu) => menu.item).toList(),
-          ),
-        );
-      }),
-      routes: AppRoutes.allRoutes,
-      onUnknownRoute: (RouteSettings settings) {
-        print(settings.name);
-      },
-      localizationsDelegates: [
-        //此处
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        ChineseCupertinoLocalizations.delegate
-      ],
-      builder: (context, child) {
-        child = botToastBuilder(context, child);
-        return MaxScaleTextWidget(
-          max: 1.0,
-          child: child,
-        );
-      },
-      supportedLocales: AppConstants.supportedLocales(),
-    );
+          return Scaffold(
+            key: AppKeys.appPage,
+            body: menus[_currentIndex].page,
+            bottomNavigationBar: BottomNavigation(
+              currentIndex: _currentIndex,
+              onChanged: _handleNavigation,
+              items: menus.map((menu) => menu.item).toList(),
+            ),
+          );
+        }),
+        routes: AppRoutes.allRoutes,
+        onUnknownRoute: (RouteSettings settings) {
+          print(settings.name);
+        },
+        localizationsDelegates: [
+          //此处
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          ChineseCupertinoLocalizations.delegate
+        ],
+        builder: (context, child) {
+          child = botToastBuilder(context, child);
+          return MaxScaleTextWidget(
+            max: 1.0,
+            child: child,
+          );
+        },
+        supportedLocales: AppConstants.supportedLocales(),
+      );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _loginJumpSubscription.cancel();
+    _loginJumpSubscription = null;
   }
 }
 
@@ -326,7 +336,7 @@ class MaxScaleTextWidget extends StatelessWidget {
     return MediaQuery(
       data: data.copyWith(
           textScaleFactor:
-              max > data.textScaleFactor ? data.textScaleFactor : max),
+          max > data.textScaleFactor ? data.textScaleFactor : max),
       child: child,
     );
   }
