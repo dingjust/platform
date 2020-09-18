@@ -51,7 +51,12 @@ class _AuthBindingState extends State<AuthBinding> {
           FlutterDdshare.ddResponseEventHandler.listen((resp) async {
         //授权回调信息
         if (resp is DDShareAuthResponse) {
-          print('授权回调信息=====> code: ${resp.code}  state:${resp.state}');
+          //回调信息处理
+          int result =
+              await authLoginHelper.handlerDingTalkAuthBinding(resp, context);
+          if (result > 0) {
+            _updateUserInfo();
+          }
         }
       });
     }
@@ -84,7 +89,10 @@ class _AuthBindingState extends State<AuthBinding> {
               child: GestureDetector(
                   onTap: () {
                     if (_currentUser.weChatOpenid == null) {
-                      WechatServiceImpl.instance.sendAuth();
+                      var cancelFunc = BotToast.showLoading();
+                      WechatServiceImpl.instance.sendAuth().then((value) {
+                        cancelFunc.call();
+                      });
                     } else {
                       _onUnbind(1);
                     }
@@ -116,17 +124,31 @@ class _AuthBindingState extends State<AuthBinding> {
               top: true,
               label: '绑定钉钉',
               child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (_currentUser.dingTalkOpenid == null) {
+                      var cancelFunc = BotToast.showLoading();
+                      FlutterDdshare.sendDDAppAuth(
+                          DateTime
+                              .now()
+                              .millisecondsSinceEpoch
+                              .toString())
+                          .then((value) {
+                        cancelFunc.call();
+                      });
+                    } else {
+                      _onUnbind(2);
+                    }
+                  },
                   child: Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                             child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child:
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                  child:
                                   B2BImage.dingding_logo(height: 30, width: 30),
                             ),
                             Expanded(
@@ -165,6 +187,9 @@ class _AuthBindingState extends State<AuthBinding> {
                 case 1:
                   _unbindWechat();
                   break;
+                case 2:
+                  _unbindDingTalk();
+                  break;
                 default:
               }
               Navigator.of(context).pop();
@@ -180,6 +205,22 @@ class _AuthBindingState extends State<AuthBinding> {
       crossPage: false,
     );
     BaseResponse response = await AuthRespository.wechatAuthUnBinding();
+    if (response == null || response.code == 0) {
+      cancelFunc.call();
+      BotToast.showText(text: '解除绑定失败');
+    } else if (response.code == 1) {
+      BotToast.showText(text: '解除绑定成功');
+      _updateUserInfo(callback: cancelFunc);
+    }
+  }
+
+  ///解除钉钉绑定
+  void _unbindDingTalk() async {
+    var cancelFunc = BotToast.showLoading(
+      clickClose: true,
+      crossPage: false,
+    );
+    BaseResponse response = await AuthRespository.dingTalkAuthUnBinding();
     if (response == null || response.code == 0) {
       cancelFunc.call();
       BotToast.showText(text: '解除绑定失败');

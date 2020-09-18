@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
 import 'package:flutter_ddshare/response/ddshare_response.dart';
 import 'package:fluwx/fluwx.dart';
@@ -49,9 +47,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
           FlutterDdshare.ddResponseEventHandler.listen((resp) async {
         //授权回调信息
         if (resp is DDShareAuthResponse) {
-          print('授权回调信息=====> code: ${resp.code}  state:${resp.state}');
-          BotToast.showText(text: '已复制到粘贴板：${resp.code}');
-          Clipboard.setData(ClipboardData(text: resp.code));
+          authLoginHelper.handlerDingTalkAuthLogin(resp, context);
         }
       });
     }
@@ -147,7 +143,8 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
               ),
             ),
             onPressed: () {
-              FlutterDdshare.sendDDAppAuth('test');
+              FlutterDdshare.sendDDAppAuth(
+                  DateTime.now().millisecondsSinceEpoch.toString());
             },
           )
         ],

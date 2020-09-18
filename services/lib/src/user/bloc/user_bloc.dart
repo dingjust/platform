@@ -61,7 +61,7 @@ class UserBLoC extends BLoCBase {
   Stream<String> get loginStream => _loginResultController.stream;
 
   ///跳转登录
-  StreamController loginJumpController = StreamController<bool>();
+  StreamController loginJumpController = StreamController<bool>.broadcast();
 
   Stream<bool> get loginJumpStream => loginJumpController.stream;
 
