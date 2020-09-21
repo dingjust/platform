@@ -224,6 +224,7 @@
 <script>
 export default {
   name: 'MaterialAppendTable',
+  props: ['formData'],
   methods: {
     getExpectQuantity (index) {
       let count = 0;
@@ -324,12 +325,20 @@ export default {
       stark = stark.concat(entries);
 
       let repeat;
+      let formRepeat;
       while (stark.length) {
         let temp = stark.shift();
         repeat = stark.filter(item => item.code === temp.code);
         if (repeat.length > 0) {
-          if (repeat.filter(val => val.name === temp.name && val.type === temp.type && val.unit === temp.unit).length !== repeat.length) {
-            this.$message.warning('物料编号 ' + temp.code + ' 存在同编号但是名称，类型，单位不一致的物料，请先处理');
+          if (repeat.filter(val => val.name === temp.name && val.type === temp.type && val.unit === temp.unit && val.operator === temp.operator).length !== repeat.length) {
+            this.$message.warning('添加表单中存在相同物料编号 ' + temp.code + '，但名字、类型、单位不一致的物料，请先进行处理');
+            return false;
+          }
+        }
+        formRepeat = this.formData.materialEntities.filter(item => item.code === temp.code);
+        if (formRepeat.length > 0) {
+          if (formRepeat.filter(val => val.name === temp.name && val.type === temp.type && val.unit === temp.unit && val.operator === temp.operator).length !== formRepeat.length) {
+            this.$message.warning('采购明细中已存在相同物料编号 ' + temp.code + '，但名字、类型、单位不一致的物料，请先进行处理');
             return false;
           }
         }

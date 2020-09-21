@@ -186,6 +186,12 @@ export default {
     children: [{
       name: '采购需求',
       url: '/purchase/requirement'
+    }, {
+      name: '采购工单',
+      url: '/purchase/worksheet'
+    }, {
+      name: '采购单',
+      url: '/purchase/order'
     }]
   },
   {

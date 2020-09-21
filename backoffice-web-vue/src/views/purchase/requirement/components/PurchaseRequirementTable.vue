@@ -29,7 +29,20 @@
               <span>{{scope.row.spaceDiff * 100}}%</span>
             </template>
           </el-table-column>
-          <el-table-column label="需求数量" prop="needQuantity" min-width="100px"></el-table-column>
+          <el-table-column label="需求数量" prop="needQuantity" min-width="100px">
+            <template slot="header">
+              <span v-popover:popover>需求数量</span>
+              <el-popover ref="popover" placement="top-start" width="270" trigger="hover"
+                :content="title">
+              </el-popover>
+            </template>
+            <template slot-scope="scope">
+              <span v-popover:popover>{{scope.row.needQuantity}}</span>
+              <el-popover ref="popover" placement="top-start" width="270" trigger="hover"
+                :content="title">
+              </el-popover>
+            </template>
+          </el-table-column>
           <el-table-column label="供应商" prop="operator"></el-table-column>
           <el-table-column label="物料价格" prop="price"></el-table-column>
           <el-table-column label="总金额" prop="totalPrice"></el-table-column>
@@ -43,11 +56,17 @@
               <span>{{scope.row.batchColor ? '是' : '否'}}</span>
             </template>
           </el-table-column>
+          <el-table-column label="操作" min-width="100px">
+            <template slot-scope="scope">
+              <el-button type="text" @click="onModify(scope.row, scope.$index)">修改</el-button>
+              <el-button type="text" @click="onDelete(scope.row, scope.$index)">删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="appendVisible" width="80%" append-to-body :close-on-click-modal="false">
-      <material-append-table v-if="appendVisible" @onSelect="onSelect"/>
+      <material-append-table v-if="appendVisible" :formData="formData" @onSelect="onSelect"/>
     </el-dialog>
   </div>
 </template>
@@ -90,13 +109,20 @@ export default {
     },
     onSelect (entries) {
       this.appendVisible = false;
-      this.formData.materialEntities = entries;
+      this.formData.materialEntities = this.formData.materialEntities.concat(entries);
+    },
+    onModify (row, index) {
+
+    },
+    onDelete (row, index) {
+      this.formData.materialEntities.splice(index, 1);
     }
   },
   data () {
     return {
       appendVisible: false,
-      bomVisible: false
+      bomVisible: false,
+      title: '需求数量 = 预计用量 * 订单数 / 空差'
     }
   }  
 }
