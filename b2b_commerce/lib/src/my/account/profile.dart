@@ -4,6 +4,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'components/auth_binding.dart';
 import 'reset_password_by_password.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -24,7 +25,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     UserModel currentUser = UserBLoC.instance.currentUser;
     media = currentUser.profilePicture;
@@ -121,6 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               ],
             ),
+            AuthBinding(),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: GestureDetector(
@@ -198,13 +199,17 @@ class _InputRow extends StatelessWidget {
 
   final EdgeInsetsGeometry padding;
 
-  const _InputRow({Key key,
-    this.label,
-    this.child,
-    this.suffix,
-    this.labelWidth = 100,
-    this.height = 70,
-    this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 10)})
+  final bool top;
+
+  const _InputRow(
+      {Key key,
+      this.label,
+      this.child,
+      this.suffix,
+      this.labelWidth = 100,
+      this.height = 70,
+      this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      this.top = false})
       : super(key: key);
 
   @override
@@ -213,8 +218,13 @@ class _InputRow extends StatelessWidget {
         height: height,
         padding: padding,
         decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
+          border: Border(
+              bottom: BorderSide(width: 0.5, color: Colors.grey[300]),
+              top: BorderSide(
+                width: top ? 0.5 : 0,
+                color: Colors.grey[300],
+              )),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

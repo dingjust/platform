@@ -40,6 +40,26 @@ class UserModel extends PrincipalModel {
   ///手机号
   String mobileNumber;
 
+  ///微信OpenId
+  String weChatOpenid;
+
+  ///微信头像
+  @JsonKey(toJson: _mediaToJson)
+  MediaModel weChatHeadImg;
+
+  ///微信昵称
+  String weChatNickname;
+
+  ///钉钉OpenId
+  String dingTalkOpenid;
+
+  ///钉钉头像
+  @JsonKey(toJson: _mediaToJson)
+  MediaModel dingTalkHeadImg;
+
+  ///钉钉昵称
+  String dingTalkNickname;
+
   Image get avatar =>
       profilePicture ??
       CachedNetworkImage(
@@ -58,23 +78,27 @@ class UserModel extends PrincipalModel {
                 size: 30,
               ));
 
-  UserModel(
-      {MediaModel profilePicture,
-        int id,
-      String uid,
-      String name,
-      this.loginDisabled,
-      this.type,
-      this.roles,
-      this.status,
-        this.mobileNumber,
-      this.b2bUnit})
+  UserModel({MediaModel profilePicture,
+    int id,
+    String uid,
+    String name,
+    this.loginDisabled,
+    this.type,
+    this.roles,
+    this.status,
+    this.mobileNumber,
+    this.b2bUnit,
+    this.weChatOpenid,
+    this.weChatHeadImg,
+    this.dingTalkOpenid,
+    this.dingTalkHeadImg,
+    this.dingTalkNickname})
       : super(
     id: id,
     profilePicture: profilePicture,
     uid: uid,
     name: name,
-        );
+  );
 
   UserModel.empty() {
     this.profilePicture = null;
@@ -95,6 +119,9 @@ class UserModel extends PrincipalModel {
       models == null
           ? null
           : models.map((model) => RoleModel.toJson(model)).toList();
+
+  static Map<String, dynamic> _mediaToJson(MediaModel model) =>
+      model == null ? null : MediaModel.toJson(model);
 }
 
 /// 客户
@@ -151,7 +178,7 @@ class B2BCustomerModel extends CustomerModel {
     loginDisabled: loginDisabled,
     mobileNumber: mobileNumber,
     roles: roles,
-        );
+  );
 
   factory B2BCustomerModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$B2BCustomerModelFromJson(json);

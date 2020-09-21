@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isRemember = true;
   bool _isPasswordHide = true;
-  bool _isPasswordLogin = true;
+  bool _isPasswordLogin = false;
   bool validate = false;
   bool _isAgree = true;
 
@@ -469,9 +469,9 @@ class _LoginPageState extends State<LoginPage> {
       });
     } else {
       bloc
-          .loginByCaptcha(
+          .loginByAuthorizationCode(
               username: _phoneController.text,
-              captcha: _smsCaptchaController.text,
+              code: _smsCaptchaController.text,
               remember: _isRemember)
           .then((result) {
         if (result == LoginResult.SUCCESS) {

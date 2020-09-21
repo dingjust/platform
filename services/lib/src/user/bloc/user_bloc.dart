@@ -92,9 +92,9 @@ class UserBLoC extends BLoCBase {
       // 获取用户信息
       Response infoResponse;
       try {
-        infoResponse = await http$.get(UserApis.userInfo(username));
+        infoResponse = await http$.get(UserApis.userInfo);
       } on DioError catch (e) {
-        print(e);
+        return LoginResult.DIO_ERROR;
       }
 
       if (infoResponse != null && infoResponse.statusCode == 200) {
@@ -110,13 +110,10 @@ class UserBLoC extends BLoCBase {
         _controller.sink.add(_user);
       }
 
-      //获取用户授权信息
-      await AuthorizationBLoC.instance.getAuthorizations(_user.uid);
-
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
         BrandModel brand =
-        await UserRepositoryImpl().getBrand(_user.companyCode);
+            await UserRepositoryImpl().getBrand(_user.companyCode);
         if (brand != null) {
           _user.b2bUnit = brand;
         }
@@ -149,26 +146,27 @@ class UserBLoC extends BLoCBase {
     return LoginResult.FAIL;
   }
 
-  //验证码登录
-  Future<LoginResult> loginByCaptcha(
-      {String username, String captcha, bool remember}) async {
-    print(captcha);
+  //授权码登录 传入username则校验账号存在
+  Future<LoginResult> loginByAuthorizationCode(
+      {String username, String code, bool remember}) async {
+    print(code);
     Response loginResponse;
     try {
       //校验账号存在
-      UserType type = await UserRepositoryImpl().phoneExist(username);
-      if (type != null && type != UserType.DEFAULT) {
-        loginResponse = await http$.post(
-            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
-          'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
-              'client_id': 'nbyjy',
-          'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
-          'code': captcha,
-        }));
-      } else {
-        _loginResultController.sink.add('账号不存在请注册后登录');
-        return LoginResult.FAIL;
+      if (username != null) {
+        UserType type = await UserRepositoryImpl().phoneExist(username);
+        if (type == null || type == UserType.DEFAULT) {
+          _loginResultController.sink.add('账号不存在请注册后登录');
+          return LoginResult.FAIL;
+        }
       }
+      loginResponse = await http$
+          .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+        'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
+        'client_id': 'nbyjy',
+        'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
+        'code': code,
+      }));
     } on DioError catch (e) {
       print(e);
       //登录错误回调
@@ -185,7 +183,7 @@ class UserBLoC extends BLoCBase {
       // 获取用户信息
       Response infoResponse;
       try {
-        infoResponse = await http$.get(UserApis.userInfo(username));
+        infoResponse = await http$.get(UserApis.userInfo);
       } on DioError catch (e) {
         print(e);
         //  清理本地记录
@@ -193,7 +191,7 @@ class UserBLoC extends BLoCBase {
         // 清除授权
         http$.removeAuthorization();
         //登录错误回调
-        _loginResultController.sink.add('验证码错误请输入正确的验证码');
+        _loginResultController.sink.add('获取用户信息失败');
         return LoginResult.DIO_ERROR;
       }
 
@@ -202,9 +200,6 @@ class UserBLoC extends BLoCBase {
         _user.name = infoResponse.data['username'];
         _user.status = UserStatus.ONLINE;
       }
-
-      //获取用户授权信息
-      await AuthorizationBLoC.instance.getAuthorizations(_user.uid);
 
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
@@ -299,7 +294,7 @@ class UserBLoC extends BLoCBase {
         Response infoResponse;
         try {
           String username = await LocalStorage.get(GlobalConfigs.USER_KEY);
-          infoResponse = await http$.get(UserApis.userInfo(username));
+          infoResponse = await http$.get(UserApis.userInfo);
         } on DioError catch (e) {
           print(e);
         }
@@ -309,10 +304,6 @@ class UserBLoC extends BLoCBase {
           _user.name = infoResponse.data['username'];
           _user.status = UserStatus.ONLINE;
         }
-
-        //获取用户授权信息
-        await AuthorizationBLoC.instance.getAuthorizations(_user.uid);
-
         // 获取公司信息
         if (_user.type == UserType.BRAND) {
           BrandModel brand =
@@ -354,11 +345,11 @@ class UserBLoC extends BLoCBase {
   }
 
   ///刷新用户信息
-  Future<void> refreshUser() async {
+  Future<UserModel> refreshUser() async {
     // 获取用户信息
     Response infoResponse;
     try {
-      infoResponse = await http$.get(UserApis.userInfo(currentUser.uid));
+      infoResponse = await http$.get(UserApis.userInfo);
     } on DioError catch (e) {
       print(e);
     }
@@ -368,9 +359,6 @@ class UserBLoC extends BLoCBase {
         ..name = infoResponse.data['username']
         ..status = UserStatus.ONLINE;
     }
-
-    //获取用户授权信息
-    await AuthorizationBLoC.instance.getAuthorizations(_user.uid);
 
     // 获取公司信息
     if (_user.type == UserType.BRAND) {
@@ -385,6 +373,8 @@ class UserBLoC extends BLoCBase {
         _user.b2bUnit = factoryModel;
       }
     }
+
+    return _user;
   }
 
   @override

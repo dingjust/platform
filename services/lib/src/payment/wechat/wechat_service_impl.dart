@@ -39,6 +39,8 @@ class WechatServiceImpl implements WechatService {
         print(
             '>>>>>微信授权登录回调>>> code:${res.code} , _wechatAuthState: $_wechatAuthState  , state:${res.state} ,${_wechatAuthState == res.state}');
         //TODO:回调 Code 请求后端获取对应 access_token
+        // Clipboard.setData(ClipboardData(text: '${res.code}'));
+        // BotToast.showText(text: 'Code已复制到粘贴板：${res.code}');
       }
     });
   }
