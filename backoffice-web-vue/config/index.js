@@ -98,7 +98,7 @@ module.exports = {
     //   '/logout': {
     //     target: 'https://47.106.112.137:9002',
     //     "secure": false,
-    //     pathRewrite: { 
+    //     pathRewrite: {
     //       '^/logout': 'djwebservices/logout'
     //     }
     //   },
