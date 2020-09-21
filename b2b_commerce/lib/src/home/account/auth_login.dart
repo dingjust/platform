@@ -45,11 +45,11 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       //监听钉钉回调
       _ddShareSubscription =
           FlutterDdshare.ddResponseEventHandler.listen((resp) async {
-        //授权回调信息
-        if (resp is DDShareAuthResponse) {
-          authLoginHelper.handlerDingTalkAuthLogin(resp, context);
-        }
-      });
+            //授权回调信息
+            if (resp is DDShareAuthResponse) {
+              authLoginHelper.handlerDingTalkAuthLogin(resp, context);
+            }
+          });
     }
 
     //监听微信回调
@@ -83,25 +83,25 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       children: [
         Expanded(
             child: Row(
-          children: [
-            Expanded(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-              ),
-            ),
-            Text(
-              '其他方式登录方式',
-              style: TextStyle(color: Colors.grey),
-            ),
-            Expanded(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-              ),
-            ),
-          ],
-        ))
+              children: [
+                Expanded(
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                ),
+                Text(
+                  '其他方式登录方式',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Expanded(
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                ),
+              ],
+            ))
       ],
     );
   }
