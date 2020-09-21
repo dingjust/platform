@@ -2007,7 +2007,88 @@ const state = {
       code: 'NEXT_MONTH',
       name: '下月'
     }
-  ]
+  ],
+  // 品质要求
+  QualityRequirementType: [{
+      code: 'NO_REQUIREMENT',
+      name: '无要求'
+    }, {
+      code: 'FIRST_GRADE',
+      name: '一等品'
+    }, {
+      code: 'SECOND_GRADE',
+      name: '二等品'
+    }, {
+      code: 'QUALIFIED',
+      name: '合格品'
+    }, {
+      code: 'SAMPLE_QUALITY',
+      name: '样衣品质'
+    }
+  ],
+  // 采购任务列表状态
+  PurchaseTaskState: [{
+      code: 'NOT_COMMITED',
+      name: '待提交'
+    }, {
+      code: 'NOT_ASSIGNED',
+      name: '未分配'
+    }, {
+      code: 'AUDITING',
+      name: '待审核'
+    }, {
+      code: 'AUDITED_PASSED',
+      name: '审核通过'
+    }, {
+      code: 'AUDITED_FAIL',
+      name: '审核驳回'
+    }, {
+      code: 'PURCHASING',
+      name: '采购中'
+    }, {
+      code: 'PURCHASE_COMPLETE',
+      name: '采购完成'
+    }, {
+      code: 'INVALID',
+      name: '已作废'
+  }],
+  // 采购工单状态
+  PurchaseWorksheetState: [{
+      code: 'NONE',
+      name: '无'
+    }, {
+        code: 'WAIT_TO_PURCHASE',
+        name: '待采购'  
+    }, {
+        code: 'WAIT_TO_RECYCLE_MATERIAL',
+        name: '待回料'
+    }, {
+        code: 'COMPLETE',
+        name: '采购完成'
+  }],
+  // 采购单状态
+  PurchaseOrderState: [{
+    code: 'NOT_COMMITED',
+    name: '待提交'
+  }, {
+    code: 'AUDITING',
+    name: '审核中'
+  }, {
+    code: 'AUDIT_FAILED',
+    name: '审核失败'
+  }, {
+    code: 'WAIT_TO_REV_MATERIALS',
+    name: '待回料'
+  }, {
+    code: 'WAIT_TO_RECONCILIATION',
+    name: '待对账'
+  }, {
+    code: 'WAIT_TO_PAY',
+    name: '待付款'
+  }, {
+    code: 'COMPLETED',
+    name: '已完成'
+  }]
 };
 
 const mutations = {};

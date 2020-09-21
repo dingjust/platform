@@ -8,29 +8,29 @@
       </el-col>
       <el-col :span="12">
         <el-row type="flex" justify="end">
-          <el-button type="text" @click="onImport">批量导入</el-button>
+          <el-button type="text" @click="importVisible=true">批量导入</el-button>
         </el-row>
       </el-col>
     </el-row>
-    <el-form ref="form" :model="form" :hide-required-asterisk="true">
-      <el-table ref="resultTable" stripe :data="form.entries" :height="autoHeight">
+    <el-form ref="form" :model="entries" :hide-required-asterisk="true">
+      <el-table ref="resultTable" stripe :data="entries.workOrders" :height="autoHeight">
         <el-table-column min-width="100px">
           <template slot="header">
             <span>物料名称<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.name'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.name'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
               <el-input v-model="scope.row.name" style="width: 90px"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column prop="type" min-width="100px">
+        <el-table-column prop="materialsType" min-width="100px">
           <template slot="header">
             <span>物料类别<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.type'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <el-select v-model="scope.row.type" style="width: 90px">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.materialsType'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+              <el-select v-model="scope.row.materialsType" style="width: 90px">
                 <template v-for="item in materialsType">
                   <el-option :label="item.name" :value="item.code" :key="item.code"></el-option>
                 </template>
@@ -43,24 +43,24 @@
             <span>物料编号<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.code'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.code'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
               <el-input v-model="scope.row.code" style="width: 90px"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="幅宽/型号" prop="mode" min-width="100px">
+        <el-table-column label="幅宽/型号" prop="modelName" min-width="100px">
           <template slot="header">
             <span>幅宽/型号<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.mode'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <el-input v-model="scope.row.mode" style="width: 90px"></el-input>
+            <el-form-item :prop="'workOrders.' + scope.$index + '.modelName'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+              <el-input v-model="scope.row.modelName" style="width: 90px"></el-input>
             </el-form-item>
           </template></el-table-column>
-        <el-table-column label="克重/规格" prop="spec" min-width="100px">
+        <el-table-column label="克重/规格" prop="specName" min-width="100px">
           <template slot-scope="scope">
             <el-form-item>
-              <el-input v-model="scope.row.spec" style="width: 90px"></el-input>
+              <el-input v-model="scope.row.specName" style="width: 90px"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -69,18 +69,18 @@
             <span>物料单位<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.unit'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.unit'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
               <el-input v-model="scope.row.unit" style="width: 90px"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="物料颜色" prop="color" min-width="100px">
+        <el-table-column label="物料颜色" prop="colorName" min-width="100px">
           <template slot="header">
             <span>物料颜色<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.color'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <el-input v-model="scope.row.color" style="width: 90px"></el-input>
+            <el-form-item :prop="'workOrders.' + scope.$index + '.colorName'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+              <el-input v-model="scope.row.colorName" style="width: 90px"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -89,26 +89,26 @@
             <span>单件用量<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.unitQuantity'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.unitQuantity'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
               <el-input v-model="scope.row.unitQuantity" style="width: 90px" 
                         v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="预计损耗" prop="expectLoss" min-width="100px">
+        <el-table-column label="预计损耗" prop="estimatedLoss" min-width="100px">
           <template slot="header">
             <span>预计损耗<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.expectLoss'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <el-input v-model="scope.row.expectLoss" style="width: 90px"
+            <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedLoss'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+              <el-input v-model="scope.row.estimatedLoss" style="width: 90px"
                         v-number-input.float="{ min: 0, max: 100, decimal: 2 }">
                 <span slot="suffix">%</span>
               </el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="预计用量" prop="expectQuantity" min-width="100px">
+        <el-table-column label="预计用量" prop="estimatedUsage" min-width="100px">
           <template slot="header">
             <span>预计用量<span style="color: #F56C6C"> *</span></span>
           </template>
@@ -118,28 +118,28 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="订单数" prop="orderQuantity" min-width="100px">
+        <el-table-column label="订单数" prop="orderCount" min-width="100px">
           <template slot="header">
             <span>订单数<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.orderQuantity'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <el-input v-model="scope.row.orderQuantity" style="width: 90px"
+            <el-form-item :prop="'workOrders.' + scope.$index + '.orderCount'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+              <el-input v-model="scope.row.orderCount" style="width: 90px"
                         v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="空差" prop="spaceDiff" min-width="100px">
+        <el-table-column label="空差" prop="emptySent" min-width="100px">
           <template slot-scope="scope">
             <el-form-item>
-              <el-input v-model="scope.row.spaceDiff" style="width: 90px" placeholder="100"
+              <el-input v-model="scope.row.emptySent" style="width: 90px" placeholder="100"
                         v-number-input.float="{ min: 0, max: 100, decimal: 2 }">
                 <span slot="suffix">%</span>
               </el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="需求数量" prop="needQuantity" min-width="100px">
+        <el-table-column label="需求数量" prop="requiredAmount" min-width="100px">
           <template slot="header">
             <span>需求数量<span style="color: #F56C6C"> *</span></span>
           </template>
@@ -149,19 +149,19 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="供应商" prop="operator" min-width="100px">
+        <el-table-column label="供应商" prop="cooperatorName" min-width="100px">
           <template slot-scope="scope">
             <el-form-item>
-              <el-input v-model="scope.row.operator" style="width: 90px"></el-input>
+              <el-input v-model="scope.row.cooperatorName" style="width: 90px"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="物料价格" prop="price" min-width="100px">
+        <el-table-column label="物料单价" prop="price" min-width="100px">
           <template slot="header">
-            <span>物料价格<span style="color: #F56C6C"> *</span></span>
+            <span>物料单价<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.price'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.price'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
               <el-input v-model="scope.row.price" style="width: 90px"
                         v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
             </el-form-item>
@@ -170,19 +170,18 @@
         <el-table-column label="总金额" prop="totalPrice" min-width="100px">
           <template slot-scope="scope">
             <el-form-item>
-              <el-input v-model="scope.row.totalPrice" style="width: 90px"
-                        v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+              <span>{{getTotalPrice(scope.$index)}}</span>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="到料时间" prop="time" min-width="150px">
+        <el-table-column label="到料时间" prop="estimatedRecTime" min-width="150px">
           <template slot="header">
             <span>到料时间<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'entries.' + scope.$index + '.time'" :rules="[{required: true, type: 'number',message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedRecTime'" :rules="[{required: true, type: 'number',message: '必填', tigger: 'blur'}]">
               <el-date-picker
-                v-model="scope.row.time"
+                v-model="scope.row.estimatedRecTime"
                 type="date"
                 value-format="timestamp"
                 style="width: 130px"
@@ -191,10 +190,10 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="是否批色" prop="batchColor" min-width="110px">
+        <el-table-column label="是否批色" prop="auditColor" min-width="110px">
           <template slot-scope="scope">
             <el-form-item>
-              <el-select v-model="scope.row.batchColor" style="width:90px" placeholder="否">
+              <el-select v-model="scope.row.auditColor" style="width:90px" placeholder="否">
                 <el-option label="是" :value="true"></el-option>
                 <el-option label="否" :value="false"></el-option>
               </el-select>
@@ -218,68 +217,90 @@
         </el-table-column>
       </el-table>
     </el-form>
+    <el-row type="flex" justify="center" style="margin-top: 30px">
+      <el-button class="sumbit-btn" @click="onSumbit">确认</el-button>
+    </el-row>
+    <el-dialog :visible.sync="importVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <materials-import v-if="importVisible" @onImport="onImport"/>
+    </el-dialog>
   </div>  
 </template>
 
 <script>
+import MaterialsImport from './MaterialsImport'
+
 export default {
   name: 'MaterialAppendTable',
-  props: ['formData'],
+  props: ['formData', 'entries'],
+  components: {
+    MaterialsImport
+  },
   methods: {
+    onImport (data) {
+      this.entries.workOrders = this.entries.workOrders.concat(data);
+    },
     getExpectQuantity (index) {
       let count = 0;
-      if (!Number.isNaN(Number.parseFloat(this.form.entries[index].unitQuantity)) && !Number.isNaN(Number.parseFloat(this.form.entries[index].expectLoss))) {
-        count = Number.parseFloat(this.form.entries[index].unitQuantity) * (1 + Number.parseFloat(this.form.entries[index].expectLoss) / 100);
+      if (!Number.isNaN(Number.parseFloat(this.entries.workOrders[index].unitQuantity)) && !Number.isNaN(Number.parseFloat(this.entries.workOrders[index].estimatedLoss))) {
+        count = Number.parseFloat(this.entries.workOrders[index].unitQuantity) * (1 + Number.parseFloat(this.entries.workOrders[index].estimatedLoss) / 100);
       }
-      this.form.entries[index].expectQuantity = count.toFixed(2);
+      this.entries.workOrders[index].estimatedUsage = count.toFixed(2);
       return count.toFixed(2);
     },
     getNeedQuantity (index) {
       let count = 0;
-      const expectQuantity = this.getExpectQuantity(index);
-      if (!Number.isNaN(Number.parseFloat(this.form.entries[index].orderQuantity))) {
-        const orderQuantity = Number.parseFloat(this.form.entries[index].orderQuantity);
-        let spaceDiff = 100;
-        if (!Number.isNaN(Number.parseFloat(this.form.entries[index].spaceDiff))) {
-          spaceDiff = Number.parseFloat(this.form.entries[index].spaceDiff);
+      const estimatedUsage = this.getExpectQuantity(index);
+      if (!Number.isNaN(Number.parseFloat(this.entries.workOrders[index].orderCount))) {
+        const orderCount = Number.parseFloat(this.entries.workOrders[index].orderCount);
+        let emptySent = 100;
+        if (!Number.isNaN(Number.parseFloat(this.entries.workOrders[index].emptySent))) {
+          emptySent = Number.parseFloat(this.entries.workOrders[index].emptySent);
         }
-        count = expectQuantity * orderQuantity / (spaceDiff / 100);
+        count = estimatedUsage * orderCount / (emptySent / 100);
       }
-      this.form.entries[index].needQuantity = count.toFixed(2);
+      this.entries.workOrders[index].requiredAmount = count.toFixed(2);
+      return count.toFixed(2);
+    },
+    getTotalPrice (index) {
+      let count = 0;
+      if (!Number.isNaN(Number.parseFloat(this.entries.workOrders[index].price))) {
+        count = Number.parseFloat(this.entries.workOrders[index].price) * this.getNeedQuantity(index);
+      }
+      this.entries.workOrders[index].totalPrice = count.toFixed(2);
       return count.toFixed(2);
     },
     onAdd (index, row) {
-      this.form.entries.splice(index + 1, 0 , {
-          name: '',
-          type: '',
-          code: '',
-          mode: '',
-          spec: '',
-          unit: '',
-          color: '',
-          unitQuantity: '',
-          expectLoss: '',
-          expectQuantity: '',
-          orderQuantity: '',
-          spaceDiff: '',
-          needQuantity: '',
-          operator: '',
-          price: '',
-          totalPrice: '',
-          time: '',
-          batchColor: ''
+      this.entries.workOrders.splice(index + 1, 0 , {
+        name: '',
+        code: '',
+        unit: '',
+        materialsType: '',
+        unitQuantity: '',
+        specName: '',
+        colorName: '',
+        modelName: '',
+        emptySent: '',
+        requiredAmount: '',
+        estimatedLoss: '',
+        estimatedUsage: '',
+        orderCount: '',
+        auditColor: '',
+        estimatedRecTime: '',
+        cooperatorName: '',
+        price: '',
+        totalPrice: ''
       })
     },
     onCopy (index, row) {
-      this.form.entries.splice(index + 1, 0, Object.assign({}, row));
+      this.entries.workOrders.splice(index + 1, 0, Object.assign({}, row));
     },
     onDelete (index, row) {
-      this.form.entries.splice(index, 1);
-      if (this.form.entries.length <= 0 && index === 0) {
+      this.entries.workOrders.splice(index, 1);
+      if (this.entries.workOrders.length <= 0 && index === 0) {
         this.onAdd(-1);
       }
     },
-    onImport () {
+    onSumbit () {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this._onImport();
@@ -289,17 +310,17 @@ export default {
       })
     },
     _onImport () {
-      const flag = this.checkRepeat(this.form.entries);
+      const flag = this.checkRepeat(this.entries.workOrders);
 
       if (flag) {
-        this.$emit('onSelect', this.arrangeData(this.form.entries));
+        this.$emit('onSelect', this.arrangeData(this.entries.workOrders));
       }
     },
-    arrangeData (entries) {
+    arrangeData (materials) {
       let result = [];
       let stark = [];
 
-      stark = stark.concat(entries);
+      stark = stark.concat(materials);
 
       while (stark.length) {
         let temp = stark.shift();
@@ -308,21 +329,21 @@ export default {
         stark = stark.filter(item => item.code !== temp.code);
       }
       result.forEach(item => {
-        if (item.batchColor == '') {
-          item.batchColor = false;
+        if (item.auditColor == '') {
+          item.auditColor = false;
         }
-        if (Number.isNaN(Number.parseFloat(item.spaceDiff))) {
-          item.spaceDiff = 1;
+        if (Number.isNaN(Number.parseFloat(item.emptySent))) {
+          item.emptySent = 1;
         } else {
-          item.spaceDiff = Number.parseFloat(item.spaceDiff) / 100;
+          item.emptySent = Number.parseFloat(item.emptySent) / 100;
         }
       })
       return result;
     },
-    checkRepeat (entries) {
+    checkRepeat (materials) {
       let stark = [];
 
-      stark = stark.concat(entries);
+      stark = stark.concat(materials);
 
       let repeat;
       let formRepeat;
@@ -330,15 +351,15 @@ export default {
         let temp = stark.shift();
         repeat = stark.filter(item => item.code === temp.code);
         if (repeat.length > 0) {
-          if (repeat.filter(val => val.name === temp.name && val.type === temp.type && val.unit === temp.unit && val.operator === temp.operator).length !== repeat.length) {
-            this.$message.warning('添加表单中存在相同物料编号 ' + temp.code + '，但名字、类型、单位不一致的物料，请先进行处理');
+          if (repeat.filter(val => val.name === temp.name && val.materialsType === temp.materialsType && val.unit === temp.unit && val.cooperatorName === temp.cooperatorName).length !== repeat.length) {
+            this.$message.warning('添加表单中存在相同物料编号 ' + temp.code + '，但名字、类型、单位，供应商其一不一致的物料，请先进行处理');
             return false;
           }
         }
-        formRepeat = this.formData.materialEntities.filter(item => item.code === temp.code);
+        formRepeat = this.formData.workOrders.filter(item => item.code === temp.code);
         if (formRepeat.length > 0) {
-          if (formRepeat.filter(val => val.name === temp.name && val.type === temp.type && val.unit === temp.unit && val.operator === temp.operator).length !== formRepeat.length) {
-            this.$message.warning('采购明细中已存在相同物料编号 ' + temp.code + '，但名字、类型、单位不一致的物料，请先进行处理');
+          if (formRepeat.filter(val => val.name === temp.name && val.materialsType === temp.materialsType && val.unit === temp.unit && val.cooperatorName === temp.cooperatorName).length !== formRepeat.length) {
+            this.$message.warning('采购明细中已存在相同物料编号 ' + temp.code + '，但名字、类型、单位，供应商其一不一致的物料，请先进行处理');
             return false;
           }
         }
@@ -349,28 +370,7 @@ export default {
   data () {
     return {
       materialsType: this.$store.state.EnumsModule.MaterialsType,
-      form: {
-        entries: [{
-          name: '',
-          type: '',
-          code: '',
-          mode: '',
-          spec: '',
-          unit: '',
-          color: '',
-          unitQuantity: '',
-          expectLoss: '',
-          expectQuantity: '',
-          orderQuantity: '',
-          spaceDiff: '',
-          needQuantity: '',
-          operator: '',
-          price: '',
-          totalPrice: '',
-          time: '',
-          batchColor: ''
-        }]
-      }
+      importVisible: false
     }
   }  
 }
@@ -392,5 +392,11 @@ export default {
    
   /deep/ .el-table .warning-row {
     background: oldlace;
+  }
+
+  .sumbit-btn {
+    width: 100px;
+    color: #606266;
+    background-color: #ffd60c;
   }
 </style>

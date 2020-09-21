@@ -123,6 +123,8 @@
         results,
         header
       }) {
+        console.log(results);
+        console.log(header);
         let data = results.filter(row => {
             //过滤案例行和注明行
             let col1 = row[header[0]];

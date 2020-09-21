@@ -8,28 +8,33 @@
     </div>
     <el-tabs type="border-card">
       <el-tab-pane label="采购明细">
-        <el-table ref="resultTable" :data="formData.materialEntities" stripe :height="autoHeight" :span-method="objectSpanMethod">
+        <el-table ref="resultTable" :data="formData.workOrders" stripe :height="autoHeight" :span-method="objectSpanMethod">
           <el-table-column label="物料名称" prop="name"></el-table-column>
-          <el-table-column label="物料类别" prop="type">
+          <el-table-column label="物料类别" prop="materialsType">
             <template slot-scope="scope">
-              <span>{{getEnum('MaterialsType', scope.row.type)}}</span>
+              <span>{{getEnum('MaterialsType', scope.row.materialsType)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="物料编号" prop="code"></el-table-column>
           <el-table-column label="物料单位" prop="unit"></el-table-column>
-          <el-table-column label="幅宽/型号" prop="mode"></el-table-column>
-          <el-table-column label="克重/规格" prop="spec"></el-table-column>
-          <el-table-column label="物料颜色" prop="color"></el-table-column>
+          <el-table-column label="供应商" prop="cooperatorName"></el-table-column>
+          <el-table-column label="幅宽/型号" prop="modelName"></el-table-column>
+          <el-table-column label="克重/规格" prop="specName"></el-table-column>
+          <el-table-column label="物料颜色" prop="colorName"></el-table-column>
           <el-table-column label="单位用量" prop="unitQuantity"></el-table-column>
-          <el-table-column label="预计损耗" prop="expectLoss"></el-table-column>
-          <el-table-column label="预计用量" prop="expectQuantity"></el-table-column>
-          <el-table-column label="订单数" prop="orderQuantity"></el-table-column>
-          <el-table-column label="空差" prop="spaceDiff">
+          <el-table-column label="预计损耗" prop="estimatedLoss">
             <template slot-scope="scope">
-              <span>{{scope.row.spaceDiff * 100}}%</span>
+              <span>{{scope.row.estimatedLoss}}%</span>
             </template>
           </el-table-column>
-          <el-table-column label="需求数量" prop="needQuantity" min-width="100px">
+          <el-table-column label="预计用量" prop="estimatedUsage"></el-table-column>
+          <el-table-column label="订单数" prop="orderCount"></el-table-column>
+          <el-table-column label="空差" prop="emptySent">
+            <template slot-scope="scope">
+              <span>{{scope.row.emptySent * 100}}%</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="需求数量" prop="requiredAmount" min-width="100px">
             <template slot="header">
               <span v-popover:popover>需求数量</span>
               <el-popover ref="popover" placement="top-start" width="270" trigger="hover"
@@ -37,23 +42,22 @@
               </el-popover>
             </template>
             <template slot-scope="scope">
-              <span v-popover:popover>{{scope.row.needQuantity}}</span>
+              <span v-popover:popover>{{scope.row.requiredAmount}}</span>
               <el-popover ref="popover" placement="top-start" width="270" trigger="hover"
                 :content="title">
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column label="供应商" prop="operator"></el-table-column>
-          <el-table-column label="物料价格" prop="price"></el-table-column>
+          <el-table-column label="物料单价" prop="price"></el-table-column>
           <el-table-column label="总金额" prop="totalPrice"></el-table-column>
-          <el-table-column label="到料时间" prop="time" min-width="100px">
+          <el-table-column label="到料时间" prop="estimatedRecTime" min-width="100px">
             <template slot-scope="scope">
-              <span>{{scope.row.time | timestampToTime}}</span>
+              <span>{{scope.row.estimatedRecTime | timestampToTime}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="是否批色" prop="batchColor">
+          <el-table-column label="是否批色" prop="auditColor">
             <template slot-scope="scope">
-              <span>{{scope.row.batchColor ? '是' : '否'}}</span>
+              <span>{{scope.row.auditColor ? '是' : '否'}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" min-width="100px">
@@ -66,7 +70,7 @@
       </el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="appendVisible" width="80%" append-to-body :close-on-click-modal="false">
-      <material-append-table v-if="appendVisible" :formData="formData" @onSelect="onSelect"/>
+      <material-append-table v-if="appendVisible" :formData="formData" @onSelect="onSelect" :entries="entries" />
     </el-dialog>
   </div>
 </template>
@@ -78,18 +82,18 @@ export default {
   name: 'PurchaseRequirementTable',
   props: ['formData'],
   components: {
-    MaterialAppendTable
+    MaterialAppendTable,
   },
   methods: {
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      let index = this.formData.materialEntities.findIndex(item => item.code === row.code);
-      let length = this.formData.materialEntities.filter(item => item.code === row.code).length;
-      if (index === rowIndex && columnIndex < 4) {
+      let index = this.formData.workOrders.findIndex(item => item.code === row.code);
+      let length = this.formData.workOrders.filter(item => item.code === row.code).length;
+      if (index === rowIndex && columnIndex < 5) {
         return {
           rowspan: length,
           colspan: 1
         }
-      } else if (index !== rowIndex && columnIndex < 4) {
+      } else if (index !== rowIndex && columnIndex < 5) {
         return {
           rowspan: 0,
           colspan: 0
@@ -109,20 +113,68 @@ export default {
     },
     onSelect (entries) {
       this.appendVisible = false;
-      this.formData.materialEntities = this.formData.materialEntities.concat(entries);
+      this.formData.workOrders = this.formData.workOrders.concat(entries);
+      this.entries = {
+        workOrders: [
+          {
+            name: '',
+            code: '',
+            unit: '',
+            materialsType: '',
+            unitQuantity: '',
+            specName: '',
+            colorName: '',
+            modelName: '',
+            emptySent: '',
+            requiredAmount: '',
+            estimatedLoss: '',
+            estimatedUsage: '',
+            orderCount: '',
+            auditColor: '',
+            estimatedRecTime: '',
+            cooperatorName: '',
+            price: '',
+            totalPrice: ''
+          }
+        ]
+      }
     },
     onModify (row, index) {
 
     },
     onDelete (row, index) {
-      this.formData.materialEntities.splice(index, 1);
+      this.formData.workOrders.splice(index, 1);
     }
   },
   data () {
     return {
       appendVisible: false,
       bomVisible: false,
-      title: '需求数量 = 预计用量 * 订单数 / 空差'
+      title: '需求数量 = 预计用量 * 订单数 / 空差',
+      entries: {
+        workOrders: [
+          {
+            name: '',
+            code: '',
+            unit: '',
+            materialsType: '',
+            unitQuantity: '',
+            specName: '',
+            colorName: '',
+            modelName: '',
+            emptySent: '',
+            requiredAmount: '',
+            estimatedLoss: '',
+            estimatedUsage: '',
+            orderCount: '',
+            auditColor: '',
+            estimatedRecTime: '',
+            cooperatorName: '',
+            price: '',
+            totalPrice: ''
+          }
+        ]
+      }
     }
   }  
 }

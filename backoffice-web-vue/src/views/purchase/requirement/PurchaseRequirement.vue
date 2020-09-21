@@ -51,11 +51,11 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch(page, size) {
-      if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-        this.onResetQuery();
-      }
+      // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+      //   this.onResetQuery();
+      // }
       const query = this.queryFormData;
-      const url = this.apis().getoutboundOrdersList();
+      const url = this.apis().getPurchaseTaskList();
       this.searchAdvanced({
         url,
         query,
@@ -76,34 +76,34 @@ export default {
       queryFormData: {
         keyword: '',
         operatorName: '',
-        state: 'TO_BE_SUBMITTED'
+        state: 'NOT_COMMITED'
       },
       dataQuery: {},
-      activeName: 'TO_BE_SUBMITTED',
+      activeName: 'NOT_COMMITED',
       statuses: [{
-          code: 'TO_BE_SUBMITTED',
+          code: 'NOT_COMMITED',
           name: '待提交'
         }, {
           code: 'AUDITING',
           name: '待审核'
         }, {
-          code: 'AUDITED_FAILED',
+          code: 'AUDITED_FAIL',
           name: '审核驳回'
         }, {
           code: 'PURCHASING',
           name: '采购中'
         }, {
-          code: 'COMPLETED',
+          code: 'PURCHASE_COMPLETE',
           name: '采购完成'
         }, {
           code: '',
           name: '全部'
-      }]
+      }],
     }
   },
   created () {
-    this.dataQuery = this.getDataPerQuery('PURCHASE_REQUIREMENT');
-    this.onResetQuery();
+    // this.dataQuery = this.getDataPerQuery('PURCHASE_REQUIREMENT');
+    // this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }
 }

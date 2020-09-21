@@ -14,7 +14,7 @@
               <el-input placeholder="请输入合作商名称" v-model="queryFormData.cooperator"></el-input>
             </el-form-item>
             <el-button-group>
-              <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+              <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch(0, 10)">搜索</el-button>
               <el-button native-type="reset" @click="onReset">重置</el-button>
             </el-button-group>
           </el-col>
@@ -44,7 +44,10 @@
     name: 'ProductionTaskSelectDialog',
     props: {
       formData: {
-        type: Object
+        type: Object,
+        default: () => {
+          return { taskOrderEntries: [] }
+        }
       },
       isSingleChoice: {
         type: Boolean,
