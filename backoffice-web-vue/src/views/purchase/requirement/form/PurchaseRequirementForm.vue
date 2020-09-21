@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
       <div class="purchase-form-row">
-        <el-form :model="formData" :inline="true" :hide-required-asterisk="true" label-width="80px" label-position="left">
+        <el-form ref="form" :model="formData" :inline="true" :hide-required-asterisk="true" label-width="80px" label-position="left">
           <el-row type="flex" justify="start" >
             <el-col :span="7">
               <el-form-item label="系统单号">
@@ -17,14 +17,14 @@
               </el-form-item>
             </el-col>
             <el-col :span="10">
-              <el-form-item label="关联订单" prop="code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'blur' }]">
-                <el-input v-model="formData.code" :disabled="true"></el-input>
+              <el-form-item label="关联订单" prop="productionTask.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
+                <el-input v-model="formData.productionTask.code" :disabled="true"></el-input>
               </el-form-item>
-              <el-button class="purchase-btn" @click="onSelect">选择</el-button>
+              <el-button class="purchase-btn" @click="taskDialogVisible=true">选择</el-button>
             </el-col>
             <el-col :span="7">
               <el-form-item label="关联款号">
-                <el-input v-model="formData.skuId" :disabled="true"></el-input>
+                <el-input v-model="formData.productionTask.product.skuID" :disabled="true"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -34,31 +34,31 @@
           <el-row type="flex" justify="start" >
             <div>
               <el-form-item label="是否含税">
-                <el-radio :label="true" v-model="formData.invoice">含税</el-radio>
-                <el-radio :label="false" v-model="formData.invoice">不含税</el-radio>
+                <el-radio :label="true" v-model="formData.includeTax">含税</el-radio>
+                <el-radio :label="false" v-model="formData.includeTax">不含税</el-radio>
               </el-form-item>
             </div>
-            <div v-if="formData.invoice" style="margin-left: 20px">
+            <div v-if="formData.includeTax" style="margin-left: 20px">
               <el-form-item label="税点" label-width="40px">
-                <el-select v-model="formData.invoicePercent" placeholder="请选择" style="width: 100px;">
-                  <el-option v-for="item in invoicePercent" :key="item.value" :label="item.label" :value="item.value" />
+                <el-select v-model="formData.taxPoint" placeholder="请选择" style="width: 100px;">
+                  <el-option v-for="item in TaxPointState" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
             </div>
             <div style="margin-left: 20px">
-              <el-form-item label="品质要求" prop="qualityRequirement" :rules="[{ required: true, message: '请选择品质要求', trigger: 'change' }]">
+              <el-form-item label="品质要求" prop="qualityRequirement" :rules="[{ required: true, message: '不能为空', trigger: 'change' }]">
                 <el-select v-model="formData.qualityRequirement" placeholder="请选择">
-                  <el-option v-for="item in QualityRequirementStatus" :key="item.code" :label="item.name" :value="item.code" />
+                  <el-option v-for="item in QualityRequirementType" :key="item.code" :label="item.name" :value="item.code" />
                 </el-select>
               </el-form-item>
             </div>
           </el-row>
           <div style="display: flex;flex-wrap: wrap;">
-            <el-form-item label="采购人" prop="merchandiser" >
-              <personnal-selection-v2 :vPerson.sync="formData.purchaser" />
+            <el-form-item label="采购人" prop="merchandiser" :rules="[{ required: true, message: '不能为空', trigger: 'change' }]">
+              <personnal-selection-v2 :vPerson.sync="formData.merchandiser" />
             </el-form-item>
             <el-form-item label="" label-width="10px" >
-              <el-checkbox v-model="formData.auditNeeded">需审核</el-checkbox>
+              <el-checkbox v-model="formData.auditNeeded" @change="handleClick">需审核</el-checkbox>
             </el-form-item>
             <template v-for="(item,itemIndex) in formData.approvers">
               <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px"
@@ -90,6 +90,10 @@
         <purchase-requirement-btn-group @onSave="onSave" @onDelete="onDelete" @onReturn="onReturn"/>
       </div>
     </el-card>
+    <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <production-task-select-dialog v-if="taskDialogVisible" @onSelectTask="onSelectTask" :isSingleChoice="true"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -97,17 +101,27 @@
 import { PersonnalSelectionV2, MyAddressForm } from '@/components'
 import PurchaseRequirementTable from '../components/PurchaseRequirementTable'
 import PurchaseRequirementBtnGroup from '../components/PurchaseRequirementBtnGroup'
+import ProductionTaskSelectDialog from '@/views/order/salesProduction/production-task/components/ProductionTaskSelectDialog'
+
 export default {
   name: 'PurchaseRequirementForm',
   components: {
     PersonnalSelectionV2,
     MyAddressForm,
     PurchaseRequirementTable,
-    PurchaseRequirementBtnGroup
+    PurchaseRequirementBtnGroup,
+    ProductionTaskSelectDialog
   },
   methods: {
-    onSelect () {
-      this.$message('--------------------选择工单------------------------------');
+    onSelectTask (data) {
+      this.formData.productionTask = {
+        id: data[0].id,
+        code: data[0].code,
+        product: {
+          skuID: data[0].product.skuID
+        }
+      };
+      this.taskDialogVisible = false;
     },
     appendApprover () {
       this.formData.approvers.push({});
@@ -115,19 +129,150 @@ export default {
     removeApprover () {
       this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
     },
-    onSave (flag) {
+    handleClick (value) {
+      if (!value) {
+        this.formData.approvers.forEach((val, index) => {
+          this.$refs.form.clearValidate('approvers.' + index);
+        })
+      }
+    },
+    async validateForms() {
+      const formArr = [
+        this.$refs.form,
+        this.$refs.addressForm.$refs.address
+      ];
+      // 使用Promise.all 并行去校验结果
+      let res = await Promise.all(formArr.map(this.getFormPromise));
 
+      return res.every(item => !!item);
+    },
+    //封装Promise对象
+    getFormPromise(form) {
+      return new Promise(resolve => {
+        form.validate(res => {
+          resolve(res);
+        })
+      })
+    },
+    async onSave (flag) {
+      let validate = await this.validateForms();
+      if (validate) {
+        this._onSave(flag);
+      } else {
+        this.$message.error('请完善信息');
+      }
+    },
+    _onSave (flag) {
+      if (this.formData.workOrders.length <= 0) {
+        this.$message.error('请先添加物料！');
+        return;
+      }
+      // 整理提交数据
+      let data = Object.assign({}, this.formData);
+      data.productionTask = {
+        id: this.formData.productionTask.id
+      }
+      if (!this.formData.includeTax) {
+        data.taxPoint = null;
+      }
+      if (this.formData.auditNeeded) {
+        data.approvers = this.formData.approvers.filter(item => item instanceof Array && item.length > 0).map(item => {
+          return {
+            id: item[item.length - 1]
+          }
+        })
+      } else {
+        data.approvers = null;
+      }
+      data.merchandiser = {
+        id: this.formData.merchandiser[this.formData.merchandiser.length - 1]
+      }
+      let workOrders = [];
+      this.formData.workOrders.forEach(item => {
+        let index = workOrders.findIndex(val => 
+          val.cooperatorName === item.cooperatorName && 
+          val.materials.name === item.name &&
+          val.materials.code === item.code &&
+          val.materials.unit === item.unit &&
+          val.materials.materialsType === item.materialsType);
+        if (index <= -1) {
+          workOrders.push({
+            cooperatorName: item.cooperatorName.trim(),
+            materials: {
+              name: item.name.trim(),
+              code: item.code.trim(),
+              unit: item.unit,
+              materialsType: item.materialsType,
+              specList: [{
+                unitQuantity: item.unitQuantity,
+                specName: item.specName.trim(),
+                colorName: item.colorName.trim(),
+                modelName: item.modelName.trim(),
+                emptySent: item.emptySent,
+                requiredAmount: item.requiredAmount,
+                estimatedLoss: Number.parseFloat(item.estimatedLoss) / 100,
+                estimatedUsage: item.estimatedUsage,
+                orderCount: item.orderCount,
+                auditColor: item.auditColor,
+                price: item.price,
+                totalPrice: item.totalPrice,
+                estimatedRecTime: item.estimatedRecTime
+              }]
+            }
+          })
+        } else {
+          workOrders[index].materials.specList.push({
+            unitQuantity: item.unitQuantity,
+            specName: item.specName.trim(),
+            colorName: item.colorName.trim(),
+            modelName: item.modelName.trim(),
+            emptySent: item.emptySent,
+            requiredAmount: item.requiredAmount,
+            estimatedLoss: Number.parseFloat(item.estimatedLoss) / 100,
+            estimatedUsage: item.estimatedUsage,
+            orderCount: item.orderCount,
+            auditColor: item.auditColor,
+            price: item.price,
+            totalPrice: item.totalPrice,
+            estimatedRecTime: item.estimatedRecTime
+          })
+        }
+      })
+      data.workOrders = workOrders;
+      this.__onSave(data, flag);
+    },
+    async __onSave (data, flag) {
+      const url = this.apis().savePurchaseTask();
+      const result = await this.$http.post(url, data, {
+        submitAudit: flag
+      });
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('添加采购需求成功！');
+        this.$router.go(-1); 
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+      } else {
+        this.$message.error('添加采购需求失败！');
+      }
     },
     onDelete () {
 
     },
     onReturn () {
 
-    }
+    },
+    validateField (name) {
+      this.$refs.form.validateField(name);
+    },
   },
   data () {
     return {
-      invoicePercent: [{
+      taskDialogVisible: false,
+      TaxPointState: [{
           label: '3%税点',
           value: 0.03
         },
@@ -140,34 +285,34 @@ export default {
           value: 0.13
         }
       ],
-      QualityRequirementStatus: [{
-          code: '1',
-          name: '一等品'
-        }, {
-          code: '2',
-          name: '二等品'
-        }, {
-          code: '3',
-          name: '合格品'
-        }, {
-          code: '4',
-          name: '同样品'
-      }],
+      QualityRequirementType: this.$store.state.EnumsModule.QualityRequirementType,
       formData: {
-        code: '',
-        skuID: '',
-        invoice: false,
-        invoicePercent: {
-          label: '3%税点',
-          value: 0.03
-        },
+        includeTax: false,
+        taxPoint: 0.03,
         qualityRequirement: '',
-        purchaser: '',
+        productionTask: {
+          id: '',
+          code: '',
+          product: {
+            skuID: ''
+          }
+        },
+        workOrders: [],
         auditNeeded: true,
-        approvers: [{}],
+        merchandiser: null,
+        approvers: [null],
         shippingAddress: {},
-        materialEntities: []
       }
+    }
+  },
+  watch: {
+    'formData.merchandiser': function (nval, oval) {
+      this.validateField('merchandiser');
+    },
+    'formData.approvers': function (nval, oval) {
+      this.formData.approvers.forEach((item, index) => {
+        this.validateField('approvers.' + index);
+      })
     }
   }  
 }

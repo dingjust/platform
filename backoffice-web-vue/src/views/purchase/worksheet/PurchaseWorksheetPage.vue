@@ -58,11 +58,11 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch(page, size) {
-      if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-        this.onResetQuery();
-      }
+      // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+      //   this.onResetQuery();
+      // }
       const query = this.queryFormData;
-      const url = this.apis().getoutboundOrdersList();
+      const url = this.apis().getPurchaseWorkOrder();
       this.searchAdvanced({
         url,
         query,
@@ -74,27 +74,27 @@ export default {
       this.queryFormData.state = tab.name;
       this.onAdvancedSearch(0, 10);
     },
-    onResetQuery () {
-      this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
-    }
+    // onResetQuery () {
+    //   this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+    // }
   },
   data () {
     return {
       queryFormData: {
         keyword: '',
         operatorName: '',
-        state: '1'
+        state: 'WAIT_TO_PURCHASE'
       },
       dataQuery: {},
-      activeName: '1',
+      activeName: 'WAIT_TO_PURCHASE',
       statuses: [{
-          code: '1',
-          name: '待采购'
+          code: 'WAIT_TO_PURCHASE',
+          name: '待采购'  
         }, {
-          code: '2',
+          code: 'WAIT_TO_RECYCLE_MATERIAL',
           name: '待回料'
         }, {
-          code: 'COMPLETED',
+          code: 'COMPLETE',
           name: '采购完成'
         }, {
           code: '',
@@ -103,8 +103,8 @@ export default {
     }
   },
   created () {
-    this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
-    this.onResetQuery();
+    // this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
+    // this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }
 }

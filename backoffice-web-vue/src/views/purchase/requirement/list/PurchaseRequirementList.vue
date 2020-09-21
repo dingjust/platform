@@ -2,16 +2,20 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" >
       <el-table-column label="采购需求号" prop="code" />
-      <el-table-column label="关联款号" prop="shuID" />
-      <el-table-column label="关联订单" />
-      <el-table-column label="创建人" />
+      <el-table-column label="关联款号" prop="productionTask.product.skuID" />
+      <el-table-column label="关联订单" prop="productionTask.code"/>
+      <el-table-column label="采购人" prop="merchandiser.name"/>
       <el-table-column label="创建人" prop="creator.name" />
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态"></el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('PurchaseTaskState', scope.row.state)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
@@ -39,7 +43,7 @@ export default {
   },
   methods: {
     onDetail(row) {
-      this.$message('----------------onDetail-----------------------')
+      this.$router.push('/purchase/requirement/' + row.id);
     },
     onEdit(row) {
       this.$message('----------------onEdit-----------------------')

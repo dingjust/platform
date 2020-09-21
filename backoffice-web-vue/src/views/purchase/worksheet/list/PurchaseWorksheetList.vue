@@ -3,11 +3,11 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" >
       <el-table-column label="采购工单号" prop="code"></el-table-column>
       <el-table-column label="关联款号" prop="skuID"></el-table-column>
-      <el-table-column label="物料名称" prop="material.name"></el-table-column>
-      <el-table-column label="物料类别" prop="material.type"></el-table-column>
-      <el-table-column label="物料编号" prop="material.code"></el-table-column>
+      <el-table-column label="物料名称" prop="materials.name"></el-table-column>
+      <el-table-column label="物料类别" prop="materials.materialsType"></el-table-column>
+      <el-table-column label="物料编号" prop="materials.code"></el-table-column>
       <el-table-column label="采购总量" prop="totalQuantity"></el-table-column>
-      <el-table-column label="采购员" prop="purchaser"></el-table-column>
+      <el-table-column label="采购员" prop="cooperator.name"></el-table-column>
       <el-table-column label="单位" prop="unit"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
@@ -19,7 +19,11 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态"></el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('PurchaseWorksheetState', scope.row.state)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>

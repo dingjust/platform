@@ -61,7 +61,7 @@
           <!-- </el-col> -->
           <!-- <el-col :span="7"> -->
             <el-form-item label="联系方式" label-width="80px" :rules="[
-                  { required: !readOnly, message: '请填写联系方式', trigger: 'change'}]" prop="cellphone">
+                  { required: !readOnly, validator: validatePhone, trigger: 'change'}]" prop="cellphone">
               <el-input placeholder="电话" v-model="address.cellphone">
               </el-input>
             </el-form-item>
@@ -179,8 +179,20 @@
         }
 
         this.cityDistricts = result;
+      },
+      validateField (name) {
+        this.$refs.address.validateField(name);
+      },
+      validatePhone (rule, value, callback) {
+        const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+        if (value === '') {
+          callback(new Error('请输入手机号码'));
+        } else if (!reg.test(value)) {
+          callback(new Error('请输入合法手机号码'));
+        } else {
+          callback();
+        }
       }
-
     },
     data() {
       return {
@@ -202,6 +214,9 @@
       },
       address: function (newVal, oldVal) {
         this.$emit('update:vAddress', newVal);
+      },
+      'address.cellphone': function (nval, oval) {
+        this.validateField('cellphone');
       }
     },
     created() {

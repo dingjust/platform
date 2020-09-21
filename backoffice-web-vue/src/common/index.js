@@ -820,6 +820,10 @@ const COMMON_APIS = {
   savePurchaseTask() {
     return '/b2b/purchase/task/save'
   },
+  // 获取采购工单列表
+  getPurchaseWorkOrder () {
+    return '/b2b/purchase/work/order/search'
+  },
   // 创建生产工单
   createProductionOrder() {
     return '/b2b/orders/production/work/create';
