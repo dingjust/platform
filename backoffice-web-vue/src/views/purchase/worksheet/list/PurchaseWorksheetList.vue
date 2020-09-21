@@ -1,14 +1,22 @@
 <template>
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" >
-      <el-table-column label="采购工单号" prop="code"></el-table-column>
+      <el-table-column label="采购工单号" prop="code" min-width="100px"></el-table-column>
       <el-table-column label="关联款号" prop="skuID"></el-table-column>
       <el-table-column label="物料名称" prop="materials.name"></el-table-column>
-      <el-table-column label="物料类别" prop="materials.materialsType"></el-table-column>
+      <el-table-column label="物料类别" prop="materials.materialsType">
+        <template slot-scope="scope">
+          <span>{{getEnum('MaterialsType', scope.row.materials.materialsType)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="物料编号" prop="materials.code"></el-table-column>
-      <el-table-column label="采购总量" prop="totalQuantity"></el-table-column>
-      <el-table-column label="采购员" prop="cooperator.name"></el-table-column>
-      <el-table-column label="单位" prop="unit"></el-table-column>
+      <el-table-column label="采购总量">
+        <template slot-scope="scope">
+          <span>{{requiredAmount(scope.row)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="采购员" prop="cooperatorName"></el-table-column>
+      <el-table-column label="单位" prop="materials.unit"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
@@ -48,11 +56,17 @@ export default {
     }
   },
   methods: {
-    onDetail(row) {
-      this.$message('----------------onDetail-----------------------')
+    requiredAmount (row) {
+      let count = 0;
+      row.materials.specList.forEach(item => {
+        if (typeof item.requiredAmount === 'number') {
+          count += item.requiredAmount;
+        }
+      });
+      return count === 0 ? '' : count;
     },
-    onEdit(row) {
-      this.$message('----------------onEdit-----------------------')
+    onDetail(row) {
+      this.$router.push('/purchase/worksheet/' + row.id);
     },
     onPageSizeChanged(val) {
       this.$emit('onAdvancedSearch', 0, val);
