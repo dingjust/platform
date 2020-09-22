@@ -10,20 +10,20 @@
           <th :key="item">{{item}}</th>
         </template>
       </tr>
-      <template v-if="formData.entries && formData.entries.length > 0">
-        <template v-for="(item, index) in formData.entries">
+      <template v-if="materials && materials.length > 0">
+        <template v-for="(item, index) in materials">
           <tr :key="index">
             <td>{{item.name}}</td>
-            <td>{{item.color}}</td>
-            <td>{{item.spec}}</td>
-            <td>{{item.guige}}</td>
+            <td>{{item.colorName}}</td>
+            <td>{{item.modelName}}</td>
+            <td>{{item.specName}}</td>
             <td>{{item.unitQuantity}}</td>
-            <td>{{item.lossQuantity}}</td>
-            <td>{{item.totalQuantity}}</td>
+            <td>{{item.estimatedLoss}}</td>
+            <td>{{item.estimatedUsage}}</td>
             <td>{{item.orderCount}}</td>
-            <td>{{item.spaceDiff}}</td>
-            <td>{{item.needQuantity}}</td>
-            <td>{{item.materialPrice}}</td>
+            <td>{{item.emptySent}}</td>
+            <td>{{item.requiredAmount}}</td>
+            <td>{{item.price}}</td>
             <td>{{item.totalPrice}}</td>
           </tr>
         </template>
@@ -48,7 +48,7 @@
 <script>
 export default {
   name: 'PurchaseInfoTable',
-  props: ['formData'],
+  props: ['materials'],
   data () {
     return {
       titleRow: ['物料名称', '物料颜色', '幅宽/型号', '克重/规格', '单件用量', '耗量', '实际用量', '订单数', '空差', '需求总数', '物料单价', '总金额']

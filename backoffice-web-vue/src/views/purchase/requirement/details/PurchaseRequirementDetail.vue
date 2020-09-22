@@ -31,7 +31,7 @@
           <h6>是否含税：{{formData.auditNeed ? '是' : '否'}}</h6>
         </el-col>
         <el-col :span="6">
-          <h6>品质要求：{{getEnum('QualityRequirementType', formData.quanlityRequirement)}}</h6>
+          <h6>品质要求：{{getEnum('QualityRequirementType', formData.qualityRequirement)}}</h6>
         </el-col>
         <el-col :span="6">
           <h6>采购员：{{formData.merchandiser.name}}</h6>
@@ -115,7 +115,7 @@ export default {
           }
         },
         auditNeed: false,
-        quanlityRequirement: 'NO_REQUIREMENT',
+        qualityRequirement: 'NO_REQUIREMENT',
         merchandiser: {
           name: ''
         },

@@ -53,7 +53,7 @@
         // this.$emit('onResetQuery');
       },
       onCreate () {
-        this.$emit('onCreate');
+        this.$router.push('/purchase/requirement/create');
       }
     },
     data () {

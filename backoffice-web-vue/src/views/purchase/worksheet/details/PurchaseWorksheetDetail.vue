@@ -8,13 +8,13 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <h6>状态/标签：{{'待采购'}}</h6>
+          <h6>状态/标签：{{formData.state}}</h6>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
       <el-row type="flex" justify="start" class="basic-row">
         <el-col :span="6">
-          <h6>工单号：{{'1234567-1'}}</h6>
+          <h6>工单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="6">
           <h6>关联款号：{{'MJ-D206030'}}</h6>
@@ -23,22 +23,22 @@
           <h6>关联需求：{{'PO41002810'}}</h6>
         </el-col>
         <el-col :span="6">
-          <h6>创建时间：{{1630375172000 | timestampToTime}}</h6>
+          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
         </el-col>
       </el-row>
       <div class="basic-info-container">
         <el-row type="flex" justify="start" class="basic-row">
           <el-col :span="6">
-            <h6>物料编号：{{'1234567-1'}}</h6>
+            <h6>物料编号：{{formData.materials.code}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>物料属性：{{'MJ-D206030'}}</h6>
+            <h6>物料属性：{{formData.materials.materialsType}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>单位：{{'PO41002810'}}</h6>
+            <h6>单位：{{formData.materials.unit}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>供应商：{{'宁波衣加衣供应链有限公司'}}</h6>
+            <h6>供应商：{{formData.cooperatorName}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" class="basic-row">
@@ -57,7 +57,7 @@
         </el-row>
       </div>
       <el-divider></el-divider>
-      <purchase-info-table :formData="formData"/>
+      <purchase-info-table :materials="materials"/>
       <purchase-order-list-info :formData="formData"/>
       <el-divider></el-divider>
       <purchase-summary :formData="formData"/>
@@ -82,13 +82,55 @@ export default {
     PurchaseSummary
   },
   methods: {
+    async getDetail () {
+      const id = this.id;
+      const url = this.apis().getPurchaseWorkOrderDetail(id);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.formData = result.data;
+
+
+        // 整理物料行
+        this.materials = result.data.materials.specList.map(item => {
+          return {
+            name: result.data.materials.name,
+            colorName: item.colorName,
+            modelName: item.specName,
+            specName: item.specName,
+            unitQuantity: item.unitQuantity,
+            estimatedLoss: item.estimatedLoss,
+            estimatedUsage: item.estimatedUsage,
+            orderCount: item.orderCount,
+            emptySent: item.emptySent,
+            requiredAmount: item.requiredAmount,
+            price: item.price,
+            totalPrice: item.totalPrice
+          }
+        })
+      }
+    },
     onFinish () {
 
     }
   },
   data () {
     return {
+      materials: [],
       formData: {
+        state: 'WAIT_TO_PURCHASE',
+        code: '',
+        creationtime: '',
+        materials: {
+          code: '',
+          name: '',
+          materialsType: 'PLUS_MATERIAL',
+          unit: ''
+        },
+        cooperatorName: '',
         entries: [{
             name: '物料名称1',
             color: '白色',
@@ -125,6 +167,9 @@ export default {
         }]
       }
     }
+  },
+  created () {
+    this.getDetail();
   }  
 }
 </script>
