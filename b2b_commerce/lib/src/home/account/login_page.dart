@@ -274,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                     focusNode: _smsFocusNode,
                     controller: _smsCaptchaController,
                     decoration: InputDecoration(
-                        hintText: '请输入', border: InputBorder.none),
+                        hintText: '请输入短信验证码', border: InputBorder.none),
                   ),
                   surfix: FlatButton(
                     shape: RoundedRectangleBorder(

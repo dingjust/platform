@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/api/auth.dart';
 import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:services/src/supplier/brands_response.dart';
 import 'package:services/src/user/response/b2b_customer_response.dart';
@@ -266,8 +267,8 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<B2BCustomerResponse> employees(Map<String, Object> params,
-      dynamic data) async {
+  Future<B2BCustomerResponse> employees(
+      Map<String, Object> params, dynamic data) async {
     Response response;
     B2BCustomerResponse result;
     try {
@@ -342,6 +343,23 @@ class UserRepositoryImpl implements UserRepository {
       return true;
     } else {
       return false;
+    }
+  }
+
+  @override
+  Future<BaseResponse> bindingRegister(
+      {String type, CompanyRegisterDTO form}) async {
+    Response response;
+    try {
+      response = await http$.post(AuthApis.bindingRegister(type),
+          data: CompanyRegisterDTO.toJson(form));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
     }
   }
 }

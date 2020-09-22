@@ -46,8 +46,6 @@ class HttpManager {
 
     (_instance.httpClientAdapter as DefaultHttpClientAdapter)
         .onHttpClientCreate = (client) {
-      // you can also create a new HttpClient to dio
-      // return new HttpClient();
       // 忽略证书
       HttpClient httpClient = new HttpClient()
         ..badCertificateCallback =
@@ -57,37 +55,31 @@ class HttpManager {
 
     _instance.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      // 在请求被发送之前做一些事情
-      // var result = await Connectivity().checkConnectivity();
-      // AppBLoC.instance.setConnectivityResult(result);
-      // if (result == ConnectivityResult.none) {
-      //   MessageBLoC.instance.snackMessageController.add('网络链接不可用');
-      //   throw -1; // network error
-      // }
+      print('***${DateTime.now()}***');
       options.headers['Authorization'] = authorization;
 
       // 所属信息
       options.headers['company'] = UserBLoC.instance.currentUser.companyCode;
-      if (GlobalConfigs.DEBUG) {
-        print("REQUEST[${options?.method}] => PATH: ${options?.path}");
-      }
+      // if (GlobalConfigs.DEBUG) {
+      //   print("REQUEST[${options?.method}] => PATH: ${options?.path}");
+      // }
     }, onResponse: (Response response) {
-      // 在返回响应数据之前做一些预处理
+      print('***${DateTime.now()}***');
       //更改网络状态
       if (NetState.instance != null) {
         NetState.instance.setConnectivityResult(ConnectivityResult.mobile);
       }
       AppBLoC.instance.setConnectivityResult(ConnectivityResult.mobile);
       _clearContext();
-      if (GlobalConfigs.DEBUG) {
-        if (response != null) {
-          print(
-              "RESPONSE[${response?.statusCode}] => PATH: ${response?.request
-                  ?.path}>>>返回结果:${response?.data.toString()}");
-        }
-      }
+      // if (GlobalConfigs.DEBUG) {
+      //   if (response != null) {
+      //     print(
+      //         "RESPONSE[${response?.statusCode}] => PATH: ${response?.request?.path}>>>返回结果:${response?.data.toString()}");
+      //   }
+      // }
       return response; // continue
     }, onError: (DioError e) {
+      print('***${DateTime.now()}***');
       //未登录或token失效
       if (e?.response != null && e.response.statusCode == 401) {
         //已登录，token失效
@@ -123,13 +115,17 @@ class HttpManager {
         }
         _clearContext();
       }
-      if (GlobalConfigs.DEBUG) {
-        print(
-            "ERROR[${e?.response?.statusCode}] => PATH: ${e?.request
-                ?.path}>>>${e?.response?.data.toString()}");
-      }
+      // if (GlobalConfigs.DEBUG) {
+      //   print(
+      //       "ERROR[${e?.response?.statusCode}] => PATH: ${e?.request?.path}>>>${e?.response?.data.toString()}");
+      // }
       return e; //continue
     }));
+
+    if (GlobalConfigs.DEBUG) {
+      _instance.interceptors
+          .add(LogInterceptor(requestBody: true, responseBody: true));
+    }
   }
 
   Future<Response<T>> get<T>(
@@ -176,7 +172,7 @@ class HttpManager {
     String path, {
     BuildContext context,
     data,
-        Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters,
     Options options,
     CancelToken cancelToken,
   }) {

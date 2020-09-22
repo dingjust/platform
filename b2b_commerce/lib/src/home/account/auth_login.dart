@@ -45,11 +45,11 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       //监听钉钉回调
       _ddShareSubscription =
           FlutterDdshare.ddResponseEventHandler.listen((resp) async {
-            //授权回调信息
-            if (resp is DDShareAuthResponse) {
-              authLoginHelper.handlerDingTalkAuthLogin(resp, context);
-            }
-          });
+        //授权回调信息
+        if (resp is DDShareAuthResponse) {
+          authLoginHelper.handlerDingTalkAuthLogin(resp, context);
+        }
+      });
     }
 
     //监听微信回调

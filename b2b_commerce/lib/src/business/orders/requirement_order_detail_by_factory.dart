@@ -104,7 +104,6 @@ class _RequirementOrderDetailByFactoryPageState
             bottomNavigationBar: _buildBottomButtons(orderModel),
           );
         } else {
-          print('ddd');
           return Center(
             child: CircularProgressIndicator(),
           );
