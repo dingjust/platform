@@ -72,7 +72,6 @@
         }
       },
       getState (row) {
-        console.log(row);
         if (row.currentUserAuditState != null) {
           return row.currentUserAuditState;
         }

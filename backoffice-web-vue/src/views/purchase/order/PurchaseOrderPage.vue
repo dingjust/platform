@@ -58,11 +58,11 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch(page, size) {
-      if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-        this.onResetQuery();
-      }
+      // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+      //   this.onResetQuery();
+      // }
       const query = this.queryFormData;
-      const url = this.apis().getoutboundOrdersList();
+      const url = this.apis().searchPurchaseOrder();
       this.searchAdvanced({
         url,
         query,
@@ -74,43 +74,44 @@ export default {
       this.queryFormData.state = tab.name;
       this.onAdvancedSearch(0, 10);
     },
-    onResetQuery () {
-      this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
-    }
+    // onResetQuery () {
+    //   this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+    // }
   },
   data () {
     return {
       queryFormData: {
         keyword: '',
         operatorName: '',
-        state: 'TO_BE_SUBMITTED'
+        state: 'NOT_COMMITED'
       },
       dataQuery: {},
-      activeName: 'TO_BE_SUBMITTED',
+      activeName: 'NOT_COMMITED',
       statuses: [{
-          code: 'TO_BE_SUBMITTED',
+          code: 'NOT_COMMITED',
           name: '待提交'
         }, {
           code: 'AUDITING',
           name: '待审核'
         }, {
-          code: 'AUDITED_FAILED',
+          code: 'AUDIT_FAILED',
           name: '审核驳回'
         }, {
-          code: 'wait_come',
+          code: 'WAIT_TO_REV_MATERIALS',
           name: '待回料'
         }, {
           code: 'COMPLETED',
-          name: '采购完成'
+          name: '已完成'
         }, {
           code: '',
           name: '全部'
-      }]
+        }
+      ]
     }
   },
   created () {
-    this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
-    this.onResetQuery();
+    // this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
+    // this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }
 }

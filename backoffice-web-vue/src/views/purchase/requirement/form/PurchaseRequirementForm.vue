@@ -13,7 +13,7 @@
           <el-row type="flex" justify="start" >
             <el-col :span="7">
               <el-form-item label="系统单号">
-                <el-input placeholder="系统生成" :disabled="true"></el-input>
+                <el-input placeholder="系统生成" v-model="formData.code" :disabled="true"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -102,6 +102,7 @@ import { PersonnalSelectionV2, MyAddressForm } from '@/components'
 import PurchaseRequirementTable from '../components/PurchaseRequirementTable'
 import PurchaseRequirementBtnGroup from '../components/PurchaseRequirementBtnGroup'
 import ProductionTaskSelectDialog from '@/views/order/salesProduction/production-task/components/ProductionTaskSelectDialog'
+import { re } from 'semver'
 
 export default {
   name: 'PurchaseRequirementForm',
@@ -197,13 +198,16 @@ export default {
           val.materials.materialsType === item.materialsType);
         if (index <= -1) {
           workOrders.push({
+            id: item.id ? item.id : '',
             cooperatorName: item.cooperatorName.trim(),
             materials: {
+              id: item.materialsId ? item.materialsId : '',
               name: item.name.trim(),
               code: item.code.trim(),
               unit: item.unit,
               materialsType: item.materialsType,
               specList: [{
+                id: item.specListId,
                 unitQuantity: item.unitQuantity,
                 specName: item.specName.trim(),
                 colorName: item.colorName.trim(),
@@ -213,7 +217,7 @@ export default {
                 estimatedLoss: Number.parseFloat(item.estimatedLoss) / 100,
                 estimatedUsage: item.estimatedUsage,
                 orderCount: item.orderCount,
-                auditColor: item.auditColor,
+                // auditColor: item.auditColor,
                 price: item.price,
                 totalPrice: item.totalPrice,
                 estimatedRecTime: item.estimatedRecTime
@@ -221,7 +225,14 @@ export default {
             }
           })
         } else {
+          if (!workOrders[index].id && item.id) {
+            workOrders[index].id = item.id;
+          }
+          if (!workOrders[index].materials.id && item.materialsId) {
+            workOrders[index].materials.id = item.materialsId;
+          }
           workOrders[index].materials.specList.push({
+            id: item.specListId ? item.specListId : '',
             unitQuantity: item.unitQuantity,
             specName: item.specName.trim(),
             colorName: item.colorName.trim(),
@@ -244,7 +255,7 @@ export default {
     async __onSave (data, flag) {
       const url = this.apis().savePurchaseTask();
       const result = await this.$http.post(url, data, {
-        submitAudit: flag
+        submit: flag
       });
       if (result['errors']) {
         this.$message.error(result['errors'][0].message);
@@ -268,6 +279,62 @@ export default {
     validateField (name) {
       this.$refs.form.validateField(name);
     },
+    async getDetail (id) {
+      const url = this.apis().getPurchaseTask(id);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.initData(result.data);
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+      }
+    },
+    initData (resultData) {
+      let workOrders = []; 
+      let data = Object.assign({}, resultData);
+      resultData.workOrders.forEach(row => {
+        if (row.materials && row.materials.specList && row.materials.specList.length > 0) {
+          workOrders = workOrders.concat(row.materials.specList.map(item => {
+            return {
+              id: row.id,
+              materialsId: row.materials.id,
+              specListId: item.id,
+              name: row.materials.name,
+              code: row.materials.code,
+              unit: row.materials.unit,
+              materialsType: row.materials.materialsType,
+              unitQuantity: item.unitQuantity,
+              specName: item.specName,
+              colorName: item.colorName,
+              modelName: item.modelName,
+              emptySent: item.emptySent,
+              requiredAmount: item.requiredAmount,
+              estimatedLoss: item.estimatedLoss,
+              estimatedUsage: item.estimatedUsage,
+              orderCount: item.orderCount,
+              auditColor: item.auditColor,
+              estimatedRecTime: item.estimatedRecTime,
+              cooperatorName: row.cooperatorName,
+              price: item.price,
+              totalPrice: item.totalPrice
+            }
+          }));
+        }
+      })
+      data.workOrders = workOrders;
+      if (!data.approvers) {
+        data.approvers = [null];
+        data.auditNeeded = false
+      } else {
+        data.auditNeeded = true;
+      }
+      this.formData = Object.assign({}, data);
+      this.$refs.addressForm.getCities(data.shippingAddress.region);
+      this.$refs.addressForm.onCityChanged(data.shippingAddress.city);
+    }
   },
   data () {
     return {
@@ -287,6 +354,7 @@ export default {
       ],
       QualityRequirementType: this.$store.state.EnumsModule.QualityRequirementType,
       formData: {
+        code: '',
         includeTax: false,
         taxPoint: 0.03,
         qualityRequirement: '',
@@ -310,9 +378,17 @@ export default {
       this.validateField('merchandiser');
     },
     'formData.approvers': function (nval, oval) {
+      if (!this.formData.auditNeeded) {
+        return;
+      }
       this.formData.approvers.forEach((item, index) => {
         this.validateField('approvers.' + index);
       })
+    }
+  },
+  created () {
+    if (this.$route.params.id) {
+      this.getDetail(this.$route.params.id);
     }
   }  
 }

@@ -19,8 +19,9 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="onEdit(scope.row)">编辑</el-button>
+          <el-divider direction="vertical" v-if="scope.row.state === 'NOT_COMMITED'"></el-divider>
+          <el-button v-if="scope.row.state === 'NOT_COMMITED' || scope.row.state === 'AUDITED_FAIL'" 
+                      type="text" @click="onEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -46,7 +47,12 @@ export default {
       this.$router.push('/purchase/requirement/' + row.id);
     },
     onEdit(row) {
-      this.$message('----------------onEdit-----------------------')
+      this.$router.push({
+        name: '创建采购需求',
+        params: {
+          id: row.id
+        }
+      });
     },
     onPageSizeChanged(val) {
       this.$emit('onAdvancedSearch', 0, val);

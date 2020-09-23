@@ -63,6 +63,21 @@ export default {
         size
       });
     },
+    async getPurchaseRequirementCount() {
+      const url = this.apis().getPurchaseRequirementCount();
+      const result = await this.$http.post(url, this.queryFormData);
+      if (result['errors']) {
+        this.stateCount = {};
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.stateCount = {};
+        this.$message.error(result.msg);
+        return;
+      }
+      this.stateCount = result.data;
+    },
     handleClick (tab, event) {
       this.queryFormData.state = tab.name;
       this.onAdvancedSearch(0, 10);
@@ -99,6 +114,7 @@ export default {
           code: '',
           name: '全部'
       }],
+      stateCount: {},
     }
   },
   created () {
