@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:models/models.dart';
+import 'package:services/src/common/response.dart';
 import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:services/src/supplier/brands_response.dart';
 import 'package:services/src/user/response/b2b_customer_response.dart';
@@ -60,8 +61,8 @@ abstract class UserRepository {
   Future<List<RoleModel>> roles();
 
   //获取员工列表
-  Future<B2BCustomerResponse> employees(Map<String, Object> params,
-      dynamic data);
+  Future<B2BCustomerResponse> employees(
+      Map<String, Object> params, dynamic data);
 
   //获取员工明细
   Future<B2BCustomerModel> getEmployee(String uid);
@@ -78,4 +79,7 @@ abstract class UserRepository {
   ///更新个人资料
   Future<bool> updateUserInfo(
       String uid, String name, String phone, MediaModel media);
+
+  //绑定第三方注册
+  Future<BaseResponse> bindingRegister({String type, CompanyRegisterDTO form});
 }

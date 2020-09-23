@@ -33,6 +33,12 @@ class CompanyRegisterDTO {
   @JsonKey(toJson: _addressToJson)
   AddressModel contactAddress;
 
+  ///微信openId
+  String wxOpenid;
+
+  ///钉钉openId
+  String ddOpenid;
+
   CompanyRegisterDTO(
       {this.mobileNumber,
       this.password,
@@ -40,10 +46,12 @@ class CompanyRegisterDTO {
       this.contactPerson,
       this.contactPhone,
       this.captchaCode,
-        this.latitude,
-        this.longitude,
-        this.locationAddress,
-      this.contactAddress});
+      this.latitude,
+      this.longitude,
+      this.locationAddress,
+      this.contactAddress,
+      this.wxOpenid,
+      this.ddOpenid});
 
   static Map<String, dynamic> _addressToJson(AddressModel contactAddress) =>
       contactAddress == null
