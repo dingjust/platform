@@ -18,7 +18,7 @@
         </div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <template v-for="item in statuses">
-            <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+            <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
               <purchase-order-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
             </el-tab-pane>
           </template>
@@ -57,60 +57,88 @@ export default {
     ...mapActions({
       searchAdvanced: 'searchAdvanced'
     }),
-    onAdvancedSearch(page, size) {
-      if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-        this.onResetQuery();
-      }
+    onAdvancedSearch(page, size, isTab) {
+      // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+      //   this.onResetQuery();
+      // }
       const query = this.queryFormData;
-      const url = this.apis().getoutboundOrdersList();
+      const url = this.apis().searchPurchaseOrder();
       this.searchAdvanced({
         url,
         query,
         page,
         size
       });
+
+      // 切换tab页不再重新查询统计接口
+      if (!isTab) {
+        this.getPurchaseOrderCount();
+      }
+    },
+    async getPurchaseOrderCount() {
+      const url = this.apis().getPurchaseOrderCount();
+      const result = await this.$http.post(url, this.queryFormData);
+      if (result['errors']) {
+        this.stateCount = {};
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.stateCount = {};
+        this.$message.error(result.msg);
+        return;
+      }
+      this.stateCount = result.data;
+    },
+    tabName(tab) {
+      if (this.stateCount.hasOwnProperty(tab.code)) {
+        return tab.name + '(' + this.stateCount[tab.code] + ')';
+      }
+      return tab.name;
     },
     handleClick (tab, event) {
       this.queryFormData.state = tab.name;
-      this.onAdvancedSearch(0, 10);
+      this.onAdvancedSearch(0, 10, true);
     },
-    onResetQuery () {
-      this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
-    }
+    // onResetQuery () {
+    //   this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+    // }
   },
   data () {
     return {
       queryFormData: {
         keyword: '',
         operatorName: '',
-        state: 'TO_BE_SUBMITTED'
+        state: 'NOT_COMMITED'
       },
       dataQuery: {},
-      activeName: 'TO_BE_SUBMITTED',
+      activeName: 'NOT_COMMITED',
       statuses: [{
-          code: 'TO_BE_SUBMITTED',
+          code: 'NOT_COMMITED',
           name: '待提交'
         }, {
           code: 'AUDITING',
           name: '待审核'
         }, {
-          code: 'AUDITED_FAILED',
+          code: 'AUDIT_FAILED',
           name: '审核驳回'
         }, {
-          code: 'wait_come',
+          code: 'WAIT_TO_REV_MATERIALS',
           name: '待回料'
         }, {
           code: 'COMPLETED',
-          name: '采购完成'
+          name: '已完成'
         }, {
           code: '',
           name: '全部'
-      }]
+        }
+      ],
+      stateCount: {}
     }
   },
   created () {
-    this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
-    this.onResetQuery();
+    // this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
+    // this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }
 }

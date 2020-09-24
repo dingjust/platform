@@ -828,6 +828,42 @@ const COMMON_APIS = {
   getPurchaseWorkOrderDetail (id) {
     return '/b2b/purchase/work/order/' + id;
   },
+  // 添加采购单(采购工单下)
+  savePurchaseOrder () {
+    return '/b2b/purchase/order/save';
+  },
+  // 采购单列表（新）
+  searchPurchaseOrder () {
+    return '/b2b/purchase/order/search';
+  },
+  // 根据工单id获取采购单
+  searchPurchaseOrderByWorksheetId (id) {
+    return '/b2b/purchase/order/get/all/by/work/' + id;
+  },
+  // 根据id获取采购单
+  searchPurchaseOrderById (id) {
+    return '/b2b/purchase/order/' + id;
+  },
+  // 更新采购单信息
+  updatePurchaseOrder () {
+    return '/b2b/purchase/order/update/quantity';
+  },
+  // 标记采购完成
+  purchaseOrderComplete (id) {
+    return '/b2b/purchase/order/complete/' + id;
+  },
+  // 采购需求列表统计
+  getPurchaseRequirementCount () {
+    return '/b2b/purchase/task/state/count';
+  },
+  // 采购工单列表统计
+  getPurchaseWorksheetCount () {
+    return '/b2b/purchase/work/order/state/count';
+  },
+  // 采购单列表统计
+  getPurchaseOrderCount () {
+    return '/b2b/purchase/order/state/count';
+  },
   // 创建生产工单
   createProductionOrder() {
     return '/b2b/orders/production/work/create';

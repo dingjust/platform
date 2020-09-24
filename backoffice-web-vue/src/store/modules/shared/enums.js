@@ -1797,6 +1797,12 @@ const state = {
   }, {
     code: 'PaymentRequestTask',
     name: '付款申请单'
+  }, {
+    code: 'PurchaseTask',
+    name: '采购需求'
+  }, {
+    code: 'ProductionPurchaseOrder',
+    name: '采购单'
   }],
   // 外发模式
   ManagementMode: [{

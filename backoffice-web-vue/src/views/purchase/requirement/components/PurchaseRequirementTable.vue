@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="over-tabs">
+    <div class="over-tabs" v-if="!readOnly">
       <el-row type="flex">
         <el-button class="material-btn" @click="onBOMImport">BOM导入</el-button>
         <el-button class="material-btn" @click="appendMateriel">添加物料</el-button>
@@ -55,12 +55,12 @@
               <span>{{scope.row.estimatedRecTime | timestampToTime}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="是否批色" prop="auditColor">
+          <!-- <el-table-column label="是否批色" prop="auditColor">
             <template slot-scope="scope">
               <span>{{scope.row.auditColor ? '是' : '否'}}</span>
             </template>
-          </el-table-column>
-          <el-table-column label="操作" min-width="100px">
+          </el-table-column> -->
+          <el-table-column label="操作" min-width="100px" v-if="!readOnly">
             <template slot-scope="scope">
               <el-button type="text" @click="onModify(scope.row, scope.$index)">修改</el-button>
               <el-button type="text" @click="onDelete(scope.row, scope.$index)">删除</el-button>
@@ -80,7 +80,15 @@ import MaterialAppendTable from './MaterialAppendTable'
 
 export default {
   name: 'PurchaseRequirementTable',
-  props: ['formData'],
+  props: {
+    formData: {
+      required: true
+    },
+    readOnly: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     MaterialAppendTable,
   },
@@ -113,7 +121,7 @@ export default {
     },
     onSelect (entries) {
       this.appendVisible = false;
-      this.formData.workOrders = this.formData.workOrders.concat(entries);
+      this.formData.workOrders = this.arrangeData(this.formData.workOrders.concat(entries));
       this.entries = {
         workOrders: [
           {
@@ -138,6 +146,20 @@ export default {
           }
         ]
       }
+    },
+    arrangeData (materials) {
+      let result = [];
+      let stark = [];
+
+      stark = stark.concat(materials);
+
+      while (stark.length) {
+        let temp = stark.shift();
+        result.push(temp);
+        result = result.concat(stark.filter(item => item.code === temp.code));
+        stark = stark.filter(item => item.code !== temp.code);
+      }
+      return result;
     },
     onModify (row, index) {
 

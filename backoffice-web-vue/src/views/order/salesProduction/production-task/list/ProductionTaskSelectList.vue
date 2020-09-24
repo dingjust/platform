@@ -98,14 +98,14 @@
         return true;
       },
       onPageSizeChanged (val) {
-        this.$emit('onAdvancedSearch', 0, val);
+        this.$emit('onSearch', 0, val);
 
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
       onCurrentPageChanged (val) {
-        this.$emit('onAdvancedSearch', val - 1, 10);
+        this.$emit('onSearch', val - 1, 10);
 
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0

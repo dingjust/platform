@@ -1,45 +1,48 @@
 <template>
   <div>
-    <el-row type="flex" justify="start" class="purchase-row">
+    <el-row type="flex" justify="start" class="purchase-row" v-if="readOnly">
       <el-col :span="6">
-        <h6>工单号：{{'1234567-1'}}</h6>
+        <h6>采购单号：{{order.code}}</h6>
       </el-col>
       <el-col :span="6">
-        <h6>关联款号：{{'MJ-D206030'}}</h6>
+        <h6>关联款号：{{formData.task.productionTask.product.skuID}}</h6>
       </el-col>
       <el-col :span="6">
-        <h6>关联需求：{{'PO41002810'}}</h6>
+        <h6>关联需求：{{formData.task.code}}</h6>
       </el-col>
       <el-col :span="6">
-        <h6>创建时间：{{1630375172000 | timestampToTime}}</h6>
+        <h6>创建时间：{{order.creationtime | timestampToTime}}</h6>
       </el-col>
     </el-row>
     <el-row type="flex" justify="start">
       <el-col :span="18">
         <el-row type="flex" justify="start" class="purchase-row">
           <el-col :span="8">
-            <h6>物料编号：{{'123456-123'}}</h6>
+            <h6>物料编号：{{formData.materials.code}}</h6>
           </el-col>
           <el-col :span="8">
-            <h6>物料属性：{{'面料'}}</h6>
+            <h6>物料属性：{{getEnum('MaterialsType', formData.materials.materialsType)}}</h6>
           </el-col>
           <el-col :span="8">
-            <h6>到料时间：{{1630375172000 | timestampToTime}}</h6>
+            <h6>到料时间：{{formData.materials.specList[0].estimatedRecTime | timestampToTime}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" class="purchase-row">
           <el-col :span="8">
-            <h6>是否含税：{{'123456-123'}}</h6>
+            <div style="display: flex;flex-wrap: wrap;">
+              <h6>是否含税：{{formData.task.includeTax ? '是' : '否'}}</h6>
+              <h6 v-if="formData.task.includeTax" style="margin-left: 30px">税点：{{formData.task.taxPoint * 100}}%</h6>
+            </div>
           </el-col>
           <el-col :span="8">
-            <h6>品质要求：{{'合格品'}}</h6>
+            <h6>品质要求：{{getEnum('QualityRequirementType', formData.task.qualityRequirement)}}</h6>
           </el-col>
           <el-col :span="8">
-            <h6>供应商：{{'宁波衣加衣供应链有限公司'}}</h6>
+            <h6>供应商：{{formData.cooperatorName}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" class="purchase-row">
-          <h6>收货地址：{{'广东省广州市海珠区云顶同创汇707'}}</h6>
+          <h6>收货地址：{{formData.task.shippingAddress.details}}</h6>
         </el-row>
       </el-col>
       <el-col :span="6">
@@ -56,25 +59,27 @@
             </el-upload>
           </el-row>
           <div class="contract-list">
-            <template v-for="(item, index) in formData.contract">
-              <div :key="item.id" :title="item.name" class="contract-item" style="width: 60px">
-                <div class="mask" :key="item.id">
-                  <el-button type="text" @click="showContract(item)">
-                    <i style="font-size: 22px;color: #fff;font-size: 20px;" class="el-icon-zoom-in"></i>
-                  </el-button>
-                  <el-button type="text" @click="onDelete(item, index)">
-                    <i style="font-size: 22px;color: #fff;font-size: 20px;" class="el-icon-delete"></i>
-                  </el-button>
-                </div>
-                <el-row type="flex" justify="center" align="middle">
-                  <div>
-                    <img style="width: 100%" src="static/img/word.png"/>
+            <template v-if="order.attachAgreements && order.attachAgreements.length > 0">
+              <template v-for="(item, index) in order.attachAgreements">
+                <div :key="item.id" :title="item.name" class="contract-item" style="width: 60px">
+                  <div class="mask" :key="item.id">
+                    <el-button type="text" @click="showContract(item)">
+                      <i style="font-size: 22px;color: #fff;font-size: 20px;" class="el-icon-zoom-in"></i>
+                    </el-button>
+                    <el-button type="text" @click="onDelete(item, index)">
+                      <i style="font-size: 22px;color: #fff;font-size: 20px;" class="el-icon-delete"></i>
+                    </el-button>
                   </div>
-                </el-row>
-                <el-row type="flex" justify="center" align="middle">
-                  <h6 class="upload-text nowrap-text">{{item.name}}</h6>
-                </el-row>
-              </div>
+                  <el-row type="flex" justify="center" align="middle">
+                    <div>
+                      <img style="width: 100%" src="static/img/word.png"/>
+                    </div>
+                  </el-row>
+                  <el-row type="flex" justify="center" align="middle">
+                    <h6 class="upload-text nowrap-text">{{item.name}}</h6>
+                  </el-row>
+                </div>
+              </template>
             </template>
             <div v-if="isUploading">
               <el-progress type="circle" :percentage="25" style="width: 40px;height: 40px;margin-top: 10px"></el-progress>
@@ -100,7 +105,18 @@ import PdfPreview from '@/components/custom/upload/PdfPreview'
 
 export default {
   name: 'PurchaseOrderBasicInfo',
-  props: ['formData'],
+  props: {
+    order: {
+      required: true
+    },
+    formData: {
+      required: true
+    },
+    readOnly: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     PdfPreview
   },
@@ -120,8 +136,8 @@ export default {
     fileList: function () {
       let files = [];
       let type;
-      if (this.formData.contract && this.formData.contract.length > 0) {
-        this.formData.contract.forEach(image => {
+      if (this.order.attachAgreements && this.order.attachAgreements.length > 0) {
+        this.order.attachAgreements.forEach(image => {
           let file = {
             id: '',
             url: '',
@@ -145,7 +161,7 @@ export default {
         })
       }
 
-      if (this.readOnly || this.formData.contract.length === this.limit) {
+      if (this.order.attachAgreements.length === this.limit) {
         this.uploadDisabled = true;
       } else {
         this.uploadDisabled = false;
@@ -155,8 +171,6 @@ export default {
   },
   methods: {
     onChange (file, fileList) {
-      console.log(file)
-      console.log(fileList);
       this.isUploading = false;
     },
     onBeforeUpload(file) {
@@ -192,8 +206,8 @@ export default {
       }
     },
     onSuccess(response) {
-      this.formData.contract.push(response);
-      if (this.formData.contract.length === this.limit) {
+      this.order.attachAgreements.push(response);
+      if (this.order.attachAgreements.length === this.limit) {
         this.uploadDisabled = true;
       } else {
         this.uploadDisabled = false;
@@ -205,8 +219,8 @@ export default {
     async handleRemove(file) {
       const images = this.fileList || [];
       const index = images.indexOf(file);
-      this.formData.contract.splice(index, 1);
-      if (this.formData.contract.length === this.limit) {
+      this.order.attachAgreements.splice(index, 1);
+      if (this.order.attachAgreements.length === this.limit) {
         this.uploadDisabled = true;
       } else {
         this.uploadDisabled = false;
@@ -224,7 +238,7 @@ export default {
       }
     },
     onDelete (item, index) {
-      this.formData.contract.splice(index, 1);
+      this.order.attachAgreements.splice(index, 1);
     }
   },
   data () {
@@ -235,7 +249,6 @@ export default {
       dialogImageUrl: '',
       limit: 5,
       pdfUrl: '',
-      readOnly: false,
       isUploading: false
     }
   }

@@ -40,6 +40,9 @@
         </el-tab-pane> -->
       </el-tabs>
     </el-card>
+    <el-dialog :visible.sync="detailVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <purchase-order-detail v-if="detailVisible" :orderDetail="orderDetail" @callback="callback"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -55,13 +58,15 @@
     'TaskApprovalModule'
   );
 
+  import PurchaseOrderDetail from '@/views/purchase/order/details/PurchaseOrderDetail'
   import TaskApprovalToolbar from './toolbar/TaskApprovalToolbar';
   import TaskApprovalList from './list/TaskApprovalList';
   export default {
     name: 'TaskApprovalPage',
     components: {
       TaskApprovalList,
-      TaskApprovalToolbar
+      TaskApprovalToolbar,
+      PurchaseOrderDetail
     },
     props: [],
     computed: {
@@ -131,6 +136,11 @@
             break;
           case 'PaymentRequestTask':
             this.$router.push('/financial/merchandiser/paymentRequest/' + row.auditModel.id);
+          case 'PurchaseTask':
+            this.$router.push('/purchase/requirement/' + row.auditModel.id);
+          case 'ProductionPurchaseOrder':
+            this.purchaseOrderId = row.auditModel.id;
+            this.onPurchaseOrderDetail(row.auditModel.id);
         }
       },
       onApproval(row) {
@@ -180,10 +190,34 @@
         }
         this.$message.success('拒绝成功');
         this.onAdvancedSearch(this.page.number);
+      },
+      async onPurchaseOrderDetail (id) {
+        const url = this.apis().searchPurchaseOrderById(id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 1) {
+          this.orderDetail = result.data;
+          if (!this.orderDetail.attachAgreements) {
+            this.$set(this.orderDetail, 'attachAgreements', []);
+          }
+          this.detailVisible = true;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+      },
+      callback () {
+        this.onPurchaseOrderDetail(this.purchaseOrderId);
+        this.onAdvancedSearch(0, 10);
       }
     },
     data() {
       return {
+        orderDetail: '',
+        detailVisible: false,
         activeName: 'ORDER_TASK',
         activeStatus: '',
         queryFormData: {
@@ -204,7 +238,8 @@
           code: 'AUDITED_FAILED',
           name: '已驳回'
         }],
-        dataQuery: {}
+        dataQuery: {},
+        purchaseOrderId: ''
       }
     },
     created() {

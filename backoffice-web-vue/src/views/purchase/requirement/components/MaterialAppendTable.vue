@@ -190,7 +190,7 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="是否批色" prop="auditColor" min-width="110px">
+        <!-- <el-table-column label="是否批色" prop="auditColor" min-width="110px">
           <template slot-scope="scope">
             <el-form-item>
               <el-select v-model="scope.row.auditColor" style="width:90px" placeholder="否">
@@ -199,7 +199,7 @@
               </el-select>
             </el-form-item>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="操作" min-width="100px" fixed="right">
           <template slot-scope="scope">
             <el-form-item>
@@ -238,6 +238,7 @@ export default {
   methods: {
     onImport (data) {
       this.entries.workOrders = this.entries.workOrders.concat(data);
+      this.importVisible = false;
     },
     getExpectQuantity (index) {
       let count = 0;
@@ -318,20 +319,10 @@ export default {
     },
     arrangeData (materials) {
       let result = [];
-      let stark = [];
 
-      stark = stark.concat(materials);
+      result = result.concat(materials);
 
-      while (stark.length) {
-        let temp = stark.shift();
-        result.push(temp);
-        result = result.concat(stark.filter(item => item.code === temp.code));
-        stark = stark.filter(item => item.code !== temp.code);
-      }
       result.forEach(item => {
-        if (item.auditColor == '') {
-          item.auditColor = false;
-        }
         if (Number.isNaN(Number.parseFloat(item.emptySent))) {
           item.emptySent = 1;
         } else {

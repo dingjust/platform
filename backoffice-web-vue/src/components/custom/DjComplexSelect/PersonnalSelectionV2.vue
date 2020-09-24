@@ -101,11 +101,6 @@ export default {
         } 
       })
 
-      // 处理数据回显
-      if (this.vPerson && this.vPerson.id) {
-        let arr = this.familyTree(this.deptList, this.vPerson.id);
-        this.person = arr.map(item => item.id);
-      }
     },
     breadthQuery (tree, id) {
       let stark = [];
@@ -157,8 +152,13 @@ export default {
       this.initData();
     },
     loading: function (nval, oval) {
-      if (nval === false) {
+      if (nval === false && this.deptOptions.length > 0) {
         this.initData();
+        // 处理数据回显
+        if (this.vPerson && this.vPerson.id) {
+          let arr = this.familyTree(this.deptList, this.vPerson.id);
+          this.person = arr.map(item => item.id);
+        }
       }
     }
   },
