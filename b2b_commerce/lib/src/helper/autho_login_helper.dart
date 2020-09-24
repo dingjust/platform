@@ -73,7 +73,8 @@ class AuthLoginHelper {
     BaseResponse response = await AuthRespository.wechatAuthBinding(res.code);
     if (response == null || response.code == 0) {
       BotToast.showText(
-          text: '绑定微信失败' + response?.msg ?? '', duration: Duration(seconds: 5));
+          text: '绑定微信失败：' + response?.msg ?? '',
+          duration: Duration(seconds: 5));
       cancelFunc.call();
       return -1;
     } else if (response.code == 1) {
@@ -145,7 +146,8 @@ class AuthLoginHelper {
     BaseResponse response = await AuthRespository.dingTalkAuthBinding(res.code);
     if (response == null || response.code == 0) {
       BotToast.showText(
-          text: '绑定钉钉失败' + response?.msg ?? '', duration: Duration(seconds: 5));
+          text: '绑定钉钉失败：' + response?.msg ?? '',
+          duration: Duration(seconds: 5));
       cancelFunc.call();
       return -1;
     } else if (response.code == 1) {
