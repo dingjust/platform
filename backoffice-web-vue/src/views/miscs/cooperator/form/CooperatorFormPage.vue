@@ -12,7 +12,7 @@
             <el-row type="flex" class="row-title">
               <form-label label="基本信息" />
             </el-row>
-            <el-row type="flex" justify="start" align="middle" :gutter="10">
+            <el-row type="flex" justify="start" align="top" :gutter="10">
               <el-col :span="9">
                 <el-form-item prop="name" label="合作商名称" label-width="100px">
                   <el-select v-model="formData.name" multiple remote reserve-keyword @remove-tag="onRemoveTag"
@@ -179,6 +179,10 @@
       isFromDialog: {
         type: Boolean,
         default: false
+      },
+      cooperatorName: {
+        type: String,
+        default: ''
       }
     },
     components: {
@@ -351,8 +355,12 @@
         },
       };
     },
+    mounted () {
+      if (this.cooperatorName != '') {
+        this.formData.name = this.cooperatorName;
+      }
+    },
     created() {
-
     },
   };
 
@@ -412,7 +420,7 @@
   .form-btn_select {
     background-color: #FFD60C;
     border-color: #FFD60C;
-    margin-bottom: 25px;
+    /* margin-bottom: 25px; */
     color: #000;
   }
 

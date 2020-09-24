@@ -4,7 +4,8 @@
       <el-row>
         <el-col :span="6">
           <div class="purchase-list-title">
-            <h6>采购工单列表</h6>
+            <!-- 新采购单 -->
+            <h6>采购单列表</h6>
           </div>
         </el-col>
       </el-row>

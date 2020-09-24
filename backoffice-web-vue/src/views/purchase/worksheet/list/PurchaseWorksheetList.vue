@@ -2,7 +2,7 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" >
       <el-table-column label="采购工单号" prop="code" min-width="100px"></el-table-column>
-      <el-table-column label="关联款号" prop="skuID"></el-table-column>
+      <el-table-column label="关联款号" prop="task.productionTask.product.skuID"></el-table-column>
       <el-table-column label="物料名称" prop="materials.name"></el-table-column>
       <el-table-column label="物料类别" prop="materials.materialsType">
         <template slot-scope="scope">

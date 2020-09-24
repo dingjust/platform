@@ -15,14 +15,16 @@
             <td>{{item.spec.modelName}}</td>
             <td>{{item.spec.specName}}</td>
             <td>{{item.orderQuantity}}</td>
-            <td>
-              <el-input v-if="isOnEdit" v-model="item.receiveQuantity" type="number" v-number-input.float="{ min: 0, max: item.orderQuantity, decimal: 0}" />
+            <td style="width: 200px">
+              <el-input v-if="isOnEdit" v-model="item.receiveQuantity" type="number" v-number-input.float="{ min: 0, decimal: 2}" />
+              <span v-else>{{item.receiveQuantity}}</span>
             </td>
             <td>
               <span>{{lackMaterials(item)}}</span>
             </td>
             <td style="width: 200px">
               <el-input v-if="isOnEdit" v-model="item.remark" />
+              <span v-else>{{item.remark}}</span>
             </td>
           </tr>
         </template>
@@ -52,7 +54,7 @@ export default {
       let orderQuantity = Number.parseFloat(item.orderQuantity);
       let receiveQuantity = Number.parseFloat(item.receiveQuantity);
       if (!Number.isNaN(orderQuantity) && !Number.isNaN(receiveQuantity)) {
-        return (orderQuantity - receiveQuantity).toFixed(0);
+        return (orderQuantity - receiveQuantity).toFixed(0) > 0 ? (orderQuantity - receiveQuantity).toFixed(0) : 0;
       }
       return '';
     }

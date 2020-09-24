@@ -48,15 +48,17 @@
       <el-col :span="6">
         <div class="box">
           <el-row type="flex" justify="space-between" align="middle">
-            <h6>合同：(未上传)</h6>
-            <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" ref="upload" :before-upload="onBeforeUpload"
-                       :on-success="onSuccess" :headers="headers" :file-list="fileList" :on-exceed="handleExceed"
-                       :limit="limit" :on-remove="handleRemove" :on-change="onChange">
-              <el-button type="text">
-                <i class="iconfont2_2" style="font-size: 20px;">&#xe6b9;</i>
-                <h6 class="upload-title">点击上传</h6>
-              </el-button>
-            </el-upload>
+            <h6>合同：</h6>
+            <template v-if="!readOnly">
+              <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" ref="upload" :before-upload="onBeforeUpload"
+                        :on-success="onSuccess" :headers="headers" :file-list="fileList" :on-exceed="handleExceed"
+                        :limit="limit" :on-remove="handleRemove" :on-change="onChange">
+                <el-button type="text">
+                  <i class="iconfont2_2" style="font-size: 20px;">&#xe6b9;</i>
+                  <h6 class="upload-title">点击上传</h6>
+                </el-button>
+              </el-upload>
+            </template>
           </el-row>
           <div class="contract-list">
             <template v-if="order.attachAgreements && order.attachAgreements.length > 0">
@@ -265,6 +267,7 @@ export default {
     border-radius: 5px;
     width: 100%;
     height: 100%;
+    padding: 5px 0px 0px 5px;
   }
 
   .upload-title {

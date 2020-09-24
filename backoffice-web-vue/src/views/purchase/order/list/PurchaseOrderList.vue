@@ -1,7 +1,7 @@
 <template>
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" >
-      <el-table-column label="采购单号" prop="code"></el-table-column>
+      <el-table-column label="采购单号" prop="code" min-width="120px"></el-table-column>
       <el-table-column label="关联款号" prop="workOrder.task.productionTask.product.skuID"></el-table-column>
       <el-table-column label="物料名称" prop="workOrder.materials.name"></el-table-column>
       <el-table-column label="物料类别" prop="workOrder.materials.materialsType">
@@ -23,7 +23,11 @@
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态"></el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('PurchaseOrderState', scope.row.state)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
@@ -49,10 +53,7 @@ export default {
   },
   methods: {
     onDetail(row) {
-      this.$message('----------------onDetail-----------------------')
-    },
-    onEdit(row) {
-      this.$message('----------------onEdit-----------------------')
+      this.$router.push('/purchase/order/' + row.id);
     },
     onPageSizeChanged(val) {
       this.$emit('onAdvancedSearch', 0, val);

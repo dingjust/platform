@@ -16,14 +16,15 @@
         <purchase-order-basic-info :formData="formData" :order="order"/>
         <el-divider></el-divider>
         <el-form ref="form" :model="order" :inline="true">
-          <el-row type="flex" justify="start">
-            <el-col>
-              <el-form-item label="供应商" prop="cooperatorName" :rules="[{required: true, message: '请选择供应商', trigger: 'change'}]">
-                <el-input v-model="order.cooperatorName"></el-input>
-              </el-form-item>
-              <el-button class="select-btn" @click="suppliersSelectVisible=true">选择</el-button>
-            </el-col>
-          </el-row>
+          <div class="cooperator-container">
+            <el-form-item label="供应商" prop="cooperatorName" :rules="[{required: true, message: '请选择供应商', trigger: 'change'}]">
+              <el-input v-model="order.cooperatorName"></el-input>
+            </el-form-item>
+            <el-button type="text" style="padding: 3px 15px;" @click="onAdd">
+              <i class="el-icon-plus icon-font"></i>
+            </el-button>
+            <el-button class="select-btn" @click="suppliersSelectVisible=true">选择</el-button>
+          </div>
           <purchase-material-table :order="order"/>
           <div style="display: flex;flex-wrap: wrap;padding-left: 20px">
             <el-form-item label="" label-width="10px">
@@ -53,6 +54,9 @@
       :close-on-click-modal="false">
       <supplier-select v-if="suppliersSelectVisible" @onSelect="onSuppliersSelect" />
     </el-dialog>
+    <el-dialog :visible.sync="appendVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <cooperator-form-page v-if="appendVisible" :cooperatorName="order.cooperatorName" :isFromDialog="true" @callback="callback"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -61,6 +65,7 @@ import PurchaseOrderBasicInfo from '../components/PurchaseOrderBasicInfo'
 import PurchaseMaterialTable from '../components/PurchaseMaterialTable'
 import PurchaseOrderBtnGroup from '../components/PurchaseOrderBtnGroup'
 import { PersonnalSelectionV2, SupplierSelect } from '@/components'
+import CooperatorFormPage from '@/views/miscs/cooperator/form/CooperatorFormPage'
 
 export default {
   name: 'PurchaseOrderForm',
@@ -70,11 +75,18 @@ export default {
     PurchaseMaterialTable,
     PurchaseOrderBtnGroup,
     PersonnalSelectionV2,
-    SupplierSelect
+    SupplierSelect,
+    CooperatorFormPage
   },
   computed: {
   },
   methods: {
+    onAdd () {
+      this.appendVisible = true;
+    },
+    callback () {
+      this.appendVisible = false;
+    },
     appendApprover() {
       this.order.approvers.push({});
     },
@@ -82,11 +94,9 @@ export default {
       this.order.approvers.splice(this.order.approvers.length - 1, 1);
     },
     onSuppliersSelect (data) {
+      this.selectCooperator = data;
       this.suppliersSelectVisible = false;
       this.order.cooperatorName = data.name;
-      this.order.cooperator = {
-        id: data.id
-      }
     },
     onSave (flag) {
       this.$refs.form.validate(valid => {
@@ -112,11 +122,14 @@ export default {
           }
         })
       };
-      if (this.order.cooperator.id) {
-        form.cooperator = this.order.cooperator;
-      } else {
-        form.cooperatorName = this.order.cooperatorName;
+      if (this.selectCooperator != '' && this.selectCooperator.id) {
+        if (this.selectCooperator.name === this.order.cooperatorName) {
+          this.$set(form, 'cooperator', {id: this.selectCooperator.id});
+        } else {
+          this.$set(form, 'cooperatorName', this.order.cooperatorName);
+        }
       }
+
       if (this.order.auditNeed) {
         form.auditNeed = true;
         form.approvers = this.order.approvers.filter(item => item instanceof Array && item.length > 0).map(item => {
@@ -157,6 +170,8 @@ export default {
   data () {
     return {
       suppliersSelectVisible: false,
+      selectCooperator: '',
+      appendVisible: false
     }
   },
   watch: {
@@ -190,5 +205,19 @@ export default {
 
   /deep/ .el-form-item {
     margin-bottom: 0px;
+  }
+
+  button {
+    outline:none;
+  }
+
+  .icon-font {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .cooperator-container {
+    display: flex;
+    align-items: flex-start;
   }
 </style>
