@@ -15,9 +15,15 @@
             <td>{{item.spec.modelName}}</td>
             <td>{{item.spec.specName}}</td>
             <td>{{item.orderQuantity}}</td>
-            <td></td>
-            <td></td>
-            <td style="width: 200px"></td>
+            <td>
+              <el-input v-if="isOnEdit" v-model="item.receiveQuantity" type="number" v-number-input.float="{ min: 0, max: item.orderQuantity, decimal: 0}" />
+            </td>
+            <td>
+              <span>{{lackMaterials(item)}}</span>
+            </td>
+            <td style="width: 200px">
+              <el-input v-if="isOnEdit" v-model="item.remark" />
+            </td>
           </tr>
         </template>
       </template>
@@ -40,7 +46,17 @@
 <script>
 export default {
   name: 'PurchaseMaterialAcceptance',
-  props: ['order'],
+  props: ['order', 'isOnEdit'],
+  methods: {
+    lackMaterials (item) {
+      let orderQuantity = Number.parseFloat(item.orderQuantity);
+      let receiveQuantity = Number.parseFloat(item.receiveQuantity);
+      if (!Number.isNaN(orderQuantity) && !Number.isNaN(receiveQuantity)) {
+        return (orderQuantity - receiveQuantity).toFixed(0);
+      }
+      return '';
+    }
+  },
   data () {
     return {
       titleRow: ['物料名称', '物料颜色', '幅宽/型号', '克重/规格', '下单数', '收料数', '缺料数', '备注'],

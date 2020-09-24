@@ -844,6 +844,14 @@ const COMMON_APIS = {
   searchPurchaseOrderById (id) {
     return '/b2b/purchase/order/' + id;
   },
+  // 更新采购单信息
+  updatePurchaseOrder () {
+    return '/b2b/purchase/order/update/quantity';
+  },
+  // 标记采购完成
+  purchaseOrderComplete (id) {
+    return '/b2b/purchase/order/complete/' + id;
+  },
   // 采购需求列表统计
   getPurchaseRequirementCount () {
     return '/b2b/purchase/task/state/count';
@@ -852,6 +860,7 @@ const COMMON_APIS = {
   getPurchaseWorksheetCount () {
     return '/b2b/purchase/work/order/state/count';
   },
+  // 采购单列表统计
   getPurchaseOrderCount () {
     return '/b2b/purchase/order/state/count';
   },

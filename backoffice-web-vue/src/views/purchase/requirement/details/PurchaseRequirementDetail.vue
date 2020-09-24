@@ -89,13 +89,6 @@ export default {
         return true;
       }
       return false;
-
-      // if (this.formData.approvers != null) {
-      //   let flag = this.formData.approvers.some(item => item.uid === this.$store.getters.currentUser.uid);
-      //   return this.formData.auditWorkOrder.currentUserAuditState == 'AUDITING' && flag;
-      // } else {
-      //   return false;
-      // }
     },
   },
   methods: {

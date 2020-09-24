@@ -41,7 +41,7 @@
       </el-tabs>
     </el-card>
     <el-dialog :visible.sync="detailVisible" width="80%" append-to-body :close-on-click-modal="false">
-      <purchase-order-detail v-if="detailVisible" :orderDetail="orderDetail"/>
+      <purchase-order-detail v-if="detailVisible" :orderDetail="orderDetail" @callback="callback"/>
     </el-dialog>
   </div>
 </template>
@@ -139,6 +139,7 @@
           case 'PurchaseTask':
             this.$router.push('/purchase/requirement/' + row.auditModel.id);
           case 'ProductionPurchaseOrder':
+            this.purchaseOrderId = row.auditModel.id;
             this.onPurchaseOrderDetail(row.auditModel.id);
         }
       },
@@ -208,6 +209,10 @@
           return;
         }
       },
+      callback () {
+        this.onPurchaseOrderDetail(this.purchaseOrderId);
+        this.onAdvancedSearch(0, 10);
+      }
     },
     data() {
       return {
@@ -233,7 +238,8 @@
           code: 'AUDITED_FAILED',
           name: '已驳回'
         }],
-        dataQuery: {}
+        dataQuery: {},
+        purchaseOrderId: ''
       }
     },
     created() {

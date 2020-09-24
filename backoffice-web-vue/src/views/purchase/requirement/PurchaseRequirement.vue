@@ -13,7 +13,7 @@
                                     :queryFormData="queryFormData" :dataQuery="dataQuery"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+          <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
             <purchase-requirement-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
           </el-tab-pane>
         </template>
@@ -50,7 +50,7 @@ export default {
     ...mapActions({
       searchAdvanced: 'searchAdvanced'
     }),
-    onAdvancedSearch(page, size) {
+    onAdvancedSearch(page, size, isTab) {
       // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
       //   this.onResetQuery();
       // }
@@ -62,6 +62,10 @@ export default {
         page,
         size
       });
+      // 切换tab页不再重新查询统计接口
+      if (!isTab) {
+        this.getPurchaseRequirementCount();
+      }
     },
     async getPurchaseRequirementCount() {
       const url = this.apis().getPurchaseRequirementCount();
@@ -78,9 +82,15 @@ export default {
       }
       this.stateCount = result.data;
     },
+    tabName(tab) {
+      if (this.stateCount.hasOwnProperty(tab.code)) {
+        return tab.name + '(' + this.stateCount[tab.code] + ')';
+      }
+      return tab.name;
+    },
     handleClick (tab, event) {
       this.queryFormData.state = tab.name;
-      this.onAdvancedSearch(0, 10);
+      this.onAdvancedSearch(0, 10, true);
     },
     onResetQuery () {
       this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));

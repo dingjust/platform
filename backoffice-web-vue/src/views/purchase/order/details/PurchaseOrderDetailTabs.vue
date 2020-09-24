@@ -3,8 +3,13 @@
     <div class="over-tabs">
       <el-row type="flex">
         <template v-if="activeName === 'ACCEPTANCE'">
-          <el-button class="material-btn" @click="onEdit">编辑</el-button>
-          <el-button class="material-btn" @click="receiveComplete">收料完成</el-button>
+          <template v-if="isOnEdit">
+            <el-button class="material-btn" @click="onEditSave">保存</el-button>
+          </template>
+          <template v-else>
+            <el-button class="material-btn" @click="onEdit">编辑</el-button>
+            <el-button class="material-btn" @click="receiveComplete">收料完成</el-button>
+          </template>
         </template>
         <template v-if="activeName === 'FINANCE'">
           <el-button class="material-btn" style="width: 120px" @click="createPaymentOrder">创建付款申请单</el-button>
@@ -13,7 +18,7 @@
     </div>
     <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="物料验收" name="ACCEPTANCE">
-        <purchase-material-acceptance :order="order"/>
+        <purchase-material-acceptance :order="order" :isOnEdit="isOnEdit" />
         <el-row type="flex" justify="end">
           <h6>变更时间：2020.09.23</h6>
         </el-row>
@@ -46,10 +51,49 @@ export default {
       this.activeName = tab.name;
     },
     onEdit () {
-
+      this.editVisible = true;
+      this.isOnEdit = true;
     },
-    receiveComplete () {
+    async onEditSave () {
+      let form = {
+        id: this.order.id,
+        entries: this.order.entries.map(item => {
+          return {
+            receiveQuantity: item.receiveQuantity,
+            remark: item.remark
+          }
+        })
+      }
 
+      const url = this.apis().updatePurchaseOrder();
+      const result = await this.$http.post(url, form);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('编辑物料验收信息成功！');
+        this.$emit('callback');
+        this.isOnEdit = false;
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      }
+    },
+    async receiveComplete () {
+      const url = this.apis().purchaseOrderComplete(this.order.id);
+      const result = await this.$http.post(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('收料完成！');
+        return;
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      }
     },
     createPaymentOrder () {
 
@@ -57,7 +101,8 @@ export default {
   },
   data () {
     return {
-      activeName: 'ACCEPTANCE'
+      activeName: 'ACCEPTANCE',
+      isOnEdit: false
     }
   }
 }

@@ -30,7 +30,7 @@
       <purchase-order-form v-if="orderVisible" :formData="formData" :order="order" @callback="callback"/>
     </el-dialog>
     <el-dialog :visible.sync="detailVisible" width="80%" append-to-body :close-on-click-modal="false">
-      <purchase-order-detail v-if="detailVisible" :orderDetail="orderDetail"/>
+      <purchase-order-detail v-if="detailVisible" :orderDetail="orderDetail" @callback="onDetail(detailId)"/>
     </el-dialog>
   </div>
 </template>
@@ -77,6 +77,8 @@ export default {
       this.orderVisible = true;
     },
     async onDetail (id) {
+      this.detailId = id;
+
       const url = this.apis().searchPurchaseOrderById(id);
       const result = await this.$http.get(url);
       if (result['errors']) {
@@ -85,6 +87,10 @@ export default {
       }
       if (result.code === 1) {
         this.orderDetail = result.data;
+        this.orderDetail.entries.forEach(item => {
+          this.$set(item, 'receiveQuantity', '');
+          this.$set(item, 'remark', '');
+        })
         if (!this.orderDetail.attachAgreements) {
           this.$set(this.orderDetail, 'attachAgreements', []);
         }
@@ -104,7 +110,8 @@ export default {
       orderVisible: false,
       detailVisible: false,
       order: [],
-      orderDetail: ''
+      orderDetail: '',
+      detailId: ''
     }
   }  
 }
