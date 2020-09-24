@@ -41,3 +41,4 @@ ios/
 res/
 backoffice-web/node_modules
 backoffice-web/out-tsc
+/b2b_commerce/android/android.zip
