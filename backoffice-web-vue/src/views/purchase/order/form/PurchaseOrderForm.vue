@@ -17,10 +17,13 @@
         <el-divider></el-divider>
         <el-form ref="form" :model="order" :inline="true">
           <div class="cooperator-container">
-            <el-form-item label="供应商" prop="cooperatorName" :rules="[{required: true, message: '请选择供应商', trigger: 'change'}]">
-              <el-input v-model="order.cooperatorName"></el-input>
+            <el-form-item label="供应商" prop="cooperatorName" :rules="[{required: true, validator: validateCooperator, trigger: 'change'}]">
+              <el-select v-model="order.cooperatorName" multiple remote reserve-keyword @remove-tag="onRemoveTag"
+                v-if="(order.cooperatorName instanceof Array) && order.cooperatorName.length > 0" style="width: 194px">
+              </el-select>
+              <el-input v-else v-model="order.cooperatorName" style="width: 194px"></el-input>
             </el-form-item>
-            <el-button type="text" style="padding: 3px 15px;" @click="onAdd">
+            <el-button type="text" style="padding: 3px 15px;" @click="onAdd" v-if="!selectCooperator.id">
               <i class="el-icon-plus icon-font"></i>
             </el-button>
             <el-button class="select-btn" @click="suppliersSelectVisible=true">选择</el-button>
@@ -48,7 +51,7 @@
           </div>
         </el-form>
       </div>
-      <purchase-order-btn-group @onSave="onSave" @onDelete="onDelete" @onReturn="onReturn"/>
+      <purchase-order-btn-group :order="order" @onSave="onSave" @onDelete="onDelete" />
     </el-card>
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -69,7 +72,14 @@ import CooperatorFormPage from '@/views/miscs/cooperator/form/CooperatorFormPage
 
 export default {
   name: 'PurchaseOrderForm',
-  props: ['formData', 'order'],
+  props: {
+    formData: Object,
+    order: Object,
+    isFormDialog: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     PurchaseOrderBasicInfo,
     PurchaseMaterialTable,
@@ -84,7 +94,13 @@ export default {
     onAdd () {
       this.appendVisible = true;
     },
-    callback () {
+    onRemoveTag(tag) {
+      this.order.cooperatorName = '';
+      this.selectCooperator = '';
+    },
+    callback (data) {
+      this.selectCooperator = data;
+      this.order.cooperatorName = [data.name];
       this.appendVisible = false;
     },
     appendApprover() {
@@ -96,7 +112,7 @@ export default {
     onSuppliersSelect (data) {
       this.selectCooperator = data;
       this.suppliersSelectVisible = false;
-      this.order.cooperatorName = data.name;
+      this.order.cooperatorName = [data.name];
     },
     onSave (flag) {
       this.$refs.form.validate(valid => {
@@ -110,10 +126,12 @@ export default {
     },
     async _onSave (flag) {
       let form = {
+        id: this.order.id ? this.order.id : '',
         attachAgreements: this.order.attachAgreements,
         workOrder: this.order.workOrder,
         entries: this.order.entries.map(item => {
           return {
+            id: item.id ? item.id : '',
             spec: item.spec,
             orderQuantity: item.orderQuantity,
             price: item.price,
@@ -123,11 +141,9 @@ export default {
         })
       };
       if (this.selectCooperator != '' && this.selectCooperator.id) {
-        if (this.selectCooperator.name === this.order.cooperatorName) {
-          this.$set(form, 'cooperator', {id: this.selectCooperator.id});
-        } else {
-          this.$set(form, 'cooperatorName', this.order.cooperatorName);
-        }
+        this.$set(form, 'cooperator', { id: this.selectCooperator.id });
+      } else {
+        this.$set(form, 'cooperatorName', this.order.cooperatorName);
       }
 
       if (this.order.auditNeed) {
@@ -141,6 +157,7 @@ export default {
         form.auditNeed = false;
         form.approvers = null;
       }
+      
       const url = this.apis().savePurchaseOrder();
       const result = await this.$http.post(url, form, {
         submit: flag
@@ -151,21 +168,49 @@ export default {
       }
       if (result.code === 1) {
         this.$message.success('创建采购单成功！');
-        this.$emit('callback');
+        if (this.isFormDialog) {
+          this.$emit('callback');
+        } else {
+          this.$router.push('/purchase/order');
+        }
       } else if (result.code === 0) {
         this.$message.error(result.msg);
         return;
       }
     },
-    onDelete (flag) {
-      this.$message('----------------onDelete-----------------')
-    },
-    onReturn (flag) {
-      this.$message('----------------onReturn-----------------')
+    async onDelete () {
+      const id = this.order.id;
+      
+      const url = this.apis().deletePurchaseOrderById(id);
+      const result = await this.$http.delete(url);
+      
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('删除采购单成功！');
+        if (this.isFormDialog) {
+          this.$emit('callback');
+        } else {
+          this.$router.push('/purchase/order');
+        }
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+      } else {
+        this.$message.error('删除采购需求失败！');
+      }
     },
     validateField (name) {
       this.$refs.form.validateField(name);
     },
+    validateCooperator (rule, value, callback) {
+      if (this.order.cooperatorName === '') {
+        callback(new Error('请填写或选择合作商'));
+      } else {
+        callback();
+      }
+    }
   },
   data () {
     return {
@@ -182,8 +227,16 @@ export default {
       this.order.approvers.forEach((item, index) => {
         this.validateField('approvers.' + index);
       })
+    },
+    'order.cooperatorName': function (nval, oval) {
+      this.validateField('cooperatorName');
     }
-  },  
+  }, 
+  created () {
+    if (!this.formData || !this.order) {
+      this.$router.push('/purchase/order');
+    }
+  } 
 }
 </script>
 

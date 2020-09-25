@@ -31,6 +31,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
+          <el-button v-if="scope.row.state === 'NOT_COMMITED' || scope.row.state === 'AUDIT_FAILED'" type="text" @click="onEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -55,6 +56,17 @@ export default {
     onDetail(row) {
       this.$router.push('/purchase/order/' + row.id);
     },
+    async onEdit (row) {
+      await this.getDetail(row.id);
+      
+      this.$router.push({
+        name: '创建采购单',
+        params: {
+          formData: this.orderDetail.workOrder,
+          order: this.order
+        }
+      });
+    },
     onPageSizeChanged(val) {
       this.$emit('onAdvancedSearch', 0, val);
 
@@ -69,9 +81,64 @@ export default {
         this.$refs.resultTable.bodyWrapper.scrollTop = 0
       });
     },
+    async getDetail (id) {
+      const url = this.apis().searchPurchaseOrderById(id);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.orderDetail = result.data;
+        this.orderDetail.entries.forEach(item => {
+          if (!item.receiveQuantity) {
+            this.$set(item, 'receiveQuantity', '');
+          }
+          if (!item.remark) {
+            this.$set(item, 'remark', '');
+          }
+        })
+        if (!this.orderDetail.attachAgreements) {
+          this.$set(this.orderDetail, 'attachAgreements', []);
+        }
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      }
+      
+      this.order = {
+        id: this.orderDetail.id,
+        cooperator: this.orderDetail.cooperator ? this.orderDetail.cooperator : {},
+        cooperatorName: this.orderDetail.cooperatorName ? this.orderDetail.cooperatorName : '',
+        approvers: this.orderDetail.approvers ? this.orderDetail.approvers : [],
+        auditNeed: this.orderDetail.approvers && this.orderDetail.approvers.length >= 0,
+        attachAgreements: this.orderDetail.attachAgreements ? this.orderDetail.attachAgreements : [],
+        workOrder: {
+          id: this.orderDetail.workOrder.id
+        },
+        entries: this.orderDetail.entries.map(val => {
+          return {
+            id: val.id,
+            spec: {
+              id: val.spec.id
+            },
+            name: this.orderDetail.workOrder.materials.name,
+            colorName: val.spec.colorName,
+            modelName: val.spec.modelName,
+            specName: val.spec.specName,
+            orderQuantity: val.orderQuantity,
+            price: val.price,
+            totalPrice: val.totalPrice,
+            estimatedRecTime: val.estimatedRecTime
+          }
+        })
+      }
+    },
   },
   data() {
     return {
+      orderDetail: '',
+      order: ''
     }
   },
   create() {

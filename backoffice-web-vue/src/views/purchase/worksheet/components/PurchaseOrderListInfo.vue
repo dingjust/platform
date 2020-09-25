@@ -27,7 +27,8 @@
       </el-tabs>
     </el-row>
     <el-dialog :visible.sync="orderVisible" width="80%" append-to-body :close-on-click-modal="false">
-      <purchase-order-form v-if="orderVisible" :formData="formData" :order="order" @callback="callback"/>
+      <purchase-order-form v-if="orderVisible" :formData="formData" 
+                          :order="order" @callback="callback" :isFormDialog="true"/>
     </el-dialog>
     <el-dialog :visible.sync="detailVisible" width="80%" append-to-body :close-on-click-modal="false">
       <purchase-order-detail v-if="detailVisible" :id="orderId" @callback="callback"/>
@@ -48,8 +49,40 @@ export default {
   },
   methods: {
     onDetail (item) {
-      this.detailVisible = true;
-      this.orderId = item.id;
+      if (item.state === 'NOT_COMMITED' || item.state === 'AUDIT_FAILED') {
+        this.order = {
+          id: item.id,
+          state: item.state,
+          cooperator: item.cooperator ? item.cooperator : {},
+          cooperatorName: item.cooperatorName ? item.cooperatorName : '',
+          approvers: item.approvers ? item.approvers : [],
+          auditNeed: item.approvers && item.approvers.length >= 0,
+          attachAgreements: item.attachAgreements ? item.attachAgreements : [],
+          workOrder: {
+            id: item.workOrder.id
+          },
+          entries: item.entries.map(val => {
+            return {
+              id: val.id,
+              spec: {
+                id: val.spec.id
+              },
+              name: item.workOrder.materials.name,
+              colorName: val.spec.colorName,
+              modelName: val.spec.modelName,
+              specName: val.spec.specName,
+              orderQuantity: val.orderQuantity,
+              price: val.price,
+              totalPrice: val.totalPrice,
+              estimatedRecTime: val.estimatedRecTime
+            }
+          })
+        }
+        this.orderVisible = true;
+      } else {
+        this.detailVisible = true;
+        this.orderId = item.id;
+      }
     },
     onCreate () {
       this.order = {
@@ -70,7 +103,7 @@ export default {
           },
           name: item.name,
           colorName: item.colorName,
-          modelName: item.specName,
+          modelName: item.modelName,
           specName: item.specName,
           orderQuantity: '',
           price: '',

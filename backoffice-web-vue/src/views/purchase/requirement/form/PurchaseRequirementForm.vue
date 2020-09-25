@@ -87,7 +87,7 @@
         <purchase-requirement-table :formData="formData"/>
       </div>
       <div style="margin-top: 30px">
-        <purchase-requirement-btn-group @onSave="onSave" @onDelete="onDelete" @onReturn="onReturn"/>
+        <purchase-requirement-btn-group :formData="formData" @onSave="onSave" @onDelete="onDelete" />
       </div>
     </el-card>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
@@ -102,7 +102,6 @@ import { PersonnalSelectionV2, MyAddressForm } from '@/components'
 import PurchaseRequirementTable from '../components/PurchaseRequirementTable'
 import PurchaseRequirementBtnGroup from '../components/PurchaseRequirementBtnGroup'
 import ProductionTaskSelectDialog from '@/views/order/salesProduction/production-task/components/ProductionTaskSelectDialog'
-import { re } from 'semver'
 
 export default {
   name: 'PurchaseRequirementForm',
@@ -270,11 +269,24 @@ export default {
         this.$message.error('添加采购需求失败！');
       }
     },
-    onDelete () {
-
-    },
-    onReturn () {
-
+    async onDelete () {
+      const id = this.formData.id;
+      
+      const url = this.apis().deletePurchaseTaskById(id);
+      const result = await this.$http.delete(url);
+      
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('删除采购需求成功！');
+        this.$router.push('/purchase/requirement');
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+      } else {
+        this.$message.error('删除采购需求失败！');
+      }
     },
     validateField (name) {
       this.$refs.form.validateField(name);

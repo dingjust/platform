@@ -39,6 +39,9 @@
           </authorized>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+        <el-button v-if="canReturn" class="sumbit-btn" @click="onReturn">撤回</el-button>
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -59,6 +62,13 @@ export default {
     OrderAuditDetail
   },
   computed: {
+    canReturn: function () {
+      if (this.orderDetail.state !== 'AUDITING') {
+        return false;
+      }
+
+      return true;
+    },
     cooperator: function () {
       if (!this.orderDetail.cooperator && this.orderDetail.cooperatorName) {
         return this.orderDetail.cooperatorName;
@@ -164,6 +174,37 @@ export default {
         this.getDetail();
       }, 1000);
     },
+    async onReturn () {
+      const id = this.id;
+
+      const url = this.apis().revokeTask(id);
+      const result = await this.$http.delete(url);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('审核撤回成功！');
+        
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+          this.getDetail();
+          this.callback();
+        }, 1000);
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      } else {
+        this.$message.error('审核撤回失败！');
+      }
+    },
     callback () {
       this.$emit('callback');
     }
@@ -176,13 +217,18 @@ export default {
         entries: [],
         workOrder: {
           materials: {
-            code: ''
+            code: '',
+            specList: [{
+            }]
           },
           task: {
             productionTask: {
               product: {
                 skuID: ''
               }
+            },
+            shippingAddress: {
+              details: ''
             }
           }
         }
@@ -219,5 +265,11 @@ export default {
     color: white;
     width: 90px;
     height: 35px;
+  }
+
+  .sumbit-btn {
+    width: 100px;
+    color: #606266;
+    background-color: #ffd60c;
   }
 </style>

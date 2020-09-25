@@ -69,7 +69,7 @@ export default {
       let count = 0;
       this.order.entries.forEach(item => {
         if (!Number.isNaN(Number.parseInt(item.orderQuantity))) {
-          count += Number.parseInt(item.orderQuantity);
+          count += Number.parseFloat(item.orderQuantity).toFixed(2);
         }
       })
       return count === 0 ? '' : count;

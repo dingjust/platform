@@ -223,8 +223,13 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$emit('添加合作商成功！');
         if (this.isFromDialog) {
-          this.$emit('callback');
+          this.$emit('callback', result.data);
           return;
         }
         this.$router.push('/account/cooperator');
@@ -250,8 +255,13 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$emit('保存合作商成功！');
         if (this.isFromDialog) {
-          this.$emit('callback');
+          this.$emit('callback', result.data);
           return;
         }
         this.$router.push('/account/cooperator');
