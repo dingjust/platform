@@ -22,6 +22,7 @@ class _AuthenticationEnterpriseFromPageState
   TextEditingController _enterpriseNameController = TextEditingController();
   TextEditingController _xydmController = TextEditingController();
   TextEditingController _fddbrController = TextEditingController();
+  String _roleStr = '';
 
   @override
   void initState() {
@@ -115,11 +116,26 @@ class _AuthenticationEnterpriseFromPageState
                     },
                   );
                 });
+          } else if (_roleStr == null || _roleStr == '') {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) {
+                  return CustomizeDialog(
+                    dialogType: DialogType.RESULT_DIALOG,
+                    failTips: '请选择身份',
+                    callbackResult: false,
+                    confirmAction: () {
+                      Navigator.of(context).pop();
+                    },
+                  );
+                });
           } else {
             Map map = {
+              'role': _roleStr,
               'companyName': _enterpriseNameController.text,
               'organization': _xydmController.text,
-              'legal': {'name': _fddbrController.text}
+              'username': _fddbrController.text
             };
             enterprise(map);
           }
@@ -170,10 +186,29 @@ class _AuthenticationEnterpriseFromPageState
                   style: TextStyle(
                     fontSize: 16,
                   )),
-              hintText: '输入法人姓名',
+              hintText: _roleStr == 'AGENT' ? '输入经办人姓名' : '输入法人姓名',
               hideDivider: true,
             ),
           ),
+          Container(
+              padding: EdgeInsets.all(15),
+              child: GestureDetector(
+                onTap: _selectRole,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('我的身份'),
+                    Expanded(
+                        child: Text(
+                      _roleStr != ''
+                          ? (_roleStr == 'AGENT' ? '我是经办人' : '我是法人')
+                          : '请选择身份',
+                      style: TextStyle(color: Colors.grey),
+                      textAlign: TextAlign.end,
+                    ))
+                  ],
+                ),
+              )),
         ],
       ),
     );
@@ -207,6 +242,49 @@ class _AuthenticationEnterpriseFromPageState
               ))
         ],
       ),
+    );
+  }
+
+  ///选择身份
+  void _selectRole() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              title: Text(
+                '我是法人',
+                textAlign: TextAlign.center,
+              ),
+              onTap: () {
+                setState(() {
+                  _roleStr = 'LEGAL';
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            Divider(
+              height: 0.5,
+              thickness: 0.5,
+              color: Colors.grey[300],
+            ),
+            ListTile(
+              title: Text(
+                '我是经办人',
+                textAlign: TextAlign.center,
+              ),
+              onTap: () {
+                setState(() {
+                  _roleStr = 'AGENT';
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
