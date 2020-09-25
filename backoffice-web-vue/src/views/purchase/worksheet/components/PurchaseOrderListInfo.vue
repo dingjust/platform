@@ -52,6 +52,7 @@ export default {
       if (item.state === 'NOT_COMMITED' || item.state === 'AUDIT_FAILED') {
         this.order = {
           id: item.id,
+          state: item.state,
           cooperator: item.cooperator ? item.cooperator : {},
           cooperatorName: item.cooperatorName ? item.cooperatorName : '',
           approvers: item.approvers ? item.approvers : [],

@@ -57,6 +57,7 @@
 
   import TaskApprovalToolbar from './toolbar/TaskApprovalToolbar';
   import TaskApprovalList from './list/TaskApprovalList';
+import brands from '@/store/modules/user/brands';
   export default {
     name: 'TaskApprovalPage',
     components: {
@@ -131,10 +132,13 @@
             break;
           case 'PaymentRequestTask':
             this.$router.push('/financial/merchandiser/paymentRequest/' + row.auditModel.id);
+            break;
           case 'PurchaseTask':
             this.$router.push('/purchase/requirement/' + row.auditModel.id);
+            break;
           case 'ProductionPurchaseOrder':
             this.$router.push('/purchase/order/' + row.auditModel.id);
+            break;
         }
       },
       onApproval(row) {

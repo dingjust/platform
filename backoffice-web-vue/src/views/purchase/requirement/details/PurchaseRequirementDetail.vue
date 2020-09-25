@@ -59,6 +59,9 @@
           </authorized>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+        <el-button v-if="canReturn" class="sumbit-btn" @click="onReturn">撤回</el-button>
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -75,6 +78,12 @@ export default {
     OrderAuditDetail
   },
   computed: {
+    canReturn: function () {
+      if (this.formData.state !== 'AUDITING') {
+        return false;
+      }
+      return this.formData.creator.uid === this.$store.getters.currentUser.uid;
+    },
     canAudit: function () {
       if (this.formData.state !== 'AUDITING') {
         return false;
@@ -162,6 +171,36 @@ export default {
         this.getDetail();
       }, 1000);
     },
+    async onReturn () {
+      const id = this.formData.id;
+
+      const url = this.apis().revokeTask(id);
+      const result = await this.$http.delete(url);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('审核撤回成功！');
+        
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+          this.getDetail();
+        }, 1000);
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      } else {
+        this.$message.error('审核撤回失败！');
+      }
+    },
     initData (resultData) {
       let workOrders = []; 
       let data = Object.assign({}, resultData);
@@ -248,5 +287,11 @@ export default {
     color: white;
     width: 90px;
     height: 35px;
+  }
+
+  .sumbit-btn {
+    width: 100px;
+    color: #606266;
+    background-color: #ffd60c;
   }
 </style>

@@ -51,7 +51,7 @@
           </div>
         </el-form>
       </div>
-      <purchase-order-btn-group @onSave="onSave" @onDelete="onDelete" @onReturn="onReturn"/>
+      <purchase-order-btn-group :order="order" @onSave="onSave" @onDelete="onDelete" />
     </el-card>
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -178,11 +178,28 @@ export default {
         return;
       }
     },
-    onDelete (flag) {
-      this.$message('----------------onDelete-----------------')
-    },
-    onReturn (flag) {
-      this.$message('----------------onReturn-----------------')
+    async onDelete () {
+      const id = this.order.id;
+      
+      const url = this.apis().deletePurchaseOrderById(id);
+      const result = await this.$http.delete(url);
+      
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('删除采购单成功！');
+        if (this.isFormDialog) {
+          this.$emit('callback');
+        } else {
+          this.$router.push('/purchase/order');
+        }
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+      } else {
+        this.$message.error('删除采购需求失败！');
+      }
     },
     validateField (name) {
       this.$refs.form.validateField(name);
@@ -214,7 +231,12 @@ export default {
     'order.cooperatorName': function (nval, oval) {
       this.validateField('cooperatorName');
     }
-  },  
+  }, 
+  created () {
+    if (!this.formData || !this.order) {
+      this.$router.push('/purchase/order');
+    }
+  } 
 }
 </script>
 
