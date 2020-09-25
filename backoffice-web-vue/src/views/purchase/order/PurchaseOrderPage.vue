@@ -20,7 +20,7 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <template v-for="item in statuses">
             <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
-              <purchase-order-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
+              <purchase-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" />
             </el-tab-pane>
           </template>
         </el-tabs>
@@ -100,7 +100,7 @@ export default {
     handleClick (tab, event) {
       this.queryFormData.state = tab.name;
       this.onAdvancedSearch(0, 10, true);
-    },
+    }
     // onResetQuery () {
     //   this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
     // }

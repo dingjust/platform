@@ -816,6 +816,10 @@ const COMMON_APIS = {
   getPurchaseTask(id) {
     return '/b2b/purchase/task/' + id;
   },
+  // 删除采购任务
+  deletePurchaseTaskById (id) {
+    return '/b2b/purchase/task/' + id;
+  },
   // 添加采购任务
   savePurchaseTask() {
     return '/b2b/purchase/task/save'
@@ -842,6 +846,10 @@ const COMMON_APIS = {
   },
   // 根据id获取采购单
   searchPurchaseOrderById (id) {
+    return '/b2b/purchase/order/' + id;
+  },
+  // 删除采购单
+  deletePurchaseOrderById (id) {
     return '/b2b/purchase/order/' + id;
   },
   // 更新采购单信息

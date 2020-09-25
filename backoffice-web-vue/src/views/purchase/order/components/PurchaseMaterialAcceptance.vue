@@ -54,7 +54,7 @@ export default {
       let orderQuantity = Number.parseFloat(item.orderQuantity);
       let receiveQuantity = Number.parseFloat(item.receiveQuantity);
       if (!Number.isNaN(orderQuantity) && !Number.isNaN(receiveQuantity)) {
-        return (orderQuantity - receiveQuantity).toFixed(0) > 0 ? (orderQuantity - receiveQuantity).toFixed(0) : 0;
+        return (orderQuantity - receiveQuantity).toFixed(2) > 0 ? (orderQuantity - receiveQuantity).toFixed(2) : 0;
       }
       return '';
     }
