@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" />
+    <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" :downLink="downLink"/>
     <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
       <el-table-column label="产品主图">
         <template slot-scope="scope">
@@ -104,6 +104,7 @@
       return {
         tableData: [],
         tableHeader: [],
+        downLink: 'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E6%AC%BE%E5%BC%8F%E6%89%B9%E9%87%8F%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx'
       }
     },
     methods: {

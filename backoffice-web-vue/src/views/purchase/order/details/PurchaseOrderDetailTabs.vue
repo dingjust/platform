@@ -6,7 +6,7 @@
           <template v-if="isOnEdit">
             <el-button class="material-btn" @click="onEditSave">保存</el-button>
           </template>
-          <template v-else>
+          <template v-if="!isOnEdit && order.state === 'WAIT_TO_REV_MATERIALS'">
             <el-button class="material-btn" @click="onEdit">编辑</el-button>
             <el-button class="material-btn" @click="receiveComplete">收料完成</el-button>
           </template>
@@ -20,7 +20,7 @@
       <el-tab-pane label="物料验收" name="ACCEPTANCE">
         <purchase-material-acceptance :order="order" :isOnEdit="isOnEdit" />
         <el-row type="flex" justify="end">
-          <h6>变更时间：2020.09.23</h6>
+          <h6>变更时间：{{modifiedtime | formatDate}}</h6>
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="财务信息" name="FINANCE">
@@ -46,6 +46,11 @@ export default {
   components: {
     PurchaseMaterialAcceptance
   },
+  computed: {
+    modifiedtime: function () {
+      return this.order.entries.map(item => item.modifiedtime).sort((o1, o2) => o2 - o1)[0];
+    }
+  },
   methods: {
     handleClick (tab, event) {
       this.activeName = tab.name;
@@ -59,6 +64,7 @@ export default {
         id: this.order.id,
         entries: this.order.entries.map(item => {
           return {
+            id: item.id,
             receiveQuantity: item.receiveQuantity,
             remark: item.remark
           }
@@ -73,7 +79,7 @@ export default {
       }
       if (result.code === 1) {
         this.$message.success('编辑物料验收信息成功！');
-        this.$emit('callback');
+        this.$emit('getDetail');
         this.isOnEdit = false;
       } else if (result.code === 0) {
         this.$message.error(result.msg);
@@ -89,6 +95,8 @@ export default {
       }
       if (result.code === 1) {
         this.$message.success('收料完成！');
+        this.$emit('getDetail');
+        this.$emit('callback');
         return;
       } else if (result.code === 0) {
         this.$message.error(result.msg);

@@ -22,7 +22,7 @@
           <h6>供应商：{{cooperator}}</h6>
         </el-row>
         <purchase-material-table :order="orderDetail" :readOnly="true"/>
-        <purchase-order-detail-tabs :order="orderDetail" @callback="callback"/>
+        <purchase-order-detail-tabs :order="orderDetail" @callback="callback" @getDetail="getDetail"/>
         <template v-if="orderDetail.currentAuditWork &&orderDetail.currentAuditWork.processes&& orderDetail.currentAuditWork.processes.length > 0">
           <order-audit-detail :processes="orderDetail.currentAuditWork.processes" />
         </template>
@@ -51,7 +51,7 @@ import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
 
 export default {
   name: 'PurchaseOrderDetail',
-  props: ['orderDetail'],
+  props: ['id'],
   components: {
     PurchaseOrderBasicInfo,
     PurchaseMaterialTable,
@@ -84,6 +84,31 @@ export default {
     },
   },
   methods: {
+    async getDetail () {
+      const url = this.apis().searchPurchaseOrderById(this.id);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.orderDetail = result.data;
+        this.orderDetail.entries.forEach(item => {
+          if (!item.receiveQuantity) {
+            this.$set(item, 'receiveQuantity', '');
+          }
+          if (!item.remark) {
+            this.$set(item, 'remark', '');
+          }
+        })
+        if (!this.orderDetail.attachAgreements) {
+          this.$set(this.orderDetail, 'attachAgreements', []);
+        }
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      }
+    },
     onApproval(isPass) {
       if (this.orderDetail.currentAuditWork.auditingUser.uid === this.$store.getters.currentUser.uid &&
         this.orderDetail.currentAuditWork.currentUserAuditState === 'AUDITING') {
@@ -136,12 +161,36 @@ export default {
       });
       setTimeout(() => {
         loading.close();
-        this.$emit('callback');
+        this.getDetail();
       }, 1000);
     },
     callback () {
       this.$emit('callback');
     }
+  },
+  data () {
+    return {
+      orderDetail: {
+        code: '',
+        state: 'WAIT_TO_REV_MATERIALS',
+        entries: [],
+        workOrder: {
+          materials: {
+            code: ''
+          },
+          task: {
+            productionTask: {
+              product: {
+                skuID: ''
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  created () {
+    this.getDetail();
   }  
 }
 </script>

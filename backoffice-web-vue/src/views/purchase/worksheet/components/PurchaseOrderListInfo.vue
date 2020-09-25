@@ -11,7 +11,7 @@
                     <h6 style="margin: 10px 10px 0px 0px">{{getEnum('PurchaseOrderState', item.state)}}</h6>
                   </el-row>
                   <el-row type="flex" justify="center" style="height: 72%;">
-                    <el-button type="text" @click="onDetail(item.id)">点击查看详情</el-button>
+                    <el-button type="text" @click="onDetail(item)">点击查看详情</el-button>
                   </el-row>
                 </div>
               </template>
@@ -30,7 +30,7 @@
       <purchase-order-form v-if="orderVisible" :formData="formData" :order="order" @callback="callback"/>
     </el-dialog>
     <el-dialog :visible.sync="detailVisible" width="80%" append-to-body :close-on-click-modal="false">
-      <purchase-order-detail v-if="detailVisible" :orderDetail="orderDetail" @callback="onDetail(detailId)"/>
+      <purchase-order-detail v-if="detailVisible" :id="orderId" @callback="callback"/>
     </el-dialog>
   </div>
 </template>
@@ -47,6 +47,10 @@ export default {
     PurchaseOrderDetail
   },
   methods: {
+    onDetail (item) {
+      this.detailVisible = true;
+      this.orderId = item.id;
+    },
     onCreate () {
       this.order = {
         cooperator: {},
@@ -76,30 +80,6 @@ export default {
       })
       this.orderVisible = true;
     },
-    async onDetail (id) {
-      this.detailId = id;
-
-      const url = this.apis().searchPurchaseOrderById(id);
-      const result = await this.$http.get(url);
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.code === 1) {
-        this.orderDetail = result.data;
-        this.orderDetail.entries.forEach(item => {
-          this.$set(item, 'receiveQuantity', '');
-          this.$set(item, 'remark', '');
-        })
-        if (!this.orderDetail.attachAgreements) {
-          this.$set(this.orderDetail, 'attachAgreements', []);
-        }
-        this.detailVisible = true;
-      } else if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
-    },
     callback () {
       this.orderVisible = false;
       this.$emit('callback');
@@ -110,8 +90,7 @@ export default {
       orderVisible: false,
       detailVisible: false,
       order: [],
-      orderDetail: '',
-      detailId: ''
+      orderId: ''
     }
   }  
 }

@@ -14,13 +14,22 @@
               <th :key="item">{{item}}</th>
             </template>
           </tr>
-          <tr>
-            <td>{{purchaseName}}</td>
-            <td>{{purchaseColor}}</td>
-            <td>{{purchaseQuantity}}</td>
-            <td>{{purchasePrice}}</td>
-            <td>{{purchaseTotalPrice}}</td>
-          </tr>
+          <template v-if="formData.materials.specList && formData.materials.specList.length> 0">
+            <template v-for="item in formData.materials.specList">
+              <tr :key="item.id">
+                <td>{{formData.materials.name}}</td>
+                <td>{{item.colorName}}</td>
+                <td>{{item.actuallyOrderQuantity}}</td>
+                <td>{{item.actuallyPrice}}</td>
+                <td>{{item.actuallyTotalPrice}}</td>
+              </tr>
+            </template>
+          </template>
+          <template v-else>
+            <tr>
+              <td :colspan="titleRow.length">暂无数据</td>
+            </tr>
+          </template>
         </table>
       </el-col>
     </el-row>
@@ -31,23 +40,6 @@
 export default {
   name: 'PurchaseSummary',
   props: ['formData'],
-  computed: {
-    purchaseName: function () {
-      return '123456';
-    },
-    purchaseColor: function () {
-      return '345678';
-    },
-    purchaseQuantity: function () {
-      return '456789';
-    },
-    purchasePrice: function () {
-      return '678900';
-    },
-    purchaseTotalPrice: function () {
-      return '1678900';
-    },
-  },
   data () {
     return {
       titleRow: ['物料名称', '物料颜色', '实际采购数量', '实际采购单价', '采购总价']

@@ -488,6 +488,11 @@ const router = new Router({
         path: 'order',
         name: '采购单',
         component: () => import(/* webpackChunkName: 'purchase' */ '@/views/purchase/order/PurchaseOrderPage')
+      }, {
+        path: 'order/:id',
+        name: '采购单',
+        props: true,
+        component: () => import(/* webpackChunkName: 'purchase' */ '@/views/purchase/order/details/PurchaseOrderDetail')
       }]
     },
     {

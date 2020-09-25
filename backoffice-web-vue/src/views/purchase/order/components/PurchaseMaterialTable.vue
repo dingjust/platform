@@ -19,7 +19,7 @@
             <td>{{readOnly ? item.spec.specName : item.specName}}</td>
             <td style="min-width: 100px">
               <span v-if="readOnly">{{item.orderQuantity}}</span>
-              <el-input v-else v-model="item.orderQuantity" type="number" v-number-input.float="{ min: 0, decimal: 0}" />
+              <el-input v-else v-model="item.orderQuantity" type="number" v-number-input.float="{ min: 0, decimal: 2}" />
             </td>
             <td style="min-width: 100px">
               <span v-if="readOnly">{{item.price}}</span>
