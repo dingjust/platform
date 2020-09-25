@@ -31,6 +31,17 @@
           <el-input size="small" v-model="enterpriseSlotData.username" placeholder="姓名(与身份证一致)" />
         </el-col>
       </el-row>
+      <el-row class="form-row" type="flex" justify="center" :gutter=15>
+        <el-col :span="3">
+          <el-button type="info" style="width: 120px" disabled>我的身份</el-button>
+        </el-col>
+        <el-col :span="12">
+          <div style="padding-top:10px">
+          <el-radio v-model="enterpriseSlotData.role" label="LEGAL">我是法人</el-radio>
+          <el-radio v-model="enterpriseSlotData.role" label="AGENT">我是经办人</el-radio>
+          </div>
+        </el-col>
+      </el-row>
       <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
         <Authorized :permission="['CERT_APPLY']">
           <el-button v-if="companyState == 'UNCERTIFIED'" class="form-submit_btn submit" size="mini" round
