@@ -89,7 +89,7 @@
             <span>单件用量<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.unitQuantity'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.unitQuantity'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.unitQuantity" style="width: 90px" 
                         v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
             </el-form-item>
@@ -100,7 +100,7 @@
             <span>预计损耗<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedLoss'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedLoss'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.estimatedLoss" style="width: 90px"
                         v-number-input.float="{ min: 0, max: 100, decimal: 2 }">
                 <span slot="suffix">%</span>
@@ -123,7 +123,7 @@
             <span>订单数<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.orderCount'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.orderCount'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.orderCount" style="width: 90px"
                         v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
             </el-form-item>
@@ -161,7 +161,7 @@
             <span>物料单价<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.price'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.price'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.price" style="width: 90px"
                         v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
             </el-form-item>
@@ -356,6 +356,13 @@ export default {
         }
       }
       return true;
+    },
+    validateValue (rule, value, callback) {
+      if (value && value !== '') {
+        callback();
+      } else {
+        callback(new Error('必填'));
+      }
     }
   },
   data () {

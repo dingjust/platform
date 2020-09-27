@@ -130,7 +130,13 @@ export default {
     }
   },
   created () {
-    this.dataQuery = this.getDataPerQuery('PURCHASE_REQUIREMENT');
+    let data = this.getDataPerQuery('PURCHASE_REQUIREMENT');
+    this.dataQuery = {
+      users: data.users,
+      depts: data.depts,
+      ctrDepts: data.depts,
+      ctrUsers: data.users
+    };
     this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }

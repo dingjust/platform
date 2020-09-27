@@ -97,8 +97,6 @@ export default {
 
       // 处理数据回显
       if (this.vPerson && this.vPerson.id) {
-        console.log(this.vPerson.name);
-        console.log(this.deptList);  
         let arr = this.familyTree(this.deptList, this.vPerson.id);
         this.person = arr.map(item => item.id);
       }

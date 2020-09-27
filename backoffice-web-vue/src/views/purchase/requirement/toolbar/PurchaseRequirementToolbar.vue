@@ -7,10 +7,11 @@
             <el-input placeholder="输入订单号、产品名或货号" v-model="queryFormData.keyword" style="width: 130px"></el-input>
           </el-form-item>
           <el-form-item label="创建人" class="toolbar-form-item">
-            <el-input style="width: 120px;" placeholder="输入创建人名称" v-model="queryFormData.creator"></el-input>
+            <dept-person-select ref="deptPersonSelect1" :dataQuery="dataQuery" width="120"
+                                :selectDept="queryFormData.ctrDepts" :selectPerson="queryFormData.ctrUsers"/>
           </el-form-item>
-          <el-form-item label="采购员" prop="name" class="toolbar-form-item">
-            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="120"
+          <el-form-item label="采购员" class="toolbar-form-item">
+            <dept-person-select ref="deptPersonSelect2" :dataQuery="dataQuery" width="120"
                                 :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
           </el-form-item>
           <el-form-item label="创建时间" class="toolbar-form-item">
@@ -58,7 +59,8 @@
         this.queryFormData.creator = '';
         this.queryFormData.createdDateFrom = '';
         this.queryFormData.createdDateTo = '';
-        this.$refs.deptPersonSelect.clearSelectData();
+        this.$refs.deptPersonSelect1.clearSelectData();
+        this.$refs.deptPersonSelect2.clearSelectData();
         this.$emit('onResetQuery');
       },
       onCreate () {
