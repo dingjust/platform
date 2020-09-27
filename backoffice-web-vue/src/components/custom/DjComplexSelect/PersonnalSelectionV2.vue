@@ -91,13 +91,14 @@ export default {
 
         // 主账号没所属部门时，跟一级部门同级
         if (item.root && item.b2bDept == null) {
-          console.log('-------------------------------------------------------------------')
           this.deptList.push(item);
         } 
       })
 
       // 处理数据回显
-      if (this.vPerson && this.vPerson.id) {  
+      if (this.vPerson && this.vPerson.id) {
+        console.log(this.vPerson.name);
+        console.log(this.deptList);  
         let arr = this.familyTree(this.deptList, this.vPerson.id);
         this.person = arr.map(item => item.id);
       }

@@ -54,7 +54,7 @@
             </div>
           </el-row>
           <div style="display: flex;flex-wrap: wrap;">
-            <el-form-item label="采购人" prop="merchandiser" :rules="[{ required: true, type: 'object', message: '不能为空', trigger: 'change' }]">
+            <el-form-item label="采购人" prop="merchandiser" :rules="[{ required: true, message: '不能为空', trigger: 'change' }]">
               <personnal-selection-v2 :vPerson.sync="formData.merchandiser" />
             </el-form-item>
             <el-form-item label="" label-width="10px" >
@@ -290,62 +290,6 @@ export default {
     },
     validateField (name) {
       this.$refs.form.validateField(name);
-    },
-    async getDetail (id) {
-      const url = this.apis().getPurchaseTask(id);
-      const result = await this.$http.get(url);
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.code === 1) {
-        this.initData(result.data);
-      } else if (result.code === 0) {
-        this.$message.error(result.msg);
-      }
-    },
-    initData (resultData) {
-      let workOrders = []; 
-      let data = Object.assign({}, resultData);
-      resultData.workOrders.forEach(row => {
-        if (row.materials && row.materials.specList && row.materials.specList.length > 0) {
-          workOrders = workOrders.concat(row.materials.specList.map(item => {
-            return {
-              id: row.id,
-              materialsId: row.materials.id,
-              specListId: item.id,
-              name: row.materials.name,
-              code: row.materials.code,
-              unit: row.materials.unit,
-              materialsType: row.materials.materialsType,
-              unitQuantity: item.unitQuantity,
-              specName: item.specName,
-              colorName: item.colorName,
-              modelName: item.modelName,
-              emptySent: item.emptySent,
-              requiredAmount: item.requiredAmount,
-              estimatedLoss: item.estimatedLoss,
-              estimatedUsage: item.estimatedUsage,
-              orderCount: item.orderCount,
-              auditColor: item.auditColor,
-              estimatedRecTime: item.estimatedRecTime,
-              cooperatorName: row.cooperatorName,
-              price: item.price,
-              totalPrice: item.totalPrice
-            }
-          }));
-        }
-      })
-      data.workOrders = workOrders;
-      if (!data.approvers) {
-        data.approvers = [null];
-        data.auditNeeded = false
-      } else {
-        data.auditNeeded = true;
-      }
-      this.formData = Object.assign({}, data);
-      this.$refs.addressForm.getCities(data.shippingAddress.region);
-      this.$refs.addressForm.onCityChanged(data.shippingAddress.city);
     }
   },
   data () {
@@ -399,8 +343,8 @@ export default {
     }
   },
   created () {
-    if (this.$route.params.id) {
-      this.getDetail(this.$route.params.id);
+    if (this.$route.params.formData) {
+      this.formData = this.$route.params.formData;
     }
   }  
 }

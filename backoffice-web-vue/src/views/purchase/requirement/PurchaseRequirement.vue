@@ -101,8 +101,8 @@ export default {
       queryFormData: {
         keyword: '',
         creator: '',
-        creationtimeFrom: '',
-        creationtimeTo: '',
+        createdDateFrom: '',
+        createdDateTo: '',
         state: 'NOT_COMMITED'
       },
       dataQuery: {},

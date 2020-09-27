@@ -109,8 +109,8 @@ export default {
       queryFormData: {
         keyword: '',
         cooperatorName: '',
-        creationtimeFrom: '',
-        creationtimeTo: '',
+        createdDateFrom: '',
+        createdDateTo: '',
         state: 'WAIT_TO_PURCHASE'
       },
       dataQuery: {},

@@ -46,11 +46,62 @@ export default {
     onDetail(row) {
       this.$router.push('/purchase/requirement/' + row.id);
     },
-    onEdit(row) {
+    async onEdit(row) {
+      const url = this.apis().getPurchaseTask(row.id);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.initData(result.data);
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+      }
+    },
+    initData (resultData) {
+      let workOrders = []; 
+      let data = Object.assign({}, resultData);
+      resultData.workOrders.forEach(row => {
+        if (row.materials && row.materials.specList && row.materials.specList.length > 0) {
+          workOrders = workOrders.concat(row.materials.specList.map(item => {
+            return {
+              id: row.id,
+              materialsId: row.materials.id,
+              specListId: item.id,
+              name: row.materials.name,
+              code: row.materials.code,
+              unit: row.materials.unit,
+              materialsType: row.materials.materialsType,
+              unitQuantity: item.unitQuantity,
+              specName: item.specName,
+              colorName: item.colorName,
+              modelName: item.modelName,
+              emptySent: item.emptySent,
+              requiredAmount: item.requiredAmount,
+              estimatedLoss: item.estimatedLoss,
+              estimatedUsage: item.estimatedUsage,
+              orderCount: item.orderCount,
+              auditColor: item.auditColor,
+              estimatedRecTime: item.estimatedRecTime,
+              cooperatorName: row.cooperatorName,
+              price: item.price,
+              totalPrice: item.totalPrice
+            }
+          }));
+        }
+      })
+      data.workOrders = workOrders;
+      if (!data.approvers) {
+        data.approvers = [null];
+        data.auditNeeded = false
+      } else {
+        data.auditNeeded = true;
+      }
       this.$router.push({
         name: '创建采购需求',
         params: {
-          id: row.id
+          formData: Object.assign({}, data)
         }
       });
     },

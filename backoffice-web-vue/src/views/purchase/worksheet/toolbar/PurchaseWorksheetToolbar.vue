@@ -53,8 +53,8 @@
         this.dateArr = [];
         this.queryFormData.keyword = '';
         this.queryFormData.cooperatorName = '';
-        this.queryFormData.creationtimeFrom = '';
-        this.queryFormData.creationtimeTo = '';
+        this.queryFormData.createdDateFrom = '';
+        this.queryFormData.createdDateTo = '';
         this.$refs.deptPersonSelect.clearSelectData();
         this.$emit('onResetQuery');
       },
@@ -70,11 +70,11 @@
     watch: {
       dateArr: function (nval, oval) {
         if (nval.length > 0) {
-          this.queryFormData.creationtimeFrom = nval[0];
-          this.queryFormData.creationtimeTo = nval[1];
+          this.queryFormData.createdDateFrom = nval[0];
+          this.queryFormData.createdDateTo = nval[1];
         } else {
-          this.queryFormData.creationtimeFrom = '';
-          this.queryFormData.creationtimeTo = '';
+          this.queryFormData.createdDateFrom = '';
+          this.queryFormData.createdDateTo = '';
         }
       }
     },

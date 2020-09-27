@@ -110,8 +110,8 @@ export default {
       queryFormData: {
         keyword: '',
         cooperatorName: '',
-        creationtimeFrom: '',
-        creationtimeTo: '',
+        createdDateFrom: '',
+        createdDateTo: '',
         state: 'NOT_COMMITED'
       },
       dataQuery: {},
