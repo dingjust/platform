@@ -119,7 +119,6 @@ export default {
         this.$message.warning('图片正在上传，请稍后再试！');
         return;
       }
-      return;
       this.$refs.form.validate(valid => {
         if (valid) {
           this._onSave(flag);

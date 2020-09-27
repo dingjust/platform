@@ -68,7 +68,6 @@ export default {
     },
     createDeptPersonTree () {
       let index;
-      console.log(this.personList)
       this.personList.forEach(item => {
         if (item.uid === this.$store.getters.currentUser.uid && this.excludeMySelf) {
           return;

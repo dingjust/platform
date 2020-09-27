@@ -54,7 +54,7 @@
             </div>
           </el-row>
           <div style="display: flex;flex-wrap: wrap;">
-            <el-form-item label="采购人" prop="merchandiser" :rules="[{ required: true, message: '不能为空', trigger: 'change' }]">
+            <el-form-item label="采购人" prop="merchandiser" :rules="[{ required: true, type: 'object', message: '不能为空', trigger: 'change' }]">
               <personnal-selection-v2 :vPerson.sync="formData.merchandiser" />
             </el-form-item>
             <el-form-item label="" label-width="10px" >
@@ -379,7 +379,7 @@ export default {
         },
         workOrders: [],
         auditNeeded: true,
-        merchandiser: null,
+        merchandiser: {},
         approvers: [null],
         shippingAddress: {},
       }
@@ -387,7 +387,6 @@ export default {
   },
   watch: {
     'formData.merchandiser': function (nval, oval) {
-      console.log('======================================')
       this.validateField('merchandiser');
     },
     'formData.approvers': function (nval, oval) {
