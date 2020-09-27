@@ -24,6 +24,9 @@
         </el-tabs>
       </div>
     </el-card>
+    <el-dialog :visible.sync="typeVisible" width="40%" append-to-body :close-on-click-modal="false">
+      <payment-request-type-select v-if="typeVisible" />
+    </el-dialog>
   </div>
 </template>
 
@@ -37,6 +40,7 @@
   );
   import PaymentRequestToolbar from './toolbar/PaymentRequestToolbar'
   import PaymentRequestList from './list/PaymentRequestList'
+  import PaymentRequestTypeSelect from '@/views/financial/components/PaymentRequestTypeSelect'
 
   export default {
     name: 'PaymentRequestMerchandiserPage',
@@ -45,7 +49,8 @@
     },
     components: {
       PaymentRequestToolbar,
-      PaymentRequestList
+      PaymentRequestList,
+      PaymentRequestTypeSelect
     },
     computed: {
       ...mapGetters({
@@ -103,7 +108,8 @@
         this.$router.push('/financial/merchandiser/paymentRequest/' + row.id);
       },
       onCreate () {
-        this.$router.push('/financial/create/paymentRequest');
+        this.typeVisible = true;
+        // this.$router.push('/financial/create/paymentRequest');
       },
       onResetQuery () {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
@@ -111,6 +117,7 @@
     },
     data () {
       return {
+        typeVisible: false,
         stateCount: {},
         queryFormData: {
           keyword: '',
@@ -193,5 +200,9 @@
   .pr-create-btn:hover {
     background: #ffd60c;
     color: #606266;
+  }
+
+  /deep/ .el-dialog__header {
+    padding: 0px;
   }
 </style>

@@ -104,7 +104,13 @@ export default {
       }
     },
     createPaymentOrder () {
-
+      this.$router.push({
+        name: '创建付款申请单',
+        params: {
+          orderData: this.order,
+          type: 'MATERIALS_COST'
+        }
+      });
     }
   },
   data () {

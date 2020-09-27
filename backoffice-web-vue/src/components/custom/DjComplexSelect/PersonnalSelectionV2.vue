@@ -68,6 +68,7 @@ export default {
     },
     createDeptPersonTree () {
       let index;
+      console.log(this.personList)
       this.personList.forEach(item => {
         if (item.uid === this.$store.getters.currentUser.uid && this.excludeMySelf) {
           return;
@@ -83,12 +84,6 @@ export default {
           return;
         }
 
-        // this.selectedRow.forEach(val => {
-        //   if (JSON.stringify(item) === JSON.stringify(this.person)) {
-        //     return;
-        //   }
-        // })
-
         if (item.b2bDept) {
           this.$set(item, 'parentId', item.b2bDept.id);
           let temp = this.breadthQuery(this.deptList, item.b2bDept.id);
@@ -97,10 +92,16 @@ export default {
 
         // 主账号没所属部门时，跟一级部门同级
         if (item.root && item.b2bDept == null) {
+          console.log('-------------------------------------------------------------------')
           this.deptList.push(item);
         } 
       })
 
+      // 处理数据回显
+      if (this.vPerson && this.vPerson.id) {  
+        let arr = this.familyTree(this.deptList, this.vPerson.id);
+        this.person = arr.map(item => item.id);
+      }
     },
     breadthQuery (tree, id) {
       let stark = [];
@@ -124,11 +125,7 @@ export default {
           var item = arr[i]
           if (item.id === id) {
             temp.unshift(item)
-            // if (item.parentId) {
-              forFn(arr1, item.parentId)
-            // } else if (item.parentId == null && item.b2bDept) {
-            //   forFn(arr1, item.b2bDept.id)
-            // }
+            forFn(arr1, item.parentId)
             break
           } else {
             if (item.children) {
@@ -154,17 +151,17 @@ export default {
     loading: function (nval, oval) {
       if (nval === false && this.deptOptions.length > 0) {
         this.initData();
-        // 处理数据回显
-        if (this.vPerson && this.vPerson.id) {
-          let arr = this.familyTree(this.deptList, this.vPerson.id);
-          this.person = arr.map(item => item.id);
-        }
       }
     }
   },
   created () {
     if (this.loading === false) {
       this.initData();
+      // 处理数据回显
+      if (this.vPerson && this.vPerson.id) {  
+        let arr = this.familyTree(this.deptList, this.vPerson.id);
+        this.person = arr.map(item => item.id);
+      }
     }
   },
   beforeCreate () {

@@ -387,6 +387,7 @@ export default {
   },
   watch: {
     'formData.merchandiser': function (nval, oval) {
+      console.log('======================================')
       this.validateField('merchandiser');
     },
     'formData.approvers': function (nval, oval) {

@@ -832,6 +832,10 @@ const COMMON_APIS = {
   getPurchaseWorkOrderDetail (id) {
     return '/b2b/purchase/work/order/' + id;
   },
+  // 采购工单采购完成
+  purchaseWorkComplete (id) {
+    return '/b2b/purchase/work/order/complete/' + id;
+  },
   // 添加采购单(采购工单下)
   savePurchaseOrder () {
     return '/b2b/purchase/order/save';
@@ -1007,6 +1011,9 @@ const COMMON_APIS = {
   // 查询订单可请款金额
   getRequestAmount(id) {
     return '/b2b/payment/bill/amount/' + id;
+  },
+  getPaymentRequestByOrder (id) {
+    return '/b2b/payment/request/get/all/by/order/' + id;
   }
 };
 

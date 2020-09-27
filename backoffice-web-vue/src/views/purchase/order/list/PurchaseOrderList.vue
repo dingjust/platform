@@ -1,6 +1,7 @@
 <template>
   <div class="shipping-order-list-container">
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" >
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" 
+              :highlight-current-row="isSelect"  @current-change="handleCurrentChange">
       <el-table-column label="采购单号" prop="code" min-width="120px"></el-table-column>
       <el-table-column label="关联款号" prop="workOrder.task.productionTask.product.skuID"></el-table-column>
       <el-table-column label="物料名称" prop="workOrder.materials.name"></el-table-column>
@@ -40,6 +41,9 @@
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <el-row type="flex" justify="center">
+      <el-button class="sumbit-btn" @click="onSubmit">确定</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -50,6 +54,10 @@ export default {
     page: {
       type: Object,
       required: true
+    },
+    isSelect: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -134,11 +142,18 @@ export default {
         })
       }
     },
+    handleCurrentChange (val) {
+      this.selectRow = val;
+    },
+    onSubmit () {
+      this.$emit('setPurchaseOrder', this.selectRow);
+    }
   },
   data() {
     return {
       orderDetail: '',
-      order: ''
+      order: '',
+      selectRow: ''
     }
   },
   create() {
@@ -150,6 +165,12 @@ export default {
 <style scoped>
   .shipping-order-list-container>>>.el-table th>.cell .el-checkbox {
     display: none;
+  }
+
+  .sumbit-btn {
+    width: 100px;
+    color: #606266;
+    background-color: #ffd60c;
   }
 
 </style>

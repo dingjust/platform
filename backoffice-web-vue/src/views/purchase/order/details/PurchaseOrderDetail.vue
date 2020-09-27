@@ -119,6 +119,13 @@ export default {
         return;
       }
     },
+    async getPayment () {
+      const url = this.apis().getPaymentRequestByOrder(this.id);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+      }
+    },
     onApproval(isPass) {
       if (this.orderDetail.currentAuditWork.auditingUser.uid === this.$store.getters.currentUser.uid &&
         this.orderDetail.currentAuditWork.currentUserAuditState === 'AUDITING') {
@@ -237,6 +244,7 @@ export default {
   },
   created () {
     this.getDetail();
+    this.getPayment();
   }  
 }
 </script>

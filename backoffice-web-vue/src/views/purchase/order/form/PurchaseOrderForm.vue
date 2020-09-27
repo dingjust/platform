@@ -13,13 +13,13 @@
       </el-row>
       <div class="pt-2"></div>
       <div class="basic-row">
-        <purchase-order-basic-info :formData="formData" :order="order"/>
+        <purchase-order-basic-info ref="basicInfo" :formData="formData" :order="order"/>
         <el-divider></el-divider>
         <el-form ref="form" :model="order" :inline="true">
           <div class="cooperator-container">
             <el-form-item label="供应商" prop="cooperatorName" :rules="[{required: true, validator: validateCooperator, trigger: 'change'}]">
               <el-select v-model="order.cooperatorName" multiple remote reserve-keyword @remove-tag="onRemoveTag"
-                v-if="(order.cooperatorName instanceof Array) && order.cooperatorName.length > 0" style="width: 194px">
+                v-if="(order.cooperatorName instanceof Array) && order.cooperatorName.length > 0" style="width: 210px">
               </el-select>
               <el-input v-else v-model="order.cooperatorName" style="width: 194px"></el-input>
             </el-form-item>
@@ -115,6 +115,11 @@ export default {
       this.order.cooperatorName = [data.name];
     },
     onSave (flag) {
+      if (this.$refs.basicInfo.isUploading) {
+        this.$message.warning('图片正在上传，请稍后再试！');
+        return;
+      }
+      return;
       this.$refs.form.validate(valid => {
         if (valid) {
           this._onSave(flag);

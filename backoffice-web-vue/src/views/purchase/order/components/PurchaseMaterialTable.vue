@@ -45,7 +45,7 @@
         <td :colspan="4">总计</td>
         <td>{{countQuantity}}</td>
         <td></td>
-        <td>{{countPrice}}</td>
+        <td>{{countTotalPrice}}</td>
         <td></td>
       </tr>
     </table>
@@ -68,13 +68,13 @@ export default {
     countQuantity: function () {
       let count = 0;
       this.order.entries.forEach(item => {
-        if (!Number.isNaN(Number.parseInt(item.orderQuantity))) {
-          count += Number.parseFloat(item.orderQuantity).toFixed(2);
+        if (!Number.isNaN(Number.parseFloat(item.orderQuantity))) {
+          count += Number.parseFloat(item.orderQuantity);
         }
       })
-      return count === 0 ? '' : count;
+      return count === 0 ? '' : count.toFixed(2);
     },
-    countPrice: function () {
+    countTotalPrice: function () {
       let count = 0;
       this.order.entries.forEach(item => {
         if (!Number.isNaN(Number.parseFloat(item.totalPrice))) {

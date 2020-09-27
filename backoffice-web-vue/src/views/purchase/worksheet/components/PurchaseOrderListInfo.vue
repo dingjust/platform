@@ -1,29 +1,34 @@
 <template>
   <div>
     <el-row type="flex" justify="start">
+      <div class="over-tabs">
+        <el-button class="material-btn" @click="onCreate">创建采购订单</el-button>
+      </div>
       <el-tabs type="border-card" style="width: 100%">
         <el-tab-pane label="采购单">
-          <div style="display: flex;flex-wrap: wrap;">
-            <template v-if="purchaseOrderList && purchaseOrderList.length > 0">
-              <template v-for="item in purchaseOrderList">
-                <div class="order-card" :key="item.code">
-                  <el-row type="flex" justify="end">
-                    <h6 style="margin: 10px 10px 0px 0px">{{getEnum('PurchaseOrderState', item.state)}}</h6>
-                  </el-row>
-                  <el-row type="flex" justify="center" style="height: 72%;">
-                    <el-button type="text" @click="onDetail(item)">点击查看详情</el-button>
-                  </el-row>
-                </div>
+          <div style="overflow: auto;">
+            <div class="order-list">
+              <template v-if="purchaseOrderList && purchaseOrderList.length > 0">
+                <template v-for="item in purchaseOrderList">
+                  <el-button :key="item.code" class="order-card">
+                    <div @click="onDetail(item)">
+                      <el-row type="flex" justify="center">
+                        <img style="width: 100px" src="static/img/purchase-order.png"/>
+                      </el-row>
+                      <el-row type="flex" justify="center">
+                        <h6 style="font-size: 12px">采购单号：{{item.code}}</h6>
+                      </el-row>
+                      <el-row type="flex" justify="center">
+                        <h6 style="font-size: 12px">{{getEnum('PurchaseOrderState', item.state)}}</h6>
+                      </el-row>
+                    </div>
+                  </el-button>
+                </template>
               </template>
-            </template>
-            <div class="order-card order-card-create">
-              <div>
-                <el-button @click="onCreate">创建采购订单</el-button>
-              </div>
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="其他信息">其他信息</el-tab-pane>
+        <el-tab-pane label="其他信息"></el-tab-pane>
       </el-tabs>
     </el-row>
     <el-dialog :visible.sync="orderVisible" width="80%" append-to-body :close-on-click-modal="false">
@@ -55,7 +60,7 @@ export default {
           state: item.state,
           cooperator: item.cooperator ? item.cooperator : {},
           cooperatorName: item.cooperatorName ? item.cooperatorName : '',
-          approvers: item.approvers ? item.approvers : [],
+          approvers: item.approvers ? item.approvers : [null],
           auditNeed: item.approvers && item.approvers.length >= 0,
           attachAgreements: item.attachAgreements ? item.attachAgreements : [],
           workOrder: {
@@ -131,17 +136,18 @@ export default {
 
 <style scoped>
   .order-card {
-    width: 200px;
-    height: 200px;
-    background-color: #EBEEF5;
-    margin: 10px;
-    border: 1px solid #cfd3da;
+    padding: 0px;
+    height: 150px;
+    border: none;
+    color: #606266;
   }
 
-  .order-card-create {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .order-card:hover {
+    background-color: #ffd60c;
+  }
+
+  .order-card:focus {
+    background-color: none!important;
   }
 
   button {
@@ -150,5 +156,24 @@ export default {
 
   /deep/ .el-dialog__header {
     padding: 0px;
+  }
+
+  .over-tabs {
+    position: absolute;
+    z-index: 100;
+    right: 10px;
+    margin-top: 2px;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 100px;
+    height: 35px;
+  }
+  
+  .order-list {
+    display: inline-flex;
   }
 </style>

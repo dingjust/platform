@@ -2094,6 +2094,17 @@ const state = {
   }, {
     code: 'COMPLETED',
     name: '已完成'
+  }],
+  // 付款申请单状态
+  PaymentRequestType: [{
+      code: 'PROCESS_COST',
+      name: '货款/加工费'
+    }, {
+      code: 'MATERIALS_COST',
+      name: '物料款'
+    }, {
+      code: 'OTHER_COST',
+      name: '其他'
   }]
 };
 

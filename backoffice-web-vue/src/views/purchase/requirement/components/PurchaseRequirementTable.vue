@@ -121,7 +121,12 @@ export default {
     },
     onSelect (entries) {
       this.appendVisible = false;
-      this.formData.workOrders = this.arrangeData(this.formData.workOrders.concat(entries));
+      if (this.isModify) {
+        this.formData.workOrders = entries;
+        this.isModify = false;
+      } else {
+        this.formData.workOrders = this.arrangeData(this.formData.workOrders.concat(entries));
+      }
       this.entries = {
         workOrders: [
           {
@@ -162,7 +167,9 @@ export default {
       return result;
     },
     onModify (row, index) {
-
+      this.entries.workOrders = this.formData.workOrders;
+      this.appendVisible = true;
+      this.isModify = true;
     },
     onDelete (row, index) {
       this.formData.workOrders.splice(index, 1);
@@ -172,6 +179,7 @@ export default {
     return {
       appendVisible: false,
       bomVisible: false,
+      isModify: false,
       title: '需求数量 = 预计用量 * 订单数 / 空差',
       entries: {
         workOrders: [

@@ -9,13 +9,13 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <purchase-worksheet-toolbar @onAdvancedSearch="onAdvancedSearch" 
+      <purchase-worksheet-toolbar @onAdvancedSearch="onAdvancedSearch" @onResetQuery="onResetQuery"
                                     :queryFormData="queryFormData" :dataQuery="dataQuery"/>
       <div>
-        <div class="tags-container">
+        <!-- <div class="tags-container">
           <el-button>未延期</el-button>
           <el-button>已延期</el-button>
-        </div>
+        </div> -->
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <template v-for="item in statuses">
             <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
@@ -58,9 +58,9 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch(page, size, isTab) {
-      // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-      //   this.onResetQuery();
-      // }
+      if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        this.onResetQuery();
+      }
       const query = this.queryFormData;
       const url = this.apis().getPurchaseWorkOrder();
       this.searchAdvanced({
@@ -100,15 +100,17 @@ export default {
       this.queryFormData.state = tab.name;
       this.onAdvancedSearch(0, 10, true);
     },
-    // onResetQuery () {
-    //   this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
-    // }
+    onResetQuery () {
+      this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+    }
   },
   data () {
     return {
       queryFormData: {
         keyword: '',
-        operatorName: '',
+        cooperatorName: '',
+        creationtimeFrom: '',
+        creationtimeTo: '',
         state: 'WAIT_TO_PURCHASE'
       },
       dataQuery: {},
@@ -130,8 +132,8 @@ export default {
     }
   },
   created () {
-    // this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
-    // this.onResetQuery();
+    this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
+    this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }
 }

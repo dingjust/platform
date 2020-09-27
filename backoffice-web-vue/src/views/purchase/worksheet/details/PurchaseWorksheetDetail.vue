@@ -20,7 +20,9 @@
           <h6>关联款号：{{formData.task.productionTask.product.skuID}}</h6>
         </el-col>
         <el-col :span="6">
-          <h6>关联需求：{{formData.task.productionTask.code}}</h6>
+          <h6>关联需求：
+            <el-button type="text" @click="onTaskDetail(formData.task.id)" class="code-btn">{{formData.task.code}}</el-button>
+          </h6>
         </el-col>
         <el-col :span="6">
           <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
@@ -65,10 +67,13 @@
                                 @callback="callback" :purchaseOrderList="purchaseOrderList"/>
       <el-divider></el-divider>
       <purchase-summary :formData="formData"/>
-      <el-row type="flex" justify="center" style="margin: 40px 0px 0px 0px;">
+      <el-row type="flex" justify="center" style="margin: 40px 0px 0px 0px;" v-if="formData.state !== 'COMPLETE'">
         <el-button class="sumbit-btn" @click="onFinish">采购完成</el-button>
       </el-row>
     </el-card>
+    <el-dialog :visible.sync="taskVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <purchase-requirement-detail v-if="taskVisible" :id="taskId" />
+    </el-dialog>
   </div>
 </template>
 
@@ -76,6 +81,7 @@
 import PurchaseInfoTable from '../components/PurchaseInfoTable'
 import PurchaseOrderListInfo from '../components/PurchaseOrderListInfo'
 import PurchaseSummary from '../components/PurchaseSummary'
+import PurchaseRequirementDetail from '../../requirement/details/PurchaseRequirementDetail'
 
 export default {
   name: 'PurchaseWorksheetDetail',
@@ -83,7 +89,8 @@ export default {
   components: {
     PurchaseInfoTable,
     PurchaseOrderListInfo,
-    PurchaseSummary
+    PurchaseSummary,
+    PurchaseRequirementDetail
   },
   methods: {
     async getDetail () {
@@ -133,10 +140,45 @@ export default {
       }
     },
     onFinish () {
+      let flag = this.purchaseOrderList.every(item => 
+        item.state !== 'NOT_COMMITED' && 
+        item.state !== 'AUDITING' && 
+        item.state !== 'AUDIT_FAILED' &&
+        item.state !== 'WAIT_TO_REV_MATERIALS'
+      )
+      if (flag) {
+        this._onFinish();
+      } else {
+        this.$message.error('工单内的所有采购单收料完成才能执行采购完成操作！');
+      }
+    },
+    async _onFinish () {
+      const id = this.id;
 
+      const url = this.apis().purchaseWorkComplete(id);
+      const result = await this.$http.post(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.$message.success('采购完成！');
+        this.getDetail();
+        return;
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      } else {
+        this.$message.error('操作失败！');
+      }
     },
     callback () {
+      this.getDetail();
       this.getPurchaseOrder();
+    },
+    onTaskDetail (id) {
+      this.taskId = id;
+      this.taskVisible = true;
     }
   },
   data () {
@@ -165,7 +207,9 @@ export default {
           }
         }
       },
-      purchaseOrderList: []
+      purchaseOrderList: [],
+      taskId: '',
+      taskVisible: false
     }
   },
   created () {
@@ -199,5 +243,10 @@ export default {
     width: 100px;
     color: #606266;
     background: #FFD60C;
+  }
+
+  .code-btn {
+    font-size: 14px;
+    padding: 0px;
   }
 </style>

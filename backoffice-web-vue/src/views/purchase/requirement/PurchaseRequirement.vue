@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <purchase-requirement-toolbar @onAdvancedSearch="onAdvancedSearch" 
+      <purchase-requirement-toolbar @onAdvancedSearch="onAdvancedSearch" @onResetQuery="onResetQuery"
                                     :queryFormData="queryFormData" :dataQuery="dataQuery"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
@@ -51,9 +51,9 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch(page, size, isTab) {
-      // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-      //   this.onResetQuery();
-      // }
+      if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        this.onResetQuery();
+      }
       const query = this.queryFormData;
       const url = this.apis().getPurchaseTaskList();
       this.searchAdvanced({
@@ -100,7 +100,9 @@ export default {
     return {
       queryFormData: {
         keyword: '',
-        operatorName: '',
+        creator: '',
+        creationtimeFrom: '',
+        creationtimeTo: '',
         state: 'NOT_COMMITED'
       },
       dataQuery: {},
@@ -128,8 +130,8 @@ export default {
     }
   },
   created () {
-    // this.dataQuery = this.getDataPerQuery('PURCHASE_REQUIREMENT');
-    // this.onResetQuery();
+    this.dataQuery = this.getDataPerQuery('PURCHASE_REQUIREMENT');
+    this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }
 }

@@ -18,23 +18,46 @@
             </el-form-item>
           </el-col>
           <el-col :span="9">
-            <el-form-item label="订单号" prop="productionOrder"
-              :rules="[{type: Object, validator: validateProductionOrder, trigger: 'change'}]">
-              <el-input class="payment-request-input" v-model="formData.productionOrder.code" :disabled="true">
-              </el-input>
-              <el-button @click="saleProdutionVisible = !saleProdutionVisible">选择</el-button>
-            </el-form-item>
+            <template v-if="type === 'PROCESS_COST'">
+              <el-form-item label="外发订单" prop="productionOrder"
+                :rules="[{type: Object, validator: validateProductionOrder, trigger: 'change'}]">
+                <el-input class="payment-request-input" v-model="formData.productionOrder.code" :disabled="true">
+                </el-input>
+                <el-button @click="saleProdutionVisible = !saleProdutionVisible">选择</el-button>
+              </el-form-item>
+            </template>
+            <template v-else-if="type === 'MATERIALS_COST'">
+              <el-form-item label="采购单" prop="productionOrder"
+                :rules="[{type: Object, validator: validateProductionOrder, trigger: 'change'}]">
+                <el-input class="payment-request-input" v-model="formData.productionOrder.code" :disabled="true">
+                </el-input>
+                <el-button @click="purchaseVisible = !purchaseVisible">选择</el-button>
+              </el-form-item>
+            </template>
+            <template v-else-if="type === 'OTHER_COST'">
+              <el-form-item label="单号" prop="productionOrder" 
+                            :rules="[{type: Object, validator: validateProductionOrder, trigger: 'change'}]">
+                <el-input class="payment-request-input" v-model="formData.productionOrder.code"></el-input>
+              </el-form-item>
+            </template>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="合同号">
-              <el-input class="payment-request-input" :disabled="true" v-model="contactCode"></el-input>
-            </el-form-item>
+            <template v-if="type === 'OTHER_COST'">
+              <el-form-item label="合同号">
+                <el-input class="payment-request-input" v-model="formData.agreementCode"></el-input>
+              </el-form-item>
+            </template>
+            <template v-else>
+              <el-form-item label="合同号">
+                <el-input class="payment-request-input" :disabled="true" v-model="contactCode"></el-input>
+              </el-form-item>
+            </template>
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="7">
             <el-form-item label="申请部门">
-              <el-input class="payment-request-input" v-model="this.deptName" :disabled="true"></el-input>
+              <el-input class="payment-request-input" v-model="deptName" :disabled="type !== 'OTHER_COST'"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="9">
@@ -52,7 +75,7 @@
         <el-row type="flex" justify="start" align="top" style="padding-left: 10px">
           <el-col :span="7">
             <el-form-item label="收款对象">
-              <el-input :disabled="true" class="payment-request-input" v-model="receiver"></el-input>
+              <el-input :disabled="type !== 'OTHER_COST'" class="payment-request-input" v-model="receiver"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="9">
@@ -133,6 +156,10 @@
       :close-on-click-modal="false">
       <outbound-order-select-page v-if="saleProdutionVisible" @setSelectOrder="setSelectOrder" />
     </el-dialog>
+    <el-dialog :visible.sync="purchaseVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <purchase-order-select-page v-if="purchaseVisible" @setPurchaseOrder="setPurchaseOrder"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -145,6 +172,7 @@
   import {
     OutboundOrderSelectPage
   } from '@/views/order/salesProduction/outbound-order/index.js'
+  import PurchaseOrderSelectPage from '@/views/purchase/order/components/PurchaseOrderSelectPage'
   export default {
     name: 'PaymentRequestForm',
     props: {
@@ -153,13 +181,18 @@
       },
       requestData: {
         type: Object
+      },
+      type: {
+        type: String,
+        default: 'PROCESS_COST'
       }
     },
     components: {
       PersonnelSelection,
       ImagesUpload,
       OutboundOrderSelectPage,
-      PersonnalSelectionV2
+      PersonnalSelectionV2,
+      PurchaseOrderSelectPage
     },
     computed: {
 
@@ -208,6 +241,30 @@
         this.deptName = row.merchandiser.b2bDept ? row.merchandiser.b2bDept.name : '';
         this.countRequestAmount(row.id);
       },
+      setPurchaseOrder (row) {
+        this.purchaseVisible = false;
+        this.formData.productionOrder = {
+          id: row.id,
+          code: row.code
+        }
+        if (row.cooperator) {
+          this.receiver = row.cooperator.type == 'ONLINE' ? row.cooperator.partner.name : row.cooperator.name;
+          this.formData.bankCardAccount =
+            row.cooperator.type == 'ONLINE' ? row.cooperator.partner.contactPerson : row.cooperator.contactPerson;
+          this.formData.bankCardNo = row.cooperator.bankAccount;
+          this.formData.bank = row.cooperator.bankOfDeposit;
+        } else {
+          this.receiver = row.cooperatorName;
+        }
+
+        if (row.attachAgreements && row.attachAgreements.length > 0) {
+          row.attachAgreements.forEach(item => {
+            if (item.name.lastIndexOf('.') > -1) {
+              this.contactCode += item.name.substring(0, item.name.lastIndexOf('.'));
+            }
+          })
+        }
+      },
       appendApprover () {
         this.formData.approvers.push({});
       },
@@ -232,7 +289,6 @@
         }
       },
       onConfirm() {
-        console.log(this.$refs.form);
         if (this.$refs.upload.isUploading()) {
           this.$message.error('请等待图片上传完毕');
           return null;
@@ -249,6 +305,14 @@
       },
       async _onConfirm() {
         let data = Object.assign({}, this.formData);
+        this.$delete(data, 'productionOrder');
+        if (this.type === 'PROCESS_COST' || this.type === 'MATERIALS_COST') {
+          this.$set(data, 'order', {
+            id: this.formData.productionOrder.id
+          })
+        } else {
+          this.$set(data, 'orderCode', this.formData.productionOrder.code)
+        }
         // 人员设置数据处理
         data.approvers = [];
         this.formData.approvers.forEach(item => {
@@ -258,14 +322,7 @@
             });
           }
         })
-        // // 人员设置数据处理
-        // for (let i = 0; i < data.approvers.length; i++) {
-        //   if (data.approvers instanceof Array && data.approvers[i].length > 0) {
-        //     data.approvers[i] = {
-        //       id: this.formData.approvers[i][this.formData.approvers[i].length -1]
-        //     }
-        //   }
-        // }
+        this.$set(data, 'type', this.type);
 
         const url = this.apis().appendPaymentRequest();
         const result = await this.$http.post(url, data, {
@@ -287,18 +344,11 @@
         }
       },
       onChange(val) {
-        // if (this.preApplyAmount == '') {
-        //   return;
-        // }
-        // if (this.parseFloatNotParNaN(val) > this.parseFloatNotParNaN(this.preApplyAmount)) {
-        //   this.formData.requestAmount = this.preApplyAmount + '';
-        // }
         this.chineseAmount = this.convertCurrency(this.formData.requestAmount);
       },
       onBlur() {
         var reg = /\.$/;
         if (reg.test(this.formData.requestAmount)) {
-          // this.$set(row, attribute, parseFloat(row[attribute] + '00'));
           this.formData.requestAmount = this.parseFloatNotParNaN(this.formData.requestAmount);
         }
       },
@@ -416,10 +466,12 @@
         preApplyAmount: '',
         contactCode: '',
         saleProdutionVisible: false,
+        purchaseVisible: false,
         currentUser: this.$store.getters.currentUser,
         receiver: '',
         chineseAmount: '',
         formData: {
+          agreementCode: '',
           requestAmount: '',
           paymentFor: '',
           bankCardAccount: '',
@@ -448,7 +500,11 @@
     },
     created() {
       if (this.orderData != null) {
-        this.setSelectOrder(this.orderData);
+        if (this.type === 'PROCESS_COST') {
+          this.setSelectOrder(this.orderData);
+        } else if (this.type === 'MATERIALS_COST') {
+          this.setPurchaseOrder(this.orderData);
+        }
       } else if (this.requestData != null) {
         this.initData();
       }

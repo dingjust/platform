@@ -36,9 +36,9 @@
       </template>
       <tr>
         <td :colspan="4">总计</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{countPlace}}</td>
+        <td>{{countReceive}}</td>
+        <td>{{countLack}}</td>
         <td></td>
       </tr>
     </table>
@@ -49,6 +49,33 @@
 export default {
   name: 'PurchaseMaterialAcceptance',
   props: ['order', 'isOnEdit'],
+  computed: {
+    countPlace: function () {
+      let count = 0;
+      this.order.entries.forEach(item => {
+        if (!Number.isNaN(Number.parseFloat(item.orderQuantity))) {
+          count += Number.parseFloat(item.orderQuantity);
+        }
+      })
+      return count.toFixed(2);
+    },
+    countReceive: function () {
+      let count = 0;
+      this.order.entries.forEach(item => {
+        if (!Number.isNaN(Number.parseFloat(item.receiveQuantity))) {
+          count += Number.parseFloat(item.receiveQuantity);
+        }
+      })
+      return count.toFixed(2);
+    },
+    countLack: function () {
+      let count = 0;
+      this.order.entries.forEach(item => {
+        count += this.lackMaterials(item) !== '' ? this.lackMaterials(item) : 0;
+      })
+      return count.toFixed(2);
+    }
+  },
   methods: {
     lackMaterials (item) {
       let orderQuantity = Number.parseFloat(item.orderQuantity);
