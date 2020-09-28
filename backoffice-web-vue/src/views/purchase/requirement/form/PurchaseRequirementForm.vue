@@ -92,7 +92,8 @@
     </el-card>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <production-task-select-dialog v-if="taskDialogVisible" @onSelectTask="onSelectTask" :isSingleChoice="true"/>
+      <production-task-select-dialog v-if="taskDialogVisible" @onSelectTask="onSelectTask" 
+                                    :isSingleChoice="true" :selectType="'PURCHASE'"/>
     </el-dialog>
   </div>
 </template>

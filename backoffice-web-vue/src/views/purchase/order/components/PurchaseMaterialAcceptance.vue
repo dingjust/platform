@@ -71,7 +71,7 @@ export default {
     countLack: function () {
       let count = 0;
       this.order.entries.forEach(item => {
-        count += this.lackMaterials(item) !== '' ? this.lackMaterials(item) : 0;
+        count += Number.parseFloat(this.lackMaterials(item) !== '' ? this.lackMaterials(item) : 0);
       })
       return count.toFixed(2);
     }

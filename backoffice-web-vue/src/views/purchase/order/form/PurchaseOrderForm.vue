@@ -51,7 +51,7 @@
           </div>
         </el-form>
       </div>
-      <purchase-order-btn-group :order="order" @onSave="onSave" @onDelete="onDelete" />
+      <purchase-order-btn-group :formData="formData" :order="order" @onSave="onSave" @onDelete="onDelete" />
     </el-card>
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">

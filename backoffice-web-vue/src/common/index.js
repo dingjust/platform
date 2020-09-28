@@ -1012,8 +1012,13 @@ const COMMON_APIS = {
   getRequestAmount(id) {
     return '/b2b/payment/bill/amount/' + id;
   },
+  // 通过采购单获取付款申请单
   getPaymentRequestByOrder (id) {
     return '/b2b/payment/request/get/all/by/order/' + id;
+  },
+  // 通过生产工单获取采购需求
+  getPurchaseRequirementByProductionId (id) {
+    return '/b2b/purchase/task/get/all/by/production/' + id;
   }
 };
 

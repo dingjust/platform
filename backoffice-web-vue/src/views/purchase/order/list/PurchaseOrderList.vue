@@ -11,7 +11,7 @@
         </template>
       </el-table-column>
       <el-table-column label="物料编号" prop="workOrder.materials.code"></el-table-column>
-      <el-table-column label="采购总量" prop="totalQuantity"></el-table-column>
+      <el-table-column label="采购总量" prop="totalOrderQuantity"></el-table-column>
       <el-table-column label="采购员" prop="workOrder.task.merchandiser.name"></el-table-column>
       <el-table-column label="单位" prop="workOrder.materials.unit"></el-table-column>
       <el-table-column label="创建时间">

@@ -67,7 +67,7 @@ export default {
         return false;
       }
 
-      return true;
+      return this.orderDetail.workOrder.task.merchandiser.uid === this.$store.getters.currentUser.uid;
     },
     cooperator: function () {
       if (!this.orderDetail.cooperator && this.orderDetail.cooperatorName) {

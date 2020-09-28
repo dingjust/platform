@@ -78,7 +78,9 @@
         //   this.queryFormData.productionWorkOrder = 'isProductionWorkOrder';
         // }
         // this.queryFormData.type = 'FOUNDRY_PRODUCTION';
-        this.queryFormData.haveOutOrder = 'haveOutOrder'
+        if (this.selectType === 'OUTBOUND_ORDER') {
+          this.queryFormData.haveOutOrder = 'haveOutOrder'
+        }
         const query = this.queryFormData;
         const url = this.apis().getProductionOrders();
         const result = await this.$http.post(url, query, {
