@@ -6,7 +6,7 @@
     </el-row>
     <div style="display: flex;flex-wrap: wrap;">
       <template v-for="(item, Index) in ToDoList">
-        <div :key="Index" class="list-contaner">
+        <div :key="Index" class="list-contaner" v-if="item.isAuth">
           <div class="list-title">
             <h6 style="font-size: 14px">{{item.name}}</h6>
           </div>
@@ -47,7 +47,17 @@
         this.initData();
       },
       initData () {
-
+        const dataPermissionStr = sessionStorage.getItem('dataPermission');
+        if (dataPermissionStr != undefined && dataPermissionStr != null && dataPermissionStr != 'undefined' && dataPermissionStr != 'null' && dataPermissionStr != '') {
+          const authList = JSON.parse(dataPermissionStr);
+          this.ToDoList.forEach(item => {
+            if (authList[item.auth]) {
+              this.$set(item, 'isAuth', true);
+            } else {
+              this.$set(item, 'isAuth', false);
+            }
+          })
+        }
       }
     },
     data() {
@@ -69,64 +79,62 @@
             list: [{
               title: 'pendingAudit',
               text: '个未审批',
-              show: true
-            }]
+            }],
+            auth: 'AUDIT_TASK'
           }, {
             name: '订单',
             list: [{
               title: 'pendingAccepted',
               text: '个待接订单',
-              show: true
-            }]
+            }],
+            auth: 'SALES_OUT_ORDER'
           }, {
             name: '工单',
             list: [{
               title: 'pendingProduction',
               text: '个工单待生产',
-              show: true
             }],
+            auth: 'PRODUCTION_TASK_ORDER'
           }, {
             name: '收货',
             list: [{
               title: 'pendingReceive',
-              text: '个待收货',
-              show: true
+              text: '个待收货'
             }, {
               title: 'pendingReturn',
-              text: '个待退货',
-              show: true
-            }]
+              text: '个待退货'
+            }],
+            auth: 'RECEIPT_SHEET'
           }, {
             name: '发货',
             list: [{
               title: 'returnToBeReceived',
-              text: '个退货待收',
-              show: true
+              text: '个退货待收'
             }, {
               title: 'pendingReconsider',
-              text: '个待复议',
-              show: true
-            }]
+              text: '个待复议'
+            }],
+            auth: 'SHIPPING_SHEET'
           }, {
             name: '对账',
             list: [{
               title: 'pendingReconciliation',
-              text: '个对账单待确认',
-              show: true
-            }]
+              text: '个对账单待确认'
+            }],
+            auth: 'RECONCILIATION_SHEET'
           }, {
             name: '合同',
             list: [{
               title: 'pendingSign',
-              text: '个待签署',
-              show: true
-            }]
+              text: '个待签署'
+            }],
+            auth: 'COMPANY_AGREEMENT'
           }
         ]
       };
     },
     created() {
-      // this.getData();
+      this.getData();
     }
   };
 

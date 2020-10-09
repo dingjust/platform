@@ -13,6 +13,7 @@
   require('echarts/lib/component/tooltip');
   require('echarts/lib/component/title');
   require('echarts/lib/component/legendScroll');
+  require("echarts/lib/component/toolbox");
 
   var colors = ['#5793f3', '#d14a61', '#675bba'];
 
