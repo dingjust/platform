@@ -7,13 +7,52 @@
       <authentication-dialog @onCancel="onCancel"/>
     </el-dialog>
     <el-row :gutter="20">
+      <el-col :xs="24" :sm="24" :md="24" :lg="14" :xl="14">
+        <el-row>
+          <business-card/>
+        </el-row>
+        <el-row class="hidden-lg-and-up">
+          <account-entry-card/>
+        </el-row>
+        <el-row class="hidden-lg-and-up">
+          <progress-card/>
+        </el-row>
+        <el-row>
+          <chart-card/>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :xs="24" :sm="12">
+            <month-income-card :slot-data="lastMonthIncome"/>
+          </el-col>
+          <el-col :xs="24" :sm="12">
+            <month-income-card :slot-data="thisMonthIncome"/>
+          </el-col>
+        </el-row>
+        <el-row class="hidden-lg-and-up">
+          <img class="dashboard-img" src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png"/>
+        </el-row>
+      </el-col>
+      <el-col class="hidden-md-and-down" :lg="10" :xl="10">
+        <el-row>
+          <account-entry-card/>
+        </el-row>
+        <el-row>
+          <progress-card/>
+        </el-row>
+        <el-row>
+          <img class="dashboard-img" src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png"/>
+        </el-row>
+      </el-col>
+    </el-row>
+    <!-- 旧页面布局 -->
+    <!-- <el-row :gutter="20">
       <el-col :span="14">
         <el-row>
           <business-card/>
         </el-row>
-        <!-- <el-row>
+        <el-row>
           <toolbar-card/>
-        </el-row> -->
+        </el-row>
         <el-row>
           <chart-card/>
         </el-row>
@@ -37,7 +76,7 @@
           <img class="dashboard-img" src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png"/>
         </el-row>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
