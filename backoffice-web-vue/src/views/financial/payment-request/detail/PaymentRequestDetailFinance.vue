@@ -227,7 +227,9 @@
           return;
         }
         this.formData = result.data;
-        this.countRequestAmount(result.data.order.id);
+        if (result.data.order && result.data.order.id) {
+          this.countRequestAmount(result.data.order.id);
+        }
       },
       async countRequestAmount(id) {
         const url = this.apis().getRequestAmount(id);
@@ -237,7 +239,8 @@
           return;
         }
         if (result.code === 0) {
-          this.$message.error(result.msg);
+          // this.$message.error(result.msg);
+          throw Error(result.msg);
           return;
         }
         this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) -
