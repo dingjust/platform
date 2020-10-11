@@ -33,7 +33,7 @@
             </el-col>
             <el-col :span="8">
               <h6>订单号：
-                <el-button type="text" style="font-size: 14px;" @click="orderVisible = true">{{formData.productionOrder.code}}</el-button>
+                <el-button type="text" style="font-size: 14px;" @click="orderVisible = true">{{formData.order.code}}</el-button>
               </h6>
             </el-col>
             <el-col :span="8">
@@ -129,7 +129,7 @@
       <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
     </el-dialog>
     <el-dialog :visible.sync="orderVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
-      <outbound-order-detail v-if="orderVisible" :code="formData.productionOrder.id" />
+      <outbound-order-detail v-if="orderVisible" :code="formData.order.id" />
     </el-dialog>
   </div>
 </template>
@@ -166,10 +166,10 @@
     computed: { 
       agreementsCode: function () {
         let arr = [];
-        if (!this.formData.productionOrder.agreements && this.formData.productionOrder.agreements.length <= 0) {
+        if (!this.formData.order.agreements && this.formData.order.agreements.length <= 0) {
           return [];
         }
-        return this.formData.productionOrder.agreements.filter(item => item.state !== 'INVALID');
+        return this.formData.order.agreements.filter(item => item.state !== 'INVALID');
       },
       auditState: function () {
         switch (this.formData.state) {
@@ -227,7 +227,9 @@
           return;
         }
         this.formData = result.data;
-        this.countRequestAmount(result.data.productionOrder.id);
+        if (result.data.order && result.data.order.id) {
+          this.countRequestAmount(result.data.order.id);
+        }
       },
       async countRequestAmount(id) {
         const url = this.apis().getRequestAmount(id);
@@ -237,7 +239,8 @@
           return;
         }
         if (result.code === 0) {
-          this.$message.error(result.msg);
+          // this.$message.error(result.msg);
+          throw Error(result.msg);
           return;
         }
         this.preApplyAmount = this.parseFloatNotParNaN(result.data.amount) -
@@ -356,7 +359,7 @@
         paymentVisible: false,
         preApplyAmount: '',
         formData: {
-          productionOrder: {
+          order: {
             code: '',
             agreements: []
           },

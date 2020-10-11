@@ -1,16 +1,16 @@
 <template>
   <div>
     <header class="app-header navbar">
-      <el-row type="flex" style="width:100%">
+      <el-row type="flex" style="width:100%" align="middle">
         <el-col :xs="8" :sm="8" :md="10" :lg="12" :xl="12">
-          <el-row type="flex">
+          <el-row type="flex" align="middle">
             <div class="navbar-logo">
               <img class="navbar-logo-img" src="static/img/logo.51f4203.png" />
               <span class="navbar-logo-title">钉单{{clientName}}端</span>
             </div>
-            <div class="navbar-toggler aside-menu-toggler">
-              <el-row type="flex" align="middle">
-                <span>{{currentUser.companyName}}</span>
+            <div class="navbar-toggler aside-menu-toggler hidden-xs-only">
+              <el-row type="flex" align="middle" style="white-space: nowrap;">
+                <span style="color:#383e4b">{{currentUser.companyName}}</span>
                 <el-tag :type="authenticated?'success':'info'" effect="dark" style="margin-left:10px" size="mini">
                   {{ authenticated?'已认证':'未认证'}}
                 </el-tag>
@@ -19,7 +19,7 @@
           </el-row>
         </el-col>
         <el-col :xs="16" :sm="16" :md="14" :lg="12" :xl="12">
-          <el-row type="flex" justify="space-between" align="middle" style="padding-top:5px">
+          <el-row type="flex" justify="space-between" align="middle">
             <el-col :xs="1" :sm="5" :md="6" :lg="7" :xl="8">
               <!-- <div class="input">
                 <el-input placeholder="搜索..." prefix-icon="el-icon-search" v-model="input2" size="small"
@@ -185,9 +185,12 @@
 
   .navbar-logo {
     margin-left: 20px;
-    margin-right: 80px;
-    margin-bottom: 5px;
+    margin-right: 30px;
+    /* margin-bottom: 5px; */
     width: 120px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
   }
 
   .navbar-authentication-img {
@@ -199,7 +202,7 @@
   .navbar-logo-img {
     width: 30px;
     height: 30px;
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
   }
 
   .navbar-logo-title {
@@ -215,6 +218,7 @@
     padding-top: 5px;
     line-height: 20px;
     margin-right: 5px;
+    white-space: nowrap;
   }
 
 </style>

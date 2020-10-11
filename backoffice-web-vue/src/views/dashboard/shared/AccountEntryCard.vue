@@ -18,15 +18,15 @@
       </el-col>
     </el-row>
     <el-row type="flex" justify="space-around" style="margin-top:30px;">
-      <el-col :span="3">
+      <el-col :span="8" class="col-container">
         <h6 class="dashboard-entry-num">88</h6>
         <h6 class="dashboard-entry-income2"> 今日访客</h6>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="8" class="col-container">
         <h6 class="dashboard-entry-num">12</h6>
         <h6 class="dashboard-entry-income2">上架产品</h6>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="8" class="col-container">
         <h6 class="dashboard-entry-num">24</h6>
         <h6 class="dashboard-entry-income2">本月接单</h6>
       </el-col>
@@ -106,4 +106,9 @@
     text-align: center;
   }
 
+  .col-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 </style>

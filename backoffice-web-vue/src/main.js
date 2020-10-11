@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/display.css';
 import {
   TENANT_APIS,
   NONE_TENANT_APIS

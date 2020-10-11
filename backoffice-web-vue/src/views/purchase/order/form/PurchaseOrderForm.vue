@@ -7,9 +7,6 @@
             <h6>创建采购单</h6>
           </div>
         </el-col>
-        <!-- <el-col :span="6">
-          <h6>状态/标签：{{'待采购'}}</h6>
-        </el-col> -->
       </el-row>
       <div class="pt-2"></div>
       <div class="basic-row">

@@ -2,7 +2,7 @@
   <div>
     <el-row type="flex" justify="start">
       <div class="over-tabs">
-        <el-button class="material-btn" @click="onCreate">创建采购订单</el-button>
+        <el-button class="material-btn" v-if="formData.state !== 'COMPLETE'" @click="onCreate">创建采购订单</el-button>
       </div>
       <el-tabs type="border-card" style="width: 100%">
         <el-tab-pane label="采购单">
@@ -13,7 +13,7 @@
                   <el-button :key="item.code" class="order-card">
                     <div @click="onDetail(item)">
                       <el-row type="flex" justify="center">
-                        <img style="width: 100px" src="static/img/purchase-order.png"/>
+                        <img style="width: 100px;height: 100px" src="static/img/purchase-order.png"/>
                       </el-row>
                       <el-row type="flex" justify="center">
                         <h6 style="font-size: 12px">采购单号：{{item.code}}</h6>

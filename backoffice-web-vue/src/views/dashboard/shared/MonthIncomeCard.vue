@@ -6,17 +6,17 @@
       </div>
       <i class="el-icon-s-fold dashboard-icon-btn"></i>
     </el-row>
-    <el-row type="flex" justify="space-between" :gutter="60" align="middle">
-      <el-col :span="12">
+    <el-row type="flex" justify="space-between" align="middle">
+      <el-col :span="8">
         <el-row>
           <h6 class="dashboard-income-money">￥{{slotData.income}}</h6>
         </el-row>
-        <el-row type="flex" style="margin-top:5px;" align="middle">
+        <el-row type="flex" style="margin-top:5px;white-space: nowrap;" align="middle">
           <h6 class="dashboard-income-text">月同比 {{slotData.comparison}}</h6>
           <i class="el-icon-caret-top dashboard-icon-caret"></i>
         </el-row>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-row>
           <h6 class="dashboard-income-text">以收入：￥{{slotData.incomed}}</h6>
         </el-row>

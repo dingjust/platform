@@ -6,7 +6,7 @@
           <template v-if="isOnEdit">
             <el-button class="material-btn" @click="onEditSave">保存</el-button>
           </template>
-          <template v-if="!isOnEdit && order.state === 'WAIT_TO_REV_MATERIALS'">
+          <template v-if="!isOnEdit && order.state === 'WAIT_TO_REV_MATERIALS' && isMerchandiser">
             <el-button class="material-btn" @click="onEdit">编辑</el-button>
             <el-button class="material-btn" @click="receiveComplete">收料完成</el-button>
           </template>
@@ -47,6 +47,9 @@ export default {
     PurchaseMaterialAcceptance
   },
   computed: {
+    isMerchandiser: function () {
+      return this.order.workOrder.task.merchandiser.uid === this.$store.getters.currentUser.uid;
+    },
     modifiedtime: function () {
       return this.order.entries.map(item => item.modifiedtime).sort((o1, o2) => o2 - o1)[0];
     }

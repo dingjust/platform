@@ -130,7 +130,8 @@
           productionLeaderName: '',
           cooperator: '',
           categories: [],
-          productionWorkOrder: ''
+          productionWorkOrder: '',
+          excludeState: 'CANCED'
         },
         page: {
           number: 0, // 当前页，从0开始

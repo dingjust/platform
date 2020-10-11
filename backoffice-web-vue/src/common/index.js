@@ -1019,6 +1019,10 @@ const COMMON_APIS = {
   // 通过生产工单获取采购需求
   getPurchaseRequirementByProductionId (id) {
     return '/b2b/purchase/task/get/all/by/production/' + id;
+  },
+  // 查询首页统计
+  getCompanyReport () {
+    return '/b2b/company/reports/tab2';
   }
 };
 

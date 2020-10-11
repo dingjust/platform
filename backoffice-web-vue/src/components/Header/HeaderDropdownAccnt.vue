@@ -8,7 +8,7 @@
               <el-image
                 :src="currentUser.profilePicture != null ? currentUser.profilePicture.url : 'static/img/avatars/user.jpg'"
                 fit="cover" class="img-avatar img-head" alt></el-image>
-              <span class="name">{{currentUser.username}}</span>
+              <h6 class="name hidden-sm-and-down" style="margin-bottom: 0px;">{{currentUser.username}}</h6>
               <i class="el-icon-arrow-down arrow" v-show="arrowDown"></i>
               <i class="el-icon-arrow-up arrow" v-show="!arrowDown"></i>
             </el-row>

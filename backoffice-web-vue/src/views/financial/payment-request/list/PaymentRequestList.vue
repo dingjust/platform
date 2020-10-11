@@ -2,7 +2,7 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" highlight-current-row :height="autoHeight">
       <el-table-column label="申请单号" prop="code"/>
-      <el-table-column label="关联订单" prop="bill.productionOrder.code"/>
+      <el-table-column label="关联订单" prop="order.code"/>
       <el-table-column label="付款内容" prop="paymentFor"/>
       <el-table-column label="创建人" prop="applyUser.name"/>
       <el-table-column label="创建时间">
@@ -11,7 +11,7 @@
         </template>
       </el-table-column>
       <el-table-column label="申请金额" prop="requestAmount"/>
-      <el-table-column label="收款对象" prop="payable.name" />
+      <el-table-column label="收款对象" prop="payableName" />
       <el-table-column label="付款时间">
         <template slot-scope="scope" v-if="scope.row.paymentRecords && scope.row.paymentRecords.payTime">
           <span>{{scope.row.paymentRecords.payTime | formatDate}}</span>

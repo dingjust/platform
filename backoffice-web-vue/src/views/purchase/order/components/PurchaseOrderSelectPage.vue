@@ -1,6 +1,6 @@
 <template>
   <div>
-    <purchase-order-toolbar @onAdvancedSearch="onAdvancedSearch" 
+    <purchase-order-toolbar @onAdvancedSearch="onAdvancedSearch" @onResetQuery="onResetQuery"
                             :queryFormData="queryFormData" :dataQuery="dataQuery"/>
     <div>
       <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -45,9 +45,9 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch(page, size, isTab) {
-      // if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-      //   this.onResetQuery();
-      // }
+      if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+        this.onResetQuery();
+      }
       const query = this.queryFormData;
       const url = this.apis().searchPurchaseOrder();
       this.searchAdvanced({
@@ -90,9 +90,9 @@ export default {
     setPurchaseOrder (val) {
       this.$emit('setPurchaseOrder', val);
     },
-    // onResetQuery () {
-    //   this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
-    // }
+    onResetQuery () {
+      this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+    }
   },
   data () {
     return {
@@ -115,8 +115,8 @@ export default {
     }
   },
   created () {
-    // this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
-    // this.onResetQuery();
+    this.dataQuery = this.getDataPerQuery('PURCHASE_WORKSHEET');
+    this.onResetQuery();
     this.onAdvancedSearch(0, 10);
   }
 }
