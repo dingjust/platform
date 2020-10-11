@@ -23,27 +23,33 @@
                 <el-button @click="onEnabled">启用</el-button>
               </Authorized>
             </el-row>
-            <el-form :inline="true">
+            <el-form ref="form" :inline="true" :model="formData" :hide-required-asterisk="true" label-width="90px" label-position="left">
               <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
                 <el-col :span="12">
                   <el-form-item label="姓名：">
+                    <template slot="label"><span>姓&#x3000;&#x3000;名：</span></template>
                     <h6 class="basic-title" v-if="!editState">{{this.formData.name}}</h6>
                     <el-input v-else v-model="formData.name"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="联系方式：">
+                  <el-form-item label="联系方式：" prop="contactPhone" :rules="[{ required: true, validator: validatePhone, trigger: 'change'}]">
                     <h6 class="basic-title" v-if="!editState">{{this.formData.contactPhone}}</h6>
                     <el-input v-else v-model="formData.contactPhone"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row> 
-              <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row" style="margin-bottom: 20px">
+              <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
                 <el-col :span="12">
-                  <h6 class="basic-title">登陆账号：{{this.formData.uid}}</h6>
+                  <el-form-item label="登陆账号：">
+                    <h6 class="basic-title">{{this.formData.uid}}</h6>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <h6 class="basic-title">状态：{{this.formData.loginDisabled ? '禁用' : '启用'}}</h6>
+                  <el-form-item label="状态：">
+                    <template slot="label"><span>状&#x3000;&#x3000;态：</span></template>
+                    <h6 class="basic-title">{{this.formData.loginDisabled ? '禁用' : '启用'}}</h6>
+                  </el-form-item>
                 </el-col>
               </el-row>
               <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
@@ -110,6 +116,9 @@ export default {
       if (this.formData.b2bRoleGroupList == null) {
         this.formData.b2bRoleGroupList = [];
       }
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate();
+      })
     },
     async getDeptList () {
       const url = this.apis().getB2BCustomerDeptList();
@@ -160,12 +169,19 @@ export default {
 
     },
     onConfirm () {
-      this.$confirm('是否确认更新员工信息?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this._onConfirm();
+      this.$refs.form.validate((vaild) => {
+        if (vaild) {
+          this.$confirm('是否确认更新员工信息?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this._onConfirm();
+          });
+        } else {
+          this.$message.error('请完善表单信息');
+          return false;
+        }
       });
     },
     async _onConfirm () {
@@ -196,7 +212,21 @@ export default {
       }
       this.$message.success('编辑员工信息成功');
       this.getDetail();
+      this.editState = false;
       // this.$router.go(-1);
+    },
+    validateField (name) {
+      this.$refs.form.validateField(name);
+    },
+    validatePhone (rule, value, callback) {
+      const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+      if (value === '') {
+        callback(new Error('请输入手机号码'));
+      } else if (!reg.test(value)) {
+        callback(new Error('请输入合法手机号码'));
+      } else {
+        callback();
+      }
     }
   },
   data () {
@@ -216,6 +246,11 @@ export default {
           name: ''
         }
       }
+    }
+  },
+  watch: {
+    'formData.contactPhone': function (nval, oval) {
+      this.validateField('contactPhone');
     }
   },
   created () {

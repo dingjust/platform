@@ -236,6 +236,9 @@ export default {
             },
             shippingAddress: {
               details: ''
+            },
+            merchandiser: {
+              uid: ''
             }
           }
         }
