@@ -182,13 +182,13 @@
       sumbitData: function () {
         return this.tableData.map(row => {
           return {
-            name: row['物料名称*'],
-            code: row['物料编号*'],
+            name: row['物料名称*'] + '',
+            code: row['物料编号*'] + '',
             materialsType: this.getMaterial(row['物料类别*']),
-            modelName: row['幅宽/型号*'],
-            specName: row['克重/规格'],
+            modelName: row['幅宽/型号*'] + '',
+            specName: row['克重/规格'] + '',
             unit: row['物料单位*'],
-            colorName: row['物料颜色*'],
+            colorName: row['物料颜色*'] + '',
             unitQuantity: row['单件用量*'] + '',
             estimatedLoss: (row['损耗*'] * 100) + '',
             estimatedUsage: row['预计用量*'] + '',
@@ -198,8 +198,8 @@
             cooperatorName: row['供应商'],
             price: row['物料单价*'] + '',
             totalPrice: row['总金额*'] + '',
-            estimatedRecTime: new Date(row['到料时间*'].replace(/-|\./g, '/')).getTime(),
-            auditColor: row['是否批色'].trim() === '是'
+            estimatedRecTime: new Date(row['到料时间*'].replace(/-|\./g, '/')).getTime()
+            // auditColor: row['是否批色'].trim() === '是'
           }
         })
       }
@@ -412,7 +412,8 @@
         }
         this.tableData.forEach(row => {
           for (let key in row) {
-            if (!row[key] && key !== '是否批色' && key !== '合作商' && key !== '克重/规格') {
+            // if (!row[key] && key !== '是否批色' && key !== '合作商' && key !== '克重/规格') {
+            if (!row[key] && key !== '合作商' && key !== '克重/规格') {
               this.$message.error('表格数据有误，请修改表格后再上传');
               throw Error('表格数据有误，请修改表格后再上传');
               return;

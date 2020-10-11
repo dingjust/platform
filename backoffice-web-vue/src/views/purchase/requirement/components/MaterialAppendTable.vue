@@ -237,7 +237,7 @@ export default {
   },
   methods: {
     onImport (data) {
-      this.entries.workOrders = this.entries.workOrders.concat(data);
+      this.entries.workOrders = data;
       this.importVisible = false;
     },
     getExpectQuantity (index) {

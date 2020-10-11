@@ -13,10 +13,12 @@
           <div style="display: flex;">
             <template v-for="(val, listIndex) in item.list">
               <div :key="listIndex" class="content-title" style="margin-right: 15px">
-                <h6>
-                  <span style="font-size: 20px">{{reportData[val.title]}}</span>
-                  <span style="font-size: 12px"> {{val.text}}</span>
-                </h6>
+                <el-button class="todo-button" type="text" @click="toJump(item)">
+                  <h6>
+                    <span style="font-size: 20px">{{reportData[val.title]}}</span>
+                    <span style="font-size: 12px"> {{val.text}}</span>
+                  </h6>
+                </el-button>
               </div>
             </template>
           </div>
@@ -57,6 +59,31 @@
               this.$set(item, 'isAuth', false);
             }
           })
+        }
+      },
+      toJump (item) {
+        switch (item.auth) {
+          case 'AUDIT_TASK':
+            this.$router.push('/task/approval');
+            break;
+          case 'SALES_OUT_ORDER':
+            this.$router.push('/sales/pending-order');
+            break;
+          case 'PRODUCTION_TASK_ORDER':
+            this.$router.push('/sales/productionOrder ');
+            break;
+          case 'RECEIPT_SHEET':
+            this.$router.push('/receipt/shipping-receipt-sheet');
+            break;
+          case 'SHIPPING_SHEET':
+            this.$router.push('/shipping/shipping-receipt-sheet');
+            break;
+          case 'RECONCILIATION_SHEET':
+            this.$router.push('/shipping/reconciliation-manage');
+            break;
+          case 'COMPANY_AGREEMENT':
+            this.$router.push('/contract/manage');
+            break;
         }
       }
     },
@@ -157,5 +184,13 @@
     margin-top: 10px;
     width: 33.33%;
     min-width: 196px;
+  }
+
+  .todo-button {
+    color: #606266;
+  }
+
+  .todo-button:hover {
+    color: #409EFF;
   }
 </style>
