@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
+import 'package:b2b_commerce/src/helper/global_message_helper.dart';
 import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/bottom_navigation.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
@@ -18,6 +19,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
@@ -34,8 +36,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) => globalInit());
@@ -50,21 +50,11 @@ class _MyAppState extends State<MyApp> {
           initialData: UserBLoC.instance.currentUser,
           stream: UserBLoC.instance.stream,
           builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-            // 未登录
+            // 未登录,游客
             if (snapshot.data.type == UserType.ANONYMOUS) {
-              final botToastBuilder = BotToastInit(); //1.调用BotToastInit
-              return MaterialApp(
-                home: ClientSelectPage(),
-                builder: (context, child) {
-                  child = botToastBuilder(context, child);
-                  return MaxScaleTextWidget(
-                    max: 1.0,
-                    child: child,
-                  );
-                },
-              );
+              return AnymouseApp();
             }
-            return MyAppHomeDelegate(
+            return B2BApp(
               userType: snapshot.data.type,
             );
           }),
@@ -115,18 +105,19 @@ class _MyAppState extends State<MyApp> {
 // }
 }
 
-class MyAppHomeDelegate extends StatefulWidget {
-  MyAppHomeDelegate({
+///B2B应用
+class B2BApp extends StatefulWidget {
+  B2BApp({
     Key key,
     @required this.userType,
   }) : super(key: key);
 
   final UserType userType;
 
-  _MyAppHomeDelegateState createState() => _MyAppHomeDelegateState();
+  _B2BAppState createState() => _B2BAppState();
 }
 
-class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
+class _B2BAppState extends State<B2BApp> {
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   int _currentIndex = 0;
 
@@ -136,9 +127,14 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   //跳转登录页限制锁
   bool loginLock = false;
 
+  ///全局Channel-原生通信
+  MethodChannel _globalChannel;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) => initListener());
+    _globalChannel = MethodChannel('net.nbyjy.b2b/global_channel');
+    _globalChannel.setMethodCallHandler(_globalChannelMethodHandler);
     super.initState();
   }
 
@@ -264,52 +260,60 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     final botToastBuilder = BotToastInit(); //1.调用BotToastInit
 
     return //1.使用BotToastInit直接包裹MaterialApp
-      MaterialApp(
-        navigatorKey: _navigatorKey,
-        title: AppConstants.appTitle,
-        navigatorObservers: [BotToastNavigatorObserver(), B2BNavigatorObserver()],
-        //2.注册路由观察者
-        theme: ThemeData(
-          primaryColor: Colors.white,
-          accentColor: Color.fromRGBO(255, 214, 12, 1),
-          bottomAppBarColor: Colors.grey,
-        ),
-        home: Builder(builder: (context) {
-          AppVersionHelper appVersionHelper =
-          Provider.of<AppVersionHelper>(context);
-          // appVersionHelper.getAppVersionInfo('nbyjy');
-          appVersionHelper.checkVersion(
-              context, AppBLoC.instance.packageInfo.version, 'nbyjy');
+        MaterialApp(
+      navigatorKey: _navigatorKey,
+      title: AppConstants.appTitle,
+      navigatorObservers: [BotToastNavigatorObserver(), B2BNavigatorObserver()],
+      //2.注册路由观察者
+      theme: ThemeData(
+        primaryColor: Colors.white,
+        accentColor: Color.fromRGBO(255, 214, 12, 1),
+        bottomAppBarColor: Colors.grey,
+      ),
+      home: Builder(builder: (context) {
+        AppVersionHelper appVersionHelper =
+            Provider.of<AppVersionHelper>(context);
+        appVersionHelper.checkVersion(
+            context, AppBLoC.instance.packageInfo.version, 'nbyjy');
 
-          return Scaffold(
-            key: AppKeys.appPage,
-            body: menus[_currentIndex].page,
-            bottomNavigationBar: BottomNavigation(
-              currentIndex: _currentIndex,
-              onChanged: _handleNavigation,
-              items: menus.map((menu) => menu.item).toList(),
-            ),
-          );
-        }),
-        routes: AppRoutes.allRoutes,
-        onUnknownRoute: (RouteSettings settings) {
-          print(settings.name);
-        },
-        localizationsDelegates: [
-          //此处
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          ChineseCupertinoLocalizations.delegate
-        ],
-        builder: (context, child) {
-          child = botToastBuilder(context, child);
-          return MaxScaleTextWidget(
-            max: 1.0,
-            child: child,
-          );
-        },
-        supportedLocales: AppConstants.supportedLocales(),
-      );
+        return Scaffold(
+          key: AppKeys.appPage,
+          body: menus[_currentIndex].page,
+          bottomNavigationBar: BottomNavigation(
+            currentIndex: _currentIndex,
+            onChanged: _handleNavigation,
+            items: menus.map((menu) => menu.item).toList(),
+          ),
+        );
+      }),
+      routes: AppRoutes.allRoutes,
+      onUnknownRoute: (RouteSettings settings) {
+        print(settings.name);
+      },
+      localizationsDelegates: [
+        //此处
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        ChineseCupertinoLocalizations.delegate
+      ],
+      builder: (context, child) {
+        child = botToastBuilder(context, child);
+        return MaxScaleTextWidget(
+          max: 1.0,
+          child: child,
+        );
+      },
+      supportedLocales: AppConstants.supportedLocales(),
+    );
+  }
+
+  ///全局消息处理
+  Future _globalChannelMethodHandler(MethodCall methodCall) {
+    var message =
+        BaseChannelMessage.create(methodCall.method, methodCall.arguments);
+    GlobalMessageHelper.handlerChannelMessage(
+        message, _navigatorKey.currentState.overlay.context);
+    return Future.value();
   }
 
   @override
@@ -317,6 +321,35 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     super.dispose();
     _loginJumpSubscription.cancel();
     _loginJumpSubscription = null;
+    _globalChannel = null;
+  }
+}
+
+///无身份应用入口
+class AnymouseApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.white,
+        accentColor: Color.fromRGBO(255, 214, 12, 1),
+        bottomAppBarColor: Colors.grey,
+      ),
+      navigatorObservers: [BotToastNavigatorObserver(), B2BNavigatorObserver()],
+      home: ClientSelectPage(),
+      routes: {
+        AppRoutes.ROUTE_AUTH_REQUEST_PAGE:
+            AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
+      },
+      builder: (context, child) {
+        final botToastBuilder = BotToastInit(); //1.调用BotToastInit
+        child = botToastBuilder(context, child);
+        return MaxScaleTextWidget(
+          max: 1.0,
+          child: child,
+        );
+      },
+    );
   }
 }
 

@@ -1,0 +1,3 @@
+include ':dingdansdk'
+include ':app'
+rootProject.name = "DingDanSDK"
