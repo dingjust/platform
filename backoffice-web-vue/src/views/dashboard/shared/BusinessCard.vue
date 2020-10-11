@@ -47,11 +47,11 @@
         this.initData();
       },
       initData () {
-        const dataPermissionStr = sessionStorage.getItem('dataPermission');
-        if (dataPermissionStr != undefined && dataPermissionStr != null && dataPermissionStr != 'undefined' && dataPermissionStr != 'null' && dataPermissionStr != '') {
-          const authList = JSON.parse(dataPermissionStr);
+        const permissions = sessionStorage.getItem('permissions');
+        if (permissions != undefined && permissions != null && permissions != 'undefined' && permissions != 'null' && permissions != '') {
+          const authList = JSON.parse(permissions);
           this.ToDoList.forEach(item => {
-            if (authList[item.auth]) {
+            if (authList.indexOf(item.auth) >= 0) {
               this.$set(item, 'isAuth', true);
             } else {
               this.$set(item, 'isAuth', false);
