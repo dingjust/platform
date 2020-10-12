@@ -22,6 +22,8 @@
                 <td>{{item.actuallyOrderQuantity}}</td>
                 <td>{{item.actuallyPrice}}</td>
                 <td>{{item.actuallyTotalPrice}}</td>
+                <td>{{item.receiveQuantity}}</td>
+                <td>{{item.remainQuantity}}</td>
               </tr>
             </template>
           </template>
@@ -39,10 +41,10 @@
 <script>
 export default {
   name: 'PurchaseSummary',
-  props: ['formData'],
+  props: ['formData', 'purchaseOrderList'],
   data () {
     return {
-      titleRow: ['物料名称', '物料颜色', '实际采购数量', '实际采购单价', '采购总价']
+      titleRow: ['物料名称', '物料颜色', '实际采购数量', '实际采购单价', '采购总价', '实际回料数', '缺料数']
     }
   }  
 }

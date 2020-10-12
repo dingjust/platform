@@ -208,6 +208,8 @@ export default {
         if (row.materials && row.materials.specList && row.materials.specList.length > 0) {
           workOrders = workOrders.concat(row.materials.specList.map(item => {
             return {
+              id: row.id,
+              state: row.state,
               name: row.materials.name,
               code: row.materials.code,
               unit: row.materials.unit,
@@ -225,7 +227,13 @@ export default {
               estimatedRecTime: item.estimatedRecTime,
               cooperatorName: row.cooperatorName,
               price: item.price,
-              totalPrice: item.totalPrice
+              totalPrice: item.totalPrice,
+              actuallyOrderQuantity: item.actuallyOrderQuantity,
+              actuallyPrice: item.actuallyPrice,
+              actuallyTotalPrice: item.actuallyTotalPrice,
+              receiveQuantity: item.receiveQuantity,
+              remainQuantity: item.remainQuantity,
+              completeTime: row.completeTime
             }
           }));
         }

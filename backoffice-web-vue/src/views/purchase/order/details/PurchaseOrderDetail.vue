@@ -114,6 +114,7 @@ export default {
         if (!this.orderDetail.attachAgreements) {
           this.$set(this.orderDetail, 'attachAgreements', []);
         }
+        this.callback();
       } else if (result.code === 0) {
         this.$message.error(result.msg);
         return;

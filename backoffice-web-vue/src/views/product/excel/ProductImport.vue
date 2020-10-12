@@ -90,8 +90,8 @@
           let category = getCategoryCodeByCascadedName(row['主品类*'], row['子品类*']);
           return {
             'images': row.images,
-            'skuID': row['款号*'],
-            'name': row['标题*'],
+            'skuID': (row['款号*'] + '').replace(/[\r\n]/g,"").trim(),
+            'name': (row['标题*']).replace(/[\r\n]/g,"").trim(),
             'colorSizes': colorSizes,
             'category': {
               code: category

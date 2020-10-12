@@ -29,6 +29,13 @@
           <span> {{getEnum('CooperatorType',scope.row.type)}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="标签">
+        <template slot-scope="scope">
+          <el-tag size="mini" class="elTagClass" :disable-transitions="true">
+            {{(scope.row.partner && scope.row.partner.approvalStatus && scope.row.partner.approvalStatus === 'approved') ? '已认证' : '未认证'}}
+          </el-tag>
+        </template>
+      </el-table-column>
       <!--<el-table-column label="合作次数" v-if="!isFactory()" prop="belongTo.name">-->
       <!--<template slot-scope="scope">-->
       <!--<span v-if="scope.row.belongTo">{{scope.row.belongTo.name}}</span>-->
@@ -135,4 +142,11 @@
     color: #FFA403;
   }
 
+  .elTagClass{
+    color: #0b0e0f;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor:pointer;
+    background-color: #FFD60C;
+  }
 </style>
