@@ -65,6 +65,14 @@
                     android:scheme="nbyjy"
                     android:host="callphone" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="net.nbyjy.b2b"
+                    android:path="/sign"
+                    android:scheme="dingdan" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.tencent.connect.common.AssistActivity"

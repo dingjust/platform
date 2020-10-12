@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/helper/app_version.dart';
+import 'package:b2b_commerce/src/helper/global_message_helper.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -13,105 +15,107 @@ class ClientSelectPage extends StatefulWidget {
 class _ClientSelectPageState extends State<ClientSelectPage> {
   GlobalKey homePageKey = GlobalKey();
 
+  ///全局Channel-原生通信
+  static MethodChannel _globalChannel;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) => homeInit());
+    _globalChannel = MethodChannel('net.nbyjy.b2b/global_channel');
+    _globalChannel.setMethodCallHandler(_globalChannelMethodHandler);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        key: homePageKey,
-        body: Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'temp/client_select.png',
-                package: 'assets',
-                fit: BoxFit.fitWidth,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(left: 20),
+    return Scaffold(
+      key: homePageKey,
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              'temp/client_select.png',
+              package: 'assets',
+              fit: BoxFit.fitWidth,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(left: 20),
+                  child: Text(
+                    '请选择用户身份注册或登录',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Container(
+                  width: 150,
+                  height: 50,
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    onPressed: () {
+                      UserBLoC.instance.changeUserType(UserType.BRAND);
+                    },
                     child: Text(
-                      '请选择用户身份注册或登录',
-                      style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                    width: 150,
-                    height: 50,
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      onPressed: () {
-                        UserBLoC.instance.changeUserType(UserType.BRAND);
-                      },
-                      child: Text(
-                        '品牌',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                      '品牌',
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
-                    width: 150,
-                    height: 50,
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      onPressed: () {
-                        UserBLoC.instance.changeUserType(UserType.FACTORY);
-                      },
-                      child: Text(
-                        '工厂',
-                        style: TextStyle(fontSize: 20),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
+                  width: 150,
+                  height: 50,
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    onPressed: () {
+                      UserBLoC.instance.changeUserType(UserType.FACTORY);
+                    },
+                    child: Text(
+                      '工厂',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            GestureDetector(
+                onTap: () {
+                  showMessage(context);
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 40),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Text(
+                          '如何选择身份',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-              GestureDetector(
-                  onTap: () {
-                    showMessage(context);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(top: 40),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(right: 10),
-                          child: Text(
-                            '如何选择身份',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        Icon(
-                          B2BIcons.question,
-                          color: Colors.red,
-                          size: 18,
-                        ),
-                      ],
-                    ),
-                  ))
-            ],
-          ),
+                      Icon(
+                        B2BIcons.question,
+                        color: Colors.red,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ))
+          ],
         ),
       ),
     );
@@ -142,7 +146,7 @@ class _ClientSelectPageState extends State<ClientSelectPage> {
                       children: <TextSpan>[
                         TextSpan(
                             text:
-                            '服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。',
+                                '服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。',
                             style: TextStyle(color: Colors.black))
                       ]),
                 ),
@@ -183,5 +187,19 @@ class _ClientSelectPageState extends State<ClientSelectPage> {
     await appVersionHelper.getAppVersionInfo('nbyjy');
     await appVersionHelper.checkVersion(
         context, AppBLoC.instance.packageInfo.version, 'nbyjy');
+  }
+
+  ///全局消息处理
+  Future _globalChannelMethodHandler(MethodCall methodCall) {
+    var message =
+    BaseChannelMessage.create(methodCall.method, methodCall.arguments);
+    GlobalMessageHelper.handlerChannelMessage(message, context);
+    return Future.value();
+  }
+
+  @override
+  void dispose() {
+    _globalChannel = null;
+    super.dispose();
   }
 }

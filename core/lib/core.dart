@@ -17,4 +17,4 @@ export 'src/util/file_format_util.dart';
 export 'src/util/regex_util.dart';
 export 'src/util/show_dialog_util.dart';
 export 'src/util/version_util.dart';
-
+export 'src/message/global_channel_message.dart';
