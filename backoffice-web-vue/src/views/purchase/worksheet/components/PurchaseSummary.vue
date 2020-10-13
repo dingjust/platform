@@ -19,9 +19,9 @@
               <tr :key="item.id">
                 <td>{{formData.materials.name}}</td>
                 <td>{{item.colorName}}</td>
-                <td>{{item.actuallyOrderQuantity}}</td>
-                <td>{{item.actuallyPrice}}</td>
-                <td>{{item.actuallyTotalPrice}}</td>
+                <td>{{item.actuallyOrderQuantity ? item.actuallyOrderQuantity : 0}}</td>
+                <td>{{item.actuallyPrice ? item.actuallyPrice : 0}}</td>
+                <td>{{item.actuallyTotalPrice ? item.actuallyTotalPrice : 0}}</td>
                 <td>{{item.receiveQuantity ? item.receiveQuantity : 0}}</td>
                 <td>{{item.remainQuantity ? item.remainQuantity : getRemainQuantity(item.actuallyOrderQuantity, item.receiveQuantity)}}</td>
               </tr>
