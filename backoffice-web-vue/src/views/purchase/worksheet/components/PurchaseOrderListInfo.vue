@@ -6,20 +6,20 @@
       </div>
       <el-tabs type="border-card" style="width: 100%">
         <el-tab-pane label="采购单">
-          <div style="overflow: auto;">
+          <div style="overflow-x: auto;overflow-y: hidden;">
             <div class="order-list">
               <template v-if="purchaseOrderList && purchaseOrderList.length > 0">
                 <template v-for="item in purchaseOrderList">
                   <el-button :key="item.code" class="order-card">
                     <div @click="onDetail(item)">
                       <el-row type="flex" justify="center">
-                        <img style="width: 100px;height: 100px" src="static/img/purchase-order.png"/>
+                        <img style="width: 80px;height: 80px" src="static/img/purchase-order.png"/>
                       </el-row>
                       <el-row type="flex" justify="center">
-                        <h6 style="font-size: 12px">采购单号：{{item.code}}</h6>
+                        <h6 style="font-size: 12px;margin-bottom: 0px">{{item.code}}</h6>
                       </el-row>
                       <el-row type="flex" justify="center">
-                        <h6 style="font-size: 12px">{{getEnum('PurchaseOrderState', item.state)}}</h6>
+                        <h6 style="font-size: 12px;margin-bottom: 0px">{{getEnum('PurchaseOrderState', item.state)}}</h6>
                       </el-row>
                     </div>
                   </el-button>
@@ -137,7 +137,7 @@ export default {
 <style scoped>
   .order-card {
     padding: 0px;
-    height: 150px;
+    /* height: 150px; */
     border: none;
     color: #606266;
   }

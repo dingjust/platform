@@ -20,8 +20,9 @@
               </el-select>
               <el-input v-else v-model="order.cooperatorName" style="width: 194px"></el-input>
             </el-form-item>
-            <el-button type="text" style="padding: 3px 15px;" @click="onAdd" v-if="!selectCooperator.id">
-              <i class="el-icon-plus icon-font"></i>
+            <el-button @click="onAdd" v-if="!selectCooperator.id">
+              <!-- <i class="el-icon-plus icon-font"></i> -->
+              + 添加为供应商
             </el-button>
             <el-button class="select-btn" @click="suppliersSelectVisible=true">选择</el-button>
           </div>

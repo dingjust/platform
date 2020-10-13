@@ -17,7 +17,7 @@
           </el-table-column>
           <el-table-column label="物料编号" prop="code"></el-table-column>
           <el-table-column label="物料单位" prop="unit"></el-table-column>
-          <el-table-column label="供应商" prop="cooperatorName"></el-table-column>
+          <el-table-column label="供应商" v-if="!readOnly" prop="cooperatorName"></el-table-column>
           <el-table-column label="幅宽/型号" prop="modelName"></el-table-column>
           <el-table-column label="克重/规格" prop="specName"></el-table-column>
           <el-table-column label="物料颜色" prop="colorName"></el-table-column>
@@ -105,7 +105,7 @@
               <el-button type="text" @click="onDelete(scope.row, scope.$index)">删除</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="操作" min-width="100px" v-else fixed="right">
+          <el-table-column label="操作" min-width="50px" v-else fixed="right">
             <template slot-scope="scope">
               <el-button type="text" @click="onDetail(scope.row, scope.$index)">详情</el-button>
             </template>
@@ -143,22 +143,22 @@ export default {
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       let index = this.formData.workOrders.findIndex(item => item.code === row.code);
       let length = this.formData.workOrders.filter(item => item.code === row.code).length;
-      if (index === rowIndex && columnIndex < 5) {
+      if (index === rowIndex && columnIndex < 4) {
         return {
           rowspan: length,
           colspan: 1
         }
-      } else if (index !== rowIndex && columnIndex < 5) {
+      } else if (index !== rowIndex && columnIndex < 4) {
         return {
           rowspan: 0,
           colspan: 0
         }
-      } else if (this.readOnly && index === rowIndex && columnIndex >= 14) {
+      } else if (this.readOnly && index === rowIndex && columnIndex >= 13) {
         return {
           rowspan: length,
           colspan: 1
         }
-      } else if (this.readOnly && index !== rowIndex && columnIndex >= 14) {
+      } else if (this.readOnly && index !== rowIndex && columnIndex >= 13) {
         return {
           rowspan: 0,
           colspan: 0

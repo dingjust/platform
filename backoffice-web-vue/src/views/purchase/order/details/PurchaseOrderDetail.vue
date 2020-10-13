@@ -105,7 +105,7 @@ export default {
         this.orderDetail = result.data;
         this.orderDetail.entries.forEach(item => {
           if (!item.receiveQuantity) {
-            this.$set(item, 'receiveQuantity', '');
+            this.$set(item, 'receiveQuantity', 0);
           }
           if (!item.remark) {
             this.$set(item, 'remark', '');
@@ -114,7 +114,6 @@ export default {
         if (!this.orderDetail.attachAgreements) {
           this.$set(this.orderDetail, 'attachAgreements', []);
         }
-        this.callback();
       } else if (result.code === 0) {
         this.$message.error(result.msg);
         return;
