@@ -25,7 +25,7 @@
           <el-table-column label="单位用量" prop="unitQuantity" v-if="!readOnly"></el-table-column>
           <el-table-column label="预计损耗" prop="estimatedLoss" v-if="!readOnly">
             <template slot-scope="scope">
-              <span>{{scope.row.estimatedLoss}}%</span>
+              <span>{{scope.row.estimatedLoss * 100}}%</span>
             </template>
           </el-table-column>
           <el-table-column label="预计用量" prop="estimatedUsage" v-if="!readOnly"></el-table-column>
@@ -58,7 +58,11 @@
                           :content="scope.row.unitQuantity + '+ ( ' + scope.row.unitQuantity + ' × ' + (scope.row.estimatedLoss * 100) + '% )'">
                 <span slot="reference" style="color: #409EFF">{{scope.row.estimatedUsage}}</span>
               </el-popover>
-              <span> / {{scope.row.orderCount}} / {{scope.row.requiredAmount}}</span>
+              <span> / {{scope.row.orderCount}} / </span>
+              <el-popover ref="popover" placement="top-start" trigger="hover" 
+                          :content="'( ' + scope.row.estimatedUsage + ' × ' + scope.row.orderCount + ' ) / ' + (scope.row.emptySent * 100) + '% '">
+                <span slot="reference" style="color: #409EFF">{{scope.row.requiredAmount}}</span>
+              </el-popover>
             </template>
           </el-table-column>
           <el-table-column label="物料单价/总金额" min-width="110px" v-if="readOnly">
