@@ -323,6 +323,8 @@ export default {
       result = result.concat(materials);
 
       result.forEach(item => {
+        item.estimatedLoss = Number.parseFloat(item.estimatedLoss) / 100;
+        
         if (Number.isNaN(Number.parseFloat(item.emptySent))) {
           item.emptySent = 1;
         } else {
