@@ -267,7 +267,9 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               ),
             );
             if (result != null) {
-              productModel = result;
+              setState(() {
+                productModel = result;
+              });
 
               if (productModel.variants != null) {
                 List<ColorModel> colors = List();
@@ -429,7 +431,9 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             ),
           );
           if (result != null) {
-            productModel = result;
+            setState(() {
+              productModel = result;
+            });
 
             if (productModel.variants != null) {
               List<ColorModel> colors = List();

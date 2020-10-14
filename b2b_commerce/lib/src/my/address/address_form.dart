@@ -48,11 +48,14 @@ class AddressFormState extends State<AddressFormPage> {
       return;
     }
 
-    widget.address.cityDistrict = result;
-    widget.address.city = result.city;
-    widget.address.region = result.city.region;
+    setState(() {
+      widget.address.cityDistrict = result;
+      widget.address.city = result.city;
+      widget.address.region = result.city.region;
 
-    regionCityAndDistrict = widget.address.region.name + widget.address.city.name + widget.address.cityDistrict.name;
+      regionCityAndDistrict = widget.address.region.name + widget.address.city.name + widget.address.cityDistrict.name;
+    });
+
   }
 
   @override

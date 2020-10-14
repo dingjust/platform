@@ -361,7 +361,9 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
                         type: 'CGDD',
                       ))).then((value) {
                 if (value != null) {
-                  cgddTemp = value;
+                  setState(() {
+                    cgddTemp = value;
+                  });
                 }
               });
             },

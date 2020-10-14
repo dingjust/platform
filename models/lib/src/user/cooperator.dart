@@ -21,8 +21,11 @@ enum CooperatorCategory {
   ///供应商
   SUPPLIER,
 
-  ///CUSTOMER
-  CUSTOMER
+  ///客户
+  CUSTOMER,
+
+  ///加工厂
+  FABRIC_SUPPLIER
 }
 
 /// 合作商

@@ -276,7 +276,9 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
                             type: 'WTSCHT',
                           ))).then((value) {
                             if(value != null){
-                              temp = value;
+                              setState(() {
+                                temp = value;
+                              });
                             }
               });
             },

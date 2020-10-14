@@ -28,6 +28,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
   TextEditingController _contactPhoneController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _dutiesController = TextEditingController();
+  CompanyModel _company;
 
   FocusNode _contactPersonFocusNode = FocusNode();
   FocusNode _contactPhoneFocusNode = FocusNode();
@@ -38,10 +39,11 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
   @override
   void initState() {
     super.initState();
-    _contactPersonController.text = widget.company.contactPerson;
-    _contactPhoneController.text = widget.company.contactPhone;
-    _phoneController.text = widget.company.phone;
-    _dutiesController.text = widget.company.duties;
+    _company = CompanyModel.fromJson(CompanyModel.toJson(widget.company));
+    _contactPersonController.text = _company.contactPerson;
+    _contactPhoneController.text = _company.contactPhone;
+    _phoneController.text = _company.phone;
+    _dutiesController.text = _company.duties;
   }
 
   @override
@@ -55,18 +57,18 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
           IconButton(
               icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
-                widget.company.contactPerson = _contactPersonController.text == ''
+                _company.contactPerson = _contactPersonController.text == ''
                     ? null
                     : _contactPersonController.text;
-                widget.company.contactPhone = _contactPhoneController.text == ''
+                _company.contactPhone = _contactPhoneController.text == ''
                     ? null
                     : _contactPhoneController.text;
-                widget.company.duties = _dutiesController.text == ''
+                _company.duties = _dutiesController.text == ''
                     ? null
                     : _dutiesController.text;
-                widget.company.phone =
+                _company.phone =
                 _phoneController.text == '' ? null : _phoneController.text;
-                Navigator.pop(context);
+                Navigator.pop(context,_company);
               }),
         ],
       ),
