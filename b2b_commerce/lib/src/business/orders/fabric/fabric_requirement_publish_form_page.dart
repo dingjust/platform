@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:core/core.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -13,6 +16,11 @@ class FabricRequirementPublishFormPage extends StatefulWidget {
 
 class _FabricRequirementPublishFormPageState
     extends State<FabricRequirementPublishFormPage> {
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+
+  AndroidDeviceInfo androidDeviceInfo;
+  IosDeviceInfo iosDeviceInfo;
+
   TextEditingController titleController;
   FocusNode titleFocusNode;
   TextEditingController numController;
@@ -30,6 +38,7 @@ class _FabricRequirementPublishFormPageState
   @override
   void initState() {
     super.initState();
+    initPlatformState();
     titleController = TextEditingController();
     titleFocusNode = FocusNode();
     numController = TextEditingController();
@@ -38,6 +47,28 @@ class _FabricRequirementPublishFormPageState
     video = [];
     expireTime = 7;
     isAgree = false;
+  }
+
+  Future<void> initPlatformState() async {
+    AndroidDeviceInfo androidInfo;
+    IosDeviceInfo iosInfo;
+
+    try {
+      if (Platform.isAndroid) {
+        androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+      } else if (Platform.isIOS) {
+        iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+      }
+    } on PlatformException {
+      print('[nbyjy]=====>获取设备信息错误');
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      androidDeviceInfo = androidInfo;
+      iosDeviceInfo = iosInfo;
+    });
   }
 
   @override
@@ -120,8 +151,7 @@ class _PicturesRow extends StatelessWidget {
 
   final bool editable;
 
-  const _PicturesRow(
-      {Key key, @required this.list, this.maxNum = 5, this.editable = true})
+  const _PicturesRow({Key key, @required this.list, this.maxNum = 5, this.editable = true})
       : super(key: key);
 
   @override
@@ -190,8 +220,7 @@ class _VideoRow extends StatelessWidget {
 
   final bool editable;
 
-  const _VideoRow(
-      {Key key, @required this.list, this.maxNum = 1, this.editable = true})
+  const _VideoRow({Key key, @required this.list, this.maxNum = 1, this.editable = true})
       : super(key: key);
 
   @override
@@ -260,11 +289,10 @@ class _TitleRow extends StatelessWidget {
 
   final ValueChanged<String> onChanged;
 
-  const _TitleRow(
-      {Key key,
-      @required this.titleController,
-      @required this.titleFocusNode,
-      @required this.onChanged})
+  const _TitleRow({Key key,
+    @required this.titleController,
+    @required this.titleFocusNode,
+    @required this.onChanged})
       : super(key: key);
 
   @override
@@ -312,11 +340,10 @@ class _NumRow extends StatelessWidget {
 
   final ValueChanged<String> onChanged;
 
-  const _NumRow(
-      {Key key,
-      @required this.numController,
-      @required this.numFocusNode,
-      @required this.onChanged})
+  const _NumRow({Key key,
+    @required this.numController,
+    @required this.numFocusNode,
+    @required this.onChanged})
       : super(key: key);
 
   @override
@@ -406,8 +433,7 @@ class _ExpiryTimeRow extends StatelessWidget {
 
   final ValueChanged<int> onChanged;
 
-  const _ExpiryTimeRow(
-      {Key key, @required this.value, @required this.onChanged})
+  const _ExpiryTimeRow({Key key, @required this.value, @required this.onChanged})
       : super(key: key);
 
   @override
@@ -457,10 +483,10 @@ class _ExpiryTimeRow extends StatelessWidget {
                           }),
                       Expanded(
                           child: Text(
-                        EffectiveDaysEnum[index].name,
-                        softWrap: false,
-                        overflow: TextOverflow.visible,
-                      )),
+                            EffectiveDaysEnum[index].name,
+                            softWrap: false,
+                            overflow: TextOverflow.visible,
+                          )),
                     ],
                   ),
                 );
@@ -484,7 +510,6 @@ class _ProtocolRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        // padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
         margin: EdgeInsets.only(top: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
