@@ -24,6 +24,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
   TextEditingController _line1Controller;
   FocusNode _line1FocusNode = FocusNode();
   String regionCityAndDistrict;
+  B2BUnitModel _company;
 
   List<Widget> tipsWidget;
   AddressModel _address;
@@ -34,6 +35,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
   @override
   void initState() {
     super.initState();
+    _company = B2BUnitModel.fromJson(B2BUnitModel.toJson(widget.company));
     _line1Controller = TextEditingController(text: widget.company?.contactAddress?.line1);
     if(widget.company?.contactAddress != null && widget.company?.contactAddress.region?.isocode != null){
       _address = AddressModel.fromJson(AddressModel.toJson(widget.company?.contactAddress));
@@ -198,11 +200,11 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
                   _showValidateMsg(context, '请填写详细地址');
                   return;
                 }
-                widget.company.latitude = _latitude;
-                widget.company.longitude = _longitude;
-                widget.company.locationAddress = _locationAddress;
-                widget.company.contactAddress = _address;
-                Navigator.of(context).pop(_address);
+                _company.latitude = _latitude;
+                _company.longitude = _longitude;
+                _company.locationAddress = _locationAddress;
+                _company.contactAddress = _address;
+                Navigator.of(context).pop(_company);
               },
             )
           ],

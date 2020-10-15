@@ -415,7 +415,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               ),
             );
             if (result != null) {
-              productModel = result;
+              setState(() {
+                productModel = result;
+              });
 
               if (productModel.variants != null) {
                 List<ColorModel> colors = List();

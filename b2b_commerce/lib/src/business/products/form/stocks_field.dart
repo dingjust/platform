@@ -67,8 +67,7 @@ class _StocksFieldState extends State<StocksField>
               ? IconButton(
                   icon: Text('确定'),
                   onPressed: () {
-                    widget.product.colorSizes = _colorSizes;
-                    Navigator.pop(context);
+                    Navigator.pop(context,_colorSizes);
                   })
               : Container()
         ],

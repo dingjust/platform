@@ -19,9 +19,11 @@
               <tr :key="item.id">
                 <td>{{formData.materials.name}}</td>
                 <td>{{item.colorName}}</td>
-                <td>{{item.actuallyOrderQuantity}}</td>
-                <td>{{item.actuallyPrice}}</td>
-                <td>{{item.actuallyTotalPrice}}</td>
+                <td>{{item.actuallyOrderQuantity ? item.actuallyOrderQuantity : 0}}</td>
+                <td>{{item.actuallyPrice ? item.actuallyPrice : 0}}</td>
+                <td>{{item.actuallyTotalPrice ? item.actuallyTotalPrice : 0}}</td>
+                <td>{{item.receiveQuantity ? item.receiveQuantity : 0}}</td>
+                <td>{{item.remainQuantity ? item.remainQuantity : getRemainQuantity(item.actuallyOrderQuantity, item.receiveQuantity)}}</td>
               </tr>
             </template>
           </template>
@@ -39,10 +41,17 @@
 <script>
 export default {
   name: 'PurchaseSummary',
-  props: ['formData'],
+  props: ['formData', 'purchaseOrderList'],
+  methods: {
+    getRemainQuantity (actuallyOrderQuantity, receiveQuantity) {
+      let actQuantity = Number.isNaN(Number.parseFloat(actuallyOrderQuantity)) ? 0 : Number.parseFloat(actuallyOrderQuantity); 
+      let recQuantity = Number.isNaN(Number.parseFloat(receiveQuantity)) ? 0 : Number.parseFloat(receiveQuantity);
+      return (actQuantity - recQuantity) > 0 ? (actQuantity - recQuantity).toFixed(2) : 0;
+    }
+  },
   data () {
     return {
-      titleRow: ['物料名称', '物料颜色', '实际采购数量', '实际采购单价', '采购总价']
+      titleRow: ['物料名称', '物料颜色', '实际采购数量', '实际采购单价', '采购总价', '实际回料数', '缺料数']
     }
   }  
 }

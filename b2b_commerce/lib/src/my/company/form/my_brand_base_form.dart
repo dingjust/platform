@@ -186,14 +186,23 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               color: Color(Constants.DIVIDER_COLOR),
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
+              onTap: () async{
+                CompanyModel result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
                             MyBrandContactFormPage(
                               company: _brand,
                             )));
+
+                if(result != null){
+                  setState(() {
+                    _brand.contactPerson = result.contactPerson;
+                    _brand.contactPhone = result.contactPhone;
+                    _brand.duties = result.duties;
+                    _brand.phone = result.phone;
+                  });
+                }
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -241,7 +250,9 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                               addressModel: _brand.contactAddress,
                             )));
                 if (result != null) {
-                  _brand.contactAddress = result;
+                  setState(() {
+                    _brand.contactAddress = result;
+                  });
                 }
               },
               child: Container(
@@ -300,7 +311,8 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         ]),
                       ),
                     ),
-                    Text(formatCategorySelectText(_brand.adeptAtCategories),
+                    Text(_brand.adeptAtCategories == null || _brand.adeptAtCategories.length == 0 ? '请选择'
+                        : formatCategorySelectText(_brand.adeptAtCategories),
                         style: TextStyle(color: Colors.grey)),
                     Icon(Icons.chevron_right, color: Colors.grey),
                   ],
@@ -321,7 +333,9 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 );
 
                 if (result != null) {
-                  _brand.adeptAtCategories = result;
+                  setState(() {
+                    _brand.adeptAtCategories = result;
+                  });
                 }
               },
             ),

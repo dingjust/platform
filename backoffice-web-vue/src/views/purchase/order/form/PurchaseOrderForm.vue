@@ -20,8 +20,9 @@
               </el-select>
               <el-input v-else v-model="order.cooperatorName" style="width: 194px"></el-input>
             </el-form-item>
-            <el-button type="text" style="padding: 3px 15px;" @click="onAdd" v-if="!selectCooperator.id">
-              <i class="el-icon-plus icon-font"></i>
+            <el-button @click="onAdd" v-if="!selectCooperator.id">
+              <!-- <i class="el-icon-plus icon-font"></i> -->
+              + 添加为供应商
             </el-button>
             <el-button class="select-btn" @click="suppliersSelectVisible=true">选择</el-button>
           </div>
@@ -126,6 +127,23 @@ export default {
       });
     },
     async _onSave (flag) {
+      try {
+        this.order.entries.forEach(item => {
+          if (!item.orderQuantity || item.orderQuantity === 0) {
+            throw new Error('请填写下单数');
+          }
+          if (!item.price) {
+            throw new Error('请填写物料单价');
+          }
+          if (!item.estimatedRecTime) {
+            throw new Error('请填写到料时间');
+          }
+        })
+      } catch (error) {
+        this.$message.error(error.message);
+        return;
+      }
+
       let form = {
         id: this.order.id ? this.order.id : '',
         attachAgreements: this.order.attachAgreements,
@@ -177,6 +195,8 @@ export default {
       } else if (result.code === 0) {
         this.$message.error(result.msg);
         return;
+      } else {
+        this.$message.success('创建采购单失败！');
       }
     },
     async onDelete () {

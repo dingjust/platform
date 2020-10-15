@@ -1023,6 +1023,12 @@ const COMMON_APIS = {
   // 查询首页统计
   getCompanyReport () {
     return '/b2b/company/reports/tab2';
+  },
+  getApplicationList () {
+    return '/b2b/application/list'
+  },
+  createApplication () {
+    return '/b2b/application/save'
   }
 };
 

@@ -47,7 +47,11 @@ class _SubContractContactInputState extends State<SubContractContactInput>{
                   onTap: () async {
                     widget.item.details.contactPerson = _nameController.text == '' ? null : _nameController.text;
                     widget.item.details.contactPhone = _phoneController.text == '' ? null : _phoneController.text;
-                    Navigator.pop(context);
+                    List<String> result = [
+                      widget.item.details.contactPerson,
+                      widget.item.details.contactPhone
+                    ];
+                    Navigator.pop(context, result);
                   }
               )
             ]

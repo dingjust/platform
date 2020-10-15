@@ -103,7 +103,9 @@ class _RequirementOrderSelectPublishTargetFormState
                               CooperatorSelectPage(models: this._cooperatorModels,)));
 
                   if(result != null){
-                    this._cooperatorModels = result;
+                    setState(() {
+                      this._cooperatorModels = result;
+                    });
                   }
                 },
                 child: Container(
@@ -139,7 +141,9 @@ class _RequirementOrderSelectPublishTargetFormState
 
                   print(result);
                   if(result != null){
-                    this._factoryModels = result;
+                    setState(() {
+                      this._factoryModels = result;
+                    });
                   }
                 },
                 child: Container(

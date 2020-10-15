@@ -17,7 +17,9 @@
           <h6>任务单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="6">
-          <h6>关联订单：{{formData.productionTask.code}}</h6>
+          <h6>关联工单：
+            <el-button type="text" @click="onProductDetail(formData.productionTask.id)" class="code-btn">{{formData.productionTask.code}}</el-button>
+          </h6>
         </el-col>
         <el-col :span="6">
           <h6>关联款号：{{formData.productionTask.product.skuID}}</h6>
@@ -63,19 +65,24 @@
         <el-button v-if="canReturn" class="sumbit-btn" @click="onReturn">撤回</el-button>
       </el-row>
     </el-card>
+    <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <production-order-detail v-if="productionVisible" :id="productionId" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import PurchaseRequirementTable from '../components/PurchaseRequirementTable'
 import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
+import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
 
 export default {
   name: 'PurchaseRequirementDetail',
   props: ['id'],
   components: {
     PurchaseRequirementTable,
-    OrderAuditDetail
+    OrderAuditDetail,
+    ProductionOrderDetail
   },
   computed: {
     canReturn: function () {
@@ -115,6 +122,10 @@ export default {
       } else if (result.code === 0) {
         this.$message.error(result.msg);
       }
+    },
+    onProductDetail (id) {
+      this.productionId = id;
+      this.productionVisible = true;
     },
     onApproval(isPass) {
       if (this.formData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
@@ -208,6 +219,8 @@ export default {
         if (row.materials && row.materials.specList && row.materials.specList.length > 0) {
           workOrders = workOrders.concat(row.materials.specList.map(item => {
             return {
+              id: row.id,
+              state: row.state,
               name: row.materials.name,
               code: row.materials.code,
               unit: row.materials.unit,
@@ -225,7 +238,13 @@ export default {
               estimatedRecTime: item.estimatedRecTime,
               cooperatorName: row.cooperatorName,
               price: item.price,
-              totalPrice: item.totalPrice
+              totalPrice: item.totalPrice,
+              actuallyOrderQuantity: item.actuallyOrderQuantity,
+              actuallyPrice: item.actuallyPrice,
+              actuallyTotalPrice: item.actuallyTotalPrice,
+              receiveQuantity: item.receiveQuantity,
+              remainQuantity: item.remainQuantity,
+              completeTime: row.completeTime
             }
           }));
         }
@@ -236,6 +255,8 @@ export default {
   },
   data () {
     return {
+      productionId: '',
+      productionVisible: false,
       formData: {
         state: 'NOT_COMMITED',
         code: '',
@@ -293,5 +314,10 @@ export default {
     width: 100px;
     color: #606266;
     background-color: #ffd60c;
+  }
+
+  .code-btn {
+    font-size: 14px;
+    padding: 0px;
   }
 </style>

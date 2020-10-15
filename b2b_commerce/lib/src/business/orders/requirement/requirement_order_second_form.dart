@@ -911,7 +911,9 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                                   formState: widget.formState,
                                 )));
                     if (result != null) {
-                      _factoryUids = result;
+                      setState(() {
+                        _factoryUids = result;
+                      });
                     }
                   },
                   child: Row(

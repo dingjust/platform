@@ -241,7 +241,9 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
                           CooperatorSingleSelectPage(model: this._cooperatorModel,)));
 
               if(result != null){
-                this._cooperatorModel = result;
+                setState(() {
+                  this._cooperatorModel = result;
+                });
               }
             },
             child: Container(
@@ -371,7 +373,9 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
                             type: 'KJXY',
                           ))).then((value) {
                             if(value != null){
-                              kjxyTemp = value;
+                              setState(() {
+                                kjxyTemp = value;
+                              });
                             }
               });
             },

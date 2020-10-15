@@ -66,7 +66,7 @@ export default {
           count += item.requiredAmount;
         }
       })  
-      return count;  
+      return count.toFixed(2);  
     },
     totalMaterialPrice: function () {
       let count = 0;
@@ -75,7 +75,7 @@ export default {
           count += item.totalPrice;
         }
       })  
-      return count;  
+      return count.toFixed(2);  
     }
   },
   data () {

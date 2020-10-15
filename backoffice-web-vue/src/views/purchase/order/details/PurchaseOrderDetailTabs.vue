@@ -83,6 +83,7 @@ export default {
       if (result.code === 1) {
         this.$message.success('编辑物料验收信息成功！');
         this.$emit('getDetail');
+        this.$emit('callback');
         this.isOnEdit = false;
       } else if (result.code === 0) {
         this.$message.error(result.msg);

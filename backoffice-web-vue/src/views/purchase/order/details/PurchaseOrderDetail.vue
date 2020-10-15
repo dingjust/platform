@@ -105,7 +105,7 @@ export default {
         this.orderDetail = result.data;
         this.orderDetail.entries.forEach(item => {
           if (!item.receiveQuantity) {
-            this.$set(item, 'receiveQuantity', '');
+            this.$set(item, 'receiveQuantity', 0);
           }
           if (!item.remark) {
             this.$set(item, 'remark', '');

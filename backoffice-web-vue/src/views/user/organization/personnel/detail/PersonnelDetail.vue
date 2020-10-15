@@ -14,7 +14,8 @@
           <el-tab-pane label="基本信息" name="BASIC">
             <el-row type="flex" justify="end">
               <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
-                <el-button @click="onEdit">编辑</el-button>
+                <el-button v-if="!editState" @click="onEdit">编辑</el-button>
+                <el-button v-else @click="onCancel">取消</el-button>
               </Authorized>
               <Authorized :permission="['COMPANY_CUSTOMER_ENABLE']">
                 <el-button @click="onForbidden">禁用</el-button>
@@ -26,7 +27,7 @@
             <el-form ref="form" :inline="true" :model="formData" :hide-required-asterisk="true" label-width="90px" label-position="left">
               <el-row type="flex" justify="start" align="middle" class="personnel-detail-basic-row">
                 <el-col :span="12">
-                  <el-form-item label="姓名：">
+                  <el-form-item label="姓名：" prop="name" :rules="[{ required: true, message: '请输入员工姓名', trigger: 'change'}]">
                     <template slot="label"><span>姓&#x3000;&#x3000;名：</span></template>
                     <h6 class="basic-title" v-if="!editState">{{this.formData.name}}</h6>
                     <el-input v-else v-model="formData.name"></el-input>
@@ -131,6 +132,25 @@ export default {
     },
     onEdit () {
       this.editState = true;
+      this.cacheData = {
+        name: this.formData.name,
+        contactPhone: this.formData.contactPhone,
+        b2bDept: this.formData.b2bDept
+      }
+    },
+    onCancel () {
+      this.editState = false;
+      this.formData.name = this.cacheData.name;
+      this.formData.contactPhone = this.cacheData.contactPhone;
+      this.formData.b2bDept = this.cacheData.b2bDept;
+      this.$refs.form.clearValidate();
+      this.cacheData = {
+        name: '',
+        contactPhone: '',
+        b2bDept: {
+          name: ''
+        }
+      }
     },
     onForbidden () {
       if (this.formData.loginDisabled === true) {
@@ -234,6 +254,13 @@ export default {
       activeName: 'BASIC',
       editState: false,
       deptList: [],
+      cacheData: {
+        name: '',
+        contactPhone: '',
+        b2bDept: {
+          name: ''
+        }
+      },
       formData: {
         uid: '',
         name: '',

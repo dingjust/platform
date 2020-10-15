@@ -182,20 +182,20 @@
       sumbitData: function () {
         return this.tableData.map(row => {
           return {
-            name: row['物料名称*'] + '',
-            code: row['物料编号*'] + '',
+            name: (row['物料名称*'] + '').replace(/[\r\n]/g,"").trim(),
+            code: (row['物料编号*'] + '').replace(/[\r\n]/g,"").trim(),
             materialsType: this.getMaterial(row['物料类别*']),
-            modelName: row['幅宽/型号*'] + '',
-            specName: row['克重/规格'] + '',
-            unit: row['物料单位*'],
-            colorName: row['物料颜色*'] + '',
+            modelName: (row['幅宽/型号*'] + '').replace(/[\r\n]/g,"").trim(),
+            specName: (row['克重/规格'] + '').replace(/[\r\n]/g,"").trim(),
+            unit: (row['物料单位*'] + '').replace(/[\r\n]/g,"").trim(),
+            colorName: (row['物料颜色*'] + '').replace(/[\r\n]/g,"").trim(),
             unitQuantity: row['单件用量*'] + '',
             estimatedLoss: (row['损耗*'] * 100) + '',
             estimatedUsage: row['预计用量*'] + '',
             emptySent: (row['空差*'] * 100) + '',
             orderCount: row['订单数*'] + '',
             requiredAmount: row['需求总量*'] + '',
-            cooperatorName: row['供应商'],
+            cooperatorName: (row['供应商'] + '').replace(/[\r\n]/g,"").trim(),
             price: row['物料单价*'] + '',
             totalPrice: row['总金额*'] + '',
             estimatedRecTime: new Date(row['到料时间*'].replace(/-|\./g, '/')).getTime()

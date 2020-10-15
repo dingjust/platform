@@ -340,7 +340,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             ),
           );
           if (result != null) {
-            productModel = result;
+            setState(() {
+              productModel = result;
+            });
 
             if (productModel.variants != null) {
               List<ColorModel> colors = List();
@@ -433,14 +435,18 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 )),
           ),
           onTap: () async {
+            print('===============');
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ProductSelectPage(),
               ),
             );
+            print(result);
             if (result != null) {
-              productModel = result;
+              setState(() {
+                productModel = ApparelProductModel.fromJson(ApparelProductModel.toJson(result));
+              });
 
               if (productModel.variants != null) {
                 List<ColorModel> colors = List();

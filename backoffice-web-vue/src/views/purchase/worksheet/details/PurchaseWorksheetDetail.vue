@@ -66,7 +66,7 @@
       <purchase-order-list-info :formData="formData" :materials="materials" 
                                 @callback="callback" :purchaseOrderList="purchaseOrderList"/>
       <el-divider></el-divider>
-      <purchase-summary :formData="formData"/>
+      <purchase-summary :formData="formData" :purchaseOrderList="purchaseOrderList"/>
       <el-row type="flex" justify="center" style="margin: 40px 0px 0px 0px;" v-if="formData.state !== 'COMPLETE'">
         <el-button class="sumbit-btn" @click="onFinish">采购完成</el-button>
       </el-row>

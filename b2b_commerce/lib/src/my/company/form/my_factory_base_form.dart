@@ -277,14 +277,23 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   GestureDetector _buildContactInfo(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
+      onTap: () async{
+        CompanyModel result = await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     MyBrandContactFormPage(
                       company: _factory,
                     )));
+
+        if(result != null){
+          setState(() {
+            _factory.contactPerson = result.contactPerson;
+            _factory.contactPhone = result.contactPhone;
+            _factory.duties = result.duties;
+            _factory.phone = result.phone;
+          });
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -355,13 +364,20 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ],
           ),
         ),
-        onTap: () {
-          Navigator.push(
+        onTap: () async{
+          B2BUnitModel result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ContactAddressFormPage(company: _factory),
             ),
           );
+
+          setState(() {
+            _factory.contactAddress = result.contactAddress;
+            _factory.locationAddress = result.locationAddress;
+            _factory.latitude = result.latitude;
+            _factory.longitude = result.longitude;
+          });
         });
   }
 
@@ -654,7 +670,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 ]),
               ),
             ),
-            Text(
+            Text(_factory.adeptAtCategories == null || _factory.adeptAtCategories.length == 0 ? '请选择':
               formatCategorySelectText(_factory.adeptAtCategories, 2),
               style: TextStyle(color: Colors.grey),
             ),
@@ -681,7 +697,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         );
 
         if (result != null) {
-          _factory.adeptAtCategories = result;
+          setState(() {
+            _factory.adeptAtCategories = result;
+          });
         }
       },
     );
@@ -1369,12 +1387,14 @@ class _EquipmentPageState extends State<EquipmentPage> {
                 );
                 print(result);
                 if (result != null) {
-                  _attributes[0].valueSelects = result['cuttingDepartment'];
-                  _attributes[1].valueSelects = result['productionWorkshop'];
-                  _attributes[2].valueSelects = result['lastDepartment'];
-                  widget.item.cuttingDepartment = result['cuttingDepartment'];
-                  widget.item.productionWorkshop = result['productionWorkshop'];
-                  widget.item.lastDepartment = result['lastDepartment'];
+                 setState(() {
+                   _attributes[0].valueSelects = result['cuttingDepartment'];
+                   _attributes[1].valueSelects = result['productionWorkshop'];
+                   _attributes[2].valueSelects = result['lastDepartment'];
+                   widget.item.cuttingDepartment = result['cuttingDepartment'];
+                   widget.item.productionWorkshop = result['productionWorkshop'];
+                   widget.item.lastDepartment = result['lastDepartment'];
+                 });
                 }
               },
               child: _buildAttributesInfo()
@@ -1483,6 +1503,9 @@ class _EquipmentPageState extends State<EquipmentPage> {
       }
     }
 
+    if(text.endsWith("\n")){
+      text = text.substring(0,text.length-1);
+    }
     return text;
   }
 }
