@@ -25,7 +25,6 @@ class RequirementOrderFirstForm extends StatefulWidget {
 
 class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
   GlobalKey _scaffoldKey = GlobalKey();
-  CategoryModel _categorySelect;
 
   @override
   void initState() {
@@ -91,7 +90,7 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                 //埋点>>>需求发布1填写下一步
                 FlutterUmplus.event("requirement_publish_1_finsh",
                     label:
-                    '${widget.formState.model.details.majorCategory.name}');
+                        '${widget.formState.model.details.majorCategory.name}');
 
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => RequirementOrderSecondForm(
