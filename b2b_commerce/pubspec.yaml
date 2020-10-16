@@ -92,6 +92,7 @@ dependencies:
   # lcfarm_flutter_umeng: ^0.1.8
   flutter_umplus: ^0.0.1
   video_thumbnail: ^0.2.2
+  device_info: ^0.4.2+8
 
   # PUB库钉钉插件
   flutter_ddshare: ^1.0.0
