@@ -36,12 +36,12 @@ class _LoginPageState extends State<LoginPage> {
   Timer _timer;
   String phoneValidateStr = "";
 
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _smsCaptchaController = TextEditingController();
-  FocusNode _phoneFocusNode = FocusNode();
-  FocusNode _passwordFocusNode = FocusNode();
-  FocusNode _smsFocusNode = FocusNode();
+  TextEditingController _phoneController;
+  TextEditingController _passwordController;
+  TextEditingController _smsCaptchaController;
+  FocusNode _phoneFocusNode;
+  FocusNode _passwordFocusNode;
+  FocusNode _smsFocusNode;
 
   bool _isRemember = true;
   bool _isPasswordHide = true;
@@ -49,19 +49,31 @@ class _LoginPageState extends State<LoginPage> {
   bool validate = false;
   bool _isAgree = true;
 
+  StreamSubscription loginStreamSubscription;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => showSnackBar(context));
     WidgetsBinding.instance.addPostFrameCallback((_) => checkLocalUserName());
+
+    _phoneController = TextEditingController();
+    _passwordController = TextEditingController();
+    _smsCaptchaController = TextEditingController();
+    _phoneFocusNode = FocusNode();
+    _passwordFocusNode = FocusNode();
+    _smsFocusNode = FocusNode();
+
+    _passwordController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
-    bloc.loginStream.listen((result) {
+    loginStreamSubscription = bloc.loginStream.listen((result) {
       Navigator.of(context).pop();
       showDialog(
           context: context,
@@ -165,11 +177,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildInputArea() {
-    //监听密码输入变动、刷新表单校验
-    _passwordController.addListener(() {
-      setState(() {});
-    });
-
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
       child: Column(
@@ -715,6 +722,12 @@ class _LoginPageState extends State<LoginPage> {
             });
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    loginStreamSubscription = null;
   }
 }
 

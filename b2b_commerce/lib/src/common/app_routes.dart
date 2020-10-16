@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/apparel_products_brand.dart';
+import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
@@ -59,6 +60,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_SALE_ORDERS = '/business/sale_orders';
   static const ROUTE_QUOTES = '/business/quotes';
   static const ROUTE_REQUIREMENT_ORDERS = '/business/requirement_orders';
+  static const ROUTE_FABRIC_PUBLISH = '/business/fabric/publish';
   static const ROUTE_REQUIREMENT_ORDERS_DETAIL =
       '/business/orders/requirement_orders_detail';
   static const ROUTE_REQUIREMENT_QUOTE_DETAIL =
@@ -138,6 +140,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_ORDER_PRODUCTS_INDEX: (context) => ProductsHomePage(),
     ROUTE_SALE_ORDERS: (context) => SaleOrdersPage(),
     ROUTE_WEBVIEW_PAGE: (context) => WebviewPage(),
-    ROUTE_AUTH_REQUEST_PAGE: (context) => AuthRequestPage()
+    ROUTE_AUTH_REQUEST_PAGE: (context) => AuthRequestPage(),
+    ROUTE_FABRIC_PUBLISH: (context) => FabricRequirementPublishFormPage()
   };
 }

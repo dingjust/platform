@@ -187,9 +187,6 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                 onChanged: (value) {
                   _product.name = value;
                 },
-                onEditingComplete: () {
-                  FocusScope.of(context).requestFocus(_skuIDFocusNode);
-                },
                 enabled: _enabled,
               ),
             ),
@@ -208,12 +205,8 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                       fontSize: 16,
                     )),
                 hintText: !_enabled ? '' : '请填写产品货号',
-                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   _product.skuID = value;
-                },
-                onEditingComplete: () {
-                  FocusScope.of(context).requestFocus(_brandFocusNode);
                 },
                 enabled: _enabled,
               ),
@@ -246,9 +239,11 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                           builder: (context) =>
                               ColorsSizesField(_product,
                                   colors: colors, sizes: sizes)));
-                  setState(() {
-                    _product.colorSizes = result.colorSizes;
-                  });
+                  if(result != null){
+                    setState(() {
+                      _product.colorSizes = result.colorSizes;
+                    });
+                  }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -353,18 +348,17 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                       fontSize: 16,
                     )),
                 hintText: !_enabled ? '' : '请填写品牌',
-                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   _product.brand = value;
                 },
-                onEditingComplete: () {
-                  if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-                    FocusScope.of(context).requestFocus(_priceFocusNode);
-                  } else if (UserBLoC.instance.currentUser.type ==
-                      UserType.FACTORY) {
-                    FocusScope.of(context).requestFocus(_gramWeightFocusNode);
-                  }
-                },
+//                onEditingComplete: () {
+//                  if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+//                    FocusScope.of(context).requestFocus(_priceFocusNode);
+//                  } else if (UserBLoC.instance.currentUser.type ==
+//                      UserType.FACTORY) {
+//                    FocusScope.of(context).requestFocus(_gramWeightFocusNode);
+//                  }
+//                },
                 enabled: _enabled,
               ),
             ),

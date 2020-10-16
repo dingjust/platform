@@ -4,6 +4,7 @@ export 'src/account/login/login.dart';
 export 'src/commons/advance_icon_button/advance_icon_button.dart';
 export 'src/commons/albums_cameras/single_select/albums_cameras.dart';
 export 'src/commons/attachments/attachments.dart';
+export 'src/commons/attachments/video_attachments.dart';
 export 'src/commons/basic/info_row.dart';
 export 'src/commons/bloc_provider.dart';
 export 'src/commons/button/button.dart';

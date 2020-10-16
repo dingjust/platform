@@ -257,13 +257,17 @@ class _SubContractSecondFormState extends State<SubContractSecondForm> {
                       ),
                     ),
                   ),
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async{
+                    List<String> result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
                               SubContractContactInput(widget.formState.model)),
                     );
+                    setState(() {
+                      widget.formState.model.details.contactPerson = result[0];
+                      widget.formState.model.details.contactPhone = result[1];
+                    });
                   }),
             ),
             Container(

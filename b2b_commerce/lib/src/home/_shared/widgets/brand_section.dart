@@ -28,20 +28,19 @@ class BrandEntranceSection extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  MultiProvider(
-                    providers: [
-                      ChangeNotifierProvider(
-                        builder: (_) => RequirementOrderFormState(),
-                      ),
-                    ],
-                    child: Consumer(
-                      builder: (context, RequirementOrderFormState state, _) =>
-                          RequirementOrderFirstForm(
-                            formState: state,
-                          ),
-                    ),
+              builder: (context) => MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                    builder: (_) => RequirementOrderFormState(),
                   ),
+                ],
+                child: Consumer(
+                  builder: (context, RequirementOrderFormState state, _) =>
+                      RequirementOrderFirstForm(
+                    formState: state,
+                  ),
+                ),
+              ),
             ),
           );
         },
@@ -99,9 +98,10 @@ class BrandEntranceSection extends StatelessWidget {
     if (categories != null && labels != null) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => FactoryPage(
-            FactoryCondition(
-                starLevel: 0,
+          builder: (context) =>
+              FactoryPage(
+                FactoryCondition(
+                    starLevel: 0,
                 adeptAtCategories: [],
                 labels: conditionLabels,
                 cooperationModes: []),
@@ -336,9 +336,10 @@ class BrandButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.requirement(),
         onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
+          Navigator.pushNamed(context, AppRoutes.ROUTE_FABRIC_PUBLISH);
+          // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
         },
-        title: '我的需求',
+        title: '面料需求',
       ),
     );
   }
@@ -356,10 +357,11 @@ class BrandButtonsSection extends StatelessWidget {
     labels.add(LabelModel(name: '已认证', id: 1000000));
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => FactoryPage(
-          FactoryCondition(
-              starLevel: 0,
-              adeptAtCategories: [],
+        builder: (context) =>
+            FactoryPage(
+              FactoryCondition(
+                  starLevel: 0,
+                  adeptAtCategories: [],
               labels: conditionLabels,
               cooperationModes: []),
           route: '优选工厂',

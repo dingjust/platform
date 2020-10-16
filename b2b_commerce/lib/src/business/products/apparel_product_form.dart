@@ -309,12 +309,18 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 padding: EdgeInsets.all(15),
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async{
+                    dynamic result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 StocksField(_product, enabled: true)));
+
+                    if(result != null){
+                      setState(() {
+                        _product.colorSizes = result;
+                      });
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -421,7 +427,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                       fontSize: 16,
                     )),
                 hintText: '请填写品牌',
-                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   _product.brand = value;
                 },
