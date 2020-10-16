@@ -6,8 +6,8 @@
       </div>
       <i class="el-icon-s-fold dashboard-icon-btn"></i>
     </el-row>
-    <el-row type="flex" justify="space-between" align="middle">
-      <el-col :span="8">
+    <div style="display: flex;justify-content: space-between;">
+      <div>
         <el-row>
           <h6 class="dashboard-income-money">￥{{slotData.income}}</h6>
         </el-row>
@@ -15,8 +15,8 @@
           <h6 class="dashboard-income-text">月同比 {{slotData.comparison}}</h6>
           <i class="el-icon-caret-top dashboard-icon-caret"></i>
         </el-row>
-      </el-col>
-      <el-col :span="8">
+      </div>
+      <div>
         <el-row>
           <h6 class="dashboard-income-text">以收入：￥{{slotData.incomed}}</h6>
         </el-row>
@@ -26,8 +26,8 @@
         <el-row>
           <h6 class="dashboard-income-text">生产订单数：{{slotData.purchaseOrders}}</h6>
         </el-row>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 

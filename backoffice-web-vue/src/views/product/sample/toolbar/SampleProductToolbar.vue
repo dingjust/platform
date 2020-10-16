@@ -34,15 +34,18 @@
               <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
                 <el-button v-if="!isTenant()" class="create-btn" size="medium" @click="onNew">添加产品</el-button>
               </Authorized>
-              <el-dropdown @command="handleCommand">
+              <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
+                <el-button v-if="!isTenant()" class="create-btn" size="medium" @click="importDialogVisible = true">批量导入</el-button>
+              </Authorized>
+              <!-- <el-dropdown @command="handleCommand">
                 <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
                   <el-button v-if="!isTenant()" class="create-btn" size="medium">操作<i
                       class="el-icon-arrow-down el-icon--right"></i></el-button>
-                </Authorized>
-                <el-dropdown-menu slot="dropdown">
+                </Authorized> -->
+                <!-- <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="0">批量导入</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+                </el-dropdown-menu> -->
+              <!-- </el-dropdown> -->
             </el-button-group>
           </el-row>
         </el-col>

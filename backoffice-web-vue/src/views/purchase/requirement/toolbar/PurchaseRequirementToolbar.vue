@@ -30,7 +30,9 @@
           </el-button-group>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" class="create-button" @click="onCreate">创建采购需求</el-button>
+          <authorized :permission="['PURCHASE_TASK_CREATE']">
+            <el-button type="primary" class="create-button" @click="onCreate">创建采购需求</el-button>
+          </authorized>
         </el-col>
       </el-row>
     </el-form>

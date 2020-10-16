@@ -2,7 +2,9 @@
   <div>
     <el-row type="flex" justify="start">
       <div class="over-tabs">
-        <el-button class="material-btn" v-if="formData.state !== 'COMPLETE'" @click="onCreate">创建采购订单</el-button>
+        <authorized :permission="['PURCHASE_ORDER_CREATE']">
+          <el-button class="material-btn" v-if="formData.state !== 'COMPLETE'" @click="onCreate">创建采购订单</el-button>
+        </authorized>
       </div>
       <el-tabs type="border-card" style="width: 100%">
         <el-tab-pane label="采购单">
@@ -28,7 +30,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="其他信息"></el-tab-pane>
+        <!-- <el-tab-pane label="其他信息"></el-tab-pane> -->
       </el-tabs>
     </el-row>
     <el-dialog :visible.sync="orderVisible" width="80%" append-to-body :close-on-click-modal="false">

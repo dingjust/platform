@@ -68,7 +68,9 @@
       <el-divider></el-divider>
       <purchase-summary :formData="formData" :purchaseOrderList="purchaseOrderList"/>
       <el-row type="flex" justify="center" style="margin: 40px 0px 0px 0px;" v-if="formData.state !== 'COMPLETE'">
-        <el-button class="sumbit-btn" @click="onFinish">采购完成</el-button>
+        <authorized :permission="['PURCHASE_WORK_ORDER_FINISHED']">
+          <el-button class="sumbit-btn" @click="onFinish">采购完成</el-button>
+        </authorized>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="taskVisible" width="80%" append-to-body :close-on-click-modal="false">

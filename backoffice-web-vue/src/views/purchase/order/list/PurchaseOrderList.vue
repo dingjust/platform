@@ -41,7 +41,7 @@
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
-    <el-row type="flex" justify="center">
+    <el-row type="flex" justify="center" v-if="isSelect">
       <el-button class="sumbit-btn" @click="onSubmit">确定</el-button>
     </el-row>
   </div>

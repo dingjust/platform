@@ -1,7 +1,7 @@
 <template>
   <div>
     <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"
-      :queryFormData="queryFormData" :isSelect="true"/>
+      :queryFormData="queryFormData" :isSelect="true" :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <div>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
@@ -32,7 +32,7 @@
   import OutboundOrderList from '../list/OutboundOrderList';
   import OutboundOrderTypeSelectForm from '../form/OutboundOrderTypeSelectForm';
   export default {
-    name: 'OutboundOrderPage',
+    name: 'OutboundOrderSelectPage',
     components: {
       OutboundOrderTypeSelectForm,
       OutboundOrderList,
@@ -77,6 +77,9 @@
         });
       },
       onAdvancedSearch(page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         const query = this.queryFormData;
         const url = this.apis().getoutboundOrdersList();
         this.setIsAdvancedSearch(true);
@@ -170,7 +173,10 @@
       },
       setSelectOrder (row) {
         this.$emit('setSelectOrder', row);
-      }
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data() {
       return {
@@ -237,10 +243,13 @@
           name: '',
           merchandiserPk: 'isMyself'
         },
-        stateCount: {}
+        stateCount: {},
+        dataQuery: {}
       }
     },
     created() {
+      this.dataQuery = this.getDataPerQuery('SALES_OUT_ORDER');
+      this.onResetQuery();
       this.onAdvancedSearch();
     },
     mounted() {

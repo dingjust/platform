@@ -7,8 +7,12 @@
             <el-button class="material-btn" @click="onEditSave">保存</el-button>
           </template>
           <template v-if="!isOnEdit && order.state === 'WAIT_TO_REV_MATERIALS' && isMerchandiser">
-            <el-button class="material-btn" @click="onEdit">编辑</el-button>
-            <el-button class="material-btn" @click="receiveComplete">收料完成</el-button>
+            <authorized :permission="['PURCHASE_ORDER_MODIFY']">
+              <el-button class="material-btn" @click="onEdit">编辑</el-button>
+            </authorized>
+            <authorized :permission="['PURCHASE_ORDER_MODIFY']">
+              <el-button class="material-btn" @click="receiveComplete">收料完成</el-button>
+            </authorized>
           </template>
         </template>
         <template v-if="activeName === 'FINANCE'">

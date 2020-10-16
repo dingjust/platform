@@ -182,15 +182,31 @@ export default {
   {
     name: '采购管理',
     icon: 'el-icon-shopping-bag-2',
+    meta: {
+      requiresAuth: true,
+      permissions: ['PURCHASE']
+    },
     children: [{
       name: '采购需求',
-      url: '/purchase/requirement'
+      url: '/purchase/requirement',
+      meta: {
+        requiresAuth: true,
+        permissions: ['PURCHASE_TASK']
+      }
     }, {
       name: '采购工单',
-      url: '/purchase/worksheet'
+      url: '/purchase/worksheet',
+      meta: {
+        requiresAuth: true,
+        permissions: ['PURCHASE_WORK_ORDER']
+      }
     }, {
       name: '采购单',
-      url: '/purchase/order'
+      url: '/purchase/order',
+      meta: {
+        requiresAuth: true,
+        permissions: ['PURCHASE_ORDER']
+      }
     }]
   },
   {
