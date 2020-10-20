@@ -6,7 +6,7 @@
       <el-table-column label="采购员" prop="merchandiser.name"></el-table-column>
       <el-table-column label="审批状态">
         <template slot-scope="scope">
-          <span>{{getEnum('AuditState', scope.row.auditWorkOrder.state)}}</span>
+          <span>{{scope.row.auditWorkOrder.state ? getEnum('AuditState', scope.row.auditWorkOrder.state) : '已审批'}}</span>
         </template>
       </el-table-column>
       <el-table-column label="标签">

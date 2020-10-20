@@ -147,7 +147,7 @@ export default {
       this.initData();
     },
     loading: function (nval, oval) {
-      if (nval === false && this.deptOptions.length > 0) {
+      if (nval === false) {
         this.initData();
       }
     }
