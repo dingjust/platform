@@ -8,6 +8,7 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:models/models.dart';
@@ -50,7 +51,7 @@ class _AttachmentsState extends State<Attachments> {
   Color iconColorRight = Colors.black;
 
   final StreamController _streamController =
-  StreamController<double>.broadcast();
+      StreamController<double>.broadcast();
 
   @override
   Widget build(BuildContext context) {
@@ -523,16 +524,18 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                     color: Colors.grey,
                   ),
                 ),
-            placeholder: (context, url) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: 30,
-            ),
-            errorWidget: (context, url, error) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: 30,
-            ),
+            placeholder: (context, url) =>
+                SpinKitRing(
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: 30,
+                ),
+            errorWidget: (context, url, error) =>
+                SpinKitRing(
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: 30,
+                ),
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -695,16 +698,18 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                           color: Colors.grey,
                         ),
                       ),
-                  placeholder: (context, url) => SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30,
-                  ),
-                  errorWidget: (context, url, error) => SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30,
-                  ),
+                  placeholder: (context, url) =>
+                      SpinKitRing(
+                        color: Colors.black12,
+                        lineWidth: 2,
+                        size: 30,
+                      ),
+                  errorWidget: (context, url, error) =>
+                      SpinKitRing(
+                        color: Colors.black12,
+                        lineWidth: 2,
+                        size: 30,
+                      ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -828,29 +833,28 @@ class _EditableAttachmentsState extends State<EditableAttachments>
     return filePath;
   }
 
-  void downLoadImage(String url, String name, String mediaType) async {
-    var dio = new Dio();
-
-    Response response =
-        await dio.get(url, options: Options(responseType: ResponseType.stream));
-
-    HttpClientResponse resp = response.data;
-
-    final Uint8List bytes = await consolidateHttpClientResponseBytes(resp);
-
-    // final result = await ImageGallerySaver.save(bytes);
-  }
-
-  Future _uploadFile(File file) async {
+  Future _uploadFile(File sourceFile) async {
     //上传文件置入列表
-    int index = _addFile(file);
+    int index = _addFile(sourceFile);
     //调用上传接口,更新上传进度条
     try {
+      //调用插件压缩图片
+      Uint8List file = await FlutterImageCompress.compressWithFile(
+        sourceFile.absolute.path,
+        minWidth: 1920,
+        minHeight: 1080,
+        quality: 90,
+      );
+
+      MultipartFile multipartFile = await MultipartFile.fromBytes(file,
+          filename: "file", contentType: MediaType.parse('image/jpeg'));
+
       FormData formData = FormData.fromMap({
         // "file": UploadFileInfo(file, "file",
         //     contentType: ContentType.parse('image/jpeg')),
-        "file": await MultipartFile.fromFile(file.path,
-            filename: "file", contentType: MediaType.parse('image/jpeg')),
+        // "file": await MultipartFile.fromFile(file.path,
+        //     filename: "file", contentType: MediaType.parse('image/jpeg')),
+        "file": multipartFile,
         "conversionGroup": "DefaultProductConversionGroup",
         "imageFormat": "DefaultImageFormat"
       });
@@ -866,15 +870,14 @@ class _EditableAttachmentsState extends State<EditableAttachments>
           _streamControllerList[index].sink.add(sent / total);
         },
       );
-      _removeFile(file);
+      _removeFile(sourceFile);
 
-      // Navigator.of(context).pop();
-      //Navigator.of(context).pop();
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
         widget.list.add(MediaModel.fromJson(response.data));
       });
     } catch (e) {
+      _removeFile(sourceFile);
       print(e);
     }
   }
@@ -1129,14 +1132,24 @@ class _SingleAttachmentState extends State<SingleAttachment>
     );
   }
 
-  Future _uploadFile(File file) async {
+  Future _uploadFile(File sourceFile) async {
     // TODO： 引入StreamBuilder实时更新进度条
     try {
+      //调用插件压缩图片
+      Uint8List file = await FlutterImageCompress.compressWithFile(
+        sourceFile.absolute.path,
+        minWidth: 1920,
+        minHeight: 1080,
+        quality: 90,
+      );
+
+      MultipartFile multipartFile = await MultipartFile.fromBytes(file,
+          filename: "file", contentType: MediaType.parse('image/jpeg'));
+
       FormData formData = FormData.fromMap({
         // "file": UploadFileInfo(file, "file",
         //     contentType: ContentType.parse('image/jpeg')),
-        "file": await MultipartFile.fromFile(file.path,
-            filename: "file", contentType: MediaType.parse('image/jpeg')),
+        "file": multipartFile,
         "conversionGroup": "DefaultProductConversionGroup",
         "imageFormat": "DefaultImageFormat"
       });

@@ -11,5 +11,6 @@ const FileFormatMap = {
   'application/msword': 'doc',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       'docx',
-  'jpeg': 'jpeg'
+  'jpeg': 'jpeg',
+  'image/jpeg': 'jpeg'
 };

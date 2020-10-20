@@ -1,4 +1,10 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
+import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -61,7 +67,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
               builder: _buildItem,
               itemCount: widget.galleryItems.length,
               loadingBuilder: (context, event) =>
-                  widget.loadingChild ??
+              widget.loadingChild ??
                   Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -81,6 +87,22 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
                 ),
               ),
             ),
+            // Align(
+            //   alignment: Alignment.bottomCenter,
+            //   child: GestureDetector(
+            //       onTap: onSave,
+            //       child: Container(
+            //         padding: const EdgeInsets.all(20.0),
+            //         child: Text(
+            //           '保存',
+            //           style: const TextStyle(
+            //             color: Colors.white,
+            //             fontSize: 17.0,
+            //             decoration: null,
+            //           ),
+            //         ),
+            //       )),
+            // ),
             Positioned(
               left: 5,
               top: 20,
@@ -102,22 +124,22 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     final GalleryItem item = widget.galleryItems[index];
     return
-        // item.isSvg
-        //     ?
-        //     PhotoViewGalleryPageOptions.customChild(
-        //         child: Container(
-        //           width: 300,
-        //           height: 300,
-        //           child: SvgPicture.asset(
-        //             item.resource,
-        //             height: 200.0,
-        //           ),
-        //         ),
-        //         childSize: const Size(300, 300),
-        //         initialScale: PhotoViewComputedScale.contained,
-        //         minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
-        //         maxScale: PhotoViewComputedScale.covered * 1.1,
-        //         heroAttributes: PhotoViewHeroAttributes(tag: item.id),
+      // item.isSvg
+      //     ?
+      //     PhotoViewGalleryPageOptions.customChild(
+      //         child: Container(
+      //           width: 300,
+      //           height: 300,
+      //           child: SvgPicture.asset(
+      //             item.resource,
+      //             height: 200.0,
+      //           ),
+      //         ),
+      //         childSize: const Size(300, 300),
+      //         initialScale: PhotoViewComputedScale.contained,
+      //         minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
+      //         maxScale: PhotoViewComputedScale.covered * 1.1,
+      //         heroAttributes: PhotoViewHeroAttributes(tag: item.id),
         //       )
         //     :
         PhotoViewGalleryPageOptions(
@@ -127,5 +149,29 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
       maxScale: PhotoViewComputedScale.covered * 1.1,
       heroAttributes: PhotoViewHeroAttributes(tag: item.model.id),
     );
+  }
+
+  ///保存图片
+  void onSave() async {
+    MediaModel model = widget.galleryItems[currentIndex].model;
+
+    //获取应用目录路径
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    String filePath =
+        "$dir/${model.name}.${FileFormatUtil.mediaFormat(model.mediaType)}";
+    var dio = new Dio();
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client.idleTimeout = new Duration(seconds: 0);
+    };
+    try {
+      Response response = await dio.download(model.actualUrl, filePath);
+      if (response.statusCode == 200) {
+        BotToast.showText(text: '图片保存至$filePath');
+      }
+      print(response.statusCode);
+    } catch (e) {
+      print(e);
+    }
   }
 }
