@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:b2b_commerce/src/_shared/widgets/authorization_dector.dart';
 import 'package:b2b_commerce/src/business/index.dart';
@@ -366,10 +367,10 @@ class MaxScaleTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var data = MediaQuery.of(context);
+    var scale = min(max, data.textScaleFactor);
+
     return MediaQuery(
-      data: data.copyWith(
-          textScaleFactor:
-          max > data.textScaleFactor ? data.textScaleFactor : max),
+      data: data.copyWith(textScaleFactor: scale),
       child: child,
     );
   }

@@ -201,40 +201,6 @@ class _AttachmentsState extends State<Attachments> {
     );
   }
 
-  // //图片预览
-  // void onPreview(BuildContext context, String url, String name) {
-  //   showDialog(
-  //     barrierDismissible: false,
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return Scaffold(
-  //           body: Stack(
-  //         fit: StackFit.expand,
-  //         children: <Widget>[
-  //           PhotoView(
-  //             imageProvider: NetworkImage(url),
-  //             onTapUp: (context, detail, val) {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //           Positioned(
-  //             left: 10,
-  //             top: 10,
-  //             child: IconButton(
-  //               icon: Icon(
-  //                 Icons.backspace,
-  //                 color: Colors.white,
-  //               ),
-  //               onPressed: () {
-  //                 Navigator.of(context).pop();
-  //               },
-  //             ),
-  //           )
-  //         ],
-  //       ));
-  //     },
-  //   );
-  // }
   //图片预览
   void onPreview(BuildContext context, MediaModel model) {
     Navigator.push(
@@ -769,41 +735,6 @@ class _EditableAttachmentsState extends State<EditableAttachments>
       ),
     );
   }
-
-  //图片预览
-  // void onPreview(BuildContext context, String url, String name) {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (BuildContext context) {
-  //       return Scaffold(
-  //           body: Stack(
-  //             fit: StackFit.expand,
-  //             children: <Widget>[
-  //               PhotoView(
-  //                 imageProvider: NetworkImage(url),
-  //                 onTapUp: (context, detail, val) {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //               ),
-  //               Positioned(
-  //                 left: 10,
-  //                 top: 10,
-  //                 child: IconButton(
-  //                   icon: Icon(
-  //                     Icons.backspace,
-  //                     color: Colors.white,
-  //                   ),
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                 ),
-  //               )
-  //             ],
-  //           ));
-  //     },
-  //   );
-  // }
 
   //图片预览
   void onPreview(BuildContext context, MediaModel model) {
