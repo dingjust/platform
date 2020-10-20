@@ -5,7 +5,7 @@ import {
   createNamespacedHelpers
 } from 'vuex';
 
-const CLIENT_ID = 'nbyjy';
+const CLIENT_ID = 'nbyjy_web';
 const CLIENT_SECRET = 'password';
 const GRANT_TYPE_PASSWORD = 'password';
 const GRANT_TYPE_REFRESH_TOKEN = 'refresh_token';
