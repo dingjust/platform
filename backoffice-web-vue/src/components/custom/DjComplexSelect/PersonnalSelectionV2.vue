@@ -164,7 +164,7 @@ export default {
   },
   beforeCreate () {
     this.$store.commit('OrganizationModule/deptList', {cmd: 'plusRef'});
-    if (this.$store.state.OrganizationModule.deptList.refNum <= 1) {
+    if (this.$store.state.OrganizationModule.deptList.refNum <= 1 || this.$store.state.OrganizationModule.deptList.options.length <= 0) {
       this.$store.dispatch('OrganizationModule/loadDeptList', this);
     }
   },
