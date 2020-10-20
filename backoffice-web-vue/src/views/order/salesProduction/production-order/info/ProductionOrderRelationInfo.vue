@@ -17,7 +17,7 @@
         <reconciliation-tasks-detail v-if="reconciliationTaskId" :id="reconciliationTaskId" shadow="hover"
           :showOrderInfo="false" />
       </el-tab-pane>
-      <el-tab-pane label="采购订单" name="采购订单" :lazy="true">
+      <el-tab-pane label="采购订单" name="采购订单">
         <purchase-order-basic-table v-if="isMySelf" :purchaseList="purchaseList"/>
       </el-tab-pane>
       <!-- <el-tab-pane label="财务" :lazy="true" v-if="isMySelf">
@@ -39,7 +39,7 @@
 <script>
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
-  import PurchaseOrderBasicTable from '../../components/context-order-tab/PurchaseOrderBasicTable';
+  import PurchaseOrderBasicTable from '@/views/order/salesProduction/components/context-order-tab/PurchaseOrderBasicTable'
   import ProductionOrderOutboundList from '../list/ProductionOrderOutboundList'
 
   import {
