@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,6 +52,10 @@ class _LoginPageState extends State<LoginPage> {
 
   StreamSubscription loginStreamSubscription;
 
+  ///倒计时间
+  int countdownTime = 60;
+  final CountdownController controller = CountdownController();
+
   @override
   void initState() {
     super.initState();
@@ -67,13 +72,9 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.addListener(() {
       setState(() {});
     });
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
-
-    loginStreamSubscription = bloc.loginStream.listen((result) {
+    loginStreamSubscription =
+        BLoCProvider.of<UserBLoC>(context).loginStream.listen((result) {
       Navigator.of(context).pop();
       showDialog(
           context: context,
@@ -85,18 +86,12 @@ class _LoginPageState extends State<LoginPage> {
               callbackResult: false,
             );
           });
-//      showDialog(
-//          context: context,
-//          child: SimpleDialog(
-//            title: Text('登录失败'),
-//            children: <Widget>[
-//              Container(
-//                padding: EdgeInsets.all(10),
-//                child: Text('${result}'),
-//              ),
-//            ],
-//          ));
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     return Material(
       child: Scaffold(
@@ -283,28 +278,58 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(
                         hintText: '请输入短信验证码', border: InputBorder.none),
                   ),
-                  surfix: FlatButton(
+            surfix: Countdown(
+              controller: controller,
+              seconds: countdownTime,
+              build: (_, double time) =>
+                  FlatButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)),
                     color: Color.fromRGBO(255, 214, 12, 1),
-                    onPressed: (_seconds == 0)
+                    onPressed: (time == 0 || time == countdownTime)
                         ? () async {
-                            bool legal = await validatePhone();
-                            if (legal) {
-                              UserRepositoryImpl()
-                                  .sendCaptchaForLogin(_phoneController.text)
-                                  .then((a) {
-                                _startTimer();
-                              });
-                            }
-                          }
+                      bool legal = await validatePhone();
+                      if (legal) {
+                        UserRepositoryImpl()
+                            .sendCaptchaForLogin(_phoneController.text)
+                            .then((a) {
+                          controller.restart();
+                        });
+                      }
+                    }
                         : null,
                     child: Text(
-                      '$_verifyStr',
+                      (time == 0 || time == countdownTime)
+                          ? '获取验证码'
+                          : '${time.toInt()}s',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
-                ),
+              interval: Duration(milliseconds: 1000),
+              onFinished: () {},
+            ),
+            // surfix: FlatButton(
+            //   shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(50)),
+            //   color: Color.fromRGBO(255, 214, 12, 1),
+            //   onPressed: (_seconds == 0)
+            //       ? () async {
+            //           bool legal = await validatePhone();
+            //           if (legal) {
+            //             UserRepositoryImpl()
+            //                 .sendCaptchaForLogin(_phoneController.text)
+            //                 .then((a) {
+            //               _startTimer();
+            //             });
+            //           }
+            //         }
+            //       : null,
+            //   child: Text(
+            //     '$_verifyStr',
+            //     style: TextStyle(color: Colors.black),
+            //   ),
+            // ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -437,6 +462,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (_phoneController.text == '') {
       result = '';
+      BotToast.showText(text: '请输入手机号');
     } else {
       if (RegexUtil.isMobile(_phoneController.text)) {
         UserType type =
@@ -484,7 +510,7 @@ class _LoginPageState extends State<LoginPage> {
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
         }
       });
     }
@@ -727,6 +753,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     super.dispose();
+    loginStreamSubscription.cancel();
     loginStreamSubscription = null;
   }
 }

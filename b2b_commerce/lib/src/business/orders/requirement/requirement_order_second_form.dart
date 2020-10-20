@@ -38,6 +38,17 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
     super.initForm();
     super.initCreate(widget.formState.model);
     super.initState();
+
+    //设置默认联系人
+    if (widget.formState?.model?.details != null) {
+      if (widget.formState?.model?.details?.contactPhone == null ||
+          widget.formState?.model?.details?.contactPhone == "") {
+        widget.formState.model.details.contactPhone =
+            UserBLoC.instance.currentUser.mobileNumber;
+        widget.formState.model.details.contactPerson =
+            UserBLoC.instance.currentUser.name;
+      }
+    }
   }
 
   @override
@@ -79,13 +90,9 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
               padding: const EdgeInsets.all(15.0),
               child: Text(
                   '已选：'
-                      '${widget.formState.model.details.majorCategory
-                      .name}     '
-                      '${widget.formState.model.details.category.parent != null
-                      ? widget.formState.model.details.category.parent.name +
-                      '-'
-                      : ''}'
-                      '${widget.formState.model.details.category.name}',
+                  '${widget.formState.model.details.majorCategory.name}     '
+                  '${widget.formState.model.details.category.parent != null ? widget.formState.model.details.category.parent.name + '-' : ''}'
+                  '${widget.formState.model.details.category.name}',
                   style: TextStyle(color: Colors.grey, fontSize: 16)),
             ),
             Container(
@@ -405,25 +412,26 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: MachiningType.values
-                          .map((type) => ChoiceChip(
-                          label: Container(
-                            height: 20,
-                            width: 60,
-                            child: Center(
-                                child:
-                                Text(MachiningTypeLocalizedMap[type])),
-                          ),
-                          backgroundColor: Colors.grey[100],
-                          selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                          selected: widget
-                              .formState.model.details.machiningType ==
-                              type,
-                          onSelected: (bool selected) {
-                            setState(() {
-                              widget.formState.model.details.machiningType =
-                                  type;
-                            });
-                          }))
+                          .map((type) =>
+                          ChoiceChip(
+                              label: Container(
+                                height: 20,
+                                width: 60,
+                                child: Center(
+                                    child:
+                                    Text(MachiningTypeLocalizedMap[type])),
+                              ),
+                              backgroundColor: Colors.grey[100],
+                              selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                              selected: widget
+                                  .formState.model.details.machiningType ==
+                                  type,
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  widget.formState.model.details.machiningType =
+                                      type;
+                                });
+                              }))
                           .toList(),
                     ),
                   ),
