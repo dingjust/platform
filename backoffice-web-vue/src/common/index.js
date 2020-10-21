@@ -1023,12 +1023,6 @@ const COMMON_APIS = {
   // 查询首页统计
   getCompanyReport () {
     return '/b2b/company/reports/tab2';
-  },
-  getApplicationList () {
-    return '/b2b/application/list'
-  },
-  createApplication () {
-    return '/b2b/application/save'
   }
 };
 
@@ -1179,16 +1173,26 @@ let TENANT_APIS = {
   updateAllCarousels() {
     return '/b2b/carousels/updateAll';
   },
-
-  //销售计划
-  salesPlanSave(needAudit) {
+  // 获取第三方应用列表
+  getApplicationList () {
+    return '/b2b/application/list'
+  },
+  createApplication () {
+    return '/b2b/application/save'
+  },
+  // 获取应用详情
+  getApplicationDetail (id) {
+    return '/b2b/application/detail/' + id
+  },
+  // 销售计划
+  salesPlanSave (needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
   },
 
-  //销售订单
-  salesOrderSave(needAudit) {
+  // 销售订单
+  salesOrderSave (needAudit) {
     return '/b2b/sales/production/order/save/order?submitAudit=' + needAudit;
-  },
+  }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

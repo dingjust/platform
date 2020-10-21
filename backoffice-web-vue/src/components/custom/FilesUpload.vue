@@ -2,12 +2,12 @@
   <div class="animated fadeIn image-upload">
     <el-row :gutter="10">
       <el-col :span="24">
-        <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" :disabled="disabled"
+        <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" :disabled="disabled" ref="upload"
           :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
           :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
-          :class="{disabled:uploadDisabled,picClass:picClass}">
+          :class="{disabled:uploadDisabled,picClass:picClass}" :show-file-list="showFile" :on-change="onChange">
           <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip" style="margin-top:10px;">文件大小不超过5M</div>
+          <div slot="tip" class="el-upload__tip" style="margin-top:10px;" v-if="showFile">文件大小不超过5M</div>
         </el-upload>
       </el-col>
     </el-row>
@@ -37,12 +37,22 @@
       readOnly: {
         type: Boolean,
         default: false
+      },
+      showFile: {
+        type: Boolean,
+        default: true
       }
     },
     methods: {
+      onChange (file, fileList) {
+        this.$emit('changUploading', false);
+      },
       onBeforeUpload(file) {
+        this.$emit('changUploading', true);
+
         if (file.size > 1024 * 1024 * 5) {
           this.$message.error('上传的文件不允许超过5M');
+          this.$emit('changUploading', false);
           return false;
         }
         return true;
@@ -98,6 +108,12 @@
       },
       handleExceed(files, fileList) {
         this.$message.warning('当前限制选择' + this.limit + ' 个图片');
+      },
+      //是否还有正在上传文件
+      isUploading() {
+        let index = this.$refs.upload.uploadFiles.findIndex(file => file.status == 'uploading' || file.status ==
+          'ready');
+        return index != -1;
       }
     },
     computed: {
@@ -144,8 +160,11 @@
         };
       },
       headers: function () {
+        const token = sessionStorage.getItem('token');
         return {
-          Authorization: this.$store.getters.token
+          //TODO:  store没刷新token
+          // Authorization: this.$store.getters.token
+          Authorization: 'Bearer ' + token
         }
       }
     },

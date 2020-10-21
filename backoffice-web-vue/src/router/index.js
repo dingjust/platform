@@ -834,6 +834,19 @@ const router = new Router({
         path: '/miscs/cashOutManager',
         name: '提现管理',
         component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/cashOutManager/cashOutManagerPage')
+      }, {
+        path: '/miscs/application',
+        name: '第三方应用管理',
+        component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/application/ApplicationManagement.vue')
+      }, {
+        path: '/miscs/create/application',
+        name: '添加第三方应用',
+        component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/application/form/ApplicationManagementForm.vue')
+      }, {
+        path: '/miscs/application/:id',
+        name: '添加第三方应用信息',
+        props: true,
+        component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/application/form/ApplicationManagementForm.vue')
       }
       ]
     },

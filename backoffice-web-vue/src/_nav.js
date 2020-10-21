@@ -175,6 +175,11 @@ export default {
           url: '/miscs/promote',
           icon: 'iconNone',
         },
+        {
+          name: '第三方应用管理',
+          url: '/miscs/application',
+          icon: 'iconNone',
+        },
         // {
         //   name: '未分类',
         //   icon: 'iconNone',
