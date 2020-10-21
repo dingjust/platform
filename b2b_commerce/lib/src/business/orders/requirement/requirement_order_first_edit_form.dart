@@ -24,7 +24,6 @@ class RequirementOrderFirstEditForm extends StatefulWidget {
 class _RequirementOrderFirstEditFormState
     extends State<RequirementOrderFirstEditForm> {
   GlobalKey _scaffoldKey = GlobalKey();
-  CategoryModel _categorySelect;
 
   @override
   void initState() {

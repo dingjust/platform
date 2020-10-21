@@ -69,8 +69,6 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
               onPressed: () async {
-                print(widget.formState.model.details.category);
-                print(widget.formState.model.details.majorCategory);
                 if (widget.formState.model.details.majorCategory == null) {
                   ShowDialogUtil.showValidateMsg(context, '请选择面料类别');
                   return;

@@ -26,7 +26,6 @@ class RequirementOrderFormState with ChangeNotifier{
   List<CooperatorModel> _cooperatorModels;
   List<FactoryModel> _factoryModels;
   FactoryModel _factoryModel;
-  CooperatorModel _cooperatorModel;
 
   RequirementOrderModel get model {
     if(_model == null){

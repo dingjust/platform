@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 
 ///发货，收货单表单控件变量Mixins
 class RequirementFormMixin {

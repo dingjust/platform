@@ -1,23 +1,10 @@
-import 'dart:async';
-
 import 'package:b2b_commerce/src/_shared/cooperator/cooperator_item.dart';
 import 'package:b2b_commerce/src/_shared/cooperator/cooperator_select.dart';
-import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/production_areas_field.dart';
-import 'package:b2b_commerce/src/business/orders/form/remarks_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requriement_order_select_factory_item.dart';
-import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
-import 'package:b2b_commerce/src/my/company/_shared/factory_list_item.dart';
 import 'package:b2b_commerce/src/my/company/_shared/factory_select.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 import 'RequirementFormMixins.dart';
 
@@ -35,7 +22,7 @@ class RequirementOrderSelectPublishTargetForm extends StatefulWidget {
 
 class _RequirementOrderSelectPublishTargetFormState
     extends State<RequirementOrderSelectPublishTargetForm>
-    with RequirementFormMixin,AutomaticKeepAliveClientMixin {
+    with RequirementFormMixin, AutomaticKeepAliveClientMixin {
   GlobalKey _scaffoldKey = GlobalKey();
   List<CooperatorModel> _cooperatorModels = [];
   List<FactoryModel> _factoryModels = [];
@@ -80,12 +67,18 @@ class _RequirementOrderSelectPublishTargetFormState
             onPressed: () async {
               //统计当前页面选中的uid
               _selectUids.clear();
-              _selectUids.addAll(_cooperatorModels.where((coop) => coop.type == CooperatorType.ONLINE && !_selectUids.contains(coop.partner.uid)).map((coop) => coop.partner.uid));
-              _selectUids.addAll(_factoryModels.where((factory) => !_selectUids.contains(factory.uid)).map((factory) => factory.uid));
+              _selectUids.addAll(_cooperatorModels
+                  .where((coop) =>
+                      coop.type == CooperatorType.ONLINE &&
+                      !_selectUids.contains(coop.partner.uid))
+                  .map((coop) => coop.partner.uid));
+              _selectUids.addAll(_factoryModels
+                  .where((factory) => !_selectUids.contains(factory.uid))
+                  .map((factory) => factory.uid));
               widget.formState.cooperatorModels = List.from(_cooperatorModels);
               widget.formState.factoryModels = List.from(_factoryModels);
               print(_selectUids);
-              Navigator.pop(context,_selectUids);
+              Navigator.pop(context, _selectUids);
             }),
       ),
       body: Container(
@@ -95,14 +88,16 @@ class _RequirementOrderSelectPublishTargetFormState
           child: Column(
             children: <Widget>[
               InkWell(
-                onTap: ()async{
+                onTap: () async {
                   dynamic result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              CooperatorSelectPage(models: this._cooperatorModels,)));
+                              CooperatorSelectPage(
+                                models: this._cooperatorModels,
+                              )));
 
-                  if(result != null){
+                  if (result != null) {
                     setState(() {
                       this._cooperatorModels = result;
                     });
@@ -116,13 +111,26 @@ class _RequirementOrderSelectPublishTargetFormState
                       Text('从我的供应商中选择'),
                       Row(
                         children: <Widget>[
-                          RichText(text: TextSpan(
-                              children: [
-                                TextSpan(text: '已选择',style: TextStyle(color: Colors.black,)),
-                                TextSpan(text: this._cooperatorModels.length.toString(),style: TextStyle(color: Colors.red,)),
-                                TextSpan(text: '家',style: TextStyle(color: Colors.black,)),
-                              ]
-                          ),),
+                          RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: '已选择',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  )),
+                              TextSpan(
+                                  text:
+                                  this._cooperatorModels.length.toString(),
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  )),
+                              TextSpan(
+                                  text: '家',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  )),
+                            ]),
+                          ),
                           Icon(Icons.chevron_right),
                         ],
                       )
@@ -130,17 +138,21 @@ class _RequirementOrderSelectPublishTargetFormState
                   ),
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               InkWell(
-                onTap: ()async{
+                onTap: () async {
                   dynamic result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              FactorySelectPage(factoryModels: this._factoryModels,)));
+                              FactorySelectPage(
+                                factoryModels: this._factoryModels,
+                              )));
 
                   print(result);
-                  if(result != null){
+                  if (result != null) {
                     setState(() {
                       this._factoryModels = result;
                     });
@@ -154,13 +166,25 @@ class _RequirementOrderSelectPublishTargetFormState
                       Text('从全部工厂中选择'),
                       Row(
                         children: <Widget>[
-                          RichText(text: TextSpan(
-                            children: [
-                              TextSpan(text: '已选择',style: TextStyle(color: Colors.black,)),
-                              TextSpan(text: this._factoryModels.length.toString(),style: TextStyle(color: Colors.red,)),
-                              TextSpan(text: '家',style: TextStyle(color: Colors.black,)),
-                            ]
-                          ),),
+                          RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: '已选择',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  )),
+                              TextSpan(
+                                  text: this._factoryModels.length.toString(),
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  )),
+                              TextSpan(
+                                  text: '家',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  )),
+                            ]),
+                          ),
                           Icon(Icons.chevron_right),
                         ],
                       ),
@@ -168,7 +192,9 @@ class _RequirementOrderSelectPublishTargetFormState
                   ),
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
 //              Container(
 //                padding: const EdgeInsets.only(top: 10, right: 15),
 //                child: Row(
@@ -330,11 +356,13 @@ class _RequirementOrderSelectPublishTargetFormState
             ),
           ),
         ),
-        IconButton(icon: Icon(Icons.cancel), onPressed: (){
-          setState(() {
-            this._cooperatorModels.remove(cooperator);
-          });
-        }),
+        IconButton(
+            icon: Icon(Icons.cancel),
+            onPressed: () {
+              setState(() {
+                this._cooperatorModels.remove(cooperator);
+              });
+            }),
       ],
     );
   }
@@ -358,11 +386,13 @@ class _RequirementOrderSelectPublishTargetFormState
             ),
           ),
         ),
-        IconButton(icon: Icon(Icons.cancel), onPressed: (){
-          setState(() {
-            this._factoryModels.remove(factoryModel);
-          });
-        }),
+        IconButton(
+            icon: Icon(Icons.cancel),
+            onPressed: () {
+              setState(() {
+                this._factoryModels.remove(factoryModel);
+              });
+            }),
       ],
     );
   }
@@ -371,6 +401,4 @@ class _RequirementOrderSelectPublishTargetFormState
   bool get wantKeepAlive {
     return true;
   }
-
-
 }
