@@ -49,12 +49,13 @@
       onLogout() {
         axios.post('/logout').finally(() => {
           //刷新清除缓存
-          this.$router.go(0);
+          // this.$router.go(0);
+          this.$store.dispatch('resetAllState');
           this.$router.push('/login');
         });
-
         // 清除sessionStorage缓存
         sessionStorage.clear();
+        localStorage.clear();
       },
       onCancel() {
         this.dialogVisible = false;

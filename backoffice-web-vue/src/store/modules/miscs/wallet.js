@@ -1,43 +1,47 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  isAdvancedSearch: false,
-  groups: ['B2B'],
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  walletData: null,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  amountFlowPage: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    index: '',
-    name: '',
-    description: '',
-    group: 'B2B',
-    infos: []
-  },
-  queryFormData: {
-    company: '',
-    flowSources: [],
-    amountFlowTypes: [],
-    amountStatus: [],
-    createdDateFrom: null,
-    createdDateTo: null
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    isAdvancedSearch: false,
+    groups: ['B2B'],
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    walletData: null,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    amountFlowPage: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      index: '',
+      name: '',
+      description: '',
+      group: 'B2B',
+      infos: []
+    },
+    queryFormData: {
+      company: '',
+      flowSources: [],
+      amountFlowTypes: [],
+      amountStatus: [],
+      createdDateFrom: null,
+      createdDateTo: null
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
@@ -47,7 +51,10 @@ const mutations = {
   amountFlowPage: (state, page) => state.amountFlowPage = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
   walletData: (state, walletData) => state.walletData = walletData,
-  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -112,6 +119,9 @@ const actions = {
     if (!response['errors']) {
       commit('walletData', response);
     }
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

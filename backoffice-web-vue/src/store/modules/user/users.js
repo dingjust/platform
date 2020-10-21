@@ -1,59 +1,61 @@
 import axios from 'axios';
 import http from '@/common/js/http';
 import router from '@/router';
-import {
-  createNamespacedHelpers
-} from 'vuex';
 
 const CLIENT_ID = 'nbyjy';
 const CLIENT_SECRET = 'password';
 const GRANT_TYPE_PASSWORD = 'password';
 const GRANT_TYPE_REFRESH_TOKEN = 'refresh_token';
 
-const state = {
-  currentUser: null,
-  authorized: false,
-  token: '',
-  expiresIn: 0,
-  refreshToken: '',
-  authenticationInfo: {
-    companyState: '',
-    companyType: '',
-    personalState: ''
-  },
-  permissions: [],
-  dataPermission: []
-};
+const getDefaultState = () => {
+  return {
+    currentUser: null,
+    authorized: false,
+    token: '',
+    expiresIn: 0,
+    refreshToken: '',
+    authenticationInfo: {
+      companyState: '',
+      companyType: '',
+      personalState: ''
+    },
+    permissions: [],
+    dataPermission: []
+  }
+}
+
+const state = getDefaultState();
+
 const mutations = {
-  authorized(state, authorized) {
+  authorized (state, authorized) {
     sessionStorage.setItem('authorized', authorized);
     state.authorized = authorized;
   },
-  token(state, token) {
+  token (state, token) {
     sessionStorage.setItem('token', token);
     state.token = token;
   },
-  expiresIn(state, expiredIn) {
+  expiresIn (state, expiredIn) {
     localStorage.setItem('expiresIn', expiredIn);
     state.expiresIn = expiredIn;
   },
-  refreshToken(state, refreshToken) {
+  refreshToken (state, refreshToken) {
     localStorage.setItem('refreshToken', refreshToken);
     state.refreshToken = refreshToken;
   },
-  currentUser(state, currentUser) {
+  currentUser (state, currentUser) {
     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
     state.currentUser = currentUser;
   },
-  authenticationInfo(state, authenticationInfo) {
+  authenticationInfo (state, authenticationInfo) {
     sessionStorage.setItem('authenticationInfo', JSON.stringify(authenticationInfo));
     state.authenticationInfo = authenticationInfo;
   },
-  permissions(state, permissions) {
+  permissions (state, permissions) {
     sessionStorage.setItem('permissions', JSON.stringify(permissions));
     state.permissions = permissions;
   },
-  dataPermission(state, data) {
+  dataPermission (state, data) {
     if (data != null && data.length > 0) {
       let dataPermission = {};
       data.forEach(item => {
@@ -62,10 +64,13 @@ const mutations = {
       sessionStorage.setItem('dataPermission', JSON.stringify(dataPermission));
       state.dataPermission = dataPermission;
     }
+  },
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
   }
 };
 const actions = {
-  async login({
+  async login ({
     dispatch,
     commit,
     state
@@ -80,13 +85,13 @@ const actions = {
       '&client_secret=' + CLIENT_SECRET +
       '&grant_type=' + GRANT_TYPE_PASSWORD);
 
-    //请求报错
+    // 请求报错
     if (response['errors']) {
       alert(response['errors'][0].message);
       return;
     }
 
-    //密码校验不正确
+    // 密码校验不正确
     if (response['error']) {
       console.log(JSON.stringify(response));
       if (response['error'] == 'invalid_grant') {
@@ -95,12 +100,11 @@ const actions = {
       return;
     }
 
-    //其他情况
+    // 其他情况
     if (!response['access_token']) {
       alert('网络连接错误');
       return;
     }
-
 
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response['access_token'];
 
@@ -122,7 +126,6 @@ const actions = {
     const result = await http.get('/b2b/cert/state');
     if (!result['errors']) {
       commit('authenticationInfo', result.data);
-
     }
 
     // 获取用户权限
@@ -134,9 +137,9 @@ const actions = {
     }
     commit('permissions', res.data.roleList);
     commit('dataPermission', res.data.dataPermissionList);
-    //存储登录用户username
+    // 存储登录用户username
 
-    //分割子账号名称
+    // 分割子账号名称
     let strArray = username.split(':');
     localStorage.setItem('userName', strArray[0]);
     if (strArray.length == 2) {
@@ -144,7 +147,7 @@ const actions = {
     }
     router.push('/');
   },
-  async getProfile({
+  async getProfile ({
     dispatch,
     commit,
     state
@@ -165,7 +168,7 @@ const actions = {
     }
     location.reload();
   },
-  async refreshToken({
+  async refreshToken ({
     dispatch,
     commit,
     state
@@ -183,29 +186,32 @@ const actions = {
     commit('token', response['access_token']);
     commit('expiresIn', response['expires_in']);
     commit('refreshToken', response['refresh_token']);
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 const getters = {
-  currentUser() {
+  currentUser () {
     if (!state.currentUser) {
       return JSON.parse(sessionStorage.getItem('currentUser'));
     }
     return state.currentUser;
   },
-  token() {
+  token () {
     return 'Bearer ' + sessionStorage.getItem('token');
     // return 'Bearer ' + state.token;
   },
-  authenticationInfo(){
+  authenticationInfo () {
     return JSON.parse(sessionStorage.getItem('authenticationInfo'));
   },
-  permissions() {
+  permissions () {
     if (state.permissions.length <= 0) {
       return JSON.parse(sessionStorage.getItem('permissions'));
     }
     return state.permissions;
   },
-  dataPermission() {
+  dataPermission () {
     if (state.dataPermission.length <= 0) {
       return JSON.parse(sessionStorage.getItem('dataPermission'));
     }

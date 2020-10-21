@@ -27,6 +27,19 @@
     },
     mounted () {
       this.initCharts();
+      // 监听窗口大小
+      let that = this;
+      window.onresize = () => {
+        if (!that.timer) {
+          that.timer = true;
+          setTimeout(() => {
+            this.timer = false;
+            return (() => {
+              this.screenWidth = document.body.clientWidth
+            })();
+          }, 200);
+        }
+      }
     },
     methods: {
       initCharts () {
@@ -128,27 +141,32 @@
             ]
           }
           myChart.setOption(option);
-          window.addEventListener('resize', function () {
-            that.$nextTick(() => {
-              myChart.resize();
-            })
-          })
+          this.chart = myChart;
         }
       }
     },
     data () {
       return {
+        screenWidth: document.body.clientWidth,
+        chart: null,
+        timer: false
       };
+    },
+    watch: {
+      screenWidth: function(nval, oval) {
+        if (nval) {
+          this.chart.resize();
+        }
+      }
     },
     created () {}
   };
 </script>
-<style>
+<style scoped>
   .dashboard-chart {
     width: 100%;
     height: 250px;
     display: flex;
     justify-content: center;
   }
-
 </style>

@@ -11,7 +11,7 @@
     <!--</div>-->
     <el-card>
       <el-row>
-        <el-col :span="2">
+        <el-col>
           <div class="contract-list-title">
             <h6>合同列表</h6>
           </div>
@@ -22,15 +22,19 @@
                         style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onSearch"
                         :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <div>
-        <Authorized :permission="['AGREEMENT_CREATE']">
-          <el-button class="pr-create-btn" @click="dialogVisible = true">创建合同</el-button>
-        </Authorized>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <template v-for="(item, index) in contractStatues">
-            <el-tab-pane :name="item" :key="item">
-              <span slot="label">
+        <div class="tag-container" :class="tagPosition ? 'tag-position' : ''">
+          <el-row ref="tag" type="flex" justify="end" align="top">
+            <Authorized :permission="['AGREEMENT_CREATE']">
+              <el-button class="pr-create-btn" @click="dialogVisible = true">创建合同</el-button>
+            </Authorized>
+          </el-row>
+        </div>
+        <el-tabs ref="tabs" v-model="activeName" @tab-click="handleClick">
+          <template v-for="item in contractStatues">
+            <el-tab-pane :name="item" :key="item" :label="item">
+              <!-- <span slot="label">
                 <tab-label-bubble :label="item" :num="index" />
-              </span>
+              </span> -->
               <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onSearch"
                                             @closePdfVisible="pdfVisible = false" @previewPdf="openPreviewPdf"/>
             </el-tab-pane>
@@ -109,6 +113,20 @@
           page,
           size
         });
+
+        this.$nextTick(() => {
+          this.changeTagPosition();
+        })
+      },
+      changeTagPosition () {
+        let count = 20;
+        this.contractStatues.forEach(item => {
+          count += document.getElementById("tab-" + item).scrollWidth
+        })
+        if (this.tagWidth === 0) {
+          this.tagWidth = this.$refs.tag.$el.scrollWidth
+        }
+        this.tagPosition = this.tagWidth + count < this.$refs.tabs.$el.scrollWidth;
       },
       // onAdvancedSearch(page, size) {
       //   this.setIsAdvancedSearch(true);
@@ -207,8 +225,18 @@
           state: '',
           partner: ''
         },
-        dataQuery: {}
+        dataQuery: {},
+        tagPosition: true,
+        tagWidth: 0,
       };
+    },
+    mounted() {
+      let that = this;
+      window.addEventListener('resize', function () {
+        that.$nextTick(() => {
+          that.changeTagPosition();
+        })
+      })
     },
     created () {
       this.dataQuery = this.getDataPerQuery('COMPANY_AGREEMENT');
@@ -240,10 +268,18 @@
     padding-left: 10px;
   }
 
-  .pr-create-btn {
+
+  .tag-position {
     position: absolute;
-    right: 21px;
+  }
+
+  .tag-container {
+    right: 35px;
+    margin-top: 4px;
     z-index: 999;
+  }
+
+  .pr-create-btn {
     background-color: #ffd60c;
     width: 110px;
   } 

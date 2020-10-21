@@ -1,18 +1,22 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {},
-};
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {}
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
@@ -20,10 +24,13 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   page: (state, page) => state.page = page,
   formData: (state, formData) => state.formData = formData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({
+  async search ({
     dispatch,
     commit,
     state
@@ -47,10 +54,10 @@ const actions = {
     }
 
     if (mode == 'import') {
-      //设置筛选发货方
+      // 设置筛选发货方
       queryForm['shipParty'] = companyCode;
     } else if (mode == 'export') {
-      //设置筛选收货方
+      // 设置筛选收货方
       queryForm['receiveParty'] = companyCode;
     }
 
@@ -66,7 +73,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({
+  async searchAdvanced ({
     dispatch,
     commit,
     state
@@ -77,8 +84,8 @@ const actions = {
     size,
     mode,
     companyCode
-  }) {    
-    if (page || page === 0) {    
+  }) {
+    if (page || page === 0) {
       commit('currentPageNumber', page);
     }
 
@@ -86,13 +93,12 @@ const actions = {
       commit('currentPageSize', size);
     }
     if (mode == 'import') {
-      //设置筛选发货方
+      // 设置筛选发货方
       query['shipParty'] = companyCode;
     } else if (mode == 'export') {
-      //设置筛选收货方
+      // 设置筛选收货方
       query['receiveParty'] = companyCode;
     }
-
 
     const response = await http.post(url, query, {
       page: state.currentPageNumber,
@@ -103,6 +109,9 @@ const actions = {
     if (!response['errors']) {
       commit('page', response);
     }
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 
@@ -111,7 +120,7 @@ const getters = {
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  formData: state => state.formData,
+  formData: state => state.formData
 };
 
 export default {

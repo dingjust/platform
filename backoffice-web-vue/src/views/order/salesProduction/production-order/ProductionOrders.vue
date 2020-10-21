@@ -2,10 +2,9 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-row>
-        <el-col :span="4">
+        <el-col>
           <div class="orders-list-title">
-            <!--            生产工单列表-->
-            <h6>订单列表</h6>
+            <h6>生产工单列表</h6>
           </div>
         </el-col>
       </el-row>
@@ -14,28 +13,27 @@
         @onCreate="onCreate" :queryFormData="queryFormData" :isAllocating="isAllocating" :dataQuery="dataQuery"
         @onResetQuery="onResetQuery" />
       <div>
-        <div class="tag-container" v-if="!isAllocating">
-          <el-row type="flex" justify="end" align="middle">
-            <el-col :span="18">
-              <el-row type="flex" justify="start" align="middle">
-                <h6 style="margin-bottom: 0px">标签：</h6>
-                <el-button class="type-btn" :style="allBtnColor" @click="setQueryOrderType('')">全部
-                </el-button>
-                <el-button class="type-btn" :style="outBtnColor" @click="setQueryOrderType('FOUNDRY_PRODUCTION')">外发
-                </el-button>
-                <el-button class="type-btn" :style="selfBtnColor" @click="setQueryOrderType('SELF_PRODUCED')">自产
-                </el-button>
-              </el-row>
-            </el-col>
-            <el-col :span="6">
-              <authorized :permission="['OUT_ORDER_CREATE']">
-                <el-button v-if="!isAllocating" type="primary" class="create-button" @click="onCreate">创建外发订单
-                </el-button>
-              </authorized>
-            </el-col>
+        <div class="tag-container" :class="tagPosition ? 'tag-position' : ''">
+          <el-row ref="tag" type="flex" justify="end" align="middle" v-if="!isAllocating">
+            <h6 style="margin-bottom: 0px">标签：</h6>
+            <el-button class="type-btn" :style="allBtnColor" @click="setQueryOrderType('')">全部
+            </el-button>
+            <el-button class="type-btn" :style="outBtnColor" @click="setQueryOrderType('FOUNDRY_PRODUCTION')">外发
+            </el-button>
+            <el-button class="type-btn" :style="selfBtnColor" @click="setQueryOrderType('SELF_PRODUCED')">自产
+            </el-button>
+            <authorized :permission="['OUT_ORDER_CREATE']">
+              <el-button v-if="!isAllocating" type="primary" class="create-button" @click="onCreate">创建外发订单
+              </el-button>
+            </authorized>
+          </el-row>
+          <el-row type="flex" justify="end" align="middle" v-else>
+            <authorized :permission="['PRODUCTION_TASK_ASSIGN']">
+              <el-button v-if="isAllocating" type="primary" class="create-button" @click="onAllocating">去分配</el-button>
+            </authorized>
           </el-row>
         </div>
-        <div class="tag-container" style="right: 96px" v-else>
+        <!-- <div class="tag-container tag-position" style="right: 96px" v-else>
           <el-row type="flex" justify="end" align="middle">
             <el-col :span="6">
               <authorized :permission="['PRODUCTION_TASK_ASSIGN']">
@@ -43,10 +41,10 @@
               </authorized>
             </el-col>
           </el-row>
-        </div>
-        <el-tabs v-model="activeStatus" @tab-click="handleClick">
+        </div> -->
+        <el-tabs ref="tabs" v-model="activeStatus" @tab-click="handleClick">
           <template v-for="(item, index) in statues">
-            <el-tab-pane :name="item.code" :key="index" :label="tabName(item)">
+            <el-tab-pane ref="pane" :name="item.code" :key="index" :label="tabName(item)">
               <production-order-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
                 :vSelectRow.sync="selectRow" :isAllocating="isAllocating" />
             </el-tab-pane>
@@ -168,6 +166,24 @@
           return;
         }
         this.stateCount = result.data;
+
+        this.$nextTick(() => {
+          this.changeTagPosition();
+        })
+      },
+      changeTagPosition () {
+        let count = 20;
+        this.statues.forEach(item => {
+          if (item.code === '') {
+            count += document.getElementById("tab-" + (this.statues.length - 1)).scrollWidth
+          } else {
+            count += document.getElementById("tab-" + item.code).scrollWidth
+          }
+        })
+        if (this.tagWidth === 0) {
+          this.tagWidth = this.$refs.tag.$el.scrollWidth
+        }
+        this.tagPosition = this.tagWidth + count < this.$refs.tabs.$el.scrollWidth;
       },
       tabName(tab) {
         if (this.stateCount.hasOwnProperty(tab.code)) {
@@ -282,6 +298,8 @@
           state: 'TO_BE_PRODUCED',
           type: ''
         },
+        tagPosition: true,
+        tagWidth: 0,
         formData: {
           id: null,
           outboundCompanyName: '',
@@ -328,7 +346,8 @@
             id: ''
           }]
         },
-        stateCount: {},
+        stateCount: {
+        },
         dataQuery: {}
       };
     },
@@ -342,7 +361,12 @@
       })
     },
     mounted() {
-
+      let that = this;
+      window.addEventListener('resize', function () {
+        that.$nextTick(() => {
+          that.changeTagPosition();
+        })
+      })
     },
     destroyed() {}
   };
@@ -370,15 +394,17 @@
     padding: 0px !important;
   }
 
-  .tag-container {
+  .tag-position {
     position: absolute;
+  }
+
+  .tag-container {
     right: 35px;
     margin-top: 4px;
     z-index: 999;
   }
 
   .type-btn {
-    font-size: 14px;
     color: #303133;
     padding-left: 20px;
   }

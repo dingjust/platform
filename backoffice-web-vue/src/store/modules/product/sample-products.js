@@ -1,103 +1,107 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    images: [],
-    details: [],
-    code: '',
-    skuID: '',
-    name: '',
-    category: {
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      images: [],
+      details: [],
       code: '',
-      name: ''
+      skuID: '',
+      name: '',
+      category: {
+        code: '',
+        name: ''
+      },
+      brand: '',
+      gramWeight: 0.0,
+      colors: [],
+      sizes: [],
+      attributes: {
+        styles: [],
+        fabricCompositions: [],
+        editionType: '',
+        pattern: '',
+        sleeveType: '',
+        sleeveLength: '',
+        decorativePatterns: [],
+        popularElements: [],
+        filler: '',
+        thickness: '',
+        season: '',
+        taggable: true,
+        placket: ''
+      },
+      belongTo: {
+        uid: '',
+        name: ''
+      },
+      entries: [],
+      costingSheets: [],
+      productionProcessContent: '',
+      medias: []
     },
-    brand: '',
-    gramWeight: 0.0,
-    colors: [],
-    sizes: [],
-    attributes: {
-      styles: [],
+    newFormData: {
+      id: null,
+      images: [],
+      details: [],
+      code: '',
+      skuID: '',
+      name: '',
+      gramWeight: 0.0,
+      category: null,
+      brand: '',
+      colors: [],
+      sizes: [],
       fabricCompositions: [],
-      editionType: '',
-      pattern: '',
-      sleeveType: '',
-      sleeveLength: '',
-      decorativePatterns: [],
-      popularElements: [],
-      filler: '',
-      thickness: '',
-      season: '',
-      taggable: true,
-      placket: ''
+      attributes: {
+        styles: [],
+        editionType: '',
+        pattern: '',
+        sleeveType: '',
+        sleeveLength: '',
+        decorativePatterns: [],
+        popularElements: [],
+        filler: '',
+        thickness: '',
+        season: '',
+        taggable: true,
+        placket: ''
+      },
+      belongTo: {
+        uid: '',
+        name: ''
+      },
+      colorSizes: [],
+      entries: [],
+      costingSheets: [],
+      productionProcessContent: '',
+      medias: []
     },
-    belongTo: {
-      uid: '',
-      name: ''
-    },
-    entries: [],
-    costingSheets: [],
-    productionProcessContent: '',
-    medias: []
-  },
-  newFormData: {
-    id: null,
-    images: [],
-    details: [],
-    code: '',
-    skuID: '',
-    name: '',
-    gramWeight: 0.0,
-    category: null,
-    brand: '',
-    colors: [],
-    sizes: [],
-    fabricCompositions: [],
-    attributes: {
-      styles: [],
-      editionType: '',
-      pattern: '',
-      sleeveType: '',
-      sleeveLength: '',
-      decorativePatterns: [],
-      popularElements: [],
-      filler: '',
-      thickness: '',
-      season: '',
-      taggable: true,
-      placket: ''
-    },
-    belongTo: {
-      uid: '',
-      name: ''
-    },
-    colorSizes: [],
-    entries: [],
-    costingSheets: [],
-    productionProcessContent: '',
-    medias: []
-  },
-  queryFormData: {
-    code: '',
-    skuID: '',
-    name: '',
-    approvalStatuses: '',
-    categories: [],
-    belongToName: ''
+    queryFormData: {
+      code: '',
+      skuID: '',
+      name: '',
+      approvalStatuses: '',
+      categories: [],
+      belongToName: ''
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -107,11 +111,14 @@ const mutations = {
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   newFormData: (state, newFormData) => state.newFormData = newFormData,
   page: (state, page) => state.page = page,
-  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({
+  async search ({
     dispatch,
     commit,
     state
@@ -146,7 +153,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({
+  async searchAdvanced ({
     dispatch,
     commit,
     state
@@ -173,7 +180,7 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({
+  refresh ({
     dispatch,
     commit,
     state
@@ -189,7 +196,7 @@ const actions = {
       size: currentPageSize
     });
   },
-  resetFormData({
+  resetFormData ({
     dispatch,
     commit,
     state
@@ -230,7 +237,10 @@ const actions = {
       costingSheets: [],
       productionProcessContent: '',
       medias: []
-    }, );
+    });
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

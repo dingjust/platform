@@ -1,32 +1,37 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  statuses: '',
-  dateTime: '',
-  orderCode: '',
-  type: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  purchaseOrders: [],
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  queryFormData: {
-    title: '',
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    statuses: '',
+    dateTime: '',
     orderCode: '',
-    creationtimeStart: '',
-    creationtimeEnd: '',
     type: '',
-    state: '',
-    partner: ''
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    purchaseOrders: [],
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    queryFormData: {
+      title: '',
+      orderCode: '',
+      creationtimeStart: '',
+      creationtimeEnd: '',
+      type: '',
+      state: '',
+      partner: ''
+    }
   }
-};
+}
+
+const state = getDefaultState();
+
 var creationtimeStart = '';
 var creationtimeEnd = '';
 
@@ -40,11 +45,14 @@ const mutations = {
   orderCode: (state, orderCode) => state.orderCode = orderCode,
   dateTime: (state, dateTime) => state.dateTime = dateTime,
   page: (state, page) => state.page = page,
-  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, query,page,size}) {
+  async search ({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
 
@@ -71,6 +79,9 @@ const actions = {
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

@@ -1,23 +1,27 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-  },
-  queryFormData: {
-    keyword: ''
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+    },
+    queryFormData: {
+      keyword: ''
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -27,6 +31,9 @@ const mutations = {
   formData: (state, formData) => state.formData = formData,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -70,6 +77,9 @@ const actions = {
       commit('page', response);
     }
   },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
+  }
 };
 
 const getters = {

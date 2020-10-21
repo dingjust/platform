@@ -1,13 +1,20 @@
 import http from '@/common/js/http';
 
-const state = {
-  permissions: []
-};
+const getDefaultState = () => {
+  return {
+    permissions: []
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   permissions (state, permissions) {
     sessionStorage.setItem('permissions', JSON.stringify(permissions));
     state.permissions = permissions;
+  },
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
   }
 };
 
@@ -27,6 +34,9 @@ const actions = {
     }
     console.log(result);
     commit('permissions', result.data);
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

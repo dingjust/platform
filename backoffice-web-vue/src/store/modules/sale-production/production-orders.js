@@ -1,37 +1,100 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  statuses: [],
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    code: '',
-    product: {
-      thumbnail: '',
-      category: {
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    statuses: [],
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      code: '',
+      product: {
+        thumbnail: '',
+        category: {
+          name: ''
+        }
+      },
+      cooperator: {
+        partner: {
+          name: ''
+        }
+      },
+      status: 'PENDING_CONFIRM',
+      supplier: {},
+      user: {},
+      deliveryAddress: {
+        id: null,
+        fullname: '',
+        cellphone: '',
+        region: {
+          isocode: '',
+          name: ''
+        },
+        city: {
+          code: '',
+          name: ''
+        },
+        cityDistrict: {
+          code: '',
+          name: ''
+        },
+        line1: ''
+      },
+      entries: [],
+      attachments: [],
+      remarks: '',
+      salesApplication: 'BELOW_THE_LINE',
+      totalPrice: 0,
+      totalQuantity: 0,
+      unitPrice: 0,
+      purchaser: {},
+      belongTo: {
+        uid: '',
+        name: ''
+      },
+      creator: {},
+      progresses: [],
+      companyOfSeller: '',
+      contactPersonOfSeller: '',
+      contactOfSeller: '',
+      payPlan: {
+        payPlanType: '',
+        isHaveDeposit: true,
+        payPlanItems: []
+      },
+      factoryOperator: {
+        name: ''
+      },
+      brandOperator: {
         name: ''
       }
     },
-    cooperator: {
-      partner: {
-        name: ''
-      }
+    queryFormData: {
+      code: '',
+      requirementOrderCode: '',
+      skuID: '',
+      statuses: [],
+      expectedDeliveryDateFrom: null,
+      expectedDeliveryDateTo: null,
+      createdDateFrom: null,
+      createdDateTo: null,
+      // belongTos: [],
+      // purchasers:[],
+      keyword: '',
+      categories: [],
+      orderType: ''
     },
-    status: 'PENDING_CONFIRM',
-    supplier: {},
-    user: {},
-    deliveryAddress: {
+    addressFormData: {
       id: null,
       fullname: '',
       cellphone: '',
@@ -49,146 +112,87 @@ const state = {
       },
       line1: ''
     },
-    entries: [],
-    attachments: [],
-    remarks: '',
-    salesApplication: 'BELOW_THE_LINE',
-    totalPrice: 0,
-    totalQuantity: 0,
-    unitPrice: 0,
-    purchaser: {},
-    belongTo: {
-      uid: '',
-      name: ''
+    consignmentFormData: {
+      trackingID: '',
+      carrierDetails: {
+        code: '',
+        name: ''
+      }
     },
-    creator: {},
-    progresses: [],
-    companyOfSeller: '',
-    contactPersonOfSeller: '',
-    contactOfSeller: '',
-    payPlan: {
-      payPlanType: '',
-      isHaveDeposit: true,
-      payPlanItems: []
-    },
-    factoryOperator: {
-      name: ''
-    },
-    brandOperator: {
-      name: ''
-    }
-  },
-  queryFormData: {
-    code: '',
-    requirementOrderCode: '',
-    skuID: '',
-    statuses: [],
-    expectedDeliveryDateFrom: null,
-    expectedDeliveryDateTo: null,
-    createdDateFrom: null,
-    createdDateTo: null,
-    // belongTos: [],
-    // purchasers:[],
-    keyword: '',
-    categories: [],
-    orderType: ''
-  },
-  addressFormData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
-    },
-    city: {
-      code: '',
-      name: ''
-    },
-    cityDistrict: {
-      code: '',
-      name: ''
-    },
-    line1: ''
-  },
-  consignmentFormData: {
-    trackingID: '',
-    carrierDetails: {
-      code: '',
-      name: ''
-    }
-  },
-  detailData: {
+    detailData: {
 
-  },
-  colorSizeData: [],
-  createFormData: {
-    cooperator: {
-      id: '',
-      partner: {
+    },
+    colorSizeData: [],
+    createFormData: {
+      cooperator: {
         id: '',
-        name: '',
-        contactPerson: '',
-        contactPhone: ''
-      }
-    },
-    isSelfProduction: false,
-    productionTask: {
-      id: '',
-      product: {
-        name: '',
-        colorSizeEntries: []
-      }
-    },
-    expectedDeliveryDate: '',
-    deliveryAddress: {},
-    machiningType: 'LABOR_AND_MATERIAL',
-    invoiceNeeded: false,
-    invoiceTaxPoint: 0.03,
-    freightPayer: 'PARTYB',
-    progressWorkSheet: {
-      name: '',
-      progresses: []
-    },
-    payPlan: {
-      payPlanType: 'PHASEONE',
-      isHaveDeposit: false,
-      payPlanItems: [],
-      deposit: {
-        event: 'ORDER_CONFIRMED',
-        time: 5,
-        range: 'INSIDE',
-        percent: 0.3
+        partner: {
+          id: '',
+          name: '',
+          contactPerson: '',
+          contactPhone: ''
+        }
       },
-      balance1: {
-        event: 'ORDER_CONFIRMED',
-        time: 5,
-        range: 'INSIDE',
-        percent: 0.3
-      },
-      balance2: {
-        event: 'ORDER_CONFIRMED',
-        time: 5,
-        range: 'INSIDE',
-        percent: 0.3
-      },
-      monthBalance: {
-        event: 'ORDER_CONFIRMED',
-        time: 5
-      }
-    },
-    remarks: '',
-    partyAOperator: {
-      id: ''
-    },
-    attachments: [],
-    entries: [{
+      isSelfProduction: false,
       productionTask: {
+        id: '',
+        product: {
+          name: '',
+          colorSizeEntries: []
+        }
+      },
+      expectedDeliveryDate: '',
+      deliveryAddress: {},
+      machiningType: 'LABOR_AND_MATERIAL',
+      invoiceNeeded: false,
+      invoiceTaxPoint: 0.03,
+      freightPayer: 'PARTYB',
+      progressWorkSheet: {
+        name: '',
+        progresses: []
+      },
+      payPlan: {
+        payPlanType: 'PHASEONE',
+        isHaveDeposit: false,
+        payPlanItems: [],
+        deposit: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        balance1: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        balance2: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        monthBalance: {
+          event: 'ORDER_CONFIRMED',
+          time: 5
+        }
+      },
+      remarks: '',
+      partyAOperator: {
         id: ''
-      }
-    }]
+      },
+      attachments: [],
+      entries: [{
+        productionTask: {
+          id: ''
+        }
+      }]
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -202,11 +206,14 @@ const mutations = {
   detailData: (state, detailData) => state.detailData = detailData,
   formData: (state, formData) => state.formData = formData,
   colorSizeData: (state, colorSizeData) => state.colorSizeData = colorSizeData,
-  createFormData: (state, createFormData) => state.createFormData = createFormData
+  createFormData: (state, createFormData) => state.createFormData = createFormData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({
+  async search ({
     dispatch,
     commit,
     state
@@ -243,7 +250,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({
+  async searchAdvanced ({
     dispatch,
     commit,
     state
@@ -277,7 +284,7 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({
+  refresh ({
     dispatch,
     commit,
     state
@@ -309,12 +316,12 @@ const actions = {
   //     commit('formData', result);
   //   }
   // },
-  async refreshDetail({
-      dispatch,
-      commit,
-      state
-    },
-    id
+  async refreshDetail ({
+    dispatch,
+    commit,
+    state
+  },
+  id
   ) {
     const url = '/b2b/production/task/order/' + id;
     const result = await http.get(url);
@@ -322,7 +329,7 @@ const actions = {
       commit('formData', result.data);
     }
   },
-  clearQueryFormData({
+  clearQueryFormData ({
     dispatch,
     commit,
     state
@@ -341,7 +348,7 @@ const actions = {
       orderType: ''
     })
   },
-  clearCreateFormData({
+  clearCreateFormData ({
     dispatch,
     commit,
     state
@@ -412,6 +419,9 @@ const actions = {
         }
       }]
     })
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

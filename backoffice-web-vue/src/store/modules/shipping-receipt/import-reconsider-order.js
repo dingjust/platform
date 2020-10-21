@@ -1,18 +1,22 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {},
-};
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {}
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
@@ -20,10 +24,13 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   page: (state, page) => state.page = page,
   formData: (state, formData) => state.formData = formData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({
+  async search ({
     dispatch,
     commit,
     state
@@ -48,7 +55,7 @@ const actions = {
       shipParty: companyCode
     }, {
       page: state.currentPageNumber,
-      size: state.currentPageSize,
+      size: state.currentPageSize
     });
 
     // console.log(JSON.stringify(response));
@@ -56,7 +63,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({
+  async searchAdvanced ({
     dispatch,
     commit,
     state
@@ -74,17 +81,20 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    //设置筛选收货方
+    // 设置筛选收货方
     query['shipParty'] = companyCode;
 
     const response = await http.post(url, query, {
       page: state.currentPageNumber,
-      size: state.currentPageSize,
+      size: state.currentPageSize
     });
 
     if (!response['errors']) {
       commit('page', response);
     }
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 
@@ -93,7 +103,7 @@ const getters = {
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  formData: state => state.formData,
+  formData: state => state.formData
 };
 
 export default {

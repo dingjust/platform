@@ -1,18 +1,22 @@
 // 全局保存公司部门列表和员工列表
 import http from '@/common/js/http';
 
-const state = {
-  deptList: {
-    refNum: 0,            // 被组件引用次数
-    loading: false,       // 数据是否加载中
-    options: []           // 具体数据
-  },
-  personList: {
-    refNum: 0,            // 被组件引用次数
-    loading: false,       // 数据是否加载中
-    options: []           // 具体数据
+const getDefaultState = () => {
+  return {
+    deptList: {
+      refNum: 0, // 被组件引用次数
+      loading: false, // 数据是否加载中
+      options: [] // 具体数据
+    },
+    personList: {
+      refNum: 0, // 被组件引用次数
+      loading: false, // 数据是否加载中
+      options: [] // 具体数据
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   deptList ({deptList}, {cmd, val}) {
@@ -50,11 +54,14 @@ const mutations = {
       default:
         throw 'deptList 未知命令' + cmd;
     }
+  },
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
   }
 };
 
 const actions = {
-  async loadDeptList({commit, state}, vue) {
+  async loadDeptList ({commit, state}, vue) {
     // 如果没有被引用，那么不加载数据
     if (state.deptList.refNum <= 0) {
       return;
@@ -64,10 +71,10 @@ const actions = {
     }
 
     commit('deptList', {cmd: 'loading', val: true});
-    
+
     await this.dispatch('OrganizationModule/getDept');
     await this.dispatch('OrganizationModule/getPerson');
-    
+
     commit('deptList', {cmd: 'loading', val: false});
   },
   async getDept ({dispatch, commit, state}, vue) {
@@ -90,6 +97,9 @@ const actions = {
     if (!response['errors']) {
       commit('personList', {cmd: 'options', val: response.content});
     }
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

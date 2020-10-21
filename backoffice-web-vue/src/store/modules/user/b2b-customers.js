@@ -1,54 +1,58 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    uid: '',
-    name: '',
-    mobileNumber: '',
-    password: '',
-    confirmPassword: '',
-    roles: [],
-    b2bRoleList: [],
-    b2bDept: {
-      id: ''
-    },
-    b2bRoleGroup: {
-      id: ''
-    }
-  },
-  queryFormData: {
+const getDefaultState = () => {
+  return {
     keyword: '',
-    roleGroupName: '',
-    deptName: ''
-  },
-  roleForm: {
-    id: null,
-    name: '',
-    roleIds: []
-  },
-  roleGroupData: {
-    id: '',
-    name: '',
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      uid: '',
+      name: '',
+      mobileNumber: '',
+      password: '',
+      confirmPassword: '',
+      roles: [],
+      b2bRoleList: [],
+      b2bDept: {
+        id: ''
+      },
+      b2bRoleGroup: {
+        id: ''
+      }
+    },
+    queryFormData: {
+      keyword: '',
+      roleGroupName: '',
+      deptName: ''
+    },
+    roleForm: {
+      id: null,
+      name: '',
+      roleIds: []
+    },
+    roleGroupData: {
+      id: '',
+      name: '',
+      roleList: [],
+      roleIds: []
+    },
     roleList: [],
-    roleIds: []
-  },
-  roleList: [],
-  deptList: [],
-  roleGroupList: [],
-  roleCodeList: [],
-  trainData: []
-};
+    deptList: [],
+    roleGroupList: [],
+    roleCodeList: [],
+    trainData: []
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
@@ -63,7 +67,10 @@ const mutations = {
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   roleGroupList: (state, roleGroupList) => state.roleGroupList = roleGroupList,
   roleCodeList: (state, roleCodeList) => state.roleCodeList = roleCodeList,
-  trainData: (state, trainData) => state.trainData = trainData
+  trainData: (state, trainData) => state.trainData = trainData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -108,6 +115,9 @@ const actions = {
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url, keyword, page: currentPageNumber, size: currentPageSize});
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

@@ -1,65 +1,69 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  status: [],
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    code: '',
-    entries: [
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    status: [],
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      code: '',
+      entries: [
 
-    ],
-    id: '',
-  },
-  queryFormData: {
-    code: '',
-    skuID: '',
-    state: '',
-    keywords: '',
-    productionLeaderName: '',
-    cooperator: '',
-    categories: [],
-    productionWorkOrder: ''
-  },
-  addressFormData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
+      ],
+      id: ''
     },
-    city: {
+    queryFormData: {
       code: '',
-      name: ''
+      skuID: '',
+      state: '',
+      keywords: '',
+      productionLeaderName: '',
+      cooperator: '',
+      categories: [],
+      productionWorkOrder: ''
     },
-    cityDistrict: {
-      code: '',
-      name: ''
+    addressFormData: {
+      id: null,
+      fullname: '',
+      cellphone: '',
+      region: {
+        isocode: '',
+        name: ''
+      },
+      city: {
+        code: '',
+        name: ''
+      },
+      cityDistrict: {
+        code: '',
+        name: ''
+      },
+      line1: ''
     },
-    line1: ''
-  },
-  consignmentFormData: {
-    trackingID: '',
-    carrierDetails: {
-      code: '',
-      name: ''
+    consignmentFormData: {
+      trackingID: '',
+      carrierDetails: {
+        code: '',
+        name: ''
+      }
+    },
+    detailData: {
+
     }
-  },
-  detailData: {
-
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -71,11 +75,14 @@ const mutations = {
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
-  detailData: (state, detailData) => state.detailData = detailData
+  detailData: (state, detailData) => state.detailData = detailData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({
+  async search ({
     dispatch,
     commit,
     state
@@ -112,7 +119,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({
+  async searchAdvanced ({
     dispatch,
     commit,
     state
@@ -138,7 +145,7 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({
+  refresh ({
     dispatch,
     commit,
     state
@@ -156,7 +163,7 @@ const actions = {
       size: currentPageSize
     });
   },
-  async refreshDetail({
+  async refreshDetail ({
     dispatch,
     commit,
     state
@@ -167,7 +174,7 @@ const actions = {
       commit('detailData', result);
     }
   },
-  clearQueryFormData({dispatch, commit, state}) {
+  clearQueryFormData ({dispatch, commit, state}) {
     commit('queryFormData', {
       code: '',
       skuID: '',
@@ -178,6 +185,9 @@ const actions = {
       categories: [],
       productionWorkOrder: ''
     })
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

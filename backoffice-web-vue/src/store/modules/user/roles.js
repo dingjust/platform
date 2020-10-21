@@ -1,29 +1,36 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    uid: '',
-    name: '',
-    description: ''
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      uid: '',
+      name: '',
+      description: ''
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -51,6 +58,9 @@ const actions = {
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url,keyword, page: currentPageNumber, size: currentPageSize});
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

@@ -1,25 +1,68 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    uid: '',
-    name: '',
-    registrationDate: null,
-    profilePicture: null,
-    scaleRange: '',
-    contactAddress: {
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      uid: '',
+      name: '',
+      registrationDate: null,
+      profilePicture: null,
+      scaleRange: '',
+      contactAddress: {
+        id: null,
+        fullname: '',
+        cellphone: '',
+        region: {
+          isocode: '',
+          name: ''
+        },
+        city: {
+          code: '',
+          name: ''
+        },
+        cityDistrict: {
+          code: '',
+          name: ''
+        },
+        line1: ''
+      },
+      styles: [],
+      brand: '',
+      labels: [],
+      ageRanges: [],
+      priceRange1s: [],
+      priceRange2s: [],
+      adeptAtCategories: [],
+      contactPhone: '',
+      contactPerson: '',
+      accountUid: '',
+      password: '',
+      confirmPassword: '',
+      email: '',
+      taxNumber: '',
+      bankOfDeposit: '',
+      phone: '',
+      cooperativeBrand: '',
+      businessRegistrationNo: '',
+      legalRepresentative: '',
+      certificateOfLegal: '',
+      salesMarket: [],
+      duties: '',
+      loginDisabled: false
+    },
+    addressFormData: {
       id: null,
       fullname: '',
       cellphone: '',
@@ -37,69 +80,30 @@ const state = {
       },
       line1: ''
     },
-    styles: [],
-    brand: '',
-    labels: [],
-    ageRanges: [],
-    priceRange1s: [],
-    priceRange2s: [],
-    adeptAtCategories: [],
-    contactPhone: '',
-    contactPerson: '',
-    accountUid: '',
-    password: '',
-    confirmPassword: '',
-    email: '',
-    taxNumber: '',
-    bankOfDeposit: '',
-    phone: '',
-    cooperativeBrand: '',
-    businessRegistrationNo: '',
-    legalRepresentative: '',
-    certificateOfLegal: '',
-    salesMarket: [],
-    duties: '',
-    loginDisabled: false
-  },
-  addressFormData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
+    queryFormData: {
+      keyword: '',
+      contactPhone: '',
+      cooperativeBrand: '',
+      adeptAtCategories: [],
+      regions: [],
+      cities: [],
+      labels: [],
+      creationTimeFrom: '',
+      creationTimeTo: '',
+      approvalStatuses: []
     },
-    city: {
-      code: '',
-      name: ''
-    },
-    cityDistrict: {
-      code: '',
-      name: ''
-    },
-    line1: ''
-  },
-  queryFormData: {
-    keyword: '',
-    contactPhone: '',
-    cooperativeBrand: '',
-    adeptAtCategories: [],
-    regions: [],
     cities: [],
+    cityDistricts: [],
+    categories: [],
     labels: [],
-    creationTimeFrom: '',
-    creationTimeTo: '',
-    approvalStatuses: []
-  },
-  cities: [],
-  cityDistricts: [],
-  categories: [],
-  labels: [],
-  isCitiesChanged: false,
-  isDistrictsChanged: false,
-  brandFormVisible: false,
-  approvalStatus: ''
-};
+    isCitiesChanged: false,
+    isDistrictsChanged: false,
+    brandFormVisible: false,
+    approvalStatus: ''
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
@@ -114,7 +118,10 @@ const mutations = {
   setIsDistrictsChanged: (state, isDistrictsChanged) => state.isDistrictsChanged = isDistrictsChanged,
   setBrandFormVisible: (state, brandFormVisible) => state.brandFormVisible = brandFormVisible,
   cities: (state, cities) => state.cities = cities,
-  cityDistricts: (state, cityDistricts) => state.cityDistricts = cityDistricts
+  cityDistricts: (state, cityDistricts) => state.cityDistricts = cityDistricts,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -159,6 +166,9 @@ const actions = {
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

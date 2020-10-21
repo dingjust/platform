@@ -1,37 +1,44 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    code: '',
-    name: '',
-    company: {
-      uid: '',
-      name: ''
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
     },
-    pictures: []
-  },
-};
+    formData: {
+      id: null,
+      code: '',
+      name: '',
+      company: {
+        uid: '',
+        name: ''
+      },
+      pictures: []
+    }
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url,keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     if (page || page === 0) {
       commit('currentPageNumber', page);
@@ -40,7 +47,7 @@ const actions = {
     if (size) {
       commit('currentPageSize', size);
     }
-    const response = await http.post(url,{keyword: state.keyword}, {
+    const response = await http.post(url, {keyword: state.keyword}, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -49,11 +56,14 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state},{url}) {
+  refresh ({dispatch, commit, state}, {url}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
-    dispatch('search', {url,keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url, keyword, page: currentPageNumber, size: currentPageSize});
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

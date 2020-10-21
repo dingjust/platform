@@ -1,7 +1,11 @@
-const state = {
-  visitedViews: [],
-  cachedViews: []
+const getDefaultState = () => {
+  return {
+    visitedViews: [],
+    cachedViews: []
+  }
 }
+
+const state = getDefaultState();
 
 const mutations = {
   ADD_VISITED_VIEW: (state, view) => {
@@ -63,28 +67,31 @@ const mutations = {
         break
       }
     }
+  },
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
   }
 }
 
 const actions = {
-  addView({
+  addView ({
     dispatch
   }, view) {
     dispatch('addVisitedView', view)
     dispatch('addCachedView', view)
   },
-  addVisitedView({
+  addVisitedView ({
     commit
   }, view) {
     commit('ADD_VISITED_VIEW', view)
   },
-  addCachedView({
+  addCachedView ({
     commit
   }, view) {
     commit('ADD_CACHED_VIEW', view)
   },
 
-  delView({
+  delView ({
     dispatch,
     state
   }, view) {
@@ -97,7 +104,7 @@ const actions = {
       })
     })
   },
-  delVisitedView({
+  delVisitedView ({
     commit,
     state
   }, view) {
@@ -106,7 +113,7 @@ const actions = {
       resolve([...state.visitedViews])
     })
   },
-  delCachedView({
+  delCachedView ({
     commit,
     state
   }, view) {
@@ -116,7 +123,7 @@ const actions = {
     })
   },
 
-  delOthersViews({
+  delOthersViews ({
     dispatch,
     state
   }, view) {
@@ -129,7 +136,7 @@ const actions = {
       })
     })
   },
-  delOthersVisitedViews({
+  delOthersVisitedViews ({
     commit,
     state
   }, view) {
@@ -138,7 +145,7 @@ const actions = {
       resolve([...state.visitedViews])
     })
   },
-  delOthersCachedViews({
+  delOthersCachedViews ({
     commit,
     state
   }, view) {
@@ -148,7 +155,7 @@ const actions = {
     })
   },
 
-  delAllViews({
+  delAllViews ({
     dispatch,
     state
   }, view) {
@@ -161,7 +168,7 @@ const actions = {
       })
     })
   },
-  delAllVisitedViews({
+  delAllVisitedViews ({
     commit,
     state
   }) {
@@ -170,7 +177,7 @@ const actions = {
       resolve([...state.visitedViews])
     })
   },
-  delAllCachedViews({
+  delAllCachedViews ({
     commit,
     state
   }) {
@@ -180,10 +187,13 @@ const actions = {
     })
   },
 
-  updateVisitedView({
+  updateVisitedView ({
     commit
   }, view) {
     commit('UPDATE_VISITED_VIEW', view)
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 }
 

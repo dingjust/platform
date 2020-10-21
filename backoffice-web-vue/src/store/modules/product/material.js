@@ -1,51 +1,55 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    name: '',
-    code: '',
-    materialsType: '',
-    materialsUnit: '',
-    materialWidth: '',
-    materialComposition: '',
-    images: [],
-    colors: [],
-    specs: [
-      {
-        code: '',
-        name: '',
-        key: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36)
-      }
-    ],
-    models: [
-      {
-        code: '',
-        name: '',
-        key: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36)
-      }
-    ],
-    variants: []
-  },
-  queryFormData: {
-    name: '',
-    code: '',
-    materialsType: ''
-  },
-  isCreate: true,
-  selectMaterialList: []
-};
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      name: '',
+      code: '',
+      materialsType: '',
+      materialsUnit: '',
+      materialWidth: '',
+      materialComposition: '',
+      images: [],
+      colors: [],
+      specs: [
+        {
+          code: '',
+          name: '',
+          key: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36)
+        }
+      ],
+      models: [
+        {
+          code: '',
+          name: '',
+          key: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36)
+        }
+      ],
+      variants: []
+    },
+    queryFormData: {
+      name: '',
+      code: '',
+      materialsType: ''
+    },
+    isCreate: true,
+    selectMaterialList: []
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -56,7 +60,10 @@ const mutations = {
   page: (state, page) => state.page = page,
   formData: (state, formData) => state.formData = formData,
   isCreate: (state, isCreate) => state.isCreate = isCreate,
-  selectMaterialList: (state, selectMaterialList) => state.selectMaterialList = selectMaterialList
+  selectMaterialList: (state, selectMaterialList) => state.selectMaterialList = selectMaterialList,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -118,6 +125,9 @@ const actions = {
       materialsType: ''
     });
     commit('currentPageNumber', 0);
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

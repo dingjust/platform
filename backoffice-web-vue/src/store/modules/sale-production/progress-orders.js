@@ -1,51 +1,55 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  statuses: [],
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    progresses: [],
-    partyACompany: {},
-    partyBCompany: {},
-    code: '',
-    status: '',
-    skuID: '',
-    currentPhase: '',
-    machiningType: 'LABOR_AND_MATERIAL',
-    expectedDeliveryDate: '',
-    personInCharge: {},
-    orderStatus: '',
-    colorSizeEntries: [],
-    product: {
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    statuses: [],
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      progresses: [],
+      partyACompany: {},
+      partyBCompany: {},
+      code: '',
+      status: '',
+      skuID: '',
+      currentPhase: '',
+      machiningType: 'LABOR_AND_MATERIAL',
+      expectedDeliveryDate: '',
+      personInCharge: {},
+      orderStatus: '',
+      colorSizeEntries: [],
+      product: {
+
+      },
+      belongTo: {}
+    },
+    queryFormData: {
+      keyword: '',
+      statuses: '',
+      expectedDeliveryDateFrom: '',
+      expectedDeliveryDateTo: '',
+      operatorName: ''
+    },
+    detailData: {
 
     },
-    belongTo: {}
-  },
-  queryFormData: {
-    keyword: '',
-    statuses: '',
-    expectedDeliveryDateFrom: '',
-    expectedDeliveryDateTo: '',
-    operatorName: ''
-  },
-  detailData: {
+    colorSizeData: [],
+    currentProgress: ''
+  }
+}
 
-  },
-  colorSizeData: [],
-  currentProgress: ''
-};
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -60,10 +64,13 @@ const mutations = {
   formData: (state, formData) => state.formData = formData,
   colorSizeData: (state, colorSizeData) => state.colorSizeData = colorSizeData,
   currentProgress: (state, currentProgress) => state.currentProgress = currentProgress,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({
+  async search ({
     dispatch,
     commit,
     state
@@ -100,7 +107,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({
+  async searchAdvanced ({
     dispatch,
     commit,
     state
@@ -126,7 +133,7 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({
+  refresh ({
     dispatch,
     commit,
     state
@@ -144,7 +151,7 @@ const actions = {
       size: currentPageSize
     });
   },
-  async getDetail({
+  async getDetail ({
     dispatch,
     commit,
     state
@@ -155,7 +162,7 @@ const actions = {
       commit('formData', result.data);
     }
   },
-  async refreshDetail({
+  async refreshDetail ({
     dispatch,
     commit,
     state
@@ -167,7 +174,7 @@ const actions = {
       commit('formData', result.data);
     }
   },
-  async setDetail({
+  async setDetail ({
     dispatch,
     commit,
     state
@@ -176,7 +183,7 @@ const actions = {
       commit('formData', data);
     }
   },
-  clearFormData({
+  clearFormData ({
     dispatch,
     commit,
     state
@@ -196,12 +203,12 @@ const actions = {
       orderStatus: '',
       colorSizeEntries: [],
       product: {
-  
+
       },
       belongTo: {}
     });
   },
-  clearQueryFormData({
+  clearQueryFormData ({
     dispatch,
     commit,
     state
@@ -213,6 +220,9 @@ const actions = {
       expectedDeliveryDateTo: '',
       operatorName: ''
     });
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

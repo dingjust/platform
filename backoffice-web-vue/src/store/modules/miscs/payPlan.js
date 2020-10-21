@@ -1,37 +1,41 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 8,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  queryFormData: {
-    type: '',
-    keyword: ''
-  },
-  formData: {
-    id: null,
-    name: '',
-    payPlanType: 'PHASEONE',
-    isHaveDeposit: false,
-    remarks: '',
-    payPlanItems:[]
-  },
-  editFormData: {
-    id: null,
-    name: '',
-    payPlanType: '',
-    isHaveDeposit: false,
-    remarks: '',
-    payPlanItems:[]
-  },
-};
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    currentPageNumber: 0,
+    currentPageSize: 8,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    queryFormData: {
+      type: '',
+      keyword: ''
+    },
+    formData: {
+      id: null,
+      name: '',
+      payPlanType: 'PHASEONE',
+      isHaveDeposit: false,
+      remarks: '',
+      payPlanItems: []
+    },
+    editFormData: {
+      id: null,
+      name: '',
+      payPlanType: '',
+      isHaveDeposit: false,
+      remarks: '',
+      payPlanItems: []
+    }
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
@@ -41,6 +45,9 @@ const mutations = {
   setQueryFormData: (state, query) => state.queryFormData = query,
   setFormData: (state, data) => state.formData = data,
   setEditFormData: (state, data) => state.editFormData = data,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -85,7 +92,7 @@ const actions = {
 
     dispatch('search', {keyword, page: currentPageNumber, size: currentPageSize});
   },
-  //清空订单列表数据
+  // 清空订单列表数据
   clearOrderPageData ({dispatch, commit, state}) {
     commit('orderPage', {
       number: 0, // 当前页，从0开始
@@ -94,6 +101,9 @@ const actions = {
       totalElements: 0, // 总数目数
       content: [] // 当前页数据
     });
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 
@@ -105,7 +115,7 @@ const getters = {
   orderPage: state => state.orderPage,
   queryFormData: state => state.queryFormData,
   formData: state => state.formData,
-  editFormData: state => state.editFormData,
+  editFormData: state => state.editFormData
 };
 
 export default {

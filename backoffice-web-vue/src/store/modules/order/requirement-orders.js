@@ -1,118 +1,122 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  statuses: [],
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  quoteCurrentPageNumber: 0,
-  quoteCurrentPageSize: 10,
-  cooperatorCurrentPageNumber: 0,
-  cooperatorCurrentPageSize: 10,
-  factoryCurrentPageNumber: 0,
-  factoryCurrentPageSize: 10,
-  factories: [],
-  phoneNumbers: [],
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  quotePage: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  factoryPage: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  cooperatorPage: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    code: '',
-    details: {
-      pictures: [],
-      category: null,
-      majorCategory: null,
-      expectedMachiningQuantity: '',
-      machiningType: 'LABOR_AND_MATERIAL',
-      expectedDeliveryDate: null,
-      maxExpectedPrice: '',
-      invoiceNeeded: false,
-      proofingNeeded: false,
-      contactPerson: '',
-      contactPhone: '',
-      productiveOrientations: [],
-      publishingMode: 'PUBLIC',
-      effectiveDays: '90',
-      salesMarket: []
-    },
-    attachments: [],
-    labels: [],
-    cancelledDate: '',
-    comment: ''
-  },
-  queryFormData: {
+const getDefaultState = () => {
+  return {
+    url: '',
     keyword: '',
-    username: '',
     statuses: [],
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    quoteCurrentPageNumber: 0,
+    quoteCurrentPageSize: 10,
+    cooperatorCurrentPageNumber: 0,
+    cooperatorCurrentPageSize: 10,
+    factoryCurrentPageNumber: 0,
+    factoryCurrentPageSize: 10,
+    factories: [],
+    phoneNumbers: [],
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    quotePage: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    factoryPage: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    cooperatorPage: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    formData: {
+      id: null,
+      code: '',
+      details: {
+        pictures: [],
+        category: null,
+        majorCategory: null,
+        expectedMachiningQuantity: '',
+        machiningType: 'LABOR_AND_MATERIAL',
+        expectedDeliveryDate: null,
+        maxExpectedPrice: '',
+        invoiceNeeded: false,
+        proofingNeeded: false,
+        contactPerson: '',
+        contactPhone: '',
+        productiveOrientations: [],
+        publishingMode: 'PUBLIC',
+        effectiveDays: '90',
+        salesMarket: []
+      },
+      attachments: [],
+      labels: [],
+      cancelledDate: '',
+      comment: ''
+    },
+    queryFormData: {
+      keyword: '',
+      username: '',
+      statuses: [],
+      categories: [],
+      createdDateFrom: null,
+      createdDateTo: null
+    },
+    quoteQueryFormData: {
+      requirementOrderRef: ''
+    },
+    factoryQueryFormData: {
+      keyword: '',
+      adeptAtCategories: [],
+      productiveOrientations: [],
+      populationScales: [],
+      starLevel: null,
+      machiningTypes: [],
+      categories: [],
+      industrialClusters: [],
+      labels: []
+    },
+    cooperatorQueryFormData: {
+      type: '',
+      keyword: ''
+    },
+    quoteFormData: {
+      id: null,
+      code: '',
+      requirementOrder: null,
+      unitPriceOfFabric: 0,
+      unitPriceOfExcipients: 0,
+      unitPriceOfProcessing: 0,
+      costOfOther: 0,
+      costOfSamples: 0,
+      expectedDeliveryDate: null,
+      remarks: null,
+      attachments: []
+    },
     categories: [],
-    createdDateFrom: null,
-    createdDateTo: null
-  },
-  quoteQueryFormData: {
-    requirementOrderRef: ''
-  },
-  factoryQueryFormData: {
-    keyword: '',
-    adeptAtCategories: [],
-    productiveOrientations: [],
-    populationScales: [],
-    starLevel: null,
-    machiningTypes: [],
-    categories: [],
-    industrialClusters: [],
-    labels: []
-  },
-  cooperatorQueryFormData: {
-    type: '',
-    keyword: ''
-  },
-  quoteFormData: {
-    id: null,
-    code: '',
-    requirementOrder: null,
-    unitPriceOfFabric: 0,
-    unitPriceOfExcipients: 0,
-    unitPriceOfProcessing: 0,
-    costOfOther: 0,
-    costOfSamples: 0,
-    expectedDeliveryDate: null,
-    remarks: null,
-    attachments: []
-  },
-  categories: [],
-  majorCategories: [],
-  regions: [],
-  labels: [],
-  isShowDetailPrice: false
-};
+    majorCategories: [],
+    regions: [],
+    labels: [],
+    isShowDetailPrice: false
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -141,6 +145,9 @@ const mutations = {
   regions: (state, regions) => state.regions = regions,
   labels: (state, labels) => state.labels = labels,
   isShowDetailPrice: (state, isShowDetailPrice) => state.isShowDetailPrice = isShowDetailPrice,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -273,7 +280,7 @@ const actions = {
       comment: ''
     });
   },
-  clearQueryFormData ({dispatch, commit, state}){
+  clearQueryFormData ({dispatch, commit, state}) {
     commit('queryFormData', {
       keyword: '',
       username: '',
@@ -301,6 +308,9 @@ const actions = {
       keyword: '',
       type: ''
     });
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 
@@ -324,7 +334,7 @@ const getters = {
   majorCategories: state => state.majorCategories,
   regions: state => state.regions,
   labels: state => state.labels,
-  isShowDetailPrice: state => state.isShowDetailPrice,
+  isShowDetailPrice: state => state.isShowDetailPrice
 };
 
 export default {

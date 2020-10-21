@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-row>
-        <el-col :span="4">
+        <el-col>
           <div class="financial-list-title">
             <h6>付款申请单</h6>
           </div>
@@ -12,10 +12,14 @@
       <payment-request-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" 
                                :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
       <div>
-        <Authorized :permission="['PAYMENT_REQUEST_CREATE']">
-          <el-button class="pr-create-btn" @click="onCreate">创建付款申请单</el-button>
-        </Authorized>
-        <el-tabs v-model="pageInfo[userRole].activeName" @tab-click="handleClick">
+        <div :class="tagPosition ? 'tag-position' : ''">
+          <el-row ref="tag" type="flex" justify="end" align="middle" >
+            <Authorized :permission="['PAYMENT_REQUEST_CREATE']">
+              <el-button class="pr-create-btn" @click="onCreate">创建付款申请单</el-button>
+            </Authorized>
+          </el-row>
+        </div>
+        <el-tabs ref="tabs" v-model="pageInfo[userRole].activeName" @tab-click="handleClick">
           <template v-for="item in pageInfo[userRole].status">
             <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
               <payment-request-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail"/>
@@ -97,6 +101,24 @@
           return;
         }
         this.stateCount = result.data;
+
+        this.$nextTick(() => {
+          this.changeTagPosition();
+        })
+      },
+      changeTagPosition () {
+        let count = 20;
+        this.pageInfo['MERCHANDISER'].status.forEach(item => {
+          if (item.code === '') {
+            count += document.getElementById("tab-" + (this.pageInfo['MERCHANDISER'].status.length - 1)).scrollWidth
+          } else {
+            count += document.getElementById("tab-" + item.code).scrollWidth
+          }
+        })
+        if (this.tagWidth === 0) {
+          this.tagWidth = this.$refs.tag.$el.scrollWidth
+        }
+        this.tagPosition = this.tagWidth + count < this.$refs.tabs.$el.scrollWidth;
       },
       tabName(tab) {
         if (this.stateCount.hasOwnProperty(tab.code)) {
@@ -165,13 +187,23 @@
             }]
           }
         },
-        dataQuery: {}
+        dataQuery: {},
+        tagPosition: true,
+        tagWidth: 0,
       }
     },
     created () {
       this.dataQuery = this.getDataPerQuery('PAYMENT_REQUEST');
       this.onResetQuery();
       this.onAdvancedSearch(0, 10);
+    },
+    mounted() {
+      let that = this;
+      window.addEventListener('resize', function () {
+        that.$nextTick(() => {
+          that.changeTagPosition();
+        })
+      })
     },
     destroyed () {
       
@@ -185,10 +217,13 @@
     padding-left: 10px;
   }
 
-  .pr-create-btn {
+  .tag-position {
     position: absolute;
     right: 21px;
     z-index: 999;
+  }
+
+  .pr-create-btn {
     background-color: #ffd60c;
   } 
 

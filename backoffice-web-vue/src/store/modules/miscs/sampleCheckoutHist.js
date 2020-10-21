@@ -1,53 +1,57 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    code: '',
-    name: '',
-    quantity: '',
-    expectedReturningDate: '',
-    relatedParty: '',
-    contact: '',
-    type: '',
-    state: '',
-    remarks: '',
-    images: [],
-    company: {
-      uid: '',
-      name: ''
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
     },
-    returnedDate:'',
-  },
-  queryFormData: {
-    id: null,
-    code: '',
-    name: '',
-    quantity: '',
-    expectedReturningDate: '',
-    relatedParty: '',
-    contact: '',
-    type: '',
-    state: '',
-    remarks: '',
-    images: [],
-    company: {
-      uid: '',
-      name: ''
+    formData: {
+      id: null,
+      code: '',
+      name: '',
+      quantity: '',
+      expectedReturningDate: '',
+      relatedParty: '',
+      contact: '',
+      type: '',
+      state: '',
+      remarks: '',
+      images: [],
+      company: {
+        uid: '',
+        name: ''
+      },
+      returnedDate: ''
     },
-    returnedDate:'',
+    queryFormData: {
+      id: null,
+      code: '',
+      name: '',
+      quantity: '',
+      expectedReturningDate: '',
+      relatedParty: '',
+      contact: '',
+      type: '',
+      state: '',
+      remarks: '',
+      images: [],
+      company: {
+        uid: '',
+        name: ''
+      },
+      returnedDate: ''
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
@@ -56,11 +60,14 @@ const mutations = {
   returnState: (state, returnState) => state.returnState = returnState,
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     if (page || page === 0) {
       commit('currentPageNumber', page);
@@ -78,7 +85,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
     commit('currentPageNumber', page);
@@ -94,12 +101,15 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state},{url}) {
+  refresh ({dispatch, commit, state}, {url}) {
     const keyword = state.keyword;
     const queryFormData = state.queryFormData;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
-    dispatch('search', {url,keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url, keyword, page: currentPageNumber, size: currentPageSize});
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

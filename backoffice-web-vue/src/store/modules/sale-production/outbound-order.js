@@ -1,117 +1,121 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  statuses: [],
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    outboundCompanyName: '',
-    outboundContactPerson: '',
-    outboundContactPhone: '',
-    belongTo: {
-      uid: ''
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    statuses: [],
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
     },
-    targetCooperator: {
-      id: '',
-      partner: {}
-    },
-    originCooperator: {
-      id: '',
-      partner: {}
-    },
-    taskOrderEntries: [{
-      originOrder: {
-        id: ''
+    formData: {
+      id: null,
+      outboundCompanyName: '',
+      outboundContactPerson: '',
+      outboundContactPhone: '',
+      belongTo: {
+        uid: ''
       },
-      unitPrice: '',
-      deliveryDate: '',
-      shippingAddress: {},
-      product: {
+      targetCooperator: {
+        id: '',
+        partner: {}
+      },
+      originCooperator: {
+        id: '',
+        partner: {}
+      },
+      taskOrderEntries: [{
+        originOrder: {
+          id: ''
+        },
+        unitPrice: '',
+        deliveryDate: '',
+        shippingAddress: {},
+        product: {
 
+        },
+        progressPlan: {
+          name: ''
+        },
+        colorSizeEntries: []
+      }],
+      cooperationMode: 'LABOR_AND_MATERIAL',
+      invoiceNeeded: false,
+      invoiceTaxPoint: 0.03,
+      freightPayer: 'PARTYB',
+      remarks: '',
+      sendAuditNeeded: false,
+      progressPlan: {},
+      payPlan: {
+        isHaveDeposit: false,
+        payPlanType: 'PHASEONE',
+        payPlanItems: [{
+          moneyType: 'PHASEONE',
+          payPercent: 0.3,
+          triggerDays: 5,
+          triggerEvent: 'ORDER_CONFIRMED',
+          triggerType: 'INSIDE'
+        }]
       },
-      progressPlan: {
+      attachments: [],
+      sendApprovers: [{
+        id: ''
+      }],
+      merchandiser: {
+        id: '',
         name: ''
       },
-      colorSizeEntries: []
-    }],
-    cooperationMode: 'LABOR_AND_MATERIAL',
-    invoiceNeeded: false,
-    invoiceTaxPoint: 0.03,
-    freightPayer: 'PARTYB',
-    remarks: '',
-    sendAuditNeeded: false,
-    progressPlan: {},
-    payPlan: {
-      isHaveDeposit: false,
-      payPlanType: 'PHASEONE',
-      payPlanItems: [{
-        moneyType: 'PHASEONE',
-        payPercent: 0.3,
-        triggerDays: 5,
-        triggerEvent: 'ORDER_CONFIRMED',
-        triggerType: 'INSIDE'
-      }]
+      manageWay: '',
+      sendAuditWorkOrder: {
+        processes: []
+      }
     },
-    attachments: [],
-    sendApprovers: [{
-      id: ''
-    }],
-    merchandiser: {
-      id: '',
+    queryFormData: {
+      keyword: '',
+      targetCooperator: '',
+      merchandiser: '',
+      statuses: '',
       name: ''
     },
-    manageWay:'',
-    sendAuditWorkOrder: {
-      processes: []
-    }
-  },
-  queryFormData: {
-    keyword: '',
-    targetCooperator: '',
-    merchandiser: '',
-    statuses: '',
-    name: ''
-  },
-  addressFormData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
+    addressFormData: {
+      id: null,
+      fullname: '',
+      cellphone: '',
+      region: {
+        isocode: '',
+        name: ''
+      },
+      city: {
+        code: '',
+        name: ''
+      },
+      cityDistrict: {
+        code: '',
+        name: ''
+      },
+      line1: ''
     },
-    city: {
-      code: '',
-      name: ''
+    consignmentFormData: {
+      trackingID: '',
+      carrierDetails: {
+        code: '',
+        name: ''
+      }
     },
-    cityDistrict: {
-      code: '',
-      name: ''
-    },
-    line1: ''
-  },
-  consignmentFormData: {
-    trackingID: '',
-    carrierDetails: {
-      code: '',
-      name: ''
-    }
-  },
-  detailData: {
+    detailData: {
 
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -124,7 +128,10 @@ const mutations = {
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
-  detailData: (state, detailData) => state.detailData = detailData
+  detailData: (state, detailData) => state.detailData = detailData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -249,6 +256,9 @@ const actions = {
     if (!result['errors']) {
       commit('detailData', result);
     }
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

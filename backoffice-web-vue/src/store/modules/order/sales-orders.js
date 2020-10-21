@@ -1,73 +1,77 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  statuses: [],
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    code: '',
-    entries: [],
-    deliveryAddress: {},
-    id: '',
-    status: '',
-    user: {},
-    quality: '',
-    seller: {}
-  },
-  queryFormData: {
-    code: '',
-    requirementOrderCode: '',
-    skuID: '',
-    statuses: [],
-    refunding: '',
-    expectedDeliveryDateFrom: null,
-    expectedDeliveryDateTo: null,
-    createdDateFrom: null,
-    createdDateTo: null,
-    // belongTos: [],
-    // purchasers:[],
+const getDefaultState = () => {
+  return {
+    url: '',
     keyword: '',
-    categories: []
-  },
-  addressFormData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
+    statuses: [],
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
     },
-    city: {
+    formData: {
       code: '',
-      name: ''
+      entries: [],
+      deliveryAddress: {},
+      id: '',
+      status: '',
+      user: {},
+      quality: '',
+      seller: {}
     },
-    cityDistrict: {
+    queryFormData: {
       code: '',
-      name: ''
+      requirementOrderCode: '',
+      skuID: '',
+      statuses: [],
+      refunding: '',
+      expectedDeliveryDateFrom: null,
+      expectedDeliveryDateTo: null,
+      createdDateFrom: null,
+      createdDateTo: null,
+      // belongTos: [],
+      // purchasers:[],
+      keyword: '',
+      categories: []
     },
-    line1: ''
-  },
-  consignmentFormData: {
-    trackingID: '',
-    carrierDetails: {
-      code: '',
-      name: ''
-    }
-  },
-  detailData: {
+    addressFormData: {
+      id: null,
+      fullname: '',
+      cellphone: '',
+      region: {
+        isocode: '',
+        name: ''
+      },
+      city: {
+        code: '',
+        name: ''
+      },
+      cityDistrict: {
+        code: '',
+        name: ''
+      },
+      line1: ''
+    },
+    consignmentFormData: {
+      trackingID: '',
+      carrierDetails: {
+        code: '',
+        name: ''
+      }
+    },
+    detailData: {
 
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -79,7 +83,10 @@ const mutations = {
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
-  detailData: (state, detailData) => state.detailData = detailData
+  detailData: (state, detailData) => state.detailData = detailData,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -141,6 +148,9 @@ const actions = {
     if (!result['errors']) {
       commit('detailData', result);
     }
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

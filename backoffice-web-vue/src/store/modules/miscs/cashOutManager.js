@@ -1,43 +1,47 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  isAdvancedSearch: false,
-  groups: ['B2B'],
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  billsPage: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  cashOutDetailData: null,
-  formData: {
-    id: null,
-    index: '',
-    name: '',
-    description: '',
-    group: 'B2B',
-    infos: []
-  },
-  queryFormData: {
-    company: '',
-    flowSources: [],
-    amountFlowTypes: [],
-    amountStatus: [],
-    createdDateFrom: null,
-    createdDateTo: null
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    isAdvancedSearch: false,
+    groups: ['B2B'],
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    billsPage: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    cashOutDetailData: null,
+    formData: {
+      id: null,
+      index: '',
+      name: '',
+      description: '',
+      group: 'B2B',
+      infos: []
+    },
+    queryFormData: {
+      company: '',
+      flowSources: [],
+      amountFlowTypes: [],
+      amountStatus: [],
+      createdDateFrom: null,
+      createdDateTo: null
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
@@ -47,7 +51,10 @@ const mutations = {
   billsPage: (state, page) => state.billsPage = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
   queryFormData: (state, query) => state.queryFormData = query,
-  cashOutDetailData: (state, data) => state.cashOutDetailData = data
+  cashOutDetailData: (state, data) => state.cashOutDetailData = data,  
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -107,6 +114,9 @@ const actions = {
 
     dispatch('search', {url, keyword, page: currentPageNumber, size: currentPageSize});
   },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
+  }
 };
 
 const getters = {

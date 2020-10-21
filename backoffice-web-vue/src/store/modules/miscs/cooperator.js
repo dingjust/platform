@@ -1,72 +1,76 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  ordersPageNumber: 0,
-  ordersPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  orderPage: {
-    number: 0, // 当前页，从0开始
-    size: 8, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  queryFormData: {
-    type: '',
+const getDefaultState = () => {
+  return {
     keyword: '',
-  },
-  ordersQueryFormData: {
-    belongTos: null,
-    purchasers: null
-  },
-  formData: {
-    id: null,
-    name: '',
-    contactPhone: '',
-    contactPerson: '',
-    taxNumber: '',
-    bankOfDeposit: '',
-    bankAccount: '',
-    partner: null,
-    type: null,
-    category: null,
-    detailedIdentity: '',
-    payPlan: null,
-    remarks: '',
-    accountName: '',
-    address: {
-      region: '',
-      city: '',
-      cityDistrict: '',
-      line1: ''
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    ordersPageNumber: 0,
+    ordersPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
     },
-  },
-  editFormData: {
-    id: null,
-    name: '',
-    contactPhone: '',
-    contactPerson: '',
-    taxNumber: '',
-    bankOfDeposit: '',
-    bankAccount: '',
-    partner: null,
-    type: null,
-    category: null,
-    detailedIdentity: '',
-    payPlan: null,
-    remarks: '',
-    accountName: ''
-  },
-};
+    orderPage: {
+      number: 0, // 当前页，从0开始
+      size: 8, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    },
+    queryFormData: {
+      type: '',
+      keyword: ''
+    },
+    ordersQueryFormData: {
+      belongTos: null,
+      purchasers: null
+    },
+    formData: {
+      id: null,
+      name: '',
+      contactPhone: '',
+      contactPerson: '',
+      taxNumber: '',
+      bankOfDeposit: '',
+      bankAccount: '',
+      partner: null,
+      type: null,
+      category: null,
+      detailedIdentity: '',
+      payPlan: null,
+      remarks: '',
+      accountName: '',
+      address: {
+        region: '',
+        city: '',
+        cityDistrict: '',
+        line1: ''
+      }
+    },
+    editFormData: {
+      id: null,
+      name: '',
+      contactPhone: '',
+      contactPerson: '',
+      taxNumber: '',
+      bankOfDeposit: '',
+      bankAccount: '',
+      partner: null,
+      type: null,
+      category: null,
+      detailedIdentity: '',
+      payPlan: null,
+      remarks: '',
+      accountName: ''
+    }
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
@@ -81,11 +85,14 @@ const mutations = {
   setQueryFormDataKeyword: (state, keyword) => state.queryFormData.keyword = keyword,
   setOrdersQueryFormData: (state, query) => state.ordersQueryFormData = query,
   setFormData: (state, data) => state.formData = data,
-  setEditFormData: (state, data) => state.editFormData = data
+  setEditFormData: (state, data) => state.editFormData = data,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({
+  async search ({
     dispatch,
     commit,
     state
@@ -112,7 +119,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({
+  async searchAdvanced ({
     dispatch,
     commit,
     state
@@ -138,7 +145,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchOrdersAdvanced({
+  async searchOrdersAdvanced ({
     dispatch,
     commit,
     state
@@ -158,7 +165,7 @@ const actions = {
       commit('orderPage', response);
     }
   },
-  refresh({
+  refresh ({
     dispatch,
     commit,
     state
@@ -173,8 +180,8 @@ const actions = {
       size: currentPageSize
     });
   },
-  //清空订单列表数据
-  clearOrderPageData({
+  // 清空订单列表数据
+  clearOrderPageData ({
     dispatch,
     commit,
     state
@@ -187,7 +194,7 @@ const actions = {
       content: [] // 当前页数据
     });
   },
-  clearFormData({
+  clearFormData ({
     dispatch,
     commit,
     state
@@ -212,10 +219,12 @@ const actions = {
         city: '',
         cityDistrict: '',
         line1: ''
-      },
+      }
     });
   },
-
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
+  }
 };
 
 const getters = {
@@ -229,7 +238,7 @@ const getters = {
   queryFormData: state => state.queryFormData,
   ordersQueryFormData: state => state.ordersQueryFormData,
   formData: state => state.formData,
-  editFormData: state => state.editFormData,
+  editFormData: state => state.editFormData
 };
 
 export default {

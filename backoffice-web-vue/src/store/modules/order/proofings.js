@@ -1,46 +1,83 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  keyword: '',
-  isAdvancedSearch: false,
-  statuses: [],
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    code: '',
-    quoteRef: '',
-    belongTo: {
-      uid: '',
-      name: ''
+const getDefaultState = () => {
+  return {
+    url: '',
+    keyword: '',
+    isAdvancedSearch: false,
+    statuses: [],
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
     },
-    salesApplication: 'BELOW_THE_LINE',
-    companyOfSeller: '',
-    contactPersonOfSeller: '',
-    contactOfSeller: '',
-    expectedDeliveryDate: null,
-    deposit: 0,
-    depositPaid: false,
-    depositPaidDate: null,
-    balance: 0,
-    balancePaid: false,
-    balancePaidDate: null,
-    machiningType: null,
-    invoiceNeeded: false,
-    proofingNeeded: false,
-    uniqueCode: '',
-    requirementOrderCode: '',
-    unitPrice: 0,
-    remarks: '',
-    deliveryAddress: {
+    formData: {
+      id: null,
+      code: '',
+      quoteRef: '',
+      belongTo: {
+        uid: '',
+        name: ''
+      },
+      salesApplication: 'BELOW_THE_LINE',
+      companyOfSeller: '',
+      contactPersonOfSeller: '',
+      contactOfSeller: '',
+      expectedDeliveryDate: null,
+      deposit: 0,
+      depositPaid: false,
+      depositPaidDate: null,
+      balance: 0,
+      balancePaid: false,
+      balancePaidDate: null,
+      machiningType: null,
+      invoiceNeeded: false,
+      proofingNeeded: false,
+      uniqueCode: '',
+      requirementOrderCode: '',
+      unitPrice: 0,
+      remarks: '',
+      deliveryAddress: {
+        id: null,
+        fullname: '',
+        cellphone: '',
+        region: {
+          isocode: '',
+          name: ''
+        },
+        city: {
+          code: '',
+          name: ''
+        },
+        cityDistrict: {
+          code: '',
+          name: ''
+        },
+        line1: ''
+      },
+      consignment: {
+        trackingID: '',
+        carrierDetails: {
+          code: '',
+          name: ''
+        },
+        isOffline: false
+      }
+    },
+    queryFormData: {
+      keyword: '',
+      brandOperatorName: '',
+      factoryOperatorName: '',
+      brandReferenceName: '',
+      factoryReferenceName: '',
+      categories: [],
+      statuses: []
+    },
+    addressFormData: {
       id: null,
       fullname: '',
       cellphone: '',
@@ -58,51 +95,18 @@ const state = {
       },
       line1: ''
     },
-    consignment: {
+    consignmentFormData: {
       trackingID: '',
       carrierDetails: {
         code: '',
         name: ''
-      },
-      isOffline: false
-    }
-  },
-  queryFormData: {
-    keyword: '',
-    brandOperatorName: '',
-    factoryOperatorName: '',
-    brandReferenceName: '',
-    factoryReferenceName: '',
-    categories: [],
-    statuses: []
-  },
-  addressFormData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
+      }
     },
-    city: {
-      code: '',
-      name: ''
-    },
-    cityDistrict: {
-      code: '',
-      name: ''
-    },
-    line1: ''
-  },
-  consignmentFormData: {
-    trackingID: '',
-    carrierDetails: {
-      code: '',
-      name: ''
-    }
-  },
-  categories: []
-};
+    categories: []
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -112,7 +116,10 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
-  categories: (state, categories) => state.categories = categories
+  categories: (state, categories) => state.categories = categories,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -179,6 +186,9 @@ const actions = {
       categories: [],
       statuses: []
     });
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

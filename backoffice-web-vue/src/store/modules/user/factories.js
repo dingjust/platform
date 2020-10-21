@@ -1,96 +1,100 @@
 import http from '@/common/js/http';
 
-const state = {
-  keyword: '',
-  isAdvancedSearch: false,
-  currentPageNumber: 0,
-  currentPageSize: 10,
-  page: {
-    number: 0, // 当前页，从0开始
-    size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  formData: {
-    id: null,
-    uid: '',
-    name: '',
-    profilePicture: null,
-    contactAddress: {
-      id: null,
-      fullname: '',
-      cellphone: '',
-      region: {
-        isocode: '',
-        name: ''
-      },
-      city: {
-        code: '',
-        name: ''
-      },
-      cityDistrict: {
-        code: '',
-        name: ''
-      },
-      line1: ''
+const getDefaultState = () => {
+  return {
+    keyword: '',
+    isAdvancedSearch: false,
+    currentPageNumber: 0,
+    currentPageSize: 10,
+    page: {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
     },
-    categories: [],
-    adeptAtCategories: [],
-    contactPerson: '',
-    contactPhone: '',
-    latheQuantity: '',
-    scaleRange: '',
-    monthlyCapacityRange: '',
-    cooperationModes: [],
-    populationScale: '',
-    developmentCapacity: false,
-    registrationDate: null,
-    taxNumber: '',
-    bankOfDeposit: '',
-    phone: '',
-    cooperativeBrand: '',
-    businessRegistrationNo: '',
-    legalRepresentative: '',
-    certificateOfLegal: '',
-    labels: [],
-    industrialCluster: null,
-    longitude: 0,
-    latitude: 0,
-    certificates: [],
-    productionMode: '',
-    starLevel:0,
-    cuttingDepartment: [],
-    productionWorkshop: [],
-    lastDepartment: [],
-    keyword: '',
-    qualityLevels: [],
-    duties: '',
-    loginDisabled: false,
-    profiles: []
-  },
-  queryFormData: {
-    keyword: '',
-    labels: [],
-    populationScales: [],
-    productiveOrientations: [],
+    formData: {
+      id: null,
+      uid: '',
+      name: '',
+      profilePicture: null,
+      contactAddress: {
+        id: null,
+        fullname: '',
+        cellphone: '',
+        region: {
+          isocode: '',
+          name: ''
+        },
+        city: {
+          code: '',
+          name: ''
+        },
+        cityDistrict: {
+          code: '',
+          name: ''
+        },
+        line1: ''
+      },
+      categories: [],
+      adeptAtCategories: [],
+      contactPerson: '',
+      contactPhone: '',
+      latheQuantity: '',
+      scaleRange: '',
+      monthlyCapacityRange: '',
+      cooperationModes: [],
+      populationScale: '',
+      developmentCapacity: false,
+      registrationDate: null,
+      taxNumber: '',
+      bankOfDeposit: '',
+      phone: '',
+      cooperativeBrand: '',
+      businessRegistrationNo: '',
+      legalRepresentative: '',
+      certificateOfLegal: '',
+      labels: [],
+      industrialCluster: null,
+      longitude: 0,
+      latitude: 0,
+      certificates: [],
+      productionMode: '',
+      starLevel:0,
+      cuttingDepartment: [],
+      productionWorkshop: [],
+      lastDepartment: [],
+      keyword: '',
+      qualityLevels: [],
+      duties: '',
+      loginDisabled: false,
+      profiles: []
+    },
+    queryFormData: {
+      keyword: '',
+      labels: [],
+      populationScales: [],
+      productiveOrientations: [],
+      cities: [],
+      starLevel: null,
+      machiningTypes: [],
+      categories: [],
+      adeptAtCategories: [],
+      industrialClusters: [],
+      creationTimeFrom: '',
+      creationTimeTo: ''
+    },
     cities: [],
-    starLevel: null,
-    machiningTypes: [],
+    cityDistricts: [],
+    labels: [],
     categories: [],
-    adeptAtCategories: [],
-    industrialClusters: [],
-    creationTimeFrom: '',
-    creationTimeTo: ''
-  },
-  cities: [],
-  cityDistricts: [],
-  labels: [],
-  categories: [],
-  factoryFormVisible: false,
-  isCitiesChanged: false,
-  isDistrictsChanged: false,
-};
+    factoryFormVisible: false,
+    isCitiesChanged: false,
+    isDistrictsChanged: false,
+  }
+}
+
+const state = getDefaultState();
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
@@ -106,6 +110,9 @@ const mutations = {
   setFactoryFormVisible: (state,factoryFormVisible) => state.factoryFormVisible = factoryFormVisible,
   setIsCitiesChanged: (state,isCitiesChanged) => state.isCitiesChanged = isCitiesChanged,
   setIsDistrictsChanged: (state,isDistrictsChanged) => state.isDistrictsChanged = isDistrictsChanged,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
@@ -202,6 +209,9 @@ const actions = {
       keyword: ''
     };
     commit('setFormData', data);
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 

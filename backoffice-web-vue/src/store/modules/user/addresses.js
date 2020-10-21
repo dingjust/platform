@@ -1,36 +1,43 @@
 import http from '@/common/js/http';
 
-const state = {
-  url: '',
-  results: [],
-  formData: {
-    id: null,
-    fullname: '',
-    cellphone: '',
-    region: {
-      isocode: '',
-      name: ''
-    },
-    city: {
-      code: '',
-      name: ''
-    },
-    cityDistrict: {
-      code: '',
-      name: ''
-    },
-    line1: '',
-    defaultAddress: false
+const getDefaultState = () => {
+  return {
+    url: '',
+    results: [],
+    formData: {
+      id: null,
+      fullname: '',
+      cellphone: '',
+      region: {
+        isocode: '',
+        name: ''
+      },
+      city: {
+        code: '',
+        name: ''
+      },
+      cityDistrict: {
+        code: '',
+        name: ''
+      },
+      line1: '',
+      defaultAddress: false
+    }
   }
-};
+}
+
+const state = getDefaultState();
 
 const mutations = {
   url: (state, url) => state.url = url,
-  results: (state, results) => state.results = results
+  results: (state, results) => state.results = results,
+  resetModuleState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url}) {
+  async search ({dispatch, commit, state}, {url}) {
     commit('url', url);
 
     const response = await http.get(url);
@@ -40,8 +47,11 @@ const actions = {
       commit('results', response);
     }
   },
-  refresh({dispatch, commit, state}) {
+  refresh ({dispatch, commit, state}) {
     dispatch('search', {url: state.url});
+  },
+  resetState ({dispatch, commit, state}) {
+    commit('resetModuleState');
   }
 };
 
