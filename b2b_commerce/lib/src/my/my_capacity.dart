@@ -16,7 +16,6 @@ class MyCapacityPage extends StatefulWidget {
 class _MyCapacityPageState extends State<MyCapacityPage> {
   @override
   void initState() {
-    // TODO: implement initState
     WidgetsBinding.instance.addPostFrameCallback((_) => checkLoginStatus());
     super.initState();
   }

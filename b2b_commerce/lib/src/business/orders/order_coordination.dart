@@ -17,7 +17,6 @@ class OrderCoordinationPage extends StatefulWidget {
 class _OrderCoordinationPageState extends State<OrderCoordinationPage> {
   @override
   void initState() {
-    // TODO: implement initState
     //埋点>>>订单协同
     FlutterUmplus.event(
       "order_coordination",
