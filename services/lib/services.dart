@@ -69,6 +69,7 @@ export 'src/order/repository/quote_order_respository.dart';
 export 'src/order/repository/requirement_order_repository.dart';
 export 'src/order/repository/sales_order_respository.dart';
 export 'src/order/response/order_response.dart';
+export 'src/order/state/fabric_requirement_state.dart';
 export 'src/order/state/production_progress_state.dart';
 export 'src/order/state/requirement_order_form_state.dart';
 export 'src/order/state/requirement_order_select_state.dart';

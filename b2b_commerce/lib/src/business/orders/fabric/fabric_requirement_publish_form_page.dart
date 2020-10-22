@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
+import 'fabric_requirement_publish_grant_page.dart';
+
 ///面料需求发布表单页
 class FabricRequirementPublishFormPage extends StatefulWidget {
   @override
@@ -138,6 +140,15 @@ class _FabricRequirementPublishFormPageState
                 isAgree = v;
               });
             },
+          ),
+          _NextButton(
+            onPressed: isAgree
+                ? () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            FabricRequirementPublishGrantPage()));
+                  }
+                : null,
           )
         ]));
   }
@@ -151,7 +162,8 @@ class _PicturesRow extends StatelessWidget {
 
   final bool editable;
 
-  const _PicturesRow({Key key, @required this.list, this.maxNum = 5, this.editable = true})
+  const _PicturesRow(
+      {Key key, @required this.list, this.maxNum = 5, this.editable = true})
       : super(key: key);
 
   @override
@@ -220,7 +232,8 @@ class _VideoRow extends StatelessWidget {
 
   final bool editable;
 
-  const _VideoRow({Key key, @required this.list, this.maxNum = 1, this.editable = true})
+  const _VideoRow(
+      {Key key, @required this.list, this.maxNum = 1, this.editable = true})
       : super(key: key);
 
   @override
@@ -433,7 +446,8 @@ class _ExpiryTimeRow extends StatelessWidget {
 
   final ValueChanged<int> onChanged;
 
-  const _ExpiryTimeRow({Key key, @required this.value, @required this.onChanged})
+  const _ExpiryTimeRow(
+      {Key key, @required this.value, @required this.onChanged})
       : super(key: key);
 
   @override
@@ -525,7 +539,7 @@ class _ProtocolRow extends StatelessWidget {
             GestureDetector(
               onTap: () => showServiceProtocol(context),
               child: Text(
-                '《钉单平台服务协议》',
+                '《注册及授权发布协议》',
                 overflow: TextOverflow.clip,
                 style: TextStyle(color: Colors.blue),
               ),
@@ -567,5 +581,33 @@ class _ProtocolRow extends StatelessWidget {
             });
       },
     );
+  }
+}
+
+///下一步按钮
+class _NextButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const _NextButton({Key key, @required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: RaisedButton(
+          color: Color.fromRGBO(255, 214, 12, 1),
+          child: Text(
+            '下一步',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 18,
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(50))),
+          onPressed: onPressed,
+        ));
   }
 }

@@ -337,8 +337,8 @@ class BrandButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.requirement(),
         onPressed: () {
-          // Navigator.pushNamed(context, AppRoutes.ROUTE_FABRIC_PUBLISH);
-          Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
+          Navigator.pushNamed(context, AppRoutes.ROUTE_FABRIC_PUBLISH);
+          // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
         },
         title: '我的需求',
       ),

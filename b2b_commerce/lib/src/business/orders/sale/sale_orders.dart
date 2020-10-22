@@ -54,7 +54,7 @@ class _SaleOrdersPageState extends State<SaleOrdersPage> {
       icon: const Icon(B2BIcons.search, size: 20),
       onPressed: () async {
         String value =
-        await LocalStorage.get(GlobalConfigs.SALE_HISTORY_KEYWORD_KEY);
+            await LocalStorage.get(GlobalConfigs.SALE_HISTORY_KEYWORD_KEY);
         if (value != null && value != '') {
           List<dynamic> list = json.decode(value);
           historyKeywords = list.map((item) => item as String).toList();
