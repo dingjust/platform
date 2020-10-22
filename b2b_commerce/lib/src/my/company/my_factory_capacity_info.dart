@@ -1,9 +1,7 @@
 import 'dart:ui';
 
 import 'package:b2b_commerce/src/my/capacity/_shared/capacity_factory_info_item.dart';
-import 'package:b2b_commerce/src/my/capacity/_shared/capacity_matching_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';

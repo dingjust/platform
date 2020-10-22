@@ -6,29 +6,30 @@ class GlobalConfigs {
   // static const DEBUG = false;
 
   //测试
-  // static const CONTEXT_PATH = 'https://sc.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
+  static const CONTEXT_PATH = 'https://sc.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
 
   //本地
-  static const CONTEXT_PATH = 'https://192.168.1.122:9002/djwebservices/v2';
-  static const MEDIA_CONTEXT_PATH = 'http://192.168.1.122';
+  // static const CONTEXT_PATH = 'https://192.168.1.122:9002/djwebservices/v2';
+  // static const MEDIA_CONTEXT_PATH = 'http://192.168.1.122';
 
   // 生产
   // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
   // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   //分享域名
-  // static const SHARE_CONTEXT_PATH = 'https://share.sc.nbyjy.net'; //测试
-  static const SHARE_CONTEXT_PATH = 'https://share.ht.nbyjy.net'; //生产
+  static const SHARE_CONTEXT_PATH = 'https://share.sc.nbyjy.net'; //测试
+  // static const SHARE_CONTEXT_PATH = 'https://share.ht.nbyjy.net'; //生产
 
   /// 通过nginx代理所有b2b前缀的请求
-  // static const B2B_API_PREFIX = 'b2b';  //测试&生产
-  static const B2B_API_PREFIX = 'b2b-apparel-zh'; //本地
+  static const B2B_API_PREFIX = 'b2b'; //测试&生产
+  // static const B2B_API_PREFIX = 'b2b-apparel-zh'; //本地
 
   ///验证
-  // static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
-  static const AUTH_SERVER_URL =
-      'https://192.168.1.122:9002/authorizationserver';
+  static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
+
+  // static const AUTH_SERVER_URL =
+  //     'https://192.168.1.122:9002/authorizationserver';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
@@ -96,7 +97,7 @@ class GlobalConfigs {
   /// 应用名称（英文），用于获取应用程序目录
   static const APP_NAME = 'dingjust_platform';
 
-  static const B2B_CLIENT_ID = 'nbyjy';
+  static const B2B_CLIENT_ID = 'nbyjy_app';
   static const B2B_CLIENT_SECRET = 'password';
 
   static const String AMAP_TIP_KEY = '16019b7f1babc4b2d81010730bad2504';
