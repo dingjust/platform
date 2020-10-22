@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core/core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -87,6 +89,17 @@ class _RegionSelectorState extends State<RegionSelector> {
                 return InkWell(
                   onTap: () {
                     setState(() {
+                      if(region.isocode == Constants.WHOLE_COUNTRY_ISOCODE){
+                        _regionCodeSelects.clear();
+                        widget.regionSelects.clear();
+                      }else{
+                        _regionCodeSelects.remove(Constants.WHOLE_COUNTRY_ISOCODE);
+                        widget.regionSelects.removeWhere(
+                                (reg) =>
+                                reg.isocode ==
+                                Constants.WHOLE_COUNTRY_ISOCODE);
+                      }
+
                       if (_regionCodeSelects
                           .contains(region.isocode)) {
                         _regionCodeSelects
@@ -116,33 +129,30 @@ class _RegionSelectorState extends State<RegionSelector> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 1),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                      BorderRadius.circular(10),
-                      color: _regionCodeSelects
-                          .contains(region.isocode)
-                          ? Color.fromRGBO(
-                          255, 214, 12, 1)
-                          : Colors.white,
+                    decoration: ShapeDecoration(
+                      shape: region.isocode == Constants.WHOLE_COUNTRY_ISOCODE ? UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey,width: 0.5)) : InputBorder.none,
                     ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 0, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(region.name),
-//                                    Offstage(
-//                                      offstage: !_regionCodeSelects
-//                                          .contains(region.isocode),
-//                                      child: Icon(
-//                                        Icons.done,
-//                                        size: 12,
-//                                      ),
-//                                    )
-                      ],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 1),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.circular(10),
+                        color: _regionCodeSelects
+                            .contains(region.isocode)
+                            ? Color.fromRGBO(
+                            255, 214, 12, 1)
+                            : Colors.white,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 10),
+                      child: Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(region.name),
+                        ],
+                      ),
                     ),
                   ),
                 );

@@ -155,6 +155,7 @@ flutter:
     - packages/assets/temp/common/order.png
     - data/province.json
     - data/province_only.json
+    - data/province_only_whole_country.json
     - packages/assets/temp/login_background.png
     - packages/assets/temp/production/fab_add.png
     - packages/assets/temp/production/fab_create.png

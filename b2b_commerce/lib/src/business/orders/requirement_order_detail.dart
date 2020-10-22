@@ -105,7 +105,7 @@ class _RequirementOrderDetailPageState
               ),
             );
           } else {
-            return Center(
+            return Center( 
               child: CircularProgressIndicator(),
             );
           }

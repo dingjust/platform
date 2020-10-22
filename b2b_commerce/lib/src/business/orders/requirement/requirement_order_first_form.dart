@@ -1,4 +1,4 @@
-import 'dart:async';
+ import 'dart:async';
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_form.dart';
@@ -101,8 +101,8 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
             Consumer(
               builder: (context, MajorCategoryState categoryState, _) =>
                   FutureBuilder(
-                future: categoryState.getMajorCategories(),
-                builder: (BuildContext context,
+                    future: categoryState.getMajorCategories(),
+                    builder: (BuildContext context,
                     AsyncSnapshot<List<CategoryModel>> snapshot) {
                   if (!snapshot.hasData) {
                     return Container(

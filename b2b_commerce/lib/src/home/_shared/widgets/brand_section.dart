@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
@@ -36,7 +37,7 @@ class BrandEntranceSection extends StatelessWidget {
                 ],
                 child: Consumer(
                   builder: (context, RequirementOrderFormState state, _) =>
-                      RequirementOrderFirstForm(
+                      RequirementOrderForm(
                     formState: state,
                   ),
                 ),

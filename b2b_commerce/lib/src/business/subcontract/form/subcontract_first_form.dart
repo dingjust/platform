@@ -368,10 +368,10 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                               //CN-10代表全国
                               setState(() {
                                 formState.model.details.productiveOrientations
-                                    .add(RegionModel(isocode: 'CN-10'));
+                                    .add(RegionModel(isocode: Constants.WHOLE_COUNTRY_ISOCODE));
                               });
                               dynamic m = formState.model.details.productiveOrientations
-                                  .firstWhere((region) => region.isocode == 'CN-10',
+                                  .firstWhere((region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
                                   orElse: null);
                               print(m);
                             },
@@ -385,7 +385,7 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                   formState.model.details
                                       .productiveOrientations
                                       .indexWhere(
-                                        (region) => region.isocode == 'CN-10',
+                                        (region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
                                   ) >
                                       -1
                                   ? BoxDecoration(
@@ -424,7 +424,7 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                       formState.model.details
                                           .productiveOrientations
                                           .removeWhere((region) =>
-                                      region.isocode == 'CN-10');
+                                      region.isocode == Constants.WHOLE_COUNTRY_ISOCODE);
                                     });
                                   });
                                 });
@@ -440,7 +440,7 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                   formState.model.details
                                       .productiveOrientations
                                       .indexWhere(
-                                        (region) => region.isocode == 'CN-10',
+                                        (region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
                                   ) <
                                       0
                                   ? BoxDecoration(
@@ -470,7 +470,7 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
     String text = '';
 
     if (formState.model.details.productiveOrientations.indexWhere(
-          (region) => region.isocode == 'CN-10',
+          (region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
         ) >
         -1) {
       return '全国';
