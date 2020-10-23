@@ -67,7 +67,7 @@
                                 @callback="callback" :purchaseOrderList="purchaseOrderList"/>
       <el-divider></el-divider>
       <purchase-summary :formData="formData" :purchaseOrderList="purchaseOrderList"/>
-      <el-row type="flex" justify="center" style="margin: 40px 0px 0px 0px;" v-if="formData.state !== 'COMPLETE'">
+      <el-row type="flex" justify="center" style="margin: 40px 0px 0px 0px;" v-if="canFinish">
         <authorized :permission="['PURCHASE_WORK_ORDER_FINISHED']">
           <el-button class="sumbit-btn" @click="onFinish">采购完成</el-button>
         </authorized>
@@ -93,6 +93,13 @@ export default {
     PurchaseOrderListInfo,
     PurchaseSummary,
     PurchaseRequirementDetail
+  },
+  computed: {
+    canFinish: function () {
+      return this.formData.state !== 'COMPLETE' && 
+              this.formData.state !== 'NONE' && 
+              this.formData.task.merchandiser.uid === this.$store.getters.currentUser.uid;
+    }
   },
   methods: {
     async getDetail () {
@@ -142,6 +149,10 @@ export default {
       }
     },
     onFinish () {
+      if (this.purchaseOrderList.length <= 0) {
+        this.$message.error('请先创建采购单！');
+        return;
+      }
       let flag = this.purchaseOrderList.every(item => 
         item.state !== 'NOT_COMMITED' && 
         item.state !== 'AUDITING' && 
@@ -206,6 +217,9 @@ export default {
           },
           shippingAddress: {
             details: ''
+          },
+          merchandiser: {
+            uid: ''
           }
         }
       },
