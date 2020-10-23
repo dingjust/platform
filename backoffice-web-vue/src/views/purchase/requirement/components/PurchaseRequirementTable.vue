@@ -88,7 +88,7 @@
           </el-table-column>
           <el-table-column label="收料数/缺料数" min-width="110px" v-if="readOnly">
             <template slot-scope="scope">
-              <span v-if="scope.row.receiveQuantity && scope.row.remainQuantity">
+              <span v-if="scope.row.receiveQuantity != null  && scope.row.remainQuantity != null">
                 {{scope.row.receiveQuantity}} / {{scope.row.remainQuantity}}
               </span>
             </template>
