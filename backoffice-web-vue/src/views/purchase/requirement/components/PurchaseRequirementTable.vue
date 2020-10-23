@@ -2,7 +2,7 @@
   <div>
     <div class="over-tabs" v-if="!readOnly">
       <el-row type="flex">
-        <el-button class="material-btn" @click="onBOMImport">BOM导入</el-button>
+        <!-- <el-button class="material-btn" @click="onBOMImport">BOM导入</el-button> -->
         <el-button class="material-btn" @click="appendMateriel">添加物料</el-button>
       </el-row>
     </div>

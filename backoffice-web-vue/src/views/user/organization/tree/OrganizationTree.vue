@@ -56,7 +56,7 @@
     methods: {  
       onClick (data) {
         this.queryFormData.deptName = data.name;
-        if (data.name === '全部') {
+        if (data.depth === 0) {
           this.queryFormData.deptName = '';
         }
         this.$emit('onAdvancedSearch', 0 , 10);
