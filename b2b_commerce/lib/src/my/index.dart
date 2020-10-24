@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static final GlobalKey<ScaffoldState> _scaffoldKey =
-  GlobalKey<ScaffoldState>();
+      GlobalKey<ScaffoldState>();
 
   final double _appBarHeight = 160.0;
 
@@ -213,6 +213,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: const TextStyle(
                       fontSize: 16,
                       color: const Color.fromRGBO(132, 114, 1, 1),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '查看个人资料',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.black38,
                     ),
                   ),
                 )

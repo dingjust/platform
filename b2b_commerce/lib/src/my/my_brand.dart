@@ -14,7 +14,6 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './company/form/my_brand_base_form.dart';
-import 'company/form/my_company_contact_form.dart';
 
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
