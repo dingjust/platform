@@ -91,12 +91,12 @@
     getEntryProfitPercent
   } from '../js/accounting.js';
 
-  import ProductionOrderDetail from '../production-order/details/ProductionOrderDetail'
+  // import ProductionOrderDetail from '../production-order/details/ProductionOrderDetail'
 
   export default {
     name: 'SalesProductionProductsTable',
     components: {
-      ProductionOrderDetail
+      ProductionOrderDetail:()=>import('../production-order/details/ProductionOrderDetail')
     },
     props: {
       data: {
