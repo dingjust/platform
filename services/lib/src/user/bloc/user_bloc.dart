@@ -119,7 +119,7 @@ class UserBLoC extends BLoCBase {
         }
       } else if (_user.type == UserType.FACTORY) {
         FactoryModel factoryModel =
-        await UserRepositoryImpl().getFactory(_user.companyCode);
+            await UserRepositoryImpl().getFactory(_user.companyCode);
         if (factoryModel != null) {
           _user.b2bUnit = factoryModel;
         }
@@ -163,7 +163,7 @@ class UserBLoC extends BLoCBase {
       loginResponse = await http$
           .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
         'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
-        'client_id': 'nbyjy',
+        'client_id': GlobalConfigs.B2B_CLIENT_ID,
         'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
         'code': code,
       }));
