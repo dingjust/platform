@@ -15,7 +15,7 @@
             </authorized>
           </template>
         </template>
-        <template v-if="activeName === 'FINANCE'">
+        <template v-if="canCreatePayment">
           <el-button class="material-btn" style="width: 120px" @click="createPaymentOrder">创建付款申请单</el-button>
         </template>
       </el-row>
@@ -51,6 +51,12 @@ export default {
     PurchaseMaterialAcceptance
   },
   computed: {
+    canCreatePayment: function () {
+      return this.activeName === 'FINANCE' && 
+              this.order.state !== 'NOT_COMMITED' && 
+              this.order.state !== 'AUDITING' && 
+              this.order.state !== 'AUDIT_FAILED';
+    },
     isMerchandiser: function () {
       return this.order.workOrder.task.merchandiser.uid === this.$store.getters.currentUser.uid;
     },

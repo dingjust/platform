@@ -221,6 +221,9 @@ export default {
           },
           merchandiser: {
             uid: ''
+          },
+          creator: {
+            uid: ''
           }
         }
       },
