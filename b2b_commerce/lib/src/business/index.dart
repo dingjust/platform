@@ -133,6 +133,9 @@ class BrandMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.saleOrder, '面料需求',
                     AppRoutes.ROUTE_FABRIC_REQUIREMENT,
                     authorizations: [Authorization.PURCHASE_ORDER]),
+                buildChild(context, MenuItemImage.saleOrder, '外接订单',
+                    AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS,
+                    authorizations: [Authorization.PURCHASE_ORDER]),
               ],
             )
           ],
@@ -161,8 +164,13 @@ class BrandMenusSection extends StatelessWidget {
               crossAxisSpacing: 4.0,
               childAspectRatio: (1.3),
               children: <Widget>[
-                buildChild(context, MenuItemImage.productFactory, '产品管理',
-                    UserBLoC.instance.currentUser.type == UserType.FACTORY ? AppRoutes.ROUTE_PRODUCTS : AppRoutes.ROUTE_PRODUCTS_BRAND,
+                buildChild(
+                    context,
+                    MenuItemImage.productFactory,
+                    '产品管理',
+                    UserBLoC.instance.currentUser.type == UserType.FACTORY
+                        ? AppRoutes.ROUTE_PRODUCTS
+                        : AppRoutes.ROUTE_PRODUCTS_BRAND,
                     authorizations: [Authorization.PRODUCT]),
                 //  buildChild(context, MenuItemImage.employeeManage, '员工管理',
                 //      AppRoutes.ROUTE_EMPLOYEES),
@@ -178,8 +186,8 @@ class BrandMenusSection extends StatelessWidget {
         ));
   }
 
-  Widget buildChild(BuildContext context, Image image, String title,
-      String routeTo,
+  Widget buildChild(
+      BuildContext context, Image image, String title, String routeTo,
       {List<Authorization> authorizations}) {
     if (authorizations != null) {
       return AuthorizationDector(

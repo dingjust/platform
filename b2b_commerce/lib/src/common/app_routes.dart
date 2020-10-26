@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_page.
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_orders_page.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
@@ -76,6 +77,9 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_SUBCONTRACTS_MINE =
       '/business/subcontract/subcontract_mine';
 
+  static const ROUTE_EXTERNAL_SALE_ORDERS =
+      '/business/orders/sales_production/external_sale_orders';
+
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
   static const ROUTE_MY_FACTORY = '/my/my_factory';
@@ -144,6 +148,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_WEBVIEW_PAGE: (context) => WebviewPage(),
     ROUTE_AUTH_REQUEST_PAGE: (context) => AuthRequestPage(),
     ROUTE_FABRIC_PUBLISH: (context) => FabricRequirementPublishFormPage(),
-    ROUTE_FABRIC_REQUIREMENT: (context) => FabricRequirementPage()
+    ROUTE_FABRIC_REQUIREMENT: (context) => FabricRequirementPage(),
+    ROUTE_EXTERNAL_SALE_ORDERS: (context) => ExternalSaleOrdersPage()
   };
 }
