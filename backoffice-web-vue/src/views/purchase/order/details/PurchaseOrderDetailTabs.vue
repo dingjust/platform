@@ -28,16 +28,35 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="财务信息" name="FINANCE">
-        <el-table>
-          <el-table-column label="付款次数"></el-table-column>
-          <el-table-column label="付款方式"></el-table-column>
-          <el-table-column label="付款金额"></el-table-column>
-          <el-table-column label="付款内容"></el-table-column>
-          <el-table-column label="付款时间"></el-table-column>
-          <el-table-column label="付款凭证"></el-table-column>
+        <el-table :data="paymentList">
+          <el-table-column label="付款次数">
+            <template slot-scope="scope">
+              <span>{{scope.$index + 1}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="付款方式">
+            <template slot-scope="scope">
+              <span>{{getEnum('PaymentMethod', scope.row.paymentRecords.paymentMethod)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="付款金额" prop="requestAmount"></el-table-column>
+          <el-table-column label="付款内容" prop="paymentFor"></el-table-column>
+          <el-table-column label="付款时间">
+            <template slot-scope="scope">
+              <span>{{scope.row.paymentRecords.payTime | timestampToTime}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="付款凭证">
+            <template slot-scope="scope">
+              <el-button type="text" @click="onVouchers(scope.row)">查看凭证</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog :visible.sync="dialogVisible" width="30%" append-to-body>
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </div>
 </template>
 
@@ -46,7 +65,7 @@ import PurchaseMaterialAcceptance from '../components/PurchaseMaterialAcceptance
 
 export default {
   name: 'PurchaseOrderDetailTabs',
-  props: ['order'],
+  props: ['order', 'paymentList'],
   components: {
     PurchaseMaterialAcceptance
   },
@@ -55,7 +74,8 @@ export default {
       return this.activeName === 'FINANCE' && 
               this.order.state !== 'NOT_COMMITED' && 
               this.order.state !== 'AUDITING' && 
-              this.order.state !== 'AUDIT_FAILED';
+              this.order.state !== 'AUDIT_FAILED' &&
+              this.isMerchandiser;
     },
     isMerchandiser: function () {
       return this.order.workOrder.task.merchandiser.uid === this.$store.getters.currentUser.uid;
@@ -65,6 +85,10 @@ export default {
     }
   },
   methods: {
+    onVouchers(row) {
+      this.dialogImageUrl = row.paymentRecords.paymentVouchers[0].url;
+      this.dialogVisible = true;
+    },
     handleClick (tab, event) {
       this.activeName = tab.name;
     },
@@ -129,6 +153,8 @@ export default {
   },
   data () {
     return {
+      dialogImageUrl: '',
+      dialogVisible: false,
       activeName: 'ACCEPTANCE',
       isOnEdit: false
     }

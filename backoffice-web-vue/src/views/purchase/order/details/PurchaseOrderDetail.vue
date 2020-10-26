@@ -22,7 +22,7 @@
           <h6>供应商：{{cooperator}}</h6>
         </el-row>
         <purchase-material-table :order="orderDetail" :readOnly="true"/>
-        <purchase-order-detail-tabs :order="orderDetail" @callback="callback" @getDetail="getDetail"/>
+        <purchase-order-detail-tabs :order="orderDetail" @callback="callback" @getDetail="getDetail" :paymentList="paymentList"/>
         <template v-if="orderDetail.currentAuditWork &&orderDetail.currentAuditWork.processes&& orderDetail.currentAuditWork.processes.length > 0">
           <order-audit-detail :processes="orderDetail.currentAuditWork.processes" />
         </template>
@@ -125,6 +125,7 @@ export default {
       if (result['errors']) {
         this.$message.error(result['errors'][0].message);
       }
+      this.paymentList = result.data.filter(item => item.paymentRecords);
     },
     onApproval(isPass) {
       if (this.orderDetail.currentAuditWork.auditingUser.uid === this.$store.getters.currentUser.uid &&
@@ -218,6 +219,7 @@ export default {
   },
   data () {
     return {
+      paymentList: [],
       orderDetail: {
         code: '',
         state: 'WAIT_TO_REV_MATERIALS',
