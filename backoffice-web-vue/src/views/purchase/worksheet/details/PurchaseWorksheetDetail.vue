@@ -98,7 +98,8 @@ export default {
     canFinish: function () {
       return this.formData.state !== 'COMPLETE' && 
               this.formData.state !== 'NONE' && 
-              this.formData.task.merchandiser.uid === this.$store.getters.currentUser.uid;
+              (this.formData.task.merchandiser.uid === this.$store.getters.currentUser.uid ||
+              this.formData.task.creator.uid === this.$store.getters.currentUser.uid);
     }
   },
   methods: {
