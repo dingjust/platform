@@ -51,6 +51,7 @@ android {
         versionCode 19
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
 //        ndk {
 //            //选择要添加的对应 cpu 类型的 .so 库。
 //            abiFilters 'armeabi-v7a'
@@ -117,6 +118,8 @@ android {
 
         compile 'com.umeng.umsdk:analytics:8.1.6'
         compile 'com.umeng.umsdk:common:2.0.0'
+
+        implementation 'com.android.support:multidex:1.0.3'
     }
 }
 
