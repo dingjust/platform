@@ -3,12 +3,16 @@
     <el-row>
       <el-form :inline="true">
         <el-row type="flex" justify="space-between">
-          <el-col :span="20" style="padding-top: 5px">
+          <el-col :span="24" style="padding-top: 5px">
             <el-form-item label="订单信息" prop="name">
               <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keywords"></el-input>
             </el-form-item>
-            <el-form-item label="负责人" prop="name">
+            <!-- <el-form-item label="负责人" prop="name">
               <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.productionLeaderName"></el-input>
+            </el-form-item> -->
+            <el-form-item label="部门/人员" prop="name">
+              <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" width="170"
+                                  :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
             </el-form-item>
             <el-form-item label="合作商" prop="name">
               <el-input placeholder="请输入合作商名称" v-model="queryFormData.cooperator"></el-input>
@@ -21,6 +25,13 @@
         </el-row>
       </el-form>
     </el-row>
+    <template v-if="selectType === 'PURCHASE_REQUIREMENT'">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <template v-for="item in statuses">
+          <el-tab-pane :label="item.name" :name="item.code" :key="item.code"></el-tab-pane>
+        </template>
+      </el-tabs>
+    </template>
     <production-task-select-list ref="taskList" :page="page" @onSearch="onAdvancedSearch"
                                 :is-select="true" @onDetails="onDetails" :isSingleChoice="isSingleChoice" 
                                 :selectedRow="formData.taskOrderEntries"/>
@@ -40,6 +51,8 @@
   import ProductionTaskList from '../list/ProductionTaskList';
   import ProductionTaskDetail from '../details/ProductionTaskDetail';
   import ProductionTaskSelectList from '../list/ProductionTaskSelectList';
+  import { DeptPersonSelect } from '@/components'
+
   export default {
     name: 'ProductionTaskSelectDialog',
     props: {
@@ -57,11 +70,30 @@
         type: String
       }
     },
-    components: {ProductionTaskSelectList, ProductionTaskDetail, ProductionTaskList, ProdcutionTaskToolbar},
+    components: {
+      ProductionTaskSelectList, 
+      ProductionTaskDetail, 
+      ProductionTaskList, 
+      ProdcutionTaskToolbar, 
+      DeptPersonSelect
+    },
     computed: {
     },
     methods: {
+      handleClick (tab, event) {
+        if (tab.name === 'TO_BE_PRODUCED') {
+          this.queryFormData.haveOutOrder = 'nothaveOutOrder'
+          this.queryFormData.state = 'TO_BE_PRODUCED'
+        } else if (tab.name === 'PRODUCING') {
+          this.queryFormData.haveOutOrder = ''
+          this.queryFormData.state = 'PRODUCING'
+        }
+        this.onAdvancedSearch();
+      },
       async onAdvancedSearch (page, size) {
+        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
+          this.onResetQuery();
+        }
         let pageS = 0;
         let sizeS = 10;
         if (page) {
@@ -69,17 +101,6 @@
         }
         if (size) {
           sizeS = size;
-        }
-        // if (this.selectType == 'OUTBOUND_ORDER') {
-        //   this.queryFormData.state = 'DISPATCHING';
-        //   this.queryFormData.productionWorkOrder = '';
-        // } else {
-        //   this.queryFormData.state = '';
-        //   this.queryFormData.productionWorkOrder = 'isProductionWorkOrder';
-        // }
-        // this.queryFormData.type = 'FOUNDRY_PRODUCTION';
-        if (this.selectType === 'OUTBOUND_ORDER') {
-          this.queryFormData.haveOutOrder = 'haveOutOrder'
         }
         const query = this.queryFormData;
         const url = this.apis().getProductionOrders();
@@ -97,6 +118,8 @@
         this.queryFormData.keywords = '';
         this.queryFormData.productionLeaderName = '';
         this.queryFormData.cooperator = '';
+        this.$refs.deptPersonSelect.clearSelectData();
+        this.$emit('onResetQuery');
       },
       onDetails (id) {
         this.taskId = id;
@@ -111,14 +134,24 @@
         this.formData.taskOrderEntries.forEach(item => {
           index = this.page.content.findIndex(val => val.id == item.originOrder.id)
           if (index > -1) {
-            // this.$refs['taskList'].$refs['resultTable'].toggleRowSelection(this.page.content[index]);
             this.$refs['taskList'].clickRow(this.page.content[index]);
           }
         })
-      }
+      },
+      onResetQuery () {
+        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
     },
     data () {
       return {
+        activeName: 'TO_BE_PRODUCED',
+        statuses: [{
+          code: 'TO_BE_PRODUCED',
+          name: '待生产'
+        }, {
+          code: 'PRODUCING',
+          name: '生产中'
+        }],
         taskId: '',
         taskVisible: false,
         outboundOrderTypeSelect: false,
@@ -139,8 +172,8 @@
           totalPages: 1, // 总页数
           totalElements: 0, // 总数目数
           content: [] // 当前页数据
-        }
-        // formData: this.$store.state.OutboundOrderModule.formData
+        },
+        dataQuery: {}
       }
     },
     watch: {
@@ -153,6 +186,14 @@
       }
     },
     created () {
+      this.dataQuery = this.getDataPerQuery('SALES_OUT_ORDER');
+      this.onResetQuery();
+      if (this.selectType === 'OUTBOUND_ORDER') {
+        this.queryFormData.haveOutOrder = 'nothaveOutOrder'
+      } else if (this.selectType === 'PURCHASE_REQUIREMENT') {
+        this.queryFormData.haveOutOrder = 'nothaveOutOrder'
+        this.queryFormData.state = 'TO_BE_PRODUCED'
+      }
       this.onAdvancedSearch(0, 10);
     }
   }

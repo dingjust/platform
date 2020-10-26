@@ -93,7 +93,7 @@
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <production-task-select-dialog v-if="taskDialogVisible" @onSelectTask="onSelectTask" 
-                                    :isSingleChoice="true" :selectType="'PURCHASE'"/>
+                                :isSingleChoice="true" selectType="PURCHASE_REQUIREMENT"/>
     </el-dialog>
   </div>
 </template>
@@ -116,10 +116,10 @@ export default {
   methods: {
     onSelectTask (data) {
       this.formData.productionTask = {
-        id: data[0].id,
-        code: data[0].code,
+        id: data[0] ? data[0].id : '',
+        code: data[0] ? data[0].code : '',
         product: {
-          skuID: data[0].product.skuID
+          skuID: data[0] ? data[0].product.skuID : '' 
         }
       };
       this.taskDialogVisible = false;

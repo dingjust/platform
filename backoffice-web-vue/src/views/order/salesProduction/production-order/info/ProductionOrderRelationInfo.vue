@@ -10,12 +10,26 @@
         <production-order-outbound-list  :page="page" :pageType="pageType" />
       </el-tab-pane>
       <el-tab-pane label="收发货" name="收发货">
-        <shipping-tasks-detail :lazy="true" v-if="receiveDispatchTaskId" :id="receiveDispatchTaskId" shadow="hover"
-          :showOrderInfo="false" />
+        <template v-if="receiveDispatchTaskId">
+          <shipping-tasks-detail :lazy="true" :id="receiveDispatchTaskId" shadow="hover"
+            :showOrderInfo="false" />
+        </template>
+        <template v-else>
+          <el-row type="flex" justify="center" align="middle" style="padding: 20px;">
+            <h6 style="color: #909399">暂无数据</h6>
+          </el-row>
+        </template>
       </el-tab-pane>
       <el-tab-pane label="对账单" name="对账单" :lazy="true">
-        <reconciliation-tasks-detail v-if="reconciliationTaskId" :id="reconciliationTaskId" shadow="hover"
-          :showOrderInfo="false" />
+        <template v-if="reconciliationTaskId">
+          <reconciliation-tasks-detail :id="reconciliationTaskId" shadow="hover"
+            :showOrderInfo="false" />
+        </template>
+        <template v-else>
+          <el-row type="flex" justify="center" align="middle" style="padding: 20px;">
+            <h6 style="color: #909399">暂无数据</h6>
+          </el-row>
+        </template>
       </el-tab-pane>
       <el-tab-pane label="采购订单" name="采购订单" :lazy="true">
         <purchase-order-basic-table v-if="isMySelf" :purchaseList="purchaseList"/>
@@ -30,8 +44,8 @@
       </el-tab-pane>
       <el-tab-pane label="利润核算" :lazy="true" v-if="isMySelf">
       </el-tab-pane> -->
-      <el-tab-pane label="操作日志" :lazy="true" v-if="isMySelf">
-      </el-tab-pane>
+      <!-- <el-tab-pane label="操作日志" :lazy="true" v-if="isMySelf">
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
