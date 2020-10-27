@@ -20,9 +20,9 @@
         <el-col :span="4">
           <h6>状态：{{getEnum('PaymentRequestState', formData.state)}}</h6>
         </el-col>
-                  <el-col :span="4">
-                    <el-tag effect="plain" size="medium">{{auditState}}</el-tag>
-                  </el-col>
+        <el-col :span="4">
+          <el-tag effect="plain" size="medium">{{auditState}}</el-tag>
+        </el-col>
       </el-row>
       <div class="pt-2"></div>
       <el-row type="flex" justify="center">
@@ -33,7 +33,9 @@
             </el-col>
             <el-col :span="8">
               <h6>订单号：
-                <el-button type="text" style="font-size: 14px;" @click="orderVisible = true">{{formData.order.code}}</el-button>
+                <el-button type="text" style="font-size: 14px;" @click="onDetail">
+                  {{formData.order ? formData.order.code : (formData.bill ? formData.bill.productionOrder.code : '')}}
+                </el-button>
               </h6>
             </el-col>
             <el-col :span="8">
@@ -57,7 +59,7 @@
           </el-row>
           <el-row type="flex" justify="start" align="middle" style="margin-bottom: 15px">
             <el-col :span="8">
-              <h6>收款对象：{{formData.payable.name}}</h6>
+              <h6>收款对象：{{formData.payableName}}</h6>
             </el-col>
             <el-col :span="8">
               <h6>申请金额：{{formData.requestAmount}}元</h6>
@@ -129,7 +131,10 @@
       <pdf-preview v-if="pdfVisible" :fileUrl="fileUrl" />
     </el-dialog>
     <el-dialog :visible.sync="orderVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
-      <outbound-order-detail v-if="orderVisible" :code="formData.order.id" />
+      <outbound-order-detail v-if="orderVisible" :code="detailId" />
+    </el-dialog>
+    <el-dialog :visible.sync="purchaseVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <purchase-order-detail v-if="purchaseVisible" :id="detailId" />
     </el-dialog>
   </div>
 </template>
@@ -149,6 +154,8 @@
     OrderAuditDetail
   } from '@/views/order/salesProduction/components/'
   import OutboundOrderDetail from '@/views/order/salesProduction/outbound-order/details/OutboundOrderDetail'
+  import PurchaseOrderDetail from '@/views/purchase/order/details/PurchaseOrderDetail'
+
   export default {
     name: 'PaymentRequestDetailFinance',
     props: ['id'],
@@ -161,12 +168,15 @@
       PaymentRecordsList,
       PdfPreview,
       OrderAuditDetail,
-      OutboundOrderDetail
+      OutboundOrderDetail,
+      PurchaseOrderDetail
     },
     computed: { 
+      detailId: function () {
+        return this.formData.order.id;
+      },
       agreementsCode: function () {
-        let arr = [];
-        if (!this.formData.order.agreements && this.formData.order.agreements.length <= 0) {
+        if (!this.formData.order || !this.formData.order.agreements) {
           return [];
         }
         return this.formData.order.agreements.filter(item => item.state !== 'INVALID');
@@ -215,6 +225,14 @@
       }
     },
     methods: {
+      onDetail () {
+        console.log(this.formData.type);
+        if (this.formData.type === 'PROCESS_COST') {
+          this.orderVisible = true;
+        } else if (this.formData.type === 'MATERIALS_COST') {
+          this.purchaseVisible = true;
+        }
+      },
       async getDetail () {
         const url = this.apis().getPaymentRequestDetail(this.id);
         const result = await this.$http.get(url);
@@ -357,6 +375,7 @@
     data() {
       return {
         paymentVisible: false,
+        purchaseVisible: false,
         preApplyAmount: '',
         formData: {
           order: {
@@ -376,7 +395,6 @@
             paymentVouchers: []
           }
         },
-        detailId: '',
         isFormFincance: false,
         pdfVisible: false,
         fileUrl: '',

@@ -1,5 +1,9 @@
+import 'package:core/core.dart';
+
 /// 应用API
 abstract class UserApis {
+  static const String _clientId = GlobalConfigs.B2B_CLIENT_ID;
+
   /// 注册 POST
   static get register => (type) {
         return '/{baseSiteId}/companies/register/$type';
@@ -7,9 +11,10 @@ abstract class UserApis {
 
   //发送短信验证码
   static get sendCaptcha => (phone) => '/{baseSiteId}/sms/captcha/$phone';
+
   //发送登录用的验证码
   static get sendCaptchaForLogin =>
-      (phone) => '/{baseSiteId}/sms/captcha/nbyjy/B2B/$phone';
+      (phone) => '/{baseSiteId}/sms/captcha/$_clientId/B2B/$phone';
 
   //验证验证码是否正确
   static get validateCaptcha => '/{baseSiteId}/sms/validate';
@@ -29,8 +34,10 @@ abstract class UserApis {
 
   //创建地址
   static get addressCreate => '/{baseSiteId}/company/addresses';
+
   //更新地址
   static get addressUpdate => (id) => '/{baseSiteId}/company/addresses/$id';
+
   //删除地址
   static get addressDelete => (id) => '/{baseSiteId}/company/addresses/$id';
 
@@ -53,13 +60,15 @@ abstract class UserApis {
 
   ///手机号是否注册
   static get phoneExists => (code) {
-        return '/{baseSiteId}/companies/register/$code';
-      };
+    return '/{baseSiteId}/companies/register/$code';
+  };
 
   //获取发票抬头列表
   static get invoiceTitles => '/{baseSiteId}/company/invoice/title';
+
   //创建发票抬头
   static get invoiceTitleCreate => '/{baseSiteId}/company/invoice/title';
+
   //更新/删除发票抬头(详情)
   static get invoiceTitleFromId =>
           (id) => '/{baseSiteId}/company/invoice/title/$id';
@@ -78,8 +87,8 @@ abstract class UserApis {
 
   ///短信验证重置密码
   static get resetPassword => (id) {
-        return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';
-      };
+    return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';
+  };
 
   ///重置密码
   static get resetPasswordByPassword =>

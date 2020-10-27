@@ -3,7 +3,7 @@
     <el-row type="flex" justify="start">
       <div class="over-tabs">
         <authorized :permission="['PURCHASE_ORDER_CREATE']">
-          <el-button class="material-btn" v-if="formData.state !== 'COMPLETE'" @click="onCreate">创建采购订单</el-button>
+          <el-button class="material-btn" v-if="canCreateOrder" @click="onCreate">创建采购订单</el-button>
         </authorized>
       </div>
       <el-tabs type="border-card" style="width: 100%">
@@ -53,6 +53,14 @@ export default {
   components: {
     PurchaseOrderForm,
     PurchaseOrderDetail
+  },
+  computed: {
+    canCreateOrder: function () {
+      return this.formData.state !== 'COMPLETE' && 
+              this.formData.state !== 'NONE' && 
+              (this.formData.task.merchandiser.uid === this.$store.getters.currentUser.uid || 
+              this.formData.task.creator.uid === this.$store.getters.currentUser.uid);
+    }
   },
   methods: {
     onDetail (item) {

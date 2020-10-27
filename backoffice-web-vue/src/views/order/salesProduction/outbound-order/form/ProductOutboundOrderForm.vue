@@ -224,8 +224,6 @@
       :close-on-click-modal="false">
       <sample-products-select-dialog v-if="taskDialogVisible" @onSelectSample="onSelectSample" 
                                       :selectedRow="formData.taskOrderEntries" :isSingleSelect="isSingleSelect"/>
-      <!-- <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"
-        :selectType="'OUTBOUND_ORDER'" /> -->
     </el-dialog>
     <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -255,7 +253,6 @@
   import MyPayPlanForm from '../../../../../components/custom/order-form/MyPayPlanForm';
   import ImagesUpload from '../../../../../components/custom/ImagesUpload';
   import ProgressPlanSelectDialog from '../../../../user/progress-plan/components/ProgressPlanSelectDialog';
-  import ProductionTaskSelectDialog from '../../production-task/components/ProductionTaskSelectDialog';
   import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ProgressPlanEditForm from '@/views/user/progress-plan/components/ProgressPlanEditForm'
@@ -273,7 +270,6 @@
       PayPlanForm,
       PersonnelSelection,
       OutboundOrderColorSizeTable,
-      ProductionTaskSelectDialog,
       ProgressPlanSelectDialog,
       ImagesUpload,
       MyPayPlanForm,

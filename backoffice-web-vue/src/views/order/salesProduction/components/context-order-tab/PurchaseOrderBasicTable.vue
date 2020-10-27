@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-table :data="purchaseList" stripe style="width: 100%">
-      <el-table-column label="采购任务号" prop="code"></el-table-column>            
+      <el-table-column label="采购任务号" prop="code"></el-table-column>
       <el-table-column label="采购期限"></el-table-column>
       <el-table-column label="采购员" prop="merchandiser.name"></el-table-column>
       <el-table-column label="审批状态">
         <template slot-scope="scope">
-          <span>{{scope.row.auditWorkOrder.state ? getEnum('AuditState', scope.row.auditWorkOrder.state) : '已审批'}}</span>
+          <span>{{scope.row.auditWorkOrder && scope.row.auditWorkOrder.state ? getEnum('AuditState', scope.row.auditWorkOrder.state) : '已审批'}}</span>
         </template>
       </el-table-column>
       <el-table-column label="标签">
@@ -27,27 +27,25 @@
 </template>
 
 <script>
-import PurchaseRequirementDetail from '@/views/purchase/requirement/details/PurchaseRequirementDetail'
-export default {
-  name: 'PurchaseOrderBasicTable',
-  components: {
-    PurchaseRequirementDetail
-  },
-  props: ['purchaseList'],
-  methods: {
-    onProductDetail(row) {
-      this.taskId = row.id;
-      this.taskVisible = true;
-    }
-  },
-  data() {
-    return {
-      taskVisible: false
-    }
-  },
-  created () {
+  export default {
+    name: 'PurchaseOrderBasicTable',
+    components: {
+      PurchaseRequirementDetail: () => import('@/views/purchase/requirement/details/PurchaseRequirementDetail')
+    },
+    props: ['purchaseList'],
+    methods: {
+      onProductDetail(row) {
+        this.taskId = row.id;
+        this.taskVisible = true;
+      }
+    },
+    data() {
+      return {
+        taskVisible: false
+      }
+    },
   }
-}
+
 </script>
 
 <style scoped>
