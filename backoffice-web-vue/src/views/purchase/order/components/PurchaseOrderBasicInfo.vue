@@ -68,7 +68,7 @@
                     <el-button type="text" @click="showContract(item)">
                       <i style="font-size: 22px;color: #fff;font-size: 20px;" class="el-icon-zoom-in"></i>
                     </el-button>
-                    <el-button type="text" @click="onDelete(item, index)">
+                    <el-button type="text" v-if="!readOnly" @click="onDelete(item, index)">
                       <i style="font-size: 22px;color: #fff;font-size: 20px;" class="el-icon-delete"></i>
                     </el-button>
                   </div>

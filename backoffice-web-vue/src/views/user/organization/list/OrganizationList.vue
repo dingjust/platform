@@ -2,9 +2,13 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="姓名" prop="name" />
-      <el-table-column label="账号" prop="uid"/>
+      <el-table-column label="账号" prop="uid" min-width="180px"/>
       <el-table-column label="部门" prop="b2bDept.name" />
-      <el-table-column label="角色" prop="b2bRoleGroup.name" />
+      <el-table-column label="角色" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span>{{roleListName(scope.row)}}</span>
+        </template>
+      </el-table-column>
       <!-- <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
@@ -15,7 +19,7 @@
           <span>{{scope.row.loginDisabled ? '禁用' : '启用'}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="180px">
+      <el-table-column label="操作">
         <template slot-scope="scope" v-if="!scope.row.root">
           <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
             <el-button size="mini" @click="onEdit(scope.row)">编辑信息</el-button>
@@ -54,6 +58,18 @@
 
     },
     methods: {
+      roleListName (row) {
+        let str = '';
+        if (row.b2bRoleGroupList && row.b2bRoleGroupList.length > 0) {
+          row.b2bRoleGroupList.forEach((item, index) => {
+            str += item.name;
+            if (index < row.b2bRoleGroupList.length - 1) {
+              str += '/';
+            }
+          })
+          return str;
+        }
+      },
       onPageSizeChanged (val) {
         this.$emit('onAdvancedSearch', 0, val);
 

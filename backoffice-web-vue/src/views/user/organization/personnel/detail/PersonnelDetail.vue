@@ -62,7 +62,7 @@
                 </el-col>
               </el-row>
             </el-form>
-            <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+            <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="editState">
               <Authorized :permission="['COMPANY_CUSTOMER_MODIFY']">
                 <el-button class="personnel-role-btn" @click="onConfirm">确定</el-button>
               </Authorized>
