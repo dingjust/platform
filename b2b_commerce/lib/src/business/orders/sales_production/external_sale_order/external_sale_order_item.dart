@@ -7,14 +7,16 @@ class ExternalSaleOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        height: 120,
+        margin: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[_Header(), _Row1(), _Row2(), _End()],
         ),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
       onTap: () async {
@@ -54,6 +56,7 @@ class _Header extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
           decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
               border: Border.all(color: Color.fromRGBO(103, 194, 58, 1))),
           child: Center(
             child: Text(
@@ -101,7 +104,8 @@ class _Row1 extends StatelessWidget {
         ),
         Expanded(
             child: Text(
-          '宁波衣加衣供应链管理有限公司',
+              '宁波衣加衣供应链管理有限公司',
+          style: TextStyle(fontSize: 16),
           overflow: TextOverflow.ellipsis,
         )),
         Container(
@@ -164,18 +168,20 @@ class _End extends StatelessWidget {
                   TextSpan(
                       text: '300',
                       style: TextStyle(color: Color.fromRGBO(255, 102, 102, 1)))
-                ]))),
+                    ]))),
         Expanded(
             flex: 6,
             child: RichText(
+                textAlign: TextAlign.end,
                 text: TextSpan(
                     text: '订单金额：',
                     style: TextStyle(color: Colors.black87),
                     children: [
-                  TextSpan(
-                      text: '￥1300.0',
-                      style: TextStyle(color: Color.fromRGBO(255, 102, 102, 1)))
-                ]))),
+                      TextSpan(
+                          text: '￥1300.0',
+                          style: TextStyle(
+                              color: Color.fromRGBO(255, 102, 102, 1)))
+                    ]))),
       ],
     );
   }

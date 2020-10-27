@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -38,11 +39,29 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onAdd,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+      resizeToAvoidBottomInset: false,
     );
   }
 
   Widget _buildSearchButton() {
     return IconButton(
         icon: const Icon(B2BIcons.search, size: 20), onPressed: () async {});
+  }
+
+  ///添加外接订单
+  void _onAdd() {
+    //唯一码导入
+    Navigator.of(context)
+        .pushNamed(AppRoutes.ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT)
+        .then((value) {
+      //TODO:刷新
+    });
   }
 }
