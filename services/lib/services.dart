@@ -118,7 +118,6 @@ export 'src/system/notification/message_web_client.dart';
 export 'src/system/page/repository/carousels_respository.dart';
 export 'src/system/page/state/product_home_carousels_state.dart';
 export 'src/system/page/state/product_home_state.dart';
-export 'src/system/version/app_version.dart';
 export 'src/user/address_repository.dart';
 export 'src/user/address_repository_impl.dart';
 export 'src/user/amount_flow_repository.dart';

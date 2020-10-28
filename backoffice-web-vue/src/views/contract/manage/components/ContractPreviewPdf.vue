@@ -196,7 +196,8 @@
         if (keyword == null) {
           keyword = '';
         }
-        const url = this.apis().getSealGrantList();
+        // const url = this.apis().getSealGrantList();
+        const url = this.apis().getSealsList();
         const result = await this.$http.post(url, {
           keyword: keyword
         }, {
