@@ -161,7 +161,7 @@ class AppVersionHelper {
                                         ignoreVersionNotification = true;
                                         UserBLoC.instance
                                             .ignoreVersionNotification = true;
-                                        Navigator.of(context).pop();
+                                        cancelFunc();
                                       },
                                     ),
                                   ),
@@ -260,7 +260,6 @@ class AppVersionHelper {
                                         ignoreVersionNotification = true;
                                         UserBLoC.instance
                                             .ignoreVersionNotification = true;
-                                        // Navigator.of(context).pop();
                                         cancelFunc();
                                       },
                                     ),
