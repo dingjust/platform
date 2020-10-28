@@ -62,12 +62,12 @@ class _FabricRequirementListItem extends State<FabricRequirementListItem> {
   }
 
   void _onTap() {
-    BotToast.showCustomText(
+    BotToast.showEnhancedWidget(
         onlyOne: true,
         duration: null,
         clickClose: true,
-        crossPage: false,
         backgroundColor: Colors.black38,
+        allowClick: false,
         toastBuilder: (cancelFunc) => AlertDialog(
               content: Container(
                 height: 200,
