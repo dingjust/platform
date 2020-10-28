@@ -5,7 +5,7 @@ author: zhanhongbo1112
 homepage: https://www.github.com/zhanhongbo1112
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.5.0 <3.0.0"
 
 dependencies:
   flutter:
