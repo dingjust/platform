@@ -379,7 +379,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
   void initState() {
     super.initState();
     _controller = new AnimationController(
-      vsync: this,
+      // vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 
@@ -1024,7 +1024,7 @@ class _SingleAttachmentState extends State<SingleAttachment>
   void initState() {
     super.initState();
     _controller = new AnimationController(
-      vsync: this,
+      // vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 

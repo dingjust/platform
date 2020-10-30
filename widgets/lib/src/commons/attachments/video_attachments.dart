@@ -72,7 +72,7 @@ class _VideoAttachmentsState extends State<VideoAttachments>
   void initState() {
     super.initState();
     _controller = new AnimationController(
-      vsync: this,
+      // vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 
