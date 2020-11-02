@@ -2,6 +2,7 @@ library models;
 
 import 'package:json_annotation/json_annotation.dart';
 
+export 'src/audit/audit_work_order.dart';
 export 'src/auth/authorization.dart';
 export 'src/capacity/capacity.dart';
 export 'src/info/sales_order_refund_info.dart';
@@ -15,17 +16,24 @@ export 'src/order/order.dart';
 export 'src/order/order_note.dart';
 export 'src/order/payment_order.dart';
 export 'src/product/product.dart';
+export 'src/production_plan/outbound_order.dart';
+export 'src/production_plan/production_order.dart';
+export 'src/production_plan/production_work.dart';
+export 'src/production_plan/progress_plan.dart';
 export 'src/report/report.dart';
 export 'src/security/principal.dart';
+export 'src/shared/shared.dart';
 export 'src/subcontract/subcontract.dart';
 export 'src/system/notification/message.dart';
 export 'src/system/page/carousel.dart';
 export 'src/system/page/plate_products.dart';
+export 'src/user/b2b_group.dart';
 export 'src/user/cooperator.dart';
 export 'src/user/dto.dart';
 export 'src/user/member.dart';
 export 'src/user/user.dart';
 export 'src/user/user_group.dart';
+export 'src/user_agreement/user_agreement.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
 
@@ -109,8 +117,8 @@ List<String> enumCodesToNames(List<String> codes, dynamic enumModels) {
 }
 
 //格式选中的枚举（多选）
-String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,
-    int count,
+String formatEnumSelectsText(
+    List<String> codes, List<EnumModel> enumModels, int count,
     {String customText}) {
   String text = '';
   if (customText != null && (codes == null || codes.length == 0)) {

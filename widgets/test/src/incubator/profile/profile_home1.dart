@@ -8,7 +8,8 @@ class ProfileHomePage extends StatefulWidget {
 }
 
 class ProfileHomePageState extends State<ProfileHomePage> {
-  static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>();
   final double _appBarHeight = 256.0;
 
   @override
@@ -125,8 +126,9 @@ class ProfileHomePageState extends State<ProfileHomePage> {
                 icon: const Icon(Icons.create),
                 tooltip: 'Edit',
                 onPressed: () {
-                  _scaffoldKey.currentState
-                      .showSnackBar(const SnackBar(content: Text("Editing isn't supported in this screen.")));
+                  _scaffoldKey.currentState.showSnackBar(const SnackBar(
+                      content:
+                      Text("Editing isn't supported in this screen.")));
                 },
               ),
             ],
@@ -145,12 +147,12 @@ class ProfileHomePageState extends State<ProfileHomePage> {
                   // against the background image.
                   const DecoratedBox(
                     decoration: BoxDecoration(
-                        // gradient: LinearGradient(
-                        //   begin: Alignment(0.0, -1.0),
-                        //   end: Alignment(0.0, -0.4),
-                        //   colors: <Color>[Color(0x60000000), Color(0x00000000)],
-                        // ),
-                        ),
+                      gradient: LinearGradient(
+                        begin: Alignment(0.0, -1.0),
+                        end: Alignment(0.0, -0.4),
+                        colors: <Color>[Color(0x60000000), Color(0x00000000)],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -176,9 +178,13 @@ class _Menu extends StatelessWidget {
     final ThemeData themeData = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: themeData.dividerColor))),
+      decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: themeData.dividerColor))),
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.subhead,
+        style: Theme
+            .of(context)
+            .textTheme
+            .subhead,
         child: SafeArea(
           top: false,
           bottom: false,

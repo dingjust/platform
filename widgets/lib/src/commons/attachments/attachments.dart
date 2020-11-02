@@ -162,8 +162,7 @@ class _AttachmentsState extends State<Attachments> {
                         height: 100,
                         imageUrl: '${model.previewUrl()}',
                         fit: BoxFit.cover,
-                        imageBuilder: (context, imageProvider) =>
-                            Container(
+                        imageBuilder: (context, imageProvider) => Container(
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
@@ -379,7 +378,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
   void initState() {
     super.initState();
     _controller = new AnimationController(
-      // vsync: this,
+      vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 
@@ -1024,7 +1023,7 @@ class _SingleAttachmentState extends State<SingleAttachment>
   void initState() {
     super.initState();
     _controller = new AnimationController(
-      // vsync: this,
+      vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 

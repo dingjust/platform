@@ -65,7 +65,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       text: text,
       animationController: AnimationController(
         duration: Duration(milliseconds: 700),
-        // vsync: this,
+        vsync: this,
       ),
     );
     setState(() {
@@ -97,7 +97,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: _isComposing ? () => _handleSubmitted(_textController.text) : null,
+                onPressed: _isComposing
+                    ? () => _handleSubmitted(_textController.text)
+                    : null,
               ),
             ),
           ],

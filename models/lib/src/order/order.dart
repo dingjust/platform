@@ -253,15 +253,15 @@ class AbstractOrderModel extends ItemModel {
   double unitPrice;
 
   /// 创建时间
-  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
+  @JsonKey(name: "creationtime", fromJson: dateTimefromMilliseconds)
   DateTime creationTime;
 
   /// 修改时间
-  @JsonKey(name: "modifiedtime", fromJson: _dateTimefromMilliseconds)
+  @JsonKey(name: "modifiedtime", fromJson: dateTimefromMilliseconds)
   DateTime modifiedTime;
 
   /// 地址
-  @JsonKey(name: 'deliveryAddress', toJson: _deliverAddressToJson)
+  @JsonKey(name: 'deliveryAddress', toJson: deliverAddressToJson)
   AddressModel deliveryAddress;
 
   /// 备注
@@ -271,23 +271,23 @@ class AbstractOrderModel extends ItemModel {
   SalesApplication salesApplication;
 
   //物流信息
-  @JsonKey(toJson: _consignmentModelToJson)
+  @JsonKey(toJson: consignmentModelToJson)
   ConsignmentModel consignment;
 
   //合作方
-  @JsonKey(toJson: _principalToJson)
+  @JsonKey(toJson: principalToJson)
   PrincipalModel supplier;
 
   ///发货单
-  @JsonKey(toJson: _shippingOrdersToJson)
+  @JsonKey(toJson: shippingOrdersToJson)
   List<ShippingOrderNoteModel> shippingOrders;
 
   ///收货单
-  @JsonKey(toJson: _deliveryOrdersToJson)
+  @JsonKey(toJson: deliveryOrdersToJson)
   List<DeliveryOrderNoteModel> deliveryOrders;
 
   ///对账单
-  @JsonKey(toJson: _reconciliationOrdersToJson)
+  @JsonKey(toJson: reconciliationOrdersToJson)
   List<ReconciliationOrderNoteModel> reconciliationOrders;
 
   ///是否线下物流
@@ -316,27 +316,27 @@ class AbstractOrderModel extends ItemModel {
   static Map<String, dynamic> toJson(AbstractOrderModel model) =>
       model == null ? null : _$AbstractOrderModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
+  static DateTime dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
-  static Map<String, dynamic> _deliverAddressToJson(AddressModel model) =>
+  static Map<String, dynamic> deliverAddressToJson(AddressModel model) =>
       model == null ? null : AddressModel.toJson(model);
 
-  static Map<String, dynamic> _consignmentModelToJson(ConsignmentModel model) =>
+  static Map<String, dynamic> consignmentModelToJson(ConsignmentModel model) =>
       model == null ? null : ConsignmentModel.toJson(model);
 
-  static Map<String, dynamic> _principalToJson(PrincipalModel model) =>
+  static Map<String, dynamic> principalToJson(PrincipalModel model) =>
       model == null ? null : PrincipalModel.toJson(model);
 
-  static List<Map<String, dynamic>> _shippingOrdersToJson(
-      List<ShippingOrderNoteModel> shippingOrders) =>
+  static List<Map<String, dynamic>> shippingOrdersToJson(
+          List<ShippingOrderNoteModel> shippingOrders) =>
       shippingOrders == null
           ? null
           : shippingOrders
-          .map((model) => ShippingOrderNoteModel.toJson(model))
-          .toList();
+              .map((model) => ShippingOrderNoteModel.toJson(model))
+              .toList();
 
-  static List<Map<String, dynamic>> _deliveryOrdersToJson(
+  static List<Map<String, dynamic>> deliveryOrdersToJson(
       List<DeliveryOrderNoteModel> deliveryOrders) =>
       deliveryOrders == null
           ? null
@@ -344,7 +344,7 @@ class AbstractOrderModel extends ItemModel {
           .map((model) => DeliveryOrderNoteModel.toJson(model))
           .toList();
 
-  static List<Map<String, dynamic>> _reconciliationOrdersToJson(
+  static List<Map<String, dynamic>> reconciliationOrdersToJson(
       List<ReconciliationOrderNoteModel> reconciliationOrders) =>
       reconciliationOrders == null
           ? null
@@ -589,7 +589,7 @@ class ConsignmentEntryModel extends ItemModel {
 @JsonSerializable()
 class RequirementInfoModel extends ItemModel {
   /// 期望交货时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime expectedDeliveryDate;
 
   ///预计订单数量
@@ -695,7 +695,7 @@ class RequirementInfoModel extends ItemModel {
   static Map<String, dynamic> toJson(RequirementInfoModel model) =>
       model == null ? null : _$RequirementInfoModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
+  static DateTime dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
@@ -868,7 +868,7 @@ class PurchaseOrderModel extends OrderModel {
   String requirementOrderCode;
 
   /// 预计交货时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime expectedDeliveryDate;
 
   ///生产进度
@@ -888,11 +888,11 @@ class PurchaseOrderModel extends OrderModel {
   double balance;
 
   ///预计支付定金日期
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime depositPaidDate;
 
   ///预计支付尾款日期
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime balancePaidDate;
 
   ///卖方
@@ -970,7 +970,7 @@ class PurchaseOrderModel extends OrderModel {
   @JsonKey(toJson: _companyToJson)
   CompanyModel creator;
 
-  // @JsonKey(fromJson: _dateTimefromMilliseconds)
+  // @JsonKey(fromJson: dateTimefromMilliseconds)
   // DateTime modifiedtime;
 
   // @JsonKey(toJson:_)
@@ -1045,7 +1045,7 @@ class PurchaseOrderModel extends OrderModel {
   static Map<String, dynamic> toJson(PurchaseOrderModel model) =>
       model == null ? null : _$PurchaseOrderModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
+  static DateTime dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static Map<String, dynamic> _brandToJson(BrandModel model) =>
@@ -1180,19 +1180,19 @@ class SalesOrderModel extends OrderModel {
   SalesOrderRefundDetailModel refundApply;
 
   ///支付时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime payTime;
 
   ///提醒时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime reminderDeliveryTime;
 
   ///下次可提醒时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime nextReminderDeliveryTime;
 
   ///下次可提醒时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime deliveryTime;
 
   ///是否线下物流
@@ -1249,7 +1249,7 @@ class SalesOrderModel extends OrderModel {
   static Map<String, dynamic> refundToJson(SalesOrderRefundDetailModel model) =>
       model == null ? null : SalesOrderRefundDetailModel.toJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
+  static DateTime dateTimefromMilliseconds(int date) =>
       date == null ? date : DateTime.fromMillisecondsSinceEpoch(date);
 }
 
@@ -1307,7 +1307,7 @@ class QuoteModel extends AbstractOrderModel {
   String purchaseOrderCode;
 
   /// 交货时间，工厂自己填写的交货时间，而不是需求订单中的交货时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime expectedDeliveryDate;
 
   /// 报价工厂
@@ -1386,7 +1386,7 @@ class QuoteModel extends AbstractOrderModel {
   static Map<String, dynamic> toJson(QuoteModel model) =>
       model == null ? null : _$QuoteModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
+  static DateTime dateTimefromMilliseconds(int date) =>
       date == null ? date : DateTime.fromMillisecondsSinceEpoch(date);
 
   static List<Map<String, dynamic>> _attachmentsToJson(
@@ -1431,15 +1431,15 @@ class ProductionProgressModel extends ItemModel {
   int sequence;
 
   /// 预计完成时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime estimatedDate;
 
   /// 实际完成时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime finishDate;
 
   ///修改时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime modifiedtime;
 
   ///备注
@@ -1475,7 +1475,7 @@ class ProductionProgressModel extends ItemModel {
   static Map<String, dynamic> toJson(ProductionProgressModel model) =>
       model == null ? null : _$ProductionProgressModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
+  static DateTime dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>

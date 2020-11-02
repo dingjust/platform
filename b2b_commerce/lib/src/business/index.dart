@@ -336,6 +336,9 @@ class FactoryMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.saleOrder, '面料需求',
                     AppRoutes.ROUTE_FABRIC_REQUIREMENT,
                     authorizations: [Authorization.PURCHASE_ORDER]),
+                buildChild(context, MenuItemImage.saleOrder, '外接订单',
+                    AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS,
+                    authorizations: [Authorization.PURCHASE_ORDER]),
               ],
             )
           ],
@@ -387,8 +390,8 @@ class FactoryMenusSection extends StatelessWidget {
         ));
   }
 
-  Widget buildChild(BuildContext context, Image image, String title,
-      String routeTo,
+  Widget buildChild(
+      BuildContext context, Image image, String title, String routeTo,
       {List<Authorization> authorizations}) {
     if (authorizations != null) {
       return AuthorizationDector(

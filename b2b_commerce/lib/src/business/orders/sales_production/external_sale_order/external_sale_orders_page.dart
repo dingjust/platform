@@ -3,6 +3,8 @@ import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'external_sale_orders_list.dart';
@@ -25,28 +27,31 @@ class ExternalSaleOrdersPage extends StatefulWidget {
 class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarFactory.buildDefaultAppBar('外接订单',
-          actions: <Widget>[_buildSearchButton()]),
-      body: DefaultTabController(
-        length: _statuses.length,
-        child: Scaffold(
-          appBar: TabFactory.buildDefaultTabBar(_statuses, scrollable: true),
-          body: TabBarView(
-            children: _statuses
-                .map((status) => ExternalSaleOrdersView(status: status))
-                .toList(),
+    return ChangeNotifierProvider<ExternalSaleOrdersState>(
+      create: (context) => ExternalSaleOrdersState(),
+      child: Scaffold(
+        appBar: AppBarFactory.buildDefaultAppBar('外接订单',
+            actions: <Widget>[_buildSearchButton()]),
+        body: DefaultTabController(
+          length: _statuses.length,
+          child: Scaffold(
+            appBar: TabFactory.buildDefaultTabBar(_statuses, scrollable: true),
+            body: TabBarView(
+              children: _statuses
+                  .map((status) => ExternalSaleOrdersView(status: status))
+                  .toList(),
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _onAdd,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          onPressed: _onAdd,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
         ),
+        resizeToAvoidBottomInset: false,
       ),
-      resizeToAvoidBottomInset: false,
     );
   }
 

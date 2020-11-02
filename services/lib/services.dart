@@ -94,6 +94,7 @@ export 'src/product/state/recommend_product_state.dart';
 export 'src/production/bloc/production_bloc.dart';
 export 'src/production/bloc/production_search_result_bloc.dart';
 export 'src/qq/qq_service.dart';
+export 'src/sale_production/state/external_sale_orders_state.dart';
 export 'src/state/address_state.dart';
 export 'src/state/carrier_state.dart';
 export 'src/state/category_state.dart';

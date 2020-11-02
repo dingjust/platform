@@ -74,12 +74,10 @@ class IncomeComparison extends StatelessWidget {
                   height: lineHeight,
                   margin: EdgeInsets.only(right: 5),
                   decoration: BoxDecoration(
-                    // gradient: LinearGradient(
-                    //   colors: <Color>[
-                    //   Color.fromRGBO(255, 149, 22, 1),
-                    //   Color.fromRGBO(255, 199, 49, 1)
-                    // ]),
-                    // gradient: Gra,
+                    gradient: LinearGradient(colors: <Color>[
+                      Color.fromRGBO(255, 149, 22, 1),
+                      Color.fromRGBO(255, 199, 49, 1)
+                    ]),
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),
                         bottomLeft: Radius.circular(10)),
@@ -91,10 +89,10 @@ class IncomeComparison extends StatelessWidget {
                 child: Container(
                     height: lineHeight,
                     decoration: BoxDecoration(
-                        // gradient: LinearGradient(colors: <Color>[
-                        //   Color.fromRGBO(118, 110, 147, 1),
-                        //   Color.fromRGBO(77, 68, 89, 1)
-                        // ]),
+                        gradient: LinearGradient(colors: <Color>[
+                          Color.fromRGBO(118, 110, 147, 1),
+                          Color.fromRGBO(77, 68, 89, 1)
+                        ]),
                         borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(10),
                             topRight: Radius.circular(10)))),

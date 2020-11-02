@@ -1,8 +1,13 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 
 ///外接订单块
 class ExternalSaleOrderItem extends StatelessWidget {
+  final SalesProductionOrderModel model;
+
+  const ExternalSaleOrderItem(this.model, {Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -12,7 +17,14 @@ class ExternalSaleOrderItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[_Header(), _Row1(), _Row2(), _End()],
+          children: <Widget>[
+            _Header(
+              model: model,
+            ),
+            _Row1(model: model),
+            _Row2(model: model),
+            _End(model: model)
+          ],
         ),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -36,15 +48,19 @@ class ExternalSaleOrderItem extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
+  final SalesProductionOrderModel model;
+
+  const _Header({Key key, this.model}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Text(
-            '单号：SO00000001',
+            '单号：${model.code}',
             textAlign: TextAlign.start,
             style: const TextStyle(
               fontSize: 16,
@@ -53,26 +69,14 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
-              border: Border.all(color: Color.fromRGBO(103, 194, 58, 1))),
-          child: Center(
-            child: Text(
-              '线上',
-              style: TextStyle(
-                  color: Color.fromRGBO(103, 194, 58, 1), fontSize: 10),
-            ),
-          ),
-        ),
+        _buildTag(),
         Expanded(
           flex: 1,
           child: Container(
             child: Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '待接单',
+                  '${SalesProductionOrderStateLocalizedMap[model.state]}',
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 18,
@@ -85,9 +89,44 @@ class _Header extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildTag() {
+    //自创外接订单无originCompany
+    return model.originCompany == null
+        ? Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
+            child: Center(
+              child: Text(
+                '自创',
+                style:
+                    TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
+              ),
+            ),
+          )
+        : Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
+            child: Center(
+              child: Text(
+                '线上',
+                style: TextStyle(
+                    color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
+              ),
+            ),
+          );
+  }
 }
 
 class _Row1 extends StatelessWidget {
+  final SalesProductionOrderModel model;
+
+  const _Row1({Key key, this.model}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -97,43 +136,81 @@ class _Row1 extends StatelessWidget {
           height: 20,
           margin: EdgeInsets.only(right: 5),
           child: CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://img13.360buyimg.com/jdcms/s150x150_jfs/t1/124452/23/15961/228167/5f92a3dbEea4f45ef/9a708b638748e18a.jpg.webp'),
+            backgroundImage: getImage(),
             radius: 20,
           ),
         ),
         Expanded(
             child: Text(
-              '宁波衣加衣供应链管理有限公司',
-          style: TextStyle(fontSize: 16),
-          overflow: TextOverflow.ellipsis,
-        )),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 5),
-          child: Center(
-            child: Text(
-              '未签合同',
-              style: TextStyle(color: Colors.black54, fontSize: 10),
-            ),
-          ),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54, width: 0.5),
-              color: Colors.grey[200]),
-        )
+              '${getCoopertorName()}',
+              style: TextStyle(fontSize: 16),
+              overflow: TextOverflow.ellipsis,
+            )),
+        _buildTag()
       ],
+    );
+  }
+
+  String getCoopertorName() {
+    String name = '';
+    if (model.originCompany != null) {
+      name = model.originCompany.name;
+    } else {
+      name = model.originCooperator.type == CooperatorType.ONLINE
+          ? model.originCooperator.partner.name
+          : model.originCooperator.name;
+    }
+    return name;
+  }
+
+  ImageProvider getImage() {
+    if (model.originCompany != null &&
+        model.originCompany.profilePicture != null) {
+      return NetworkImage(model.originCompany.profilePicture.thumbnailUrl());
+    } else {
+      return AssetImage(
+        'temp/picture.png',
+        package: "assets",
+      );
+    }
+  }
+
+  Widget _buildTag() {
+    bool isDone = model.agreements
+        .any((element) => element.state == AgreementState.COMPLETE);
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      child: Center(
+        child: Text(
+          isDone ? '已签合同' : '未签合同',
+          style: TextStyle(
+              color: isDone ? Color.fromRGBO(103, 194, 58, 1) : Colors.black54,
+              fontSize: 10),
+        ),
+      ),
+      decoration: BoxDecoration(
+          border: Border.all(
+              color: isDone ? Color.fromRGBO(225, 243, 216, 1) : Colors.black54,
+              width: 0.5),
+          color: isDone ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
     );
   }
 }
 
 class _Row2 extends StatelessWidget {
+  final SalesProductionOrderModel model;
+
+  const _Row2({Key key, this.model}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('合作方式：包公包料'),
+        Text('合作方式：${CooperationModeLocalizedMap[model.cooperationMode]}'),
         Text(
-          '创建时间：${DateFormatUtil.formatYMD(DateTime.now())}',
+          '创建时间：${DateFormatUtil.formatYMD(model.creationtime)}',
           style: TextStyle(fontSize: 14),
         )
       ],
@@ -142,6 +219,10 @@ class _Row2 extends StatelessWidget {
 }
 
 class _End extends StatelessWidget {
+  final SalesProductionOrderModel model;
+
+  const _End({Key key, this.model}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -154,10 +235,11 @@ class _End extends StatelessWidget {
                     text: '产品数：',
                     style: TextStyle(color: Colors.black87),
                     children: [
-                  TextSpan(
-                      text: '3',
-                      style: TextStyle(color: Color.fromRGBO(255, 102, 102, 1)))
-                ]))),
+                      TextSpan(
+                          text: '${model.entrySize}',
+                          style: TextStyle(
+                              color: Color.fromRGBO(255, 102, 102, 1)))
+                    ]))),
         Expanded(
             flex: 4,
             child: RichText(
@@ -165,9 +247,10 @@ class _End extends StatelessWidget {
                     text: '订单数量：',
                     style: TextStyle(color: Colors.black87),
                     children: [
-                  TextSpan(
-                      text: '300',
-                      style: TextStyle(color: Color.fromRGBO(255, 102, 102, 1)))
+                      TextSpan(
+                          text: '300',
+                          style: TextStyle(
+                              color: Color.fromRGBO(255, 102, 102, 1)))
                     ]))),
         Expanded(
             flex: 6,

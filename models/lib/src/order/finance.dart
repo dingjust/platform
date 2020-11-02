@@ -11,8 +11,17 @@ enum PayPlanType {
   ///二期尾款
   PHASETWO,
 
+  ///三期尾款
+  PHASETHREE,
+
   ///月结
-  MONTHLY_SETTLEMENT
+  MONTHLY_SETTLEMENT,
+
+  ///一月一结
+  MONTHLY_SETTLEMENT_ONE,
+
+  ///一月两结
+  MONTHLY_SETTLEMENT_TWO,
 }
 
 ///账期支付方式
@@ -20,6 +29,9 @@ const PayPlanTypeLocalizedMap = {
   PayPlanType.PHASEONE: "一期尾款",
   PayPlanType.PHASETWO: "二期尾款",
   PayPlanType.MONTHLY_SETTLEMENT: "月结",
+  PayPlanType.PHASETHREE: "三期尾款",
+  PayPlanType.MONTHLY_SETTLEMENT_ONE: "一月一结",
+  PayPlanType.MONTHLY_SETTLEMENT_TWO: "一月两结"
 };
 
 ///账期支付类型
@@ -187,7 +199,7 @@ class AbstractPayPlanItemModel extends ItemModel {
       this.triggerDays,
       this.moneyType,
       this.triggerType,
-        this.payStatus,
+      this.payStatus,
       this.sequence});
 
   factory AbstractPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
