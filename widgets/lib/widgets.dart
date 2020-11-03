@@ -68,3 +68,4 @@ export 'src/commons/table/attribute_table.dart';
 export 'src/commons/table/color_size_num_table.dart';
 export 'src/commons/table/report_table.dart';
 export 'src/commons/tag/recommend_product_tag.dart';
+export 'src/commons/search/search_appbar.dart';

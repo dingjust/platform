@@ -25,13 +25,24 @@ class ExternalSaleOrdersPage extends StatefulWidget {
 }
 
 class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
+  bool isSearching = false;
+  TextEditingController controller;
+  FocusNode focusNode;
+  String appBarTitle = '外接订单';
+
+  @override
+  void initState() {
+    controller = TextEditingController();
+    focusNode = FocusNode();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ExternalSaleOrdersState>(
       create: (context) => ExternalSaleOrdersState(),
       child: Scaffold(
-        appBar: AppBarFactory.buildDefaultAppBar('外接订单',
-            actions: <Widget>[_buildSearchButton()]),
+        appBar: _buildAppbar(),
         body: DefaultTabController(
           length: _statuses.length,
           child: Scaffold(
@@ -57,7 +68,12 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
 
   Widget _buildSearchButton() {
     return IconButton(
-        icon: const Icon(B2BIcons.search, size: 20), onPressed: () async {});
+        icon: const Icon(B2BIcons.search, size: 20),
+        onPressed: () {
+          setState(() {
+            isSearching = true;
+          });
+        });
   }
 
   ///添加外接订单
@@ -68,5 +84,32 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
         .then((value) {
       //TODO:刷新
     });
+  }
+
+  Widget _buildAppbar() {
+    return isSearching
+        ? AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: true,
+            title: Consumer<ExternalSaleOrdersState>(
+              builder: (context, ExternalSaleOrdersState state, _) =>
+                  SearchAppbarTitle(
+                controller: controller,
+                focusNode: focusNode,
+                onSearch: () {
+                  state.setKeyword(controller.text);
+                  if (controller.text == '') {
+                    setState(() {
+                      isSearching = false;
+                    });
+                  }
+                },
+                onChange: (v) {
+                  state.setKeyword(controller.text);
+                },
+              ),
+            ))
+        : AppBarFactory.buildDefaultAppBar('$appBarTitle',
+            actions: <Widget>[_buildSearchButton()]);
   }
 }

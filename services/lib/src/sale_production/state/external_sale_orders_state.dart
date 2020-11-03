@@ -42,36 +42,47 @@ class ExternalSaleOrdersState extends PageState {
         totalElements: -1),
   };
 
+  String _keyword = '';
+
+  String get getKeyword => _keyword;
+
+  void setKeyword(String keywords) {
+    _keyword = keywords;
+    //清空数据
+    this.clear();
+  }
+
   PageEntry getEntry(String status, {String keyword}) {
     if (_ordersMap[status].totalElements < 0) {
-      getOrders(status, keyword: keyword);
+      getOrders(status);
     }
     return _ordersMap[status];
   }
 
   List<SalesProductionOrderModel> orders(String status, {String keyword}) {
     if (_ordersMap[status].totalElements < 0) {
-      getOrders(status, keyword: keyword);
+      getOrders(status);
     }
     return _ordersMap[status].data;
   }
 
-  void getOrders(String status, {String keyword}) async {
+  void getOrders(String status) async {
     //若没有数据则查询
     if (_ordersMap[status].totalElements < 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
         'depts': [0],
-        'users': [0]
+        'users': [0],
+        'keyword': _keyword != '' ? _keyword : null,
       };
       if (status != '' && status != 'SEARCH') {
         data['state'] = status;
       }
 
-      if (status == 'SEARCH' && keyword != null) {
-        data['keyword'] = keyword;
-      }
+      // if (status == 'SEARCH' && keyword != null) {
+      //   data['keyword'] = keyword;
+      // }
 
       Response<Map<String, dynamic>> response;
 
@@ -100,7 +111,7 @@ class ExternalSaleOrdersState extends PageState {
     }
   }
 
-  void loadMoreOrders(String status, {String keyword}) async {
+  void loadMoreOrders(String status) async {
     if (!lock) {
       //异步调用开始，通知加载组件
       workingStart();
@@ -108,17 +119,11 @@ class ExternalSaleOrdersState extends PageState {
       if (_ordersMap[status].currentPage + 1 != _ordersMap[status].totalPages) {
         Map data = {
           'depts': [0],
-          'users': [0]
+          'users': [0],
+          'keyword': _keyword != '' ? _keyword : null,
         };
         if (status != 'ALL') {
           data['state'] = status;
-        }
-        // if (status == 'ON_RETURN') {
-        //   data = {'refunding': true};
-        // }
-
-        if (status == 'SEARCH' && keyword != null) {
-          data['keyword'] = keyword;
         }
 
         Response<Map<String, dynamic>> response;
