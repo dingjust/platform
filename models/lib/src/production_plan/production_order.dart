@@ -672,7 +672,8 @@ const SalesProductionOrderStateLocalizedMap = {
   SalesProductionOrderState.ACCEPTED: "已接单",
   SalesProductionOrderState.CANCELED: "已取消",
   SalesProductionOrderState.COMPLETED: "已完成",
-  SalesProductionOrderState.AUDIT_PASSED: "审核通过",
+  // SalesProductionOrderState.AUDIT_PASSED: "审核通过",
+  SalesProductionOrderState.AUDIT_PASSED: "生产中",
   SalesProductionOrderState.ORDER_REJECTED: "外发单拒单",
 };
 

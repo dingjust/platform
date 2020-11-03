@@ -3,4 +3,6 @@ class SaleProductionApis {
   /// 外接订单
   static get outOrderPendingList =>
       '/{baseSiteId}/out/order/pending/accept/search';
+  static get outOrderList => 
+      '/{baseSiteId}/out/order/search';
 }

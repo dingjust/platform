@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_import.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_orders_page.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/out_order/out_orders_page.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
@@ -84,6 +85,8 @@ class AppRoutes with GlobalRoutes {
 
   static const ROUTE_EXTERNAL_SALE_ORDERS =
       '/business/orders/sales_production/external_sale_orders';
+  
+  static const ROUTE_OUT_ORDERS = '/business/orders/sales_production/out_orders';
 
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
@@ -157,5 +160,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_EXTERNAL_SALE_ORDERS: (context) => ExternalSaleOrdersPage(),
     ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT: (context) =>
         ExternalSaleOrderImportPage(),
+    ROUTE_OUT_ORDERS: (context) => OutOrdersPage()
   };
 }
