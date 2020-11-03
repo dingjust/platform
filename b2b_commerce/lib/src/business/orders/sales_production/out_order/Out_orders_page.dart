@@ -23,28 +23,74 @@ class OutOrdersPage extends StatefulWidget {
 }
 
 class _OutOrdersPageState extends State<OutOrdersPage> {
+  bool isSearching = false;
+  TextEditingController controller;
+  FocusNode focusNode;
+  String appBarTitle = '外接订单';
+
+  @override
+  void initState() {
+    controller = TextEditingController();
+    focusNode = FocusNode();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<OutOrdersState>(
         create: (context) => OutOrdersState(),
         child: Scaffold(
-          appBar: AppBarFactory.buildDefaultAppBar('外发订单',
-              actions: <Widget>[_buildSearchButton()]),
+          appBar: _buildAppbar(),
+          // appBar: AppBarFactory.buildDefaultAppBar('外发订单',
+          //     actions: <Widget>[_buildSearchButton()]),
           body: DefaultTabController(
-            length: _statuses.length, 
-            child: Scaffold(
-              appBar: TabFactory.buildDefaultTabBar(_statuses, scrollable: true),
-              body: TabBarView(
-                children: _statuses.map((status) => OutOrdersView(status: status)).toList(),
-              ),
-            )
-          ),
-        )
-    );
+              length: _statuses.length,
+              child: Scaffold(
+                appBar:
+                    TabFactory.buildDefaultTabBar(_statuses, scrollable: true),
+                body: TabBarView(
+                  children: _statuses
+                      .map((status) => OutOrdersView(status: status))
+                      .toList(),
+                ),
+              )),
+        ));
   }
 
   Widget _buildSearchButton() {
     return IconButton(
-        icon: const Icon(B2BIcons.search, size: 20), onPressed: () async {});
+        icon: const Icon(B2BIcons.search, size: 20),
+        onPressed: () {
+          setState(() {
+            isSearching = true;
+          });
+        });
+  }
+
+  Widget _buildAppbar() {
+    return isSearching
+        ? AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: true,
+            title: Consumer<OutOrdersState>(
+                builder: (context, OutOrdersState state, _) =>
+                    SearchAppbarTitle(
+                      controller: controller,
+                      focusNode: focusNode,
+                      onSearch: () {
+                        state.setKeyword(controller.text);
+                        if (controller.text == '') {
+                          setState(() {
+                            isSearching = false;
+                          });
+                        }
+                      },
+                      onChange: (v) {
+                        state.setKeyword(controller.text);
+                      },
+                    )),
+          )
+        : AppBarFactory.buildDefaultAppBar('$appBarTitle',
+            actions: <Widget>[_buildSearchButton()] );
   }
 }
