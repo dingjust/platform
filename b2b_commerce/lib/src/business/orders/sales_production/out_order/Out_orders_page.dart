@@ -26,7 +26,7 @@ class _OutOrdersPageState extends State<OutOrdersPage> {
   bool isSearching = false;
   TextEditingController controller;
   FocusNode focusNode;
-  String appBarTitle = '外接订单';
+  String appBarTitle = '外发订单';
 
   @override
   void initState() {
@@ -41,8 +41,6 @@ class _OutOrdersPageState extends State<OutOrdersPage> {
         create: (context) => OutOrdersState(),
         child: Scaffold(
           appBar: _buildAppbar(),
-          // appBar: AppBarFactory.buildDefaultAppBar('外发订单',
-          //     actions: <Widget>[_buildSearchButton()]),
           body: DefaultTabController(
               length: _statuses.length,
               child: Scaffold(
@@ -91,6 +89,6 @@ class _OutOrdersPageState extends State<OutOrdersPage> {
                     )),
           )
         : AppBarFactory.buildDefaultAppBar('$appBarTitle',
-            actions: <Widget>[_buildSearchButton()] );
+            actions: <Widget>[_buildSearchButton()]);
   }
 }

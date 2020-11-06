@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/sales_production/out_order/out_order_item.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -62,9 +62,9 @@ class OutOrdersList extends StatelessWidget {
                 children: state
                     .orders(status.code)
                     .map((model) =>
-                    OutOrderItem(
-                      model,
-                    ))
+                    ExternalSaleOrderItem(
+                                model,
+                              ))
                     .toList(),
               )
                   : NoDataInfoRow(),

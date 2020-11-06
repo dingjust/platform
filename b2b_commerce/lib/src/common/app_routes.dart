@@ -162,7 +162,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_EXTERNAL_SALE_ORDERS: (context) => ExternalSaleOrdersPage(),
     ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT: (context) =>
         ExternalSaleOrderImportPage(),
-    ROUTE_OUT_ORDERS: (context) => OutOrdersPage()
+    ROUTE_OUT_ORDERS: (context) => OutOrdersPage(),
     ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
         id: ModalRoute.of(context).settings.arguments)
   };
