@@ -33,10 +33,11 @@ class OutOrdersList extends StatelessWidget {
 
   ScrollController _scrollController;
 
-  OutOrdersList(this.status,
-      this.state, {
-        Key key,
-      }) : super(key: key) {
+  OutOrdersList(
+    this.status,
+    this.state, {
+    Key key,
+  }) : super(key: key) {
     this._scrollController = ScrollController();
     //监听加载更多
     _scrollController.addListener(() {
@@ -63,8 +64,9 @@ class OutOrdersList extends StatelessWidget {
                     .orders(status.code)
                     .map((model) =>
                     ExternalSaleOrderItem(
-                                model,
-                              ))
+                      model,
+                      type: SaleOrderItemType.EXPORT,
+                    ))
                     .toList(),
               )
                   : NoDataInfoRow(),

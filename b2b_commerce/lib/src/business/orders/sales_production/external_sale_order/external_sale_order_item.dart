@@ -11,7 +11,11 @@ import 'constants.dart';
 class ExternalSaleOrderItem extends StatelessWidget {
   final SalesProductionOrderModel model;
 
-  const ExternalSaleOrderItem(this.model, {Key key}) : super(key: key);
+  final SaleOrderItemType type;
+
+  const ExternalSaleOrderItem(this.model,
+      {Key key, this.type = SaleOrderItemType.IMPORT})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +43,10 @@ class ExternalSaleOrderItem extends StatelessWidget {
       onTap: () async {
         //回调true刷新
         Navigator.of(context)
-            .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
-                arguments: model.id)
-            .then((needRefresh) {
+            .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL, arguments: {
+          'id': model.id,
+          'title': type == SaleOrderItemType.IMPORT ? '外接订单明细' : '外发订单明细'
+        }).then((needRefresh) {
           if (needRefresh != null && needRefresh) {
             Provider.of<ExternalSaleOrdersState>(context).clear();
           }
@@ -98,31 +103,31 @@ class _Header extends StatelessWidget {
     //自创外接订单无originCompany
     return model.originCompany == null
         ? Container(
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-      child: Center(
-        child: Text(
-          '自创',
-          style:
-          TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
-        ),
-      ),
-    )
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
+            child: Center(
+              child: Text(
+                '自创',
+                style:
+                    TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
+              ),
+            ),
+          )
         : Container(
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
-      child: Center(
-        child: Text(
-          '线上',
-          style: TextStyle(
-              color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
-        ),
-      ),
-    );
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
+            child: Center(
+              child: Text(
+                '线上',
+                style: TextStyle(
+                    color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
+              ),
+            ),
+          );
   }
 }
 
@@ -274,4 +279,13 @@ class _End extends StatelessWidget {
       ],
     );
   }
+}
+
+///类型
+enum SaleOrderItemType {
+  ///外接
+  IMPORT,
+
+  ///外发
+  EXPORT
 }

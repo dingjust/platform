@@ -2,10 +2,10 @@ import 'package:b2b_commerce/src/_shared/widgets/employee_select.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:core/core.dart';
 import 'package:services/services.dart';
 
 import 'constants.dart';
@@ -15,7 +15,11 @@ import 'order_entry_detail.dart';
 class ExternalSaleOrderDetailPage extends StatefulWidget {
   int id;
 
-  ExternalSaleOrderDetailPage({Key key, @required this.id}) : super(key: key);
+  final String titile;
+
+  ExternalSaleOrderDetailPage(
+      {Key key, @required this.id, this.titile = '外接订单明细'})
+      : super(key: key);
 
   @override
   _ExternalSaleOrderDetailPageState createState() =>
@@ -35,7 +39,7 @@ class _ExternalSaleOrderDetailPageState
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text('外接订单明细'),
+              title: Text('${widget.titile}'),
               backgroundColor: Constants.THEME_COLOR_MAIN,
               elevation: 0.5,
             ),

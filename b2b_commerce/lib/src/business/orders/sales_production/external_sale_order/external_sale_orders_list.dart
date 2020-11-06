@@ -34,10 +34,11 @@ class ExternalSaleOrdersList extends StatelessWidget {
 
   ScrollController _scrollController;
 
-  ExternalSaleOrdersList(this.status,
-      this.state, {
-        Key key,
-      }) : super(key: key) {
+  ExternalSaleOrdersList(
+    this.status,
+    this.state, {
+    Key key,
+  }) : super(key: key) {
     this._scrollController = ScrollController();
     //监听加载更多
     _scrollController.addListener(() {

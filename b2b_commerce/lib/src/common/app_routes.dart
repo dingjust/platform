@@ -86,7 +86,8 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_EXTERNAL_SALE_ORDERS =
       '/business/orders/sales_production/external_sale_orders';
 
-  static const ROUTE_OUT_ORDERS = '/business/orders/sales_production/out_orders';
+  static const ROUTE_OUT_ORDERS =
+      '/business/orders/sales_production/out_orders';
   static const ROUTE_EXTERNAL_SALE_ORDERS_DETAIL =
       '/business/orders/sales_production/external_sale_orders/detail';
 
@@ -164,6 +165,13 @@ class AppRoutes with GlobalRoutes {
         ExternalSaleOrderImportPage(),
     ROUTE_OUT_ORDERS: (context) => OutOrdersPage(),
     ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
-        id: ModalRoute.of(context).settings.arguments)
+          id: getVal('id', context),
+          titile: getVal('title', context),
+        )
   };
+
+  static dynamic getVal(String key, BuildContext context) {
+    Map<String, dynamic> map = ModalRoute.of(context).settings.arguments;
+    return map[key];
+  }
 }
