@@ -13,4 +13,6 @@ class SaleProductionApis {
   static get refuse => (id) {
         return '/{baseSiteId}/sales/production/order/reject/outboundOrder/$id';
       };
+  static get outOrderList =>
+      '/{baseSiteId}/out/order/search';
 }

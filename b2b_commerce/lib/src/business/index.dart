@@ -186,6 +186,36 @@ class BrandMenusSection extends StatelessWidget {
         ));
   }
 
+  Widget _buildOutOrderMenu(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '外发管理',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context, MenuItemImage.productFactory, '外发订单',
+                    AppRoutes.ROUTE_OUT_ORDERS),
+              ],
+            )
+          ],
+        ));
+  }
+
   Widget buildChild(
       BuildContext context, Image image, String title, String routeTo,
       {List<Authorization> authorizations}) {
@@ -259,6 +289,11 @@ class BrandMenusSection extends StatelessWidget {
           color: Color.fromRGBO(245, 245, 245, 1),
         ),
         _buildCompanyMenu(context),
+        Container(
+          height: 10,
+          color: Color.fromRGBO(245, 245, 245, 1),
+        ),
+        _buildOutOrderMenu(context)
       ]),
     );
   }
@@ -390,6 +425,36 @@ class FactoryMenusSection extends StatelessWidget {
         ));
   }
 
+  Widget _buildOutOrderMenu(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '外发管理',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context, MenuItemImage.productFactory, '外发订单',
+                    AppRoutes.ROUTE_OUT_ORDERS),
+              ],
+            )
+          ],
+        ));
+  }
+
   Widget buildChild(
       BuildContext context, Image image, String title, String routeTo,
       {List<Authorization> authorizations}) {
@@ -501,6 +566,11 @@ class FactoryMenusSection extends StatelessWidget {
           color: Color.fromRGBO(245, 245, 245, 1),
         ),
         _buildCompanyMenu(context),
+        Container(
+          height: 10,
+          color: Color.fromRGBO(245, 245, 245, 1),
+        ),
+        _buildOutOrderMenu(context)
       ]),
     );
   }
