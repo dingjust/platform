@@ -142,6 +142,9 @@ export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/websocket/websocket_service.dart';
+export 'src/sale_production/repository/external_sale_order_respository.dart';
+export 'src/state/b2bcustomers_state.dart';
+export 'src/state/b2b_dept_state.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();
@@ -150,7 +153,9 @@ abstract class BLoCBase {
   var _returnToTopController = StreamController<bool>.broadcast();
 
   Stream<bool> get loadingStream => _loadingController.stream;
+
   Stream<bool> get bottomStream => _bottomController.stream;
+
   Stream<bool> get toTopBtnStream => _toTopBtnController.stream;
   Stream<bool> get returnToTopStream => _returnToTopController.stream;
 

@@ -45,8 +45,17 @@ enum PayMoneyType {
   ///二期款
   PHASETWO,
 
+  ///三期款
+  PHASETHREE,
+
   ///月结
-  MONTHLY_SETTLEMENT
+  MONTHLY_SETTLEMENT,
+
+  ///一月一结
+  MONTHLY_SETTLEMENT_ONE,
+
+  ///一月两结
+  MONTHLY_SETTLEMENT_TWO
 }
 
 ///账期支付类型
@@ -54,7 +63,10 @@ const PayMoneyTypeLocalizedMap = {
   PayMoneyType.DEPOSIT: "定金",
   PayMoneyType.PHASEONE: "一期款",
   PayMoneyType.PHASETWO: "二期款",
+  PayMoneyType.PHASETHREE: "三期款",
   PayMoneyType.MONTHLY_SETTLEMENT: "月结",
+  PayMoneyType.MONTHLY_SETTLEMENT_ONE: "一月一结",
+  PayMoneyType.MONTHLY_SETTLEMENT_TWO: "一月两结",
 };
 
 ///触发事件
@@ -240,7 +252,9 @@ class CompanyPayPlanModel extends AbstractPayPlanModel {
   static Map<String, dynamic> principalToJson(PrincipalModel belongTo) =>
       belongTo == null
           ? null
-          : belongTo == null ? null : PrincipalModel.toJson(belongTo);
+          : belongTo == null
+              ? null
+              : PrincipalModel.toJson(belongTo);
 }
 
 /// 付款方案子项

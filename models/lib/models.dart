@@ -16,6 +16,7 @@ export 'src/order/order.dart';
 export 'src/order/order_note.dart';
 export 'src/order/payment_order.dart';
 export 'src/product/product.dart';
+export 'src/production_plan/color_size_entry.dart';
 export 'src/production_plan/outbound_order.dart';
 export 'src/production_plan/production_order.dart';
 export 'src/production_plan/production_work.dart';

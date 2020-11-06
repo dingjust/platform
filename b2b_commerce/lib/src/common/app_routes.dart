@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_page.
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_import.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_orders_page.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
@@ -81,9 +82,10 @@ class AppRoutes with GlobalRoutes {
   ///外接订单导入
   static const ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT =
       '/business/sale_production/external_sale_order/import';
-
   static const ROUTE_EXTERNAL_SALE_ORDERS =
       '/business/orders/sales_production/external_sale_orders';
+  static const ROUTE_EXTERNAL_SALE_ORDERS_DETAIL =
+      '/business/orders/sales_production/external_sale_orders/detail';
 
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
@@ -157,5 +159,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_EXTERNAL_SALE_ORDERS: (context) => ExternalSaleOrdersPage(),
     ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT: (context) =>
         ExternalSaleOrderImportPage(),
+    ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
+        id: ModalRoute.of(context).settings.arguments)
   };
 }

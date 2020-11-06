@@ -3,4 +3,14 @@ class SaleProductionApis {
   /// 外接订单
   static get outOrderPendingList =>
       '/{baseSiteId}/out/order/pending/accept/search';
+
+  /// 外接订单详情
+  static get outOrderPendingDetail => (id) {
+        return '/{baseSiteId}/sales/production/order/$id';
+      };
+
+  /// 外接订单-拒单
+  static get refuse => (id) {
+        return '/{baseSiteId}/sales/production/order/reject/outboundOrder/$id';
+      };
 }

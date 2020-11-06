@@ -24,7 +24,7 @@ abstract class UserApis {
 
   /// 更新用户信息
   static get updateUserInfo =>
-          (uid) => '/{baseSiteId}/b2bCustomers/' + uid + '/updateUserInfo';
+      (uid) => '/{baseSiteId}/b2bCustomers/' + uid + '/updateUserInfo';
 
   //获取地址列表
   static get addresses => '/{baseSiteId}/company/addresses';
@@ -59,9 +59,10 @@ abstract class UserApis {
       '/{baseSiteId}/orders/requirement/countByStatuses';
 
   ///手机号是否注册
-  static get phoneExists => (code) {
-    return '/{baseSiteId}/companies/register/$code';
-  };
+  static get phoneExists =>
+          (code) {
+        return '/{baseSiteId}/companies/register/$code';
+      };
 
   //获取发票抬头列表
   static get invoiceTitles => '/{baseSiteId}/company/invoice/title';
@@ -86,9 +87,10 @@ abstract class UserApis {
   static get employeeFromId => (uid) => '/{baseSiteId}/b2bCustomers/$uid';
 
   ///短信验证重置密码
-  static get resetPassword => (id) {
-    return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';
-  };
+  static get resetPassword =>
+          (id) {
+        return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';
+      };
 
   ///重置密码
   static get resetPasswordByPassword =>
@@ -228,4 +230,10 @@ abstract class UserApis {
           (id) {
         return '/{baseSiteId}/b2bCustomers/role/$id';
       };
+
+  ///公司员工(B2BCustomerExt)列表
+  static get b2bCustomer => '/{baseSiteId}/b2bCustomers';
+
+  ///部门列表
+  static get b2bDepts => '/{baseSiteId}/dept/tree/list';
 }

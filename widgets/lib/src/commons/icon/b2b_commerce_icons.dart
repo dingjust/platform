@@ -84,19 +84,19 @@ class B2BIcons {
   static const IconData question =
       const IconData(0xe639, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData aim =
-  const IconData(0xe68d, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe68d, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData home_2 =
-  const IconData(0xe60c, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe60c, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData phone_2 =
-  const IconData(0xe655, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe655, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData add_rect =
-  const IconData(0xe71e, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe71e, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData remove_rect =
-  const IconData(0xe723, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe723, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData close =
-  const IconData(0xe641, fontFamily: 'b2bIcons2', matchTextDirection: true);
+      const IconData(0xe641, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData switch_identity =
-  const IconData(0xe664, fontFamily: 'b2bIcons', matchTextDirection: true);
+      const IconData(0xe664, fontFamily: 'b2bIcons', matchTextDirection: true);
 
   ///展开
   static const IconData arrowOpen = const IconData(0xe714,
@@ -154,10 +154,13 @@ class B2BIcons {
   static const IconData triangle_down = const IconData(0xe680,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
 
-
-  /// 
+  ///
   static const IconData click = const IconData(0xe600,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  /// 合同
+  static const IconData agreement = const IconData(0xe63a,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
 }
 
 class CommonImage {

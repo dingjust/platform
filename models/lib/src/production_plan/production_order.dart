@@ -5,6 +5,7 @@ import 'package:models/src/production_plan/production_work.dart';
 import 'package:models/src/user/b2b_group.dart';
 import 'package:models/src/user_agreement/user_agreement.dart';
 
+import 'color_size_entry.dart';
 import 'progress_plan.dart';
 
 part 'production_order.g.dart';
@@ -416,45 +417,50 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   @JsonKey(toJson: ProgressPhaseModel.toJson)
   ProgressPhaseModel currentPhase;
 
-  ProductionTaskOrderModel({
-    String code,
-    int originOrderId,
-    int parentId,
-    ProductionOrderModel originOrder,
-    OrderProgressPlanModel progressPlan,
-    String name,
-    CooperationMode cooperationMode,
-    int itemsCount,
-    bool invoiceNeeded,
-    double invoiceTaxPoint,
-    B2BCustomerModel merchandiser,
-    B2BCustomerModel creator,
-    CompanyModel belongTo,
-    B2BCustomerModel productionLeader,
-    B2BDeptModel productionDept,
-    bool deleted,
-    bool canceling,
-    ProgressWorkSheetModel progressWorkSheet,
-    this.product,
-    this.outOrder,
-    this.type,
-    this.shippingAddress,
-    this.sortNum,
-    this.unitPrice,
-    this.quantity,
-    this.totalPrimeCost,
-    this.totalSalesPrice,
-    this.totalProfit,
-    this.deliveryDate,
-    this.populationScale,
-    this.state,
-    this.progressInit,
-    this.productionProcessContent,
-    this.medias,
-    this.remarks,
-    this.priorityLevel,
-    this.currentPhase,
-  }) : super(
+  ///颜色尺码款
+  @JsonKey(toJson: ColorSizeEntryV2Model.listToJson)
+  List<ColorSizeEntryV2Model> colorSizeEntries;
+
+  ProductionTaskOrderModel(
+      {String code,
+      int originOrderId,
+      int parentId,
+      ProductionOrderModel originOrder,
+      OrderProgressPlanModel progressPlan,
+      String name,
+      CooperationMode cooperationMode,
+      int itemsCount,
+      bool invoiceNeeded,
+      double invoiceTaxPoint,
+      B2BCustomerModel merchandiser,
+      B2BCustomerModel creator,
+      CompanyModel belongTo,
+      B2BCustomerModel productionLeader,
+      B2BDeptModel productionDept,
+      bool deleted,
+      bool canceling,
+      ProgressWorkSheetModel progressWorkSheet,
+      this.product,
+      this.outOrder,
+      this.type,
+      this.shippingAddress,
+      this.sortNum,
+      this.unitPrice,
+      this.quantity,
+      this.totalPrimeCost,
+      this.totalSalesPrice,
+      this.totalProfit,
+      this.deliveryDate,
+      this.populationScale,
+      this.state,
+      this.progressInit,
+      this.productionProcessContent,
+      this.medias,
+      this.remarks,
+      this.priorityLevel,
+      this.currentPhase,
+      this.colorSizeEntries})
+      : super(
             code: code,
             originOrderId: originOrderId,
             parentId: parentId,

@@ -4,15 +4,7 @@ import 'package:models/models.dart';
 part 'user_agreement.g.dart';
 
 @JsonSerializable()
-class UserAgreementModel extends ItemModel {
-  ///编号
-  String code;
-
-  ///标题
-  String title;
-
-  String content;
-
+class UserAgreementModel extends ContractModel {
   ///合同类型
   AgreementTemplateType type;
 
@@ -41,24 +33,22 @@ class UserAgreementModel extends ItemModel {
   ///模板编号
   String originalTmplCode;
 
-  ///合同签署状态
-  AgreementState state;
-
   ///线下合作商
   bool offlinePartner;
 
-  bool available;
-
-  bool isCreator;
-
   bool isOffline;
 
-  bool isSigned;
-
   UserAgreementModel({
-    this.code,
-    this.title,
-    this.content,
+    String title,
+    String contractNumber,
+    String partner,
+    DateTime createTime,
+    ContractStatus state,
+    bool available,
+    String code,
+    String content,
+    bool isCreator,
+    bool isSigned,
     this.type,
     this.deleted,
     this.partyA,
@@ -67,13 +57,20 @@ class UserAgreementModel extends ItemModel {
     this.partyBSignTime,
     this.completeSignTime,
     this.originalTmplCode,
-    this.state,
     this.offlinePartner,
-    this.available,
-    this.isCreator,
     this.isOffline,
-    this.isSigned,
-  });
+  }) : super(
+          title: title,
+          contractNumber: contractNumber,
+          partner: partner,
+          createTime: createTime,
+          state: state,
+          available: available,
+          content: content,
+          isCreator: isCreator,
+          isSigned: isSigned,
+          code: code,
+        );
 
   factory UserAgreementModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$UserAgreementModelFromJson(json);
@@ -83,42 +80,3 @@ class UserAgreementModel extends ItemModel {
   static DateTime dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 }
-
-///用户合同状态
-enum AgreementState {
-  ///初始状态
-  INITIATE,
-
-  ///签署中
-  SIGN,
-
-  ///甲方签署
-  PARTY_A_SIGN,
-
-  ///乙方签署
-  PARTY_B_SIGN,
-
-  ///完成
-  COMPLETE,
-
-  ///作废
-  INVALID,
-
-  ///查询-待我签署
-  WAIT_ME_SIGN,
-
-  ///查询-待对方签署
-  WAIT_PARTNER_SIGN
-}
-
-///订单取消状态
-const AgreementStateLocalizedMap = {
-  AgreementState.INITIATE: "初始状态",
-  AgreementState.SIGN: "签署中",
-  AgreementState.PARTY_A_SIGN: "甲方签署",
-  AgreementState.PARTY_B_SIGN: "乙方签署",
-  AgreementState.COMPLETE: "完成",
-  AgreementState.INVALID: "作废",
-  AgreementState.WAIT_ME_SIGN: "查询-待我签署",
-  AgreementState.WAIT_PARTNER_SIGN: "查询-待对方签署",
-};

@@ -1,6 +1,11 @@
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
+
+import 'constants.dart';
 
 ///外接订单块
 class ExternalSaleOrderItem extends StatelessWidget {
@@ -32,16 +37,15 @@ class ExternalSaleOrderItem extends StatelessWidget {
         ),
       ),
       onTap: () async {
-        // Navigator.of(itemContext).push(
-        //   MaterialPageRoute(
-        //       builder: (context) => SaleOrderDetailPage(
-        //             code: widget.model.code,
-        //             callback: () {
-        //               //回调刷新State
-        //               Provider.of<SaleOrdersState>(itemContext).clear();
-        //             },
-        //           )),
-        // );
+        //回调true刷新
+        Navigator.of(context)
+            .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+                arguments: model.id)
+            .then((needRefresh) {
+          if (needRefresh != null && needRefresh) {
+            Provider.of<ExternalSaleOrdersState>(context).clear();
+          }
+        });
       },
     );
   }
@@ -80,7 +84,7 @@ class _Header extends StatelessWidget {
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 18,
-                    color: Color(0xFFFFD600),
+                    color: getSalesProductionStateColor(model.state),
                     fontWeight: FontWeight.w500,
                   ),
                 )),
@@ -94,31 +98,31 @@ class _Header extends StatelessWidget {
     //自创外接订单无originCompany
     return model.originCompany == null
         ? Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-            child: Center(
-              child: Text(
-                '自创',
-                style:
-                    TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
-              ),
-            ),
-          )
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          border: Border.all(color: Constants.THEME_COLOR_MAIN)),
+      child: Center(
+        child: Text(
+          '自创',
+          style:
+          TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
+        ),
+      ),
+    )
         : Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
-            child: Center(
-              child: Text(
-                '线上',
-                style: TextStyle(
-                    color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
-              ),
-            ),
-          );
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
+      child: Center(
+        child: Text(
+          '线上',
+          style: TextStyle(
+              color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
+        ),
+      ),
+    );
   }
 }
 
@@ -156,9 +160,9 @@ class _Row1 extends StatelessWidget {
     if (model.originCompany != null) {
       name = model.originCompany.name;
     } else {
-      name = model.originCooperator.type == CooperatorType.ONLINE
-          ? model.originCooperator.partner.name
-          : model.originCooperator.name;
+      name = model?.originCooperator?.type == CooperatorType.ONLINE
+          ? model?.originCooperator?.partner?.name
+          : model?.originCooperator?.name;
     }
     return name;
   }
@@ -176,8 +180,10 @@ class _Row1 extends StatelessWidget {
   }
 
   Widget _buildTag() {
-    bool isDone = model.agreements
-        .any((element) => element.state == AgreementState.COMPLETE);
+    bool isDone = model.agreements != null
+        ? model.agreements
+        .any((element) => element.state == ContractStatus.COMPLETE)
+        : false;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5),

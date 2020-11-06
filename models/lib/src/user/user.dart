@@ -78,27 +78,28 @@ class UserModel extends PrincipalModel {
                 size: 30,
               ));
 
-  UserModel({MediaModel profilePicture,
-    int id,
-    String uid,
-    String name,
-    this.loginDisabled,
-    this.type,
-    this.roles,
-    this.status,
-    this.mobileNumber,
-    this.b2bUnit,
-    this.weChatOpenid,
-    this.weChatHeadImg,
-    this.dingTalkOpenid,
-    this.dingTalkHeadImg,
-    this.dingTalkNickname})
+  UserModel(
+      {MediaModel profilePicture,
+      int id,
+      String uid,
+      String name,
+      this.loginDisabled,
+      this.type,
+      this.roles,
+      this.status,
+      this.mobileNumber,
+      this.b2bUnit,
+      this.weChatOpenid,
+      this.weChatHeadImg,
+      this.dingTalkOpenid,
+      this.dingTalkHeadImg,
+      this.dingTalkNickname})
       : super(
-    id: id,
-    profilePicture: profilePicture,
-    uid: uid,
-    name: name,
-  );
+          id: id,
+          profilePicture: profilePicture,
+          uid: uid,
+          name: name,
+        );
 
   UserModel.empty() {
     this.profilePicture = null;
@@ -157,7 +158,7 @@ class CustomerModel extends UserModel {
 @JsonSerializable()
 class B2BCustomerModel extends CustomerModel {
   bool active;
-  @JsonKey(toJson: _b2bUnitToJson)
+  @JsonKey(toJson: b2bUnitToJson)
   B2BUnitModel defaultB2BUnit;
 
   B2BCustomerModel({
@@ -186,8 +187,46 @@ class B2BCustomerModel extends CustomerModel {
   static Map<String, dynamic> toJson(B2BCustomerModel model) =>
       model == null ? null : _$B2BCustomerModelToJson(model);
 
-  static Map<String, dynamic> _b2bUnitToJson(B2BUnitModel model) =>
+  static Map<String, dynamic> b2bUnitToJson(B2BUnitModel model) =>
       model == null ? null : B2BUnitModel.toJson(model);
+}
+
+/// 新B2BCustomer
+@JsonSerializable()
+class B2BCustomerModelExt extends B2BCustomerModel {
+  @JsonKey(toJson: B2BDeptModel.toJson)
+  B2BDeptModel b2bDept;
+
+  ///是否主主张
+  bool root;
+
+  B2BCustomerModelExt({int id,
+    MediaModel profilePicture,
+    String uid,
+    String name,
+    bool loginDisabled,
+    String mobileNumber,
+    List<RoleModel> roles,
+    bool active,
+    B2BUnitModel defaultB2BUnit,
+    this.b2bDept,
+    this.root})
+      : super(
+      id: id,
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      loginDisabled: loginDisabled,
+      mobileNumber: mobileNumber,
+      roles: roles,
+      active: active,
+      defaultB2BUnit: defaultB2BUnit);
+
+  factory B2BCustomerModelExt.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$B2BCustomerModelExtFromJson(json);
+
+  static Map<String, dynamic> toJson(B2BCustomerModelExt model) =>
+      model == null ? null : _$B2BCustomerModelExtToJson(model);
 }
 
 /// 地址
@@ -390,7 +429,7 @@ class ContractModel extends ItemModel {
   String title;
   String contractNumber;
   String partner;
-  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
+  @JsonKey(name: "creationtime", fromJson: dateTimefromMilliseconds)
   DateTime createTime;
   ContractStatus state;
   bool available;
@@ -409,6 +448,7 @@ class ContractModel extends ItemModel {
     this.content,
     this.isCreator,
     this.isSigned,
+    this.code,
   });
 
   factory ContractModel.fromJson(Map<String, dynamic> json) =>
@@ -417,7 +457,7 @@ class ContractModel extends ItemModel {
   static Map<String, dynamic> toJson(ContractModel model) =>
       model == null ? null : _$ContractModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
+  static DateTime dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 }
 
@@ -428,17 +468,23 @@ enum ContractStatus {
   /// 签署中
   SIGN,
 
-  // 甲方签署
+  ///甲方签署
   PARTY_A_SIGN,
 
-  //乙方签署
+  ///乙方签署
   PARTY_B_SIGN,
 
-  //完成
+  ///完成
   COMPLETE,
 
-  //作废
+  ///作废
   INVALID,
+
+  ///查询-待我签署
+  WAIT_ME_SIGN,
+
+  ///查询-待对方签署
+  WAIT_PARTNER_SIGN
 }
 
 // TODO: i18n处理
@@ -449,6 +495,8 @@ const ContractStatusLocalizedMap = {
   ContractStatus.PARTY_B_SIGN: "乙方签署",
   ContractStatus.COMPLETE: "已签署",
   ContractStatus.INVALID: '已作废',
+  ContractStatus.WAIT_ME_SIGN: "查询-待我签署",
+  ContractStatus.WAIT_PARTNER_SIGN: "查询-待对方签署",
 };
 
 @JsonSerializable()
@@ -545,6 +593,9 @@ enum AgreementTemplateType {
 
   ///补充协议
   BCXY,
+
+  ///未知
+  UNKOWN
 }
 
 const AgreementTemplateTypeLocalizedMap = {
@@ -552,6 +603,7 @@ const AgreementTemplateTypeLocalizedMap = {
   AgreementTemplateType.CGDD: "采购订单",
   AgreementTemplateType.WTSCHT: '委托生产合同',
   AgreementTemplateType.BCXY: "补充协议",
+  AgreementTemplateType.UNKOWN: "未知"
 };
 
 const AgreementTemplateTypeMap = {

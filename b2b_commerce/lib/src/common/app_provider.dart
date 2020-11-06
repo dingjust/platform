@@ -10,7 +10,7 @@ import 'package:services/services.dart';
 ///全局 Provider
 class AppProvider {
   static List<SingleChildCloneableWidget> providers =
-  <SingleChildCloneableWidget>[
+      <SingleChildCloneableWidget>[
     ChangeNotifierProvider(create: (_) => MyCapacityState()),
     ChangeNotifierProvider(create: (_) => ProductionProgressState()),
     ChangeNotifierProvider(create: (_) => AmapState()),
@@ -36,16 +36,22 @@ class AppProvider {
     Provider(
       create: (_) => AppVersionHelper(),
     ),
-    Provider(
-      create: (_) => LabelState(),
-    ),
-    Provider(
-      create: (_) => ColorState(),
-    ),
-    Provider(
-      create: (_) => SizeState(),
-    ),
-  ];
+        Provider(
+          create: (_) => LabelState(),
+        ),
+        Provider(
+          create: (_) => ColorState(),
+        ),
+        Provider(
+          create: (_) => SizeState(),
+        ),
+        Provider(
+          create: (_) => B2BCustomersState(),
+        ),
+        Provider(
+          create: (_) => B2BDeptState(),
+        ),
+      ];
 
   ///预加载
   preloading(BuildContext context) async {

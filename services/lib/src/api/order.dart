@@ -9,8 +9,7 @@ class OrderApis {
   static get requirementOrdersMap => '/{baseSiteId}/orders/requirement/map';
 
   ///关闭需求订单
-  static get requirementOrderCancle =>
-          (code) {
+  static get requirementOrderCancle => (code) {
         return '/{baseSiteId}/orders/requirement/cancelled/$code';
       };
 
@@ -82,9 +81,10 @@ class OrderApis {
       };
 
   //批量修改生产进度预计完成时间
-  static get progressEstimatedDateUploads => (code, id) {
-    return '/{baseSiteId}/orders/purchase/$code/progresses';
-  };
+  static get progressEstimatedDateUploads =>
+          (code, id) {
+        return '/{baseSiteId}/orders/purchase/$code/progresses';
+      };
 
   //修改生产订单尾款金额
   static get purchaseOrderBalanceUpdate => (code) {
@@ -137,9 +137,10 @@ class OrderApis {
       };
 
   //品牌更新地址（打样订单）
-  static get updateProofAddress => (code) {
-    return '/{baseSiteId}/orders/proofing/$code/deliveryAddress';
-  };
+  static get updateProofAddress =>
+          (code) {
+        return '/{baseSiteId}/orders/proofing/$code/deliveryAddress';
+      };
 
   /// 根据条件获取报价单列表 POST
   static get quotes => '/{baseSiteId}/orders/quote';
@@ -202,9 +203,10 @@ class OrderApis {
       };
 
   //确认收货
-  static get shipped => (code) {
-    return '/{baseSiteId}/orders/proofing/$code/shipped';
-  };
+  static get shipped =>
+          (code) {
+        return '/{baseSiteId}/orders/proofing/$code/shipped';
+      };
 
   /// 更新需求信息
   static get requirementUpdate => (code) {
@@ -223,9 +225,10 @@ class OrderApis {
       };
 
   //确认打样订单
-  static get proofingConfirm => (code) {
-    return '/{baseSiteId}/orders/proofing/$code/paid';
-  };
+  static get proofingConfirm =>
+          (code) {
+        return '/{baseSiteId}/orders/proofing/$code/paid';
+      };
 
   // ========生产单=========
 

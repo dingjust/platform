@@ -10,7 +10,7 @@ import 'package:widgets/widgets.dart';
 import 'external_sale_orders_list.dart';
 
 const _statuses = <EnumModel>[
-  EnumModel('TO_BE_ACCEPTED', '待接单'),
+  EnumModel('TO_BE_ACCEPTED', '待接单/待提交'),
   EnumModel('AUDITING', '待审核'),
   EnumModel('AUDIT_REJECTED', '审核驳回'),
   EnumModel('AUDIT_PASSED', '生产中'),

@@ -23,16 +23,12 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   //选的是否是企业认证
   bool _isCompany = false;
 
-  var _futureBuilderFuture;
-
   @override
   void initState() {
     //埋点>>>我要认证
     FlutterUmplus.event(
       "my_authentication",
     );
-    _futureBuilderFuture = _getData();
-
     //权限预获取
     PermissionHelper.check();
 
@@ -59,13 +55,16 @@ class _MyAuthenticationState extends State<MyAuthentication> {
         '认证通过',
         style: TextStyle(color: Colors.green),
       );
-    if (model.companyState == AuthenticationState.FAILED)
+    if (model.companyState == AuthenticationState.FAILED ||
+        model.companyState == AuthenticationState.FAIL)
       return Text(
         '认证失败',
         style: TextStyle(
           color: Color.fromRGBO(255, 214, 12, 1),
         ),
       );
+
+    return Container();
   }
 
   Widget setPersonalAuthenticationStateText(AuthenticationModel model) {
@@ -102,7 +101,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   Future<CertificationState> _getData() async {
     // 查询明细
     CertificationState model =
-    await ContractRepository().getAuthenticationState();
+        await ContractRepository().getAuthenticationState();
     AuthenticationModel authenticationModel = model.data;
 
     if (authenticationModel.companyType != null &&
@@ -141,7 +140,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
           }
         },
         initialData: null,
-        future: _futureBuilderFuture,
+        future: _getData(),
       ),
     );
   }
@@ -171,7 +170,15 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                       )),
             );
           }
-          if (model.companyState == AuthenticationState.FAILED) {}
+          if (model.companyState == AuthenticationState.FAILED ||
+              model.companyState == AuthenticationState.FAIL) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AuthenticationEnterpriseFromPage()),
+            );
+          }
+
           if (model.companyState == AuthenticationState.CHECK) {
             Navigator.push(
               context,

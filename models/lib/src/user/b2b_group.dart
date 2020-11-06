@@ -38,17 +38,24 @@ class B2BDeptModel extends ItemModel {
   @JsonKey(toJson: companyToJson)
   CompanyModel belongTo;
 
-  B2BDeptModel({
-    this.name,
-    this.sort,
-    this.parentList,
-    this.parent,
-    this.functionTypeList,
-    this.manager,
-    this.children,
-    this.deleted,
-    this.belongTo,
-  });
+  ///深度
+  int depth;
+
+  ///父节点id
+  int parentId;
+
+  B2BDeptModel(
+      {this.name,
+      this.sort,
+      this.parentList,
+      this.parent,
+      this.functionTypeList,
+      this.manager,
+      this.children,
+      this.deleted,
+      this.belongTo,
+      this.depth,
+      this.parentId});
 
   factory B2BDeptModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$B2BDeptModelFromJson(json);
