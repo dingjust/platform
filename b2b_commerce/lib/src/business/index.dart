@@ -216,6 +216,36 @@ class BrandMenusSection extends StatelessWidget {
         ));
   }
 
+  Widget _buildProductionOrderMenu(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '生产管理',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context, MenuItemImage.productFactory, '生产工单',
+                    AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
+              ],
+            )
+          ],
+        ));
+  }
+
   Widget buildChild(
       BuildContext context, Image image, String title, String routeTo,
       {List<Authorization> authorizations}) {
@@ -293,7 +323,12 @@ class BrandMenusSection extends StatelessWidget {
           height: 10,
           color: Color.fromRGBO(245, 245, 245, 1),
         ),
-        _buildOutOrderMenu(context)
+        _buildOutOrderMenu(context),
+        Container(
+          height: 10,
+          color: Color.fromRGBO(245, 245, 245, 1),
+        ),
+        _buildProductionOrderMenu(context)
       ]),
     );
   }
@@ -454,6 +489,36 @@ class FactoryMenusSection extends StatelessWidget {
           ],
         ));
   }
+  
+  Widget _buildProductionOrderMenu(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '生产管理',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(0.0),
+              crossAxisCount: 4,
+              mainAxisSpacing: 20.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: (1.3),
+              children: <Widget>[
+                buildChild(context, MenuItemImage.productFactory, '生产工单',
+                    AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
+              ],
+            )
+          ],
+        ));
+  }
 
   Widget buildChild(
       BuildContext context, Image image, String title, String routeTo,
@@ -570,7 +635,12 @@ class FactoryMenusSection extends StatelessWidget {
           height: 10,
           color: Color.fromRGBO(245, 245, 245, 1),
         ),
-        _buildOutOrderMenu(context)
+        _buildOutOrderMenu(context),
+        Container(
+          height: 10,
+          color: Color.fromRGBO(245, 245, 245, 1),
+        ),
+        _buildProductionOrderMenu(context)
       ]),
     );
   }

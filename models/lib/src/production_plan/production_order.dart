@@ -421,6 +421,9 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   @JsonKey(toJson: ColorSizeEntryV2Model.listToJson)
   List<ColorSizeEntryV2Model> colorSizeEntries;
 
+  /// 关联外发单号
+  String outboundOrderCode;
+
   ProductionTaskOrderModel(
       {String code,
       int originOrderId,
@@ -459,7 +462,8 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
       this.remarks,
       this.priorityLevel,
       this.currentPhase,
-      this.colorSizeEntries})
+      this.colorSizeEntries,
+      this.outboundOrderCode})
       : super(
             code: code,
             originOrderId: originOrderId,

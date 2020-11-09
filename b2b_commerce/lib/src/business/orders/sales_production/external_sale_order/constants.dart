@@ -15,3 +15,20 @@ const SALES_PRODUCTION_STATE_COLORS = {
 Color getSalesProductionStateColor(SalesProductionOrderState state) {
   return SALES_PRODUCTION_STATE_COLORS[state] ?? Colors.black54;
 }
+
+///  生产工单状态颜色
+const  PRODUCTION_TASK_ORDER_STATE_COLORS = {
+  ProductionTaskOrderState.TO_BE_ALLOCATED: Color(0xFFFFD600),
+  ProductionTaskOrderState.TO_BE_PRODUCED: Color(0xFFFF5722),
+  ProductionTaskOrderState.PRODUCING: Color(0xffff9800),
+  ProductionTaskOrderState.TO_BE_DELIVERED: Color(0xFFFFD600),
+  ProductionTaskOrderState.TO_BE_RECONCILED: Color(0xff1e88e5),
+  ProductionTaskOrderState.COMPLETED: Colors.green,
+  ProductionTaskOrderState.CANCED: Colors.red,
+};
+
+Color getProductionTaskOrderStateColor(ProductionTaskOrderState state) {
+  return PRODUCTION_TASK_ORDER_STATE_COLORS[state] ?? Colors.black54;
+}
+
+
