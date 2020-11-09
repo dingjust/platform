@@ -48,13 +48,13 @@ class SizeState {
 
   List<SizeModel> get sizes => _sizes;
 
-  set sizes(List<SizeModel> value) {
+  set setSizes(List<SizeModel> value) {
     _sizes = value;
   }
 
   List<ColorSizeEntryModel> get sizeEntries => _sizeEntries;
 
-  set sizeEntries(List<ColorSizeEntryModel> value) {
+  set setSizeEntries(List<ColorSizeEntryModel> value) {
     _sizeEntries = value;
   }
 }

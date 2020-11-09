@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
     initUMeng();
 
     // 预加载全局数据
-    AppProvider().preloading(context);
+    AppProvider.preloading(context);
   }
 
   ///友盟初始化

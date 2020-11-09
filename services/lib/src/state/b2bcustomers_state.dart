@@ -7,7 +7,7 @@ import 'package:services/src/net/http_manager.dart';
 class B2BCustomersState {
   List<B2BCustomerModelExt> _b2bCustomersExt;
 
-  Future<List<B2BCustomerModelExt>> getAllSizes() async {
+  Future<List<B2BCustomerModelExt>> list() async {
     if (_b2bCustomersExt == null) {
       Response response;
       try {
@@ -19,9 +19,9 @@ class B2BCustomersState {
       }
       if (response != null && response.statusCode == 200) {
         if (response.data['content'] != null) {
-          _b2bCustomersExt = response.data['content']
-              .map((e) => B2BCustomerModelExt.fromJson(e))
-              .toList();
+          List<dynamic> datas = response.data['content'];
+          _b2bCustomersExt =
+              datas.map((e) => B2BCustomerModelExt.fromJson(e)).toList();
         }
       }
     }
@@ -29,4 +29,8 @@ class B2BCustomersState {
   }
 
   List<B2BCustomerModelExt> get b2bCustomersExt => _b2bCustomersExt;
+
+  void clear() {
+    _b2bCustomersExt = null;
+  }
 }

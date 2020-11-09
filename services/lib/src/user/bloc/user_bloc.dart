@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/b2b_commerce.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -204,7 +206,7 @@ class UserBLoC extends BLoCBase {
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
         BrandModel brand =
-        await UserRepositoryImpl().getBrand(_user.companyCode);
+            await UserRepositoryImpl().getBrand(_user.companyCode);
         if (brand != null) {
           _user.b2bUnit = brand;
         }
@@ -237,7 +239,7 @@ class UserBLoC extends BLoCBase {
     return LoginResult.FAIL;
   }
 
-  Future<void> logout({UserType type}) async {
+  Future<void> logout({UserType type, BuildContext context}) async {
     _user = UserModel.empty();
 
     if (type != null) {
@@ -255,9 +257,14 @@ class UserBLoC extends BLoCBase {
     jpush$.deleteAlias();
 
     _controller.sink.add(_user);
+
+    //清除用户State数据
+    if (context != null) {
+      AppProvider.clearUserData(context);
+    }
   }
 
-//
+  ///改变用户类型
   void changeUserType(UserType userType) {
     _user.type = userType;
     _controller.sink.add(_user);

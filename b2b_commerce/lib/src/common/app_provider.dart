@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:core/core.dart';
@@ -36,36 +34,28 @@ class AppProvider {
     Provider(
       create: (_) => AppVersionHelper(),
     ),
-        Provider(
-          create: (_) => LabelState(),
-        ),
-        Provider(
-          create: (_) => ColorState(),
-        ),
-        Provider(
-          create: (_) => SizeState(),
-        ),
-        Provider(
-          create: (_) => B2BCustomersState(),
-        ),
-        Provider(
-          create: (_) => B2BDeptState(),
-        ),
-      ];
+    Provider(
+      create: (_) => LabelState(),
+    ),
+    Provider(
+      create: (_) => ColorState(),
+    ),
+    Provider(
+      create: (_) => SizeState(),
+    ),
+    Provider(
+      create: (_) => B2BCustomersState(),
+    ),
+    Provider(
+      create: (_) => B2BDeptState(),
+    ),
+  ];
 
   ///预加载
-  preloading(BuildContext context) async {
+  static preloading(BuildContext context) async {
     DateTime start = DateTime.now();
-    print(
-        '[nbyjy]================================	预加载开始${DateFormatUtil
-            .formatYMDHMS(start)}');
-
-    // Provider.of<ProductHomeState>(context).getData();
-    // Provider.of<ProductHomeCarouselsState>(context).getBodyData();
-    // Provider.of<ProductHomeCarouselsState>(context).getHeaderData();
-    Provider
-        .of<RecommendProductState>(context)
-        .products;
+    print('[nbyjy]预加载开始${DateFormatUtil.formatYMDHMS(start)}');
+    Provider.of<RecommendProductState>(context).products;
     await Provider.of<CategoryState>(context).getCascadedCategories();
     await Provider.of<AddressState>(context).getRegions();
     await Provider.of<MajorCategoryState>(context).getMajorCategories();
@@ -76,53 +66,17 @@ class AppProvider {
 
     AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
     await appVersionHelper.getAppVersionInfo('nbyjy');
-    // await appVersionHelper.checkVersion(
-    //     context, AppBLoC.instance.packageInfo.version, 'nbyjy');
-    // ReceivePort receivePort = ReceivePort();
-    // await Isolate.spawn(dataLoader, receivePort.sendPort);
-
-    // SendPort sendPort = await receivePort.first;
-
-    // int result = await sendReceive(
-    //     sendPort, 'https://jsonplaceholder.typicode.com/posts');
     DateTime end = DateTime.now();
-    // print('================================	结果${result}}');
+    print('[nbyjy]预加载结束${DateFormatUtil.formatYMDHMS(end)}');
     print(
-        '[nbyjy]================================	预加载结束${DateFormatUtil
-            .formatYMDHMS(end)}');
-    print(
-        '[nbyjy]================================	相差${end
-            .difference(start)
-            .inSeconds}秒(${end
-            .difference(start)
-            .inMilliseconds})');
+        '[nbyjy]相差${end.difference(start).inSeconds}秒(${end.difference(start).inMilliseconds})');
   }
 
-  static dataLoader(SendPort sendPort) async {
-    ReceivePort receivePort = ReceivePort();
-    sendPort.send(receivePort.sendPort);
-
-    int num = 999999999999999;
-
-    await for (var msg in receivePort) {
-      String requestURL = msg[0];
-      SendPort callbackPort = msg[1];
-
-      // int count = 0;
-      // while (num > 0) {
-      //   if (num % 2 == 0) {
-      //     count++;
-      //   }
-      //   num--;
-      // }
-      await Future.delayed(Duration(seconds: 10));
-      callbackPort.send(0);
-    }
-  }
-
-  Future sendReceive(SendPort sendPort, String url) {
-    ReceivePort receivePort = ReceivePort();
-    sendPort.send([url, receivePort.sendPort]);
-    return receivePort.first;
+  ///清理用户相关数据(非系统数据)
+  static clearUserData(BuildContext context) {
+    Provider.of<MyCapacityState>(context).clear();
+    Provider.of<ProductionProgressState>(context).clear();
+    Provider.of<B2BCustomersState>(context).clear();
+    Provider.of<B2BDeptState>(context).clear();
   }
 }
