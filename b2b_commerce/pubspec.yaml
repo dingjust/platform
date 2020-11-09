@@ -149,6 +149,8 @@ flutter:
     - packages/assets/temp/business/register_brand.png
     - packages/assets/temp/business/register_customer.png
     - packages/assets/temp/business/register_factory.png
+    - packages/assets/temp/business/external_order.png
+    - packages/assets/temp/business/outbound_order.png
     - packages/assets/temp/common/fast_factory.png
     - packages/assets/temp/common/find_factory.png
     - packages/assets/temp/common/idle_capacity.png

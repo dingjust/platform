@@ -13,6 +13,9 @@ class SaleProductionApis {
   static get refuse => (id) {
         return '/{baseSiteId}/sales/production/order/reject/outboundOrder/$id';
       };
-  static get outOrderList =>
-      '/{baseSiteId}/out/order/search';
+
+  ///外接订单-接单
+  static get accept => '/{baseSiteId}/sales/production/order/save/order';
+
+  static get outOrderList => '/{baseSiteId}/out/order/search';
 }
