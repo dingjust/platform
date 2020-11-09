@@ -40,4 +40,27 @@ class ExternalSaleOrderRespository {
     } else
       return null;
   }
+
+  /// 外接订单唯一码检索
+  Future<SalesProductionOrderModel> uniqueCodePreview(String code) async {
+    Response<Map<String, dynamic>> response =
+        await http$.get(SaleProductionApis.uniqueCodePreview(code));
+
+    if (response.statusCode == 200 && response.data['code'] == 1) {
+      SalesProductionOrderModel model =
+          SalesProductionOrderModel.fromJson(response.data['data']);
+      return model;
+    } else
+      return null;
+  }
+
+  ///外接订单唯一码导入
+  Future<BaseResponse> uniqueCodeImport(String code) async {
+    Response<Map<String, dynamic>> response =
+        await http$.get(SaleProductionApis.uniqueCodeImport(code));
+    if (response.statusCode == 200 && response.data != null) {
+      return BaseResponse.fromJson(response.data);
+    } else
+      return null;
+  }
 }

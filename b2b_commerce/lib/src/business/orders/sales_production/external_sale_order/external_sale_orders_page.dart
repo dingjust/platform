@@ -54,13 +54,7 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _onAdd,
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-        ),
+        floatingActionButton: _AddButton(),
         resizeToAvoidBottomInset: false,
       ),
     );
@@ -81,9 +75,7 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
     //唯一码导入
     Navigator.of(context)
         .pushNamed(AppRoutes.ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT)
-        .then((value) {
-      //TODO:刷新
-    });
+        .then((value) {});
   }
 
   Widget _buildAppbar() {
@@ -111,5 +103,27 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
             ))
         : AppBarFactory.buildDefaultAppBar('$appBarTitle',
             actions: <Widget>[_buildSearchButton()]);
+  }
+}
+
+class _AddButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        //唯一码导入
+        Navigator.of(context)
+            .pushNamed(AppRoutes.ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT)
+            .then((value) {
+          if (value) {
+            Provider.of<ExternalSaleOrdersState>(context).clear();
+          }
+        });
+      },
+      child: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+    );
   }
 }
