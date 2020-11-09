@@ -416,7 +416,7 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   @JsonKey(toJson: ColorSizeEntryV2Model.listToJson)
   List<ColorSizeEntryV2Model> colorSizeEntries;
 
-  ///外发订单号
+  /// 关联外发单号
   String outboundOrderCode;
 
   ProductionTaskOrderModel(

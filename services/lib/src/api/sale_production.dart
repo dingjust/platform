@@ -18,4 +18,17 @@ class SaleProductionApis {
   static get accept => '/{baseSiteId}/sales/production/order/save/order';
 
   static get outOrderList => '/{baseSiteId}/out/order/search';
+
+  /// 外发订单列表
+  static get outOrderList =>
+      '/{baseSiteId}/out/order/search';
+
+  /// 生产工单列表
+  static get productionTaskOrderList =>
+      '/{baseSiteId}/production/task/order/search';
+
+  /// 生产工单详情
+  static get productionTaskOrderDetail => (id) {
+    return  '/{baseSiteId}/production/task/order/$id';
+  };
 }
