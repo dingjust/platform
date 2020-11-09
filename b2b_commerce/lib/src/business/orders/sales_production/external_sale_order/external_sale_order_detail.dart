@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
-import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_order_entry_detail.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -463,10 +463,9 @@ class _EntriesInfo extends StatelessWidget {
 
   void onTap(BuildContext context, ProductionTaskOrderModel entry) {
     if (order.auditState == AuditState.PASSED) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProductionTaskOrderEntryDetailPage(
-                id: entry.id,
-              )));
+      Navigator.of(context).pushNamed(
+          AppRoutes.ROUTE_PRODUCTION_TASK_ORDER_DETAIL,
+          arguments: entry.id);
     } else {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ExternalSaleOrderEntryDetailPage(

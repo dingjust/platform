@@ -34,7 +34,8 @@ class OrderDetailBtnGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //接单方按钮
-    if (isTarget) {
+    // if (isTarget) { TODO:接单方判断修改
+    if (!isOrigin) {
       if (order.state != SalesProductionOrderState.CANCELED) {
         //外接来源订单
         if (isSaleOrder &&

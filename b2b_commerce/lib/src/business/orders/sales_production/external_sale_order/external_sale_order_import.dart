@@ -18,12 +18,11 @@ class _ExternalSaleOrderImportPageState
   int checkCode = 0;
   String checkResult = '';
 
-  //外接订单数据TODO: model构建
   SalesProductionOrderModel order;
 
   @override
   void initState() {
-    _textEditingController = TextEditingController(text: 'TJTspqC');
+    _textEditingController = TextEditingController();
     super.initState();
   }
 
@@ -125,7 +124,7 @@ class _ExternalSaleOrderImportPageState
   ///检索
   void _onCheck() async {
     Function cancelFunc =
-    BotToast.showLoading(clickClose: true, crossPage: false);
+        BotToast.showLoading(clickClose: true, crossPage: false);
     SalesProductionOrderModel model = await ExternalSaleOrderRespository()
         .uniqueCodePreview(_textEditingController.text);
 
