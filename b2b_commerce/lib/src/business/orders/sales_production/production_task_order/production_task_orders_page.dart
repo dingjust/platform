@@ -62,8 +62,8 @@ class _ProductionTaskOrdersPageState extends State<ProductionTaskOrdersPage> {
         ? AppBar(
             elevation: 0,
             automaticallyImplyLeading: true,
-            title: Consumer<ExternalSaleOrdersState>(
-              builder: (context, ExternalSaleOrdersState state, _) =>
+            title: Consumer<ProductionTaskOrdersState>(
+              builder: (context, ProductionTaskOrdersState state, _) =>
                   SearchAppbarTitle(
                 controller: controller,
                 focusNode: focusNode,
