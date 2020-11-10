@@ -340,7 +340,8 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
   Widget _buildDeliveryAddress(BuildContext context) {
     String companyCode = UserBLoC.instance.currentUser.companyCode;
     bool canUpdateAddress = false;
-    if(companyCode == order.belongTo.uid && SalesOrderStatus.PENDING_PAYMENT == order.status){
+    if (companyCode == order?.belongTo?.uid ??
+        null && SalesOrderStatus.PENDING_PAYMENT == order.status) {
       canUpdateAddress = true;
     }
 

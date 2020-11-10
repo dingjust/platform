@@ -141,11 +141,13 @@ class _OrderAcceptPageState extends State<OrderAcceptPage> {
   void _onAccept() async {
     //校验
     if (order?.productionLeader?.id == null) {
-      BotToast.showText(text: '前选择跟单员');
+      BotToast.showText(text: '请选择跟单员');
+      throw Exception('请选择跟单员');
     }
     if (order.auditNeeded &&
         (order.approvers == null || order.approvers.isEmpty)) {
-      BotToast.showText(text: '前选择审批人');
+      BotToast.showText(text: '请选择审批人');
+      throw Exception('请选择审批人');
     }
     Function cancelFunc =
         BotToast.showLoading(crossPage: false, clickClose: false);
