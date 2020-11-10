@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/orders/quote/quote_my_list_item.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sales_order_from.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:connectivity/connectivity.dart';
@@ -12,8 +13,8 @@ import '../../../home/pool/requirement_quote_order_form.dart';
 import '../../../production/production_online_order_from.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
 
-class QuoteList extends StatefulWidget {
-  QuoteList({
+class QuoteMyList extends StatefulWidget {
+  QuoteMyList({
     Key key,
     this.status,
     this.companyUid,
@@ -28,18 +29,18 @@ class QuoteList extends StatefulWidget {
   final TextEditingController rejectController = TextEditingController();
 
   @override
-  _QuoteListState createState() {
-    return _QuoteListState();
+  _QuoteMyListState createState() {
+    return _QuoteMyListState();
   }
 }
 
-class _QuoteListState extends State<QuoteList>
+class _QuoteMyListState extends State<QuoteMyList>
     with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
 
-    var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
+    var bloc = BLoCProvider.of<QuoteMyOrdersBLoC>(context);
 
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels ==
@@ -133,6 +134,7 @@ class _QuoteListState extends State<QuoteList>
   confirmFactory(QuoteModel model) async {
     int statusCode = await QuoteOrderRepository().quoteApprove(model.code);
     if (statusCode == 200) {
+      _alertMessage('确认成功');
       //触发刷新
       _handleRefresh();
     } else {
@@ -200,7 +202,7 @@ class _QuoteListState extends State<QuoteList>
 
   // 子组件刷新数据方法
   void _handleRefresh() {
-    var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
+    var bloc = BLoCProvider.of<QuoteMyOrdersBLoC>(context);
     if (widget.companyUid != null) {
       bloc.getQuoteDataByCompany(widget.companyUid);
     } else if (widget.keyword != null) {
@@ -228,7 +230,7 @@ class _QuoteListState extends State<QuoteList>
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
+    var bloc = BLoCProvider.of<QuoteMyOrdersBLoC>(context);
 
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),
@@ -310,7 +312,7 @@ class _QuoteListState extends State<QuoteList>
                 if (snapshot.hasData) {
                   return Column(
                     children: snapshot.data.data.map((item) {
-                      return QuoteListItem(
+                      return QuoteMyListItem(
                         model: item,
                         onQuoteRejecting: () => _onQuoteRejecting(item),
                         onQuoteConfirming: () => _onQuoteConfirming(item),

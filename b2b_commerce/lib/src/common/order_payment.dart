@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail_online.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_detail_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -189,6 +190,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                   style: TextStyle(
                     color: Colors.black,
                   )),
+              trailing: Icon(
+                Icons.edit,
+                color: Colors.black,
+              ),
             )
                 : Container(
               height: 100,
@@ -843,7 +848,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void selectDeliveryAddress() {
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -859,18 +863,26 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             widget.order.deliveryAddress = value;
           });
 
+          bool result = false;
           if (widget.order is ProofingModel) {
             //更新打样单地址
-            bool result = await ProofingOrderRepository()
+            result = await ProofingOrderRepository()
                 .updateAddress(widget.order.code, widget.order);
           } else if (widget.order is PurchaseOrderModel) {
             // 采购单地址
-            bool result = await PurchaseOrderRepository()
+            result = await PurchaseOrderRepository()
                 .updateAddress(widget.order.code, widget.order);
+          } else if (widget.order is SalesOrderModel){
+            result = await SalesOrderRespository().updateAddress(widget.order.code, widget.order);
           }
+          if(result){
+            BotToast.showText(text: '修改收货地址成功');
+          }else{
+            BotToast.showText(text: '修改收货地址失败');
+          }
+
         }
       });
-    }
   }
 
   double getPayAmount() {

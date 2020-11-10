@@ -28,7 +28,7 @@ class SalesListButtonGroup extends SalesDetailButtonGroup {
   @override
   List<Widget> buildButtons(BuildContext context) {
     //根据买卖方显示按钮
-    UserType userType = BLoCProvider.of<UserBLoC>(context).currentUser.type;
+    String companyCode = BLoCProvider.of<UserBLoC>(context).currentUser.companyCode;
 
     List<Widget> buttons = [
       Expanded(
@@ -37,8 +37,8 @@ class SalesListButtonGroup extends SalesDetailButtonGroup {
       ),
     ];
 
-    //工厂按钮
-    if (userType == UserType.FACTORY) {
+    //卖方按钮
+    if (companyCode == model.seller.uid) {
       //TODO退款状态判断
       if (model.refunding != null && model.refunding) {
         buttons.add(buildSpaceBtn());

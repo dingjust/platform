@@ -7,12 +7,12 @@ import 'package:services/services.dart';
 import 'package:services/src/order/PageEntry.dart';
 import 'package:services/src/order/response/order_response.dart';
 
-class QuoteOrdersBLoC extends BLoCBase {
+class QuoteMyOrdersBLoC extends BLoCBase {
   // 工厂模式
-  factory QuoteOrdersBLoC() => _getInstance();
+  factory QuoteMyOrdersBLoC() => _getInstance();
 
-  static QuoteOrdersBLoC get instance => _getInstance();
-  static QuoteOrdersBLoC _instance;
+  static QuoteMyOrdersBLoC get instance => _getInstance();
+  static QuoteMyOrdersBLoC _instance;
 
   QuoteOrdersResponse quoteResponse;
   List<QuoteModel> quoteModels = [];
@@ -20,13 +20,13 @@ class QuoteOrdersBLoC extends BLoCBase {
   //锁
   bool lock = false;
 
-  QuoteOrdersBLoC._internal() {
+  QuoteMyOrdersBLoC._internal() {
     // 初始化
   }
 
-  static QuoteOrdersBLoC _getInstance() {
+  static QuoteMyOrdersBLoC _getInstance() {
     if (_instance == null) {
-      _instance = new QuoteOrdersBLoC._internal();
+      _instance = new QuoteMyOrdersBLoC._internal();
     }
     return _instance;
   }
@@ -61,6 +61,7 @@ class QuoteOrdersBLoC extends BLoCBase {
             'states': [status],
           };
         }
+        data['requirementOrderBelongTos'] = [UserBLoC.instance.currentUser.companyCode];
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.quotes,
@@ -87,7 +88,7 @@ class QuoteOrdersBLoC extends BLoCBase {
           .add(QuoteData(status: status, data: _quotesMap[status].data));
       lock = false;
     }
-  }
+  }//
 
   filterByKeyword(String keyword) async {
     //若没有数据则查询
@@ -103,6 +104,8 @@ class QuoteOrdersBLoC extends BLoCBase {
           data: data,
           queryParameters: {
             'page': _quotesMap['ALL'].currentPage,
+
+
             'size': _quotesMap['ALL'].size
           });
     } on DioError catch (e) {
@@ -211,15 +214,8 @@ class QuoteOrdersBLoC extends BLoCBase {
     if (!lock) {
       lock = true;
       if(quoteModels.isEmpty){
-        if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-          //获取与该工厂全部的报价单
-          quoteResponse =
-          await QuoteOrderRepository().getQuotesByFactory(companyUid, { 'fields':QuoteOrderOptions.BASIC_LESS,});
-        } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-          //获取与该品牌全部的报价单
-          quoteResponse =
-          await QuoteOrderRepository().getQuotesByBrand(companyUid, { 'fields':QuoteOrderOptions.BASIC_LESS,});
-        }
+        quoteResponse =
+        await QuoteOrderRepository().getQuotesByBrand(companyUid, { 'fields':QuoteOrderOptions.BASIC_LESS,});
 
         quoteModels.addAll(quoteResponse.content);
       }
@@ -233,17 +229,9 @@ class QuoteOrdersBLoC extends BLoCBase {
   lodingMoreByCompany(String companyUid) async {
     if (!lock) {
       lock = true;
-      //获取与该工厂全部的报价单
       if (quoteResponse.number < quoteResponse.totalPages - 1) {
-        if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-          //获取与该工厂全部的报价单
-          quoteResponse = await QuoteOrderRepository().getQuotesByFactory(
-              companyUid, {'page': quoteResponse.number + 1, 'fields':QuoteOrderOptions.BASIC_LESS,});
-        } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-          //获取与该品牌全部的报价单
-          quoteResponse = await QuoteOrderRepository()
-              .getQuotesByBrand(companyUid, {'page': quoteResponse.number + 1, 'fields':QuoteOrderOptions.BASIC_LESS,});
-        }
+        quoteResponse = await QuoteOrderRepository()
+            .getQuotesByBrand(companyUid, {'page': quoteResponse.number + 1, 'fields':QuoteOrderOptions.BASIC_LESS,});
         quoteModels.addAll(quoteResponse.content);
       } else {
         bottomController.sink.add(true);
@@ -268,12 +256,4 @@ class QuoteOrdersBLoC extends BLoCBase {
 
     super.dispose();
   }
-}
-
-class QuoteData {
-  String status;
-
-  List<QuoteModel> data;
-
-  QuoteData({this.status, this.data});
 }

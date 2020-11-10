@@ -1,9 +1,12 @@
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -30,7 +33,8 @@ class FactoryButtonsSection extends StatelessWidget {
                   _buildMaterial(context),
                   _buildContractManage(context),
                   _buildOrderCoordination(context),
-                  _builRequirement(context)
+                  _builRequirement(context),
+                  _buildPublishRequirement(context),
                 ],
               ),
             ],
@@ -116,6 +120,36 @@ class FactoryButtonsSection extends StatelessWidget {
           title: '我的发布',
         ));
   }
+  Widget _buildPublishRequirement(BuildContext context) {
+    return Expanded(
+        flex: 1,
+        child: ImageNumButton(
+          image: B2BImage.requirement(),
+          imagePadding: EdgeInsets.all(10),
+          onPressed: () {
+//            Navigator.pushNamed(context, AppRoutes.ROUTE_SUBCONTRACTS_MINE);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      builder: (_) => RequirementOrderFormState(),
+                    ),
+                  ],
+                  child: Consumer(
+                    builder: (context, RequirementOrderFormState state, _) =>
+                        RequirementOrderForm(
+                          formState: state,
+                        ),
+                  ),
+                ),
+              ),
+            );
+          },
+          title: '发布需求',
+        ));
+  }
 }
 
 class FactoryEntranceSection extends StatelessWidget {
@@ -148,6 +182,7 @@ class FactoryEntranceSection extends StatelessWidget {
           });
         },
       ),
+
     ];
 
     return EasyGrid(items: items);

@@ -753,6 +753,7 @@ class _BuyStockFormState extends State<BuyStockForm>
             productEntries: productEntries,
             remarksEditingController: remarksEditingController,
             totalEditingControllerMap: totalEditingControllerMap,
+            salesOrderType: SalesOrderType.SPOT_GOODS,
             orderType: OrderType.SALES,
           )));
     } else {

@@ -322,8 +322,10 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
         trackingID: _orderCodeController.text,
         offlineConsignment: _isOffline)
         .then((msg) {
-      if (msg.resultCode == 0) {
+      if (msg != null && msg.resultCode == 0) {
         Navigator.of(context).pop(true);
+      }else{
+        BotToast.showText(text: "发货失败");
       }
     });
   }

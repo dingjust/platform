@@ -20,6 +20,8 @@ class OrderConfirmForm extends StatefulWidget {
 
   OrderType orderType;
 
+  SalesOrderType salesOrderType;
+
   ///按颜色分组
   Map<String, List<EditApparelSizeVariantProductEntry>> colorRowList;
   Map<String, TextEditingController> totalEditingControllerMap;
@@ -32,7 +34,8 @@ class OrderConfirmForm extends StatefulWidget {
       this.colorRowList,
       this.totalEditingControllerMap,
       this.remarksEditingController,
-      this.orderType})
+      this.orderType,
+      this.salesOrderType})
       : super(key: key);
 
   @override
@@ -648,7 +651,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
   ///校验表单
   bool validateForm() {
-    if (widget.orderType == OrderType.PURCHASE) {
+    if (widget.orderType == OrderType.PURCHASE || (widget.orderType == OrderType.SALES && widget.salesOrderType == SalesOrderType.FUTURE_GOODS)) {
       if (widget.product.steppedPrices != null &&
           widget.product.steppedPrices.isNotEmpty) {
         if (totalNum < widget.product.steppedPrices[0].minimumQuantity &&
@@ -848,6 +851,13 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       ..totalQuantity = totalNum
       ..deliveryAddress = addressModel
       ..remarks = widget.remarksEditingController.text;
+    //销售订单类型
+      if(widget.salesOrderType != null){
+        model.type = widget.salesOrderType;
+      }else{
+        model.type = SalesOrderType.DEFAULT_GOODS;
+      }
+
     showDialog(
         context: context,
         barrierDismissible: false,
