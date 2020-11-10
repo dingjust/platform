@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_constants.dart';
+import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +198,7 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                             ),
                           ),
                           Text(
-                            '￥${order.entries.first.basePrice}',
+                            '￥${order.unitPrice}',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w500),
@@ -337,111 +338,149 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
 
   /// 构建收货信息UI
   Widget _buildDeliveryAddress(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: ListTile(
-                leading: Icon(
-                  Icons.location_on,
-                  color: Colors.black,
-                ),
-                title: Row(
-                  children: <Widget>[
-                    Text('${order?.deliveryAddress?.fullname ?? ''}'),
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      child: Text('${order?.deliveryAddress?.cellphone ?? ''}'),
-                    )
-                  ],
-                ),
-                subtitle: Text('${order?.deliveryAddress?.details ?? ''}',
-                    style: TextStyle(
-                      color: Colors.black,
-                    )),
-              ),
-            ),
-            SizedBox(
-              child: Image.asset(
-                'temp/common/address_under_line.png',
-                package: 'assets',
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-            GestureDetector(
-              child: Container(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      child: Text(
-                        '物流信息',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.carrierDetails.name : ''}',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.trackingID : ''}',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              onTap: () {
-                if (order.consignment != null &&
-                    order.consignment.carrierDetails != null &&
-                    order.consignment.trackingID != null &&
-                    order.consignment.carrierDetails.name != null) {
-                  copyToClipboard(order.consignment.trackingID);
+    String companyCode = UserBLoC.instance.currentUser.companyCode;
+    bool canUpdateAddress = false;
+    if(companyCode == order.belongTo.uid && SalesOrderStatus.PENDING_PAYMENT == order.status){
+      canUpdateAddress = true;
+    }
+
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: ListTile(
+              onTap: (){
+                if(canUpdateAddress){
+                  selectDeliveryAddress();
                 }
               },
+              leading: Icon(
+                Icons.location_on,
+                color: Colors.black,
+              ),
+              title: Row(
+                children: <Widget>[
+                  Text('${order?.deliveryAddress?.fullname ?? ''}'),
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text('${order?.deliveryAddress?.cellphone ?? ''}'),
+                  )
+                ],
+              ),
+              subtitle: Text('${order?.deliveryAddress?.details ?? ''}',
+                  style: TextStyle(
+                    color: Colors.black,
+                  )),
+              trailing: canUpdateAddress ? Icon(
+                Icons.edit,
+                color: Colors.black,
+              ):null,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                // Container(
-                //     decoration: BoxDecoration(
-                //         border: Border.all(color: Colors.grey[300]),
-                //         shape: BoxShape.circle),
-                //     padding: EdgeInsets.fromLTRB(5, 2, 5, 5),
-                //     margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
-                //     child: Icon(
-                //       B2BIcons.truck,
-                //       color: Colors.grey[400],
-                //     )),
-                order.isOfflineConsignment ?? false
-                    ? Container(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text('订单已走线下物流'),
-                )
-                    : Container()
-              ],
+          ),
+          SizedBox(
+            child: Image.asset(
+              'temp/common/address_under_line.png',
+              package: 'assets',
+              fit: BoxFit.fitWidth,
             ),
-          ],
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-        ),
+          ),
+          GestureDetector(
+            child: Container(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      '物流信息',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.carrierDetails.name : ''}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Container(
+                        child: Text(
+                          '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.trackingID : ''}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            onTap: () {
+              if (order.consignment != null &&
+                  order.consignment.carrierDetails != null &&
+                  order.consignment.trackingID != null &&
+                  order.consignment.carrierDetails.name != null) {
+                copyToClipboard(order.consignment.trackingID);
+              }
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              // Container(
+              //     decoration: BoxDecoration(
+              //         border: Border.all(color: Colors.grey[300]),
+              //         shape: BoxShape.circle),
+              //     padding: EdgeInsets.fromLTRB(5, 2, 5, 5),
+              //     margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
+              //     child: Icon(
+              //       B2BIcons.truck,
+              //       color: Colors.grey[400],
+              //     )),
+              order.isOfflineConsignment ?? false
+                  ? Container(
+                padding:
+                EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Text('订单已走线下物流'),
+              )
+                  : Container()
+            ],
+          ),
+        ],
       ),
-      onTap: () async {},
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+      ),
     );
+  }
+
+  void selectDeliveryAddress() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MyAddressesPage(
+            isJumpSource: true,
+            title: '选择地址',
+          )),
+      //接收返回数据并处理
+    ).then((value) async {
+      if (value != null) {
+        setState(() {
+          order.deliveryAddress = value;
+        });
+
+        bool result = await SalesOrderRespository().updateAddress(order.code, order);
+        if(result){
+          BotToast.showText(text: '修改收货地址成功');
+        }else{
+          BotToast.showText(text: '修改收货地址失败');
+        }
+
+      }
+    });
   }
 
   /// 提示隐藏产品颜色尺码UI

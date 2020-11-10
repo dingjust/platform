@@ -41,12 +41,12 @@ class SalesDetailButtonGroup extends StatelessWidget {
 
   List<Widget> buildButtons(BuildContext context) {
     //根据买卖方显示按钮
-    UserType userType = BLoCProvider.of<UserBLoC>(context).currentUser.type;
+    String companyCode = BLoCProvider.of<UserBLoC>(context).currentUser.companyCode;
 
     List<Widget> buttons = [buildTelButton(context)];
 
     //工厂按钮
-    if (userType == UserType.FACTORY) {
+    if (companyCode == model.seller.uid) {
       //TODO退款状态判断
       if (model.refunding != null && model.refunding) {
         buttons.add(buildSpaceBtn());
@@ -101,7 +101,7 @@ class SalesDetailButtonGroup extends StatelessWidget {
 
   Widget buildTelButton(BuildContext context) {
     //根据买卖方
-    UserType userType = BLoCProvider.of<UserBLoC>(context).currentUser.type;
+    String companyCode = BLoCProvider.of<UserBLoC>(context).currentUser.companyCode;
 
     return Expanded(
       flex: 1,
@@ -112,10 +112,10 @@ class SalesDetailButtonGroup extends StatelessWidget {
           InkWell(
             onTap: () async {
               var url = 'tel:';
-              if (userType != UserType.FACTORY) {
+              if (companyCode != model.seller.uid) {
                 url += model.seller.contactPhone;
               } else {
-                url += model.user.contactPhone;
+                url += model.belongTo.contactPhone;
               }
 
               await launch(url);
@@ -258,7 +258,7 @@ class SalesDetailButtonGroup extends StatelessWidget {
                   paymentFor: PaymentFor.SALES,
                 )))
         .then((val) {
-      if (val) {
+      if (val ?? false) {
         //成功回调刷新
         callback();
       }
@@ -271,7 +271,7 @@ class SalesDetailButtonGroup extends StatelessWidget {
         .push(
             MaterialPageRoute(builder: (context) => ReturnFormPage(model.code)))
         .then((val) {
-      if (val) {
+      if (val ?? false) {
         //成功回调刷新
         callback();
       }
@@ -354,23 +354,11 @@ class SalesDetailButtonGroup extends StatelessWidget {
 
   void confirm(BuildContext context) async {
     BaseMsg msg = await SalesOrderRespository().confirmReceived(model.code);
-    if (msg != null && msg.resultCode == 0) {
+    if (msg != null && msg.code == 1) {
       callback();
+      BotToast.showText(text: "确认收货成功");
     } else {
-      Navigator.of(context).pop();
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '确认失败',
-              callbackResult: false,
-              confirmAction: () {
-                Navigator.of(context).pop();
-              },
-            );
-          });
+      BotToast.showText(text: "确认收货失败");
     }
   }
 

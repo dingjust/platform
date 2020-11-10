@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publi
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
+import 'package:b2b_commerce/src/business/quote_my_orders.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/common/webview_page.dart';
@@ -60,6 +61,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_PURCHASE_ORDERS = '/business/purchase_orders';
   static const ROUTE_SALE_ORDERS = '/business/sale_orders';
   static const ROUTE_QUOTES = '/business/quotes';
+  static const ROUTE_MY_QUOTES = '/business/my_quotes';
   static const ROUTE_REQUIREMENT_ORDERS = '/business/requirement_orders';
   static const ROUTE_FABRIC_PUBLISH = '/business/fabric/publish';
   static const ROUTE_FABRIC_REQUIREMENT = '/business/fabric/requirement';
@@ -114,6 +116,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),
+    ROUTE_MY_QUOTES: (context) => QuoteMyOrdersPage(),
     ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
     ROUTE_SUBCONTRACTS_POOL: (context) => SubContractPoolPage(),

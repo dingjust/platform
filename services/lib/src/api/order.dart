@@ -415,4 +415,9 @@ class OrderApis {
           (code) {
         return '/{baseSiteId}/b2b/orders/sales/$code/reminder/delivery';
       };
+
+  //销售订单更新地址
+  static get updateSalesAddress => (code) {
+    return '/{baseSiteId}/b2b/orders/sales/$code/deliveryAddress';
+  };
 }
