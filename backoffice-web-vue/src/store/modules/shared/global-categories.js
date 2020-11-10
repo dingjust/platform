@@ -5,26 +5,26 @@ const state = {
 };
 
 const mutations = {
-  categories: (state, categories) => state.categories = categories,
+  categories: (state, categories) => state.categories = categories
 };
 
 const actions = {
-  async getCategoriesData({
+  async getCategoriesData ({
     dispatch,
     commit,
     state
   }) {
-    //获取尺码数据
+    // 获取尺码数据
     const url = '/b2b/categories/cascaded';
     const response = await http.get(url);
-    if (!response['errors']) {
+    if (!response['errors'] && response instanceof Array) {
       commit('categories', response);
     }
-  },
+  }
 };
 
 const getters = {
-  categories: state => state.categories,
+  categories: state => state.categories
 };
 
 export default {

@@ -5,26 +5,26 @@ const state = {
 };
 
 const mutations = {
-  colors: (state, colors) => state.colors = colors,
+  colors: (state, colors) => state.colors = colors
 };
 
 const actions = {
-  async getcolorsData({
+  async getcolorsData ({
     dispatch,
     commit,
     state
   }) {
-    //获取尺码数据
+    // 获取尺码数据
     const url = '/b2b/colors/all';
     const response = await http.get(url);
-    if (!response['errors']) {
+    if (!response['errors'] && response instanceof Array) {
       commit('colors', response);
     }
   },
 };
 
 const getters = {
-  colors: state => state.colors,
+  colors: state => state.colors
 };
 
 export default {
