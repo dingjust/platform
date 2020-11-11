@@ -10,7 +10,21 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 class ProductionTaskOrderItem extends StatelessWidget {
   final ProductionTaskOrderModel model;
 
-  const ProductionTaskOrderItem(this.model, {Key key}) : super(key: key);
+  /// 是否是选择列表
+  final bool isSelectList;
+
+  /// item是否被选择
+  final bool isSelected;
+
+  /// 回调方法
+  final VoidCallback onPressed;
+
+  const ProductionTaskOrderItem(this.model,
+      {this.isSelected = false,
+      this.isSelectList = false,
+      this.onPressed,
+      Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +38,17 @@ class ProductionTaskOrderItem extends StatelessWidget {
           children: <Widget>[_header(), _main(), _foot()],
         ),
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            color: isSelected ? Constants.THEME_COLOR_MAIN : Colors.white,
+            borderRadius: BorderRadius.circular(10)),
       ),
       onTap: () async {
-        Navigator.of(context).pushNamed(
-            AppRoutes.ROUTE_PRODUCTION_TASK_ORDER_DETAIL,
-            arguments: model.id);
+        if (isSelectList) {
+          onPressed();
+        } else {
+          Navigator.of(context).pushNamed(
+              AppRoutes.ROUTE_PRODUCTION_TASK_ORDER_DETAIL,
+              arguments: model.id);
+        }
       },
     );
   }

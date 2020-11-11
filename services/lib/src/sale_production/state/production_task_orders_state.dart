@@ -38,6 +38,12 @@ class ProductionTaskOrdersState extends PageState {
         size: 10,
         data: List<ProductionTaskOrderModel>(),
         totalElements: -1),
+    // 选择组件展示的列表数据
+    'SELECT_LIST': PageEntry(
+        currentPage: 0,
+        size: 10,
+        data: List<ProductionTaskOrderModel>(),
+        totalElements: -1)
   };
 
   String _keyword = '';
@@ -69,15 +75,23 @@ class ProductionTaskOrdersState extends PageState {
     if (_ordersMap[status].totalElements < 0) {
       // 分页拿数据，response.data
       // 请求参数
-      Map data = {
-        'depts': [0],
-        'users': [0],
-        'keyword': _keyword != '' ? _keyword : null
-      };
+      Map data;
+      if (status == 'SELECT_LIST') {
+        data = {
+          'excludeState': 'CANCED',
+          'haveOutOrder': 'NotSentOut'
+        };
+      } else {
+        data = {
+          'depts': [0],
+          'users': [0]
+        };
 
-      if (status != '' && status != 'SEARCH') {
-        data['state'] = status;
+        if (status != '' && status != 'SEARCH') {
+          data['state'] = status;
+        }
       }
+      data['keyword'] = _keyword != '' ? _keyword : null;
 
       Response<Map<String, dynamic>> response;
 
@@ -112,14 +126,23 @@ class ProductionTaskOrdersState extends PageState {
       workingStart();
       //接口调用：
       if (_ordersMap[status].currentPage + 1 != _ordersMap[status].totalPages) {
-        Map data = {
-          'depts': [0],
-          'users': [0],
-          'keyword': _keyword != '' ? _keyword : null,
-        };
-        if (status != 'ALL') {
-          data['state'] = status;
+        Map data;
+        if (status == 'SELECT_LIST') {
+          data = {
+            'excludeState': 'CANCED',
+            'haveOutOrder': 'NotSentOut'
+          };
+        } else {
+          data = {
+            'depts': [0],
+            'users': [0]
+          };
+
+          if (status != 'ALL') {
+            data['state'] = status;
+          }
         }
+       data['keyword'] = _keyword != '' ? _keyword : null;
 
         Response<Map<String, dynamic>> response;
         try {
@@ -142,7 +165,7 @@ class ProductionTaskOrdersState extends PageState {
           _ordersMap[status].data.addAll(ordersResponse.content);
         }
       }
-      
+
       //异步调用结束，通知加载组件
       workingEnd();
     }
