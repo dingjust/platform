@@ -80,6 +80,10 @@ class ProgressWorkSheetModel extends ItemModel {
   @JsonKey(toJson: CooperatorModel.toJson)
   CooperatorModel cooperator;
 
+  ///创建时间
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime creationtime;
+
   ProgressWorkSheetModel({
     this.code,
     this.status,
