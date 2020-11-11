@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail_online.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_detail_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +13,10 @@ import 'package:flutter_alipay/flutter_alipay.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:fluwx/fluwx.dart';
-import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 
 class OrderPaymentPage extends StatefulWidget {
   OrderModel order;
@@ -36,13 +37,15 @@ class OrderPaymentPage extends StatefulWidget {
 }
 
 class _OrderPaymentPageState extends State<OrderPaymentPage> {
+  StreamSubscription wechatSubscription;
+
   void initState() {
     //埋点>>>进入支付页面
     FlutterUmplus.event("payment_page");
 
     WidgetsBinding.instance.addPostFrameCallback((_) => initCheck());
     //监听微信回调
-    weChatResponseEventHandler.listen((data) async {
+    wechatSubscription = weChatResponseEventHandler.listen((data) async {
       print('========Fluwx response ${widget.hashCode}');
       if (data.errCode == 0) {
         Future.delayed(const Duration(seconds: 1), () {
@@ -111,14 +114,13 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) =>
                             SaleOrderDetailPage(code: widget.order.code)));
-                  } else if (widget.paymentFor == PaymentFor.DEPOSIT && widget.isFormDetail) {
+                  } else if (widget.paymentFor == PaymentFor.DEPOSIT &&
+                      widget.isFormDetail) {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) =>
-                          PurchaseOrderDetailOnlinePage(code: widget.order.code)
-                      )
-                    );
+                            PurchaseOrderDetailOnlinePage(
+                                code: widget.order.code)));
                   } else {
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
@@ -188,6 +190,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                   style: TextStyle(
                     color: Colors.black,
                   )),
+              trailing: Icon(
+                Icons.edit,
+                color: Colors.black,
+              ),
             )
                 : Container(
               height: 100,
@@ -280,48 +286,50 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         children: <Widget>[
           product?.thumbnail != null
               ? Container(
-                  width: 80,
-                  height: 80,
-                  child: CachedNetworkImage(
+            width: 80,
+            height: 80,
+            child: CachedNetworkImage(
+                width: 100,
+                height: 100,
+                imageUrl: '${product.thumbnail.previewUrl()}',
+                fit: BoxFit.cover,
+                imageBuilder: (context, imageProvider) =>
+                    Container(
                       width: 100,
                       height: 100,
-                      imageUrl: '${product.thumbnail.previewUrl()}',
-                      fit: BoxFit.cover,
-                      imageBuilder: (context, imageProvider) =>
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                      placeholder: (context, url) => SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                        size: 100,
-                          ),
-                      errorWidget: (context, url, error) => SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                        size: 100,
-                          )),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                )
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                placeholder: (context, url) =>
+                    SpinKitRing(
+                      color: Colors.black12,
+                      lineWidth: 2,
+                      size: 100,
+                    ),
+                errorWidget: (context, url, error) =>
+                    SpinKitRing(
+                      color: Colors.black12,
+                      lineWidth: 2,
+                      size: 100,
+                    )),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          )
               : Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color.fromRGBO(243, 243, 243, 1)),
-                  child: Icon(B2BIcons.noPicture,
-                      color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-                ),
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Color.fromRGBO(243, 243, 243, 1)),
+            child: Icon(B2BIcons.noPicture,
+                color: Color.fromRGBO(200, 200, 200, 1), size: 60),
+          ),
           Expanded(
             flex: 1,
             child: Container(
@@ -787,9 +795,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                   this.dispose();
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                          builder: (context) => ProofingOrderDetailPage(
-                            widget.order.code,
-                          )),
+                          builder: (context) =>
+                              ProofingOrderDetailPage(
+                                widget.order.code,
+                              )),
                       ModalRoute.withName('/'));
 
                   ///TODO:生产单
@@ -839,11 +848,11 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void selectDeliveryAddress() {
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MyAddressesPage(
+            builder: (context) =>
+                MyAddressesPage(
                   isJumpSource: true,
                   title: '选择地址',
                 )),
@@ -854,18 +863,26 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             widget.order.deliveryAddress = value;
           });
 
+          bool result = false;
           if (widget.order is ProofingModel) {
             //更新打样单地址
-            bool result = await ProofingOrderRepository()
+            result = await ProofingOrderRepository()
                 .updateAddress(widget.order.code, widget.order);
           } else if (widget.order is PurchaseOrderModel) {
             // 采购单地址
-            bool result = await PurchaseOrderRepository()
+            result = await PurchaseOrderRepository()
                 .updateAddress(widget.order.code, widget.order);
+          } else if (widget.order is SalesOrderModel){
+            result = await SalesOrderRespository().updateAddress(widget.order.code, widget.order);
           }
+          if(result){
+            BotToast.showText(text: '修改收货地址成功');
+          }else{
+            BotToast.showText(text: '修改收货地址失败');
+          }
+
         }
       });
-    }
   }
 
   double getPayAmount() {
@@ -914,8 +931,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    // fluwx.dispose();
+    wechatSubscription.cancel();
     super.dispose();
   }
 

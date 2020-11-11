@@ -13,17 +13,29 @@ class SaleProductionApis {
   static get refuse => (id) {
         return '/{baseSiteId}/sales/production/order/reject/outboundOrder/$id';
       };
-  
+
+  ///外接订单-接单
+  static get accept => '/{baseSiteId}/sales/production/order/save/order';
+
+  ///外接订单-唯一码-检索
+  static get uniqueCodePreview => (code) {
+        return '/{baseSiteId}/out/order/preview/$code';
+      };
+
+  ///外接订单-唯一码-导入
+  static get uniqueCodeImport => (code) {
+        return '/{baseSiteId}/sales/production/order/create/from/uniqueCode/$code';
+      };
+
   /// 外发订单列表
-  static get outOrderList =>
-      '/{baseSiteId}/out/order/search';
+  static get outOrderList => '/{baseSiteId}/out/order/search';
 
   /// 生产工单列表
-  static get productionTaskOrderList => 
+  static get productionTaskOrderList =>
       '/{baseSiteId}/production/task/order/search';
 
   /// 生产工单详情
   static get productionTaskOrderDetail => (id) {
-    return  '/{baseSiteId}/production/task/order/$id';
-  }; 
+        return '/{baseSiteId}/production/task/order/$id';
+      };
 }

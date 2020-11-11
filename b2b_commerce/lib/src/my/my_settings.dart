@@ -53,7 +53,7 @@ class _MySettingsPageState extends State<MySettingsPage> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
-                bloc.logout();
+                bloc.logout(context: context);
               },
             ),
           ),

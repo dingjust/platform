@@ -28,13 +28,14 @@ class ProductionProgressState with ChangeNotifier {
     notifyListeners();
   }
 
-  void jumpToProgressDetail({BuildContext context,
-    MaterialPageRoute materialPageRoute,
-    ProductionProgressModel progress,
-    VoidCallback callBack}) async {
+  void jumpToProgressDetail(
+      {BuildContext context,
+      MaterialPageRoute materialPageRoute,
+      ProductionProgressModel progress,
+      VoidCallback callBack}) async {
     ///比较数据时间
     ProductionProgressModel currentProgress = _order.progresses.firstWhere(
-            (innerProgress) => innerProgress.id == progress.id,
+        (innerProgress) => innerProgress.id == progress.id,
         orElse: () => null);
 
     //更新当前选中生产节点
@@ -71,5 +72,10 @@ class ProductionProgressState with ChangeNotifier {
       notifyListeners();
     }
     return _order;
+  }
+
+  void clear() {
+    _order = null;
+    _progress = null;
   }
 }

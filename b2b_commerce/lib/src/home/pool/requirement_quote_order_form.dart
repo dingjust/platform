@@ -59,7 +59,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
       _unitPriceController.text = widget.quoteModel.unitPrice?.toString() ?? '';
       quoteDate = widget.quoteModel.expectedDeliveryDate ?? '';
     } else {
-      expectedDeliveryDate = widget.model.details.expectedDeliveryDate;
+      expectedDeliveryDate = widget.model?.details?.expectedDeliveryDate;
     }
 
     if (widget.update) {
@@ -82,15 +82,15 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
         ),
         body: Container(
             child: ListView(
-              children: <Widget>[
-                _buildRequirementInfo(),
-                _buildQuoteInfo(),
-                _buildProofingInfo(),
-                _buildConfirmationDeliveryDate(),
-                _buildAccessory(),
-                _buildRemarks()
-              ],
-            )),
+          children: <Widget>[
+            _buildRequirementInfo(),
+            _buildQuoteInfo(),
+            _buildProofingInfo(),
+            _buildConfirmationDeliveryDate(),
+            _buildAccessory(),
+            _buildRemarks()
+          ],
+        )),
         bottomNavigationBar: Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -128,8 +128,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                   Navigator.of(context).pop();
                 },
               );
-            }
-        );
+            });
         return Future.value(false);
       },
     );
@@ -229,27 +228,29 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  widget.model.details!=null && widget.model.details.productName != null
+                  widget.model.details != null &&
+                      widget.model.details.productName != null
                       ? Text(
-                          widget.model.details.productName,
-                          style: TextStyle(fontSize: 15),
-                          overflow: TextOverflow.ellipsis,
-                        )
+                    widget.model.details.productName,
+                    style: TextStyle(fontSize: 15),
+                    overflow: TextOverflow.ellipsis,
+                  )
                       : Text(
-                          ' ',
-                          style: TextStyle(fontSize: 15, color: Colors.red),
-                        ),
-                  widget.model.details!=null && widget.model.details.productSkuID != null
+                    ' ',
+                    style: TextStyle(fontSize: 15, color: Colors.red),
+                  ),
+                  widget.model.details != null &&
+                      widget.model.details.productSkuID != null
                       ? Container(
-                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '货号：${widget.model.details.productSkuID}',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      '货号：${widget.model.details.productSkuID}',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
                         )
                       : Container(),
                   Container(
@@ -258,8 +259,20 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.model.details == null || widget.model.details.majorCategory == null || widget.model.details.majorCategory.name == null ? '' : widget.model.details.majorCategory.name}   ${widget.model.details==null || widget.model.details.category == null || widget.model.details.category.name == null ? '' : widget.model.details.category.name}  "
-                          " ${widget.model.details==null || widget.model.details.expectedMachiningQuantity == null ? '' : widget.model.details.expectedMachiningQuantity}件",
+                      "${widget.model.details == null ||
+                          widget.model.details.majorCategory == null ||
+                          widget.model.details.majorCategory.name == null
+                          ? ''
+                          : widget.model.details.majorCategory.name}   ${widget
+                          .model.details == null ||
+                          widget.model.details.category == null ||
+                          widget.model.details.category.name == null
+                          ? ''
+                          : widget.model.details.category.name}  "
+                          " ${widget.model.details == null ||
+                          widget.model.details.expectedMachiningQuantity == null
+                          ? ''
+                          : widget.model.details.expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -464,26 +477,23 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           Container(
               child: GestureDetector(
             child: ListTile(
-              leading: RichText(text: TextSpan(
-                  text: '确认交货日期 ',
-                  style: TextStyle(color: Colors.black, fontSize: 15.0),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '* ',
-                        style: TextStyle(color: Colors.red)
-                    ),
-                  ]
-              ),
+              leading: RichText(
+                text: TextSpan(
+                    text: '确认交货日期 ',
+                    style: TextStyle(color: Colors.black, fontSize: 15.0),
+                    children: <TextSpan>[
+                      TextSpan(text: '* ', style: TextStyle(color: Colors.red)),
+                    ]),
               ),
               trailing: quoteDate == null
                   ? Text(
-                      '必选',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    )
+                '必选',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              )
                   : Text(
-                      DateFormatUtil.formatYMD(quoteDate),
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
+                DateFormatUtil.formatYMD(quoteDate),
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
             ),
             onTap: () {
               _showDatePicker();
@@ -594,16 +604,35 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   }
 
   void onSubmit() {
-    double fabric = _fabricController.text != null && _fabricController.text != '' ? double.parse(_fabricController.text.substring(
-        _fabricController.text.indexOf('￥') + 1, _fabricController.text.length)):0 ;
-    double excipients = _excipientsController.text != null && _excipientsController.text != '' ? double.parse(_excipientsController.text.substring(
-        _excipientsController.text.indexOf('￥') + 1, _excipientsController.text.length)):0 ;
-    double processing = _processingController.text != null && _processingController.text != '' ? double.parse(_processingController.text.substring(
-        _processingController.text.indexOf('￥') + 1, _processingController.text.length)):0 ;
-    double other = _otherController.text != null && _otherController.text != '' ? double.parse(_otherController.text.substring(
-        _otherController.text.indexOf('￥') + 1, _otherController.text.length)):0 ;
-    double unitPrice = _unitPriceController.text != null && _unitPriceController.text != '' ? double.parse(_unitPriceController.text.substring(
-        _unitPriceController.text.indexOf('￥') + 1, _unitPriceController.text.length)):0 ;
+    double fabric =
+    _fabricController.text != null && _fabricController.text != ''
+        ? double.parse(_fabricController.text.substring(
+        _fabricController.text.indexOf('￥') + 1,
+        _fabricController.text.length))
+        : 0;
+    double excipients =
+    _excipientsController.text != null && _excipientsController.text != ''
+        ? double.parse(_excipientsController.text.substring(
+        _excipientsController.text.indexOf('￥') + 1,
+        _excipientsController.text.length))
+        : 0;
+    double processing =
+    _processingController.text != null && _processingController.text != ''
+        ? double.parse(_processingController.text.substring(
+        _processingController.text.indexOf('￥') + 1,
+        _processingController.text.length))
+        : 0;
+    double other = _otherController.text != null && _otherController.text != ''
+        ? double.parse(_otherController.text.substring(
+        _otherController.text.indexOf('￥') + 1,
+        _otherController.text.length))
+        : 0;
+    double unitPrice =
+    _unitPriceController.text != null && _unitPriceController.text != ''
+        ? double.parse(_unitPriceController.text.substring(
+        _unitPriceController.text.indexOf('￥') + 1,
+        _unitPriceController.text.length))
+        : 0;
 
     if (_unitPriceController.text.isEmpty) {
       showDialog(
@@ -616,9 +645,8 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               callbackResult: false,
               outsideDismiss: true,
             );
-          }
-      );
-    } else if(quoteDate == null){
+          });
+    } else if (quoteDate == null) {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -629,24 +657,22 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               callbackResult: false,
               outsideDismiss: true,
             );
-          }
-      );
-    } else if((excipients + fabric + processing + other) > unitPrice){
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.RESULT_DIALOG,
-                failTips: '报价明细总金额大于订单报价金额',
-                callbackResult: false,
-                confirmAction: (){
-                  Navigator.of(context).pop();
-                },
-              );
-            }
-        );
-    }else {
+          });
+    } else if ((excipients + fabric + processing + other) > unitPrice) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '报价明细总金额大于订单报价金额',
+              callbackResult: false,
+              confirmAction: () {
+                Navigator.of(context).pop();
+              },
+            );
+          });
+    } else {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -657,12 +683,11 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               isNeedConfirmButton: true,
               isNeedCancelButton: true,
               dialogHeight: 210,
-              confirmAction: (){
+              confirmAction: () {
                 onSure();
               },
             );
-          }
-      );
+          });
 //      showDialog<void>(
 //        context: context,
 //        barrierDismissible: true, // user must tap button!
@@ -749,15 +774,14 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack:  QuoteOrderRepository().quoteUpdate(model),
+              requestCallBack: QuoteOrderRepository().quoteUpdate(model),
               outsideDismiss: false,
               loadingText: '保存中。。。',
               entrance: 'quoteOrder',
             );
-          }
-      ).then((value){
+          }).then((value) {
         bool result = false;
-        if(value!=null){
+        if (value != null) {
           result = true;
         }
         showDialog(
@@ -769,14 +793,12 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                 failTips: '修改报价失败',
                 successTips: '修改报价成功',
                 callbackResult: result,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                   getOrderDetail(value);
                 },
               );
-            }
-        );
-
+            });
       });
     } else {
       showDialog(
@@ -789,10 +811,9 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               loadingText: '保存中。。。',
               entrance: 'quoteOrder',
             );
-          }
-      ).then((value){
+          }).then((value) {
         bool result = false;
-        if(value!=null){
+        if (value != null) {
           result = true;
         }
         showDialog(
@@ -804,29 +825,28 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
                 failTips: '创建报价单失败',
                 successTips: '创建报价单成功',
                 callbackResult: result,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                   getOrderDetail(value);
                 },
               );
-            }
-        );
-
+            });
       });
     }
   }
 
-  void getOrderDetail(String code) async{
-    if(code != null && code != ''){
+  void getOrderDetail(String code) async {
+    if (code != null && code != '') {
 //      QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(code);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (context) => QuoteOrderDetailPage( code,)),
+              builder: (context) =>
+                  QuoteOrderDetailPage(
+                    code,
+                  )),
           ModalRoute.withName('/'));
     }
-
   }
-
 }
 
 class InputRow extends StatelessWidget {

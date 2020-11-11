@@ -1,6 +1,8 @@
+import 'package:b2b_commerce/b2b_commerce.dart';
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/sale/sales_order_from.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_online_order_from.dart';
@@ -161,7 +163,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
 
   Widget _buildCompanyInfo() {
     /// 工厂端显示
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+    if (UserBLoC.instance.currentUser.companyCode == pageItem.belongTo.uid) {
       return Container(
         color: Colors.white,
         child: Column(
@@ -325,7 +327,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
 
   _buildFactory() {
     //品牌端显示
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+    if (UserBLoC.instance.currentUser.companyCode == pageItem?.requirementOrder?.belongTo?.uid) {
       return GestureDetector(
         onTap: () async {
           if (pageItem.belongTo != null) {
@@ -784,7 +786,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     List<Widget> buttons;
 
     //品牌端显示
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+    if (UserBLoC.instance.currentUser.companyCode == pageItem?.requirementOrder?.belongTo?.uid) {
       if (pageItem.state == QuoteState.SELLER_SUBMITTED) {
         buttons = <Widget>[
           Container(
@@ -818,7 +820,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         ];
       }
     } //工厂端显示
-    else {
+    else if(UserBLoC.instance.currentUser.companyCode == pageItem.belongTo?.uid){
       if (pageItem.state == QuoteState.SELLER_SUBMITTED) {
         buttons = [
           Container(
@@ -837,148 +839,68 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         ];
       } else if (pageItem.state == QuoteState.BUYER_APPROVED) {
         buttons = <Widget>[
-          pageItem.activeProofing == null
+          pageItem.salesOrderCode == null
               ? Container(
-                  height: 30,
-                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  child: FlatButton(
-                      onPressed: onCreateProofings,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                      child: Text(
-                        '创建打样订单',
-                        style: TextStyle(
-                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                      )),
-                )
+            height: 30,
+            child: FlatButton(
+              onPressed: () => onSalesOrderCreating(pageItem),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '创建销售订单',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
+          )
               : Container(
-                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  height: 30,
-                  child: FlatButton(
-                    onPressed: () async {
-                      QuoteModel quote = await QuoteOrderRepository()
-                          .getQuoteDetails(pageItem.code);
-                      if (quote.activeProofing?.code != null) {
-                        //查询明细
-                        // ProofingModel detailModel = await ProofingOrderRepository().proofingDetail(quote.activeProofing.code);
-                        // if (detailModel != null) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ProofingOrderDetailPage(
-                                  quote.activeProofing.code,
-                                )));
-                        // }
-                      } else {
-                        showDialog<void>(
-                          context: context,
-                          barrierDismissible: false, // user must tap button!
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(
-                                '提示',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                              content: Text('该订单已被取消'),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text(
-                                    '确定',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  onPressed: () async {
-                                    QuoteOrdersBLoC().refreshData('ALL');
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
+            height: 30,
+            child: FlatButton(
+              onPressed: () async {
+                QuoteModel quote = await QuoteOrderRepository()
+                    .getQuoteDetails(pageItem.code);
+                if (quote.salesOrderCode != null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SaleOrderDetailPage(
+                              code: pageItem.salesOrderCode,
+                              callback: () {
+                                //回调刷新State
+//                                      Provider.of<SaleOrdersState>(context).clear();
+                              },
+                            )),
+                  );
+                } else {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return CustomizeDialog(
+                          dialogType: DialogType.CONFIRM_DIALOG,
+                          dialogHeight: 210,
+                          contentText2: '该订单已被取消',
+                          isNeedConfirmButton: true,
+                          isNeedCancelButton: true,
+                          confirmAction: () {
+                            QuoteOrdersBLoC().refreshData('ALL');
+                            Navigator.of(context).pop();
                           },
                         );
-                      }
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    color: Colors.grey,
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                    child: Text(
-                      '查看打样订单',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                ),
-          pageItem.activePurchaseOrder == null
-              ? Container(
-                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  height: 30,
-                  child: FlatButton(
-                      onPressed: onCreateProduction,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                      child: Text(
-                        '创建生产订单',
-                        style: TextStyle(
-                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                      )),
-                )
-              : Container(
-                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  height: 30,
-                  child: FlatButton(
-                    onPressed: () async {
-                      QuoteModel quote = await QuoteOrderRepository()
-                          .getQuoteDetails(pageItem.code);
-                      if (quote.activePurchaseOrder?.code != null) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                PurchaseOrderDetailPage(
-                                    code: quote.activePurchaseOrder.code)));
-                      } else {
-                        showDialog<void>(
-                          context: context,
-                          barrierDismissible: false, // user must tap button!
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(
-                                '提示',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                              content: Text('该订单已被取消'),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text(
-                                    '确定',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  onPressed: () async {
-                                    QuoteOrdersBLoC().refreshData('ALL');
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    color: Colors.grey,
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                    child: Text(
-                      '查看生产订单',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                ),
+                      });
+                }
+              },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              color: Colors.grey,
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Text(
+                '查看销售订单',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
         ];
       } else if (pageItem.requirementOrder.status ==
           RequirementOrderStatus.PENDING_QUOTE) {
@@ -1181,5 +1103,13 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             );
           });
     }
+  }
+
+  void onSalesOrderCreating(QuoteModel model) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SalesOrderForm(quoteModel: model)),
+    );
   }
 }

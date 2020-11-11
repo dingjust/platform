@@ -18,9 +18,12 @@ class B2BDeptState {
       }
       if (response != null && response.statusCode == 200) {
         if (response.data['code'] == 1) {
-          _b2bDepts = response.data['data']
-              .map((dept) => B2BDeptModel.fromJson(dept))
-              .toList();
+          List<dynamic> datas = response.data['data'];
+          List<Map<String, dynamic>> maps = datas.map((e) {
+            Map<String, dynamic> item = e as Map<String, dynamic>;
+            return item;
+          }).toList();
+          _b2bDepts = maps.map((e) => B2BDeptModel.fromJson(e)).toList();
         }
       }
     }
@@ -28,4 +31,8 @@ class B2BDeptState {
   }
 
   List<B2BDeptModel> get b2bDepts => _b2bDepts;
+
+  void clear() {
+    _b2bDepts = null;
+  }
 }

@@ -234,6 +234,29 @@ const AgreementRoleTypeLocalizedMap = {
   AgreementRoleType.PARTYB: "乙方"
 };
 
+/// 销售订单类型
+enum SalesOrderType {
+  /// 期货
+  FUTURE_GOODS,
+
+  /// 现货
+  SPOT_GOODS,
+
+  ///报价来源
+  QUOTE_SOURCE,
+
+  /// 默认
+  DEFAULT_GOODS
+}
+
+// TODO: i18n处理
+const SalesOrderTypeLocalizedMap = {
+  SalesOrderType.FUTURE_GOODS: "期货",
+  SalesOrderType.SPOT_GOODS: "现货",
+  SalesOrderType.QUOTE_SOURCE: "报价来源",
+  SalesOrderType.DEFAULT_GOODS: "默认"
+};
+
 @JsonSerializable()
 class AbstractOrderModel extends ItemModel {
   ///点击统计
@@ -1198,6 +1221,12 @@ class SalesOrderModel extends OrderModel {
   ///是否线下物流
   bool isOfflineConsignment;
 
+  ///销售订单类型
+  SalesOrderType type;
+
+  ///报价单code
+  String quoteOrderCode;
+
   SalesOrderModel({String code,
     this.status,
     double totalPrice,
@@ -1217,7 +1246,9 @@ class SalesOrderModel extends OrderModel {
     this.reminderDeliveryTime,
     this.nextReminderDeliveryTime,
     this.isOfflineConsignment,
-    this.deliveryTime})
+    this.deliveryTime,
+    this.quoteOrderCode,
+    this.type})
       : super(
     code: code,
     totalQuantity: quality,
@@ -1348,6 +1379,9 @@ class QuoteModel extends AbstractOrderModel {
   /// 拒绝报价理由
   String comment;
 
+  ///销售订单code
+  String salesOrderCode;
+
   QuoteModel({String code,
     int totalQuantity,
     double totalPrice,
@@ -1369,6 +1403,7 @@ class QuoteModel extends AbstractOrderModel {
     this.expectedDeliveryDate,
     this.activePurchaseOrder,
     this.activeProofing,
+    this.salesOrderCode,
     this.comment})
       : super(
       code: code,
@@ -1457,16 +1492,20 @@ class ProductionProgressModel extends ItemModel {
   @JsonKey(toJson: _productionProgressOrdersToJson)
   List<ProductionProgressOrderModel> productionProgressOrders;
 
-  ProductionProgressModel({this.phase,
-    this.quantity,
-    this.medias,
-    this.sequence,
-    this.estimatedDate,
-    this.finishDate,
-    this.modifiedtime,
-    this.order,
-    this.updateOnly,
-    this.delayedDays,
+  ///节点
+  ProgressPhaseModel progressPhase;
+
+  ProductionProgressModel(
+      {this.phase,
+      this.quantity,
+      this.medias,
+      this.sequence,
+      this.estimatedDate,
+      this.finishDate,
+      this.modifiedtime,
+      this.order,
+      this.updateOnly,
+      this.delayedDays,
     this.remarks});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>

@@ -260,9 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               Icon(B2BIcons.switch_identity),
               Text(
-                  '切换至${UserBLoC.instance.currentUser.type == UserType.BRAND
-                      ? '工厂'
-                      : '品牌'}')
+                  '切换至${UserBLoC.instance.currentUser.type == UserType.BRAND ? '工厂' : '品牌'}')
             ],
           ),
         ),
@@ -279,7 +277,8 @@ class _MyHomePageState extends State<MyHomePage> {
             UserBLoC.instance.logout(
                 type: UserBLoC.instance.currentUser.type == UserType.BRAND
                     ? UserType.FACTORY
-                    : UserType.BRAND);
+                    : UserType.BRAND,
+                context: context);
             widget.turnToHome?.call();
             //           .then((val) {
             //   UserBLoC.instance.changeUserType(

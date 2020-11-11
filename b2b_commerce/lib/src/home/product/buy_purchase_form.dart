@@ -712,7 +712,8 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                 productEntries: productEntries,
                 remarksEditingController: remarksEditingController,
                 totalEditingControllerMap: totalEditingControllerMap,
-                orderType: OrderType.PURCHASE,
+                orderType: OrderType.SALES,
+                salesOrderType: SalesOrderType.FUTURE_GOODS,
               )));
     } else {
       Toast.show("未达最低采购量", context,

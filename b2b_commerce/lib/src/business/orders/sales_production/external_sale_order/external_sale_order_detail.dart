@@ -1,7 +1,6 @@
-import 'package:b2b_commerce/src/_shared/widgets/employee_select.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
-import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_order_entry_detail.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 import 'constants.dart';
+import 'order_detail_btn_group.dart';
 import 'order_entry_detail.dart';
 
 ///外接订单详情页
@@ -31,52 +31,64 @@ class _ExternalSaleOrderDetailPageState
     extends State<ExternalSaleOrderDetailPage> {
   SalesProductionOrderModel order;
 
+  ///是否需要回调
+  bool callBackPop;
+
+  @override
+  void initState() {
+    super.initState();
+    callBackPop = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<SalesProductionOrderModel>(
       builder: (BuildContext context,
           AsyncSnapshot<SalesProductionOrderModel> snapshot) {
         if (snapshot.data != null) {
-          return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text('${widget.titile}'),
-              backgroundColor: Constants.THEME_COLOR_MAIN,
-              elevation: 0.5,
-            ),
-            body: Container(
-              padding: EdgeInsets.only(bottom: 10),
-              child: ListView(
-                children: <Widget>[
-                  _Header(
-                    order: order,
+          return WillPopScope(
+              child: Scaffold(
+                appBar: AppBar(
+                  centerTitle: true,
+                  title: Text('${widget.titile}'),
+                  backgroundColor: Constants.THEME_COLOR_MAIN,
+                  elevation: 0.5,
+                ),
+                body: Container(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: ListView(
+                    children: <Widget>[
+                      _Header(
+                        order: order,
+                      ),
+                      _EntriesInfo(
+                        order: order,
+                      ),
+                      _MainInfo(
+                        order: order,
+                      ),
+                      OrderContractsBlock(
+                        agreements: order.agreements,
+                      ),
+                      _OrderInfo(
+                        order: order,
+                      ),
+                      //底部占位
+                      Container(
+                        height: 80,
+                      )
+                    ],
                   ),
-                  _EntriesInfo(
-                    order: order,
-                  ),
-                  _MainInfo(
-                    order: order,
-                  ),
-                  OrderContractsBlock(
-                    agreements: order.agreements,
-                  ),
-                  _OrderInfo(
-                    order: order,
-                  ),
-                  //底部占位
-                  Container(
-                    height: 80,
-                  )
-                ],
+                ),
+                bottomSheet: OrderDetailBtnGroup(
+                  order: order,
+                  listCallback: listPageCallback,
+                  detailCallback: _getData,
+                  needCallbackPop: needCallbackPop,
+                ),
+                resizeToAvoidBottomPadding: true,
               ),
-            ),
-            bottomSheet: _BtnGroup(
-              order: order,
-              listCallback: listPageCallback,
-              detailCallback: _getData,
-            ),
-            resizeToAvoidBottomPadding: true,
-          );
+              onWillPop: onPop);
         } else {
           return Container(
             color: Colors.white,
@@ -104,6 +116,23 @@ class _ExternalSaleOrderDetailPageState
   ///返回回页面刷新
   void listPageCallback() {
     Navigator.of(context).pop(true);
+  }
+
+  ///需要页面返回列表刷新
+  void needCallbackPop() {
+    setState(() {
+      callBackPop = true;
+    });
+  }
+
+  ///页面回退回调
+  Future<bool> onPop() async {
+    if (callBackPop) {
+      Navigator.of(context).pop(true);
+      return false;
+    } else {
+      return true;
+    }
   }
 }
 
@@ -434,10 +463,9 @@ class _EntriesInfo extends StatelessWidget {
 
   void onTap(BuildContext context, ProductionTaskOrderModel entry) {
     if (order.auditState == AuditState.PASSED) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProductionTaskOrderEntryDetailPage(
-                id: entry.id,
-              )));
+      Navigator.of(context).pushNamed(
+          AppRoutes.ROUTE_PRODUCTION_TASK_ORDER_DETAIL,
+          arguments: entry.id);
     } else {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ExternalSaleOrderEntryDetailPage(
@@ -445,180 +473,4 @@ class _EntriesInfo extends StatelessWidget {
               )));
     }
   }
-}
-
-///底部按钮组
-class _BtnGroup extends StatelessWidget {
-  final SalesProductionOrderModel order;
-
-  final double height;
-
-  ///详情页刷新回调
-  final VoidCallback detailCallback;
-
-  ///列表页刷新回调
-  final VoidCallback listCallback;
-
-  const _BtnGroup(
-      {Key key,
-      this.order,
-      this.height = 55,
-      this.detailCallback,
-      this.listCallback})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (order.state != SalesProductionOrderState.CANCELED) {
-      //外接来源订单
-      if (isSaleOrder &&
-          (order.auditState == AuditState.NONE ||
-              order.auditState == AuditState.AUDITED_FAILED) &&
-          hasOrigin) {
-        return _acceptBtns(context);
-      }
-    }
-
-    //空
-    return Container(
-      height: 0,
-    );
-  }
-
-  ///接单按钮
-  Widget _acceptBtns(BuildContext context) {
-    return Container(
-      height: 55,
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 1,
-              child: Container(
-                height: height,
-                child: FlatButton(
-                    shape: RoundedRectangleBorder(),
-                    disabledColor: Colors.grey,
-                    onPressed: _onRefuse,
-                    child: Text('拒单',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.red,
-                        ))),
-              )),
-          Expanded(
-              flex: 1,
-              child: Container(
-                height: height,
-                child: FlatButton(
-                    shape: RoundedRectangleBorder(),
-                    disabledColor: Colors.grey,
-                    onPressed: () => _onAccept(context),
-                    color: Constants.THEME_COLOR_MAIN,
-                    child: Text('接单',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                        ))),
-              ))
-        ],
-      ),
-    );
-  }
-
-  ///接单
-  void _onAccept(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => EmployeeSelectPage()));
-  }
-
-  ///拒绝
-  void _onRefuse() {
-    BotToast.showEnhancedWidget(
-        onlyOne: true,
-        duration: null,
-        clickClose: true,
-        backgroundColor: Colors.black38,
-        allowClick: false,
-        toastBuilder: (cancelFunc) => AlertDialog(
-              content: Container(
-                height: 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          '确认拒绝订单?',
-                        ))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        FlatButton(onPressed: cancelFunc, child: Text('否')),
-                        FlatButton(
-                          onPressed: () {
-                            cancelFunc.call();
-                            _resuse();
-                          },
-                          child: Text('是'),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ));
-  }
-
-  ///拒单接口
-  void _resuse() async {
-    Function cancelFunc =
-        BotToast.showLoading(crossPage: false, clickClose: false);
-    BaseResponse response =
-        await ExternalSaleOrderRespository().refuse(order.id);
-    cancelFunc.call();
-    if (response != null && response.code == 1) {
-      BotToast.showText(text: '拒单成功');
-      //订单取消返回列表页面刷新
-      if (listCallback != null) {
-        listCallback.call();
-      }
-    } else if (response != null && response.code == 0) {
-      BotToast.showText(text: '${response.msg}');
-    } else {
-      BotToast.showText(text: '操作失败');
-    }
-  }
-
-  ///是否审批人
-  bool get isApprover {
-    if (order.approvers == null || UserBLoC.instance.currentUser == null) {
-      return false;
-    }
-
-    return order.approvers.any((element) =>
-        element.id == UserBLoC.instance.currentUser.id ||
-        element.uid == UserBLoC.instance.currentUser.uid);
-  }
-
-  ///是否创建者
-  bool get isCreator {
-    if (order.creator != null || UserBLoC.instance.currentUser != null) {
-      return order.creator.uid == UserBLoC.instance.currentUser.uid;
-    } else {
-      return false;
-    }
-  }
-
-  ///是否销售订单（外接订单）
-  bool get isSaleOrder => order?.type == ProductionOrderType.SALES_ORDER;
-
-  ///来源
-  bool get hasOrigin =>
-      order?.originCompany != null && order?.originCompany?.uid != null;
 }

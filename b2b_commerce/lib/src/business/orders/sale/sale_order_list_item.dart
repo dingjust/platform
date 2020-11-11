@@ -71,10 +71,10 @@ class _SaleOrderListItemState extends State<SaleOrderListItem> {
 
   Widget _buildHeader(BuildContext context) {
     //根据显示买卖方
-    UserType userType = BLoCProvider
+    String companyCode = BLoCProvider
         .of<UserBLoC>(context)
         .currentUser
-        .type;
+        .companyCode;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
@@ -88,9 +88,9 @@ class _SaleOrderListItemState extends State<SaleOrderListItem> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(
-                      userType != UserType.FACTORY
-                          ? '${widget.model?.seller?.name ?? ''}'
-                          : '${widget.model?.user?.name ?? ''}',
+                      companyCode == widget.model.seller.uid
+                          ? '${widget.model?.belongTo?.name ?? ''}'
+                          : '${widget.model?.seller?.name ?? ''}',
                       textAlign: TextAlign.start,
                       style: const TextStyle(
                         fontSize: 16,

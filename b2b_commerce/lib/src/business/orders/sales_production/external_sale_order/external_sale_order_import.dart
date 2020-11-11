@@ -3,6 +3,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class ExternalSaleOrderImportPage extends StatefulWidget {
   @override
@@ -17,12 +18,11 @@ class _ExternalSaleOrderImportPageState
   int checkCode = 0;
   String checkResult = '';
 
-  //外接订单数据TODO: model构建
   SalesProductionOrderModel order;
 
   @override
   void initState() {
-    _textEditingController = TextEditingController(text: 'TJTspqC');
+    _textEditingController = TextEditingController();
     super.initState();
   }
 
@@ -55,17 +55,17 @@ class _ExternalSaleOrderImportPageState
             children: <Widget>[
               Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: TextField(
-                      controller: _textEditingController,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: '请输入7位唯一码'),
-                    ),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(245, 245, 245, 1),
-                        borderRadius: BorderRadius.circular(5)),
-                  )),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: TextField(
+                  controller: _textEditingController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      border: InputBorder.none, hintText: '请输入7位唯一码'),
+                ),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(245, 245, 245, 1),
+                    borderRadius: BorderRadius.circular(5)),
+              )),
               Container(
                 child: FlatButton(
                     padding: const EdgeInsets.symmetric(
@@ -117,24 +117,46 @@ class _ExternalSaleOrderImportPageState
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(50))),
-          onPressed: () async {
-            // _onSubmit();
-          }),
+          onPressed: order != null ? _onSubmit : null),
     );
   }
 
   ///检索
   void _onCheck() async {
-    //TODO:接口调用
     Function cancelFunc =
         BotToast.showLoading(clickClose: true, crossPage: false);
-    await Future.delayed(Duration(seconds: 2));
+    SalesProductionOrderModel model = await ExternalSaleOrderRespository()
+        .uniqueCodePreview(_textEditingController.text);
+
     setState(() {
-      checkCode = 1;
-      // checkResult = '获取失败，未找到相关记录！';
-      order = SalesProductionOrderModel.fromJson(mock['data']);
+      if (model != null) {
+        checkCode = 1;
+        order = model;
+      } else {
+        checkCode = 0;
+        checkResult = '检索无数据';
+      }
     });
     cancelFunc();
+  }
+
+  ///确定
+  void _onSubmit() async {
+    Function cancelFunc =
+    BotToast.showLoading(clickClose: true, crossPage: false);
+
+    BaseResponse response = await ExternalSaleOrderRespository()
+        .uniqueCodeImport(_textEditingController.text);
+    cancelFunc.call();
+    //导入成功
+    if (response != null && response.code == 1) {
+      BotToast.showText(text: '导入成功');
+      Navigator.of(context).pop(true);
+    } else if (response != null && response.code == 0) {
+      BotToast.showText(text: '${response.msg}');
+    } else {
+      BotToast.showText(text: '操作失败');
+    }
   }
 }
 
@@ -153,11 +175,15 @@ class _OrderInfo extends StatelessWidget {
           Row(
             children: [
               Expanded(flex: 1, child: Text('订单号：${order.code}')),
+            ],
+          ),
+          Divider(),
+          Row(
+            children: [
               Expanded(
                   flex: 1,
                   child: Text(
                     '合作商：${order.originCooperator.name}',
-                    textAlign: TextAlign.end,
                   )),
             ],
           ),
@@ -171,6 +197,7 @@ class _OrderInfo extends StatelessWidget {
   Widget _buildProductRow(ProductionTaskOrderModel entry) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.symmetric(vertical: 5),
       color: Colors.grey[100],
       child: Row(
         children: [
@@ -208,145 +235,3 @@ class _OrderInfo extends StatelessWidget {
     );
   }
 }
-
-const mock = {
-  "code": 1,
-  "msg": null,
-  "resultCode": 0,
-  "data": {
-    "code": "TSPO00000GZ6",
-    "invoiceNeeded": false,
-    "haveDeposit": false,
-    "auditNeeded": false,
-    "sendAuditNeeded": false,
-    "originCooperator": {"name": "时尚品牌"},
-    "taskOrderEntries": [
-      {
-        "id": 8796748578145,
-        "invoiceNeeded": false,
-        "product": {
-          "skuID": "5222121",
-          "name": "产品3",
-          "images": [
-            {
-              "id": 8811314577438,
-              "name": "微信图片_20200604184853.jpg",
-              "url": "/resource/h5b/h98/8811314610206.jpg",
-              "mediaType": "image/jpeg",
-              "mime": "image/jpeg",
-              "mediaFormat": "DefaultImageFormat",
-              "convertedMedias": []
-            }
-          ],
-          "thumbnail": {
-            "id": 8811314577438,
-            "name": "微信图片_20200604184853.jpg",
-            "url": "/resource/h5b/h98/8811314610206.jpg",
-            "mediaType": "image/jpeg",
-            "mime": "image/jpeg",
-            "mediaFormat": "DefaultImageFormat",
-            "convertedMedias": []
-          },
-          "thumbnails": [
-            {
-              "id": 8811314577438,
-              "name": "微信图片_20200604184853.jpg",
-              "url": "/resource/h5b/h98/8811314610206.jpg",
-              "mediaType": "image/jpeg",
-              "mime": "image/jpeg",
-              "mediaFormat": "DefaultImageFormat",
-              "convertedMedias": []
-            }
-          ],
-          "details": []
-        },
-        "progressInit": false,
-        "deliveryDate": 1603296000000
-      },
-      {
-        "id": 8796748610913,
-        "invoiceNeeded": false,
-        "product": {
-          "skuID": "002222",
-          "name": "产品2",
-          "images": [
-            {
-              "id": 8811314380830,
-              "name": "59049110cc90529e.jpg",
-              "url": "/resource/he4/h9d/8811314413598.jpg",
-              "mediaType": "image/jpeg",
-              "mime": "image/jpeg",
-              "mediaFormat": "DefaultImageFormat",
-              "convertedMedias": []
-            }
-          ],
-          "thumbnail": {
-            "id": 8811314380830,
-            "name": "59049110cc90529e.jpg",
-            "url": "/resource/he4/h9d/8811314413598.jpg",
-            "mediaType": "image/jpeg",
-            "mime": "image/jpeg",
-            "mediaFormat": "DefaultImageFormat",
-            "convertedMedias": []
-          },
-          "thumbnails": [
-            {
-              "id": 8811314380830,
-              "name": "59049110cc90529e.jpg",
-              "url": "/resource/he4/h9d/8811314413598.jpg",
-              "mediaType": "image/jpeg",
-              "mime": "image/jpeg",
-              "mediaFormat": "DefaultImageFormat",
-              "convertedMedias": []
-            }
-          ],
-          "details": []
-        },
-        "progressInit": false,
-        "deliveryDate": 1603987200000
-      },
-      {
-        "id": 8796748643681,
-        "invoiceNeeded": false,
-        "product": {
-          "skuID": "0001",
-          "name": "样衣1",
-          "images": [
-            {
-              "id": 8807709573150,
-              "name": "0d6f2ac087947bbc.jpg",
-              "url": "/resource/h73/h4e/8807709605918.jpg",
-              "mediaType": "image/jpeg",
-              "mime": "image/jpeg",
-              "mediaFormat": "DefaultImageFormat",
-              "convertedMedias": []
-            }
-          ],
-          "thumbnail": {
-            "id": 8807709573150,
-            "name": "0d6f2ac087947bbc.jpg",
-            "url": "/resource/h73/h4e/8807709605918.jpg",
-            "mediaType": "image/jpeg",
-            "mime": "image/jpeg",
-            "mediaFormat": "DefaultImageFormat",
-            "convertedMedias": []
-          },
-          "thumbnails": [
-            {
-              "id": 8807709573150,
-              "name": "0d6f2ac087947bbc.jpg",
-              "url": "/resource/h73/h4e/8807709605918.jpg",
-              "mediaType": "image/jpeg",
-              "mime": "image/jpeg",
-              "mediaFormat": "DefaultImageFormat",
-              "convertedMedias": []
-            }
-          ],
-          "details": []
-        },
-        "progressInit": false,
-        "deliveryDate": 1603209600000
-      }
-    ]
-  }
-};

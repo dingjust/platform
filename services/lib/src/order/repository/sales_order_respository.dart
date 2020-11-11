@@ -8,11 +8,12 @@ import 'package:services/src/net/http_manager.dart';
 
 class SalesOrderRespository {
   ///看款下单创建销售订单
-  Future<CommonResponse> orderByProduct(SalesOrderModel form) async {
+  Future<CommonResponse> orderByProduct(SalesOrderModel form,{Map<String,Object> params}) async {
     Response response;
     try {
       response = await http$.post(OrderApis.salesCreateByProduct,
           data: SalesOrderModel.toJson(form),
+          queryParameters: params,
           options: Options(responseType: ResponseType.plain));
     } on DioError catch (e) {
       print(e);
@@ -170,6 +171,24 @@ class SalesOrderRespository {
       return BaseMsg.fromJson(json.decode(response.data));
     } else {
       return null;
+    }
+  }
+
+  //修改送货地址
+  Future<bool> updateAddress(String code, SalesOrderModel form) async {
+    Response<String> response;
+    try {
+      response = await http$.put(OrderApis.updateSalesAddress(code),
+          data: SalesOrderModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

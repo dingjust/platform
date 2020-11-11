@@ -18,16 +18,17 @@ class AuthLoginHelper {
   ///处理微信回调授权登录
   Future<int> handlerWeChatAuthLogin(
       WeChatAuthResponse res, BuildContext context) async {
-    BotToast.showLoading(
+    Function cancelFunc = BotToast.showLoading(
       clickClose: true,
       crossPage: false,
     );
 
     //通过微信Code获取系统授权码
     AuthorizationCodeResponse response =
-    await AuthRespository.getAuthorizationCodeByWechatCode(res.code);
+        await AuthRespository.getAuthorizationCodeByWechatCode(res.code);
     if (response == null || response.resultCode == 10002) {
       BotToast.showText(text: '授权失败');
+      cancelFunc.call();
       return 0;
     }
 
@@ -59,7 +60,8 @@ class AuthLoginHelper {
   }
 
   ///处理微信回调授权绑定
-  Future<int> handlerWeChatAuthBinding(WeChatAuthResponse res, BuildContext context) async {
+  Future<int> handlerWeChatAuthBinding(WeChatAuthResponse res,
+      BuildContext context) async {
     if (res == null || res.code == null) {
       return -1;
     }
@@ -88,7 +90,7 @@ class AuthLoginHelper {
   ///处理钉钉回调授权登录
   Future<int> handlerDingTalkAuthLogin(DDShareAuthResponse res,
       BuildContext context) async {
-    BotToast.showLoading(
+    Function cancelFunc = BotToast.showLoading(
       clickClose: true,
       crossPage: false,
     );
@@ -98,6 +100,7 @@ class AuthLoginHelper {
     await AuthRespository.getAuthorizationCodeByDingTalkCode(res.code);
     if (response == null || response.resultCode == 10002) {
       BotToast.showText(text: '授权失败');
+      cancelFunc.call();
       return 0;
     }
 

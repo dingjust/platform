@@ -14,7 +14,7 @@ class BaseResponse {
   final int resultCode;
 
   ///数据
-  final String data;
+  final dynamic data;
 
   BaseResponse(this.code, this.msg, this.resultCode, this.data);
 

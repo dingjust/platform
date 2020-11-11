@@ -32,8 +32,8 @@ typedef void ProductionOrderCreatingCallback();
 typedef void SalesOrderCreatingCallback();
 
 /// 报价单行
-class QuoteListItem extends StatelessWidget {
-  QuoteListItem({
+class QuoteMyListItem extends StatelessWidget {
+  QuoteMyListItem({
     Key key,
     @required this.model,
     this.onQuoteRejecting,
@@ -64,7 +64,6 @@ class QuoteListItem extends StatelessWidget {
     QuoteState.BUYER_APPROVED: Colors.green,
     QuoteState.BUYER_REJECTED: Colors.grey
   };
-
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +147,7 @@ class QuoteListItem extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Text(
-                    '${model.supplier?.name}',
+                    '${model.belongTo?.name}',
                     style: const TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),

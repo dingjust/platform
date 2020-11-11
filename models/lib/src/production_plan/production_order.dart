@@ -7,6 +7,7 @@ import 'package:models/src/user_agreement/user_agreement.dart';
 
 import 'color_size_entry.dart';
 import 'progress_plan.dart';
+import 'progress_work_sheet_order.dart';
 
 part 'production_order.g.dart';
 
@@ -23,7 +24,6 @@ class ProductionOrderModel extends ItemModel {
   int parentId;
 
   /// 来源外发订单
-  @JsonKey(toJson: toJson)
   ProductionOrderModel originOrder;
 
   ///节点方案
@@ -102,8 +102,7 @@ class ProductionOrderModel extends ItemModel {
   factory ProductionOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProductionOrderModel model) =>
-      model == null ? null : _$ProductionOrderModelToJson(model);
+  Map<String, dynamic> toJson() => _$ProductionOrderModelToJson(this);
 
   static Map<String, dynamic> principalToJson(PrincipalModel model) =>
       model == null ? null : PrincipalModel.toJson(model);
@@ -148,7 +147,6 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   ProductionOrderAcceptState acceptState;
 
   ///当前取消申请
-  @JsonKey(toJson: ProductionOrderCancelApplyModel.toJson)
   ProductionOrderCancelApplyModel currentCancelApply;
 
   ///处理时间
@@ -330,22 +328,21 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   factory SalesProductionOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$SalesProductionOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SalesProductionOrderModel model) =>
-      model == null ? null : _$SalesProductionOrderModelToJson(model);
+  Map<String, dynamic> toJson() => _$SalesProductionOrderModelToJson(this);
 
   static List<Map<String, dynamic>> b2bCutomersToJson(
           List<B2BCustomerModel> models) =>
-      models == null ? null : models.map((e) => B2BCustomerModel.toJson(e));
+      models == null
+          ? null
+          : models.map((e) => B2BCustomerModel.toJson(e)).toList();
 
   static List<Map<String, dynamic>> productionTaskOrdersToList(
           List<ProductionTaskOrderModel> models) =>
-      models == null
-          ? null
-          : models.map((e) => ProductionTaskOrderModel.toJson(e));
+      models == null ? null : models.map((e) => e.toJson()).toList();
 
   static List<Map<String, dynamic>> agreementsToJson(
           List<UserAgreementModel> models) =>
-      models == null ? null : models.map((e) => e.toJson());
+      models == null ? null : models.map((e) => e.toJson()).toList();
 }
 
 ///生产任务工单
@@ -360,7 +357,6 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   ///成本预算
 
   ///外发订单
-  @JsonKey(toJson: ProductionOrderModel.toJson)
   ProductionOrderModel outOrder;
 
   ///类型
@@ -414,7 +410,6 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   int priorityLevel;
 
   ///当前阶段
-  @JsonKey(toJson: ProgressPhaseModel.toJson)
   ProgressPhaseModel currentPhase;
 
   ///颜色尺码款
@@ -423,6 +418,32 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
 
   /// 关联外发单号
   String outboundOrderCode;
+
+  ///利润百分比
+  int profitPercent;
+
+  ///管理模式
+  ManagementMode managementMode;
+
+  ///来源合作商
+  @JsonKey(toJson: CooperatorModel.toJson)
+  CooperatorModel originCooperator;
+
+  ///外发合作商
+  @JsonKey(toJson: CooperatorModel.toJson)
+  CooperatorModel targetCooperator;
+
+  ///生产工单单号
+  String productionWorkOrderCode;
+
+  ///审核状态
+  String auditState;
+
+  ///发货任务
+  dynamic receiveDispatchTask;
+
+  ///对账任务
+  dynamic reconciliationTask;
 
   ProductionTaskOrderModel(
       {String code,
@@ -463,32 +484,40 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
       this.priorityLevel,
       this.currentPhase,
       this.colorSizeEntries,
-      this.outboundOrderCode})
+      this.outboundOrderCode,
+      this.auditState,
+      this.targetCooperator,
+      this.reconciliationTask,
+      this.receiveDispatchTask,
+      this.profitPercent,
+      this.productionWorkOrderCode,
+      this.originCooperator,
+      this.managementMode})
       : super(
-            code: code,
-            originOrderId: originOrderId,
-            parentId: parentId,
-            originOrder: originOrder,
-            progressPlan: progressPlan,
-            name: name,
-            cooperationMode: cooperationMode,
-            itemsCount: itemsCount,
-            invoiceNeeded: invoiceNeeded,
-            invoiceTaxPoint: invoiceTaxPoint,
-            merchandiser: merchandiser,
-            creator: creator,
-            belongTo: belongTo,
-            productionLeader: productionLeader,
-            productionDept: productionDept,
-            deleted: deleted,
-            canceling: canceling,
-            progressWorkSheet: progressWorkSheet);
+          code: code,
+          originOrderId: originOrderId,
+          parentId: parentId,
+          originOrder: originOrder,
+          progressPlan: progressPlan,
+          name: name,
+          cooperationMode: cooperationMode,
+          itemsCount: itemsCount,
+          invoiceNeeded: invoiceNeeded,
+          invoiceTaxPoint: invoiceTaxPoint,
+          merchandiser: merchandiser,
+          creator: creator,
+          belongTo: belongTo,
+          productionLeader: productionLeader,
+          productionDept: productionDept,
+          deleted: deleted,
+          canceling: canceling,
+          progressWorkSheet: progressWorkSheet,
+        );
 
   factory ProductionTaskOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionTaskOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProductionTaskOrderModel model) =>
-      model == null ? null : _$ProductionTaskOrderModelToJson(model);
+  Map<String, dynamic> toJson() => _$ProductionTaskOrderModelToJson(this);
 }
 
 ///生产订单取消申请
@@ -533,8 +562,8 @@ class ProductionOrderCancelApplyModel extends ItemModel {
   factory ProductionOrderCancelApplyModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionOrderCancelApplyModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProductionOrderCancelApplyModel model) =>
-      model == null ? null : _$ProductionOrderCancelApplyModelToJson(model);
+  Map<String, dynamic> toJson() =>
+      _$ProductionOrderCancelApplyModelToJson(this);
 
   static Map<String, dynamic> userToJson(UserModel model) =>
       model == null ? null : UserModel.toJson(model);
