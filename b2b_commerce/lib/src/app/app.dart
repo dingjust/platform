@@ -15,7 +15,7 @@ import 'package:b2b_commerce/src/home/index.dart';
 import 'package:b2b_commerce/src/my/index.dart';
 import 'package:b2b_commerce/src/my/messages/index.dart';
 import 'package:b2b_commerce/src/observer/b2b_navigator_observer.dart';
-import 'package:b2b_commerce/src/production/index.dart';
+import 'package:b2b_commerce/src/production/v2/index.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
@@ -183,40 +183,35 @@ class _B2BAppState extends State<B2BApp> {
           activeIcon: Container(
             child: const Icon(B2BIcons.home_active),
           ),
-          title: const Text('商机'),
+          label: '商机',
         ),
         HomePage(userType: widget.userType),
       ),
       NavigationMenu(
           BottomNavigationBarItem(
-            icon: Container(
-              child: const Icon(B2BIcons.production),
-            ),
-            activeIcon: Container(
-              child: const Icon(B2BIcons.production_active),
-            ),
-            title: Container(
-              child: const Text('生产'),
-            ),
-          ),
+              icon: Container(
+                child: const Icon(B2BIcons.production),
+              ),
+              activeIcon: Container(
+                child: const Icon(B2BIcons.production_active),
+              ),
+              label: '生产'),
           AuthorizationDector(
             authorizations: [Authorization.PURCHASE_ORDER],
             show: false,
             message: '无操作权限',
-            child: ProductionPage(),
+            // child: ProductionPage(),
+            child: ProductionProgressPage(),
           )),
       NavigationMenu(
         BottomNavigationBarItem(
-          icon: Container(
-            child: BottomNotificationsIcon(),
-          ),
-          activeIcon: Container(
-            child: BottomNotificationsActiveIcon(),
-          ),
-          title: Container(
-            child: const Text('消息'),
-          ),
-        ),
+            icon: Container(
+              child: BottomNotificationsIcon(),
+            ),
+            activeIcon: Container(
+              child: BottomNotificationsActiveIcon(),
+            ),
+            label: '消息'),
         MessagePage(),
       ),
       NavigationMenu(
@@ -227,9 +222,7 @@ class _B2BAppState extends State<B2BApp> {
             activeIcon: Container(
               child: const Icon(B2BIcons.business_active),
             ),
-            title: Container(
-              child: const Text('工作'),
-            )),
+            label: '工作'),
         BusinessHomePage(userType: widget.userType),
       ),
       NavigationMenu(
@@ -244,9 +237,7 @@ class _B2BAppState extends State<B2BApp> {
                 B2BIcons.my_active,
               ),
             ),
-            title: Container(
-              child: const Text('我的'),
-            )),
+            label: '我的'),
         MyHomePage(turnToHome: () {
           _handleNavigation(0);
         }),
