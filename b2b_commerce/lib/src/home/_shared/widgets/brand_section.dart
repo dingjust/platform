@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
@@ -103,13 +102,13 @@ class BrandEntranceSection extends StatelessWidget {
               FactoryPage(
                 FactoryCondition(
                     starLevel: 0,
-                adeptAtCategories: [],
-                labels: conditionLabels,
-                cooperationModes: []),
-            route: '快反工厂',
-            categories: categories,
-            labels: labels,
-          ),
+                    adeptAtCategories: [],
+                    labels: conditionLabels,
+                    cooperationModes: []),
+                route: '快反工厂',
+                categories: categories,
+                labels: labels,
+              ),
         ),
       );
     }
@@ -283,17 +282,16 @@ class BrandButtonsSection extends StatelessWidget {
 
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) =>
-                  FactoryPage(
-                    FactoryCondition(
-                        starLevel: 0,
-                        adeptAtCategories: [],
-                        labels: conditionLabels,
-                        cooperationModes: []),
-                    route: '优选工厂',
-                    categories: categories,
-                    labels: labels,
-                  ),
+              builder: (context) => FactoryPage(
+                FactoryCondition(
+                    starLevel: 0,
+                    adeptAtCategories: [],
+                    labels: conditionLabels,
+                    cooperationModes: []),
+                route: '优选工厂',
+                categories: categories,
+                labels: labels,
+              ),
             ),
           );
         },
@@ -340,7 +338,7 @@ class BrandButtonsSection extends StatelessWidget {
           Navigator.pushNamed(context, AppRoutes.ROUTE_FABRIC_PUBLISH);
           // Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
         },
-        title: '我的需求',
+        title: '面料需求',
       ),
     );
   }
@@ -363,12 +361,12 @@ class BrandButtonsSection extends StatelessWidget {
               FactoryCondition(
                   starLevel: 0,
                   adeptAtCategories: [],
-              labels: conditionLabels,
-              cooperationModes: []),
-          route: '优选工厂',
-          categories: categories,
-          labels: labels,
-        ),
+                  labels: conditionLabels,
+                  cooperationModes: []),
+              route: '优选工厂',
+              categories: categories,
+              labels: labels,
+            ),
       ),
     );
   }

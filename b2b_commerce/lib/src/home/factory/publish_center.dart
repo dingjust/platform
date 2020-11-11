@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
 import 'package:b2b_commerce/src/business/subcontract/form/subcontract_first_form.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
@@ -6,6 +7,7 @@ import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -79,7 +81,38 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
                     },
                     title: '发布空闲产能',
                   ),
-                )
+                ),
+                Container(
+                    width: 85,
+                    height: 100,
+                    child: ImageNumButton(
+                      image: B2BImage.requirement(),
+                      imagePadding: EdgeInsets.all(10),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MultiProvider(
+                                  providers: [
+                                    ChangeNotifierProvider(
+                                      create: (_) =>
+                                          RequirementOrderFormState(),
+                                    ),
+                                  ],
+                                  child: Consumer(
+                                    builder: (context,
+                                        RequirementOrderFormState state, _) =>
+                                        RequirementOrderForm(
+                                          formState: state,
+                                        ),
+                                  ),
+                                ),
+                          ),
+                        );
+                      },
+                      title: '发布需求',
+                    ))
               ],
             ),
           ),

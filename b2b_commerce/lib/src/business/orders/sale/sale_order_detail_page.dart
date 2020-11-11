@@ -11,7 +11,7 @@ import 'package:widgets/widgets.dart';
 
 import 'components/sales_detail_button_group.dart';
 
-///
+///销售订单详情
 class SaleOrderDetailPage extends StatefulWidget {
   final String code;
 

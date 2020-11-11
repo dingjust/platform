@@ -419,15 +419,40 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   /// 关联外发单号
   String outboundOrderCode;
 
-  ProductionTaskOrderModel(
-      {String code,
-      int originOrderId,
-      int parentId,
-      ProductionOrderModel originOrder,
-      OrderProgressPlanModel progressPlan,
-      String name,
-      CooperationMode cooperationMode,
-      int itemsCount,
+  ///利润百分比
+  int profitPercent;
+
+  ///管理模式
+  ManagementMode managementMode;
+
+  ///来源合作商
+  @JsonKey(toJson: CooperatorModel.toJson)
+  CooperatorModel originCooperator;
+
+  ///外发合作商
+  @JsonKey(toJson: CooperatorModel.toJson)
+  CooperatorModel targetCooperator;
+
+  ///生产工单单号
+  String productionWorkOrderCode;
+
+  ///审核状态
+  String auditState;
+
+  ///发货任务
+  dynamic receiveDispatchTask;
+
+  ///对账任务
+  dynamic reconciliationTask;
+
+  ProductionTaskOrderModel({String code,
+    int originOrderId,
+    int parentId,
+    ProductionOrderModel originOrder,
+    OrderProgressPlanModel progressPlan,
+    String name,
+    CooperationMode cooperationMode,
+    int itemsCount,
       bool invoiceNeeded,
       double invoiceTaxPoint,
       B2BCustomerModel merchandiser,
@@ -437,16 +462,16 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
       B2BDeptModel productionDept,
       bool deleted,
       bool canceling,
-      ProgressWorkSheetModel progressWorkSheet,
-      this.product,
-      this.outOrder,
-      this.type,
-      this.shippingAddress,
-      this.sortNum,
-      this.unitPrice,
-      this.quantity,
-      this.totalPrimeCost,
-      this.totalSalesPrice,
+    ProgressWorkSheetModel progressWorkSheet,
+    this.product,
+    this.outOrder,
+    this.type,
+    this.shippingAddress,
+    this.sortNum,
+    this.unitPrice,
+    this.quantity,
+    this.totalPrimeCost,
+    this.totalSalesPrice,
     this.totalProfit,
     this.deliveryDate,
     this.populationScale,
@@ -458,26 +483,35 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
     this.priorityLevel,
     this.currentPhase,
     this.colorSizeEntries,
-    this.outboundOrderCode})
+    this.outboundOrderCode,
+    this.auditState,
+    this.targetCooperator,
+    this.reconciliationTask,
+    this.receiveDispatchTask,
+    this.profitPercent,
+    this.productionWorkOrderCode,
+    this.originCooperator,
+    this.managementMode})
       : super(
-            code: code,
-            originOrderId: originOrderId,
-            parentId: parentId,
-            originOrder: originOrder,
-            progressPlan: progressPlan,
-            name: name,
-            cooperationMode: cooperationMode,
-            itemsCount: itemsCount,
-            invoiceNeeded: invoiceNeeded,
-            invoiceTaxPoint: invoiceTaxPoint,
-            merchandiser: merchandiser,
-            creator: creator,
-            belongTo: belongTo,
-            productionLeader: productionLeader,
-            productionDept: productionDept,
-            deleted: deleted,
-            canceling: canceling,
-            progressWorkSheet: progressWorkSheet);
+    code: code,
+    originOrderId: originOrderId,
+    parentId: parentId,
+    originOrder: originOrder,
+    progressPlan: progressPlan,
+    name: name,
+    cooperationMode: cooperationMode,
+    itemsCount: itemsCount,
+    invoiceNeeded: invoiceNeeded,
+    invoiceTaxPoint: invoiceTaxPoint,
+    merchandiser: merchandiser,
+    creator: creator,
+    belongTo: belongTo,
+    productionLeader: productionLeader,
+    productionDept: productionDept,
+    deleted: deleted,
+    canceling: canceling,
+    progressWorkSheet: progressWorkSheet,
+  );
 
   factory ProductionTaskOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionTaskOrderModelFromJson(json);

@@ -34,7 +34,6 @@ class FactoryButtonsSection extends StatelessWidget {
                   _buildContractManage(context),
                   _buildOrderCoordination(context),
                   _builRequirement(context),
-                  _buildPublishRequirement(context),
                 ],
               ),
             ],
@@ -120,36 +119,6 @@ class FactoryButtonsSection extends StatelessWidget {
           title: '我的发布',
         ));
   }
-  Widget _buildPublishRequirement(BuildContext context) {
-    return Expanded(
-        flex: 1,
-        child: ImageNumButton(
-          image: B2BImage.requirement(),
-          imagePadding: EdgeInsets.all(10),
-          onPressed: () {
-//            Navigator.pushNamed(context, AppRoutes.ROUTE_SUBCONTRACTS_MINE);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MultiProvider(
-                  providers: [
-                    ChangeNotifierProvider(
-                      builder: (_) => RequirementOrderFormState(),
-                    ),
-                  ],
-                  child: Consumer(
-                    builder: (context, RequirementOrderFormState state, _) =>
-                        RequirementOrderForm(
-                          formState: state,
-                        ),
-                  ),
-                ),
-              ),
-            );
-          },
-          title: '发布需求',
-        ));
-  }
 }
 
 class FactoryEntranceSection extends StatelessWidget {
@@ -174,15 +143,13 @@ class FactoryEntranceSection extends StatelessWidget {
               .then((categories) {
             if (categories != null) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      RequirementPoolRecommend(
+                  builder: (context) => RequirementPoolRecommend(
                         categories: categories,
                       )));
             }
           });
         },
       ),
-
     ];
 
     return EasyGrid(items: items);
