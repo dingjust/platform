@@ -7,6 +7,7 @@ import 'package:models/src/user_agreement/user_agreement.dart';
 
 import 'color_size_entry.dart';
 import 'progress_plan.dart';
+import 'progress_work_sheet_order.dart';
 
 part 'production_order.g.dart';
 
@@ -409,7 +410,6 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   int priorityLevel;
 
   ///当前阶段
-  @JsonKey(toJson: ProgressPhaseModel.toJson)
   ProgressPhaseModel currentPhase;
 
   ///颜色尺码款
@@ -445,14 +445,15 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   ///对账任务
   dynamic reconciliationTask;
 
-  ProductionTaskOrderModel({String code,
-    int originOrderId,
-    int parentId,
-    ProductionOrderModel originOrder,
-    OrderProgressPlanModel progressPlan,
-    String name,
-    CooperationMode cooperationMode,
-    int itemsCount,
+  ProductionTaskOrderModel(
+      {String code,
+      int originOrderId,
+      int parentId,
+      ProductionOrderModel originOrder,
+      OrderProgressPlanModel progressPlan,
+      String name,
+      CooperationMode cooperationMode,
+      int itemsCount,
       bool invoiceNeeded,
       double invoiceTaxPoint,
       B2BCustomerModel merchandiser,
@@ -462,56 +463,56 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
       B2BDeptModel productionDept,
       bool deleted,
       bool canceling,
-    ProgressWorkSheetModel progressWorkSheet,
-    this.product,
-    this.outOrder,
-    this.type,
-    this.shippingAddress,
-    this.sortNum,
-    this.unitPrice,
-    this.quantity,
-    this.totalPrimeCost,
-    this.totalSalesPrice,
-    this.totalProfit,
-    this.deliveryDate,
-    this.populationScale,
-    this.state,
-    this.progressInit,
-    this.productionProcessContent,
-    this.medias,
-    this.remarks,
-    this.priorityLevel,
-    this.currentPhase,
-    this.colorSizeEntries,
-    this.outboundOrderCode,
-    this.auditState,
-    this.targetCooperator,
-    this.reconciliationTask,
-    this.receiveDispatchTask,
-    this.profitPercent,
-    this.productionWorkOrderCode,
-    this.originCooperator,
-    this.managementMode})
+      ProgressWorkSheetModel progressWorkSheet,
+      this.product,
+      this.outOrder,
+      this.type,
+      this.shippingAddress,
+      this.sortNum,
+      this.unitPrice,
+      this.quantity,
+      this.totalPrimeCost,
+      this.totalSalesPrice,
+      this.totalProfit,
+      this.deliveryDate,
+      this.populationScale,
+      this.state,
+      this.progressInit,
+      this.productionProcessContent,
+      this.medias,
+      this.remarks,
+      this.priorityLevel,
+      this.currentPhase,
+      this.colorSizeEntries,
+      this.outboundOrderCode,
+      this.auditState,
+      this.targetCooperator,
+      this.reconciliationTask,
+      this.receiveDispatchTask,
+      this.profitPercent,
+      this.productionWorkOrderCode,
+      this.originCooperator,
+      this.managementMode})
       : super(
-    code: code,
-    originOrderId: originOrderId,
-    parentId: parentId,
-    originOrder: originOrder,
-    progressPlan: progressPlan,
-    name: name,
-    cooperationMode: cooperationMode,
-    itemsCount: itemsCount,
-    invoiceNeeded: invoiceNeeded,
-    invoiceTaxPoint: invoiceTaxPoint,
-    merchandiser: merchandiser,
-    creator: creator,
-    belongTo: belongTo,
-    productionLeader: productionLeader,
-    productionDept: productionDept,
-    deleted: deleted,
-    canceling: canceling,
-    progressWorkSheet: progressWorkSheet,
-  );
+          code: code,
+          originOrderId: originOrderId,
+          parentId: parentId,
+          originOrder: originOrder,
+          progressPlan: progressPlan,
+          name: name,
+          cooperationMode: cooperationMode,
+          itemsCount: itemsCount,
+          invoiceNeeded: invoiceNeeded,
+          invoiceTaxPoint: invoiceTaxPoint,
+          merchandiser: merchandiser,
+          creator: creator,
+          belongTo: belongTo,
+          productionLeader: productionLeader,
+          productionDept: productionDept,
+          deleted: deleted,
+          canceling: canceling,
+          progressWorkSheet: progressWorkSheet,
+        );
 
   factory ProductionTaskOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionTaskOrderModelFromJson(json);

@@ -1492,16 +1492,20 @@ class ProductionProgressModel extends ItemModel {
   @JsonKey(toJson: _productionProgressOrdersToJson)
   List<ProductionProgressOrderModel> productionProgressOrders;
 
-  ProductionProgressModel({this.phase,
-    this.quantity,
-    this.medias,
-    this.sequence,
-    this.estimatedDate,
-    this.finishDate,
-    this.modifiedtime,
-    this.order,
-    this.updateOnly,
-    this.delayedDays,
+  ///节点
+  ProgressPhaseModel progressPhase;
+
+  ProductionProgressModel(
+      {this.phase,
+      this.quantity,
+      this.medias,
+      this.sequence,
+      this.estimatedDate,
+      this.finishDate,
+      this.modifiedtime,
+      this.order,
+      this.updateOnly,
+      this.delayedDays,
     this.remarks});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>

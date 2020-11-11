@@ -2,6 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:models/models.dart';
 import 'package:models/src/production_plan/outbound_order.dart';
 
+import 'progress_work_sheet_order.dart';
+
 part 'production_work.g.dart';
 
 ///生产工单
@@ -21,7 +23,6 @@ class ProductionWorkOrderModel extends OrderModel {
   int priorityLevel;
 
   ///当前阶段
-  @JsonKey(toJson: progressPhaseToJson)
   ProgressPhaseModel currentPhase;
 
   ///预计交货日期
@@ -190,8 +191,7 @@ class ProductionWorkOrderModel extends OrderModel {
   factory ProductionWorkOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionWorkOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProductionWorkOrderModel model) =>
-      model == null ? null : _$ProductionWorkOrderModelToJson(model);
+  Map<String, dynamic> toJson() => _$ProductionWorkOrderModelToJson(this);
 
   static List<Map<String, dynamic>> colorSizeEntriesToJson(
           List<ColorSizeEntryModel> models) =>
@@ -205,9 +205,6 @@ class ProductionWorkOrderModel extends OrderModel {
   static Map<String, dynamic> progressWorkSheetToJson(
           ProgressWorkSheetModel model) =>
       model == null ? null : ProgressWorkSheetModel.toJson(model);
-
-  static Map<String, dynamic> progressPhaseToJson(ProgressPhaseModel model) =>
-      model == null ? null : ProgressPhaseModel.toJson(model);
 
   static Map<String, dynamic> outBoundOrderEntryToJson(
           OutboundOrderEntryModel model) =>
@@ -251,37 +248,7 @@ class ProgressPhaseModel extends ItemModel {
   factory ProgressPhaseModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProgressPhaseModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProgressPhaseModel model) =>
-      model == null ? null : _$ProgressPhaseModelToJson(model);
-}
-
-///进度工单
-@JsonSerializable()
-class ProgressWorkSheetModel extends ItemModel {
-  ///编号
-  String code;
-
-  ///状态
-  ProgressWorkSheetStatus status;
-
-  ///当前阶段
-  @JsonKey(toJson: progressPhaseToJson)
-  ProgressPhaseModel currentPhase;
-
-  ProgressWorkSheetModel({
-    this.code,
-    this.status,
-    this.currentPhase,
-  });
-
-  factory ProgressWorkSheetModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProgressWorkSheetModelFromJson(json);
-
-  static Map<String, dynamic> toJson(ProgressWorkSheetModel model) =>
-      model == null ? null : _$ProgressWorkSheetModelToJson(model);
-
-  static Map<String, dynamic> progressPhaseToJson(ProgressPhaseModel model) =>
-      model == null ? null : ProgressPhaseModel.toJson(model);
+  Map<String, dynamic> toJson() => _$ProgressPhaseModelToJson(this);
 }
 
 ///订单管理方式
@@ -297,21 +264,6 @@ enum ManagementMode {
 const ManagementModeLocalizedMap = {
   ManagementMode.COLLABORATION: "协同",
   ManagementMode.AUTOGESTION: "自管",
-};
-
-///进度工单状态
-enum ProgressWorkSheetStatus {
-  ///生产中
-  IN_PRODUCTION,
-
-  ///完成
-  COMPLETED,
-}
-
-///进度工单状态
-const ProgressWorkSheetStatusLocalizedMap = {
-  ProgressWorkSheetStatus.IN_PRODUCTION: "生产中",
-  ProgressWorkSheetStatus.COMPLETED: "完成",
 };
 
 ///入仓方式

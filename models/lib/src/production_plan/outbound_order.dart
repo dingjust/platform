@@ -8,7 +8,6 @@ part 'outbound_order.g.dart';
 @JsonSerializable()
 class OutboundOrderEntryModel extends ItemModel {
   ///生产工单
-  @JsonKey(toJson: productionWorkOrderToJson)
   ProductionWorkOrderModel productionWorkOrder;
 
   ///产品
@@ -52,10 +51,6 @@ class OutboundOrderEntryModel extends ItemModel {
 
   static Map<String, dynamic> toJson(OutboundOrderEntryModel model) =>
       model == null ? null : _$OutboundOrderEntryModelToJson(model);
-
-  static Map<String, dynamic> productionWorkOrderToJson(
-          ProductionWorkOrderModel model) =>
-      model == null ? null : ProductionWorkOrderModel.toJson(model);
 
   static Map<String, dynamic> productToJson(ProductModel model) =>
       model == null ? null : ProductModel.toJson(model);
