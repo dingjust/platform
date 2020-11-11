@@ -2,13 +2,11 @@ import 'dart:convert';
 
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:b2b_commerce/src/production/production_filter.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
-import 'package:b2b_commerce/src/production/search_input.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -49,25 +47,27 @@ class _ProductionPageState extends State<ProductionPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
-                      String jsonStr = await LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
+                      String jsonStr = await LocalStorage.get(
+                          GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
                       if (jsonStr != null && jsonStr != '') {
                         List<dynamic> list = json.decode(jsonStr);
-                        historyKeywords = list.map((item) => item as String).toList();
+                        historyKeywords =
+                            list.map((item) => item as String).toList();
                       } else {
                         historyKeywords = [];
                       }
                       keyword = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SearchModelPage(
-                                searchModel: SearchModel(
-                                  historyKeywords: historyKeywords,
-                                  keyword: keyword,
-                                  route: GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
-                                  searchModelType: SearchModelType.PRODUCTION_ORDER,
-                                ),
-                              ),
+                          builder: (context) => SearchModelPage(
+                            searchModel: SearchModel(
+                              historyKeywords: historyKeywords,
+                              keyword: keyword,
+                              route:
+                                  GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
+                              searchModelType: SearchModelType.PRODUCTION_ORDER,
+                            ),
+                          ),
                         ),
                       );
                     },
@@ -140,9 +140,9 @@ class _ProductionPageState extends State<ProductionPage> {
               ),
             ),
             endDrawer: Drawer(
-              child:  ProductionFilterPage(
-                  bloc: ProductionBLoC.instance,
-                ),
+              child: ProductionFilterPage(
+                bloc: ProductionBLoC.instance,
+              ),
             ),
             body: Container(child: ProductionListView(keyword)),
           ),
@@ -225,7 +225,7 @@ class ProductionListView extends StatefulWidget {
   _ProductionListViewState createState() => _ProductionListViewState();
 }
 
-class _ProductionListViewState extends State<ProductionListView>{
+class _ProductionListViewState extends State<ProductionListView> {
   ///当前选中条件
   FilterConditionEntry currentCondition = FilterConditionEntry(
       label: '当前生产', value: 'comprehensive', checked: true);
@@ -236,12 +236,12 @@ class _ProductionListViewState extends State<ProductionListView>{
 
     var bloc = BLoCProvider.of<ProductionBLoC>(context);
     widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
+      if (widget.scrollController.position.pixels ==
+          widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.getDataMore(widget.keyword);
       }
     });
-
   }
 
   @override
