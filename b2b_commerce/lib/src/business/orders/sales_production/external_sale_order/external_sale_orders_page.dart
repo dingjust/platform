@@ -70,13 +70,6 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
         });
   }
 
-  ///添加外接订单
-  void _onAdd() {
-    //唯一码导入
-    Navigator.of(context)
-        .pushNamed(AppRoutes.ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT)
-        .then((value) {});
-  }
 
   Widget _buildAppbar() {
     return isSearching

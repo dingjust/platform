@@ -49,8 +49,7 @@ class ProgressPlanModel extends BaseProgressPlanModel {
   factory ProgressPlanModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProgressPlanModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProgressPlanModel model) =>
-      model == null ? null : _$ProgressPlanModelToJson(model);
+  Map<String, dynamic> toJson() => _$ProgressPlanModelToJson(this);
 }
 
 ///订单节点方案
@@ -66,6 +65,5 @@ class OrderProgressPlanModel extends ProgressPlanModel {
   factory OrderProgressPlanModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$OrderProgressPlanModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrderProgressPlanModel model) =>
-      model == null ? null : _$OrderProgressPlanModelToJson(model);
+  Map<String, dynamic> toJson() => _$OrderProgressPlanModelToJson(this);
 }

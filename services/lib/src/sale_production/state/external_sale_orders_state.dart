@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
-import 'package:services/src/api/order.dart';
 import 'package:services/src/api/sale_production.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/order/PageEntry.dart';
@@ -73,16 +72,12 @@ class ExternalSaleOrdersState extends PageState {
       //请求参数
       Map data = {
         'depts': [0],
-        'users': [0],
+        'users': [],
         'keyword': _keyword != '' ? _keyword : null,
       };
       if (status != '' && status != 'SEARCH') {
         data['state'] = status;
       }
-
-      // if (status == 'SEARCH' && keyword != null) {
-      //   data['keyword'] = keyword;
-      // }
 
       Response<Map<String, dynamic>> response;
 
@@ -119,7 +114,7 @@ class ExternalSaleOrdersState extends PageState {
       if (_ordersMap[status].currentPage + 1 != _ordersMap[status].totalPages) {
         Map data = {
           'depts': [0],
-          'users': [0],
+          'users': [],
           'keyword': _keyword != '' ? _keyword : null,
         };
         if (status != 'ALL') {
@@ -128,11 +123,12 @@ class ExternalSaleOrdersState extends PageState {
 
         Response<Map<String, dynamic>> response;
         try {
-          response = await http$
-              .post(OrderApis.salesOrderList, data: data, queryParameters: {
-            'page': ++_ordersMap[status].currentPage,
-            'size': _ordersMap[status].size,
-          });
+          response = await http$.post(SaleProductionApis.outOrderPendingList,
+              data: data,
+              queryParameters: {
+                'page': ++_ordersMap[status].currentPage,
+                'size': _ordersMap[status].size,
+              });
         } on DioError catch (e) {
           print(e);
         }

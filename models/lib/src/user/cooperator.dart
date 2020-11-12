@@ -18,21 +18,26 @@ const CooperatorTypeLocalizedMap = {
 };
 
 enum CooperatorCategory {
-  ///供应商
+  ///加工厂
   SUPPLIER,
 
   ///客户
   CUSTOMER,
 
-  ///加工厂
+  ///面辅料商
   FABRIC_SUPPLIER
 }
+
+// TODO: i18n处理
+const CooperatorCategoryLocalizedMap = {
+  CooperatorCategory.SUPPLIER: "加工厂",
+  CooperatorCategory.CUSTOMER: "客户",
+  CooperatorCategory.FABRIC_SUPPLIER: "面辅料商",
+};
 
 /// 合作商
 @JsonSerializable()
 class CooperatorModel extends ItemModel {
-  int id;
-
   ///合作商名称
   String name;
 
@@ -75,22 +80,36 @@ class CooperatorModel extends ItemModel {
   ///备注
   String remarks;
 
-  CooperatorModel({
-    this.id,
-    this.name,
-    this.contactPerson,
-    this.contactPhone,
-    this.belongTo,
-    this.partner,
-    this.type,
-    this.category,
-    this.detailedIdentity,
-    this.bankOfDeposit,
-    this.bankAccount,
-    this.taxNumber,
-    this.payPlan,
-    this.remarks,
-  });
+  ///户名
+  String accountName;
+
+  ///地址
+  @JsonKey(toJson: AddressModel.toJson)
+  AddressModel address;
+
+  ///进度方案
+  ProgressPlanModel progressPlan;
+
+  ///对账方案
+  //TODO:
+
+  CooperatorModel(
+      {this.name,
+      this.contactPerson,
+      this.contactPhone,
+      this.belongTo,
+      this.partner,
+      this.type,
+      this.category,
+      this.detailedIdentity,
+      this.bankOfDeposit,
+      this.bankAccount,
+      this.taxNumber,
+      this.payPlan,
+      this.remarks,
+      this.accountName,
+      this.address,
+      this.progressPlan});
 
   factory CooperatorModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CooperatorModelFromJson(json);

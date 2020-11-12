@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/out_orders_list.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +53,7 @@ class _OutOrdersPageState extends State<OutOrdersPage> {
                       .toList(),
                 ),
               )),
+          floatingActionButton: _AddButton(),
         ));
   }
 
@@ -87,8 +89,30 @@ class _OutOrdersPageState extends State<OutOrdersPage> {
                         state.setKeyword(controller.text);
                       },
                     )),
-          )
+    )
         : AppBarFactory.buildDefaultAppBar('$appBarTitle',
-            actions: <Widget>[_buildSearchButton()]);
+        actions: <Widget>[_buildSearchButton()]);
+  }
+}
+
+class _AddButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        //唯一码导入
+        Navigator.of(context)
+            .pushNamed(AppRoutes.ROUTE_OUT_ORDER_FORM)
+            .then((value) {
+          // if (value) {
+          //   Provider.of<ExternalSaleOrdersState>(context).clear();
+          // }
+        });
+      },
+      child: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+    );
   }
 }
