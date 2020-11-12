@@ -38,4 +38,8 @@ class SaleProductionApis {
   static get productionTaskOrderDetail => (id) {
         return '/{baseSiteId}/production/task/order/$id';
       };
+
+  /// 进度工单列表
+  static get progressWorkSheetList => 
+      '/{baseSiteId}/sheets/progress/work';
 }

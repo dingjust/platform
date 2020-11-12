@@ -21,6 +21,7 @@ export 'src/production_plan/outbound_order.dart';
 export 'src/production_plan/production_order.dart';
 export 'src/production_plan/production_work.dart';
 export 'src/production_plan/progress_plan.dart';
+export 'src/production_plan/progress_work_sheet_order.dart';
 export 'src/report/report.dart';
 export 'src/security/principal.dart';
 export 'src/shared/shared.dart';

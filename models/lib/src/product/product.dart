@@ -1138,10 +1138,13 @@ class ColorSizeEntryModel extends ItemModel {
   ///数量
   int quality;
 
+  /// 数量v2
+  int quantity;
+
   ///是否是自定义
   bool customize;
 
-  ColorSizeEntryModel({this.code, this.quality, this.name, this.customize});
+  ColorSizeEntryModel({this.code, this.quality, this.quantity, this.name, this.customize});
 
   factory ColorSizeEntryModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ColorSizeEntryModelFromJson(json);
