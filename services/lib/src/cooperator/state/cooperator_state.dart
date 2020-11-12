@@ -1,9 +1,8 @@
-import 'package:core/core.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/state/state.dart';
 
-///工厂产能状态管理
+///合作商状态管理
 class CooperatorState extends PageState {
   String factoryUid;
   CooperatorState({this.factoryUid});

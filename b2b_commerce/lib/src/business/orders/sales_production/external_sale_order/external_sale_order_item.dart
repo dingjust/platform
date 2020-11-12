@@ -151,10 +151,10 @@ class _Row1 extends StatelessWidget {
         ),
         Expanded(
             child: Text(
-              '${getCoopertorName()}',
-              style: TextStyle(fontSize: 16),
-              overflow: TextOverflow.ellipsis,
-            )),
+          '${getCoopertorName()}',
+          style: TextStyle(fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+        )),
         _buildTag()
       ],
     );
@@ -202,7 +202,8 @@ class _Row1 extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           border: Border.all(
-              color: isDone ? Color.fromRGBO(225, 243, 216, 1) : Colors.black54,
+              color:
+              isDone ? Color.fromRGBO(225, 243, 216, 1) : Colors.grey[200],
               width: 0.5),
           color: isDone ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
     );

@@ -27,7 +27,6 @@ class ProductionOrderModel extends ItemModel {
   ProductionOrderModel originOrder;
 
   ///节点方案
-  @JsonKey(toJson: progressPlanToJson)
   OrderProgressPlanModel progressPlan;
 
   ///名称
@@ -106,10 +105,6 @@ class ProductionOrderModel extends ItemModel {
 
   static Map<String, dynamic> principalToJson(PrincipalModel model) =>
       model == null ? null : PrincipalModel.toJson(model);
-
-  static Map<String, dynamic> progressPlanToJson(
-          OrderProgressPlanModel model) =>
-      model == null ? null : OrderProgressPlanModel.toJson(model);
 
   static Map<String, dynamic> b2bCustomerToJson(B2BCustomerModel model) =>
       model == null ? null : B2BCustomerModel.toJson(model);

@@ -175,7 +175,7 @@ class BrandMenusSection extends StatelessWidget {
                 //  buildChild(context, MenuItemImage.employeeManage, '员工管理',
                 //      AppRoutes.ROUTE_EMPLOYEES),
                 buildChild(context, MenuItemImage.partnerFactory, '合作商管理',
-                    AppRoutes.ROUTE_SUPPLIERS,
+                    AppRoutes.ROUTE_COOPERATORS,
                     authorizations: [Authorization.COMPANY_COOPERATOR]),
                 buildChild(context, MenuItemImage.clothesManage, '样衣借还',
                     AppRoutes.ROUTE_SAMPLE_GARMENTS,
@@ -449,7 +449,7 @@ class FactoryMenusSection extends StatelessWidget {
                 // buildChild(context, MenuItemImage.employeeManage, '员工管理',
                 //     AppRoutes.ROUTE_EMPLOYEES),
                 buildChild(context, MenuItemImage.partnerFactory, '合作商管理',
-                    AppRoutes.ROUTE_SUPPLIERS,
+                    AppRoutes.ROUTE_COOPERATORS,
                     authorizations: [Authorization.COMPANY_COOPERATOR]),
                 buildChild(context, MenuItemImage.clothesManage, '样衣借还',
                     AppRoutes.ROUTE_SAMPLE_GARMENTS,
@@ -495,7 +495,7 @@ class FactoryMenusSection extends StatelessWidget {
           ],
         ));
   }
-  
+
   Widget _buildProductionOrderMenu(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 20),
@@ -588,44 +588,6 @@ class FactoryMenusSection extends StatelessWidget {
           });
     }
   }
-
-//  Widget _buildOrderMenu() {
-//    return Container(
-//      color: Colors.white,
-//      child: Row(
-//        children: <Widget>[
-//          AdvanceMenu('订单管理', <AdvanceMenuItem>[
-//            AdvanceMenuItem(
-//                MenuItemImage.quoteFactory, '报价管理', AppRoutes.ROUTE_QUOTES),
-//            AdvanceMenuItem(MenuItemImage.proofingOrder, '打样订单',
-//                AppRoutes.ROUTE_PROOFING_ORDERS),
-//            AdvanceMenuItem(MenuItemImage.purchaseOrder, '生产订单',
-//                AppRoutes.ROUTE_PURCHASE_ORDERS),
-//          ]),
-//        ],
-//      ),
-//    );
-//  }
-//
-//  Widget _buildCompanyMenu() {
-//    return Container(
-//      color: Colors.white,
-//      child: Row(
-//        children: <Widget>[
-//          AdvanceMenu('工厂管理', <AdvanceMenuItem>[
-//            // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
-//            //     AppRoutes.ROUTE_EMPLOYEES),
-//            AdvanceMenuItem(
-//                MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
-//            AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
-//                AppRoutes.ROUTE_SUPPLIERS),
-//            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还',
-//                AppRoutes.ROUTE_SAMPLE_GARMENTS),
-//          ])
-//        ],
-//      ),
-//    );
-//  }
 
   @override
   Widget build(BuildContext context) {

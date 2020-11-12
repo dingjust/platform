@@ -99,15 +99,15 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         ),
         body: Container(
             child: ListView(
-              children: <Widget>[
-                _buildCenter(context),
-                Divider(
-                  height: 0,
-                ),
-                _buildBottom(context),
+          children: <Widget>[
+            _buildCenter(context),
+            Divider(
+              height: 0,
+            ),
+            _buildBottom(context),
 //                _buildCommitButton(context),
-              ],
-            )),
+          ],
+        )),
         bottomNavigationBar: Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -294,7 +294,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '${productModel != null && productModel.name != null ? productModel.name : ''}',
+                        '${productModel != null && productModel.name != null
+                            ? productModel.name
+                            : ''}',
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -445,7 +447,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             print(result);
             if (result != null) {
               setState(() {
-                productModel = ApparelProductModel.fromJson(ApparelProductModel.toJson(result));
+                productModel = ApparelProductModel.fromJson(
+                    ApparelProductModel.toJson(result));
               });
 
               if (productModel.variants != null) {
@@ -1274,7 +1277,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     }
 
     //合作商
-    purchaseOrder.cooperator = CooperatorModel(id: cooperatorModel.id);
+    CooperatorModel cooperatorModel = CooperatorModel();
+    cooperatorModel.id = cooperatorModel.id;
+    purchaseOrder.cooperator = cooperatorModel;
     if (cooperatorModel.type == CooperatorType.ONLINE) {
       purchaseOrder.companyOfSeller = cooperatorModel.partner.name;
       purchaseOrder.contactPersonOfSeller =

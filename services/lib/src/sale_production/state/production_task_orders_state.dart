@@ -84,7 +84,7 @@ class ProductionTaskOrdersState extends PageState {
       } else {
         data = {
           'depts': [0],
-          'users': [0]
+          'users': []
         };
 
         if (status != '' && status != 'SEARCH') {
@@ -135,7 +135,7 @@ class ProductionTaskOrdersState extends PageState {
         } else {
           data = {
             'depts': [0],
-            'users': [0]
+            'users': []
           };
 
           if (status != 'ALL') {

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
-import 'package:services/src/api/order.dart';
 import 'package:services/src/api/sale_production.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/order/PageEntry.dart';
@@ -51,7 +50,7 @@ class OutOrdersState extends PageState {
 
   String get getKeyword => _keyword;
 
-  void setKeyword(String  keywords) {
+  void setKeyword(String keywords) {
     _keyword = keywords;
     // 清空数据
     this.clear();
@@ -78,16 +77,12 @@ class OutOrdersState extends PageState {
       //请求参数
       Map data = {
         'depts': [0],
-        'users': [0],
+        'users': [],
         'name': _keyword != '' ? _keyword : null
       };
       if (status != '' && status != 'SEARCH') {
         data['state'] = status;
       }
-
-      // if (status == 'SEARCH' && keyword != null) {
-      //   data['keyword'] = keyword;
-      // }
 
       Response<Map<String, dynamic>> response;
 
@@ -103,7 +98,8 @@ class OutOrdersState extends PageState {
       }
 
       if (response != null && response.statusCode == 200) {
-        OutOrdersResponse ordersResponse = OutOrdersResponse.fromJson(response.data);
+        OutOrdersResponse ordersResponse =
+            OutOrdersResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
         _ordersMap[status].totalElements = ordersResponse.totalElements;
         _ordersMap[status].data.clear();
@@ -123,7 +119,7 @@ class OutOrdersState extends PageState {
       if (_ordersMap[status].currentPage + 1 != _ordersMap[status].totalPages) {
         Map data = {
           'depts': [0],
-          'users': [0],
+          'users': [],
           'name': _keyword != '' ? _keyword : null
         };
         if (status != 'ALL') {
@@ -132,17 +128,19 @@ class OutOrdersState extends PageState {
 
         Response<Map<String, dynamic>> response;
         try {
-          response = await http$
-              .post(OrderApis.salesOrderList, data: data, queryParameters: {
-            'page': ++_ordersMap[status].currentPage,
-            'size': _ordersMap[status].size,
-          });
+          response = await http$.post(SaleProductionApis.outOrderList,
+              data: data,
+              queryParameters: {
+                'page': ++_ordersMap[status].currentPage,
+                'size': _ordersMap[status].size,
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response.statusCode == 200) {
-          OutOrdersResponse ordersResponse = OutOrdersResponse.fromJson(response.data);
+          OutOrdersResponse ordersResponse =
+          OutOrdersResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
           _ordersMap[status].data.addAll(ordersResponse.content);

@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/apparel_products_brand.dart';
+import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
@@ -6,6 +7,7 @@ import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_import.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_orders_page.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/out_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/out_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_order_entry_detail.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_orders_page.dart';
@@ -79,6 +81,9 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
+
+  ///新合作商
+  static const ROUTE_COOPERATORS = '/business/cooperators';
   static const ROUTE_SUBCONTRACTS_POOL =
       '/business/subcontract/subcontract_pool';
   static const ROUTE_SUBCONTRACTS_MINE =
@@ -90,13 +95,17 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_EXTERNAL_SALE_ORDERS =
       '/business/orders/sales_production/external_sale_orders';
 
+  ///外接订单导入
+  static const ROUTE_OUT_ORDER_FORM =
+      '/business/sale_production/out_order/form';
+
   static const ROUTE_OUT_ORDERS =
       '/business/orders/sales_production/out_orders';
   static const ROUTE_EXTERNAL_SALE_ORDERS_DETAIL =
       '/business/orders/sales_production/external_sale_orders/detail';
-  static const ROUTE_PRODUCTION_TASK_ORDER_DETAIL = 
+  static const ROUTE_PRODUCTION_TASK_ORDER_DETAIL =
       '/business/orders/sales_production/production_task_order/detail';
-  static const ROUTE_PRODUCTION_TASK_ORDERS = 
+  static const ROUTE_PRODUCTION_TASK_ORDERS =
       '/business/orders/sales_production/production_task_orders';
 
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
@@ -177,10 +186,12 @@ class AppRoutes with GlobalRoutes {
           id: getVal('id', context),
           titile: getVal('title', context),
         ),
-    ROUTE_PRODUCTION_TASK_ORDER_DETAIL: (context) => ProductionTaskOrderEntryDetailPage(
-          id: ModalRoute.of(context).settings.arguments
-        ),
-    ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage()
+    ROUTE_PRODUCTION_TASK_ORDER_DETAIL: (context) =>
+        ProductionTaskOrderEntryDetailPage(
+            id: ModalRoute.of(context).settings.arguments),
+    ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage(),
+    ROUTE_OUT_ORDER_FORM: (context) => OutOrderForm(),
+    ROUTE_COOPERATORS: (context) => CooperatorsPage()
   };
 
   static dynamic getVal(String key, BuildContext context) {
