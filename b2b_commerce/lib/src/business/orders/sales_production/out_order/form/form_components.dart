@@ -36,10 +36,10 @@ class FormLabel extends StatelessWidget {
       children: [
         Expanded(
             child: Text(
-              '$label',
-              style:
+          '$label',
+          style:
               TextStyle(color: Color(0xff455a64), fontWeight: FontWeight.bold),
-            ))
+        ))
       ],
     );
   }
@@ -110,6 +110,13 @@ class FormCooperatorsSelect extends StatelessWidget {
 
 ///生产详情
 class FormProduction extends StatelessWidget {
+  final List<ProductionTaskOrderModel> entries;
+
+  final ValueChanged<List<ProductionTaskOrderModel>> onEntriesChange;
+
+  const FormProduction({Key key, this.entries, this.onEntriesChange})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return FormBlock(
@@ -118,12 +125,15 @@ class FormProduction extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(width: 10,),
+            Container(
+              width: 10,
+            ),
             Text('外发工单数：'),
             Expanded(
                 child: Text(
                   '1',
-                  style: TextStyle(color: Colors.blue,
+                  style: TextStyle(
+                      color: Colors.blue,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 )),

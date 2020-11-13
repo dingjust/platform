@@ -39,7 +39,14 @@ class _OutOrderFormState extends State<OutOrderForm> {
                   onCooperatorSelect: onCooperatorSelect,
                   value: form.cooperator,
                 ),
-                FormProduction(),
+                FormProduction(
+                  onEntriesChange: (entries) {
+                    setState(() {
+                      form.taskOrderEntries = entries;
+                    });
+                  },
+                  entries: form.taskOrderEntries,
+                ),
                 // _EntriesInfo(
                 //   order: order,
                 // ),
