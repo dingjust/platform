@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -23,8 +22,6 @@ class CooperatorItem extends StatelessWidget {
           child: InkWell(
               onTap: () => onTap(context),
               borderRadius: BorderRadius.circular(10),
-              focusColor: Constants.THEME_COLOR_MAIN,
-              autofocus: true,
               child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 10,

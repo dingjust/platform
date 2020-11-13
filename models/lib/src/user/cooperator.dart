@@ -11,10 +11,9 @@ enum CooperatorType {
   OFFLINE
 }
 
-// TODO: i18n处理
 const CooperatorTypeLocalizedMap = {
   CooperatorType.ONLINE: "线上合作商",
-  CooperatorType.OFFLINE: "自定义",
+  CooperatorType.OFFLINE: "自定义合作商",
 };
 
 enum CooperatorCategory {
@@ -28,7 +27,12 @@ enum CooperatorCategory {
   FABRIC_SUPPLIER
 }
 
-// TODO: i18n处理
+const CooperatorCategoryCodeMap = {
+  CooperatorCategory.SUPPLIER: "SUPPLIER",
+  CooperatorCategory.CUSTOMER: "CUSTOMER",
+  CooperatorCategory.FABRIC_SUPPLIER: "FABRIC_SUPPLIER",
+};
+
 const CooperatorCategoryLocalizedMap = {
   CooperatorCategory.SUPPLIER: "加工厂",
   CooperatorCategory.CUSTOMER: "客户",

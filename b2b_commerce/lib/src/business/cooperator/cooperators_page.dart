@@ -17,6 +17,9 @@ class CooperatorsPage extends StatefulWidget {
   ///选择模式
   final bool selectingMode;
 
+  ///限定类型
+  final List<CooperatorCategory> categories;
+
   ///选择模式下最大限制
   final int max;
 
@@ -34,7 +37,11 @@ class CooperatorsPage extends StatefulWidget {
   ///             )));
   /// ```
   const CooperatorsPage(
-      {Key key, this.selectedData, this.selectingMode = false, this.max = 99})
+      {Key key,
+      this.selectedData,
+      this.selectingMode = false,
+      this.max = 99,
+      this.categories})
       : super(key: key);
 
   @override
@@ -49,6 +56,9 @@ class _CooperatorsPageState extends State<CooperatorsPage> {
   ///用于选择模式中的数据
   List<CooperatorModel> selectedData;
 
+  ///类型
+  List<EnumModel> statuses;
+
   @override
   void initState() {
     controller = TextEditingController();
@@ -57,6 +67,18 @@ class _CooperatorsPageState extends State<CooperatorsPage> {
     selectedData = [];
     if (widget.selectedData != null) {
       selectedData.addAll(widget.selectedData);
+    }
+
+    if (widget.categories != null) {
+      statuses = widget.categories
+          .map(
+            (e) =>
+            EnumModel('${CooperatorCategoryCodeMap[e]}',
+                '${CooperatorCategoryLocalizedMap[e]}'),
+      )
+          .toList();
+    } else {
+      statuses = _statuses;
     }
 
     super.initState();
@@ -71,17 +93,20 @@ class _CooperatorsPageState extends State<CooperatorsPage> {
       child: Scaffold(
         appBar: _buildAppbar(),
         body: DefaultTabController(
-          length: _statuses.length,
+          length: statuses.length,
           child: Scaffold(
-            appBar: TabFactory.buildDefaultTabBar(_statuses, scrollable: false),
+            appBar: TabFactory.buildDefaultTabBar(statuses, scrollable: false),
             body: TabBarView(
-              children: _statuses
+              children: statuses
                   .map((status) => CooperatorsView(status: status))
                   .toList(),
             ),
           ),
         ),
         floatingActionButton: _AddButton(),
+        floatingActionButtonLocation: widget.selectingMode
+            ? FloatingActionButtonLocation.centerDocked
+            : null,
         bottomSheet: _buildBottomBtns(),
         resizeToAvoidBottomInset: false,
       ),

@@ -35,29 +35,11 @@ class _OutOrderFormState extends State<OutOrderForm> {
             child: ListView(
               children: <Widget>[
                 _buildOutTypeRadio(),
-                FlatButton(
-                    onPressed: () async {
-                      List<CooperatorModel> cooperators = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CooperatorsPage(
-                                    selectedData: form.cooperator != null
-                                        ? [form.cooperator]
-                                        : [],
-                                    selectingMode: true,
-                                    max: 1,
-                                  )));
-                      if (cooperators != null) {
-                        setState(() {
-                          if (cooperators.isNotEmpty) {
-                            form.cooperator = cooperators.first;
-                          } else {
-                            form.cooperator = null;
-                          }
-                        });
-                      }
-                    },
-                    child: Text('asdasdas'))
+                FormCooperatorsSelect(
+                  onCooperatorSelect: onCooperatorSelect,
+                  value: form.cooperator,
+                ),
+                FormProduction(),
                 // _EntriesInfo(
                 //   order: order,
                 // ),
@@ -118,6 +100,28 @@ class _OutOrderFormState extends State<OutOrderForm> {
         ],
       ),
     );
+  }
+
+  void onCooperatorSelect() async {
+    List<CooperatorModel> cooperators = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CooperatorsPage(
+                  selectedData:
+                      form.cooperator != null ? [form.cooperator] : [],
+                  selectingMode: true,
+                  categories: [CooperatorCategory.SUPPLIER],
+                  max: 1,
+                )));
+    if (cooperators != null) {
+      setState(() {
+        if (cooperators.isNotEmpty) {
+          form.cooperator = cooperators.first;
+        } else {
+          form.cooperator = null;
+        }
+      });
+    }
   }
 
   ///页面回退回调
