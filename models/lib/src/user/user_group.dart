@@ -117,6 +117,9 @@ class CompanyModel extends UserGroupModel {
   //职务
   String duties;
 
+  // 联系人uid
+  String contactUid;
+
   CompanyModel({
     MediaModel profilePicture,
     String uid,
@@ -143,6 +146,7 @@ class CompanyModel extends UserGroupModel {
     this.profiles,
     this.labels,
     this.duties,
+    this.contactUid
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -212,6 +216,7 @@ class OrgUnitModel extends CompanyModel {
     List<CompanyProfileModel> companyProfiles,
     List<LabelModel> labels,
     String duties,
+    String contactUid,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -239,6 +244,7 @@ class OrgUnitModel extends CompanyModel {
           profiles: companyProfiles,
           labels: labels,
           duties: duties,
+          contactUid: contactUid
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -289,6 +295,7 @@ class B2BUnitModel extends OrgUnitModel {
         List<CompanyProfileModel> companyProfiles,
         List<LabelModel> labels,
         String duties,
+        String contactUid,
         this.active,
         this.email,
         this.phone,
@@ -323,6 +330,7 @@ class B2BUnitModel extends OrgUnitModel {
     companyProfiles: companyProfiles,
     labels: labels,
     duties: duties,
+    contactUid: contactUid
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -392,6 +400,7 @@ class BrandModel extends B2BUnitModel {
     List<CompanyProfileModel> companyProfiles,
     List<LabelModel> labels,
     String duties,
+    String contactUid,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -430,6 +439,7 @@ class BrandModel extends B2BUnitModel {
     companyProfiles: companyProfiles,
     labels: labels,
     duties: duties,
+    contactUid: contactUid
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -569,6 +579,7 @@ class FactoryModel extends B2BUnitModel {
     List<CompanyProfileModel> companyProfiles,
     List<LabelModel> labels,
     String duties,
+    String contactUid,
     this.historyOrdersCount,
     this.orderedSuccessRate,
     this.monthlyCapacityRange,
@@ -627,6 +638,7 @@ class FactoryModel extends B2BUnitModel {
     companyProfiles: companyProfiles,
     labels: labels,
     duties: duties,
+    contactUid: contactUid
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>

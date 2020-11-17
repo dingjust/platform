@@ -147,6 +147,7 @@ export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
 export 'src/user/response/company_payplan_response.dart';
 export 'src/user/response/cooperator_response.dart';
+export 'src/user/response/company_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_response.dart';
