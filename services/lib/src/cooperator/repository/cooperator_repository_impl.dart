@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/user/response/cooperator_response.dart';
 
@@ -29,5 +30,18 @@ class CooperatorRepositoryImpl implements CooperatorRepository {
       result = null;
     }
     return result;
+  }
+
+  @override
+  Future<CooperatorModel> getDetail(int id) async {
+    Response<Map<String, dynamic>> response = 
+      await http$.get(UserApis.cooperatorDetail(id));
+
+    if (response.statusCode == 200) {
+      CooperatorModel model = CooperatorModel.fromJson(response.data);
+      return model;
+    } else {
+      return null;
+    }
   }
 }
