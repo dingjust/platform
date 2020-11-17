@@ -206,6 +206,14 @@ abstract class UserApis {
   ///合作商列表
   static get cooperators => '/{baseSiteId}/cooperator';
 
+  /// 合作商详情
+  static get cooperatorDetail => (id) { 
+    return '/{baseSiteId}/cooperator/$id';
+  };
+
+  /// 根据keyword查询全公司列表
+  static get companies => '/{baseSiteId}/companies/findBrandAndFactory';
+
   ///公司账务列表
   static get payplans => '/{baseSiteId}/payPlan';
 

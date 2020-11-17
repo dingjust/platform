@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:b2b_commerce/src/business/cooperator/cooperator_detail.dart';
+import 'package:core/core.dart';
 import 'package:models/models.dart';
 
 class CooperatorItem extends StatelessWidget {
@@ -140,6 +142,13 @@ class CooperatorItem extends StatelessWidget {
     } else {
       // 没有则跳转详情页
       //TODO:命名路由详情跳转
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => CooperatorDetailPage(
+            id: model.id,
+          ),
+        )
+      );
     }
   }
 }
