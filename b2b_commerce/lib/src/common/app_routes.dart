@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/apparel_products_brand.dart';
+import 'package:b2b_commerce/src/business/cooperator/cooperator_form.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
@@ -84,6 +85,9 @@ class AppRoutes with GlobalRoutes {
 
   ///新合作商
   static const ROUTE_COOPERATORS = '/business/cooperators';
+  /// 创建合作商
+  static const ROUTE_COOPERATORS_CREATE = '/business/cooperators/create';
+
   static const ROUTE_SUBCONTRACTS_POOL =
       '/business/subcontract/subcontract_pool';
   static const ROUTE_SUBCONTRACTS_MINE =
@@ -191,7 +195,8 @@ class AppRoutes with GlobalRoutes {
             id: ModalRoute.of(context).settings.arguments),
     ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage(),
     ROUTE_OUT_ORDER_FORM: (context) => OutOrderForm(),
-    ROUTE_COOPERATORS: (context) => CooperatorsPage()
+    ROUTE_COOPERATORS: (context) => CooperatorsPage(),
+    ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm()
   };
 
   static dynamic getVal(String key, BuildContext context) {
