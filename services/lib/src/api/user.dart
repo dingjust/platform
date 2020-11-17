@@ -207,7 +207,7 @@ abstract class UserApis {
   static get cooperators => '/{baseSiteId}/cooperator';
 
   ///公司账务列表
-  static get payplans => '/{baseSiteId}/payPlan?page=0&size=999';
+  static get payplans => '/{baseSiteId}/payPlan';
 
   ///撤销合同
   static get revokeContract =>

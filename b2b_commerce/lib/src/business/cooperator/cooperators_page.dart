@@ -72,8 +72,7 @@ class _CooperatorsPageState extends State<CooperatorsPage> {
     if (widget.categories != null) {
       statuses = widget.categories
           .map(
-            (e) =>
-            EnumModel('${CooperatorCategoryCodeMap[e]}',
+            (e) => EnumModel('${CooperatorCategoryCodeMap[e]}',
                 '${CooperatorCategoryLocalizedMap[e]}'),
       )
           .toList();
@@ -209,8 +208,14 @@ class _CooperatorsPageState extends State<CooperatorsPage> {
       if (selectedData.any((element) => element.id == model.id)) {
         selectedData.removeWhere((element) => element.id == model.id);
       } else {
-        if (selectedData.length < widget.max) {
+        //单选情况
+        if (widget.max == 1) {
+          selectedData.clear();
           selectedData.add(model);
+        } else {
+          if (selectedData.length < widget.max) {
+            selectedData.add(model);
+          }
         }
       }
     });
