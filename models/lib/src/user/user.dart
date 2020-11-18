@@ -94,12 +94,7 @@ class UserModel extends PrincipalModel {
       this.dingTalkOpenid,
       this.dingTalkHeadImg,
       this.dingTalkNickname})
-      : super(
-          id: id,
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-        );
+      : super(profilePicture: profilePicture, uid: uid, name: name, id: id);
 
   UserModel.empty() {
     this.profilePicture = null;

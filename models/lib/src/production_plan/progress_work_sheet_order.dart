@@ -24,6 +24,7 @@ class ProgressWorkSheetModel extends ItemModel {
   ProductionTaskOrderModel productionTaskOrder;
 
   ///当前阶段
+  @JsonKey(toJson: _progressPhaseToJson)
   ProgressPhaseModel currentPhase;
 
   ///所属
@@ -51,7 +52,7 @@ class ProgressWorkSheetModel extends ItemModel {
   int priorityLevel;
 
   ///交货日期
-  @JsonKey(fromJson: dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime expectedDeliveryDate;
 
   ///工单负责人
@@ -81,7 +82,7 @@ class ProgressWorkSheetModel extends ItemModel {
   CooperatorModel cooperator;
 
   ///创建时间
-  @JsonKey(fromJson: dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime creationtime;
 
   ProgressWorkSheetModel({
@@ -119,13 +120,19 @@ class ProgressWorkSheetModel extends ItemModel {
           List<ProductionProgressModel> progresses) =>
       progresses == null
           ? null
-          : progresses.map((e) => ProductionProgressModel.toJson(e));
+          : progresses.map((e) => ProductionProgressModel.toJson(e)).toList();
 
   static List<Map<String, dynamic>> colorSizeEntriesToJson(
           List<ColorSizeEntryModel> models) =>
       models == null
           ? null
           : models.map((e) => ColorSizeEntryModel.toJson(e)).toList();
+
+  static Map<String, dynamic> _progressPhaseToJson(ProgressPhaseModel model) =>
+      model == null ? null : model.toJson();
+
+  static int _dateTimetoMilliseconds(DateTime date) =>
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 ///进度工单状态

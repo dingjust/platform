@@ -12,7 +12,8 @@ class PayPlanRepositoryImpl implements PayPlanRepository {
     Response response;
     CompanyPayPlanResponse result;
     try {
-      response = await http$.post(UserApis.payplans, data: {});
+      response = await http$.post(UserApis.payplans,
+          data: {}, queryParameters: {'page': 0, 'size': 999});
     } on DioError catch (e) {
       print(e);
     }

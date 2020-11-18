@@ -18,7 +18,6 @@ class _PayPlanSelectPageState extends State<PayPlanSelectPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.selectedModel != null) {
       selectedModel = widget.selectedModel;
@@ -59,33 +58,32 @@ class _PayPlanSelectPageState extends State<PayPlanSelectPage> {
   Widget _buildBody(List<CompanyPayPlanModel> plans) {
     return Container(
         child: Column(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '财务方案尚不支持手机端创建，请前往钉单平台设置',
-                    style: TextStyle(color: Colors.red),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: ListView(
-                  children: plans
-                      .map((plan) =>
-                      PayPlanItem(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '财务方案尚不支持手机端创建，请前往钉单平台设置',
+                style: TextStyle(color: Colors.red),
+              )
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: ListView(
+              children: plans
+                  .map((plan) => PayPlanItem(
                         model: plan,
                         selectModel: selectedModel,
                         onChanged: _handleModelChanged,
                       ))
-                      .toList()),
-            )
-          ],
-        ));
+                  .toList()),
+        )
+      ],
+    ));
   }
 
   void _handleModelChanged(CompanyPayPlanModel model) {
@@ -115,13 +113,6 @@ class _PayPlanItemState extends State<PayPlanItem> {
   String phaseOneStr = '';
   String phaseTwoStr = '';
   String monthlySettlementStr = '';
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initDetail();
-  }
 
   void _handleTap() {
     var selectModel = widget.selectModel;
@@ -188,46 +179,18 @@ class _PayPlanItemState extends State<PayPlanItem> {
               ],
             ),
             showDetail
-                ? Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              depositStr,
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              phaseOneStr + phaseTwoStr,
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              monthlySettlementStr,
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  )
+                ? Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '${widget.model.previewText}',
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                )
+              ],
+            )
                 : Container()
           ],
         ),
@@ -237,40 +200,6 @@ class _PayPlanItemState extends State<PayPlanItem> {
 
   String getSubTitle() {
     return '${widget.model.isHaveDeposit ? '有' : '无'}定金+${PayPlanTypeLocalizedMap[widget.model.payPlanType]}';
-  }
-
-  void initDetail() {
-    widget.model.payPlanItems.forEach((item) {
-      String eventStr = '${TriggerEventLocalizedMap[item.triggerEvent]}';
-      String triggerDaysStr = '${item.triggerDays}';
-      String payPercentStr = '${item.payPercent * 100}';
-
-      if (item.moneyType == PayMoneyType.DEPOSIT) {
-        depositStr =
-            '    定金：在双方${eventStr}后${triggerDaysStr}天以内，甲方应向乙方支付生效订单总金额的${payPercentStr}%为定金。';
-      }
-
-      if (item.moneyType == PayMoneyType.PHASEONE) {
-        if (widget.model.payPlanType == PayPlanType.PHASEONE) {
-          phaseOneStr =
-              '    支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在${eventStr}${triggerDaysStr}天以内未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
-        }
-        if (widget.model.payPlanType == PayPlanType.PHASETWO) {
-          phaseOneStr =
-              '    支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在${eventStr}后${triggerDaysStr}天以内支付合同总价的${payPercentStr}%。';
-        }
-      }
-
-      if (item.moneyType == PayMoneyType.PHASETWO) {
-        phaseTwoStr =
-            '在产品入库并经甲方检验全部产品合格${eventStr}后${triggerDaysStr}天以内未发现任何产品质量问题的，则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
-      }
-
-      if (item.moneyType == PayMoneyType.MONTHLY_SETTLEMENT) {
-        monthlySettlementStr =
-            '    支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在${eventStr}完成的次月${triggerDaysStr}号支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
-      }
-    });
   }
 
   bool isSelect() {

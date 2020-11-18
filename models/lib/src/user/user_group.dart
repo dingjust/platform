@@ -17,11 +17,17 @@ class UserGroupModel extends PrincipalGroupModel {
     String uid,
     String name,
     List<PrincipalModel> members,
+    ArticleApprovalStatus approvalStatus,
+    String contactPhone,
+    String contactPerson,
   }) : super(
-          profilePicture: profilePicture,
+    profilePicture: profilePicture,
           uid: uid,
           name: name,
           members: members,
+          approvalStatus: approvalStatus,
+          contactPhone: contactPhone,
+          contactPerson: contactPerson,
         );
 
   factory UserGroupModel.fromJson(Map<String, dynamic> json) =>
@@ -83,12 +89,6 @@ class CompanyModel extends UserGroupModel {
   @JsonKey(toJson: _mediasToJson)
   List<MediaModel> certificates;
 
-  //联系人
-  String contactPerson;
-
-  //联系电话
-  String contactPhone;
-
   //合作品牌
   String cooperativeBrand;
 
@@ -100,8 +100,6 @@ class CompanyModel extends UserGroupModel {
 
   //企业类型
   CompanyType type;
-
-  ArticleApprovalStatus approvalStatus;
 
 //认证状态
   AuthenticationStatus authenticationStatus;
@@ -120,11 +118,15 @@ class CompanyModel extends UserGroupModel {
   // 联系人uid
   String contactUid;
 
-  CompanyModel({
-    MediaModel profilePicture,
+  CompanyModel({MediaModel profilePicture,
     String uid,
     String name,
     List<PrincipalModel> members,
+    ArticleApprovalStatus approvalStatus,
+    //联系人
+    String contactPerson,
+    //联系电话
+    String contactPhone,
     this.starLevel,
     this.address,
     this.describe,
@@ -133,8 +135,6 @@ class CompanyModel extends UserGroupModel {
     this.taxNumber,
     this.bankOfDeposit,
     this.certificates,
-    this.contactPhone,
-    this.contactPerson,
     this.cooperativeBrand,
     this.qq,
     this.wechat,
@@ -142,17 +142,18 @@ class CompanyModel extends UserGroupModel {
     this.certificateOfLegal,
     this.legalRepresentative,
     this.type,
-    this.approvalStatus,
     this.profiles,
     this.labels,
     this.duties,
-    this.contactUid
-  }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-        );
+    this.contactUid})
+      : super(
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      members: members,
+      approvalStatus: approvalStatus,
+      contactPerson: contactPerson,
+      contactPhone: contactPhone);
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CompanyModelFromJson(json);
@@ -219,33 +220,32 @@ class OrgUnitModel extends CompanyModel {
     String contactUid,
     this.path,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-          starLevel: starLevel,
-          address: address,
-          contactAddress: contactAddress,
-          describe: describe,
-          creationTime: creationTime,
-          taxNumber: taxNumber,
-          bankOfDeposit: bankOfDeposit,
-          certificates: certificates,
-          contactPerson: contactPerson,
-          contactPhone: contactPhone,
-          cooperativeBrand: cooperativeBrand,
-          qq: qq,
-          wechat: wechat,
-          businessRegistrationNo: businessRegistrationNo,
-          certificateOfLegal: certificateOfLegal,
-          legalRepresentative: legalRepresentative,
-          type: type,
-          approvalStatus: approvalStatus,
-          profiles: companyProfiles,
-          labels: labels,
-          duties: duties,
-          contactUid: contactUid
-        );
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      members: members,
+      starLevel: starLevel,
+      address: address,
+      contactAddress: contactAddress,
+      describe: describe,
+      creationTime: creationTime,
+      taxNumber: taxNumber,
+      bankOfDeposit: bankOfDeposit,
+      certificates: certificates,
+      contactPerson: contactPerson,
+      contactPhone: contactPhone,
+      cooperativeBrand: cooperativeBrand,
+      qq: qq,
+      wechat: wechat,
+      businessRegistrationNo: businessRegistrationNo,
+      certificateOfLegal: certificateOfLegal,
+      legalRepresentative: legalRepresentative,
+      type: type,
+      approvalStatus: approvalStatus,
+      profiles: companyProfiles,
+      labels: labels,
+      duties: duties,
+      contactUid: contactUid);
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$OrgUnitModelFromJson(json);
@@ -274,16 +274,16 @@ class B2BUnitModel extends OrgUnitModel {
       String name,
       List<PrincipalModel> members,
       String path,
-      int starLevel,
-      AddressModel contactAddress,
-      String address,
-      String describe,
-      DateTime creationTime,
-      String taxNumber,
-      String bankOfDeposit,
-      List<MediaModel> certificates,
-      String contactPerson,
-      String contactPhone,
+        int starLevel,
+        AddressModel contactAddress,
+        String address,
+        String describe,
+        DateTime creationTime,
+        String taxNumber,
+        String bankOfDeposit,
+        List<MediaModel> certificates,
+        String contactPerson,
+        String contactPhone,
         String cooperativeBrand,
         String qq,
         String wechat,
@@ -304,34 +304,33 @@ class B2BUnitModel extends OrgUnitModel {
         this.longitude,
         this.latitude})
       : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-          path: path,
-          starLevel: starLevel,
-          address: address,
-          contactAddress: contactAddress,
-          describe: describe,
-          creationTime: creationTime,
-          taxNumber: taxNumber,
-          bankOfDeposit: bankOfDeposit,
-          certificates: certificates,
-          contactPerson: contactPerson,
-          contactPhone: contactPhone,
-    cooperativeBrand: cooperativeBrand,
-    qq: qq,
-    wechat: wechat,
-    businessRegistrationNo: businessRegistrationNo,
-    certificateOfLegal: certificateOfLegal,
-    legalRepresentative: legalRepresentative,
-    type: type,
-    approvalStatus: approvalStatus,
-    companyProfiles: companyProfiles,
-    labels: labels,
-    duties: duties,
-    contactUid: contactUid
-        );
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      members: members,
+      path: path,
+      starLevel: starLevel,
+      address: address,
+      contactAddress: contactAddress,
+      describe: describe,
+      creationTime: creationTime,
+      taxNumber: taxNumber,
+      bankOfDeposit: bankOfDeposit,
+      certificates: certificates,
+      contactPerson: contactPerson,
+      contactPhone: contactPhone,
+      cooperativeBrand: cooperativeBrand,
+      qq: qq,
+      wechat: wechat,
+      businessRegistrationNo: businessRegistrationNo,
+      certificateOfLegal: certificateOfLegal,
+      legalRepresentative: legalRepresentative,
+      type: type,
+      approvalStatus: approvalStatus,
+      companyProfiles: companyProfiles,
+      labels: labels,
+      duties: duties,
+      contactUid: contactUid);
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$B2BUnitModelFromJson(json);
@@ -411,36 +410,35 @@ class BrandModel extends B2BUnitModel {
     this.adeptAtCategories,
     this.salesMarket,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-          path: path,
-          active: active,
-          starLevel: starLevel,
-          address: address,
-          contactAddress: contactAddress,
-          email: email,
-          phone: phone,
-          creationTime: creationTime,
-          taxNumber: taxNumber,
-          bankOfDeposit: bankOfDeposit,
-          certificates: certificates,
-          contactPerson: contactPerson,
-          contactPhone: contactPhone,
-    cooperativeBrand: cooperativeBrand,
-    qq: qq,
-    wechat: wechat,
-    businessRegistrationNo: businessRegistrationNo,
-    certificateOfLegal: certificateOfLegal,
-    legalRepresentative: legalRepresentative,
-    type: type,
-    approvalStatus: approvalStatus,
-    companyProfiles: companyProfiles,
-    labels: labels,
-    duties: duties,
-    contactUid: contactUid
-        );
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      members: members,
+      path: path,
+      active: active,
+      starLevel: starLevel,
+      address: address,
+      contactAddress: contactAddress,
+      email: email,
+      phone: phone,
+      creationTime: creationTime,
+      taxNumber: taxNumber,
+      bankOfDeposit: bankOfDeposit,
+      certificates: certificates,
+      contactPerson: contactPerson,
+      contactPhone: contactPhone,
+      cooperativeBrand: cooperativeBrand,
+      qq: qq,
+      wechat: wechat,
+      businessRegistrationNo: businessRegistrationNo,
+      certificateOfLegal: certificateOfLegal,
+      legalRepresentative: legalRepresentative,
+      type: type,
+      approvalStatus: approvalStatus,
+      companyProfiles: companyProfiles,
+      labels: labels,
+      duties: duties,
+      contactUid: contactUid);
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$BrandModelFromJson(json);
@@ -611,35 +609,34 @@ class FactoryModel extends B2BUnitModel {
     this.capacities,
     this.populationScale})
       : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          members: members,
-          path: path,
-          active: active,
-          starLevel: starLevel,
-          describe: describe,
-          address: address,
-          contactAddress: contactAddress,
-          creationTime: creationTime,
-          taxNumber: taxNumber,
-          bankOfDeposit: bankOfDeposit,
-          certificates: certificates,
-          contactPerson: contactPerson,
-          contactPhone: contactPhone,
-    cooperativeBrand: cooperativeBrand,
-    qq: qq,
-    wechat: wechat,
-    businessRegistrationNo: businessRegistrationNo,
-    certificateOfLegal: certificateOfLegal,
-    legalRepresentative: legalRepresentative,
-    type: type,
-    approvalStatus: approvalStatus,
-    companyProfiles: companyProfiles,
-    labels: labels,
-    duties: duties,
-    contactUid: contactUid
-        );
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      members: members,
+      path: path,
+      active: active,
+      starLevel: starLevel,
+      describe: describe,
+      address: address,
+      contactAddress: contactAddress,
+      creationTime: creationTime,
+      taxNumber: taxNumber,
+      bankOfDeposit: bankOfDeposit,
+      certificates: certificates,
+      contactPerson: contactPerson,
+      contactPhone: contactPhone,
+      cooperativeBrand: cooperativeBrand,
+      qq: qq,
+      wechat: wechat,
+      businessRegistrationNo: businessRegistrationNo,
+      certificateOfLegal: certificateOfLegal,
+      legalRepresentative: legalRepresentative,
+      type: type,
+      approvalStatus: approvalStatus,
+      companyProfiles: companyProfiles,
+      labels: labels,
+      duties: duties,
+      contactUid: contactUid);
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FactoryModelFromJson(json);

@@ -184,6 +184,11 @@ const MachiningTypeLocalizedMap = {
   MachiningType.LIGHT_PROCESSING: '清加工',
 };
 
+const CooperationModeCodeMap = {
+  CooperationMode.LABOR_AND_MATERIAL: 'LABOR_AND_MATERIAL',
+  CooperationMode.LIGHT_PROCESSING: 'LIGHT_PROCESSING',
+};
+
 const CooperationModeLocalizedMap = {
   CooperationMode.LABOR_AND_MATERIAL: '包工包料',
   CooperationMode.LIGHT_PROCESSING: '清加工',
@@ -316,22 +321,23 @@ class AbstractOrderModel extends ItemModel {
   ///是否线下物流
   bool isOfflineConsignment;
 
-  AbstractOrderModel({@required this.statistics,
-    this.code,
-    this.totalQuantity = 0,
-    this.totalPrice = 0,
-    this.creationTime,
-    this.modifiedTime,
-    this.deliveryAddress,
-    this.remarks,
-    this.unitPrice,
-    this.salesApplication,
-    this.consignment,
-    this.supplier,
-    this.shippingOrders,
-    this.deliveryOrders,
-    this.reconciliationOrders,
-    this.isOfflineConsignment});
+  AbstractOrderModel(
+      {@required this.statistics,
+      this.code,
+      this.totalQuantity = 0,
+      this.totalPrice = 0,
+      this.creationTime,
+      this.modifiedTime,
+      this.deliveryAddress,
+      this.remarks,
+      this.unitPrice,
+      this.salesApplication,
+      this.consignment,
+      this.supplier,
+      this.shippingOrders,
+      this.deliveryOrders,
+      this.reconciliationOrders,
+      this.isOfflineConsignment});
 
   factory AbstractOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$AbstractOrderModelFromJson(json);
@@ -1466,15 +1472,15 @@ class ProductionProgressModel extends ItemModel {
   int sequence;
 
   /// 预计完成时间
-  @JsonKey(fromJson: dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime estimatedDate;
 
   /// 实际完成时间
-  @JsonKey(fromJson: dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime finishDate;
 
   ///修改时间
-  @JsonKey(fromJson: dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime modifiedtime;
 
   ///备注
@@ -1493,19 +1499,19 @@ class ProductionProgressModel extends ItemModel {
   List<ProductionProgressOrderModel> productionProgressOrders;
 
   ///节点
+  @JsonKey(toJson: _progressPhaseToJson)
   ProgressPhaseModel progressPhase;
 
-  ProductionProgressModel(
-      {this.phase,
-      this.quantity,
-      this.medias,
-      this.sequence,
-      this.estimatedDate,
-      this.finishDate,
-      this.modifiedtime,
-      this.order,
-      this.updateOnly,
-      this.delayedDays,
+  ProductionProgressModel({this.phase,
+    this.quantity,
+    this.medias,
+    this.sequence,
+    this.estimatedDate,
+    this.finishDate,
+    this.modifiedtime,
+    this.order,
+    this.updateOnly,
+    this.delayedDays,
     this.remarks});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>
@@ -1525,6 +1531,9 @@ class ProductionProgressModel extends ItemModel {
   static Map<String, dynamic> _purchaseOrderToJson(PurchaseOrderModel model) =>
       model == null ? null : PurchaseOrderModel.toJson(model);
 
+  static Map<String, dynamic> _progressPhaseToJson(ProgressPhaseModel model) =>
+      model == null ? null : model.toJson();
+
   static List<Map<String, dynamic>> _productionProgressOrdersToJson(
       List<ProductionProgressOrderModel> models) =>
       models == null
@@ -1543,6 +1552,9 @@ class ProductionProgressModel extends ItemModel {
     });
     return result;
   }
+
+  static int _dateTimetoMilliseconds(DateTime date) =>
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 //订单状态model，用于订单状态控件的List传入

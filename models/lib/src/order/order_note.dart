@@ -483,7 +483,7 @@ class ProductionProgressOrderModel {
   int amount;
 
   ///上报时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  @JsonKey(fromJson: _dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime reportTime;
 
   ///备注
@@ -532,4 +532,7 @@ class ProductionProgressOrderModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
+
+  static int _dateTimetoMilliseconds(DateTime date) =>
+      date == null ? null : date.millisecondsSinceEpoch;
 }

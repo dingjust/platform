@@ -10,7 +10,9 @@ class BaseMsg {
 
   int resultCode;
 
-  BaseMsg({this.code, this.msg, this.resultCode});
+  dynamic data;
+
+  BaseMsg({this.code, this.msg, this.resultCode,this.data});
 
   factory BaseMsg.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$BaseMsgFromJson(json);
