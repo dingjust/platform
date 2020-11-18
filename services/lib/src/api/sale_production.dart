@@ -40,6 +40,8 @@ class SaleProductionApis {
       };
 
   /// 进度工单列表
-  static get progressWorkSheetList => 
-      '/{baseSiteId}/sheets/progress/work';
+  static get progressWorkSheetList => '/{baseSiteId}/sheets/progress/work';
+
+  /// 创建外发订单
+  static get createOutOrder => '/{baseSiteId}/out/order/save';
 }

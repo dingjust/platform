@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/payplan/payplan_select_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/employee_select.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _OutOrderFormState extends State<OutOrderForm> {
                 _buildOutTypeRadio(),
                 FormCooperatorsSelect(
                   onCooperatorSelect: onCooperatorSelect,
-                  value: form.cooperator,
+                  value: form.targetCooperator,
                 ),
                 FormProduction(
                   onEntriesChange: (entries) {
@@ -75,11 +76,11 @@ class _OutOrderFormState extends State<OutOrderForm> {
                 _buildRemarks(),
                 Container(
                   height: 60,
-                )
+                ),
+                _bottomBtns()
               ],
             ),
           ),
-          bottomSheet: _bottomBtns(),
           resizeToAvoidBottomPadding: true,
         ),
         onWillPop: onPop);
@@ -181,7 +182,7 @@ class _OutOrderFormState extends State<OutOrderForm> {
 
   Widget _buildRemarks() {
     TextEditingController textEditingController =
-    TextEditingController(text: form?.remarks ?? '');
+        TextEditingController(text: form?.remarks ?? '');
     FocusNode focusNode = FocusNode();
 
     return FormBlock(
@@ -240,7 +241,7 @@ class _OutOrderFormState extends State<OutOrderForm> {
             builder: (context) =>
                 CooperatorsPage(
                   selectedData:
-                  form.cooperator != null ? [form.cooperator] : [],
+                  form.targetCooperator != null ? [form.targetCooperator] : [],
                   selectingMode: true,
                   categories: [CooperatorCategory.SUPPLIER],
                   max: 1,
@@ -248,9 +249,9 @@ class _OutOrderFormState extends State<OutOrderForm> {
     if (cooperators != null) {
       setState(() {
         if (cooperators.isNotEmpty) {
-          form.cooperator = cooperators.first;
+          form.targetCooperator = cooperators.first;
         } else {
-          form.cooperator = null;
+          form.targetCooperator = null;
         }
       });
     }
@@ -365,7 +366,7 @@ class _OutOrderFormState extends State<OutOrderForm> {
                     disabledColor: Colors.grey,
                     onPressed: () => onSubmit(true),
                     color: Constants.THEME_COLOR_MAIN,
-                    child: Text('接单',
+                    child: Text('提交',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -377,7 +378,24 @@ class _OutOrderFormState extends State<OutOrderForm> {
   }
 
   void onSubmit(bool submitAudit) async {
-    validateForm();
+    if (validateForm()) {
+      Function cancelFunc =
+      BotToast.showLoading(crossPage: false, clickClose: false);
+      BaseResponse response =
+      await OutOrderRespository.saveOutOrder(submitAudit, form);
+      cancelFunc.call();
+      if (response != null && response.code == 1) {
+        BotToast.showText(text: '提交成功');
+        //跳转到
+        Navigator.of(context).pushReplacementNamed(
+            AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+            arguments: {'id': response.data, 'title': '外发订单明细'});
+      } else if (response != null && response.code == 0) {
+        BotToast.showText(text: '${response.msg}');
+      } else {
+        BotToast.showText(text: '操作失败');
+      }
+    }
   }
 
   ///订单行校验
@@ -399,7 +417,7 @@ class _OutOrderFormState extends State<OutOrderForm> {
       FormValidateItem(
           (form.taskOrderEntries == null || form.taskOrderEntries.isEmpty),
           '请选择工单'),
-      FormValidateItem((form.cooperator == null), '请选择合作商'),
+      FormValidateItem((form.targetCooperator == null), '请选择合作商'),
       FormValidateItem(form.cooperationMode == null, '请选择合作方式'),
       FormValidateItem(form.invoiceNeeded == null, '请选择是否开票'),
       FormValidateItem(

@@ -6,7 +6,8 @@ part 'principal.g.dart';
 // import 'package:models/models.dart';
 
 @JsonSerializable()
-class PrincipalModel extends ItemModel {
+class PrincipalModel {
+  int id;
   @JsonKey(toJson: mediaToJson)
   MediaModel profilePicture;
   String uid;
@@ -23,6 +24,7 @@ class PrincipalModel extends ItemModel {
   List<CompanyPayPlanModel> payPlans;
 
   PrincipalModel({
+    this.id,
     this.profilePicture,
     @required this.uid,
     this.name,
@@ -78,13 +80,13 @@ class PrincipalGroupModel extends PrincipalModel {
     String contactPerson,
     this.members,
   }) : super(
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      approvalStatus: approvalStatus,
-      contactAddress: contactAddress,
-      contactPhone: contactPhone,
-      contactPerson: contactPerson);
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            approvalStatus: approvalStatus,
+            contactAddress: contactAddress,
+            contactPhone: contactPhone,
+            contactPerson: contactPerson);
 
   factory PrincipalGroupModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$PrincipalGroupModelFromJson(json);

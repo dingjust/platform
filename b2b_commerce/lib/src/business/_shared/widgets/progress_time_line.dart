@@ -1,13 +1,9 @@
-import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 enum ProgressState{
   BEFORE,
@@ -175,8 +171,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine>{
                   child: Container(
                     padding: EdgeInsets.only(right: 10),
                     child: Text(
-                      '${_model.progresses[index].delayedDays > 0 ? '已延期${_model.progresses[index].delayedDays}天'
-                          : _model.progresses[index].delayedDays < 0 ? '倒计时${_model.progresses[index].delayedDays}天':''}',
+                      '${_model.progresses[index].delayedDays > 0 ? '已延期${_model.progresses[index].delayedDays}天' : _model.progresses[index].delayedDays < 0 ? '倒计时${-_model.progresses[index].delayedDays}天' : ''}',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
