@@ -1472,15 +1472,15 @@ class ProductionProgressModel extends ItemModel {
   int sequence;
 
   /// 预计完成时间
-  @JsonKey(fromJson: dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime estimatedDate;
 
   /// 实际完成时间
-  @JsonKey(fromJson: dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime finishDate;
 
   ///修改时间
-  @JsonKey(fromJson: dateTimefromMilliseconds)
+  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime modifiedtime;
 
   ///备注
@@ -1499,6 +1499,7 @@ class ProductionProgressModel extends ItemModel {
   List<ProductionProgressOrderModel> productionProgressOrders;
 
   ///节点
+  @JsonKey(toJson: _progressPhaseToJson)
   ProgressPhaseModel progressPhase;
 
   ProductionProgressModel({this.phase,
@@ -1530,6 +1531,9 @@ class ProductionProgressModel extends ItemModel {
   static Map<String, dynamic> _purchaseOrderToJson(PurchaseOrderModel model) =>
       model == null ? null : PurchaseOrderModel.toJson(model);
 
+  static Map<String, dynamic> _progressPhaseToJson(ProgressPhaseModel model) =>
+      model == null ? null : model.toJson();
+
   static List<Map<String, dynamic>> _productionProgressOrdersToJson(
       List<ProductionProgressOrderModel> models) =>
       models == null
@@ -1548,6 +1552,9 @@ class ProductionProgressModel extends ItemModel {
     });
     return result;
   }
+
+  static int _dateTimetoMilliseconds(DateTime date) =>
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 //订单状态model，用于订单状态控件的List传入

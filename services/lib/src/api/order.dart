@@ -423,4 +423,19 @@ class OrderApis {
   static get updateSalesAddress => (code) {
     return '/{baseSiteId}/b2b/orders/sales/$code/deliveryAddress';
   };
+
+  //批量修改生产进度预计完成时间
+  static get updateProgressesEstimatedDate => () {
+        return '/{baseSiteId}/sheets/progress/work/update/progresses/date';
+      };
+
+  //生产进度节点完成
+  static get finishProgress => (code,id) {
+    return '/{baseSiteId}/sheets/progress/work/$code/finish/progress/$id';
+  };
+
+  //生产进度工单明细
+  static get progressWorkSheetDetail => (code) {
+    return '/{baseSiteId}/sheets/progress/work/$code';
+  };
 }

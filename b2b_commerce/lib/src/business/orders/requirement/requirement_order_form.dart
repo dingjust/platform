@@ -1090,7 +1090,9 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
                                   formState: widget.formState,
                                 )));
                     if (result != null) {
-                      _factoryUids = result;
+                      setState((){
+                        _factoryUids = result;
+                      });
                     }
                   },
                   child: Row(
