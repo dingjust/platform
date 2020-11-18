@@ -45,7 +45,7 @@ class _ExternalSaleOrderDetailPageState
     return FutureBuilder<SalesProductionOrderModel>(
       builder: (BuildContext context,
           AsyncSnapshot<SalesProductionOrderModel> snapshot) {
-        if (snapshot.data != null) {
+        if (snapshot.data != null && order != null) {
           return WillPopScope(
               child: Scaffold(
                 appBar: AppBar(
