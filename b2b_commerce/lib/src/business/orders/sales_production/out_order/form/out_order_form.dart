@@ -172,13 +172,13 @@ class _OutOrderFormState extends State<OutOrderForm> {
 
     return form.sendAuditNeeded
         ? ListTile(
-      title: Text(
-        '$title',
-        style: TextStyle(color: Colors.grey),
-      ),
-      trailing: Icon(Icons.keyboard_arrow_right),
-      onTap: onSelectApprovers,
-    )
+            title: Text(
+              '$title',
+              style: TextStyle(color: Colors.grey),
+            ),
+            trailing: Icon(Icons.keyboard_arrow_right),
+            onTap: onSelectApprovers,
+          )
         : Container();
   }
 
@@ -229,7 +229,7 @@ class _OutOrderFormState extends State<OutOrderForm> {
               max: 5,
               selected:
               form.sendApprovers != null ? form.sendApprovers : [],
-                )));
+            )));
     setState(() {
       form.sendApprovers = b2bCusomers;
     });
@@ -335,27 +335,6 @@ class _OutOrderFormState extends State<OutOrderForm> {
                 ),
               ),
             ));
-  }
-
-  void onSubmit(bool submitAudit) async {
-    if (validateForm()) {
-      Function cancelFunc =
-      BotToast.showLoading(crossPage: false, clickClose: false);
-      BaseResponse response =
-      await OutOrderRespository.saveOutOrder(submitAudit, form);
-      cancelFunc.call();
-      if (response != null && response.code == 1) {
-        BotToast.showText(text: '提交成功');
-        //跳转到
-        Navigator.of(context).pushReplacementNamed(
-            AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
-            arguments: {'id': response.data, 'title': '外发订单明细'});
-      } else if (response != null && response.code == 0) {
-        BotToast.showText(text: '${response.msg}');
-      } else {
-        BotToast.showText(text: '操作失败');
-      }
-    }
   }
 
   ///订单行校验
