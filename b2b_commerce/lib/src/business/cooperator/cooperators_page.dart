@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -196,7 +197,11 @@ class _AddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context)
+            .pushNamed(AppRoutes.ROUTE_COOPERATORS_CREATE)
+            .then((value) {});
+      },
       child: Icon(
         Icons.add,
         color: Colors.white,
