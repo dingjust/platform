@@ -68,7 +68,7 @@ class _ExternalSaleOrderDetailPageState
                         order: order,
                       ),
                       OrderContractsBlock(
-                        agreements: order.agreements,
+                        agreements: order?.agreements,
                       ),
                       _OrderInfo(
                         order: order,
