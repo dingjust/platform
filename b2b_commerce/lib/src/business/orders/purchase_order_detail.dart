@@ -130,11 +130,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     centerTitle: true,
                     title: Text('生产订单明细'),
                     actions: <Widget>[
-                      IconButton(
-                        iconSize: 4,
-                        icon: Icon(B2BIcons.more),
-                        onPressed: () {},
-                      )
+//                      IconButton(
+//                        iconSize: 4,
+//                        icon: Icon(B2BIcons.more),
+//                        onPressed: () {},
+//                      )
                     ],
                     brightness: Brightness.dark,
                     flexibleSpace: FlexibleSpaceBar(

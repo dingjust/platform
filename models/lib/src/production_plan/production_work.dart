@@ -23,6 +23,7 @@ class ProductionWorkOrderModel extends OrderModel {
   int priorityLevel;
 
   ///当前阶段
+  @JsonKey(toJson: _progressPhaseToJson)
   ProgressPhaseModel currentPhase;
 
   ///预计交货日期
@@ -232,6 +233,9 @@ class ProductionWorkOrderModel extends OrderModel {
 
   static Map<String, dynamic> cooperatorToJson(CooperatorModel model) =>
       model == null ? null : CooperatorModel.toJson(model);
+
+  static Map<String, dynamic> _progressPhaseToJson(ProgressPhaseModel model) =>
+      model == null ? null : model.toJson();
 }
 
 ///生产进度

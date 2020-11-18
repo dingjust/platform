@@ -5,6 +5,8 @@ import 'package:core/core.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/constants.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
 
 /// 生产工单列表item
 class ProductionTaskOrderItem extends StatelessWidget {
@@ -45,9 +47,12 @@ class ProductionTaskOrderItem extends StatelessWidget {
         if (isSelectList) {
           onPressed();
         } else {
-          Navigator.of(context).pushNamed(
+          dynamic result = await Navigator.of(context).pushNamed(
               AppRoutes.ROUTE_PRODUCTION_TASK_ORDER_DETAIL,
               arguments: model.id);
+          if(result != null){
+            Provider.of<ProductionTaskOrdersState>(context).clear();
+          }
         }
       },
     );

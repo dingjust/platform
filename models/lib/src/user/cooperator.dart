@@ -88,6 +88,7 @@ class CooperatorModel extends ItemModel {
   AddressModel address;
 
   ///进度方案
+  @JsonKey(toJson: progressPlanToJson)
   ProgressPlanModel progressPlan;
 
   ///对账方案
@@ -123,6 +124,10 @@ class CooperatorModel extends ItemModel {
   static Map<String, dynamic> companyPayPlanToJson(
       CompanyPayPlanModel payPlan) =>
       payPlan == null ? null : CompanyPayPlanModel.toJson(payPlan);
+
+  static Map<String, dynamic> progressPlanToJson(
+      ProgressPlanModel model) =>
+      model == null ? null : model.toJson();
 
   String getName() {
     if (type == CooperatorType.ONLINE) {
