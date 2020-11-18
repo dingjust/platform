@@ -218,7 +218,7 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   ///审核状态
   AuditState auditState;
 
-  ///是否需要审核
+  ///外发是否需要审核
   bool sendAuditNeeded;
 
   ///外发审批人

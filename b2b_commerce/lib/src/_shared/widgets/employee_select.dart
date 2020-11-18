@@ -13,7 +13,7 @@ class EmployeeSelectPage extends StatefulWidget {
 
   final int max;
 
-  final List<B2BCustomerModelExt> selected;
+  final List<B2BCustomerModel> selected;
 
   EmployeeSelectPage(
       {Key key, this.multi = false, this.node, this.selected, this.max = 99})
@@ -32,7 +32,7 @@ class _EmployeeSelectPageState extends State<EmployeeSelectPage> {
       fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87);
 
   ///选中员工
-  List<B2BCustomerModelExt> selectedCustomers;
+  List<B2BCustomerModel> selectedCustomers;
 
   @override
   void initState() {
@@ -211,8 +211,9 @@ class _EmployeeSelectPageState extends State<EmployeeSelectPage> {
                               selectedCustomers.addAll(cCustomers);
                             }
                           } else {
-                            selectedCustomers.removeWhere(
-                                (element) => cCustomers.contains(element));
+                            selectedCustomers.removeWhere((element) =>
+                                cCustomers
+                                    .any((item) => item.id == element.id));
                           }
                         });
                       },
@@ -268,7 +269,8 @@ class _EmployeeSelectPageState extends State<EmployeeSelectPage> {
           child: Row(
             children: [
               Checkbox(
-                value: selectedCustomers.contains(model),
+                value:
+                    selectedCustomers.any((element) => element.id == model.id),
                 onChanged: (value) {
                   addCustomer(model);
                 },
@@ -287,7 +289,7 @@ class _EmployeeSelectPageState extends State<EmployeeSelectPage> {
 
   void addCustomer(B2BCustomerModelExt model) {
     setState(() {
-      if (!selectedCustomers.contains(model)) {
+      if (!selectedCustomers.any((element) => element.id == model.id)) {
         if (!widget.multi) {
           //单选判断
           if (selectedCustomers.length == 0) {
@@ -300,7 +302,7 @@ class _EmployeeSelectPageState extends State<EmployeeSelectPage> {
           }
         }
       } else {
-        selectedCustomers.remove(model);
+        selectedCustomers.removeWhere((element) => element.id == model.id);
       }
     });
   }
@@ -377,7 +379,9 @@ class _EmployeeSelectPageState extends State<EmployeeSelectPage> {
     //当前节点所有员工
     List<B2BCustomerModelExt> customers = getCustomersByNode(cNode);
     if (customers != null && customers.isNotEmpty) {
-      return customers.every((element) => selectedCustomers.contains(element));
+      return customers.every(
+              (element) =>
+              selectedCustomers.any((item) => item.id == element.id));
     }
     return false;
   }

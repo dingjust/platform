@@ -1,10 +1,9 @@
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_btns.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:core/core.dart';
 
 import 'order_accept_page.dart';
 
@@ -23,12 +22,13 @@ class OrderDetailBtnGroup extends StatelessWidget {
   ///需要列表页刷新回调
   final VoidCallback needCallbackPop;
 
-  const OrderDetailBtnGroup({Key key,
-    this.order,
-    this.height = 55,
-    this.detailCallback,
-    this.listCallback,
-    this.needCallbackPop})
+  const OrderDetailBtnGroup(
+      {Key key,
+      this.order,
+      this.height = 55,
+      this.detailCallback,
+      this.listCallback,
+      this.needCallbackPop})
       : super(key: key);
 
   @override
@@ -36,14 +36,12 @@ class OrderDetailBtnGroup extends StatelessWidget {
     //接单方按钮
     // if (isTarget) { TODO:接单方判断修改
     if (!isOrigin) {
-      if (order.state != SalesProductionOrderState.CANCELED) {
+      if ([
+        SalesProductionOrderState.TO_BE_ACCEPTED,
+        SalesProductionOrderState.AUDIT_REJECTED
+      ].contains(order.state)) {
         //外接来源订单
-        if (isSaleOrder &&
-            (order.auditState == AuditState.NONE ||
-                order.auditState == AuditState.AUDITED_FAILED) &&
-            hasOrigin) {
-          return _acceptBtns(context);
-        }
+        return _acceptBtns(context);
       }
     } else if (isOrigin) {
       //来源方
@@ -114,7 +112,7 @@ class OrderDetailBtnGroup extends StatelessWidget {
         builder: (context) => OrderAcceptPage(order: order)))
         .then((value) {
       //回调刷新
-      if (value && detailCallback != null) {
+      if (value == true && detailCallback != null) {
         detailCallback.call();
         if (needCallbackPop != null) {
           needCallbackPop.call();

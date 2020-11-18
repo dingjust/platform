@@ -24,7 +24,7 @@ class _OutOrderFormState extends State<OutOrderForm> {
   void initState() {
     UserModel currentUser = UserBLoC.instance.currentUser;
     form = SalesProductionOrderModel(
-        auditNeeded: false,
+        sendAuditNeeded: false,
         attachments: [],
         merchandiser:
             B2BCustomerModel(id: currentUser.id, name: currentUser.name));
@@ -148,10 +148,10 @@ class _OutOrderFormState extends State<OutOrderForm> {
           child: Row(
             children: [
               Checkbox(
-                  value: form.auditNeeded,
+                  value: form.sendAuditNeeded,
                   onChanged: (val) {
                     setState(() {
-                      form.auditNeeded = val;
+                      form.sendAuditNeeded = val;
                     });
                   }),
               Text('需要审核'),
@@ -166,19 +166,19 @@ class _OutOrderFormState extends State<OutOrderForm> {
   Widget _buildApproversRow() {
     String title = '请选择审核人员';
 
-    if (form.approvers != null && form.approvers.isNotEmpty) {
-      title = form.approvers.map((e) => e.name).toString();
+    if (form.sendApprovers != null && form.sendApprovers.isNotEmpty) {
+      title = form.sendApprovers.map((e) => e.name).toString();
     }
 
-    return form.auditNeeded
+    return form.sendAuditNeeded
         ? ListTile(
-            title: Text(
-              '$title',
-              style: TextStyle(color: Colors.grey),
-            ),
-            trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: onSelectApprovers,
-          )
+      title: Text(
+        '$title',
+        style: TextStyle(color: Colors.grey),
+      ),
+      trailing: Icon(Icons.keyboard_arrow_right),
+      onTap: onSelectApprovers,
+    )
         : Container();
   }
 
@@ -225,12 +225,13 @@ class _OutOrderFormState extends State<OutOrderForm> {
     List<B2BCustomerModel> b2bCusomers =
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => EmployeeSelectPage(
-                  multi: true,
-                  max: 5,
-                  selected: form.approvers != null ? form.approvers : [],
+              multi: true,
+              max: 5,
+              selected:
+              form.sendApprovers != null ? form.sendApprovers : [],
                 )));
     setState(() {
-      form.approvers = b2bCusomers;
+      form.sendApprovers = b2bCusomers;
     });
   }
 
@@ -386,8 +387,8 @@ class _OutOrderFormState extends State<OutOrderForm> {
       FormValidateItem(form.payPlan == null, '请选择账务方案'),
       FormValidateItem(form.merchandiser == null, '跟单员不能为空'),
       FormValidateItem(
-          form.auditNeeded &&
-              (form.approvers == null || form.approvers.isEmpty),
+          form.sendAuditNeeded &&
+              (form.sendApprovers == null || form.sendApprovers.isEmpty),
           '请选择审核人'),
     ];
 

@@ -646,7 +646,7 @@ class FormRemarks extends StatelessWidget {
             textAlign: TextAlign.left,
             hintText: '请输入内容',
             controller: textEditingController,
-            maxLength: 120,
+            maxLength: 150,
             focusNode: focusNode,
             onChanged: (value) {
               form.remarks = value;
