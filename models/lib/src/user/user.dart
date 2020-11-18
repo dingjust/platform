@@ -95,7 +95,6 @@ class UserModel extends PrincipalModel {
       this.dingTalkHeadImg,
       this.dingTalkNickname})
       : super(
-          id: id,
           profilePicture: profilePicture,
           uid: uid,
           name: name,

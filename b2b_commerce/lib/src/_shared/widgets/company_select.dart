@@ -1,14 +1,12 @@
-import 'package:dio/dio.dart';
+import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
-
 class CompanySelectPage extends StatefulWidget {
-
   CompanySelectPage({Key key}) : super(key: key);
 
   @override
@@ -22,7 +20,7 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
   String appBarTitle = '公司列表';
   String hintText = '输入公司名称或账号';
   String _keyword = '';
- 
+
   List<CompanyModel> _companyModels;
 
   CompanyModel selectedCompany;
@@ -44,9 +42,7 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
         builder:
             (BuildContext context, AsyncSnapshot<List<CompanyModel>> snapshot) {
           if (_keyword == '') {
-            return isSearching
-                ? Container()
-                : _buildTips('输入查询的公司名称或账号');
+            return isSearching ? Container() : _buildTips('输入查询的公司名称或账号');
           } else if (snapshot.connectionState == ConnectionState.done) {
             if (!snapshot.hasError && snapshot.hasData) {
               return CompanySelectList(
@@ -70,28 +66,27 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
 
   Widget _buildBottom() {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-              child: FlatButton(
-                color: Color.fromRGBO(255, 214, 12, 1),
-                onPressed: () {
-                  Navigator.of(context).pop(selectedCompany);
-                  selectedCompany = null;
-                  _keyword = '';
-                },
-                child: Text(
-                  '确定',
-                  style: TextStyle(fontSize: 18),
-                ),
-              )),
-        ],
-      )
-    );
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        color: Colors.white,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+                child: FlatButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              onPressed: () {
+                Navigator.of(context).pop(selectedCompany);
+                selectedCompany = null;
+                _keyword = '';
+              },
+              child: Text(
+                '确定',
+                style: TextStyle(fontSize: 18),
+              ),
+            )),
+          ],
+        ));
   }
 
   Widget _buildTips(String tip) {
@@ -196,13 +191,13 @@ class CompanySelectList extends StatelessWidget {
             ? Column(
                 children: data
                     .map((model) => CompanySelectItem(
-                        model: model, 
-                        selectedCompany: selectedCompany,
-                        onPressed: () {
-                          if (onItemTap != null) {
-                            onItemTap(model);
-                          }
-                        }))
+                    model: model,
+                    selectedCompany: selectedCompany,
+                    onPressed: () {
+                      if (onItemTap != null) {
+                        onItemTap(model);
+                      }
+                    }))
                     .toList())
             : NoDataInfoRow(),
         // _buildEnd()
@@ -231,20 +226,19 @@ class CompanySelectItem extends StatelessWidget {
   /// 回调方法
   final VoidCallback onPressed;
 
-  const CompanySelectItem({Key key, this.model, this.selectedCompany, this.onPressed})
+  const CompanySelectItem(
+      {Key key, this.model, this.selectedCompany, this.onPressed})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector( 
+    return GestureDetector(
       child: Container(
         margin: const EdgeInsets.fromLTRB(5, 10, 5, 0),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            _buildMain()
-          ],
+          children: <Widget>[_buildMain()],
         ),
         decoration: BoxDecoration(
             color: selectedCompany != null && selectedCompany.id == model.id
@@ -259,47 +253,41 @@ class CompanySelectItem extends StatelessWidget {
   }
 
   Widget _buildMain() {
-    return Column(
-      children: [
-        Row(
+    return Column(children: [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Text(
+              '公司名称：${model.name}',
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500),
+            ),
+          )
+        ],
+      ),
+      Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          children: [
             Expanded(
               flex: 2,
               child: Text(
-                '公司名称：${model.name}',
+                '账号：${model.contactUid}',
                 textAlign: TextAlign.start,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500
-                ),
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
               ),
-            )
+            ),
+            _buildTag()
           ],
         ),
-        Container(
-          margin: EdgeInsets.only(top: 5),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Text(
-                  '账号：${model.contactUid}',
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87
-                  ),
-                ),
-              ),
-              _buildTag()
-            ],
-          ),
-        ),
-      ]
-    );
+      ),
+    ]);
   }
 
   Widget _buildTag() {
@@ -325,8 +313,7 @@ class CompanySelectItem extends StatelessWidget {
             child: Center(
               child: Text(
                 '已认证',
-                style:
-                    TextStyle(color: Colors.green, fontSize: 10),
+                style: TextStyle(color: Colors.green, fontSize: 10),
               ),
             ),
           );

@@ -2,12 +2,11 @@ import 'package:b2b_commerce/src/_shared/payplan/payplan_select_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/employee_select.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 import 'form_components.dart';
 
@@ -170,13 +169,13 @@ class _OutOrderFormState extends State<OutOrderForm> {
 
     return form.auditNeeded
         ? ListTile(
-      title: Text(
-        '$title',
-        style: TextStyle(color: Colors.grey),
-      ),
-      trailing: Icon(Icons.keyboard_arrow_right),
-      onTap: onSelectApprovers,
-    )
+            title: Text(
+              '$title',
+              style: TextStyle(color: Colors.grey),
+            ),
+            trailing: Icon(Icons.keyboard_arrow_right),
+            onTap: onSelectApprovers,
+          )
         : Container();
   }
 

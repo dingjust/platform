@@ -9,7 +9,6 @@ part 'principal.g.dart';
 class PrincipalModel extends ItemModel {
   @JsonKey(toJson: mediaToJson)
   MediaModel profilePicture;
-  int id;
   String uid;
   String name;
   String phone;
@@ -26,7 +25,6 @@ class PrincipalModel extends ItemModel {
   PrincipalModel({
     this.profilePicture,
     @required this.uid,
-    this.id,
     this.name,
     this.phone,
     this.approvalStatus,
@@ -45,7 +43,7 @@ class PrincipalModel extends ItemModel {
       model == null ? null : MediaModel.toJson(model);
 
   static List<Map<String, dynamic>> payPlansToJson(
-      List<CompanyPayPlanModel> payPlans) =>
+          List<CompanyPayPlanModel> payPlans) =>
       payPlans == null
           ? null
           : payPlans.map((plan) => CompanyPayPlanModel.toJson(plan)).toList();
@@ -76,14 +74,17 @@ class PrincipalGroupModel extends PrincipalModel {
     String name,
     ArticleApprovalStatus approvalStatus,
     AddressModel contactAddress,
+    String contactPhone,
+    String contactPerson,
     this.members,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          approvalStatus: approvalStatus,
-          contactAddress: contactAddress,
-        );
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      approvalStatus: approvalStatus,
+      contactAddress: contactAddress,
+      contactPhone: contactPhone,
+      contactPerson: contactPerson);
 
   factory PrincipalGroupModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$PrincipalGroupModelFromJson(json);
