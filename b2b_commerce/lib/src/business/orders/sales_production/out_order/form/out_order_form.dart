@@ -3,12 +3,12 @@ import 'package:b2b_commerce/src/_shared/widgets/employee_select.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'form_btns.dart';
 import 'form_components.dart';
 
 ///外发订单表单页
@@ -77,11 +77,13 @@ class _OutOrderFormState extends State<OutOrderForm> {
                 Container(
                   height: 60,
                 ),
-                _bottomBtns()
               ],
             ),
           ),
-          resizeToAvoidBottomPadding: true,
+          bottomNavigationBar: FormBtns(
+            form: form,
+            validateFunc: validateForm,
+          ),
         ),
         onWillPop: onPop);
   }
@@ -221,13 +223,12 @@ class _OutOrderFormState extends State<OutOrderForm> {
   ///选择审核人员
   void onSelectApprovers() async {
     List<B2BCustomerModel> b2bCusomers =
-    await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            EmployeeSelectPage(
-              multi: true,
-              max: 5,
-              selected: form.approvers != null ? form.approvers : [],
-            )));
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => EmployeeSelectPage(
+                  multi: true,
+                  max: 5,
+                  selected: form.approvers != null ? form.approvers : [],
+                )));
     setState(() {
       form.approvers = b2bCusomers;
     });
@@ -240,8 +241,9 @@ class _OutOrderFormState extends State<OutOrderForm> {
         MaterialPageRoute(
             builder: (context) =>
                 CooperatorsPage(
-                  selectedData:
-                  form.targetCooperator != null ? [form.targetCooperator] : [],
+                  selectedData: form.targetCooperator != null
+                      ? [form.targetCooperator]
+                      : [],
                   selectingMode: true,
                   categories: [CooperatorCategory.SUPPLIER],
                   max: 1,
@@ -332,49 +334,6 @@ class _OutOrderFormState extends State<OutOrderForm> {
                 ),
               ),
             ));
-  }
-
-  ///接单按钮
-  Widget _bottomBtns({double height = 55}) {
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-              flex: 1,
-              child: Container(
-                height: height,
-                child: FlatButton(
-                    shape: RoundedRectangleBorder(),
-                    disabledColor: Colors.grey,
-                    onPressed: () => onSubmit(false),
-                    child: Text('保存',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.red,
-                        ))),
-              )),
-          Expanded(
-              flex: 1,
-              child: Container(
-                height: height,
-                child: FlatButton(
-                    shape: RoundedRectangleBorder(),
-                    disabledColor: Colors.grey,
-                    onPressed: () => onSubmit(true),
-                    color: Constants.THEME_COLOR_MAIN,
-                    child: Text('提交',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                        ))),
-              ))
-        ],
-      ),
-    );
   }
 
   void onSubmit(bool submitAudit) async {
