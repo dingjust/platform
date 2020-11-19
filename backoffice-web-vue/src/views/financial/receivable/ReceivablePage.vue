@@ -112,7 +112,7 @@
           createdDateTo: '',
           state: 'WAIT_TO_PAY'
         },
-        statuses: this.$store.state.EnumsModule.financialState,
+        statuses: Object.assign([], this.$store.state.EnumsModule.financialState),
         dataQuery: {}
       }
     },
