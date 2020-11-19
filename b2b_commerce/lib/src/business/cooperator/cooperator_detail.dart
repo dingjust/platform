@@ -151,24 +151,46 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                           child: Text('${model.name}',
                               style: TextStyle(fontSize: 18)),
                         ),
-                        Container(
-                          height: 20,
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              border: Border.all(
-                                  color: Color.fromRGBO(68, 138, 255, 1))),
-                          child: Center(
-                            child: Text(
-                              '未认证',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(68, 138, 255, 1),
-                                  fontSize: 10),
-                            ),
-                          ),
-                        )
+                        model.partner != null && model.partner.approvalStatus ==
+                                ArticleApprovalStatus.approved
+                            ? Container(
+                                height: 20,
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 1),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(2),
+                                    border: Border.all(
+                                        color:
+                                          Color.fromRGBO(225, 243, 216, 1))),
+                                child: Center(
+                                  child: Text(
+                                    '已认证',
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(103, 194, 58, 1),
+                                        fontSize: 10),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 20,
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 1),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(2),
+                                    border: Border.all(
+                                        color:
+                                            Colors.grey[200])),
+                                child: Center(
+                                  child: Text(
+                                    '未认证',
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 10),
+                                  ),
+                                ),
+                              )
                       ],
                     ),
                   ),
