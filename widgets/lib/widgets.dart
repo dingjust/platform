@@ -1,6 +1,7 @@
 library widgets;
 
 export 'src/account/login/login.dart';
+export 'src/commons/address/address_info.dart';
 export 'src/commons/advance_icon_button/advance_icon_button.dart';
 export 'src/commons/albums_cameras/single_select/albums_cameras.dart';
 export 'src/commons/attachments/attachments.dart';
@@ -46,6 +47,7 @@ export 'src/commons/photo_picker/photo_picker.dart';
 export 'src/commons/photo_picker/picture_pick_preview.dart';
 export 'src/commons/progress/progress_indicator.dart';
 export 'src/commons/search/history_tag.dart';
+export 'src/commons/search/search_appbar.dart';
 export 'src/commons/search/suggestions_row.dart';
 export 'src/commons/select/category_select.dart';
 export 'src/commons/select/color_size_select.dart';
@@ -65,9 +67,8 @@ export 'src/commons/stars/stars.dart';
 export 'src/commons/stepbar/production_circle_step.dart';
 export 'src/commons/stepbar/status_step.dart';
 export 'src/commons/table/attribute_table.dart';
+export 'src/commons/table/color_size_entry_table.dart';
+export 'src/commons/table/color_size_note_entry_table.dart';
 export 'src/commons/table/color_size_num_table.dart';
 export 'src/commons/table/report_table.dart';
-export 'src/commons/table/color_size_entry_table.dart';
 export 'src/commons/tag/recommend_product_tag.dart';
-export 'src/commons/search/search_appbar.dart';
-export 'src/commons/address/address_info.dart';

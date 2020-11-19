@@ -2,28 +2,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-typedef CompareFunction = int Function(String code1, String code2);
+import 'color_size_entry_table.dart';
 
-///颜色尺码表(v2版本)
-///
-/// 示例：
-///
-/// ```dart preamble
-/// ColorSizeEntryTable(
-/// data: order.colorSizeEntries,
-/// compareFunction: Provider.of<SizeState>(context).compare,
-/// ),
-/// ```
-class ColorSizeEntryTable extends StatelessWidget {
-  final List<ColorSizeEntryV2Model> data;
+///颜色尺码表(AbstractOrderNoteEntryModel值版本)
+class ColorSizeNoteEntryTable extends StatelessWidget {
+  final List<AbstractOrderNoteEntryModel> data;
 
   //过滤后数据
-  List<ColorSizeEntryV2Model> filterData;
+  List<AbstractOrderNoteEntryModel> filterData;
 
   ///排序函数
   final CompareFunction compareFunction;
 
-  ColorSizeEntryTable({Key key, this.data, this.compareFunction}) {
+  ColorSizeNoteEntryTable({Key key, this.data, this.compareFunction}) {
     //过滤数量为0
     filterData = data.where((element) => element.quantity > 0).toList();
   }
@@ -31,8 +22,8 @@ class ColorSizeEntryTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ///按颜色分组
-    Map<String, List<ColorSizeEntryV2Model>> colorRowList =
-        Map<String, List<ColorSizeEntryV2Model>>();
+    Map<String, List<AbstractOrderNoteEntryModel>> colorRowList =
+        Map<String, List<AbstractOrderNoteEntryModel>>();
 
     List<TableRow> dataRowList = [];
     List<TableRow> tableRowList = [
@@ -89,16 +80,16 @@ class ColorSizeEntryTable extends StatelessWidget {
     ];
 
     filterData.forEach((entry) {
-      if (colorRowList[entry.color.code] == null) {
-        colorRowList[entry.color.code] = [];
+      if (colorRowList[entry.color] == null) {
+        colorRowList[entry.color] = [];
       }
-      colorRowList[entry.color.code].add(entry);
+      colorRowList[entry.color].add(entry);
     });
 
     colorRowList.forEach((color, entries) {
       //排序
       if (compareFunction != null) {
-        entries.sort((o1, o2) => compareFunction(o1.size.code, o2.size.code));
+        entries.sort((o1, o2) => compareFunction(o1.size, o2.size));
       }
 
       //构建尺码数量列
@@ -110,7 +101,7 @@ class ColorSizeEntryTable extends StatelessWidget {
                     color: Color.fromRGBO(250, 250, 250, 1),
                     alignment: Alignment.center,
                     child: Text(
-                      '${entry.size.name}',
+                      '${entry.size}',
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 16.0, color: Color(0xFF30424D)),
@@ -140,16 +131,7 @@ class ColorSizeEntryTable extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  width: 20,
-                  decoration: BoxDecoration(
-                    color: Color(int.parse('0xff' +
-                        '${entries[0].color.colorCode == null || entries[0].color.colorCode == '' ? 'fffff' : entries[0].color.colorCode.substring(1)}')),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(''),
-                ),
-                Text(entries[0].color.name),
+                Text(entries[0].color),
               ],
             ),
           ),
@@ -194,7 +176,7 @@ class ColorSizeEntryTable extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(IterableProperty<ColorSizeEntryV2Model>('entries', filterData));
+    properties.add(
+        IterableProperty<AbstractOrderNoteEntryModel>('entries', filterData));
   }
 }
