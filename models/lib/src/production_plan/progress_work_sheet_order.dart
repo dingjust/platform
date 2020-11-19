@@ -63,11 +63,11 @@ class ProgressWorkSheetModel extends ItemModel {
   @JsonKey(toJson: B2BCustomerModel.toJson)
   B2BCustomerModel merchandiser;
 
-  String orderStatus;
+  ProductionTaskOrderState orderStatus;
 
   ///订单颜色尺码行
   @JsonKey(toJson: colorSizeEntriesToJson)
-  List<ColorSizeEntryModel> colorSizeEntries;
+  List<ColorSizeEntryV2Model> colorSizeEntries;
 
   ///产品
   @JsonKey(toJson: ProductModel.toJson)
@@ -123,10 +123,10 @@ class ProgressWorkSheetModel extends ItemModel {
           : progresses.map((e) => ProductionProgressModel.toJson(e)).toList();
 
   static List<Map<String, dynamic>> colorSizeEntriesToJson(
-          List<ColorSizeEntryModel> models) =>
+          List<ColorSizeEntryV2Model> models) =>
       models == null
           ? null
-          : models.map((e) => ColorSizeEntryModel.toJson(e)).toList();
+          : models.map((e) => e.toJson()).toList();
 
   static Map<String, dynamic> _progressPhaseToJson(ProgressPhaseModel model) =>
       model == null ? null : model.toJson();

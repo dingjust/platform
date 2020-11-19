@@ -1,7 +1,11 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/constants.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/progress_work_sheet/progress_work_sheet_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
 
 /// 生产进度块
 class ProgressWorkSheetItem extends StatelessWidget {
@@ -25,16 +29,30 @@ class ProgressWorkSheetItem extends StatelessWidget {
       ),
       onTap: () async {
         print('------------------------');
+        dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ProgressWorkSheetDetailPage(code: model.code,)));
+        if(result != null){
+          Provider.of<ProgressWorkSheetState>(context).clear();
+        }
+
       },
     );
   }
 
   Widget _foot() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Text('生成数量：${productQuantity()}'),
-        Text('交货日期：${DateFormatUtil.formatYMD(model.expectedDeliveryDate)}')
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('生产数量：${productQuantity()}'),
+            Text('交货日期：${DateFormatUtil.formatYMD(model.expectedDeliveryDate)}')
+          ],
+        ),
+        Row(
+          children: [
+            Text('工单负责人：${model.personInCharge?.name ?? ''}')
+          ],
+        )
       ],
     );
   }
@@ -95,17 +113,6 @@ class ProgressWorkSheetItem extends StatelessWidget {
             ),
           ),
         ),
-        model.personInCharge != null
-            ? Container(
-                height: height,
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [Text('工单负责人：${model.personInCharge.name}')],
-                ),
-              )
-            : Container()
       ],
     );
   }
@@ -125,7 +132,22 @@ class ProgressWorkSheetItem extends StatelessWidget {
                 fontWeight: FontWeight.w500),
           ),
         ),
+        _getOrderStatus(),
       ],
+    );
+  }
+
+  ///订单状态
+  Widget _getOrderStatus() {
+
+    return Text(
+      '${ProgressWorkSheetStatusLocalizedMap[model.status]}',
+      textAlign: TextAlign.end,
+      style: TextStyle(
+        fontSize: 18,
+        color: PROGRESS_WORK_SHEET_STATUS_COLORS[model.status],
+        fontWeight: FontWeight.w500,
+      ),
     );
   }
 }
