@@ -211,6 +211,9 @@ abstract class UserApis {
     return '/{baseSiteId}/cooperator/$id';
   };
 
+  /// 添加合作商
+  static get appendCooperator => '/{baseSiteId}/cooperator/create';
+
   /// 根据keyword查询全公司列表
   static get companies => '/{baseSiteId}/companies/findBrandAndFactory';
 

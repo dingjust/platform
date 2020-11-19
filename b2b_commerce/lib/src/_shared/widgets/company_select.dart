@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -19,9 +20,6 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
   FocusNode focusNode;
   String appBarTitle = '公司列表';
   String hintText = '输入公司名称或账号';
-  String _keyword = '';
-
-  List<CompanyModel> _companyModels;
 
   CompanyModel selectedCompany;
 
@@ -32,36 +30,75 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
     super.initState();
   }
 
+  Widget _buildSearchButton() {
+    return IconButton(
+        icon: const Icon(B2BIcons.search, size: 20),
+        onPressed: () {
+          setState(() {
+            isSearching = true;
+          });
+        });
+  }
+
+  Widget _buildAppbar() {
+    return isSearching
+        ? AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: true,
+            title: Consumer<CompanyState>(
+              builder: (context, CompanyState state, _) => SearchAppbarTitle(
+                controller: controller,
+                focusNode: focusNode,
+                onSearch: () {
+                  state.setKeyword(controller.text);
+                  if (controller.text == '') {
+                    setState(() {
+                      isSearching = false;
+                    });
+                  }
+                },
+                onChange: (v) {
+                  state.setKeyword(controller.text);
+                },
+              ),
+            ),
+          )
+        : AppBarFactory.buildDefaultAppBar(
+            '$appBarTitle',
+            actions: <Widget>[_buildSearchButton()],
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppbar(),
-      body: FutureBuilder<List<CompanyModel>>(
-        initialData: null,
-        future: _getData(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<CompanyModel>> snapshot) {
-          if (_keyword == '') {
-            return isSearching ? Container() : _buildTips('输入查询的公司名称或账号');
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            if (!snapshot.hasError && snapshot.hasData) {
-              return CompanySelectList(
-                data: _companyModels,
-                onItemTap: onItemTap,
-                selectedCompany: selectedCompany,
-              );
-            } else {
-              return _buildTips('查询失败，请稍后再试！');
-            }
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+    return ChangeNotifierProvider<CompanyState>(
+      create: (context) => CompanyState(),
+      child: Scaffold(
+        appBar: _buildAppbar(),
+        body: Consumer<CompanyState>(
+          builder: (context, CompanyState state, _) => Container(
+            child: _buildBody(state),
+          ),
+        ),
+        bottomNavigationBar: _buildBottom(),
       ),
-      bottomNavigationBar: _buildBottom(),
     );
+  }
+
+  Widget _buildBody(CompanyState state) {
+    if (state.getKeyword == '') {
+      return _buildTips('输入查询的公司名称或账号');
+    } else if (state.getEntry().totalElements > -1) {
+      return CompanySelectList(
+        state: state,
+        onItemTap: onItemTap,
+        selectedCompany: selectedCompany,
+      );
+    } else {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
   }
 
   Widget _buildBottom() {
@@ -78,7 +115,6 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
               onPressed: () {
                 Navigator.of(context).pop(selectedCompany);
                 selectedCompany = null;
-                _keyword = '';
               },
               child: Text(
                 '确定',
@@ -100,66 +136,6 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
     );
   }
 
-  Future<List<CompanyModel>> _getData() async {
-    if (_keyword == '') {
-      _companyModels = null;
-    } else if (_companyModels == null) {
-      try {
-        var response = await http$.post(UserApis.companies,
-            data: {'keyword': _keyword},
-            queryParameters: {'page': 0, 'size': 20});
-        if (response != null && response.statusCode == 200) {
-          CompanyResponse companiesResponse =
-              CompanyResponse.fromJson(response.data);
-          _companyModels = companiesResponse.content;
-        }
-      } on DioError catch (e) {
-        print(e);
-      }
-    }
-    return _companyModels;
-  }
-
-  Widget _buildAppbar() {
-    return isSearching
-        ? AppBar(
-            elevation: 0,
-            automaticallyImplyLeading: true,
-            title: SearchAppbarTitle(
-              controller: controller,
-              focusNode: focusNode,
-              hintText: hintText,
-              onSearch: () {
-                _keyword = controller.text;
-                if (controller.text == '') {
-                  setState(() {
-                    isSearching = false;
-                    selectedCompany = null;
-                  });
-                }
-              },
-              onChange: (v) {
-                _keyword = controller.text;
-                setState(() {
-                  _companyModels = null;
-                });
-              },
-            ))
-        : AppBarFactory.buildDefaultAppBar('$appBarTitle',
-            actions: <Widget>[_buildSearchButton()]);
-  }
-
-  Widget _buildSearchButton() {
-    return IconButton(
-      icon: const Icon(B2BIcons.search, size: 20),
-      onPressed: () {
-        setState(() {
-          isSearching = true;
-        });
-      },
-    );
-  }
-
   void onItemTap(CompanyModel model) {
     setState(() {
       if (selectedCompany != null && selectedCompany.id == model.id) {
@@ -172,41 +148,70 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
 }
 
 class CompanySelectList extends StatelessWidget {
-  final List<CompanyModel> data;
+  final CompanyState state;
 
   final CompanyModel selectedCompany;
 
   final ValueChanged<CompanyModel> onItemTap;
 
-  const CompanySelectList(
-      {Key key, this.data, this.onItemTap, this.selectedCompany})
-      : super(key: key);
+  ScrollController _scrollController;
+
+  CompanySelectList({
+    Key key,
+    this.onItemTap,
+    this.selectedCompany,
+    this.state,
+  }) : super(key: key) {
+    this._scrollController = ScrollController();
+    // 监听加载更多
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        state.loadMore();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-        data.length > 0
-            ? Column(
-                children: data
-                    .map((model) => CompanySelectItem(
-                    model: model,
-                    selectedCompany: selectedCompany,
-                    onPressed: () {
-                      if (onItemTap != null) {
-                        onItemTap(model);
-                      }
-                    }))
-                    .toList())
-            : NoDataInfoRow(),
-        // _buildEnd()
-      ],
+    return Container(
+      child: RefreshIndicator(
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            state.companies().isNotEmpty
+                ? Column(
+                    children: state
+                        .companies()
+                        .map(
+                          (model) => CompanySelectItem(
+                            model: model,
+                            selectedCompany: selectedCompany,
+                            onPressed: () {
+                              if (onItemTap != null) {
+                                onItemTap(model);
+                              }
+                            },
+                          ),
+                        )
+                        .toList(),
+                  )
+                : NoDataInfoRow(),
+            ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+              opacity: state.loadingMore ? 1.0 : 0,
+            ),
+            _buildEnd()
+          ],
+        ),
+        onRefresh: () async {
+          state.clear();
+        },
+      ),
     );
   }
 
   Widget _buildEnd() {
-    return data.length > 0
+    return state.getEntry().currentPage + 1 == state.getEntry().totalPages
         ? Container(
             padding: EdgeInsets.only(bottom: 10),
             child: Row(
@@ -253,41 +258,43 @@ class CompanySelectItem extends StatelessWidget {
   }
 
   Widget _buildMain() {
-    return Column(children: [
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Text(
-              '公司名称：${model.name}',
-              textAlign: TextAlign.start,
-              style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500),
-            ),
-          )
-        ],
-      ),
-      Container(
-        margin: EdgeInsets.only(top: 5),
-        child: Row(
+    return Column(
+      children: [
+        Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Expanded(
               flex: 2,
               child: Text(
-                '账号：${model.contactUid}',
+                '公司名称：${model.name}',
                 textAlign: TextAlign.start,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500),
               ),
-            ),
-            _buildTag()
+            )
           ],
         ),
-      ),
-    ]);
+        Container(
+          margin: EdgeInsets.only(top: 5),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Text(
+                  '账号：${model.contactUid}',
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                ),
+              ),
+              _buildTag()
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildTag() {
@@ -295,8 +302,11 @@ class CompanySelectItem extends StatelessWidget {
         ? Container(
             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
+              borderRadius: BorderRadius.circular(2),
+              border: Border.all(
+                color: Color.fromRGBO(68, 138, 255, 1),
+              ),
+            ),
             child: Center(
               child: Text(
                 '未认证',

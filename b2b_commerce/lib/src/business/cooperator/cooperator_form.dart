@@ -1,12 +1,11 @@
 import 'package:b2b_commerce/src/_shared/widgets/company_select.dart';
 import 'package:b2b_commerce/src/business/cooperator/components/cooperator_selection_row.dart';
+import 'package:b2b_commerce/src/business/cooperator/components/form_sumbit_btn.dart';
 import 'package:b2b_commerce/src/my/address/region_select.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-
-import 'components/cooperator_form_validated.dart';
 
 class CooperatorForm extends StatefulWidget {
   CooperatorForm({Key key}) : super(key: key);
@@ -66,10 +65,9 @@ class _CooperatorFormState extends State<CooperatorForm> {
                 color: Color(0xff455a64), fontWeight: FontWeight.bold),
           ),
           elevation: 0.5,
-          actions: <Widget>[IconButton(icon: Text('保存'), 
-          onPressed: () async {
-            CooperatorFormValidated.validated(form);
-          })],
+          actions: <Widget>[
+            FormSumbitBtn(form: form)
+          ],
         ),
         body: Container(
           child: ListView(
