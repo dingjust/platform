@@ -205,6 +205,18 @@ class AbstractPayPlanItemModel extends ItemModel {
   ///支付状态
   PayStatus payStatus;
 
+  String brandPayStatus;
+
+  String factoryPayStatus;
+
+  int payDayNum;
+
+  int monthlyStartDayNum;
+
+  int monthlyEndDayNum;
+
+  bool isRange;
+
   AbstractPayPlanItemModel(
       {this.payPercent,
       this.triggerEvent,
@@ -212,7 +224,13 @@ class AbstractPayPlanItemModel extends ItemModel {
       this.moneyType,
       this.triggerType,
       this.payStatus,
-      this.sequence});
+      this.sequence,
+      this.brandPayStatus,
+      this.factoryPayStatus,
+      this.payDayNum,
+      this.monthlyStartDayNum,
+      this.monthlyEndDayNum,
+      this.isRange});
 
   factory AbstractPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$AbstractPayPlanItemModelFromJson(json);
@@ -231,17 +249,24 @@ class CompanyPayPlanModel extends AbstractPayPlanModel {
   @JsonKey(toJson: principalToJson)
   PrincipalModel belongTo;
 
-  CompanyPayPlanModel({
-    String name,
+  ///备注
+  String remarks;
+
+  ///预览
+  String previewText;
+
+  CompanyPayPlanModel({String name,
     bool isHaveDeposit,
     PayPlanType payPlanType,
     List<AbstractPayPlanItemModel> payPlanItems,
     this.approvalStatus,
-  }) : super(
-            name: name,
-            isHaveDeposit: isHaveDeposit,
-            payPlanType: payPlanType,
-            payPlanItems: payPlanItems);
+    this.remarks,
+    this.previewText})
+      : super(
+      name: name,
+      isHaveDeposit: isHaveDeposit,
+      payPlanType: payPlanType,
+      payPlanItems: payPlanItems);
 
   factory CompanyPayPlanModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CompanyPayPlanModelFromJson(json);
@@ -267,13 +292,27 @@ class CompanyPayPlanItemModel extends AbstractPayPlanItemModel {
     PayMoneyType moneyType,
     TriggerType triggerType,
     int sequence,
+    String brandPayStatus,
+    String factoryPayStatus,
+    int payDayNum,
+    int monthlyStartDayNum,
+    int monthlyEndDayNum,
+    bool isRange,
+    PayStatus payStatus,
   }) : super(
-            payPercent: payPercent,
-            triggerEvent: triggerEvent,
-            triggerDays: triggerDays,
-            moneyType: moneyType,
-            triggerType: triggerType,
-            sequence: sequence);
+      payPercent: payPercent,
+      triggerEvent: triggerEvent,
+      triggerDays: triggerDays,
+      moneyType: moneyType,
+      triggerType: triggerType,
+      sequence: sequence,
+      brandPayStatus: brandPayStatus,
+      factoryPayStatus: factoryPayStatus,
+      payDayNum: payDayNum,
+      monthlyEndDayNum: monthlyEndDayNum,
+      monthlyStartDayNum: monthlyStartDayNum,
+      isRange: isRange,
+      payStatus: payStatus);
 
   factory CompanyPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CompanyPayPlanItemModelFromJson(json);
@@ -329,13 +368,27 @@ class OrderPayPlanItemModel extends AbstractPayPlanItemModel {
     PayMoneyType moneyType,
     TriggerType triggerType,
     int sequence,
+    String brandPayStatus,
+    String factoryPayStatus,
+    int payDayNum,
+    int monthlyStartDayNum,
+    int monthlyEndDayNum,
+    bool isRange,
+    PayStatus payStatus,
   }) : super(
-            payPercent: payPercent,
-            triggerEvent: triggerEvent,
-            triggerDays: triggerDays,
-            moneyType: moneyType,
-            triggerType: triggerType,
-            sequence: sequence);
+      payPercent: payPercent,
+      triggerEvent: triggerEvent,
+      triggerDays: triggerDays,
+      moneyType: moneyType,
+      triggerType: triggerType,
+      sequence: sequence,
+      brandPayStatus: brandPayStatus,
+      factoryPayStatus: factoryPayStatus,
+      payDayNum: payDayNum,
+      monthlyEndDayNum: monthlyEndDayNum,
+      monthlyStartDayNum: monthlyStartDayNum,
+      isRange: isRange,
+      payStatus: payStatus);
 
   factory OrderPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$OrderPayPlanItemModelFromJson(json);

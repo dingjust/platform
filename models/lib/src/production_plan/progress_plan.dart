@@ -55,15 +55,27 @@ class ProgressPlanModel extends BaseProgressPlanModel {
 ///订单节点方案
 @JsonSerializable()
 class OrderProgressPlanModel extends ProgressPlanModel {
-  OrderProgressPlanModel({
-    String name,
-    String remarks,
-    CompanyModel belongTo,
-    bool eable,
-  }) : super(name: name, remarks: remarks, belongTo: belongTo, eable: eable);
+  @JsonKey(toJson: progressesToJson)
+  List<ProductionProgressModel> productionProgresses;
+
+  OrderProgressPlanModel(
+      {String name,
+      String remarks,
+      CompanyModel belongTo,
+      bool eable,
+      this.productionProgresses})
+      : super(name: name, remarks: remarks, belongTo: belongTo, eable: eable);
 
   factory OrderProgressPlanModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$OrderProgressPlanModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderProgressPlanModelToJson(this);
+
+  static List<Map<String, dynamic>> progressesToJson(
+          List<ProductionProgressModel> models) =>
+      models == null
+          ? null
+          : models
+              .map((model) => ProductionProgressModel.toJson(model))
+              .toList();
 }

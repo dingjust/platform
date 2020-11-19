@@ -45,7 +45,7 @@ class _ExternalSaleOrderDetailPageState
     return FutureBuilder<SalesProductionOrderModel>(
       builder: (BuildContext context,
           AsyncSnapshot<SalesProductionOrderModel> snapshot) {
-        if (snapshot.data != null) {
+        if (snapshot.data != null && order != null) {
           return WillPopScope(
               child: Scaffold(
                 appBar: AppBar(
@@ -68,7 +68,7 @@ class _ExternalSaleOrderDetailPageState
                         order: order,
                       ),
                       OrderContractsBlock(
-                        agreements: order.agreements,
+                        agreements: order?.agreements,
                       ),
                       _OrderInfo(
                         order: order,
@@ -83,7 +83,7 @@ class _ExternalSaleOrderDetailPageState
                 bottomSheet: OrderDetailBtnGroup(
                   order: order,
                   listCallback: listPageCallback,
-                  detailCallback: _getData,
+                  detailCallback: _clearData,
                   needCallbackPop: needCallbackPop,
                 ),
                 resizeToAvoidBottomPadding: true,
@@ -111,6 +111,13 @@ class _ExternalSaleOrderDetailPageState
       order = detailModel;
     }
     return order;
+  }
+
+  ///刷新
+  void _clearData() async {
+    setState(() {
+      order = null;
+    });
   }
 
   ///返回回页面刷新

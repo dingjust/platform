@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:b2b_commerce/src/business/cooperator/cooperator_detail.dart';
-import 'package:core/core.dart';
 import 'package:models/models.dart';
 
-class CooperatorItem extends StatelessWidget {
-  final CooperatorModel model;
+class PayPlanItem extends StatelessWidget {
+  final CompanyPayPlanModel model;
 
-  final ValueChanged<CooperatorModel> onItemTap;
+  final ValueChanged<CompanyPayPlanModel> onItemTap;
 
   final isSelected;
 
-  const CooperatorItem(
+  const PayPlanItem(
       {Key key, this.model, this.isSelected = false, this.onItemTap})
       : super(key: key);
 
@@ -59,7 +57,7 @@ class CooperatorItem extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            '联系人：${model.contactPerson}',
+            '联系人：',
             overflow: TextOverflow.ellipsis,
             style: textStyle,
           ),
@@ -67,7 +65,7 @@ class CooperatorItem extends StatelessWidget {
         Expanded(
             flex: 2,
             child: Text(
-              '联系方式：${model.contactPhone}',
+              '联系方式：',
               overflow: TextOverflow.ellipsis,
               style: textStyle,
             ))
@@ -76,11 +74,6 @@ class CooperatorItem extends StatelessWidget {
   }
 
   Widget _buildRow3() {
-    bool isOnline = model.type == CooperatorType.ONLINE;
-
-    TextStyle textStyle = TextStyle(
-        color: isOnline ? Color(0xff448aff) : Colors.grey, fontSize: 16);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -93,47 +86,46 @@ class CooperatorItem extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 0.5,
-                      color: isOnline ? Color(0xff448aff) : Colors.grey)),
+                border: Border.all(width: 0.5, color: Color(0xff448aff)),
+              ),
               child: Text(
-                '${CooperatorTypeLocalizedMap[model.type]}',
+                '',
                 overflow: TextOverflow.ellipsis,
-                style: textStyle,
+                // style: textStyle,
               ),
             )
           ],
         )),
-        _buildTag()
+        // _buildTag()
       ],
     );
   }
 
-  Widget _buildTag() {
-    bool certified = model.partner != null &&
-        model.partner.approvalStatus == ArticleApprovalStatus.approved;
+  // Widget _buildTag() {
+  //   bool certified = model.partner != null &&
+  //       model.partner.approvalStatus == ArticleApprovalStatus.approved;
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Center(
-        child: Text(
-          certified ? '已认证' : '未认证',
-          style: TextStyle(
-              color:
-                  certified ? Color.fromRGBO(103, 194, 58, 1) : Colors.black54,
-              fontSize: 16),
-        ),
-      ),
-      decoration: BoxDecoration(
-          border: Border.all(
-              color: certified
-                  ? Color.fromRGBO(225, 243, 216, 1)
-                  : Colors.grey[200],
-              width: 0.5),
-          color:
-              certified ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
-    );
-  }
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: 10),
+  //     child: Center(
+  //       child: Text(
+  //         certified ? '已认证' : '未认证',
+  //         style: TextStyle(
+  //             color:
+  //                 certified ? Color.fromRGBO(103, 194, 58, 1) : Colors.black54,
+  //             fontSize: 16),
+  //       ),
+  //     ),
+  //     decoration: BoxDecoration(
+  //         border: Border.all(
+  //             color: certified
+  //                 ? Color.fromRGBO(225, 243, 216, 1)
+  //                 : Colors.grey[200],
+  //             width: 0.5),
+  //         color:
+  //             certified ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
+  //   );
+  // }
 
   void onTap(BuildContext context) async {
     //有点击事件调用
@@ -142,13 +134,6 @@ class CooperatorItem extends StatelessWidget {
     } else {
       // 没有则跳转详情页
       //TODO:命名路由详情跳转
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => CooperatorDetailPage(
-            id: model.id,
-          ),
-        )
-      );
     }
   }
 }

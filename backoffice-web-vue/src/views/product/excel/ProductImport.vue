@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" :downLink="downLink"/>
+    <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" :downLink="downLink" />
     <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
       <el-table-column label="产品主图">
         <template slot-scope="scope">
@@ -90,8 +90,8 @@
           let category = getCategoryCodeByCascadedName(row['主品类*'], row['子品类*']);
           return {
             'images': row.images,
-            'skuID': (row['款号*'] + '').replace(/[\r\n]/g,"").trim(),
-            'name': (row['标题*']).replace(/[\r\n]/g,"").trim(),
+            'skuID': (row['款号*'] + '').replace(/[\r\n]/g, "").trim(),
+            'name': (row['标题*']).replace(/[\r\n]/g, "").trim(),
             'colorSizes': colorSizes,
             'category': {
               code: category
@@ -130,7 +130,7 @@
             //过滤案例行和注明行
             let col1 = row[header[0]];
             if (col1 != null && col1 != "") {
-              col1=col1.toString();
+              col1 = col1.toString();
               return !(col1.includes('案例：') || col1.includes('注明：'));
             }
             return true;
@@ -148,7 +148,7 @@
         let sizeStrArray = [];
         let colorStrArray = [];
         if (sizesStr != null) {
-          sizeStrArray = sizesStr.split('/');
+          sizeStrArray = sizesStr.toString().split('/');
           sizeStrArray = sizeStrArray.map(str => {
             let code = getSizeCode(str);
             if (code != null) {
@@ -163,7 +163,7 @@
           });
         }
         if (colorStr != null) { //颜色处理
-          colorStrArray = colorStr.split('/');
+          colorStrArray = colorStr.toString().split('/');
           colorStrArray = colorStrArray.map(str => {
             let code = getColorCode(str);
             if (code != null) {

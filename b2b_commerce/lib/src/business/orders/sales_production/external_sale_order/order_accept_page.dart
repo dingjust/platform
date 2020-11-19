@@ -150,7 +150,7 @@ class _OrderAcceptPageState extends State<OrderAcceptPage> {
       throw Exception('请选择审批人');
     }
     Function cancelFunc =
-        BotToast.showLoading(crossPage: false, clickClose: false);
+        BotToast.showLoading(crossPage: false, clickClose: true);
     BaseResponse response = await ExternalSaleOrderRespository().accept(order);
     cancelFunc.call();
     if (response != null && response.code == 1) {
@@ -181,13 +181,18 @@ class _OrderAcceptPageState extends State<OrderAcceptPage> {
 
   ///选择审核人员
   void onSelectApprovers() async {
+    // List<>
+
     List<B2BCustomerModel> b2bCusomers =
-        await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => EmployeeSelectPage(
-                  multi: true,
-                  max: 5,
-                  selected: order.approvers != null ? order.approvers : [],
-                )));
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            EmployeeSelectPage(
+              multi: true,
+              max: 5,
+              selected: order.approvers != null
+                  ? (order.approvers as List<B2BCustomerModel>)
+                  : [],
+            )));
     setState(() {
       order.approvers = b2bCusomers;
     });

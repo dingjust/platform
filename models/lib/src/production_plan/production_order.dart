@@ -78,6 +78,10 @@ class ProductionOrderModel extends ItemModel {
   @JsonKey(toJson: progressWorkSheetToJson)
   ProgressWorkSheetModel progressWorkSheet;
 
+  ///附件
+  @JsonKey(toJson: mediasToJson)
+  List<MediaModel> attachments;
+
   ProductionOrderModel(
       {this.code,
       this.originOrderId,
@@ -96,7 +100,8 @@ class ProductionOrderModel extends ItemModel {
       this.productionDept,
       this.deleted,
       this.canceling,
-      this.progressWorkSheet});
+      this.progressWorkSheet,
+      this.attachments});
 
   factory ProductionOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionOrderModelFromJson(json);
@@ -118,6 +123,9 @@ class ProductionOrderModel extends ItemModel {
   static Map<String, dynamic> progressWorkSheetToJson(
           ProgressWorkSheetModel model) =>
       model == null ? null : ProgressWorkSheetModel.toJson(model);
+
+  static List<Map<String, dynamic>> mediasToJson(List<MediaModel> models) =>
+      models == null ? null : models.map((e) => MediaModel.toJson(e)).toList();
 }
 
 ///销售生产单
@@ -174,8 +182,8 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   CooperatorModel cooperator;
 
   ///付款方案
-  @JsonKey(toJson: OrderPayPlanModel.toJson)
-  OrderPayPlanModel payPlan;
+  @JsonKey(toJson: CompanyPayPlanModel.toJson)
+  CompanyPayPlanModel payPlan;
 
   ///总负责人
   @JsonKey(toJson: B2BCustomerModel.toJson)
@@ -210,7 +218,7 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   ///审核状态
   AuditState auditState;
 
-  ///是否需要审核
+  ///外发是否需要审核
   bool sendAuditNeeded;
 
   ///外发审批人
@@ -246,45 +254,45 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   ///产品数
   int entrySize;
 
-  SalesProductionOrderModel(
-      {String code,
-      int originOrderId,
-      int parentId,
-      ProductionOrderModel originOrder,
-      OrderProgressPlanModel progressPlan,
-      String name,
-      CooperationMode cooperationMode,
-      int itemsCount,
-      bool invoiceNeeded,
-      double invoiceTaxPoint,
-      B2BCustomerModel merchandiser,
-      B2BCustomerModel creator,
-      CompanyModel belongTo,
-      B2BCustomerModel productionLeader,
-      B2BDeptModel productionDept,
-      bool deleted,
-      bool canceling,
-      ProgressWorkSheetModel progressWorkSheet,
-      this.haveDeposit,
-      this.managementMode,
-      this.uniqueCode,
-      this.labels,
-      this.outOrderState,
-      this.acceptState,
-      this.currentCancelApply,
-      this.acceptProcessTime,
-      this.salesDateStart,
-      this.salesDateEnd,
-      this.currentAuditOrder,
-      this.payPlanType,
-      this.type,
-      this.freightPayer,
-      this.cooperator,
-      this.payPlan,
-      this.planLeader,
-      this.approvers,
-      this.purchasingLeader,
-      this.originCooperator,
+  SalesProductionOrderModel({String code,
+    int originOrderId,
+    int parentId,
+    ProductionOrderModel originOrder,
+    OrderProgressPlanModel progressPlan,
+    String name,
+    CooperationMode cooperationMode,
+    int itemsCount,
+    bool invoiceNeeded,
+    double invoiceTaxPoint,
+    B2BCustomerModel merchandiser,
+    B2BCustomerModel creator,
+    CompanyModel belongTo,
+    B2BCustomerModel productionLeader,
+    B2BDeptModel productionDept,
+    bool deleted,
+    bool canceling,
+    ProgressWorkSheetModel progressWorkSheet,
+    List<MediaModel> attachments,
+    this.haveDeposit,
+    this.managementMode,
+    this.uniqueCode,
+    this.labels,
+    this.outOrderState,
+    this.acceptState,
+    this.currentCancelApply,
+    this.acceptProcessTime,
+    this.salesDateStart,
+    this.salesDateEnd,
+    this.currentAuditOrder,
+    this.payPlanType,
+    this.type,
+    this.freightPayer,
+    this.cooperator,
+    this.payPlan,
+    this.planLeader,
+    this.approvers,
+    this.purchasingLeader,
+    this.originCooperator,
       this.targetCooperator,
       this.state,
       this.shippingAddress,
@@ -298,27 +306,28 @@ class SalesProductionOrderModel extends ProductionOrderModel {
       this.remarks,
       this.currentSendAuditOrder,
       this.taskOrderEntries,
-      this.agreements,
-      this.entrySize})
+    this.agreements,
+    this.entrySize})
       : super(
-            code: code,
-            originOrderId: originOrderId,
-            parentId: parentId,
-            originOrder: originOrder,
-            progressPlan: progressPlan,
-            name: name,
-            cooperationMode: cooperationMode,
-            itemsCount: itemsCount,
-            invoiceNeeded: invoiceNeeded,
-            invoiceTaxPoint: invoiceTaxPoint,
-            merchandiser: merchandiser,
-            creator: creator,
-            belongTo: belongTo,
-            productionLeader: productionLeader,
-            productionDept: productionDept,
-            deleted: deleted,
-            canceling: canceling,
-            progressWorkSheet: progressWorkSheet);
+      code: code,
+      originOrderId: originOrderId,
+      parentId: parentId,
+      originOrder: originOrder,
+      progressPlan: progressPlan,
+      name: name,
+      cooperationMode: cooperationMode,
+      itemsCount: itemsCount,
+      invoiceNeeded: invoiceNeeded,
+      invoiceTaxPoint: invoiceTaxPoint,
+      merchandiser: merchandiser,
+      creator: creator,
+      belongTo: belongTo,
+      productionLeader: productionLeader,
+      productionDept: productionDept,
+      deleted: deleted,
+      canceling: canceling,
+      progressWorkSheet: progressWorkSheet,
+      attachments: attachments);
 
   factory SalesProductionOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$SalesProductionOrderModelFromJson(json);
@@ -440,74 +449,74 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   ///对账任务
   dynamic reconciliationTask;
 
-  ProductionTaskOrderModel(
-      {String code,
-      int originOrderId,
-      int parentId,
-      ProductionOrderModel originOrder,
-      OrderProgressPlanModel progressPlan,
-      String name,
-      CooperationMode cooperationMode,
-      int itemsCount,
-      bool invoiceNeeded,
-      double invoiceTaxPoint,
-      B2BCustomerModel merchandiser,
-      B2BCustomerModel creator,
-      CompanyModel belongTo,
-      B2BCustomerModel productionLeader,
-      B2BDeptModel productionDept,
-      bool deleted,
-      bool canceling,
-      ProgressWorkSheetModel progressWorkSheet,
-      this.product,
-      this.outOrder,
-      this.type,
-      this.shippingAddress,
-      this.sortNum,
-      this.unitPrice,
-      this.quantity,
-      this.totalPrimeCost,
-      this.totalSalesPrice,
-      this.totalProfit,
-      this.deliveryDate,
-      this.populationScale,
-      this.state,
-      this.progressInit,
-      this.productionProcessContent,
-      this.medias,
-      this.remarks,
-      this.priorityLevel,
-      this.currentPhase,
-      this.colorSizeEntries,
-      this.outboundOrderCode,
-      this.auditState,
-      this.targetCooperator,
-      this.reconciliationTask,
-      this.receiveDispatchTask,
-      this.profitPercent,
-      this.productionWorkOrderCode,
-      this.originCooperator,
-      this.managementMode})
+  ProductionTaskOrderModel({String code,
+    int originOrderId,
+    int parentId,
+    ProductionOrderModel originOrder,
+    OrderProgressPlanModel progressPlan,
+    String name,
+    CooperationMode cooperationMode,
+    int itemsCount,
+    bool invoiceNeeded,
+    double invoiceTaxPoint,
+    B2BCustomerModel merchandiser,
+    B2BCustomerModel creator,
+    CompanyModel belongTo,
+    B2BCustomerModel productionLeader,
+    B2BDeptModel productionDept,
+    bool deleted,
+    bool canceling,
+    ProgressWorkSheetModel progressWorkSheet,
+    List<MediaModel> attachments,
+    this.product,
+    this.outOrder,
+    this.type,
+    this.shippingAddress,
+    this.sortNum,
+    this.unitPrice,
+    this.quantity,
+    this.totalPrimeCost,
+    this.totalSalesPrice,
+    this.totalProfit,
+    this.deliveryDate,
+    this.populationScale,
+    this.state,
+    this.progressInit,
+    this.productionProcessContent,
+    this.medias,
+    this.remarks,
+    this.priorityLevel,
+    this.currentPhase,
+    this.colorSizeEntries,
+    this.outboundOrderCode,
+    this.auditState,
+    this.targetCooperator,
+    this.reconciliationTask,
+    this.receiveDispatchTask,
+    this.profitPercent,
+    this.productionWorkOrderCode,
+    this.originCooperator,
+    this.managementMode})
       : super(
-          code: code,
-          originOrderId: originOrderId,
-          parentId: parentId,
-          originOrder: originOrder,
-          progressPlan: progressPlan,
-          name: name,
-          cooperationMode: cooperationMode,
-          itemsCount: itemsCount,
-          invoiceNeeded: invoiceNeeded,
-          invoiceTaxPoint: invoiceTaxPoint,
-          merchandiser: merchandiser,
-          creator: creator,
-          belongTo: belongTo,
-          productionLeader: productionLeader,
-          productionDept: productionDept,
-          deleted: deleted,
-          canceling: canceling,
-          progressWorkSheet: progressWorkSheet,
-        );
+      code: code,
+      originOrderId: originOrderId,
+      parentId: parentId,
+      originOrder: originOrder,
+      progressPlan: progressPlan,
+      name: name,
+      cooperationMode: cooperationMode,
+      itemsCount: itemsCount,
+      invoiceNeeded: invoiceNeeded,
+      invoiceTaxPoint: invoiceTaxPoint,
+      merchandiser: merchandiser,
+      creator: creator,
+      belongTo: belongTo,
+      productionLeader: productionLeader,
+      productionDept: productionDept,
+      deleted: deleted,
+      canceling: canceling,
+      progressWorkSheet: progressWorkSheet,
+      attachments: attachments);
 
   factory ProductionTaskOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionTaskOrderModelFromJson(json);
