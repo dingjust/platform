@@ -3,8 +3,8 @@ import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.d
 import 'package:b2b_commerce/src/business/_shared/widgets/progress_time_line.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/constants.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -137,7 +137,7 @@ class _MainInfo extends StatelessWidget {
         ),
         _partnerInfo(saleOrder),
         _staffInfo(order, saleOrder),
-        OrderContractsBlock(agreements: saleOrder.agreements),
+        OrderContractsBlock(agreements: saleOrder?.agreements),
         _buildBottom(context),
       ],
     );

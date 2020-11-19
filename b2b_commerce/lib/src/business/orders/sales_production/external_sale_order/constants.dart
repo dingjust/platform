@@ -31,4 +31,8 @@ Color getProductionTaskOrderStateColor(ProductionTaskOrderState state) {
   return PRODUCTION_TASK_ORDER_STATE_COLORS[state] ?? Colors.black54;
 }
 
-
+///  生产进度工单状态颜色
+const  PROGRESS_WORK_SHEET_STATUS_COLORS = {
+  ProgressWorkSheetStatus.IN_PRODUCTION: Color(0xffff9800),
+  ProgressWorkSheetStatus.COMPLETED: Colors.green,
+};

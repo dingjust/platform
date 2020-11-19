@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
-import 'package:b2b_commerce/src/production/v2/progress_work_sheet_list.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/progress_work_sheet/progress_work_sheet_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';

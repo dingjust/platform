@@ -119,7 +119,7 @@ class ProgressWorkSheetState extends PageState {
               ProgressWorkSheetResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
-          _ordersMap[status].data.clear();
+//          _ordersMap[status].data.clear();
           _ordersMap[status].data.addAll(ordersResponse.content);
         }
       }

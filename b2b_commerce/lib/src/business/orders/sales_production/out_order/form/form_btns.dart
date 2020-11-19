@@ -64,7 +64,7 @@ class FormBtns extends StatelessWidget {
   void onSubmit(bool submitAudit, BuildContext context) async {
     if (validateFunc != null && validateFunc()) {
       Function cancelFunc =
-          BotToast.showLoading(crossPage: false, clickClose: false);
+          BotToast.showLoading(crossPage: false, clickClose: true);
       BaseResponse response =
           await OutOrderRespository.saveOutOrder(submitAudit, form);
       cancelFunc.call();

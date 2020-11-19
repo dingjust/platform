@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/_shared/payplan/payplan_select_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/employee_select.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
