@@ -80,17 +80,22 @@ class _ProductionTaskOrderEntryDetailPageState
       SalesProductionOrderModel detailModel =
           await ProductionTaskOrderRespository().getOrderDetail(widget.id);
       order = detailModel;
+      BotToast.showText(text: '生产进度工单负责人：${order.taskOrderEntries[0].progressWorkSheet?.personInCharge?.uid}-'
+          '生产进度工单跟单员：${order.taskOrderEntries[0].progressWorkSheet?.merchandiser?.uid}');
     }
     return order;
   }
 
-  void refreshData()async{
+  void refreshData(bool returnRefreshData)async{
     SalesProductionOrderModel detailModel =
     await ProductionTaskOrderRespository().getOrderDetail(widget.id);
     if(detailModel != null){
       setState((){
         order = detailModel;
-        _returnRefreshListData = true;
+        order.taskOrderEntries[0] = detailModel.taskOrderEntries[0];
+        if(returnRefreshData && !_returnRefreshListData){
+          _returnRefreshListData = true;
+        }
       });
     }
 
@@ -102,7 +107,7 @@ class _MainInfo extends StatelessWidget {
 
   final SalesProductionOrderModel saleOrder;
 
-  final VoidCallback onRefreshData;
+  final ValueChanged<bool> onRefreshData;
 
   const _MainInfo({Key key, this.order, this.saleOrder,this.onRefreshData}) : super(key: key);
 
@@ -175,7 +180,7 @@ class _MainInfo extends StatelessWidget {
     if(belongToUid == null){
       belongToUid = order.progressWorkSheet.partyBCompany?.uid;
     }
-    if(companyCode == belongToUid && order.state == ProductionTaskOrderState.PRODUCING){
+    if(companyCode == belongToUid && (order.state == ProductionTaskOrderState.PRODUCING || order.state == ProductionTaskOrderState.TO_BE_PRODUCED)){
       _enableEdit = true;
     }
 

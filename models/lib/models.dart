@@ -521,6 +521,13 @@ const SubContractTypeEnum = [
   EnumModel('CUTTING_PIECE', '裁片'),
 ];
 
+//优先级
+const PriorityLevelEnum = [
+  EnumModel('1', '普通'),
+  EnumModel('2', '加急'),
+  EnumModel('3', '特急'),
+];
+
 /// 分页数据
 @JsonSerializable()
 class PaginationData {
