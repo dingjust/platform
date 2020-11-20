@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/_shared/widgets/progress_time_line_date_form.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class ProgressTimeLine extends StatefulWidget {
   final bool enableEdit;
 
   //刷新生产工单
-  final VoidCallback onRefreshOrderData;
+  final ValueChanged<bool> onRefreshOrderData;
 
   const ProgressTimeLine(
       {Key key, this.model, this.enableEdit = false, this.onRefreshOrderData})
@@ -39,49 +40,61 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
   @override
   void initState() {
     _enableEdit = widget.enableEdit;
-    _model = ProgressWorkSheetModel.fromJson(
-        ProgressWorkSheetModel.toJson(widget.model));
+//    _model = ProgressWorkSheetModel.fromJson(
+//        ProgressWorkSheetModel.toJson(widget.model));
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        _buildPurchaseProductionProgresse(context),
-        LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) =>
-              Opacity(
-            opacity: 0.5,
+    return _enableEdit && widget.model.orderStatus == ProductionTaskOrderState.TO_BE_PRODUCED ? IntrinsicHeight(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          _buildPurchaseProductionProgresse(context),
+          Opacity(
+            opacity: 0.7,
             child: Container(
               color: Colors.black45,
-              height: constraints.maxHeight,
             ),
           ),
-        ),
-      ],
-    );
+          FlatButton(
+            onPressed: ()async{
+              dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ProgressTimeLineDateForm(model: widget.model,)));
+              print(result is bool);
+              if(result != null) {
+                setState(() {
+                  widget.onRefreshOrderData(true);
+                });
+              }
+            },
+            child: Text('设置预计完成日期'),
+            color: Colors.white,
+            textColor: Colors.blue,
+          )
+        ],
+      ),
+    ):_buildPurchaseProductionProgresse(context);
   }
 
 //构建生产进度UI
   Widget _buildPurchaseProductionProgresse(BuildContext context) {
     int _index = 0;
-    return _model.progresses == null
+    return widget.model.progresses == null
         ? Container()
         : Container(
             padding: EdgeInsets.only(top: 20, right: 15),
             child: Column(
-              children: _model.progresses.map((e) {
+              children: widget.model.progresses.map((e) {
                 ProgressState _currentStatus = ProgressState.AFTER;
                 if (e.finishDate != null) {
                   _currentStatus = ProgressState.BEFORE;
-                } else if (_model.currentPhase != null &&
+                } else if (widget.model.currentPhase != null &&
                     e.progressPhase != null) {
-                  if (_model.currentPhase.sequence > e.progressPhase.sequence) {
+                  if (widget.model.currentPhase.sequence > e.progressPhase.sequence) {
                     _currentStatus = ProgressState.BEFORE;
-                  } else if (_model.currentPhase.sequence ==
+                  } else if (widget.model.currentPhase.sequence ==
                       e.progressPhase.sequence) {
                     _currentStatus = ProgressState.CURRENT;
                   }
@@ -164,7 +177,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
 //            margin: EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
-//                _model.currentPhase.sequence > _model.progresses[index].sequence?
+//                widget.model.currentPhase.sequence > widget.model.progresses[index].sequence?
 //                  Container(
 //                    padding: EdgeInsets.symmetric(horizontal: 5),
 //                    margin: EdgeInsets.symmetric(horizontal: 10),
@@ -178,7 +191,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
 //                    child: Text('${index+1}'),
 //                  ),
                 Expanded(
-                  child: Text(_model.progresses[index].progressPhase.name,
+                  child: Text(widget.model.progresses[index].progressPhase.name,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: _colorStateMap[currentStatus],
@@ -189,7 +202,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                   child: Container(
                     padding: EdgeInsets.only(right: 10),
                     child: Text(
-                      '${_model.progresses[index].delayedDays > 0 ? '已延期${_model.progresses[index].delayedDays}天' : _model.progresses[index].delayedDays < 0 ? '倒计时${-_model.progresses[index].delayedDays}天' : ''}',
+                      '${widget.model.progresses[index].delayedDays > 0 ? '已延期${widget.model.progresses[index].delayedDays}天' : widget.model.progresses[index].delayedDays < 0 ? '倒计时${-widget.model.progresses[index].delayedDays}天' : ''}',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
@@ -212,9 +225,9 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     _buildEstimatedDate(
-                        context, _model.progresses[index], currentStatus),
+                        context, widget.model.progresses[index], currentStatus),
                     _buildFinishDate(
-                        context, _model.progresses[index], currentStatus),
+                        context, widget.model.progresses[index], currentStatus),
 //                    _buildQuantity(
 //                        context, productionProgress, isCurrentStatus),
 //                    _buildProgressRemarks(
@@ -222,28 +235,22 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                   ],
                 ),
               ),
-              _enableEdit && currentStatus == ProgressState.CURRENT
+              _enableEdit && widget.model.orderStatus == ProductionTaskOrderState.PRODUCING && currentStatus == ProgressState.CURRENT
                   ? FlatButton(
                       onPressed: () async {
                         showConfirmDialog(false, message: '是否确认完成节点？',
                             confirm: () async {
                           BaseMsg msg = await ProgressOrderRepository()
                               .finishProgress(
-                                  _model.code, _model.progresses[index].id);
+                                  widget.model.code, widget.model.progresses[index].id);
                           if (msg != null) {
                             BotToast.showText(text: msg.msg);
                             //刷新进度工单数据
-                            ProgressWorkSheetModel model =
-                                await ProgressWorkSheetRepository()
-                                    .detail(_model.code);
-                            if (model != null) {
-                              setState(() {
-                                _model = model;
-                                if (_model.status ==
-                                    ProgressWorkSheetStatus.COMPLETED) {
-                                  widget.onRefreshOrderData();
-                                }
-                              });
+                            if(index == widget.model.progresses.length-1){
+                              //完成最后一个节点
+                              widget.onRefreshOrderData(true);
+                            }else{
+                              widget.onRefreshOrderData(false);
                             }
                           } else {
                             BotToast.showText(text: "系统错误");
@@ -269,11 +276,6 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
     );
   }
 
-  void uploadPicture(ProductionProgressModel model) async {
-//    await PurchaseOrderRepository()
-//        .productionProgressUpload(model.code, model.id.toString(), model);
-  }
-
   Widget _buildEstimatedDate(BuildContext context,
       ProductionProgressModel progress, ProgressState currentStatus) {
     return Container(
@@ -285,7 +287,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                   style: TextStyle(color: _colorStateMap[currentStatus])),
               onTap: () {
 //                    currentStatus == true &&
-//                    _model.status == ProgressWorkSheetStatus.IN_PRODUCTION
+//                    widget.model.status == ProgressWorkSheetStatus.IN_PRODUCTION
 //                    ? _showDatePicker(progress,context)
 //                    : null;
               }),
@@ -299,7 +301,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
               onTap: () {
 //                _enableEdit &&
 //                    currentStatus == true &&
-//                    _model.status == ProgressWorkSheetStatus.IN_PRODUCTION
+//                    widget.model.status == ProgressWorkSheetStatus.IN_PRODUCTION
 //                    ? _showDatePicker(progress,context)
 //                    : null;
               }),
@@ -328,301 +330,8 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
     );
   }
 
-  Widget _buildQuantity(BuildContext context, ProductionProgressModel progress,
-      ProgressState currentStatus) {
-    TextEditingController inputController = TextEditingController();
-    inputController.text = progress.quantity.toString();
 
-    return Container(
-      child: Container(
-        padding: EdgeInsets.all(8),
-        child: Row(
-          children: <Widget>[
-            GestureDetector(
-                child: Text('数量', style: TextStyle()),
-                onTap: () {
-                  if (_enableEdit &&
-                      _model.status == ProgressWorkSheetStatus.IN_PRODUCTION) {
-                    _showEditDialog(
-                        title: "填写数量",
-                        onConfirm: () {
-                          setState(() {
-                            ProductionProgressModel model = _model.progresses
-                                .firstWhere(
-                                    (element) => element.id == progress.id,
-                                    orElse: () => null);
-                            if (model != null) {
-                              model.quantity = int.parse(
-                                  inputController.text == ''
-                                      ? '0'
-                                      : inputController.text);
-                            }
-                          });
-                        });
-                  }
-                }),
-            GestureDetector(
-                child: Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: progress.quantity == 0 || progress.quantity == null
-                        ? Text('${_enableEdit ? '填写' : ''}',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ))
-                        : Text('${progress.quantity}', style: TextStyle()),
-                  ),
-                ),
-                onTap: () {
-                  _enableEdit &&
-                          _model.status == ProgressWorkSheetStatus.IN_PRODUCTION
-                      ? _showDialog(progress, context)
-                      : null;
-                }),
-            progress.quantity == null || progress.quantity == ''
-                ? Align(
-                    alignment: Alignment.centerRight,
-                    child: !_enableEdit
-                        ? Container()
-                        : IconButton(
-                            icon: Icon(Icons.keyboard_arrow_right),
-                            onPressed: () {
-                              _enableEdit &&
-                                      _model.status ==
-                                          ProgressWorkSheetStatus.IN_PRODUCTION
-                                  ? _showDialog(progress, context)
-                                  : null;
-                            }),
-                  )
-                : Container()
-          ],
-        ),
-      ),
-    );
-  }
 
-  CancelFunc _showEditDialog({String title, Function onConfirm}) {
-    return BotToast.showWidget(
-      toastBuilder: (cancelFunc) => Center(
-        child: AlertDialog(
-          title: Text(title ?? ''),
-          content: Theme(
-            data: ThemeData(primaryColor: Color(0xffffd60c)),
-            child: TextField(
-              textAlign: TextAlign.left,
-              controller: TextEditingController(),
-              autofocus: true,
-              maxLength: 120,
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: cancelFunc,
-              child: Text(
-                "取消",
-                style: TextStyle(color: Color(0xff707070)),
-              ),
-            ),
-            FlatButton(
-              onPressed: () {
-                onConfirm();
-                cancelFunc();
-              },
-              child: Text(
-                "确定",
-                style: TextStyle(color: Colors.blue),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildProgressRemarks(BuildContext context,
-      ProductionProgressModel progress, ProgressState currentStatus) {
-    return Container(
-        child: GestureDetector(
-      child: Container(
-          padding: EdgeInsets.all(8),
-          child: Row(children: <Widget>[
-            Text('备注', style: TextStyle()),
-            Container(
-                margin: EdgeInsets.fromLTRB(15, 0, 5, 0),
-                child: progress.remarks == null || progress.remarks == ''
-                    ? Text(
-                        '${_enableEdit ? '填写' : ''}',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      )
-                    : Container(
-                        width: 140,
-                        child: Text(
-                          '${progress.remarks}',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      )),
-          ])),
-      onTap: () async {
-        _enableEdit && _model.status == ProgressWorkSheetStatus.IN_PRODUCTION
-            ? _showRemarksDialog(progress, '备注', progress.remarks)
-            : __neverShowMsg(
-                '${progress.remarks == null ? '' : progress.remarks}');
-      },
-    ));
-  }
 
-  //打开日期选择器
-  void _showDatePicker(
-    ProductionProgressModel model,
-    BuildContext context,
-  ) {
-    _selectDate(context, model);
-  }
-
-  //生成日期选择器
-  Future<Null> _selectDate(
-      BuildContext context, ProductionProgressModel model) async {
-    DateTime nowDate = DateTime.now();
-    final DateTime _picked = await showDatePicker(
-        context: context,
-        initialDate: nowDate,
-        firstDate: nowDate,
-        lastDate: DateTime(2999));
-
-    if (_picked != null) {
-      setState(() {
-        model.estimatedDate = _picked;
-      });
-
-      try {
-        model.updateOnly = true;
-//        showDialog(
-//            context: context,
-//            barrierDismissible: false,
-//            builder: (_) {
-//              return RequestDataLoading(
-//                requestCallBack: PurchaseOrderRepository()
-//                    .productionProgressUpload(
-//                    model.code, model.id.toString(), model),
-//                outsideDismiss: false,
-//                loadingText: '保存中。。。',
-//                entrance: '0',
-//              );
-//            });
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
-
-//打开数量输入弹框
-  Future<void> _showDialog(
-    ProductionProgressModel model,
-    BuildContext context,
-  ) {
-    TextEditingController inputController = TextEditingController();
-    inputController.text = model.quantity.toString();
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.INPUTS_DIALOG,
-            inputController1: inputController,
-            inputType1: TextInputType.number,
-            focusNode1: FocusNode(),
-          );
-        }).then((value) {
-      if (value != null && value != '') {
-        model.quantity = int.parse(value);
-        try {
-          model.updateOnly = true;
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return RequestDataLoading(
-                  requestCallBack: PurchaseOrderRepository()
-                      .productionProgressUpload(
-                          _model.code, model.id.toString(), model),
-                  outsideDismiss: false,
-                  loadingText: '保存中。。。',
-                  entrance: '',
-                );
-              });
-        } catch (e) {
-          print(e);
-        }
-      }
-    });
-  }
-
-  //备注输入框
-  void _showRemarksDialog(
-      ProductionProgressModel model, String type, String remarks) {
-    _neverRemarks(context, model, type, remarks);
-  }
-
-  Future<void> _neverRemarks(BuildContext context,
-      ProductionProgressModel model, String type, String remarks) async {
-    TextEditingController inputController = TextEditingController();
-    inputController.text = model.remarks;
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.INPUTS_DIALOG,
-            inputController1: inputController,
-            focusNode1: FocusNode(),
-          );
-        }).then((value) {
-      if (value != null && value != '') {
-        model.remarks = value;
-        try {
-          model.updateOnly = true;
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return RequestDataLoading(
-                  requestCallBack: PurchaseOrderRepository()
-                      .productionProgressUpload(
-                          _model.code, model.id.toString(), model),
-                  outsideDismiss: false,
-                  loadingText: '保存中。。。',
-                  entrance: '',
-                );
-              });
-        } catch (e) {
-          print(e);
-        }
-      }
-    });
-  }
-
-  __neverShowMsg(String text) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return SimpleDialog(
-          title: const Text(
-            '备注',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          children: <Widget>[
-            SimpleDialogOption(
-              child: Text('${text}'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

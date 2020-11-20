@@ -83,13 +83,15 @@ class _ProgressWorkSheetDetailPage
     return order;
   }
 
-  void refreshData()async{
+  void refreshData(bool returnRefreshData)async{
     ProgressWorkSheetModel detailModel =
     await ProgressWorkSheetRepository().detail(widget.code);
     if(detailModel != null){
       setState((){
         order = detailModel;
-        _returnRefreshListData = true;
+        if(returnRefreshData){
+          _returnRefreshListData = true;
+        }
       });
     }
 
@@ -99,7 +101,7 @@ class _ProgressWorkSheetDetailPage
 class _MainInfo extends StatelessWidget {
   final ProgressWorkSheetModel order;
 
-  final VoidCallback onRefreshData;
+  final ValueChanged<bool> onRefreshData;
 
   const _MainInfo({Key key, this.order, this.onRefreshData}) : super(key: key);
 
