@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/_shared/widgets/progress_time_line_date_form.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/production_progress/production_progress_detail_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -48,34 +49,42 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
 
   @override
   Widget build(BuildContext context) {
-    return _enableEdit && widget.model.orderStatus == ProductionTaskOrderState.TO_BE_PRODUCED ? IntrinsicHeight(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          _buildPurchaseProductionProgresse(context),
-          Opacity(
-            opacity: 0.7,
-            child: Container(
-              color: Colors.black45,
+    return _enableEdit &&
+            widget.model.orderStatus == ProductionTaskOrderState.TO_BE_PRODUCED
+        ? IntrinsicHeight(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _buildPurchaseProductionProgresse(context),
+                Opacity(
+                  opacity: 0.7,
+                  child: Container(
+                    color: Colors.black45,
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () async {
+                    dynamic result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProgressTimeLineDateForm(
+                                  model: widget.model,
+                                )));
+                    print(result is bool);
+                    if (result != null) {
+                      setState(() {
+                        widget.onRefreshOrderData(true);
+                      });
+                    }
+                  },
+                  child: Text('设置预计完成日期'),
+                  color: Colors.white,
+                  textColor: Colors.blue,
+                )
+              ],
             ),
-          ),
-          FlatButton(
-            onPressed: ()async{
-              dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ProgressTimeLineDateForm(model: widget.model,)));
-              print(result is bool);
-              if(result != null) {
-                setState(() {
-                  widget.onRefreshOrderData(true);
-                });
-              }
-            },
-            child: Text('设置预计完成日期'),
-            color: Colors.white,
-            textColor: Colors.blue,
           )
-        ],
-      ),
-    ):_buildPurchaseProductionProgresse(context);
+        : _buildPurchaseProductionProgresse(context);
   }
 
 //构建生产进度UI
@@ -92,7 +101,8 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                   _currentStatus = ProgressState.BEFORE;
                 } else if (widget.model.currentPhase != null &&
                     e.progressPhase != null) {
-                  if (widget.model.currentPhase.sequence > e.progressPhase.sequence) {
+                  if (widget.model.currentPhase.sequence >
+                      e.progressPhase.sequence) {
                     _currentStatus = ProgressState.BEFORE;
                   } else if (widget.model.currentPhase.sequence ==
                       e.progressPhase.sequence) {
@@ -114,54 +124,68 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
   //TimeLineUI
   Widget _buildProductionProgress(
       BuildContext context, int index, ProgressState currentStatus) {
-    return Stack(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 40.0),
-          child: _buildProgressTimeLine(context, index, currentStatus),
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  ProductionProgressDetailPage(
+                    colorSizeEntries: widget.model.colorSizeEntries,
+                    progress: widget.model.progresses[index],
+                  )));
+        },
+        child: Stack(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 40.0),
+              child: _buildProgressTimeLine(context, index, currentStatus),
+            ),
+            Positioned(
+              top: 3.0,
+              bottom: 0.0,
+              left: 17.5,
+              child: Container(
+                height: double.infinity,
+                width: 1.3,
+                color: _colorStateMap[currentStatus],
+              ),
+            ),
+            Positioned(
+              top: 0.0,
+              left: 3.0,
+              child: ProgressState.BEFORE == currentStatus
+                  ? Container(
+                width: 30,
+                decoration: ShapeDecoration(
+                    shape: CircleBorder(
+                        side: BorderSide(width: 2, color: Colors.green)),
+                    color: Colors.white),
+                child: Center(
+                    child: Icon(
+                      Icons.done,
+                      size: 18,
+                      color: Colors.green,
+                    )),
+              )
+                  : Container(
+                width: 30,
+                decoration: ShapeDecoration(
+                    shape: CircleBorder(
+                        side: BorderSide(
+                            width: 2,
+                            color: _colorStateMap[currentStatus])),
+                    color: Colors.white),
+                child: Center(
+                    child: Text(
+                      '${index + 1}',
+                      style: TextStyle(color: _colorStateMap[currentStatus]),
+                    )),
+              ),
+            )
+          ],
         ),
-        Positioned(
-          top: 3.0,
-          bottom: 0.0,
-          left: 17.5,
-          child: Container(
-            height: double.infinity,
-            width: 1.3,
-            color: _colorStateMap[currentStatus],
-          ),
-        ),
-        Positioned(
-          top: 0.0,
-          left: 3.0,
-          child: ProgressState.BEFORE == currentStatus
-              ? Container(
-                  width: 30,
-                  decoration: ShapeDecoration(
-                      shape: CircleBorder(
-                          side: BorderSide(width: 2, color: Colors.green)),
-                      color: Colors.white),
-                  child: Center(
-                      child: Icon(
-                    Icons.done,
-                    size: 18,
-                    color: Colors.green,
-                  )),
-                )
-              : Container(
-                  width: 30,
-                  decoration: ShapeDecoration(
-                      shape: CircleBorder(
-                          side: BorderSide(
-                              width: 2, color: _colorStateMap[currentStatus])),
-                      color: Colors.white),
-                  child: Center(
-                      child: Text(
-                    '${index + 1}',
-                    style: TextStyle(color: _colorStateMap[currentStatus]),
-                  )),
-                ),
-        )
-      ],
+      ),
     );
   }
 
@@ -235,24 +259,27 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                   ],
                 ),
               ),
-              _enableEdit && widget.model.orderStatus == ProductionTaskOrderState.PRODUCING && currentStatus == ProgressState.CURRENT
+              _enableEdit &&
+                  widget.model.orderStatus ==
+                      ProductionTaskOrderState.PRODUCING &&
+                  currentStatus == ProgressState.CURRENT
                   ? FlatButton(
-                      onPressed: () async {
-                        showConfirmDialog(false, message: '是否确认完成节点？',
-                            confirm: () async {
-                          BaseMsg msg = await ProgressOrderRepository()
-                              .finishProgress(
-                                  widget.model.code, widget.model.progresses[index].id);
-                          if (msg != null) {
-                            BotToast.showText(text: msg.msg);
-                            //刷新进度工单数据
-                            if(index == widget.model.progresses.length-1){
-                              //完成最后一个节点
-                              widget.onRefreshOrderData(true);
-                            }else{
-                              widget.onRefreshOrderData(false);
-                            }
+                onPressed: () async {
+                  showConfirmDialog(false, message: '是否确认完成节点？',
+                      confirm: () async {
+                        BaseMsg msg = await ProgressOrderRepository()
+                            .finishProgress(widget.model.code,
+                            widget.model.progresses[index].id);
+                        if (msg != null) {
+                          BotToast.showText(text: msg.msg);
+                          //刷新进度工单数据
+                          if (index == widget.model.progresses.length - 1) {
+                            //完成最后一个节点
+                            widget.onRefreshOrderData(true);
                           } else {
+                            widget.onRefreshOrderData(false);
+                          }
+                        } else {
                             BotToast.showText(text: "系统错误");
                           }
                         });
@@ -329,9 +356,4 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
       ),
     );
   }
-
-
-
-
-
 }
