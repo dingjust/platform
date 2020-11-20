@@ -129,8 +129,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  ProductionProgressDetailPage(
+              builder: (context) => ProductionProgressDetailPage(
                     colorSizeEntries: widget.model.colorSizeEntries,
                     progress: widget.model.progresses[index],
                   )));
@@ -280,16 +279,16 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                             widget.onRefreshOrderData(false);
                           }
                         } else {
-                            BotToast.showText(text: "系统错误");
-                          }
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Text(
-                          '完成',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                          BotToast.showText(text: "系统错误");
+                        }
+                      });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    '完成',
+                    style: TextStyle(color: Colors.white),
+                  ),
                       ),
                       shape:
                           CircleBorder(side: BorderSide(color: Colors.white)),
