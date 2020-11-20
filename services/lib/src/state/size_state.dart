@@ -46,6 +46,19 @@ class SizeState {
     return (size1?.sequence ?? -1) - (size2?.sequence ?? -1);
   }
 
+  ///比较尺码顺序(名称)
+  int compareByName(String o1, String o2) {
+    if (_sizes == null || _sizes.isEmpty) {
+      return 0;
+    }
+    //查找对应Model
+    SizeModel size1 =
+        _sizes.firstWhere((element) => element.name == o1, orElse: () => null);
+    SizeModel size2 =
+        _sizes.firstWhere((element) => element.name == o2, orElse: () => null);
+    return (size1?.sequence ?? -1) - (size2?.sequence ?? -1);
+  }
+
   List<SizeModel> get sizes => _sizes;
 
   set setSizes(List<SizeModel> value) {

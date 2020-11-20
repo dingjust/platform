@@ -17,7 +17,7 @@ class OutOrderRespository {
     order.taskOrderEntries.forEach((element) {
       element.id = null;
       element?.progressPlan?.id = null;
-      element.progressPlan.productionProgresses.forEach((progress) {
+      element?.progressPlan?.productionProgresses?.forEach((progress) {
         progress.id = null;
       });
     });
