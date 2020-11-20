@@ -60,7 +60,7 @@ class AbstractOrderNoteModel extends ItemModel {
       this.brandOperator,
       this.factoryOperator,
       this.status,
-        this.consignment});
+      this.consignment});
 
   factory AbstractOrderNoteModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$AbstractOrderNoteModelFromJson(json);
@@ -88,7 +88,11 @@ class AbstractOrderNoteEntryModel extends ItemModel {
   ///尺码文本
   String size;
 
-  AbstractOrderNoteEntryModel({this.quantity, this.color, this.size});
+  ///订单需要
+  int needQuantity;
+
+  AbstractOrderNoteEntryModel(
+      {this.quantity, this.color, this.size, this.needQuantity});
 
   factory AbstractOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$AbstractOrderNoteEntryModelFromJson(json);
@@ -123,12 +127,12 @@ class OrderNoteModel extends AbstractOrderNoteModel {
     this.entries,
     this.remarks,
   }) : super(
-            code: code,
-            brand: brand,
-            skuID: skuID,
-            brandOperator: brandOperator,
-            factoryOperator: factoryOperator,
-            status: status,
+      code: code,
+      brand: brand,
+      skuID: skuID,
+      brandOperator: brandOperator,
+      factoryOperator: factoryOperator,
+      status: status,
       consignment: consignment);
 
   factory OrderNoteModel.fromJson(Map<String, dynamic> json) =>
@@ -160,8 +164,13 @@ class OrderNoteEntryModel extends AbstractOrderNoteEntryModel {
     int quantity,
     String color,
     String size,
+    int needQuantity,
     this.order,
-  }) : super(quantity: quantity, color: color, size: size);
+  }) : super(
+      quantity: quantity,
+      color: color,
+      size: size,
+      needQuantity: needQuantity);
 
   factory OrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$OrderNoteEntryModelFromJson(json);
@@ -224,16 +233,16 @@ class ShippingOrderNoteModel extends OrderNoteModel {
     this.withdrawalQuality,
     this.defectiveQuality,
   }) : super(
-            code: code,
-            brand: brand,
-            skuID: skuID,
-            brandOperator: brandOperator,
-            factoryOperator: factoryOperator,
-            status: status,
+      code: code,
+      brand: brand,
+      skuID: skuID,
+      brandOperator: brandOperator,
+      factoryOperator: factoryOperator,
+      status: status,
       consignment: consignment,
-            belongOrder: belongOrder,
-            entries: entries,
-            remarks: remarks);
+      belongOrder: belongOrder,
+      entries: entries,
+      remarks: remarks);
 
   factory ShippingOrderNoteModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ShippingOrderNoteModelFromJson(json);
@@ -310,16 +319,16 @@ class DeliveryOrderNoteModel extends OrderNoteModel {
     this.withdrawalQuality,
     this.defectiveQuality,
   }) : super(
-            code: code,
-            brand: brand,
-            skuID: skuID,
-            brandOperator: brandOperator,
-            factoryOperator: factoryOperator,
-            status: status,
+      code: code,
+      brand: brand,
+      skuID: skuID,
+      brandOperator: brandOperator,
+      factoryOperator: factoryOperator,
+      status: status,
       consignment: consignment,
-            belongOrder: belongOrder,
-            entries: entries,
-            remarks: remarks);
+      belongOrder: belongOrder,
+      entries: entries,
+      remarks: remarks);
 
   factory DeliveryOrderNoteModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$DeliveryOrderNoteModelFromJson(json);
@@ -387,24 +396,23 @@ class ReconciliationOrderNoteModel extends OrderNoteModel {
   ///拒绝原因
   String rejectReason;
 
-  ReconciliationOrderNoteModel(
-      {String code,
-      String brand,
-      String skuID,
-      B2BCustomerModel brandOperator,
-      B2BCustomerModel factoryOperator,
-      OrderNoteStatus status,
-        ConsignmentModel consignment,
-      AbstractOrderModel belongOrder,
-      List<OrderNoteEntryModel> entries,
-      String remarks,
-      this.partA,
-      this.partB,
-      this.cooperationMethod,
-      this.confirmDate,
-      this.delayDeduction,
-      this.qualityDeduction,
-      this.otherDeduction,
+  ReconciliationOrderNoteModel({String code,
+    String brand,
+    String skuID,
+    B2BCustomerModel brandOperator,
+    B2BCustomerModel factoryOperator,
+    OrderNoteStatus status,
+    ConsignmentModel consignment,
+    AbstractOrderModel belongOrder,
+    List<OrderNoteEntryModel> entries,
+    String remarks,
+    this.partA,
+    this.partB,
+    this.cooperationMethod,
+    this.confirmDate,
+    this.delayDeduction,
+    this.qualityDeduction,
+    this.otherDeduction,
       this.otherFunds,
       this.delayDeductionRemarks,
       this.qualityDeductionRemarks,
@@ -412,16 +420,16 @@ class ReconciliationOrderNoteModel extends OrderNoteModel {
       this.otherFundsRemarks,
       this.rejectReason})
       : super(
-            code: code,
-            brand: brand,
-            skuID: skuID,
-            brandOperator: brandOperator,
-            factoryOperator: factoryOperator,
-            status: status,
+      code: code,
+      brand: brand,
+      skuID: skuID,
+      brandOperator: brandOperator,
+      factoryOperator: factoryOperator,
+      status: status,
       consignment: consignment,
-            belongOrder: belongOrder,
-            entries: entries,
-            remarks: remarks);
+      belongOrder: belongOrder,
+      entries: entries,
+      remarks: remarks);
 
   factory ReconciliationOrderNoteModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ReconciliationOrderNoteModelFromJson(json);
@@ -483,7 +491,7 @@ class ProductionProgressOrderModel {
   int amount;
 
   ///上报时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
+  @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
   DateTime reportTime;
 
   ///备注

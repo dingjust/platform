@@ -57,6 +57,18 @@ class _ProductionProgressDetailPageState
               margin: EdgeInsets.only(top: 10),
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
+                children: [Text('上报记录：')],
+              ),
+            ),
+            for (ProductionProgressOrderModel order
+                in widget.progress?.productionProgressOrders ?? [])
+              _OrderItem(
+                model: order,
+              ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
                 children: [Text('附件：')],
               ),
             ),
@@ -73,7 +85,9 @@ class _ProductionProgressDetailPageState
               margin: EdgeInsets.only(top: 10),
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
-                children: [Expanded(child: Text('${widget.progress.remarks}'))],
+                children: [
+                  Expanded(child: Text('${widget.progress.remarks ?? '暂无备注'}'))
+                ],
               ),
             ),
           ],
@@ -110,6 +124,17 @@ class _ProductionProgressDetailPageState
   ///合并有效单据entry
   List<OrderNoteEntryModel> get totalEntries {
     List<OrderNoteEntryModel> result = [];
+    //构造订单需要
+    if (widget.colorSizeEntries != null) {
+      widget.colorSizeEntries.forEach((element) {
+        result.add(OrderNoteEntryModel(
+            size: element.size.name,
+            color: element.color.name,
+            quantity: 0,
+            needQuantity: element.quantity));
+      });
+    }
+
     if (widget.progress.productionProgressOrders != null) {
       widget.progress.productionProgressOrders
           .where(
@@ -117,15 +142,11 @@ class _ProductionProgressDetailPageState
           .forEach((entry) {
         entry.entries.forEach((element) {
           OrderNoteEntryModel note = result.firstWhere(
-              (val) => val.color == element.color && val.size == element.size,
+                  (val) =>
+              val.color == element.color && val.size == element.size,
               orElse: () => null);
           if (note != null) {
             note.quantity += element.quantity;
-          } else {
-            result.add(OrderNoteEntryModel(
-                size: element.size,
-                color: element.color,
-                quantity: element.quantity));
           }
         });
       });
@@ -149,7 +170,7 @@ class _InfoRow extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
           border:
-              Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+          Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [Text('$title'), Text('$val')],
@@ -157,3 +178,61 @@ class _InfoRow extends StatelessWidget {
     );
   }
 }
+
+class _OrderItem extends StatelessWidget {
+  final ProductionProgressOrderModel model;
+
+  const _OrderItem({Key key, this.model}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+          border: Border(
+              top: BorderSide(width: 0.5, color: Colors.grey[300]),
+              bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(child: Text('单号：${model.id}')),
+              Text(
+                '${ProductionProgressOrderStatusLocalizedMap[model.status]}',
+                style: TextStyle(color: _ORDER_STATUS_COLORS[model.status]),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: RichText(
+                    text: TextSpan(
+                        text: '数量：',
+                        style: TextStyle(fontSize: 16, color: Colors.black87),
+                        children: [
+                          TextSpan(
+                              text: '${model.amount}',
+                              style: TextStyle(color: Colors.blueAccent)),
+                        ])),
+              ),
+              Text('上报人：${model.operator.name}'),
+            ],
+          ),
+          Row(
+            children: [
+              Text('上报时间：${DateFormatUtil.formatYMD(model.reportTime)}'),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+///  生产工单状态颜色
+const _ORDER_STATUS_COLORS = {
+  ProductionProgressOrderStatus.PASS: Colors.green,
+  ProductionProgressOrderStatus.CANCEL: Colors.red,
+};
