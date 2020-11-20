@@ -100,7 +100,7 @@
     mixins: [],
     computed: {
       reverificationShow: function () {
-        return (this.companyState == 'SUCCESS' || this.companyState == 'FAILED');
+        return (this.companyState == 'SUCCESS' || this.companyState == 'FAIL');
       }
     },
     methods: {

@@ -1,31 +1,33 @@
 <template>
   <div class="animated fadeIn">
     <el-card>
-      <el-row type="flex" justify="space-between"> 
-        <el-col :span="6">
-          <div class="purchase-list-title">
-            <h6>采购单详情</h6>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <h6>状态/标签：{{getEnum('PurchaseOrderState', orderDetail.state)}}</h6>
-        </el-col>
-      </el-row>
-      <div class="pt-2"></div>
-      <div class="basic-row">
-        <purchase-order-basic-info :formData="orderDetail.workOrder" :order="orderDetail" :readOnly="true"/>
-        <el-divider></el-divider>
-        <el-row type="flex" justify="start">
-          <h6>采购信息</h6>
+      <div id="purchase-order-detail">
+        <el-row type="flex" justify="space-between"> 
+          <el-col :span="6">
+            <div class="purchase-list-title">
+              <h6>采购单详情</h6>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <h6>状态/标签：{{getEnum('PurchaseOrderState', orderDetail.state)}}</h6>
+          </el-col>
         </el-row>
-        <el-row type="flex" justify="start">
-          <h6>供应商：{{cooperator}}</h6>
-        </el-row>
-        <purchase-material-table :order="orderDetail" :readOnly="true"/>
-        <purchase-order-detail-tabs :order="orderDetail" @callback="callback" @getDetail="getDetail" :paymentList="paymentList"/>
-        <template v-if="orderDetail.currentAuditWork &&orderDetail.currentAuditWork.processes&& orderDetail.currentAuditWork.processes.length > 0">
-          <order-audit-detail :processes="orderDetail.currentAuditWork.processes" />
-        </template>
+        <div class="pt-2"></div>
+        <div class="basic-row">
+          <purchase-order-basic-info :formData="orderDetail.workOrder" :order="orderDetail" :readOnly="true"/>
+          <el-divider></el-divider>
+          <el-row type="flex" justify="start">
+            <h6>采购信息</h6>
+          </el-row>
+          <el-row type="flex" justify="start">
+            <h6>供应商：{{cooperator}}</h6>
+          </el-row>
+          <purchase-material-table :order="orderDetail" :readOnly="true"/>
+          <purchase-order-detail-tabs :order="orderDetail" @callback="callback" @getDetail="getDetail" :paymentList="paymentList"/>
+          <template v-if="orderDetail.currentAuditWork &&orderDetail.currentAuditWork.processes&& orderDetail.currentAuditWork.processes.length > 0">
+            <order-audit-detail :processes="orderDetail.currentAuditWork.processes" />
+          </template>
+        </div>
       </div>
       <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
         <el-col :span="3">
@@ -42,6 +44,9 @@
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
         <el-button v-if="canReturn" class="sumbit-btn" @click="onReturn">撤回</el-button>
       </el-row>
+      <el-row type="flex" justify="center">
+        <printer-button v-print="'#purchase-order-detail'" />
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -51,6 +56,7 @@ import PurchaseOrderBasicInfo from '../components/PurchaseOrderBasicInfo'
 import PurchaseMaterialTable from '../components/PurchaseMaterialTable'
 import PurchaseOrderDetailTabs from './PurchaseOrderDetailTabs'
 import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
+import { PrinterButton } from '@/components/index.js'
 
 export default {
   name: 'PurchaseOrderDetail',
@@ -59,7 +65,8 @@ export default {
     PurchaseOrderBasicInfo,
     PurchaseMaterialTable,
     PurchaseOrderDetailTabs,
-    OrderAuditDetail
+    OrderAuditDetail,
+    PrinterButton
   },
   computed: {
     canReturn: function () {

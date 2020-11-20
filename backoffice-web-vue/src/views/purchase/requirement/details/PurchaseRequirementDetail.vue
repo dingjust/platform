@@ -1,54 +1,56 @@
 <template>
   <div class="animated fadeIn">
     <el-card>
-      <el-row type="flex" justify="space-between">
-        <el-col :span="6">
-          <div class="purchase-list-title">
-            <h6>采购需求详情</h6>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <h6>状态/标签：{{getEnum('PurchaseTaskState', formData.state)}}</h6>
-        </el-col>
-      </el-row>
-      <div class="pt-2"></div>
-      <el-row type="flex" justify="start" class="basic-row">
-        <el-col :span="6">
-          <h6>任务单号：{{formData.code}}</h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>关联工单：
-            <el-button type="text" @click="onProductDetail(formData.productionTask.id)" class="code-btn">{{formData.productionTask.code}}</el-button>
-          </h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>关联款号：{{formData.productionTask.product.skuID}}</h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="start" class="basic-row">
-        <el-col :span="6">
-          <div style="display: flex;flex-wrap: wrap;">
-            <h6>是否含税：{{formData.includeTax ? '是' : '否'}}</h6>
-            <h6 v-if="formData.includeTax" style="margin-left: 30px">税点：{{formData.taxPoint * 100}}%</h6>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <h6>品质要求：{{getEnum('QualityRequirementType', formData.qualityRequirement)}}</h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>采购员：{{formData.merchandiser.name}}</h6>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="start" class="basic-row">
-        <h6>收货地址：{{formData.shippingAddress.details}}</h6>
-      </el-row>
-      <purchase-requirement-table :formData="formData" :readOnly="true"/>
-      <template v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">
-        <order-audit-detail :processes="formData.auditWorkOrder.processes" />
-      </template>
+      <div id="purchase-requirement-detail">
+        <el-row type="flex" justify="space-between">
+          <el-col :span="6">
+            <div class="purchase-list-title">
+              <h6>采购需求详情</h6>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <h6>状态/标签：{{getEnum('PurchaseTaskState', formData.state)}}</h6>
+          </el-col>
+        </el-row>
+        <div class="pt-2"></div>
+        <el-row type="flex" justify="start" class="basic-row">
+          <el-col :span="6">
+            <h6>任务单号：{{formData.code}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>关联工单：
+              <el-button type="text" @click="onProductDetail(formData.productionTask.id)" class="code-btn">{{formData.productionTask.code}}</el-button>
+            </h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>关联款号：{{formData.productionTask.product.skuID}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" class="basic-row">
+          <el-col :span="6">
+            <div style="display: flex;flex-wrap: wrap;">
+              <h6>是否含税：{{formData.includeTax ? '是' : '否'}}</h6>
+              <h6 v-if="formData.includeTax" style="margin-left: 30px">税点：{{formData.taxPoint * 100}}%</h6>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <h6>品质要求：{{getEnum('QualityRequirementType', formData.qualityRequirement)}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>采购员：{{formData.merchandiser.name}}</h6>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" class="basic-row">
+          <h6>收货地址：{{formData.shippingAddress.details}}</h6>
+        </el-row>
+        <purchase-requirement-table :formData="formData" :readOnly="true"/>
+        <template v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">
+          <order-audit-detail :processes="formData.auditWorkOrder.processes" />
+        </template>
+      </div>
       <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
@@ -64,6 +66,9 @@
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
         <el-button v-if="canReturn" class="sumbit-btn" @click="onReturn">撤回</el-button>
       </el-row>
+      <el-row type="flex" justify="center">
+        <printer-button v-print="'#purchase-requirement-detail'" />
+      </el-row>
     </el-card>
     <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
       <production-order-detail v-if="productionVisible" :id="productionId" />
@@ -75,6 +80,7 @@
 import PurchaseRequirementTable from '../components/PurchaseRequirementTable'
 import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
 import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
+import { PrinterButton } from '@/components/index.js'
 
 export default {
   name: 'PurchaseRequirementDetail',
@@ -82,7 +88,8 @@ export default {
   components: {
     PurchaseRequirementTable,
     OrderAuditDetail,
-    ProductionOrderDetail
+    ProductionOrderDetail,
+    PrinterButton
   },
   computed: {
     canReturn: function () {
