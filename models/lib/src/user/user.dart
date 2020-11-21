@@ -134,13 +134,13 @@ class CustomerModel extends UserModel {
     List<RoleModel> roles,
     String mobileNumber,
   }) : super(
-      id: id,
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      loginDisabled: loginDisabled,
-      roles: roles,
-      mobileNumber: mobileNumber);
+            id: id,
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            loginDisabled: loginDisabled,
+            roles: roles,
+            mobileNumber: mobileNumber);
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CustomerModelFromJson(json);
@@ -181,6 +181,11 @@ class B2BCustomerModel extends CustomerModel {
 
   static Map<String, dynamic> toJson(B2BCustomerModel model) =>
       model == null ? null : _$B2BCustomerModelToJson(model);
+
+  static List<Map<String, dynamic>> listToJson(List<B2BCustomerModel> models) =>
+      models == null
+          ? null
+          : models.map((e) => B2BCustomerModel.toJson(e)).toList();
 
   static Map<String, dynamic> b2bUnitToJson(B2BUnitModel model) =>
       model == null ? null : B2BUnitModel.toJson(model);

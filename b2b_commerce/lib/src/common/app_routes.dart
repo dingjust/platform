@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/business/apparel_products_brand.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperator_form.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
+import 'package:b2b_commerce/src/business/orders/delivery/delivery_order_detail_page.dart';
+import 'package:b2b_commerce/src/business/orders/delivery/delivery_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
@@ -85,6 +87,7 @@ class AppRoutes with GlobalRoutes {
 
   ///新合作商
   static const ROUTE_COOPERATORS = '/business/cooperators';
+
   /// 创建合作商
   static const ROUTE_COOPERATORS_CREATE = '/business/cooperators/create';
 
@@ -111,6 +114,11 @@ class AppRoutes with GlobalRoutes {
       '/business/orders/sales_production/production_task_order/detail';
   static const ROUTE_PRODUCTION_TASK_ORDERS =
       '/business/orders/sales_production/production_task_orders';
+
+  ///出货单
+  static const ROUTE_DELIVERY_ORDERS = '/business/orders/delivery_orders';
+  static const ROUTE_DELIVERY_ORDER_DETAIL =
+      '/business/orders/delivery_orders/detail';
 
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
@@ -196,7 +204,11 @@ class AppRoutes with GlobalRoutes {
     ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage(),
     ROUTE_OUT_ORDER_FORM: (context) => OutOrderForm(),
     ROUTE_COOPERATORS: (context) => CooperatorsPage(),
-    ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm()
+    ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm(),
+    ROUTE_DELIVERY_ORDERS: (context) => DeliveryOrdersPage(),
+    ROUTE_DELIVERY_ORDER_DETAIL: (context) => DeliveryOrderDetailPage(
+          id: getVal('id', context),
+        ),
   };
 
   static dynamic getVal(String key, BuildContext context) {

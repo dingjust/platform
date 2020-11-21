@@ -10,6 +10,7 @@ export 'src/media/media.dart';
 export 'src/msg/msg.dart';
 export 'src/my/guideline.dart';
 export 'src/my/wallet.dart';
+export 'src/order/delivery_order.dart';
 export 'src/order/finance.dart';
 export 'src/order/invoice.dart';
 export 'src/order/order.dart';

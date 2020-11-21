@@ -39,6 +39,16 @@ class CooperatorItem extends StatelessWidget {
   Widget _buildRow1() {
     return Row(
       children: [
+        Container(
+          width: 30,
+          height: 30,
+          margin: EdgeInsets.only(right: 5),
+          child: CircleAvatar(
+            backgroundImage: getImage(),
+            backgroundColor: Colors.white,
+            radius: 30,
+          ),
+        ),
         Expanded(
             child: Text(
           '${model.name}',
@@ -131,8 +141,19 @@ class CooperatorItem extends StatelessWidget {
                   : Colors.grey[200],
               width: 0.5),
           color:
-              certified ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
+          certified ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
     );
+  }
+
+  ImageProvider getImage() {
+    if (model.partner != null && model.partner.profilePicture != null) {
+      return NetworkImage(model.partner.profilePicture.thumbnailUrl());
+    } else {
+      return AssetImage(
+        'temp/picture.png',
+        package: "assets",
+      );
+    }
   }
 
   void onTap(BuildContext context) async {
@@ -142,13 +163,12 @@ class CooperatorItem extends StatelessWidget {
     } else {
       // 没有则跳转详情页
       //TODO:命名路由详情跳转
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => CooperatorDetailPage(
-            id: model.id,
-          ),
-        )
-      );
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            CooperatorDetailPage(
+              id: model.id,
+            ),
+      ));
     }
   }
 }
