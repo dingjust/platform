@@ -11,6 +11,7 @@
         <reconciliation-orders-form-v2-header :formData="formData" />
         <reconciliation-info-table :formData="formData" />
         <reconciliation-approvers-part :formData="formData"/>
+        <reconciliation-upload-part :formData="formData"/>
       </el-form>
     </el-card>
   </div>
@@ -20,12 +21,15 @@
 import ReconciliationOrdersFormV2Header from './ReconciliationOrdersFormV2Header'
 import ReconciliationInfoTable from './ReconciliationInfoTable'
 import ReconciliationApproversPart from './ReconciliationApproversPart'
+import ReconciliationUploadPart from './ReconciliationUploadPart'
+
 export default {
   name: 'ReconciliationOrdersFormV2',
   components: {
     ReconciliationOrdersFormV2Header,
     ReconciliationInfoTable,
-    ReconciliationApproversPart
+    ReconciliationApproversPart,
+    ReconciliationUploadPart
   },
   data () {
     return {
@@ -62,7 +66,9 @@ export default {
           //   remarks: ''
           // }
         ],
-        approvers: [null]
+        approvers: [null],
+        enclosure: [],
+        contract: []
       }
     }
   }
