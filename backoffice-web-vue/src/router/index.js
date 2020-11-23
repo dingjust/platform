@@ -1082,6 +1082,10 @@ const router = new Router({
         props: true,
         component: () => import(/* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/reconciliation-order/form/ReconciliationOrdersForm')
       }, {
+        path: 'create',
+        name: '创建对账单',
+        component: () => import(/* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/reconciliation-order/formV2/ReconciliationOrdersFormV2')
+      }, {
         path: 'orders/:id',
         name: '对账单详情',
         props: true,
