@@ -40,11 +40,11 @@ dependencies:
   flutter_staggered_grid_view: "^0.2.4"
   intl: ^0.16.0
   image_picker: ^0.6.7+7
-  rxdart: ^0.22.2
+  rxdart: ^0.24.1
   fluwx: ^2.3.0
-  path_provider: ^0.5.0+1
+  path_provider: ^1.6.18
   # flutter_cache_manager: ^0.3.0
-  flutter_cache_manager: ^1.1.1
+  flutter_cache_manager: ^2.0.0
   open_file: ^3.0.1
   url_launcher: ^5.0.2
   flutter_speed_dial: ^1.0.9
@@ -54,7 +54,7 @@ dependencies:
   autocomplete_textfield: ^1.6.4
   pulltorefresh_flutter: "^0.1.9"
   # cached_network_image: ^0.7.0
-  cached_network_image: ^2.0.0
+  cached_network_image: ^2.3.3
   flutter_spinkit: ^3.1.0
   store_redirect: ^1.0.1
   # image_gallery_saver: ^1.1.0
@@ -230,6 +230,7 @@ flutter:
     - packages/assets/temp/auth_fail.png
     - packages/assets/temp/auth_success.png
     - packages/assets/temp/common/dingding_logo.png
+    - packages/assets/temp/business/delivery.png
 
   fonts:
     - family: b2bIcons
