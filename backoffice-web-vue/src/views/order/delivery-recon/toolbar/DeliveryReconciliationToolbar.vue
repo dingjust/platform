@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'DeliveryOrdersToolbar',
+  name: 'DeliveryReconciliationToolbar',
   props: ['queryFormData'],
   data () {
     return {
@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     onAdvancedSearch () {
-      this.$emit('onAdvancedSearch', 0, 10);
+      this.$emit('onAdvancedSearch');
     },
     onReset () {
       this.queryFormData.keyword = '';

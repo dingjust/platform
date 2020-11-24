@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="出货单号" prop="code"></el-table-column>
+      <el-table-column label="对账单号" prop="code"></el-table-column>
       <el-table-column label="合作商" prop="cooperator"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: 'DeliveryOrdersList',
+  name: 'ReconciliationOrdersListV2',
   props: ['page'],
   methods: {
     onDetail (row) {

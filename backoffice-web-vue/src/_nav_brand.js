@@ -176,6 +176,10 @@ export default {
         requiresAuth: true,
         permissions: ['RECONCILIATION_SHEET_OUT']
       }
+    },
+    {
+      name: '出货对账',
+      url: '/order/delivery-Reconciliation'
     }
     ]
   },

@@ -1,207 +1,107 @@
+<!--
+* @Description: 出货单
+* @Date 2020/11/23 17:55
+* @Author L.G.Y
+-->
 <template>
-  <div class="animated fadeIn">
+  <div>
     <el-row>
-      <el-col :span="4">
-        <div class="title">
-          <h6>出货单列表</h6>
-        </div>
-      </el-col>
+      <div class="list-title">
+        <h6>出货单列表</h6>
+      </div>
     </el-row>
     <div class="pt-2"></div>
-    <shipping-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" 
-                             :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
+    <delivery-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" :mode="mode"/>
+        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+          <delivery-orders-list :page="page"/>
         </el-tab-pane>
       </template>
     </el-tabs>
   </div>
 </template>
-
+ 
 <script>
-  import {
-    createNamespacedHelpers
-  } from 'vuex';
-  const {
-    mapGetters,
-    mapActions
-  } = createNamespacedHelpers(
-    'ShippingOrdersModule'
-  );
+import { createNamespacedHelpers } from 'vuex';
 
-  import ShippingOrdersToolbar from './toolbar/ShippingOrdersToolbar'
-  import ShippingOrdersList from './list/ShippingOrdersList'
+const {
+  mapGetters,
+  mapActions,
+  mapMutations
+} = createNamespacedHelpers(
+  'DeliveryOrdersModule'
+);
 
-  export default {
-    name: 'ShippingOrdersPage',
-    props: {
-      mode: {
-        type: String,
-        default: 'import'
-      }
-    },
-    components: {
-      ShippingOrdersToolbar,
-      ShippingOrdersList
-    },
-    computed: {
-      ...mapGetters({
-        keyword: 'keyword',
-        page: 'page',
-        formData: 'formData'
-      })
-    },
-    methods: {
-      ...mapActions({
-        search: 'search',
-        searchAdvanced: 'searchAdvanced'
-      }),
-      onSearch(page, size) {
-        const keyword = this.keyword;
-        const url = this.apis().shippingOrderList();
-        const mode = this.mode;
-        const companyCode = this.currentUser.companyCode;
-        this.search({
-          url,
-          keyword,
-          page,
-          size,
-          mode,
-          companyCode
-        });
-      },
-      onAdvancedSearch(page, size, isTab) {
-        if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
-          this.onResetQuery();
-        }
-        const query = this.queryFormData;
-        const url = this.apis().shippingOrderList();
-        const mode = this.mode;
-        const companyCode = this.currentUser.companyCode;
-        this.searchAdvanced({
-          url,
-          query,
-          page,
-          size,
-          mode,
-          companyCode
-        });
-        if (!isTab) {
-          this.shippingOrderStateCount();
-        }
-      },
-      async shippingOrderStateCount() {
-        let query = Object.assign({}, this.queryFormData);
-        query.states = '';
-        if (this.mode == 'import') {
-          query['shipParty'] = this.$store.getters.currentUser.companyCode;
-        } else {
-          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
-        }
+import DeliveryOrdersList from './list/DeliveryOrdersList'
+import DeliveryOrdersToolbar from './toolbar/DeliveryOrdersToolbar'
 
-        const url = this.apis().shippingOrderStateCount();
-        const result = await this.$http.post(url, query);
-        if (result['errors']) {
-          this.stateCount = {};
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        if (result.code === 0) {
-          this.stateCount = {};
-          this.$message.error(result.msg);
-          return;
-        }
-        this.stateCount = result.data;
-      },
-      tabName(tab) {
-        if (this.stateCount.hasOwnProperty(tab.code)) {
-          return tab.name + '(' + this.stateCount[tab.code] + ')';
-        }
-        if (tab.code === '已完成') {
-          let count = 0;
-          if (!isNaN(this.stateCount['RECONCILED'])) {
-            count += this.stateCount['RECONCILED'];
-          }
-          if (!isNaN(this.stateCount['COMPLETED'])) {
-            count += this.stateCount['COMPLETED'];
-          }
-          return count > 0 ? tab.name + '(' + count + ')' : tab.name;
-        }
-        return tab.name;
-      },
-      handleClick(tab, event) {
-        //已完成状态为 已对账和完成状态
-        if (tab.name == '已完成') {
-          this.queryFormData.states = ['RECONCILED', 'COMPLETED'];
-        } else {
-          this.queryFormData.states = tab.name;
-        }
-        this.onAdvancedSearch(0, 10, true);
-      },
-      onDetail(row) {
-        this.$router.push('/shipping/orders/' + row.id);
-      },
-      onResetQuery () {
-        this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
-      }
-    },
-    data() {
-      return {
-        stateCount: {},
-        currentUser: this.$store.getters.currentUser,
-        activeName: 'PENDING_RECEIVED',
-        statuses: [{
-          code: 'PENDING_RECEIVED',
-          name: '待收货'
-        }, {
-          code: 'PENDING_RETURNED',
-          name: '待退货'
-        }, {
-          code: 'RETURNING',
-          name: '退货中'
-        }, {
-          code: 'PENDING_RECONSIDER',
-          name: '待复议'
-        }, {
-          code: 'IN_RECONSIDER',
-          name: '复议中'
-        }, {
+export default {
+  name: 'DeliveryOrdersPageV2',
+  components: {
+    DeliveryOrdersList,
+    DeliveryOrdersToolbar
+  },
+  computed: {
+    ...mapGetters({
+      page: 'page',
+      keyword: 'keyword'
+    })
+  },
+  data () {
+    return {
+      activeName: 'PENDING_RECONCILED',
+      statuses: [
+        {
           code: 'PENDING_RECONCILED',
-          name: '待对账'
-        }, {
-          code: '已完成',
-          name: '已完成'
-        }],
-        queryFormData: {
-          keyword: '',
-          cooperatorName: '',
-          merchandiserName: '',
-          createdDateFrom: '',
-          createdDateTo: '',
-          states: 'PENDING_RECEIVED'
+          name: '待对账',
         },
-        dataQuery: {}
+        {
+          code: 'IN_RECONCILED',
+          name: '对账中',
+        },
+        {
+          code: 'COMPLETED',
+          name: '已完成',
+        },
+      ],
+      queryFormData: {
+        keyword: '',
+        cooperator: '',
+        status: '',
+        expectedDeliveryDateFrom: '',
+        expectedDeliveryDateTo: ''
       }
-    },
-    created() {
-      const pageSign = this.mode === 'import' ? 'SHIPPING_SHEET' : 'RECEIPT_SHEET';
-      this.dataQuery = this.getDataPerQuery(pageSign);
-      this.onResetQuery();
-      this.onAdvancedSearch();
-    },
-    destroyed() {
-
     }
+  },
+  methods: {
+    ...mapActions({
+      searchAdvanced: 'searchAdvanced'
+    }),
+    onAdvancedSearch (page, size) {
+      const query = this.queryFormData;
+      const url = this.apis().getoutboundOrdersList();
+      this.searchAdvanced({
+        url,
+        query,
+        page,
+        size
+      });
+    },
+    handleClick (tab, event) {
+      this.queryFormData.status = tab.name;
+      this.onAdvancedSearch(0, 10);
+    }
+  },
+  created () {
+    this.onAdvancedSearch(0, 10);
   }
-
+}
 </script>
 
-<style scoped>
-  .title {
+<style>
+  .list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
-
 </style>

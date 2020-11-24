@@ -216,9 +216,14 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/sales/details/SalesOrderDetailsPage')
             },
             {
+              path: 'delivery-Reconciliation',
+              name: '出货对账',
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/DeliveryReconciliationPage')
+            },
+            {
               path: 'reconciliation/create',
               name: '创建对账单',
-              component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/order/delivery-recon/reconciliation/form/ReconciliationOrdersFormV2')
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/reconciliation/form/ReconciliationOrdersFormV2')
             },
           ]
         },
