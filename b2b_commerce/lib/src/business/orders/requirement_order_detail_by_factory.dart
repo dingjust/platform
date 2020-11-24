@@ -2,7 +2,6 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
-import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -31,6 +30,7 @@ class RequirementOrderDetailByFactoryPage extends StatefulWidget {
 class _RequirementOrderDetailByFactoryPageState
     extends State<RequirementOrderDetailByFactoryPage> {
   RequirementOrderModel orderModel;
+  UserModel currentUser = UserBLoC.instance.currentUser;
 
   List<QuoteModel> quotesList;
 
@@ -146,91 +146,87 @@ class _RequirementOrderDetailByFactoryPageState
             children: <Widget>[
               orderModel.belongTo.profilePicture == null
                   ? Container(
-                margin: EdgeInsets.only(right: 10),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'temp/picture.png',
-                        package: "assets",
-                      ),
-                      fit: BoxFit.cover,
-                    )),
-              )
+                      margin: EdgeInsets.only(right: 10),
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'temp/picture.png',
+                              package: "assets",
+                            ),
+                            fit: BoxFit.cover,
+                          )),
+                    )
                   : Container(
-                margin: EdgeInsets.only(right: 10),
-                width: 60,
-                height: 60,
-                child: CachedNetworkImage(
-                    width: 80,
-                    height: 80,
-                    imageUrl:
-                    '${orderModel.belongTo.profilePicture.previewUrl()}',
-                    fit: BoxFit.cover,
-                    imageBuilder: (context, imageProvider) =>
-                        Container(
+                      margin: EdgeInsets.only(right: 10),
+                      width: 60,
+                      height: 60,
+                      child: CachedNetworkImage(
                           width: 80,
                           height: 80,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                    placeholder: (context, url) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        ),
-                    errorWidget: (context, url, error) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        )),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+                          imageUrl:
+                              '${orderModel.belongTo.profilePicture.previewUrl()}',
+                          fit: BoxFit.cover,
+                          imageBuilder: (context, imageProvider) => Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                          placeholder: (context, url) => SpinKitRing(
+                                color: Colors.black12,
+                                lineWidth: 2,
+                                size: 30,
+                              ),
+                          errorWidget: (context, url, error) => SpinKitRing(
+                                color: Colors.black12,
+                                lineWidth: 2,
+                                size: 30,
+                              )),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
               Container(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 5),
-                        child: Text(
-                          orderModel.belongTo == null ||
-                              orderModel.belongTo == null
-                              ? ''
-                              : '${orderModel.belongTo.name}',
-                          textScaleFactor: 1.3,
-                        ),
-                      ),
-                      orderModel.belongTo == null ||
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      orderModel.belongTo == null || orderModel.belongTo == null
+                          ? ''
+                          : '${orderModel.belongTo.name}',
+                      textScaleFactor: 1.3,
+                    ),
+                  ),
+                  orderModel.belongTo == null ||
                           orderModel.belongTo.approvalStatus == null
-                          ? Container()
-                          : Container(
+                      ? Container()
+                      : Container(
                           margin: EdgeInsets.only(top: 5),
                           color: Color.fromRGBO(254, 252, 235, 1),
                           child: orderModel.belongTo.approvalStatus !=
-                              ArticleApprovalStatus.approved
+                                  ArticleApprovalStatus.approved
                               ? Text('  未认证  ',
-                              style: TextStyle(
-                                color: Color.fromRGBO(255, 133, 148, 1),
-                              ))
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(255, 133, 148, 1),
+                                  ))
                               : Text(
-                            '  已认证  ',
-                            style: TextStyle(
-                              color: Color.fromRGBO(255, 133, 148, 1),
-                            ),
-                          ))
-                    ],
-                  ))
+                                  '  已认证  ',
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(255, 133, 148, 1),
+                                  ),
+                                ))
+                ],
+              ))
             ],
           ),
           Container(
@@ -265,59 +261,6 @@ class _RequirementOrderDetailByFactoryPageState
       child: Text(
         orderModel.details?.productName ?? '无标题',
         style: TextStyle(fontSize: 20),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return GestureDetector(
-      onTap: () {
-        copyToClipboard(orderModel.code);
-      },
-      child: Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(bottom: 10),
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: Text('需求订单号：' + orderModel.code),
-                    flex: 1,
-                  ),
-                  Text(
-                    '复制',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                      '发布时间: ${orderModel.creationTime != null ? DateFormatUtil
-                          .format(orderModel.creationTime) : ''}'),
-                  flex: 1,
-                ),
-                UserBLoC.instance.currentUser.type == UserType.BRAND
-                    ? Text(
-                  '已报价 ${orderModel.totalQuotesCount != null ? orderModel
-                      .totalQuotesCount : ''}',
-                  style: TextStyle(fontSize: 15, color: Colors.red),
-                )
-                    : Container()
-              ],
-            )
-          ],
-        ),
       ),
     );
   }
@@ -579,7 +522,9 @@ class _RequirementOrderDetailByFactoryPageState
                   child: Text(
                     orderModel.details.invoiceNeeded == null
                         ? ''
-                        : orderModel.details.invoiceNeeded ? '是' : '否',
+                        : orderModel.details.invoiceNeeded
+                        ? '是'
+                        : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -612,7 +557,9 @@ class _RequirementOrderDetailByFactoryPageState
                   child: Text(
                     orderModel.details.proofingNeeded == null
                         ? ''
-                        : orderModel.details.proofingNeeded ? '是' : '否',
+                        : orderModel.details.proofingNeeded
+                        ? '是'
+                        : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -746,7 +693,9 @@ class _RequirementOrderDetailByFactoryPageState
               },
             ),
           ),
-          Expanded(
+          isMyself()
+              ? Container()
+              : Expanded(
             flex: 1,
             child: Container(
                 height: double.infinity,
@@ -755,12 +704,13 @@ class _RequirementOrderDetailByFactoryPageState
                       FlatButton(
                         color: Color.fromRGBO(255, 214, 12, 1),
                         onPressed: () async {
-                          QuoteModel newQuote =
-                          await Navigator.of(context).push(MaterialPageRoute(
+                          QuoteModel newQuote = await Navigator.of(context)
+                              .push(MaterialPageRoute(
                               builder: (context) =>
                                   RequirementQuoteOrderForm(
                                     model: orderModel,
-                                    quoteModel: QuoteModel(attachments: []),
+                                    quoteModel:
+                                    QuoteModel(attachments: []),
                                   )));
 
                           if (newQuote != null) {
@@ -782,142 +732,6 @@ class _RequirementOrderDetailByFactoryPageState
         ],
       ),
     );
-  }
-
-  Widget _buildButtonGroups() {
-    //品牌端显示
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
-      return Container(
-        margin: EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                  height: 30,
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-                  child: FlatButton(
-                      color: Colors.red,
-                      child: Text(
-                        '重新发布需求',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      onPressed: () async {
-                        onReview();
-                      })),
-            ),
-            Expanded(
-              child: Container(
-                  height: 30,
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-                  child: FlatButton(
-                      color: Color(0xFFFFD600),
-                      child: Text(
-                        '邀请工厂报价',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FactoryPage(
-                                FactoryCondition(
-                                    starLevel: 0,
-                                    adeptAtCategories: [],
-                                    labels: [],
-                                    cooperationModes: []),
-                                requirementCode: orderModel.code,
-                                route: '全部工厂',
-                              )),
-                        );
-                      })),
-            ),
-          ],
-        ),
-      );
-    } else if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        orderModel.status != RequirementOrderStatus.PENDING_QUOTE) {
-      return Container(
-        child: Container(
-            height: 30,
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-            margin: EdgeInsets.only(bottom: 10),
-            child: FlatButton(
-                color: Colors.red,
-                child: Text(
-                  '重新发布需求',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                ),
-                onPressed: () async {
-                  onReview();
-                })),
-      );
-    } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return Container(
-        child: Container(
-          height: 30,
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          margin: EdgeInsets.only(bottom: 20),
-          child: FlatButton(
-              onPressed: () async {
-                QuoteModel newQuote =
-                await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        RequirementQuoteOrderForm(
-                          model: orderModel,
-                          quoteModel: QuoteModel(attachments: []),
-                        )));
-
-                if (newQuote != null) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          QuoteOrderDetailPage(
-                            newQuote.code,
-                          )));
-                }
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '去报价',
-                style: TextStyle(
-                  color: Color.fromRGBO(36, 38, 41, 1),
-                  fontSize: 16,
-                ),
-              )),
-        ),
-      );
-    } else {
-      return Container();
-    }
   }
 
   ///TODO分享
@@ -948,11 +762,12 @@ class _RequirementOrderDetailByFactoryPageState
 
   void onReview() {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RequirementOrderFrom(
-          order: orderModel,
-          isReview: true,
-          isCreate: true,
-        )));
+        builder: (context) =>
+            RequirementOrderFrom(
+              order: orderModel,
+              isReview: true,
+              isCreate: true,
+            )));
   }
 
   //拨打电话或发短信
@@ -1027,5 +842,13 @@ class _RequirementOrderDetailByFactoryPageState
     }
 
     return text;
+  }
+
+  ///是否自己所属
+  bool isMyself() {
+    if (currentUser?.companyCode != null && orderModel?.belongTo?.uid != null) {
+      return currentUser.companyCode == orderModel.belongTo.uid;
+    }
+    return false;
   }
 }
