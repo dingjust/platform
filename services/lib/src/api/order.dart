@@ -66,8 +66,7 @@ class OrderApis {
       '/b2b/orders/purchase/createByOffline';
 
   //看款下单创建采购订单 POST
-  static get purchaseCreateByProduct =>
-          (productBelongTo) =>
+  static get purchaseCreateByProduct => (productBelongTo) =>
       '/{baseSiteId}/orders/purchase/createByProduct/$productBelongTo';
 
   //创建线上生产订单
@@ -420,22 +419,38 @@ class OrderApis {
       };
 
   //销售订单更新地址
-  static get updateSalesAddress => (code) {
-    return '/{baseSiteId}/b2b/orders/sales/$code/deliveryAddress';
-  };
+  static get updateSalesAddress =>
+          (code) {
+        return '/{baseSiteId}/b2b/orders/sales/$code/deliveryAddress';
+      };
 
   //批量修改生产进度预计完成时间
-  static get updateProgressesEstimatedDate => () {
+  static get updateProgressesEstimatedDate =>
+          () {
         return '/{baseSiteId}/sheets/progress/work/update/progresses/date';
       };
 
   //生产进度节点完成
-  static get finishProgress => (code,id) {
-    return '/{baseSiteId}/sheets/progress/work/$code/finish/progress/$id';
-  };
+  static get finishProgress =>
+          (code, id) {
+        return '/{baseSiteId}/sheets/progress/work/$code/finish/progress/$id';
+      };
 
   //生产进度工单明细
-  static get progressWorkSheetDetail => (code) {
-    return '/{baseSiteId}/sheets/progress/work/$code';
-  };
+  static get progressWorkSheetDetail =>
+          (code) {
+        return '/{baseSiteId}/sheets/progress/work/$code';
+      };
+
+  ///快速发货单-创建
+  static get deliveryOrderCreate => '/{baseSiteId}/sheets/fast/shipping/create';
+
+  ///快速发货单-查询
+  static get deliveryOrderList => '/{baseSiteId}/sheets/fast/shipping';
+
+  ///快速发货单-详情
+  static get deliveryOrderDetail =>
+          (id) {
+        return '/{baseSiteId}/sheets/fast/shipping/$id';
+      };
 }

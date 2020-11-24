@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-import 'constants.dart';
 import 'order_detail_btn_group.dart';
 import 'order_entry_detail.dart';
 

@@ -17,7 +17,7 @@ Color getSalesProductionStateColor(SalesProductionOrderState state) {
 }
 
 ///  生产工单状态颜色
-const  PRODUCTION_TASK_ORDER_STATE_COLORS = {
+const PRODUCTION_TASK_ORDER_STATE_COLORS = {
   ProductionTaskOrderState.TO_BE_ALLOCATED: Color(0xFFFFD600),
   ProductionTaskOrderState.TO_BE_PRODUCED: Color(0xFFFF5722),
   ProductionTaskOrderState.PRODUCING: Color(0xffff9800),
@@ -32,7 +32,18 @@ Color getProductionTaskOrderStateColor(ProductionTaskOrderState state) {
 }
 
 ///  生产进度工单状态颜色
-const  PROGRESS_WORK_SHEET_STATUS_COLORS = {
+const PROGRESS_WORK_SHEET_STATUS_COLORS = {
   ProgressWorkSheetStatus.IN_PRODUCTION: Color(0xffff9800),
   ProgressWorkSheetStatus.COMPLETED: Colors.green,
 };
+
+///  发货单状态颜色
+const DELIVERY_ORDER_STATUS_COLORS = {
+  LogisticsSheetState.PENDING_RECONCILED: Color(0xffff9800),
+  LogisticsSheetState.IN_RECONCILED: Colors.blueAccent,
+  LogisticsSheetState.COMPLETED: Colors.green,
+};
+
+Color getDeliveryOrderStateColor(LogisticsSheetState state) {
+  return DELIVERY_ORDER_STATUS_COLORS[state] ?? Colors.black54;
+}

@@ -73,6 +73,7 @@ class SearchAppbarTitle extends StatelessWidget {
                               child: GestureDetector(
                                 onTap: () {
                                   controller.text = '';
+                                  onChange('');
                                 },
                                 child: Icon(
                                   Icons.clear,

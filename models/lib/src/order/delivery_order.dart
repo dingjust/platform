@@ -4,18 +4,49 @@ import 'package:models/models.dart';
 part 'delivery_order.g.dart';
 
 ///物流单状态
-enum ShippingSheetState {
+enum LogisticsSheetState {
   ///待对账
   PENDING_RECONCILED,
+
+  ///对账中
+  IN_RECONCILED,
 
   ///已完成
   COMPLETED,
 }
 
 ///账期支付方式
-const ShippingSheetStateLocalizedMap = {
-  ShippingSheetState.PENDING_RECONCILED: "待对账",
-  ShippingSheetState.COMPLETED: "已完成",
+const LogisticsSheetStateLocalizedMap = {
+  LogisticsSheetState.PENDING_RECONCILED: "待对账",
+  LogisticsSheetState.IN_RECONCILED: "对账中",
+  LogisticsSheetState.COMPLETED: "已完成",
+};
+
+///对账状态
+enum FastReconciliationSheetState {
+  ///待乙方签署
+  PENDING_B_SIGN,
+
+  ///待审批
+  PENDING_APPROVAL,
+
+  ///待甲方签署
+  PENDING_A_SIGN,
+
+  ///已完成
+  COMPLETED,
+
+  ///已取消
+  CANCELLED
+}
+
+///对账状态
+const FastReconciliationSheetStateLocalizedMap = {
+  FastReconciliationSheetState.PENDING_B_SIGN: "待乙方签署",
+  FastReconciliationSheetState.PENDING_APPROVAL: "待审批",
+  FastReconciliationSheetState.PENDING_A_SIGN: "待甲方签署",
+  FastReconciliationSheetState.COMPLETED: "已完成",
+  FastReconciliationSheetState.CANCELLED: "已取消",
 };
 
 /// 物流单
@@ -60,6 +91,10 @@ class LogisticsSheetModel {
   ///备注
   String remarks;
 
+  ///创建时间
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime creationtime;
+
   //TODO:LogisticsSheet 部分字段省略
 
   LogisticsSheetModel(
@@ -73,7 +108,8 @@ class LogisticsSheetModel {
       this.creator,
       this.medias,
       this.targetCooperator,
-      this.remarks});
+      this.remarks,
+      this.creationtime});
 
   factory LogisticsSheetModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$LogisticsSheetModelFromJson(json);
@@ -92,33 +128,38 @@ class FastShippingSheetModel extends LogisticsSheetModel {
   ///标题
   String title;
 
+  ///状态
+  LogisticsSheetState state;
+
   @JsonKey(toJson: CooperatorModel.toJson)
   CooperatorModel cooperator;
 
-  FastShippingSheetModel(
-      {int id,
-      String code,
-      CompanyModel shipParty,
-      CompanyModel receiveParty,
-      AddressModel deliveryAddress,
-      B2BCustomerModel merchandiser,
-      B2BCustomerModel productionLeader,
-      B2BCustomerModel creator,
-      List<MediaModel> medias,
-      CooperatorModel targetCooperator,
-      this.title,
-      this.cooperator})
+  FastShippingSheetModel({int id,
+    String code,
+    CompanyModel shipParty,
+    CompanyModel receiveParty,
+    AddressModel deliveryAddress,
+    B2BCustomerModel merchandiser,
+    B2BCustomerModel productionLeader,
+    B2BCustomerModel creator,
+    List<MediaModel> medias,
+    CooperatorModel targetCooperator,
+    DateTime creationtime,
+    this.title,
+    this.state,
+    this.cooperator})
       : super(
-            id: id,
-            code: code,
-            shipParty: shipParty,
-            receiveParty: receiveParty,
-            deliveryAddress: deliveryAddress,
-            merchandiser: merchandiser,
-            productionLeader: productionLeader,
-            creator: creator,
-            medias: medias,
-            targetCooperator: targetCooperator);
+      id: id,
+      code: code,
+      shipParty: shipParty,
+      receiveParty: receiveParty,
+      deliveryAddress: deliveryAddress,
+      merchandiser: merchandiser,
+      productionLeader: productionLeader,
+      creator: creator,
+      medias: medias,
+      targetCooperator: targetCooperator,
+      creationtime: creationtime);
 
   factory FastShippingSheetModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FastShippingSheetModelFromJson(json);
@@ -133,6 +174,9 @@ class FastShippingSheetModel extends LogisticsSheetModel {
 /// 快速对账单
 @JsonSerializable()
 class FastReconciliationSheetModel extends LogisticsSheetModel {
+  ///状态
+  FastReconciliationSheetState state;
+
   ///发货单
   @JsonKey(toJson: FastShippingSheetModel.listToJson)
   List<FastShippingSheetModel> fastShippingSheets;
@@ -155,41 +199,42 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
   @JsonKey(toJson: FastReconciliationSheetEntryModel.listToJson)
   List<FastReconciliationSheetEntryModel> entries;
 
-  FastReconciliationSheetModel(
-      {int id,
-      String code,
-      CompanyModel shipParty,
-      CompanyModel receiveParty,
-      AddressModel deliveryAddress,
-      B2BCustomerModel merchandiser,
-      B2BCustomerModel productionLeader,
-      B2BCustomerModel creator,
-      List<MediaModel> medias,
-      CooperatorModel targetCooperator,
-      this.fastShippingSheets,
-      this.isApproval,
-      this.approvers,
-      this.auditWorkOrder,
-      this.reconciliationQuantity})
+  FastReconciliationSheetModel({int id,
+    String code,
+    CompanyModel shipParty,
+    CompanyModel receiveParty,
+    AddressModel deliveryAddress,
+    B2BCustomerModel merchandiser,
+    B2BCustomerModel productionLeader,
+    B2BCustomerModel creator,
+    List<MediaModel> medias,
+    CooperatorModel targetCooperator,
+    DateTime creationtime,
+    this.state,
+    this.fastShippingSheets,
+    this.isApproval,
+    this.approvers,
+    this.auditWorkOrder,
+    this.reconciliationQuantity})
       : super(
-            id: id,
-            code: code,
-            shipParty: shipParty,
-            receiveParty: receiveParty,
-            deliveryAddress: deliveryAddress,
-            merchandiser: merchandiser,
-            productionLeader: productionLeader,
-            creator: creator,
-            medias: medias,
-            targetCooperator: targetCooperator);
+      id: id,
+      code: code,
+      shipParty: shipParty,
+      receiveParty: receiveParty,
+      deliveryAddress: deliveryAddress,
+      merchandiser: merchandiser,
+      productionLeader: productionLeader,
+      creator: creator,
+      medias: medias,
+      targetCooperator: targetCooperator,
+      creationtime: creationtime);
 
   factory FastReconciliationSheetModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FastReconciliationSheetModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$FastReconciliationSheetModelToJson(this);
 
-  static List<Map<String, dynamic>> mediasToJson(
-          List<FastReconciliationSheetModel> medias) =>
+  static List<Map<String, dynamic>> mediasToJson(List<FastReconciliationSheetModel> medias) =>
       medias == null ? null : medias.map((media) => media.toJson()).toList();
 }
 

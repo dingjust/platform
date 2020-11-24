@@ -65,6 +65,7 @@ export 'src/order/bloc/requirement_pool_bloc.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
 export 'src/order/bloc/sale_orders_bloc.dart';
 export 'src/order/purchase/state/purchase_order_list_state.dart';
+export 'src/order/repository/delivery_order_respository.dart';
 export 'src/order/repository/order_note_respository.dart';
 export 'src/order/repository/progress_order_respository.dart';
 export 'src/order/repository/progress_work_sheet_respository.dart';

@@ -207,8 +207,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm(),
     ROUTE_DELIVERY_ORDERS: (context) => DeliveryOrdersPage(),
     ROUTE_DELIVERY_ORDER_DETAIL: (context) => DeliveryOrderDetailPage(
-          id: getVal('id', context),
-        ),
+        id: getVal('id', context), needRefresh: getVal('needRefresh', context)),
   };
 
   static dynamic getVal(String key, BuildContext context) {

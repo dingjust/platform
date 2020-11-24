@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
-import 'constants.dart';
 
 ///外接订单块
 class ExternalSaleOrderItem extends StatelessWidget {
@@ -103,31 +103,31 @@ class _Header extends StatelessWidget {
     //自创外接订单无originCompany
     return model.originCompany == null
         ? Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-            child: Center(
-              child: Text(
-                '自创',
-                style:
-                    TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
-              ),
-            ),
-          )
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          border: Border.all(color: Constants.THEME_COLOR_MAIN)),
+      child: Center(
+        child: Text(
+          '自创',
+          style:
+          TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
+        ),
+      ),
+    )
         : Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
-            child: Center(
-              child: Text(
-                '线上',
-                style: TextStyle(
-                    color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
-              ),
-            ),
-          );
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
+      child: Center(
+        child: Text(
+          '线上',
+          style: TextStyle(
+              color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
+        ),
+      ),
+    );
   }
 }
 
@@ -151,10 +151,10 @@ class _Row1 extends StatelessWidget {
         ),
         Expanded(
             child: Text(
-          '${getCoopertorName()}',
-          style: TextStyle(fontSize: 16),
-          overflow: TextOverflow.ellipsis,
-        )),
+              '${getCoopertorName()}',
+              style: TextStyle(fontSize: 16),
+              overflow: TextOverflow.ellipsis,
+            )),
         _buildTag()
       ],
     );
