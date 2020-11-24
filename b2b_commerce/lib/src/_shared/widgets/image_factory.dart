@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -26,9 +25,9 @@ class ImageFactory {
 
   static Widget buildThumbnailImage(
     MediaModel media, {
-        double size = 60,
-        double containerSize = 80,
-        BoxFit fit = BoxFit.fill,
+    double size = 60,
+    double containerSize = 80,
+    BoxFit fit = BoxFit.fill,
   }) {
     if (media == null) {
       return buildDefaultThumbnailImage(
@@ -43,31 +42,38 @@ class ImageFactory {
           width: containerSize,
           height: containerSize,
           child: CachedNetworkImage(
-              imageUrl: '${media.previewUrl()}',
-              fit: fit,
-              imageBuilder: (context, imageProvider) =>
-                  Container(
-                    width: containerSize,
-                    height: containerSize,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-              placeholder: (context, url) =>
-                  SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30.0,
-                  ),
-              errorWidget: (context, url, error) =>
-                  SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30,
-                  )),
+            imageUrl: '${media.previewUrl()}',
+            fit: fit,
+            imageBuilder: (context, imageProvider) =>
+                Container(
+                  width: containerSize,
+                  height: containerSize,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) =>
+                Icon(
+                  Icons.photo_outlined,
+                  color: Colors.grey,
+                  size: size,
+                ),
+            // placeholder: (context, url) => SpinKitRing(
+            //       color: Colors.black12,
+            //       lineWidth: 2,
+            //       size: 30.0,
+            //     ),
+
+            // errorWidget: (context, url, error) => SpinKitRing(
+            //       color: Colors.black12,
+            //       lineWidth: 2,
+            //       size: 30,
+            //     )
+          ),
         ));
   }
 
