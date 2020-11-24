@@ -4,7 +4,6 @@ import 'package:b2b_commerce/src/_shared/contract/contract_purchase_order_select
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/contract/contract_kjxy_select_page.dart';
 import 'package:b2b_commerce/src/my/contract/contract_temp_select_page.dart';
-import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:core/core.dart';
 import 'package:dio/adapter.dart';
@@ -15,12 +14,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'contract_detail_page.dart';
+
 class ContractCGDDFrom extends StatefulWidget {
   _ContractCGDDFromState createState() => _ContractCGDDFromState();
 }
 
 class _ContractCGDDFromState extends State<ContractCGDDFrom> {
-  final StreamController _streamController = StreamController<double>.broadcast();
+  final StreamController _streamController =
+      StreamController<double>.broadcast();
   PurchaseOrderModel orderModel;
   bool isA = false;
   bool isB = false;
@@ -136,7 +138,7 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
       return;
     }
 
-    ShowDialogUtil.showChoseDiglog(context, '是否确认创建采购订单合同', (){
+    ShowDialogUtil.showChoseDiglog(context, '是否确认创建采购订单合同', () {
       Navigator.pop(context);
       if (isA) {
         role = 'PARTYA';
@@ -188,7 +190,6 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               );
             });
       });
-
     });
   }
 
@@ -283,21 +284,20 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
           Divider(height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
           GestureDetector(
             onTap: () {
-              if(_orderModels == null || _orderModels.length == 0){
+              if (_orderModels == null || _orderModels.length == 0) {
                 ShowDialogUtil.showValidateMsg(context, '请选择订单');
                 return;
               }
 
               String companyCode;
-              if(_orderModels != null && _orderModels.length > 0){
-                if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+              if (_orderModels != null && _orderModels.length > 0) {
+                if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
                   companyCode = _orderModels[0].belongTo.uid;
                 }
-                if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+                if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
                   companyCode = _orderModels[0].purchaser.uid;
                 }
               }
-
 
               Navigator.push(
                   context,
@@ -355,11 +355,12 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ContractTempSelectPage(
-                        title: '采购订单合同模板',
-                        contractTempModel: cgddTemp,
-                        type: 'CGDD',
-                      ))).then((value) {
+                      builder: (context) =>
+                          ContractTempSelectPage(
+                            title: '采购订单合同模板',
+                            contractTempModel: cgddTemp,
+                            type: 'CGDD',
+                          ))).then((value) {
                 if (value != null) {
                   setState(() {
                     cgddTemp = value;
@@ -468,11 +469,12 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
 
   //文件下载打开
   _previewFile(String contractCode) async {
-    if(contractCode == null || contractCode == ''){
+    if (contractCode == null || contractCode == '') {
       return;
     }
     var contractModel = await ContractRepository().getContract(contractCode);
-    SearchResultModel resultModel = await ContractRepository().getContractPdfMedia(contractCode);
+    SearchResultModel resultModel =
+    await ContractRepository().getContractPdfMedia(contractCode);
     MediaModel pdf = resultModel.data;
 //    final url = "http://africau.edu/images/default/sample.pdf";
     //获取应用目录路径
@@ -492,8 +494,7 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:
-            dio.download(pdf.actualUrl, filePath,
+            requestCallBack: dio.download(pdf.actualUrl, filePath,
                 onReceiveProgress: (received, total) {
                   print((received / total * 100).toStringAsFixed(0) + "%");
                   _streamController.sink.add(received / total);
@@ -502,10 +503,16 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
             loadingText: '请稍候。。。',
             entrance: '',
           );
-        }).then((_){
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) =>
-              PdfReaderWidget(pathPDF: filePath,contractModel: contractModel.data,route: MaterialPageRoute(builder: (context) => MyContractPage()))),
+        }).then((_) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ContractDetailPage(
+                      pathPDF: filePath,
+                      contractModel: contractModel.data,
+                      route: MaterialPageRoute(
+                          builder: (context) => MyContractPage()))),
           ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
     });
   }

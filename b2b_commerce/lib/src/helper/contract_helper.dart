@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
+import 'package:b2b_commerce/src/my/contract/contract_detail_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
@@ -17,7 +17,7 @@ class ContractHelper {
 
     SearchResultModel resultModel =
         await ContractRepository().getContractPdfMedia(model.code);
-    if (resultModel.code == 0) {
+    if (resultModel?.code == 0) {
       cancelFunc.call();
       BotToast.showText(text: '${resultModel.msg}');
       return false;
@@ -36,7 +36,7 @@ class ContractHelper {
     Response response = await dio.download(pdf.actualUrl, filePath);
     cancelFunc.call();
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PdfReaderWidget(
+        builder: (context) => ContractDetailPage(
               pathPDF: filePath,
               contractModel: model,
             )));

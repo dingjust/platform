@@ -7,7 +7,13 @@ import 'package:widgets/widgets.dart';
 class OrderContractsBlock extends StatelessWidget {
   final List<ContractModel> agreements;
 
-  const OrderContractsBlock({Key key, this.agreements}) : super(key: key);
+  final String label;
+
+  final String hintText;
+
+  const OrderContractsBlock(
+      {Key key, this.agreements, this.label = '合同', this.hintText = '未创建合同'})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class OrderContractsBlock extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '合同',
+                  '$label',
                   style: TextStyle(color: Colors.grey),
                 ),
               ],
@@ -34,7 +40,7 @@ class OrderContractsBlock extends StatelessWidget {
                   )
                 : Center(
                     child: Text(
-                      '未创建合同',
+                      '$hintText',
                       style: TextStyle(color: Colors.grey),
                     ),
                   )
@@ -43,7 +49,7 @@ class OrderContractsBlock extends StatelessWidget {
   }
 
   Widget _buildBtn(BuildContext context, ContractModel model,
-      {double height = 80, double width = 60}) {
+      {double height = 85, double width = 80}) {
     return Container(
       height: height,
       width: width,
@@ -62,7 +68,17 @@ class OrderContractsBlock extends StatelessWidget {
                 color: Color(0xffffca3a),
                 size: 40,
               ),
-              Text('${model.title}'),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${model.title}',
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
+              ),
               Text(
                 '${ContractStatusLocalizedMap[model.state]}',
                 style: TextStyle(color: Colors.grey),

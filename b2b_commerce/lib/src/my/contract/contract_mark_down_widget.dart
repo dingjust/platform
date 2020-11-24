@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/common/webview_page.dart';
-import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
@@ -11,6 +10,8 @@ import 'package:models/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import 'contract_detail_page.dart';
 
 class ContractMarkDownWidgetPage extends StatefulWidget {
   ContractModel model;
@@ -122,7 +123,7 @@ class _ContractMarkDownWidgetPageState
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => PdfReaderWidget(pathPDF: filePath)),
+          builder: (context) => ContractDetailPage(pathPDF: filePath)),
     );
   }
 

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:b2b_commerce/src/_shared/contract/contract_purchase_order_select.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/contract/contract_temp_select_page.dart';
-import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:core/core.dart';
 import 'package:dio/adapter.dart';
@@ -14,12 +13,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'contract_detail_page.dart';
+
 class ContractWTSCHTFrom extends StatefulWidget {
   _ContractWTSCHTFromState createState() => _ContractWTSCHTFromState();
 }
 
 class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
-  final StreamController _streamController = StreamController<double>.broadcast();
+  final StreamController _streamController =
+      StreamController<double>.broadcast();
   bool isA = false;
   bool isB = false;
   List<ContractTemplateModel> tempList;
@@ -28,9 +30,9 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
 
   @override
   void initState() {
-    if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       isA = true;
-    }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+    } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       isB = true;
     }
 //    initSeal();
@@ -39,7 +41,7 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
 
   initSeal() async {
     // 延时1s执行返回
-    Future.delayed(Duration(seconds: 5), (){
+    Future.delayed(Duration(seconds: 5), () {
 //      Navigator.of(context).pop();
       print('延时1s执行');
     });
@@ -115,7 +117,7 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
             );
           });
     } else {
-      ShowDialogUtil.showChoseDiglog(context, '是否确认创建委托生产合同', (){
+      ShowDialogUtil.showChoseDiglog(context, '是否确认创建委托生产合同', () {
         Navigator.pop(context);
         if (isA) {
           role = 'PARTYA';
@@ -153,7 +155,9 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
                 return CustomizeDialog(
                   dialogType: DialogType.RESULT_DIALOG,
                   failTips:
-                  '${value != null && value.msg != null ? value.msg : '创建合同失败'}',
+                  '${value != null && value.msg != null
+                      ? value.msg
+                      : '创建合同失败'}',
                   successTips: '创建合同成功',
                   callbackResult: result,
                   confirmAction: () {
@@ -161,7 +165,7 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
                       print(value.data);
                       print(value.msg);
                       //创建成功跳转到合同详情
-                     _previewFile(value.data);
+                      _previewFile(value.data);
                     } else {
                       Navigator.of(context).pop();
                     }
@@ -220,7 +224,7 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
                             models: _orderModels,
                           )));
 
-              if(result != null){
+              if (result != null) {
                 print(result);
                 _orderModels = result;
               }
@@ -243,8 +247,13 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        '${_orderModels == null || _orderModels.length == 0 ? '' : _orderModels.map((model) => model.code).join(',')}',
-                        style: TextStyle(fontSize: 18,),
+                        '${_orderModels == null || _orderModels.length == 0
+                            ? ''
+                            : _orderModels.map((model) => model.code).join(
+                            ',')}',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
                       ),
@@ -275,11 +284,11 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
                             contractTempModel: temp,
                             type: 'WTSCHT',
                           ))).then((value) {
-                            if(value != null){
-                              setState(() {
-                                temp = value;
-                              });
-                            }
+                if (value != null) {
+                  setState(() {
+                    temp = value;
+                  });
+                }
               });
             },
             child: Container(
@@ -383,11 +392,12 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
 
   //文件下载打开
   _previewFile(String contractCode) async {
-    if(contractCode == null || contractCode == ''){
+    if (contractCode == null || contractCode == '') {
       return;
     }
     var contractModel = await ContractRepository().getContract(contractCode);
-    SearchResultModel resultModel = await ContractRepository().getContractPdfMedia(contractCode);
+    SearchResultModel resultModel =
+    await ContractRepository().getContractPdfMedia(contractCode);
     MediaModel pdf = resultModel.data;
 //    final url = "http://africau.edu/images/default/sample.pdf";
     //获取应用目录路径
@@ -407,8 +417,7 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:
-            dio.download(pdf.actualUrl, filePath,
+            requestCallBack: dio.download(pdf.actualUrl, filePath,
                 onReceiveProgress: (received, total) {
                   print((received / total * 100).toStringAsFixed(0) + "%");
                   _streamController.sink.add(received / total);
@@ -417,10 +426,16 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
             loadingText: '请稍候。。。',
             entrance: '',
           );
-        }).then((_){
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) =>
-              PdfReaderWidget(pathPDF: filePath,contractModel: contractModel.data,route: MaterialPageRoute(builder: (context) => MyContractPage()))),
+        }).then((_) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ContractDetailPage(
+                      pathPDF: filePath,
+                      contractModel: contractModel.data,
+                      route: MaterialPageRoute(
+                          builder: (context) => MyContractPage()))),
           ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
     });
   }
