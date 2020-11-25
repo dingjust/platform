@@ -175,6 +175,8 @@
         tableData: [],
         tableHeader: [],
         MaterialsType: this.$store.state.EnumsModule.MaterialsType,
+        cacheData:[],
+        cacheHeader:[],
         downLink: 'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E9%87%87%E8%B4%AD%E6%B8%85%E5%8D%95%E6%89%B9%E9%87%8F%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx'
       }
     },
@@ -186,7 +188,7 @@
             code: (row['物料编号*'] + '').replace(/[\r\n]/g,"").trim(),
             materialsType: this.getMaterial(row['物料类别*']),
             modelName: (row['幅宽/型号*'] + '').replace(/[\r\n]/g,"").trim(),
-            specName: (row['克重/规格'] + '').replace(/[\r\n]/g,"").trim(),
+            specName: (row['克重/规格'] + '')!=undefined?(row['克重/规格'] + '').replace(/[\r\n]/g,"").trim():'',
             unit: (row['物料单位*'] + '').replace(/[\r\n]/g,"").trim(),
             colorName: (row['物料颜色*'] + '').replace(/[\r\n]/g,"").trim(),
             unitQuantity: row['单件用量*'] + '',
@@ -388,13 +390,20 @@
         let temp = data.shift();
         let item = {};
         let tableD = [];
+        // this.cacheData=results;
+        // this.cacheHeader=header;
         data.map(row => {
           for (let key in temp) {
             if (temp[key]) {
               if (temp[key] === '到料时间*') {
                 item[temp[key]] = this.formatDate(row[key]);
               } else {
-                item[temp[key]] = row[key];
+                if(row[key]==null||row[key]==undefined){
+                  item[temp[key]] = '';
+                }else{
+                  item[temp[key]] = row[key];
+                }
+                
               }
             }
           }
@@ -405,21 +414,21 @@
         this.tableHeader = header;
       },
       onCreate () {
-        if (this.numErrorCount > 0) {
-          this.$message.error('表格数据有误，请修改表格后再上传');
-          throw Error('表格数据有误，请修改表格后再上传');
-          return;
-        }
-        this.tableData.forEach(row => {
-          for (let key in row) {
-            // if (!row[key] && key !== '是否批色' && key !== '合作商' && key !== '克重/规格') {
-            if (!row[key] && key !== '合作商' && key !== '克重/规格') {
-              this.$message.error('表格数据有误，请修改表格后再上传');
-              throw Error('表格数据有误，请修改表格后再上传');
-              return;
-            }
-          }
-        })
+        // if (this.numErrorCount > 0) {
+        //   this.$message.error('表格数据有误，请修改表格后再上传');
+        //   throw Error('表格数据有误，请修改表格后再上传');
+        //   return;
+        // }
+        // this.tableData.forEach(row => {
+        //   for (let key in row) {
+        //     // if (!row[key] && key !== '是否批色' && key !== '合作商' && key !== '克重/规格') {
+        //     if (!row[key] && key !== '合作商' && key !== '克重/规格') {
+        //       this.$message.error('表格数据有误，请修改表格后再上传');
+        //       throw Error('表格数据有误，请修改表格后再上传');
+        //       return;
+        //     }
+        //   }
+        // })
         this.$emit('onImport', this.sumbitData);
       }
     }

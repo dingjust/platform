@@ -190,13 +190,12 @@ export default {
       }
       let workOrders = [];
       this.formData.workOrders.forEach(item => {
-        let index = workOrders.findIndex(val => 
-          val.cooperatorName === item.cooperatorName && 
-          val.materials.name === item.name &&
-          val.materials.code === item.code &&
-          val.materials.unit === item.unit &&
-          val.materials.materialsType === item.materialsType);
-        if (index <= -1) {
+        // let index = workOrders.findIndex(val => 
+        //   val.materials.name === item.name &&
+        //   val.materials.code === item.code &&
+        //   val.materials.unit === item.unit &&
+        //   val.materials.materialsType === item.materialsType);
+        // if (index <= -1) {
           workOrders.push({
             id: item.id ? item.id : '',
             cooperatorName: item.cooperatorName.trim(),
@@ -224,30 +223,30 @@ export default {
               }]
             }
           })
-        } else {
-          if (!workOrders[index].id && item.id) {
-            workOrders[index].id = item.id;
-          }
-          if (!workOrders[index].materials.id && item.materialsId) {
-            workOrders[index].materials.id = item.materialsId;
-          }
-          workOrders[index].materials.specList.push({
-            id: item.specListId ? item.specListId : '',
-            unitQuantity: item.unitQuantity,
-            specName: item.specName.trim(),
-            colorName: item.colorName.trim(),
-            modelName: item.modelName.trim(),
-            emptySent: item.emptySent,
-            requiredAmount: item.requiredAmount,
-            estimatedLoss: Number.parseFloat(item.estimatedLoss) / 100,
-            estimatedUsage: item.estimatedUsage,
-            orderCount: item.orderCount,
-            auditColor: item.auditColor,
-            price: item.price,
-            totalPrice: item.totalPrice,
-            estimatedRecTime: item.estimatedRecTime
-          })
-        }
+        // } else {
+        //   if (!workOrders[index].id && item.id) {
+        //     workOrders[index].id = item.id;
+        //   }
+        //   if (!workOrders[index].materials.id && item.materialsId) {
+        //     workOrders[index].materials.id = item.materialsId;
+        //   }
+        //   workOrders[index].materials.specList.push({
+        //     id: item.specListId ? item.specListId : '',
+        //     unitQuantity: item.unitQuantity,
+        //     specName: item.specName.trim(),
+        //     colorName: item.colorName.trim(),
+        //     modelName: item.modelName.trim(),
+        //     emptySent: item.emptySent,
+        //     requiredAmount: item.requiredAmount,
+        //     estimatedLoss: Number.parseFloat(item.estimatedLoss) / 100,
+        //     estimatedUsage: item.estimatedUsage,
+        //     orderCount: item.orderCount,
+        //     auditColor: item.auditColor,
+        //     price: item.price,
+        //     totalPrice: item.totalPrice,
+        //     estimatedRecTime: item.estimatedRecTime
+        //   })
+        // }
       })
       data.workOrders = workOrders;
       this.__onSave(data, flag);
