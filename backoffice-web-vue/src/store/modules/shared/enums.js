@@ -2105,7 +2105,42 @@ const state = {
     }, {
       code: 'OTHER_COST',
       name: '其他'
-  }]
+  }],
+
+  // 出货单状态
+  DeliveryType: [
+    {
+      code: 'PENDING_RECONCILED',
+      name: '待对账',
+    },
+    {
+      code: 'IN_RECONCILED',
+      name: '对账中',
+    },
+    {
+      code: 'COMPLETED',
+      name: '已完成',
+    },
+  ],
+  // 新对账单状态
+  ReconciliationV2Type: [
+    {
+      code: 'PENDING_B_SIGN',
+      name: '待乙方签署'
+    }, {
+      code: 'PENDING_APPROVAL',
+      name: '待审批'
+    }, {
+      code: 'PENDING_A_SIGN',
+      name: '待甲方签署'
+    }, {
+      code: 'COMPLETED',
+      name: '已完成'
+    }, {
+      code: 'CANCELLED',
+      name: '已取消'
+    }
+  ]
 };
 
 const mutations = {};

@@ -18,7 +18,7 @@
         </template>
       </el-table-column>
       <el-table-column label="产品名称" prop="product.name" min-width="120px" />
-      <el-table-column label="波段" prop="bd" min-width="120px">
+      <el-table-column label="波段" prop="waveBand" min-width="120px">
         <template slot-scope="scope">
           <el-input v-model="scope.row.waveBand"></el-input>
         </template>

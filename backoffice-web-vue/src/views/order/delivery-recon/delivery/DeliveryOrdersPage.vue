@@ -14,11 +14,14 @@
     <delivery-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-          <delivery-orders-list :page="page"/>
-        </el-tab-pane>
+        <el-tab-pane :label="item.name" :name="item.code" :key="item.code" />
       </template>
     </el-tabs>
+    <delivery-orders-list ref="list" :page="page" @onAdvancedSearch="onAdvancedSearch" 
+                            :isSelection="isSelection" :selectedId="selectedId"/>
+    <el-row type="flex" justify="center" v-if="isSelection">
+      <el-button type="primary" size="medium" class="reconciliation-btn" @click="onSelect">确定</el-button>
+    </el-row>
   </div>
 </template>
  
@@ -38,6 +41,17 @@ import DeliveryOrdersToolbar from './toolbar/DeliveryOrdersToolbar'
 
 export default {
   name: 'DeliveryOrdersPageV2',
+  props: {
+    // 是否为选择列表组件
+    isSelection: {
+      type: Boolean,
+      default: false,
+    },
+    // 已选id，处理回显
+    selectedId: {
+      default: ''
+    } 
+  },
   components: {
     DeliveryOrdersList,
     DeliveryOrdersToolbar
@@ -68,9 +82,10 @@ export default {
       queryFormData: {
         keyword: '',
         cooperator: '',
-        status: '',
+        states: '',
         expectedDeliveryDateFrom: '',
-        expectedDeliveryDateTo: ''
+        expectedDeliveryDateTo: '',
+        partyType: "PARTYA"
       }
     }
   },
@@ -80,7 +95,7 @@ export default {
     }),
     onAdvancedSearch (page, size) {
       const query = this.queryFormData;
-      const url = this.apis().getoutboundOrdersList();
+      const url = this.apis().getDeliveryList();
       this.searchAdvanced({
         url,
         query,
@@ -89,8 +104,11 @@ export default {
       });
     },
     handleClick (tab, event) {
-      this.queryFormData.status = tab.name;
+      this.queryFormData.states = tab.name;
       this.onAdvancedSearch(0, 10);
+    },
+    onSelect () {
+      this.$emit('onSelect', this.$refs.list.currentRow);
     }
   },
   created () {
@@ -99,9 +117,15 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+  }
+
+  .reconciliation-btn {
+    background: #ffd60c;
+    color: #303133;
+    border-color: #ffd60c;
   }
 </style>

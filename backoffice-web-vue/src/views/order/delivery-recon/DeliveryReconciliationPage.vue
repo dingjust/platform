@@ -22,7 +22,7 @@
       <el-tabs ref="tabs" v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
           <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-           <delivery-reconciliation-list :orderType="orderType" :page="page"/>
+           <delivery-reconciliation-list :orderType="orderType" :page="page" @onAdvancedSearch="onAdvancedSearch"/>
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -88,7 +88,8 @@ export default {
       queryFormData: {
         keyword: '',
         cooperator: '',
-        status: '',
+        states: 'PENDING_RECONCILED',
+        partyType: "PARTYA",
         expectedDeliveryDateFrom: '',
         expectedDeliveryDateTo: ''
       },
@@ -99,35 +100,53 @@ export default {
     }
   },
   methods: {
-    searchDelivery (page, size) {
-      // TODO 接口查询
+    async searchDelivery (page, size) {
+      const query = Object.assign({}, this.queryFormData);
 
-      this.$nextTick(() => {
-        this.changeTagPosition();
-      })
+      const url = this.apis().getDeliveryList();
+      const result = await this.$http.post(url, query, {
+        page: page,
+        size: size
+      });
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+
+      this.$set(this, 'page', result);
     },
-    searchReconciliation (page, size) {
-      // TODO 接口查询
+    async searchReconciliation (page, size) {
+      const query = Object.assign({}, this.queryFormData);
 
-      this.$nextTick(() => {
-        this.changeTagPosition();
-      })
+      const url = this.apis().getReconciliationV2List();
+      const result = await this.$http.post(url, query, {
+        page: page,
+        size: size
+      });
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+
+      this.$set(this, 'page', result);
     },
     handleClick (tab, event) {
-      this.queryFormData.status = tab.name;
+      this.queryFormData.states = tab.name;
       if (tab.name === 'PENDING_RECONCILED') {
         this.orderType = 'DELIVERY';
-        this.searchDelivery();
+        this.searchDelivery(0, 10);
       } else {
         this.orderType = 'RECONCILIATION';
-        this.searchReconciliation();
+        this.searchReconciliation(0, 10);
       }
     },
-    onAdvancedSearch () {
+    onAdvancedSearch (page, size) {
       if (this.orderType === 'DELIVERY') {
-        this.searchDelivery();
+        this.searchDelivery(page, size);
       } else if (this.orderType === 'RECONCILIATION') {
-        this.searchReconciliation();
+        this.searchReconciliation(page, size);
       }
     },
     changeTagPosition () {
@@ -139,18 +158,17 @@ export default {
         this.tagWidth = this.$refs.tag.$el.scrollWidth
       }
       this.tagPosition = this.tagWidth + count < this.$refs.tabs.$el.scrollWidth;
-    }
+    },
+
   },
   mounted() {
-    let that = this;
-    window.addEventListener('resize', function () {
-      that.$nextTick(() => {
-        that.changeTagPosition();
-      })
-    })
+    window.addEventListener('resize', this.changeTagPosition);
   },
   created () {
     this.searchDelivery(0, 10);
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.changeTagPosition);
   }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
   <div>
     <template v-if="orderType === 'DELIVERY'">
-      <delivery-orders-list :page="page"/>
+      <delivery-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
     </template>
     <template v-if="orderType === 'RECONCILIATION'">
-      <reconciliation-orders-list-v2 :page="page"/>
+      <reconciliation-orders-list-v2 :page="page" @onAdvancedSearch="onAdvancedSearch"/>
     </template>
   </div>  
 </template>
@@ -19,6 +19,11 @@ export default {
   components: {
     ReconciliationOrdersListV2,
     DeliveryOrdersList
+  },
+  methods: {
+    onAdvancedSearch (page, size) {
+      this.$emit('onAdvancedSearch', page, size);
+    }
   }
 }
 </script>

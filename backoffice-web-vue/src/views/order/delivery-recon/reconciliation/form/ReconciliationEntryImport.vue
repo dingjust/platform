@@ -14,9 +14,29 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="产品名称" prop="product.name"></el-table-column>
+      <el-table-column label="产品名称" prop="product.name">
+        <template slot-scope="scope">
+          <div title="此款号产品不在数据库中，请点击左侧按钮添加产品">
+            <span v-if="scope.row.product.id">{{scope.row.product.name}}</span>
+            <span v-else class="noth-product">
+              {{scope.row.product.name}}
+              <i class="el-icon-warning" style="color: #F56C6C"/>
+            </span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="波段" prop="波段"></el-table-column>
-      <el-table-column label="产品款号" prop="product.skuID"></el-table-column>
+      <el-table-column label="产品款号">
+        <template slot-scope="scope">
+          <div title="此款号产品不在数据库中，请点击左侧按钮添加产品">
+            <span v-if="scope.row.product.id">{{scope.row.product.skuID}}</span>
+            <span v-else class="noth-product">
+              {{scope.row.product.skuID}}
+              <i class="el-icon-warning" style="color: #F56C6C" />
+            </span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="订单款号" prop="订单款号"></el-table-column>
       <el-table-column label="交货时间" prop="交货时间" min-width="85"></el-table-column>
       <el-table-column label="合同时间" prop="合同时间" min-width="85"></el-table-column>
@@ -76,16 +96,16 @@ export default {
           deliveryDate: new Date(row['交货时间'].replace(/-|\./g, '/')).getTime(),
           contractDate: new Date(row['合同时间'].replace(/-|\./g, '/')).getTime(),
           customizedMode: row['定作方式'],
-          orderQuantity: row['下单数'] + '',
-          cutQuantity: row['裁数'] + '',
-          packageQuantity: row['装箱单数'] + '',
-          storageQuantity: row['正品入库数'] + '',
-          unitContractPrice: row['合同单价(不含税）'] + '',
-          loanAmount: row['货款金额'] + '',
-          expressFee: row['快递费'] + '',
-          deductionAmount: row['扣款'] + '',
-          returnQuantity: row['退货'] + '',
-          settlementAmount: row['结算金额'] + '',
+          orderQuantity: row['下单数'],
+          cutQuantity: row['裁数'],
+          packageQuantity: row['装箱单数'],
+          storageQuantity: row['正品入库数'],
+          unitContractPrice: row['合同单价(不含税）'],
+          loanAmount: row['货款金额'],
+          expressFee: row['快递费'],
+          deductionAmount: row['扣款'],
+          returnQuantity: row['退货'],
+          settlementAmount: row['结算金额'],
           remarks: row['备注']
         };
       });
@@ -97,10 +117,10 @@ export default {
       this.operateIndex = index;
     },
     onSelectSample (products) {
-      this.tableData.entries[this.operateIndex].product.skuID = products[0].skuID;
-      this.tableData.entries[this.operateIndex].product.name = products[0].name;
-      this.tableData.entries[this.operateIndex].product.id = products[0].id;
-      this.tableData.entries[this.operateIndex].product.thumbnail = products[0].thumbnail;
+      this.tableData[this.operateIndex].product.skuID = products[0].skuID;
+      this.tableData[this.operateIndex].product.name = products[0].name;
+      this.tableData[this.operateIndex].product.id = products[0].id;
+      this.tableData[this.operateIndex].product.thumbnail = products[0].thumbnail;
       this.productDialog = false;
     },
     beforeUpload(file) {
@@ -149,7 +169,7 @@ export default {
               // 字符串类型去除内容中的回车
               item[element] = row[key].replace(/[\r\n]/g,"").trim();
             } else {
-              item[element] = row[key];
+              item[element] = row[key] + '';
             }
           }
         }
@@ -169,15 +189,44 @@ export default {
       this.validateSkuID(tableC);
     },
     async validateSkuID (tableC) {
-      let products = tableC.map(row => row['product']);  
-      console.log(products)
+      let skuIDs = tableC.map(row => row['product'].skuID);  
+      // 去重,转换为 ,分隔的字符串
+      skuIDs = [...new Set(skuIDs)].join(',');
+
+      const url = this.apis().checkProductBySkuID();
+      const result = await this.$http.get(url, {
+        skuIds: skuIDs
+      });
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+      }
+
+      this.handleData(tableC, result);
+    },
+    handleData (tableC, result) {
+      let index;
+      tableC.forEach(item => {
+        index = result.findIndex(val => val.skuID === item.product.skuID);
+        if (index > -1) {
+          item.product.id = result[index].id;
+          item.product.thumbnail = result[index].thumbnail;
+        }
+      })
 
       this.$set(this, 'tableData', tableC);
     },
     onImport () {
+      // 判断数据是否合法
+      let badData = this.tableData.filter(item => !item.product.id);
+      if (badData.length > 0) {
+        this.$message.error('存在数据行没有产品，请先处理！');
+        return;
+      }
+
       this.$emit('onImport', this.sumbitData);
     },
-    // excel日期格式出来
+    // excel日期格式处理
     formatDate (numb) {
       var second = 25569,
               day_timestamp = 24 * 60 * 60 * 1000;
@@ -355,5 +404,9 @@ export default {
     .select-icon {
       color: #409eff;
     }
+  }
+
+  .noth-product {
+    color: #C0C4CC;
   }
 </style>

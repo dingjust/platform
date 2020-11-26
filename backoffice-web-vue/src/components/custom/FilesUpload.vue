@@ -2,12 +2,12 @@
   <div class="animated fadeIn image-upload">
     <el-row :gutter="10">
       <el-col :span="24">
-        <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" :disabled="disabled"
+        <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" :disabled="disabled" ref="upload"
           :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
           :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
           :class="{disabled:uploadDisabled,picClass:picClass}">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip" style="margin-top:10px;">文件大小不超过5M</div>
+          <el-button size="small" type="primary" v-if="!readOnly">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip" style="margin-top:10px;" v-if="!readOnly">文件大小不超过5M</div>
         </el-upload>
       </el-col>
     </el-row>
@@ -98,7 +98,12 @@
       },
       handleExceed(files, fileList) {
         this.$message.warning('当前限制选择' + this.limit + ' 个图片');
-      }
+      },
+      isUploading() {
+        let index = this.$refs.upload.uploadFiles.findIndex(file => file.status == 'uploading' || file.status ==
+          'ready');
+        return index != -1;
+      },
     },
     computed: {
       fileList: function () {

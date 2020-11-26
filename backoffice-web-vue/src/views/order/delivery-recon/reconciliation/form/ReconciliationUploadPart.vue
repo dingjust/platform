@@ -1,16 +1,18 @@
 <template>
   <el-row class="upload-part">
     <el-row type="flex">
-      <h6 class="title-text">合同</h6>
+      <h6 class="title-text">纸质对账单
+        <span style="color: #909399">(把已签署的对账单文件扫描上传到订单附件中作为备份)</span>
+      </h6>
     </el-row>
     <el-row type="flex" class="basic-container">
-      <images-upload :slotData="formData.contract" />
+      <images-upload ref="imageUpload" :slotData="formData.paperSheetMedias" :limit="1"/>
     </el-row>
     <el-row type="flex">
       <h6 class="title-text">附件</h6>
     </el-row>
     <el-row type="flex" class="basic-container">
-      <files-upload :slotData="formData.enclosure" />
+      <files-upload ref="filesUpload" :slotData="formData.medias" />
     </el-row>
   </el-row>
 </template>

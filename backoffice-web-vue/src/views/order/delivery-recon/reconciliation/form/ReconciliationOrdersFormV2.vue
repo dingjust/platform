@@ -7,12 +7,15 @@
         </div>
       </el-row>
       <div class="pt-2"></div>
-      <el-form :model="formData" :inline="true" class="form-container">
+      <el-form ref="form" :model="formData" :inline="true" class="form-container">
         <reconciliation-orders-form-v2-header :formData="formData" />
         <reconciliation-info-table :formData="formData" />
         <reconciliation-approvers-part :formData="formData"/>
-        <reconciliation-upload-part :formData="formData"/>
+        <reconciliation-upload-part ref="uploadPart" :formData="formData"/>
       </el-form>
+      <el-row type="flex" justify="center">
+        <el-button class="sumbit-btn" @click="onCreate">创建</el-button>
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -34,41 +37,92 @@ export default {
   data () {
     return {
       formData: {
+        title: '',
         fastShippingSheets: [
           {
             id: '',
             code: ''
           }
         ],
-        entries: [
-          // {
-          //   product: {
-          //     id: '',
-          //     name: '',
-          //     thumbnail: '',
-          //     skuID: ''
-          //   },
-          //   waveBand: '',
-          //   orderItemNo: '',
-          //   customizedMode: '',
-          //   deliveryDate: '',
-          //   contractDate: '',
-          //   orderQuantity: '',
-          //   cutQuantity: '',
-          //   packageQuantity: '',
-          //   storageQuantity: '',
-          //   returnQuantity: '',
-          //   unitContractPrice: '',
-          //   loanAmount: '',
-          //   expressFee: '',
-          //   deductionAmount: '',
-          //   settlementAmount: '',
-          //   remarks: ''
-          // }
-        ],
+        cooperator: '',
+        entries: [],
+        isApproval: true,
         approvers: [null],
-        enclosure: [],
-        contract: []
+        paperSheetMedias: [],
+        medias: []
+      }
+    }
+  },
+  methods: {
+    validateField(name) {
+      this.$refs.form.validateField(name);
+    },
+    onCreate () {
+      if (this.$refs.uploadPart.$refs.imageUpload.isUploading() || 
+          this.$refs.uploadPart.$refs.filesUpload.isUploading()) {
+        this.$message.warning('文件正在上传，请稍等...');
+        return;
+      }
+
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this._onCreate();
+        } else {
+          this.$message.error('请完善表单信息！');
+        }
+      })
+    },
+    async _onCreate () {
+      let data = Object.assign({}, this.formData);
+      // 人员设置数据处理
+      if (!this.formData.isApproval) {
+        data.approvers = [];
+      } else {
+        // 处理级联选择数据
+        data.approvers = [];
+        this.formData.approvers.forEach(item => {
+          if (item instanceof Array && item.length > 0) {
+            data.approvers.push({
+              id: item[item.length - 1]
+            });
+          }
+        })
+      }
+
+      const url = this.apis().createReconciliationV2();
+      const result = await this.$http.post(url, data);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+
+      this.$message.success('创建成功！');
+      this.$router.push('/order/delivery-Reconciliation');
+    }
+  },
+  watch: {
+    'formData.approvers': function (nval, oval) {
+      this.formData.approvers.forEach((item, index) => {
+        this.validateField('approvers.' + index);
+      })
+    },
+    'formData.isApproval': function (nval, oval) {
+      this.formData.approvers.forEach((item, index) => {
+        this.$refs.form.clearValidate('approvers.' + index);
+      })
+    }
+  },
+  created () {
+    if (this.$route.params.order) {
+      this.formData.fastShippingSheets[0].id = this.$route.params.order.id;
+      this.formData.fastShippingSheets[0].code = this.$route.params.order.code;
+      
+      this.formData.cooperator = {
+        id: this.$route.params.order.cooperator.id,
+        name: this.$route.params.order.cooperator.type === 'ONLINE' ? 
+              this.$route.params.order.cooperator.partner.name : 
+              this.$route.params.order.cooperator.name
       }
     }
   }
@@ -83,5 +137,12 @@ export default {
 
   .form-container {
     margin: 0 0 0 20px;
+  }
+
+  .sumbit-btn {
+    background-color: #ffd60c;
+    border-color: #ffd60c;
+    color: #606266;
+    width: 80px;
   }
 </style>

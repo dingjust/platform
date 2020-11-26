@@ -15,7 +15,7 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
         <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
-          <reconciliation-orders-list-v2 :page="page"/>
+          <reconciliation-orders-list-v2 :page="page" @onAdvancedSearch="onAdvancedSearch"/>
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -71,7 +71,8 @@ export default {
       queryFormData: {
         keyword: '',
         cooperator: '',
-        status: '',
+        states: 'PENDING_B_SIGN',
+        partyType: "PARTYA",
         expectedDeliveryDateFrom: '',
         expectedDeliveryDateTo: ''
       }
@@ -83,7 +84,7 @@ export default {
     }),
     onAdvancedSearch (page, size) {
       const query = this.queryFormData;
-      const url = this.apis().getoutboundOrdersList();
+      const url = this.apis().getReconciliationV2List();
       this.searchAdvanced({
         url,
         query,
@@ -92,7 +93,7 @@ export default {
       });
     },
     handleClick (tab, event) {
-      this.queryFormData.status = tab.name;
+      this.queryFormData.states = tab.name;
       this.onAdvancedSearch(0, 10);
     }
   },
