@@ -10,6 +10,7 @@ import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/out_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/out_orders_page.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/out_production_task_order/out_production_task_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_order_entry_detail.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_orders_page.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
@@ -111,6 +112,8 @@ class AppRoutes with GlobalRoutes {
       '/business/orders/sales_production/production_task_order/detail';
   static const ROUTE_PRODUCTION_TASK_ORDERS =
       '/business/orders/sales_production/production_task_orders';
+  static const ROUTE_OUT_PRODUCTION_TASK_ORDERS =
+      '/business/orders/sales_production/out_production_task_orders';
 
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
@@ -194,6 +197,7 @@ class AppRoutes with GlobalRoutes {
         ProductionTaskOrderEntryDetailPage(
             id: ModalRoute.of(context).settings.arguments),
     ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage(),
+    ROUTE_OUT_PRODUCTION_TASK_ORDERS: (context) => OutProductionTaskOrdersPage(),
     ROUTE_OUT_ORDER_FORM: (context) => OutOrderForm(),
     ROUTE_COOPERATORS: (context) => CooperatorsPage(),
     ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm()
