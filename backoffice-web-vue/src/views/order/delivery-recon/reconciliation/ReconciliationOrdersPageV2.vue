@@ -14,7 +14,7 @@
     <reconciliation-orders-toolbar-v2 :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
           <reconciliation-orders-list-v2 :page="page" @onAdvancedSearch="onAdvancedSearch"/>
         </el-tab-pane>
       </template>
@@ -70,19 +70,20 @@ export default {
       ],
       queryFormData: {
         keyword: '',
-        cooperator: '',
+        cooperatorName: '',
         states: 'PENDING_B_SIGN',
-        partyType: "PARTYA",
-        expectedDeliveryDateFrom: '',
-        expectedDeliveryDateTo: ''
-      }
+        // partyType: "PARTYA",
+        createdDateFrom: '',
+        createdDateTo: ''
+      },
+      stateCount: {},
     }
   },
   methods: {
     ...mapActions({
       searchAdvanced: 'searchAdvanced'
     }),
-    onAdvancedSearch (page, size) {
+    onAdvancedSearch (page, size, isTabChange) {
       const query = this.queryFormData;
       const url = this.apis().getReconciliationV2List();
       this.searchAdvanced({
@@ -91,10 +92,39 @@ export default {
         page,
         size
       });
+
+      // 获取统计信息
+      if (!isTabChange) {
+        this.getReconciliationV2ListCount();
+      }
+    },
+    async getReconciliationV2ListCount () {
+      let query = Object.assign({}, this.queryFormData);
+      query.states = '';
+
+      const url = this.apis().getReconciliationV2ListCount();
+      const result = await this.$http.post(url, query);
+      if (result['errors']) {
+        this.stateCount = {};
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.stateCount = {};
+        this.$message.error(result.msg);
+        return;
+      }
+      this.stateCount = result.data;
+    },
+    tabName(tab) {
+      if (this.stateCount.hasOwnProperty(tab.code)) {
+        return tab.name + '(' + this.stateCount[tab.code] + ')';
+      }
+      return tab.name;
     },
     handleClick (tab, event) {
       this.queryFormData.states = tab.name;
-      this.onAdvancedSearch(0, 10);
+      this.onAdvancedSearch(0, 10, true);
     }
   },
   created () {

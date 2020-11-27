@@ -21,7 +21,7 @@
       </div>
       <el-tabs ref="tabs" v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+          <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
            <delivery-reconciliation-list :orderType="orderType" :page="page" @onAdvancedSearch="onAdvancedSearch"/>
           </el-tab-pane>
         </template>
@@ -87,21 +87,22 @@ export default {
       ],
       queryFormData: {
         keyword: '',
-        cooperator: '',
+        cooperatorName: '',
         states: 'PENDING_RECONCILED',
-        partyType: "PARTYB",
-        expectedDeliveryDateFrom: '',
-        expectedDeliveryDateTo: ''
+        // partyType: "PARTYB",
+        createdDateFrom: '',
+        createdDateTo: ''
       },
       deliveryVisible: false,
       reconciliationVisible: false,
       tagPosition: true,
-      tagWidth: 0
+      tagWidth: 0,
+      stateCount: {}
     }
   },
   methods: {
     async searchDelivery (page, size) {
-      this.queryFormData.partyType = 'PARTYB';
+      // this.queryFormData.partyType = 'PARTYB';
       const query = Object.assign({}, this.queryFormData);
 
       const url = this.apis().getDeliveryList();
@@ -118,7 +119,7 @@ export default {
       this.$set(this, 'page', result);
     },
     async searchReconciliation (page, size) {
-      this.queryFormData.partyType = 'PARTYA';
+      // this.queryFormData.partyType = 'PARTYA';
       const query = Object.assign({}, this.queryFormData);
 
       const url = this.apis().getReconciliationV2List();
@@ -138,18 +139,69 @@ export default {
       this.queryFormData.states = tab.name;
       if (tab.name === 'PENDING_RECONCILED') {
         this.orderType = 'DELIVERY';
-        this.searchDelivery(0, 10);
       } else {
         this.orderType = 'RECONCILIATION';
-        this.searchReconciliation(0, 10);
       }
+
+      this.onAdvancedSearch(0, 10, true);
     },
-    onAdvancedSearch (page, size) {
+    onAdvancedSearch (page, size, isTabChange) {
       if (this.orderType === 'DELIVERY') {
         this.searchDelivery(page, size);
       } else if (this.orderType === 'RECONCILIATION') {
         this.searchReconciliation(page, size);
       }
+
+      // 获取统计信息
+      if (!isTabChange) {
+        this.getCount();
+      }
+    },
+    getCount () {
+      this.getDeliveryListCount();
+      this.getReconciliationV2ListCount();
+    },
+    async getDeliveryListCount () {
+      let query = Object.assign({}, this.queryFormData);
+      query.states = '';
+
+      const url = this.apis().getDeliveryListCount();
+      const result = await this.$http.post(url, query);
+      if (result['errors']) {
+        this.stateCount = {};
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.stateCount = {};
+        this.$message.error(result.msg);
+        return;
+      }
+      this.stateCount = Object.assign(this.stateCount, result.data);
+    },
+    async getReconciliationV2ListCount () {
+      let query = Object.assign({}, this.queryFormData);
+      query.states = '';
+
+      const url = this.apis().getReconciliationV2ListCount();
+      const result = await this.$http.post(url, query);
+      if (result['errors']) {
+        this.stateCount = {};
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.stateCount = {};
+        this.$message.error(result.msg);
+        return;
+      }
+      this.stateCount = Object.assign(this.stateCount, result.data);
+    },
+    tabName(tab) {
+      if (this.stateCount.hasOwnProperty(tab.code)) {
+        return tab.name + '(' + this.stateCount[tab.code] + ')';
+      }
+      return tab.name;
     },
     changeTagPosition () {
       let count = 20;
@@ -167,7 +219,7 @@ export default {
     window.addEventListener('resize', this.changeTagPosition);
   },
   created () {
-    this.searchDelivery(0, 10);
+    this.onAdvancedSearch(0, 10);
   },
   destroyed () {
     window.removeEventListener('resize', this.changeTagPosition);

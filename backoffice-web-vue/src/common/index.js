@@ -1711,6 +1711,10 @@ let NONE_TENANT_APIS = {
   getDeliveryList () {
     return '/b2b/sheets/fast/shipping';
   },
+  // 获取出货单列表统计
+  getDeliveryListCount () {
+    return '/b2b/sheets/fast/shipping/state/count';
+  },
   // 获取出货单详情
   getDeliveryDetail (id) {
     return '/b2b/sheets/fast/shipping/' + id;
@@ -1722,6 +1726,10 @@ let NONE_TENANT_APIS = {
   // 获取新对账单列表
   getReconciliationV2List () {
     return '/b2b/sheets/fast/reconciliation';
+  },
+  // 获取新对账单列表统计
+  getReconciliationV2ListCount () {
+    return '/b2b/sheets/fast/reconciliation/state/count';
   },
   // 创建新对账单
   createReconciliationV2 () {

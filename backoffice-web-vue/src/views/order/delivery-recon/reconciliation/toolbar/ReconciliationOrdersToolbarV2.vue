@@ -2,10 +2,10 @@
   <el-form :inline="true" class="delivery-recon-toolbar">
     <div>
       <el-form-item label="订单信息">
-        <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.name"></el-input>
+        <el-input placeholder="请输入订单号，标题" v-model="queryFormData.keyword"></el-input>
       </el-form-item>
       <el-form-item label="合作商">
-        <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.coopeartor"></el-input>
+        <el-input placeholder="请输入合作商名称" v-model="queryFormData.cooperatorName"></el-input>
       </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
@@ -41,18 +41,18 @@ export default {
     },
     onReset () {
       this.queryFormData.keyword = '';
-      this.queryFormData.coopeartor = '';
+      this.queryFormData.cooperatorName = '';
       this.dateArr = null;
     }
   },
   watch: {
     dateArr: function (newVal, oldVal) {
       if (newVal == null) {
-        this.queryFormData.expectedDeliveryDateFrom = null;
-        this.queryFormData.expectedDeliveryDateTo = null;
+        this.queryFormData.createdDateFrom = null;
+        this.queryFormData.createdDateTo = null;
       } else {
-        this.queryFormData.expectedDeliveryDateFrom = newVal[0];
-        this.queryFormData.expectedDeliveryDateTo = newVal[1];
+        this.queryFormData.createdDateFrom = newVal[0];
+        this.queryFormData.createdDateTo = newVal[1];
       }
     }
   },

@@ -25,7 +25,8 @@
         <h6 class="basic-text">标题：{{order.title}}</h6>
       </el-row>
       <el-row type="flex" justify="start" class="basic-container">
-        <h6 class="basic-text">合作商：{{order.cooperator.name}}</h6>
+        <h6 class="basic-text">合作商：{{order.receiveParty && order.receiveParty.uid === currentUserUid ? 
+                  order.shipParty.name : order.receiveParty.name}}</h6>
       </el-row>
       <el-row type="flex" justify="start" class="basic-container">
         <h6 class="basic-text" style="min-width: 48px;">单据：</h6>
@@ -58,6 +59,8 @@ export default {
   data () {
     return {
       order: {
+        receiveParty: {},
+        shipParty: {},
         cooperator: {}
       },
       currentUserUid: this.$store.getters.currentUser.uid

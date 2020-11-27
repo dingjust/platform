@@ -5,8 +5,10 @@
       <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="合作商" min-width="200px">
         <template slot-scope="scope">
-          <span v-if="scope.row.receiveParty">{{scope.row.receiveParty.uid === currentUserUid ? 
-                  scope.row.shipParty.name : scope.row.receiveParty.name}}</span>
+          <span v-if="scope.row.receiveParty">
+            {{scope.row.receiveParty && scope.row.receiveParty.uid === currentUserUid ? 
+                  scope.row.shipParty.name : scope.row.receiveParty.name}}
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间">

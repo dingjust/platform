@@ -14,7 +14,7 @@
     <delivery-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
     <el-tabs v-model="activeName" @tab-click="handleClick" v-if="!isSelection">
       <template v-for="item in statuses">
-        <el-tab-pane :label="item.name" :name="item.code" :key="item.code" />
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code" />
       </template>
     </el-tabs>
     <delivery-orders-list ref="list" :page="page" @onAdvancedSearch="onAdvancedSearch" 
@@ -81,19 +81,20 @@ export default {
       ],
       queryFormData: {
         keyword: '',
-        cooperator: '',
+        cooperatorName: '',
         states: 'PENDING_RECONCILED',
-        expectedDeliveryDateFrom: '',
-        expectedDeliveryDateTo: '',
-        partyType: "PARTYB"
-      }
+        createdDateFrom: '',
+        createdDateTo: '',
+        // partyType: "PARTYB"
+      },
+      stateCount: {},
     }
   },
   methods: {
     ...mapActions({
       searchAdvanced: 'searchAdvanced'
     }),
-    onAdvancedSearch (page, size) {
+    onAdvancedSearch (page, size, isTabChange) {
       const query = this.queryFormData;
       const url = this.apis().getDeliveryList();
       this.searchAdvanced({
@@ -102,10 +103,39 @@ export default {
         page,
         size
       });
+
+      // 获取统计信息
+      if (!isTabChange) {
+        this.getDeliveryListCount();
+      }
+    },
+    async getDeliveryListCount () {
+      let query = Object.assign({}, this.queryFormData);
+      query.states = '';
+
+      const url = this.apis().getDeliveryListCount();
+      const result = await this.$http.post(url, query);
+      if (result['errors']) {
+        this.stateCount = {};
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.stateCount = {};
+        this.$message.error(result.msg);
+        return;
+      }
+      this.stateCount = result.data;
+    },
+    tabName(tab) {
+      if (this.stateCount.hasOwnProperty(tab.code)) {
+        return tab.name + '(' + this.stateCount[tab.code] + ')';
+      }
+      return tab.name;
     },
     handleClick (tab, event) {
       this.queryFormData.states = tab.name;
-      this.onAdvancedSearch(0, 10);
+      this.onAdvancedSearch(0, 10, true);
     },
     onSelect () {
       this.$emit('onSelect', this.$refs.list.currentRow);

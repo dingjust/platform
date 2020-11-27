@@ -15,7 +15,14 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column label="合作商" prop="cooperator.name" min-width="200px" />
+      <el-table-column label="合作商" min-width="200px">
+        <template slot-scope="scope">
+          <span v-if="scope.row.receiveParty">
+            {{scope.row.receiveParty && scope.row.receiveParty.uid === currentUserUid ? 
+                  scope.row.shipParty.name : scope.row.receiveParty.name}}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
