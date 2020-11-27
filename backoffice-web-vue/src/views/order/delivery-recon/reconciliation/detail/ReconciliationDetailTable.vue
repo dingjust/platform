@@ -1,11 +1,12 @@
 <template>
   <div>
-    <el-table :data="order.entries" border >
+    <el-table :data="tableData" border v-if="order.entries">
       <el-table-column label="产品图片" min-width="80px">
         <template slot-scope="scope">
           <div v-if="scope.row.product && scope.row.product.images[0].id && scope.row.product.images[0].id !== ''"> 
             <img :src="scope.row.product.images[0].url" style="width: 50px; height: 50px"/>
           </div>
+          <span v-else-if="scope.row.countRow">{{scope.row.countRow}}</span>
         </template>
       </el-table-column>
       <el-table-column label="产品名称" prop="product.name" min-width="120px" />
@@ -45,7 +46,45 @@
 <script>
 export default {
   name: 'ReconciliationDetailTable',
-  props: ['order']
+  props: ['order'],
+  computed: {
+    tableData: function () {
+      let data = [];
+      data = data.concat(this.order.entries);
+      if (this.order.entries && this.order.entries.length > 0) {
+        data.push({
+          countRow: '合计',
+          orderQuantity: this.countColumn(this.order.entries, 'orderQuantity'),
+          cutQuantity: this.countColumn(this.order.entries, 'cutQuantity'),
+          packageQuantity: this.countColumn(this.order.entries, 'packageQuantity'),
+          storageQuantity: this.countColumn(this.order.entries, 'storageQuantity'),
+          // unitContractPrice: this.countColumn(this.order.entries, 'unitContractPrice'),
+          loanAmount: this.countColumn(this.order.entries, 'loanAmount'),
+          expressFee: this.countColumn(this.order.entries, 'expressFee'),
+          deductionAmount: this.countColumn(this.order.entries, 'deductionAmount'),
+          returnQuantity: this.countColumn(this.order.entries, 'returnQuantity'),
+          settlementAmount: this.countColumn(this.order.entries, 'settlementAmount')
+        });
+      }
+      return data;
+    }
+  },
+  methods: {
+    countColumn (arr, attribute) {
+      let count = 0;
+      arr.forEach(item => {
+        if (!Number.isNaN(Number.parseFloat(item[attribute]))) {
+          count += Number.parseFloat(item[attribute]);
+        }
+      })
+      
+      let regexp = /^.*\.0*$/;
+      if (regexp.test(count.toFixed(2) + '')) {
+        return count.toFixed(0) == 0 ? '' : count.toFixed(0);
+      }
+      return count.toFixed(2);
+    },
+  }
 }
 </script>
 

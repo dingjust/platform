@@ -54,14 +54,14 @@ export default {
       this.$emit('onAdvancedSearch', 0, val);
 
       this.$nextTick(() => {
-        this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        this.$refs.resultTable.bodyWrapper.scrollTop = 0;
       });
     },
     onCurrentPageChanged(val) {
       this.$emit('onAdvancedSearch', val - 1, 10);
 
       this.$nextTick(() => {
-        this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        this.$refs.resultTable.bodyWrapper.scrollTop = 0;
       });
     },
     onDetail (row) {

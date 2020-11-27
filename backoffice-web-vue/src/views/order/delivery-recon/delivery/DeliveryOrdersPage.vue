@@ -12,7 +12,7 @@
     </el-row>
     <div class="pt-2"></div>
     <delivery-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick" v-if="!isSelection">
       <template v-for="item in statuses">
         <el-tab-pane :label="item.name" :name="item.code" :key="item.code" />
       </template>
@@ -82,10 +82,10 @@ export default {
       queryFormData: {
         keyword: '',
         cooperator: '',
-        states: '',
+        states: 'PENDING_RECONCILED',
         expectedDeliveryDateFrom: '',
         expectedDeliveryDateTo: '',
-        partyType: "PARTYA"
+        partyType: "PARTYB"
       }
     }
   },

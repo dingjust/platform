@@ -19,11 +19,25 @@
       <reconciliation-detail-table class="basic-container" v-if="order.id" :order="order"/>
       <el-row type="flex" class="basic-container">
         <div><h6>附件：</h6></div>
-        <files-upload :slotData="order.medias" :readOnly="true" :disabled="true"/>
+        <files-upload v-if="order.medias && order.medias.length > 0" :slotData="order.medias" :readOnly="true" :disabled="true"/>
       </el-row>
-      <template v-if="order.auditWorkOrder && order.auditWorkOrder.processes && order.auditWorkOrder.processes.length > 0">
-        <order-audit-detail class="basic-container" :processes="order.auditWorkOrder.processes" />
-      </template>
+      <div v-if="!isCooperator">
+        <template v-if="order.auditWorkOrder && order.auditWorkOrder.processes && order.auditWorkOrder.processes.length > 0">
+          <order-audit-detail class="basic-container" :processes="order.auditWorkOrder.processes" />
+        </template>
+        <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
+          <el-col :span="3">
+            <authorized :permission="['DO_AUDIT']">
+              <el-button class="material-btn_red" @click="onApproval(false)">审核驳回</el-button>
+            </authorized>
+          </el-col>
+          <el-col :span="3">
+            <authorized :permission="['DO_AUDIT']">
+              <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
+            </authorized>
+          </el-col>
+        </el-row>
+      </div>
     </el-card>
   </div>
 </template>
@@ -43,11 +57,32 @@ export default {
     FilesUpload,
     ReconciliationDetailHeader
   },
+  computed: {
+    isCooperator: function () {
+      return this.order.cooperator.type === 'ONLINE' && 
+              this.order.cooperator.partner.uid === this.$store.getters.currentUser.companyCode;
+    },
+    canAudit: function () {
+      if (this.order.state !== 'PENDING_APPROVAL') {
+        return false;
+      }
+      // 订单审核状态在待审核且登陆账号为审核人
+      if (this.order.approvers != null) {
+        let flag = this.order.approvers.some(item => item.uid === this.$store.getters.currentUser.uid);
+        return this.order.auditWorkOrder.currentUserAuditState == 'AUDITING' && flag;
+      } else {
+        return false;
+      }
+    },
+  },
   data () {
     return {
       order: {
         receiveParty: {},
-        shipParty: {}
+        shipParty: {},
+        cooperator: {
+          partner: ''
+        }
       }
     }
   },
@@ -67,6 +102,62 @@ export default {
 
       this.order = result.data;  
     },
+    //审批
+    onApproval(isPass) {
+      if (this.order.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
+        this.order.auditWorkOrder.currentUserAuditState === 'AUDITING') {
+        if (isPass) {
+          this.$confirm('是否确认审核通过?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this._onApproval(isPass, '');
+          });
+        } else {
+          this.$prompt('请输入不通过原因', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }).then(({
+            value
+          }) => {
+            this._onApproval(isPass, value);
+          }).catch(() => {
+            //TODO:取消操作
+          });
+        }
+      } else if (this.order.auditWorkOrder.currentUserAuditState === 'AUDITING' &&
+        this.order.auditWorkOrder.auditingUser.uid !== this.$store.getters.currentUser.uid) {
+        this.$message.warning('此订单暂未轮到您进行审批。')
+      } else if (this.order.auditWorkOrder.currentUserAuditState === 'PASSED') {
+        this.$message.warning('您已对此订单进行了审批。');
+      }
+    },
+    async _onApproval(isPass, auditMsg) {
+      let formData = {
+        id: this.order.auditWorkOrder.id,
+        auditMsg: auditMsg,
+        state: isPass ? 'PASSED' : 'AUDITED_FAILED'
+      };
+      const url = this.apis().taskAudit();
+      const result = await this.$http.post(url, formData);
+      if (result.code == 0) {
+        this.$message.error(result.msg);
+        return
+      }
+      this.$message.success('审批成功');
+
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      setTimeout(() => {
+        loading.close();
+        this.getDetail();
+      }, 1000);
+    },
   },
   created () {
     this.getDetail();
@@ -85,4 +176,19 @@ export default {
     margin: 0 0 20px 12px;
   }
 
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
+  }
+
+  .material-btn_red {
+    background-color: red;
+    /* border-color: #FFD5CE; */
+    color: white;
+    width: 90px;
+    height: 35px;
+  }
 </style>

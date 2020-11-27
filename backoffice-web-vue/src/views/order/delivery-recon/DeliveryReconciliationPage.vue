@@ -89,7 +89,7 @@ export default {
         keyword: '',
         cooperator: '',
         states: 'PENDING_RECONCILED',
-        partyType: "PARTYA",
+        partyType: "PARTYB",
         expectedDeliveryDateFrom: '',
         expectedDeliveryDateTo: ''
       },
@@ -101,6 +101,7 @@ export default {
   },
   methods: {
     async searchDelivery (page, size) {
+      this.queryFormData.partyType = 'PARTYB';
       const query = Object.assign({}, this.queryFormData);
 
       const url = this.apis().getDeliveryList();
@@ -117,6 +118,7 @@ export default {
       this.$set(this, 'page', result);
     },
     async searchReconciliation (page, size) {
+      this.queryFormData.partyType = 'PARTYA';
       const query = Object.assign({}, this.queryFormData);
 
       const url = this.apis().getReconciliationV2List();

@@ -139,6 +139,8 @@ import brands from '@/store/modules/user/brands';
           case 'ProductionPurchaseOrder':
             this.$router.push('/purchase/order/' + row.auditModel.id);
             break;
+          case 'FastReconciliationSheet':
+            this.$router.push('/order/reconciliation/' + row.auditModel.id);
         }
       },
       onApproval(row) {

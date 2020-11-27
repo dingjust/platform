@@ -9,22 +9,66 @@
                   order.shipParty.name : order.receiveParty.name}}</h6>
       </el-row>
     </el-col>
-    <el-col :xs="6" :sm="6">
+    <el-col :xs="6" :sm="6" v-if="order.docSignatures">
       <div class="info-box">
-        <h6>电子合同</h6>
+        <el-row type="flex" justify="start">
+          <h6>电子合同</h6>
+        </el-row>
+        <el-row>
+          <template v-for="item in order.docSignatures">
+            <el-col :span="6" :key="item.code" @click.native="showPDF(item)" class="contract-item" style="width: 60px">
+              <el-row type="flex" justify="center" align="middle">
+                <div>
+                  <img style="width: 100%" src="static/img/word.png"/>
+                </div>
+              </el-row>
+              <!-- <el-row type="flex" justify="center" align="middle">
+                <h6 class="state-title">{{item.state === 'COMPLETE' ? '(已签署)' : '(未签署)'}}</h6>
+              </el-row> -->
+            </el-col>
+          </template>
+        </el-row>
       </div>
     </el-col>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <doc-signatures :fileUrl="fileUrl" :pdfItem="pdfItem" :order="order"/>
+    </el-dialog>
   </el-row>
 </template>
 
 <script>
+import DocSignatures from '@/views/order/delivery-recon/components/DocSignatures'
 export default {
   name: 'ReconciliationDetailHeader',
   props: ['order'],
+  components: {
+    DocSignatures
+  },
   data () {
     return {
-      currentUserUid: this.$store.getters.currentUser.uid
+      currentUserUid: this.$store.getters.currentUser.uid,
+      fileUrl: '',
+      pdfVisible: false,
+      pdfItem: ''
     }
+  },
+  methods: {
+    async showPDF (item) {
+      this.pdfItem = item;
+
+      const url = this.apis().getDocToken(item.code);
+      const result = await this.$http.get(url);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+
+      const aa = '/b2b/doc/signature/download/' + result.data + '/' + item.code;
+
+      this.fileUrl = encodeURIComponent(aa);
+      this.pdfVisible = true;
+    },
   }
 }
 </script>
@@ -50,5 +94,14 @@ export default {
     border: 1px solid #dcdfe6;
     border-radius: 10px;
     padding: 5px 0px 0px 5px;
+  }
+
+  .contract-item {
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .contract-item:hover {
+    background-color: #ffd60c;
   }
 </style>

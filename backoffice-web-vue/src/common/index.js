@@ -1730,6 +1730,13 @@ let NONE_TENANT_APIS = {
   // 查询对账单详情
   getReconciliationV2Detail (id) {
     return '/b2b/sheets/fast/reconciliation/' + id;
+  },
+  // 获取doc token
+  getDocToken (code) {
+    return '/b2b/doc/signature/get/download/token/' + code;
+  },
+  doDocSign (code) {
+    return '/b2b/doc/signature/' + code;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

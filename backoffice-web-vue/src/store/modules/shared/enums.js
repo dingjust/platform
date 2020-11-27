@@ -1803,6 +1803,9 @@ const state = {
   }, {
     code: 'ProductionPurchaseOrder',
     name: '采购单'
+  }, {
+    code: 'FastReconciliationSheet',
+    name: '出货对账单'
   }],
   // 外发模式
   ManagementMode: [{
