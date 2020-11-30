@@ -110,8 +110,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                   }
                 }
 
-                return _buildProductionProgress(
-                    context, _index++, _currentStatus);
+                return _buildProductionProgress(context, _index++, _currentStatus);
               }).toList(),
             ),
             decoration: BoxDecoration(
