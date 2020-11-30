@@ -1,13 +1,15 @@
 <template>
   <div>
-    <el-row type="flex" justify="end" style="margin-bottom: 20px" v-if="canSign">
-      <el-button type="warning" class="toolbar-search_input" @click="onSign">签署
-      </el-button>
+    <el-row type="flex" justify="end" style="margin-bottom: 20px">
+      <el-button type="warning" @click="onDownload" class="toolbar-search_input">下载</el-button>
+      <el-button type="warning" class="toolbar-search_input" v-if="canSign" @click="onSign">签署</el-button>
     </el-row>
     <div>
-      <iframe id='previewPdf' :src="'static/pdf/web/viewer.html?file=' + fileUrl"
+      <!-- <iframe id='previewPdf' :src="'static/pdf/web/viewer.html?file=' + fileUrl" -->
+      <iframe id='previewPdf' :src="fileUrl"
         height="480" width="100%">
       </iframe>
+      <a id="a"  target="_blank"></a>
     </div>
     <el-dialog :visible.sync="dialogSealVisible" width="60%" :show-close="true" :close-on-click-modal="false" append-to-body>
       <contract-seal-list v-if="dialogSealVisible" :page="sealPage" @onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
@@ -26,12 +28,10 @@ export default {
   },
   computed: {
     canSign: function () {
-      if (this.order.cooperator.type === 'ONLINE' && 
-          this.order.cooperator.partner.uid === this.$store.getters.currentUser.companyCode) {
-            console.log(this.order.type);
-        return this.order.state === 'PENDING_B_SIGN';
-      } else {
-        return this.order.state === 'PENDING_A_SIGN';
+      if (this.order.state === 'PENDING_B_SIGN') {
+        return this.order.shipParty.uid === this.$store.getters.currentUser.companyCode;
+      } else if (this.order.state === 'PENDING_A_SIGN') {
+        return this.order.receiveParty.uid === this.$store.getters.currentUser.companyCode;
       }
     }
   },
@@ -92,6 +92,12 @@ export default {
         this.$message.error(result.msg);
       }
     },
+    async onDownload () {
+      const url = this.apis().getDocToken(this.pdfItem.code);
+      const result = await this.$http.get(url);
+
+      window.location.href = '/b2b/doc/signature/download/' + result.data + '/' + this.pdfItem.code;
+    }
   }
 }
 </script>

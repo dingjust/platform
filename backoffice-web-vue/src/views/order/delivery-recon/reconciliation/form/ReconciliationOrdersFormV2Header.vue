@@ -71,8 +71,8 @@ export default {
       this.formData.fastShippingSheets[0].id = row.id;
 
       this.formData.cooperator = {
-        id: row.cooperator.id,
-        name: row.cooperator.type === 'ONLINE' ? row.cooperator.partner.name : row.cooperator.name
+        id: row.targetCooperator.id,
+        name: row.targetCooperator.type === 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name
       }
       this.deliveryVisible = false;
     },

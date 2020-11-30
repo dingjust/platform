@@ -15,7 +15,7 @@
           <h6>状态：{{getEnum('ReconciliationV2Type', order.state)}}</h6>
         </el-col>
       </el-row>
-      <reconciliation-detail-header :order="order" />
+      <reconciliation-detail-header :order="order" @showPDF="showPDF"/>
       <reconciliation-detail-table class="basic-container" v-if="order.id" :order="order"/>
       <el-row type="flex" class="basic-container">
         <div><h6>附件：</h6></div>
@@ -39,6 +39,10 @@
         </el-row>
       </div>
     </el-card>
+    <!-- 展示pdf组件 -->
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+      <doc-signatures v-if="pdfVisible" :fileUrl="fileUrl" :pdfItem="pdfItem" :order="order"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -47,6 +51,7 @@ import ReconciliationDetailTable from './ReconciliationDetailTable'
 import ReconciliationDetailHeader from './ReconciliationDetailHeader'
 import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
 import { FilesUpload } from '@/components'
+import DocSignatures from '@/views/order/delivery-recon/components/DocSignatures'
 
 export default {
   name: 'ReconciliationOrdersDetailV2',
@@ -55,7 +60,8 @@ export default {
     ReconciliationDetailTable,
     OrderAuditDetail,
     FilesUpload,
-    ReconciliationDetailHeader
+    ReconciliationDetailHeader,
+    DocSignatures
   },
   computed: {
     isCooperator: function () {
@@ -83,7 +89,10 @@ export default {
         cooperator: {
           partner: ''
         }
-      }
+      },
+      pdfVisible: false,
+      fileUrl: '',
+      pdfItem: ''
     }
   },
   methods: {
@@ -100,7 +109,21 @@ export default {
         return;
       }
 
-      this.order = result.data;  
+      this.$set(this, 'order', result.data);
+    },
+    async showPDF (item) {
+      await this.getDetail();
+
+      const index = this.order.docSignatures.findIndex(val => val.id === item.id);
+      if (index > -1) {
+        this.pdfItem = this.order.docSignatures[index];
+        this.fileUrl = this.order.docSignatures[index].docPdf.url;
+      } else {
+        this.pdfItem = '';
+        this.fileUrl = '';
+      }
+
+      this.pdfVisible = true;
     },
     //审批
     onApproval(isPass) {

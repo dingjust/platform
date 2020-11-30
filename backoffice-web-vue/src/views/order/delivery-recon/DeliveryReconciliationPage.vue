@@ -157,9 +157,12 @@ export default {
         this.getCount();
       }
     },
-    getCount () {
-      this.getDeliveryListCount();
-      this.getReconciliationV2ListCount();
+    async getCount () {
+      await this.getDeliveryListCount();
+      await this.getReconciliationV2ListCount();
+
+      // 通过 this.$set 刷新组件显示
+      this.$set(this.stateCount, 'loading', true);
     },
     async getDeliveryListCount () {
       let query = Object.assign({}, this.queryFormData);

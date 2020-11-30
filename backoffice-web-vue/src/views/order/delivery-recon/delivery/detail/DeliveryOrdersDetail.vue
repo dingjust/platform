@@ -25,8 +25,7 @@
         <h6 class="basic-text">标题：{{order.title}}</h6>
       </el-row>
       <el-row type="flex" justify="start" class="basic-container">
-        <h6 class="basic-text">合作商：{{order.receiveParty && order.receiveParty.uid === currentUserUid ? 
-                  order.shipParty.name : order.receiveParty.name}}</h6>
+        <h6 class="basic-text">合作商：{{order.cooperator.type === 'ONLINE' ? order.cooperator.partner.name : order.cooperator.name}}</h6>
       </el-row>
       <el-row type="flex" justify="start" class="basic-container">
         <h6 class="basic-text" style="min-width: 48px;">单据：</h6>
@@ -46,7 +45,7 @@
         <h6 class="basic-text">备注：{{order.remarks}}</h6>
       </el-row>
       <el-row v-if="order.state === 'PENDING_RECONCILED'" type="flex" justify="center">
-        <el-button type="primary" size="medium" class="reconciliation-btn" @click="onReconciliation">去对账</el-button>
+        <el-button type="primary" size="medium" class="reconciliation-btn" v-if="canRecon" @click="onReconciliation">去对账</el-button>
       </el-row>
     </el-card>
   </div>
@@ -56,6 +55,12 @@
 export default {
   name: 'DeliveryOrdersDetail',
   props: ['id'],
+  computed: {
+    canRecon: function () {
+      // receiveParty 才能创建对账单
+      return this.order.receiveParty.uid === this.$store.getters.currentUser.companyCode
+    }
+  },
   data () {
     return {
       order: {

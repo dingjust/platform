@@ -5,8 +5,7 @@
         <h6 class="basic-text">标题：{{order.title}}</h6>
       </el-row>
       <el-row type="flex" justify="start" class="basic-container">
-        <h6 class="basic-text">合作商：{{order.receiveParty && order.receiveParty.uid === currentUserUid ? 
-                  order.shipParty.name : order.receiveParty.name}}</h6>
+        <h6 class="basic-text">合作商：{{order.cooperator.type === 'ONLINE' ? order.cooperator.partner.name : order.cooperator.name}}</h6>
       </el-row>
     </el-col>
     <el-col :xs="6" :sm="6" v-if="order.docSignatures">
@@ -30,20 +29,13 @@
         </el-row>
       </div>
     </el-col>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
-      <doc-signatures :fileUrl="fileUrl" :pdfItem="pdfItem" :order="order"/>
-    </el-dialog>
   </el-row>
 </template>
 
 <script>
-import DocSignatures from '@/views/order/delivery-recon/components/DocSignatures'
 export default {
   name: 'ReconciliationDetailHeader',
   props: ['order'],
-  components: {
-    DocSignatures
-  },
   data () {
     return {
       currentUserUid: this.$store.getters.currentUser.uid,
@@ -53,21 +45,8 @@ export default {
     }
   },
   methods: {
-    async showPDF (item) {
-      this.pdfItem = item;
-
-      const url = this.apis().getDocToken(item.code);
-      const result = await this.$http.get(url);
-
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-
-      const aa = '/b2b/doc/signature/download/' + result.data + '/' + item.code;
-
-      this.fileUrl = encodeURIComponent(aa);
-      this.pdfVisible = true;
+    showPDF (item) {
+      this.$emit('showPDF', item);
     },
   }
 }
