@@ -231,6 +231,7 @@ flutter:
     - packages/assets/temp/auth_success.png
     - packages/assets/temp/common/dingding_logo.png
     - packages/assets/temp/business/delivery.png
+    - packages/assets/temp/business/reconciliation.png
 
   fonts:
     - family: b2bIcons

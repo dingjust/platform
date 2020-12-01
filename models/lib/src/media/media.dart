@@ -47,6 +47,9 @@ class MediaModel extends ItemModel {
   static Map<String, dynamic> toJson(MediaModel model) =>
       model == null ? null : _$MediaModelToJson(model);
 
+  static List<Map<String, dynamic>> listToJson(List<MediaModel> models) =>
+      models == null ? null : models.map((e) => _$MediaModelToJson(e)).toList();
+
   static List<String> convertedMediasToJson(List<MediaModel> convertedMedias) =>
       null;
 

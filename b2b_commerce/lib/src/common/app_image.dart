@@ -53,6 +53,9 @@ class MenuItemImage {
 
   ///发货
   static Image delivery = getImage('temp/business/delivery.png');
+
+  ///对账
+  static Image reconciliation = getImage('temp/business/reconciliation.png');
 }
 
 class B2BImage {

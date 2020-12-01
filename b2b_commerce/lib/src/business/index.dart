@@ -136,6 +136,12 @@ class BrandMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.externalOrder, '外接订单',
                     AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS,
                     authorizations: [Authorization.PURCHASE_ORDER]),
+                buildChild(
+                  context,
+                  MenuItemImage.reconciliation,
+                  '对账单',
+                  AppRoutes.ROUTE_RECONCILIATION_ORDERS,
+                )
               ],
             )
           ],
@@ -417,6 +423,8 @@ class FactoryMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.externalOrder, '外接订单',
                     AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS,
                     authorizations: [Authorization.PURCHASE_ORDER]),
+                buildChild(context, MenuItemImage.reconciliation, '对账单',
+                    AppRoutes.ROUTE_RECONCILIATION_ORDERS),
               ],
             )
           ],

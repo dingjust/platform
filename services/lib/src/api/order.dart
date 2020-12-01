@@ -80,8 +80,7 @@ class OrderApis {
       };
 
   //批量修改生产进度预计完成时间
-  static get progressEstimatedDateUploads =>
-          (code, id) {
+  static get progressEstimatedDateUploads => (code, id) {
         return '/{baseSiteId}/orders/purchase/$code/progresses';
       };
 
@@ -452,5 +451,15 @@ class OrderApis {
   static get deliveryOrderDetail =>
           (id) {
         return '/{baseSiteId}/sheets/fast/shipping/$id';
+      };
+
+  ///快速对账单-查询
+  static get reconciliationOrderList =>
+      '/{baseSiteId}/sheets/fast/reconciliation';
+
+  ///快速对账单-详情
+  static get reconciliationOrderDetail =>
+          (id) {
+        return '/{baseSiteId}/sheets/fast/reconciliation/$id';
       };
 }

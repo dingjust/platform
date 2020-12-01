@@ -7,7 +7,11 @@ import 'package:permission_handler/permission_handler.dart';
 class WebviewPage extends StatefulWidget {
   String url;
 
-  WebviewPage({Key key, this.url = ''}) : super(key: key);
+  ///是否重定向到合同列表
+  bool needRedirectContractList;
+
+  WebviewPage({Key key, this.url = '', this.needRedirectContractList = true})
+      : super(key: key);
 
   @override
   _WebviewPageState createState() => _WebviewPageState();
@@ -23,8 +27,6 @@ class _WebviewPageState extends State<WebviewPage> {
     _permissionsInit();
     // flutterWebviewPlugin.
     flutterWebviewPlugin.onUrlChanged.listen((String url) async {
-      print(url);
-      print(url.contains('result_code=3000'));
       if (url.contains('result_code=3000')) {
         _goContractListPage = true;
       }
@@ -43,7 +45,7 @@ class _WebviewPageState extends State<WebviewPage> {
         ),
         onWillPop: () {
           //签署成功跳转到合同列表页
-          if (_goContractListPage) {
+          if (_goContractListPage && widget.needRedirectContractList) {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => MyContractPage()),

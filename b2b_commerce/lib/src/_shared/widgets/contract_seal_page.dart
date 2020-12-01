@@ -1,23 +1,14 @@
-import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
-class ContractSealPage extends StatefulWidget {
-  ContractModel model;
-  bool isSelect;
-
-  ContractSealPage({
-    this.model,
-    this.isSelect = true,
-  });
-  _ContractSealPageState createState() => _ContractSealPageState();
+class ContractSealSelectPage extends StatefulWidget {
+  _ContractSealSelectPageState createState() => _ContractSealSelectPageState();
 }
 
-class _ContractSealPageState extends State<ContractSealPage> {
+class _ContractSealSelectPageState extends State<ContractSealSelectPage> {
   ScrollController scrollController = ScrollController();
   List<SealModel> sealList;
 
@@ -70,9 +61,7 @@ class _ContractSealPageState extends State<ContractSealPage> {
   Widget _buildItems(BuildContext context, SealModel model) {
     return GestureDetector(
       onTap: () {
-        if (widget.isSelect) {
-          flowContract(widget.model?.code, model);
-        }
+        Navigator.of(context).pop(model);
       },
       child: Container(
         child: Column(
@@ -100,8 +89,7 @@ class _ContractSealPageState extends State<ContractSealPage> {
             height: 400,
             imageUrl: '${model.media.actualUrl}',
             fit: BoxFit.fill,
-            imageBuilder: (context, imageProvider) =>
-                Container(
+            imageBuilder: (context, imageProvider) => Container(
                   width: 200,
                   height: 400,
                   decoration: BoxDecoration(
@@ -112,14 +100,12 @@ class _ContractSealPageState extends State<ContractSealPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-            placeholder: (context, url) =>
-                SpinKitRing(
+            placeholder: (context, url) => SpinKitRing(
                   color: Colors.black,
                   lineWidth: 1,
                   size: 20,
                 ),
-            errorWidget: (context, url, error) =>
-                SpinKitRing(
+            errorWidget: (context, url, error) => SpinKitRing(
                   color: Colors.black,
                   lineWidth: 1,
                   size: 20,
@@ -144,62 +130,6 @@ class _ContractSealPageState extends State<ContractSealPage> {
         ),
       ),
     );
-  }
-
-  flowContract(String code, SealModel sealModel) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return RequestDataLoading(
-            requestCallBack:
-            ContractRepository().flowContract(code, sealModel.code),
-            outsideDismiss: false,
-            loadingText: '请稍候。。。',
-            entrance: '',
-          );
-        }).then((value) {
-      Certification certification = value;
-      if (certification != null) {
-        if (certification.data != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WebviewPage(url: certification.data)),
-          );
-        } else {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return CustomizeDialog(
-                  dialogType: DialogType.RESULT_DIALOG,
-                  failTips: certification.msg,
-                  callbackResult: false,
-                  confirmAction: () {
-                    Navigator.of(context).pop();
-                    Navigator.pop(context);
-                  },
-                );
-              });
-        }
-      } else {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.RESULT_DIALOG,
-                failTips: '签署失败',
-                callbackResult: false,
-                confirmAction: () {
-                  Navigator.of(context).pop();
-                  Navigator.pop(context);
-                },
-              );
-            });
-      }
-    });
   }
 
   Future<List<SealModel>> _getData() async {

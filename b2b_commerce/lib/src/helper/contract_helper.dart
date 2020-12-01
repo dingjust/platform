@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/my/contract/contract_detail_page.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +26,17 @@ class ContractHelper {
     String dir = (await getApplicationDocumentsDirectory()).path;
     String fileName = pdf.name;
     String filePath = "$dir/$fileName";
-    var dio = new Dio();
+    // var dio = new Dio();
 
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
-      client.idleTimeout = new Duration(seconds: 0);
-    };
-    Response response = await dio.download(pdf.actualUrl, filePath);
+    // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (client) {
+    //   client.idleTimeout = new Duration(seconds: 0);
+    // };
+
+    // Response response = await dio.download(pdf.actualUrl, filePath);
+
+    Response response = await http$.download(pdf.actualUrl, filePath);
+
     cancelFunc.call();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ContractDetailPage(

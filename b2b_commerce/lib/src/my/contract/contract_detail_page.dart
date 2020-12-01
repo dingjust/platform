@@ -454,7 +454,6 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ContractSealPage(
-                                sealList: sealList,
                                 model: widget.contractModel,
                               )),
                     ).then((v) {
@@ -845,7 +844,6 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ContractSealPage(
-                                sealList: sealList,
                                 model: widget.contractModel,
                               )),
                     ).then((val) {

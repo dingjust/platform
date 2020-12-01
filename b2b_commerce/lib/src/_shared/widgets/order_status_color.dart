@@ -47,3 +47,16 @@ const DELIVERY_ORDER_STATUS_COLORS = {
 Color getDeliveryOrderStateColor(LogisticsSheetState state) {
   return DELIVERY_ORDER_STATUS_COLORS[state] ?? Colors.black54;
 }
+
+///  对账单状态颜色
+const RECONCILIATION_ORDER_STATUS_COLORS = {
+  FastReconciliationSheetState.PENDING_B_SIGN: Colors.blueAccent,
+  FastReconciliationSheetState.PENDING_APPROVAL: Color(0xffff9800),
+  FastReconciliationSheetState.PENDING_A_SIGN: Colors.yellowAccent,
+  FastReconciliationSheetState.COMPLETED: Colors.green,
+  FastReconciliationSheetState.CANCELLED: Colors.red
+};
+
+Color getReconciliationOrderStateColor(FastReconciliationSheetState state) {
+  return RECONCILIATION_ORDER_STATUS_COLORS[state] ?? Colors.black54;
+}

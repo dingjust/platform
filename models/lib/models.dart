@@ -39,6 +39,7 @@ export 'src/user/user_group.dart';
 export 'src/user_agreement/user_agreement.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
+export 'src/doc/doc_signature.dart';
 
 part 'models.g.dart';
 

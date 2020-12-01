@@ -134,32 +134,37 @@ class FastShippingSheetModel extends LogisticsSheetModel {
   @JsonKey(toJson: CooperatorModel.toJson)
   CooperatorModel cooperator;
 
-  FastShippingSheetModel({int id,
-    String code,
-    CompanyModel shipParty,
-    CompanyModel receiveParty,
-    AddressModel deliveryAddress,
-    B2BCustomerModel merchandiser,
-    B2BCustomerModel productionLeader,
-    B2BCustomerModel creator,
-    List<MediaModel> medias,
-    CooperatorModel targetCooperator,
-    DateTime creationtime,
-    this.title,
-    this.state,
-    this.cooperator})
+  ///对账单
+  FastReconciliationSheetModel fastReconciliationSheet;
+
+  FastShippingSheetModel(
+      {int id,
+      String code,
+      CompanyModel shipParty,
+      CompanyModel receiveParty,
+      AddressModel deliveryAddress,
+      B2BCustomerModel merchandiser,
+      B2BCustomerModel productionLeader,
+      B2BCustomerModel creator,
+      List<MediaModel> medias,
+      CooperatorModel targetCooperator,
+      DateTime creationtime,
+      this.title,
+      this.state,
+      this.cooperator,
+      this.fastReconciliationSheet})
       : super(
-      id: id,
-      code: code,
-      shipParty: shipParty,
-      receiveParty: receiveParty,
-      deliveryAddress: deliveryAddress,
-      merchandiser: merchandiser,
-      productionLeader: productionLeader,
-      creator: creator,
-      medias: medias,
-      targetCooperator: targetCooperator,
-      creationtime: creationtime);
+            id: id,
+            code: code,
+            shipParty: shipParty,
+            receiveParty: receiveParty,
+            deliveryAddress: deliveryAddress,
+            merchandiser: merchandiser,
+            productionLeader: productionLeader,
+            creator: creator,
+            medias: medias,
+            targetCooperator: targetCooperator,
+            creationtime: creationtime);
 
   factory FastShippingSheetModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FastShippingSheetModelFromJson(json);
@@ -174,6 +179,8 @@ class FastShippingSheetModel extends LogisticsSheetModel {
 /// 快速对账单
 @JsonSerializable()
 class FastReconciliationSheetModel extends LogisticsSheetModel {
+  String title;
+
   ///状态
   FastReconciliationSheetState state;
 
@@ -199,6 +206,13 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
   @JsonKey(toJson: FastReconciliationSheetEntryModel.listToJson)
   List<FastReconciliationSheetEntryModel> entries;
 
+  @JsonKey(toJson: CooperatorModel.toJson)
+  CooperatorModel cooperator;
+
+  ///签署文档
+  @JsonKey(toJson: DocSignatureModel.listToJson)
+  List<DocSignatureModel> docSignatures;
+
   FastReconciliationSheetModel({int id,
     String code,
     CompanyModel shipParty,
@@ -210,12 +224,15 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
     List<MediaModel> medias,
     CooperatorModel targetCooperator,
     DateTime creationtime,
+    this.title,
     this.state,
     this.fastShippingSheets,
     this.isApproval,
     this.approvers,
     this.auditWorkOrder,
-    this.reconciliationQuantity})
+    this.reconciliationQuantity,
+    this.cooperator,
+    this.docSignatures})
       : super(
       id: id,
       code: code,
@@ -234,7 +251,8 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
 
   Map<String, dynamic> toJson() => _$FastReconciliationSheetModelToJson(this);
 
-  static List<Map<String, dynamic>> mediasToJson(List<FastReconciliationSheetModel> medias) =>
+  static List<Map<String, dynamic>> mediasToJson(
+      List<FastReconciliationSheetModel> medias) =>
       medias == null ? null : medias.map((media) => media.toJson()).toList();
 }
 

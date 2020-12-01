@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -177,10 +178,9 @@ class _DeliveryOrderFormState extends State<DeliveryOrderForm> {
       if (response != null && response.code == 1) {
         BotToast.showText(text: '提交成功');
         //跳转到
-        // Navigator.of(context).pushReplacementNamed(
-        //     AppRoutes.ROUTE_DELIVERY_ORDER_DETAIL,
-        //     arguments: {'id': response.data, 'needRefresh': true});
-        Navigator.of(context).pop(true);
+        Navigator.of(context).pushReplacementNamed(
+            AppRoutes.ROUTE_DELIVERY_ORDER_DETAIL,
+            arguments: {'id': response.data, 'needRefresh': true});
       } else if (response != null && response.code == 0) {
         BotToast.showText(text: '${response.msg}');
       } else {

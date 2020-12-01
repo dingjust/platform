@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperator_item.dart';
-import 'package:b2b_commerce/src/business/orders/recon/fast_reconciliation_sheet_info.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
+import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +10,25 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class DeliveryOrderDetailPage extends StatefulWidget {
+///对账单详情
+class ReconciliationOrderDetailPage extends StatefulWidget {
   final int id;
 
   ///说否需要回退刷新
   final bool needRefresh;
 
-  const DeliveryOrderDetailPage({Key key, this.id, this.needRefresh = false})
+  const ReconciliationOrderDetailPage(
+      {Key key, this.id, this.needRefresh = false})
       : super(key: key);
 
   @override
-  _DeliveryOrderDetailPageState createState() =>
-      _DeliveryOrderDetailPageState();
+  _ReconciliationOrderDetailPageState createState() =>
+      _ReconciliationOrderDetailPageState();
 }
 
-class _DeliveryOrderDetailPageState extends State<DeliveryOrderDetailPage> {
-  FastShippingSheetModel order;
+class _ReconciliationOrderDetailPageState
+    extends State<ReconciliationOrderDetailPage> {
+  FastReconciliationSheetModel order;
 
   ///是否需要回调刷新
   bool needRefresh = false;
@@ -40,16 +43,16 @@ class _DeliveryOrderDetailPageState extends State<DeliveryOrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<FastShippingSheetModel>(
+    return FutureBuilder<FastReconciliationSheetModel>(
       builder: (BuildContext context,
-          AsyncSnapshot<FastShippingSheetModel> snapshot) {
+          AsyncSnapshot<FastReconciliationSheetModel> snapshot) {
         if (snapshot.data != null && order != null) {
           return WillPopScope(
               onWillPop: onPop,
               child: Scaffold(
                 appBar: AppBar(
                   centerTitle: true,
-                  title: Text('出货单详情'),
+                  title: Text('对账单详情'),
                   backgroundColor: Constants.THEME_COLOR_MAIN,
                   elevation: 0.5,
                 ),
@@ -61,9 +64,6 @@ class _DeliveryOrderDetailPageState extends State<DeliveryOrderDetailPage> {
                         model: order.cooperator,
                       ),
                       _main(),
-                      FastReconSheetBlock(
-                        sheet: order.fastReconciliationSheet,
-                      ),
                       _OrderInfo(
                         order: order,
                       )
@@ -93,11 +93,11 @@ class _DeliveryOrderDetailPageState extends State<DeliveryOrderDetailPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text('.${LogisticsSheetStateLocalizedMap[order.state]}',
+          Text('.${FastReconciliationSheetStateLocalizedMap[order.state]}',
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: getDeliveryOrderStateColor(order.state)))
+                  color: getReconciliationOrderStateColor(order.state)))
         ],
       ),
     );
@@ -131,12 +131,18 @@ class _DeliveryOrderDetailPageState extends State<DeliveryOrderDetailPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
-                children: [FormLabel('单据：')],
+                children: [FormLabel('电子对账单：')],
               ),
             ),
-            Row(
-              children: [Expanded(child: Attachments(list: order.medias))],
+            _buildDocs(),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [FormLabel('附件：')],
+              ),
             ),
+            _buildAttachments(),
             Container(
               margin: EdgeInsets.only(top: 10),
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -160,10 +166,10 @@ class _DeliveryOrderDetailPageState extends State<DeliveryOrderDetailPage> {
   }
 
   /// 查询明细
-  Future<FastShippingSheetModel> _getData() async {
+  Future<FastReconciliationSheetModel> _getData() async {
     if (order == null) {
-      FastShippingSheetModel detailModel =
-          await DeliveryOrderRespository.getDetail(widget.id);
+      FastReconciliationSheetModel detailModel =
+          await ReconciliationOrderRespository.getDetail(widget.id);
       order = detailModel;
     }
     return order;
@@ -178,11 +184,56 @@ class _DeliveryOrderDetailPageState extends State<DeliveryOrderDetailPage> {
       return true;
     }
   }
+
+  Widget _buildAttachments() {
+    return (order?.medias != null && order.medias.isNotEmpty)
+        ? Row(
+            children: [Expanded(child: Attachments(list: order?.medias ?? []))],
+          )
+        : Container();
+  }
+
+  Widget _buildDocs() {
+    return Row(children: [
+      for (DocSignatureModel doc in order?.docSignatures ?? []) _buildBtn(doc)
+    ]);
+  }
+
+  Widget _buildBtn(DocSignatureModel model,
+      {double height = 65, double width = 80}) {
+    return Container(
+      height: height,
+      width: width,
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      child: Material(
+        color: Colors.white,
+        child: InkWell(
+          onTap: () {
+            DocSignatureHelper.open(context: context, model: model);
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                B2BIcons.agreement,
+                color: Color(0xffffca3a),
+                size: 40,
+              ),
+              Text(
+                '${DocSignatureStateLocalizedMap[model.state]}',
+                style: TextStyle(color: Colors.grey),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 ///订单基础信息
 class _OrderInfo extends StatelessWidget {
-  final FastShippingSheetModel order;
+  final FastReconciliationSheetModel order;
 
   final TextStyle _infoStyle = const TextStyle(color: Colors.grey);
 
@@ -241,9 +292,9 @@ class _OrderInfo extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-                '$val',
-                style: _infoStyle,
-              ))
+            '$val',
+            style: _infoStyle,
+          ))
         ],
       );
     }
