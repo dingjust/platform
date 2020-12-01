@@ -45,6 +45,7 @@ dependencies:
   bot_toast: ^3.0.4
   video_player: ^0.11.0
   video_thumbnail: ^0.2.2
+  flutter_image_compress: ^0.7.0
 
 dev_dependencies:
   flutter_test:
