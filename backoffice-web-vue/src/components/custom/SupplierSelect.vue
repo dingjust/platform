@@ -155,7 +155,8 @@
             name: this.selectSupplier.partner.name,
             person: this.selectSupplier.partner.contactPerson,
             phone: this.selectSupplier.partner.contactPhone,
-            payPlan: this.selectSupplier.payPlan
+            payPlan: this.selectSupplier.payPlan,
+            approvalStatus: this.selectSupplier.partner.approvalStatus
           };
         } else {
           result = {
@@ -163,7 +164,8 @@
             name: this.selectSupplier.name,
             person: this.selectSupplier.contactPerson,
             phone: this.selectSupplier.contactPhone,
-            payPlan: this.selectSupplier.payPlan
+            payPlan: this.selectSupplier.payPlan,
+            approvalStatus: this.selectSupplier.approvalStatus
           };
         }
         this.$emit('onSelect', result);

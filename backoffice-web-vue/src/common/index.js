@@ -1,819 +1,819 @@
 const COMMON_APIS = {
   // 注册
-  fastRegister(type) {
+  fastRegister (type) {
     return '/b2b/companies/register/fast/' + type;
   },
   // 是否已注册
-  checkRegistered(phone) {
+  checkRegistered (phone) {
     return '/b2b/companies/register/' + phone;
   },
   // 发送短信验证码
-  sendCaptcha(phone) {
+  sendCaptcha (phone) {
     return '/b2b/sms/captcha/' + phone;
   },
   // 发送员工绑定手机号短信验证码
-  sendCaptchaByChild(uid) {
+  sendCaptchaByChild (uid) {
     return '/b2b/sms/captchaByChild/' + uid;
   },
   // 校验短信验证码
-  validateCaptcha() {
+  validateCaptcha () {
     return '/b2b/sms/validate';
   },
-  //短信重置密码
-  resetPasswordByCaptcha(id) {
+  // 短信重置密码
+  resetPasswordByCaptcha (id) {
     return '/b2b/users/anonymous/resetPasswordByCaptcha/' + id;
   },
 
-  //员工账号短信重置密码
-  resetPasswordByCaptchaForChild(uid) {
+  // 员工账号短信重置密码
+  resetPasswordByCaptchaForChild (uid) {
     return '/b2b/users/anonymous/resetPasswordByCaptchaChild/' + uid;
   },
 
-  getAmapTips(key, keyWord, city) {
+  getAmapTips (key, keyWord, city) {
     return '/amap/v3/assistant/inputtips?key=' + key + '&keywords=' + keyWord + '&city=' + city;
   },
-  changePassword(username) {
+  changePassword (username) {
     return '/b2b/users/' + username + '/password';
   },
-  getRegions() {
+  getRegions () {
     return '/b2b/addresses/CN/regions';
   },
-  getCities(parentCode) {
+  getCities (parentCode) {
     return '/b2b/addresses/' + parentCode + '/cities'
   },
-  getDistricts(parentCode) {
+  getDistricts (parentCode) {
     return '/b2b/addresses/' + parentCode + '/districts'
   },
-  getCarriers() {
+  getCarriers () {
     return '/b2b/carriers';
   },
-  findBrandAndFactory() {
+  findBrandAndFactory () {
     return '/b2b/companies/findBrandAndFactory';
   },
-  createColor() {
+  createColor () {
     return '/b2b/colors/create';
   },
-  updateColor(code) {
+  updateColor (code) {
     return '/b2b/colors/update/' + code;
   },
-  getColors() {
+  getColors () {
     return '/b2b/colors';
   },
-  getColorsSearch() {
+  getColorsSearch () {
     return '/b2b/colors/search';
   },
-  getColor(code) {
+  getColor (code) {
     return '/b2b/colors/' + code;
   },
-  getColorSearch(code) {
+  getColorSearch (code) {
     return '/b2b/colors/search/' + code;
   },
-  getAllColors() {
+  getAllColors () {
     return '/b2b/colors/all';
   },
-  createSize() {
+  createSize () {
     return '/b2b/sizes/create';
   },
-  updateSize(code) {
+  updateSize (code) {
     return '/b2b/sizes/update/' + code;
   },
-  getSizes() {
+  getSizes () {
     return '/b2b/sizes';
   },
-  getSizesSearch() {
+  getSizesSearch () {
     return '/b2b/sizes/search';
   },
-  getSize(code) {
+  getSize (code) {
     return '/b2b/sizes/' + code;
   },
-  getSizeSearch(code) {
+  getSizeSearch (code) {
     return '/b2b/sizes/search/' + code;
   },
-  getAllSizes() {
+  getAllSizes () {
     return '/b2b/sizes/all';
   },
-  createSampleProduct() {
+  createSampleProduct () {
     return '/b2b/products/sample/create';
   },
-  updateSampleProduct(code) {
+  updateSampleProduct (code) {
     return '/b2b/products/sample/update/' + code;
   },
-  getSampleProducts() {
+  getSampleProducts () {
     return '/b2b/sample/clothes';
   },
-  getSampleProduct(id) {
+  getSampleProduct (id) {
     return '/b2b/products/sample/' + id;
   },
-  createSampleCheckoutHist() {
+  createSampleCheckoutHist () {
     return '/b2b/products/sampleCheckoutHist/create';
   },
-  updateSampleCheckoutHist(id) {
+  updateSampleCheckoutHist (id) {
     return '/b2b/products/sampleCheckoutHist/update/' + id;
   },
-  getSampleCheckoutHists() {
+  getSampleCheckoutHists () {
     return '/b2b/products/sampleCheckoutHist';
   },
-  getAdvanceSampleCheckoutHists() {
+  getAdvanceSampleCheckoutHists () {
     return '/b2b/products/sampleCheckoutHist/search';
   },
-  getSampleCheckoutHist(id) {
+  getSampleCheckoutHist (id) {
     return '/b2b/products/sampleCheckoutHist/' + id;
   },
-  createCarousel() {
+  createCarousel () {
     return '/b2b/carousels/create';
   },
-  updateCarousel(id) {
+  updateCarousel (id) {
     return '/b2b/carousels/update/' + id;
   },
-  getCarousels() {
+  getCarousels () {
     return '/b2b/carousels';
   },
-  getCarousel(id) {
+  getCarousel (id) {
     return '/b2b/carousels/' + id;
   },
-  createIndustrialCluster() {
+  createIndustrialCluster () {
     return '/b2b/industrialClusters/create';
   },
-  getIndustrialClusters() {
+  getIndustrialClusters () {
     return '/b2b/industrialClusters';
   },
-  getIndustrialClustersAll() {
+  getIndustrialClustersAll () {
     return '/b2b/industrialClusters/all';
   },
-  getIndustrialCluster(code) {
+  getIndustrialCluster (code) {
     return '/b2b/industrialClusters/' + code;
   },
-  createLabel() {
+  createLabel () {
     return '/b2b/labels/create';
   },
-  updateLabel() {
+  updateLabel () {
     return '/b2b/labels/update';
   },
-  getAllLabels() {
+  getAllLabels () {
     return '/b2b/labels/all';
   },
-  getGroupLabels(group) {
+  getGroupLabels (group) {
     return '/b2b/labels/' + group + '/all';
   },
-  getIndustrialClusterLabels() {
+  getIndustrialClusterLabels () {
     return '/b2b/industrialClusters/labels';
   },
-  getLabels() {
+  getLabels () {
     return '/b2b/labels';
   },
-  getLabel(id) {
+  getLabel (id) {
     return '/b2b/labels/' + id;
   },
-  getBrandSuppliers() {
+  getBrandSuppliers () {
     return '/b2b/factories/getSuppliers';
   },
-  getFactoriesSuppliers() {
+  getFactoriesSuppliers () {
     return '/b2b/brands/getSuppliers';
   },
-  createEmployee() {
+  createEmployee () {
     return '/b2b/employees/create';
   },
-  updateEmployee(uid) {
+  updateEmployee (uid) {
     return '/b2b/employees/update/' + uid;
   },
-  getEmployees() {
+  getEmployees () {
     return '/b2b/employees';
   },
-  getEmployee(uid) {
+  getEmployee (uid) {
     return '/b2b/employees/' + uid;
   },
-  createBrand() {
+  createBrand () {
     return '/b2b/brands/new';
   },
-  updateBrand(uid) {
+  updateBrand (uid) {
     return '/b2b/brands/' + uid;
   },
-  getBrands() {
+  getBrands () {
     return '/b2b/brands';
   },
-  getBrandsByName() {
+  getBrandsByName () {
     return '/b2b/brands/searchByName';
   },
-  getBrand(uid) {
+  getBrand (uid) {
     return '/b2b/brands/' + uid;
   },
-  removeCertificateForCompany(uid, mediaID) {
+  removeCertificateForCompany (uid, mediaID) {
     return '/b2b/brands/' + uid + '/certificate/' + mediaID;
   },
-  createFactory() {
+  createFactory () {
     return '/b2b/factories/new';
   },
-  updateFactory(uid) {
+  updateFactory (uid) {
     return '/b2b/factories/' + uid;
   },
-  updateFactoryProfiles(uid) {
+  updateFactoryProfiles (uid) {
     return '/b2b/factories/' + uid + '/profiles';
   },
-  getFactories() {
+  getFactories () {
     return '/b2b/factories';
   },
-  getFactoriesByName() {
+  getFactoriesByName () {
     return '/b2b/factories/searchByName';
   },
-  getFactory(uid) {
+  getFactory (uid) {
     return '/b2b/factories/' + uid;
   },
-  createB2BCustomer() {
+  createB2BCustomer () {
     return '/b2b/b2bCustomers/create';
   },
-  updateB2BCustomer(uid) {
+  updateB2BCustomer (uid) {
     return '/b2b/b2bCustomers/update/' + uid;
   },
-  getB2BCustomers() {
+  getB2BCustomers () {
     return '/b2b/b2bCustomers';
   },
-  getPersonnelDetail(id) {
+  getPersonnelDetail (id) {
     return '/b2b/b2bCustomers/get/' + id;
   },
-  getB2BCustomerDeptList() {
+  getB2BCustomerDeptList () {
     return '/b2b/dept/tree/list';
   },
-  createB2BCustomerDept() {
+  createB2BCustomerDept () {
     return '/b2b/dept/save';
   },
-  deleteB2BCustomerDept(id) {
+  deleteB2BCustomerDept (id) {
     return '/b2b/dept/delete/' + id;
   },
-  getB2BCustomerRoleGroupList() {
+  getB2BCustomerRoleGroupList () {
     return '/b2b/role/group/list';
   },
-  saveB2BCustomerRoleGroup() {
+  saveB2BCustomerRoleGroup () {
     return '/b2b/role/group/save';
   },
-  removeB2BCustomerRoleGroup(id) {
+  removeB2BCustomerRoleGroup (id) {
     return '/b2b/role/group/delete/' + id;
   },
-  getB2BCustomerRoleGroupDetails(id) {
+  getB2BCustomerRoleGroupDetails (id) {
     return '/b2b/role/group/get/' + id;
   },
   // 启/禁用角色
-  changeRoleState(id) {
+  changeRoleState (id) {
     return '/b2b/role/group/enable/or/disable/' + id;
   },
-  getB2BCustomer(uid) {
+  getB2BCustomer (uid) {
     return '/b2b/b2bCustomers/' + uid;
   },
-  getRoleList() {
+  getRoleList () {
     return '/b2b/role/tree/list';
   },
-  createRole() {
+  createRole () {
     return '/b2b/roles/create';
   },
-  getRoles() {
+  getRoles () {
     return '/b2b/roles';
   },
-  getAllRoles() {
+  getAllRoles () {
     return '/b2b/roles';
   },
-  getRole(uid) {
+  getRole (uid) {
     return '/b2b/roles/' + uid;
   },
-  createUserGroup() {
+  createUserGroup () {
     return '/b2b/userGroups/create';
   },
-  updateUserGroup() {
+  updateUserGroup () {
     return '/b2b/userGroups/update';
   },
-  getUserGroups() {
+  getUserGroups () {
     return '/b2b/userGroups';
   },
-  getUserGroup(uid) {
+  getUserGroup (uid) {
     return '/b2b/userGroups/' + uid;
   },
-  createB2BUnit() {
+  createB2BUnit () {
     return '/b2b/b2bUnits';
   },
-  getB2BUnits() {
+  getB2BUnits () {
     return '/b2b/b2bUnits';
   },
-  getB2BUnit(uid) {
+  getB2BUnit (uid) {
     return '/b2b/b2bUnits/' + uid;
   },
-  createAddress() {
+  createAddress () {
     return '/b2b/company/addresses';
   },
-  updateAddress(id) {
+  updateAddress (id) {
     return '/b2b/company/addresses/' + id;
   },
-  removeAddress(id) {
+  removeAddress (id) {
     return '/b2b/company/addresses/' + id;
   },
-  getAddresses() {
+  getAddresses () {
     return '/b2b/company/addresses';
   },
-  getAddress(id) {
+  getAddress (id) {
     return '/b2b/company/addresses/' + id;
   },
-  getCategories() {
+  getCategories () {
     return '/b2b/categories/categories';
   },
-  getCategory(code) {
+  getCategory (code) {
     return '/b2b/categories/category/' + code;
   },
-  createCategories() {
+  createCategories () {
     return '/b2b/categories';
   },
   // 小类，级联（二级）
-  getMinorCategories() {
+  getMinorCategories () {
     return '/b2b/categories/cascaded';
   },
-  getMajorCategories() {
+  getMajorCategories () {
     return '/b2b/categories/majors';
   },
-  getApparelProduct(code) {
+  getApparelProduct (code) {
     return '/b2b/products/apparel/' + code;
   },
-  getSampleProduct(code) {
+  getSampleProduct (code) {
     return '/b2b/sample/clothes/' + code;
   },
-  onShelfProduct(code) {
+  onShelfProduct (code) {
     return '/b2b/products/apparel/' + code + '/on';
   },
-  offShelfProduct(code) {
+  offShelfProduct (code) {
     return '/b2b/products/apparel/' + code + '/off';
   },
-  deleteProduct(code) {
+  deleteProduct (code) {
     return '/b2b/products/apparel/' + code + '/deleted';
   },
-  createApparelProduct() {
+  createApparelProduct () {
     return '/b2b/products/apparel/create';
   },
-  createSampleProduct() {
+  createSampleProduct () {
     return '/b2b/sample/clothes/create';
   },
-  updateOfApparelProduct(code) {
+  updateOfApparelProduct (code) {
     return '/b2b/products/apparel/' + code;
   },
-  updateOfSampleProduct(code) {
+  updateOfSampleProduct (code) {
     return '/b2b/sample/clothes/' + code;
   },
-  updateBasicOfApparelProduct(code) {
+  updateBasicOfApparelProduct (code) {
     return '/b2b/products/apparel/' + code + '/basic';
   },
-  updateVariantsOfApparelProduct(code) {
+  updateVariantsOfApparelProduct (code) {
     return '/b2b/products/apparel/' + code + '/variants';
   },
-  updateAttributesOfApparelProduct(code) {
+  updateAttributesOfApparelProduct (code) {
     return '/b2b/products/apparel/' + code + '/attributes';
   },
-  updateImagesOfApparelProduct(code) {
+  updateImagesOfApparelProduct (code) {
     return '/b2b/products/apparel/' + code + '/images';
   },
-  getRequirementOrder(code) {
+  getRequirementOrder (code) {
     return '/b2b/orders/requirement/' + code;
   },
-  getQuotesByRequirementOrder(code) {
+  getQuotesByRequirementOrder (code) {
     return '/b2b/orders/requirement/' + code + '/quotes';
   },
-  cancelledRequirementOrder(code) {
+  cancelledRequirementOrder (code) {
     return '/b2b/orders/requirement/cancelled/' + code;
   },
-  recommendRequirementOrderToFactory(code, uid) {
+  recommendRequirementOrderToFactory (code, uid) {
     return '/b2b/orders/requirement/' + code + '/factory/' + uid + '/recommend';
   },
-  getRecommendFactories(code) {
+  getRecommendFactories (code) {
     return '/b2b/orders/requirement/' + code + '/factories';
   },
-  createRequirementOrder() {
+  createRequirementOrder () {
     return '/b2b/orders/requirement/new';
   },
-  updateRequirementOrder(code) {
+  updateRequirementOrder (code) {
     return '/b2b/orders/requirement/' + code + '/request';
   },
-  getQuote(code) {
+  getQuote (code) {
     return '/b2b/orders/quote/' + code;
   },
-  createQuote() {
+  createQuote () {
     return '/b2b/orders/quote/create';
   },
-  updateQuote(code) {
+  updateQuote (code) {
     return '/b2b/orders/quote/' + code;
   },
-  approveQuote(code) {
+  approveQuote (code) {
     return '/b2b/orders/quote/' + code + '/approve';
   },
-  rejectQuote(code) {
+  rejectQuote (code) {
     return '/b2b/orders/quote/' + code + '/reject';
   },
-  cancelQuote(code) {
+  cancelQuote (code) {
     return '/b2b/orders/quote/' + code + '/cancel';
   },
-  getPurchaseOrder(code) {
+  getPurchaseOrder (code) {
     return '/b2b/orders/purchase/' + code;
   },
-  updateDeliveryAddressOfPurchaseOrder(code) {
+  updateDeliveryAddressOfPurchaseOrder (code) {
     return '/b2b/orders/purchase/' + code + '/deliveryAddress';
   },
-  updateProgressOfPurchaseOrder(code, id) {
+  updateProgressOfPurchaseOrder (code, id) {
     return '/b2b/orders/purchase/' + code + '/progress/' + id;
   },
-  updateProgressForBatch(code) {
+  updateProgressForBatch (code) {
     return '/b2b/orders/purchase/' + code + '/progresses';
   },
   // 生成唯一码
-  generateUniqueCode(code) {
+  generateUniqueCode (code) {
     return '/b2b/orders/purchase/' + code + '/unique';
   },
   // 根据唯一码获取订单明细
-  getDetailsForUniqueCode(code) {
+  getDetailsForUniqueCode (code) {
     return '/b2b/orders/purchase/unique/' + code;
   },
   // 关联唯一码
-  linkUniqueCode(code) {
+  linkUniqueCode (code) {
     return '/b2b/orders/purchase/link/' + code;
   },
-  createPurchaseOrder() {
+  createPurchaseOrder () {
     return '/b2b/orders/purchase/create';
   },
-  createOfflinePurchaseOrder() {
+  createOfflinePurchaseOrder () {
     return '/b2b/orders/purchase/createByOffline';
   },
-  updateOfflinePurchaseOrder() {
+  updateOfflinePurchaseOrder () {
     return '/b2b/orders/purchase/updateByOffline';
   },
-  createPurchaseOrderOfQuote(quote) {
+  createPurchaseOrderOfQuote (quote) {
     return '/b2b/orders/purchase/create/' + quote;
   },
   // 创建发货单
-  createShippingOrder(code) {
+  createShippingOrder (code) {
     return '/b2b/orders/purchase/' + code + '/createShippingOrder';
   },
   // 创建全部发货单
-  confirmShipping(code) {
+  confirmShipping (code) {
     return '/b2b/orders/purchase/' + code + '/confirmShipping';
   },
   // 删除发货单
-  deleteShippingOrder(id) {
+  deleteShippingOrder (id) {
     return '/b2b/orders/purchase/deleteShippingOrder/' + id;
   },
   // 创建收货单
-  createDeliveryOrder(code) {
+  createDeliveryOrder (code) {
     return '/b2b/orders/purchase/' + code + '/createDeliveryOrder';
   },
   // 创建并提交收货单
-  createAndCommitDeliveryOrder(code) {
+  createAndCommitDeliveryOrder (code) {
     return '/b2b/orders/purchase/' + code + '/createAndCommitDeliveryOrder';
   },
   // 提交收货单
-  commitDeliveryOrder() {
+  commitDeliveryOrder () {
     return '/b2b/orders/purchase/commitDeliveryOrder';
   },
   // 保存收货单
-  updateDeliveryOrder() {
+  updateDeliveryOrder () {
     return '/b2b/orders/purchase/updateDeliveryOrder';
   },
   // 撤回收货单
-  withdrawDeliveryOrder(code) {
+  withdrawDeliveryOrder (code) {
     return '/b2b/orders/purchase/' + code + '/recallDelivery';
   },
   // 确认收货单
-  confirmDeliveryOrder(code) {
+  confirmDeliveryOrder (code) {
     return '/b2b/orders/purchase/' + code + '/confirmDelivery';
   },
   // 拒绝收货单
-  rejectDeliveryOrder(code) {
+  rejectDeliveryOrder (code) {
     return '/b2b/orders/purchase/' + code + '/rejectDelivery';
   },
   // 创建对账单
-  createReconciliationOrder(code) {
+  createReconciliationOrder (code) {
     return '/b2b/orders/purchase/' + code + '/createReconciliationOrder';
   },
   // 创建并提交对账单
-  createAndCommitReconciliationOrder(code) {
+  createAndCommitReconciliationOrder (code) {
     return '/b2b/orders/purchase/' + code + '/createAndCommitReconciliationOrder';
   },
   // 提交对账单
-  commitReconciliationOrder() {
+  commitReconciliationOrder () {
     return '/b2b/orders/purchase/commitReconciliationOrder';
   },
   // 撤回对账单
-  withdrawReconciliationOrder() {
+  withdrawReconciliationOrder () {
     return '/b2b/orders/purchase/recallReconciliationOrder';
   },
   // 确认对账单
-  confirmReconciliation(code) {
+  confirmReconciliation (code) {
     return '/b2b/orders/purchase/' + code + '/confirmReconciliation';
   },
   // 拒绝对账单
-  rejectReconciliation(code) {
+  rejectReconciliation (code) {
     return '/b2b/orders/purchase/' + code + '/rejectReconciliation';
   },
   // 确认线下生产订单
-  confirmProductionByOffline(code) {
+  confirmProductionByOffline (code) {
     return '/b2b/orders/purchase/' + code + '/confirmProductionByOffline';
   },
-  getProductionProgressReports() {
+  getProductionProgressReports () {
     return '/b2b/reports/productionProgresses';
   },
-  getProofing(code) {
+  getProofing (code) {
     return '/b2b/orders/proofing/' + code;
   },
-  updateDeliveryAddressOfProofing(code) {
+  updateDeliveryAddressOfProofing (code) {
     return '/b2b/orders/proofing/' + code + '/deliveryAddress';
   },
-  createProofing(quote) {
+  createProofing (quote) {
     return '/b2b/orders/proofing/create/' + quote;
   },
-  removeMedia(mediaID) {
+  removeMedia (mediaID) {
     return '/b2b/media/' + mediaID
   },
-  getAmountFlowDetail(id) {
+  getAmountFlowDetail (id) {
     return '/b2b/amountFlow/' + id
   },
-  findAmountFlows() {
+  findAmountFlows () {
     return '/b2b/amountFlow'
   },
-  getBill(id) {
+  getBill (id) {
     return '/b2b/bill/' + id;
   },
-  createPaymentOrder(id) {
+  createPaymentOrder (id) {
     return '/b2b/orders/purchase/confirmPayment/' + id;
   },
-  updatePaymentOrder() {
+  updatePaymentOrder () {
     return '/b2b/orders/purchase/updatePaymentOrder';
   },
-  deletePaymentOrder(id) {
+  deletePaymentOrder (id) {
     return '/b2b/orders/purchase/deletePaymentOrder/' + id;
   },
-  createReceiptOrder(id) {
+  createReceiptOrder (id) {
     return '/b2b/orders/purchase/confirmReceipt/' + id;
   },
-  updateReceiptOrder() {
+  updateReceiptOrder () {
     return '/b2b/orders/purchase/updateReceiptOrder';
   },
-  deleteReceiptOrder(id) {
+  deleteReceiptOrder (id) {
     return '/b2b/orders/purchase/deleteReceiptOrder/' + id;
   },
-  getCooperators() {
+  getCooperators () {
     return '/b2b/cooperator';
   },
-  getCooperator(id) {
+  getCooperator (id) {
     return '/b2b/cooperator/' + id;
   },
-  createCooperator() {
+  createCooperator () {
     return '/b2b/cooperator/create';
   },
-  updateCooperator() {
+  updateCooperator () {
     return '/b2b/cooperator/update';
   },
-  deleteCooperator(id) {
+  deleteCooperator (id) {
     return '/b2b/cooperator/delete/' + id;
   },
-  getPayPlans() {
+  getPayPlans () {
     return '/b2b/payPlan';
   },
-  getPayPlan(id) {
+  getPayPlan (id) {
     return '/b2b/payPlan/' + id;
   },
-  createPayPlan() {
+  createPayPlan () {
     return '/b2b/payPlan/create';
   },
-  updatePayPlan(id) {
+  updatePayPlan (id) {
     return '/b2b/payPlan/update/' + id;
   },
-  deletePayPlan(id) {
+  deletePayPlan (id) {
     return 'b2b/payPlan/delete/' + id;
   },
   // deletePayPlan (id) {
   //   return 'b2b/payPlan/delete/' + id;
   // },
-  updateUserInfo(uid) {
+  updateUserInfo (uid) {
     return 'b2b/b2bCustomers/' + uid + '/updateUserInfo';
   },
   // 公司产能
-  getCapacityList() {
+  getCapacityList () {
     return 'b2b/factory/capacity/list';
   },
-  getCapacityByCode(code) {
+  getCapacityByCode (code) {
     return 'b2b/factory/capacity/get/' + code;
   },
   // 品牌查询产能列表
-  searchCapacity() {
+  searchCapacity () {
     return 'b2b/factory/capacity/search';
   },
   // 产能切换状态
-  capacitySwitchStatus(code) {
+  capacitySwitchStatus (code) {
     return 'b2b/factory/capacity/switch/status/' + code;
   },
   // 产能刷新
-  capacityRefresh(code) {
+  capacityRefresh (code) {
     return 'b2b/factory/capacity/refresh/' + code;
   },
   // 保存
-  capacitySave() {
+  capacitySave () {
     return 'b2b/factory/capacity/save';
   },
   /// 创建生产进度单据
-  createProductionProgressOrder(id) {
+  createProductionProgressOrder (id) {
     return 'b2b/orders/purchase/progress/' + id + '/order';
   },
   /// 作废生产进度单据
-  deleteProductionProgressOrder(id, orderId) {
+  deleteProductionProgressOrder (id, orderId) {
     return 'b2b/orders/purchase/progress/' + id + '/order/' + orderId;
   },
   /// 修改生产进度单据
-  updateProductionProgressOrder(id, orderId) {
+  updateProductionProgressOrder (id, orderId) {
     return 'b2b/orders/purchase/progress/' + id + '/order/' + orderId;
   },
   /// 生意/订单/合同/财务统计
-  reportsTab1() {
+  reportsTab1 () {
     return 'b2b/company/reports/tab1';
   },
   /// 上线倒计时/交货倒计时统计
-  reportsProgress() {
+  reportsProgress () {
     return 'b2b/company/reports/progress';
   },
-  checkTempName() {
+  checkTempName () {
     return 'b2b/user/agreement/temp/check';
   },
   /// 未读消息统计
-  countUnreadMsg(uid) {
+  countUnreadMsg (uid) {
     return 'b2b/user/' + uid + '/unread/msg/count';
   },
 
   /// 获取消息列表（消息盒子）
-  getMsgList(uid) {
+  getMsgList (uid) {
     return 'b2b/user/' + uid + '/msg/list';
   },
 
   /// 消息标记为未读
-  unReadMsgs(uid) {
+  unReadMsgs (uid) {
     return 'b2b/user/' + uid + '/msg/update/to/unread';
   },
   /// 消息标记为已读
-  readMsgs(uid) {
+  readMsgs (uid) {
     return 'b2b/user/' + uid + '/msg/update/to/read';
   },
-  deleteMsgs(uid) {
+  deleteMsgs (uid) {
     return 'b2b/user/' + uid + '/msg/delete';
   },
   /// 将所有未读消息标记为已读
-  readAllMsg(uid) {
+  readAllMsg (uid) {
     return 'b2b/user/' + uid + '/msg/read';
   },
   // 删除员工
-  removeB2BCustomer(id) {
+  removeB2BCustomer (id) {
     return 'b2b/companies/remove/sub/account/' + id;
   },
   // 改变员工账号启/禁用状态
-  changeLoginDisabled(uid) {
+  changeLoginDisabled (uid) {
     return 'b2b/users/' + uid + '/active';
   },
   // 设置部门负责人
-  setDepartmentHead(uid) {
+  setDepartmentHead (uid) {
     return 'b2b/dept/update/manager/' + uid;
   },
   // 添加物料
-  saveMaterials() {
+  saveMaterials () {
     return '/b2b/materials/save';
   },
   // 获取物料列表(弹窗组件选择)
-  getMaterialsListBySelect() {
+  getMaterialsListBySelect () {
     return '/b2b/materials/searchBySelect';
   },
   // 获取物料列表
-  getMaterialsList() {
+  getMaterialsList () {
     return '/b2b/materials/search';
   },
   // 获取物料详情
-  getMaterialDetails(id) {
+  getMaterialDetails (id) {
     return '/b2b/materials/' + id;
   },
   // 获取外发订单列表
-  getoutboundOrdersList() {
+  getoutboundOrdersList () {
     return '/b2b/out/order/search';
   },
   // 获取外发工单列表
-  getoutboundProductionList() {
+  getoutboundProductionList () {
     return '/b2b/out/order/production/search';
   },
   // 创建外发订单
-  createOutboundOrder() {
+  createOutboundOrder () {
     return '/b2b/out/order/save';
   },
   // 创建外发订单(款式外发)
-  createOutboundOrderWithClothes() {
+  createOutboundOrderWithClothes () {
     return '/b2b/out/order/save/with/clothes';
   },
   // 获取外发订单详情
-  getoutboundOrderDetail(id) {
+  getoutboundOrderDetail (id) {
     return '/b2b/out/order/' + id;
   },
   // 编辑外发订单详情
-  updateOutboundOrder() {
+  updateOutboundOrder () {
     return '/b2b/orders/outbound/update';
   },
   // 接单
-  acceptOutboundOrder(code) {
+  acceptOutboundOrder (code) {
     return '/b2b/orders/outbound/' + code + '/production';
   },
   // 拒绝接单
-  rejectedOutboundOrder(code) {
+  rejectedOutboundOrder (code) {
     return '/b2b/orders/outbound/' + code + '/rejectedConfirm';
   },
   // 取消外发订单
-  cancelOutboundOrder(code) {
+  cancelOutboundOrder (code) {
     return '/b2b/orders/outbound/' + code + '/cancelling';
   },
   // 获取节点方案列表
-  getProgressPlan() {
+  getProgressPlan () {
     return '/b2b/progress/plan';
   },
   // 新建节点方案
-  createProgressPlan() {
+  createProgressPlan () {
     return '/b2b/progress/plan/create';
   },
   // 更新节点方案
-  updateProgressPlan(id) {
+  updateProgressPlan (id) {
     return '/b2b/progress/plan/update/' + id;
   },
   // 获取节点方案详情
-  getProgressPlanDetail(id) {
+  getProgressPlanDetail (id) {
     return '/b2b/progress/plan/' + id;
   },
   // 启用节点方案
-  enableProgressPlan(id) {
+  enableProgressPlan (id) {
     return '/b2b/progress/plan/enable/' + id;
   },
   // 禁用节点方案
-  disableProgressPlan(id) {
+  disableProgressPlan (id) {
     return '/b2b/progress/plan/disEnable/' + id;
   },
   // 删除节点方案
-  deleteProgressPlan(id) {
+  deleteProgressPlan (id) {
     return '/b2b/progress/plan/delete/' + id;
   },
   // 获取节点列表
-  getProgressPhaseList() {
+  getProgressPhaseList () {
     return '/b2b/progress/phase';
   },
   // 获取对账方案列表
-  getReconciliationPlan() {
+  getReconciliationPlan () {
     return '/b2b/reconciliationPlan';
   },
   // 新建对账方案
-  createReconciliationPlan() {
+  createReconciliationPlan () {
     return '/b2b/reconciliationPlan/create';
   },
   // 更新对账方案
-  updateReconciliationPlan(id) {
+  updateReconciliationPlan (id) {
     return '/b2b/reconciliationPlan/update/' + id;
   },
   // 获取对账方案详情
-  getReconciliationPlanDetail(id) {
+  getReconciliationPlanDetail (id) {
     return '/b2b/reconciliationPlan/' + id;
   },
   // 启用对账方案
-  enableReconciliationPlan(id) {
+  enableReconciliationPlan (id) {
     return '/b2b/reconciliationPlan/enable/' + id;
   },
   // 禁用对账方案
-  disableReconciliationPlan(id) {
+  disableReconciliationPlan (id) {
     return '/b2b/reconciliationPlan/disEnable/' + id;
   },
   // 删除对账方案
-  deleteReconciliationPlan(id) {
+  deleteReconciliationPlan (id) {
     return '/b2b/reconciliationPlan/delete/' + id;
   },
   // 获取代办列表
-  getToDoList() {
+  getToDoList () {
     return '/b2b/todo/task/list';
   },
   // 跟新为已读
-  updateToRead(id) {
+  updateToRead (id) {
     return '/b2b/todo/task/read/' + id;
   },
   // 获取审核列表
-  getAuditList() {
+  getAuditList () {
     return '/b2b/audit/order/order/list';
   },
   // 审核任务
-  taskAudit() {
+  taskAudit () {
     return '/b2b/audit/order/order/audit';
   },
   // 审核撤回
-  revokeTask(id) {
+  revokeTask (id) {
     return '/b2b/audit/order/order/revoke/' + id;
   },
   // 获取进度工单列表
-  getProgressOrderList() {
+  getProgressOrderList () {
     return '/b2b/sheets/progress/work';
   },
   // 获取进度工单详情
-  getProgressOrderDetail(code) {
+  getProgressOrderDetail (code) {
     return '/b2b/sheets/progress/work/' + code;
   },
   // 获取采购任务列表
-  getPurchaseTaskList() {
+  getPurchaseTaskList () {
     return '/b2b/purchase/task/search';
   },
   // 根据id获取采购任务
-  getPurchaseTask(id) {
+  getPurchaseTask (id) {
     return '/b2b/purchase/task/' + id;
   },
   // 删除采购任务
@@ -821,7 +821,7 @@ const COMMON_APIS = {
     return '/b2b/purchase/task/' + id;
   },
   // 添加采购任务
-  savePurchaseTask() {
+  savePurchaseTask () {
     return '/b2b/purchase/task/save'
   },
   // 获取采购工单列表
@@ -877,139 +877,139 @@ const COMMON_APIS = {
     return '/b2b/purchase/order/state/count';
   },
   // 创建生产工单
-  createProductionOrder() {
+  createProductionOrder () {
     return '/b2b/orders/production/work/create';
   },
   // 更新进度工单
-  updateProgressOrder() {
+  updateProgressOrder () {
     return '/b2b/sheets/progress/work/update';
   },
   // 设置进度节点时间
-  updateProgressDate() {
+  updateProgressDate () {
     return '/b2b/sheets/progress/work/update/progresses/date'
   },
   // 分配工单任务
-  allocatingProductionOrder() {
+  allocatingProductionOrder () {
     return '/b2b/production/task/order/update/merchandiser'
   },
   // 创建进度工单
-  createProgressOrder(id) {
+  createProgressOrder (id) {
     return '/b2b/orders/production/work/create/' + id;
   },
   // 销售订单状态统计
-  salesOrderStateCount() {
+  salesOrderStateCount () {
     return '/b2b/sales/production/order/state/count';
   },
   // 待接订单状态统计
-  pendingOrderStateCount() {
+  pendingOrderStateCount () {
     return '/b2b/out/order/pending/state/count';
   },
   // 生产工单状态统计
-  productionOrderStateCount() {
+  productionOrderStateCount () {
     return '/b2b/production/task/order/state/count';
   },
   // 外发生产工单状态统计
-  outProductionOrderStateCount() {
+  outProductionOrderStateCount () {
     return '/b2b/production/task/order/out/state/count';
   },
   // 外发订单状态统计
-  outboundOrderStateCount() {
+  outboundOrderStateCount () {
     return '/b2b/out/order/state/count';
   },
   // 进度工单状态统计
-  progressOrderStateCount() {
+  progressOrderStateCount () {
     return '/b2b/orders/production/work/state/phase/count';
   },
   // 发货单状态统计
-  shippingOrderStateCount() {
+  shippingOrderStateCount () {
     return '/b2b/sheets/shipping/state/count';
   },
   // 收发货任务状态统计
-  receivedispatchStateCount() {
+  receivedispatchStateCount () {
     return '/b2b/sheets/receivedispatch/state/count';
   },
   // 退货单状态统计
-  returnSheetStateCount() {
+  returnSheetStateCount () {
     return '/b2b/sheets/return/state/count';
   },
   // 复议单列表状态统计
-  reconsiderOrderStateCount() {
+  reconsiderOrderStateCount () {
     return '/b2b/sheets/reconsider/state/count';
   },
   // 对账任务列表状态统计
-  reconciliationTaskStateCount() {
+  reconciliationTaskStateCount () {
     return '/b2b/sheets/reconciliation_task/state/count';
   },
   // 对账单列表状态统计
-  reconciliationSheetStateCount() {
+  reconciliationSheetStateCount () {
     return '/b2b/sheets/reconciliation/state/count';
   },
   // 收货单列表状态统计
-  receiptSheetStateCount() {
+  receiptSheetStateCount () {
     return '/b2b/sheets/receipt/state/count';
   },
   // 对账单（收货方审核）列表状态统计
-  reconciliationSheetAuditStateCount() {
+  reconciliationSheetAuditStateCount () {
     return '/b2b/sheets/reconciliation/auditState/count';
   },
   // 应收账款列表
-  getReceivableList() {
+  getReceivableList () {
     return '/b2b/payment/bill/receivables/search';
   },
   // 应收账单统计
-  getReceivableCount() {
+  getReceivableCount () {
     return '/b2b/payment/bill/receivables/state/count';
   },
   // 应付账款列表
-  getPaymentList() {
+  getPaymentList () {
     return '/b2b/payment/bill/search';
   },
   // 应付账款统计
-  getPaymentCount() {
+  getPaymentCount () {
     return '/b2b/payment/bill/state/count';
   },
   // 根据id获取应付单
-  getPaymentDetail(id) {
+  getPaymentDetail (id) {
     return '/b2b/payment/bill/' + id;
   },
   // 添加发票
-  appendInvoice() {
+  appendInvoice () {
     return '/b2b/payment/bill/add/invoice';
   },
   // 添加请款单
-  appendPaymentRequest() {
+  appendPaymentRequest () {
     return '/b2b/payment/request/save';
   },
   // 请款单列表
-  getPaymentRequestList() {
+  getPaymentRequestList () {
     return '/b2b/payment/request/search';
   },
   // 请款单状态统计
-  getPaymentRequestCount() {
+  getPaymentRequestCount () {
     return '/b2b/payment/request/state/count';
   },
   // 财务请款单
-  getFinancePaymentRequest() {
+  getFinancePaymentRequest () {
     return '/b2b/payment/request/finance/search';
   },
   // 财务请款单状态统计
-  getFinancePaymentRequestCount() {
+  getFinancePaymentRequestCount () {
     return '/b2b/payment/request/finance/state/count';
   },
   // 根据id获取请款单
-  getPaymentRequestDetail(id) {
+  getPaymentRequestDetail (id) {
     return '/b2b/payment/request/' + id;
   },
   // 添加付款单
-  appendPaymentRecord(id) {
+  appendPaymentRecord (id) {
     return '/b2b/payment/request/add/payment/records/' + id;
   },
   // 付款确认
-  paymentRequestPayConfirm(id) {
+  paymentRequestPayConfirm (id) {
     return '/b2b/payment/request/pay/confirm/' + id;
   },
   // 查询订单可请款金额
-  getRequestAmount(id) {
+  getRequestAmount (id) {
     return '/b2b/payment/bill/amount/' + id;
   },
   // 通过采购单获取付款申请单
@@ -1033,260 +1033,260 @@ const COMMON_APIS = {
 };
 
 let TENANT_APIS = {
-  getApparelProducts() {
+  getApparelProducts () {
     return '/b2b/products/apparel/all';
   },
-  getSampleProducts() {
+  getSampleProducts () {
     return '/b2b/sample/clothes/all';
   },
-  getRequirementOrders() {
+  getRequirementOrders () {
     return '/b2b/orders/requirement/all';
   },
-  getAllRequirementOrders() {
+  getAllRequirementOrders () {
     return this.getRequirementOrders();
   },
-  getQuotes() {
+  getQuotes () {
     return '/b2b/orders/quote/all';
   },
-  getPurchaseOrders() {
+  getPurchaseOrders () {
     return '/b2b/orders/purchase/all';
   },
-  getProofings() {
+  getProofings () {
     return '/b2b/orders/proofing/all';
   },
-  createOperationCourse() {
+  createOperationCourse () {
     return '/b2b/guideline/create';
   },
-  updateOperationCourse() {
+  updateOperationCourse () {
     return '/b2b/guideline/update';
   },
-  deleteOperationCourse(id) {
+  deleteOperationCourse (id) {
     return '/b2b/guideline/delete/' + id;
   },
-  getOperationCourses() {
+  getOperationCourses () {
     return '/b2b/guideline';
   },
-  getOperationCourse(id) {
+  getOperationCourse (id) {
     return '/b2b/guideline/' + id;
   },
-  synchronizeProgress(code, targetCode) {
+  synchronizeProgress (code, targetCode) {
     return '/b2b/orders/purchase/' + code + '/synchronizeProgress/' + targetCode;
   },
-  rejectedCashOut(id) {
+  rejectedCashOut (id) {
     return '/b2b/companyWallet/cashOutRejected/' + id;
   },
-  completedCashOut(id) {
+  completedCashOut (id) {
     return '/b2b/companyWallet/cashOutCompleted/' + id;
   },
-  findBills() {
+  findBills () {
     return '/b2b/bill/all'
   },
-  getContractsList() {
+  getContractsList () {
     return '/b2b/user/agreement/list';
   },
-  getContractDetail(code) {
+  getContractDetail (code) {
     return '/b2b/user/agreement/get/' + code;
   },
-  getSeals() {
+  getSeals () {
     return '/b2b/user/seal/list';
   },
-  getTemplatesListPt() {
+  getTemplatesListPt () {
     return '/b2b/agreement/temp/list';
   },
-  getTemplates(code) {
+  getTemplates (code) {
     return '/b2b/user/agreement/temp/get/' + code;
   },
-  getTemplatesList() {
+  getTemplatesList () {
     return '/b2b/user/agreement/temp/list';
   },
-  saveTemplate() {
+  saveTemplate () {
     return '/b2b/user/agreement/temp/save';
   },
-  deleteTemplate(code) {
+  deleteTemplate (code) {
     return '/b2b/user/agreement/temp/delete/' + code;
   },
-  saveSeal() {
+  saveSeal () {
     return '/b2b/user/seal/save';
   },
-  delSeal(code) {
+  delSeal (code) {
     return '/b2b/user/seal/delete/' + code;
   },
-  saveContract() {
+  saveContract () {
     return '/b2b/user/agreement/save';
   },
   // saveContract () {
   //   return '/b2b/user/agreement/save';
   // },
-  personalAuthentication() {
+  personalAuthentication () {
     return '/b2b/fdd/api/save/personal/verify/data';
   },
-  enterpriseAuthentication() {
+  enterpriseAuthentication () {
     return '/b2b/fdd/api/save/enterprise/verify/data';
   },
-  getAuthenticationState() {
+  getAuthenticationState () {
     return '/b2b/cert/state';
   },
-  getAuthenticationInfo() {
+  getAuthenticationInfo () {
     return '/b2b/cert/personal/cert/info';
   },
-  getAuthenticationEnterprise() {
+  getAuthenticationEnterprise () {
     return '/b2b/cert/enterprise/cert/info';
   },
-  refuseContract(code) {
+  refuseContract (code) {
     return '/b2b/user/agreement/reject/sign/' + code;
   },
-  revokeContract(code) {
+  revokeContract (code) {
     return '/b2b/user/agreement/revoke/' + code;
   },
-  previewPdf(code) {
+  previewPdf (code) {
     return '/b2b/user/agreement/preview/pdf/' + code;
   },
-  orderContractClick() {
+  orderContractClick () {
     return '/b2b/user/agreement/order/validate';
   },
-  platformOffShelfProduct(code) {
+  platformOffShelfProduct (code) {
     return '/b2b/products/apparel/' + code + '/platformOff';
   },
-  platformDeletedShelfProduct(code) {
+  platformDeletedShelfProduct (code) {
     return '/b2b/products/apparel/' + code + '/platformDeleted';
   },
-  platformCancelledRequirementOrder(code) {
+  platformCancelledRequirementOrder (code) {
     return '/b2b/orders/requirement/platformCancelled/' + code;
   },
-  platformCancelQuote(code) {
+  platformCancelQuote (code) {
     return '/b2b/orders/quote/' + code + '/platformCancel';
   },
-  platformCancellingOfProofing(code) {
+  platformCancellingOfProofing (code) {
     return '/b2b/orders/proofing/' + code + '/platformCancelling';
   },
-  forbiddenCompany(uid) {
+  forbiddenCompany (uid) {
     return '/b2b/companies/forbidden/' + uid;
   },
-  cannelForbiddenCompany(uid) {
+  cannelForbiddenCompany (uid) {
     return '/b2b/companies/cannelForbidden/' + uid;
   },
   // 根据类型获取活动产品页面信息
-  getProductPlate(type) {
+  getProductPlate (type) {
     return '/b2b/products/plate/' + type;
   },
-  createProductPlate() {
+  createProductPlate () {
     return '/b2b/products/plate/create';
   },
   // 获取轮播图
-  getCarouselsList(type) {
+  getCarouselsList (type) {
     return '/b2b/carousels/list/' + type;
   },
-  updateAllCarousels() {
+  updateAllCarousels () {
     return '/b2b/carousels/updateAll';
   },
 
-  //销售计划
-  salesPlanSave(needAudit) {
+  // 销售计划
+  salesPlanSave (needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
   },
 
-  //销售订单
-  salesOrderSave(needAudit) {
+  // 销售订单
+  salesOrderSave (needAudit) {
     return '/b2b/sales/production/order/save/order?submitAudit=' + needAudit;
-  },
+  }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
 let NONE_TENANT_APIS = {
-  getApparelProducts() {
+  getApparelProducts () {
     return '/b2b/products/apparel';
   },
-  getSampleProducts() {
+  getSampleProducts () {
     return '/b2b/sample/clothes';
   },
-  deleteSampleProduct(code) {
+  deleteSampleProduct (code) {
     return '/b2b/sample/clothes/' + code + '/deleted';
   },
-  getRequirementOrders() {
+  getRequirementOrders () {
     return '/b2b/orders/requirement';
   },
-  getAllRequirementOrders() {
+  getAllRequirementOrders () {
     return '/b2b/orders/requirement/all';
   },
-  getQuotes() {
+  getQuotes () {
     return '/b2b/orders/quote';
   },
-  getPurchaseOrders() {
+  getPurchaseOrders () {
     return '/b2b/orders/purchase/search';
   },
   //   getPurchaseOrders() {
   //   return '/b2b/orders/purchase';
   // },
-  confirmDeliveringOfProductionOrder(code) {
+  confirmDeliveringOfProductionOrder (code) {
     return '/b2b/orders/purchase/' + code + '/delivering';
   },
-  getProofings() {
+  getProofings () {
     return '/b2b/orders/proofing';
   },
-  confirmDeliveringOfProofing(code) {
+  confirmDeliveringOfProofing (code) {
     return '/b2b/orders/proofing/' + code + '/delivering';
   },
-  cancellingOfProofing(code) {
+  cancellingOfProofing (code) {
     return '/b2b/orders/proofing/' + code + '/cancelling';
   },
-  cancellingOfPurchaseOrder(code) {
+  cancellingOfPurchaseOrder (code) {
     return '/b2b/orders/purchase/' + code + '/cancelling';
   },
-  changeCannelStatus(code) {
+  changeCannelStatus (code) {
     return '/b2b/orders/purchase/' + code + '/changeCannelStatus';
   },
-  completedOfPurchaseOrder(code) {
+  completedOfPurchaseOrder (code) {
     return '/b2b/orders/purchase/' + code + '/shipped';
   },
-  completedOfProofing(code) {
+  completedOfProofing (code) {
     return '/b2b/orders/proofing/' + code + '/shipped';
   },
-  payProofings(code) {
+  payProofings (code) {
     return '/b2b/orders/proofing/' + code + '/paid';
   },
-  payProofingsImage(code) {
+  payProofingsImage (code) {
     return '/b2b/checkout/multi/wechat/pay/' + code;
   },
-  cashOutCanceled(code) {
+  cashOutCanceled (code) {
     return '/b2b/checkout/multi/wechat/pay/' + code;
   },
-  cashOutApply(amount) {
+  cashOutApply (amount) {
     return '/b2b/amountFlow/cashOut/' + amount;
   },
-  getBills() {
+  getBills () {
     return '/b2b/bill';
   },
-  getWallet() {
+  getWallet () {
     return '/b2b/companyWallet';
   },
-  getContractsList() {
+  getContractsList () {
     return '/b2b/user/agreement/list';
   },
-  getSealsList() {
+  getSealsList () {
     return '/b2b/user/seal/list';
   },
   getSealGrantList () {
     return '/b2b/user/seal/grant/list';
   },
-  getTemplatesListPt() {
+  getTemplatesListPt () {
     return '/b2b/agreement/temp/list';
   },
-  getTemplates(code) {
+  getTemplates (code) {
     return '/b2b/user/agreement/temp/get/' + code;
   },
-  getTemplatesList() {
+  getTemplatesList () {
     return '/b2b/user/agreement/temp/list';
   },
-  saveTemplate() {
+  saveTemplate () {
     return '/b2b/user/agreement/temp/save';
   },
-  deleteTemplate(code) {
+  deleteTemplate (code) {
     return '/b2b/user/agreement/temp/delete/' + code;
   },
-  saveSeal() {
+  saveSeal () {
     return '/b2b/user/seal/save';
   },
-  delSeal(code) {
+  delSeal (code) {
     return '/b2b/user/seal/delete/' + code;
   },
   sealGrant (sealCode, customerUid) {
@@ -1298,416 +1298,454 @@ let NONE_TENANT_APIS = {
   sealGrantList (code) {
     return '/b2b/user/seal/grant/list/' + code;
   },
-  saveContract() {
+  saveContract () {
     return '/b2b/user/agreement/save';
   },
-  deleteContract(code) {
+  deleteContract (code) {
     return '/b2b/user/agreement/delete/' + code;
   },
-  downContract(code) {
+  downContract (code) {
     return '/b2b/user/agreement/get/download/token/' + code;
   },
-  flowContract(code, sealCode) {
+  flowContract (code, sealCode) {
     return '/b2b/user/agreement/start/flow/' + code + '?sealCode=' + sealCode;
   },
-  personalAuthentication() {
+  personalAuthentication () {
     return '/b2b/fdd/api/save/personal/verify/data';
   },
-  enterpriseAuthentication() {
+  enterpriseAuthentication () {
     return '/b2b/fdd/api/save/enterprise/verify/data';
   },
-  getAuthenticationState() {
+  getAuthenticationState () {
     return '/b2b/cert/state';
   },
-  getAuthenticationInfo() {
+  getAuthenticationInfo () {
     return '/b2b/cert/personal/cert/info';
   },
-  getAuthenticationEnterprise() {
+  getAuthenticationEnterprise () {
     return '/b2b/cert/enterprise/cert/info';
   },
-  getContractDetail(code) {
+  getContractDetail (code) {
     return '/b2b/user/agreement/get/' + code;
   },
-  refuseContract(code) {
+  refuseContract (code) {
     return '/b2b/user/agreement/reject/sign/' + code;
   },
-  revokeContract(code) {
+  revokeContract (code) {
     return '/b2b/user/agreement/revoke/' + code;
   },
-  previewPdf(code) {
+  previewPdf (code) {
     return '/b2b/user/agreement/preview/pdf/' + code;
   },
-  orderContractClick() {
+  orderContractClick () {
     return '/b2b/user/agreement/order/validate';
   },
-  getOldSalesOrderList() {
+  getOldSalesOrderList () {
     return '/b2b/b2b/orders/sales';
   },
-  getSalesOrderDetails(code) {
+  getSalesOrderDetails (code) {
     return '/b2b/b2b/orders/sales/' + code;
   },
-  updateConsignment(code) {
+  updateConsignment (code) {
     return '/b2b/b2b/orders/sales/update/consignment/' + code;
   },
-  cannelSalesOrder(code) {
+  cannelSalesOrder (code) {
     return '/b2b/b2b/orders/sales/' + code + '/cancel/order';
   },
-  confirmReceived(code) {
+  confirmReceived (code) {
     return '/b2b/b2b/orders/sales/' + code + '/confirmReceived';
   },
-  orderRefundApply() {
+  orderRefundApply () {
     return '/b2b/sales/order/refund/apply';
   },
-  getRefundDetail(code) {
+  getRefundDetail (code) {
     return '/b2b/sales/order/refund/apply/' + code;
   },
-  auditRefundApply() {
+  auditRefundApply () {
     return '/b2b/sales/order/refund/audit/apply';
   },
-  cancelRefundApply(code) {
+  cancelRefundApply (code) {
     return '/b2b/sales/order/refund/apply/cancel/' + code;
   },
-  reminderSalesOrderDelivery(code) {
+  reminderSalesOrderDelivery (code) {
     return '/b2b/b2b/orders/sales/' + code + '/reminder/delivery';
   },
 
-
-  //销售计划
-  salesPlanSave(needAudit) {
+  // 销售计划
+  salesPlanSave (needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
   },
-  //销售订单
-  salesOrderSave(needAudit) {
+  // 销售订单
+  salesOrderSave (needAudit) {
     return '/b2b/sales/production/order/save/order?submitAudit=' + needAudit;
   },
   // 更新销售订单行
-  updateSalesOrderRow() {
+  updateSalesOrderRow () {
     return '/b2b/sales/production/order/update/entry';
   },
-  //销售计划撤回
-  salesPlanWithdraw(id) {
+  // 销售计划撤回
+  salesPlanWithdraw (id) {
     return '/b2b/sales/production/order/revoke/audit/' + id;
   },
-  //拒绝销售订单
-  refuseSalesOrder(id) {
+  // 拒绝销售订单
+  refuseSalesOrder (id) {
     return '/b2b/sales/production/order/reject/outboundOrder/' + id;
   },
-  //唯一码导入销售订单
-  importSalesOrderByUniqueCode(code) {
+  // 唯一码导入销售订单
+  importSalesOrderByUniqueCode (code) {
     return '/b2b/sales/production/order/create/from/uniqueCode/' + code;
   },
-  //销售计划订单列表
-  getSalesOrderList() {
+  // 销售计划订单列表
+  getSalesOrderList () {
     return '/b2b/sales/production/order/search';
   },
-  //待接销售订单列表
-  getPendingSalesOrderList() {
+  // 待接销售订单列表
+  getPendingSalesOrderList () {
     return '/b2b/out/order/pending/accept/search';
   },
-  //销售计划订单详情
-  getSalesProductionOrderDetails(id) {
+  // 销售计划订单详情
+  getSalesProductionOrderDetails (id) {
     return '/b2b/sales/production/order/' + id;
   },
-  //生产任务
-  getProductionTaskList() {
+  // 生产任务
+  getProductionTaskList () {
     return '/b2b/production/task/search';
   },
-  //生产任务详情
-  getProductionTaskDetails(id) {
+  // 生产任务详情
+  getProductionTaskDetails (id) {
     return '/b2b/production/task/detail/' + id;
   },
-  //生产工单
-  getProductionOrders() {
+  // 生产工单
+  getProductionOrders () {
     return '/b2b/production/task/order/search';
   },
-  //生产工单详情
-  getProductionOrderDetail(id) {
+  // 生产工单详情
+  getProductionOrderDetail (id) {
     return '/b2b/production/task/order/' + id;
   },
 
-  //设置生产进度预计完成时间
-  setProgressDate(code) {
+  // 设置生产进度预计完成时间
+  setProgressDate (code) {
     return '/b2b/sheets/progress/work/' + code + '/update/progresses';
   },
 
-  //节点完成
-  finshProgress(code, id) {
+  // 节点完成
+  finshProgress (code, id) {
     return '/b2b/sheets/progress/work/' + code + '/finish/progress/' + id;
   },
 
-  //外发订单生成唯一码
-  generateUniqueCodeForSale(code) {
+  // 外发订单生成唯一码
+  generateUniqueCodeForSale (code) {
     return '/b2b/orders/outbound/' + code + '/unique';
   },
 
-  //根据任务id查生产订单
-  searchProductionByTaskIds() {
+  // 根据任务id查生产订单
+  searchProductionByTaskIds () {
     return '/b2b/orders/production/work/search';
   },
 
-  //根据任务id查外发订单
-  searchPurchaseByTaskIds() {
+  // 根据任务id查外发订单
+  searchPurchaseByTaskIds () {
     return '/b2b/orders/outbound/search';
   },
 
   // 创建发货单================================新生产工单
-  createShippingOrderV2(code) {
+  createShippingOrderV2 (code) {
     return '/b2b/orders/production/work/' + code + '/createShippingOrder';
   },
   // 创建全部发货单
-  confirmShippingV2(code) {
+  confirmShippingV2 (code) {
     return '/b2b/orders/production/work/' + code + '/confirmShipping';
   },
   // 删除发货单
-  deleteShippingOrderV2(id) {
+  deleteShippingOrderV2 (id) {
     return '/b2b/orders/production/work/deleteShippingOrder/' + id;
   },
   // 创建收货单
-  createDeliveryOrderV2(code) {
+  createDeliveryOrderV2 (code) {
     return '/b2b/orders/production/work/' + code + '/createDeliveryOrder';
   },
   // 创建并提交收货单
-  createAndCommitDeliveryOrderV2(code) {
+  createAndCommitDeliveryOrderV2 (code) {
     return '/b2b/orders/production/work/' + code + '/createAndCommitDeliveryOrder';
   },
   // 提交收货单
-  commitDeliveryOrderV2() {
+  commitDeliveryOrderV2 () {
     return '/b2b/orders/production/work/commitDeliveryOrder';
   },
   // 保存收货单
-  updateDeliveryOrderV2() {
+  updateDeliveryOrderV2 () {
     return '/b2b/orders/production/work/updateDeliveryOrder';
   },
   // 撤回收货单
-  withdrawDeliveryOrderV2(code) {
+  withdrawDeliveryOrderV2 (code) {
     return '/b2b/orders/production/work/' + code + '/recallDelivery';
   },
   // 确认收货单
-  confirmDeliveryOrderV2(code) {
+  confirmDeliveryOrderV2 (code) {
     return '/b2b/orders/production/work/' + code + '/confirmDelivery';
   },
   // 拒绝收货单
-  rejectDeliveryOrderV2(code) {
+  rejectDeliveryOrderV2 (code) {
     return '/b2b/orders/production/work/' + code + '/rejectDelivery';
   },
   // 创建对账单
-  createReconciliationOrderV2(code) {
+  createReconciliationOrderV2 (code) {
     return '/b2b/orders/production/work/' + code + '/createReconciliationOrder';
   },
   // 创建并提交对账单
-  createAndCommitReconciliationOrderV2(code) {
+  createAndCommitReconciliationOrderV2 (code) {
     return '/b2b/orders/production/work/' + code + '/createAndCommitReconciliationOrder';
   },
   // 保存
-  updateReconciliationOrderV2() {
+  updateReconciliationOrderV2 () {
     return '/b2b/orders/production/work/updateReconciliationOrder';
   },
   // 保存并提交
-  updateAndCommitReconciliationOrderV2() {
+  updateAndCommitReconciliationOrderV2 () {
     return '/b2b/orders/production/work/updateAndCommitReconciliationOrder';
   },
   // 提交对账单
-  commitReconciliationOrderV2() {
+  commitReconciliationOrderV2 () {
     return '/b2b/orders/production/work/commitReconciliationOrder';
   },
   // 撤回对账单
-  withdrawReconciliationOrderV2() {
+  withdrawReconciliationOrderV2 () {
     return '/b2b/orders/production/work/recallReconciliationOrder';
   },
   // 确认对账单
-  confirmReconciliationV2(code) {
+  confirmReconciliationV2 (code) {
     return '/b2b/orders/production/work/' + code + '/confirmReconciliation';
   },
   // 拒绝对账单
-  rejectReconciliationV2(code) {
+  rejectReconciliationV2 (code) {
     return '/b2b/orders/production/work/' + code + '/rejectReconciliation';
   },
 
-
-  /**---------------       收发货           ---------------**/
+  /** ---------------       收发货           ---------------**/
 
   // 收发任务列表
-  shippingTaskList() {
+  shippingTaskList () {
     return '/b2b/sheets/receivedispatch';
   },
 
   // 收发任务详情
-  shippingTaskDetail(id) {
+  shippingTaskDetail (id) {
     return '/b2b/sheets/receivedispatch/' + id;
   },
 
   // 发货单列表
-  shippingOrderList() {
+  shippingOrderList () {
     return '/b2b/sheets/shipping';
   },
 
   // 发货完结
-  shippingFinish(id) {
+  shippingFinish (id) {
     return '/b2b/sheets/receivedispatch/finishDelivery/' + id;
   },
 
   // 发货单详情
-  shippingOrderDetail(id) {
+  shippingOrderDetail (id) {
     return '/b2b/sheets/shipping/' + id;
   },
 
   // 创建发货单
-  shippingOrderCreate() {
+  shippingOrderCreate () {
     return '/b2b/sheets/shipping/create';
   },
 
-  //创建收货单
-  receiptOrderCreate() {
+  // 创建收货单
+  receiptOrderCreate () {
     return '/b2b/sheets/receipt/create';
   },
 
-  //创建自管收货单
-  selfReceiptOrderCreate() {
+  // 创建自管收货单
+  selfReceiptOrderCreate () {
     return '/b2b/sheets/receipt/createByTask';
   },
 
-  //收货单列表
-  receiptOrderList() {
+  // 收货单列表
+  receiptOrderList () {
     return '/b2b/sheets/receipt';
   },
 
   // 收货单详情
-  receiptOrderDetail(id) {
+  receiptOrderDetail (id) {
     return '/b2b/sheets/receipt/' + id;
   },
 
   // 创建退货单
-  returnOrderCreate() {
+  returnOrderCreate () {
     return '/b2b/sheets/return/create';
   },
 
   // 跳过退货
-  cancelReturn(id) {
+  cancelReturn (id) {
     return '/b2b/sheets/shipping/cancelReturn/' + id;
   },
 
   // 跳过复议
-  cancelReconsider(id) {
+  cancelReconsider (id) {
     return '/b2b/sheets/shipping/cancelReconsider/' + id;
   },
 
   // 退货单详情
-  returnOrderDetail(id) {
+  returnOrderDetail (id) {
     return '/b2b/sheets/return/' + id;
   },
 
   // 退货单列表
-  returnOrderList() {
+  returnOrderList () {
     return '/b2b/sheets/return';
   },
 
-  //确认退货单
-  confirmReturnOrder(id) {
+  // 确认退货单
+  confirmReturnOrder (id) {
     return '/b2b/sheets/return/confirm/' + id;
   },
 
-  //创建复议单
-  reconsiderOrderCreate() {
+  // 创建复议单
+  reconsiderOrderCreate () {
     return '/b2b/sheets/reconsider/create';
   },
 
-
-  //复议单列表
-  reconsiderOrderList() {
+  // 复议单列表
+  reconsiderOrderList () {
     return '/b2b/sheets/reconsider';
   },
 
-  //复议单详情
-  reconsiderOrderDetail(id) {
+  // 复议单详情
+  reconsiderOrderDetail (id) {
     return '/b2b/sheets/reconsider/' + id;
   },
 
-  //同意复议单
-  acceptReconsider() {
+  // 同意复议单
+  acceptReconsider () {
     return '/b2b/sheets/reconsider/confirm';
   },
 
-  //拒绝复议单
-  rejectReconsider(id) {
+  // 拒绝复议单
+  rejectReconsider (id) {
     return '/b2b/sheets/reconsider/reject/' + id;
   },
 
-  //==========================================对账单
+  // ==========================================对账单
 
-  //对账任务列表
-  reconciliationTaskList() {
+  // 对账任务列表
+  reconciliationTaskList () {
     return '/b2b/sheets/reconciliation_task';
   },
 
-  //对账任务详情
-  reconciliationTaskDetail(id) {
+  // 对账任务详情
+  reconciliationTaskDetail (id) {
     return '/b2b/sheets/reconciliation_task/' + id;
   },
 
-  //创建对账单
-  reconciliationCreate() {
+  // 创建对账单
+  reconciliationCreate () {
     return '/b2b/sheets/reconciliation/create';
   },
 
-  //更新对账单
-  reconciliationUpdate() {
+  // 更新对账单
+  reconciliationUpdate () {
     return '/b2b/sheets/reconciliation/update';
   },
 
-  //对账单列表
-  reconciliationList() {
+  // 对账单列表
+  reconciliationList () {
     return '/b2b/sheets/reconciliation';
   },
 
-  //对账详情
-  reconciliationDetail(id) {
+  // 对账详情
+  reconciliationDetail (id) {
     return '/b2b/sheets/reconciliation/' + id;
   },
 
-  //确认对账
-  reconciliationAccept(id) {
+  // 确认对账
+  reconciliationAccept (id) {
     return '/b2b/sheets/reconciliation/confirm/' + id;
   },
 
-  //拒绝对账
-  reconciliationReject(id) {
+  // 拒绝对账
+  reconciliationReject (id) {
     return '/b2b/sheets/reconciliation/reject/' + id;
   },
 
-  //唯一码检索
-  uniqueCodeCheck(code) {
+  // 唯一码检索
+  uniqueCodeCheck (code) {
     return '/b2b/out/order/preview/' + code;
   },
 
-  //外发订单-取消订单
-  outboundOrderCancel() {
+  // 外发订单-取消订单
+  outboundOrderCancel () {
     return '/b2b/out/order/cancel';
   },
 
-  //自创外接订单-取消订单
-  saleOrderProductionCancel() {
+  // 自创外接订单-取消订单
+  saleOrderProductionCancel () {
     return '/b2b/sales/production/order/cancel';
   },
 
-  //外发订单-取消订单-处理
-  outboundOrderCancelHandle() {
+  // 外发订单-取消订单-处理
+  outboundOrderCancelHandle () {
     return '/b2b/out/order/handling/cancel';
   },
 
-  //外发订单-撤回
-  outboundOrderWithdraw(id) {
+  // 外发订单-撤回
+  outboundOrderWithdraw (id) {
     return '/b2b/out/order/revoke/' + id;
   },
 
-  //订单-作废
-  outboundOrderDelete(id) {
+  // 订单-作废
+  outboundOrderDelete (id) {
     return '/b2b/sales/production/order/' + id;
   },
 
-  //批量导入样衣
-  muliteClothesCreate() {
+  // 批量导入样衣
+  muliteClothesCreate () {
     return '/b2b/sample/clothes/multiple/all/create';
   },
+
+  /** 出货对账 */
+  // 获取出货单列表
+  getDeliveryList () {
+    return '/b2b/sheets/fast/shipping';
+  },
+  // 获取出货单列表统计
+  getDeliveryListCount () {
+    return '/b2b/sheets/fast/shipping/state/count';
+  },
+  // 获取出货单详情
+  getDeliveryDetail (id) {
+    return '/b2b/sheets/fast/shipping/' + id;
+  },
+  // 根据skuID查询产品是否存在
+  checkProductBySkuID () {
+    return '/b2b/sample/clothes/listBySkuid';
+  },
+  // 获取新对账单列表
+  getReconciliationV2List () {
+    return '/b2b/sheets/fast/reconciliation';
+  },
+  // 获取新对账单列表统计
+  getReconciliationV2ListCount () {
+    return '/b2b/sheets/fast/reconciliation/state/count';
+  },
+  // 创建新对账单
+  createReconciliationV2 () {
+    return '/b2b/sheets/fast/reconciliation/create';
+  },
+  // 查询对账单详情
+  getReconciliationV2Detail (id) {
+    return '/b2b/sheets/fast/reconciliation/' + id;
+  },
+  // 获取doc token
+  getDocToken (code) {
+    return '/b2b/doc/signature/get/download/token/' + code;
+  },
+  doDocSign (code) {
+    return '/b2b/doc/signature/' + code;
+  }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

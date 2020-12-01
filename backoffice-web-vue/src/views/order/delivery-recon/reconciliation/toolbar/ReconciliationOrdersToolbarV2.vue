@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'DeliveryOrdersToolbar',
+  name: 'ReconciliationOrdersToolbarV2',
   props: ['queryFormData'],
   data () {
     return {

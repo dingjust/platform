@@ -1,27 +1,24 @@
 <!--
-* @Description: 出货单
-* @Date 2020/11/23 17:55
+* @Description: 新对账单（出货对账）
+* @Date 2020/11/23 14:09
 * @Author L.G.Y
 -->
 <template>
   <div>
     <el-row>
       <div class="list-title">
-        <h6>出货单列表</h6>
+        <h6>对账单列表</h6>
       </div>
     </el-row>
     <div class="pt-2"></div>
-    <delivery-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
-    <el-tabs v-model="activeName" @tab-click="handleClick" v-if="!isSelection">
+    <reconciliation-orders-toolbar-v2 :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code" />
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
+          <reconciliation-orders-list-v2 :page="page" @onAdvancedSearch="onAdvancedSearch"/>
+        </el-tab-pane>
       </template>
     </el-tabs>
-    <delivery-orders-list ref="list" :page="page" @onAdvancedSearch="onAdvancedSearch" 
-                            :isSelection="isSelection" :selectedId="selectedId"/>
-    <el-row type="flex" justify="center" v-if="isSelection">
-      <el-button type="primary" size="medium" class="reconciliation-btn" @click="onSelect">确定</el-button>
-    </el-row>
   </div>
 </template>
  
@@ -33,28 +30,16 @@ const {
   mapActions,
   mapMutations
 } = createNamespacedHelpers(
-  'DeliveryOrdersModule'
+  'ReconciliationOrdersV2Module'
 );
 
-import DeliveryOrdersList from './list/DeliveryOrdersList'
-import DeliveryOrdersToolbar from './toolbar/DeliveryOrdersToolbar'
-
+import ReconciliationOrdersListV2 from './list/ReconciliationOrdersListV2'
+import ReconciliationOrdersToolbarV2 from './toolbar/ReconciliationOrdersToolbarV2'
 export default {
-  name: 'DeliveryOrdersPageV2',
-  props: {
-    // 是否为选择列表组件
-    isSelection: {
-      type: Boolean,
-      default: false,
-    },
-    // 已选id，处理回显
-    selectedId: {
-      default: ''
-    } 
-  },
+  name: 'ReconciliationOrdersPageV2',
   components: {
-    DeliveryOrdersList,
-    DeliveryOrdersToolbar
+    ReconciliationOrdersListV2,
+    ReconciliationOrdersToolbarV2
   },
   computed: {
     ...mapGetters({
@@ -64,28 +49,32 @@ export default {
   },
   data () {
     return {
-      activeName: 'PENDING_RECONCILED',
+      activeName: 'PENDING_B_SIGN',
       statuses: [
         {
-          code: 'PENDING_RECONCILED',
-          name: '待对账',
-        },
-        {
-          code: 'IN_RECONCILED',
-          name: '对账中',
-        },
-        {
+          code: 'PENDING_B_SIGN',
+          name: '待乙方签署'
+        }, {
+          code: 'PENDING_APPROVAL',
+          name: '待审批'
+        }, {
+          code: 'PENDING_A_SIGN',
+          name: '待甲方签署'
+        }, {
           code: 'COMPLETED',
-          name: '已完成',
-        },
+          name: '已完成'
+        }, {
+          code: 'CANCELLED',
+          name: '已取消'
+        }
       ],
       queryFormData: {
         keyword: '',
         cooperatorName: '',
-        states: 'PENDING_RECONCILED',
+        states: 'PENDING_B_SIGN',
+        // partyType: "PARTYA",
         createdDateFrom: '',
-        createdDateTo: '',
-        // partyType: "PARTYB"
+        createdDateTo: ''
       },
       stateCount: {},
     }
@@ -96,7 +85,7 @@ export default {
     }),
     onAdvancedSearch (page, size, isTabChange) {
       const query = this.queryFormData;
-      const url = this.apis().getDeliveryList();
+      const url = this.apis().getReconciliationV2List();
       this.searchAdvanced({
         url,
         query,
@@ -106,14 +95,14 @@ export default {
 
       // 获取统计信息
       if (!isTabChange) {
-        this.getDeliveryListCount();
+        this.getReconciliationV2ListCount();
       }
     },
-    async getDeliveryListCount () {
+    async getReconciliationV2ListCount () {
       let query = Object.assign({}, this.queryFormData);
       query.states = '';
 
-      const url = this.apis().getDeliveryListCount();
+      const url = this.apis().getReconciliationV2ListCount();
       const result = await this.$http.post(url, query);
       if (result['errors']) {
         this.stateCount = {};
@@ -136,9 +125,6 @@ export default {
     handleClick (tab, event) {
       this.queryFormData.states = tab.name;
       this.onAdvancedSearch(0, 10, true);
-    },
-    onSelect () {
-      this.$emit('onSelect', this.$refs.list.currentRow);
     }
   },
   created () {
@@ -147,15 +133,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   .list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
-  }
-
-  .reconciliation-btn {
-    background: #ffd60c;
-    color: #303133;
-    border-color: #ffd60c;
   }
 </style>

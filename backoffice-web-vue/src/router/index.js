@@ -216,9 +216,26 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/sales/details/SalesOrderDetailsPage')
             },
             {
+              path: 'delivery-Reconciliation',
+              name: '出货对账',
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/DeliveryReconciliationPage')
+            },
+            {
+              path: 'delivery/:id',
+              name: '出货单详情',
+              props: true,
+              component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/delivery/detail/DeliveryOrdersDetail')
+            },
+            {
               path: 'reconciliation/create',
-              name: '创建对账单',
-              component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/order/delivery-recon/reconciliation/form/ReconciliationOrdersFormV2')
+              name: '创建出货对账单',
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/reconciliation/form/ReconciliationOrdersFormV2')
+            },
+            {
+              path: 'reconciliation/:id',
+              name: '创建出货对账单',
+              props: true,
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/reconciliation/detail/ReconciliationOrdersDetailV2')
             },
           ]
         },
