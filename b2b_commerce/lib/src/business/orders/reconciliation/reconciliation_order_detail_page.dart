@@ -209,7 +209,16 @@ class _ReconciliationOrderDetailPageState
         color: Colors.white,
         child: InkWell(
           onTap: () {
-            DocSignatureHelper.open(context: context, model: model);
+            DocSignatureHelper.open(context: context, model: model)
+                .then((value) {
+              //需要刷新
+              if (value != null && value) {
+                setState(() {
+                  order = null;
+                  needRefresh = true;
+                });
+              }
+            });
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

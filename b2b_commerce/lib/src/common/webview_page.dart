@@ -7,10 +7,15 @@ import 'package:permission_handler/permission_handler.dart';
 class WebviewPage extends StatefulWidget {
   String url;
 
+  String title;
+
   ///是否重定向到合同列表
   bool needRedirectContractList;
 
-  WebviewPage({Key key, this.url = '', this.needRedirectContractList = true})
+  WebviewPage({Key key,
+    this.url = '',
+    this.needRedirectContractList = true,
+    this.title = ''})
       : super(key: key);
 
   @override
@@ -20,6 +25,7 @@ class WebviewPage extends StatefulWidget {
 class _WebviewPageState extends State<WebviewPage> {
   FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
   bool _goContractListPage = false;
+  bool needRefresh = false;
 
   @override
   void initState() {
@@ -27,6 +33,9 @@ class _WebviewPageState extends State<WebviewPage> {
     _permissionsInit();
     // flutterWebviewPlugin.
     flutterWebviewPlugin.onUrlChanged.listen((String url) async {
+      print('WebView:url=>$url');
+      needRefresh = true;
+
       if (url.contains('result_code=3000')) {
         _goContractListPage = true;
       }
@@ -38,7 +47,9 @@ class _WebviewPageState extends State<WebviewPage> {
     return WillPopScope(
         child: WebviewScaffold(
           url: widget.url,
-          appBar: AppBar(),
+          appBar: AppBar(
+            title: Text('${widget.title}'),
+          ),
           withZoom: true,
           withLocalStorage: true,
           hidden: true,
@@ -50,6 +61,8 @@ class _WebviewPageState extends State<WebviewPage> {
                 context,
                 MaterialPageRoute(builder: (context) => MyContractPage()),
                 ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
+          } else if (needRefresh) {
+            Navigator.of(context).pop(true);
           } else {
             Navigator.pop(context);
           }

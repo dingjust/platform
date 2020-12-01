@@ -10,7 +10,7 @@ import 'package:services/services.dart';
 
 ///签署文档工具类
 class DocSignatureHelper {
-  static open({
+  static Future<bool> open({
     @required BuildContext context,
     @required DocSignatureModel model,
   }) async {
@@ -29,18 +29,21 @@ class DocSignatureHelper {
     int contentLength = 0;
     contentLength = int.parse(response.headers.map['content-length'][0]);
     if (contentLength > 0) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DocSignatureDetailPage(
+      bool result = await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              DocSignatureDetailPage(
                 pathPDF: filePath,
                 doc: model,
-                title: '对账单详情',
+                title: '电子对账单详情',
               )));
+      return result;
     } else {
       BotToast.showText(text: 'PDF下载失败');
     }
+    return false;
   }
 
-  static sign(
+  static Future<bool> sign(
       {@required BuildContext context,
       @required String sealCode,
       @required String docCode}) async {
@@ -58,21 +61,26 @@ class DocSignatureHelper {
     cancelFunc.call();
     if (response != null && response.statusCode == 200) {
       BaseResponse baseResponse = BaseResponse.fromJson(response.data);
-      if (baseResponse.resultCode == 1) {
-        Navigator.push(
+      if (baseResponse.code == 1) {
+        bool result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => WebviewPage(
+              builder: (context) =>
+                  WebviewPage(
                     url: response.data['data'],
                     needRedirectContractList: false,
                   )),
         );
+        if (result != null && result) {
+          return true;
+        }
+        return false;
       } else {
         BotToast.showText(text: '${baseResponse.msg}');
       }
     } else {
       BotToast.showText(text: '签署失败');
-      return null;
     }
+    return false;
   }
 }

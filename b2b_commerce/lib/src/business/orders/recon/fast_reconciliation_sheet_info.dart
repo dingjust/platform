@@ -90,7 +90,13 @@ class FastReconSheetBlock extends StatelessWidget {
         color: Colors.white,
         child: InkWell(
           onTap: () {
-            DocSignatureHelper.open(context: context, model: model);
+            // DocSignatureHelper.open(context: context, model: model)
+            //     .then((value) {
+            //   //需要刷新
+            //   if (value != null && value) {
+
+            //   }
+            // });
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

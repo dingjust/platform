@@ -99,28 +99,38 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
                         child: Text('去签署')))
               ],
             ),
-          )
-        : Container();
+    )
+        : Container(
+      height: bottomHeight,
+    );
   }
 
   void _onSign() async {
     setState(() {
       _showPdf = false;
     });
+
     SealModel seal = await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => ContractSealSelectPage()));
+
+    if (seal == null) {
+      BotToast.showText(text: '请选择有效印章');
+      setState(() {
+        _showPdf = true;
+      });
+      throw Exception('印章为空');
+    }
+
+    bool result = await DocSignatureHelper.sign(
+        context: context, sealCode: seal.code, docCode: doc.code);
 
     setState(() {
       _showPdf = true;
     });
 
-    if (seal == null) {
-      BotToast.showText(text: '请选择有效印章');
-      throw Exception('印章为空');
+    if (result) {
+      Navigator.of(context).pop(true);
     }
-
-    DocSignatureHelper.sign(
-        context: context, sealCode: seal.code, docCode: doc.code);
   }
 
   ///判断知否需要去签署
