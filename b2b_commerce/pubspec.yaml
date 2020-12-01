@@ -54,7 +54,7 @@ dependencies:
   autocomplete_textfield: ^1.6.4
   pulltorefresh_flutter: "^0.1.9"
   # cached_network_image: ^0.7.0
-  cached_network_image: ^2.3.3
+  cached_network_image: 2.3.3
   flutter_spinkit: ^3.1.0
   store_redirect: ^1.0.1
   # image_gallery_saver: ^1.1.0
@@ -90,6 +90,7 @@ dependencies:
   flutter_umplus: ^0.0.1
   video_thumbnail: ^0.2.2
   device_info: ^0.4.2+8
+  flutter_image_compress: ^0.7.0
 
   # PUB库钉钉插件
   flutter_ddshare: ^1.0.0

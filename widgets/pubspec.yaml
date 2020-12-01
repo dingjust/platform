@@ -35,7 +35,7 @@ dependencies:
   open_file: ^3.0.1
   month_picker_dialog: ^0.3.0
   # cached_network_image: ^0.7.0
-  cached_network_image: ^2.3.3
+  cached_network_image: 2.3.3
   flutter_spinkit: ^3.1.0
   cool_ui: "^0.1.14"
   crypto: ^2.0.6
