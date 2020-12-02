@@ -9,11 +9,11 @@
         <template slot-scope="scope">
           <div v-if="scope.row.countRow">{{scope.row.countRow}}</div>
           <div v-else>
-            <div v-if="scope.row.product && scope.row.product.id && scope.row.product.id !== ''"> 
-              <img :src="scope.row.product.thumbnail.url" style="width: 50px; height: 50px"/>
-            </div>
-            <el-button type="text" @click="onSelectProduct(scope.$index)" v-else>
-              <div class="product-select-icon">
+            <el-button type="text" @click="onSelectProduct(scope.$index)">
+              <div v-if="scope.row.product && scope.row.product.id && scope.row.product.id !== ''"> 
+                <img :src="scope.row.product.thumbnail.url" style="width: 50px; height: 50px"/>
+              </div>
+              <div class="product-select-icon" v-else>
                 <i class="el-icon-plus select-icon"></i>
               </div>
             </el-button>
@@ -199,30 +199,30 @@ export default {
   },
   data () {
     return {
-      item: {
-        product: {
-          id: '',
-          name: '',
-          thumbnail: '',
-          skuID: ''
-        },
-        waveBand: '',
-        orderItemNo: '',
-        customizedMode: '',
-        deliveryDate: '',
-        contractDate: '',
-        orderQuantity: '',
-        cutQuantity: '',
-        packageQuantity: '',
-        storageQuantity: '',
-        returnQuantity: '',
-        unitContractPrice: '',
-        loanAmount: '',
-        expressFee: '',
-        deductionAmount: '',
-        settlementAmount: '',
-        remarks: ''
-      },
+      // item: {
+      //   product: {
+      //     id: '',
+      //     name: '',
+      //     thumbnail: '',
+      //     skuID: ''
+      //   },
+      //   waveBand: '',
+      //   orderItemNo: '',
+      //   customizedMode: '',
+      //   deliveryDate: '',
+      //   contractDate: '',
+      //   orderQuantity: '',
+      //   cutQuantity: '',
+      //   packageQuantity: '',
+      //   storageQuantity: '',
+      //   returnQuantity: '',
+      //   unitContractPrice: '',
+      //   loanAmount: '',
+      //   expressFee: '',
+      //   deductionAmount: '',
+      //   settlementAmount: '',
+      //   remarks: ''
+      // },
       productDialog: false,
       operateIndex: '',
       importVisible: false
@@ -251,7 +251,30 @@ export default {
       }
     },
     onAdd () {
-      this.formData.entries.push(Object.assign({}, this.item));
+      this.formData.entries.push({
+        product: {
+          id: '',
+          name: '',
+          thumbnail: '',
+          skuID: ''
+        },
+        waveBand: '',
+        orderItemNo: '',
+        customizedMode: '',
+        deliveryDate: '',
+        contractDate: '',
+        orderQuantity: '',
+        cutQuantity: '',
+        packageQuantity: '',
+        storageQuantity: '',
+        returnQuantity: '',
+        unitContractPrice: '',
+        loanAmount: '',
+        expressFee: '',
+        deductionAmount: '',
+        settlementAmount: '',
+        remarks: ''
+      });
     },
     onCopy (index, row) {
       this.formData.entries.splice(index + 1, 0, Object.assign({}, row));
