@@ -8,7 +8,7 @@
     </div>
     <el-tabs type="border-card">
       <el-tab-pane label="采购明细">
-        <el-table ref="resultTable" :data="formData.workOrders" stripe :height="autoHeight" :span-method="objectSpanMethod">
+        <el-table ref="resultTable" :data="formData.workOrders" stripe :height="autoHeight">
           <el-table-column label="物料名称" prop="name" fixed="left"></el-table-column>
           <el-table-column label="物料类别" prop="materialsType">
             <template slot-scope="scope">

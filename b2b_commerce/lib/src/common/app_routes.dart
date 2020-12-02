@@ -6,6 +6,8 @@ import 'package:b2b_commerce/src/business/orders/delivery/delivery_orders_page.d
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
+import 'package:b2b_commerce/src/business/orders/reconciliation/reconciliation_order_detail_page.dart';
+import 'package:b2b_commerce/src/business/orders/reconciliation/reconciliation_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_import.dart';
@@ -120,6 +122,12 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_DELIVERY_ORDER_DETAIL =
       '/business/orders/delivery_orders/detail';
 
+  ///对账单
+  static const ROUTE_RECONCILIATION_ORDERS =
+      '/business/orders/reconciliation_orders';
+  static const ROUTE_RECONCILIATION_ORDER_DETAIL =
+      '/business/orders/reconciliation_orders/detail';
+
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
   static const ROUTE_MY_FACTORY = '/my/my_factory';
@@ -207,8 +215,12 @@ class AppRoutes with GlobalRoutes {
     ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm(),
     ROUTE_DELIVERY_ORDERS: (context) => DeliveryOrdersPage(),
     ROUTE_DELIVERY_ORDER_DETAIL: (context) => DeliveryOrderDetailPage(
-          id: getVal('id', context),
-        ),
+        id: getVal('id', context), needRefresh: getVal('needRefresh', context)),
+    ROUTE_RECONCILIATION_ORDERS: (context) => ReconciliationOrdersPage(),
+    ROUTE_RECONCILIATION_ORDER_DETAIL: (context) =>
+        ReconciliationOrderDetailPage(
+            id: getVal('id', context),
+            needRefresh: getVal('needRefresh', context)),
   };
 
   static dynamic getVal(String key, BuildContext context) {

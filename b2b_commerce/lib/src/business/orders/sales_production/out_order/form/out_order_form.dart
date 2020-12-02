@@ -224,11 +224,11 @@ class _OutOrderFormState extends State<OutOrderForm> {
     List<B2BCustomerModel> b2bCusomers =
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => EmployeeSelectPage(
-              multi: true,
-              max: 5,
-              selected:
-              form.sendApprovers != null ? form.sendApprovers : [],
-            )));
+                  multi: true,
+                  max: 5,
+                  selected:
+                      form.sendApprovers != null ? form.sendApprovers : [],
+                )));
     setState(() {
       form.sendApprovers = b2bCusomers;
     });

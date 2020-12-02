@@ -28,7 +28,7 @@ dependencies:
   json_annotation: ^3.0.1
   shared_preferences: ^0.4.2
   fluwx: ^2.3.0
-  rxdart: ^0.22.2
+  rxdart: ^0.24.1
   open_file: ^3.0.1
   store_redirect: ^1.0.1
   amap_location: ^0.2.0

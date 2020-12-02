@@ -6,7 +6,7 @@ import 'package:widgets/widgets.dart';
 
 import 'delivery_order_item.dart';
 
-///外接订单View
+///快速出货单View
 class DeliveryOrdersView extends StatelessWidget {
   final EnumModel status;
 
@@ -26,7 +26,7 @@ class DeliveryOrdersView extends StatelessWidget {
   }
 }
 
-///外接订单列表
+///快速出货单列表
 class DeliveryOrdersList extends StatelessWidget {
   final DeliveryOrdersState state;
 

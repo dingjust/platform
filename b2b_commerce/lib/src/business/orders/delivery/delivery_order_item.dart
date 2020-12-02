@@ -1,15 +1,15 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 ///发货单块
 class DeliveryOrderItem extends StatelessWidget {
-  final SalesProductionOrderModel model;
+  final FastShippingSheetModel model;
 
   const DeliveryOrderItem(
     this.model, {
@@ -20,11 +20,9 @@ class DeliveryOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        height: 180,
         margin: const EdgeInsets.fromLTRB(5, 10, 5, 0),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             _Header(
               model: model,
@@ -45,6 +43,10 @@ class DeliveryOrderItem extends StatelessWidget {
         Navigator.of(context)
             .pushNamed(AppRoutes.ROUTE_DELIVERY_ORDER_DETAIL, arguments: {
           'id': model.id,
+        }).then((needRefresh) {
+          if (needRefresh != null && needRefresh) {
+            Provider.of<DeliveryOrdersState>(context).clear();
+          }
         });
       },
     );
@@ -52,7 +54,7 @@ class DeliveryOrderItem extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  final SalesProductionOrderModel model;
+  final FastShippingSheetModel model;
 
   const _Header({Key key, this.model}) : super(key: key);
 
@@ -64,8 +66,9 @@ class _Header extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Text(
-            '单号：${model.code}',
+            '标题：${model.title}',
             textAlign: TextAlign.start,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontSize: 16,
               color: Colors.black87,
@@ -73,61 +76,58 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-        _buildTag(),
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '${SalesProductionOrderStateLocalizedMap[model.state]}',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 18,
-                    // color: getSalesProductionStateColor(model.state),
-                    fontWeight: FontWeight.w500,
-                  ),
-                )),
-          ),
+        // _buildTag(),
+        Container(
+          child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '${LogisticsSheetStateLocalizedMap[model.state]}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: getDeliveryOrderStateColor(model.state),
+                  fontWeight: FontWeight.w500,
+                ),
+              )),
         ),
       ],
     );
   }
 
-  Widget _buildTag() {
-    //自创外接订单无originCompany
-    return model.originCompany == null
-        ? Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-            child: Center(
-              child: Text(
-                '自创',
-                style:
-                    TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
-              ),
-            ),
-          )
-        : Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
-            child: Center(
-              child: Text(
-                '线上',
-                style: TextStyle(
-                    color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
-              ),
-            ),
-          );
-  }
+// Widget _buildTag() {
+//   //自创外接订单无originCompany
+//   return model.originCompany == null
+//       ? Container(
+//           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+//           decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(2),
+//               border: Border.all(color: Constants.THEME_COLOR_MAIN)),
+//           child: Center(
+//             child: Text(
+//               '自创',
+//               style:
+//                   TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
+//             ),
+//           ),
+//         )
+//       : Container(
+//           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+//           decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(2),
+//               border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
+//           child: Center(
+//             child: Text(
+//               '线上',
+//               style: TextStyle(
+//                   color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
+//             ),
+//           ),
+//         );
+// }
 }
 
 class _Row1 extends StatelessWidget {
-  final SalesProductionOrderModel model;
+  final FastShippingSheetModel model;
 
   const _Row1({Key key, this.model}) : super(key: key);
 
@@ -150,27 +150,26 @@ class _Row1 extends StatelessWidget {
           style: TextStyle(fontSize: 16),
           overflow: TextOverflow.ellipsis,
         )),
-        _buildTag()
+        // _buildTag()
       ],
     );
   }
 
   String getCoopertorName() {
     String name = '';
-    if (model.originCompany != null) {
-      name = model.originCompany.name;
-    } else {
-      name = model?.originCooperator?.type == CooperatorType.ONLINE
-          ? model?.originCooperator?.partner?.name
-          : model?.originCooperator?.name;
-    }
+
+    name = model?.cooperator?.type == CooperatorType.ONLINE
+        ? model?.cooperator?.partner?.name
+        : model?.cooperator?.name;
+
     return name;
   }
 
   ImageProvider getImage() {
-    if (model.originCompany != null &&
-        model.originCompany.profilePicture != null) {
-      return NetworkImage(model.originCompany.profilePicture.thumbnailUrl());
+    if (model.cooperator?.partner != null &&
+        model.cooperator.partner.profilePicture != null) {
+      return NetworkImage(
+          model.cooperator?.partner?.profilePicture?.thumbnailUrl());
     } else {
       return AssetImage(
         'temp/picture.png',
@@ -179,34 +178,34 @@ class _Row1 extends StatelessWidget {
     }
   }
 
-  Widget _buildTag() {
-    bool isDone = model.agreements != null
-        ? model.agreements
-            .any((element) => element.state == ContractStatus.COMPLETE)
-        : false;
+// Widget _buildTag() {
+//   bool isDone = model.agreements != null
+//       ? model.agreements
+//           .any((element) => element.state == ContractStatus.COMPLETE)
+//       : false;
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5),
-      child: Center(
-        child: Text(
-          isDone ? '已签合同' : '未签合同',
-          style: TextStyle(
-              color: isDone ? Color.fromRGBO(103, 194, 58, 1) : Colors.black54,
-              fontSize: 10),
-        ),
-      ),
-      decoration: BoxDecoration(
-          border: Border.all(
-              color:
-                  isDone ? Color.fromRGBO(225, 243, 216, 1) : Colors.grey[200],
-              width: 0.5),
-          color: isDone ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
-    );
-  }
+//   return Container(
+//     padding: EdgeInsets.symmetric(horizontal: 5),
+//     child: Center(
+//       child: Text(
+//         isDone ? '已签合同' : '未签合同',
+//         style: TextStyle(
+//             color: isDone ? Color.fromRGBO(103, 194, 58, 1) : Colors.black54,
+//             fontSize: 10),
+//       ),
+//     ),
+//     decoration: BoxDecoration(
+//         border: Border.all(
+//             color:
+//                 isDone ? Color.fromRGBO(225, 243, 216, 1) : Colors.grey[200],
+//             width: 0.5),
+//         color: isDone ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
+//   );
+// }
 }
 
 class _Row2 extends StatelessWidget {
-  final SalesProductionOrderModel model;
+  final FastShippingSheetModel model;
 
   const _Row2({Key key, this.model}) : super(key: key);
 
@@ -215,9 +214,21 @@ class _Row2 extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('合作方式：${CooperationModeLocalizedMap[model.cooperationMode]}'),
+        Expanded(
+          flex: 2,
+          child: Text(
+            '单号：${model.code}',
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         Text(
-          '创建时间：${DateFormatUtil.formatYMD(model.creationtime)}',
+          '${DateFormatUtil.formatYMD(model.creationtime)}',
           style: TextStyle(fontSize: 14),
         )
       ],
@@ -226,7 +237,7 @@ class _Row2 extends StatelessWidget {
 }
 
 class _MediasRow extends StatelessWidget {
-  final SalesProductionOrderModel model;
+  final FastShippingSheetModel model;
 
   const _MediasRow({Key key, this.model}) : super(key: key);
 
@@ -244,25 +255,12 @@ class _MediasRow extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Text('单据：'),
-                for (MediaModel model in [
-                  MediaModel.fromJson(val),
-                  MediaModel.fromJson(val),
-                  MediaModel.fromJson(val)
-                ])
-                  ImageFactory.buildThumbnailImage(model, containerSize: 50)
+                for (MediaModel media in model.medias ?? [])
+                  ImageFactory.buildThumbnailImage(media,
+                      size: 50, containerSize: 50)
               ]),
         )
       ],
     );
   }
 }
-
-const val = {
-  "id": 8811314577438,
-  "name": "微信图片_20200604184853.jpg",
-  "url": "/resource/h5b/h98/8811314610206.jpg",
-  "mediaType": "image/jpeg",
-  "mime": "image/jpeg",
-  "mediaFormat": "DefaultImageFormat",
-  "convertedMedias": []
-};

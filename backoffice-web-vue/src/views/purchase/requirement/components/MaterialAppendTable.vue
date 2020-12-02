@@ -43,7 +43,7 @@
             <span>物料编号<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.code'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.code'">
               <el-input v-model="scope.row.code" style="width: 90px"></el-input>
             </el-form-item>
           </template>
@@ -53,7 +53,7 @@
             <span>幅宽/型号<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.modelName'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.modelName'">
               <el-input v-model="scope.row.modelName" style="width: 90px"></el-input>
             </el-form-item>
           </template></el-table-column>
@@ -79,7 +79,7 @@
             <span>物料颜色<span style="color: #F56C6C"> *</span></span>
           </template>
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.colorName'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.colorName'">
               <el-input v-model="scope.row.colorName" style="width: 90px"></el-input>
             </el-form-item>
           </template>
@@ -311,11 +311,11 @@ export default {
       })
     },
     _onImport () {
-      const flag = this.checkRepeat(this.entries.workOrders);
+      // const flag = this.checkRepeat(this.entries.workOrders);
 
-      if (flag) {
+      // if (flag) {
         this.$emit('onSelect', this.arrangeData(this.entries.workOrders));
-      }
+      // }
     },
     arrangeData (materials) {
       let result = [];

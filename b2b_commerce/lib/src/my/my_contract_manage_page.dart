@@ -35,41 +35,41 @@ class _MyContractManagePageState extends State<MyContractManagePage> {
 
   Future<CertificationContractCount> getData() async {
     CertificationContractCount contractCount =
-    await ContractRepository().getContractCount();
+        await ContractRepository().getContractCount();
     return contractCount;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('合同管理'),
-          centerTitle: true,
-          elevation: 0.5,
-        ),
-        body: FutureBuilder<CertificationContractCount>(
-          builder: (BuildContext context,
-              AsyncSnapshot<CertificationContractCount> snapshot) {
-            if (snapshot.data != null) {
-              return Container(
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    _buildHead(),
-                    _buildMain(snapshot.data.data),
-                    _buildHelp(),
-                  ],
-                ),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-          initialData: null,
-          future: _futureBuilderFuture,
-        ),
+      appBar: AppBar(
+        title: Text('合同管理'),
+        centerTitle: true,
+        elevation: 0.5,
+      ),
+      body: FutureBuilder<CertificationContractCount>(
+        builder: (BuildContext context,
+            AsyncSnapshot<CertificationContractCount> snapshot) {
+          if (snapshot.data != null) {
+            return Container(
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  _buildHead(),
+                  _buildMain(snapshot.data.data),
+                  _buildHelp(),
+                ],
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+        initialData: null,
+        future: _futureBuilderFuture,
+      ),
       // bottomNavigationBar: Container(
       //   color: Colors.white,
       //   padding: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
@@ -148,7 +148,6 @@ class _MyContractManagePageState extends State<MyContractManagePage> {
                   MaterialPageRoute(
                       builder: (context) =>
                           ContractSealPage(
-                            sealList: sealList,
                             isSelect: false,
                           )));
             },

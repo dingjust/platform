@@ -26,9 +26,9 @@ class ImageFactory {
 
   static Widget buildThumbnailImage(
     MediaModel media, {
-        double size = 60,
-        double containerSize = 80,
-        BoxFit fit = BoxFit.fill,
+    double size = 60,
+    double containerSize = 80,
+    BoxFit fit = BoxFit.fill,
   }) {
     if (media == null) {
       return buildDefaultThumbnailImage(
@@ -43,31 +43,29 @@ class ImageFactory {
           width: containerSize,
           height: containerSize,
           child: CachedNetworkImage(
-              imageUrl: '${media.previewUrl()}',
-              fit: fit,
-              imageBuilder: (context, imageProvider) =>
-                  Container(
-                    width: containerSize,
-                    height: containerSize,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(10)),
+            imageUrl: '${media.previewUrl()}',
+            fit: fit,
+            imageBuilder: (context, imageProvider) => Container(
+              width: containerSize,
+              height: containerSize,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
                   ),
-              placeholder: (context, url) =>
-                  SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30.0,
-                  ),
-              errorWidget: (context, url, error) =>
-                  SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: 30,
-                  )),
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            placeholder: (context, url) => SpinKitRing(
+              color: Colors.black12,
+              lineWidth: 2,
+              size: 30,
+            ),
+            errorWidget: (context, url, error) => Icon(
+              Icons.photo_outlined,
+              color: Colors.grey,
+              size: size,
+            ),
+          ),
         ));
   }
 

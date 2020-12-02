@@ -1,9 +1,9 @@
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:core/core.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -14,16 +14,25 @@ class DeliveryOrderForm extends StatefulWidget {
 }
 
 class _DeliveryOrderFormState extends State<DeliveryOrderForm> {
-  SalesProductionOrderModel form;
+  FastShippingSheetModel form;
+
+  TextEditingController remarksController;
+  TextEditingController titleController;
+
+  FocusNode remarksNode;
+  FocusNode titleNode;
 
   @override
   void initState() {
-    UserModel currentUser = UserBLoC.instance.currentUser;
-    form = SalesProductionOrderModel(
-        sendAuditNeeded: false,
-        attachments: [],
-        merchandiser:
-            B2BCustomerModel(id: currentUser.id, name: currentUser.name));
+    form = FastShippingSheetModel(
+      medias: [],
+    );
+    remarksController = TextEditingController(text: form?.remarks ?? '');
+    titleController = TextEditingController(text: form?.title ?? '');
+
+    remarksNode = FocusNode();
+    titleNode = FocusNode();
+
     super.initState();
   }
 
@@ -45,7 +54,7 @@ class _DeliveryOrderFormState extends State<DeliveryOrderForm> {
               children: <Widget>[
                 FormCooperatorsSelect(
                   onCooperatorSelect: onCooperatorSelect,
-                  value: form.targetCooperator,
+                  value: form.cooperator,
                 ),
                 _buildRemarks(),
                 Container(
@@ -60,17 +69,30 @@ class _DeliveryOrderFormState extends State<DeliveryOrderForm> {
   }
 
   Widget _buildRemarks() {
-    TextEditingController textEditingController =
-        TextEditingController(text: form?.remarks ?? '');
-    FocusNode focusNode = FocusNode();
-
     return FormBlock(
       children: [
+        FormLabel('标题'),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: TextFieldBorderComponent(
+            padding: EdgeInsets.all(0),
+            hideDivider: true,
+            isRequired: true,
+            textAlign: TextAlign.left,
+            hintText: '请输入标题',
+            controller: titleController,
+            focusNode: titleNode,
+            onChanged: (value) {
+              form.title = value;
+            },
+          ),
+        ),
+        Divider(),
         FormLabel('单据'),
         Container(
           color: Colors.white,
           child: EditableAttachments(
-            list: form.attachments,
+            list: form.medias,
             maxNum: 20,
           ),
         ),
@@ -82,10 +104,10 @@ class _DeliveryOrderFormState extends State<DeliveryOrderForm> {
             hideDivider: true,
             isRequired: true,
             textAlign: TextAlign.left,
-            hintText: '请输入内容',
-            controller: textEditingController,
+            hintText: '请输入备注',
+            controller: remarksController,
             maxLength: 250,
-            focusNode: focusNode,
+            focusNode: remarksNode,
             onChanged: (value) {
               form.remarks = value;
             },
@@ -102,18 +124,17 @@ class _DeliveryOrderFormState extends State<DeliveryOrderForm> {
         context,
         MaterialPageRoute(
             builder: (context) => CooperatorsPage(
-                  selectedData: form.targetCooperator != null
-                      ? [form.targetCooperator]
-                      : [],
+                  selectedData:
+                      form.cooperator != null ? [form.cooperator] : [],
                   selectingMode: true,
                   max: 1,
                 )));
     if (cooperators != null) {
       setState(() {
         if (cooperators.isNotEmpty) {
-          form.targetCooperator = cooperators.first;
+          form.cooperator = cooperators.first;
         } else {
-          form.targetCooperator = null;
+          form.cooperator = null;
         }
       });
     }
@@ -147,12 +168,33 @@ class _DeliveryOrderFormState extends State<DeliveryOrderForm> {
     );
   }
 
-  void _onSubmit() {}
+  void _onSubmit() async {
+    if (validateForm()) {
+      Function cancelFunc =
+          BotToast.showLoading(crossPage: false, clickClose: true);
+      BaseResponse response = await DeliveryOrderRespository.crerate(form);
+      cancelFunc.call();
+      if (response != null && response.code == 1) {
+        BotToast.showText(text: '提交成功');
+        //跳转到
+        // Navigator.of(context).pushReplacementNamed(
+        //     AppRoutes.ROUTE_DELIVERY_ORDER_DETAIL,
+        //     arguments: {'id': response.data, 'needRefresh': true});
+        Navigator.of(context).pop(true);
+      } else if (response != null && response.code == 0) {
+        BotToast.showText(text: '${response.msg}');
+      } else {
+        BotToast.showText(text: '操作失败');
+      }
+    }
+  }
 
   ///表单校验
   bool validateForm() {
     List<FormValidateItem> items = [
-      FormValidateItem(form.managementMode == null, '请选择管理方式'),
+      FormValidateItem((form.title == null || form.title == ''), '请填写标题'),
+      FormValidateItem((form.medias.isEmpty), '请上传单据'),
+      FormValidateItem((form.cooperator == null), '请选择合作商'),
     ];
 
     FormValidateItem item =

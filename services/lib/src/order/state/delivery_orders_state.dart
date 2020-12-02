@@ -1,43 +1,33 @@
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
-import 'package:services/src/api/sale_production.dart';
+import 'package:services/src/api/order.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/order/PageEntry.dart';
-import 'package:services/src/sale_production/response/sale_production_response.dart';
+import 'package:services/src/order/response/delivery_order_response.dart';
 import 'package:services/src/state/state.dart';
 
 ///外接订单状态管理
 class DeliveryOrdersState extends PageState {
   Map<String, PageEntry> _ordersMap = {
-    'TO_BE_ACCEPTED': PageEntry(
+    'ALL': PageEntry(
         currentPage: 0,
         size: 10,
-        data: List<SalesProductionOrderModel>(),
+        data: List<FastShippingSheetModel>(),
         totalElements: -1),
-    'AUDITING': PageEntry(
+    'PENDING_RECONCILED': PageEntry(
         currentPage: 0,
         size: 10,
-        data: List<SalesProductionOrderModel>(),
+        data: List<FastShippingSheetModel>(),
         totalElements: -1),
-    'AUDIT_REJECTED': PageEntry(
+    'IN_RECONCILED': PageEntry(
         currentPage: 0,
         size: 10,
-        data: List<SalesProductionOrderModel>(),
-        totalElements: -1),
-    'AUDIT_PASSED': PageEntry(
-        currentPage: 0,
-        size: 10,
-        data: List<SalesProductionOrderModel>(),
+        data: List<FastShippingSheetModel>(),
         totalElements: -1),
     'COMPLETED': PageEntry(
         currentPage: 0,
         size: 10,
-        data: List<SalesProductionOrderModel>(),
-        totalElements: -1),
-    'CANCELED': PageEntry(
-        currentPage: 0,
-        size: 10,
-        data: List<SalesProductionOrderModel>(),
+        data: List<FastShippingSheetModel>(),
         totalElements: -1),
   };
 
@@ -58,7 +48,7 @@ class DeliveryOrdersState extends PageState {
     return _ordersMap[status];
   }
 
-  List<SalesProductionOrderModel> orders(String status, {String keyword}) {
+  List<FastShippingSheetModel> orders(String status, {String keyword}) {
     if (_ordersMap[status].totalElements < 0) {
       getOrders(status);
     }
@@ -71,30 +61,27 @@ class DeliveryOrdersState extends PageState {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-        'depts': [0],
-        'users': [],
         'keyword': _keyword != '' ? _keyword : null,
       };
-      if (status != '' && status != 'SEARCH') {
-        data['state'] = status;
+      if (status != '' && status != 'ALL') {
+        data['states'] = [status];
       }
 
       Response<Map<String, dynamic>> response;
 
       try {
-        response = await http$.post(SaleProductionApis.outOrderPendingList,
-            data: data,
-            queryParameters: {
-              'page': _ordersMap[status].currentPage,
-              'size': _ordersMap[status].size,
-            });
+        response = await http$
+            .post(OrderApis.deliveryOrderList, data: data, queryParameters: {
+          'page': _ordersMap[status].currentPage,
+          'size': _ordersMap[status].size,
+        });
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        ExternalSaleOrdersResponse ordersResponse =
-            ExternalSaleOrdersResponse.fromJson(response.data);
+        DeliveryOrderResponse ordersResponse =
+            DeliveryOrderResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
         _ordersMap[status].totalElements = ordersResponse.totalElements;
         _ordersMap[status].data.clear();
@@ -113,29 +100,26 @@ class DeliveryOrdersState extends PageState {
       //接口调用：
       if (_ordersMap[status].currentPage + 1 != _ordersMap[status].totalPages) {
         Map data = {
-          'depts': [0],
-          'users': [],
           'keyword': _keyword != '' ? _keyword : null,
         };
-        if (status != 'ALL') {
-          data['state'] = status;
+        if (status != '' && status != 'ALL') {
+          data['states'] = [status];
         }
 
         Response<Map<String, dynamic>> response;
         try {
-          response = await http$.post(SaleProductionApis.outOrderPendingList,
-              data: data,
-              queryParameters: {
-                'page': ++_ordersMap[status].currentPage,
-                'size': _ordersMap[status].size,
-              });
+          response = await http$
+              .post(OrderApis.deliveryOrderList, data: data, queryParameters: {
+            'page': ++_ordersMap[status].currentPage,
+            'size': _ordersMap[status].size,
+          });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response.statusCode == 200) {
-          ExternalSaleOrdersResponse ordersResponse =
-              ExternalSaleOrdersResponse.fromJson(response.data);
+          DeliveryOrderResponse ordersResponse =
+          DeliveryOrderResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
           _ordersMap[status].data.addAll(ordersResponse.content);
@@ -152,7 +136,7 @@ class DeliveryOrdersState extends PageState {
     _ordersMap.forEach((key, entry) {
       entry.currentPage = 0;
       entry.size = 10;
-      entry.data = List<SalesProductionOrderModel>();
+      entry.data = List<FastShippingSheetModel>();
       entry.totalElements = -1;
     });
     notifyListeners();

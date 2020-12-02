@@ -7,7 +7,16 @@ import 'package:permission_handler/permission_handler.dart';
 class WebviewPage extends StatefulWidget {
   String url;
 
-  WebviewPage({Key key, this.url = ''}) : super(key: key);
+  String title;
+
+  ///是否重定向到合同列表
+  bool needRedirectContractList;
+
+  WebviewPage({Key key,
+    this.url = '',
+    this.needRedirectContractList = true,
+    this.title = ''})
+      : super(key: key);
 
   @override
   _WebviewPageState createState() => _WebviewPageState();
@@ -16,6 +25,7 @@ class WebviewPage extends StatefulWidget {
 class _WebviewPageState extends State<WebviewPage> {
   FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
   bool _goContractListPage = false;
+  bool needRefresh = false;
 
   @override
   void initState() {
@@ -23,8 +33,9 @@ class _WebviewPageState extends State<WebviewPage> {
     _permissionsInit();
     // flutterWebviewPlugin.
     flutterWebviewPlugin.onUrlChanged.listen((String url) async {
-      print(url);
-      print(url.contains('result_code=3000'));
+      print('WebView:url=>$url');
+      needRefresh = true;
+
       if (url.contains('result_code=3000')) {
         _goContractListPage = true;
       }
@@ -36,18 +47,22 @@ class _WebviewPageState extends State<WebviewPage> {
     return WillPopScope(
         child: WebviewScaffold(
           url: widget.url,
-          appBar: AppBar(),
+          appBar: AppBar(
+            title: Text('${widget.title}'),
+          ),
           withZoom: true,
           withLocalStorage: true,
           hidden: true,
         ),
         onWillPop: () {
           //签署成功跳转到合同列表页
-          if (_goContractListPage) {
+          if (_goContractListPage && widget.needRedirectContractList) {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => MyContractPage()),
                 ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
+          } else if (needRefresh) {
+            Navigator.of(context).pop(true);
           } else {
             Navigator.pop(context);
           }

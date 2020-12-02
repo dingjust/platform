@@ -202,6 +202,25 @@ class HttpManager {
     );
   }
 
+  Future<Response<T>> download<T>(
+    String path,
+    String savePath, {
+    BuildContext context,
+    data,
+    Options options,
+    CancelToken cancelToken,
+  }) {
+    _setContext(context);
+    path = path.replaceAll('{baseSiteId}', baseSiteId);
+    return instance.download(
+      path,
+      savePath,
+      data: data,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
   static _setContext(BuildContext context) {
     if (context != null) {
       instance.options.extra[GlobalConfigs.CURRENT_CONTEXT_KEY] = context;

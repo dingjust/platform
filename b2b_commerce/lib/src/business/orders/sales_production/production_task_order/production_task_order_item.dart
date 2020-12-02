@@ -1,9 +1,9 @@
+import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:core/core.dart';
 
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/constants.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -23,9 +23,9 @@ class ProductionTaskOrderItem extends StatelessWidget {
 
   const ProductionTaskOrderItem(this.model,
       {this.isSelected = false,
-      this.isSelectList = false,
-      this.onPressed,
-      Key key})
+        this.isSelectList = false,
+        this.onPressed,
+        Key key})
       : super(key: key);
 
   @override
@@ -75,41 +75,41 @@ class ProductionTaskOrderItem extends StatelessWidget {
         ),
         Expanded(
             child: Container(
-          height: height,
-          padding: EdgeInsets.symmetric(horizontal: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                model.product.name,
-                style: TextStyle(fontSize: 18),
-                overflow: TextOverflow.ellipsis,
+              height: height,
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    model.product.name,
+                    style: TextStyle(fontSize: 18),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      '货号：${model.product.skuID}',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 243, 243, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      '品类：${model.product.category?.name}',
+                      style: TextStyle(
+                          fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
+                    ),
+                  )
+                ],
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  '货号：${model.product.skuID}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 243, 243, 1),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  '品类：${model.product.category?.name}',
-                  style: TextStyle(
-                      fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
-                ),
-              )
-            ],
-          ),
-        ))
+            ))
       ],
     );
   }
@@ -153,30 +153,30 @@ class ProductionTaskOrderItem extends StatelessWidget {
     //自创外接订单无originCompany
     return model.outboundOrderCode == null
         ? Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
-            child: Center(
-              child: Text(
-                '未外发',
-                style: TextStyle(
-                    color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
-              ),
-            ),
-          )
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
+      child: Center(
+        child: Text(
+          '未外发',
+          style: TextStyle(
+              color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
+        ),
+      ),
+    )
         : Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-            child: Center(
-              child: Text(
-                '已外发',
-                style:
-                    TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
-              ),
-            ),
-          );
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          border: Border.all(color: Constants.THEME_COLOR_MAIN)),
+      child: Center(
+        child: Text(
+          '已外发',
+          style:
+          TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
+        ),
+      ),
+    );
   }
 }

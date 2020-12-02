@@ -50,6 +50,12 @@ class MenuItemImage {
   static Image freeCapacity2 = getImage('temp/index/free_capacity2.png');
   static Image externalOrder = getImage('temp/business/external_order.png');
   static Image outboundOrder = getImage('temp/business/outbound_order.png');
+
+  ///发货
+  static Image delivery = getImage('temp/business/delivery.png');
+
+  ///对账
+  static Image reconciliation = getImage('temp/business/reconciliation.png');
 }
 
 class B2BImage {

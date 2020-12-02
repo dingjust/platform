@@ -10,7 +10,9 @@ import 'delivery_orders_list.dart';
 import 'form/delivery_order_form.dart';
 
 const _statuses = <EnumModel>[
-  EnumModel('AUDIT_PASSED', '生产中'),
+  EnumModel('ALL', '全部'),
+  EnumModel('PENDING_RECONCILED', '待对账'),
+  EnumModel('IN_RECONCILED', '对账中'),
   EnumModel('COMPLETED', '已完成'),
 ];
 
@@ -42,7 +44,7 @@ class _DeliveryOrdersPageState extends State<DeliveryOrdersPage> {
         body: DefaultTabController(
           length: _statuses.length,
           child: Scaffold(
-            appBar: TabFactory.buildDefaultTabBar(_statuses, scrollable: true),
+            appBar: TabFactory.buildDefaultTabBar(_statuses, scrollable: false),
             body: TabBarView(
               children: _statuses
                   .map((status) => DeliveryOrdersView(status: status))
@@ -74,8 +76,9 @@ class _DeliveryOrdersPageState extends State<DeliveryOrdersPage> {
             title: Consumer<DeliveryOrdersState>(
               builder: (context, DeliveryOrdersState state, _) =>
                   SearchAppbarTitle(
-                controller: controller,
+                    controller: controller,
                 focusNode: focusNode,
+                hintText: '请输入单号...',
                 onSearch: () {
                   state.setKeyword(controller.text);
                   if (controller.text == '') {
@@ -99,7 +102,7 @@ class _AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        //唯一码导入
+        //出货表单
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => DeliveryOrderForm()))
             .then((value) {

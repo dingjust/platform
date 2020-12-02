@@ -1,8 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/constants.dart';
+import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/progress_work_sheet/progress_work_sheet_detail_page.dart';
-import 'package:flutter/material.dart';
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
