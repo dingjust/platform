@@ -199,30 +199,30 @@ export default {
   },
   data () {
     return {
-      item: {
-        product: {
-          id: '',
-          name: '',
-          thumbnail: '',
-          skuID: ''
-        },
-        waveBand: '',
-        orderItemNo: '',
-        customizedMode: '',
-        deliveryDate: '',
-        contractDate: '',
-        orderQuantity: '',
-        cutQuantity: '',
-        packageQuantity: '',
-        storageQuantity: '',
-        returnQuantity: '',
-        unitContractPrice: '',
-        loanAmount: '',
-        expressFee: '',
-        deductionAmount: '',
-        settlementAmount: '',
-        remarks: ''
-      },
+      // item: {
+      //   product: {
+      //     id: '',
+      //     name: '',
+      //     thumbnail: '',
+      //     skuID: ''
+      //   },
+      //   waveBand: '',
+      //   orderItemNo: '',
+      //   customizedMode: '',
+      //   deliveryDate: '',
+      //   contractDate: '',
+      //   orderQuantity: '',
+      //   cutQuantity: '',
+      //   packageQuantity: '',
+      //   storageQuantity: '',
+      //   returnQuantity: '',
+      //   unitContractPrice: '',
+      //   loanAmount: '',
+      //   expressFee: '',
+      //   deductionAmount: '',
+      //   settlementAmount: '',
+      //   remarks: ''
+      // },
       productDialog: false,
       operateIndex: '',
       importVisible: false
@@ -251,7 +251,30 @@ export default {
       }
     },
     onAdd () {
-      this.formData.entries.push(Object.assign({}, this.item));
+      this.formData.entries.push({
+        product: {
+          id: '',
+          name: '',
+          thumbnail: '',
+          skuID: ''
+        },
+        waveBand: '',
+        orderItemNo: '',
+        customizedMode: '',
+        deliveryDate: '',
+        contractDate: '',
+        orderQuantity: '',
+        cutQuantity: '',
+        packageQuantity: '',
+        storageQuantity: '',
+        returnQuantity: '',
+        unitContractPrice: '',
+        loanAmount: '',
+        expressFee: '',
+        deductionAmount: '',
+        settlementAmount: '',
+        remarks: ''
+      });
     },
     onCopy (index, row) {
       this.formData.entries.splice(index + 1, 0, Object.assign({}, row));

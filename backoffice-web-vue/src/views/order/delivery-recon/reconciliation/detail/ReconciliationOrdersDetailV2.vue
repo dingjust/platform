@@ -21,7 +21,7 @@
         <div><h6>附件：</h6></div>
         <files-upload v-if="order.medias && order.medias.length > 0" :slotData="order.medias" :readOnly="true" :disabled="true"/>
       </el-row>
-      <div v-if="!isCooperator">
+      <div v-if="isReceiveParty">
         <template v-if="order.auditWorkOrder && order.auditWorkOrder.processes && order.auditWorkOrder.processes.length > 0">
           <order-audit-detail class="basic-container" :processes="order.auditWorkOrder.processes" />
         </template>
@@ -64,9 +64,8 @@ export default {
     DocSignatures
   },
   computed: {
-    isCooperator: function () {
-      return this.order.cooperator.type === 'ONLINE' && 
-              this.order.cooperator.partner.uid === this.$store.getters.currentUser.companyCode;
+    isReceiveParty: function () {
+      return this.order.receiveParty.uid === this.$store.getters.currentUser.companyCode;
     },
     canAudit: function () {
       if (this.order.state !== 'PENDING_APPROVAL') {
