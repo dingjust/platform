@@ -1719,6 +1719,10 @@ let NONE_TENANT_APIS = {
   getDeliveryDetail (id) {
     return '/b2b/sheets/fast/shipping/' + id;
   },
+  // 创建出货单
+  createDelivery () {
+    return '/b2b/sheets/fast/shipping/create';
+  },
   // 根据skuID查询产品是否存在
   checkProductBySkuID () {
     return '/b2b/sample/clothes/listBySkuid';

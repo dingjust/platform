@@ -215,8 +215,7 @@ export default {
         this.tagWidth = this.$refs.tag.$el.scrollWidth
       }
       this.tagPosition = this.tagWidth + count < this.$refs.tabs.$el.scrollWidth;
-    },
-
+    }
   },
   mounted() {
     window.addEventListener('resize', this.changeTagPosition);
