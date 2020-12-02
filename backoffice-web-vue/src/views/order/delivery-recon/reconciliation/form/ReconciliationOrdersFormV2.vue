@@ -66,7 +66,7 @@ export default {
   data () {
     return {
       authenticationInfo: this.$store.getters.authenticationInfo,
-      electronTip: '正在新创建电子对账单使用在线电子签章签署合同，是否继续',
+      electronTip: '正在新创建电子对账单，双方将使用在线电子签章系统签署，是否继续?',
       paperTip: '正在把已签署的对账单文件扫描件上传到订单附件中作为备份，是否继续',
       formData: {
         title: '',

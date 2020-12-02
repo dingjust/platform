@@ -14,18 +14,20 @@ class DocSignatureDetailPage extends StatefulWidget {
 
   final String title;
 
+  final bool disable;
+
   ///回退重路由
   Route route;
 
   ///PDF路径
   String pathPDF;
 
-  DocSignatureDetailPage({
-    this.pathPDF = '',
-    this.route,
-    this.title = '账单详情',
-    this.doc,
-  });
+  DocSignatureDetailPage(
+      {this.pathPDF = '',
+      this.route,
+      this.title = '账单详情',
+      this.doc,
+      this.disable = false});
 
   @override
   _DocSignatureDetailPageState createState() =>
@@ -135,6 +137,10 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
 
   ///判断知否需要去签署
   bool needToSign() {
+    if (widget.disable) {
+      return false;
+    }
+
     if (widget.doc == null) {
       return false;
     }

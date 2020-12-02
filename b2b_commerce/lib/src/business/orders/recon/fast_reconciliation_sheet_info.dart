@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -19,23 +18,24 @@ class FastReconSheetBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _onTap(context),
-      child: Container(
-          padding: EdgeInsets.all(15),
-          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-          color: Colors.white,
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: Row(
-                  children: [FormLabel('$label：')],
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: () => _onTap(context),
+        child: Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    children: [FormLabel('$label：')],
+                  ),
                 ),
-              ),
-              ...sheet != null ? _buildMain(context) : [_buildNoData()]
-            ],
-          )),
+                ...sheet != null ? _buildMain(context) : [_buildNoData()]
+              ],
+            )),
+      ),
     );
   }
 
@@ -54,9 +54,24 @@ class FastReconSheetBlock extends StatelessWidget {
         ],
       ),
       Divider(),
-      Row(children: [
-        for (DocSignatureModel doc in sheet?.docSignatures ?? [])
-          _buildBtn(context, doc)
+      Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                B2BIcons.agreement,
+                color: Color(0xffffca3a),
+                size: 40,
+              ),
+              Text(
+                '${sheet.title ?? '无标题'}',
+                style: TextStyle(color: Colors.grey),
+              )
+            ],
+          ),
+        )
       ])
     ];
   }
@@ -80,42 +95,6 @@ class FastReconSheetBlock extends StatelessWidget {
     );
   }
 
-  Widget _buildBtn(BuildContext context, DocSignatureModel model,
-      {double height = 85, double width = 80}) {
-    return Container(
-      height: height,
-      width: width,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      child: Material(
-        color: Colors.white,
-        child: InkWell(
-          onTap: () {
-            // DocSignatureHelper.open(context: context, model: model)
-            //     .then((value) {
-            //   //需要刷新
-            //   if (value != null && value) {
-
-            //   }
-            // });
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(
-                B2BIcons.agreement,
-                color: Color(0xffffca3a),
-                size: 40,
-              ),
-              Text(
-                '${DocSignatureStateLocalizedMap[model.state]}',
-                style: TextStyle(color: Colors.grey),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   void _onTap(BuildContext context) async {
     Navigator.of(context)

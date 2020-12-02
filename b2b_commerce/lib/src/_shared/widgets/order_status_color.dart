@@ -52,7 +52,7 @@ Color getDeliveryOrderStateColor(LogisticsSheetState state) {
 const RECONCILIATION_ORDER_STATUS_COLORS = {
   FastReconciliationSheetState.PENDING_B_SIGN: Colors.blueAccent,
   FastReconciliationSheetState.PENDING_APPROVAL: Color(0xffff9800),
-  FastReconciliationSheetState.PENDING_A_SIGN: Colors.yellowAccent,
+  FastReconciliationSheetState.PENDING_A_SIGN: Color(0xff4db6ac),
   FastReconciliationSheetState.COMPLETED: Colors.green,
   FastReconciliationSheetState.CANCELLED: Colors.red
 };

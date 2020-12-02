@@ -10,10 +10,10 @@ import 'package:services/services.dart';
 
 ///签署文档工具类
 class DocSignatureHelper {
-  static Future<bool> open({
-    @required BuildContext context,
-    @required DocSignatureModel model,
-  }) async {
+  static Future<bool> open(
+      {@required BuildContext context,
+      @required DocSignatureModel model,
+      bool disable = false}) async {
     Function cancelFunc = BotToast.showLoading(
         clickClose: false, allowClick: false, crossPage: false);
 
@@ -35,6 +35,7 @@ class DocSignatureHelper {
                 pathPDF: filePath,
                 doc: model,
                 title: '电子对账单详情',
+                disable: disable,
               )));
       return result;
     } else {
