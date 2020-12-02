@@ -61,6 +61,9 @@ class _DeliveryOrderDetailPageState extends State<DeliveryOrderDetailPage> {
                         model: order.cooperator,
                       ),
                       _main(),
+                      Container(
+                        height: 10,
+                      ),
                       FastReconSheetBlock(
                         sheet: order.fastReconciliationSheet,
                       ),
@@ -241,9 +244,9 @@ class _OrderInfo extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-                '$val',
-                style: _infoStyle,
-              ))
+            '$val',
+            style: _infoStyle,
+          ))
         ],
       );
     }

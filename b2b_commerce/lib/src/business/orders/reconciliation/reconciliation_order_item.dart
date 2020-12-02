@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
+import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,6 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-        // _buildTag(),
         Container(
           child: Align(
               alignment: Alignment.centerRight,
@@ -93,37 +93,6 @@ class _Header extends StatelessWidget {
       ],
     );
   }
-
-// Widget _buildTag() {
-//   //自创外接订单无originCompany
-//   return model.originCompany == null
-//       ? Container(
-//           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-//           decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(2),
-//               border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-//           child: Center(
-//             child: Text(
-//               '自创',
-//               style:
-//                   TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
-//             ),
-//           ),
-//         )
-//       : Container(
-//           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-//           decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(2),
-//               border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
-//           child: Center(
-//             child: Text(
-//               '线上',
-//               style: TextStyle(
-//                   color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
-//             ),
-//           ),
-//         );
-// }
 }
 
 class _Row1 extends StatelessWidget {
@@ -150,7 +119,6 @@ class _Row1 extends StatelessWidget {
           style: TextStyle(fontSize: 16),
           overflow: TextOverflow.ellipsis,
         )),
-        // _buildTag()
       ],
     );
   }
@@ -177,31 +145,6 @@ class _Row1 extends StatelessWidget {
       );
     }
   }
-
-// Widget _buildTag() {
-//   bool isDone = model.agreements != null
-//       ? model.agreements
-//           .any((element) => element.state == ContractStatus.COMPLETE)
-//       : false;
-
-//   return Container(
-//     padding: EdgeInsets.symmetric(horizontal: 5),
-//     child: Center(
-//       child: Text(
-//         isDone ? '已签合同' : '未签合同',
-//         style: TextStyle(
-//             color: isDone ? Color.fromRGBO(103, 194, 58, 1) : Colors.black54,
-//             fontSize: 10),
-//       ),
-//     ),
-//     decoration: BoxDecoration(
-//         border: Border.all(
-//             color:
-//                 isDone ? Color.fromRGBO(225, 243, 216, 1) : Colors.grey[200],
-//             width: 0.5),
-//         color: isDone ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
-//   );
-// }
 }
 
 class _Row2 extends StatelessWidget {
@@ -246,21 +189,18 @@ class _MediasRow extends StatelessWidget {
     return Row(
       children: [
         Text('单据：'),
-        for (DocSignatureModel doc in model.docSignatures ?? [])
-          _buildBtn(context, doc)
+        for (DocSignatureModel doc in model.docSignatures ?? []) _buildBtn(doc)
       ],
     );
   }
 
-  Widget _buildBtn(BuildContext context, DocSignatureModel model,
-      {double height = 60, double width = 100}) {
+  Widget _buildBtn(
+    DocSignatureModel doc,
+  ) {
     return Expanded(
         child: Container(
-            // height: height,
-            // width: width,
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.ce,
               children: [
                 Icon(
                   B2BIcons.agreement,
@@ -273,27 +213,7 @@ class _MediasRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '${model.title ?? '空标题'}',
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '${DocSignatureStateLocalizedMap[model.state]}',
-                            style: TextStyle(color: Colors.grey),
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      ],
+                      children: [DocSignatureTag(doc: doc)],
                     ),
                   ],
                 ))

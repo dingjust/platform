@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperator_item.dart';
+import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
 import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -209,7 +210,8 @@ class _ReconciliationOrderDetailPageState
         color: Colors.white,
         child: InkWell(
           onTap: () {
-            DocSignatureHelper.open(context: context, model: model)
+            DocSignatureHelper.open(
+                    context: context, model: model, disable: inApproval)
                 .then((value) {
               //需要刷新
               if (value != null && value) {
@@ -228,16 +230,17 @@ class _ReconciliationOrderDetailPageState
                 color: Color(0xffffca3a),
                 size: 40,
               ),
-              Text(
-                '${DocSignatureStateLocalizedMap[model.state]}',
-                style: TextStyle(color: Colors.grey),
-              )
+              DocSignatureTag(doc: model)
             ],
           ),
         ),
       ),
     );
   }
+
+  ///审批中则禁用签署
+  bool get inApproval =>
+      order.state == FastReconciliationSheetState.PENDING_APPROVAL;
 }
 
 ///订单基础信息
