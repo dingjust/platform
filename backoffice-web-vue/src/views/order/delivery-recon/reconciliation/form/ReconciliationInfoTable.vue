@@ -9,11 +9,11 @@
         <template slot-scope="scope">
           <div v-if="scope.row.countRow">{{scope.row.countRow}}</div>
           <div v-else>
-            <div v-if="scope.row.product && scope.row.product.id && scope.row.product.id !== ''"> 
-              <img :src="scope.row.product.thumbnail.url" style="width: 50px; height: 50px"/>
-            </div>
-            <el-button type="text" @click="onSelectProduct(scope.$index)" v-else>
-              <div class="product-select-icon">
+            <el-button type="text" @click="onSelectProduct(scope.$index)">
+              <div v-if="scope.row.product && scope.row.product.id && scope.row.product.id !== ''"> 
+                <img :src="scope.row.product.thumbnail.url" style="width: 50px; height: 50px"/>
+              </div>
+              <div class="product-select-icon" v-else>
                 <i class="el-icon-plus select-icon"></i>
               </div>
             </el-button>
