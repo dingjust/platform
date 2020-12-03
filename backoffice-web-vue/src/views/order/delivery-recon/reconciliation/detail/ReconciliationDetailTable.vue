@@ -36,7 +36,7 @@
       <el-table-column label="结算金额" prop="settlementAmount" min-width="120px" />
       <el-table-column label="备注" prop="remarks" min-width="120px">
         <template slot-scope="scope">
-          <span :title="scope.row.remarks">{{scope.row.remarks}}</span>
+          <span :title="scope.row.remarks" class="remark-title">{{scope.row.remarks}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -89,5 +89,9 @@ export default {
 </script>
 
 <style scoped>
-
+  .remark-title {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
 </style>

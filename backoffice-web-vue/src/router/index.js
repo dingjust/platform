@@ -221,6 +221,12 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/DeliveryReconciliationPage')
             },
             {
+              path: 'delivery/create',
+              name: '出货单详情',
+              props: true,
+              component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/delivery/form/DeliveryOrdersForm')
+            },
+            {
               path: 'delivery/:id',
               name: '出货单详情',
               props: true,

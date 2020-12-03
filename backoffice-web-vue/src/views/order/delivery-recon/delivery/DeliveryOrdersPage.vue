@@ -12,7 +12,12 @@
     </el-row>
     <div class="pt-2"></div>
     <delivery-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
-    <el-tabs v-model="activeName" @tab-click="handleClick" v-if="!isSelection">
+    <div class="tag-container" :class="tagPosition ? 'tag-position' : ''">
+      <el-row ref="tag" type="flex" justify="end" align="top">
+        <el-button size="medium" @click="onCreate">创建出货单</el-button>
+      </el-row>
+    </div>
+    <el-tabs ref="tabs" v-model="activeName" @tab-click="handleClick" v-if="!isSelection">
       <template v-for="item in statuses">
         <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code" />
       </template>
@@ -88,6 +93,8 @@ export default {
         // partyType: "PARTYB"
       },
       stateCount: {},
+      tagPosition: true,
+      tagWidth: 0,
     }
   },
   methods: {
@@ -139,10 +146,29 @@ export default {
     },
     onSelect () {
       this.$emit('onSelect', this.$refs.list.currentRow);
+    },
+    onCreate () {
+      this.$router.push('/order/delivery/create');
+    },
+    changeTagPosition () {
+      let count = 20;
+      this.statuses.forEach(item => {
+        count += document.getElementById("tab-" + item.code).scrollWidth
+      })
+      if (this.tagWidth === 0) {
+        this.tagWidth = this.$refs.tag.$el.scrollWidth
+      }
+      this.tagPosition = this.tagWidth + count < this.$refs.tabs.$el.scrollWidth;
     }
+  },
+  mounted() {
+    window.addEventListener('resize', this.changeTagPosition);
   },
   created () {
     this.onAdvancedSearch(0, 10);
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.changeTagPosition);
   }
 }
 </script>
@@ -157,5 +183,15 @@ export default {
     background: #ffd60c;
     color: #303133;
     border-color: #ffd60c;
+  }
+
+  .tag-position {
+    position: absolute;
+  }
+
+  .tag-container {
+    right: 20px;
+    margin-top: 2px;
+    z-index: 999;
   }
 </style>
