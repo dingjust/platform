@@ -45,11 +45,10 @@ class FactoryItem extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      MyFactoryPage(
-                        factoryUid: model.uid,
-                        isFactoryDetail: true,
-                      ),
+                  builder: (context) => MyFactoryPage(
+                    factoryUid: model.uid,
+                    isFactoryDetail: true,
+                  ),
                 ),
               );
             });
@@ -166,8 +165,8 @@ class FactoryItem extends StatelessWidget {
                       )),
                   Text(
                     model.contactAddress != null
-                        ? '${model.contactAddress.city.name} ${model
-                        .contactAddress.cityDistrict.name}'
+                        ? '${model?.contactAddress?.city?.name} ${model
+                        ?.contactAddress?.cityDistrict?.name}'
                         : '',
                     style: TextStyle(color: Colors.black54),
                   )
@@ -197,7 +196,7 @@ class FactoryItem extends StatelessWidget {
   String getCategoryStr(FactoryModel model) {
     String result = '';
     model.adeptAtCategories.forEach((category) {
-      result = '$result ${category.name}';
+      result = '$result ${category?.name}';
     });
     return result;
   }
@@ -223,7 +222,7 @@ class FactoryNameText extends StatelessWidget {
             Expanded(
                 flex: 3,
                 child: Text(
-                  '${model.name}',
+                  '${model?.name}',
                   style: textStyle,
                   overflow: TextOverflow.ellipsis,
                 )),
@@ -248,7 +247,7 @@ class FactoryNameText extends StatelessWidget {
       return Expanded(
         flex: 1,
         child: Text(
-          '${model.name}',
+          '${model?.name}',
           style: textStyle,
           overflow: TextOverflow.ellipsis,
         ),
@@ -298,7 +297,7 @@ class CertifiedTagsAndLabelsText extends StatelessWidget {
     ];
     model.labels.forEach((label) {
       tags.add(Tag(
-        label: label.name,
+        label: label?.name ?? '',
         color: Color.fromRGBO(255, 133, 148, 1),
       ));
     });

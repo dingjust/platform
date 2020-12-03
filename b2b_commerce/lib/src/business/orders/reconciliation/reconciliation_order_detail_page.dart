@@ -211,7 +211,7 @@ class _ReconciliationOrderDetailPageState
         child: InkWell(
           onTap: () {
             DocSignatureHelper.open(
-                    context: context, model: model, disable: inApproval)
+                    context: context, model: model, disable: signDisable)
                 .then((value) {
               //需要刷新
               if (value != null && value) {
@@ -238,9 +238,10 @@ class _ReconciliationOrderDetailPageState
     );
   }
 
-  ///审批中则禁用签署
-  bool get inApproval =>
-      order.state == FastReconciliationSheetState.PENDING_APPROVAL;
+  ///审批中,或取消状态则禁用签署
+  bool get signDisable =>
+      order.state == FastReconciliationSheetState.PENDING_APPROVAL ||
+          order.state == FastReconciliationSheetState.CANCELLED;
 }
 
 ///订单基础信息
