@@ -79,7 +79,7 @@ export default {
   },
   data () {
     return {
-      downLink: 'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E9%87%87%E8%B4%AD%E6%B8%85%E5%8D%95%E6%89%B9%E9%87%8F%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx',
+      downLink: 'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%AF%B9%E8%B4%A6%E5%8D%95%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx',
       tableData: [],
       productDialog: false,
       operateIndex: ''
