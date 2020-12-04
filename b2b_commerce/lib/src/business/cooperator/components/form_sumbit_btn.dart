@@ -27,8 +27,7 @@ class FormSumbitBtn extends StatelessWidget {
       cancelFunc.call();
       if (response != null && response.code == 1) {
         BotToast.showText(text: '添加成功！');
-        Navigator.of(context).pop();
-        Navigator.of(context).popAndPushNamed(AppRoutes.ROUTE_COOPERATORS);
+        Navigator.of(context).pop(true);
       } else if (response != null && response.code == 0) {
         BotToast.showText(text: '${response.msg}');
       } else {

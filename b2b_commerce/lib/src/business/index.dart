@@ -216,7 +216,7 @@ class BrandMenusSection extends StatelessWidget {
               children: <Widget>[
                 buildChild(context, MenuItemImage.outboundOrder, '外发订单',
                     AppRoutes.ROUTE_OUT_ORDERS),
-                buildChild(context, MenuItemImage.outboundOrder, '外发生产工单',
+                buildChild(context, MenuItemImage.productionBlue, '外发生产工单',
                     AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS),
               ],
             )
@@ -246,7 +246,7 @@ class BrandMenusSection extends StatelessWidget {
               crossAxisSpacing: 4.0,
               childAspectRatio: (1.3),
               children: <Widget>[
-                buildChild(context, MenuItemImage.productFactory, '生产工单',
+                buildChild(context, MenuItemImage.productionOrange, '生产工单',
                     AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
                 buildChild(context, MenuItemImage.delivery, '出货单',
                     AppRoutes.ROUTE_DELIVERY_ORDERS),
@@ -404,10 +404,10 @@ class FactoryMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.requirementOrder, '需求订单',
                     AppRoutes.ROUTE_REQUIREMENT_ORDERS,
                     authorizations: [Authorization.REQUIREMENT_ORDER]),
-                buildChild(context, MenuItemImage.priceManage, '我的报价',
+                buildChild(context, MenuItemImage.priceManage, '报价处理',
                     AppRoutes.ROUTE_MY_QUOTES,
                     authorizations: [Authorization.QUOTE_ORDER]),
-                buildChild(context, MenuItemImage.priceManage, '报价处理',
+                buildChild(context, MenuItemImage.priceOrder, '我的报价',
                     AppRoutes.ROUTE_QUOTES,
                     authorizations: [Authorization.QUOTE_ORDER]),
                 buildChild(context, MenuItemImage.proofingOrder, '打样订单',
@@ -502,7 +502,7 @@ class FactoryMenusSection extends StatelessWidget {
               children: <Widget>[
                 buildChild(context, MenuItemImage.outboundOrder, '外发订单',
                     AppRoutes.ROUTE_OUT_ORDERS),
-                buildChild(context, MenuItemImage.outboundOrder, '外发生产工单',
+                buildChild(context, MenuItemImage.productionBlue, '外发生产工单',
                     AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS),
               ],
             )
@@ -532,7 +532,7 @@ class FactoryMenusSection extends StatelessWidget {
               crossAxisSpacing: 4.0,
               childAspectRatio: (1.3),
               children: <Widget>[
-                buildChild(context, MenuItemImage.productFactory, '生产工单',
+                buildChild(context, MenuItemImage.productionOrange, '生产工单',
                     AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
                 buildChild(context, MenuItemImage.delivery, '出货单',
                     AppRoutes.ROUTE_DELIVERY_ORDERS),

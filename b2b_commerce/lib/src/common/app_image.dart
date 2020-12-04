@@ -27,6 +27,7 @@ class MenuItemImage {
   static Image myCollection = getImage('temp/business/my_collection.png');
   static Image orderMatter = getImage('temp/business/order_matter.png');
   static Image priceManage = getImage('temp/business/price_manage.png');
+  static Image priceOrder = getImage('temp/business/price_order.png');
   static Image productManage = getImage('temp/business/product_manage.png');
   static Image purchaseOrder = getImage('temp/business/purchase_order.png');
   static Image requirementOrder =
@@ -46,7 +47,7 @@ class MenuItemImage {
   static Image productionFactory =
       getImage('temp/business/production_order_factory.png');
   static Image quoteFactory =
-      getImage('temp/business/quote_manage_factory.png');
+  getImage('temp/business/quote_manage_factory.png');
   static Image freeCapacity2 = getImage('temp/index/free_capacity2.png');
   static Image externalOrder = getImage('temp/business/external_order.png');
   static Image outboundOrder = getImage('temp/business/outbound_order.png');
@@ -56,6 +57,13 @@ class MenuItemImage {
 
   ///对账
   static Image reconciliation = getImage('temp/business/reconciliation.png');
+
+  ///生产工单
+  static Image productionBlue = getImage('temp/business/production_blue.png');
+
+  ///生产工单
+  static Image productionOrange =
+  getImage('temp/business/production_orange.png');
 }
 
 class B2BImage {
