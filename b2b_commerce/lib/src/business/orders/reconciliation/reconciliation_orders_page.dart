@@ -79,7 +79,7 @@ class _ReconciliationOrdersPageState extends State<ReconciliationOrdersPage> {
                   SearchAppbarTitle(
                 controller: controller,
                 focusNode: focusNode,
-                hintText: '请输入单号...',
+                hintText: '请输入单号,标题...',
                 onSearch: () {
                   state.setKeyword(controller.text);
                   if (controller.text == '') {

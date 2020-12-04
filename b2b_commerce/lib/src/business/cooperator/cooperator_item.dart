@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperator_detail.dart';
-import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class CooperatorItem extends StatelessWidget {
@@ -51,7 +50,7 @@ class CooperatorItem extends StatelessWidget {
         ),
         Expanded(
             child: Text(
-          '${model.name}',
+              '$name',
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -69,7 +68,7 @@ class CooperatorItem extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            '联系人：${model.contactPerson}',
+            '联系人：$contactPerson',
             overflow: TextOverflow.ellipsis,
             style: textStyle,
           ),
@@ -77,7 +76,7 @@ class CooperatorItem extends StatelessWidget {
         Expanded(
             flex: 2,
             child: Text(
-              '联系方式：${model.contactPhone}',
+              '联系方式：$contactPhone',
               overflow: TextOverflow.ellipsis,
               style: textStyle,
             ))
@@ -170,5 +169,35 @@ class CooperatorItem extends StatelessWidget {
             ),
       ));
     }
+  }
+
+  ///名称
+  String get name {
+    if (model.name != null) {
+      return model.name;
+    } else if (model?.partner?.name != null) {
+      return model.partner.name;
+    }
+    return '';
+  }
+
+  ///联系人
+  String get contactPerson {
+    if (model.contactPerson != null) {
+      return model.contactPerson;
+    } else if (model?.partner?.contactPerson != null) {
+      return model.partner.contactPerson;
+    }
+    return '';
+  }
+
+  ///联系电话F
+  String get contactPhone {
+    if (model.contactPhone != null) {
+      return model.contactPhone;
+    } else if (model?.partner?.contactPhone != null) {
+      return model.partner.contactPhone;
+    }
+    return '';
   }
 }
