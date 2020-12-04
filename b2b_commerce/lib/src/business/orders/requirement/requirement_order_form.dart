@@ -35,6 +35,10 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
 
   @override
   void initState() {
+    //埋点>>>需求发布页面进入
+    FlutterUmplus.event("requirement_publish_page",
+        label: '${UserTypeMap[UserBLoC.instance.currentUser.type]}');
+
     if (widget.formState.factoryUid != null) {
       _factoryUids.add(widget.formState.factoryUid);
     }
@@ -233,6 +237,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
           ],
         ));
   }
+
   Container _buildProductiveOrientations() {
     return Container(
       color: Colors.white,
@@ -264,11 +269,11 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
                       builder: (BuildContext context) {
                         return RegionSelector(
                           regions: data
-                              .map<RegionModel>((region) =>
-                              RegionModel.fromJson(region))
+                              .map<RegionModel>(
+                                  (region) => RegionModel.fromJson(region))
                               .toList(),
-                          regionSelects: widget.formState.model
-                              .details.productiveOrientations,
+                          regionSelects: widget
+                              .formState.model.details.productiveOrientations,
                           multiple: true,
                         );
                       },
@@ -284,9 +289,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
                 },
                 child: Text(
                   formatAreaSelectsText(
-                      widget.formState.model.details
-                          .productiveOrientations,
-                      2),
+                      widget.formState.model.details.productiveOrientations, 2),
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
@@ -1090,7 +1093,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
                                   formState: widget.formState,
                                 )));
                     if (result != null) {
-                      setState((){
+                      setState(() {
                         _factoryUids = result;
                       });
                     }
@@ -1221,7 +1224,8 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
     }
     ShowDialogUtil.showChoseDiglog(context, '是否确认发布', () {
       //埋点>>>需求发布2填写并发布
-      FlutterUmplus.event("requirement_publish_2_finsh");
+      FlutterUmplus.event("requirement_publish_finsh",
+          label: '${UserTypeMap[UserBLoC.instance.currentUser.type]}');
 
       showDialog(
           context: context,
@@ -1238,7 +1242,8 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
           }).then((code) async {
         if (code != null && code != '') {
           //埋点>>>需求发布成功
-          FlutterUmplus.event("requirement_publish_success");
+          FlutterUmplus.event("requirement_publish_success",
+              label: '${UserTypeMap[UserBLoC.instance.currentUser.type]}');
 
           widget.formState.model.code = code;
           //根据code查询明
@@ -1246,9 +1251,10 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
               .getRequirementOrderDetail(code);
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => PublishRequirementSuccessDialog(
-                  model: model,
-                ),
+                builder: (context) =>
+                    PublishRequirementSuccessDialog(
+                      model: model,
+                    ),
               ),
               ModalRoute.withName('/'));
         }
@@ -1292,7 +1298,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
   //格式选中的地区（多选）
   String formatAreaSelectsText(List<RegionModel> selects, int count) {
     String text = '';
-    if(selects == null || selects.length == 0){
+    if (selects == null || selects.length == 0) {
       return '选择要求地域';
     }
 

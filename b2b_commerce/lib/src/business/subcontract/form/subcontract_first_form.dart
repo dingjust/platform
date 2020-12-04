@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_form.dart';
 import 'package:b2b_commerce/src/business/subcontract/form/subcontract_second_form.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 /// 产品分类选择页
 class SubContractFirstForm extends StatefulWidget {
