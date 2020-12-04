@@ -34,6 +34,9 @@ class SaleProductionApis {
   static get productionTaskOrderList =>
       '/{baseSiteId}/production/task/order/search';
 
+  static get outProductionTaskOrderList =>
+      '/{baseSiteId}/out/order/production/search';
+
   /// 生产工单详情
   static get productionTaskOrderDetail => (id) {
         return '/{baseSiteId}/production/task/order/$id';
