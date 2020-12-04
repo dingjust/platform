@@ -146,8 +146,7 @@ class _RequirementOrderFirstEditFormState
                               Container(
                                 margin: EdgeInsets.only(left: 15),
                                 child: Text(
-                                    '已选：${widget.formState.editModel?.details
-                                        ?.majorCategory?.name ?? ''}'),
+                                    '已选：${widget.formState.editModel?.details?.majorCategory?.name ?? ''}'),
                               )
                             ],
                           ),
@@ -353,14 +352,14 @@ class _RequirementOrderFirstEditFormState
                         onTap: () {
                           //TODO:CN-10代表全国
                           setState(() {
-                            widget
-                                .formState.editModel.details.productiveOrientations
+                            widget.formState.editModel.details
+                                .productiveOrientations
                                 .add(RegionModel(isocode: 'CN-10'));
                           });
-                          dynamic m = widget
-                              .formState.editModel.details.productiveOrientations
+                          dynamic m = widget.formState.editModel.details
+                              .productiveOrientations
                               .firstWhere((region) => region.isocode == 'CN-10',
-                                  orElse: null);
+                              orElse: null);
                           print(m);
                         },
                         child: Container(
