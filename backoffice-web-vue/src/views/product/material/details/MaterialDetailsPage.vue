@@ -443,6 +443,12 @@
         }
         const url = this.apis().saveMaterials();
         const result = await this.$http.post(url, formData);
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;
