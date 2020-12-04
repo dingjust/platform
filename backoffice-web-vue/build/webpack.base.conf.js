@@ -10,7 +10,6 @@ function resolve(dir) {
 module.exports = {
   entry: {
     app: ["babel-polyfill", "./src/main.js"],
-    // vendors: ['jquery', 'echarts','highlight','tui-editor','codemirror'],
     vendor_jquery: ['jquery'],
     vendor_echarts: ['echarts'],
     vendor_tui_editor: ['tui-editor', 'highlight'],
@@ -83,4 +82,8 @@ module.exports = {
       }
     ]
   },
+  externals: {
+    'echarts':'echarts',
+    'xlsx':'XLSX',
+ },
 };

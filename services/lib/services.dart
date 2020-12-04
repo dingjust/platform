@@ -110,6 +110,7 @@ export 'src/sale_production/repository/production_task_order_respository.dart';
 export 'src/sale_production/state/external_sale_orders_state.dart';
 export 'src/sale_production/state/out_orders_state.dart';
 export 'src/sale_production/state/production_task_orders_state.dart';
+export 'src/sale_production/state/out_production_task_orders_state.dart';
 export 'src/sale_production/state/progress_work_sheet_state.dart';
 export 'src/state/address_state.dart';
 export 'src/state/b2b_dept_state.dart';

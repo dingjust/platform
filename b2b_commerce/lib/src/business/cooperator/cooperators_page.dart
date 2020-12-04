@@ -75,7 +75,7 @@ class _CooperatorsPageState extends State<CooperatorsPage> {
           .map(
             (e) => EnumModel('${CooperatorCategoryCodeMap[e]}',
                 '${CooperatorCategoryLocalizedMap[e]}'),
-      )
+          )
           .toList();
     } else {
       statuses = _statuses;
@@ -227,10 +227,14 @@ class _AddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {
+      onPressed: () async {
         Navigator.of(context)
             .pushNamed(AppRoutes.ROUTE_COOPERATORS_CREATE)
-            .then((value) {});
+            .then((needRefresh) {
+          if (needRefresh) {
+            Provider.of<CooperatorV2State>(context).clear();
+          }
+        });
       },
       child: Icon(
         Icons.add,
