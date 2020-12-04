@@ -71,7 +71,7 @@ class ProgressWorkSheetItem extends StatelessWidget {
     return Row(
       children: [
         Hero(
-          tag: 'productHero${model.code}',
+          tag: 'productHero${model.id}',
           child: ImageFactory.buildThumbnailImage(model.product?.thumbnail,
               containerSize: height),
         ),
