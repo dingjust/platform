@@ -216,6 +216,8 @@ class BrandMenusSection extends StatelessWidget {
               children: <Widget>[
                 buildChild(context, MenuItemImage.outboundOrder, '外发订单',
                     AppRoutes.ROUTE_OUT_ORDERS),
+                buildChild(context, MenuItemImage.outboundOrder, '外发生产工单',
+                    AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS),
               ],
             )
           ],
@@ -500,6 +502,8 @@ class FactoryMenusSection extends StatelessWidget {
               children: <Widget>[
                 buildChild(context, MenuItemImage.outboundOrder, '外发订单',
                     AppRoutes.ROUTE_OUT_ORDERS),
+                buildChild(context, MenuItemImage.outboundOrder, '外发生产工单',
+                    AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS),
               ],
             )
           ],
