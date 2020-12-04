@@ -67,8 +67,6 @@ export default {
   },
   methods: {
     onSelect (row) {
-      console.log(row);
-
       this.formData.fastShippingSheets[0].code = row.code;
       this.formData.fastShippingSheets[0].id = row.id;
 
@@ -87,7 +85,11 @@ export default {
       this.formData.cooperator = '';
     },
     onSuppliersSelect (val) {
-      this.formData.cooperator = val;
+      if (val.id) {
+        this.formData.cooperator = val;
+      } else {
+        this.formData.cooperator = '';
+      }
       this.cooperatorVisible = false;
     }
   }

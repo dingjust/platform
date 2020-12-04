@@ -154,6 +154,7 @@ export default {
 
       // 获取统计信息
       if (!isTabChange) {
+        this.stateCount = {};
         this.getCount();
       }
     },

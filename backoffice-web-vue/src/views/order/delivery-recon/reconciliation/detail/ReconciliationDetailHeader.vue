@@ -10,8 +10,8 @@
     </el-col>
     <el-col :xs="6" :sm="6" v-if="order.docSignatures">
       <div class="info-box">
-        <el-row type="flex" justify="start">
-          <h6>电子合同</h6>
+        <el-row type="flex" justify="start" class="reconcilication-order-title">
+          <h6 style="margin: 0px">电子对账单</h6>
         </el-row>
         <el-row>
           <template v-for="item in order.docSignatures">
@@ -82,5 +82,10 @@ export default {
 
   .contract-item:hover {
     background-color: #ffd60c;
+  }
+
+  .reconcilication-order-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
   }
 </style>
