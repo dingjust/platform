@@ -98,7 +98,7 @@ export default {
 
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.isAllApproval && this.formData.entries.length <= 0) {
+          if (this.isAllApproval && this.formData.entries.length <= 0 && this.formData.paperSheetMedias.length <= 0) {
             this.$message.error('请填写对账信息！');
             return;
           }

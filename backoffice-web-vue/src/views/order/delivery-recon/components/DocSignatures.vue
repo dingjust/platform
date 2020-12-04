@@ -2,7 +2,9 @@
   <div>
     <el-row type="flex" justify="end" style="margin-bottom: 20px">
       <el-button type="warning" @click="onDownload" class="toolbar-search_input">下载</el-button>
-      <el-button type="warning" class="toolbar-search_input" v-if="canSign" @click="onSign">签署</el-button>
+      <Authorized :permission="['AGREEMENT_SIGN']">
+        <el-button type="warning" class="toolbar-search_input" v-if="canSign" @click="onSign">签署</el-button>
+      </Authorized>
     </el-row>
     <div>
       <!-- <iframe id='previewPdf' :src="'static/pdf/web/viewer.html?file=' + fileUrl" -->
