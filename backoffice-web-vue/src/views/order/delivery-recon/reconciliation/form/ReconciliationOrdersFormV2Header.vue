@@ -67,12 +67,15 @@ export default {
   },
   methods: {
     onSelect (row) {
+      console.log(row);
+
       this.formData.fastShippingSheets[0].code = row.code;
       this.formData.fastShippingSheets[0].id = row.id;
 
       this.formData.cooperator = {
-        id: row.targetCooperator.id,
-        name: row.targetCooperator.type === 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name
+        id: row.cooperator.id,
+        name: row.cooperator.type === 'ONLINE' ? row.cooperator.partner.name : row.cooperator.name,
+        approvalStatus: row.cooperator.type === 'ONLINE' ? row.cooperator.partner.approvalStatus : ''
       }
       this.deliveryVisible = false;
     },

@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     needValidate: function () {
-      return this.formData.cooperator.id && this.isAllApproval;
+      return this.formData.cooperator.id && !this.isAllApproval;
     }
   }
 }
