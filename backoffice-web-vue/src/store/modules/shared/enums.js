@@ -1570,10 +1570,10 @@ const state = {
       code: 'SUBSIDIARY_MATERIAL',
       name: '辅料'
     },
-    // {
-    //   code: 'PACK',
-    //   name: '包装'
-    // }
+    {
+      code: 'PACKING',
+      name: '包装'
+    }
   ],
   MaterialsUnit: [{
       code: 'INDIVIDUAL',
