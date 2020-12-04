@@ -211,6 +211,7 @@ class _BuyProofingFormState extends State<BuyProofingForm>
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       )
                     ],
@@ -478,8 +479,7 @@ class _BuyProofingFormState extends State<BuyProofingForm>
                     children: <TextSpan>[
                       TextSpan(
                           text:
-                          '￥${DoubleUtil.getDecimalsValue(
-                              totalNum * widget.product.proofingFee, 2)}',
+                              '￥${DoubleUtil.getDecimalsValue(totalNum * widget.product.proofingFee, 2)}',
                           style: TextStyle(color: Colors.red)),
                     ]),
               ),

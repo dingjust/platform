@@ -8,11 +8,12 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RecommendProductItem extends StatelessWidget {
-  const RecommendProductItem({Key key,
-    this.model,
-    this.imageSize = 200,
-    this.showAddress = false,
-    this.onClick})
+  const RecommendProductItem(
+      {Key key,
+      this.model,
+      this.imageSize = 200,
+      this.showAddress = false,
+      this.onClick})
       : super(key: key);
 
   final ApparelProductModel model;
@@ -32,10 +33,8 @@ class RecommendProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print('=====${model.thumbnails[0].normalUrl()}');
     return GestureDetector(
         onTap: () async {
-          ///点击
           if (onClick != null) {
             onClick();
           }
@@ -48,7 +47,7 @@ class RecommendProductItem extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               });
-          //TODO: 跳转到产品详情页
+          //跳转到产品详情页
           ApparelProductModel detailProduct =
           await ProductRepositoryImpl().detail(model.code);
           Navigator.of(context).pop();
@@ -68,7 +67,7 @@ class RecommendProductItem extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   model?.thumbnails != null &&
-                      model?.thumbnails.isNotEmpty &&
+                      model.thumbnails.isNotEmpty &&
                       model?.thumbnails[0].url != null
                       ? Container(
                     width: 200,

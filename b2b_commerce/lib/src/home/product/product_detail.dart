@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
-as dj;
+    as dj;
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
 import 'package:b2b_commerce/src/home/product/buy_proofing_form.dart';
 import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
