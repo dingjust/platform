@@ -5,7 +5,6 @@ import 'package:b2b_commerce/b2b_commerce.dart';
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_select.dart';
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
@@ -505,20 +504,6 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             ),
           );
         });
-//    Navigator.push(
-//      context,
-//      MaterialPageRoute(
-//        builder: (context) => ChangeNotifierProvider(
-//          builder: (_) => RequirementOrderFormState(),
-//          child: Consumer(
-//            builder: (context, RequirementOrderFormState state, _) =>
-//                RequirementOrderFirstForm(
-//              formState: state,
-//            ),
-//          ),
-//        ),
-//      ),
-//    );
   }
 
   List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {

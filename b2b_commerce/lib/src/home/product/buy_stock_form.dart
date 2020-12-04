@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/home/product/order_confirm_form.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
@@ -234,6 +232,7 @@ class _BuyStockFormState extends State<BuyStockForm>
                           '${widget.product.name}',
                           style: TextStyle(color: Colors.black87, fontSize: 16),
                           textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       )
                     ],
@@ -244,9 +243,7 @@ class _BuyStockFormState extends State<BuyStockForm>
                         flex: 1,
                         child: Text(
                           totalNum == 0
-                              ? '￥${widget.product
-                              .minSpotSteppedPrice} ~ ￥${widget.product
-                              .maxSpotSteppedPrice}'
+                              ? '￥${widget.product.minSpotSteppedPrice} ~ ￥${widget.product.maxSpotSteppedPrice}'
                               : '￥$price',
                           style: TextStyle(color: Colors.red, fontSize: 16),
                           textAlign: TextAlign.left,
@@ -747,15 +744,16 @@ class _BuyStockFormState extends State<BuyStockForm>
         return;
       }
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => OrderConfirmForm(
-            product: widget.product,
-            colorRowList: colorRowList,
-            productEntries: productEntries,
-            remarksEditingController: remarksEditingController,
-            totalEditingControllerMap: totalEditingControllerMap,
-            salesOrderType: SalesOrderType.SPOT_GOODS,
-            orderType: OrderType.SALES,
-          )));
+          builder: (context) =>
+              OrderConfirmForm(
+                product: widget.product,
+                colorRowList: colorRowList,
+                productEntries: productEntries,
+                remarksEditingController: remarksEditingController,
+                totalEditingControllerMap: totalEditingControllerMap,
+                salesOrderType: SalesOrderType.SPOT_GOODS,
+                orderType: OrderType.SALES,
+              )));
     } else {
       Toast.show(
           "未达最低采购量${widget.product.spotSteppedPrices[0].minimumQuantity}件",
@@ -764,7 +762,6 @@ class _BuyStockFormState extends State<BuyStockForm>
           gravity: Toast.CENTER);
     }
   }
-
 
   ///预览图片URL
   String getImgURL() {

@@ -226,6 +226,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                           '${widget.product.name}',
                           style: TextStyle(color: Colors.black87, fontSize: 16),
                           textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       )
                     ],
@@ -498,8 +499,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                             ]),
                       ),
                       Text(
-                        '￥${DoubleUtil.getDecimalsValue(
-                            snapshot.data * price, 2)}',
+                        '￥${DoubleUtil.getDecimalsValue(snapshot.data * price, 2)}',
                         style: TextStyle(color: Colors.red, fontSize: 14),
                       ),
                     ],
@@ -720,7 +720,6 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
           duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
     }
   }
-
 
   ///预览图片URL
   String getImgURL() {

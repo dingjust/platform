@@ -225,7 +225,7 @@ class _MainInfo extends StatelessWidget {
       child: Row(
         children: [
           Hero(
-              tag: 'productHero${order.code}',
+              tag: 'productHero${order.id}',
               child: ImageFactory.buildThumbnailImage(order?.product?.thumbnail,
                   containerSize: height)),
           Expanded(
