@@ -67,12 +67,12 @@ class AppActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ListTile(
-          trailing: Icon(Icons.chevron_right),
-          title: const Text('功能介绍'),
-          leading: const Icon(Icons.shopping_basket),
-          onTap: () {},
-        ),
+        // ListTile(
+        //   trailing: Icon(Icons.chevron_right),
+        //   title: const Text('功能介绍'),
+        //   leading: const Icon(Icons.shopping_basket),
+        //   onTap: () {},
+        // ),
         ListTile(
           trailing: Icon(Icons.chevron_right),
           title: const Text('版本更新'),
@@ -80,7 +80,7 @@ class AppActions extends StatelessWidget {
           onTap: () {
             //TODO版本检测
             AppVersionHelper appVersionHelper =
-            Provider.of<AppVersionHelper>(context);
+                Provider.of<AppVersionHelper>(context);
             appVersionHelper.checkVersion(
                 context, AppBLoC.instance.packageInfo.version, 'nbyjy',
                 showNowMessage: true);
