@@ -46,13 +46,13 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                       _InputRow(
                           label: '联系人',
                           child: Text(
-                            '${model.contactPerson}',
+                            '$contactPerson',
                             style: TextStyle(fontSize: 18),
                           )),
                       _InputRow(
                           label: '联系方式',
                           child: Text(
-                            '${model.contactPhone}',
+                            '$contactPhone',
                             style: TextStyle(fontSize: 18),
                           )),
                       _InputRow(
@@ -148,11 +148,11 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Text('${model.name}',
-                              style: TextStyle(fontSize: 18)),
+                          child: Text('$name', style: TextStyle(fontSize: 18)),
                         ),
-                        model.partner != null && model.partner.approvalStatus ==
-                                ArticleApprovalStatus.approved
+                        model.partner != null &&
+                                model.partner.approvalStatus ==
+                                    ArticleApprovalStatus.approved
                             ? Container(
                                 height: 20,
                                 margin: EdgeInsets.symmetric(horizontal: 5),
@@ -162,7 +162,7 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                                     borderRadius: BorderRadius.circular(2),
                                     border: Border.all(
                                         color:
-                                          Color.fromRGBO(225, 243, 216, 1))),
+                                            Color.fromRGBO(225, 243, 216, 1))),
                                 child: Center(
                                   child: Text(
                                     '已认证',
@@ -173,24 +173,22 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                                 ),
                               )
                             : Container(
-                                height: 20,
-                                margin: EdgeInsets.symmetric(horizontal: 5),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 1),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    border: Border.all(
-                                        color:
-                                            Colors.grey[200])),
-                                child: Center(
-                                  child: Text(
-                                    '未认证',
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 10),
-                                  ),
-                                ),
-                              )
+                          height: 20,
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 1),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              border:
+                              Border.all(color: Colors.grey[200])),
+                          child: Center(
+                            child: Text(
+                              '未认证',
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 10),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -230,13 +228,43 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                               style: TextStyle(fontSize: 16),
                             ),
                           ),
-                        )
+                  )
                       : Container()
                 ],
               ),
             )
           ],
         ));
+  }
+
+  ///名称
+  String get name {
+    if (model.name != null) {
+      return model.name;
+    } else if (model?.partner?.name != null) {
+      return model.partner.name;
+    }
+    return '';
+  }
+
+  ///联系人
+  String get contactPerson {
+    if (model.contactPerson != null) {
+      return model.contactPerson;
+    } else if (model?.partner?.contactPerson != null) {
+      return model.partner.contactPerson;
+    }
+    return '';
+  }
+
+  ///联系电话F
+  String get contactPhone {
+    if (model.contactPhone != null) {
+      return model.contactPhone;
+    } else if (model?.partner?.contactPhone != null) {
+      return model.partner.contactPhone;
+    }
+    return '';
   }
 }
 
