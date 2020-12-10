@@ -38,6 +38,9 @@
           </el-col>
         </el-row>
       </div>
+      <el-row v-if="canConfirm" type="flex" justify="center">
+        <el-button class="material-btn" @click="toConfirm">确认</el-button>
+      </el-row>
     </el-card>
     <!-- 展示pdf组件 -->
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
@@ -79,6 +82,13 @@ export default {
         return false;
       }
     },
+    canConfirm: function () {
+      // 出货方 && 合同为线下合同 && 订单状态为待乙方签署
+      // 乙方需要进行确认操作
+      return !this.isReceiveParty && 
+        this.order.docSignatures[0].signMethod === 'OFFLINE_SIGN' && 
+        this.order.state=== 'PENDING_B_SIGN';
+    }
   },
   data () {
     return {
@@ -180,6 +190,32 @@ export default {
         this.getDetail();
       }, 1000);
     },
+    toConfirm () {
+      this.$confirm('是否进行确认操作?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this._toConfirm();
+      });
+    },
+    async _toConfirm () {
+      const id = this.order.id;
+
+      const url = this.apis().ReconciliationPartyBConfirm(id);
+      const result = await this.$http.put(url);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      }
+      this.$message.success('操作成功！');
+      this.getDetail();
+    }
   },
   created () {
     this.getDetail();

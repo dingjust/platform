@@ -1743,6 +1743,18 @@ let NONE_TENANT_APIS = {
   getReconciliationV2Detail (id) {
     return '/b2b/sheets/fast/reconciliation/' + id;
   },
+  // 获取对账项列表
+  getReconciliationItems () {
+    return '/b2b/sheets/fast/reconciliation/entry';
+  },
+  // 获取对账项列表统计
+  getReconciliationItemsCount () {
+    return '/b2b/sheets/fast/reconciliation/entry/state/count';
+  },
+  // 对账单乙方确认
+  ReconciliationPartyBConfirm (id) {
+    return '/b2b/sheets/fast/reconciliation/confirmByPartyB/' + id;
+  },
   // 获取doc token
   getDocToken (code) {
     return '/b2b/doc/signature/get/download/token/' + code;
