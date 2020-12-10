@@ -199,7 +199,9 @@ export default {
       });
 
       if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
+        // this.$message.error(result['errors'][0].message);
+        this.$set(this, 'tableData', tableC);
+        return;
       }
 
       this.handleData(tableC, result);
