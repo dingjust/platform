@@ -11,7 +11,7 @@
         <el-row type="flex" justify="start" align="middle" style="margin-bottom: 20px;">
           <h6>创建日期：{{slotData.creationtime | timestampToTime}}</h6>
         </el-row>
-        <div class="person-row">
+        <!-- <div class="person-row">
           <div>
             <h6 style="margin: 6px">用印权限人：</h6>
           </div>
@@ -25,8 +25,8 @@
               </el-col>
             </el-row>
           </div>
-        </div>
-        <el-row type="flex" justify="start" align="middle">
+        </div> -->
+        <!-- <el-row type="flex" justify="start" align="middle">
           <el-button type="text" style="color: #606266;margin-left: 40px;" @click="authorizeVislble=true">
             <div class="append-row">
               <i class="el-icon-plus icon-row"></i>
@@ -36,7 +36,7 @@
         </el-row>
         <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
           <h6 style="color: #F56C6C">注：用印授权只有主账号可以执行</h6>
-        </el-row>
+        </el-row> -->
       </el-col>
     </el-row>
     <el-dialog :visible.sync="authorizeVislble" width="40%" append-to-body :close-on-click-modal="false">
