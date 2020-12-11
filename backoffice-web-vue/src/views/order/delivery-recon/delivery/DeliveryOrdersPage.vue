@@ -12,7 +12,7 @@
     </el-row>
     <div class="pt-2"></div>
     <delivery-orders-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
-    <div class="tag-container" :class="tagPosition ? 'tag-position' : ''">
+    <div class="tag-container" :class="tagPosition ? 'tag-position' : ''" v-if="!isSelection">
       <el-row ref="tag" type="flex" justify="end" align="top">
         <el-button size="medium" @click="onCreate">创建出货单</el-button>
       </el-row>
@@ -102,7 +102,13 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch (page, size, isTabChange) {
-      const query = this.queryFormData;
+      const query = Object.assign({}, this.queryFormData);
+
+      // 选择列表过滤出货单
+      if (this.isSelection) {
+        this.$set(query, 'partyType', 'PARTYA');
+      }
+
       const url = this.apis().getDeliveryList();
       this.searchAdvanced({
         url,
@@ -111,13 +117,14 @@ export default {
         size
       });
 
-      // 获取统计信息
-      if (!isTabChange) {
+      // 获取统计信息(tab切换或者选择列表不查统计)
+      if (!isTabChange && !this.isSelection) {
         this.getDeliveryListCount();
       }
     },
     async getDeliveryListCount () {
       let query = Object.assign({}, this.queryFormData);
+
       query.states = '';
 
       const url = this.apis().getDeliveryListCount();

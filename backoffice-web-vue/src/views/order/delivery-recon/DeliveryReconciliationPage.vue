@@ -17,6 +17,7 @@
         <el-row ref="tag" type="flex" justify="end" align="top">
           <el-button size="medium" @click="deliveryVisible = true">出货单</el-button>
           <el-button size="medium" @click="reconciliationVisible = true">对账单</el-button>
+          <el-button size="medium" @click="itemVisible = true">对账项</el-button>
         </el-row>
       </div>
       <el-tabs ref="tabs" v-model="activeName" @tab-click="handleClick">
@@ -33,6 +34,9 @@
     <el-dialog :visible.sync="deliveryVisible" width="80%" append-to-body class="purchase-dialog" :close-on-click-modal="false">
       <delivery-orders-page v-if="deliveryVisible"/>
     </el-dialog>
+    <el-dialog :visible.sync="itemVisible" width="80%" append-to-body class="purchase-dialog" :close-on-click-modal="false">
+      <reconciliation-item-page v-if="itemVisible"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -41,6 +45,7 @@ import DeliveryReconciliationToolbar from './toolbar/DeliveryReconciliationToolb
 import DeliveryReconciliationList from './list/DeliveryReconciliationList'
 import ReconciliationOrdersPageV2 from './reconciliation/ReconciliationOrdersPageV2'
 import DeliveryOrdersPage from './delivery/DeliveryOrdersPage'
+import ReconciliationItemPage from './components/ReconciliationItemPage'
 
 export default {
   name: 'DeliveryReconciliationPage',
@@ -48,7 +53,8 @@ export default {
     DeliveryReconciliationToolbar,
     DeliveryReconciliationList,
     ReconciliationOrdersPageV2,
-    DeliveryOrdersPage
+    DeliveryOrdersPage,
+    ReconciliationItemPage
   },
   data () {
     return {
@@ -95,6 +101,7 @@ export default {
       },
       deliveryVisible: false,
       reconciliationVisible: false,
+      itemVisible: false,
       tagPosition: true,
       tagWidth: 0,
       stateCount: {}
