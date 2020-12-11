@@ -26,18 +26,18 @@ class MyFactoryServiceInfoState extends State<MyFactoryServiceInfo> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     String _cooperationModes = '';
 
-    widget.factory.cooperationModes.forEach((item){
+    widget.factory.cooperationModes.forEach((item) {
       _cooperationModes += CooperationModesLocalizedMap[item];
       _cooperationModes += '、';
     });
 
-    if(_cooperationModes.contains('、')){
-      _cooperationModes = _cooperationModes.substring(0, _cooperationModes.length - 1);
+    if (_cooperationModes.contains('、')) {
+      _cooperationModes =
+          _cooperationModes.substring(0, _cooperationModes.length - 1);
     }
 
     return Column(
@@ -48,10 +48,9 @@ class MyFactoryServiceInfoState extends State<MyFactoryServiceInfo> {
               padding: EdgeInsets.only(bottom: 15),
               child: Row(
                 children: <Widget>[
-                  Text('工厂服务',style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold
-                  ))
+                  Text('工厂服务',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
                 ],
               ),
             ),
@@ -68,7 +67,9 @@ class MyFactoryServiceInfoState extends State<MyFactoryServiceInfo> {
                     ),
                   ),
                   Text(
-                    enumMap(FactoryFreeProofingsEnum, widget.factory.freeProofing) ?? '',
+                    enumMap(FactoryFreeProofingsEnum,
+                        widget.factory.freeProofing) ??
+                        '',
                     style: const TextStyle(
                       fontSize: 16,
                     ),
@@ -109,12 +110,17 @@ class MyFactoryServiceInfoState extends State<MyFactoryServiceInfo> {
                       style: const TextStyle(color: Colors.grey, fontSize: 16),
                     ),
                   ),
-                  Text(
-                    '${formatEnumSelectsText(widget.factory.qualityLevels,FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length) ?? ''}',
-                    style: const TextStyle(
-                      fontSize: 16,
+                  Expanded(
+                    child: Text(
+                      '${formatEnumSelectsText(widget.factory.qualityLevels,
+                          FactoryQualityLevelsEnum,
+                          FactoryQualityLevelsEnum.length) ?? ''}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -185,5 +191,4 @@ class MyFactoryServiceInfoState extends State<MyFactoryServiceInfo> {
 
     return text;
   }
-
 }

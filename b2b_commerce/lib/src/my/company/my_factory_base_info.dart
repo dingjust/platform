@@ -123,90 +123,107 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
               children: <Widget>[
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   child: _buildFactoryItem(_buildFactoryHeaderRow),
                 ),
                 Divider(height: 0),
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   child: _buildhistoryOrdersCount(),
                 ),
                 SizedBox(
                   height: 10,
                   child: Container(
-                    color: Colors.grey[100] ,
+                    color: Colors.grey[100],
                   ),
                 ),
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   child: _buildContactInfo(),
                 ),
                 SizedBox(
                   height: 10,
                   child: Container(
-                    color: Colors.grey[100] ,
+                    color: Colors.grey[100],
                   ),
                 ),
-                widget.factory?.capacities != null && widget.factory.capacities.length > 0 ? Container(
+                widget.factory?.capacities != null &&
+                    widget.factory.capacities.length > 0
+                    ? Container(
                   color: Colors.white,
                   height: 210,
-                  padding: EdgeInsets.only(top: 15,right: 10,bottom: 10),
-                  child: MyCompanyCapacityInfo(widget.factory,isSupplier: widget.isSupplier),
-                ) :
-                Container(
+                  padding:
+                  EdgeInsets.only(top: 15, right: 10, bottom: 10),
+                  child: MyCompanyCapacityInfo(widget.factory,
+                      isSupplier: widget.isSupplier),
+                )
+                    : Container(
                   color: Colors.white,
-                  padding: EdgeInsets.only(top: 15,right: 10,bottom: 10),
+                  padding:
+                  EdgeInsets.only(top: 15, right: 10, bottom: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('该工厂尚未发布空闲产能',style: TextStyle(fontSize: 16,),),
+                      Text(
+                        '该工厂尚未发布空闲产能',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 SizedBox(
                   height: 10,
                   child: Container(
-                    color: Colors.grey[100] ,
+                    color: Colors.grey[100],
                   ),
                 ),
-                 Container(
+                Container(
                   color: Colors.white,
-                  padding: EdgeInsets.only(top: 15,left: 15),
-                  child: MyFactoryScaleInfo(widget.factory,isSupplier: widget.isSupplier),
+                  padding: EdgeInsets.only(top: 15, left: 15),
+                  child: MyFactoryScaleInfo(widget.factory,
+                      isSupplier: widget.isSupplier),
                 ),
                 SizedBox(
                   height: 10,
                   child: Container(
-                    color: Colors.grey[100] ,
+                    color: Colors.grey[100],
                   ),
                 ),
-                 Container(
+                Container(
                   color: Colors.white,
-                  padding: EdgeInsets.only(top: 15,left: 15),
-                  child: MyFactoryAbilityInfo(widget.factory,isSupplier: widget.isSupplier),
+                  padding: EdgeInsets.only(top: 15, left: 15),
+                  child: MyFactoryAbilityInfo(widget.factory,
+                      isSupplier: widget.isSupplier),
                 ),
                 SizedBox(
                   height: 10,
                   child: Container(
-                    color: Colors.grey[100] ,
+                    color: Colors.grey[100],
                   ),
                 ),
-                 Container(
+                Container(
                   color: Colors.white,
-                  padding: EdgeInsets.only(top: 15,left: 15),
-                  child: MyFactoryServiceInfo(widget.factory,isSupplier: widget.isSupplier),
+                  padding: EdgeInsets.only(top: 15, left: 15),
+                  child: MyFactoryServiceInfo(widget.factory,
+                      isSupplier: widget.isSupplier),
                 ),
                 SizedBox(
                   height: 10,
                   child: Container(
-                    color: Colors.grey[100] ,
+                    color: Colors.grey[100],
                   ),
                 ),
-                 Container(
+                Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   child: _buildCreationTime(),
                 ),
                 Divider(height: 0),
@@ -526,17 +543,20 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(bottom: 15,),
+          padding: EdgeInsets.only(
+            bottom: 15,
+          ),
           child: Row(
             children: <Widget>[
               Text('企业信息',
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold))
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(bottom: 15,),
+          padding: EdgeInsets.only(
+            bottom: 15,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -569,7 +589,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                 ),
               ),
               Expanded(
-                child: Text('${widget.factory.contactAddress?.details ?? ''}',
+                child: Text(
+                  '${widget.factory.contactAddress?.details ?? ''}',
                   style: const TextStyle(
                     fontSize: 16,
                   ),
@@ -586,6 +607,9 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
     return Row(
       children: <Widget>[
         ImageFactory.buildThumbnailImage(widget.factory.profilePicture),
+        Container(
+          width: 10,
+        ),
         Expanded(
           child: Container(
             height: 80,
@@ -600,7 +624,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                 ),
                 Stars(
                   starLevel: widget.factory.starLevel ?? 0,
-                  highlightOnly:false,
+                  highlightOnly: false,
                 ),
                 Container(
                   height: 20,
