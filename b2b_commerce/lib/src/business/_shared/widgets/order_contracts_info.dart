@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/helper/contract_helper.dart';
+import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 ///订单合同信息显示
 class OrderContractsBlock extends StatelessWidget {
@@ -63,11 +63,7 @@ class OrderContractsBlock extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                B2BIcons.agreement,
-                color: Color(0xffffca3a),
-                size: 40,
-              ),
+              DocSignatureHelper.getDocTypeIcon(),
               Row(
                 children: [
                   Expanded(

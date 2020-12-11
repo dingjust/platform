@@ -1,8 +1,8 @@
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 ///快速对账单信息显示
 class FastReconSheetBlock extends StatelessWidget {
@@ -60,11 +60,7 @@ class FastReconSheetBlock extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                B2BIcons.agreement,
-                color: Color(0xffffca3a),
-                size: 40,
-              ),
+              DocSignatureHelper.getDocTypeIcon(),
               Text(
                 '${sheet.title ?? '无标题'}',
                 style: TextStyle(color: Colors.grey),
@@ -94,7 +90,6 @@ class FastReconSheetBlock extends StatelessWidget {
       ),
     );
   }
-
 
   void _onTap(BuildContext context) async {
     Navigator.of(context)

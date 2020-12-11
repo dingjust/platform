@@ -1,12 +1,12 @@
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 ///发货单块
 class ReconciliationOrderItem extends StatelessWidget {
@@ -202,11 +202,7 @@ class _MediasRow extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               children: [
-                Icon(
-                  B2BIcons.agreement,
-                  color: Color(0xffffca3a),
-                  size: 40,
-                ),
+                DocSignatureHelper.getDocTypeIcon(signMethod: doc.signMethod),
                 Expanded(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

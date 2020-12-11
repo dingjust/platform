@@ -71,7 +71,7 @@ class _ReconciliationOrderDetailPageState
                     ],
                   ),
                 ),
-                resizeToAvoidBottomPadding: true,
+                bottomSheet: _bottomSheet(),
               ));
         } else {
           return Container(
@@ -166,6 +166,41 @@ class _ReconciliationOrderDetailPageState
         ));
   }
 
+  Widget _bottomSheet({double height = 55}) {
+    //若对账单状态为待乙方签署，且账单为线下签署则可以确认跳过
+    if (order.state == FastReconciliationSheetState.PENDING_B_SIGN) {
+      if (order.docSignatures != null && order.docSignatures.isNotEmpty) {
+        if (order.docSignatures.first.signMethod ==
+            SignMethodType.OFFLINE_SIGN) {
+          return Container(
+            height: height,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      height: height,
+                      child: FlatButton(
+                          onPressed: () => _onConfirm(),
+                          color: Constants.THEME_COLOR_MAIN,
+                          child: Text('确认账单',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ))),
+                    ))
+              ],
+            ),
+          );
+        }
+      }
+    }
+
+    return Container(
+      height: 0,
+    );
+  }
+
   /// 查询明细
   Future<FastReconciliationSheetModel> _getData() async {
     if (order == null) {
@@ -225,17 +260,70 @@ class _ReconciliationOrderDetailPageState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                B2BIcons.agreement,
-                color: Color(0xffffca3a),
-                size: 40,
-              ),
+              DocSignatureHelper.getDocTypeIcon(signMethod: model.signMethod),
               DocSignatureTag(doc: model)
             ],
           ),
         ),
       ),
     );
+  }
+
+  ///乙方确认
+  void _onConfirm() {
+    BotToast.showCustomText(
+        onlyOne: true,
+        duration: null,
+        clickClose: false,
+        crossPage: false,
+        backgroundColor: Colors.black38,
+        toastBuilder: (cancelFunc) =>
+            AlertDialog(
+              content: Container(
+                height: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Text('是否确认对账单？'),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: FlatButton(
+                                onPressed: cancelFunc, child: Text('否'))),
+                        Expanded(
+                            child: FlatButton(
+                                onPressed: _onConfirmByPartyB,
+                                child: Text('是',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                    ))))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ));
+  }
+
+  void _onConfirmByPartyB() async {
+    Function cancelFunc =
+    BotToast.showLoading(crossPage: false, clickClose: false);
+    BaseResponse response =
+    await ReconciliationOrderRespository.confirmByPartyB(order.id);
+    cancelFunc.call();
+    if (response != null && response.code == 1) {
+      BotToast.showText(text: '确认成功');
+      setState(() {
+        order = null;
+      });
+    } else if (response != null && response.code == 0) {
+      BotToast.showText(text: '${response.msg}');
+    } else {
+      BotToast.showText(text: '操作失败');
+    }
   }
 
   ///审批中,或取消状态则禁用签署
