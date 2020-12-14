@@ -59,8 +59,7 @@ abstract class UserApis {
       '/{baseSiteId}/orders/requirement/countByStatuses';
 
   ///手机号是否注册
-  static get phoneExists =>
-          (code) {
+  static get phoneExists => (code) {
         return '/{baseSiteId}/companies/register/$code';
       };
 
@@ -207,12 +206,19 @@ abstract class UserApis {
   static get cooperators => '/{baseSiteId}/cooperator';
 
   /// 合作商详情
-  static get cooperatorDetail => (id) { 
-    return '/{baseSiteId}/cooperator/$id';
-  };
+  static get cooperatorDetail =>
+          (id) {
+        return '/{baseSiteId}/cooperator/$id';
+      };
 
   /// 添加合作商
   static get appendCooperator => '/{baseSiteId}/cooperator/create';
+
+  /// 删除合作商
+  static get deleteCooperator =>
+          (id) {
+        return '/{baseSiteId}/cooperator/delete/$id';
+      };
 
   /// 根据keyword查询全公司列表
   static get companies => '/{baseSiteId}/companies/findBrandAndFactory';
