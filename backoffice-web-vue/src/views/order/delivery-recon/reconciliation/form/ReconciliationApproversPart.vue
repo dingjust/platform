@@ -3,7 +3,7 @@
     <div class="form-block-content">
       <div>
         <el-form-item label="" label-width="10px">
-          <el-checkbox v-model="formData.isApproval" @>需审核</el-checkbox>
+          <el-checkbox v-model="formData.isApproval" :disabled="isDisabled">需审核</el-checkbox>
         </el-form-item>
       </div>
       <div style="display: flex;flex-wrap: wrap;">
@@ -28,11 +28,18 @@
 
 <script>
 import { PersonnalSelectionV2 } from '@/components'
+import { checkAuditFree } from '@/auth/auth'
+
 export default {
   name: 'ReconciliationApproversPart',
   props: ['formData'],
   components: {
     PersonnalSelectionV2
+  },
+  computed: {
+    isDisabled: function () {
+      return !checkAuditFree('FAST_RECONCILIATION_SHEET_NO_AUDIT');
+    }
   },
   methods: {
     appendApprover () {

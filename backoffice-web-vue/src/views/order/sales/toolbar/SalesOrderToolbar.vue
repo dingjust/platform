@@ -145,7 +145,7 @@
         brands: [],
         keyword: this.$store.state.SalesOrdersModule.keyword,
         formData: this.$store.state.SalesOrdersModule.formData,
-        queryFormData: this.$store.state.SalesOrdersModule.queryFormData,
+        // queryFormData: this.$store.state.SalesOrdersModule.queryFormData,
         categories: []
       }
     },

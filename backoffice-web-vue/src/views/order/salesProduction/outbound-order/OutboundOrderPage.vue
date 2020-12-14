@@ -259,7 +259,7 @@
           invoiceTaxPoint: 0.03,
           freightPayer: 'PARTYB',
           remarks: '',
-          sendAuditNeeded: false,
+          sendAuditNeeded: true,
           payPlan: {
             name: '',
             isHaveDeposit: false,

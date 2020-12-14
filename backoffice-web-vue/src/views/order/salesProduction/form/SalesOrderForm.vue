@@ -105,7 +105,7 @@
             <personnal-selection-v2 :vPerson.sync="form.productionLeader"/>
           </el-form-item>
           <el-form-item label="" label-width="10px">
-            <el-checkbox v-model="form.auditNeeded" @change="handleClick">需审核</el-checkbox>
+            <el-checkbox v-model="form.auditNeeded" @change="handleClick" :disabled="isDisabled">需审核</el-checkbox>
           </el-form-item>
           <template v-for="(item,itemIndex) in form.approvers">
             <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
@@ -169,6 +169,7 @@
   import PersonnelSelection from '@/components/custom/PersonnelSelection';
   import ProgressPlanSelectDialog from '@/views/user/progress-plan/components/ProgressPlanSelectDialog'
   import SampleProductsSelectDialog from '@/views/product/sample/components/SampleProductsSelectDialog';
+  import { checkAuditFree } from '@/auth/auth'
 
   import {
     PayPlanForm,
@@ -260,6 +261,9 @@
         return {
           id: this.form.productionLeader[this.form.productionLeader.length - 1]
         }
+      },
+      isDisabled: function () {
+        return !checkAuditFree('SALES_OUT_NO_AUDIT');
       }
     },
     methods: {

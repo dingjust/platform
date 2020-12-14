@@ -50,7 +50,7 @@ const state = {
     invoiceTaxPoint: 0.03,
     freightPayer: 'PARTYB',
     remarks: '',
-    sendAuditNeeded: false,
+    sendAuditNeeded: true,
     progressPlan: {},
     payPlan: {
       isHaveDeposit: false,
@@ -203,7 +203,7 @@ const actions = {
       invoiceTaxPoint: 0.03,
       freightPayer: 'PARTYB',
       remarks: '',
-      sendAuditNeeded: false,
+      sendAuditNeeded: true,
       progressPlan: {},
       payPlan: {
         isHaveDeposit: false,
