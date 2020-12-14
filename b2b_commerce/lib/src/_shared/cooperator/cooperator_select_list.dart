@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/_shared/cooperator/cooperator_item.dart';
 import 'package:b2b_commerce/src/_shared/cooperator/cooperator_no_selected_item.dart';
 import 'package:b2b_commerce/src/_shared/cooperator/cooperator_selected_item.dart';
 import 'package:flutter/material.dart';

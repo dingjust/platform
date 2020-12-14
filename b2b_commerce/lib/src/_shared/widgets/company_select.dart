@@ -47,6 +47,7 @@ class _CompanySelectPageState extends State<CompanySelectPage> {
             automaticallyImplyLeading: true,
             title: Consumer<CompanyState>(
               builder: (context, CompanyState state, _) => SearchAppbarTitle(
+                hintText: hintText,
                 controller: controller,
                 focusNode: focusNode,
                 onSearch: () {
@@ -177,6 +178,7 @@ class CompanySelectList extends StatelessWidget {
     return Container(
       child: RefreshIndicator(
         child: ListView(
+          controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
             state.companies().isNotEmpty
@@ -188,14 +190,14 @@ class CompanySelectList extends StatelessWidget {
                             model: model,
                             selectedCompany: selectedCompany,
                             onPressed: () {
-                              if (onItemTap != null) {
-                                onItemTap(model);
-                              }
-                            },
-                          ),
-                        )
-                        .toList(),
-                  )
+                        if (onItemTap != null) {
+                          onItemTap(model);
+                        }
+                      },
+                    ),
+              )
+                  .toList(),
+            )
                 : NoDataInfoRow(),
             ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
               opacity: state.loadingMore ? 1.0 : 0,

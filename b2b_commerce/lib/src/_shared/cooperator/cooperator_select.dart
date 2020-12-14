@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 class CooperatorSelectPage extends StatefulWidget{
   CooperatorSelectPage({

@@ -7,10 +7,15 @@ class CooperatorItem extends StatelessWidget {
 
   final ValueChanged<CooperatorModel> onItemTap;
 
+  final VoidCallback onItemLongPress;
+
   final isSelected;
 
-  const CooperatorItem(
-      {Key key, this.model, this.isSelected = false, this.onItemTap})
+  const CooperatorItem({Key key,
+    this.model,
+    this.isSelected = false,
+    this.onItemTap,
+    this.onItemLongPress})
       : super(key: key);
 
   @override
@@ -22,6 +27,7 @@ class CooperatorItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: InkWell(
               onTap: () => onTap(context),
+              onLongPress: () => onLongPress(context),
               borderRadius: BorderRadius.circular(10),
               child: Container(
                   padding: EdgeInsets.symmetric(
@@ -51,11 +57,11 @@ class CooperatorItem extends StatelessWidget {
         Expanded(
             child: Text(
               '$name',
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Color(0xff263238),
-              fontSize: 18),
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff263238),
+                  fontSize: 18),
         ))
       ],
     );
@@ -168,6 +174,12 @@ class CooperatorItem extends StatelessWidget {
               id: model.id,
             ),
       ));
+    }
+  }
+
+  void onLongPress(BuildContext context) {
+    if (onItemLongPress != null) {
+      onItemLongPress.call();
     }
   }
 
