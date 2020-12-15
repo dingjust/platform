@@ -120,10 +120,8 @@ export function checkAuditFree (permission) {
   if (roles.includes(ADMIN_PERMISSION)) {
     return true;
   }
-  console.log(permission)
   if (permission) {
     const hasPermission = roles.some(role => {
-      console.log(role === permission);
       return role === permission;
     });
 

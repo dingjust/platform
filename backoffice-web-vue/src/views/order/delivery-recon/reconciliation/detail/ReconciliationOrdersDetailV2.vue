@@ -41,6 +41,9 @@
       <el-row v-if="canConfirm" type="flex" justify="center">
         <el-button class="material-btn" @click="toConfirm">确认</el-button>
       </el-row>
+      <el-row v-if="canCancel" type="flex" justify="center">
+        <el-button class="material-btn" @click="toCancel">取消</el-button>
+      </el-row>
     </el-card>
     <!-- 展示pdf组件 -->
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
@@ -88,6 +91,10 @@ export default {
       return !this.isReceiveParty && 
         this.order.docSignatures[0].signMethod === 'OFFLINE_SIGN' && 
         this.order.state=== 'PENDING_B_SIGN';
+    },
+    canCancel: function () {
+      // 待乙方签署的状态下，创建方可以进行取消操作
+      return this.isReceiveParty && this.order.state === 'PENDING_B_SIGN';
     }
   },
   data () {
@@ -97,7 +104,8 @@ export default {
         shipParty: {},
         cooperator: {
           partner: ''
-        }
+        },
+        docSignatures: [{}]
       },
       pdfVisible: false,
       fileUrl: '',
@@ -214,6 +222,32 @@ export default {
         return;
       }
       this.$message.success('操作成功！');
+      this.getDetail();
+    },
+    toCancel () {
+      this.$confirm('是否进行确认操作?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this._toCancel();
+      });
+    },
+    async _toCancel () {
+      const id = this.order.id;
+
+      const url = this.apis().ReconciliationCancel(id);
+      const result = await this.$http.put(url);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.$message.error(result.msg);
+        return;
+      }
+      this.$message.success("操作成功！");
       this.getDetail();
     }
   },
