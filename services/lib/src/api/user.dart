@@ -71,7 +71,7 @@ abstract class UserApis {
 
   //更新/删除发票抬头(详情)
   static get invoiceTitleFromId =>
-          (id) => '/{baseSiteId}/company/invoice/title/$id';
+      (id) => '/{baseSiteId}/company/invoice/title/$id';
 
   //获取所有角色
   static get roles => '/{baseSiteId}/roles';
@@ -253,4 +253,7 @@ abstract class UserApis {
 
   ///部门列表
   static get b2bDepts => '/{baseSiteId}/dept/tree/list';
+
+  ///创建印章
+  static get sealSave => '/{baseSiteId}/user/seal/save';
 }
