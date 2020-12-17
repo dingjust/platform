@@ -9,6 +9,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 const _statuses = <EnumModel>[
+  EnumModel('ALL', '全部'),
   EnumModel('TO_BE_SUBMITTED', '待提交'),
   EnumModel('AUDITING', '待审核'),
   EnumModel('AUDIT_REJECTED', '审核驳回'),

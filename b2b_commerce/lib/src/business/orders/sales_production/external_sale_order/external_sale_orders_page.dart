@@ -10,6 +10,7 @@ import 'package:widgets/widgets.dart';
 import 'external_sale_orders_list.dart';
 
 const _statuses = <EnumModel>[
+  EnumModel('ALL', '全部'),
   EnumModel('TO_BE_ACCEPTED', '待接单/待提交'),
   EnumModel('AUDITING', '待审核'),
   EnumModel('AUDIT_REJECTED', '审核驳回'),
@@ -69,7 +70,6 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
           });
         });
   }
-
 
   Widget _buildAppbar() {
     return isSearching

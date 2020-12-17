@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/helper/cooperator_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -298,13 +299,14 @@ class _Header extends StatelessWidget {
             height: 30,
             margin: EdgeInsets.only(right: 5),
             child: CircleAvatar(
-              backgroundImage: getImage(),
+              backgroundImage: CooperatorHelper.getCooperatorImage(
+                  order.targetCooperator, order.originCompany),
               radius: 30,
             ),
           ),
           Expanded(
               child: Text(
-            '${getCoopertorName()}',
+                '${CooperatorHelper.getCooperatorName(order.targetCooperator, order.originCompany, order.originCooperator)}',
             style: TextStyle(fontSize: 16),
             overflow: TextOverflow.ellipsis,
           )),
@@ -316,30 +318,6 @@ class _Header extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String getCoopertorName() {
-    String name = '';
-    if (order.originCompany != null) {
-      name = order.originCompany.name;
-    } else {
-      name = order.originCooperator.type == CooperatorType.ONLINE
-          ? order.originCooperator.partner.name
-          : order.originCooperator.name;
-    }
-    return name;
-  }
-
-  ImageProvider getImage() {
-    if (order.originCompany != null &&
-        order.originCompany.profilePicture != null) {
-      return NetworkImage(order.originCompany.profilePicture.thumbnailUrl());
-    } else {
-      return AssetImage(
-        'temp/picture.png',
-        package: "assets",
-      );
-    }
   }
 }
 

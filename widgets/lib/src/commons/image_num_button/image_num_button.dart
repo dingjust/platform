@@ -17,6 +17,8 @@ class ImageNumButton extends StatelessWidget {
 
   final EdgeInsetsGeometry imagePadding;
 
+  final Color backgroundColor;
+
   const ImageNumButton(
       {Key key,
       this.image,
@@ -25,8 +27,9 @@ class ImageNumButton extends StatelessWidget {
       this.title,
       this.showNum = false,
       this.width = 55,
-        this.height = 90,
-        this.imagePadding = const EdgeInsets.all(10)})
+      this.height = 90,
+      this.backgroundColor = Colors.white,
+      this.imagePadding = const EdgeInsets.all(10)})
       : super(key: key);
 
   @override
@@ -34,6 +37,7 @@ class ImageNumButton extends StatelessWidget {
     return Container(
       height: height,
       child: Material(
+        color: backgroundColor,
         child: InkWell(
           onTap: onPressed,
           child: Column(

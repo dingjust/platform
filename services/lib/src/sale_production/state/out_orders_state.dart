@@ -9,6 +9,11 @@ import 'package:services/src/state/state.dart';
 ///外发订单状态管理
 class OutOrdersState extends PageState {
   Map<String, PageEntry> _ordersMap = {
+    'ALL': PageEntry(
+        currentPage: 0,
+        size: 10,
+        data: List<SalesProductionOrderModel>(),
+        totalElements: -1),
     'TO_BE_ACCEPTED': PageEntry(
         currentPage: 0,
         size: 10,
@@ -80,7 +85,7 @@ class OutOrdersState extends PageState {
         'users': [],
         'name': _keyword != '' ? _keyword : null
       };
-      if (status != '' && status != 'SEARCH') {
+      if (status != 'ALL') {
         data['state'] = status;
       }
 
@@ -140,7 +145,7 @@ class OutOrdersState extends PageState {
 
         if (response.statusCode == 200) {
           OutOrdersResponse ordersResponse =
-          OutOrdersResponse.fromJson(response.data);
+              OutOrdersResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
           _ordersMap[status].data.addAll(ordersResponse.content);
