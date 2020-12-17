@@ -73,7 +73,8 @@ const actions = {
     }
 
     // 设置筛选收货方
-    query['receiveParty'] = companyCode;
+    // query['receiveParty'] = companyCode;
+    query['partyType'] = 'PARTYA';
 
     const response = await http.post(url, query, {
       page: state.currentPageNumber,

@@ -209,9 +209,11 @@
         let query = Object.assign({}, this.queryFormData);
         query.states = '';
         if (this.mode == 'import') {
-          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+          // query['shipParty'] = this.$store.getters.currentUser.companyCode;
+          query['partyType'] = 'PARTYB';
         } else {
-          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+          // query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+          query['partyType'] = 'PARTYA';
         }
 
         const url = this.apis().shippingOrderStateCount();
@@ -233,9 +235,11 @@
         let query = Object.assign({}, this.queryFormData);
         query.states = '';
         if (this.mode == 'import') {
-          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+          // query['shipParty'] = this.$store.getters.currentUser.companyCode;
+          query['partyType'] = 'PARTYB';
         } else {
-          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+          // query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+          query['partyType'] = 'PARTYA';
         }
 
         const url = this.apis().reconsiderOrderStateCount();
@@ -255,9 +259,11 @@
         let query = Object.assign({}, this.queryFormData);
         query.states = '';
         if (this.mode == 'import') {
-          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+          // query['shipParty'] = this.$store.getters.currentUser.companyCode;
+          query['partyType'] = 'PARTYB';
         } else {
-          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+          // query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+          query['partyType'] = 'PARTYA';
         }
 
         const url = this.apis().returnSheetStateCount();
