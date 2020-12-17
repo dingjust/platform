@@ -1,7 +1,8 @@
 <template>
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
-      @selection-change="handleSelectionChange" @row-click="rowClick">
+      @selection-change="handleSelectionChange" @row-click="rowClick" 
+      :highlight-current-row="isSelection" @current-change="handleCurrentChange">
       <el-table-column type="selection" :reserve-selection="true" width="55" v-if="canCreateReceipt"></el-table-column>
       <el-table-column label="发货单号" prop="code" min-width="110px" fixed="left"></el-table-column>
       <el-table-column label="产品名称" min-width="150px">
@@ -126,6 +127,10 @@
       mode: {
         type: String,
         default: 'import'
+      },
+      isSelection: {
+        type: Boolean,
+        default: false
       }
     },
     components: {
@@ -238,10 +243,14 @@
         }
         return result;
       },
+      handleCurrentChange (val) {
+        this.currentRow = val;
+      }
     },
     data() {
       return {
         selectionRow: '',
+        currentRow: '',
         openId: '',
         dialogVisible: false
       }
