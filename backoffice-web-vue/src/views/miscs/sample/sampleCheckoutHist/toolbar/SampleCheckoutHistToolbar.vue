@@ -93,7 +93,6 @@
       },
       onAdvancedSearch() {
         this.setQueryFormData(this.queryFormData);
-        console.log(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
       onNew() {

@@ -100,7 +100,6 @@
     },
     watch: {
       'profilePictures': function (n, o) {
-        console.log(n);
         if (n != null && n.length > 0) {
           this.formData.profilePicture = n[0];
         } else {

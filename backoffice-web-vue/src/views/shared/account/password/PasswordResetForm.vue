@@ -181,7 +181,6 @@
           this.$message.error(result['errors'][0].message);
           return;
         } else {
-          console.log('发送成功');
         }
       },
       //发送员工绑定手机号验证码
@@ -195,7 +194,6 @@
           this.$message.error(result['errors'][0].message);
           return;
         } else {
-          console.log('发送成功');
         }
       },
       onSubmit() {

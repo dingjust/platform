@@ -84,7 +84,6 @@
         }
       },
       onDetails (code) {
-        // console.log(row);
         this.$emit('onDetails', code);
       },
       openPreviewPdf (code) {

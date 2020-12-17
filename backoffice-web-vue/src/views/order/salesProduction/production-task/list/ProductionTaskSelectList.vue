@@ -131,8 +131,6 @@
           return;
         }
         if (this.isSingleChoice && this.selectTaskList.length >= 1) {
-          console.log(row);
-          console.log(this.selectTaskList);
           if (row.id === this.selectTaskList[0].id) {
             this.$refs.resultTable.toggleRowSelection(this.selectTaskList[0], false);
             return;

@@ -36,7 +36,6 @@ const actions = {
     if (size) {
       commit('currentPageSize', size);
     }
-    console.log(state);
     const response = await http.post(url, {
       title: state.keyword,
       type:type,
@@ -45,7 +44,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }

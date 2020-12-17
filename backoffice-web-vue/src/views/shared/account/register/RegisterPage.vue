@@ -60,7 +60,6 @@
     mounted() {},
     methods: {
       handleClick(tab, event) {
-        console.log(tab, event);
       },
       toLogin() {
         this.$router.push("/login");

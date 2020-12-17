@@ -92,7 +92,6 @@
         if (this.slotData.title === this.originalTitle) {
           this.passCheck = true;
         }
-        console.log('---------------------------------------');
         if (!this.passCheck) {
           this.$message.error('请完善页面信息');
           return;
@@ -112,7 +111,6 @@
           remark: this.slotData.remarks,
           id: this.slotData.id
         };
-        console.log(tempData);
         let formData = Object.assign({}, tempData);
         const result = await http.post(url, formData);
         // if (result['errors']) {
@@ -157,7 +155,6 @@
           page: 0,
           size: 10
         });
-        console.log(result);
         this.mockData = result.content;
       }
     },
@@ -196,13 +193,11 @@
 
     watch: {
       propdata (newValue, oldValue) {
-        console.log(newValue);
       }
     },
     created () {
       // this.getTemplateListPt();
       this.originalTitle = this.slotData.title;
-      console.log(this.originalTitle);
     }
   };
 </script>

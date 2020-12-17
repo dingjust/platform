@@ -107,7 +107,6 @@
       }
     },
     created () {
-      console.log(this.slotData);
     }
   }
 </script>

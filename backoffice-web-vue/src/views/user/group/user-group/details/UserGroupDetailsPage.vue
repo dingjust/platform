@@ -58,8 +58,6 @@
     },
     computed: {
       isNewlyCreated: function () {
-        console.log(this.slotData.id);
-        console.log(this.slotData.id === null);
         return this.slotData.id === null;
       }
     },

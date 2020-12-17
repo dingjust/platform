@@ -43,7 +43,6 @@
     },
     methods: {
       async onSubmit() {
-        console.log(this.slotData);
         const url = this.apis().updateSampleCheckoutHist(this.slotData.id);
         const result = await this.$http.put(url, this.slotData);
         if (result['errors']) {

@@ -187,7 +187,6 @@
           }).then(() => {
             this.onUpdateAddress();
           }).catch(() => {
-            console.log("cancel");
           });
         }else if(this.slotData.unitPrice === 0){
           const url = this.apis().payProofings(this.slotData.code);

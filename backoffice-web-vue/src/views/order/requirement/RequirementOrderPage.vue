@@ -129,7 +129,6 @@
 
         const query = this.queryFormData;
         const url = this.apis().getRequirementOrders();
-        console.log(page);
         this.searchAdvanced({url, query, page, size});
 
         if (this.categories <= 0) {
@@ -238,7 +237,6 @@
         this.searchQuotesAdvanced({url, query: queryFormData, page, size});
       },
       async onSave (factories, phoneNumbers) {
-        console.log(factories);
         var params = {};
         if (factories != null) {
           var text = '';
@@ -248,7 +246,6 @@
           }
           text = text.slice(0, text.length - 1);
         }
-        console.log(text);
         params['factories'] = text;
         const url = this.apis().createRequirementOrder();
         const result = await this.$http.post(url, this.formData, params);
@@ -270,7 +267,6 @@
           }
           text = text.slice(0, text.length - 1);
         }
-        console.log(text);
         params['factories'] = text;
         const url = this.apis().updateRequirementOrder(this.formData.code);
         const result = await this.$http.put(url, this.formData, params);

@@ -51,7 +51,6 @@
         this.getOrderDetail(code);
       },
       callback (productionOrder) {
-        console.log(productionOrder);
         if (productionOrder == null) {
           this.getDetail();
         } else {

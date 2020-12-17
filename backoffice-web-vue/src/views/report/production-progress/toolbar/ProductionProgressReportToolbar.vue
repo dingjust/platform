@@ -83,7 +83,6 @@
         this.brands = result.content;
       },
       onDateChange(values) {
-        console.log(values[0]);
         this.queryFormData.expectedDeliveryDateFrom = values[0];
         this.queryFormData.expectedDeliveryDateTo = values[1];
         this.onAdvancedSearch();

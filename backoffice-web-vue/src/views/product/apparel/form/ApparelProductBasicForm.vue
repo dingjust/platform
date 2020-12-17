@@ -160,7 +160,6 @@
     },
     methods: {
       checkCategory  (rule, value, callback) {
-        console.log(value);
         if (!value) {
           return callback(new Error('请选择品类'));
         } else {

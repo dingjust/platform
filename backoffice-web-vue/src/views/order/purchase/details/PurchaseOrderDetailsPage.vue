@@ -35,7 +35,6 @@
         this.$emit('onDetails', row);
       },
       async onSubmit () {
-        // console.log("submitted data: " + JSON.stringify(this.slotData));
 
         const expectedDeliveryDate = this.slotData.expectedDeliveryDate;
         if (this.compareDate(new Date(), new Date(expectedDeliveryDate))) {

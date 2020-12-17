@@ -111,7 +111,6 @@
         this.$emit('operationTypeTurn');
       },
       async _onUpdate () {
-        console.log(this.slotData);
         var thumbnail = null;
         if (this.images != null) {
           thumbnail = this.images[0];
@@ -124,7 +123,6 @@
           group: this.slotData.group,
           thumbnail: thumbnail
         };
-        console.log(formData);
         const url = this.apis().createCategories();
         const result = await this.$http.put(url, formData);
         if (result['errors']) {
@@ -138,7 +136,6 @@
         this.$emit('operationTypeTurn');
       },
       async _onSubmit () {
-        console.log(this.slotData);
         var thumbnail = null;
         if (this.images != null) {
           thumbnail = this.images[0];

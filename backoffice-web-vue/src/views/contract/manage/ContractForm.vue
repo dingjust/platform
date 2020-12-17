@@ -338,7 +338,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.$emit('openPreviewPdf', this.thisContract, '');
         }
@@ -400,7 +399,6 @@
           'items': this.orderSelectFiles.map((order) => order.id),
           'customizeType': 'WTSCHT'
         }
-        console.log(data);
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
@@ -424,7 +422,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.$emit('openPreviewPdf', this.thisContract, '');
         }
@@ -533,8 +530,6 @@
           return;
         }
         this.thisContract = result.data;
-        console.log(result);
-        console.log(this.thisContract);
       }
     },
     data () {

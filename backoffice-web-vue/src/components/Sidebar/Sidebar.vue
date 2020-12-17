@@ -80,10 +80,8 @@
         e.target.parentElement.classList.toggle('open')
       },
       handleOpen(key, keyPath) {
-        console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
       },
       // 路由权限检测
       routeCheck(nav) {

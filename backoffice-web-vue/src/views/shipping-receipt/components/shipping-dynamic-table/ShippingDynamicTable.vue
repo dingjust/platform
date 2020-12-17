@@ -117,7 +117,6 @@
         this.$emit('onSelect', this.selectionRow);
       },
       rowClick(row) {
-        // console.log(JSON.stringify(row));
         // if (this.selectionRow == "") {
         //   this.$refs.resultTable.toggleRowSelection(row, true);
         // } else {

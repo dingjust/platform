@@ -207,7 +207,6 @@
         this.slotData.pictures.push(response);
       },
       async handleRemove(file) {
-        // console.log(JSON.stringify(file));
         const result = await this.$http.delete('/b2b/media/' + file.id);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -240,7 +239,6 @@
     },
     data() {
       let checkCategory = (rule, value, callback) => {
-        console.log(value);
         if (value==null||value.code === ''||value === {}) {
           callback(new Error('请选择品类'));
         }
@@ -253,7 +251,6 @@
         callback();
       };
       let contactPhone = (rule, value, callback) => {
-        console.log(Number.isInteger(value));
         if (!Number.isInteger(value)) {
           callback(new Error('请输入数字值'));
         }

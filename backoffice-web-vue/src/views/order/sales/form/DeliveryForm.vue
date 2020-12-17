@@ -145,8 +145,6 @@
       };
     },
     created () {
-      console.log('------------------------')
-      console.log(this.slotData);
       this.getCarriers();
     },
     mounted () {}

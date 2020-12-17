@@ -31,7 +31,6 @@
     computed: {},
     methods: {
       onSearch(str){
-        console.log(str);
       }
     },
     data() {

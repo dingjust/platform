@@ -41,7 +41,6 @@
         this.slotData.images.push(response);
       },
       async handleRemove(file) {
-        // console.log(JSON.stringify(file));
         // TODO: 自定义删除方法（删除图片之前，清理product的others属性
         const url = this.apis().removeMedia(file.id);
         const result = await this.$http.delete(url);

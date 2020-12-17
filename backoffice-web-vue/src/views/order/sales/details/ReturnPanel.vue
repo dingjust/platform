@@ -71,7 +71,6 @@
       //     return;
       //   }
       //   this.formData = Object.assign({}, result.data);
-      //   console.log(this.formData);
       // },
       onSure () {
         const flag = true;
@@ -126,7 +125,6 @@
       }
     },
     created () {
-      console.log(this.formData);
     },
     mounted () {}
   };

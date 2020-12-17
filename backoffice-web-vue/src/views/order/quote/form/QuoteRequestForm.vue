@@ -128,7 +128,6 @@
         this.slotData.details.pictures.push(response);
       },
       async handleRemove(file) {
-        // console.log(JSON.stringify(file));
         const result = await this.$http.delete('/b2b/media/' + file.id);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

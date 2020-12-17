@@ -36,7 +36,6 @@
     computed: {},
     methods: {
       onSearch() {
-        // console.log('keyword: ' + this.keyword);
 
         this._onSearch(0, this.page.size);
 
@@ -67,7 +66,6 @@
           return;
         }
 
-        // console.log('product: ' + JSON.stringify(result));
         this.page = result;
       },
       onPageSizeChanged(val) {

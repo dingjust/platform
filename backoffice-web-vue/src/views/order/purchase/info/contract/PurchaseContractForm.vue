@@ -353,7 +353,6 @@
           'frameAgreementCode': frameAgreementCode,
           'orderCodes': this.orderSelectFiles.map((order) => order.code)
         }
-        console.log(data);
         let formData = Object.assign({}, data);
         this.$emit('onSaveContractForm', formData);
         this.$emit('closeContractFormDialog');
@@ -453,8 +452,6 @@
           return;
         }
         this.thisContract = result.data;
-        console.log(result);
-        console.log(this.thisContract);
       }
     },
     data () {

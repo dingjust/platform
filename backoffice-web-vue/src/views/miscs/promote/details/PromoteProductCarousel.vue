@@ -124,7 +124,6 @@
         //     formData.push(item);
         //   }
         // });
-        // console.log(formData);
         // return;
         const url = this.apis().updateAllCarousels();
         const result = await this.$http.put(url, this.carouselData);

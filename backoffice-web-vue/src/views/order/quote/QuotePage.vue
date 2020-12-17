@@ -168,7 +168,6 @@
       async _onCancell (item) {
         const url = this.apis().cancelQuote(item.code);
         const result = await this.$http.put(url);
-        console.log(result);
 
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

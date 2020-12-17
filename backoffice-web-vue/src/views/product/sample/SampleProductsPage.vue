@@ -184,7 +184,6 @@
         this.apparelProductForbiddenPageVisible = true;
       },
       async onDeleteConfirm(msg) {
-        console.log(msg);
         const url = this.apis().platformDeletedShelfProduct(this.forbiddenItem.code);
         const result = await this.$http.delete(url);
         if (result['errors']) {

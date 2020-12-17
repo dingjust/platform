@@ -241,7 +241,6 @@
     },
     watch: {
       contractType: function (newType, oldType) {
-        console.log('============' + newType);
         this.$emit('contractTypeChange', newType);
       }
     },

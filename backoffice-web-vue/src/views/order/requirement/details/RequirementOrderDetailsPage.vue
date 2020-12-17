@@ -271,7 +271,6 @@
         this.formDialogVisible = !this.formDialogVisible;
       },
       async onSave (factories, phoneNumbers) {
-        console.log(factories);
         var params = {};
         if (factories != null) {
           var text = '';
@@ -281,7 +280,6 @@
           }
           text = text.slice(0, text.length - 1);
         }
-        console.log(text);
         params['factories'] = text;
         const url = this.apis().updateRequirementOrder(this.formData.code);
         const result = await this.$http.put(url, this.formData, params);

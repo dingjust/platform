@@ -71,7 +71,6 @@
     },
     watch: {
       'profiles': function (n, o) {
-        console.log(n);
       },
       deep: true
     },

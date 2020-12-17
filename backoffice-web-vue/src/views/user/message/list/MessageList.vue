@@ -210,7 +210,6 @@
         })
       },
       openOrderDialog (row) {
-        console.log(row);
         switch (row.moduleCode) {
           case 'newQuote':
           case 'refuseQuote':
@@ -261,7 +260,6 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        console.log(result);
 
         this.proofingDetailData = result;
       },
@@ -296,13 +294,11 @@
         this.purchaseDetailData = result;
         // if (result.status != 'CANCELLED' && (result.creator != null || result.creator != undefined)) {
         //   if ((result.creator.uid != this.$store.getters.currentUser.companyCode) && result.cannelStatus == 'APPLYING') {
-        //     console.log(this.contentData);
         //     this.cannelMsgVisible = true;
         //   }
         // }
       },
       async getContract () {
-        console.log(this.contentData);
         const url = this.apis().getContractsList();
         const result = await this.$http.post(url, {
           orderCode: this.contentData.code
@@ -315,7 +311,6 @@
             this.contracts.push(result.content[i]);
           }
         };
-        console.log(this.contracts);
       },
       initContract () {
         this.contracts = [];

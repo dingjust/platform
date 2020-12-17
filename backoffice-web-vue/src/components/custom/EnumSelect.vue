@@ -43,13 +43,11 @@
     },
     methods: {
       handleClick (tab, event) {
-        console.log(tab, event);
       },
       handleTagClick (key, val) {
         if (this.readOnly) {
           return;
         }
-        console.log(key);
         var mapIndex = this.mapSelectData[key].indexOf(val.code);
         if (mapIndex > -1) {
           this.mapSelectData[key].splice(mapIndex, 1);

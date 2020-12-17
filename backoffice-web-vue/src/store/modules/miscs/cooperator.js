@@ -133,7 +133,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -153,7 +152,6 @@ const actions = {
       size: state.ordersPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('orderPage', response);
     }

@@ -372,7 +372,6 @@
         this.dialogPayPlanFormVisible = false;
       },
       updateCurForm(val) {
-        console.log(JSON.stringify(val));
 
         if (val.name != null) {
           this.form.name = val.name;
@@ -412,8 +411,6 @@
         }
       },
       updateBindingForm() {
-        console.log('============');
-        console.log(JSON.stringify(newVal));
         // 组合账务参数
         var payPlanItems = [];
         if (newVal.isHaveDeposit) {

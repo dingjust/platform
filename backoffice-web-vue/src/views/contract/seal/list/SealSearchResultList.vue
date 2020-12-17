@@ -78,7 +78,6 @@
         this.$emit('onDetail', row);
       },
       async onDelete (code) {
-        console.log(code);
         const url = this.apis().delSeal(code);
         const result = await this.$http.get(url);
         if (result['errors']) {

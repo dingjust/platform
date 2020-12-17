@@ -43,7 +43,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }

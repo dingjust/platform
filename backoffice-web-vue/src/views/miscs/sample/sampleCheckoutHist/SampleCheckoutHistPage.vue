@@ -46,7 +46,6 @@
         this.searchAdvanced({url, query, page, size});
       },
       async onDetails(row) {
-        console.log(row);
         const url = this.apis().getSampleCheckoutHist(row.id);
         const result = await this.$http.get(url);
         if (result['errors']) {

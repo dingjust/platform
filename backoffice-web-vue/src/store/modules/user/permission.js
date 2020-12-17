@@ -25,7 +25,6 @@ const actions = {
       this.$message.error(result.msg);
       return;
     }
-    console.log(result);
     commit('permissions', result.data);
   }
 };

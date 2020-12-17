@@ -174,7 +174,6 @@
         });
       },
       async _onSave () {
-        // console.log(this.formData);
         let data = {
           name: this.formData.name,
           uid: this.formData.uid,
@@ -185,7 +184,6 @@
         if (this.formData.hasOwnProperty('id')) {
           data.id = this.formData.id;
         }
-        // console.log(data);
         // return;
         const url = this.apis().createB2BCustomer();
         const result = await this.$http.post(url, data);
@@ -284,7 +282,6 @@
         handler (val) {
           if (val) {
             this.count++
-            console.log(this.count);
           }
         },
         deep: true
@@ -292,7 +289,6 @@
       deptId: function (nval, oval) {
         if (nval) {
           this.count++;
-          console.log(this.count);
         }
       }
     },

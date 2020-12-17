@@ -117,7 +117,6 @@
         this.productDetailsVisible = true;
       },
       onAfterCreate(){
-        console.log('sdssssss');
         this.productDetailsVisible = false;
       }
     },

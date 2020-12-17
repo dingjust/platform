@@ -44,7 +44,6 @@
           return false;
         }
         const url = this.apis().updateLabel();
-        console.log(this.slotData);
         const result = await this.$http.put(url, this.slotData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

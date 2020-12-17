@@ -154,7 +154,6 @@
       //     page: 0,
       //     size: 10
       //   });
-      //   console.log(result);
       //   this.mockData = result.content;
       //   this.sortData();
       // },
@@ -178,7 +177,6 @@
       //   // this.onSelect(this.mockData[0]);
       // },
       async checkTempName () {
-        console.log(this.tempName.replace(/(^\s*)|(\s*$)/g, '').length);
         if (this.tempName == null || this.tempName.replace(/(^\s*)|(\s*$)/g, '').length === 0) {
           this.validateText = '请输入模板名称';
           return;
@@ -253,7 +251,6 @@
 
     watch: {
       propdata (newValue, oldValue) {
-        console.log(newValue);
       }
     },
     created () {

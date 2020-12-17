@@ -328,7 +328,6 @@
     },
     methods: {
       handleChange(val) {
-        console.log(val);
       },
       handleCommand(command) {
         this.$message("click on item " + command);

@@ -359,7 +359,6 @@
         this.$refs['requirementForm'].validateField('details.category');
       },
       'formData.details.majorCategory': function (n, o) {
-        console.log(n);
         this.$refs['requirementForm'].validateField('details.majorCategory');
       }
     },

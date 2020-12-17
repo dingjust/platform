@@ -76,7 +76,6 @@ export default {
   },
   watch: {
     propdata(newValue, oldValue) {
-      console.log(newValue);
     }
   }
 };

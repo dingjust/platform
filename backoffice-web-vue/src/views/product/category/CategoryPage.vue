@@ -75,7 +75,6 @@
           name: data.name
         };
         this.formData['thumbnail'] = null;
-        console.log(this.formData);
         this.itemData = Object.assign({}, this.formData);
         this.CategoryDetailsPageVisible = true;
         this.operationType = 'create';
@@ -86,7 +85,6 @@
         if (formData == null || formData === undefined) {
           return;
         }
-        console.log(formData);
         this.CategoryDetailsPageVisible = true;
         // this.itemData = data;
         this.itemData = Object.assign({}, formData);

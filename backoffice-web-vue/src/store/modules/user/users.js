@@ -88,7 +88,6 @@ const actions = {
 
     //密码校验不正确
     if (response['error']) {
-      console.log(JSON.stringify(response));
       if (response['error'] == 'invalid_grant') {
         alert('账号密码不正确');
       }
@@ -114,7 +113,6 @@ const actions = {
     axios.defaults.headers.common['company'] = userInfo['companyCode'];
     // 'type' : 'TENANT', 'BRAND', 'FACTORY',
     // userInfo['type'];
-    // console.log(JSON.stringify(userInfo));
     commit('currentUser', userInfo);
 
     // 获取认证信息
@@ -151,7 +149,6 @@ const actions = {
   }, {
     uid
   }) {
-    console.log(JSON.stringify(state.currentUser));
     // 获取当前登录用户信息
     const userInfo = await http.get('/b2b/users/' + uid + '/profile');
     axios.defaults.headers.common['company'] = userInfo['companyCode'];

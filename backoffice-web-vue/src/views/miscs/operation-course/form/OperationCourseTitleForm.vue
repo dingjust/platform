@@ -37,15 +37,12 @@
       },
       onSuccess(response,info) {
         info.meida = response;
-        console.log(info);
       },
       async handleRemove(info) {
-        // console.log(JSON.stringify(file));
         // TODO: 自定义删除方法（删除图片之前，清理product的others属性
         // const url = this.apis().removeMedia(this.slotData.media.id);
         // const result = await this.$http.delete(url);
         info.media = {};
-        console.log(info);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

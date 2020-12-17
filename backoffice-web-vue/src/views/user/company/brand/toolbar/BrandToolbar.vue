@@ -122,7 +122,6 @@
           } else {
             this.queryFormData.regions[0] = current;
           }
-          console.log(this.queryFormData.regions);
           this.cities = [];
           this.getCities(current);
 
@@ -146,7 +145,6 @@
         },
         onAdvancedSearch () {
           this.setQueryFormData(this.queryFormData);
-          console.log(this.queryFormData);
           this.visible = false;
           this.$emit('onAdvancedSearch', 0);
         },

@@ -166,7 +166,6 @@
           } else {
             this.queryFormData.productiveOrientations[0] = current;
           }
-          console.log(this.queryFormData.productiveOrientations);
           this.cities = [];
           this.getCities(current);
 
@@ -253,7 +252,6 @@
             this.$message.error(result['errors'][0].message);
             return;
           }
-          console.log(result);
           this.industrialClusters = result;
         },
         recordCities (val) {

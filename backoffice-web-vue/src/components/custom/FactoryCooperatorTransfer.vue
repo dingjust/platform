@@ -245,7 +245,6 @@
         this.setLabels(results.content);
       },
       handleCooperatorSelect (val) {
-        console.log(val);
         var index = this.selectCooperatorIds.indexOf(val.id);
         if (index <= -1) {
           this.selectCooperatorIds.push(val.id);
@@ -257,7 +256,6 @@
         }
       },
       handleCooperatorRemove (val) {
-        console.log(val);
         var index = this.selectCooperatorIds.indexOf(val.id);
         if (index > -1) {
           this.selectCooperatorIds.splice(index, 1);

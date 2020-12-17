@@ -258,7 +258,6 @@
         this.searchAdvanced({url, queryFormData, page, size});
       },
       handleClick (tab, event) {
-        // console.log(tab.name);
         this.queryFormData.statuses = [tab.name];
         if (tab.name === 'ALL') {
           this.onSearch('');
@@ -286,7 +285,6 @@
         }
       },
       handleSelect (item) {
-        console.log(item);
         this.formData.partner = {
           uid: item.uid,
           name: item.name,
@@ -323,7 +321,6 @@
           });
 
           this.pageNumber += 1;
-          console.log(this.companies);
         } else if (this.isFactory()) {
           const result = await this.$http.post(this.apis().getBrandsByName(), null, {
             'keyword': this.keyword,
@@ -339,7 +336,6 @@
           });
 
           this.pageNumber += 1;
-          console.log(this.companies);
         }
       },
       async onSubmit () {

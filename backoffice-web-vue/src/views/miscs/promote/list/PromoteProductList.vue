@@ -126,7 +126,6 @@
         this.$emit('onDelete', row, keyword);
       },
       onMoveUp (row, index) {
-        console.log(this.formData);
         const item = this.formData.splice(index, 1);
         this.formData.splice(index - 1, 0, item[0]);
         this.$store.state.PromoteProductModule.promoteProductList = this.formData;

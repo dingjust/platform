@@ -75,7 +75,6 @@
         });
       },
       onVouchers(row) {
-        console.log(row);
         this.dialogImageUrl = row.paymentRecords.paymentVouchers[0].url;
         this.dialogVisible = true;
       },

@@ -161,7 +161,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -197,7 +196,6 @@ const actions = {
       page: state.quoteCurrentPageNumber,
       size: state.quoteCurrentPageSize
     });
-    console.log(response);
     if (!response['errors']) {
       commit('quotePage', response);
     }
@@ -215,7 +213,6 @@ const actions = {
       page: state.cooperatorCurrentPageNumber,
       size: state.cooperatorCurrentPageSize
     });
-    console.log(response);
     if (!response['errors']) {
       commit('cooperatorPage', response);
     }
@@ -233,7 +230,6 @@ const actions = {
       page: state.factoryCurrentPageNumber,
       size: state.factoryCurrentPageSize
     });
-    console.log(response);
     if (!response['errors']) {
       commit('factoryPage', response);
     }

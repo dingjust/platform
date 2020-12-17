@@ -137,7 +137,6 @@
         this.brands = result.content;
       },
       onDateChange(values) {
-        // console.log(values[0]);
         this.queryFormData.createdDateFrom = values[0];
         this.queryFormData.createdDateTo = values[1];
         this.onAdvancedSearch();

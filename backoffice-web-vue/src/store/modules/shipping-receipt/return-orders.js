@@ -37,7 +37,6 @@ const actions = {
   }) {
     commit('keyword', keyword);
     if (page || page === 0) {
-      console.log(page);
       commit('currentPageNumber', page);
     }
 

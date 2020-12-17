@@ -45,7 +45,6 @@
     },
     data() {
       const validateLabels = (rule, value, callback) => {
-        // console.log(JSON.stringify(value));
         if (!value || !value.length) {
           callback(new Error('请选择分类'))
         } else {

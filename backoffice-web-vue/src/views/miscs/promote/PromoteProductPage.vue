@@ -290,11 +290,9 @@
       },
       operationCount() {
         this.leaveCount++;
-        console.log(this.leaveCount);
       },
       returnCount() {
         this.leaveCount = 0;
-        console.log(this.leaveCount);
       }
     },
     data() {

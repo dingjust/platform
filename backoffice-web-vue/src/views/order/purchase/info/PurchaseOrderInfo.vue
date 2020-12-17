@@ -131,9 +131,6 @@
         });
       },
       async changeCannelStatus(msg) {
-        console.log(msg);
-        console.log(this.slotData.code);
-        console.log(this.slotData.cannelStatus);
         if (this.slotData.cannelStatus == 'APPLYING') {
           this.$message.error('此订单已申请取消');
           return;

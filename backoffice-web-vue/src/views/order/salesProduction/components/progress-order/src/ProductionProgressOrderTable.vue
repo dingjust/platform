@@ -73,7 +73,6 @@
       }
     },
     created() {
-      console.log(this.orders);
     }
   }
 

@@ -168,8 +168,6 @@
       // },
       checkDetails (id) {
         this.checkOrderCodeList.push(id);
-        console.log(id)
-        console.log(this.checkOrderCodeList);
         // this.setIsShowDetailPrice(!this.isShowDetailPrice);
       },
       packupDetails (id) {

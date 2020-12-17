@@ -123,7 +123,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.showContract(this.thisContract);
         }
@@ -149,7 +148,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.showContract(this.thisContract);
         }
@@ -175,7 +173,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.showContract(this.thisContract);
         }
@@ -201,7 +198,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.showContract(this.thisContract);
         }
@@ -227,7 +223,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.showContract(this.thisContract);
         }
@@ -237,7 +232,6 @@
       async onCreate() {
         const url = this.apis().getAuthenticationState();
         const result = await http.get(url);
-        console.log(result);
         Bus.$emit('my-event');
         if (result.data.personalState == 'SUCCESS' || result.data.companyState == 'SUCCESS') {
           // this.fn.openSlider("创建", contractForm, this.slotData);
@@ -245,7 +239,6 @@
         } else {
           this.$message.error('当前账号未通过认证');
         }
-        console.log(this.slotData);
       },
       // async openContract(){
       //   const url = this.apis().getContractDetail(this.contract.code);
@@ -254,7 +247,6 @@
       //     this.$message.error(result["errors"][0].message);
       //     return;
       //   }
-      //   console.log(result);
       //
       //   if(result.data != null || result.data != ''){
       //     Bus.$emit('my-event');
@@ -267,7 +259,6 @@
 
         const url = this.apis().downContract(item.code);
         const result = await http.get(url);
-        console.log(result);
 
         const aa = '/b2b/user/agreement/download/' + result.data;
 
@@ -290,7 +281,6 @@
           keyword = '';
         }
         const url = this.apis().getSealsList();
-        console.log(url)
         const result = await this.$http.post(url, {
           keyword: keyword
         }, {
@@ -402,7 +392,6 @@
         this.getContractsList();
       });
       Bus.$on('closeContractFrom', args => {
-        console.log(2323)
         this.dialogContractVisible = false;
       });
     },

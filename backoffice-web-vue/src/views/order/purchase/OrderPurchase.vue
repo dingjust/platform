@@ -1208,7 +1208,6 @@
       }
     },
     created() {
-      // console.log(JSON.stringify(this.$router.params));
       this.onSearch();
       this.getRegions();
     },
@@ -1271,7 +1270,6 @@
         this.getProductAgain();
       }
 
-      // console.log(JSON.stringify(this.$router.params));
 
       // /更新
       if (this.$route.params.isUpdate != null && this.$route.params.isUpdate) {
@@ -1337,7 +1335,6 @@
     watch: {
       // isUpdate(newValue, oldValue) {
       //   if(newValue){
-      //     console.log(JSON.stringify(this.againData));
       //   }
       // }
     },

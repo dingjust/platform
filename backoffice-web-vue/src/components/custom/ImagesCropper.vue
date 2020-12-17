@@ -32,7 +32,6 @@
 
 <script>
   import { VueCropper } from 'vue-cropper';
-  // console.log(VueCropper);
   export default {
     name: 'ImageCropper',
     data () {
@@ -61,7 +60,6 @@
     props: ['imgFile','fixedNumber','skuname'],
     watch: {
       imgFile: function (file) {
-        console.log(file);
         this.imgFile = file;
       },
       skuname: function (val) {
@@ -95,7 +93,6 @@
         event.preventDefault();
         this.isDisabled = true;
         let that = this;
-        // console.log(this.skuname);
         if (type === 'blob') {
           this.$refs.cropper.getCropBlob(data => {
             that.$emit('upload', data, that.skuname);

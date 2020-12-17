@@ -648,8 +648,6 @@
     },
     watch: {
       'payPlanItems': function (n, o) {
-        console.log(o);
-        console.log(n);
       }
     },
     data() {

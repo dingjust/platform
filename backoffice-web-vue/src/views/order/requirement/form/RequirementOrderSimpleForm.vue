@@ -140,7 +140,6 @@
       },
       async _onSubmit() {
         let formData = this.slotData;
-        console.log(this.slotData);
 
         const url = this.apis().createRequirementOrder();
         const result = await this.$http.post(url, formData);
@@ -158,15 +157,12 @@
     computed: {},
     data() {
       let checkCategory = (rule, value, callback) => {
-        console.log(value);
         if (value==null||value.code === ''||value === {}) {
           callback(new Error('请选择品类'));
         }
         callback();
       };
       let expectedDeliveryDate = (rule, value, callback) => {
-        console.log(value);
-        console.log("expectedDeliveryDate");
           if (this.compareDate(new Date(), new Date(value))) {
             callback(new Error('预计交货时间不能小于当前时间'));
         }

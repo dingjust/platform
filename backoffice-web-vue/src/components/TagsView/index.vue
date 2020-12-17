@@ -63,9 +63,6 @@
     },
     methods: {
       isActive(route) {
-        console.log(route.name);
-        console.log(route.path + '=======' + this.$route.path);
-        console.log(route.path.toString() == this.$route.path.toString());
         return (route.path.toString() == this.$route.path.toString());
       },
       isAffix(tag) {

@@ -115,7 +115,6 @@
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       },
       handleClick (tab, event) {
-        // console.log(tab.name);
         if (tab.name == 'ALL') {
           this.queryFormData.statuses = [];
           this.onAdvancedSearch();
@@ -135,7 +134,6 @@
         this.setDetailData(result);
         if (result.status != 'CANCELLED' && (result.creator != null || result.creator != undefined)) {
           if ((result.creator.uid != this.$store.getters.currentUser.companyCode) && result.cannelStatus == 'APPLYING') {
-            console.log(this.contentData);
             this.cannelMsgVisible = true;
             return;
           }
@@ -162,7 +160,6 @@
         });
       },
       async getContract () {
-        console.log(this.contentData);
         const url = this.apis().getContractsList();
         const result = await http.post(url, {
           orderCode: this.contentData.code
@@ -175,7 +172,6 @@
             this.contracts.push(result.content[i]);
           }
         };
-        console.log(this.contracts);
       },
       initContract () {
         this.contracts = [];

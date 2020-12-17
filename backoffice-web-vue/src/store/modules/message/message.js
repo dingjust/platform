@@ -44,13 +44,11 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    console.log(state.queryFormData);
     const response = await http.post(url, state.queryFormData, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }

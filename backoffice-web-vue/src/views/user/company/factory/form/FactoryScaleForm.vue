@@ -145,7 +145,6 @@
     },
     watch: {
       'formData.cuttingDepartment': function (n, o) {
-        console.log(n);
         if (n === null || n === undefined) {
           this.mapSelectData.裁剪部 = [];
         }else {
@@ -173,7 +172,6 @@
         this.$emit('validateField', 'equipment');
       },
       'mapSelectData.裁剪部': function (n, o) {
-        console.log(n);
         if (n === null || n === undefined) {
           this.formData.cuttingDepartment = [];
         } else {

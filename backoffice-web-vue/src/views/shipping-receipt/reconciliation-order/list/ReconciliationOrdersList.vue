@@ -126,7 +126,6 @@
         this.$router.push('/reconciliation/tasks/detail/' + id);
       },
       handleSelectionChange(val) {
-        console.log(val);
       },
       rowClick(row) {
         this.$refs.resultTable.toggleRowSelection(row);

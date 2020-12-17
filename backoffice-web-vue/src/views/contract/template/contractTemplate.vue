@@ -57,7 +57,6 @@
     },
     watch: {
       activeName(newValue, oldValue) {
-        console.log(newValue);
         this.$data[this.tagtodata[newValue]] = {
           contractName: this.tagtoname[newValue]
         };
@@ -65,7 +64,6 @@
     },
     methods: {
       handleClick(tab, event) {
-        console.log(tab.name);
       }
     }
   };

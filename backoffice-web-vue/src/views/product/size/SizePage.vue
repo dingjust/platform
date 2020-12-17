@@ -112,7 +112,6 @@
         if (tab.name === '') {
           this.queryFormData.active = null;
         } else {
-          console.log(tab);
           this.queryFormData.active = tab.label == '启用';
         }
         this.onSearch();

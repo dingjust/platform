@@ -86,7 +86,6 @@
               }
             });
             obj['colorEntries'] = colorEntries;
-            console.log(obj.materialsName);
             materialsSpecEntries.push(obj);
           });
           return {
