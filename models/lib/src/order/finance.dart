@@ -145,6 +145,21 @@ const PaymentTypeLocalizedMap = {
   PaymentType.ALLPAID: "全部付款",
 };
 
+///支付月类型
+enum MonthType {
+  ///本月
+  CURRENT_MONTH,
+
+  ///下月
+  NEXT_MONTH
+}
+
+///支付类型
+const MonthTypeLocalizedMap = {
+  MonthType.CURRENT_MONTH: "本月",
+  MonthType.NEXT_MONTH: "下月",
+};
+
 /// 付款方案抽象
 @JsonSerializable()
 class AbstractPayPlanModel extends ItemModel {
@@ -217,6 +232,10 @@ class AbstractPayPlanItemModel extends ItemModel {
 
   bool isRange;
 
+  bool isLast;
+
+  MonthType monthType;
+
   AbstractPayPlanItemModel(
       {this.payPercent,
       this.triggerEvent,
@@ -230,7 +249,9 @@ class AbstractPayPlanItemModel extends ItemModel {
       this.payDayNum,
       this.monthlyStartDayNum,
       this.monthlyEndDayNum,
-      this.isRange});
+      this.isRange,
+      this.isLast,
+      this.monthType});
 
   factory AbstractPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$AbstractPayPlanItemModelFromJson(json);
@@ -298,7 +319,9 @@ class CompanyPayPlanItemModel extends AbstractPayPlanItemModel {
     int monthlyStartDayNum,
     int monthlyEndDayNum,
     bool isRange,
+    bool isLast,
     PayStatus payStatus,
+    MonthType monthType,
   }) : super(
       payPercent: payPercent,
       triggerEvent: triggerEvent,
@@ -312,7 +335,9 @@ class CompanyPayPlanItemModel extends AbstractPayPlanItemModel {
       monthlyEndDayNum: monthlyEndDayNum,
       monthlyStartDayNum: monthlyStartDayNum,
       isRange: isRange,
-      payStatus: payStatus);
+      isLast: isLast,
+      payStatus: payStatus,
+      monthType: monthType);
 
   factory CompanyPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CompanyPayPlanItemModelFromJson(json);

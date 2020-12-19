@@ -239,8 +239,7 @@ class _OutOrderFormState extends State<OutOrderForm> {
     List<CooperatorModel> cooperators = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                CooperatorsPage(
+            builder: (context) => CooperatorsPage(
                   selectedData: form.targetCooperator != null
                       ? [form.targetCooperator]
                       : [],

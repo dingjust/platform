@@ -4,6 +4,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'form/payplan_form_page.dart';
+
 class PayPlanSelectPage extends StatefulWidget {
   final CompanyPayPlanModel selectedModel;
 
@@ -15,6 +17,8 @@ class PayPlanSelectPage extends StatefulWidget {
 
 class _PayPlanSelectPageState extends State<PayPlanSelectPage> {
   CompanyPayPlanModel selectedModel;
+
+  List<CompanyPayPlanModel> plans;
 
   @override
   void initState() {
@@ -42,16 +46,17 @@ class _PayPlanSelectPageState extends State<PayPlanSelectPage> {
         ],
       ),
       body: FutureBuilder(
-        future: PayPlanRepositoryImpl().all(),
+        future: _getData(),
         builder: (BuildContext context,
-            AsyncSnapshot<CompanyPayPlanResponse> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            AsyncSnapshot<List<CompanyPayPlanModel>> snapshot) {
+          if (plans != null) {
+            return _buildBody(plans);
           } else {
-            return _buildBody(snapshot.data.content);
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),
+      floatingActionButton: _buildFAB(),
     );
   }
 
@@ -65,7 +70,7 @@ class _PayPlanSelectPageState extends State<PayPlanSelectPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                '财务方案尚不支持手机端创建，请前往钉单平台设置',
+                '账务方案尚不支持手机端创建，请前往钉单平台设置',
                 style: TextStyle(color: Colors.red),
               )
             ],
@@ -86,10 +91,39 @@ class _PayPlanSelectPageState extends State<PayPlanSelectPage> {
     ));
   }
 
+  Widget _buildFAB() {
+    return FloatingActionButton(
+      onPressed: () async {
+        bool result = await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => PayPlanFormPage()));
+        if (result != null) {
+          setState(() {
+            plans = null;
+          });
+        }
+      },
+      child: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+    );
+  }
+
   void _handleModelChanged(CompanyPayPlanModel model) {
     setState(() {
       selectedModel = model;
     });
+  }
+
+  Future<List<CompanyPayPlanModel>> _getData() async {
+    if (plans == null) {
+      CompanyPayPlanResponse response = await PayPlanRepositoryImpl().all();
+      if (response != null && response.content != null) {
+        plans = response.content;
+        return plans;
+      }
+    }
+    return plans;
   }
 }
 
