@@ -122,11 +122,11 @@ class BrandButtonsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 180,
+      height: 190,
       color: Colors.white,
       child: Container(
-          color: Colors.white,
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          // color: Colors.white,
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[

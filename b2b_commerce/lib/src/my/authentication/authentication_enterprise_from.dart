@@ -181,7 +181,7 @@ class _AuthenticationEnterpriseFromPageState
               textAlign: TextAlign.right,
               focusNode: _fddbrFocusNode,
               controller: _fddbrController,
-              enabled: widget.model == null,
+              // enabled: widget.model == null,
               leadingText: Text('法定代表人',
                   style: TextStyle(
                     fontSize: 16,

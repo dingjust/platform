@@ -81,4 +81,20 @@ class CooperatorRepositoryImpl implements CooperatorRepository {
       return null;
     }
   }
+
+  static Future<String> delete(int id) async {
+    try {
+      Response response = await http$.put(
+        UserApis.deleteCooperator(id),
+      );
+      if (response.statusCode == 200 && response.data != null) {
+        return 'success';
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+
+    return null;
+  }
 }

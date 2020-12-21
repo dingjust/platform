@@ -59,8 +59,7 @@ abstract class UserApis {
       '/{baseSiteId}/orders/requirement/countByStatuses';
 
   ///手机号是否注册
-  static get phoneExists =>
-          (code) {
+  static get phoneExists => (code) {
         return '/{baseSiteId}/companies/register/$code';
       };
 
@@ -72,7 +71,7 @@ abstract class UserApis {
 
   //更新/删除发票抬头(详情)
   static get invoiceTitleFromId =>
-          (id) => '/{baseSiteId}/company/invoice/title/$id';
+      (id) => '/{baseSiteId}/company/invoice/title/$id';
 
   //获取所有角色
   static get roles => '/{baseSiteId}/roles';
@@ -207,12 +206,19 @@ abstract class UserApis {
   static get cooperators => '/{baseSiteId}/cooperator';
 
   /// 合作商详情
-  static get cooperatorDetail => (id) { 
-    return '/{baseSiteId}/cooperator/$id';
-  };
+  static get cooperatorDetail =>
+          (id) {
+        return '/{baseSiteId}/cooperator/$id';
+      };
 
   /// 添加合作商
   static get appendCooperator => '/{baseSiteId}/cooperator/create';
+
+  /// 删除合作商
+  static get deleteCooperator =>
+          (id) {
+        return '/{baseSiteId}/cooperator/delete/$id';
+      };
 
   /// 根据keyword查询全公司列表
   static get companies => '/{baseSiteId}/companies/findBrandAndFactory';
@@ -247,4 +253,7 @@ abstract class UserApis {
 
   ///部门列表
   static get b2bDepts => '/{baseSiteId}/dept/tree/list';
+
+  ///创建印章
+  static get sealSave => '/{baseSiteId}/user/seal/save';
 }

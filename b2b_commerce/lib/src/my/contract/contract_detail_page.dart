@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/my/contract/contract_seal_page.dart';
+import 'package:b2b_commerce/src/common/webview_page.dart';
+import 'package:b2b_commerce/src/my/seal/contract_seal_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -454,7 +455,8 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ContractSealPage(
-                                model: widget.contractModel,
+                                isSelect: true,
+                                onSelect: flowContract,
                               )),
                     ).then((v) {
                       setState(() {
@@ -844,8 +846,9 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ContractSealPage(
-                                model: widget.contractModel,
-                              )),
+                            isSelect: true,
+                            onSelect: flowContract,
+                          )),
                     ).then((val) {
                       setState(() {
                         _showPdf = true;
@@ -890,5 +893,62 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
         height: 50,
       );
     }
+  }
+
+  ///选择印章后去签署页
+  flowContract(SealModel sealModel) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: ContractRepository()
+                .flowContract(widget.contractModel.code, sealModel.code),
+            outsideDismiss: false,
+            loadingText: '请稍候。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      Certification certification = value;
+      if (certification != null) {
+        if (certification.data != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WebviewPage(url: certification.data)),
+          );
+        } else {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.RESULT_DIALOG,
+                  failTips: certification.msg,
+                  callbackResult: false,
+                  confirmAction: () {
+                    Navigator.of(context).pop();
+                    Navigator.pop(context);
+                  },
+                );
+              });
+        }
+      } else {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '签署失败',
+                callbackResult: false,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                  Navigator.pop(context);
+                },
+              );
+            });
+      }
+    });
   }
 }

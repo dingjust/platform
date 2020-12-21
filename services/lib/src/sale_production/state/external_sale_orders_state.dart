@@ -9,6 +9,11 @@ import 'package:services/src/state/state.dart';
 ///外接订单状态管理
 class ExternalSaleOrdersState extends PageState {
   Map<String, PageEntry> _ordersMap = {
+    'ALL': PageEntry(
+        currentPage: 0,
+        size: 10,
+        data: List<SalesProductionOrderModel>(),
+        totalElements: -1),
     'TO_BE_ACCEPTED': PageEntry(
         currentPage: 0,
         size: 10,
@@ -75,7 +80,7 @@ class ExternalSaleOrdersState extends PageState {
         'users': [],
         'keyword': _keyword != '' ? _keyword : null,
       };
-      if (status != '' && status != 'SEARCH') {
+      if (status != 'ALL') {
         data['state'] = status;
       }
 

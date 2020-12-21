@@ -1,11 +1,11 @@
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/helper/cooperator_helper.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-
 
 ///外接订单块
 class ExternalSaleOrderItem extends StatelessWidget {
@@ -30,7 +30,10 @@ class ExternalSaleOrderItem extends StatelessWidget {
             _Header(
               model: model,
             ),
-            _Row1(model: model),
+            _Row1(
+              model: model,
+              type: type,
+            ),
             _Row2(model: model),
             _End(model: model)
           ],
@@ -103,38 +106,40 @@ class _Header extends StatelessWidget {
     //自创外接订单无originCompany
     return model.originCompany == null
         ? Container(
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-      child: Center(
-        child: Text(
-          '自创',
-          style:
-          TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
-        ),
-      ),
-    )
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
+            child: Center(
+              child: Text(
+                '自创',
+                style:
+                    TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
+              ),
+            ),
+          )
         : Container(
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
-      child: Center(
-        child: Text(
-          '线上',
-          style: TextStyle(
-              color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
-        ),
-      ),
-    );
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
+            child: Center(
+              child: Text(
+                '线上',
+                style: TextStyle(
+                    color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
+              ),
+            ),
+          );
   }
 }
 
 class _Row1 extends StatelessWidget {
   final SalesProductionOrderModel model;
 
-  const _Row1({Key key, this.model}) : super(key: key);
+  final SaleOrderItemType type;
+
+  const _Row1({Key key, this.model, this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -145,43 +150,22 @@ class _Row1 extends StatelessWidget {
           height: 20,
           margin: EdgeInsets.only(right: 5),
           child: CircleAvatar(
-            backgroundImage: getImage(),
+            backgroundImage: CooperatorHelper.getCooperatorImage(
+                model.targetCooperator, model.originCompany),
             radius: 20,
           ),
         ),
         Expanded(
             child: Text(
-              '${getCoopertorName()}',
+              '${CooperatorHelper.getCooperatorName(
+                  model.targetCooperator, model.originCompany,
+                  model.originCooperator)}',
               style: TextStyle(fontSize: 16),
               overflow: TextOverflow.ellipsis,
             )),
         _buildTag()
       ],
     );
-  }
-
-  String getCoopertorName() {
-    String name = '';
-    if (model.originCompany != null) {
-      name = model.originCompany.name;
-    } else {
-      name = model?.originCooperator?.type == CooperatorType.ONLINE
-          ? model?.originCooperator?.partner?.name
-          : model?.originCooperator?.name;
-    }
-    return name;
-  }
-
-  ImageProvider getImage() {
-    if (model.originCompany != null &&
-        model.originCompany.profilePicture != null) {
-      return NetworkImage(model.originCompany.profilePicture.thumbnailUrl());
-    } else {
-      return AssetImage(
-        'temp/picture.png',
-        package: "assets",
-      );
-    }
   }
 
   Widget _buildTag() {

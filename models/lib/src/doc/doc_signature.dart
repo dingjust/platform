@@ -160,7 +160,7 @@ enum SignMethodType {
 
 ///模板类型
 const SignMethodTypeLocalizedMap = {
-  SignMethodType.ONLINE_FORM_SIGN: "线上生产内容在线签署",
-  SignMethodType.ONLINE_CUSTOM_PDF_SIGN: "线上生产内容在线签署",
+  SignMethodType.ONLINE_FORM_SIGN: "线上签署",
+  SignMethodType.ONLINE_CUSTOM_PDF_SIGN: "线上自定义签署",
   SignMethodType.OFFLINE_SIGN: "线下签署",
 };

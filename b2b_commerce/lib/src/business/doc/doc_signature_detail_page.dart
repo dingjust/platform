@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/_shared/widgets/contract_seal_page.dart';
 import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
+import 'package:b2b_commerce/src/my/seal/contract_seal_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -101,10 +101,10 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
                         child: Text('去签署')))
               ],
             ),
-    )
+          )
         : Container(
-      height: bottomHeight,
-    );
+            height: bottomHeight,
+          );
   }
 
   void _onSign() async {
@@ -112,8 +112,11 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
       _showPdf = false;
     });
 
-    SealModel seal = await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => ContractSealSelectPage()));
+    SealModel seal = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            ContractSealPage(
+              isSelect: true,
+            )));
 
     if (seal == null) {
       BotToast.showText(text: '请选择有效印章');

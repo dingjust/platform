@@ -64,19 +64,19 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                       _InputRow(
                           label: '开户行',
                           child: Text(
-                            '${model.bankOfDeposit}',
+                            '${model?.bankOfDeposit ?? ''}',
                             style: TextStyle(fontSize: 18),
                           )),
                       _InputRow(
                           label: '银行账号',
                           child: Text(
-                            '${model.bankAccount}',
+                            '${model?.bankAccount ?? ''}',
                             style: TextStyle(fontSize: 18),
                           )),
                       _InputRow(
                           label: '税号',
                           child: Text(
-                            '${model.taxNumber}',
+                            '${model.taxNumber ?? ''}',
                             style: TextStyle(fontSize: 18),
                           )),
                       _InputRow(
@@ -88,7 +88,7 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                       _InputRow(
                           label: '备注',
                           child: Text(
-                            '${model.remarks}',
+                            '${model.remarks ?? ''}',
                             style: TextStyle(fontSize: 18),
                           )),
                     ],
@@ -173,22 +173,22 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                                 ),
                               )
                             : Container(
-                          height: 20,
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 1),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              border:
-                              Border.all(color: Colors.grey[200])),
-                          child: Center(
-                            child: Text(
-                              '未认证',
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 10),
-                            ),
-                          ),
-                        )
+                                height: 20,
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 1),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(2),
+                                    border:
+                                        Border.all(color: Colors.grey[200])),
+                                child: Center(
+                                  child: Text(
+                                    '未认证',
+                                    style: TextStyle(
+                                        color: Colors.black54, fontSize: 10),
+                                  ),
+                                ),
+                              )
                       ],
                     ),
                   ),

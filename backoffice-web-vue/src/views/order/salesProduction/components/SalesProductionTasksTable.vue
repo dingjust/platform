@@ -65,12 +65,12 @@
 </template>
 
 <script>
-import ProductionOrderDetail from '../production-order/details/ProductionOrderDetail'
+// import ProductionOrderDetail from '../production-order/details/ProductionOrderDetail'
 
   export default {
     name: 'SalesProductionTasksTable',
     components: {
-      ProductionOrderDetail
+      ProductionOrderDetail:()=>import('../production-order/details/ProductionOrderDetail')
     },
     props: {
       data: {

@@ -19,7 +19,6 @@ class PublishCenterPage extends StatefulWidget {
 class _PublishCenterPageState extends State<PublishCenterPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => checkLoginStatus());
     //埋点>>>搜索
@@ -31,69 +30,72 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFactory.buildDefaultAppBar(
-        '发布中心',
-        actions: <Widget>[],
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 100),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  width: 85,
-                  height: 100,
-                  child: ImageNumButton(
-                    width: 65,
-                    height: 90,
-                    image: B2BImage.material(),
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ProductionOfflineOrder(),
-                      //   ),
-                      // );
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubContractFirstForm()));
-                    },
-                    title: '发布转包/转片',
-                  ),
-                ),
-                Container(
-                  width: 75,
-                  height: 100,
-                  child: ImageNumButton(
-                    width: 65,
-                    height: 90,
-                    image: B2BImage.free_capacity2(),
-                    onPressed: () {
-                      //埋点>>>发布空闲产能
-                      FlutterUmplus.event(
-                        "publish_capacity",
-                      );
-                      Navigator.pushNamed(context, AppRoutes.ROUTE_MY_CAPACITY);
-                    },
-                    title: '发布空闲产能',
-                  ),
-                ),
-                Container(
-                    width: 85,
-                    height: 100,
-                    child: ImageNumButton(
-                      image: B2BImage.requirement(),
-                      imagePadding: EdgeInsets.all(10),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                MultiProvider(
+        appBar: AppBarFactory.buildDefaultAppBar(
+          '发布中心',
+          actions: <Widget>[],
+        ),
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 100),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Container(
+                      width: 85,
+                      height: 100,
+                      child: ImageNumButton(
+                        width: 65,
+                        height: 90,
+                        image: B2BImage.material(),
+                        onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => ProductionOfflineOrder(),
+                          //   ),
+                          // );
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SubContractFirstForm()));
+                        },
+                        title: '发布转包/转片',
+                      ),
+                    ),
+                    Container(
+                      width: 75,
+                      height: 100,
+                      child: ImageNumButton(
+                        width: 65,
+                        height: 90,
+                        image: B2BImage.free_capacity2(),
+                        onPressed: () {
+                          //埋点>>>发布空闲产能
+                          FlutterUmplus.event(
+                            "publish_capacity",
+                          );
+                          Navigator.pushNamed(
+                              context, AppRoutes.ROUTE_MY_CAPACITY);
+                        },
+                        title: '发布空闲产能',
+                      ),
+                    ),
+                    Container(
+                        width: 85,
+                        height: 100,
+                        child: ImageNumButton(
+                          image: B2BImage.requirement(),
+                          imagePadding: EdgeInsets.all(10),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MultiProvider(
                                   providers: [
                                     ChangeNotifierProvider(
                                       create: (_) =>
@@ -102,39 +104,40 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
                                   ],
                                   child: Consumer(
                                     builder: (context,
-                                        RequirementOrderFormState state, _) =>
+                                            RequirementOrderFormState state,
+                                            _) =>
                                         RequirementOrderForm(
-                                          formState: state,
-                                        ),
+                                      formState: state,
+                                    ),
                                   ),
                                 ),
-                          ),
-                        );
+                              ),
+                            );
+                          },
+                          title: '发布需求',
+                        ))
+                  ],
+                ),
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
                       },
-                      title: '发布需求',
-                    ))
-              ],
-            ),
+                      icon: Icon(
+                        Icons.close,
+                        size: 25,
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icon(
-                    Icons.close,
-                    size: 25,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+        ));
   }
 
   ///检测用户登录状态

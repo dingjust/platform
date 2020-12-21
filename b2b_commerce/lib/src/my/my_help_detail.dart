@@ -23,12 +23,6 @@ class _MyHelpDetailPageState extends State<MyHelpDetailPage> {
   UserGuidelineModel guidelineDetailModel;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -57,9 +51,9 @@ class _MyHelpDetailPageState extends State<MyHelpDetailPage> {
                                   children: snapshot.data.infos
                                       .map(
                                         (info) => HelpViewPage(
-                                              message: '${info.description}',
-                                              media: info.media,
-                                            ),
+                                          message: '${info.description}',
+                                          media: info.media,
+                                        ),
                                       )
                                       .toList()),
                             ),
@@ -211,11 +205,11 @@ class HelpViewPage extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   color: Colors.black54,
-                  height: 80,
+                  height: 90,
                   padding: EdgeInsets.all(10),
                   alignment: Alignment.center,
                   child: Text(
-                    '${message}',
+                    '$message',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

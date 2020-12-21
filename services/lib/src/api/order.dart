@@ -135,8 +135,7 @@ class OrderApis {
       };
 
   //品牌更新地址（打样订单）
-  static get updateProofAddress =>
-          (code) {
+  static get updateProofAddress => (code) {
         return '/{baseSiteId}/orders/proofing/$code/deliveryAddress';
       };
 
@@ -461,5 +460,11 @@ class OrderApis {
   static get reconciliationOrderDetail =>
           (id) {
         return '/{baseSiteId}/sheets/fast/reconciliation/$id';
+      };
+
+  ///快速对账单-乙方确认
+  static get reconciliationOrderConfirmByPartyB =>
+          (id) {
+        return '/{baseSiteId}/sheets/fast/reconciliation/confirmByPartyB/$id';
       };
 }

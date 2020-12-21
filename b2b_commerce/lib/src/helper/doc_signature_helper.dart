@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 ///签署文档工具类
 class DocSignatureHelper {
@@ -30,8 +31,7 @@ class DocSignatureHelper {
     contentLength = int.parse(response.headers.map['content-length'][0]);
     if (contentLength > 0) {
       bool result = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              DocSignatureDetailPage(
+          builder: (context) => DocSignatureDetailPage(
                 pathPDF: filePath,
                 doc: model,
                 title: '电子对账单详情',
@@ -84,4 +84,21 @@ class DocSignatureHelper {
     }
     return false;
   }
+
+  static Icon getDocTypeIcon(
+      {SignMethodType signMethod = SignMethodType.ONLINE_FORM_SIGN,
+        double size = 40.0}) {
+    return Icon(
+      B2BIcons.agreement,
+      color: SignMethodTypeColorsMap[signMethod],
+      size: size,
+    );
+  }
 }
+
+///模板类型
+const SignMethodTypeColorsMap = {
+  SignMethodType.ONLINE_FORM_SIGN: Color(0xffffca3a),
+  SignMethodType.ONLINE_CUSTOM_PDF_SIGN: Colors.orangeAccent,
+  SignMethodType.OFFLINE_SIGN: Colors.blueAccent,
+};

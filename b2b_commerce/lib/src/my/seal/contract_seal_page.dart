@@ -4,11 +4,24 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-class ContractSealSelectPage extends StatefulWidget {
-  _ContractSealSelectPageState createState() => _ContractSealSelectPageState();
+import 'contract_seal_form.dart';
+
+///印章列表
+class ContractSealPage extends StatefulWidget {
+  ///是否用于选择
+  final bool isSelect;
+
+  ///选择后调用函数，为null则返回选择印章数据
+  final ValueChanged<SealModel> onSelect;
+
+  ContractSealPage({this.isSelect = true, this.onSelect});
+
+  _ContractSealPageState createState() => _ContractSealPageState();
 }
 
-class _ContractSealSelectPageState extends State<ContractSealSelectPage> {
+class _ContractSealPageState extends State<ContractSealPage> {
+  ///认证状态
+  CertificationState certificationState;
   ScrollController scrollController = ScrollController();
   List<SealModel> sealList;
 
@@ -32,7 +45,6 @@ class _ContractSealSelectPageState extends State<ContractSealSelectPage> {
                 margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                 child: GridView.builder(
                   itemCount: sealList.length,
-                  //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       //横轴元素个数
                       crossAxisCount: 2,
@@ -42,10 +54,9 @@ class _ContractSealSelectPageState extends State<ContractSealSelectPage> {
                       crossAxisSpacing: 0.0,
                       //子组件宽高长度比例
                       childAspectRatio: 0.99),
-
                   itemBuilder: (BuildContext context, int index) => Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: _buildItems(context, sealList[index]),
+                    child: _buildItems(sealList[index]),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -53,25 +64,32 @@ class _ContractSealSelectPageState extends State<ContractSealSelectPage> {
                   ),
                 ),
               ),
+              floatingActionButton: _buildFAB(),
             );
           }
         });
   }
 
-  Widget _buildItems(BuildContext context, SealModel model) {
+  Widget _buildItems(SealModel model) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pop(model);
+        if (widget.isSelect) {
+          if (widget.onSelect != null) {
+            widget.onSelect.call(model);
+          } else {
+            Navigator.of(context).pop(model);
+          }
+        }
       },
       child: Container(
         child: Column(
           children: <Widget>[
             Expanded(
-              child: _buildItemImage(context, model),
+              child: _buildItemImage(model),
               flex: 5,
             ),
             Expanded(
-              child: _buildItemTitle(context, model),
+              child: _buildItemTitle(model),
               flex: 1,
             ),
           ],
@@ -80,7 +98,7 @@ class _ContractSealSelectPageState extends State<ContractSealSelectPage> {
     );
   }
 
-  Widget _buildItemImage(BuildContext context, SealModel model) {
+  Widget _buildItemImage(SealModel model) {
     return Container(
         width: 200,
         height: 400,
@@ -115,7 +133,7 @@ class _ContractSealSelectPageState extends State<ContractSealSelectPage> {
         ));
   }
 
-  Widget _buildItemTitle(BuildContext context, SealModel model) {
+  Widget _buildItemTitle(SealModel model) {
     return Container(
       height: 35,
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -132,11 +150,57 @@ class _ContractSealSelectPageState extends State<ContractSealSelectPage> {
     );
   }
 
+  Widget _buildFAB() {
+    SealType sealType;
+    if (certificationState != null) {
+      //公章类型
+      if (certificationState.data.companyState == AuthenticationState.SUCCESS) {
+        sealType = SealType.OFFICAL;
+      } else if (certificationState.data.personalState ==
+          AuthenticationState.SUCCESS) {
+        sealType = SealType.PERSONAL;
+      }
+    }
+
+    if (sealType == null) {
+      return Container();
+    }
+
+    return FloatingActionButton(
+      onPressed: () {
+        //表单
+        Navigator.of(context)
+            .push(MaterialPageRoute(
+                builder: (context) => ContractSealFormPage(
+                      type: sealType,
+                    )))
+            .then((value) {
+          if (value) {
+            setState(() {
+              sealList = null;
+            });
+          }
+        });
+      },
+      child: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+    );
+  }
+
   Future<List<SealModel>> _getData() async {
     if (sealList == null) {
       List<SealModel> data = await ContractRepository()
           .getSealList({'type': ''}, {'page': '0', 'size': '100'});
       sealList = data;
+    }
+
+    //获取认证状态信息
+    if (certificationState == null) {
+      CertificationState data =
+          await ContractRepository().getAuthenticationState();
+      certificationState = data;
     }
     return sealList;
   }

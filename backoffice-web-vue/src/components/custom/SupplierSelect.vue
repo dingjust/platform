@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-form :inline="true">
       <el-form-item label="">
-        <el-input placeholder="请输入名称查询" :v-model="queryFormData.keyword"></el-input>
+        <el-input placeholder="请输入名称查询" v-model="queryFormData.keyword"></el-input>
       </el-form-item>
       <el-button type="text" @click="onSearch">查找</el-button>
       <Authorized :permission="['COMPANY_COOPERATOR_CREATE']">
