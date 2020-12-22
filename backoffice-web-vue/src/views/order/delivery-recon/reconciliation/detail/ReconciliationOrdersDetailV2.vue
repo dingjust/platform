@@ -6,7 +6,7 @@
           <h6>对账单详情</h6>
         </el-col>
         <el-col>
-          <h6>出货单号：{{order.code}}</h6>
+          <h6>对账单号：{{order.code}}</h6>
         </el-col>
         <el-col>
           <h6>创建日期：{{order.creationtime | timestampToTime}}</h6>
