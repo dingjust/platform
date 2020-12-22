@@ -24,7 +24,6 @@ const actions = {
   async search({dispatch, commit, state},{url}) {
     const response = await http.get(url);
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('items', response);
     }

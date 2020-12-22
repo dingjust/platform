@@ -93,7 +93,6 @@
         this.slotData.attachments.push(response);
       },
       async handleRemove(file) {
-        // console.log(JSON.stringify(file));
         const url = this.apis().removeMedia(file.id);
         const result = await this.$http.delete(url);
         if (result['errors']) {

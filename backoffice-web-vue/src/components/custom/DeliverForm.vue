@@ -189,7 +189,6 @@
       //     return this.sizesForm;
       //   },
       //   set(val) {
-      //     console.log(val);
       //     this.sizesForm = val;
       //   }
       // }
@@ -220,7 +219,6 @@
         return this.colors.size + 2;
       },
       onSubmit() {
-        console.log(this.form);
       }
     },
     data() {

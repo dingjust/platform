@@ -79,9 +79,6 @@
     },
     methods: {
       onEdit() {
-        console.log(this.slotData);
-        console.log(this.order);
-        console.log(this.formData);
         // this.$router.push('/sales/progressOrder/' + this.slotData.code);        
         if (this.slotData.code != null && "" != this.slotData.code) {
           this.$router.push('/sales/progressOrder/' + this.slotData.code + '/edit');

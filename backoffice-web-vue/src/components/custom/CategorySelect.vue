@@ -47,7 +47,6 @@
     },
     methods: {
       handleClick (tab, event) {
-        console.log(tab, event);
       },
       handleTagClick (val) {
         if (this.readOnly) {
@@ -112,7 +111,6 @@
       }
     },
     created () {
-      console.log(this.listData);
       if (this.listData.length > 0) {
         this.init();
       }

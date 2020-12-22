@@ -85,7 +85,6 @@
         this.$refs.form.validateField(name);
       },
       validateImage (rule, value, callback) {
-        console.log(value);
         if (value.id != null) {
           callback();
         } else {
@@ -100,7 +99,6 @@
     },
     watch: {
       'invoiceData.image': function (nval, oval) {
-        console.log(nval);
         this.validateField('image');
       }
     },

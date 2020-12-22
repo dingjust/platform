@@ -35,11 +35,13 @@
           </el-col>
           <el-col :span="18" v-if="item.moneyType!='MONTHLY_SETTLEMENT'">
             {{getEnum('TriggerEvent',item.triggerEvent)}}后{{item.triggerDays}}天
-            {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent.toFixed(4) * 100}}%作为定金
+            <!-- {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent.toFixed(4) * 100}}%作为定金 -->
+            以内，支付总额的{{item.payPercent.toFixed(4) * 100}}%作为定金
           </el-col>
           <el-col :span="18" v-else>
             {{getEnum('TriggerEvent',item.triggerEvent)}}后次月{{item.triggerDays}}号
-            {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent.toFixed(4) * 100}}%作为月结
+            <!-- {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent.toFixed(4) * 100}}%作为月结 -->
+            以内，支付总额的{{item.payPercent.toFixed(4) * 100}}%作为月结
           </el-col>
         </el-row>
       </el-col>

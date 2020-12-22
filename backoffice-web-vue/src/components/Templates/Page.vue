@@ -80,7 +80,6 @@
         }).then(response => {
           this.page = response.data;
         }).catch(error => {
-          console.log(JSON.stringify(error));
           this.$message.error(error.response.data);
         });
       }

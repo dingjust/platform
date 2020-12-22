@@ -164,7 +164,6 @@
       },
       async openPreviewPdf (val, code) {
         this.thisContract = val;
-        console.log(this.thisContract);
         let queryCode = '';
         if (code != null && code != '') {
           queryCode = code;

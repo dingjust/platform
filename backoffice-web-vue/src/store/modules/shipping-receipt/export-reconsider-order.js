@@ -45,13 +45,13 @@ const actions = {
 
     const response = await http.post(url, {
       keyword: state.keyword,
-      shipParty: companyCode
+      partyType: 'PARTYB'
+      // shipParty: companyCode
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -75,7 +75,8 @@ const actions = {
     }
 
     // 设置筛选收货方
-    query['receiveParty'] = companyCode;
+    // query['receiveParty'] = companyCode;
+    query['partyType'] = 'PARTYA';
 
     const response = await http.post(url, query, {
       page: state.currentPageNumber,

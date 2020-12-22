@@ -226,7 +226,6 @@
     },
     methods: {
       onDetail () {
-        console.log(this.formData.type);
         if (this.formData.type === 'PROCESS_COST') {
           this.orderVisible = true;
         } else if (this.formData.type === 'MATERIALS_COST') {

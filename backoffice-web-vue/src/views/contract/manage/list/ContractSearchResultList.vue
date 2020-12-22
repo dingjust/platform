@@ -182,7 +182,6 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log('ffff');
         });
       },
       async onRefuse(code) {
@@ -218,7 +217,6 @@
         this.dialogSealVisible = true
       },
       async onSealSelectChange(data) {
-        console.log(data);
         this.dialogSealVisible = false;
         const sealCode = data.code;
 
@@ -244,7 +242,6 @@
       async previewPdf(val, code) {
         this.$emit('previewPdf', val, code);
         // this.thisContract = val;
-        // console.log(this.thisContract);
         // let queryCode = '';
         // if (code != null && code != '') {
         //   queryCode = code;

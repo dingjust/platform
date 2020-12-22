@@ -93,7 +93,6 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        console.log(result);
         this.templateData = result.data;
         this.templateDetailVisible = true;
         // this.fn.openSlider('查看：', TemplateDetail, result.data);

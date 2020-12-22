@@ -156,7 +156,7 @@
             <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
           </el-form-item>
           <el-form-item label="" label-width="10px">
-            <el-checkbox v-model="formData.sendAuditNeeded">需审核</el-checkbox>
+            <el-checkbox v-model="formData.sendAuditNeeded" :disabled="isDisabled">需审核</el-checkbox>
           </el-form-item>
           <template v-for="(item,itemIndex) in formData.sendApprovers">
             <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px"
@@ -254,6 +254,7 @@
     PersonnalSelectionV2,
     PayPlanForm
   } from '@/components'
+  import { checkAuditFree } from '@/auth/auth'
 
   export default {
     name: 'OutboundOrderForm',
@@ -279,6 +280,9 @@
         } else {
           return false;
         }
+      },
+      isDisabled: function () {
+        return !checkAuditFree('SEND_SALES_OUT_NO_AUDIT');
       }
     },
     methods: {
@@ -543,10 +547,11 @@
           //   this.formData.outboundContactPhone = this.$route.params.formData.targetCooperator.partner.contactPhone;
           //   this.formData.attachments = [];
           // }
-        } else {
+        } 
+        // else {
 
-          this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
-        }
+        //   this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
+        // }
         // //默认设置跟单员为当前账号
         this.$set(this.formData, 'merchandiser', this.currentUser);
       },
@@ -607,7 +612,7 @@
             trigger: 'change'
           }]
         },
-        formData: '',
+        formData: Object.assign({}, this.$store.state.OutboundOrderModule.formData),
         currentUser: this.$store.getters.currentUser,
         suppliersSelectVisible: false,
         taskDialogVisible: false,

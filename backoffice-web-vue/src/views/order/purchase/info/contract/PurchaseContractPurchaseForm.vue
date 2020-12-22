@@ -253,7 +253,6 @@
             return;
           }
           this.framePage = result;
-          console.log(this.framePage);
         },
         onContractTypeChange (val) {
           if (val != null || val != '') {
@@ -379,7 +378,6 @@
             role = 'PARTYB';
           }
           var frameAgreementCode = '';
-          console.log(this.selectContract);
           this.agreementType = '';
           if (this.selectContract.code == null || this.selectContract.code == '') {
             this.$message.error('请选择框架协议');
@@ -389,7 +387,6 @@
           if (this.selectContract.code != null && this.selectContract.code != '') {
             frameAgreementCode = this.selectContract.code;
           }
-          console.log(frameAgreementCode);
           let data = {
             'userTempCode': this.selectFile.code,
             'role': role,

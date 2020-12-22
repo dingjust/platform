@@ -324,7 +324,6 @@
         for (let i = 0; i < this.formData.categories.length; i++) {
           this.selectCodes.push(this.formData.categories[i].code);
         }
-        console.log(this.selectCodes);
       }
     },
     data () {

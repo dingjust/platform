@@ -69,7 +69,14 @@ export default {
       electronTip: '正在新创建电子对账单，双方将使用在线电子签章系统签署，是否继续?',
       paperTip: '正在把已签署的对账单文件扫描件上传到订单附件中作为备份，是否继续',
       formData: {
+        type: 'shippingSheets',
         title: '',
+        shippingSheets: [
+          {
+            id: '',
+            code: ''
+          }
+        ],
         fastShippingSheets: [
           {
             id: '',
@@ -116,6 +123,16 @@ export default {
     },
     async _onCreate () {
       let data = Object.assign({}, this.formData);
+
+      if (this.formData.type === 'shippingSheets') {
+        this.$delete(data, 'fastShippingSheets');
+        this.$delete(data, 'cooperator');
+      } else if (this.formData.type === 'fastShippingSheets') {
+        this.$delete(data, 'shippingSheets');
+      }
+
+      this.$delete(data, 'type');
+      
       // 人员设置数据处理
       if (!this.formData.isApproval) {
         data.approvers = [];

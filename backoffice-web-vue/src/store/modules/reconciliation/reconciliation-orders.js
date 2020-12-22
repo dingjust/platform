@@ -35,10 +35,8 @@ const actions = {
     mode,
     companyCode
   }) {
-    console.log(keyword + 'test' + page + 'test' + size);
     commit('keyword', keyword);
     if (page || page === 0) {
-      console.log(page);
       commit('currentPageNumber', page);
     }
 
@@ -47,11 +45,13 @@ const actions = {
     }
 
     if (mode == 'import') {
-      //设置筛选发货方
-      queryForm['shipParty'] = companyCode;
+      // 设置筛选发货方
+      // queryForm['shipParty'] = companyCode;
+      queryForm['partyType'] = 'PARTYB';
     } else if (mode == 'export') {
       //设置筛选收货方
-      queryForm['receiveParty'] = companyCode;
+      // queryForm['receiveParty'] = companyCode;
+      queryForm['partyType'] = 'PARTYA';
     }
 
     const response = await http.post(url, {
@@ -61,7 +61,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -87,10 +86,12 @@ const actions = {
     }
     if (mode == 'import') {
       //设置筛选发货方
-      query['shipParty'] = companyCode;
+      // query['shipParty'] = companyCode;
+      query['partyType'] = 'PARTYB';
     } else if (mode == 'export') {
       //设置筛选收货方
-      query['receiveParty'] = companyCode;
+      // query['receiveParty'] = companyCode;
+      query['partyType'] = 'PARTYA';
     }
 
 
@@ -99,7 +100,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }

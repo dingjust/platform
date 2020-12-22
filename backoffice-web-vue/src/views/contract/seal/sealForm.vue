@@ -164,10 +164,8 @@
         this.$emit('closeDialog');
       },
       createSeal() {
-        console.log(this.sealRole)
         if (this.sealRole == "sealRole0") {
           if (this.sealShape == "sealShape0") {
-            console.log('公司')
             if (this.sealRemarks == ''||this.sealRemarks.length==1) {
               this.sealUrl = CDS.companySeal(
                 this.sealName,
@@ -205,14 +203,11 @@
             }
           }
         } else if (this.sealRole == "sealRole1") {
-          console.log('个人')
           let shape = this.sealShape == "sealShape2" ? 0 : 1,
             border = this.sealBorder == "sealBorder0" ? 0 : 1;
           this.sealUrl = CDS.personal(this.sealName, 0, 0, shape, border);
         }
-        console.log(this.sealUrl);
         this.imgFile = dataURLtoFile(this.sealUrl);
-        // console.log(imgFile);
         // this.onUpload(imgFile);
       },
       doSomething() {
@@ -231,7 +226,6 @@
           var fd = new FormData();
           fd.append('file', file);
           const result = await this.$http.formdataPost(this.mediaUploadUrl, fd);
-          console.log(result);
           if (result != null) {
             this.saveSeal(result);
           }
@@ -245,7 +239,6 @@
           this.sealName = this.currentUser.username;
         }
         this.createSeal();
-        console.log(this.currentUser);
       },
       async saveSeal(item) {
         const url = this.apis().saveSeal();
@@ -254,7 +247,6 @@
           media: item,
         };
         let formData = Object.assign({}, tempData);
-        console.log(formData);
         const result = await http.post(url, formData);
         if (result['errors']) {
           this.$message.error(result.msg);
@@ -287,7 +279,6 @@
           this.sealName = this.currentUser.companyName;
           this.sealShape = "sealShape0";
         }
-        console.log(this.sealRole)
         this.createSeal();
       },
     },

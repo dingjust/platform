@@ -222,7 +222,6 @@
         this.searchAdvanced({url, queryFormData, page, size});
       },
       handleClick (tab, event) {
-        // console.log(tab.name);
         this.queryFormData.statuses = [tab.name];
         if (tab.name === 'ALL') {
           this.onSearch('');
@@ -237,7 +236,6 @@
             this.$message.error(result['errors'][0].message);
             return;
           }
-          console.log(result);
           this.companies = result.content;
         } else if (this.isFactory()) {
           const result = await this.$http.post(this.apis().getBrands(), {'keyword': queryString});

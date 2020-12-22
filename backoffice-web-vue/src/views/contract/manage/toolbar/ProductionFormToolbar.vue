@@ -181,7 +181,6 @@
           }).then(() => {
             this.onUpdateAddress();
           }).catch(() => {
-            console.log("cancel");
           });
         } else {
           // TODO: 生成支付二维码

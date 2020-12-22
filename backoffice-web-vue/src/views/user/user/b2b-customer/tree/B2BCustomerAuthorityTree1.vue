@@ -234,7 +234,6 @@
           }
         })
         this.roleIdList = this.distinct(this.roleIdList)
-        console.log(this.roleIdList);
         if (this.isRolePage) {
           this.formData.roleIds = this.roleIdList;
         } else {
@@ -280,7 +279,6 @@
       },
       // 选择角色回显角色权限
       setCheckRoleList (roleList) {
-        console.log(roleList);
         // item 订单
         roleList.forEach(item => {
           this.roleIdList.push(item.id);

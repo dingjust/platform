@@ -263,7 +263,6 @@
 
         //去除审核人为null
         if (submitForm.originApprovers) {
-          console.log('/.///')
           let originApprovers = submitForm.originApprovers.filter(item => item != null);
           submitForm.originApprovers = originApprovers;
         }

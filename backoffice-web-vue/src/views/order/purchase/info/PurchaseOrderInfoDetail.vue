@@ -116,8 +116,6 @@
     },
     methods: {
       onAddressModifyFormVisible () {
-        console.log(this.slotData);
-        console.log(this.$store.getters.currentUser);
         this.$emit('onAddressModifyFormVisible');
       }
     },

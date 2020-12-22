@@ -50,7 +50,6 @@
           this.updateDialogVisible = false;
       },
       onSubmit() {
-        console.log(this.slotData);
         this.$refs['form'].validate((valid)=> {
           if(valid){
             this._onSubmit();

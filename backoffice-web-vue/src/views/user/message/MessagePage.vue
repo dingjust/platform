@@ -41,7 +41,6 @@
         search: 'search'
       }),
       handleClick (val) {
-        console.log(this.queryFormData);
         this.queryFormData.groupCode = val.name;
         this.onSearch();
       },

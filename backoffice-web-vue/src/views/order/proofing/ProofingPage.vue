@@ -122,7 +122,6 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        console.log(result);
 
         this.slotData = result;
       },

@@ -113,7 +113,6 @@
         // 选中行
         handleCurrentChange (val) {
           this.selectedItem = val;
-          console.log(this.selectedItem);
         }
       },
       data () {

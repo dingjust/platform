@@ -89,7 +89,6 @@
         this.brands = result.content;
       },
       onDateChange (values) {
-        console.log(values[0]);
         this.queryFormData.createdDateFrom = values[0];
         this.queryFormData.createdDateTo = values[1];
         this.onAdvancedSearch();
@@ -145,7 +144,7 @@
         brands: [],
         keyword: this.$store.state.SalesOrdersModule.keyword,
         formData: this.$store.state.SalesOrdersModule.formData,
-        queryFormData: this.$store.state.SalesOrdersModule.queryFormData,
+        // queryFormData: this.$store.state.SalesOrdersModule.queryFormData,
         categories: []
       }
     },

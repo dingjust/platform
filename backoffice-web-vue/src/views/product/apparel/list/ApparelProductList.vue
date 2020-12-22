@@ -103,7 +103,6 @@
       },
       onShelf(row) {
         if (row.productType == null || row.productType.length <= 0 || row.productType.indexOf('FUTURE_GOODS') > -1) {
-          console.log(row.productType);
           if (row.steppedPrices == null || row.steppedPrices.length <= 0 || row.basicProduction == null ||
             row.productionIncrement == null || row.productionDays == null) {
             this.$message.error('价格设置资料未完善，不可上架');

@@ -35,7 +35,6 @@ const actions = {
 
     const response = await http.get(url);
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('results', response);
     }

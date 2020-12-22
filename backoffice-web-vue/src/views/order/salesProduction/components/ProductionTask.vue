@@ -112,7 +112,6 @@
       //选择供应商
       onSuppliersSelect(val) {
         this.suppliersSelectVisible = false;
-        console.log(JSON.stringify(val));
         this.$set(this.slotData, 'appointFactory', {
           name: val.name,
           id: val.id

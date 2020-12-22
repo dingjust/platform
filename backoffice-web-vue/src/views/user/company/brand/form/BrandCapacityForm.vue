@@ -144,7 +144,6 @@
             return;
           }
           this.categories = result;
-          console.log(this.categories);
         },
         isSelected (val) {
           var index = this.selectCodes.indexOf(val.code);

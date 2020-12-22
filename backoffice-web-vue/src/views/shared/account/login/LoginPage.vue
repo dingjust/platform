@@ -193,7 +193,6 @@
       },
       /// NC验证回调
       ncCallback(data) {
-        console.log(JSON.stringify(data));
         this.NC_RESULT.csessionid = data.csessionid;
         this.NC_RESULT.sig = data.sig;
         this.NC_RESULT.token = data.token;

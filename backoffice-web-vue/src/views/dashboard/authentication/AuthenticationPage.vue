@@ -168,9 +168,14 @@
       },
       onPersonal() {
         //主账号已企业认证不能个人认证
-        if (this.currentUser.mainUser && this.companyType == 'ENTERPRISE') { //是否主账号
+        // companyState
+        if (this.currentUser.mainUser && (this.companyState === 'SUCCESS' || this.companyState === 'CHECK')) {
           this.$message.error('主账号已进行企业认证后不能个人认证');
-        } else {
+        }
+        // if (this.currentUser.mainUser && this.companyType == 'ENTERPRISE') { //是否主账号
+        //   this.$message.error('主账号已进行企业认证后不能个人认证');
+        // } 
+        else {
           this.activeName = 'third';
         }
       }

@@ -44,11 +44,9 @@
         return true;
       },
       onColorChanged(value) {
-        // console.log(JSON.stringify(value));
         this._updateColorsAndSizes();
       },
       onSizeChanged(value) {
-        // console.log(JSON.stringify(value));
         this._updateColorsAndSizes();
       },
       async getAllColors() {

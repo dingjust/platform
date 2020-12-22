@@ -47,7 +47,6 @@
         this.listData = result;
       },
       handleClick(tab, event) {
-        console.log(tab, event);
       },
       handleTagClick(val) {
         var index = this.selectCodes.indexOf(val.code);
@@ -105,7 +104,6 @@
     },
     created() {
       this.getCategories();
-      console.log(this.listData);
       if (this.listData.length > 0) {
         this.init();
       }

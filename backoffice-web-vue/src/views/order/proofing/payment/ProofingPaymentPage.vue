@@ -197,7 +197,6 @@
           return;
         }
 
-        console.log(result);
         this.qrcodeUrl = result;
       },
       async onAliPayment () {

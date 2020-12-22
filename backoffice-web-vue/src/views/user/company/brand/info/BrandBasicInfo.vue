@@ -99,7 +99,6 @@
 
     },
     created() {
-      console.log(this.formData);
       if (this.formData.profilePicture != null) {
         this.profilePictures = [this.formData.profilePicture];
       }

@@ -183,7 +183,6 @@
         this.formData.contactAddress.id = null;
       },
       async onAddressSelect (val) {
-        console.log(val);
         this.addressSelectVisible = false;
         this.formData.contactAddress = val;
         this.region = val.region;

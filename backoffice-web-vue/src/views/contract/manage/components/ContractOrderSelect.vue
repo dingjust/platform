@@ -73,7 +73,6 @@
         if (size) {
           _size = size;
         }
-        console.log(_page);
         const query = this.queryFormData;
         const url = this.apis().getoutboundOrdersList();
         const result = await this.$http.post(url, query, {

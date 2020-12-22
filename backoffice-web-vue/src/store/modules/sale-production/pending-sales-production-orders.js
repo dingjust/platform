@@ -60,12 +60,10 @@ const mutations = {
 
 const actions = {
   async search ({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
-    console.log(keyword + 'test' + page + 'test' + size);
     commit('url', url);
     commit('keyword', keyword);
     commit('statuses', statuses);
     if (page || page === 0) {
-      console.log(page);
       commit('currentPageNumber', page);
     }
 
@@ -81,7 +79,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }
@@ -98,7 +95,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     }

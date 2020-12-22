@@ -190,7 +190,6 @@
         this.dialogSealVisible = true;
       },
       async onSealSelectChange (data) {
-        console.log(data);
         const sealCode = data.code;
 
         const url = this.apis().flowContract(this.slotData.code, sealCode);

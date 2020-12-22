@@ -1,13 +1,7 @@
-import store from '@/store';
-
-// const currentAuth
-
-// export { currentAuth };
-
-//管理员权限标签
+// 管理员权限标签
 const ADMIN_PERMISSION = 'CUSTOMERMANAGERGROUP';
 
-export function getCurrentUser() {
+export function getCurrentUser () {
   const currentUserStr = sessionStorage.getItem('currentUser');
   if (currentUserStr != undefined && currentUserStr != null && currentUserStr != 'undefined' && currentUserStr != 'null' && currentUserStr != '') {
     return JSON.parse(currentUserStr);
@@ -15,7 +9,7 @@ export function getCurrentUser() {
   return null;
 }
 
-export function getCurrentAuthority() {
+export function getCurrentAuthority () {
   //   return currentAuth;
   const permissionStr = sessionStorage.getItem('permissions');
   if (permissionStr != undefined && permissionStr != null && permissionStr != 'undefined' && permissionStr != 'null' && permissionStr != '') {
@@ -24,7 +18,7 @@ export function getCurrentAuthority() {
   return [];
 }
 
-export function getDataPermission() {
+export function getDataPermission () {
   //   return currentAuth;
   const dataPermissionStr = sessionStorage.getItem('dataPermission');
   if (dataPermissionStr != undefined && dataPermissionStr != null && dataPermissionStr != 'undefined' && dataPermissionStr != 'null' && dataPermissionStr != '') {
@@ -48,9 +42,9 @@ export function getDataPermission() {
 // }
 // }
 
-export function hasPermission(authority) {
+export function hasPermission (authority) {
   const roles = getCurrentAuthority();
-  //先校验是否拥有管理员权限
+  // 先校验是否拥有管理员权限
   if (roles.includes(ADMIN_PERMISSION)) {
     return true;
   }
@@ -74,18 +68,18 @@ export function hasPermission(authority) {
 
 export function getDataPermissionQuery (from) {
   const currentUser = getCurrentUser();
-  
+
   if (currentUser == null) {
     alert('登陆账号数据有误，请重新登陆！');
   }
 
   let query;
-  
+
   const roles = getCurrentAuthority();
 
   const dataPer = getDataPermission();
 
-  //先校验是否拥有管理员权限
+  // 先校验是否拥有管理员权限
   if (roles.includes(ADMIN_PERMISSION)) {
     query = {
       depts: [0],
@@ -93,7 +87,7 @@ export function getDataPermissionQuery (from) {
     }
     return query;
   }
-  
+
   if (dataPer[from] === 'ALL_DATA') {
     query = {
       depts: [0],
@@ -102,7 +96,7 @@ export function getDataPermissionQuery (from) {
   } else if (dataPer[from] === 'BELONG_DEPT_DATA') {
     query = {
       depts: currentUser.dept ? [currentUser.dept.id] : [],
-      users: currentUser.dept ? [] : [currentUser.id] 
+      users: currentUser.dept ? [] : [currentUser.id]
     }
   } else if (dataPer[from] === 'SELF_DATA') {
     query = {
@@ -117,4 +111,25 @@ export function getDataPermissionQuery (from) {
   }
 
   return query;
-} 
+}
+
+// 判断是否又免审权限
+export function checkAuditFree (permission) {
+  const roles = getCurrentAuthority();
+  // 先校验是否拥有管理员权限
+  if (roles.includes(ADMIN_PERMISSION)) {
+    return true;
+  }
+  if (permission) {
+    const hasPermission = roles.some(role => {
+      return role === permission;
+    });
+
+    if (hasPermission) {
+      return true;
+    }
+    return false;
+  } else {
+    return false;
+  }
+}

@@ -33,10 +33,8 @@ const actions = {
     page,
     size
   }) {
-    console.log(keyword + 'test' + page + 'test' + size);
     commit('keyword', keyword);
     if (page || page === 0) {
-      console.log(page);
       commit('currentPageNumber', page);
     }
 
@@ -51,7 +49,6 @@ const actions = {
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     } else {
@@ -82,14 +79,14 @@ const actions = {
     }
 
     // 设置筛选收货方
-    query['receiveParty'] = companyCode;
+    // query['receiveParty'] = companyCode;
+    query['partyType'] = 'PARTYA';
 
     const response = await http.post(url, query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
 
-    // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
     } else {

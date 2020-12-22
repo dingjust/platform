@@ -74,7 +74,6 @@
       tranData: function () {
         if (this.readOnly) {
           this.setBrandFormVisible(true);
-          console.log(this.slotData);
           return this.slotData;
         } else {
           return this.formData;
@@ -156,7 +155,6 @@
       }
     },
     created () {
-      console.log(this.formData);
     }
   }
 </script>

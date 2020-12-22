@@ -51,7 +51,6 @@
       onSuccess (response) {
         // this.formData = response;
         this.$emit('getPicture', response);
-        // console.log(response);
         this.hideUpload = true;
         this.uploadDisabled = true;
       },
@@ -60,7 +59,6 @@
         this.dialogVisible = true;
       },
       async handleRemove (file) {
-        // console.log(JSON.stringify(file));
         // TODO: 自定义删除方法（删除图片之前，清理product的others属性
         // const url = this.apis().removeMedia(file.id);
         // const result = await this.$http.delete(url);

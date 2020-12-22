@@ -61,7 +61,6 @@
         resetFormData: 'resetFormData'
       }),
       // confirmMaterial (materialList) {
-      //   console.log(materialList);
       //   this.dialog = false;
       // },
       onNew () {

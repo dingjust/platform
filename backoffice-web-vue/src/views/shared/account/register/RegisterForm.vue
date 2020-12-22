@@ -180,7 +180,6 @@
           this.$message.error(result['errors'][0].message);
           return;
         } else {
-          console.log('发送成功');
         }
       },
       async validateCaptcha() {

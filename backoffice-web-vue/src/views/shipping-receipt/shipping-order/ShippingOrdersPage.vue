@@ -12,11 +12,14 @@
                              :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <template v-for="item in statuses">
-        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
-          <shipping-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onDetail="onDetail" :mode="mode"/>
-        </el-tab-pane>
+        <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code"></el-tab-pane>
       </template>
     </el-tabs>
+    <shipping-orders-list ref="list" :page="page" @onAdvancedSearch="onAdvancedSearch" 
+                          @onDetail="onDetail" :mode="mode" :isSelection="isSelection"/>
+    <el-row type="flex" justify="center" v-if="isSelection">
+      <el-button type="primary" size="medium" class="reconciliation-btn" @click="onSelect">确定</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -40,6 +43,10 @@
       mode: {
         type: String,
         default: 'import'
+      },
+      isSelection: {
+        type: Boolean,
+        default: false
       }
     },
     components: {
@@ -96,9 +103,11 @@
         let query = Object.assign({}, this.queryFormData);
         query.states = '';
         if (this.mode == 'import') {
-          query['shipParty'] = this.$store.getters.currentUser.companyCode;
+          // query['shipParty'] = this.$store.getters.currentUser.companyCode;
+          query['partyType'] = 'PARTYB';
         } else {
-          query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+          // query['receiveParty'] = this.$store.getters.currentUser.companyCode;
+          query['partyType'] = 'PARTYA';
         }
 
         const url = this.apis().shippingOrderStateCount();
@@ -143,6 +152,9 @@
       onDetail(row) {
         this.$router.push('/shipping/orders/' + row.id);
       },
+      onSelect () {
+        this.$emit('onSelect', this.$refs.list.currentRow);
+      },
       onResetQuery () {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
       }
@@ -171,6 +183,9 @@
           code: 'PENDING_RECONCILED',
           name: '待对账'
         }, {
+          code: 'IN_RECONCILED',
+          name: '对账中'
+        }, {
           code: '已完成',
           name: '已完成'
         }],
@@ -187,6 +202,15 @@
     },
     created() {
       const pageSign = this.mode === 'import' ? 'SHIPPING_SHEET' : 'RECEIPT_SHEET';
+      if (this.isSelection) {
+        this.statuses = [{
+          code: 'PENDING_RECEIVED',
+          name: '待收货'
+        }, {
+          code: 'PENDING_RECONCILED',
+          name: '待对账'
+        }]
+      }
       this.dataQuery = this.getDataPerQuery(pageSign);
       this.onResetQuery();
       this.onAdvancedSearch();
@@ -202,6 +226,12 @@
   .title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+  }
+
+  .reconciliation-btn {
+    background: #ffd60c;
+    color: #303133;
+    border-color: #ffd60c;
   }
 
 </style>

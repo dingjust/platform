@@ -195,7 +195,6 @@
       //     return this.sizesForm;
       //   },
       //   set(val) {
-      //     console.log(val);
       //     this.sizesForm = val;
       //   }
       // }

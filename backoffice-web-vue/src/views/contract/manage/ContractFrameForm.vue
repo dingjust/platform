@@ -312,7 +312,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.$emit('openPreviewPdf', this.thisContract, '');
         }
@@ -374,7 +373,6 @@
             return;
           }
           this.thisContract = result1.data;
-          console.log(this.thisContract);
 
           this.$emit('openPreviewPdf', this.thisContract, '');
         }

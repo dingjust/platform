@@ -34,18 +34,14 @@
     computed: {},
     methods: {
       onProductSelected(product) {
-        // console.log(JSON.stringify(product));
 
         this.initializeVariantsFormProduct(product);
         this._updateEntries();
-        console.log('entries:' + JSON.stringify(this.slotData.entries));
       },
       onQuantityChanged(value) {
-        // console.log('value: ' + value);
         this._updateQuantityOfEntries();
       },
       onPriceChanged(value) {
-        // console.log('value: ' + value);
 
         this.$set(this.slotData, 'unitPrice', value);
 
@@ -111,20 +107,16 @@
       _updateQuantityOfEntries() {
         this.$set(this.slotData, 'entries', []);
         // 使用variants同步更新slotData.entries中的数量
-        console.log('variants: ' + JSON.stringify(this.variants));
 
         this._updateEntries();
 
-        console.log('entries:' + JSON.stringify(this.slotData.entries));
       },
       _updatePriceOfEntries() {
         this.$set(this.slotData, 'entries', []);
         // 使用variants同步更新slotData.entries中的单价
-        console.log('variants: ' + JSON.stringify(this.variants));
 
         this._updateEntries();
 
-        console.log('entries:' + JSON.stringify(this.slotData.entries));
       },
       _updateEntries() {
         let entries = [];

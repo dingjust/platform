@@ -266,7 +266,6 @@
       onSelectSample (data) {
         this.materialDialogVisible = false;
         this.sampleList[this.currentProductIndex] = data;
-        console.log(data);
       },
       removeRow (index) {
         this.sampleList.splice(index, 1);
@@ -344,7 +343,6 @@
         this.sampleList.push('');
       },
       onSubmit () {
-        console.log('添加产品');
         this.$emit('onAppendProduct');
       }
     },

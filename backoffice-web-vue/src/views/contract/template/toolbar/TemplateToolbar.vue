@@ -79,7 +79,6 @@
         this.tempFormVisible = true;
       },
       async onDel () {
-        console.log(this.$parent.selectedCode);
         // const url = this.apis().deleteTemplate(code);
         // const result = await this.$http.get(url);
       },

@@ -50,7 +50,6 @@
       //     page: 0,
       //     size: 100
       //   });
-      //   console.log(result);
       //   this.mockData = result.content;
       // },
 

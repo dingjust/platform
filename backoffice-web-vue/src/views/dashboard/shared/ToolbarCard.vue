@@ -84,7 +84,6 @@
       async getAuthenticationState() {
         const url = this.apis().getAuthenticationState();
         const result = await http.get(url);
-        console.log(result);
         if (result.data.companyState == 'SUCCESS') {
           this.openEnterpriseDialog = true
         }

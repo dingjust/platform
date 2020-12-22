@@ -234,13 +234,11 @@
     },
     watch: {
       'profilePictures': function (n, o) {
-        console.log(n);
         if (n != null && n.length > 0) {
           this.formData.profilePicture = n[0];
         } else {
           this.formData.profilePicture = null;
         }
-        console.log(this.formData.profilePicture);
       },
       'region': function (n, o) {
         if (n !== '') {
@@ -254,7 +252,6 @@
       }
     },
     created () {
-      console.log(this.formData);
       if (this.formData.profilePicture != null) {
         this.profilePictures = [this.formData.profilePicture];
       }
