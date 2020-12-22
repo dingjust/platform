@@ -556,6 +556,7 @@ class _PayPlanFormPageState extends State<PayPlanFormPage> {
         result = [
           getInitModel(moneyType: PayMoneyType.PHASEONE),
           getInitModel(
+            payPercent: 0,
             moneyType: PayMoneyType.PHASETWO,
           )
         ];
@@ -567,6 +568,7 @@ class _PayPlanFormPageState extends State<PayPlanFormPage> {
             moneyType: PayMoneyType.PHASETWO,
           ),
           getInitModel(
+            payPercent: 0,
             moneyType: PayMoneyType.PHASETHREE,
           )
         ];
@@ -612,7 +614,7 @@ class _PayPlanFormPageState extends State<PayPlanFormPage> {
           (element) => element.moneyType == PayMoneyType.DEPOSIT,
           orElse: () => null);
       if (depostItem != null) {
-        result.add(depostItem);
+        result = [depostItem, ...result];
       }
     }
 
@@ -660,6 +662,7 @@ class _PayPlanFormPageState extends State<PayPlanFormPage> {
     List<FormValidateItem> validateItems = [
       FormValidateItem(
           (form.name == null || form.name.trim() == ''), '请填写方案名称！'),
+      FormValidateItem(_validatePayPercent(), '付款比例总和不能超过100%')
     ];
 
     FormValidateItem item = validateItems
@@ -681,6 +684,7 @@ class _PayPlanFormPageState extends State<PayPlanFormPage> {
     if (validateForm()) {
       Function cancelFunc =
           BotToast.showLoading(crossPage: false, clickClose: false);
+
       form.previewText = PayPlanHelper.getPreviewText(form);
       String response = await PayPlanRepositoryImpl.create(form);
       cancelFunc.call();
@@ -691,6 +695,19 @@ class _PayPlanFormPageState extends State<PayPlanFormPage> {
         BotToast.showText(text: '操作失败！');
       }
     }
+  }
+
+  ///校验百分比不超过100%
+  bool _validatePayPercent() {
+    if ([PayPlanType.PHASEONE, PayPlanType.PHASETWO, PayPlanType.PHASETHREE]
+        .contains(form.payPlanType)) {
+      double sum = 0;
+      form.payPlanItems.forEach((element) {
+        sum += element.payPercent;
+      });
+      return sum >= 1;
+    }
+    return false;
   }
 }
 
