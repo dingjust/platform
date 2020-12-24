@@ -90,6 +90,22 @@ class _ProductionProgressDetailPageState
                 ],
               ),
             ),
+            Container(
+              child: ColorSizeInputTable(
+                ['蓝色', '绿色', '红色'],
+                ['S', 'M', 'L', 'XL', 'XXL'],
+                compareFunction: Provider.of<SizeState>(context).compareByName,
+                entries: [
+                  ColorSizeInputEntry(color: '红色', size: 'L', quantity: 12)
+                ],
+                onChanged: (data) {
+                  print('sadasd');
+                  data.forEach((entry) {
+                    print('${entry.color}-${entry.size}:${entry.quantity}');
+                  });
+                },
+              ),
+            )
           ],
         ),
       ),
