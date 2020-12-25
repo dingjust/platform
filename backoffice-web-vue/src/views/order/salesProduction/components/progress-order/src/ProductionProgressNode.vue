@@ -1,7 +1,7 @@
 <template>
   <div class="info-remarks-body" @mouseenter="onShowButton(true)" @mouseleave="onShowButton(false)">
     <el-row>
-      <production-progress-node-info :slot-data="slotData" @callback="onCallback" />
+      <production-progress-node-info :slot-data="slotData" @callback="onCallback" :order="order"/>
     </el-row>
     <div class="progress-modal" v-show="showButton" v-if="modalExist">
       <el-row type="flex" justify="center" align="middle" class="progress-modal-row">
@@ -27,10 +27,15 @@
       ProductionProgressNodeInfo,
       ProductionProgressDateSettingForm
     },
-    props: ['slotData', 'canEdit'],
+    props: ['slotData', 'canEdit', 'order'],
     computed: {
       //还没设置预计完成时间
       modalExist: function () {
+        // 判断已外发并且是协同的生产工单不能设置
+        if (this.order.outboundOrderCode && this.order.outboundOrderType === 'COLLABORATION') {
+          return false;
+        }
+
         if (this.slotData.status == 'IN_PRODUCTION') {
           var result = false;
           if (this.slotData != null) {

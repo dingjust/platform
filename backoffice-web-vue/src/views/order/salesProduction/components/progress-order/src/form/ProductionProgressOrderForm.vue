@@ -259,10 +259,12 @@
         if (need.length != 0) {
           var sum = 0;
           var result = this.progress.productionProgressOrders.filter(order => order.status == 'PASS').forEach(order => {
-            var result = order.entries.filter(entry => entry.color == color && entry
-              .size == size);
-            if (result.length != 0 && result[0].quantity != '') {
-              sum += result[0].quantity;
+            if (order.entries && order.entries.length > 0) {
+              var result = order.entries.filter(entry => entry.color == color && entry
+                .size == size);
+              if (result.length != 0 && result[0].quantity != '') {
+                sum += result[0].quantity;
+              }
             }
           });
           if (need[0].quantity < sum) {

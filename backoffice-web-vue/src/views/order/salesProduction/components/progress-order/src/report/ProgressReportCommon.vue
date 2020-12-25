@@ -81,12 +81,14 @@
       noteVariantTotal: function () {
         var result = 0;
         this.noteEntries.filter(entry => entry.status == 'PASS').forEach((entry) => {
-          entry.entries.forEach(item => {
-            if (this.colors.has(item.color)) {
-              result += item.quantity;
-              var a = [];
-            }
-          })
+          if (entry.entries && entry.entries.length > 0) {
+            entry.entries.forEach(item => {
+              if (this.colors.has(item.color)) {
+                result += item.quantity;
+                var a = [];
+              }
+            })
+          }
         });
         return result;
       }
@@ -104,12 +106,16 @@
       },
       getNoteVariantSum(color, size) {
         var sum = 0;
+        console.log(this.noteEntries);
+        console.log(this.noteEntries.filter(entry => entry.status == 'PASS'));
         this.noteEntries.filter(entry => entry.status == 'PASS').forEach((entry) => {
-          var result = entry.entries.filter(
-            item => item.color == color && item.size == size
-          );
-          if (result.length != 0) {
-            sum += result[0].quantity;
+          if (entry.entries && entry.entries.length > 0) {
+            var result = entry.entries.filter(
+              item => item.color == color && item.size == size
+            );
+            if (result.length != 0) {
+              sum += result[0].quantity;
+            }
           }
         });
         return sum;

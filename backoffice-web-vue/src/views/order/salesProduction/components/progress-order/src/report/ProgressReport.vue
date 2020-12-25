@@ -81,7 +81,7 @@
         <progress-report-sample v-if="slotData.progressPhase.name=='产前样'"
           :productionProgressOrders="slotData.productionProgressOrders" />
         <progress-report-common v-if="isColorSizeType" :orderEntries="belong.colorSizeEntries"
-          :noteEntries="slotData.productionProgressOrders" @onOrder="onOrder" :orderEntriesTotal="0"
+          :noteEntries="slotData.productionProgressOrders" @onOrder="onOrder" :orderEntriesTotal="orderEntriesTotal"
           :readonly="readonly" />
         <el-row type="flex" justify="end" align="center" class="show-btn-row">
           <i class="iconfont icon_arrow" v-if="!allOrdersShow" @click="allOrdersShow=true">&#xe714;&nbsp;展开全部单据</i>
@@ -113,7 +113,7 @@
     <el-row type="flex" justify="center" align="top">
       <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
       <authorized :permission="['PROGRESS_WORK_ORDER_UPDATE']">
-        <el-button size="mini" class="update-form-finish" @click="onFinish" v-if="!readonly&&isMySelf">完成</el-button>
+        <el-button size="mini" class="update-form-finish" @click="onFinish" v-if="!readonly && isMySelf && !isOutCollaboration">完成</el-button>
       </authorized>
     </el-row>
   </div>
@@ -131,7 +131,7 @@
   import ProductionProgressOrderFormMaterial from '../form/ProductionProgressOrderFormMaterial';
   export default {
     name: 'ProgressReport',
-    props: ['slotData', 'belong'],
+    props: ['slotData', 'belong', 'order'],
     components: {
       ProductionProgressOrderFormMaterial,
       ProductionProgressOrderFormSample,
@@ -180,14 +180,34 @@
       },
       //能否上报数量
       canReport: function () {
+        if (this.isOutCollaboration) {
+          return false;
+        }
         if (this.belong.status == 'IN_PRODUCTION') {
           return this.slotData.sequence >= this.belong.currentPhase.sequence;
         } else {
           return false;
         }
       },
+      isOutCollaboration: function () {
+        // 判断已外发并且是协同的生产工单不能上报
+        if (this.order.outboundOrderCode && this.order.outboundOrderType === 'COLLABORATION') {
+          return true;
+        }
+        return false;
+      },
       isMySelf: function () {
         return this.belong.belongTo.uid == this.$store.getters.currentUser.companyCode;
+      },
+      orderEntriesTotal: function () {
+        let result = 0;
+        this.belong.colorSizeEntries.forEach(element => {
+          let num = parseFloat(element.quantity);
+          if (num != null && !Number.isNaN(element.quantity)) {
+            result += num;
+          }
+        });
+        return result;
       }
     },
     methods: {

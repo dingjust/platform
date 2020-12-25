@@ -77,7 +77,8 @@
         if (this.slotData.taskOrderEntries == null) {
           return false;
         }
-        return this.slotData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.readOutbound;
+        return this.slotData.taskOrderEntries[0].outboundOrderCode != null && this.readOutbound;
+        // return this.slotData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.readOutbound;
       },
       //发货任务id
       receiveDispatchTaskId: function () {

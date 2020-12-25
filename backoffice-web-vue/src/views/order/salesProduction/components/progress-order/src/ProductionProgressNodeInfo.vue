@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <progress-report v-if="updateFormVisible" :slotData="selectProgressModel" :belong="slotData"
-        @callback="onCallback" @editSubmit="onEditSubmit" />
+        @callback="onCallback" @editSubmit="onEditSubmit" :order="order"/>
     </el-dialog>
     <el-row type="flex" justify="space-between">
       <el-steps :active="activeNodeIndex" align-center style="width:100%" finish-status="success">
@@ -16,7 +16,7 @@
               <el-row type="flex" justify="center">
                 实际完成日期:{{item.finishDate|timestampToTime}}
               </el-row>
-              <el-row type="flex" justify="center" style="color: #F56C6C">
+              <el-row type="flex" justify="center" style="color: #F56C6C" v-if="item.estimatedDate">
                 {{getTip(item)}}
               </el-row>
             </div>
@@ -41,7 +41,7 @@
 
   export default {
     name: 'ProductionProgressNodeInfo',
-    props: ['slotData'],
+    props: ['slotData', 'order'],
     components: {
       ProgressReport,
       Step
