@@ -79,7 +79,7 @@ export default {
   },
   data () {
     return {
-      downLink: 'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%AF%B9%E8%B4%A6%E5%8D%95%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx',
+      downLink: this.CONFIG.CDN_OSS_DOMAIN+'/%E5%AF%B9%E8%B4%A6%E5%8D%95%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx',
       tableData: [],
       productDialog: false,
       operateIndex: ''

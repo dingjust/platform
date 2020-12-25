@@ -104,7 +104,7 @@
       return {
         tableData: [],
         tableHeader: [],
-        downLink: 'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E6%AC%BE%E5%BC%8F%E6%89%B9%E9%87%8F%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx'
+        downLink: this.CONFIG.CDN_OSS_DOMAIN+'/%E6%AC%BE%E5%BC%8F%E6%89%B9%E9%87%8F%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx'
       }
     },
     methods: {
