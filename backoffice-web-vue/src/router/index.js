@@ -222,7 +222,7 @@ const router = new Router({
             },
             {
               path: 'delivery/create',
-              name: '出货单详情',
+              name: '创建出货单',
               props: true,
               component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/delivery/form/DeliveryOrdersForm')
             },
