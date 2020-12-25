@@ -364,13 +364,6 @@ class _MainInfo extends StatelessWidget {
                 '创建时间：${DateFormatUtil.formatYMDHMS(order.creationtime)}',
                 style: _infoStyle,
               )),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: order.deliveryDate == null
-                  ? Container()
-                  : Text(
-                  '发货时间：${DateFormatUtil.formatYMDHMS(order.deliveryDate)}',
-                  style: _infoStyle)),
         ],
       ),
       decoration: BoxDecoration(

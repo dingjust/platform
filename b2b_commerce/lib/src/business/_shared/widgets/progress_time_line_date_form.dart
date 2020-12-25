@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 ///进度工单显示
 class ProgressTimeLineDateForm extends StatefulWidget {
@@ -27,11 +28,12 @@ class _ProgressTimeLineDateFormState extends State<ProgressTimeLineDateForm> {
 
   Map<ProgressPhaseModel, TextEditingController> _controllerMap;
 
-
   @override
   void initState() {
-    _model = ProgressWorkSheetModel.fromJson(
-        ProgressWorkSheetModel.toJson(widget.model));
+    _model = ProgressWorkSheetModel(
+        code: widget.model.code,
+        progresses: widget.model.progresses,
+        priorityLevel: widget.model.priorityLevel);
 
     super.initState();
   }
@@ -70,15 +72,31 @@ class _ProgressTimeLineDateFormState extends State<ProgressTimeLineDateForm> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50))),
             onPressed: () async {
-              Function cancelFunc = BotToast.showLoading(clickClose: false, crossPage: false);
-              BaseMsg msg = await ProgressWorkSheetRepository().updateProgressesEstimatedDate(_model);
-              cancelFunc.call();
-              if(msg != null && msg.code == 1){
-                BotToast.showText(text: '保存成功');
-                Navigator.pop(context,true);
-              }else{
-                BotToast.showText(text: '保存失败');
+              if(_model.priorityLevel == null){
+                BotToast.showText(text: '请选择优先级');
+                return;
               }
+              _model.progresses.forEach((element) {
+                if(element.estimatedDate == null){
+                  BotToast.showText(text: '请完善预计完成时间');
+                  throw Exception('请完善预计完成时间');
+                }
+              });
+
+              showConfirmDialog(false, message: '是否确认保存？',
+                  confirm: () async {
+                    Function cancelFunc =
+                    BotToast.showLoading(clickClose: false, crossPage: false);
+                    BaseMsg msg = await ProgressWorkSheetRepository()
+                        .updateProgressesEstimatedDate(_model);
+                    cancelFunc.call();
+                    if (msg != null && msg.code == 1) {
+                      BotToast.showText(text: '保存成功');
+                      Navigator.pop(context, true);
+                    } else {
+                      BotToast.showText(text: '保存失败');
+                    }
+                  });
             }),
       ),
     );

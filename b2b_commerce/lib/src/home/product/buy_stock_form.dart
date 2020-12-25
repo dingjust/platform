@@ -402,108 +402,108 @@ class _BuyStockFormState extends State<BuyStockForm>
     );
   }
 
-  Widget _buildTotal(
-      List<EditApparelSizeVariantProductEntry> entries, String color) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '批量修改数量',
-                style: TextStyle(fontSize: 14),
-              ),
-              Row(
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      B2BIcons.remove_rect,
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (int.parse(totalEditingControllerMap[color].text) >
-                            0) {
-                          if (totalEditingControllerMap[color].text == '1') {
-                            totalEditingControllerMap[color].text = '';
-                            entries.forEach((entry) {
-                              entry.controller.text = '';
-                            });
-                          } else {
-                            int i = int.parse(
-                                totalEditingControllerMap[color].text);
-                            i--;
-                            totalEditingControllerMap[color].text = '$i';
-                            entries.forEach((entry) {
-                              entry.controller.text = '$i';
-                            });
-                          }
-                        }
-                      });
-                    },
-                  ),
-                  Container(
-                    width: 40,
-                    child: TextField(
-                      controller: totalEditingControllerMap[color],
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: '0',
-                          hintStyle: TextStyle(fontSize: 15)),
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14),
-                      //只能输入数字
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onChanged: (val) {
-                        if (val == '') {
-                          val = '0';
-                        }
-                        setState(() {
-                          entries.forEach((entry) {
-                            entry.controller.text = val;
-                          });
-                        });
-                      },
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      B2BIcons.add_rect,
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (totalEditingControllerMap[color].text == '') {
-                          totalEditingControllerMap[color].text = '1';
-                          entries.forEach((entry) {
-                            entry.controller.text = '1';
-                          });
-                        } else {
-                          int i =
-                              int.parse(totalEditingControllerMap[color].text);
-                          i++;
-                          totalEditingControllerMap[color].text = '$i';
-                          entries.forEach((entry) {
-                            entry.controller.text = '$i';
-                          });
-                        }
-                      });
-                    },
-                  )
-                ],
-              )
-            ],
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-          border: Border(top: BorderSide(width: 0.5, color: Colors.grey[300]))),
-    );
-  }
+  // Widget _buildTotal(
+  //     List<EditApparelSizeVariantProductEntry> entries, String color) {
+  //   return Container(
+  //     child: Column(
+  //       children: <Widget>[
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: <Widget>[
+  //             Text(
+  //               '批量修改数量',
+  //               style: TextStyle(fontSize: 14),
+  //             ),
+  //             Row(
+  //               children: <Widget>[
+  //                 IconButton(
+  //                   icon: Icon(
+  //                     B2BIcons.remove_rect,
+  //                     color: Color.fromRGBO(255, 214, 12, 1),
+  //                   ),
+  //                   onPressed: () {
+  //                     setState(() {
+  //                       if (int.parse(totalEditingControllerMap[color].text) >
+  //                           0) {
+  //                         if (totalEditingControllerMap[color].text == '1') {
+  //                           totalEditingControllerMap[color].text = '';
+  //                           entries.forEach((entry) {
+  //                             entry.controller.text = '';
+  //                           });
+  //                         } else {
+  //                           int i = int.parse(
+  //                               totalEditingControllerMap[color].text);
+  //                           i--;
+  //                           totalEditingControllerMap[color].text = '$i';
+  //                           entries.forEach((entry) {
+  //                             entry.controller.text = '$i';
+  //                           });
+  //                         }
+  //                       }
+  //                     });
+  //                   },
+  //                 ),
+  //                 Container(
+  //                   width: 40,
+  //                   child: TextField(
+  //                     controller: totalEditingControllerMap[color],
+  //                     decoration: InputDecoration(
+  //                         border: InputBorder.none,
+  //                         hintText: '0',
+  //                         hintStyle: TextStyle(fontSize: 15)),
+  //                     keyboardType: TextInputType.number,
+  //                     textAlign: TextAlign.center,
+  //                     style: TextStyle(fontSize: 14),
+  //                     //只能输入数字
+  //                     inputFormatters: <TextInputFormatter>[
+  //                       WhitelistingTextInputFormatter.digitsOnly,
+  //                     ],
+  //                     onChanged: (val) {
+  //                       if (val == '') {
+  //                         val = '0';
+  //                       }
+  //                       setState(() {
+  //                         entries.forEach((entry) {
+  //                           entry.controller.text = val;
+  //                         });
+  //                       });
+  //                     },
+  //                   ),
+  //                 ),
+  //                 IconButton(
+  //                   icon: Icon(
+  //                     B2BIcons.add_rect,
+  //                     color: Color.fromRGBO(255, 214, 12, 1),
+  //                   ),
+  //                   onPressed: () {
+  //                     setState(() {
+  //                       if (totalEditingControllerMap[color].text == '') {
+  //                         totalEditingControllerMap[color].text = '1';
+  //                         entries.forEach((entry) {
+  //                           entry.controller.text = '1';
+  //                         });
+  //                       } else {
+  //                         int i =
+  //                             int.parse(totalEditingControllerMap[color].text);
+  //                         i++;
+  //                         totalEditingControllerMap[color].text = '$i';
+  //                         entries.forEach((entry) {
+  //                           entry.controller.text = '$i';
+  //                         });
+  //                       }
+  //                     });
+  //                   },
+  //                 )
+  //               ],
+  //             )
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //     decoration: BoxDecoration(
+  //         border: Border(top: BorderSide(width: 0.5, color: Colors.grey[300]))),
+  //   );
+  // }
 
   Widget _buildEnd() {
     return StreamBuilder<int>(

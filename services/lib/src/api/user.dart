@@ -86,8 +86,7 @@ abstract class UserApis {
   static get employeeFromId => (uid) => '/{baseSiteId}/b2bCustomers/$uid';
 
   ///短信验证重置密码
-  static get resetPassword =>
-          (id) {
+  static get resetPassword => (id) {
         return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';
       };
 
@@ -225,6 +224,9 @@ abstract class UserApis {
 
   ///公司账务列表
   static get payplans => '/{baseSiteId}/payPlan';
+
+  ///创建账务方案
+  static get payplansCreate => '/{baseSiteId}/payPlan/create';
 
   ///撤销合同
   static get revokeContract =>
