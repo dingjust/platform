@@ -71,18 +71,8 @@ export default {
       formData: {
         type: 'shippingSheets',
         title: '',
-        shippingSheets: [
-          {
-            id: '',
-            code: ''
-          }
-        ],
-        fastShippingSheets: [
-          {
-            id: '',
-            code: ''
-          }
-        ],
+        shippingSheets: [],
+        fastShippingSheets: [],
         cooperator: '',
         entries: [],
         isApproval: true,
@@ -109,6 +99,12 @@ export default {
             this.$message.error('请填写对账信息！');
             return;
           }
+
+          if (this.formData.entries.some(item => item.product.id === '')) {
+            this.$message.error('存在对账内容没有产品，请选择处理');
+            return;
+          }
+
           this.$confirm(this.formData.paperSheetMedias.length <= 0 ? this.electronTip : this.paperTip, '', {
             confirmButtonText: '是',
             cancelButtonText: '否',
@@ -123,13 +119,6 @@ export default {
     },
     async _onCreate () {
       let data = Object.assign({}, this.formData);
-
-      if (this.formData.type === 'shippingSheets') {
-        this.$delete(data, 'fastShippingSheets');
-        this.$delete(data, 'cooperator');
-      } else if (this.formData.type === 'fastShippingSheets') {
-        this.$delete(data, 'shippingSheets');
-      }
 
       this.$delete(data, 'type');
       

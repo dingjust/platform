@@ -23,7 +23,7 @@
       </template>
     </el-tabs>
     <delivery-orders-list ref="list" :page="page" @onAdvancedSearch="onAdvancedSearch" 
-                            :isSelection="isSelection" :selectedId="selectedId"/>
+                            :isSelection="isSelection"/>
     <el-row type="flex" justify="center" v-if="isSelection">
       <el-button type="primary" size="medium" class="reconciliation-btn" @click="onSelect">确定</el-button>
     </el-row>
@@ -51,11 +51,7 @@ export default {
     isSelection: {
       type: Boolean,
       default: false,
-    },
-    // 已选id，处理回显
-    selectedId: {
-      default: ''
-    } 
+    }
   },
   components: {
     DeliveryOrdersList,
@@ -152,6 +148,10 @@ export default {
       this.onAdvancedSearch(0, 10, true);
     },
     onSelect () {
+      if (this.$refs.list.currentRow.length <= 0) {
+        this.$message.warning('请先选择数据！');
+        return;
+      }
       this.$emit('onSelect', this.$refs.list.currentRow);
     },
     onCreate () {

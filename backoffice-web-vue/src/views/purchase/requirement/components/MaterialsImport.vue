@@ -171,7 +171,6 @@
     },
     data() {
       return {
-        numErrorCount: 0,
         tableData: [],
         tableHeader: [],
         MaterialsType: this.$store.state.EnumsModule.MaterialsType,
@@ -200,7 +199,7 @@
             cooperatorName: (row['供应商'] + '').replace(/[\r\n]/g,"").trim(),
             price: row['物料单价*'] + '',
             totalPrice: row['总金额*'] + '',
-            estimatedRecTime: new Date(row['到料时间*'].replace(/-|\./g, '/')).getTime()
+            estimatedRecTime: new Date(row['到料时间*']).getTime()
             // auditColor: row['是否批色'].trim() === '是'
           }
         })
@@ -217,7 +216,6 @@
       isLegalDate (val) {
         let flag1 = val === null && val === undefined && val === '';
         if (flag1 || this.isValidDate(new Date(val))) {
-          this.numErrorCount++;
           return true;
         }
         return false;
@@ -229,7 +227,6 @@
         let flag1 = val === null && val === undefined && val === '';
         let flag2 = Number.isNaN(Number.parseFloat(val));
         if (flag1 || flag2) {
-          this.numErrorCount++;
           return true;
         }
         return false;
@@ -378,57 +375,36 @@
         return false
       },
       handleSuccess({ results, header }) {
-        this.numErrorCount = 0;
-        let data = results.filter(row => {  
+        let temp = results.shift();
+
+        const tableD = results.filter(row => {  
           for (let key in row) {
             if (row[key]) {
               return true;
             }
           }
           return false;
-        });
-        let temp = data.shift();
-        let item = {};
-        let tableD = [];
-        // this.cacheData=results;
-        // this.cacheHeader=header;
-        data.map(row => {
-          for (let key in temp) {
-            if (temp[key]) {
-              if (temp[key] === '到料时间*') {
-                item[temp[key]] = this.formatDate(row[key]);
-              } else {
-                if(row[key]==null||row[key]==undefined){
-                  item[temp[key]] = '';
-                }else{
-                  item[temp[key]] = row[key];
-                }
-                
-              }
-            }
-          }
-          tableD.push(item);
-          item = {};
+        }).map(row => {
+          return this.handleData(row, temp);
         })
+
         this.$set(this, 'tableData', tableD);
-        this.tableHeader = header;
+      },
+      handleData (row, temp) {
+        let item = {};
+
+        for (let key in temp) {
+          if (row[key] === null || row[key] === undefined) {
+            item[temp[key]] = '';
+          } else if (temp[key] === '到料时间*') {
+            item[temp[key]] = this.formatDate(row[key]);
+          } else {
+            item[temp[key]] = row[key];
+          }
+        }
+        return item;
       },
       onCreate () {
-        // if (this.numErrorCount > 0) {
-        //   this.$message.error('表格数据有误，请修改表格后再上传');
-        //   throw Error('表格数据有误，请修改表格后再上传');
-        //   return;
-        // }
-        // this.tableData.forEach(row => {
-        //   for (let key in row) {
-        //     // if (!row[key] && key !== '是否批色' && key !== '合作商' && key !== '克重/规格') {
-        //     if (!row[key] && key !== '合作商' && key !== '克重/规格') {
-        //       this.$message.error('表格数据有误，请修改表格后再上传');
-        //       throw Error('表格数据有误，请修改表格后再上传');
-        //       return;
-        //     }
-        //   }
-        // })
         this.$emit('onImport', this.sumbitData);
       }
     }

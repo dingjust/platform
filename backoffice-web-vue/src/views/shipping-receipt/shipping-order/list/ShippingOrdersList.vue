@@ -1,9 +1,9 @@
 <template>
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
-      @selection-change="handleSelectionChange" @row-click="rowClick" 
-      :highlight-current-row="isSelection" @current-change="handleCurrentChange">
-      <el-table-column type="selection" :reserve-selection="true" width="55" v-if="canCreateReceipt"></el-table-column>
+      @selection-change="handleSelectionChange" @row-click="rowClick" >
+      <el-table-column type="selection" :reserve-selection="true" width="55" 
+        v-if="isSelection" :selectable="selectable"/>
       <el-table-column label="发货单号" prop="code" min-width="110px" fixed="left"></el-table-column>
       <el-table-column label="产品名称" min-width="150px">
         <template slot-scope="scope">
@@ -92,7 +92,7 @@
           <span>{{getEnum('ShippingSheetState', scope.row.state)}}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="操作" fixed="right">
+      <el-table-column label="操作" fixed="right" v-if="!isSelection">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">详情</el-button>
         </template>
@@ -120,10 +120,6 @@
         type: Object,
         required: true
       },
-      canCreateReceipt: {
-        type: Boolean,
-        default: false
-      },
       mode: {
         type: String,
         default: 'import'
@@ -131,6 +127,12 @@
       isSelection: {
         type: Boolean,
         default: false
+      }
+    },
+    // ReconciliationOrdersFormV2Header 传入
+    inject: {
+      formData: {
+        default: () => {}
       }
     },
     components: {
@@ -166,27 +168,25 @@
       onReturnDetail(id) {
         this.$router.push('/returned/orders/' + id);
       },
-      handleSelectionChange(val) {
-        // 限制单选
-        if (val.length > 1) {
-          this.$refs.resultTable.toggleRowSelection(val[0], false);
-          this.selectionRow = val[val.length - 1];
-        } else if (val.length == 1) {
-          this.selectionRow = val[val.length - 1];
-        } else if (val.length == 0) {
-          this.selectionRow = '';
+      handleSelectionChange (selection) {
+        this.currentRow = selection;
+      },
+      rowClick (row) {
+        if (this.judge(row)) {
+          this.$refs.resultTable.toggleRowSelection(row);
         }
       },
-      rowClick(row) {
-        if (this.selectionRow == '') {
-          this.$refs.resultTable.toggleRowSelection(row, true);
+      selectable (row, index) {
+        if (this.judge(row)) {
+          return true;
+        } 
+        return false;
+      },
+      judge (row) {
+        if (this.currentRow <= 0 || row.shipParty.name === this.currentRow[0].shipParty.name) {
+          return true;
         } else {
-          if (this.selectionRow.id == row.id) {
-            this.$refs.resultTable.toggleRowSelection(row, false);
-          } else {
-            this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
-            this.$refs.resultTable.toggleRowSelection(row, true);
-          }
+          return false;
         }
       },
       //统计单数
@@ -242,15 +242,13 @@
           });
         }
         return result;
-      },
-      handleCurrentChange (val) {
-        this.currentRow = val;
       }
     },
     data() {
       return {
         selectionRow: '',
-        currentRow: '',
+        currentRow: [],
+        listName: 'shippingSheets',
         openId: '',
         dialogVisible: false
       }
@@ -259,19 +257,19 @@
 
     },
     watch: {
-      'page.content': function (n, o) {
-        this.$nextTick(() => {
-          this.$refs.resultTable.doLayout()
-        })
-      },
+      'page': function (nval, oval) {
+        if (this.formData && this.formData[this.listName] && nval) {
+          this.page.content.forEach(item => {
+            if (this.formData[this.listName].some(val => val.id === item.id)) {
+              this.$refs.resultTable.toggleRowSelection(item);
+            }
+          })
+        }
+      }
     },
   }
 
 </script>
 
 <style scoped>
-  .shipping-order-list-container>>>.el-table th>.cell .el-checkbox {
-    display: none;
-  }
-
 </style>

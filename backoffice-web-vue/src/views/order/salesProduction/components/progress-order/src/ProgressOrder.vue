@@ -6,14 +6,14 @@
       </el-col>
       <el-col :span="2">
         <authorized :permission="['PROGRESS_WORK_ORDER_CREATE']">
-          <el-button class="pp-edit-btn" @click="onEdit" v-if="canEdit">编辑</el-button>
+          <el-button class="pp-edit-btn" @click="onEdit" v-if="canEdit&&!isOutCollaboration">编辑</el-button>
         </authorized>
       </el-col>
     </el-row>
     <el-row type="flex" justify="center" class="pp-basic-row">
       <el-col :span="23">
         <el-card>
-          <production-progress-node v-if="hasData" :slotData="slotData" :canEdit="canEdit" @callback="onCallBack" />
+          <production-progress-node v-if="hasData" :slotData="slotData" :canEdit="canEdit" @callback="onCallBack" :order="order"/>
           <el-row v-else type="flex" justify="center">暂无数据</el-row>
         </el-card>
       </el-col>
@@ -75,7 +75,14 @@
             this.order.state == 'PRODUCING' ||
             this.order.state == 'IN_PRODUCTION') && isOperator
         }
-      }
+      },
+      isOutCollaboration: function () {
+        // 判断已外发并且是协同的生产工单不能编辑
+        if (this.order.outboundOrderCode && this.order.outboundOrderType === 'COLLABORATION') {
+          return true;
+        }
+        return false;
+      },
     },
     methods: {
       onEdit() {

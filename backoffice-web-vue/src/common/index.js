@@ -1765,6 +1765,10 @@ let NONE_TENANT_APIS = {
   },
   doDocSign (code) {
     return '/b2b/doc/signature/' + code;
+  },
+  // 获取外发外接数量，金额统计
+  getDashboardOrderStatistics () {
+    return '/b2b/sales/production/order/count';
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

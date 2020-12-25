@@ -383,6 +383,10 @@
         this.formData.taskOrderEntries.splice(index, 1);
       },
       onSelectTask(selectTaskList) {
+        if (!selectTaskList || selectTaskList.length <= 0) {
+          this.taskDialogVisible = false;
+          return;
+        }
         let row = {}
         let index;
         let entries = [];
@@ -527,12 +531,12 @@
       initData() {
         if (this.$route.params.formData != null) {
           this.formData = this.$route.params.formData;
-
           //剔除带过的单价
           // this.formData.taskOrderEntries.forEach(entry => {
-          //   entry.unitPrice = '';
+            //   entry.unitPrice = '';
           // });
 
+          this.formData.sendAuditNeeded = true;
           if (this.formData.sendApprovers == null) {
             this.formData.sendApprovers = [{
               id: ''
