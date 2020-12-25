@@ -8,23 +8,26 @@
     </el-row>
     <div style="display: flex;justify-content: space-between;">
       <div>
-        <el-row>
-          <h6 class="dashboard-income-money">￥{{slotData.income}}</h6>
-        </el-row>
-        <el-row type="flex" style="margin-top:5px;white-space: nowrap;" align="middle">
+        <!-- <el-row>
+          <h6 class="dashboard-income-money">￥{{slotData.totalAmount}}</h6>
+        </el-row> -->
+        <!-- <el-row type="flex" style="margin-top:5px;white-space: nowrap;" align="middle">
           <h6 class="dashboard-income-text">月同比 {{slotData.comparison}}</h6>
           <i class="el-icon-caret-top dashboard-icon-caret"></i>
+        </el-row> -->
+        <el-row>
+          <h6 class="dashboard-income-text">外发订单：{{slotData.totalQuantity}}</h6>
+        </el-row>
+        <el-row>
+          <h6 class="dashboard-income-text">外发金额：￥{{slotData.totalAmount}}</h6>
         </el-row>
       </div>
       <div>
         <el-row>
-          <h6 class="dashboard-income-text">以收入：￥{{slotData.incomed}}</h6>
+          <h6 class="dashboard-income-text">外接订单：{{slotData.outTotalQuantity}}</h6>
         </el-row>
         <el-row>
-          <h6 class="dashboard-income-text">打样订单数：{{slotData.proofingOrders}}</h6>
-        </el-row>
-        <el-row>
-          <h6 class="dashboard-income-text">生产订单数：{{slotData.purchaseOrders}}</h6>
+          <h6 class="dashboard-income-text">外接金额：￥{{slotData.outTotalAmount}}</h6>
         </el-row>
       </div>
     </div>

@@ -7,27 +7,27 @@
       <i class="el-icon-s-fold dashboard-icon-btn"></i>
     </el-row>
     <el-row type="flex" justify="center">
-      <h6 class="dashboard-entry-income">￥9000</h6>
+      <h6 class="dashboard-entry-income">￥0</h6>
     </el-row>
     <el-row type="flex" justify="center" :gutter="80">
       <el-col :span="12">
-        <h6 class="dashboard-entry-income2" style="text-align: right;">已入账：￥6000.00</h6>
+        <h6 class="dashboard-entry-income2" style="text-align: right;">已入账：￥0.00</h6>
       </el-col>
       <el-col :span="12">
-        <h6 class="dashboard-entry-income2">未到账：￥6000.00</h6>
+        <h6 class="dashboard-entry-income2">未到账：￥0.00</h6>
       </el-col>
     </el-row>
     <el-row type="flex" justify="space-around" style="margin-top:30px;">
       <el-col :span="8" class="col-container">
-        <h6 class="dashboard-entry-num">88</h6>
+        <h6 class="dashboard-entry-num">0</h6>
         <h6 class="dashboard-entry-income2"> 今日访客</h6>
       </el-col>
       <el-col :span="8" class="col-container">
-        <h6 class="dashboard-entry-num">12</h6>
+        <h6 class="dashboard-entry-num">0</h6>
         <h6 class="dashboard-entry-income2">上架产品</h6>
       </el-col>
       <el-col :span="8" class="col-container">
-        <h6 class="dashboard-entry-num">24</h6>
+        <h6 class="dashboard-entry-num">0</h6>
         <h6 class="dashboard-entry-income2">本月接单</h6>
       </el-col>
     </el-row>
