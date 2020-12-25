@@ -5,7 +5,7 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="24" style="padding-top: 5px">
             <el-form-item label="订单信息" prop="name">
-              <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keywords"></el-input>
+              <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keyword"></el-input>
             </el-form-item>
             <!-- <el-form-item label="负责人" prop="name">
               <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.productionLeaderName"></el-input>
@@ -115,7 +115,7 @@
         this.page = result;
       },
       onReset () {
-        this.queryFormData.keywords = '';
+        this.queryFormData.keyword = '';
         this.queryFormData.productionLeaderName = '';
         this.queryFormData.cooperator = '';
         this.$refs.deptPersonSelect.clearSelectData();
@@ -159,7 +159,7 @@
           code: '',
           skuID: '',
           state: '',
-          keywords: '',
+          keyword: '',
           productionLeaderName: '',
           cooperator: '',
           categories: [],

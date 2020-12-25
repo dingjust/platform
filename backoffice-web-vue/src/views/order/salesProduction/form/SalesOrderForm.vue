@@ -516,6 +516,8 @@
           this.form.originCooperator.contactPhone = this.form.originCooperator.partner.contactPhone;
           this.form.originCooperator.contactPerson = this.form.originCooperator.partner.contactPerson;
         }
+
+        this.form.auditNeeded = true;
       }
     },
     mounted() {
