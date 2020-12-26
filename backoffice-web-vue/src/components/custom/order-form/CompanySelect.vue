@@ -29,7 +29,10 @@
             </el-table-column>
             <el-table-column label="认证状态" align="center">
               <template slot-scope="scope">
-                {{scope.row.approvalStatus!=null?getEnum('AuthApprovalStatus', scope.row.approvalStatus):'未认证'}}
+                <el-tag type="success" v-if="scope.row.approvalStatus!=null&&scope.row.approvalStatus=='approved'">
+                  {{getEnum('AuthApprovalStatus', scope.row.approvalStatus)}}
+                </el-tag>
+                <el-tag type="info" v-else>未认证</el-tag>
               </template>
             </el-table-column>
           </el-table>
