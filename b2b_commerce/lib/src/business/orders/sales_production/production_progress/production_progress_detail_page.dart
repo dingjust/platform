@@ -132,12 +132,15 @@ class _ProductionProgressDetailPageState
     );
   }
 
-  void orderDeatil(BuildContext context, ProductionProgressOrderModel order) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+  void orderDeatil(BuildContext context, ProductionProgressOrderModel order) async{
+    dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
         ProductionProgressOrderDetailV2Page(model: order,
           colorSizeEntries: order.entries?.map((e) => ColorSizeInputEntry(
               color: e.color, size: e.size, quantity: e.quantity))
               ?.toList() ?? [],)));
+    if(result != null && result){
+      await _refreshData();
+    }
   }
 
   ///实际数量
@@ -235,16 +238,20 @@ class _ProductionProgressDetailPageState
                 )));
 
     if (result != null && result) {
-      ProgressWorkSheetModel model = await ProgressWorkSheetRepository()
-          .detail(widget.progress.belong.code);
-      if (model != null) {
-        setState(() {
-          widget.progress.productionProgressOrders = model.progresses
-              .firstWhere((element) => element.id == widget.progress.id,
-                  orElse: () => null)
-              ?.productionProgressOrders;
-        });
-      }
+      await _refreshData();
+    }
+  }
+
+  Future _refreshData() async {
+    ProgressWorkSheetModel model = await ProgressWorkSheetRepository()
+        .detail(widget.progress.belong.code);
+    if (model != null) {
+      setState(() {
+        widget.progress.productionProgressOrders = model.progresses
+            .firstWhere((element) => element.id == widget.progress.id,
+                orElse: () => null)
+            ?.productionProgressOrders;
+      });
     }
   }
 
