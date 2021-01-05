@@ -104,7 +104,7 @@
     ColorSizeBoxTable
   } from '@/components/'
   export default {
-    name: 'ShippingOrdersPage',
+    name: 'ShippingOrdersForm',
     components: {
       ColorSizeBoxTable
     },

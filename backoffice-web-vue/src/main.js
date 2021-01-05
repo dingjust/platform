@@ -106,7 +106,9 @@ import _nav_factory from '@/_nav_factory.js';
 Vue.prototype.CONFIG = {
   nav(type = process.env.NAV) {
     return type === 'FACTORY' ? _nav_factory : (type === 'BRAND' ? _nav_brand : _nav);
-  }
+  },
+  //CDN-OSS域名,OSS资源引用路径
+  CDN_OSS_DOMAIN: 'https://cdn-oss.nbyjy.net'
 };
 
 Vue.mixin({
@@ -165,7 +167,7 @@ Vue.mixin({
     },
 
     // 根据页面信息获取查询数据权限
-    getDataPerQuery (from) {
+    getDataPerQuery(from) {
       return getDataPermissionQuery(from);
     }
   },

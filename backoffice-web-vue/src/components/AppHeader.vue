@@ -32,7 +32,7 @@
                 <h6 class="qr_code-title">APP下载</h6>
                 <el-popover placement="bottom" width="280" v-model="qrVisible" trigger="hover">
                   <el-image style="width: 250px; height: 250px"
-                    src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/app_qr.png" fit="fill"></el-image>
+                    :src="CONFIG.CDN_OSS_DOMAIN+'/app_qr.png'" fit="fill"></el-image>
                   <el-row type="flex" justify="center">钉单APP下载</el-row>
                   <i class="iconfont2_2 icon-qr_code" slot="reference" @click="jumpToMessagePage">&#xe642;</i>
                 </el-popover>

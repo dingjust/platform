@@ -15,7 +15,7 @@
           <account-entry-card/>
         </el-row>
         <el-row class="hidden-lg-and-up">
-          <progress-card/>
+          <progress-card :reportsProgress="reportsProgress"/>
         </el-row>
         <el-row>
           <chart-card/>
@@ -29,7 +29,7 @@
           </el-col>
         </el-row>
         <el-row class="hidden-lg-and-up">
-          <img class="dashboard-img" src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png"/>
+          <img class="dashboard-img" :src="CONFIG.CDN_OSS_DOMAIN+'/%E5%9B%BE%E7%89%87.png'"/>
         </el-row>
       </el-col>
       <el-col class="hidden-md-and-down" :lg="10" :xl="10">
@@ -37,10 +37,10 @@
           <account-entry-card/>
         </el-row>
         <el-row>
-          <progress-card/>
+          <progress-card :reportsProgress="reportsProgress"/>
         </el-row>
         <el-row>
-          <img class="dashboard-img" src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png"/>
+          <img class="dashboard-img" :src="CONFIG.CDN_OSS_DOMAIN+'/%E5%9B%BE%E7%89%87.png'"/>
         </el-row>
       </el-col>
     </el-row>
@@ -81,92 +81,151 @@
 </template>
 
 <script>
-    import BusinessCard from '../shared/BusinessCard';
-    import ToolbarCard from '../shared/ToolbarCard';
-    import ChartCard from '../shared/ChartCard';
-    import MonthIncomeCard from '../shared/MonthIncomeCard';
-    import AccountEntryCard from '../shared/AccountEntryCard';
-    import ProgressCard from '../shared/ProgressCard';
-    import ProfileCompleteDialog from '@/views/shared/dialog/ProfileCompleteDialog';
-    import AuthenticationDialog from '@/views/shared/dialog/AuthenticationDialog';
+import BusinessCard from '../shared/BusinessCard';
+import ToolbarCard from '../shared/ToolbarCard';
+import ChartCard from '../shared/ChartCard';
+import MonthIncomeCard from '../shared/MonthIncomeCard';
+import AccountEntryCard from '../shared/AccountEntryCard';
+import ProgressCard from '../shared/ProgressCard';
+import ProfileCompleteDialog from '@/views/shared/dialog/ProfileCompleteDialog';
+import AuthenticationDialog from '@/views/shared/dialog/AuthenticationDialog';
 
-    export default {
-      name: 'FactoryDashboardPage',
-      components: {
-        BusinessCard,
-        ToolbarCard,
-        ChartCard,
-        MonthIncomeCard,
-        AccountEntryCard,
-        ProgressCard,
-        ProfileCompleteDialog,
-        AuthenticationDialog
-      },
-      computed: {},
-      methods: {
-        onCancel () {
-          this.profileDialogVisible = false;
-          this.authenticationDialogVisible = false;
-        },
-        async getProfile () {
-          var uid = this.$store.getters.currentUser.companyCode;
-          var url;
-          if (this.isBrand()) {
-            url = this.apis().getBrand(uid);
-          } else if (this.isFactory()) {
-            url = this.apis().getFactory(uid);
-          } else {
-            return;
-          }
-          const result = await this.$http.get(url);
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
-            return;
-          }
-          return result;
-        },
-        async getAuthenticationState () {
-          const url = this.apis().getAuthenticationState();
-          const result = await this.$http.get(url);
-          return result;
-        }
-
-      },
-      data () {
-        return {
-          profileDialogVisible: false,
-          authenticationDialogVisible: false,
-          thisMonthIncome: {
-            title: '本月营收',
-            income: 1231.12,
-            proofingOrders: 8,
-            purchaseOrders: 10,
-            incomed: 123,
-            comparison: 0.264
-          },
-          lastMonthIncome: {
-            title: '上月营收',
-            income: 3134.12,
-            proofingOrders: 23,
-            purchaseOrders: 13,
-            incomed: 1232,
-            comparison: 0.3114
-          }
-        };
-      },
-      async created () {
-        if (this.isBrand() || this.isFactory()) {
-          var profile = await this.getProfile();
-          var authenticationState = await this.getAuthenticationState();
-          if (!profile.profileCompleted) {
-            this.profileDialogVisible = true;
-          } else if (!(authenticationState.data.personalState == 'SUCCESS' || authenticationState.data.companyState ==
-                    'SUCCESS')) {
-            this.authenticationDialogVisible = true;
-          }
+export default {
+  name: 'FactoryDashboardPage',
+  components: {
+    BusinessCard,
+    ToolbarCard,
+    ChartCard,
+    MonthIncomeCard,
+    AccountEntryCard,
+    ProgressCard,
+    ProfileCompleteDialog,
+    AuthenticationDialog
+  },
+  computed: {},
+  methods: {
+    onCancel () {
+      this.profileDialogVisible = false;
+      this.authenticationDialogVisible = false;
+    },
+    async getProfile () {
+      var uid = this.$store.getters.currentUser.companyCode;
+      var url;
+      if (this.isBrand()) {
+        url = this.apis().getBrand(uid);
+      } else if (this.isFactory()) {
+        url = this.apis().getFactory(uid);
+      } else {
+        return;
+      }
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      return result;
+    },
+    async getAuthenticationState () {
+      const url = this.apis().getAuthenticationState();
+      const result = await this.$http.get(url);
+      return result;
+    },
+    async initData () {
+      if (this.isBrand() || this.isFactory()) {
+        var profile = await this.getProfile();
+        var authenticationState = await this.getAuthenticationState();
+        if (!profile.profileCompleted) {
+          this.profileDialogVisible = true;
+        } else if (!(authenticationState.data.personalState == 'SUCCESS' || authenticationState.data.companyState ==
+                  'SUCCESS')) {
+          this.authenticationDialogVisible = true;
         }
       }
+
+      const date = new Date();
+
+      const lastMonth = date.getFullYear() + '-' + date.getMonth() + '-01';
+      const thisMonth = date.getFullYear() + '-' 
+                          + ((date.getMonth() + 1) > 12 ? (date.getMonth() + 1) -12 : (date.getMonth() + 1)) 
+                          + '-01';
+      const nextMonth = ((date.getMonth() + 2) > 12 ? (date.getFullYear() + 1) : date.getFullYear()) + '-' 
+                          + ((date.getMonth() + 2) > 12 ? (date.getMonth() + 2) -12 : (date.getMonth() + 2)) 
+                          + '-01';
+
+      // 获取外发外接数量，金额统计
+      this.lastMonthIncome = await this.getDashboardOrderStatistics({
+        createdDateFrom: lastMonth,
+        createdDateTo: thisMonth
+      }, '上月统计');
+      this.thisMonthIncome = await this.getDashboardOrderStatistics({
+        createdDateFrom: thisMonth,
+        createdDateTo: nextMonth
+      }, '本月统计');
+
+      await this.getReportsProgress();
+    },
+    async getDashboardOrderStatistics (form, title) {
+      const url = this.apis().getDashboardOrderStatistics();
+      const result = await this.$http.post(url, form);
+
+      let data = {
+        title: title,
+        outTotalAmount: 0,
+        outTotalQuantity: 0,
+        totalAmount: 0,
+        totalQuantity: 0
+      }
+      if (result.code === 1) {
+        data = Object.assign(data, result.data);
+      }
+      return data;
+    },
+    async getReportsProgress() {
+      const url = this.apis().reportsProgress();
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      this.reportsProgress = result;
+    }
+  },
+  data () {
+    return {
+      profileDialogVisible: false,
+      authenticationDialogVisible: false,
+      thisMonthIncome: {},
+      lastMonthIncome: {},
+      reportsProgress: {
+        progress: {
+          content: [],
+          last: false,
+          totalElements: 0,
+          totalPages: 0,
+          size: 5,
+          number: 1,
+          sort: null,
+          first: false,
+          numberOfElements: 5
+        },
+        order: {
+          content: [],
+          last: false,
+          totalElements: 0,
+          totalPages: 0,
+          size: 5,
+          number: 1,
+          sort: null,
+          first: false,
+          numberOfElements: 5
+        }
+      },
     };
+  },
+  created () {
+    this.initData();
+  }
+};
 </script>
 <style>
   .dashboard-card {

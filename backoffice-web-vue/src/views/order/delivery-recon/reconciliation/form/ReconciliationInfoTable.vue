@@ -179,14 +179,14 @@ export default {
         data.push({
           countRow: '合计',
           orderQuantity: this.countColumn(this.formData.entries, 'orderQuantity'),
-          cutQuantity: this.countColumn(this.formData.entries, 'cutQuantity'),
+          // cutQuantity: this.countColumn(this.formData.entries, 'cutQuantity'),
           packageQuantity: this.countColumn(this.formData.entries, 'packageQuantity'),
           storageQuantity: this.countColumn(this.formData.entries, 'storageQuantity'),
           // unitContractPrice: this.countColumn(this.formData.entries, 'unitContractPrice'),
           loanAmount: this.countColumn(this.formData.entries, 'loanAmount'),
           expressFee: this.countColumn(this.formData.entries, 'expressFee'),
-          deductionAmount: this.countColumn(this.formData.entries, 'deductionAmount'),
-          returnQuantity: this.countColumn(this.formData.entries, 'returnQuantity'),
+          // deductionAmount: this.countColumn(this.formData.entries, 'deductionAmount'),
+          // returnQuantity: this.countColumn(this.formData.entries, 'returnQuantity'),
           settlementAmount: this.countColumn(this.formData.entries, 'settlementAmount')
         });
       }
@@ -281,6 +281,12 @@ export default {
     },
     onDelete (index, row) {
       this.formData.entries.splice(index, 1);
+      if (row.relationId) {
+        const i = this.formData.shippingSheets.findIndex(item => item.id === row.relationId);
+        if (i > -1) {
+          this.formData.shippingSheets.splice(i, 1);
+        }
+      }
     },
     onSelectProduct (index) {
       this.productDialog = true;

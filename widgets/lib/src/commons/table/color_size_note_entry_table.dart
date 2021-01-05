@@ -14,9 +14,18 @@ class ColorSizeNoteEntryTable extends StatelessWidget {
   ///排序函数
   final CompareFunction compareFunction;
 
-  ColorSizeNoteEntryTable({Key key, this.data, this.compareFunction}) {
+  ///是否显示需求量
+  final bool showNeed;
+
+  ColorSizeNoteEntryTable(
+      {Key key, this.data, this.compareFunction, this.showNeed = true}) {
     //过滤数量为0
-    filterData = data.where((element) => element.needQuantity > 0).toList();
+    if (showNeed) {
+      filterData =
+          data.where((element) => element?.needQuantity ?? -1 > 0).toList();
+    } else {
+      filterData = data;
+    }
   }
 
   @override
@@ -113,7 +122,9 @@ class ColorSizeNoteEntryTable extends StatelessWidget {
                     color: Color.fromRGBO(250, 250, 250, 1),
                     alignment: Alignment.center,
                     child: Text(
-                      '${entry.quantity}/${entry.needQuantity}',
+                      showNeed
+                          ? '${entry.quantity}'
+                          : '${entry.quantity}/${entry.needQuantity}',
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 16.0, color: Color(0xFF30424D)),

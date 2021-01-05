@@ -190,14 +190,14 @@ class CompanySelectList extends StatelessWidget {
                             model: model,
                             selectedCompany: selectedCompany,
                             onPressed: () {
-                        if (onItemTap != null) {
-                          onItemTap(model);
-                        }
-                      },
-                    ),
-              )
-                  .toList(),
-            )
+                              if (onItemTap != null) {
+                                onItemTap(model);
+                              }
+                            },
+                          ),
+                        )
+                        .toList(),
+                  )
                 : NoDataInfoRow(),
             ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
               opacity: state.loadingMore ? 1.0 : 0,
@@ -318,16 +318,16 @@ class CompanySelectItem extends StatelessWidget {
             ),
           )
         : Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-            child: Center(
-              child: Text(
-                '已认证',
-                style: TextStyle(color: Colors.green, fontSize: 10),
-              ),
-            ),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          border: Border.all(color: Colors.green)),
+      child: Center(
+        child: Text(
+          '已认证',
+          style: TextStyle(color: Colors.green, fontSize: 10),
+        ),
+      ),
           );
   }
 }

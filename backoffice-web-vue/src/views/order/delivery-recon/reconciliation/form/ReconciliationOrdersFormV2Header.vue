@@ -5,38 +5,42 @@
         <el-input v-model="formData.title"></el-input>
       </el-form-item>
     </el-row>
-    <el-row type="flex" align="top">
-      <el-col>
-        <div style="display: flex;">
-          <div>
-            <el-form-item label="单据" >
-              <el-input v-if="formData.type === 'fastShippingSheets'" v-model="formData.fastShippingSheets[0].code" :disabled="true"></el-input>
-              <el-input v-if="formData.type === 'shippingSheets'" v-model="formData.shippingSheets[0].code" :disabled="true"></el-input>
-            </el-form-item>
-          </div>
-          <div>
-            <el-button-group>
-              <el-button type="primary" class="select-btn" @click="selectVisible = true">选择</el-button>
-              <el-button @click="onCancel" v-if="canCancel">取消</el-button>
-            </el-button-group>
-          </div>
+    <el-row style="margin-top: 10px">
+      <div style="display: flex;">
+        <div>
+          <el-form-item label="合作商" prop="cooperator" :rules="{ required: true, message: '不能为空', trigger: 'change' }">
+            <el-input v-model="formData.cooperator.name" :disabled="true"></el-input>
+          </el-form-item>
         </div>
-      </el-col>
-      <el-col>
-        <div style="display: flex;">
-          <div>
-            <el-form-item label="合作商" prop="cooperator" :rules="{ required: true, message: '不能为空', trigger: 'change' }">
-              <el-input v-model="formData.cooperator.name" :disabled="true"></el-input>
-            </el-form-item>
-          </div>
-          <div>
-            <el-button type="primary" class="select-btn" @click="cooperatorVisible = true" :disabled="formData.fastShippingSheets[0].id !== ''">选择</el-button>
-          </div>
+        <div>
+          <el-button type="primary" class="select-btn" @click="cooperatorVisible = true" :disabled="!canSelectCooperator">选择</el-button>
         </div>
-      </el-col>
+      </div>
+    </el-row>
+    <el-row type="flex" align="top" style="margin-left: 10px">
+      <div style="display: flex;">
+        <div>
+          <el-form-item label="单据" style="margin: 0px"></el-form-item>
+        </div>
+        <div>
+          <el-button type="primary" size="mini" class="select-btn" @click="selectVisible = true">选择</el-button>
+        </div>
+      </div>
+    </el-row>
+    <el-row v-if="formData.shippingSheets.length > 0" style="margin-left: 10px;">
+      发货单：
+      <el-tag v-for="tag in formData.shippingSheets" :key="tag.id" closable @close="onShippingClose(tag)" style="margin-right: 10px;">
+        {{tag.code}}
+      </el-tag>
+    </el-row>
+    <el-row v-if="formData.fastShippingSheets.length > 0" style="margin: 10px 0px 0px 10px;">
+      出货单：
+      <el-tag v-for="tag in formData.fastShippingSheets" :key="tag.id" closable @close="onFastShippingClose(tag)" style="margin-right: 10px;">
+        {{tag.code}}
+      </el-tag>
     </el-row>
     <el-dialog :visible.sync="deliveryVisible" width="80%" append-to-body class="purchase-dialog" :close-on-click-modal="false">
-      <delivery-orders-page v-if="deliveryVisible" :isSelection="true" :selectedId="formData.fastShippingSheets.id" @onSelect="onSelect"/>
+      <delivery-orders-page v-if="deliveryVisible" :isSelection="true" @onSelect="onSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="shippingListVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <shipping-orders-page :mode="mode" v-if="shippingListVisible" :isSelection="true" @onSelect="onSelect"/>
@@ -60,7 +64,12 @@ import { SupplierSelect } from '@/components'
 
 export default {
   name: "ReconciliationOrdersFormV2Header",
-  props: ["formData"],
+  props: ['formData'],
+  provide () {
+    return {
+      formData: this.formData
+    }
+  },
   components: {
     DeliveryOrdersPage,
     SupplierSelect,
@@ -68,11 +77,7 @@ export default {
   },
   computed: {
     canSelectCooperator: function () {
-      return this.formData.fastShippingSheets[0].id !== '';
-    },
-    canCancel: function () {
-      return (this.formData.type === 'fastShippingSheets' && this.formData.fastShippingSheets[0].id) ||
-              (this.formData.type === 'shippingSheets' && this.formData.shippingSheets[0].id);
+      return this.formData.fastShippingSheets.length <= 0 && this.formData.shippingSheets.length <= 0;
     }
   },
   data () {
@@ -85,37 +90,67 @@ export default {
     }
   },
   methods: {
-    onSelect (row) {
-      if (this.formData.type = 'shippingSheets') {
-        this.formData.shippingSheets[0].code = row.code;
-        this.formData.shippingSheets[0].id = row.id;
+    onSelect (selection) {
+      if (this.formData.type === 'shippingSheets') {
+        this.formData.shippingSheets = selection;
+        this.appendEntries(selection);
 
         this.formData.cooperator = {
-          id: row.shipParty.id,
-          name: row.shipParty.name,
-          approvalStatus: row.shipParty.approvalStatus
+          name: selection[0].shipParty.name,
+          approvalStatus: selection[0].shipParty.approvalStatus
         }
-
         this.shippingListVisible = false;
-      } else if (this.formData.type = 'fastShippingSheets') {
-        this.formData.fastShippingSheets[0].code = row.code;
-        this.formData.fastShippingSheets[0].id = row.id;
-  
-        this.formData.cooperator = {
-          id: row.cooperator.id,
-          name: row.cooperator.type === 'ONLINE' ? row.cooperator.partner.name : row.cooperator.name,
-          approvalStatus: row.cooperator.type === 'ONLINE' ? row.cooperator.partner.approvalStatus : ''
-        }
+      } else if (this.formData.type === 'fastShippingSheets') {
+        this.formData.fastShippingSheets = selection;
 
+        this.formData.cooperator = {
+          id: selection[0].cooperator.id,
+          name: selection[0].cooperator.partner.name,
+          approvalStatus: selection[0].cooperator.partner.approvalStatus
+        }
         this.deliveryVisible = false;
       }
     },
-    onCancel () {
-      this.formData.fastShippingSheets = [{
-        code: '',
-        id: ''
-      }];
-      this.formData.cooperator = '';
+    appendEntries (selection) {
+      selection.forEach(item => {
+        this.formData.entries.push({
+          product: {
+            id: item.product.id,
+            name: item.product.name,
+            thumbnail: item.product.thumbnail,
+            skuID: item.product.skuID
+          },
+          waveBand: '',
+          orderItemNo: '',
+          customizedMode: '',
+          deliveryDate: '',
+          contractDate: '',
+          orderQuantity: item.productionTaskOrder ? item.productionTaskOrder.totalQuantity : '',
+          cutQuantity: '',
+          packageQuantity: item.totalQuantity,
+          storageQuantity: '',
+          returnQuantity: '',
+          unitContractPrice: '',
+          loanAmount: '',
+          expressFee: '',
+          deductionAmount: '',
+          settlementAmount: '',
+          remarks: '',
+          relationId: item.id
+        })
+      })
+    },
+    onShippingClose (tag) {
+      const index = this.formData.shippingSheets.findIndex(item => item.id === tag.id);
+      if (index > -1) {
+        this.formData.shippingSheets.splice(index, 1);
+      }
+    },
+    onFastShippingClose (tag) {
+      const index = this.formData.fastShippingSheets.findIndex(item => item.id === tag.id);
+      if (index > -1) {
+        this.formData.fastShippingSheets.splice(index, 1);
+      }
     },
     onSuppliersSelect (val) {
       if (val.id) {

@@ -160,11 +160,12 @@ class HomeBrandBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
       url:
-          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
+          '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
     ),
     MediaModel(
       url:
-          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+      '${GlobalConfigs
+          .CDN_OSS_DOMAIN}/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
     )
   ];
 
@@ -178,11 +179,13 @@ class HomeFactoryBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
       url:
-          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
+      '${GlobalConfigs
+          .CDN_OSS_DOMAIN}/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
     ),
     MediaModel(
       url:
-          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+      '${GlobalConfigs
+          .CDN_OSS_DOMAIN}/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
     )
   ];
 

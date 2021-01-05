@@ -27,6 +27,9 @@
     <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
       <el-col :span="3">账务详情</el-col>
       <el-col :span="21">
+        <div v-html="previewText"></div>
+      </el-col>
+      <!-- <el-col :span="21">
         <el-row type="flex" v-for="item of itemData.payPlanItems" :key="item.id" style="margin-bottom: 20px">
           <el-col :span="6">
             <span style="color: #C0C0C0">
@@ -35,16 +38,16 @@
           </el-col>
           <el-col :span="18" v-if="item.moneyType!='MONTHLY_SETTLEMENT'">
             {{getEnum('TriggerEvent',item.triggerEvent)}}后{{item.triggerDays}}天
-            <!-- {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent.toFixed(4) * 100}}%作为定金 -->
+            {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent.toFixed(4) * 100}}%作为定金
             以内，支付总额的{{item.payPercent.toFixed(4) * 100}}%作为定金
           </el-col>
           <el-col :span="18" v-else>
             {{getEnum('TriggerEvent',item.triggerEvent)}}后次月{{item.triggerDays}}号
-            <!-- {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent.toFixed(4) * 100}}%作为月结 -->
+            {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent.toFixed(4) * 100}}%作为月结
             以内，支付总额的{{item.payPercent.toFixed(4) * 100}}%作为月结
           </el-col>
         </el-row>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
@@ -64,7 +67,10 @@
     props: ['itemData'],
     components: {},
     computed: {
-      ...mapGetters({})
+      ...mapGetters({}),
+      previewText: function () {
+        return this.itemData.previewText.replace(/\n/g, '<br/>');
+      }
     },
     methods: {
       ...mapActions({}),

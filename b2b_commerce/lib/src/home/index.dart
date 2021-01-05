@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
         context, AppBLoC.instance.packageInfo.version, 'nbyjy');
 
     CertificationStatusHelper helper =
-    Provider.of<CertificationStatusHelper>(context);
+        Provider.of<CertificationStatusHelper>(context);
 
     //isNew为false 则弹出更新提示框，此时不弹出认证信息弹窗
     if (!helper.hasInfoValidate && isNew ?? true) {
@@ -177,12 +177,12 @@ class HomeTitle extends StatelessWidget {
 class HomeBrandBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
-      url:
-      'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png',
+      url: '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%9B%BE%E7%89%87.png',
     ),
     MediaModel(
       url:
-          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+      '${GlobalConfigs
+          .CDN_OSS_DOMAIN}/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
     )
   ];
 
@@ -195,12 +195,12 @@ class HomeBrandBannerSection extends StatelessWidget {
 class HomeFactoryBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
-      url:
-      'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png',
+      url: '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%9B%BE%E7%89%87.png',
     ),
     MediaModel(
       url:
-          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+      '${GlobalConfigs
+          .CDN_OSS_DOMAIN}/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
     )
   ];
 

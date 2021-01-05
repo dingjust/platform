@@ -1,27 +1,25 @@
 <template>
   <div class="animated fadeIn">
     <el-card>
-      <el-row type="flex" justify="space-between">
-        <el-col :span="6">
-          <div class="production-order-list-title">
-            <h6>生产工单明细</h6>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <h6>工单号：{{formData.taskOrderEntries!=null?formData.taskOrderEntries[0].code:''}}</h6>
-        </el-col>
-        <el-col :span="4">
-          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>订单状态：{{orderState}}</h6>
-        </el-col>
-        <el-col :span="2" v-if="orderType">
+      <div class="head-row">
+        <div class="production-order-list-title">
+          <h6 style="margin: 0px">生产工单明细</h6>
+        </div>
+        <div>
+          <h6 style="margin: 0px">工单号：{{formData.taskOrderEntries!=null?formData.taskOrderEntries[0].code:''}}</h6>
+        </div>
+        <div>
+          <h6 style="margin: 0px">创建时间：{{formData.creationtime | timestampToTime}}</h6>
+        </div>
+        <div>
+          <h6 style="margin: 0px">订单状态：{{orderState}}</h6>
+        </div>
+        <div v-if="orderType">
           <el-tag effect="dark">
             {{ orderType }}
           </el-tag>
-        </el-col>
-      </el-row>
+        </div>
+      </div>
       <div class="pt-2"></div>
       <el-row class="production-order-basic-row">
         <production-order-top-info :slotData="formData" />
@@ -106,12 +104,16 @@
         if (!this.formData.taskOrderEntries) {
           return;
         }
-        if (this.formData.taskOrderEntries[0].type == 'SELF_PRODUCED') {
-          return '自\xa0\xa0\xa0\xa0\xa0产';
-        } else if (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.formData.taskOrderEntries[0]
-          .outboundOrderCode) {
-          return '已外发';
+        if (this.formData.taskOrderEntries[0].outboundOrderCode) {
+          return '已外发'
         }
+
+        // if (this.formData.taskOrderEntries[0].type == 'SELF_PRODUCED') {
+        //   return '自\xa0\xa0\xa0\xa0\xa0产';
+        // } else if (this.formData.taskOrderEntries[0].type == 'FOUNDRY_PRODUCTION' && this.formData.taskOrderEntries[0]
+        //   .outboundOrderCode) {
+        //   return '已外发';
+        // }
       },
       isShowTag: function () {
         return this.formData.taskOrderEntries.length > 0 &&
@@ -177,6 +179,7 @@
   .production-order-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+    min-width: 100px;
   }
 
   .sales-plan-triangle_box {
@@ -204,4 +207,10 @@
     font-size: 12px;
   }
 
+  .head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
 </style>

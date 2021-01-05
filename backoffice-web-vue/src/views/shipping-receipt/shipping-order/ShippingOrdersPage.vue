@@ -153,6 +153,10 @@
         this.$router.push('/shipping/orders/' + row.id);
       },
       onSelect () {
+        if (this.$refs.list.currentRow.length <= 0) {
+          this.$message.warning('请先选择数据！');
+          return;
+        }
         this.$emit('onSelect', this.$refs.list.currentRow);
       },
       onResetQuery () {

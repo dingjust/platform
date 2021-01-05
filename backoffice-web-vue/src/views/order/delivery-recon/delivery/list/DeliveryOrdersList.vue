@@ -1,7 +1,9 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" 
-      :highlight-current-row="isSelection" @current-change="handleCurrentChange">
+      @selection-change="handleSelectionChange" row-key="id" @row-click="rowClick">
+      <el-table-column type="selection" width="55" v-if="isSelection"
+        :reserve-selection="true" :selectable="selectable" />
       <el-table-column label="出货单号" prop="code"></el-table-column>
       <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="单据">
@@ -46,11 +48,18 @@
 <script>
 export default {
   name: 'DeliveryOrdersList',
-  props: ['page', 'isSelection', 'selectedId'],
+  props: ['page', 'isSelection'],
+  // ReconciliationOrdersFormV2Header 传入
+  inject: {
+    formData: {
+      default: () => {}
+    }
+  },
   data () {
     return {
       currentUserUid: this.$store.getters.currentUser.uid,
-      currentRow: ''
+      currentRow: [],
+      listName: 'fastShippingSheets'
     }
   },
   methods: {
@@ -71,15 +80,39 @@ export default {
     onDetail (row) {
       this.$router.push('/order/delivery/' + row.id);
     },
-    handleCurrentChange (val) {
-      this.currentRow = val;
+    // 判断行是否能选择
+    selectable (row, index) {
+      if (this.judge(row)) {
+        return true;
+      } 
+      return false;
+    },
+    handleSelectionChange (selection) {
+      this.currentRow = selection;
+    },
+    rowClick (row) {
+      if (this.judge(row)) {
+        this.$refs.resultTable.toggleRowSelection(row);
+      }
+    },
+    judge (row) {
+      if (!this.formData.cooperator) {
+        // 未确定合作商时
+        return this.currentRow <= 0 || row.cooperator.name === this.currentRow[0].cooperator.name;
+      } else {
+        // 已确定合作商时
+        return this.formData.cooperator.name === row.cooperator.name;
+      }
     }
   },
   watch: {
     'page': function (nval, oval) {
-      if (this.selectedId) {
-        const index = this.page.content.findIndex(item => item.id === this.selectedId);
-        this.$refs.resultTable.setCurrentRow(this.page.content[index]);
+      if (this.formData && this.formData[this.listName] && nval) {
+        this.page.content.forEach(item => {
+          if (this.formData[this.listName].some(val => val.id === item.id)) {
+            this.$refs.resultTable.toggleRowSelection(item);
+          }
+        })
       }
     }
   }

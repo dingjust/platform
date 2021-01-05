@@ -7,6 +7,20 @@
       <el-row type="flex" justify="start" class="basic-container">
         <h6 class="basic-text">合作商：{{order.cooperator.type === 'ONLINE' ? order.cooperator.partner.name : order.cooperator.name}}</h6>
       </el-row>
+      <el-row type="flex" justify="start" class="basic-container" v-if="order.shippingSheets && order.shippingSheets.length > 0">
+        <h6 class="basic-text">关联发货单：
+          <template v-for="item in order.shippingSheets">
+            <el-button type="text" class="btn-text" @click="onShipping(item)" :key="item.id">{{item.code}}</el-button>
+          </template>
+        </h6>
+      </el-row>
+      <el-row type="flex" justify="start" class="basic-container" v-if="order.fastShippingSheets && order.fastShippingSheets.length > 0">
+        <h6 class="basic-text">关联出货单：
+          <template v-for="item in order.fastShippingSheets">
+            <el-button type="text" class="btn-text" @click="onFastShipping(item)" :key="item.id">{{item.code}}</el-button>
+          </template>
+        </h6>
+      </el-row>
     </el-col>
     <el-col :xs="6" :sm="6" v-if="order.docSignatures">
       <div class="info-box">
@@ -67,6 +81,12 @@ export default {
     showPDF (item) {
       this.$emit('showPDF', item);
     },
+    onShipping (item) {
+      this.$router.push('/shipping/orders/' + item.id);
+    },
+    onFastShipping (item) {
+      this.$router.push('/order/delivery/' + item.id);
+    }
   }
 }
 </script>
@@ -114,5 +134,10 @@ export default {
     width: 100%;
     margin-bottom: 0px;
     color: #606266;
+  }
+
+  .btn-text {
+    font-size: 16px;
+    padding: 0px;
   }
 </style>
