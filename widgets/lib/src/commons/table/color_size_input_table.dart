@@ -140,7 +140,14 @@ class _ColorSizeInputTableState extends State<ColorSizeInputTable> {
   }
 
   void _onNumChange(String val, ColorSizeInputEntry entry) {
-    int number = int.tryParse(val);
+    var number;
+
+    if (val == '') {
+      number=0;
+    } else{
+      number = int.tryParse(val);
+    }
+
     if (number != null) {
       entry.quantity = number;
       if (widget.onChanged != null) {

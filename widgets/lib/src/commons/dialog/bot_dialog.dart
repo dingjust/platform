@@ -8,6 +8,7 @@ void showConfirmDialog(bool blockPopup,
   BotToast.showCustomText(
     onlyOne: true,
     duration: null,
+    crossPage: false,
     wrapToastAnimation: (controller, cancel, child) =>
         Stack(
           children: <Widget>[

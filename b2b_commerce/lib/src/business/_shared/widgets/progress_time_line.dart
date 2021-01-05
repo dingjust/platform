@@ -127,6 +127,7 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
       color: Colors.white,
       child: InkWell(
         onTap: () {
+          widget.model.progresses[index].belong = ProgressWorkSheetModel(code: widget.model.code);
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ProductionProgressDetailPage(
                     colorSizeEntries: widget.model.colorSizeEntries,

@@ -1490,6 +1490,9 @@ class ProductionProgressModel extends ItemModel {
   @JsonKey(toJson: _purchaseOrderToJson)
   PurchaseOrderModel order;
 
+  /// 采购订单
+  ProgressWorkSheetModel belong;
+
   bool updateOnly;
 
   int delayedDays;
@@ -1512,6 +1515,7 @@ class ProductionProgressModel extends ItemModel {
     this.order,
     this.updateOnly,
     this.delayedDays,
+    this.belong,
     this.remarks});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>
