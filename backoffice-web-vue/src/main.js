@@ -108,7 +108,7 @@ Vue.prototype.CONFIG = {
     return type === 'FACTORY' ? _nav_factory : (type === 'BRAND' ? _nav_brand : _nav);
   },
   //CDN-OSS域名,OSS资源引用路径
-  CDN_OSS_DOMAIN: 'http://cdn-oss.nbyjy.net'
+  CDN_OSS_DOMAIN: 'https://cdn-oss.nbyjy.net'
 };
 
 Vue.mixin({

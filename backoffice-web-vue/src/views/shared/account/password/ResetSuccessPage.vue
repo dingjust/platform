@@ -79,7 +79,7 @@
 </script>
 <style>
   .register-container {
-    background-image: url("http://cdn-oss.nbyjy.net/login-background.jpg");
+    background-image: url("https://cdn-oss.nbyjy.net/login-background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
   }
