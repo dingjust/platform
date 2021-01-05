@@ -1491,6 +1491,7 @@ class ProductionProgressModel extends ItemModel {
   PurchaseOrderModel order;
 
   /// 采购订单
+  @JsonKey(toJson: ProgressWorkSheetModel.toJson)
   ProgressWorkSheetModel belong;
 
   bool updateOnly;

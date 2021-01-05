@@ -14,11 +14,12 @@ class ProductionProgressOrderDetailV2Page extends StatefulWidget {
   ///工单下单数
   final List<ColorSizeInputEntry> colorSizeEntries;
 
-  const ProductionProgressOrderDetailV2Page({Key key, this.model, this.colorSizeEntries})
+  const ProductionProgressOrderDetailV2Page(
+      {Key key, this.model, this.colorSizeEntries})
       : super(key: key);
 
   @override
-      _ProductionProgressOrderDetailV2PageState createState() =>
+  _ProductionProgressOrderDetailV2PageState createState() =>
       _ProductionProgressOrderDetailV2PageState();
 }
 
@@ -65,12 +66,12 @@ class _ProductionProgressOrderDetailV2PageState
             val: '${widget.model.operator?.name}',
           ),
           _InfoRow(
-            title: '上报时间',
-            val: '${DateFormatUtil.formatYMDHMS(widget.model.reportTime)}'
-          ),
-          ColorSizeEntryTable(
-            data: widget.model.entries?.map((e) => ColorSizeEntryV2Model(color: ColorModel(name: e.color),size: SizeModel(name:e.size),quantity: e.quantity))?.toList() ?? [],
+              title: '上报时间',
+              val: '${DateFormatUtil.formatYMDHMS(widget.model.reportTime)}'),
+          ColorSizeNoteEntryTable(
             compareFunction: Provider.of<SizeState>(context).compare,
+            showNeed: false,
+            data: widget.model.entries,
           ),
 //          _buildColorSizeInputTable(context),
           _buildMedias(),
@@ -90,11 +91,8 @@ class _ProductionProgressOrderDetailV2PageState
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(horizontal: 10),
-
       child: Row(
-        children: [
-
-        ],
+        children: [],
       ),
     );
   }
@@ -125,8 +123,11 @@ class _ProductionProgressOrderDetailV2PageState
         data.forEach((entry) {
           print('${entry.color}-${entry.size}:${entry.quantity}');
         });
-        widget.model.entries = data.map((e) => OrderNoteEntryModel(color: e.color,size: e.size, quantity: e.quantity ?? 0)).toList();
-
+        widget.model.entries = data
+            .map((e) =>
+            OrderNoteEntryModel(
+                color: e.color, size: e.size, quantity: e.quantity ?? 0))
+            .toList();
       },
     );
   }
@@ -205,20 +206,21 @@ class _ProductionProgressOrderDetailV2PageState
   }
 
   //作废
-  void _cancel() async{
-    showConfirmDialog(false, message: '是否确认作废？',
-        confirm: () async {
-          Function cancelFunc =
-          BotToast.showLoading(clickClose: false, crossPage: false);
-          var result = await ProgressOrderRepository().deleteProductionProgressOrder(widget.model.belong?.id,widget.model.id);
-          cancelFunc.call();
-          if (result != null) {
-            BotToast.showText(text: '作废成功');
-            Navigator.pop(context, true);
-          } else {
-            BotToast.showText(text: '作废失败');
-          }
-        });
+  void _cancel() async {
+    showConfirmDialog(false, message: '是否确认作废？', confirm: () async {
+      Function cancelFunc =
+      BotToast.showLoading(clickClose: false, crossPage: false);
+      var result = await ProgressOrderRepository()
+          .deleteProductionProgressOrder(
+          widget.model.belong?.id, widget.model.id);
+      cancelFunc.call();
+      if (result != null) {
+        BotToast.showText(text: '作废成功');
+        Navigator.pop(context, true);
+      } else {
+        BotToast.showText(text: '作废失败');
+      }
+    });
   }
 }
 
