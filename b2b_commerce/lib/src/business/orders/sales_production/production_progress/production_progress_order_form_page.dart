@@ -29,6 +29,7 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
 
 class _ProductionProgressOrderFormPageState
     extends State<ProductionProgressOrderFormPage> {
+  List<ColorSizeInputEntry> _colorSizeEntries = [];
 
   @override
   void initState() {
@@ -39,13 +40,14 @@ class _ProductionProgressOrderFormPageState
       //回显颜色尺码数量
       Map<String,int> entriesMap = new Map();
 
-      widget.model.entries.forEach((element) {
-        entriesMap['${element.color}-${element.size}'] = element.quantity;
-      });
-
-      widget.colorSizeEntries.forEach((element) {
-        element.quantity = entriesMap['${element.color}-${element.size}'];
-      });
+      _colorSizeEntries = widget.model.entries.map((e) => ColorSizeInputEntry(color: e.color,size: e.size,quantity: e.quantity)).toList();
+//      widget.model.entries.forEach((element) {
+//        entriesMap['${element.color}-${element.size}'] = element.quantity;
+//      });
+//
+//      widget.colorSizeEntries.forEach((element) {
+//        element.quantity = entriesMap['${element.color}-${element.size}'];
+//      });
     }
   }
 
@@ -147,10 +149,9 @@ class _ProductionProgressOrderFormPageState
       _colors,
       _sizes,
       compareFunction: Provider.of<SizeState>(context).compareByName,
-      entries: widget.colorSizeEntries,
+      entries: _colorSizeEntries,
       onChanged: (data) {
         widget.model.entries = data.map((e) => OrderNoteEntryModel(color: e.color,size: e.size, quantity: e.quantity ?? 0)).toList();
-
       },
     );
   }
