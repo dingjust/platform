@@ -188,8 +188,8 @@ class _ProductionProgressOrderDetailV2PageState
   }
 
   //修改单据
-  _edit() {
-    Navigator.push(
+  _edit() async{
+    dynamic result = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ProductionProgressOrderFormPage(
@@ -198,6 +198,9 @@ class _ProductionProgressOrderDetailV2PageState
                   colorSizeEntries: widget.colorSizeEntries,
                   isEditable: true,
                 )));
+    if(result != null && result){
+      Navigator.pop(context, true);
+    }
   }
 }
 

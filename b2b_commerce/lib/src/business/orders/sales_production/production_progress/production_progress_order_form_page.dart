@@ -34,6 +34,8 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
 
 class _ProductionProgressOrderFormPageState
     extends State<ProductionProgressOrderFormPage> {
+  List<ColorSizeInputEntry> _colorSizeEntries = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -43,13 +45,14 @@ class _ProductionProgressOrderFormPageState
       //回显颜色尺码数量
       Map<String, int> entriesMap = new Map();
 
-      widget.model.entries.forEach((element) {
-        entriesMap['${element.color}-${element.size}'] = element.quantity;
-      });
-
-      widget.colorSizeEntries.forEach((element) {
-        element.quantity = entriesMap['${element.color}-${element.size}'];
-      });
+      _colorSizeEntries = widget.model.entries.map((e) => ColorSizeInputEntry(color: e.color,size: e.size,quantity: e.quantity)).toList();
+//      widget.model.entries.forEach((element) {
+//        entriesMap['${element.color}-${element.size}'] = element.quantity;
+//      });
+//
+//      widget.colorSizeEntries.forEach((element) {
+//        element.quantity = entriesMap['${element.color}-${element.size}'];
+//      });
     }
   }
 
