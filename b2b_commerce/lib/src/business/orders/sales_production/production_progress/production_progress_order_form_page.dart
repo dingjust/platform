@@ -19,7 +19,12 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
 
   final bool isEditable;
 
-  const ProductionProgressOrderFormPage({Key key, this.progress, this.model, this.colorSizeEntries,this.isEditable = false})
+  const ProductionProgressOrderFormPage(
+      {Key key,
+      this.progress,
+      this.model,
+      this.colorSizeEntries,
+      this.isEditable = false})
       : super(key: key);
 
   @override
@@ -29,15 +34,14 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
 
 class _ProductionProgressOrderFormPageState
     extends State<ProductionProgressOrderFormPage> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    if(widget.isEditable && widget.model.entries != null){
+    if (widget.isEditable && widget.model.entries != null) {
       //回显颜色尺码数量
-      Map<String,int> entriesMap = new Map();
+      Map<String, int> entriesMap = new Map();
 
       widget.model.entries.forEach((element) {
         entriesMap['${element.color}-${element.size}'] = element.quantity;
@@ -54,7 +58,10 @@ class _ProductionProgressOrderFormPageState
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('${widget.progress?.progressPhase?.name ?? ''}报工${widget.isEditable ? '编辑': ''}'),
+        title: Text(
+            '${widget.progress?.progressPhase?.name ?? ''}报工${widget.isEditable
+                ? '编辑'
+                : ''}'),
         elevation: 0.5,
       ),
       bottomNavigationBar: Container(
@@ -100,7 +107,6 @@ class _ProductionProgressOrderFormPageState
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(horizontal: 10),
-
       child: Column(
         children: [
           Container(
@@ -138,21 +144,28 @@ class _ProductionProgressOrderFormPageState
     List<String> _colors = [];
     List<String> _sizes = [];
     widget.colorSizeEntries.forEach((element) {
-      _colors.add(element.color);
-      if(!_sizes.contains(element.size)){
+      if (!_colors.contains(element.color)) {
+        _colors.add(element.color);
+      }
+
+      if (!_sizes.contains(element.size)) {
         _sizes.add(element.size);
       }
     });
-    return ColorSizeInputTable(
-      _colors,
-      _sizes,
-      compareFunction: Provider.of<SizeState>(context).compareByName,
-      entries: widget.colorSizeEntries,
-      onChanged: (data) {
-        widget.model.entries = data.map((e) => OrderNoteEntryModel(color: e.color,size: e.size, quantity: e.quantity ?? 0)).toList();
+    return ColorSizeInputTable(_colors, _sizes,
+        compareFunction: Provider
+            .of<SizeState>(context)
+            .compareByName,
+        entries: widget.colorSizeEntries,
+        onChanged: onEntriesChange);
+  }
 
-      },
-    );
+  void onEntriesChange(List<ColorSizeInputEntry> data) {
+    widget.model.entries = data
+        .map((e) =>
+        OrderNoteEntryModel(
+            color: e.color, size: e.size, quantity: e.quantity ?? 0))
+        .toList();
   }
 
   GestureDetector _buildReportTime(BuildContext context) {
@@ -233,39 +246,38 @@ class _ProductionProgressOrderFormPageState
   }
 
   //保存
-  void _save() async{
-    if(widget.model.reportTime == null){
+  void _save() async {
+    if (widget.model.reportTime == null) {
       BotToast.showText(text: '请填写上报时间');
       return;
     }
     int totalQuantity = 0;
-    for(var entry in widget.model.entries){
+    for (var entry in widget.model.entries) {
       totalQuantity += entry.quantity ?? 0;
     }
-    if(totalQuantity <= 0){
+    if (totalQuantity <= 0) {
       BotToast.showText(text: '上报数量不能为空');
       return;
     }
 
-    showConfirmDialog(false, message: '是否确认保存？',
-        confirm: () async {
-          int id = widget.progress.id;
-          var result;
-          if(widget.isEditable){
-            result = await ProgressOrderRepository().updateProductionProgressOrder(id,widget.model.id, widget.model);
-          }else{
-            result = await ProgressOrderRepository().createProductionProgressOrder(id, widget.model);
-          }
+    showConfirmDialog(false, message: '是否确认保存？', confirm: () async {
+      int id = widget.progress.id;
+      var result;
+      if (widget.isEditable) {
+        result = await ProgressOrderRepository()
+            .updateProductionProgressOrder(id, widget.model.id, widget.model);
+      } else {
+        result = await ProgressOrderRepository()
+            .createProductionProgressOrder(id, widget.model);
+      }
 
-          if(result != null){
-            BotToast.showText(text: '保存成功');
-            Navigator.pop(context,true);
-          }else{
-            BotToast.showText(text: '保存失败');
-          }
-        });
-
-
+      if (result != null) {
+        BotToast.showText(text: '保存成功');
+        Navigator.pop(context, true);
+      } else {
+        BotToast.showText(text: '保存失败');
+      }
+    });
   }
 }
 
