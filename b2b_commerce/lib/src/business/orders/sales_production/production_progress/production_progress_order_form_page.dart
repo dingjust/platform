@@ -147,7 +147,7 @@ class _ProductionProgressOrderFormPageState
     List<String> _colors = [];
     List<String> _sizes = [];
     widget.colorSizeEntries.forEach((element) {
-      if (!_colors.contains(element.color)) {
+      if (!_colors.contains(element.size)) {
         _colors.add(element.color);
       }
 
@@ -155,12 +155,13 @@ class _ProductionProgressOrderFormPageState
         _sizes.add(element.size);
       }
     });
-    return ColorSizeInputTable(_colors, _sizes,
-        compareFunction: Provider
-            .of<SizeState>(context)
-            .compareByName,
-        entries: widget.colorSizeEntries,
-        onChanged: onEntriesChange);
+    return ColorSizeInputTable(
+      _colors,
+      _sizes,
+      compareFunction: Provider.of<SizeState>(context).compareByName,
+      entries: _colorSizeEntries,
+      onChanged: onEntriesChange,
+    );
   }
 
   void onEntriesChange(List<ColorSizeInputEntry> data) {
