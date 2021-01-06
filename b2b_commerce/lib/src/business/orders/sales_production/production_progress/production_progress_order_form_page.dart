@@ -8,13 +8,18 @@ import 'package:widgets/widgets.dart';
 
 ///节点详情页
 class ProductionProgressOrderFormPage extends StatefulWidget {
+  ///节点
+  final ProductionProgressModel progress;
+
   ///单据
   final ProductionProgressOrderModel model;
 
   ///工单下单数
   final List<ColorSizeInputEntry> colorSizeEntries;
 
-  const ProductionProgressOrderFormPage({Key key, this.model, this.colorSizeEntries})
+  final bool isEditable;
+
+  const ProductionProgressOrderFormPage({Key key, this.progress, this.model, this.colorSizeEntries,this.isEditable = false})
       : super(key: key);
 
   @override
@@ -24,12 +29,32 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
 
 class _ProductionProgressOrderFormPageState
     extends State<ProductionProgressOrderFormPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if(widget.isEditable && widget.model.entries != null){
+      //回显颜色尺码数量
+      Map<String,int> entriesMap = new Map();
+
+      widget.model.entries.forEach((element) {
+        entriesMap['${element.color}-${element.size}'] = element.quantity;
+      });
+
+      widget.colorSizeEntries.forEach((element) {
+        element.quantity = entriesMap['${element.color}-${element.size}'];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('${widget.model.belong.progressPhase.name}报工'),
+        title: Text('${widget.progress?.progressPhase?.name ?? ''}报工${widget.isEditable ? '编辑': ''}'),
         elevation: 0.5,
       ),
       bottomNavigationBar: Container(
@@ -50,16 +75,8 @@ class _ProductionProgressOrderFormPageState
         child: ListView(children: <Widget>[
           _InfoRow(
             title: '工单号：',
-            val: '${widget.model.belong.id}',
+            val: '${widget.progress.id}',
           ),
-//          _InfoRow(
-//            title: '款号：',
-//            val: '${widget.model.belong.belong.skuID}',
-//          ),
-//          _InfoRow(
-//            title: '合作商：',
-//            val: '${widget.model.belong.belong.cooperator?.name}',
-//          ),
           _InfoRow(
             title: '上报人员：',
             val: '${widget.model.operator?.name}',
@@ -84,9 +101,24 @@ class _ProductionProgressOrderFormPageState
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(horizontal: 10),
 
-      child: Row(
+      child: Column(
         children: [
-
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [Text('备注：')],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                Expanded(child: Text('${widget.model.remarks ?? '暂无备注'}'))
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -115,11 +147,8 @@ class _ProductionProgressOrderFormPageState
       _colors,
       _sizes,
       compareFunction: Provider.of<SizeState>(context).compareByName,
-      entries: [],
+      entries: widget.colorSizeEntries,
       onChanged: (data) {
-        data.forEach((entry) {
-          print('${entry.color}-${entry.size}:${entry.quantity}');
-        });
         widget.model.entries = data.map((e) => OrderNoteEntryModel(color: e.color,size: e.size, quantity: e.quantity ?? 0)).toList();
 
       },
@@ -220,8 +249,14 @@ class _ProductionProgressOrderFormPageState
 
     showConfirmDialog(false, message: '是否确认保存？',
         confirm: () async {
-          int id = widget.model.belong.id;
-          var result = await ProgressOrderRepository().createProductionProgressOrder(id, widget.model);
+          int id = widget.progress.id;
+          var result;
+          if(widget.isEditable){
+            result = await ProgressOrderRepository().updateProductionProgressOrder(id,widget.model.id, widget.model);
+          }else{
+            result = await ProgressOrderRepository().createProductionProgressOrder(id, widget.model);
+          }
+
           if(result != null){
             BotToast.showText(text: '保存成功');
             Navigator.pop(context,true);

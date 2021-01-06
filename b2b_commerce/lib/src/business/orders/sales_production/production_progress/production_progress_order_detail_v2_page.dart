@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/sales_production/production_progress/production_progress_order_form_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,9 @@ import 'package:widgets/widgets.dart';
 
 ///节点详情页
 class ProductionProgressOrderDetailV2Page extends StatefulWidget {
+  ///节点
+  final ProductionProgressModel progress;
+
   ///单据
   final ProductionProgressOrderModel model;
 
@@ -15,7 +19,7 @@ class ProductionProgressOrderDetailV2Page extends StatefulWidget {
   final List<ColorSizeInputEntry> colorSizeEntries;
 
   const ProductionProgressOrderDetailV2Page(
-      {Key key, this.model, this.colorSizeEntries})
+      {Key key, this.progress, this.model, this.colorSizeEntries})
       : super(key: key);
 
   @override
@@ -28,20 +32,46 @@ class _ProductionProgressOrderDetailV2PageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('报工单据明细'),
+        title: Text('${widget.progress?.progressPhase?.name ?? ''}报工单据明细'),
         elevation: 0.5,
       ),
-      bottomNavigationBar: Container(
-        height: 50,
-        width: double.infinity,
-        child: FlatButton(
-          onPressed: () => _cancel(),
-          color: const Color.fromRGBO(255, 219, 0, 1),
-          child: Text(
-            '作废',
-            style: TextStyle(fontSize: 20),
+      bottomNavigationBar: Offstage(
+        offstage: widget.model.status == ProductionProgressOrderStatus.CANCEL,
+        child: Container(
+          height: 50,
+          width: double.infinity,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: double.infinity,
+                  child: FlatButton(
+                    onPressed: () => _edit(),
+                    color: Color.fromRGBO(255, 219, 0, 1),
+                    child: Text(
+                      '修改',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: double.infinity,
+                  child: FlatButton(
+                    onPressed: () => _cancel(),
+                    color: Colors.red,
+                    child: Text(
+                      '作废',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -49,24 +79,28 @@ class _ProductionProgressOrderDetailV2PageState
         color: Colors.white,
         padding: EdgeInsets.only(bottom: 10),
         child: ListView(children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: Row(
+              children: [
+                Expanded(child: Text('订单状态：')),
+                Text(
+                  '${ProductionProgressOrderStatusLocalizedMap[widget.model.status]}',
+                  style: TextStyle(color: _ORDER_STATUS_COLORS[widget.model.status]),
+                )
+              ],
+            ),
+          ),
           _InfoRow(
             title: '单据号：',
             val: '${widget.model.id}',
           ),
-//          _InfoRow(
-//            title: '款号：',
-//            val: '${widget.model.belong.belong.skuID}',
-//          ),
-//          _InfoRow(
-//            title: '合作商：',
-//            val: '${widget.model.belong.belong.cooperator?.name}',
-//          ),
           _InfoRow(
             title: '上报人员：',
             val: '${widget.model.operator?.name}',
           ),
           _InfoRow(
-              title: '上报时间',
+              title: '上报时间：',
               val: '${DateFormatUtil.formatYMDHMS(widget.model.reportTime)}'),
           ColorSizeNoteEntryTable(
             compareFunction: Provider.of<SizeState>(context).compare,
@@ -91,8 +125,25 @@ class _ProductionProgressOrderDetailV2PageState
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        children: [],
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [Text('备注：')],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                Expanded(child: Text('${widget.model.remarks ?? '暂无备注'}'))
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -107,92 +158,6 @@ class _ProductionProgressOrderDetailV2PageState
     );
   }
 
-  ColorSizeInputTable _buildColorSizeInputTable(BuildContext context) {
-    List<String> _colors = [];
-    List<String> _sizes = [];
-    widget.colorSizeEntries.forEach((element) {
-      _colors.add(element.color);
-      _sizes.add(element.size);
-    });
-    return ColorSizeInputTable(
-      _colors,
-      _sizes,
-      compareFunction: Provider.of<SizeState>(context).compareByName,
-      entries: [],
-      onChanged: (data) {
-        data.forEach((entry) {
-          print('${entry.color}-${entry.size}:${entry.quantity}');
-        });
-        widget.model.entries = data
-            .map((e) =>
-            OrderNoteEntryModel(
-                color: e.color, size: e.size, quantity: e.quantity ?? 0))
-            .toList();
-      },
-    );
-  }
-
-  GestureDetector _buildReportTime(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: '上报时间',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ]),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Container(
-//                  width: 152,
-                    height: 43,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[50],
-//                    border: Border.all(color: Colors.black45),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                            widget.model.reportTime == null
-                                ? '选取'
-                                : DateFormatUtil.formatYMD(
-                                    widget.model.reportTime),
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey),
-                            overflow: TextOverflow.ellipsis),
-                      ),
-                    )),
-              )
-            ],
-          ),
-        ),
-        onTap: () {
-          showDatePicker(
-            context: context,
-            initialDate: widget.model.reportTime ?? DateTime.now(),
-            firstDate: DateTime(2019),
-            lastDate: DateTime(2999),
-          ).then((value) {
-            setState(() {
-              if (value != null) {
-                widget.model.reportTime = value;
-              }
-            });
-          });
-        });
-  }
 
   ///预计数量
   int get expectNum {
@@ -209,10 +174,9 @@ class _ProductionProgressOrderDetailV2PageState
   void _cancel() async {
     showConfirmDialog(false, message: '是否确认作废？', confirm: () async {
       Function cancelFunc =
-      BotToast.showLoading(clickClose: false, crossPage: false);
+          BotToast.showLoading(clickClose: false, crossPage: false);
       var result = await ProgressOrderRepository()
-          .deleteProductionProgressOrder(
-          widget.model.belong?.id, widget.model.id);
+          .deleteProductionProgressOrder(widget.progress.id, widget.model.id);
       cancelFunc.call();
       if (result != null) {
         BotToast.showText(text: '作废成功');
@@ -221,6 +185,19 @@ class _ProductionProgressOrderDetailV2PageState
         BotToast.showText(text: '作废失败');
       }
     });
+  }
+
+  //修改单据
+  _edit() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductionProgressOrderFormPage(
+                  progress: widget.progress,
+                  model: widget.model,
+                  colorSizeEntries: widget.colorSizeEntries,
+                  isEditable: true,
+                )));
   }
 }
 

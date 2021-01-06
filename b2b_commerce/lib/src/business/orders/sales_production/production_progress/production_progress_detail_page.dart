@@ -134,7 +134,9 @@ class _ProductionProgressDetailPageState
 
   void orderDeatil(BuildContext context, ProductionProgressOrderModel order) async{
     dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
-        ProductionProgressOrderDetailV2Page(model: order,
+        ProductionProgressOrderDetailV2Page(
+          progress: widget.progress,
+          model: order,
           colorSizeEntries: order.entries?.map((e) => ColorSizeInputEntry(
               color: e.color, size: e.size, quantity: e.quantity))
               ?.toList() ?? [],)));
@@ -210,9 +212,6 @@ class _ProductionProgressDetailPageState
     if (productionProgressOrderModel.medias == null) {
       productionProgressOrderModel.medias = [];
     }
-    if (productionProgressOrderModel.belong == null) {
-      productionProgressOrderModel.belong = widget.progress;
-    }
     if (productionProgressOrderModel.reportTime == null) {
       productionProgressOrderModel.reportTime = DateTime.now();
     }
@@ -226,13 +225,14 @@ class _ProductionProgressDetailPageState
 
     _colorSizeEntries = widget.colorSizeEntries
         .map((e) => ColorSizeInputEntry(
-            size: e.size.name, color: e.color.name, quantity: e.quantity))
+            size: e.size.name, color: e.color.name,))
         .toList();
 
     dynamic result = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ProductionProgressOrderFormPage(
+                  progress: widget.progress,
                   model: productionProgressOrderModel,
                   colorSizeEntries: _colorSizeEntries,
                 )));
