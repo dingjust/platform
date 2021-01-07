@@ -22,6 +22,11 @@
       <div class="pt-2"></div>
       <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
         <outbound-type-select :formData="formData" />
+        <el-row class="outbound-basic-row">
+          <el-form-item label="标题" prop="title" :rules="[{required: true, message: '请填写', trigger: 'blur'}]">
+            <el-input v-model="formData.title" style="width: 200px"></el-input>
+          </el-form-item>
+        </el-row>
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
