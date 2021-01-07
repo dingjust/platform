@@ -34,6 +34,8 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
 
 class _ProductionProgressOrderFormPageState
     extends State<ProductionProgressOrderFormPage> {
+  FocusNode _remarksFocusNode = FocusNode();
+  TextEditingController _remarksController = TextEditingController();
   List<ColorSizeInputEntry> _colorSizeEntries = [];
 
   @override
@@ -53,7 +55,11 @@ class _ProductionProgressOrderFormPageState
 //      widget.colorSizeEntries.forEach((element) {
 //        element.quantity = entriesMap['${element.color}-${element.size}'];
 //      });
+
+      _remarksController.text = widget.model.remarks;
     }
+
+
   }
 
   @override
@@ -112,22 +118,26 @@ class _ProductionProgressOrderFormPageState
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [Text('备注：')],
-            ),
+          Row(
+            children: [Text('备注：')],
           ),
           Container(
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Expanded(child: Text('${widget.model.remarks ?? '暂无备注'}'))
-              ],
+            color: Colors.white,
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: TextFieldComponent(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              dividerPadding: EdgeInsets.only(),
+              focusNode: _remarksFocusNode,
+              hintText: '填写',
+              autofocus: false,
+              inputType: TextInputType.text,
+              textAlign: TextAlign.left,
+              hideDivider: true,
+              maxLines: null,
+              maxLength: 120,
+              controller: _remarksController,
             ),
-          ),
+          )
         ],
       ),
     );
@@ -147,7 +157,7 @@ class _ProductionProgressOrderFormPageState
     List<String> _colors = [];
     List<String> _sizes = [];
     widget.colorSizeEntries.forEach((element) {
-      if (!_colors.contains(element.size)) {
+      if (!_colors.contains(element.color)) {
         _colors.add(element.color);
       }
 
@@ -263,6 +273,8 @@ class _ProductionProgressOrderFormPageState
       BotToast.showText(text: '上报数量不能为空');
       return;
     }
+
+    widget.model.remarks = _remarksController.text;
 
     showConfirmDialog(false, message: '是否确认保存？', confirm: () async {
       int id = widget.progress.id;
