@@ -15,7 +15,7 @@
       <h6 class="title-text">附件</h6>
     </el-row>
     <el-row type="flex" class="basic-container">
-      <files-upload ref="filesUpload" :slotData="formData.medias" />
+      <files-upload ref="filesUpload" :slotData="formData.medias" :limit="20"/>
     </el-row>
   </el-row>
 </template>
