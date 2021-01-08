@@ -147,7 +147,7 @@ class _ProductionProgressOrderFormPageState
     List<String> _colors = [];
     List<String> _sizes = [];
     widget.colorSizeEntries.forEach((element) {
-      if (!_colors.contains(element.size)) {
+      if (!_colors.contains(element.color)) {
         _colors.add(element.color);
       }
 
