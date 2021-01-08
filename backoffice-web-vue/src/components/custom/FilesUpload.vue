@@ -4,8 +4,8 @@
       <el-col :span="24">
         <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" :disabled="disabled" ref="upload"
           :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
-          :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
-          :class="{disabled:uploadDisabled,picClass:picClass}">
+          :multiple="true" :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit"
+          :on-remove="handleRemove" :class="{disabled:uploadDisabled,picClass:picClass}">
           <el-button size="small" type="primary" v-if="!readOnly">点击上传</el-button>
           <div slot="tip" class="el-upload__tip" style="margin-top:10px;" v-if="!readOnly">文件大小不超过5M</div>
         </el-upload>
@@ -47,13 +47,19 @@
         }
         return true;
       },
-      onSuccess(response) {
-        this.slotData.push(response);
+      onSuccess(response, file, fileList) {
+        console.log(JSON.stringify(fileList));
+        let uploadingIndex = fileList.findIndex((e) => e.status == 'uploading');
+        if (uploadingIndex < 0) {
+          let data = fileList.filter((e) => e.status == 'success').map((e) => e.response);
+          this.slotData = data;
+        }
         if (this.slotData.length === this.limit) {
           this.uploadDisabled = true;
         } else {
           this.uploadDisabled = false;
         }
+        // let data=fileList.filter((e)=>e.status=='sucess').map((e)=>e.response);                          
       },
       async handleRemove(file) {
         // TODO: 自定义删除方法（删除图片之前，清理product的others属性
@@ -157,7 +163,8 @@
       return {
         dialogImageUrl: '',
         dialogVisible: false,
-        uploadDisabled: false
+        uploadDisabled: false,
+        cacheData: []
       }
     }
   };

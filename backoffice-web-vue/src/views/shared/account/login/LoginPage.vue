@@ -384,5 +384,6 @@ export default {
   position: absolute;
   bottom: 0;
   color: white;
+  height: 11px;
 }
 </style>
