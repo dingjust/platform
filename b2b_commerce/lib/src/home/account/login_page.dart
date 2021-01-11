@@ -107,22 +107,11 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              setState(() {
-                _isPasswordLogin = !_isPasswordLogin;
-                if (_isPasswordLogin) {
-                  FocusScope.of(context).requestFocus(_passwordFocusNode);
-                } else {
-                  FocusScope.of(context).requestFocus(_smsFocusNode);
-                }
-              });
-              if (_isPasswordLogin) {
-                _passwordFocusNode.requestFocus();
-              } else {
-                _smsFocusNode.requestFocus();
-              }
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => widget.forgetPasswordPage));
             },
             child: Text(
-              _isPasswordLogin ? '验证码登录' : '密码登录',
+              '忘记密码',
               style: TextStyle(fontSize: 15),
             ),
           ),
@@ -285,12 +274,23 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               FlatButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => widget.forgetPasswordPage));
+                  setState(() {
+                    _isPasswordLogin = !_isPasswordLogin;
+                    if (_isPasswordLogin) {
+                      FocusScope.of(context).requestFocus(_passwordFocusNode);
+                    } else {
+                      FocusScope.of(context).requestFocus(_smsFocusNode);
+                    }
+                  });
+                  if (_isPasswordLogin) {
+                    _passwordFocusNode.requestFocus();
+                  } else {
+                    _smsFocusNode.requestFocus();
+                  }
                 },
                 child: Text(
-                  '忘记密码',
-                  style: TextStyle(color: Colors.black54, fontSize: 15),
+                  _isPasswordLogin ? '验证码登录' : '密码登录',
+                  style: TextStyle(fontSize: 15, color: Colors.black54),
                 ),
               ),
               Row(
