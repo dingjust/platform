@@ -93,6 +93,11 @@ export default {
         return;
       }
 
+      if (!this.isAllApproval) {
+        this.$message.error('合作商双方有其中一方未认证时，需上传已签署的对账单');
+        return;
+      }
+
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.isAllApproval && this.formData.entries.length <= 0 && this.formData.paperSheetMedias.length <= 0) {

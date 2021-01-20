@@ -280,12 +280,20 @@ export default {
       this.formData.entries.splice(index + 1, 0, Object.assign({}, row));
     },
     onDelete (index, row) {
-      this.formData.entries.splice(index, 1);
       if (row.relationId) {
-        const i = this.formData.shippingSheets.findIndex(item => item.id === row.relationId);
-        if (i > -1) {
-          this.formData.shippingSheets.splice(i, 1);
-        }
+        this.$confirm('删除此行将同时删除已选择关联发货单，是否继续？', '提示', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          const i = this.formData.shippingSheets.findIndex(item => item.id === row.relationId);
+          if (i > -1) {
+            this.formData.shippingSheets.splice(i, 1);
+          }
+          this.formData.entries.splice(index, 1);
+        });
+      } else {
+        this.formData.entries.splice(index, 1);
       }
     },
     onSelectProduct (index) {

@@ -12,7 +12,10 @@
           <h6>创建日期：{{order.creationtime | timestampToTime}}</h6>
         </el-col>
         <el-col>
-          <h6>状态：{{getEnum('ReconciliationV2Type', order.state)}}</h6>
+          <h6>
+            状态：{{getEnum('ReconciliationV2Type', order.state)}}
+            <el-tag v-if="order.state === 'PENDING_B_SIGN' || order.state === 'PENDING_A_SIGN'">{{tagTitle}}</el-tag>
+          </h6>
         </el-col>
       </el-row>
       <reconciliation-detail-header :order="order" @showPDF="showPDF"/>
@@ -95,7 +98,14 @@ export default {
     canCancel: function () {
       // 待乙方签署的状态下，创建方可以进行取消操作
       return this.isReceiveParty && this.order.state === 'PENDING_B_SIGN';
-    }
+    },
+    tagTitle: function () {
+      if (this.order.state === 'PENDING_B_SIGN') {
+        return this.order.shipParty.uid === this.$store.getters.currentUser.companyCode ? '待我签署' : '待他签署';
+      } else if (this.order.state === 'PENDING_A_SIGN') {
+        return this.order.receiveParty.uid === this.$store.getters.currentUser.companyCode ? '待我签署' : '待他签署';
+      }
+    } 
   },
   data () {
     return {

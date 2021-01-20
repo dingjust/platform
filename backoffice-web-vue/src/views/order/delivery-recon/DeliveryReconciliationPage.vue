@@ -23,7 +23,7 @@
       <el-tabs ref="tabs" v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
           <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
-           <delivery-reconciliation-list :orderType="orderType" :page="page" @onAdvancedSearch="onAdvancedSearch"/>
+           <delivery-reconciliation-list :orderType="orderType" :page="page" :activeName="activeName" @onAdvancedSearch="onAdvancedSearch"/>
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -75,20 +75,23 @@ export default {
         },
         // 对账单状态
         {
-          code: 'PENDING_B_SIGN',
-          name: '待乙方签署'
+          code: 'WAIT_ME_SIGN',
+          name: '待我签署'
+        }, {
+          code: 'WAIT_PARTNER_SIGN',
+          name: '待对方签署'
         }, {
           code: 'PENDING_APPROVAL',
           name: '待审批'
-        }, {
-          code: 'PENDING_A_SIGN',
-          name: '待甲方签署'
         }, {
           code: 'COMPLETED',
           name: '已完成'
         }, {
           code: 'CANCELLED',
           name: '已取消'
+        }, {
+          code: '全部',
+          name: '全部'
         }
       ],
       queryFormData: {
@@ -143,7 +146,14 @@ export default {
       this.$set(this, 'page', result);
     },
     handleClick (tab, event) {
-      this.queryFormData.states = tab.name;
+      if (tab.name === 'WAIT_ME_SIGN' || tab.name === 'WAIT_PARTNER_SIGN') {
+        this.queryFormData.states = '';
+        this.queryFormData.signState = tab.name;
+      } else {
+        this.queryFormData.states = tab.name === '全部' ? '' : tab.name;
+        this.queryFormData.signState = '';
+      }
+
       if (tab.name === 'PENDING_RECONCILED') {
         this.orderType = 'DELIVERY';
       } else {

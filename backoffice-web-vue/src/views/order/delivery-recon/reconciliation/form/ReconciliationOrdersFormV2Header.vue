@@ -112,7 +112,20 @@ export default {
       }
     },
     appendEntries (selection) {
+      // 过滤已经没有选择的发货单的对账行
+      this.formData.entries = this.formData.entries.filter(item => {
+        if (item.relationId) {
+          return selection.findIndex(val => val.id === item.relationId) > -1;
+        }
+        return true;
+      });
+
       selection.forEach(item => {
+        // 已存在对账行不再添加
+        if (this.formData.entries.findIndex(val => val.relationId === item.id) > -1) {
+          return;
+        }
+
         this.formData.entries.push({
           product: {
             id: item.product.id,
