@@ -57,6 +57,17 @@ export default {
       ]
     },
     {
+      name: '合同',
+      icon: 'el-icon-s-marketing',
+      children: [
+        {
+          name: '合同管理',
+          url: '/contract/backstage',
+          icon: 'iconNone'
+        }
+      ]
+    },
+    {
       name: '订单',
       icon: 'el-icon-s-order',
       url: '/order',
