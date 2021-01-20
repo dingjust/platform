@@ -157,12 +157,10 @@ class _Row1 extends StatelessWidget {
         ),
         Expanded(
             child: Text(
-              '${CooperatorHelper.getCooperatorName(
-                  model.targetCooperator, model.originCompany,
-                  model.originCooperator)}',
-              style: TextStyle(fontSize: 16),
-              overflow: TextOverflow.ellipsis,
-            )),
+          '${CooperatorHelper.getCooperatorName(model.targetCooperator, model.originCompany, model.originCooperator)}',
+          style: TextStyle(fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+        )),
         _buildTag()
       ],
     );

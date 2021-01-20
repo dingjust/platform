@@ -32,7 +32,7 @@ class OrderContractsBlock extends StatelessWidget {
               ],
             ),
             (agreements != null && agreements.length > 0)
-                ? Row(
+                ? Wrap(
                     children: [
                       for (UserAgreementModel e in agreements ?? [])
                         _buildBtn(context, e)
