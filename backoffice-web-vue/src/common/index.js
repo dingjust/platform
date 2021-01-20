@@ -1188,6 +1188,31 @@ let TENANT_APIS = {
   // 销售订单
   salesOrderSave (needAudit) {
     return '/b2b/sales/production/order/save/order?submitAudit=' + needAudit;
+  },
+
+  // 删除认证
+  deleteAuth (id) {
+    return '/b2b/fdd/api/delete/company/cert/' + id;
+  },
+  // 清除企业认证
+  clearEnterpriseAuth (companyCode) {
+    return '/b2b/fdd/api/clear/company/verify/data/' + companyCode;
+  },
+  // 清除个人认证
+  clearPersonAuth (code) {
+    return '/b2b/fdd/api/clear/personal/verify/data/' + code;
+  },
+  // 获取全部合同列表
+  getAgreementList () {
+    return '/b2b/agreement/list';
+  },
+  // 查看合同详情
+  downContract (code) {
+    return '/b2b/user/agreement/get/download/token/' + code;
+  },
+  // 重新下载合同
+  onRefreshDownloadContract () {
+    return '/b2b/fail/log/add';
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);

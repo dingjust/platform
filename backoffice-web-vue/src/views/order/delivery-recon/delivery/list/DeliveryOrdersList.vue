@@ -96,6 +96,9 @@ export default {
       }
     },
     judge (row) {
+      if (!this.formData) {
+        return;
+      }
       if (!this.formData.cooperator) {
         // 未确定合作商时
         return this.currentRow <= 0 || row.cooperator.name === this.currentRow[0].cooperator.name;

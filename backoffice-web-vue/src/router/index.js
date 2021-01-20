@@ -159,6 +159,23 @@ const router = new Router({
           ]
         },
         {
+          path: 'contract',
+          redirect: '/contract/backstage',
+          name: '合同',
+          component: {
+            render (c) {
+              return c('router-view');
+            }
+          },
+          children: [
+            {
+              path: 'backstage',
+              name: '合同管理',
+              component: () => import(/* webpackChunkName: 'contract-manage' */ '@/views/contract/backManage/ContractBackPage')
+            }
+          ]
+        },
+        {
           path: 'order',
           redirect: '/sales',
           name: '订单管理',

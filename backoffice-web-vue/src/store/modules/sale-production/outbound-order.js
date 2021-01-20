@@ -16,6 +16,7 @@ const state = {
   },
   formData: {
     id: null,
+    title: '',
     outboundCompanyName: '',
     outboundContactPerson: '',
     outboundContactPhone: '',
@@ -169,6 +170,7 @@ const actions = {
   clearFormData ({dispatch, commit, state}) {
     commit('formData', {
       id: null,
+      title: '',
       outboundCompanyName: '',
       outboundContactPerson: '',
       outboundContactPhone: '',

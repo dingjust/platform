@@ -3,6 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange" @row-click="rowClick">
       <el-table-column type="selection" :reserve-selection="true" width="55" v-if="isSelect"></el-table-column>
+      <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="外发订单号" prop="code" min-width="150">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">

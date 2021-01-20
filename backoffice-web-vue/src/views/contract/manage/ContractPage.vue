@@ -11,7 +11,7 @@
     <!--</div>-->
     <el-card>
       <el-row>
-        <el-col :span="2">
+        <el-col>
           <div class="contract-list-title">
             <h6>合同列表</h6>
           </div>

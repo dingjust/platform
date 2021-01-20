@@ -106,8 +106,6 @@
       },
       getNoteVariantSum(color, size) {
         var sum = 0;
-        console.log(this.noteEntries);
-        console.log(this.noteEntries.filter(entry => entry.status == 'PASS'));
         this.noteEntries.filter(entry => entry.status == 'PASS').forEach((entry) => {
           if (entry.entries && entry.entries.length > 0) {
             var result = entry.entries.filter(

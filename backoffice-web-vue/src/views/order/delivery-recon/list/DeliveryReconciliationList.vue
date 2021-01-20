@@ -4,7 +4,7 @@
       <delivery-orders-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
     </template>
     <template v-if="orderType === 'RECONCILIATION'">
-      <reconciliation-orders-list-v2 :page="page" @onAdvancedSearch="onAdvancedSearch"/>
+      <reconciliation-orders-list-v2 :page="page" :activeName="activeName" @onAdvancedSearch="onAdvancedSearch"/>
     </template>
   </div>  
 </template>
@@ -15,7 +15,7 @@ import ReconciliationOrdersListV2 from '../reconciliation/list/ReconciliationOrd
 
 export default {
   name: 'DeliveryReconciliationList',
-  props: ['page', 'orderType'],
+  props: ['page', 'orderType', 'activeName'],
   components: {
     ReconciliationOrdersListV2,
     DeliveryOrdersList

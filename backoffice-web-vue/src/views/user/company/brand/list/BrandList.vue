@@ -1,27 +1,27 @@
 <template>
   <div class="animated fadeIn">
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="商家编号" prop="uid" width="140"></el-table-column>
-      <el-table-column label="商家名称" prop="name" width="200"></el-table-column>
-      <el-table-column label="登录账号" prop="contactUid" width="140"></el-table-column>
-      <el-table-column label="联系人" prop="contactPerson" width="140"></el-table-column>
-      <el-table-column label="注册时间" prop="creationTime" width="140">
+      <el-table-column label="商家编号" prop="uid" min-width="110"></el-table-column>
+      <el-table-column label="商家名称" prop="name" min-width="200"></el-table-column>
+      <el-table-column label="登录账号" prop="contactUid" min-width="110"></el-table-column>
+      <el-table-column label="联系人" prop="contactPerson" min-width="110"></el-table-column>
+      <el-table-column label="注册时间" prop="creationTime" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationTime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签" prop="labels">
+      <el-table-column label="标签" prop="labels" min-width="150">
         <template slot-scope="scope">
           <el-tag size="mini" class="disableTagClass" :disable-transitions="true" v-if="scope.row.loginDisabled">
             已禁用
           </el-tag>
           <el-tag v-for="(item, index) of showLabels(scope.row.labels, scope.row.approvalStatus)"
-                  size="mini" class="elTagClass" :disable-transitions="true">
+                  size="mini" class="elTagClass" :disable-transitions="true" :key="index">
             {{item}}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" min-width="200">
           <template slot-scope="scope">
             <slot name="operations" :item="scope.row"></slot>
           </template>
@@ -58,22 +58,15 @@
         return arr1;
       },
       onPageSizeChanged (val) {
-        this._reset();
-        if (this.$store.state.BrandsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
-          return;
-        }
-        this.$emit('onSearch', 0, val);
+        this.$emit('onAdvancedSearch', 0, val);
+
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        })
       },
       onCurrentPageChanged (val) {
-        if (this.$store.state.BrandsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
-          this.$nextTick(() => {
-            this.$refs.resultTable.bodyWrapper.scrollTop = 0
-          })
-          return;
-        }
-        this.$emit('onSearch', val - 1);
+        this.$emit('onAdvancedSearch', val - 1, 10);
+        
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         })

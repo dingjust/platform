@@ -8,39 +8,34 @@
     <el-row type="flex" style="margin-left: 25px">
       <el-form-item prop="paperSheetMedias" style="paper-sheet-medias"
         :rules="{required: needValidate, type: 'array', message: '合作商双方有其中一方未认证时，需上传已签署的对账单', trigger: 'change'}">
-        <images-upload ref="imageUpload" :slotData="formData.paperSheetMedias" :limit="1" />
+        <images-upload ref="imageUpload" :slotData="formData.paperSheetMedias" :limit="1"/>
       </el-form-item>
     </el-row>
     <el-row type="flex">
       <h6 class="title-text">附件</h6>
     </el-row>
     <el-row type="flex" class="basic-container">
-      <files-upload ref="filesUpload" :slotData="formData.medias"/>
+      <files-upload ref="filesUpload" :slotData="formData.medias" :limit="20"/>
     </el-row>
   </el-row>
 </template>
 
 <script>
-  import {
+import { FilesUpload, ImagesUpload } from '@/components'
+
+export default {
+  name: 'ReconciliationUploadPart',
+  props: ['formData', 'isAllApproval'],
+  components: {
     FilesUpload,
     ImagesUpload
-  } from '@/components'
-
-  export default {
-    name: 'ReconciliationUploadPart',
-    props: ['formData', 'isAllApproval'],
-    components: {
-      FilesUpload,
-      ImagesUpload
-    },
-    computed: {
-      needValidate: function () {
-        return this.formData.cooperator.id;
-        // return this.formData.cooperator.id && !this.isAllApproval;
-      }
+  },
+  computed: {
+    needValidate: function () {
+      return this.formData.cooperator.id && !this.isAllApproval;
     }
   }
-
+}
 </script>
 
 <style scoped>
@@ -58,12 +53,12 @@
     margin: 0px;
   }
 
-  .upload-part>>>.el-upload-list--picture-card .el-upload-list__item {
+  .upload-part >>> .el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }
 
-  .upload-part>>>.el-upload--picture-card {
+  .upload-part >>> .el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
@@ -76,7 +71,7 @@
   /deep/ .is-error {
     width: 100%;
   }
-
+  
   /deep/ .el-form-item__content {
     width: 100%;
   }

@@ -14,13 +14,16 @@
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
-              <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
-              <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">标签</el-button>
-              <el-button v-if="!props.item.loginDisabled" type="text" icon="el-icon-edit" @click="onDelete(props.item)">
+              <el-button type="text" @click="onDetails(props.item)">明细</el-button>
+              <el-button type="text" @click="onEdit(props.item)">标签</el-button>
+              <el-button v-if="!props.item.loginDisabled" type="text" @click="onDelete(props.item)">
                 禁用
               </el-button>
-              <el-button v-if="props.item.loginDisabled" type="text" icon="el-icon-edit" @click="onCannelDelete(props.item)">
+              <el-button v-if="props.item.loginDisabled" type="text" @click="onCannelDelete(props.item)">
                 解禁
+              </el-button>
+              <el-button type="text" @click="clearAuth(props.item)">
+                清除认证
               </el-button>
             </template>
           </factory-list>
@@ -43,6 +46,9 @@
     <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
       <factory-forbidden-dialog  @onCancel="onCancel" @onConfirm="onConfirm"/>
     </el-dialog>
+    <el-dialog title="清除认证" :visible.sync="authVisible" width="400px" :close-on-click-modal="false">
+      <authentication-clear-form v-if="authVisible" :clearRow="clearRow" @onCancel="authVisible = false" @callback="callback"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,6 +63,7 @@
   import FactoryLabelsForm from './form/FactoryLabelsForm';
   import FactoryFrom from './form/FactoryForm';
   import FactoryForbiddenDialog from './form/FactoryForbiddenDialog';
+  import AuthenticationClearForm from '../components/AuthenticationClearForm'
 
   export default {
     name: 'FactoryPage',
@@ -67,7 +74,8 @@
       FactoryDetailsPage,
       FactoryToolbar,
       FactoryList,
-      FactoryLabelsForm
+      FactoryLabelsForm,
+      AuthenticationClearForm
     },
     computed: {
       ...mapGetters({
@@ -167,7 +175,7 @@
           return;
         }
         this.$message.success('工厂禁用成功');
-        this.onAdvancedSearch();
+        this.onAdvancedSearch(this.page.number);
         this.forbiddenDialogVisible = false;
       },
       onCannelDelete (item) {
@@ -187,7 +195,7 @@
           return;
         }
         this.$message.success('工厂解禁成功');
-        this.onAdvancedSearch();
+        this.onAdvancedSearch(this.page.number);
       },
       handleTabClick (tab) {
         if (tab.name !== '') {
@@ -200,6 +208,18 @@
           this.queryFormData.approvalStatuses = [];
         }
         this.onAdvancedSearch();
+      },
+      clearAuth (row) {
+        this.authVisible = true;
+        this.clearRow = row;
+      },
+      callback () {
+        this.authVisible = false;
+        let page = this.page.number;
+        if (this.activeName.approved && this.page.size === 1) {
+          page = this.page.number - 1;
+        }
+        this.onAdvancedSearch(page);
       }
     },
     data () {
@@ -222,11 +242,13 @@
           code: 'unapproved',
           name: '未认证'
         }],
-        activeName: ''
+        activeName: '',
+        authVisible: false,
+        clearRow: ''
       };
     },
     created () {
-      this.onSearch();
+      this.onAdvancedSearch();
     }
   };
 </script>
