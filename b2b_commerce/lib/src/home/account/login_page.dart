@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:services/services.dart'
     show LoginResult, UserBLoC, UserRepositoryImpl, WechatServiceImpl;
-import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 import 'package:widgets/widgets.dart';
 
 import 'auth_login.dart';
@@ -32,15 +31,11 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
   final GlobalKey _scaffoldKey = GlobalKey();
 
-  String _verifyStr = '获取验证码';
-  int _seconds = 0;
-  Timer _timer;
   String phoneValidateStr = "";
 
   TextEditingController _phoneController;
   TextEditingController _passwordController;
   TextEditingController _smsCaptchaController;
-  FocusNode _phoneFocusNode;
   FocusNode _passwordFocusNode;
   FocusNode _smsFocusNode;
 
@@ -65,7 +60,6 @@ class _LoginPageState extends State<LoginPage> {
     _phoneController = TextEditingController();
     _passwordController = TextEditingController();
     _smsCaptchaController = TextEditingController();
-    _phoneFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
     _smsFocusNode = FocusNode();
 
@@ -102,28 +96,6 @@ class _LoginPageState extends State<LoginPage> {
             child: _buildBody(context, bloc),
           )),
     );
-  }
-
-  _startTimer() {
-    _seconds = 60;
-
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_seconds == 0) {
-        _cancelTimer();
-        return;
-      }
-
-      _seconds--;
-      _verifyStr = '$_seconds(s)';
-      setState(() {});
-      if (_seconds == 0) {
-        _verifyStr = '重新发送';
-      }
-    });
-  }
-
-  _cancelTimer() {
-    _timer?.cancel();
   }
 
   Widget _buildServiceRow() {
@@ -192,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
               keyboardType: TextInputType.phone,
               //只能输入数字
               inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.digitsOnly
               ],
               controller: _phoneController,
 
@@ -271,65 +243,43 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.phone,
                     //只能输入数字
                     inputFormatters: <TextInputFormatter>[
-                      WhitelistingTextInputFormatter.digitsOnly,
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                     focusNode: _smsFocusNode,
                     controller: _smsCaptchaController,
                     decoration: InputDecoration(
                         hintText: '请输入短信验证码', border: InputBorder.none),
                   ),
-            surfix: Countdown(
-              controller: controller,
-              seconds: countdownTime,
-              build: (_, double time) =>
-                  FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    color: Color.fromRGBO(255, 214, 12, 1),
-                    onPressed: (time == 0 || time == countdownTime)
-                        ? () async {
-                      bool legal = await validatePhone();
-                      if (legal) {
-                        UserRepositoryImpl()
-                            .sendCaptchaForLogin(_phoneController.text)
-                            .then((a) {
-                          controller.restart();
-                        });
-                      }
-                    }
-                        : null,
-                    child: Text(
-                      (time == 0 || time == countdownTime)
-                          ? '获取验证码'
-                          : '${time.toInt()}s',
-                      style: TextStyle(color: Colors.black),
+                  surfix: Countdown(
+                    controller: controller,
+                    seconds: countdownTime,
+                    build: (_, double time) => FlatButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: (time == 0 || time == countdownTime)
+                          ? () async {
+                              bool legal = await validatePhone();
+                              if (legal) {
+                                UserRepositoryImpl()
+                                    .sendCaptchaForLogin(_phoneController.text)
+                                    .then((a) {
+                                  controller.restart();
+                                });
+                              }
+                            }
+                          : null,
+                      child: Text(
+                        (time == 0 || time == countdownTime)
+                            ? '获取验证码'
+                            : '${time.toInt()}s',
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
+                    interval: Duration(milliseconds: 1000),
+                    onFinished: () {},
                   ),
-              interval: Duration(milliseconds: 1000),
-              onFinished: () {},
-            ),
-            // surfix: FlatButton(
-            //   shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(50)),
-            //   color: Color.fromRGBO(255, 214, 12, 1),
-            //   onPressed: (_seconds == 0)
-            //       ? () async {
-            //           bool legal = await validatePhone();
-            //           if (legal) {
-            //             UserRepositoryImpl()
-            //                 .sendCaptchaForLogin(_phoneController.text)
-            //                 .then((a) {
-            //               _startTimer();
-            //             });
-            //           }
-            //         }
-            //       : null,
-            //   child: Text(
-            //     '$_verifyStr',
-            //     style: TextStyle(color: Colors.black),
-            //   ),
-            // ),
-          ),
+                ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

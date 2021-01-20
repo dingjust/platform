@@ -6,20 +6,20 @@ class GlobalConfigs {
   // static const DEBUG = false;
 
   //测试
-  // static const CONTEXT_PATH = 'https://sc.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
+  static const CONTEXT_PATH = 'https://sc.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
 
   //本地
-  // static const CONTEXT_PATH = 'https://192.168.31.59:9002/djwebservices/v2';
-  // static const MEDIA_CONTEXT_PATH = 'http://192.168.31.59';
+  // static const CONTEXT_PATH = 'https://192.168.31.180:9002/djwebservices/v2';
+  // static const MEDIA_CONTEXT_PATH = 'http://192.168.31.180';
 
   // 生产
-  static const CONTEXT_PATH = 'https://ht.nbyjy.net';
-  static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+  // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
+  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   //分享域名
-  // static const SHARE_CONTEXT_PATH = 'https://share.sc.nbyjy.net'; //测试
-  static const SHARE_CONTEXT_PATH = 'https://share.ht.nbyjy.net'; //生产
+  static const SHARE_CONTEXT_PATH = 'https://share.sc.nbyjy.net'; //测试
+  // static const SHARE_CONTEXT_PATH = 'https://share.ht.nbyjy.net'; //生产
 
   /// 通过nginx代理所有b2b前缀的请求
   static const B2B_API_PREFIX = 'b2b'; //测试&生产
@@ -29,7 +29,7 @@ class GlobalConfigs {
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
 
   // static const AUTH_SERVER_URL =
-  //     'https://192.168.31.59:9002/authorizationserver';
+  //     'https://192.168.31.180:9002/authorizationserver';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
@@ -126,4 +126,7 @@ class GlobalConfigs {
 
   ///IOS BundleId
   static const IOS_BUNDLE_ID = "com.yjy.yijiayi";
+
+  ///CDN-OSS-DOMAIN
+  static const CDN_OSS_DOMAIN = "http://cdn-oss.nbyjy.net";
 }

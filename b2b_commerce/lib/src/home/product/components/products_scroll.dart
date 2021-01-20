@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -11,15 +12,15 @@ class ProductsScroll extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ProductHomeState>(
         builder: (context, ProductHomeState homteState, _) => Container(
-              height: height,
-              margin: EdgeInsets.only(top: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                        'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/product_home_banner.png'),
+          height: height,
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              image: DecorationImage(
+                image: NetworkImage(
+                        '${GlobalConfigs.CDN_OSS_DOMAIN}/product_home_banner.png'),
                     fit: BoxFit.fill,
                   )),
-            ));
+        ));
   }
 }

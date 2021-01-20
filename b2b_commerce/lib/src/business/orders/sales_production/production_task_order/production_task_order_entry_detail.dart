@@ -126,14 +126,15 @@ class _MainInfo extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 child: ColorSizeEntryTable(
                   data: order.colorSizeEntries,
-                  compareFunction: Provider.of<SizeState>(context).compare,
+                  compareFunction: Provider.of<SizeState>(context).compareByName,
                 ),
               ),
               buildRow('生产数量', '${order.quantity}'),
               buildRow(
                   '合作方式', CooperationModeLocalizedMap[order.cooperationMode]),
               buildRow('交货日期', DateFormatUtil.formatYMD(order.deliveryDate)),
-              _buildProgressTimeLine(),
+              order.progressWorkSheet != null ?
+              _buildProgressTimeLine() : Container(),
               AddressInfoBlock(
                 model: order.shippingAddress,
               ),
@@ -175,13 +176,14 @@ class _MainInfo extends StatelessWidget {
   ProgressTimeLine _buildProgressTimeLine() {
     bool _enableEdit = false;
     String companyCode = UserBLoC.instance.currentUser.companyCode;
-    String belongToUid = order.progressWorkSheet.belongTo?.uid;
+    String belongToUid = order.progressWorkSheet?.belongTo?.uid;
     if (belongToUid == null) {
-      belongToUid = order.progressWorkSheet.partyBCompany?.uid;
+      belongToUid = order.progressWorkSheet?.partyBCompany?.uid;
     }
     if (companyCode == belongToUid &&
         (order.state == ProductionTaskOrderState.PRODUCING ||
-            order.state == ProductionTaskOrderState.TO_BE_PRODUCED)) {
+            order.state == ProductionTaskOrderState.TO_BE_PRODUCED)
+        && (order.outboundOrderCode == null )) {
       _enableEdit = true;
     }
 

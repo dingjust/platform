@@ -24,19 +24,24 @@ enum CooperatorCategory {
   CUSTOMER,
 
   ///面辅料商
-  FABRIC_SUPPLIER
+  FABRIC_SUPPLIER,
+
+  ///默认
+  DEFAULT
 }
 
 const CooperatorCategoryCodeMap = {
   CooperatorCategory.SUPPLIER: "SUPPLIER",
   CooperatorCategory.CUSTOMER: "CUSTOMER",
   CooperatorCategory.FABRIC_SUPPLIER: "FABRIC_SUPPLIER",
+  CooperatorCategory: "DEFAULT"
 };
 
 const CooperatorCategoryLocalizedMap = {
   CooperatorCategory.SUPPLIER: "加工厂",
   CooperatorCategory.CUSTOMER: "客户",
   CooperatorCategory.FABRIC_SUPPLIER: "面辅料商",
+  CooperatorCategory.DEFAULT: "默认"
 };
 
 /// 合作商

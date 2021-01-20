@@ -84,6 +84,6 @@ module.exports = {
   },
   externals: {
     'echarts':'echarts',
-    'xlsx':'XLSX',
+    // 'xlsx':'XLSX',
  },
 };

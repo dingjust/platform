@@ -31,8 +31,11 @@
       </el-table-column>
       <el-table-column label="标签">
         <template slot-scope="scope">
-          <el-tag size="mini" class="elTagClass" :disable-transitions="true">
-            {{(scope.row.partner && scope.row.partner.approvalStatus && scope.row.partner.approvalStatus === 'approved') ? '已认证' : '未认证'}}
+          <el-tag size="mini" :disable-transitions="true" :type="'success'" v-if="(scope.row.partner && scope.row.partner.approvalStatus && scope.row.partner.approvalStatus === 'approved')">
+            已认证
+          </el-tag>
+            <el-tag size="mini" :disable-transitions="true" :type="'info'" v-else>
+            未认证
           </el-tag>
         </template>
       </el-table-column>
@@ -140,13 +143,5 @@
 <style>
   .cooperator-list-button {
     color: #FFA403;
-  }
-
-  .elTagClass{
-    color: #0b0e0f;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    cursor:pointer;
-    background-color: #FFD60C;
   }
 </style>

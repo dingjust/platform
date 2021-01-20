@@ -67,8 +67,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     List<MediaModel> thumbnails = [];
     if (widget.product.thumbnails != null) {
       thumbnails = widget.product.thumbnails
-          .map((thumbnail) =>
-          MediaModel(
+          .map((thumbnail) => MediaModel(
               convertedMedias: thumbnail.convertedMedias,
               mediaFormat: thumbnail.mediaFormat,
               mediaType: thumbnail.mediaType,
@@ -418,32 +417,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 children: <Widget>[Text('商品详情')],
               ),
             ),
-            Column(
-                children: widget.product.images
-                    .map((media) =>
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: Container(
-                              child: CachedNetworkImage(
-                                  imageUrl: '${media.normalUrl()}',
-                                  fit: BoxFit.fitWidth,
-                                  placeholder: (context, url) =>
-                                      SpinKitRing(
-                                        color: Colors.black12,
-                                        lineWidth: 2,
-                                        size: 30,
-                                      ),
-                                  errorWidget: (context, url, error) =>
-                                      SpinKitRing(
-                                        color: Colors.black12,
-                                        lineWidth: 2,
-                                        size: 30,
-                                      )),
-                            ))
-                      ],
-                    ))
-                    .toList()),
+            Column(children: [
+              for (MediaModel media in [
+                ...widget?.product?.images ?? [],
+                ...widget?.product?.details ?? []
+              ])
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Container(
+                          child: CachedNetworkImage(
+                              imageUrl: '${media.normalUrl()}',
+                              fit: BoxFit.fitWidth,
+                              placeholder: (context, url) =>
+                                  SpinKitRing(
+                                    color: Colors.black12,
+                                    lineWidth: 2,
+                                    size: 30,
+                                  ),
+                              errorWidget: (context, url, error) =>
+                                  SpinKitRing(
+                                    color: Colors.black12,
+                                    lineWidth: 2,
+                                    size: 30,
+                                  )),
+                        ))
+                  ],
+                )
+            ])
           ],
         ));
   }

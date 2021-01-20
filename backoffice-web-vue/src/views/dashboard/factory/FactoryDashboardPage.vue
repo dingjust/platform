@@ -29,7 +29,7 @@
           </el-col>
         </el-row>
         <el-row class="hidden-lg-and-up">
-          <img class="dashboard-img" src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png"/>
+          <img class="dashboard-img" :src="CONFIG.CDN_OSS_DOMAIN+'/%E5%9B%BE%E7%89%87.png'"/>
         </el-row>
       </el-col>
       <el-col class="hidden-md-and-down" :lg="10" :xl="10">
@@ -40,7 +40,7 @@
           <progress-card :reportsProgress="reportsProgress"/>
         </el-row>
         <el-row>
-          <img class="dashboard-img" src="https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png"/>
+          <img class="dashboard-img" :src="CONFIG.CDN_OSS_DOMAIN+'/%E5%9B%BE%E7%89%87.png'"/>
         </el-row>
       </el-col>
     </el-row>

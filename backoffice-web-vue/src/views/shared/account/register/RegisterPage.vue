@@ -70,7 +70,7 @@
 </script>
 <style>
   .register-container {
-    background-image: url("https://yijiayi.oss-cn-shenzhen.aliyuncs.com/login-background.jpg");
+    background-image: url("https://cdn-oss.nbyjy.net/login-background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
   }
