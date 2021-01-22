@@ -1784,6 +1784,10 @@ let NONE_TENANT_APIS = {
   ReconciliationCancel (id) {
     return '/b2b/sheets/fast/reconciliation/cancel/' + id;
   },
+  // 修改对账单 put
+  reconciliationOrderModify () {
+    return '/b2b/sheets/fast/reconciliation/update';
+  },
   // 获取doc token
   getDocToken (code) {
     return '/b2b/doc/signature/get/download/token/' + code;

@@ -106,7 +106,7 @@ export default {
           }
 
           if (this.formData.entries.some(item => item.product.id === '')) {
-            this.$message.error('存在对账内容没有产品，请选择处理');
+            this.$message.error('存在对账内容没有产品，请先进行处理');
             return;
           }
 
