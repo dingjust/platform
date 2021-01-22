@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn dashboard-card">
     <el-row type="flex" justify="space-between" align="middle">
-      <h6>待办事项</h6>
+      <h6 style="margin: 0px">待办事项</h6>
       <i class="el-icon-setting dashboard-setting-btn">设置</i>
     </el-row>
     <div style="display: flex;flex-wrap: wrap;">
@@ -161,7 +161,9 @@
       };
     },
     created() {
-      this.getData();
+      if (!this.isTenant()) {
+        this.getData();
+      }
     }
   };
 

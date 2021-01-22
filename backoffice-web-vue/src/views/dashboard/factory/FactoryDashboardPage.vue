@@ -142,27 +142,29 @@ export default {
         }
       }
 
-      const date = new Date();
-
-      const lastMonth = date.getFullYear() + '-' + date.getMonth() + '-01';
-      const thisMonth = date.getFullYear() + '-' 
-                          + ((date.getMonth() + 1) > 12 ? (date.getMonth() + 1) -12 : (date.getMonth() + 1)) 
-                          + '-01';
-      const nextMonth = ((date.getMonth() + 2) > 12 ? (date.getFullYear() + 1) : date.getFullYear()) + '-' 
-                          + ((date.getMonth() + 2) > 12 ? (date.getMonth() + 2) -12 : (date.getMonth() + 2)) 
-                          + '-01';
-
-      // 获取外发外接数量，金额统计
-      this.lastMonthIncome = await this.getDashboardOrderStatistics({
-        createdDateFrom: lastMonth,
-        createdDateTo: thisMonth
-      }, '上月统计');
-      this.thisMonthIncome = await this.getDashboardOrderStatistics({
-        createdDateFrom: thisMonth,
-        createdDateTo: nextMonth
-      }, '本月统计');
-
-      await this.getReportsProgress();
+      if (!this.isTenant()) {
+        const date = new Date();
+  
+        const lastMonth = date.getFullYear() + '-' + date.getMonth() + '-01';
+        const thisMonth = date.getFullYear() + '-' 
+                            + ((date.getMonth() + 1) > 12 ? (date.getMonth() + 1) -12 : (date.getMonth() + 1)) 
+                            + '-01';
+        const nextMonth = ((date.getMonth() + 2) > 12 ? (date.getFullYear() + 1) : date.getFullYear()) + '-' 
+                            + ((date.getMonth() + 2) > 12 ? (date.getMonth() + 2) -12 : (date.getMonth() + 2)) 
+                            + '-01';
+  
+        // 获取外发外接数量，金额统计
+        this.lastMonthIncome = await this.getDashboardOrderStatistics({
+          createdDateFrom: lastMonth,
+          createdDateTo: thisMonth
+        }, '上月统计');
+        this.thisMonthIncome = await this.getDashboardOrderStatistics({
+          createdDateFrom: thisMonth,
+          createdDateTo: nextMonth
+        }, '本月统计');
+  
+        await this.getReportsProgress();
+      }
     },
     async getDashboardOrderStatistics (form, title) {
       const url = this.apis().getDashboardOrderStatistics();
