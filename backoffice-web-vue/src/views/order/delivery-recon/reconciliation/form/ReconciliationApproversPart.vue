@@ -48,6 +48,13 @@ export default {
     removeApprover () {
       this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
     },
+  },
+  mounted () {
+    if (checkAuditFree('FAST_RECONCILIATION_SHEET_NO_AUDIT')) {
+      this.formData.isApproval = false;
+    } else {
+      this.formData.isApproval = true;
+    }
   }
 }
 </script>

@@ -171,7 +171,7 @@
         }
         // 订单审核状态在待审核且登陆账号为审核人
         if (this.formData.sendApprovers != null) {
-          let flag = this.formData.sendApprovers.some(item => item.uid === this.$store.getters.currentUser.uid);
+          const flag = this.formData.sendAuditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid
           return this.formData.sendAuditWorkOrder.currentUserAuditState == 'AUDITING' && flag;
         } else {
           return false;

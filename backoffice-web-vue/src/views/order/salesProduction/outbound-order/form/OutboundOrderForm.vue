@@ -651,6 +651,12 @@
       this.$nextTick(() => {
         this.$refs['form'].clearValidate();
       })
+
+      if (checkAuditFree('SEND_SALES_OUT_NO_AUDIT')) {
+        this.formData.sendAuditNeeded = false;
+      } else {
+        this.formData.sendAuditNeeded = true;
+      }
     },
     destroyed() {
       this.clearFormData();

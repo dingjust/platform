@@ -44,13 +44,17 @@
       <el-row v-if="canConfirm" type="flex" justify="center">
         <el-button class="material-btn" @click="toConfirm">确认</el-button>
       </el-row>
-      <el-row v-if="canCancel" type="flex" justify="center">
-        <el-button class="material-btn" @click="toCancel">取消</el-button>
+      <el-row type="flex" justify="center">
+        <el-button v-if="canCancel" class="material-btn" @click="toCancel">取消</el-button>
+        <el-button v-if="canModify" class="material-btn" @click="toModify">修改</el-button>
       </el-row>
     </el-card>
     <!-- 展示pdf组件 -->
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" style="width: 100%" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" append-to-body :close-on-click-modal="false">
       <doc-signatures v-if="pdfVisible" :fileUrl="fileUrl" :pdfItem="pdfItem" :order="order"/>
+    </el-dialog>
+    <el-dialog :visible.sync="modifyVisible" :show-close="true" width="80%" append-to-body :close-on-click-modal="false">
+      <reconciliation-order-modify-form v-if="modifyVisible" :order="modifyForm" @callback="callback"/>
     </el-dialog>
   </div>
 </template>
@@ -61,6 +65,7 @@ import ReconciliationDetailHeader from './ReconciliationDetailHeader'
 import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
 import { FilesUpload } from '@/components'
 import DocSignatures from '@/views/order/delivery-recon/components/DocSignatures'
+import ReconciliationOrderModifyForm from '../form/ReconciliationOrderModifyForm'
 
 export default {
   name: 'ReconciliationOrdersDetailV2',
@@ -70,11 +75,15 @@ export default {
     OrderAuditDetail,
     FilesUpload,
     ReconciliationDetailHeader,
-    DocSignatures
+    DocSignatures,
+    ReconciliationOrderModifyForm
   },
   computed: {
     isReceiveParty: function () {
       return this.order.receiveParty.uid === this.$store.getters.currentUser.companyCode;
+    },
+    isCreator: function () {
+      return this.order.creator.uid === this.$store.getters.currentUser.uid;
     },
     canAudit: function () {
       if (this.order.state !== 'PENDING_APPROVAL') {
@@ -82,7 +91,7 @@ export default {
       }
       // 订单审核状态在待审核且登陆账号为审核人
       if (this.order.approvers != null) {
-        let flag = this.order.approvers.some(item => item.uid === this.$store.getters.currentUser.uid);
+        const flag = this.order.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid;
         return this.order.auditWorkOrder.currentUserAuditState == 'AUDITING' && flag;
       } else {
         return false;
@@ -97,7 +106,11 @@ export default {
     },
     canCancel: function () {
       // 待乙方签署的状态下，创建方可以进行取消操作
-      return this.isReceiveParty && this.order.state === 'PENDING_B_SIGN';
+      return this.isCreator && this.order.state === 'PENDING_B_SIGN';
+    },
+    canModify: function () {
+      // 待乙方签署或待审批的状态下，创建方可以进行取消操作
+      return this.isCreator && (this.order.state === 'PENDING_B_SIGN' || this.order.state === 'PENDING_APPROVAL');
     },
     tagTitle: function () {
       if (this.order.state === 'PENDING_B_SIGN') {
@@ -112,6 +125,7 @@ export default {
       order: {
         receiveParty: {},
         shipParty: {},
+        creator: {},
         cooperator: {
           partner: ''
         },
@@ -119,12 +133,19 @@ export default {
       },
       pdfVisible: false,
       fileUrl: '',
-      pdfItem: ''
+      pdfItem: '',
+      modifyVisible: false,
+      modifyForm: {
+        id: '',
+        entries: []
+      }
     }
   },
   methods: {
-    async getDetail () {
-      const url = this.apis().getReconciliationV2Detail(this.id);
+    async getDetail (id) {
+      const searchId = id || this.id;
+
+      const url = this.apis().getReconciliationV2Detail(searchId);
       const result = await this.$http.get(url);
 
       if (result['errors']) {
@@ -259,11 +280,29 @@ export default {
       }
       this.$message.success("操作成功！");
       this.getDetail();
+    },
+    toModify () {
+      const form = {
+        id: this.order.id,
+        entries: this.order.entries
+      };
+      this.modifyForm = JSON.parse(JSON.stringify(form));
+      this.modifyVisible = true;
+    },
+    callback (id) {
+      this.modifyVisible = false;
+      this.$router.push('/order/reconciliation/' + id);
     }
   },
   created () {
     this.getDetail();
-  }
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (to.name === from.name && to.params.id != from.params.id) {
+      this.getDetail(to.params.id);
+    }
+    next();
+  },
 }
 </script>
 

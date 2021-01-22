@@ -49,7 +49,7 @@ export default {
   },
   data () {
     return {
-      activeName: 'PENDING_B_SIGN',
+      activeName: 'WAIT_ME_SIGN',
       statuses: [
         {
           code: 'WAIT_ME_SIGN',

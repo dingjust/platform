@@ -89,11 +89,10 @@ export default {
         return false;
       }
       // 订单审核状态在待审核且登陆账号为审核人
-      let flag = this.orderDetail.currentAuditWork && 
-                 this.orderDetail.currentAuditWork.processes && 
-                 this.orderDetail.currentAuditWork.processes.length > 0 &&
-                 this.orderDetail.currentAuditWork.currentUserAuditState && 
-                 this.orderDetail.currentAuditWork.currentUserAuditState === 'AUDITING';
+      const flag = this.orderDetail.auditWorkOrder && 
+          this.orderDetail.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
+          this.orderDetail.auditWorkOrder.currentUserAuditState == 'AUDITING';
+          
       if (flag) {
         return true;
       }
