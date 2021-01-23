@@ -154,6 +154,7 @@ class _B2BAppState extends State<B2BApp> {
           loginLock = false;
           return;
         } else {
+          BotToast.showText(text: '请先登录');
           Navigator.of(_navigatorKey.currentState.overlay.context)
               .pushNamedAndRemoveUntil(
                   AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'))

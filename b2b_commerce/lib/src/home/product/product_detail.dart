@@ -1,3 +1,5 @@
+import 'package:core/core.dart';
+
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
     as dj;
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
@@ -6,7 +8,6 @@ import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/home/product/buy_stock_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -21,8 +22,7 @@ import 'components/clip_widget.dart';
 class ProductDetailPage extends StatefulWidget {
   final String code;
 
-  ProductDetailPage(
-    this.code, {
+  ProductDetailPage(this.code, {
     Key key,
   }) : super(key: key);
 
@@ -727,7 +727,7 @@ class BasicInfoRow extends StatelessWidget {
                     Container(
                       width: 80,
                       child: Text(
-                        '${label}',
+                        '$label',
                         style: TextStyle(
                             color: Color.fromRGBO(150, 150, 150, 1),
                             fontSize: 15),
@@ -736,7 +736,7 @@ class BasicInfoRow extends StatelessWidget {
                     Container(
                       width: 200,
                       child: Text(
-                        '${value}',
+                        '$value',
                         style: TextStyle(
                             color: Color.fromRGBO(51, 51, 51, 1), fontSize: 15),
                         overflow: TextOverflow.ellipsis,
