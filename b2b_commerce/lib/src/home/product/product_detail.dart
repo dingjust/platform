@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/home/product/buy_stock_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -18,14 +19,19 @@ import 'package:widgets/widgets.dart';
 import 'components/clip_widget.dart';
 
 class ProductDetailPage extends StatefulWidget {
-  ProductDetailPage({Key key, @required this.product}) : super(key: key);
+  final String code;
 
-  ApparelProductModel product;
+  ProductDetailPage(
+    this.code, {
+    Key key,
+  }) : super(key: key);
 
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
+  ApparelProductModel data;
+
   TextEditingController _numController = TextEditingController();
   TextEditingController _remarksController = TextEditingController();
 
@@ -34,29 +40,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
 
-    if (widget.product != null) {
+    if (widget.code != null) {
       //数据埋点>>>看款详情
-      FlutterUmplus.event("order_product_detail_page",
-          label: widget.product.code);
+      FlutterUmplus.event("order_product_detail_page", label: widget.code);
 
-      //点击量
-      ItemRepository().onDetail(widget.product.id);
-
-      //若产品没有类型
-      if (widget.product.productType == null ||
-          widget.product.productType.isEmpty) {
-        //默认期货
-        productType = ProductType.FUTURE_GOODS;
-      } else {
-        if (widget.product.productType.contains(ProductType.SPOT_GOODS)) {
-          productType = ProductType.SPOT_GOODS;
-        } else if (widget.product.productType
-            .contains(ProductType.TAIL_GOODS)) {
-          productType = ProductType.TAIL_GOODS;
-        } else {
-          productType = ProductType.FUTURE_GOODS;
-        }
-      }
+      // //点击量
+      // ItemRepository().onDetail(data.id);
     }
   }
 
@@ -64,10 +53,41 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     final bloc = BLoCProvider.of<UserBLoC>(context);
 
+    return Theme(
+      data: ThemeData(
+        canvasColor: Colors.transparent,
+      ),
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Container(
+          color: Color.fromRGBO(248, 248, 248, 1),
+          child: FutureBuilder(
+            future: _getData(),
+            builder: (BuildContext context,
+                AsyncSnapshot<ApparelProductModel> snapshot) {
+              if (data != null) {
+                return _buildBody();
+              } else {
+                return Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                      AlwaysStoppedAnimation(Constants.THEME_COLOR_MAIN),
+                    ));
+              }
+            },
+          ),
+        ),
+        bottomSheet: _bubildOrderSheet(bloc),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
     List<MediaModel> thumbnails = [];
-    if (widget.product.thumbnails != null) {
-      thumbnails = widget.product.thumbnails
-          .map((thumbnail) => MediaModel(
+    if (data.thumbnails != null) {
+      thumbnails = data.thumbnails
+          .map((thumbnail) =>
+          MediaModel(
               convertedMedias: thumbnail.convertedMedias,
               mediaFormat: thumbnail.mediaFormat,
               mediaType: thumbnail.mediaType,
@@ -78,52 +98,42 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           .toList();
     }
 
-    return Theme(
-      data: ThemeData(canvasColor: Colors.transparent),
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Container(
-          color: Color.fromRGBO(248, 248, 248, 1),
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(
-                expandedHeight: 400,
-                pinned: true,
-                elevation: 0,
-                backgroundColor: Color.fromRGBO(255, 255, 255, 0),
-                actionsIconTheme: IconThemeData(color: Colors.grey[300]),
-                // backgroundColor: Constants.THEME_COLOR_MAIN,
-                brightness: Brightness.dark,
-                leading: IconButton(
-                    icon: Icon(
-                      B2BIcons.left_fill,
-                      color: Color.fromRGBO(0, 0, 0, 0.6),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      ProductCarousel(thumbnails, 400),
-                    ],
-                  ),
-                ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          expandedHeight: 400,
+          pinned: true,
+          elevation: 0,
+          backgroundColor: Color.fromRGBO(255, 255, 255, 0),
+          actionsIconTheme: IconThemeData(color: Colors.grey[300]),
+          // backgroundColor: Constants.THEME_COLOR_MAIN,
+          brightness: Brightness.dark,
+          leading: IconButton(
+              icon: Icon(
+                B2BIcons.left_fill,
+                color: Color.fromRGBO(0, 0, 0, 0.6),
               ),
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                    // ProductCarousel(thumbnails, 400),
-                    _buildTypeRow(),
-                    _buildHeaderSection(),
-                    ProductAttributesTab(widget.product),
-                    _buildImagesSection()
-                  ])),
-            ],
+              onPressed: () {
+                Navigator.of(context).pop();
+              }),
+          flexibleSpace: FlexibleSpaceBar(
+            background: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                ProductCarousel(thumbnails, 400),
+              ],
+            ),
           ),
         ),
-        bottomSheet: _bubildOrderSheet(bloc),
-      ),
+        SliverList(
+            delegate: SliverChildListDelegate([
+              // ProductCarousel(thumbnails, 400),
+              _buildTypeRow(),
+              _buildHeaderSection(),
+              ProductAttributesTab(data),
+              _buildImagesSection()
+            ])),
+      ],
     );
   }
 
@@ -136,7 +146,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           color: Colors.white,
           border:
           Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
-      // margin: EdgeInsets.only(top: 10),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -152,9 +161,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               color: Color.fromRGBO(254, 227, 93, 1),
               child: Center(
                 child: Text(
-                  '已售${(widget.product?.salesVolume ?? 0) > 9999
-                      ? '9999+'
-                      : widget.product?.salesVolume ?? 0}件',
+                  '已售${(data?.salesVolume ?? 0) > 9999 ? '9999+' : data
+                      ?.salesVolume ?? 0}件',
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),
@@ -166,9 +174,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Widget _buildTypeSection() {
     List<ProductType> productTypes;
-    if (widget.product.productType != null &&
-        widget.product.productType.isNotEmpty) {
-      productTypes = widget.product.productType;
+    if (data.productType != null && data.productType.isNotEmpty) {
+      productTypes = data.productType;
       //排序
       productTypes.forEach((type) {
         print('${type}${type.index}');
@@ -234,7 +241,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: Text(
-              '${widget.product.name}',
+              '${data.name}',
               style: TextStyle(
                   color: Color.fromRGBO(50, 50, 50, 1),
                   fontSize: 16,
@@ -247,9 +254,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               margin: EdgeInsets.only(top: 10),
               child: Text(
                 productType == ProductType.FUTURE_GOODS
-                    ? '出货周期：${widget.product.basicProduction}件内${widget.product
-                    .productionDays}天，每加${widget.product
-                    .productionIncrement}件多1天'
+                    ? '出货周期：${data.basicProduction}件内${data
+                    .productionDays}天，每加${data.productionIncrement}件多1天'
                     : '出货周期：72小时内',
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               )),
@@ -270,9 +276,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget _buildMoneyRow() {
     List<SteppedPriceModel> steppedPrices;
     if (productType == ProductType.FUTURE_GOODS) {
-      steppedPrices = widget.product.steppedPrices;
+      steppedPrices = data.steppedPrices;
     } else {
-      steppedPrices = widget.product.spotSteppedPrices;
+      steppedPrices = data.spotSteppedPrices;
     }
 
     ///阶梯价空处理
@@ -419,8 +425,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             Column(children: [
               for (MediaModel media in [
-                ...widget?.product?.images ?? [],
-                ...widget?.product?.details ?? []
+                ...data?.images ?? [],
+                ...data?.details ?? []
               ])
                 Row(
                   children: <Widget>[
@@ -598,7 +604,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         context: context,
         builder: (BuildContext context) {
           return AttributeTable(
-            product: widget.product,
+            product: data,
           );
         });
   }
@@ -609,7 +615,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         context: buildContext,
         builder: (BuildContext context) {
           return BuyProofingForm(
-            widget.product,
+            data,
             onRefresh: () {
               setState(() {});
             },
@@ -622,7 +628,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     dj.showModalBottomSheet<void>(
         context: buildContext,
         builder: (BuildContext context) {
-          return BuyPurchaseForm(widget.product);
+          return BuyPurchaseForm(data);
         });
   }
 
@@ -631,22 +637,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     dj.showModalBottomSheet<void>(
         context: buildContext,
         builder: (BuildContext context) {
-          return BuyStockForm(widget.product);
+          return BuyStockForm(data);
         });
   }
 
   //拨打联系人
   void onTel() async {
-    var url = 'tel:' + widget.product.belongTo.contactPhone;
+    var url = 'tel:' + data.belongTo.contactPhone;
     await launch(url);
   }
 
   //跳转工厂详情
   void jumpToFactory(UserBLoC bloc) {
     if (bloc.isBrandUser) {
-      UserRepositoryImpl()
-          .getFactory(widget.product.belongTo.uid)
-          .then((factory) {
+      UserRepositoryImpl().getFactory(data.belongTo.uid).then((factory) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -658,6 +662,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
         );
       });
+    }
+  }
+
+  ///获取产品信息
+  Future<ApparelProductModel> _getData() async {
+    if (data == null) {
+      ApparelProductModel product =
+      await ProductRepositoryImpl().detail(widget.code);
+      if (product != null) {
+        data = product;
+      }
+    }
+
+    return data;
+  }
+
+  void initData() {
+    //若产品没有类型
+    if (data.productType == null || data.productType.isEmpty) {
+      //默认期货
+      productType = ProductType.FUTURE_GOODS;
+    } else {
+      if (data.productType.contains(ProductType.SPOT_GOODS)) {
+        productType = ProductType.SPOT_GOODS;
+      } else if (data.productType.contains(ProductType.TAIL_GOODS)) {
+        productType = ProductType.TAIL_GOODS;
+      } else {
+        productType = ProductType.FUTURE_GOODS;
+      }
     }
   }
 }
