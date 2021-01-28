@@ -81,12 +81,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       controller: _phoneController,
       onChanged: (value) {
         formValidate();
-      }, //只能输入数字
+      },
+      //只能输入数字
       inputFormatters: <TextInputFormatter>[
-        WhitelistingTextInputFormatter.digitsOnly,
+        FilteringTextInputFormatter.digitsOnly
       ],
       decoration:
-      InputDecoration(hintText: '请输入手机号码', border: InputBorder.none),
+          InputDecoration(hintText: '请输入手机号码', border: InputBorder.none),
     );
 
     TextFormField _passwordField = TextFormField(
@@ -246,7 +247,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             children: <Widget>[
               Container(
                 padding: EdgeInsets.all(10),
-                child: Text('${result}'),
+                child: Text('$result'),
               ),
             ],
           ));

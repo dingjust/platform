@@ -12,6 +12,7 @@ import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/bottom_navigation.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
+import 'package:b2b_commerce/src/home/account/client_select_v2.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/index.dart';
 import 'package:b2b_commerce/src/my/index.dart';
@@ -152,7 +153,7 @@ class _B2BAppState extends State<B2BApp> {
     _loginJumpSubscription = UserBLoC.instance.loginJumpStream.listen((value) {
       if (!loginLock) {
         loginLock = true;
-        BotToast.showText(text: '请登录账号');
+        BotToast.showText(text: '请登录账号', align: Alignment.center);
         Navigator.of(_navigatorKey.currentState.overlay.context)
             .pushAndRemoveUntil(
                 PageRouteBuilder(
@@ -337,10 +338,10 @@ class AnymouseApp extends StatelessWidget {
         bottomAppBarColor: Colors.grey,
       ),
       navigatorObservers: [BotToastNavigatorObserver(), B2BNavigatorObserver()],
-      home: ClientSelectPage(),
+      home: ClientSelectPageV2(),
       routes: {
         AppRoutes.ROUTE_AUTH_REQUEST_PAGE:
-            AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
+        AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
       },
       builder: (context, child) {
         final botToastBuilder = BotToastInit(); //1.调用BotToastInit

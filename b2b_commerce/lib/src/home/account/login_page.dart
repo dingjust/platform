@@ -66,21 +66,6 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.addListener(() {
       setState(() {});
     });
-
-    loginStreamSubscription =
-        BLoCProvider.of<UserBLoC>(context).loginStream.listen((result) {
-      Navigator.of(context).pop();
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '${result}',
-              callbackResult: false,
-            );
-          });
-    });
   }
 
   @override
@@ -92,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
           key: _scaffoldKey,
           body: Form(
             key: _formKey,
-            autovalidate: true,
+            autovalidateMode: AutovalidateMode.always,
             child: _buildBody(context, bloc),
           )),
     );
@@ -156,7 +141,6 @@ class _LoginPageState extends State<LoginPage> {
                 FilteringTextInputFormatter.digitsOnly
               ],
               controller: _phoneController,
-
               decoration:
                   InputDecoration(hintText: '请输入手机号', border: InputBorder.none),
             ),
@@ -318,10 +302,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLogo() {
-    return Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(255, 214, 12, 1)),
-        padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
-        child: widget.logo);
+    return ClipPath(
+      clipper: MyClipper(),
+      child: Container(
+          decoration: BoxDecoration(color: Color.fromRGBO(255, 214, 12, 8)),
+          padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
+          child: widget.logo),
+    );
   }
 
   Widget _buildBody(BuildContext context, UserBLoC bloc) {
@@ -340,14 +327,14 @@ class _LoginPageState extends State<LoginPage> {
                 fit: StackFit.expand,
                 children: <Widget>[
                   _buildLogo(),
-                  Positioned(
-                    bottom: 5,
-                    left: 5,
-                    child: Text(
-                      '当前选择:${UserTypeLocalizedMap[UserBLoC.instance.currentUser.type]}',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  )
+                  // Positioned(
+                  //   bottom: 5,
+                  //   left: 5,
+                  //   child: Text(
+                  //     '当前选择:${UserTypeLocalizedMap[UserBLoC.instance.currentUser.type]}',
+                  //     style: TextStyle(fontSize: 16),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -436,82 +423,79 @@ class _LoginPageState extends State<LoginPage> {
     return isExist;
   }
 
-  void doLogin(UserBLoC bloc) {
+  void doLogin(UserBLoC bloc) async {
+    Function cancelFunc = BotToast.showLoading();
+    LoginResult result;
     if (_isPasswordLogin) {
-      bloc
-          .login(
-              username: _phoneController.text,
-              password: _passwordController.text,
-              remember: _isRemember)
-          .then((result) {
-        if (result == LoginResult.SUCCESS) {
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
-        } else if (result == LoginResult.DIO_ERROR) {
-          // Navigator.of(context).pop();
-        }
-      });
+      result = await bloc.login(
+          username: _phoneController.text,
+          password: _passwordController.text,
+          remember: _isRemember);
     } else {
-      bloc
-          .loginByAuthorizationCode(
-              username: _phoneController.text,
-              code: _smsCaptchaController.text,
-              remember: _isRemember)
-          .then((result) {
-        if (result == LoginResult.SUCCESS) {
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
-        } else if (result == LoginResult.DIO_ERROR) {
-          // Navigator.of(context).pop();
-        }
-      });
+      result = await bloc.loginByAuthorizationCode(
+          username: _phoneController.text,
+          code: _smsCaptchaController.text,
+          remember: _isRemember);
+    }
+    cancelFunc.call();
+    if (result == LoginResult.SUCCESS) {
+      Navigator.of(context).popUntil(ModalRoute.withName('/'));
+    } else {
+      BotToast.showText(
+        text: _isPasswordLogin ? '账号或密码错误' : '验证码错误',
+        align: Alignment.center,
+        duration: Duration(seconds: 3),
+        clickClose: true,
+      );
     }
   }
 
   void onLogin(UserBLoC bloc) {
     //加载条
-    showDialog(
-      context: context,
-      builder: (context) =>
-          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-    );
-    bloc.checkUserExist(_phoneController.text).then((value) {
-      if (value == null) {
-        bloc.loginStreamController.sink.add('网络链接失败');
-      } else if (value == UserType.DEFAULT) {
-        bloc.loginStreamController.sink.add('账号不存在请注册后登录');
-      } else {
-        if (bloc.currentUser.type != value) {
-          Navigator.of(context).pop();
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return CustomizeDialog(
-                  dialogType: DialogType.LOGIN_MESSAGE_DIALOG,
-                  failTips:
-                      '您当前选择的是${UserTypeLocalizedMap[bloc.currentUser.type]},但您登录的账号为${UserTypeLocalizedMap[value]}账号，请问是否继续登录。',
-                  callbackResult: false,
-                  cancelButtonText: '换个账户',
-                  confirmButtonText: '继续登录',
-                  confirmAction: () {
-                    Navigator.of(context).pop();
-                    //加载条
-                    showDialog(
-                      context: context,
-                      builder: (context) => ProgressIndicatorFactory
-                          .buildDefaultProgressIndicator(),
-                    );
-                    doLogin(bloc);
-                  },
-                  cancelAction: () {
-                    Navigator.of(context).pop();
-                  },
-                );
-              });
-        } else {
-          doLogin(bloc);
-        }
-      }
-    });
+    // showDialog(
+    //   context: context,
+    //   builder: (context) =>
+    //       ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    // );
+    // bloc.checkUserExist(_phoneController.text).then((value) {
+    //   if (value == null) {
+    //     bloc.loginStreamController.sink.add('网络链接失败');
+    //   } else if (value == UserType.DEFAULT) {
+    //     bloc.loginStreamController.sink.add('账号不存在请注册后登录');
+    //   } else {
+    //     if (bloc.currentUser.type != value) {
+    //       Navigator.of(context).pop();
+    //       showDialog(
+    //           context: context,
+    //           barrierDismissible: false,
+    //           builder: (_) {
+    //             return CustomizeDialog(
+    //               dialogType: DialogType.LOGIN_MESSAGE_DIALOG,
+    //               failTips:
+    //                   '您当前选择的是${UserTypeLocalizedMap[bloc.currentUser.type]},但您登录的账号为${UserTypeLocalizedMap[value]}账号，请问是否继续登录。',
+    //               callbackResult: false,
+    //               cancelButtonText: '换个账户',
+    //               confirmButtonText: '继续登录',
+    //               confirmAction: () {
+    //                 Navigator.of(context).pop();
+    //                 //加载条
+    //                 showDialog(
+    //                   context: context,
+    //                   builder: (context) => ProgressIndicatorFactory
+    //                       .buildDefaultProgressIndicator(),
+    //                 );
+    //                 doLogin(bloc);
+    //               },
+    //               cancelAction: () {
+    //                 Navigator.of(context).pop();
+    //               },
+    //             );
+    //           });
+    //     } else {
+    doLogin(bloc);
+    //     }
+    //   }
+    // });
   }
 
   void showSnackBar(BuildContext context) {
@@ -781,5 +765,27 @@ class InputRow extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path p = new Path();
+    p.lineTo(size.width, 0.0);
+    p.lineTo(size.width, size.height * 0.65);
+    p.arcToPoint(
+      Offset(0.0, size.height * 0.65),
+      radius: const Radius.elliptical(50.0, 10.0),
+      rotation: 0.0,
+    );
+    p.lineTo(0.0, 0.0);
+    p.close();
+    return p;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper oldClipper) {
+    return true;
   }
 }
