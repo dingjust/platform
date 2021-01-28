@@ -67,6 +67,10 @@ export default {
         }
       }
       return flag;
+    },
+    docSignatures: function () {
+      // 过滤已取消的电子对账单
+      return orde.docSignatures.filter(item => item.state !== 'CANCELED');
     }
   },
   data () {

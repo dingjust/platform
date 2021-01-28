@@ -109,8 +109,11 @@ export default {
       return this.isCreator && this.order.state === 'PENDING_B_SIGN';
     },
     canModify: function () {
+      if (this.canConfirm) {
+        return false;
+      }
       // 待乙方签署或待审批的状态下，创建方可以进行取消操作
-      return this.isCreator && (this.order.state === 'PENDING_B_SIGN' || this.order.state === 'PENDING_APPROVAL');
+      return this.isCreator && this.order.state === 'PENDING_B_SIGN';
     },
     tagTitle: function () {
       if (this.order.state === 'PENDING_B_SIGN') {
@@ -289,20 +292,14 @@ export default {
       this.modifyForm = JSON.parse(JSON.stringify(form));
       this.modifyVisible = true;
     },
-    callback (id) {
+    callback () {
+      this.getDetail();
       this.modifyVisible = false;
-      this.$router.push('/order/reconciliation/' + id);
     }
   },
   created () {
     this.getDetail();
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (to.name === from.name && to.params.id != from.params.id) {
-      this.getDetail(to.params.id);
-    }
-    next();
-  },
+  }
 }
 </script>
 

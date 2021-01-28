@@ -145,7 +145,7 @@ export default {
       if (!this.isTenant()) {
         const date = new Date();
   
-        const lastMonth = date.getFullYear() + '-' + date.getMonth() + '-01';
+        const lastMonth = date.getFullYear() + '-' + (date.getMonth() === 0 ? 12 : date.getMonth()) + '-01';
         const thisMonth = date.getFullYear() + '-' 
                             + ((date.getMonth() + 1) > 12 ? (date.getMonth() + 1) -12 : (date.getMonth() + 1)) 
                             + '-01';

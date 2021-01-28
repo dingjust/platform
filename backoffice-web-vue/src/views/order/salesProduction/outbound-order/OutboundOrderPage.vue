@@ -116,12 +116,8 @@
         this.outboundOrderStateCount();
       },
       createOutboundOrder() {
-        // this.outboundOrderTypeSelect = true;
         this.$router.push({
-          name: '创建外发订单',
-          params: {
-            formData: Object.assign({}, this.formData)
-          }
+          name: '创建外发订单'
         });
       },
       async outboundOrderStateCount() {
@@ -193,33 +189,33 @@
           targetCooperator: {
             id: data.targetCooperator.id
           },
-          taskOrderEntries: [{
-            unitPrice: data.taskOrderEntries[0].unitPrice,
-            deliveryDate: data.taskOrderEntries[0].deliveryDate,
-            shippingAddress: data.taskOrderEntries[0].shippingAddress,
-            product: data.taskOrderEntries[0].product,
-            progressPlan: data.taskOrderEntries[0].progressPlan,
-            colorSizeEntries: data.taskOrderEntries[0].colorSizeEntries
-          }],
+          taskOrderEntries: data.taskOrderEntries.map(item => {
+            return {
+              unitPrice: item.unitPrice,
+              deliveryDate: item.deliveryDate,
+              shippingAddress: item.shippingAddress,
+              product: item.product,
+              progressPlan: item.progressPlan,
+              colorSizeEntries: item.colorSizeEntries
+            }
+          }),
           cooperationMode: data.cooperationMode,
           invoiceNeeded: data.invoiceNeeded,
           invoiceTaxPoint: data.invoiceTaxPoint,
           freightPayer: data.freightPayer,
           remarks: data.remarks,
-          sendAuditNeeded: data.sendAuditNeeded,
+          sendAuditNeeded: data.sendAuditNeeded != null ? data.sendAuditNeeded : false,
           payPlan: data.payPlan,
           attachments: data.attachments ? data.attachments : [],
           sendApprovers: data.sendApprovers,
           merchandiser: data.merchandiser,
+          title: data.title
         }
         return formData;
       },
       createProductOutbound() {
         this.$router.push({
-          name: '创建产品外发',
-          params: {
-            formData: Object.assign({}, this.formData)
-          }
+          name: '创建产品外发'
         });
       },
       onResetQuery () {
