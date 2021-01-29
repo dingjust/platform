@@ -83,6 +83,10 @@ button{
 //   padding-top: 40px !important;
 // }
 
+.el-dialog__headerbtn {
+  z-index: 999;
+}
+
 .list-button {
   color: #FFA403;
 }

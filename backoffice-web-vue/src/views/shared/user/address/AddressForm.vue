@@ -85,7 +85,7 @@
     </el-row>
     <el-row type="flex" justify="end" style="margin-top: 5px">
       <el-button size="mini" @click="fullAddress = ''">清空</el-button>
-      <el-button size="mini" @click="onAnalysis">解析</el-button>
+      <el-button size="mini" @click="onAnalysis" class="analysis-button">解析</el-button>
     </el-row>
   </div>
 </template>
@@ -285,5 +285,9 @@ export default {
   /deep/ .el-divider--horizontal {
     margin-top: 0px;
     margin-bottom: 12px;
+  }
+
+  .analysis-button {
+    background-color: #FFD60C;
   }
 </style>

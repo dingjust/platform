@@ -320,11 +320,14 @@
       if (this.$route.params.order != null) {
         Object.assign(this.form, this.$route.params.order);
         this.form.salesDateRange = [this.form.salesDateStart, this.form.salesDateEnd];
-        this.form.auditNeeded = true;
       }
     },
     mounted() {
-
+      if (checkAuditFree('SALES_PLAN_NO_AUDIT')) {
+        this.form.auditNeeded = false;
+      } else {
+        this.form.auditNeeded = true;
+      }
     }
   };
 

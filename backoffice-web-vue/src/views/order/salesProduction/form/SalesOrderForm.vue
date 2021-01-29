@@ -263,7 +263,8 @@
         }
       },
       isDisabled: function () {
-        return !checkAuditFree('SALES_OUT_NO_AUDIT');
+        return false;
+        // return !checkAuditFree('SALES_OUT_NO_AUDIT');
       }
     },
     methods: {
@@ -516,12 +517,15 @@
           this.form.originCooperator.contactPhone = this.form.originCooperator.partner.contactPhone;
           this.form.originCooperator.contactPerson = this.form.originCooperator.partner.contactPerson;
         }
-
-        this.form.auditNeeded = true;
       }
     },
     mounted() {
-
+      this.form.auditNeeded = false;
+      // if (checkAuditFree('SALES_OUT_NO_AUDIT')) {
+      //   this.form.auditNeeded = false;
+      // } else {
+      //   this.form.auditNeeded = true;
+      // }
     }
   };
 

@@ -10,7 +10,7 @@
         <template v-for="(item,itemIndex) in formData.approvers">
           <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="72px" style="margin-right:10px;"
             :prop="'approvers.' + itemIndex" :rules="{required: formData.isApproval, message: '不能为空', trigger: 'change'}">
-            <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" 
+            <personnal-selection-v2 :vPerson.sync="formData.approvers[itemIndex]" :disabled="!formData.isApproval"
                                     :excludeMySelf="true" style="width: 194px" :selectedRow="formData.approvers"/>
           </el-form-item>
         </template>
@@ -48,6 +48,13 @@ export default {
     removeApprover () {
       this.formData.approvers.splice(this.formData.approvers.length - 1, 1);
     },
+  },
+  mounted () {
+    if (checkAuditFree('FAST_RECONCILIATION_SHEET_NO_AUDIT')) {
+      this.formData.isApproval = false;
+    } else {
+      this.formData.isApproval = true;
+    }
   }
 }
 </script>

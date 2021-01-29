@@ -11,7 +11,8 @@
           <div v-else>
             <el-button type="text" @click="onSelectProduct(scope.$index)">
               <div v-if="scope.row.product && scope.row.product.id && scope.row.product.id !== ''"> 
-                <img :src="scope.row.product.thumbnail.url" style="width: 50px; height: 50px"/>
+                <img v-if="scope.row.product.thumbnail" :src="scope.row.product.thumbnail.url" style="width: 50px; height: 50px"/>
+                <img v-else :src="scope.row.product.images[0].url" style="width: 50px; height: 50px"/>
               </div>
               <div class="product-select-icon" v-else>
                 <i class="el-icon-plus select-icon"></i>
@@ -139,9 +140,18 @@
           <span v-else>{{scope.row.settlementAmount}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" prop="remark" min-width="120px">
+      <el-table-column label="定金" prop="depositAmount" min-width="120px">
+        <template slot-scope="scope">
+          <el-input v-if="!scope.row.countRow"
+                    v-model="scope.row.depositAmount" 
+                    @change="inputChange(scope.$index, 'depositAmount')"
+                    v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+          <span v-else>{{scope.row.depositAmount}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="备注" prop="remark" min-width="225px">
         <template slot-scope="scope" v-if="!scope.row.countRow">
-          <el-input v-model="scope.row.remarks" :title="scope.row.remarks"></el-input>
+          <el-input v-model="scope.row.remarks" type="textarea" style="width: 200px" :rows="3" :title="scope.row.remarks"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="80px" fixed="right">
@@ -187,6 +197,7 @@ export default {
           expressFee: this.countColumn(this.formData.entries, 'expressFee'),
           // deductionAmount: this.countColumn(this.formData.entries, 'deductionAmount'),
           // returnQuantity: this.countColumn(this.formData.entries, 'returnQuantity'),
+          depositAmount: this.countColumn(this.formData.entries, 'depositAmount'),
           settlementAmount: this.countColumn(this.formData.entries, 'settlementAmount')
         });
       }
@@ -221,6 +232,7 @@ export default {
       //   expressFee: '',
       //   deductionAmount: '',
       //   settlementAmount: '',
+      //   depositAmount: '',
       //   remarks: ''
       // },
       productDialog: false,
@@ -273,6 +285,7 @@ export default {
         expressFee: '',
         deductionAmount: '',
         settlementAmount: '',
+        depositAmount: '',
         remarks: ''
       });
     },

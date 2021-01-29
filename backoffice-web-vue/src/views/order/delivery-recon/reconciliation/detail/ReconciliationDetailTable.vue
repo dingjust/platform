@@ -34,6 +34,7 @@
       <el-table-column label="扣款" prop="deductionAmount" min-width="120px" />
       <el-table-column label="退货" prop="returnQuantity" min-width="120px" />
       <el-table-column label="结算金额" prop="settlementAmount" min-width="120px" />
+      <el-table-column label="定金" prop="depositAmount" min-width="120px" />
       <el-table-column label="备注" prop="remarks" min-width="120px">
         <template slot-scope="scope">
           <span :title="scope.row.remarks" class="remark-title">{{scope.row.remarks}}</span>
@@ -63,6 +64,7 @@ export default {
           expressFee: this.countColumn(this.order.entries, 'expressFee'),
           deductionAmount: this.countColumn(this.order.entries, 'deductionAmount'),
           returnQuantity: this.countColumn(this.order.entries, 'returnQuantity'),
+          depositAmount: this.countColumn(this.order.entries, 'depositAmount'),
           settlementAmount: this.countColumn(this.order.entries, 'settlementAmount')
         });
       }

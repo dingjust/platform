@@ -188,7 +188,8 @@
       canAudit: function () {
         const uid = this.$store.getters.currentUser.uid;
         if (this.formData.approvers && this.formData.approvers.length > 0) {
-          let flag = this.formData.approvers.some(item => item.uid === uid);
+          // let flag = this.formData.approvers.some(item => item.uid === uid);
+          const flag = this.formData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid;
           if (this.formData.currentAuditWork) {
             return this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && flag;
           } else {

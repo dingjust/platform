@@ -24,8 +24,7 @@
         </el-col>
       </template>
       <!-- 审核人员按钮 -->
-      <template
-        v-if="isApprover && slotData.auditWorkOrder && slotData.auditWorkOrder.currentUserAuditState === 'AUDITING'">
+      <template v-if="canAudit">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
             <el-button class="material-btn_red" @click="onApproval(false)">审核驳回</el-button>
@@ -90,6 +89,19 @@
       isCreator: function () {
         if (this.slotData.creator != null && this.currentUser != null) {
           return this.slotData.creator.uid == this.currentUser.uid;
+        } else {
+          return false;
+        }
+      },
+      canAudit: function () {
+        if (this.slotData.state !== 'AUDITING') {
+          return false;
+        }
+
+        // 订单审核状态在待审核且登陆账号为审核人
+        if (this.slotData.approvers != null) {
+          const flag = this.slotData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid;
+          return this.slotData.auditWorkOrder.currentUserAuditState == 'AUDITING' && flag;
         } else {
           return false;
         }

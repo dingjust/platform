@@ -198,7 +198,9 @@ export default {
         this.$message.error(result.msg);
         return;
       }
-      this.stateCount = Object.assign(this.stateCount, result.data);
+      if (result.code === 1) {
+        this.stateCount.PENDING_RECONCILED = result.data.PENDING_RECONCILED || 0;
+      }
     },
     async getReconciliationV2ListCount () {
       let query = Object.assign({}, this.queryFormData);
@@ -216,7 +218,13 @@ export default {
         this.$message.error(result.msg);
         return;
       }
-      this.stateCount = Object.assign(this.stateCount, result.data);
+      if (result.code === 1) {
+        this.stateCount.WAIT_ME_SIGN = result.data.WAIT_ME_SIGN || 0;
+        this.stateCount.WAIT_PARTNER_SIGN = result.data.WAIT_PARTNER_SIGN || 0;
+        this.stateCount.PENDING_APPROVAL = result.data.PENDING_APPROVAL || 0;
+        this.stateCount.COMPLETED = result.data.COMPLETED || 0;
+        this.stateCount.CANCELLED = result.data.CANCELLED || 0;
+      }
     },
     tabName(tab) {
       if (this.stateCount.hasOwnProperty(tab.code)) {
