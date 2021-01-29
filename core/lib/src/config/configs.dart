@@ -13,9 +13,12 @@ class GlobalConfigs {
   // static const CONTEXT_PATH = 'https://192.168.31.180:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH = 'http://192.168.31.180';
 
-  // 生产
+  // // 生产
   // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+  // //全站加速
+  // static const MEDIA_CONTEXT_PATH = 'https://ht.nbyjy.net';
+
+  //   // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   //分享域名
   static const SHARE_CONTEXT_PATH = 'https://share.sc.nbyjy.net'; //测试
