@@ -42,7 +42,7 @@ class _PublishRequirementSuccessDialogState
           queryParameters: {'page': 0, 'size': 3});
       if (response != null && response.statusCode == 200) {
         FactoriesResponse factoriesResponse =
-        FactoriesResponse.fromJson(response.data);
+            FactoriesResponse.fromJson(response.data);
         _factoryModels = factoriesResponse.content;
       }
     } on DioError catch (e) {
@@ -54,7 +54,7 @@ class _PublishRequirementSuccessDialogState
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<FactoryTabSectionState>(
-      builder: (context) => FactoryTabSectionState(),
+      create: (context) => FactoryTabSectionState(),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.5,

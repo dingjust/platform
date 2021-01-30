@@ -17,7 +17,7 @@ class SalesOrderSearchResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SaleOrdersState>(
-        builder: (context) => SaleOrdersState(),
+        create: (context) => SaleOrdersState(),
         child: Scaffold(
             appBar: AppBar(
               elevation: 0.5,
@@ -35,7 +35,7 @@ class SalesOrderSearchResultPage extends StatelessWidget {
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(20),
                           border:
-                          Border.all(color: Colors.grey[300], width: 0.5),
+                              Border.all(color: Colors.grey[300], width: 0.5),
                         ),
                         child: Container(
                           padding: EdgeInsets.only(left: 10),

@@ -18,8 +18,10 @@ class ContractPurchaseOrderSelectPage extends StatefulWidget {
       _ContractPurchaseOrderSelectPageState();
 }
 
-class _ContractPurchaseOrderSelectPageState extends State<ContractPurchaseOrderSelectPage> {
-  final GlobalKey _globalKey = GlobalKey<_ContractPurchaseOrderSelectPageState>();
+class _ContractPurchaseOrderSelectPageState
+    extends State<ContractPurchaseOrderSelectPage> {
+  final GlobalKey _globalKey =
+      GlobalKey<_ContractPurchaseOrderSelectPageState>();
   String _keyword = '';
   List<PurchaseOrderModel> _models = [];
   PurchaseOrderListState purchaseOrderState;
@@ -41,7 +43,7 @@ class _ContractPurchaseOrderSelectPageState extends State<ContractPurchaseOrderS
       bloc: ApparelProductBLoC.instance,
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(builder: (_) => PurchaseOrderListState()),
+          ChangeNotifierProvider(create: (_) => PurchaseOrderListState()),
         ],
         child: Consumer<PurchaseOrderListState>(
             builder: (context, PurchaseOrderListState purchaseOrderState, _) {
@@ -104,15 +106,15 @@ class _ContractPurchaseOrderSelectPageState extends State<ContractPurchaseOrderS
               ),
             ),
             body: Container(
-                  child: purchaseOrderState.purchaseOrderModels != null
-                      ? PurchaseOrderSelectList(
-                    purchaseOrderState: purchaseOrderState,
-                    models: _models,
-                  )
-                      : Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+              child: purchaseOrderState.purchaseOrderModels != null
+                  ? PurchaseOrderSelectList(
+                purchaseOrderState: purchaseOrderState,
+                models: _models,
+              )
+                  : Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
             bottomNavigationBar: Container(
               margin: EdgeInsets.all(10),
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -128,23 +130,26 @@ class _ContractPurchaseOrderSelectPageState extends State<ContractPurchaseOrderS
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(50))),
-                onPressed: () async{
-                  if(_models == null || _models.length == 0){
+                onPressed: () async {
+                  if (_models == null || _models.length == 0) {
                     ShowDialogUtil.showValidateMsg(context, '请勾选订单');
                     return;
                   }
-                  List<String> orderCodes = _models.map((model) => model.code).toList();
+                  List<String> orderCodes =
+                  _models.map((model) => model.code).toList();
                   //合同订单验证
-                  SearchResultModel searchResultModel = await ContractRepository().validateContractOrders(data: {
+                  SearchResultModel searchResultModel =
+                  await ContractRepository().validateContractOrders(data: {
                     'orderCodes': orderCodes,
                     'type': 'WTSCHT',
                     'isPdfAgreement': false,
                   });
                   print(searchResultModel);
-                  if(searchResultModel.code == 1){
+                  if (searchResultModel.code == 1) {
                     Navigator.pop(context, _models);
-                  }else{
-                    ShowDialogUtil.showValidateMsg(context, searchResultModel?.msg);
+                  } else {
+                    ShowDialogUtil.showValidateMsg(
+                        context, searchResultModel?.msg);
                   }
                 },
               ),

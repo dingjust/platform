@@ -2,7 +2,6 @@ import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:b2b_commerce/src/home/product/plate_products_view.dart';
 import 'package:core/core.dart';
-
 import 'package:flutter/material.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
@@ -46,7 +45,7 @@ class _PlateProductsPageState extends State<PlateProductsPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PlateProductState>(
-      builder: (context) =>
+      create: (context) =>
           PlateProductState(type: widget.type, condition: widget.condition),
       child: Scaffold(
         appBar: AppBar(

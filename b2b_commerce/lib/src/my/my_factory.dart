@@ -130,10 +130,10 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            builder: (_) => MyFactoryState(factoryUid: widget.factoryUid)),
+            create: (_) => MyFactoryState(factoryUid: widget.factoryUid)),
         ChangeNotifierProvider(
-            builder: (_) => CashProductsState(factoryUid: widget.factoryUid)),
-        ChangeNotifierProvider(builder: (_) => MyFactoryCapacityState()),
+            create: (_) => CashProductsState(factoryUid: widget.factoryUid)),
+        ChangeNotifierProvider(create: (_) => MyFactoryCapacityState()),
       ],
       child: Consumer<MyFactoryState>(
         builder: (context, MyFactoryState factoryState, _) {
@@ -161,27 +161,27 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                 widget.isFactoryDetail
                     ? Container()
                     : InkWell(
-                    onTap: () => onEdit(factoryState),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        children: <Widget>[
-                          Icon(
-                            B2BIcons.edit,
+                        onTap: () => onEdit(factoryState),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            children: <Widget>[
+                              Icon(
+                                B2BIcons.edit,
+                              ),
+                              Text('编辑')
+                            ],
                           ),
-                          Text('编辑')
-                        ],
-                      ),
-                    ))
+                        ))
               ],
             ),
             body: factoryState.model != null
                 ? _buildBody(factoryState.model)
                 : Column(
-              children: <Widget>[NoDataShow()],
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
+                    children: <Widget>[NoDataShow()],
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  ),
 //          FutureBuilder<FactoryModel>(
 //              future: _getFactoryFuture,
 //              builder: (context, snapshot) {
@@ -356,7 +356,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                                         MultiProvider(
                                           providers: [
                                             ChangeNotifierProvider(
-                                              builder: (_) =>
+                                              create: (_) =>
                                                   RequirementOrderFormState(
                                                     uid: _factory.uid,
                                                     factoryDetailModel: _factory,

@@ -1,12 +1,9 @@
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -153,27 +150,5 @@ class FactoryEntranceSection extends StatelessWidget {
     ];
 
     return EasyGrid(items: items);
-  }
-}
-
-class FactoryReportSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            '衣报送',
-            style: TextStyle(
-                color: Constants.THEME_COLOR_MAIN, fontWeight: FontWeight.bold),
-          ),
-          Text('接单工厂 556'),
-          Text('正在报价 216'),
-          Text('今日成交 12'),
-        ],
-      ),
-    );
   }
 }

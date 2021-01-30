@@ -11,7 +11,6 @@ import 'package:b2b_commerce/src/helper/global_message_helper.dart';
 import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/bottom_navigation.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
-import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:b2b_commerce/src/home/account/client_select_v2.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/index.dart';

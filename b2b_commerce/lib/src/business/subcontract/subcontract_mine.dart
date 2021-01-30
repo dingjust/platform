@@ -17,9 +17,9 @@ class SubContractMinePage extends StatefulWidget {
 class _SubContractMinePageState extends State<SubContractMinePage> {
   final GlobalKey _globalKey = GlobalKey<_SubContractMinePageState>();
   List<EnumModel> tabs = <EnumModel>[
-    EnumModel('ALL','全部'),
-    EnumModel('PUBLISHED','已发布'),
-    EnumModel('CANCELLED','已关闭'),
+    EnumModel('ALL', '全部'),
+    EnumModel('PUBLISHED', '已发布'),
+    EnumModel('CANCELLED', '已关闭'),
   ];
 
   @override
@@ -32,7 +32,7 @@ class _SubContractMinePageState extends State<SubContractMinePage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(builder: (_) => SubContractMineState()),
+        ChangeNotifierProvider(create: (_) => SubContractMineState()),
       ],
       child: Consumer<SubContractMineState>(
           builder: (context, SubContractMineState subContractMineState, _) {
@@ -51,24 +51,33 @@ class _SubContractMinePageState extends State<SubContractMinePage> {
               ),
               body: Scaffold(
                 appBar: TabBar(
-                  onTap: (v){
+                  onTap: (v) {
                     subContractMineState.key = v.toString();
                   },
                   unselectedLabelColor: Colors.black26,
                   labelColor: Colors.black,
                   indicatorSize: TabBarIndicatorSize.label,
-                  tabs: tabs.map((tab) => Tab(text: tab.name,)).toList(),
+                  tabs: tabs
+                      .map((tab) => Tab(
+                            text: tab.name,
+                          ))
+                      .toList(),
                   labelStyle: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                       color: Colors.black),
                 ),
                 body: TabBarView(
-                  children: tabs.map((tab) => subContractMineState.subcontractModelsByMap != null?
-                  SubContractMineList(subcontractMineState: subContractMineState,):
-                  Center(
+                  children: tabs
+                      .map((tab) =>
+                  subContractMineState.subcontractModelsByMap != null
+                      ? SubContractMineList(
+                    subcontractMineState: subContractMineState,
+                  )
+                      : Center(
                     child: CircularProgressIndicator(),
-                  )).toList(),
+                  ))
+                      .toList(),
                 ),
               ),
             ));

@@ -105,7 +105,7 @@ class _RequirementOrderDetailPageState
               ),
             );
           } else {
-            return Center( 
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -242,8 +242,7 @@ class _RequirementOrderDetailPageState
                       ),
                       TextSpan(
                         text:
-                        '${DateFormatUtil.formatYMDHM(orderModel
-                            .creationTime)}',
+                            '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',
                         style: TextStyle(color: Colors.black),
                       ),
                     ]),
@@ -632,7 +631,9 @@ class _RequirementOrderDetailPageState
                   child: Text(
                     orderModel.details.invoiceNeeded == null
                         ? ''
-                        : orderModel.details.invoiceNeeded ? '是' : '否',
+                        : orderModel.details.invoiceNeeded
+                        ? '是'
+                        : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -665,7 +666,9 @@ class _RequirementOrderDetailPageState
                   child: Text(
                     orderModel.details.proofingNeeded == null
                         ? ''
-                        : orderModel.details.proofingNeeded ? '是' : '否',
+                        : orderModel.details.proofingNeeded
+                        ? '是'
+                        : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -1147,7 +1150,7 @@ class _RequirementOrderDetailPageState
           MultiProvider(
             providers: [
               ChangeNotifierProvider(
-                builder: (_) =>
+                create: (_) =>
                     RequirementOrderFormState(detailModel: orderModel),
               ),
             ],

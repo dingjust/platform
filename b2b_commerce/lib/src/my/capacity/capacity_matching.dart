@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/date_range_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
-as yj;
+    as yj;
 import 'package:b2b_commerce/src/helper/login_check.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
   @override
   void initState() {
     // TODO: implement initState
-    //埋点>>>空闲产能	
+    //埋点>>>空闲产能
     FlutterUmplus.event(
       "capacity_matching",
     );
@@ -53,7 +53,7 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CapacityMatchingState>(
-      builder: (context) => CapacityMatchingState(keyword: widget.keyword),
+      create: (context) => CapacityMatchingState(keyword: widget.keyword),
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(

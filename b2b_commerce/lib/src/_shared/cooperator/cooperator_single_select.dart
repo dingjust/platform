@@ -10,24 +10,25 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class CooperatorSingleSelectPage extends StatefulWidget{
+class CooperatorSingleSelectPage extends StatefulWidget {
   CooperatorSingleSelectPage({
     Key key,
     this.model,
   }) : super(key: key);
   CooperatorModel model;
 
-  _CooperatorSingleSelectPageState createState() => _CooperatorSingleSelectPageState();
+  _CooperatorSingleSelectPageState createState() =>
+      _CooperatorSingleSelectPageState();
 }
 
-class _CooperatorSingleSelectPageState extends State<CooperatorSingleSelectPage> {
+class _CooperatorSingleSelectPageState
+    extends State<CooperatorSingleSelectPage> {
   final GlobalKey _globalKey = GlobalKey<_CooperatorSingleSelectPageState>();
   String _keyword = '';
   CooperatorState cooperatorState;
 
   @override
   void initState() {
-
     // TODO: implement initState
     super.initState();
   }
@@ -39,8 +40,7 @@ class _CooperatorSingleSelectPageState extends State<CooperatorSingleSelectPage>
       bloc: ApparelProductBLoC.instance,
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-              builder: (_) => CooperatorState()),
+          ChangeNotifierProvider(create: (_) => CooperatorState()),
         ],
         child: Consumer<CooperatorState>(
             builder: (context, CooperatorState cooperatorState, _) {
@@ -52,19 +52,20 @@ class _CooperatorSingleSelectPageState extends State<CooperatorSingleSelectPage>
                 children: <Widget>[
                   Expanded(
                     child: GestureDetector(
-                      onTap: () async{
+                      onTap: () async {
                         dynamic result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => HistorySearch(
-                              historyKey: GlobalConfigs.COOPERATOR_SELECT_HISTORY_KEYWORD_KEY,
+                              historyKey: GlobalConfigs
+                                  .COOPERATOR_SELECT_HISTORY_KEYWORD_KEY,
                               hintText: '请输入合作商名称，联系人，联系方式搜索',
                               keyword: _keyword,
                             ),
                           ),
                         );
 
-                        if(result != null){
+                        if (result != null) {
                           cooperatorState.queryFormData['keyword'] = result;
                           _keyword = result;
                           cooperatorState.clear();
@@ -76,12 +77,13 @@ class _CooperatorSingleSelectPageState extends State<CooperatorSingleSelectPage>
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.grey[300], width: 0.5),
+                          border:
+                          Border.all(color: Colors.grey[300], width: 0.5),
                         ),
                         child: Container(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            _keyword == '' ? '请输入合作商名称，联系人，联系方式搜索':_keyword,
+                            _keyword == '' ? '请输入合作商名称，联系人，联系方式搜索' : _keyword,
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 14,
@@ -95,17 +97,17 @@ class _CooperatorSingleSelectPageState extends State<CooperatorSingleSelectPage>
               ),
             ),
             body: Container(
-                  child: cooperatorState.cooperatorModels != null
-                      ? CooperatorSingleSelectList(
-                    cooperatorState: cooperatorState,
-                    model: widget.model,
-                  )
-                      : Center(
-                    child: CircularProgressIndicator(),
-                  ),
+              child: cooperatorState.cooperatorModels != null
+                  ? CooperatorSingleSelectList(
+                cooperatorState: cooperatorState,
+                model: widget.model,
+              )
+                  : Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
-          );}
-        ),
+          );
+            }),
       ),
     );
   }
@@ -116,5 +118,3 @@ class _CooperatorSingleSelectPageState extends State<CooperatorSingleSelectPage>
     super.dispose();
   }
 }
-
-

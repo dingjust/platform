@@ -22,7 +22,7 @@ class _RequirementTabSectionState extends State<RequirementTabSection> {
         child: DefaultTabController(
             length: 2,
             child: ChangeNotifierProvider<RequirementTabSectionState>(
-              builder: (context) => RequirementTabSectionState(),
+              create: (context) => RequirementTabSectionState(),
               child: Scaffold(
                   appBar: TabBar(
                     tabs: [

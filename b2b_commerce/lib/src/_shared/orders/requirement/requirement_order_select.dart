@@ -6,7 +6,7 @@ import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
-class RequirementOrderSelectPage extends StatefulWidget{
+class RequirementOrderSelectPage extends StatefulWidget {
   RequirementOrderSelectPage({
     Key key,
     this.models,
@@ -15,21 +15,21 @@ class RequirementOrderSelectPage extends StatefulWidget{
   List<RequirementOrderModel> models;
   Function onConfirm;
 
-  _RequirementOrderSelectPageState createState() => _RequirementOrderSelectPageState();
+  _RequirementOrderSelectPageState createState() =>
+      _RequirementOrderSelectPageState();
 }
 
-class _RequirementOrderSelectPageState extends State<RequirementOrderSelectPage> {
+class _RequirementOrderSelectPageState
+    extends State<RequirementOrderSelectPage> {
   final GlobalKey _globalKey = GlobalKey<_RequirementOrderSelectPageState>();
   String _keyword = '';
   List<RequirementOrderModel> _models = [];
 
   @override
   void initState() {
-    if(widget.models != null){
+    if (widget.models != null) {
       _models = List.from(widget.models);
     }
-
-    // TODO: implement initState
     super.initState();
   }
 
@@ -37,8 +37,7 @@ class _RequirementOrderSelectPageState extends State<RequirementOrderSelectPage>
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            builder: (_) => RequirementOrderSelectState()),
+        ChangeNotifierProvider(create: (_) => RequirementOrderSelectState()),
       ],
       child: Consumer<RequirementOrderSelectState>(
           builder: (context, RequirementOrderSelectState state, _) {
@@ -50,19 +49,20 @@ class _RequirementOrderSelectPageState extends State<RequirementOrderSelectPage>
               children: <Widget>[
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       dynamic result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => HistorySearch(
-                            historyKey: GlobalConfigs.REQURIEMEN_ORDER_SELECT_HISTORY_KEYWORD_KEY,
+                            historyKey: GlobalConfigs
+                                .REQURIEMEN_ORDER_SELECT_HISTORY_KEYWORD_KEY,
                             hintText: '请输入订单号，标题，分类搜索',
                             keyword: _keyword,
                           ),
                         ),
                       );
 
-                      if(result != null){
+                      if (result != null) {
                         state.queryFormData['keyword'] = result;
                         _keyword = result;
                         state.clear();
@@ -79,7 +79,7 @@ class _RequirementOrderSelectPageState extends State<RequirementOrderSelectPage>
                       child: Container(
                         padding: EdgeInsets.only(left: 10),
                         child: Text(
-                          _keyword == '' ? '请输入订单号，标题，分类搜索':_keyword,
+                          _keyword == '' ? '请输入订单号，标题，分类搜索' : _keyword,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 14,
@@ -93,14 +93,14 @@ class _RequirementOrderSelectPageState extends State<RequirementOrderSelectPage>
             ),
           ),
           body: Container(
-                child: state.requiremenOrderModels != null
-                    ? RequirementOrderSelectList(
-                  requirementSelectState: state,
-                  models: _models,
-                )
-                    : Center(
-                  child: CircularProgressIndicator(),
-                ),
+            child: state.requiremenOrderModels != null
+                ? RequirementOrderSelectList(
+              requirementSelectState: state,
+              models: _models,
+            )
+                : Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
           bottomNavigationBar: Container(
             margin: EdgeInsets.all(10),
@@ -117,13 +117,13 @@ class _RequirementOrderSelectPageState extends State<RequirementOrderSelectPage>
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
-              onPressed: (){
+              onPressed: () {
                 widget.onConfirm(_models);
               },
             ),
           ),
-        );}
-      ),
+        );
+          }),
     );
   }
 
@@ -133,5 +133,3 @@ class _RequirementOrderSelectPageState extends State<RequirementOrderSelectPage>
     super.dispose();
   }
 }
-
-

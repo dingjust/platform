@@ -29,7 +29,7 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CapacityMatchingState>(
-      builder: (context) => CapacityMatchingState(),
+      create: (context) => CapacityMatchingState(),
       child: Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,

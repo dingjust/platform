@@ -14,9 +14,7 @@ import 'package:widgets/widgets.dart';
 class SubContractFirstForm extends StatefulWidget {
   SubContractFirstForm();
 
-
-  _SubContractFirstFormState createState() =>
-      _SubContractFirstFormState();
+  _SubContractFirstFormState createState() => _SubContractFirstFormState();
 }
 
 class _SubContractFirstFormState extends State<SubContractFirstForm> {
@@ -31,9 +29,9 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SubContractFormState>(
-      builder: (context) => SubContractFormState(),
-      child :Consumer<SubContractFormState>(
-        builder: (context,formState,_) => WillPopScope(
+      create: (context) => SubContractFormState(),
+      child: Consumer<SubContractFormState>(
+        builder: (context, formState, _) => WillPopScope(
           onWillPop: () {
             ShowDialogUtil.showChoseDiglog(context, '正在创建订单，是否确认退出', () {
               Navigator.pop(context);
@@ -78,16 +76,16 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                     }
                     if (formState.model.details.productiveOrientations ==
                         null ||
-                        formState.model.details.productiveOrientations
-                            .length ==
+                        formState.model.details.productiveOrientations.length ==
                             0) {
                       ShowDialogUtil.showValidateMsg(context, '请选择工厂区域');
                       return;
                     }
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SubContractSecondForm(
-                          formState: formState,
-                        )));
+                        builder: (context) =>
+                            SubContractSecondForm(
+                              formState: formState,
+                            )));
                   }),
             ),
             body: ListView(
@@ -100,20 +98,20 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                       Text('选择类型'),
                       Expanded(
                         child: Row(
-                          children: SubContractTypeEnum.map((type)=>
-                            Expanded(
-                              child: RadioListTile(
-                                title: Text(type.name),
-                                value: type.code,
-                                groupValue: formState.model.details.type,
-                                onChanged: (v){
-                                  print(v);
-                                  setState(() {
-                                    formState.model.details.type = type.code;
-                                  });
-                                },
-                              ),
-                          )).toList(),
+                          children: SubContractTypeEnum.map((type) =>
+                              Expanded(
+                                child: RadioListTile(
+                                  title: Text(type.name),
+                                  value: type.code,
+                                  groupValue: formState.model.details.type,
+                                  onChanged: (v) {
+                                    print(v);
+                                    setState(() {
+                                      formState.model.details.type = type.code;
+                                    });
+                                  },
+                                ),
+                              )).toList(),
                         ),
                       )
 //                      Expanded(
@@ -147,7 +145,14 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                         builder: (BuildContext context,
                             AsyncSnapshot<List<CategoryModel>> snapshot) {
                           if (!snapshot.hasData) {
-                            return Container(child: SizedBox(height: 100,child: Center(child: CircularProgressIndicator()),),color: Colors.white,);
+                            return Container(
+                              child: SizedBox(
+                                height: 100,
+                                child: Center(
+                                    child: CircularProgressIndicator()),
+                              ),
+                              color: Colors.white,
+                            );
                           } else {
                             return Container(
                               padding: EdgeInsets.symmetric(
@@ -168,7 +173,8 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                         TextSpan(
                                           text: '选择面料类型',
                                           style: TextStyle(
-                                              fontSize: 16, color: Colors.black),
+                                              fontSize: 16,
+                                              color: Colors.black),
                                         ),
                                         TextSpan(
                                           text: ' *',
@@ -180,8 +186,10 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                   ),
                                   SingleMajorCategorySelect(
                                     categories: snapshot.data,
-                                    categorySelect: formState.model.details.majorCategory,
-                                    onItemTap: (categoryModel) => formState.model
+                                    categorySelect:
+                                    formState.model.details.majorCategory,
+                                    onItemTap: (categoryModel) =>
+                                    formState.model
                                         .details.majorCategory = categoryModel,
                                   ),
                                 ],
@@ -203,7 +211,14 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                         builder: (BuildContext context,
                             AsyncSnapshot<List<CategoryModel>> snapshot) {
                           if (!snapshot.hasData) {
-                            return Container(child: SizedBox(height: 100,child: Center(child: CircularProgressIndicator()),),color: Colors.white,);
+                            return Container(
+                              child: SizedBox(
+                                height: 100,
+                                child: Center(
+                                    child: CircularProgressIndicator()),
+                              ),
+                              color: Colors.white,
+                            );
                           } else {
                             return Container(
                               padding: EdgeInsets.symmetric(
@@ -245,8 +260,13 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                             ),
                                             TextSpan(
                                               text:
-                                              '${formState.model.details.category?.parent != null ? formState.model.details.category.parent.name + '-' : ''}'
-                                                  '${formState.model.details.category?.name ?? ''}',
+                                              '${formState.model.details
+                                                  .category?.parent != null
+                                                  ? formState.model.details
+                                                  .category.parent.name + '-'
+                                                  : ''}'
+                                                  '${formState.model.details
+                                                  .category?.name ?? ''}',
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 16.0,
@@ -265,12 +285,15 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                           builder: (BuildContext context) {
                                             return Consumer(
                                               builder: (context,
-                                                  CategoryState categoryState, _) =>
+                                                  CategoryState categoryState,
+                                                  _) =>
                                                   FutureBuilder(
                                                     future: categoryState
                                                         .getCascadedCategories(),
-                                                    builder: (BuildContext context,
-                                                        AsyncSnapshot<List<CategoryModel>>
+                                                    builder: (
+                                                        BuildContext context,
+                                                        AsyncSnapshot<
+                                                            List<CategoryModel>>
                                                         snapshot) {
                                                       if (!snapshot.hasData) {
                                                         return Center(
@@ -278,15 +301,23 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                                             CircularProgressIndicator());
                                                       } else {
                                                         return SingleCategorySelect(
-                                                          selectLeft: categoryModel.code,
-                                                          categories: snapshot.data,
+                                                          selectLeft:
+                                                          categoryModel.code,
+                                                          categories: snapshot
+                                                              .data,
                                                           categorySelect: formState
-                                                              .model.details.category,
-                                                          onItemTap: (categoryModel) {
+                                                              .model.details
+                                                              .category,
+                                                          onItemTap: (
+                                                              categoryModel) {
                                                             setState(() {
-                                                              formState.model.details
-                                                                  .category = categoryModel;
-                                                              Navigator.of(context).pop();
+                                                              formState.model
+                                                                  .details
+                                                                  .category =
+                                                                  categoryModel;
+                                                              Navigator.of(
+                                                                  context)
+                                                                  .pop();
                                                             });
                                                           },
                                                         );
@@ -319,8 +350,8 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                        padding:
-                        const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, bottom: 15),
                         child: RichText(
                           text: TextSpan(
                             children: <TextSpan>[
@@ -347,9 +378,10 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                               ),
                               TextSpan(
                                 text: formatAreaSelectsText(
-                                    formState.model.details
-                                        .productiveOrientations,
-                                    2,formState),
+                                    formState
+                                        .model.details.productiveOrientations,
+                                    2,
+                                    formState),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16.0,
@@ -367,10 +399,16 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                               //CN-10代表全国
                               setState(() {
                                 formState.model.details.productiveOrientations
-                                    .add(RegionModel(isocode: Constants.WHOLE_COUNTRY_ISOCODE));
+                                    .add(RegionModel(
+                                    isocode:
+                                    Constants.WHOLE_COUNTRY_ISOCODE));
                               });
-                              dynamic m = formState.model.details.productiveOrientations
-                                  .firstWhere((region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
+                              dynamic m = formState
+                                  .model.details.productiveOrientations
+                                  .firstWhere(
+                                      (region) =>
+                                  region.isocode ==
+                                      Constants.WHOLE_COUNTRY_ISOCODE,
                                   orElse: null);
                               print(m);
                             },
@@ -384,7 +422,9 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                   formState.model.details
                                       .productiveOrientations
                                       .indexWhere(
-                                        (region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
+                                        (region) =>
+                                    region.isocode ==
+                                        Constants.WHOLE_COUNTRY_ISOCODE,
                                   ) >
                                       -1
                                   ? BoxDecoration(
@@ -413,17 +453,18 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                             .map<RegionModel>((region) =>
                                             RegionModel.fromJson(region))
                                             .toList(),
-                                        regionSelects: formState.model
-                                            .details.productiveOrientations,
+                                        regionSelects: formState.model.details
+                                            .productiveOrientations,
                                         multiple: true,
                                       );
                                     },
                                   ).then((v) {
                                     setState(() {
-                                      formState.model.details
-                                          .productiveOrientations
+                                      formState
+                                          .model.details.productiveOrientations
                                           .removeWhere((region) =>
-                                      region.isocode == Constants.WHOLE_COUNTRY_ISOCODE);
+                                      region.isocode ==
+                                          Constants.WHOLE_COUNTRY_ISOCODE);
                                     });
                                   });
                                 });
@@ -439,7 +480,9 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                                   formState.model.details
                                       .productiveOrientations
                                       .indexWhere(
-                                        (region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
+                                        (region) =>
+                                    region.isocode ==
+                                        Constants.WHOLE_COUNTRY_ISOCODE,
                                   ) <
                                       0
                                   ? BoxDecoration(
@@ -458,19 +501,20 @@ class _SubContractFirstFormState extends State<SubContractFirstForm> {
                 ),
               ],
             ),
-          ),
-        ),
+              ),
+            ),
       ),
     );
   }
 
   //格式选中的地区（多选）
-  String formatAreaSelectsText(List<RegionModel> selects, int count,SubContractFormState formState) {
+  String formatAreaSelectsText(List<RegionModel> selects, int count,
+      SubContractFormState formState) {
     String text = '';
 
     if (formState.model.details.productiveOrientations.indexWhere(
           (region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
-        ) >
+    ) >
         -1) {
       return '全国';
     }
