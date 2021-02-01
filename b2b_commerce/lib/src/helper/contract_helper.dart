@@ -35,13 +35,26 @@ class ContractHelper {
 
     // Response response = await dio.download(pdf.actualUrl, filePath);
 
-    Response response = await http$.download(pdf.actualUrl, filePath);
+    Response response;
+    try {
+      response = await http$.download(pdf.actualUrl, filePath);
+    } catch (e) {
+      print('[钉单]$e');
+    }
 
     cancelFunc.call();
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ContractDetailPage(
-              pathPDF: filePath,
-              contractModel: model,
-            )));
+    if (response != null) {
+      int contentLength = 0;
+      contentLength = int.parse(response.headers.map['content-length'][0]);
+      if (contentLength > 0) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ContractDetailPage(
+                  pathPDF: filePath,
+                  contractModel: model,
+                )));
+      }
+    } else {
+      BotToast.showText(text: '合同下载失败');
+    }
   }
 }

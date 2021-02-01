@@ -45,8 +45,6 @@ class _LoginPageState extends State<LoginPage> {
   bool validate = false;
   bool _isAgree = true;
 
-  StreamSubscription loginStreamSubscription;
-
   ///倒计时间
   int countdownTime = 60;
   final CountdownController controller = CountdownController();
@@ -682,13 +680,6 @@ class _LoginPageState extends State<LoginPage> {
             });
       },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    loginStreamSubscription.cancel();
-    loginStreamSubscription = null;
   }
 }
 
