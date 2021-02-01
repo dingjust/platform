@@ -241,7 +241,7 @@ class _RequirementOrderDetailByFactoryPageState
                     ),
                     TextSpan(
                       text:
-                      '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',
+                          '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',
                       style: TextStyle(color: Colors.black),
                     ),
                   ]),
@@ -685,7 +685,17 @@ class _RequirementOrderDetailByFactoryPageState
                         borderRadius: BorderRadius.circular(8)),
                     padding: EdgeInsets.all(2),
                   ),
-                  Text(model?.details?.contactPerson ?? ''),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          model?.details?.contactPerson ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
               onPressed: () {

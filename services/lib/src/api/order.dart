@@ -16,9 +16,13 @@ class OrderApis {
   /// 根据条件获取需求订单列表 POST
   static get requirementOrdersAll => '/{baseSiteId}/orders/requirement/all';
 
-  //全部需求列表 POST
+  ///全部需求列表 POST
   static get allOrdersForFactory =>
       '/{baseSiteId}/orders/requirement/factory/all';
+
+  ///需求列表(anonymous) POST
+  static get requirementOrdersAnonymous =>
+      '/{baseSiteId}/orders/requirement/search/anonymous';
 
   //推荐需求列表 POST
   static get allRecommendedOrders =>
