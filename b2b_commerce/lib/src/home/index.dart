@@ -2,7 +2,6 @@ import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_tab_section.dart';
-import 'package:b2b_commerce/src/home/_shared/widgets/home_section.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ import '_shared/widgets/more_factory_section.dart';
 import '_shared/widgets/more_requirement_section.dart';
 import '_shared/widgets/requirement_tab_section.dart';
 
-/// 网站主页
+/// 首页
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.userType}) : super(key: AppKeys.homePage);
 
@@ -199,8 +198,7 @@ class HomeFactoryBannerSection extends StatelessWidget {
     ),
     MediaModel(
       url:
-      '${GlobalConfigs
-          .CDN_OSS_DOMAIN}/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+          '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
     )
   ];
 

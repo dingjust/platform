@@ -1,7 +1,6 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class SubContractPoolListItem extends StatelessWidget {
   const SubContractPoolListItem({
@@ -22,7 +21,8 @@ class SubContractPoolListItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('${model?.details?.title}'),
-                Text('${DateUtil.formatDate(model?.creationTime,format: 'yyyy-MM-dd')}'),
+                Text(
+                    '${DateUtil.formatDate(model?.creationTime, format: 'yyyy-MM-dd')}'),
               ],
             ),
           ),
@@ -31,7 +31,8 @@ class SubContractPoolListItem extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('类型：${enumMap(SubContractTypeEnum, model.details.type)}'),
+                  child: Text(
+                      '类型：${enumMap(SubContractTypeEnum, model.details.type)}'),
                 ),
                 Expanded(
                   child: Text('品类：${model.details.category?.name}'),
@@ -53,27 +54,13 @@ class SubContractPoolListItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 3),
             child: Row(
               children: <Widget>[
-                model.belongTo?.profilePicture != null ?
                 Container(
-                    width: 20,
-                    height: 20,
-                    decoration: ShapeDecoration(
-                      shape: CircleBorder(),
-                      image: DecorationImage(
-                          image: NetworkImage('${model.belongTo.profilePicture.actualUrl}'),
-                          fit: BoxFit.cover),
-                    )
-                ) : Container(
                   width: 20,
                   height: 20,
-                  decoration: ShapeDecoration(
-                    color: Color.fromRGBO(243, 243, 243, 1),
-                    shape: CircleBorder(),
-                  ),
-                  child: Icon(
-                    B2BIcons.noPicture,
-                    color: Color.fromRGBO(200, 200, 200, 1),
-                    size: 40,
+                  child: CircleAvatar(
+                    backgroundImage: getImage(),
+                    backgroundColor: Colors.white,
+                    radius: 20,
                   ),
                 ),
                 Expanded(
@@ -82,13 +69,25 @@ class SubContractPoolListItem extends StatelessWidget {
                     child: Text('${model.belongTo?.name}'),
                   ),
                 ),
-                Text('${model.belongTo?.contactAddress?.city?.name}${model.belongTo?.contactAddress?.cityDistrict?.name}'),
+                Text(
+                    '${model.belongTo?.contactAddress?.city?.name ?? ''}${model
+                        .belongTo?.contactAddress?.cityDistrict?.name ?? ''}'),
               ],
             ),
           ),
         ],
-
       ),
     );
+  }
+
+  ImageProvider getImage() {
+    if (model.belongTo != null && model.belongTo.profilePicture != null) {
+      return NetworkImage(model.belongTo.profilePicture.thumbnailUrl());
+    } else {
+      return AssetImage(
+        'temp/picture.png',
+        package: "assets",
+      );
+    }
   }
 }
