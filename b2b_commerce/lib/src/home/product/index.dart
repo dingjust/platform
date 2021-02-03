@@ -22,7 +22,7 @@ class _ProductsHomePageState extends State<ProductsHomePage> {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-              builder: (_) => PlateProductState(
+              create: (_) => PlateProductState(
                   type: SeeProductPlateType.RECOMMEND_FOR_YOU)),
         ],
         child: Scaffold(
@@ -85,7 +85,7 @@ class ProductsHomePageView extends StatelessWidget {
               ),
             ],
           ),
-        )),
+            )),
         ProductsRecommendSection(),
         SliverToBoxAdapter(
             child: Container(

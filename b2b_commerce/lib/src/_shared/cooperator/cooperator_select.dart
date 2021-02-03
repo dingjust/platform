@@ -6,7 +6,7 @@ import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
-class CooperatorSelectPage extends StatefulWidget{
+class CooperatorSelectPage extends StatefulWidget {
   CooperatorSelectPage({
     Key key,
     this.models,
@@ -24,7 +24,7 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
 
   @override
   void initState() {
-    if(widget.models != null){
+    if (widget.models != null) {
       _models = List.from(widget.models);
     }
 
@@ -36,8 +36,7 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            builder: (_) => CooperatorState()),
+        ChangeNotifierProvider(create: (_) => CooperatorState()),
       ],
       child: Consumer<CooperatorState>(
           builder: (context, CooperatorState cooperatorState, _) {
@@ -49,19 +48,20 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
               children: <Widget>[
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       dynamic result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => HistorySearch(
-                            historyKey: GlobalConfigs.COOPERATOR_SELECT_HISTORY_KEYWORD_KEY,
+                            historyKey: GlobalConfigs
+                                .COOPERATOR_SELECT_HISTORY_KEYWORD_KEY,
                             hintText: '请输入合作商名称，联系人，联系方式搜索',
                             keyword: _keyword,
                           ),
                         ),
                       );
 
-                      if(result != null){
+                      if (result != null) {
                         cooperatorState.queryFormData['keyword'] = result;
                         _keyword = result;
                         cooperatorState.clear();
@@ -78,7 +78,7 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
                       child: Container(
                         padding: EdgeInsets.only(left: 10),
                         child: Text(
-                          _keyword == '' ? '请输入合作商名称，联系人，联系方式搜索':_keyword,
+                          _keyword == '' ? '请输入合作商名称，联系人，联系方式搜索' : _keyword,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 14,
@@ -92,14 +92,14 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
             ),
           ),
           body: Container(
-                child: cooperatorState.cooperatorModels != null
-                    ? CooperatorSelectList(
-                  cooperatorState: cooperatorState,
-                  models: _models,
-                )
-                    : Center(
-                  child: CircularProgressIndicator(),
-                ),
+            child: cooperatorState.cooperatorModels != null
+                ? CooperatorSelectList(
+              cooperatorState: cooperatorState,
+              models: _models,
+            )
+                : Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
           bottomNavigationBar: Container(
             margin: EdgeInsets.all(10),
@@ -116,13 +116,13 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
-              onPressed: (){
-                Navigator.pop(context,_models);
+              onPressed: () {
+                Navigator.pop(context, _models);
               },
             ),
           ),
-        );}
-      ),
+        );
+          }),
     );
   }
 
@@ -132,5 +132,3 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
     super.dispose();
   }
 }
-
-

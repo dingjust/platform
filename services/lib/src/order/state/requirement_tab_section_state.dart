@@ -8,31 +8,24 @@ class RequirementTabSectionState with ChangeNotifier {
   List<RequirementOrderModel> _newRequirements;
   List<RequirementOrderModel> _nearbyRequirements;
 
-  double a_longitude;
+  double _longitude;
 
-  double a_latitude;
-
-  double b_longitude;
-
-  double b_latitude;
+  double _latitude;
 
   ///最新需求
-  List<RequirementOrderModel> getNewRequirements(double longitude,
-      double latitude) {
-    if (_newRequirements == null ||
-        a_longitude != longitude ||
-        a_latitude != latitude) {
-      queryNewRequirements(longitude, latitude);
+  List<RequirementOrderModel> getNewRequirements() {
+    if (_newRequirements == null) {
+      queryNewRequirements();
     }
     return _newRequirements;
   }
 
   ///附近需求
-  List<RequirementOrderModel> getNearbyRequirements(double longitude,
-      double latitude) {
+  List<RequirementOrderModel> getNearbyRequirements(
+      double longitude, double latitude) {
     if (_nearbyRequirements == null ||
-        b_longitude != longitude ||
-        b_latitude != latitude) {
+        _longitude != longitude ||
+        _latitude != latitude) {
       _newRequirements = null;
       _nearbyRequirements = null;
       queryNearbyRequirements(longitude, latitude);
@@ -40,17 +33,11 @@ class RequirementTabSectionState with ChangeNotifier {
     return _nearbyRequirements;
   }
 
-  void queryNewRequirements(double longitude, double latitude) {
-    //经纬度为0时不查询
-    if (longitude == 0 && latitude == 0) {
-      return;
-    }
-    a_longitude = longitude;
-    a_latitude = latitude;
+  ///最新需求
+  void queryNewRequirements() {
     try {
-      http$.post(OrderApis.requirementOrdersMap, data: {
-        'longitude': longitude ?? 113.264434,
-        'latitude': latitude ?? 23.129162,
+      http$.post(OrderApis.requirementOrdersAnonymous, data: {
+        'statuses': "PENDING_QUOTE"
       }, queryParameters: {
         'page': 0,
         'size': 5,
@@ -58,7 +45,7 @@ class RequirementTabSectionState with ChangeNotifier {
       }).then((response) {
         if (response != null && response.statusCode == 200) {
           RequirementOrdersResponse requirementOrdersResponse =
-          RequirementOrdersResponse.fromJson(response.data);
+              RequirementOrdersResponse.fromJson(response.data);
           _newRequirements = requirementOrdersResponse.content;
 
           ///通知刷新
@@ -73,17 +60,19 @@ class RequirementTabSectionState with ChangeNotifier {
   void queryNearbyRequirements(double longitude, double latitude) {
     //经纬度为0时不查询
     if (longitude == 0 && latitude == 0) {
-      return;
+      throw Exception('经纬度错误');
     }
-    b_longitude = longitude;
-    b_latitude = latitude;
+    _longitude = longitude;
+    _latitude = latitude;
     try {
       http$.post(OrderApis.requirementOrdersMap, data: {
         'longitude': longitude ?? 113.264434,
-        'latitude': latitude ?? 23.129162
+        'latitude': latitude ?? 23.129162,
+        'statuses': "PENDING_QUOTE"
       }, queryParameters: {
         'page': 0,
         'size': 5,
+        "sort": "creationtime,DESC"
       }).then((response) {
         if (response != null && response.statusCode == 200) {
           RequirementOrdersResponse requirementOrdersResponse =

@@ -17,17 +17,16 @@ class ExistingProductItem extends StatelessWidget {
       return GestureDetector(
         child: Container(
             child: Center(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: product.thumbnail != null
-                        ? CachedNetworkImage(
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: product.thumbnail != null
+                    ? CachedNetworkImage(
                         width: 100,
                         height: 100,
                         imageUrl: '${product.thumbnail.previewUrl()}',
                         fit: BoxFit.cover,
-                        imageBuilder: (context, imageProvider) =>
-                            Container(
+                        imageBuilder: (context, imageProvider) => Container(
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
@@ -87,9 +86,10 @@ class ExistingProductItem extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductDetailPage(
-                product: product,
-              ),
+              builder: (context) =>
+                  ProductDetailPage(
+                    product.code,
+                  ),
             ),
           );
         },
@@ -162,7 +162,7 @@ class ExistingProductItem extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ProductDetailPage(
-                product: product,
+                product.code,
               ),
             ),
           );

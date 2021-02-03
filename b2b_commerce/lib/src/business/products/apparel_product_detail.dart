@@ -1,14 +1,12 @@
-import 'package:b2b_commerce/src/business/products/apparel_product_prices_input.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
+import 'package:b2b_commerce/src/business/products/apparel_product_prices_input.dart';
 import 'package:b2b_commerce/src/business/products/form/stocks_field.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'form/attributes_field.dart';
-import 'form/color_size_stock_field.dart';
 import 'form/detail_picture_field.dart';
 import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';

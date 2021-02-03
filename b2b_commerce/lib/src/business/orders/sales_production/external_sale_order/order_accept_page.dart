@@ -25,6 +25,13 @@ class _OrderAcceptPageState extends State<OrderAcceptPage> {
     } else {
       order = SalesProductionOrderModel();
     }
+
+    //默认跟单员当前用户
+    if (order.productionLeader == null) {
+      UserModel currentUser = UserBLoC.instance.currentUser;
+      order.productionLeader =
+          B2BCustomerModel(id: currentUser.id, name: currentUser.name);
+    }
     super.initState();
   }
 
@@ -184,15 +191,14 @@ class _OrderAcceptPageState extends State<OrderAcceptPage> {
     // List<>
 
     List<B2BCustomerModel> b2bCusomers =
-    await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            EmployeeSelectPage(
-              multi: true,
-              max: 5,
-              selected: order.approvers != null
-                  ? (order.approvers as List<B2BCustomerModel>)
-                  : [],
-            )));
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => EmployeeSelectPage(
+                  multi: true,
+                  max: 5,
+                  selected: order.approvers != null
+                      ? (order.approvers as List<B2BCustomerModel>)
+                      : [],
+                )));
     setState(() {
       order.approvers = b2bCusomers;
     });

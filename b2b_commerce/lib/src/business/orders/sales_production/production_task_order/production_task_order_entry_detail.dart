@@ -251,7 +251,7 @@ class _MainInfo extends StatelessWidget {
     );
   }
 
-  Widget _buildProductRow({double height = 80.0}) {
+  Widget _buildProductRow({double height = 83.0}) {
     return Padding(
       // padding: EdgeInsets.symmetric(horizontal: 10),
       padding: EdgeInsets.fromLTRB(10, 10, 10, 0),

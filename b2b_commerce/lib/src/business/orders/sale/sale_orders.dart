@@ -30,7 +30,7 @@ class _SaleOrdersPageState extends State<SaleOrdersPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SaleOrdersState>(
-      builder: (context) => SaleOrdersState(),
+      create: (context) => SaleOrdersState(),
       child: Scaffold(
         appBar: AppBarFactory.buildDefaultAppBar('销售订单',
             actions: <Widget>[_buildSearchButton()]),
@@ -70,14 +70,13 @@ class _SaleOrdersPageState extends State<SaleOrdersPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            SearchModelPage(
-              searchModel: SearchModel(
-                historyKeywords: historyKeywords,
-                searchModelType: SearchModelType.SALE_ORDER,
-                route: GlobalConfigs.SALE_HISTORY_KEYWORD_KEY,
-              ),
-            ),
+        builder: (context) => SearchModelPage(
+          searchModel: SearchModel(
+            historyKeywords: historyKeywords,
+            searchModelType: SearchModelType.SALE_ORDER,
+            route: GlobalConfigs.SALE_HISTORY_KEYWORD_KEY,
+          ),
+        ),
       ),
     );
   }

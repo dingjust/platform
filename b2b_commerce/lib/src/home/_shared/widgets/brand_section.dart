@@ -4,7 +4,6 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
@@ -31,7 +30,7 @@ class BrandEntranceSection extends StatelessWidget {
               builder: (context) => MultiProvider(
                 providers: [
                   ChangeNotifierProvider(
-                    builder: (_) => RequirementOrderFormState(),
+                    create: (_) => RequirementOrderFormState(),
                   ),
                 ],
                 child: Consumer(
@@ -51,29 +50,28 @@ class BrandEntranceSection extends StatelessWidget {
         icon: B2BImage.recommend_factory(width: 75, height: 75),
         onPressed: () async {
           List<CategoryModel> categories =
-          await Provider.of<MajorCategoryState>(context)
-              .getMajorCategories();
+              await Provider.of<MajorCategoryState>(context)
+                  .getMajorCategories();
           List<LabelModel> labels =
-          await Provider.of<LabelState>(context).getLabels();
+              await Provider.of<LabelState>(context).getLabels();
           labels = labels
               .where((label) =>
-          label.group == 'FACTORY' || label.group == 'PLATFORM')
+                  label.group == 'FACTORY' || label.group == 'PLATFORM')
               .toList();
           if (categories != null && labels != null) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    FactoryPage(
-                      FactoryCondition(
-                          starLevel: 0,
-                          adeptAtCategories: [],
-                          labels: [],
-                          cooperationModes: []),
-                      route: '全部工厂',
-                      categories: categories,
-                      labels: labels,
-                    ),
+                builder: (context) => FactoryPage(
+                  FactoryCondition(
+                      starLevel: 0,
+                      adeptAtCategories: [],
+                      labels: [],
+                      cooperationModes: []),
+                  route: '全部工厂',
+                  categories: categories,
+                  labels: labels,
+                ),
               ),
             );
           }
@@ -367,28 +365,6 @@ class BrandButtonsSection extends StatelessWidget {
               categories: categories,
               labels: labels,
             ),
-      ),
-    );
-  }
-}
-
-class BrandReportSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            '衣报送',
-            style: TextStyle(
-                color: Constants.THEME_COLOR_MAIN, fontWeight: FontWeight.bold),
-          ),
-          Text('接单工厂 556'),
-          Text('正在报价 216'),
-          Text('今日成交 12'),
-        ],
       ),
     );
   }

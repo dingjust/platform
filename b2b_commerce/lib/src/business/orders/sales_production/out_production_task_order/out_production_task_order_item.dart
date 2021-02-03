@@ -64,7 +64,7 @@ class OutProductionTaskOrderItem extends StatelessWidget {
     ]);
   }
 
-  Widget _main({double height = 80.0}) {
+  Widget _main({double height = 83.0}) {
     return Row(
       children: [
         Hero(

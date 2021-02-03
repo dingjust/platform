@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RecommendProductItem extends StatelessWidget {
@@ -38,26 +37,9 @@ class RecommendProductItem extends StatelessWidget {
           if (onClick != null) {
             onClick();
           }
-
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              });
           //跳转到产品详情页
-          ApparelProductModel detailProduct =
-          await ProductRepositoryImpl().detail(model.code);
-          Navigator.of(context).pop();
-          if (detailProduct != null) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ProductDetailPage(
-                      product: detailProduct,
-                    )));
-          }
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ProductDetailPage(model.code)));
         },
         child: Stack(
           children: <Widget>[
@@ -67,8 +49,8 @@ class RecommendProductItem extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   model?.thumbnails != null &&
-                      model.thumbnails.isNotEmpty &&
-                      model?.thumbnails[0].url != null
+                          model.thumbnails.isNotEmpty &&
+                          model?.thumbnails[0].url != null
                       ? Container(
                     width: 200,
                     height: 200,

@@ -22,7 +22,7 @@ class _RequirementTabSectionState extends State<RequirementTabSection> {
         child: DefaultTabController(
             length: 2,
             child: ChangeNotifierProvider<RequirementTabSectionState>(
-              builder: (context) => RequirementTabSectionState(),
+              create: (context) => RequirementTabSectionState(),
               child: Scaffold(
                   appBar: TabBar(
                     tabs: [
@@ -51,24 +51,20 @@ class NewRequirementsListView extends StatelessWidget {
     return Consumer2<RequirementTabSectionState, AmapState>(
       builder:
           (context, RequirementTabSectionState state, AmapState amapState, _) =>
-          Container(
-              child: Container(
-                  child: state.getNewRequirements(
-                      amapState.longitude, amapState.latitude) !=
-                      null
-                      ? Column(
-                    children: state
-                        .getNewRequirements(
-                        amapState.longitude, amapState.latitude)
-                        .map((requirement) =>
-                        _RequirementItem(
-                          model: requirement,
-                        ))
-                        .toList(),
-                  )
-                      : Column(
-                    children: <Widget>[NoDataShow()],
-                  ))),
+              Container(
+                  child: Container(
+                      child: state.getNewRequirements() != null
+                          ? Column(
+                              children: state
+                                  .getNewRequirements()
+                                  .map((requirement) => _RequirementItem(
+                                        model: requirement,
+                                      ))
+                                  .toList(),
+                            )
+                          : Column(
+                              children: <Widget>[NoDataShow()],
+                            ))),
     );
   }
 }
@@ -79,23 +75,24 @@ class NearbyRequirementsListView extends StatelessWidget {
     return Consumer2<RequirementTabSectionState, AmapState>(
       builder:
           (context, RequirementTabSectionState state, AmapState amapState, _) =>
-          Container(
-              child: Container(
-                child: state.getNearbyRequirements(
-                    amapState.longitude, amapState.latitude) !=
-                    null
-            ? Column(
-                  children: state
-                      .getNearbyRequirements(
-                      amapState.longitude, amapState.latitude)
-                    .map((requirement) => _RequirementItem(
-                          model: requirement,
-                        ))
-                    .toList(),
-              )
-                    : Column(
-                  children: <Widget>[NoDataShow()],
-              ),
+              Container(
+                  child: Container(
+                    child: state.getNearbyRequirements(
+                        amapState.longitude, amapState.latitude) !=
+                        null
+                        ? Column(
+                      children: state
+                          .getNearbyRequirements(
+                          amapState.longitude, amapState.latitude)
+                          .map((requirement) =>
+                          _RequirementItem(
+                            model: requirement,
+                          ))
+                          .toList(),
+                    )
+                        : Column(
+                      children: <Widget>[NoDataShow()],
+                    ),
       )),
     );
   }

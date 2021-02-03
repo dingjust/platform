@@ -119,6 +119,7 @@ export 'src/state/b2bcustomers_state.dart';
 export 'src/state/carrier_state.dart';
 export 'src/state/category_state.dart';
 export 'src/state/color_state.dart';
+export 'src/state/home_section_state.dart';
 export 'src/state/label_state.dart';
 export 'src/state/major_category_state.dart';
 export 'src/state/size_state.dart';

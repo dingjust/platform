@@ -11,13 +11,15 @@ import 'package:b2b_commerce/src/helper/global_message_helper.dart';
 import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/bottom_navigation.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
-import 'package:b2b_commerce/src/home/account/client_select.dart';
+import 'package:b2b_commerce/src/home/account/client_select_v2.dart';
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/index.dart';
 import 'package:b2b_commerce/src/my/index.dart';
 import 'package:b2b_commerce/src/my/messages/index.dart';
 import 'package:b2b_commerce/src/observer/b2b_navigator_observer.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -150,17 +152,24 @@ class _B2BAppState extends State<B2BApp> {
     _loginJumpSubscription = UserBLoC.instance.loginJumpStream.listen((value) {
       if (!loginLock) {
         loginLock = true;
-        if (NavigatorStack.instance.currentRouteName == AppRoutes.ROUTE_LOGIN) {
+        BotToast.showText(text: '请登录账号', align: Alignment.center);
+        Navigator.of(_navigatorKey.currentState.overlay.context)
+            .pushAndRemoveUntil(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500), //动画时间为500毫秒
+                  pageBuilder: (BuildContext context, Animation animation,
+                      Animation secondaryAnimation) {
+                    return new FadeTransition(
+                      //使用渐隐渐入过渡,
+                      opacity: animation,
+                      child: B2BLoginPage(), //登录页面
+                    );
+                  },
+                ),
+                ModalRoute.withName('/'))
+            .whenComplete(() {
           loginLock = false;
-          return;
-        } else {
-          Navigator.of(_navigatorKey.currentState.overlay.context)
-              .pushNamedAndRemoveUntil(
-                  AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'))
-              .whenComplete(() {
-            loginLock = false;
-          });
-        }
+        });
       }
     });
   }
@@ -328,10 +337,10 @@ class AnymouseApp extends StatelessWidget {
         bottomAppBarColor: Colors.grey,
       ),
       navigatorObservers: [BotToastNavigatorObserver(), B2BNavigatorObserver()],
-      home: ClientSelectPage(),
+      home: ClientSelectPageV2(),
       routes: {
         AppRoutes.ROUTE_AUTH_REQUEST_PAGE:
-            AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
+        AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
       },
       builder: (context, child) {
         final botToastBuilder = BotToastInit(); //1.调用BotToastInit

@@ -16,6 +16,7 @@ class AppProvider {
     ChangeNotifierProvider(create: (_) => ProductHomeState()),
     ChangeNotifierProvider(create: (_) => ProductHomeCarouselsState()),
     ChangeNotifierProvider(create: (_) => RecommendProductState()),
+    // ChangeNotifierProvider(create: (_) => HomeSectionState()),
     Provider(
       create: (_) => AddressState(),
     ),
@@ -56,6 +57,7 @@ class AppProvider {
     DateTime start = DateTime.now();
     print('[nbyjy]预加载开始${DateFormatUtil.formatYMDHMS(start)}');
     Provider.of<RecommendProductState>(context).products;
+    // Provider.of<HomeSectionState>(context).getData();
     await Provider.of<CategoryState>(context).getCascadedCategories();
     await Provider.of<AddressState>(context).getRegions();
     await Provider.of<MajorCategoryState>(context).getMajorCategories();

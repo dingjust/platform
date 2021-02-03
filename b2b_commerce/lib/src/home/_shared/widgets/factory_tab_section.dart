@@ -30,7 +30,7 @@ class _FactoryTabSectionState extends State<FactoryTabSection>
     return Container(
         height: 700,
         child: ChangeNotifierProvider<FactoryTabSectionState>(
-          builder: (context) => FactoryTabSectionState(),
+          create: (context) => FactoryTabSectionState(),
           child: Scaffold(
               appBar: TabBar(
                 onTap: (v) {
@@ -210,19 +210,18 @@ class _FactoryItem extends StatelessWidget {
         ),
         Expanded(
             child:
-            //     CategoriesText(
-            //   model: model,
-            // )
-            Text(
-              '${getCategoryStr(model)}',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.grey),
-            )),
+                //     CategoriesText(
+                //   model: model,
+                // )
+                Text(
+          '${getCategoryStr(model)}',
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: Colors.grey),
+        )),
         Opacity(
           opacity: model?.contactAddress?.region?.name != null ? 1.0 : 0,
           child: Text(
-            '${model?.contactAddress?.region?.name ?? ''}${model?.contactAddress
-                ?.city?.name ?? ''}',
+            '${model?.contactAddress?.region?.name ?? ''}${model?.contactAddress?.city?.name ?? ''}',
             style: TextStyle(color: Colors.grey),
           ),
         )

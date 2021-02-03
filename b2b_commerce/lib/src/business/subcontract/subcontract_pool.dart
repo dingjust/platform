@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
-class SubContractPoolPage extends StatefulWidget{
+class SubContractPoolPage extends StatefulWidget {
   SubContractPoolPage({
     Key key,
   }) : super(key: key);
@@ -26,47 +26,49 @@ class _SubContractPoolPageState extends State<SubContractPoolPage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            builder: (_) => SubContractPoolState()),
+        ChangeNotifierProvider(create: (_) => SubContractPoolState()),
       ],
       child: Consumer(
-        builder: (context, SubContractPoolState subContractPoolState,_) => Scaffold(
+        builder: (context, SubContractPoolState subContractPoolState, _) =>
+            Scaffold(
           appBar: AppBar(
             elevation: 0.5,
-            title:   Text(subContractPoolState.keyword == null || subContractPoolState.keyword == '' ? '转包/裁片' : subContractPoolState.keyword),
+            title: Text(subContractPoolState.keyword == null ||
+                    subContractPoolState.keyword == ''
+                ? '转包/裁片'
+                : subContractPoolState.keyword),
             actions: <Widget>[
-              Builder(
-                builder: (context) {
-                  return GestureDetector(
-                    onTap: () async{
-                      dynamic result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HistorySearch(
-                            historyKey: GlobalConfigs.SUBCONTRACT_POOL_HISTORY_KEYWORD_KEY,
-                            hintText: '请输入转包标题，分类搜索',
-                            keyword: subContractPoolState.keyword,
-                          ),
+              Builder(builder: (context) {
+                return GestureDetector(
+                  onTap: () async {
+                    dynamic result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HistorySearch(
+                          historyKey: GlobalConfigs
+                              .SUBCONTRACT_POOL_HISTORY_KEYWORD_KEY,
+                          hintText: '请输入转包标题，分类搜索',
+                          keyword: subContractPoolState.keyword,
                         ),
-                      );
-
-                      if(result != null){
-                        subContractPoolState.keyword = result;
-                        subContractPoolState.clear();
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: Icon(
-                        Icons.search,
                       ),
+                    );
+
+                    if (result != null) {
+                      subContractPoolState.keyword = result;
+                      subContractPoolState.clear();
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Icon(
+                      Icons.search,
                     ),
-                  );
-                }
-              ),
+                  ),
+                );
+              }),
             ],
           ),
-          body:  SubContractPoolList(),
+          body: SubContractPoolList(),
         ),
       ),
     );
@@ -78,5 +80,3 @@ class _SubContractPoolPageState extends State<SubContractPoolPage> {
     super.dispose();
   }
 }
-
-

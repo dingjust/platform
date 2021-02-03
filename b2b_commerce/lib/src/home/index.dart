@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_tab_section.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/home_section.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class HomePage extends StatefulWidget {
   final Map<UserType, List<Widget>> widgets = <UserType, List<Widget>>{
     UserType.BRAND: <Widget>[
       BrandButtonsSection(),
-      BrandReportSection(),
+      // HomeReportSection(),
       BrandEntranceSection(),
       // ProductsSection(),
       FactoryTabSection(),
@@ -36,7 +37,7 @@ class HomePage extends StatefulWidget {
     ],
     UserType.FACTORY: <Widget>[
       FactoryButtonsSection(),
-      FactoryReportSection(),
+      // HomeReportSection(),
       FactoryEntranceSection(),
       RequirementTabSection(),
       MoreRequirementSection()
@@ -181,8 +182,7 @@ class HomeBrandBannerSection extends StatelessWidget {
     ),
     MediaModel(
       url:
-      '${GlobalConfigs
-          .CDN_OSS_DOMAIN}/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+          '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
     )
   ];
 
