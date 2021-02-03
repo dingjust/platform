@@ -2143,6 +2143,22 @@ const state = {
       code: 'CANCELLED',
       name: '已取消'
     }
+  ],
+
+  // 认证类型
+  ApprovalType: [
+    {
+      code: 'PERSONAL',
+      name: '个人认证'
+    },
+    {
+      code: 'ENTERPRISE',
+      name: '企业认证'
+    },
+    {
+      code: 'INDIVIDUAL',
+      name: '个体户认证'
+    }
   ]
 };
 

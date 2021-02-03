@@ -9,6 +9,7 @@
     <el-row style="margin-bottom: 10px">
       <h6 class="form-h" >认证状态：
         <span :class="approvalStatus ? 'approval-color' : ''">{{approvalStatus ? '已认证' : '未认证'}}</span>
+        <span v-if="clearRow.approvalType" class="approval-color"> ({{getEnum('ApprovalType', clearRow.approvalType)}})</span>
       </h6>
     </el-row>
     <el-divider></el-divider>
