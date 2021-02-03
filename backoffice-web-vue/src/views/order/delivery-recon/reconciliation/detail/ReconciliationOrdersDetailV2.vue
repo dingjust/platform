@@ -160,7 +160,34 @@ export default {
         return;
       }
 
-      this.$set(this, 'order', result.data);
+      this.initData(result.data);
+    },
+    initData (data) {
+      let order = JSON.parse(JSON.stringify(data));
+
+      if (order.colNames && order.colNames.length > 0) {
+        order.colNames = data.colNames.map(item => {
+          return {
+            id: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36),
+            value: item
+          }
+        })  
+  
+        let index;
+        order.entries.forEach(item => {
+          item.customColumns.forEach(val => {
+            index = order.colNames.findIndex(v => v.value === val.name);
+            if (index > -1) {
+              this.$set(item, order.colNames[index].id, {
+                id: val.id,
+                value: val.value
+              });
+            }
+          })
+        })
+      }
+
+      this.$set(this, 'order', order);
     },
     async showPDF (item) {
       await this.getDetail();
@@ -287,6 +314,7 @@ export default {
     toModify () {
       const form = {
         id: this.order.id,
+        colNames: this.order.colNames,
         entries: this.order.entries
       };
       this.modifyForm = JSON.parse(JSON.stringify(form));

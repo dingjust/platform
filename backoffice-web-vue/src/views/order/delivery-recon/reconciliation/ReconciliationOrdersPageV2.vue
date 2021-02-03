@@ -74,7 +74,8 @@ export default {
       queryFormData: {
         keyword: '',
         cooperatorName: '',
-        states: 'PENDING_B_SIGN',
+        states: '',
+        signState: 'WAIT_ME_SIGN',
         // partyType: "PARTYA",
         createdDateFrom: '',
         createdDateTo: ''
@@ -104,6 +105,7 @@ export default {
     async getReconciliationV2ListCount () {
       let query = Object.assign({}, this.queryFormData);
       query.states = '';
+      query.signState = '';
 
       const url = this.apis().getReconciliationV2ListCount();
       const result = await this.$http.post(url, query);

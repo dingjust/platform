@@ -31,7 +31,21 @@ export default {
       });
     },
     async _onModify () {
-      const form = this.order;
+      let form = JSON.parse(JSON.stringify(this.order));
+
+      form.entries.forEach(item => {
+        item.customColumns = [];
+        form.colNames.forEach(val => {
+          item.customColumns.push({
+            id: item[val.id].id !== '' ? item[val.id].id : null, 
+            name: val.value,
+            value: item[val.id].value
+          })
+          this.$delete(item, val.id);
+        })
+      })
+      
+      form.colNames = form.colNames.map(item => item.value);
 
       const url = this.apis().reconciliationOrderModify();
       const result = await this.$http.put(url, form);

@@ -106,7 +106,8 @@ export default {
           deductionAmount: row['扣款'],
           returnQuantity: row['退货'],
           settlementAmount: row['结算金额'],
-          remarks: row['备注']
+          remarks: row['备注'],
+          customColumns: []
         };
       });
     }

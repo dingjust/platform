@@ -78,7 +78,8 @@ export default {
         isApproval: true,
         approvers: [null],
         paperSheetMedias: [],
-        medias: []
+        medias: [],
+        colNames: []
       }
     }
   },
@@ -141,6 +142,19 @@ export default {
           }
         })
       }
+
+      data.entries.forEach(item => {
+        data.colNames.forEach(val => {
+          item.customColumns.push({
+            id: item[val.id].id !== '' ? item[val.id].id : null, 
+            name: val.value,
+            value: item[val.id].value
+          })
+          this.$delete(item, val.id);
+        })
+      });
+
+      data.colNames = data.colNames.map(item => item.value);
 
       const url = this.apis().createReconciliationV2();
       const result = await this.$http.post(url, data);

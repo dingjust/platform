@@ -40,6 +40,13 @@
           <span :title="scope.row.remarks" class="remark-title">{{scope.row.remarks}}</span>
         </template>
       </el-table-column>
+      <template v-if="order.colNames.length > 0">
+        <el-table-column v-for="column in order.colNames" :label="column.value" :key="column.id" min-width="120px">
+          <template slot-scope="scope">
+            <span v-if="scope.row[column.id]">{{scope.row[column.id].value}}</span>
+          </template>
+        </el-table-column>
+      </template>
     </el-table>
   </div>
 </template>
@@ -52,6 +59,7 @@ export default {
     tableData: function () {
       let data = [];
       data = data.concat(this.order.entries);
+
       if (this.order.entries && this.order.entries.length > 0) {
         data.push({
           countRow: '合计',

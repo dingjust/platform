@@ -128,6 +128,7 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
+    import axios from 'axios';
 
   const {
     mapGetters, mapActions, mapMutations
@@ -202,9 +203,14 @@
           type: 'warning'
         }).then(async () => {
           const url = this.apis().rejectQuote(code);
-          const result = await this.$http.put(url, {
-            reason: this.comment
+          // const result = await this.$http.put(url, '121313');
+
+          let result = await axios.put(url, this.comment, {
+            'headers':{
+              'Content-Type':'application/json'
+            }
           });
+
           if (result['errors']) {
             this.$message.error(result['errors'][0].message);
             return;

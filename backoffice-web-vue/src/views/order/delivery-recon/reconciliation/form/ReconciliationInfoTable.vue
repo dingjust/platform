@@ -1,10 +1,12 @@
 <template>
   <div>
     <el-row type="flex" justify="end" align="middle">
-      <el-button type="text" size="medium" @click="onAdd">添加</el-button>
+      <el-button type="text" size="medium" @click="columnVisible = true">添加表单列</el-button>
+      <el-divider direction="vertical"></el-divider>
+      <el-button type="text" size="medium" @click="onAdd">添加表单行</el-button>
       <el-button type="text" size="medium" @click="importVisible = true">批量导入</el-button>
     </el-row>
-    <el-table :data="tableData" border>
+    <el-table :data="tableData" border ref="table">
       <el-table-column label="产品图片" min-width="80px">
         <template slot-scope="scope">
           <div v-if="scope.row.countRow">{{scope.row.countRow}}</div>
@@ -154,6 +156,20 @@
           <el-input v-model="scope.row.remarks" type="textarea" style="width: 200px" :rows="3" :title="scope.row.remarks"></el-input>
         </template>
       </el-table-column>
+      <template v-if="formData.colNames.length > 0">
+        <el-table-column v-for="column in formData.colNames" :label="column.id" :key="column.id" min-width="120px">
+          <template slot="header" slot-scope="scope">
+            <div style="display: flex;align-items: center">
+              <span>{{column.value}}</span>
+              <el-button type="text" @click="onModifyColName(column)">修改</el-button>
+              <el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteCol(column)"/>
+            </div>
+          </template>
+          <template slot-scope="scope">
+            <el-input v-if="!scope.row.countRow" v-model="scope.row[column.id].value"></el-input>
+          </template>
+        </el-table-column>
+      </template>
       <el-table-column label="操作" min-width="80px" fixed="right">
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-button type="text" size="medium" @click="onCopy(scope.$index, scope.row)">
@@ -172,12 +188,16 @@
     <el-dialog :visible.sync="importVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <reconciliation-entry-import v-if="importVisible" @onImport="onImport"/>
     </el-dialog>
+    <el-dialog :title="columnDialogtitle" :visible.sync="columnVisible" width="400px" append-to-body :close-on-click-modal="false">
+      <append-column v-if="columnVisible" :modifyColumn="modifyColumn" @toModifyColumn="_modifyColumn" @addColumn="addColumn" @callback="callback" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import SampleProductsSelectDialog from '@/views/product/sample/components/SampleProductsSelectDialog'
 import ReconciliationEntryImport from './ReconciliationEntryImport'
+import AppendColumn from '../../components/AppendColumn.vue';
 export default {
   name: 'ReconciliationInfoTable',
   props: ['formData'],
@@ -201,43 +221,49 @@ export default {
           settlementAmount: this.countColumn(this.formData.entries, 'settlementAmount')
         });
       }
+
       return data;
     }
   },
   components: {
     SampleProductsSelectDialog,
-    ReconciliationEntryImport
+    ReconciliationEntryImport,
+    AppendColumn
   },
   data () {
     return {
-      // item: {
-      //   product: {
-      //     id: '',
-      //     name: '',
-      //     thumbnail: '',
-      //     skuID: ''
-      //   },
-      //   waveBand: '',
-      //   orderItemNo: '',
-      //   customizedMode: '',
-      //   deliveryDate: '',
-      //   contractDate: '',
-      //   orderQuantity: '',
-      //   cutQuantity: '',
-      //   packageQuantity: '',
-      //   storageQuantity: '',
-      //   returnQuantity: '',
-      //   unitContractPrice: '',
-      //   loanAmount: '',
-      //   expressFee: '',
-      //   deductionAmount: '',
-      //   settlementAmount: '',
-      //   depositAmount: '',
-      //   remarks: ''
-      // },
       productDialog: false,
       operateIndex: '',
-      importVisible: false
+      importVisible: false,
+      columnVisible: false,
+      columnDialogtitle: '添加表单列',
+      modifyColumn: '',
+      item: {
+        product: {
+          id: '',
+          name: '',
+          thumbnail: '',
+          skuID: ''
+        },
+        waveBand: '',
+        orderItemNo: '',
+        customizedMode: '',
+        deliveryDate: '',
+        contractDate: '',
+        orderQuantity: '',
+        cutQuantity: '',
+        packageQuantity: '',
+        storageQuantity: '',
+        returnQuantity: '',
+        unitContractPrice: '',
+        loanAmount: '',
+        expressFee: '',
+        deductionAmount: '',
+        settlementAmount: '',
+        depositAmount: '',
+        remarks: '',
+        customColumns: []
+      }
     }
   },
   methods: {
@@ -263,31 +289,7 @@ export default {
       }
     },
     onAdd () {
-      this.formData.entries.push({
-        product: {
-          id: '',
-          name: '',
-          thumbnail: '',
-          skuID: ''
-        },
-        waveBand: '',
-        orderItemNo: '',
-        customizedMode: '',
-        deliveryDate: '',
-        contractDate: '',
-        orderQuantity: '',
-        cutQuantity: '',
-        packageQuantity: '',
-        storageQuantity: '',
-        returnQuantity: '',
-        unitContractPrice: '',
-        loanAmount: '',
-        expressFee: '',
-        deductionAmount: '',
-        settlementAmount: '',
-        depositAmount: '',
-        remarks: ''
-      });
+      this.formData.entries.push(Object.assign({}, this.item));
     },
     onCopy (index, row) {
       this.formData.entries.splice(index + 1, 0, Object.assign({}, row));
@@ -321,8 +323,62 @@ export default {
       this.productDialog = false;
     },
     onImport (sumbitData) {
+      sumbitData.forEach(item => {
+        this.formData.colNames.forEach(val => {
+          this.$set(item, val.id, {
+            id: '',
+            value: ''
+          });
+        })
+      })
       this.formData.entries = this.formData.entries.concat(sumbitData);
       this.importVisible = false;
+    },
+    addColumn (title) {
+      const newC = Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36);
+
+      this.$set(this.item, newC, {
+        id: '',
+        value: ''
+      });
+
+      this.formData.entries.forEach(item => {
+        this.$set(item, newC, {
+          id: '',
+          value: ''
+        });
+      });
+
+      this.formData.colNames.push({
+        id: newC,
+        value: title
+      });
+
+      this.columnVisible = false;
+    },
+    onModifyColName (column) {
+      this.columnDialogtitle = '修改表单列名';
+      this.modifyColumn = Object.assign({}, column);
+      this.columnVisible = true;
+    },
+    _modifyColumn (column) {
+      let index = this.formData.colNames.findIndex(item => item.id === column.id);
+      if (index > -1) {
+        this.formData.colNames[index].value = column.value;
+      }
+
+      this.callback();
+    },
+    onDeleteCol (column) {
+      let index = this.formData.colNames.findIndex(item => item.id === column.id);
+      this.formData.colNames.splice(index, 1);
+      this.formData.entries.forEach(item => {
+        this.$delete(item, column.id);
+      })
+    },
+    callback () {
+      this.columnVisible = false;
+      this.modifyColumn = '';
     }
   }
 }
@@ -355,4 +411,12 @@ export default {
     }
   }
 
+  .column-close {
+    margin: 0px;
+    color: #C0C4CC
+  }
+
+  .column-close:hover {
+    color: #606266
+  }
 </style>

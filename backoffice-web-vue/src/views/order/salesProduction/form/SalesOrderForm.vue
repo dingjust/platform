@@ -492,7 +492,7 @@
           //   id: this.$store.getters.currentUser.id,
           //   name: this.$store.getters.currentUser.username
           // },
-          productionLeader: null,
+          productionLeader: this.$store.getters.currentUser,
           approvers: [null],
           purchasingLeader: null
         },

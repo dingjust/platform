@@ -6,6 +6,11 @@
           <h6 style="margin: 0px;">订单基本信息</h6>
         </el-row>
         <el-row type="flex" justify="start" style="margin: 15px 0px 0px 24px;">
+          <el-col>
+            <h6>标题：{{slotData.title}}</h6>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" style="margin: 10px 0px 0px 24px;">
           <el-col :span="9">
             <h6>合作商：{{slotData.targetCooperator.type == 'ONLINE' ?
               slotData.targetCooperator.partner.name : slotData.targetCooperator.name}}</h6>
