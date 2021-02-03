@@ -162,7 +162,7 @@ class _Card extends StatelessWidget {
   final double maxHeight;
 
   _Card({Key key,
-    this.height = 120,
+    this.height = 125,
     this.title,
     this.text,
     this.margin = EdgeInsets.zero,
