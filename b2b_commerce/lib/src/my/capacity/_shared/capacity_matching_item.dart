@@ -29,7 +29,7 @@ class CapacityMatchingItem extends StatelessWidget {
         );
       },
       child: Container(
-        height: 160,
+        height: 162,
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         padding: EdgeInsets.all(10),
         color: Colors.white,
