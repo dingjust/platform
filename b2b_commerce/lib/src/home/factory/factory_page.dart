@@ -4,7 +4,7 @@ import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
-as yj;
+    as yj;
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';

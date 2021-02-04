@@ -237,6 +237,8 @@ flutter:
     - packages/assets/temp/business/production_orange.png
     - packages/assets/temp/index/select_brand.png
     - packages/assets/temp/index/select_factory.png
+    - packages/assets/temp/index/requirement_pool.png
+    - packages/assets/temp/index/quote_process.png
 
   fonts:
     - family: b2bIcons

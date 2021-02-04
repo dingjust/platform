@@ -62,15 +62,15 @@ class FactoryItem extends StatelessWidget {
             children: <Widget>[
               showButton
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  InviteFactoryButton(
-                    factoryModel: model,
-                    requirementCode: requirementCode,
-                    callback: callback,
-                  )
-                ],
-              )
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        InviteFactoryButton(
+                          factoryModel: model,
+                          requirementCode: requirementCode,
+                          callback: callback,
+                        )
+                      ],
+                    )
                   : Container(),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
@@ -128,7 +128,10 @@ class FactoryItem extends StatelessWidget {
                                 ),
                                 Expanded(
                                     child: Text(
-                                        '${getCooperationModesStr(model)}'))
+                                        '${getCooperationModesStr(model)}')),
+                                _Distance(
+                                  model: model,
+                                )
                               ],
                             ),
                             // CertifiedTagsAndLabelsText(model: model),
@@ -510,5 +513,40 @@ class InviteFactoryButton extends StatelessWidget {
         ),
       );
     }
+  }
+}
+
+class _Distance extends StatelessWidget {
+  final FactoryModel model;
+
+  const _Distance({Key key, this.model}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text(
+        '${getStr()}',
+        style: TextStyle(color: Colors.orange),
+      ),
+    );
+  }
+
+  ///
+  String getStr() {
+    if (model.distance == null || model.distance < 0) {
+      return '';
+    }
+
+    if (model.distance < 1000) {
+      return '${model.distance.toStringAsFixed(0)}米';
+    }
+
+    if (model.distance < 10000000) {
+      double kM = model.distance / 1000;
+      return '${kM.toStringAsFixed(2)}公里';
+    }
+
+    double mKM = model.distance / 10000000;
+    return '${mKM.toStringAsFixed(2)}万公里';
   }
 }
