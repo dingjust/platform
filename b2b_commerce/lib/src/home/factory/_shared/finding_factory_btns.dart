@@ -207,23 +207,26 @@ class _IconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      child: FlatButton(
-        onPressed: onPressed,
-        child: Column(
-          children: <Widget>[
-            Expanded(flex: 1, child: icon),
-            Container(
-              child: Text(
-                '$title',
-                overflow: TextOverflow.visible,
-                style: TextStyle(fontSize: 14),
+    return Expanded(
+        child: Container(
+            height: 60,
+            child: Material(
+              color: Colors.white,
+              child: InkWell(
+                onTap: onPressed,
+                child: Column(
+                  children: <Widget>[
+                    Expanded(flex: 1, child: icon),
+                    Container(
+                      child: Text(
+                        '$title',
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            )));
   }
 }
