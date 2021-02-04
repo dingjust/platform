@@ -1,3 +1,8 @@
+<!--
+* @Description: 弃用
+* @Date 2021/02/03 17:27
+* @Author L.G.Y
+-->
 <template>
   <div class="permission-form">
     <el-container class="permission-form-container">
@@ -156,13 +161,6 @@
         this.authData[parentIndex].children[index].indeterminate = list.length > 0 && list.length < item.children.length;
         // 处理一级
         this.changeParentState(parentIndex);
-
-        // // 处理数据权限
-        // if (item.dataPermissionAvl && !isEcho) {
-        //   if (list.length > 0 && this.checkPerdata[item.id].length <= 0) {
-        //     this.checkPerdata[item.id] = ['SELF_DATA'];
-        //   }
-        // }
       },
       changeParentState (parentIndex) {
         // 处理一级
@@ -205,44 +203,10 @@
 
         this.changeParentState(parentIndex);
       },
-      // handlePerData (flag, val) {
-      //   // 处理数据权限
-      //   if (val.dataPermissionAvl) {
-      //     if (flag && this.checkPerdata[val.id].length <= 0) {
-      //       this.checkPerdata[val.id] = ['SELF_DATA'];
-      //     } else if (!flag) {
-      //       this.checkPerdata[val.id] = [];
-      //     }
-      //   }
-      // },
       handlePer (list) {
         if (list.length > 1) {
           this.checkPerdata[this.authList.id] = [list.pop()];
         }
-        // if (this.checkData[this.authList.id].length <= 0) {
-        //   let parentIndex = this.authData.findIndex(item => item.id === this.authList.parentId);
-        //   let childIndex;
-        //   if (parentIndex >= 0) {
-        //     childIndex = this.authData[parentIndex].children.findIndex(item => item.id === this.authList.id);
-        //   }
-
-        //   let flag = list.length > 0;
-        //   if (childIndex >= 0) {
-        //     // 判断二级权限是否拥有三级权限列表
-        //     let thirdList = this.authData[parentIndex].children[childIndex].children;
-        //     if (thirdList && thirdList.length > 0) {
-        //       this.authData[parentIndex].children[childIndex].indeterminate = flag;
-        //     } else if (thirdList == null || thirdList.length <= 0) {
-        //       this.authData[parentIndex].children[childIndex].indeterminate = false;
-        //       this.authData[parentIndex].children[childIndex].checked = flag;
-        //     }  
-        //   }
-
-        //   if (parentIndex >= 0) {
-        //     // this.authData[parentIndex].indeterminate = flag;
-        //     this.echoFirstData(this.authData[parentIndex].children, parentIndex);
-        //   }
-        // }
       },
       // 数据回显
       initData () {
@@ -275,10 +239,6 @@
                 // 回显三级
                 this.checkData[item.id] = list;
               } else {
-                // let perLength = [];
-                // if (this.checkPerdata[item.id]) {
-                //   perLength = this.checkPerdata[item.id].length;
-                // }
                 let length = [];
                 if (this.authData[parentIndex].children[childIndex].children) {
                   length = this.authData[parentIndex].children[childIndex].children.length;
@@ -332,7 +292,6 @@
       }
     },
     created () {
-      // this.getList();
     }  
   }
 </script>
