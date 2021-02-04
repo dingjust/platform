@@ -112,7 +112,7 @@ export default {
       if (this.canConfirm) {
         return false;
       }
-      // 待乙方签署或待审批的状态下，创建方可以进行取消操作
+      // 待乙方签署，创建方可以进行取消操作
       return this.isCreator && this.order.state === 'PENDING_B_SIGN';
     },
     tagTitle: function () {
