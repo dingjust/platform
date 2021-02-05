@@ -289,7 +289,8 @@ export default {
       }
     },
     onAdd () {
-      this.formData.entries.push(Object.assign({}, this.item));
+      // this.formData.entries.push(Object.assign({}, this.item));
+      this.formData.entries.push(JSON.parse(JSON.stringify(this.item)));
     },
     onCopy (index, row) {
       this.formData.entries.splice(index + 1, 0, Object.assign({}, row));
@@ -375,6 +376,8 @@ export default {
       this.formData.entries.forEach(item => {
         this.$delete(item, column.id);
       })
+
+      this.$delete(this.item, column.id);
     },
     callback () {
       this.columnVisible = false;
