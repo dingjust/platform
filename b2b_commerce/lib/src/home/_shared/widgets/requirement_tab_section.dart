@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail_by_factory.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/distance_text.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:core/core.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
+
+import 'orientations_text.dart';
 
 class RequirementTabSection extends StatefulWidget {
   @override
@@ -77,22 +80,21 @@ class NearbyRequirementsListView extends StatelessWidget {
           (context, RequirementTabSectionState state, AmapState amapState, _) =>
               Container(
                   child: Container(
-                    child: state.getNearbyRequirements(
-                        amapState.longitude, amapState.latitude) !=
-                        null
-                        ? Column(
-                      children: state
-                          .getNearbyRequirements(
-                          amapState.longitude, amapState.latitude)
-                          .map((requirement) =>
-                          _RequirementItem(
-                            model: requirement,
-                          ))
-                          .toList(),
-                    )
-                        : Column(
-                      children: <Widget>[NoDataShow()],
-                    ),
+        child: state.getNearbyRequirements(
+                    amapState.longitude, amapState.latitude) !=
+                null
+            ? Column(
+                children: state
+                    .getNearbyRequirements(
+                        amapState.longitude, amapState.latitude)
+                    .map((requirement) => _RequirementItem(
+                          model: requirement,
+                        ))
+                    .toList(),
+              )
+            : Column(
+                children: <Widget>[NoDataShow()],
+              ),
       )),
     );
   }
@@ -133,27 +135,12 @@ class _RequirementItem extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '${model.details.productName ?? ''}',
+                        '${model.details.productName ?? '无标题'}',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.access_time,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
-                        Text(
-                          '${DateExpress2Util.express(model.creationTime)}',
-                          style: TextStyle(
-                              color: Color.fromRGBO(97, 95, 95, 1),
-                              fontSize: 14),
-                        )
-                      ],
-                    )
                   ],
                 ),
                 Row(
@@ -176,24 +163,46 @@ class _RequirementItem extends StatelessWidget {
                         ],
                       ),
                     ),
+                    DistanceText(
+                      val: model.distance,
+                    )
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     Expanded(
-                      flex: 1,
-                      child: Text(
-                        '${model.belongTo.name}',
-                        style: TextStyle(color: Color.fromRGBO(97, 95, 95, 1)),
+                      child: OrientationsText(
+                        regions: model.details.productiveOrientations ?? [],
                       ),
                     ),
-                    Text(
-                      model?.belongTo?.contactAddress?.city != null
-                          ? '${model.belongTo.contactAddress.city.name}${model
-                          .belongTo.contactAddress.cityDistrict.name}'
-                          : '',
-                      style: TextStyle(
-                          color: Color.fromRGBO(97, 95, 95, 1), fontSize: 14),
+                    // Text(
+                    //   model?.belongTo?.contactAddress?.city != null
+                    //       ? '${model.belongTo.contactAddress.city.name}${model.belongTo.contactAddress.cityDistrict.name}'
+                    //       : '',
+                    //   style: TextStyle(
+                    //       color: Color.fromRGBO(97, 95, 95, 1), fontSize: 14),
+                    // )
+                    // Expanded(
+                    //   flex: 1,
+                    //   child: Text(
+                    //     '${model.belongTo.name}',
+                    //     style: TextStyle(color: Color.fromRGBO(97, 95, 95, 1)),
+                    //   ),
+                    // ),
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.access_time,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        Text(
+                          '${DateExpress2Util.express(model.creationTime)}',
+                          style: TextStyle(
+                              color: Color.fromRGBO(97, 95, 95, 1),
+                              fontSize: 14),
+                        )
+                      ],
                     )
                   ],
                 )

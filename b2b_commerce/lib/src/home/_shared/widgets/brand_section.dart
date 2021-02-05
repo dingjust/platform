@@ -3,7 +3,7 @@ import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
-import 'package:bot_toast/bot_toast.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
@@ -49,32 +49,24 @@ class BrandEntranceSection extends StatelessWidget {
         subTitle: '精品推选',
         icon: B2BImage.recommend_factory(width: 75, height: 75),
         onPressed: () async {
-          List<CategoryModel> categories =
-              await Provider.of<MajorCategoryState>(context)
-                  .getMajorCategories();
-          List<LabelModel> labels =
-              await Provider.of<LabelState>(context).getLabels();
-          labels = labels
-              .where((label) =>
-                  label.group == 'FACTORY' || label.group == 'PLATFORM')
-              .toList();
-          if (categories != null && labels != null) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FactoryPage(
-                  FactoryCondition(
-                      starLevel: 0,
-                      adeptAtCategories: [],
-                      labels: [],
-                      cooperationModes: []),
-                  route: '全部工厂',
-                  categories: categories,
-                  labels: labels,
-                ),
+          //埋点>>>推荐工厂
+          FlutterUmplus.event(
+            "factory_finding_all",
+          );
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FindingFactoryPage(
+                FactoryCondition(
+                    starLevel: 0,
+                    adeptAtCategories: [],
+                    labels: [],
+                    cooperationModes: []),
+                route: '推荐工厂',
               ),
-            );
-          }
+            ),
+          );
         },
       ),
     ];
@@ -142,7 +134,9 @@ class BrandButtonsSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  _buildQualityFactory(context),
+                  // _buildQualityFactory(context),
+                  // _buildRequirementCenter(context),
+                  _buildQuoteProcess(context),
                   _buildContractManage(context),
                   _buildOrderCoordination(context),
                   _builRequirement(context)
@@ -154,30 +148,38 @@ class BrandButtonsSection extends StatelessWidget {
   }
 
   Widget _buildProductionFactory(BuildContext context) {
-    //埋点>>>生产找厂
-    FlutterUmplus.event(
-      "factory_finding_all",
-    );
-
     return Expanded(
         flex: 1,
         child: ImageNumButton(
           image: B2BImage.productionFactory(),
           onPressed: () async {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    FindingFactoryPage(
-                      FactoryCondition(
-                          starLevel: 0,
-                          adeptAtCategories: [],
-                          labels: [],
-                          cooperationModes: []),
-                      route: '全部工厂',
-                    ),
-              ),
-            );
+            List<CategoryModel> categories =
+            await Provider.of<MajorCategoryState>(context)
+                .getMajorCategories();
+            List<LabelModel> labels =
+            await Provider.of<LabelState>(context).getLabels();
+            labels = labels
+                .where((label) =>
+            label.group == 'FACTORY' || label.group == 'PLATFORM')
+                .toList();
+            if (categories != null && labels != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      FactoryPage(
+                        FactoryCondition(
+                            starLevel: 0,
+                            adeptAtCategories: [],
+                            labels: [],
+                            cooperationModes: []),
+                        route: '生产找厂',
+                        categories: categories,
+                        labels: labels,
+                      ),
+                ),
+              );
+            }
           },
           title: '生产找厂',
         ));
@@ -319,8 +321,7 @@ class BrandButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.orderCoordination(),
         onPressed: () {
-          // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_COORDINATION);
-          BotToast.showText(text: '功能完善中');
+          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_COORDINATION);
         },
         title: '订单协同',
       ),
@@ -341,31 +342,44 @@ class BrandButtonsSection extends StatelessWidget {
     );
   }
 
-  void _jumpToQualityFactory(BuildContext context) async {
-    List<CategoryModel> categories =
-    await Provider.of<MajorCategoryState>(context).getMajorCategories();
-    List<LabelModel> labels =
-    await Provider.of<LabelState>(context).getLabels();
-    List<LabelModel> conditionLabels =
-    labels.where((label) => label.name == '优选工厂').toList();
-    labels = labels
-        .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
-        .toList();
-    labels.add(LabelModel(name: '已认证', id: 1000000));
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) =>
-            FactoryPage(
-              FactoryCondition(
-                  starLevel: 0,
-                  adeptAtCategories: [],
-                  labels: conditionLabels,
-                  cooperationModes: []),
-              route: '优选工厂',
-              categories: categories,
-              labels: labels,
-            ),
+  ///报价处理
+  Widget _buildQuoteProcess(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: ImageNumButton(
+        image: B2BImage.quoteProcess(),
+        imagePadding: EdgeInsets.all(10),
+        onPressed: () async {
+          Navigator.of(context).pushNamed(AppRoutes.ROUTE_QUOTES);
+        },
+        title: '报价处理',
       ),
     );
   }
+
+///需求中心
+// Widget _buildRequirementCenter(BuildContext context) {
+//   return Expanded(
+//     flex: 1,
+//     child: ImageNumButton(
+//       image: B2BImage.requirementCenter(),
+//       imagePadding: EdgeInsets.all(10),
+//       onPressed: () async {
+//         Provider.of<MajorCategoryState>(context)
+//             .getMajorCategories()
+//             .then((categories) {
+//           if (categories != null) {
+//             Navigator.of(context).push(
+//               MaterialPageRoute(
+//                 builder: (context) =>
+//                     RequirementPoolAllPage(categories: categories),
+//               ),
+//             );
+//           }
+//         });
+//       },
+//       title: '需求中心',
+//     ),
+//   );
+// }
 }

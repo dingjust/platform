@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/distance_text.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -62,15 +63,15 @@ class FactoryItem extends StatelessWidget {
             children: <Widget>[
               showButton
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  InviteFactoryButton(
-                    factoryModel: model,
-                    requirementCode: requirementCode,
-                    callback: callback,
-                  )
-                ],
-              )
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        InviteFactoryButton(
+                          factoryModel: model,
+                          requirementCode: requirementCode,
+                          callback: callback,
+                        )
+                      ],
+                    )
                   : Container(),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
@@ -111,7 +112,7 @@ class FactoryItem extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child:
-                                  StarLevelAndOrdersCountText(model: model),
+                                      StarLevelAndOrdersCountText(model: model),
                                 )
 
                                 // Expanded(
@@ -128,7 +129,10 @@ class FactoryItem extends StatelessWidget {
                                 ),
                                 Expanded(
                                     child: Text(
-                                        '${getCooperationModesStr(model)}'))
+                                        '${getCooperationModesStr(model)}')),
+                                DistanceText(
+                                  val: model.distance,
+                                )
                               ],
                             ),
                             // CertifiedTagsAndLabelsText(model: model),

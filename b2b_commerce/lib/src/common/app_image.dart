@@ -47,7 +47,7 @@ class MenuItemImage {
   static Image productionFactory =
       getImage('temp/business/production_order_factory.png');
   static Image quoteFactory =
-  getImage('temp/business/quote_manage_factory.png');
+      getImage('temp/business/quote_manage_factory.png');
   static Image freeCapacity2 = getImage('temp/index/free_capacity2.png');
   static Image externalOrder = getImage('temp/business/external_order.png');
   static Image outboundOrder = getImage('temp/business/outbound_order.png');
@@ -63,7 +63,7 @@ class MenuItemImage {
 
   ///生产工单
   static Image productionOrange =
-  getImage('temp/business/production_orange.png');
+      getImage('temp/business/production_orange.png');
 }
 
 class B2BImage {
@@ -322,6 +322,12 @@ class B2BImage {
   ///钉钉Logo
   static Image dingding_logo({double width, double height}) {
     return getImage('temp/common/dingding_logo.png',
+        width: width, height: height);
+  }
+
+  ///报价处理
+  static Image quoteProcess({double width, double height}) {
+    return getImage('temp/index/quote_process.png',
         width: width, height: height);
   }
 }
