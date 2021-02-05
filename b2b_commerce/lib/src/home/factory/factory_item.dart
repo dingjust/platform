@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/distance_text.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -111,7 +112,7 @@ class FactoryItem extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child:
-                                  StarLevelAndOrdersCountText(model: model),
+                                      StarLevelAndOrdersCountText(model: model),
                                 )
 
                                 // Expanded(
@@ -129,8 +130,8 @@ class FactoryItem extends StatelessWidget {
                                 Expanded(
                                     child: Text(
                                         '${getCooperationModesStr(model)}')),
-                                _Distance(
-                                  model: model,
+                                DistanceText(
+                                  val: model.distance,
                                 )
                               ],
                             ),
@@ -513,40 +514,5 @@ class InviteFactoryButton extends StatelessWidget {
         ),
       );
     }
-  }
-}
-
-class _Distance extends StatelessWidget {
-  final FactoryModel model;
-
-  const _Distance({Key key, this.model}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        '${getStr()}',
-        style: TextStyle(color: Colors.orange),
-      ),
-    );
-  }
-
-  ///
-  String getStr() {
-    if (model.distance == null || model.distance < 0) {
-      return '';
-    }
-
-    if (model.distance < 1000) {
-      return '${model.distance.toStringAsFixed(0)}米';
-    }
-
-    if (model.distance < 10000000) {
-      double kM = model.distance / 1000;
-      return '${kM.toStringAsFixed(2)}公里';
-    }
-
-    double mKM = model.distance / 10000000;
-    return '${mKM.toStringAsFixed(2)}万公里';
   }
 }
