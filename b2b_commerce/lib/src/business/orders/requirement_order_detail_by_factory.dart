@@ -77,13 +77,13 @@ class _RequirementOrderDetailByFactoryPageState
                     color: Colors.grey[100],
                     child: ListView(
                       children: <Widget>[
-                        //发布公司信息
-                        _buildCompanyInfo(),
                         Divider(
                           height: 0,
                         ),
                         //标题
                         _buildTitle(),
+                        //发布公司信息
+                        _buildCompanyInfo(),
                         Divider(
                           height: 0,
                         ),
@@ -142,93 +142,93 @@ class _RequirementOrderDetailByFactoryPageState
       color: Colors.white,
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              orderModel.belongTo.profilePicture == null
-                  ? Container(
-                      margin: EdgeInsets.only(right: 10),
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'temp/picture.png',
-                              package: "assets",
-                            ),
-                            fit: BoxFit.cover,
-                          )),
-                    )
-                  : Container(
-                      margin: EdgeInsets.only(right: 10),
-                      width: 60,
-                      height: 60,
-                      child: CachedNetworkImage(
-                          width: 80,
-                          height: 80,
-                          imageUrl:
-                              '${orderModel.belongTo.profilePicture.previewUrl()}',
-                          fit: BoxFit.cover,
-                          imageBuilder: (context, imageProvider) => Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                          placeholder: (context, url) => SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              ),
-                          errorWidget: (context, url, error) => SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              )),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-              Container(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      orderModel.belongTo == null || orderModel.belongTo == null
-                          ? ''
-                          : '${orderModel.belongTo.name}',
-                      textScaleFactor: 1.3,
-                    ),
-                  ),
-                  orderModel.belongTo == null ||
-                          orderModel.belongTo.approvalStatus == null
-                      ? Container()
-                      : Container(
-                          margin: EdgeInsets.only(top: 5),
-                          color: Color.fromRGBO(254, 252, 235, 1),
-                          child: orderModel.belongTo.approvalStatus !=
-                                  ArticleApprovalStatus.approved
-                              ? Text('  未认证  ',
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(255, 133, 148, 1),
-                                  ))
-                              : Text(
-                                  '  已认证  ',
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(255, 133, 148, 1),
-                                  ),
-                                ))
-                ],
-              ))
-            ],
-          ),
+          // Row(
+          //   children: <Widget>[
+          //     orderModel.belongTo.profilePicture == null
+          //         ? Container(
+          //             margin: EdgeInsets.only(right: 10),
+          //             width: 60,
+          //             height: 60,
+          //             decoration: BoxDecoration(
+          //                 borderRadius: BorderRadius.circular(10),
+          //                 image: DecorationImage(
+          //                   image: AssetImage(
+          //                     'temp/picture.png',
+          //                     package: "assets",
+          //                   ),
+          //                   fit: BoxFit.cover,
+          //                 )),
+          //           )
+          //         : Container(
+          //             margin: EdgeInsets.only(right: 10),
+          //             width: 60,
+          //             height: 60,
+          //             child: CachedNetworkImage(
+          //                 width: 80,
+          //                 height: 80,
+          //                 imageUrl:
+          //                     '${orderModel.belongTo.profilePicture.previewUrl()}',
+          //                 fit: BoxFit.cover,
+          //                 imageBuilder: (context, imageProvider) => Container(
+          //                       width: 80,
+          //                       height: 80,
+          //                       decoration: BoxDecoration(
+          //                         image: DecorationImage(
+          //                           image: imageProvider,
+          //                           fit: BoxFit.cover,
+          //                         ),
+          //                         borderRadius: BorderRadius.circular(10),
+          //                       ),
+          //                     ),
+          //                 placeholder: (context, url) => SpinKitRing(
+          //                       color: Colors.black12,
+          //                       lineWidth: 2,
+          //                       size: 30,
+          //                     ),
+          //                 errorWidget: (context, url, error) => SpinKitRing(
+          //                       color: Colors.black12,
+          //                       lineWidth: 2,
+          //                       size: 30,
+          //                     )),
+          //             decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(10),
+          //             ),
+          //           ),
+          //     Container(
+          //         child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: <Widget>[
+          //         Container(
+          //           margin: EdgeInsets.only(bottom: 5),
+          //           child: Text(
+          //             orderModel.belongTo == null || orderModel.belongTo == null
+          //                 ? ''
+          //                 : '${orderModel.belongTo.name}',
+          //             textScaleFactor: 1.3,
+          //           ),
+          //         ),
+          //         orderModel.belongTo == null ||
+          //                 orderModel.belongTo.approvalStatus == null
+          //             ? Container()
+          //             : Container(
+          //                 margin: EdgeInsets.only(top: 5),
+          //                 color: Color.fromRGBO(254, 252, 235, 1),
+          //                 child: orderModel.belongTo.approvalStatus !=
+          //                         ArticleApprovalStatus.approved
+          //                     ? Text('  未认证  ',
+          //                         style: TextStyle(
+          //                           color: Color.fromRGBO(255, 133, 148, 1),
+          //                         ))
+          //                     : Text(
+          //                         '  已认证  ',
+          //                         style: TextStyle(
+          //                           color: Color.fromRGBO(255, 133, 148, 1),
+          //                         ),
+          //                       ))
+          //       ],
+          //     ))
+          //   ],
+          // ),
           Container(
             padding: EdgeInsets.only(top: 10),
             child: Row(
@@ -296,10 +296,8 @@ class _RequirementOrderDetailByFactoryPageState
                   flex: _flexR,
                   child: Text(
                       '${orderModel.details?.majorCategory?.name}-'
-                          '${orderModel.details?.category?.parent != null
-                          ? orderModel.details.category.parent.name + '-'
-                          : ''}'
-                          '${orderModel.details?.category?.name}',
+                      '${orderModel.details?.category?.parent != null ? orderModel.details.category.parent.name + '-' : ''}'
+                      '${orderModel.details?.category?.name}',
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
               ],
