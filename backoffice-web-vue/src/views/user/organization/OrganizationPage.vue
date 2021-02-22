@@ -50,39 +50,21 @@
     computed: {
       ...mapGetters({
         page: 'page',
+        deptList: 'deptList'
       })
     },
     methods: {
       ...mapActions({
-        search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        searchDeptList: 'searchDeptList'
       }),
-      onSearch (page, size) {
-        const url = this.apis().getB2BCustomers();
-        this.search({url, keyword, page, size});
-      },
       onAdvancedSearch (page, size) {
         const query = this.queryFormData;
         const url = this.apis().getB2BCustomers();
         this.searchAdvanced({url, query, page, size});
       },
-      async getDeptList () {
-        const url = this.apis().getB2BCustomerDeptList();
-        const result = await this.$http.post(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        if (result.code == 0) {
-          this.$message.error(result.msg);
-          return;
-        }
-        this.deptList = [{
-          id: 0,
-          name: this.$store.getters.currentUser.companyName,
-          depth: 0,
-          children: result.data 
-        }];
+      getDeptList () {
+        this.searchDeptList();
       }
     },
     data () {
@@ -91,17 +73,13 @@
           keyword: '',
           roleGroupName: '',
           deptName: ''
-        },
-        deptList: []
+        }
       }
     },
     created () {
       this.onAdvancedSearch(0, 10);
       this.getDeptList();
-    },
-    destroyed () {
-
-    }    
+    }
   }
 </script>
 

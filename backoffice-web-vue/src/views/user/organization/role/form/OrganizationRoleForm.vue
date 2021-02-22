@@ -61,11 +61,14 @@
     },
     data () {
       var validateRoleIds = (rule, value, callback) => {
-        if (value && value.length > 0) {
-          callback();
-        } else {
-          return callback(new Error('请选择权限'));
+        for (const key in this.checkedThire) {
+          if (Object.hasOwnProperty.call(this.checkedThire, key)) {
+            if (this.checkedThire[key].length > 0) {
+              callback();
+            }
+          }
         }
+        return callback(new Error('请选择权限'));
       };
       return {
         authData: [],

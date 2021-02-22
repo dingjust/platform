@@ -25,50 +25,37 @@ const state = {
   dataPermission: []
 };
 const mutations = {
-  authorized(state, authorized) {
+  authorized (state, authorized) {
     sessionStorage.setItem('authorized', authorized);
     state.authorized = authorized;
   },
-  token(state, token) {
+  token (state, token) {
     sessionStorage.setItem('token', token);
     state.token = token;
   },
-  expiresIn(state, expiredIn) {
+  expiresIn (state, expiredIn) {
     localStorage.setItem('expiresIn', expiredIn);
     state.expiresIn = expiredIn;
   },
-  refreshToken(state, refreshToken) {
+  refreshToken (state, refreshToken) {
     localStorage.setItem('refreshToken', refreshToken);
     state.refreshToken = refreshToken;
   },
-  currentUser(state, currentUser) {
+  currentUser (state, currentUser) {
     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
     state.currentUser = currentUser;
   },
-  authenticationInfo(state, authenticationInfo) {
+  authenticationInfo (state, authenticationInfo) {
     sessionStorage.setItem('authenticationInfo', JSON.stringify(authenticationInfo));
     state.authenticationInfo = authenticationInfo;
-  },
-  permissions(state, permissions) {
-    sessionStorage.setItem('permissions', JSON.stringify(permissions));
-    state.permissions = permissions;
-  },
-  dataPermission(state, data) {
-    if (data != null && data.length > 0) {
-      let dataPermission = {};
-      data.forEach(item => {
-        dataPermission[item.code] = item.permission;
-      })
-      sessionStorage.setItem('dataPermission', JSON.stringify(dataPermission));
-      state.dataPermission = dataPermission;
-    }
   }
 };
 const actions = {
-  async login({
+  async login ({
     dispatch,
     commit,
-    state
+    state,
+    rootState
   }, {
     username,
     password
@@ -80,13 +67,13 @@ const actions = {
       '&client_secret=' + CLIENT_SECRET +
       '&grant_type=' + GRANT_TYPE_PASSWORD);
 
-    //请求报错
+    // 请求报错
     if (response['errors']) {
       alert(response['errors'][0].message);
       return;
     }
 
-    //密码校验不正确
+    // 密码校验不正确
     if (response['error']) {
       if (response['error'] == 'invalid_grant') {
         alert('账号密码不正确');
@@ -94,12 +81,11 @@ const actions = {
       return;
     }
 
-    //其他情况
+    // 其他情况
     if (!response['access_token']) {
       alert('网络连接错误');
       return;
     }
-
 
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response['access_token'];
 
@@ -120,21 +106,12 @@ const actions = {
     const result = await http.get('/b2b/cert/state');
     if (!result['errors']) {
       commit('authenticationInfo', result.data);
-
     }
 
     // 获取用户权限
-    const uid = state.currentUser.uid;
-    const res = await http.get('/b2b/b2bCustomers/role/' + uid);
-    if (res.code === 0) {
-      this.$message.error(res.msg);
-      return;
-    }
-    commit('permissions', res.data.roleList);
-    commit('dataPermission', res.data.dataPermissionList);
-    //存储登录用户username
+    dispatch('PermissionModule/getPermissions', {uid: state.currentUser.uid}, {root: true});
 
-    //分割子账号名称
+    // 分割子账号名称
     let strArray = username.split(':');
     localStorage.setItem('userName', strArray[0]);
     if (strArray.length == 2) {
@@ -142,7 +119,7 @@ const actions = {
     }
     router.push('/');
   },
-  async getProfile({
+  async getProfile ({
     dispatch,
     commit,
     state
@@ -162,7 +139,7 @@ const actions = {
     }
     location.reload();
   },
-  async refreshToken({
+  async refreshToken ({
     dispatch,
     commit,
     state
@@ -183,30 +160,18 @@ const actions = {
   }
 };
 const getters = {
-  currentUser() {
+  currentUser () {
     if (!state.currentUser) {
       return JSON.parse(sessionStorage.getItem('currentUser'));
     }
     return state.currentUser;
   },
-  token() {
+  token () {
     return 'Bearer ' + sessionStorage.getItem('token');
     // return 'Bearer ' + state.token;
   },
-  authenticationInfo(){
+  authenticationInfo () {
     return JSON.parse(sessionStorage.getItem('authenticationInfo'));
-  },
-  permissions() {
-    if (state.permissions.length <= 0) {
-      return JSON.parse(sessionStorage.getItem('permissions'));
-    }
-    return state.permissions;
-  },
-  dataPermission() {
-    if (state.dataPermission.length <= 0) {
-      return JSON.parse(sessionStorage.getItem('dataPermission'));
-    }
-    return state.dataPermission;
   }
 };
 

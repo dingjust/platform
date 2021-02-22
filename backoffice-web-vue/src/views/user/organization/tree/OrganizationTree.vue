@@ -3,36 +3,38 @@
     <el-row type="flex" justify="start" style="margin-bottom: 10px;">
       <h6 class="organization-tips"><i class="el-icon-tickets" />部门最多可创建三级</h6>
     </el-row>
-    <div :style="'height:' + autoHeight + 'px;overflow-y:auto;'">
-      <el-tree :data="treeData" node-key="id" default-expand-all :expand-on-click-node="false" class="tree">
-        <span class="custom-tree-node" slot-scope="{ node, data }" @click="onClick(data)">
-          <span>{{ data.name }}</span>
-          <span>
-            <template v-if="data.depth < 2 || data.depth === 0">
-              <Authorized :permission="['COMPANY_B2BDEPT_CREATE']">
-                <el-button type="text" size="mini" @click="appendDept(data)">
-                  <i class="el-icon-plus" style="border: 1px solid"/>
-                </el-button>
-              </Authorized>
-            </template>
-            <template v-if="data.depth > 0">
-              <Authorized :permission="['COMPANY_B2BDEPT_CREATE']">
-                <el-button type="text" size="mini" @click="editDept(data, node)">
-                  <i class="el-icon-edit"/>
-                </el-button>
-              </Authorized>
-            </template>
-            <template v-if="data.depth > 0">
-              <Authorized :permission="['COMPANY_B2BDEPT_REMOVE']">
-                <el-button type="text" size="mini" @click="deleteDept(data)">
-                  <i class="el-icon-delete"/>
-                </el-button>
-              </Authorized>
-            </template>
+    <el-scrollbar :style="'height:' + autoHeight + 'px;width: 100%;'">
+      <!-- <div :style="'height:' + autoHeight + 'px;'"> -->
+        <el-tree :data="treeData" node-key="id" default-expand-all :expand-on-click-node="false" class="tree">
+          <span class="custom-tree-node" slot-scope="{ node, data }" @click="onClick(data)">
+            <span>{{ data.name }}</span>
+            <span>
+              <template v-if="data.depth < 2 || data.depth === 0">
+                <Authorized :permission="['COMPANY_B2BDEPT_CREATE']">
+                  <el-button type="text" size="mini" @click="appendDept(data)">
+                    <i class="el-icon-plus" style="border: 1px solid"/>
+                  </el-button>
+                </Authorized>
+              </template>
+              <template v-if="data.depth > 0">
+                <Authorized :permission="['COMPANY_B2BDEPT_CREATE']">
+                  <el-button type="text" size="mini" @click="editDept(data, node)">
+                    <i class="el-icon-edit"/>
+                  </el-button>
+                </Authorized>
+              </template>
+              <template v-if="data.depth > 0">
+                <Authorized :permission="['COMPANY_B2BDEPT_REMOVE']">
+                  <el-button type="text" size="mini" @click="deleteDept(data)">
+                    <i class="el-icon-delete"/>
+                  </el-button>
+                </Authorized>
+              </template>
+            </span>
           </span>
-        </span>
-      </el-tree>
-    </div>
+        </el-tree>
+      <!-- </div> -->
+    </el-scrollbar>
     <el-dialog :visible.sync="deptFormVisible" class="purchase-dialog" width="40%" append-to-body :close-on-click-modal="false">
       <dept-form v-if="deptFormVisible" :formData="formData" @onConfirm="onConfirm"/>
     </el-dialog>
@@ -139,6 +141,10 @@
 </script>
 
 <style scoped>
+  .tree-container >>> .el-scrollbar__wrap{
+    overflow-x: hidden;
+  }
+
   .organization-tips {
     margin: 0px 0px 0px 15px;
     color: rgb(144, 147, 153);

@@ -48,14 +48,8 @@
     },
     methods: {
       ...mapActions({
-        search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
-        const keyword = this.keyword;
-        const url = this.apis().getB2BCustomers();
-        this.search({url, keyword, page, size});
-      },
       onAdvancedSearch (page, size) {
         const query = this.queryFormData;
         const url = this.apis().getB2BCustomers();
@@ -111,7 +105,7 @@
           return;
         }
         this.$message.success('更改员工账号状态成功');
-        this.onSearch(0, 10);
+        this.onAdvancedSearch(0, 10);
       },
       onDelete (row) {
         this.$confirm('删除后员工将无法正常使用账号 ， 请问是否继续?', '提示', {
@@ -134,7 +128,7 @@
           return;
         }
         this.$message.success('删除账号成功');
-        this.onSearch(0, 10);
+        this.onAdvancedSearch(0, 10);
       },
     },
     data () {

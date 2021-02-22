@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-tooltip :content="tipTilte" placement="top" effect="light" :disabled="selectData.length <= 0">
-      <el-cascader v-model="selectData" :options="deptList"
+      <el-cascader v-model="selectData" :options="treeData"
                   :style="'width:' + width + 'px'"
                   :disabled="cascaderDisabled"
                   :props=" { 
@@ -18,12 +18,12 @@
 <script>
 import {
   createNamespacedHelpers
-} from "vuex";
+} from 'vuex';
 
 const {
-  mapState,
+  mapGetters,
 } = createNamespacedHelpers(
-  "OrganizationModule"
+  'CacheModule'
 );
 
 export default {
@@ -53,10 +53,11 @@ export default {
   components: {
   },
   computed: {
-    ...mapState({
-      deptOptions: state => state.deptList.options,
-      loading: state => state.deptList.loading,
-      personOptions: state => state.personList.options,
+    ...mapGetters({
+      deptListLoaded: 'deptListLoaded',
+      personListLoaded: 'personListLoaded',
+      deptList: 'deptList',
+      personList: 'personList'
     }),
     cascaderDisabled: function () {
       return this.dataQuery.users.length > 0;
@@ -72,17 +73,30 @@ export default {
     }
   },
   methods: {
-    initData () {
-      let depts = JSON.parse(JSON.stringify(this.deptOptions));
+    async initData () {
+      if (!this.deptListLoaded) {
+        // 部门数据没有加载过，调用加载函数
+        await this.$store.dispatch('PersonnelModule/searchDeptList');
+      }
+      if (!this.personListLoaded) {
+        // 员工数据没有加载过，调用加载函数
+        await this.$store.dispatch('PersonnelModule/searchPersonList');
+      }
+
+      if (this.deptList.loaded && this.personList.loaded) {
+        this.handleData();
+      }
+    },
+    handleData () {
+      let depts = JSON.parse(JSON.stringify(this.deptList.options));
       // 数据权限未部门权限，过滤其他部门数据
       if (this.dataQuery && this.dataQuery.depts.length === 1 && this.dataQuery.depts[0] != 0) {
         depts = [this.breadthQuery(depts, this.dataQuery.depts[0])];
       } else if (this.dataQuery && this.dataQuery.depts.length <= 0 && this.dataQuery.users.length > 0) {
         depts = [];
       }
-      this.deptList = depts;
-      this.setMark(this.deptList, 'dept');
-      this.personList = JSON.parse(JSON.stringify(this.personOptions));
+      this.treeData = depts;
+      this.setMark(this.treeData, 'dept');
       this.createDeptPersonTree();
     },
     setMark (tree, type) {
@@ -104,25 +118,25 @@ export default {
     },
     createDeptPersonTree () {
       if (this.dataQuery && this.dataQuery.depts.length <= 0 && this.dataQuery.users.length > 0) {
-        this.personList.forEach(item => {
+        this.personList.options.forEach(item => {
           if (item.id === this.dataQuery.users[0]) {
             this.$set(item, 'mark', {
               type: 'person',
               id: item.id,
               name: item.name
             })
-            this.deptList.push(item);
+            this.treeData.push(item);
           }
         })
       } else {
-        this.personList.forEach(item => {
+        this.personList.options.forEach(item => {
           this.$set(item, 'mark', {
             type: 'person',
             id: item.id,
             name: item.name
           })
           if (item.b2bDept) {
-            let temp = this.breadthQuery(this.deptList, item.b2bDept.id);
+            let temp = this.breadthQuery(this.treeData, item.b2bDept.id);
             if (temp && temp.children) {
               temp.children.push(item);
             }
@@ -130,7 +144,7 @@ export default {
           
           // 主账号没所属部门时，跟一级部门同级
           if (item.root && item.b2bDept == null && this.dataQuery.depts[0] == 0) {
-            this.deptList.push(item);
+            this.treeData.push(item);
           } 
         })
       }
@@ -143,11 +157,11 @@ export default {
     echoData () {
       let arr = [];
       if (this.dataQuery.depts.length > 0 && this.dataQuery.depts[0] !== 0) {
-        arr = this.familyTree(this.deptList, this.dataQuery.depts[0]);
+        arr = this.familyTree(this.treeData, this.dataQuery.depts[0]);
       } else if (this.dataQuery.depts.length > 0 && this.dataQuery.depts[0] === 0) {
         return;
       } else if (this.dataQuery.users.length > 0) {
-        arr = this.familyTree(this.deptList, this.dataQuery.users[0]);
+        arr = this.familyTree(this.treeData, this.dataQuery.users[0]);
       }
       if (arr.length > 0) {
         let echo = arr.map(item => item.mark)
@@ -230,8 +244,7 @@ export default {
   },
   data () {
     return {
-      deptList: [],
-      personList: [],
+      treeData: [],
       selectData: []
     }
   },
@@ -248,25 +261,19 @@ export default {
         this.setSelect(this.selectData);
       }
     },
-    loading: function (nval, oval) {
-      if (nval === false) {
-        this.initData();
+    'deptList.options': function (nval, oval) {
+      if (this.deptList.loaded && this.personList.loaded && this.treeData.length <= 0) {
+        this.handleData();
+      }
+    },
+    'personList.options': function (nval, oval) {
+      if (this.deptList.loaded && this.personList.loaded && this.treeData.length <= 0) {
+        this.handleData();
       }
     }
   },
   created () {
-    if (this.loading === false) {
-      this.initData();
-    }
-  },
-  beforeCreate () {
-    this.$store.commit('OrganizationModule/deptList', {cmd: 'plusRef'});
-    if (this.$store.state.OrganizationModule.deptList.refNum <= 1) {
-      this.$store.dispatch('OrganizationModule/loadDeptList', this);
-    }
-  },
-  destroyed() {
-    this.$store.commit('OrganizationModule/deptList', {cmd: "minusRef"});
+    this.initData();
   }
 }
 </script>
