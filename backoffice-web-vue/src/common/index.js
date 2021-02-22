@@ -1199,8 +1199,8 @@ let TENANT_APIS = {
     return '/b2b/fdd/api/clear/company/verify/data/' + companyCode;
   },
   // 清除个人认证
-  clearPersonAuth (code) {
-    return '/b2b/fdd/api/clear/personal/verify/data/' + code;
+  clearPersonAuth (uid) {
+    return '/b2b/fdd/api/clear/personal/verify/data/' + uid;
   },
   // 获取全部合同列表
   getAgreementList () {
