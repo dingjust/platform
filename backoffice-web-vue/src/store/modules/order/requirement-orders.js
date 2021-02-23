@@ -61,12 +61,18 @@ const state = {
       productiveOrientations: [],
       publishingMode: 'PUBLIC',
       effectiveDays: '90',
-      salesMarket: []
+      salesMarket: [],
+      certificates: []
     },
     attachments: [],
     labels: [],
     cancelledDate: '',
-    comment: ''
+    comment: '',
+    publishType: 'DEFAULT',
+    belongTo: {
+      id: null,
+      name: ''
+    }
   },
   queryFormData: {
     keyword: '',

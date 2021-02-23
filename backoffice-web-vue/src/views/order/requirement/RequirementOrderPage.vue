@@ -9,6 +9,7 @@
         </el-col>
         <el-col :span="2">
           <el-button class="btn-class" @click="onNew" v-if="!isTenant()"><span style="font-size: 14px">+</span>发布需求</el-button>
+          <el-button class="btn-class" @click="onNew" v-else><span style="font-size: 14px">+</span>代发需求</el-button>
         </el-col>
       </el-row>
       <div class="pt-3"></div>
@@ -25,8 +26,8 @@
               <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button class="list-button" type="text" @click="onEdit(props.item)" v-if="!isTenant()">修改</el-button>
-                <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
+                <el-button class="list-button" type="text" @click="onEdit(props.item)" v-if="canModify(props.item)">修改</el-button>
+                <el-divider direction="vertical" v-if="canModify(props.item)"></el-divider>
                 <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
@@ -112,6 +113,9 @@
         setCategories: 'categories',
         setFormData: 'formData'
       }),
+      canModify (item) {
+        return !this.isTenant() || (this.isTenant() && item.publishType === 'PUBLISH_BY_OTHERS');
+      },
       onSearch (page, size) {
         this.setIsAdvancedSearch(false);
         const keyword = this.keyword;
@@ -211,6 +215,11 @@
         this.onAdvancedSearch();
       },
       onNew (formData) {
+        this.formData.belongTo = {
+          id: null,
+          name: ''
+        }
+        this.formData.details.certificates = [];
         this.formDialogVisible = !this.formDialogVisible;
       },
       async onEdit (item) {
@@ -236,7 +245,14 @@
 
         this.searchQuotesAdvanced({url, query: queryFormData, page, size});
       },
-      async onSave (factories, phoneNumbers) {
+      onSave (factories, phoneNumbers) {
+        if (this.isTenant()) {
+          this._onSaveByPlatform(factories, phoneNumbers);
+        } else {
+          this._onSave(factories, phoneNumbers);
+        }
+      },
+      async _onSave (factories, phoneNumbers) {
         var params = {};
         if (factories != null) {
           var text = '';
@@ -257,7 +273,35 @@
         this.formDialogVisible = !this.formDialogVisible;
         this.onAdvancedSearch();
       },
-      async onEditSave (factories, phoneNumbers) {
+      async _onSaveByPlatform (factories, phoneNumbers) {
+        var params = {};
+        if (factories != null) {
+          var text = '';
+          for (let uid of factories) {
+            text += uid;
+            text += ',';
+          }
+          text = text.slice(0, text.length - 1);
+        }
+        params['factories'] = text;
+        const url = this.apis().createPublishByPlatform();
+        const result = await this.$http.post(url, this.formData, params);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('需求订单创建成功，订单编号： ' + result);
+        this.formDialogVisible = !this.formDialogVisible;
+        this.onAdvancedSearch();
+      },
+      onEditSave (factories, phoneNumbers) {
+        if (this.isTenant()) {
+          this._onEditSaveByPlatform(factories, phoneNumbers);
+        } else {
+          this._onEditSave(factories, phoneNumbers);
+        }
+      },
+      async _onEditSave (factories, phoneNumbers) {
         var params = {};
         if (factories != null) {
           var text = '';
@@ -269,6 +313,27 @@
         }
         params['factories'] = text;
         const url = this.apis().updateRequirementOrder(this.formData.code);
+        const result = await this.$http.put(url, this.formData, params);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('需求订单修改成功');
+        this.editFormDialogVisible = false;
+        this.onAdvancedSearch();
+      },
+      async _onEditSaveByPlatform (factories, phoneNumbers) {
+        var params = {};
+        if (factories != null) {
+          var text = '';
+          for (let uid of factories) {
+            text += uid;
+            text += ',';
+          }
+          text = text.slice(0, text.length - 1);
+        }
+        params['factories'] = text;
+        const url = this.apis().updateRequirementOrderByPlatform();
         const result = await this.$http.put(url, this.formData, params);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

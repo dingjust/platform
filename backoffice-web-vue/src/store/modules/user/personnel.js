@@ -14,6 +14,16 @@ const state = {
   },
   deptList: [],
   formData: {
+  },
+  deptListLoading: false, // 是否处于加载状态中
+  personListLoading: false, // 是否处于加载状态中
+  cacheDeptList: {
+    loaded: false, // 是否已加载过
+    options: []
+  },
+  cachePersonList: {
+    loaded: false, // 是否已加载过
+    options: []
   }
 };
 
@@ -23,7 +33,11 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   page: (state, page) => state.page = page,
   formData: (state, formData) => state.formData = formData,
-  deptList: (state, deptList) => state.deptList = deptList
+  deptList: (state, deptList) => state.deptList = deptList,
+  deptListLoading: (state, deptListLoading) => state.deptListLoading = deptListLoading,
+  personListLoading: (state, personListLoading) => state.personListLoading = personListLoading,
+  cacheDeptList: (state, cacheDeptList) => state.cacheDeptList = cacheDeptList,
+  cachePersonList: (state, cachePersonList) => state.cachePersonList = cachePersonList
 };
 
 const actions = {
@@ -44,11 +58,11 @@ const actions = {
   },
   // 专门查询人员列表并进行缓存 TODO: size大小固定为99,待修改
   async searchPersonList ({dispatch, commit, state, rootState}) {
-    if (rootState.CacheModule.personListLoading) {
+    if (state.personListLoading) {
       return;
     }
 
-    commit('CacheModule/personListLoading', true, {root: true});
+    commit('personListLoading', true);
 
     const url = '/b2b/b2bCustomers';
     const response = await http.post(url, {
@@ -59,17 +73,20 @@ const actions = {
     })
 
     if (!response['errors']) {
-      dispatch('CacheModule/personList', {options: response.content}, {root: true});
+      commit('cachePersonList', {
+        loaded: true,
+        options: response.content
+      });
     }
 
-    commit('CacheModule/personListLoading', false, {root: true});
+    commit('personListLoading', false);
   },
   // 查询部门列表（通用
   async searchDeptList ({dispatch, commit, state, rootState}) {
-    if (rootState.CacheModule.deptListLoading) {
+    if (state.deptListLoading) {
       return;
     }
-    commit('CacheModule/deptListLoading', true, {root: true});
+    commit('deptListLoading', true);
 
     const url = '/b2b/dept/tree/list';
     const response = await http.post(url);
@@ -84,10 +101,13 @@ const actions = {
       }]);
 
       // 进行缓存，供员工选择组件使用
-      dispatch('CacheModule/deptList', {options: response.data}, {root: true});
+      commit('cacheDeptList', {
+        loaded: true,
+        options: response.data
+      });
     }
 
-    commit('CacheModule/deptListLoading', false, {root: true});
+    commit('deptListLoading', false);
   }
 };
 
@@ -97,7 +117,11 @@ const getters = {
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
   formData: state => state.formData,
-  deptList: state => state.deptList
+  deptList: state => state.deptList,
+  deptListLoaded: (state) => state.deptListLoading || state.cacheDeptList.loaded,
+  personListLoaded: (state) => state.personListLoading || state.cachePersonList.loaded,
+  cacheDeptList: state => state.cacheDeptList,
+  cachePersonList: state => state.cachePersonList
 };
 
 export default {

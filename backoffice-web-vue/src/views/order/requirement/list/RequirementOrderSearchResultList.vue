@@ -24,7 +24,10 @@
       </el-table-column>
       <el-table-column label="发布人" prop="user">
         <template slot-scope="scope">
-          <span>{{scope.row.user.name}}</span>
+          <span>
+            {{scope.row.user.name}}
+            <span v-if="scope.row.publishType === 'PUBLISH_BY_OTHERS'" style="color: #F56C6C">(代发)</span>
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="发布日期" prop="createdTs">

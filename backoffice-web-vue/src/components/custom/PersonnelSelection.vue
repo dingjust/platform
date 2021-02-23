@@ -19,7 +19,7 @@ import {
 const {
   mapGetters,
 } = createNamespacedHelpers(
-  'CacheModule'
+  'PersonnelModule'
 );
 export default {
   name: 'PersonnelSelection',
@@ -43,7 +43,7 @@ export default {
   computed: {
     ...mapGetters({
       personListLoaded: 'personListLoaded',
-      personList: 'personList'
+      personList: 'cachePersonList'
     })
   },
   methods: {

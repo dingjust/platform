@@ -23,7 +23,7 @@ import {
 const {
   mapGetters,
 } = createNamespacedHelpers(
-  'CacheModule'
+  'PersonnelModule'
 );
 
 export default {
@@ -56,8 +56,8 @@ export default {
     ...mapGetters({
       deptListLoaded: 'deptListLoaded',
       personListLoaded: 'personListLoaded',
-      deptList: 'deptList',
-      personList: 'personList'
+      deptList: 'cacheDeptList',
+      personList: 'cachePersonList'
     }),
     cascaderDisabled: function () {
       return this.dataQuery.users.length > 0;

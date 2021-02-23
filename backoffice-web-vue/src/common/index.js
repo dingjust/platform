@@ -382,8 +382,14 @@ const COMMON_APIS = {
   createRequirementOrder () {
     return '/b2b/orders/requirement/new';
   },
+  createPublishByPlatform () {
+    return '/b2b/orders/requirement/publishByPlatform';
+  },
   updateRequirementOrder (code) {
     return '/b2b/orders/requirement/' + code + '/request';
+  },
+  updateRequirementOrderByPlatform () {
+    return '/b2b/orders/requirement/updateByPaltform'
   },
   getQuote (code) {
     return '/b2b/orders/quote/' + code;

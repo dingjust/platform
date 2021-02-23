@@ -15,7 +15,7 @@ import {
 const {
   mapGetters,
 } = createNamespacedHelpers(
-  'CacheModule'
+  'PersonnelModule'
 );
 export default {
   name: 'PersonnalSelectionV2',
@@ -56,8 +56,8 @@ export default {
     ...mapGetters({
       deptListLoaded: 'deptListLoaded',
       personListLoaded: 'personListLoaded',
-      deptList: 'deptList',
-      personList: 'personList'
+      deptList: 'cacheDeptList',
+      personList: 'cachePersonList'
     })
   },
   methods: {
