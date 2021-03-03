@@ -49,6 +49,7 @@ const state = {
       cityDistrict: '',
       line1: ''
     },
+    attachments: []
   },
   editFormData: {
     id: null,
@@ -211,9 +212,9 @@ const actions = {
         cityDistrict: '',
         line1: ''
       },
+      attachments: []
     });
-  },
-
+  }
 };
 
 const getters = {
@@ -227,7 +228,7 @@ const getters = {
   queryFormData: state => state.queryFormData,
   ordersQueryFormData: state => state.ordersQueryFormData,
   formData: state => state.formData,
-  editFormData: state => state.editFormData,
+  editFormData: state => state.editFormData
 };
 
 export default {

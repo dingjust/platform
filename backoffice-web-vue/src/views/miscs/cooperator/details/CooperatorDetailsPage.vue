@@ -12,6 +12,12 @@
       </div>
     </el-row>
     <cooperator-order-list v-if="itemData.type == 'ONLINE'" :page="orderPage" @onSearch="onSearch"></cooperator-order-list>
+    <el-row type="flex" style="margin-top: 20px">
+      <form-label label="附件" />
+    </el-row>
+    <el-row type="flex" justify="start" v-if="itemData.attachments">
+      <files-upload ref="filesUpload" :slotData="itemData.attachments" :limit="20" :readOnly="true" :disabled="true"/>
+    </el-row>
   </div>
 </template>
 
@@ -22,11 +28,12 @@
 
   import CooperatorInfoPage from '@/views/miscs/cooperator/info/CooperatorInfoPage';
   import CooperatorOrderList from '../list/CooperatorOrderList';
+  import { FilesUpload, FormLabel } from '@/components';
 
   export default {
     name: 'CooperatorDetailsPage',
     props: ['itemData'],
-    components: {CooperatorOrderList, CooperatorInfoPage},
+    components: {CooperatorOrderList, CooperatorInfoPage, FilesUpload, FormLabel},
     computed: {
       ...mapGetters({
         orderPage: 'orderPage'

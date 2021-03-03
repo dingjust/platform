@@ -120,6 +120,12 @@
                 </el-input>
               </el-col>
             </el-row>
+            <el-row type="flex" class="row-title" style="margin-top: 20px">
+              <form-label label="附件" />
+            </el-row>
+            <el-row type="flex" justify="start">
+              <files-upload ref="filesUpload" :slotData="formData.attachments" :limit="20"/>
+            </el-row>
             <el-row type="flex" justify="center">
               <el-button class="cooperator-info-order-submit" v-if="isUpdate" @click="onSave">
                 保存</el-button>
@@ -166,12 +172,12 @@
   // } from '@/components/'
 
   import AddressForm from '@/components/custom/order-form/AddressForm'
-  import FormLabel from '@/components/custom/FormLabel'
   import PayPlanSelect from '@/components/custom/PayPlanSelect'
   import CompanySelect from '@/components/custom/order-form/CompanySelect'
 
   import ProgressPlanSelectDialog from '@/views/user/progress-plan/components/ProgressPlanSelectDialog';
   import ReconciliationPlanSelector from '@/views/user/reconciliation-plan/components/ReconciliationPlanSelector';
+  import { FilesUpload, FormLabel } from '@/components';
 
   export default {
     name: 'CooperatorFormPage',
@@ -191,7 +197,8 @@
       AddressForm,
       CompanySelect,
       ReconciliationPlanSelector,
-      ProgressPlanSelectDialog
+      ProgressPlanSelectDialog,
+      FilesUpload
     },
     computed: {
       ...mapGetters({
@@ -203,6 +210,11 @@
     },
     methods: {
       async onSubmit() {
+        if (this.$refs.filesUpload.isUploading()) {
+          this.$message.warning('文件正在上传，请稍等...')
+          return;
+        }
+
         //校验表单
         let validated = await this.validateForms();
 
@@ -235,6 +247,11 @@
         this.$router.push('/account/cooperator');
       },
       async onSave() {
+        if (this.$refs.filesUpload.isUploading()) {
+          this.$message.warning('文件正在上传，请稍等...')
+          return;
+        }
+        
         //校验表单
         let validated = await this.validateForms();
 
@@ -362,7 +379,7 @@
             message: '请输入选择类型',
             trigger: 'change'
           }],
-        },
+        }
       };
     },
     mounted () {
@@ -371,6 +388,9 @@
       }
     },
     created() {
+      if (!this.formData.attachments) {
+        this.formData.attachments = []
+      }
     },
   };
 
