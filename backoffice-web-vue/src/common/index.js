@@ -1829,6 +1829,15 @@ let NONE_TENANT_APIS = {
   // 根据生产工单id查询成本单列表
   getCostOrderByProductionId (id) {
     return '/b2b/cost/order/listByProductionOrder/' + id;
+  },
+
+  // 添加自定义颜色
+  addCustomColor () {
+    return '/b2b/colors/customize';
+  },
+  // 添加自定义尺码
+  addCustomSize () {
+    return '/b2b/sizes/customize';
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

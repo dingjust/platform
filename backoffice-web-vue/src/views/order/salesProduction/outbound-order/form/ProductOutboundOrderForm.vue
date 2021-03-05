@@ -80,6 +80,9 @@
               </el-col>
             </el-row>
             <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" :isFromProduct="true"/>
+            <el-row type="flex" v-if="item.code" style="margin: 0px 0px 10px 30px;">
+              <el-button @click="openColorSize(item)"> + 添加颜色尺码</el-button>
+            </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="8">
                 <el-form-item label="发单价格" prop="unitPrice"
@@ -239,6 +242,11 @@
       <progress-plan-edit-form v-if="editProgressPlanVisible" :progressPlan="editProgress"
         @onEditProgress="onEditProgress" />
     </el-dialog>
+    <el-dialog title="添加颜色 / 尺码" :visible.sync="colorSizeVisible" width="500px" append-to-body
+      :close-on-click-modal="false">
+      <color-size-add-form v-if="colorSizeVisible" @closeDialog="colorSizeVisible = false" 
+                            @addColorSize="addColorSize"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -269,6 +277,7 @@
   } from '@/components'
   import { SampleProductsSelectDialog } from '@/views/product/sample'
   import { checkAuditFree } from '@/auth/auth'
+  import ColorSizeAddForm from '../components/ColorSizeAddForm.vue';
 
   export default {
     name: 'ProductOutboundOrderForm',
@@ -285,7 +294,8 @@
       ProgressPlanEditForm,
       OutboundTypeSelect,
       PersonnalSelectionV2,
-      SampleProductsSelectDialog
+      SampleProductsSelectDialog,
+      ColorSizeAddForm
     },
     computed: {
       canDelete: function () {
@@ -390,6 +400,9 @@
         selectList.forEach(item => {
           colorSizeEntries = this.convertColorSize(item.colorSizes);
           row = {
+            code: item.code,
+            colors: item.colors,
+            sizes: item.sizes,
             unitPrice: '',
             deliveryDate: '',
             shippingAddress: {},
@@ -438,6 +451,39 @@
           })
         })
         return colorSizeEntries;
+      },
+      openColorSize (item) {
+        this.colorSizeItem = item;
+        this.colorSizeVisible = true;
+      },
+      addColorSize (data, selectType) {
+        let sizeSet = new Set();
+        let colorSet = new Set();
+        this.colorSizeItem.colorSizeEntries.forEach(item => {
+          sizeSet.add(item.size);
+        });
+        this.colorSizeItem.colorSizeEntries.forEach(item => {
+          colorSet.add(item.color);
+        });
+        if (selectType === 'color') {
+          sizeSet.forEach(item => {
+            this.colorSizeItem.colorSizeEntries.push({
+              color: data,
+              quantity: 0,
+              size: item
+            })
+          })
+        } else {
+          colorSet.forEach(item => {
+            this.colorSizeItem.colorSizeEntries.push({
+              color: item,
+              quantity: 0,
+              size: data
+            })
+          })
+        }
+
+        this.colorSizeVisible = false;
       },
       onSelectTask(selectTaskList) {
         let row = {}
@@ -676,7 +722,8 @@
         editProgress: '',
         operator: {},
         count: 0,
-        isSingleSelect: true
+        isSingleSelect: true,
+        colorSizeVisible: false
       }
     },
     watch: {

@@ -29,6 +29,11 @@
             :autosize="{ minRows: 4, maxRows: 6 }" /> -->
         </el-col>
       </el-row>
+      <el-row type="flex" style="padding-left: 20px">
+        <el-col>
+          <images-upload class="order-purchase-upload" :slot-data="formData.attachments" :readOnly="true"/>
+        </el-col>
+      </el-row>
       <el-row class="basic-form-row" type="flex" align="middle"
         v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED'">
         <h6>唯一码：<span style="color: #F56C6C">{{formData.uniqueCode}}</span></h6>
@@ -105,6 +110,7 @@
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
   import OutboundCancelForm from '../form/OutboundCancelForm';
   import SalesOrderCancelDialog from '../../components/SalesOrderCancelDialog';
+  import ImagesUpload from '@/components/custom/ImagesUpload'
 
   import {
     SalesProductionTabs,
@@ -132,7 +138,8 @@
       OutboundCancelForm,
       OrderAuditDetail,
       TwinkleWarningButton,
-      SalesOrderCancelDialog
+      SalesOrderCancelDialog,
+      ImagesUpload
     },
     computed: {
       ...mapGetters({
