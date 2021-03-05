@@ -9,22 +9,28 @@
         </el-col>
       </el-row>
       <div class="purchase-form-row">
-        <el-form ref="form" :model="formData" :inline="true" :hide-required-asterisk="true" label-width="80px" label-position="left">
+        <el-form ref="form" :model="formData" :inline="true" :hide-required-asterisk="true" label-width="85px" label-position="left">
           <el-row type="flex" justify="start" >
             <el-col :span="7">
               <el-form-item label="系统单号">
                 <el-input placeholder="系统生成" v-model="formData.code" :disabled="true"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <!-- <el-col :span="10">
               <el-form-item label="关联订单" prop="productionTask.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
                 <el-input v-model="formData.productionTask.code" :disabled="true"></el-input>
               </el-form-item>
               <el-button class="purchase-btn" @click="taskDialogVisible=true">选择</el-button>
+            </el-col> -->
+            <el-col :span="10">
+              <el-form-item label="关联成本单" prop="costOrder.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
+                <el-input v-model="formData.costOrder.code" :disabled="true"></el-input>
+              </el-form-item>
+              <el-button class="purchase-btn" @click="costDialogVisible=true">选择</el-button>
             </el-col>
             <el-col :span="7">
               <el-form-item label="关联款号">
-                <el-input v-model="formData.productionTask.product.skuID" :disabled="true"></el-input>
+                <el-input v-model="formData.costOrder.productionOrder.productSkuID" :disabled="true"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -90,10 +96,14 @@
         <purchase-requirement-btn-group :formData="formData" @onSave="onSave" @onDelete="onDelete" />
       </div>
     </el-card>
-    <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
+    <!-- <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <production-task-select-dialog v-if="taskDialogVisible" @onSelectTask="onSelectTask" 
                                 :isSingleChoice="true" selectType="PURCHASE_REQUIREMENT"/>
+    </el-dialog> -->
+    <el-dialog :visible.sync="costDialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <cost-select-list v-if="costDialogVisible" @onSelectCost="onSelectCost"/>
     </el-dialog>
   </div>
 </template>
@@ -103,6 +113,7 @@ import { PersonnalSelectionV2, MyAddressForm } from '@/components'
 import PurchaseRequirementTable from '../components/PurchaseRequirementTable'
 import PurchaseRequirementBtnGroup from '../components/PurchaseRequirementBtnGroup'
 import ProductionTaskSelectDialog from '@/views/order/salesProduction/production-task/components/ProductionTaskSelectDialog'
+import CostSelectList from '@/views/purchase/cost/components/CostSelectList'
 
 export default {
   name: 'PurchaseRequirementForm',
@@ -111,19 +122,63 @@ export default {
     MyAddressForm,
     PurchaseRequirementTable,
     PurchaseRequirementBtnGroup,
-    ProductionTaskSelectDialog
+    ProductionTaskSelectDialog,
+    CostSelectList
   },
   methods: {
-    onSelectTask (data) {
-      this.formData.productionTask = {
-        id: data[0] ? data[0].id : '',
-        code: data[0] ? data[0].code : '',
-        product: {
-          skuID: data[0] ? data[0].product.skuID : '' 
+    onSelectCost (data) {
+      let purchaseMaterials = [];
+      data.purchaseMaterials.forEach(row => {
+        if (row.specList && row.specList.length > 0) {
+          purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
+            return {
+              // id: row.id,
+              materialsId: row.id,
+              specListId: item.id,
+              name: row.name,
+              code: row.code,
+              unit: row.unit,
+              materialsType: row.materialsType,
+              unitQuantity: item.unitQuantity,
+              specName: item.specName,
+              colorName: item.colorName,
+              modelName: item.modelName,
+              emptySent: item.emptySent,
+              requiredAmount: item.requiredAmount,
+              estimatedLoss: item.estimatedLoss,
+              estimatedUsage: item.estimatedUsage,
+              orderCount: item.orderCount,
+              auditColor: item.auditColor,
+              estimatedRecTime: item.estimatedRecTime,
+              // cooperatorName: row.cooperatorName,
+              price: item.price,
+              totalPrice: item.totalPrice
+            }
+          }))
         }
-      };
-      this.taskDialogVisible = false;
+      })
+
+      this.formData.workOrders = purchaseMaterials;
+      this.formData.costOrder = {
+        id: data.id,
+        code: data.code,
+        productionOrder: {
+          productSkuID: data.productionOrder.productSkuID  
+        }
+      }
+
+      this.costDialogVisible = false;
     },
+    // onSelectTask (data) {
+    //   this.formData.productionTask = {
+    //     id: data[0] ? data[0].id : '',
+    //     code: data[0] ? data[0].code : '',
+    //     product: {
+    //       skuID: data[0] ? data[0].product.skuID : '' 
+    //     }
+    //   };
+    //   this.taskDialogVisible = false;
+    // },
     appendApprover () {
       this.formData.approvers.push({});
     },
@@ -170,8 +225,11 @@ export default {
       }
       // 整理提交数据
       let data = Object.assign({}, this.formData);
-      data.productionTask = {
-        id: this.formData.productionTask.id
+      // data.productionTask = {
+      //   id: this.formData.productionTask.id
+      // }
+      data.costOrder = {
+        id: this.formData.costOrder.id
       }
       if (!this.formData.includeTax) {
         data.taxPoint = null;
@@ -198,22 +256,22 @@ export default {
         // if (index <= -1) {
           workOrders.push({
             id: item.id ? item.id : '',
-            cooperatorName: item.cooperatorName.trim(),
+            cooperatorName: item.cooperatorName,
             materials: {
               id: item.materialsId ? item.materialsId : '',
-              name: item.name.trim(),
-              code: item.code.trim(),
+              name: item.name,
+              code: item.code,
               unit: item.unit,
               materialsType: item.materialsType,
               specList: [{
                 id: item.specListId,
                 unitQuantity: item.unitQuantity,
-                specName: item.specName.trim(),
-                colorName: item.colorName.trim(),
-                modelName: item.modelName.trim(),
+                specName: item.specName,
+                colorName: item.colorName,
+                modelName: item.modelName,
                 emptySent: item.emptySent,
                 requiredAmount: item.requiredAmount,
-                estimatedLoss: Number.parseFloat(item.estimatedLoss) / 100,
+                estimatedLoss: item.estimatedLoss,
                 estimatedUsage: item.estimatedUsage,
                 orderCount: item.orderCount,
                 // auditColor: item.auditColor,
@@ -249,7 +307,14 @@ export default {
         // }
       })
       data.workOrders = workOrders;
-      this.__onSave(data, flag);
+
+      this.$confirm('是否执行'+(flag ? '创建' : '保存')+'操作?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this.__onSave(data, flag);
+      });
     },
     async __onSave (data, flag) {
       const url = this.apis().savePurchaseTask();
@@ -269,7 +334,16 @@ export default {
         this.$message.error('添加采购需求失败！');
       }
     },
-    async onDelete () {
+    onDelete () {
+      this.$confirm('是否执行删除操作?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this._onDelete();
+      });
+    },
+    async _onDelete () {
       const id = this.formData.id;
       
       const url = this.apis().deletePurchaseTaskById(id);
@@ -295,6 +369,7 @@ export default {
   data () {
     return {
       taskDialogVisible: false,
+      costDialogVisible: false,
       TaxPointState: [{
           label: '3%税点',
           value: 0.03
@@ -314,13 +389,20 @@ export default {
         includeTax: false,
         taxPoint: 0.03,
         qualityRequirement: '',
-        productionTask: {
+        costOrder: {
           id: '',
           code: '',
-          product: {
-            skuID: ''
+          productionOrder: {
+            productSkuID: ''
           }
         },
+        // productionTask: {
+        //   id: '',
+        //   code: '',
+        //   product: {
+        //     skuID: ''
+        //   }
+        // },
         workOrders: [],
         auditNeeded: true,
         merchandiser: {},

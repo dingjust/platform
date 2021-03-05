@@ -1804,6 +1804,31 @@ let NONE_TENANT_APIS = {
   // 获取外发外接数量，金额统计
   getDashboardOrderStatistics () {
     return '/b2b/sales/production/order/count';
+  },
+  /** --------------------成本单----------------------------------- */
+  // 创建成本单
+  createCostOrder () {
+    return '/b2b/cost/order/create';
+  },
+  // 查询成本单列表
+  searchCostOrder () {
+    return '/b2b/cost/order';
+  },
+  // 查询成本单详情
+  getCostOrder (id) {
+    return '/b2b/cost/order/' + id;
+  },
+  // 更新成本单
+  updateCostOrder () {
+    return '/b2b/cost/order/update';
+  },
+  // 成本单取消
+  cancelCostOrder (id) {
+    return '/b2b/cost/order/cancel/' + id;
+  },
+  // 根据生产工单id查询成本单列表
+  getCostOrderByProductionId (id) {
+    return '/b2b/cost/order/listByProductionOrder/' + id;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

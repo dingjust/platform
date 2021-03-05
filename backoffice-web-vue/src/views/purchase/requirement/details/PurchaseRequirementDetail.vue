@@ -18,12 +18,12 @@
             <h6>任务单号：{{formData.code}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>关联工单：
-              <el-button type="text" @click="onProductDetail(formData.productionTask.id)" class="code-btn">{{formData.productionTask.code}}</el-button>
+            <h6>关联成本单：
+              <el-button type="text" @click="onCostDetail(formData.costOrder.id)" class="code-btn">{{formData.costOrder.code}}</el-button>
             </h6>
           </el-col>
           <el-col :span="6">
-            <h6>关联款号：{{formData.productionTask.product.skuID}}</h6>
+            <h6>关联款号：{{formData.costOrder.productionOrder.productSkuID}}</h6>
           </el-col>
           <el-col :span="6">
             <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
@@ -70,8 +70,11 @@
         <printer-button v-print="'#purchase-requirement-detail'" />
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
+    <!-- <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
       <production-order-detail v-if="productionVisible" :id="productionId" />
+    </el-dialog> -->
+    <el-dialog :visible.sync="costOrderVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <cost-order-detail v-if="costOrderVisible" :id="costOrderId"/>
     </el-dialog>
   </div>
 </template>
@@ -81,6 +84,7 @@ import PurchaseRequirementTable from '../components/PurchaseRequirementTable'
 import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
 import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
 import { PrinterButton } from '@/components/index.js'
+import CostOrderDetail from '@/views/purchase/cost/details/CostOrderDetail'
 
 export default {
   name: 'PurchaseRequirementDetail',
@@ -89,7 +93,8 @@ export default {
     PurchaseRequirementTable,
     OrderAuditDetail,
     ProductionOrderDetail,
-    PrinterButton
+    PrinterButton,
+    CostOrderDetail
   },
   computed: {
     canReturn: function () {
@@ -129,9 +134,9 @@ export default {
         this.$message.error(result.msg);
       }
     },
-    onProductDetail (id) {
-      this.productionId = id;
-      this.productionVisible = true;
+    onCostDetail (id) {
+      this.costOrderId = id;
+      this.costOrderVisible = true;
     },
     onApproval(isPass) {
       if (this.formData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
@@ -261,17 +266,24 @@ export default {
   },
   data () {
     return {
-      productionId: '',
-      productionVisible: false,
+      costOrderId: '',
+      costOrderVisible: false,
       formData: {
         state: 'NOT_COMMITED',
         code: '',
-        productionTask: {
+        costOrder: {
+          id: '',
           code: '',
-          product: {
-            skuID: ''
+          productionOrder: {
+            productSkuID: ''  
           }
         },
+        // productionTask: {
+        //   code: '',
+        //   product: {
+        //     skuID: ''
+        //   }
+        // },
         auditNeed: false,
         qualityRequirement: 'NO_REQUIREMENT',
         merchandiser: {

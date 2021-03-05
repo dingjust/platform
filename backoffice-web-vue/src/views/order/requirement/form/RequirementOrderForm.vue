@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item prop="certificates" v-if="isTenant()">
           <template slot="label">
-            <h6 class="titleTextClass">凭证<span style="color: red">*</span></h6>
+            <h6 class="titleTextClass">凭证</h6>
           </template>
           <images-upload :limit="5" :slot-data="formData.details.certificates" />
         </el-form-item>

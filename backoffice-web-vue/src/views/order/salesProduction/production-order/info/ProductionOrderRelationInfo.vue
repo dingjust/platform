@@ -34,6 +34,9 @@
       <el-tab-pane label="采购订单" name="采购订单" :lazy="true">
         <purchase-order-basic-table v-if="isMySelf" :purchaseList="purchaseList"/>
       </el-tab-pane>
+      <el-tab-pane label="成本单" name="成本单" :lazy="true">
+        <production-cost-list v-if="isMySelf" :productionId="id"/>
+      </el-tab-pane>
       <!-- <el-tab-pane label="财务" :lazy="true" v-if="isMySelf">
         <el-row v-if="isBrand()">
           <purchase-order-info-payment-finance :slotData="slotData" v-if="isBrand() && slotData.payPlan!= null" />
@@ -60,6 +63,7 @@
     ShippingTasksDetail,
     ReconciliationTasksDetail
   } from '../../../../shipping-receipt/index';
+  import ProductionCostList from '@/views/purchase/cost/components/ProductionCostList.vue';
 
   export default {
     name: 'ProductionOrderRelationInfo',
@@ -70,7 +74,8 @@
       PurchaseOrderBasicTable,
       ProductionOrderOutboundList,
       ShippingTasksDetail,
-      ReconciliationTasksDetail
+      ReconciliationTasksDetail,
+      ProductionCostList
     },
     computed: {
       showOutbound: function () {

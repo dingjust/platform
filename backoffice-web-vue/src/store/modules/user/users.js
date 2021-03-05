@@ -109,7 +109,7 @@ const actions = {
     }
 
     // 获取用户权限
-    dispatch('PermissionModule/getPermissions', {uid: state.currentUser.uid}, {root: true});
+    await dispatch('PermissionModule/getPermissions', {uid: state.currentUser.uid}, {root: true});
 
     // 分割子账号名称
     let strArray = username.split(':');

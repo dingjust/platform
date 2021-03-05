@@ -2159,6 +2159,20 @@ const state = {
       code: 'INDIVIDUAL',
       name: '个体户认证'
     }
+  ],
+
+  // 成本单状态
+  CostOrderType: [
+    {
+      code: 'PENDING_ACCOUNT',
+      name: '待核算'
+    }, {
+      code: 'ACCOUNTED',
+      name: '已核算'
+    }, {
+      code: 'CANCELLED',
+      name: '已取消'
+    }
   ]
 };
 

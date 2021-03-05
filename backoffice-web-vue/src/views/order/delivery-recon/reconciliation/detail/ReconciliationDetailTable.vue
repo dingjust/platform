@@ -64,14 +64,14 @@ export default {
         data.push({
           countRow: '合计',
           orderQuantity: this.countColumn(this.order.entries, 'orderQuantity'),
-          cutQuantity: this.countColumn(this.order.entries, 'cutQuantity'),
+          // cutQuantity: this.countColumn(this.order.entries, 'cutQuantity'),
           packageQuantity: this.countColumn(this.order.entries, 'packageQuantity'),
           storageQuantity: this.countColumn(this.order.entries, 'storageQuantity'),
           // unitContractPrice: this.countColumn(this.order.entries, 'unitContractPrice'),
           loanAmount: this.countColumn(this.order.entries, 'loanAmount'),
           expressFee: this.countColumn(this.order.entries, 'expressFee'),
-          deductionAmount: this.countColumn(this.order.entries, 'deductionAmount'),
-          returnQuantity: this.countColumn(this.order.entries, 'returnQuantity'),
+          // deductionAmount: this.countColumn(this.order.entries, 'deductionAmount'),
+          // returnQuantity: this.countColumn(this.order.entries, 'returnQuantity'),
           depositAmount: this.countColumn(this.order.entries, 'depositAmount'),
           settlementAmount: this.countColumn(this.order.entries, 'settlementAmount')
         });
@@ -87,10 +87,11 @@ export default {
           count += Number.parseFloat(item[attribute]);
         }
       })
+      const flag = arr.some(item => !Number.isNaN(Number.parseFloat(item[attribute])));
       
       let regexp = /^.*\.0*$/;
       if (regexp.test(count.toFixed(2) + '')) {
-        return count.toFixed(0) == 0 ? '' : count.toFixed(0);
+        return flag ? count.toFixed(0) : '';
       }
       return count.toFixed(2);
     },

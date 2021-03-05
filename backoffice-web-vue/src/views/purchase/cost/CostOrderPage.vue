@@ -1,0 +1,84 @@
+<!--
+* @Description: 成本单
+* @Date 2021/02/24 17:52
+* @Author L.G.Y
+-->
+<template>
+  <div class="animated fadeIn content">
+    <el-card>
+      <el-row>
+        <div class="cost-order-title">
+          <h6>成本单</h6>
+        </div>
+      </el-row>
+      <div class="pt-2"></div>
+      <cost-order-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <template v-for="item in statuses">
+          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+            <cost-order-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
+          </el-tab-pane>
+        </template>
+      </el-tabs>
+    </el-card> 
+  </div>
+</template>
+
+<script>
+import { createNamespacedHelpers } from 'vuex';
+
+const { mapGetters, mapActions } = createNamespacedHelpers(
+  'CostOrderModule'
+);
+
+import CostOrderList from './list/CostOrderList'
+import CostOrderToolbar from './toolbar/CostOrderToolbar'
+
+export default {
+  name: 'CostOrderPage',
+  components: {
+    CostOrderList,
+    CostOrderToolbar
+  },
+  data () {
+    return {
+      queryFormData: {
+        keyword: '',
+        statuses: 'PENDING_ACCOUNT'
+      },
+      activeName: 'PENDING_ACCOUNT',
+      statuses: this.$store.state.EnumsModule.CostOrderType
+    }
+  },
+  computed: {
+    ...mapGetters({
+      page: 'page'
+    })
+  },
+  methods: {
+    ...mapActions({
+      searchAdvanced: 'searchAdvanced'
+    }),
+    onAdvancedSearch (page, size) {
+      const query = this.queryFormData;
+      const url = this.apis().searchCostOrder();
+ 
+      this.searchAdvanced({url, query, page, size});
+    },
+    handleClick (tab, event) {
+      this.queryFormData.statuses = tab.name;
+      this.onAdvancedSearch();
+    }
+  },
+  created () {
+    this.onAdvancedSearch();
+  }
+}
+</script>
+
+<style scoped>
+  .cost-order-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
+</style>
