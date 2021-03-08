@@ -207,7 +207,7 @@
 
           let result = await axios.put(url, this.comment, {
             'headers':{
-              'Content-Type':'application/json'
+              'Content-Type':'application/json;charset=utf-8'
             }
           });
 
