@@ -2173,6 +2173,82 @@ const state = {
       code: 'CANCELLED',
       name: '已取消'
     }
+  ],
+
+  ActivityEvent: [
+    {
+      code: 'TYPE_REC_REGISTER',
+      name: '推荐注册'
+    }, {
+      code: 'TYPE_REC_CERTIFICATION',
+      name: '推荐注册用户实名认证'
+    }, {
+      code: 'POINTS_EXCHANGE',
+      name: '积分兑换'
+    }
+  ],
+  PointsExchangeType: [
+    {
+      code: 'MONEY',
+      name: '现金红包'
+    }, {
+      code: 'AD_SERVICE',
+      name: '广告服务'
+    }
+  ],
+  PointsExchangeState: [
+    {
+      code: 'SUBMIT',
+      name: '已提交'
+    }, {
+      code: 'APPROVED',
+      name: '审核通过'
+    }, {
+      code: 'REJECT',
+      name: '审核驳回'
+    }
+  ],
+  ActivityState: [
+    {
+      code: 'WAIT_TO_SUBMIT',
+      name: '未提交'
+    }, {
+      code: 'IN_PROGRESS',
+      name: '进行中'
+    }, {
+      code: 'STOPPED',
+      name: '已停止'
+    }
+  ],
+  UserRecommendState: [
+    {
+      code: 'SIGN',
+      name: '登记'
+    }, {
+      code: 'REGISTERED',
+      name: '已注册'
+    }, {
+      code: 'INVALID',
+      name: '已失效'
+    }, {
+      code: 'FAIL',
+      name: '推荐失败'
+    }
+  ],
+  RedEnvelopePayState: [
+    {
+      code: 'WAIT_TO_PAY',
+      name: '待支付'
+    }, {
+      code: 'PAYING',
+      name: '支付中'
+    }, {
+      code: 'PAY_SUCCESS',
+      name: '支付成功'
+    }, {
+      code: 'PAY_FAIL',
+      name: '支付失败'
+    }
   ]
 };
 

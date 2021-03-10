@@ -1219,6 +1219,19 @@ let TENANT_APIS = {
   // 重新下载合同
   onRefreshDownloadContract () {
     return '/b2b/fail/log/add';
+  },
+
+  // 积分记录列表
+  searchPointsRecord () {
+    return '/b2b/user/points/record/search';
+  },
+  // 积分申请记录
+  searchPointsExchange () {
+    return '/b2b/user/points/exchange/search';
+  },
+  // 处理积分申请
+  processPointsExchange (id) {
+    return '/b2b/user/points/exchange/process/' + id;
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);

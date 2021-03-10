@@ -138,7 +138,8 @@ const getters = {
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  tableCol: state => JSON.parse(JSON.stringify(state.tableCol))
 };
 
 export default {

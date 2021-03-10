@@ -1213,6 +1213,28 @@ const router = new Router({
               component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/warehouse/InventoryPage')
             }
           ]
+        }, 
+        {
+          path: 'activity',
+          redirect: '/activity/points/record',
+          name: '活动',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [
+            {
+              path: 'points/record',
+              name: '积分记录',
+              component: () => import( /*webpackChunkName: 'activity' */ '@/views/activity/points/PointsRecordPage')
+            },
+            {
+              path: 'points/exchange',
+              name: '积分申请',
+              component: () => import( /*webpackChunkName: 'activity' */ '@/views/activity/points/PointsExchangePage')
+            }
+          ]
         }
       ]
     },
