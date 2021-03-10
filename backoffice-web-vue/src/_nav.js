@@ -132,6 +132,23 @@ export default {
     //   ]
     // },
     {
+      name: '活动',
+      url: '/activity',
+      icon: 'el-icon-collection',
+      children: [
+        {
+          name: '积分记录',
+          url: '/activity/points/record',
+          icon: 'iconNone'
+        },
+        {
+          name: '积分申请',
+          url: '/activity/points/exchange',
+          icon: 'iconNone'
+        }
+      ]
+    },
+    {
       name: '其他',
       url: '/miscs',
       icon: 'el-icon-coin',
