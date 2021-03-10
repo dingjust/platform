@@ -17,6 +17,11 @@
           <span>{{getEnum('PointsExchangeState', scope.row.state)}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="提交时间" prop="processTime" min-width="120px">
+        <template slot-scope="scope">
+          <span v-if="scope.row.processTime">{{scope.row.processTime | formatDate}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button v-if="scope.row.state === 'SUBMIT'" type="text" style="color: #67C23A" @click="onExchange(scope.row, true)">通过</el-button>
