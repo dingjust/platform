@@ -8,7 +8,7 @@
     <el-card>
       <el-row>
         <div class="cost-order-title">
-          <h6>创建成本单</h6>
+          <h6>{{formData.id ? '编辑成本单' : '创建成本单'}}</h6>
         </div>
       </el-row>
       <div class="pt-2"></div>
@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label="关联订单" prop="productionOrder.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
             <el-input v-model="formData.productionOrder.code" :disabled="true">
-              <el-button slot="suffix" @click="taskDialogVisible = true">选择</el-button>
+              <el-button slot="suffix" @click="taskDialogVisible = true" v-if="!formData.id">选择</el-button>
             </el-input>
           </el-form-item>
           <el-form-item label="关联款号">

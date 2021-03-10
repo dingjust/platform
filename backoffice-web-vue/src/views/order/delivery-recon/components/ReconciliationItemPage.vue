@@ -90,6 +90,7 @@ export default {
     },
     async getReconciliationItemsCount () {
       const query = Object.assign({}, this.queryFormData);
+      query.states = '';
 
       const url =  this.apis().getReconciliationItemsCount();
       const result = await this.$http.post(url, query);

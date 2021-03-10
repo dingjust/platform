@@ -10,9 +10,10 @@
       <el-row type="flex" justify="start">
         <h6 style="color: #F56C6C;margin-left: 20px">注明：只有完成实名认证才可以使用电子对账单签署功能</h6>
       </el-row>
-      <el-form ref="form" :model="formData" :inline="true" class="form-container">
+      <el-form ref="form" :model="formData" :inline="true" class="form-container" label-width="65px" label-position="left">
         <reconciliation-orders-form-v2-header :formData="formData" />
-        <reconciliation-info-table :formData="formData" />
+        <reconciliation-info-table :formData="formData" :tableCol="tableCol" :isCreate="true"/>
+        <reconciliation-additional :formData="formData"/>
         <reconciliation-approvers-part :formData="formData"/>
         <reconciliation-upload-part ref="uploadPart" :formData="formData" :isAllApproval="isAllApproval"/>
       </el-form>
@@ -28,6 +29,7 @@ import ReconciliationOrdersFormV2Header from './ReconciliationOrdersFormV2Header
 import ReconciliationInfoTable from './ReconciliationInfoTable'
 import ReconciliationApproversPart from './ReconciliationApproversPart'
 import ReconciliationUploadPart from './ReconciliationUploadPart'
+import ReconciliationAdditional from './ReconciliationAdditional.vue'
 
 export default {
   name: 'ReconciliationOrdersFormV2',
@@ -35,7 +37,8 @@ export default {
     ReconciliationOrdersFormV2Header,
     ReconciliationInfoTable,
     ReconciliationApproversPart,
-    ReconciliationUploadPart
+    ReconciliationUploadPart,
+    ReconciliationAdditional
   },
   computed: {
     // 判断自身所属公司有没认证
@@ -79,8 +82,11 @@ export default {
         approvers: [null],
         paperSheetMedias: [],
         medias: [],
-        colNames: []
-      }
+        colNames: [],
+        remarks: '',
+        additionalCharges: []
+      },
+      tableCol: this.$store.state.ReconciliationOrdersV2Module.tableCol
     }
   },
   methods: {
@@ -124,7 +130,7 @@ export default {
       })
     },
     async _onCreate () {
-      let data = Object.assign({}, this.formData);
+      let data = JSON.parse(JSON.stringify(this.formData));
 
       this.$delete(data, 'type');
       
@@ -144,6 +150,7 @@ export default {
       }
 
       data.entries.forEach(item => {
+        item.customColumns = [];
         data.colNames.forEach(val => {
           item.customColumns.push({
             id: item[val.id].id !== '' ? item[val.id].id : null, 
@@ -152,9 +159,34 @@ export default {
           })
           this.$delete(item, val.id);
         })
+
+        // 将非必须字段都转换为自定义字段
+        for (const key in this.tableCol) {
+          const element = this.tableCol[key];
+          if (element.have) {
+            item.customColumns.push({
+              name: element.name,
+              value: item[key]
+            })
+          }
+          this.$delete(item, key);
+        }
       });
 
-      data.colNames = data.colNames.map(item => item.value);
+      data.colNames = this.formData.colNames.map(item => item.value);
+
+      for (const key in this.tableCol) {
+        if (this.tableCol[key].have) {
+          data.colNames.push(this.tableCol[key].name);
+        }
+      }
+
+      data.fastShippingSheets = this.formData.fastShippingSheets.map(item => {
+        return {id: item.id}
+      });
+      data.shippingSheets = this.formData.shippingSheets.map(item => {
+        return {id: item.id}
+      });
 
       const url = this.apis().createReconciliationV2();
       const result = await this.$http.post(url, data);

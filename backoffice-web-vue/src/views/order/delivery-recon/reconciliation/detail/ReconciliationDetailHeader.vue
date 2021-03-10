@@ -29,7 +29,7 @@
         </el-row>
         <el-row>
           <template v-for="item in order.docSignatures">
-            <el-col :span="6" :key="item.code" @click.native="showPDF(item)" class="contract-item" style="width: 60px">
+            <el-col v-if="item.state !== 'CANCELED'" :span="6" :key="item.code" @click.native="showPDF(item)" class="contract-item" style="width: 60px">
               <el-row type="flex" justify="center" align="middle">
                 <div>
                   <img style="width: 100%" src="static/img/word.png"/>
