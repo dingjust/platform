@@ -1,0 +1,62 @@
+@import "~taro-ui-vue/dist/style/components/flex.scss";
+
+.register {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.head {
+  align-content: center;
+}
+
+.panel_title {
+  position: relative;
+  margin-bottom: 1.06667rem;
+  padding-left: 1.06667rem;
+  color: #6a6a77;
+  font-size: 0.68267rem;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.panel_title::before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  left: 0.512rem;
+  top: 50%;
+  margin-top: -0.42667rem;
+  width: 4px;
+  height: 0.85333rem;
+  background-color: #ffd60c;
+  // -webkit-box-shadow: 0 0.14933rem 0.256rem 0 rgb(97 144 232 / 20%);
+  box-shadow: 0 0.14933rem 0.256rem 0 rgb(97 144 232 / 20%);
+  border-radius: 1px;
+}
+
+.register-company-name {
+  font-size: 16px;
+  color: #6a6a77;
+  margin-bottom: 20px;
+}
+
+.register-submit-btn {
+  margin-left: 30px;
+  margin-right: 30px;
+  background-color: #ffd60c;
+  color: white;
+  border-color: #ffd60c;
+}
+
+.register-protocol-row {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.protocol {
+  color: blue;
+}
+
+.protocol:hover {
+  cursor: pointer;
+}
