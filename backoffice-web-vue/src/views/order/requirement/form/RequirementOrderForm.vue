@@ -8,11 +8,25 @@
     <div>
       <el-form ref="requirementForm" :model="formData" :rules="rules" label-position="left" label-width="88px"
         hide-required-asterisk>
+        <el-form-item prop="belongTo" v-if="isTenant() && isCreated">
+          <template slot="label">
+            <h6 class="titleTextClass">所属公司<span style="color: red">*</span></h6>
+          </template>
+          <el-input v-model="formData.belongTo.name" :disabled="true" style="width: 300px">
+          </el-input>
+          <el-button @click="companyDialogVisible = true">选择公司</el-button>
+        </el-form-item>
+        <el-form-item prop="certificates" v-if="isTenant()">
+          <template slot="label">
+            <h6 class="titleTextClass">凭证</h6>
+          </template>
+          <images-upload :limit="5" :slot-data="formData.details.certificates" />
+        </el-form-item>
         <el-form-item prop="details.majorCategory">
           <template slot="label">
             <h6 class="titleTextClass">选择类别<span style="color: red">*</span></h6>
           </template>
-          <el-tag v-for="item of majorCategories" class="elTagClass"
+          <el-tag v-for="item of majorCategories" class="elTagClass" :key="item.id"
             :color="formData.details.majorCategory && formData.details.majorCategory.code === item.code ? '#FFD60C' : '#ffffff'"
             @click="handleTagClick(item)" size="medium">
             {{item.name}}
@@ -205,6 +219,10 @@
 
       </factory-cooperator-transfer-form>
     </el-dialog>
+    <el-dialog :visible.sync="companyDialogVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <company-select v-if="companyDialogVisible" @onSubmit="onCompanySelect" />
+    </el-dialog>
   </div>
 </template>
 
@@ -216,6 +234,7 @@
   import TemplateDetail from '../../../contract/template/detail/TemplateDetail';
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
   import FactoryCooperatorTransferForm from './FactoryCooperatorTransferForm';
+  import CompanySelect from '@/components/custom/order-form/CompanySelect'
 
   const {
     mapGetters,
@@ -229,7 +248,8 @@
       FactoryCooperatorTransferForm,
       ImagesUpload,
       TemplateDetail,
-      CategorySelect
+      CategorySelect,
+      CompanySelect
     },
     computed: {
       ...mapGetters({
@@ -258,6 +278,14 @@
         clearFactoryQueryFormData: 'clearFactoryQueryFormData',
         clearCooperatorQueryFormData: 'clearCooperatorQueryFormData'
       }),
+      onCompanySelect (val) {
+        if (val) {
+          this.formData.belongTo.id = val.id;
+          this.formData.belongTo.name = val.name;
+        }
+
+        this.companyDialogVisible = false
+      },
       onSave() {
         this.$refs['requirementForm'].validate((valid) => {
           if (valid) {
@@ -384,6 +412,13 @@
           callback();
         }
       };
+      var checkReplaceCompany = (rule, value, callback) => {
+        if (value.id) {
+          callback();
+        } else {
+          return callback(new Error('请选择需求所属公司'));
+        }
+      };
       return {
         selectDatas: [],
         pickerOptions: {
@@ -403,6 +438,7 @@
         selectPhoneNumbers: [],
         selectFactories: [],
         selectCooperators: [],
+        companyDialogVisible: false,
         rules: {
           'details.maxExpectedPrice': [{
             required: true,
@@ -454,11 +490,22 @@
             type: 'array',
             validator: checkProductiveOrientations,
             trigger: 'change'
+          }],
+          'belongTo': [{
+            required: true,
+            validator: checkReplaceCompany,
+            trigger: 'change'
           }]
         }
       }
     },
     created() {
+      if (this.isTenant()) {
+        this.formData.publishType = 'PUBLISH_BY_OTHERS';
+      } else {
+        this.formData.publishType = 'DEFAULT';
+      }
+
       if (!this.isCreated) {
         if (this.formData.details.category != null) {
           this.selectDatas.push(this.formData.details.category);
@@ -467,6 +514,8 @@
           .length > 0) {
           if (this.formData.details.productiveOrientations[0].isocode === 'CN-10') {
             this.isCountryWide = true;
+          } else {
+            this.isCountryWide = false;
           }
         }
       }

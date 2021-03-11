@@ -24,18 +24,27 @@
         </template>
       </el-table-column>
       <el-table-column label="产品名称" prop="product.name" min-width="120px" />
-      <el-table-column label="波段" prop="waveBand" min-width="120px">
+      <el-table-column lable="波段" prop="waveBand" min-width="120px" v-if="tableCol['waveBand'].have">
+        <template slot="header">
+          <span>波段<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('waveBand')"/></span>
+        </template>
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-input v-model="scope.row.waveBand"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="产品款号" prop="product.skuID" min-width="120px" />
-      <el-table-column label="订单款号" prop="orderItemNo" min-width="120px">
+      <el-table-column label="订单款号" prop="orderItemNo" min-width="120px" v-if="tableCol['orderItemNo'].have">
+        <template slot="header">
+          <span>订单款号<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('orderItemNo')"/></span>
+        </template>
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-input v-model="scope.row.orderItemNo"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="交货时间" prop="deliveryDate" min-width="160px">
+      <el-table-column label="交货时间" prop="deliveryDate" min-width="160px" v-if="tableCol['deliveryDate'].have">
+        <template slot="header">
+          <span>交货时间<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('deliveryDate')"/></span>
+        </template>
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-date-picker
             v-model="scope.row.deliveryDate"
@@ -46,7 +55,10 @@
           </el-date-picker>
         </template>
       </el-table-column>
-      <el-table-column label="合同时间" prop="contractDate" min-width="160px">
+      <el-table-column label="合同时间" prop="contractDate" min-width="160px" v-if="tableCol['contractDate'].have">
+        <template slot="header">
+          <span>合同时间<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('contractDate')"/></span>
+        </template>
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-date-picker
               v-model="scope.row.contractDate"
@@ -57,7 +69,10 @@
             </el-date-picker>
         </template>
       </el-table-column>
-      <el-table-column label="定作方式" prop="customizedMode" min-width="120px">
+      <el-table-column label="定作方式" prop="customizedMode" min-width="120px" v-if="tableCol['customizedMode'].have">
+        <template slot="header">
+          <span>定作方式<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('customizedMode')"/></span>
+        </template>
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-input v-model="scope.row.customizedMode"></el-input>
         </template>
@@ -76,26 +91,35 @@
           <span v-else>{{scope.row.cutQuantity}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="装箱单数" prop="packageQuantity" min-width="120px">
+      <el-table-column label="装箱单数" prop="packageQuantity" min-width="120px" v-if="tableCol['packageQuantity'].have">
+        <template slot="header">
+          <span>装箱单数<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('packageQuantity')"/></span>
+        </template>
         <template slot-scope="scope">
           <el-input v-model="scope.row.packageQuantity" v-if="!scope.row.countRow"
                         v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
           <span v-else>{{scope.row.packageQuantity}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="正品入库数" prop="storageQuantity" min-width="120px">
+      <el-table-column label="正品入库数" prop="storageQuantity" min-width="120px" v-if="tableCol['storageQuantity'].have">
+        <template slot="header">
+          <span>正品入库数<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('storageQuantity')"/></span>
+        </template>
         <template slot-scope="scope">
           <el-input v-model="scope.row.storageQuantity" v-if="!scope.row.countRow"
                         v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
           <span v-else>{{scope.row.storageQuantity}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合同单价（不含税）" prop="unitContractPrice" min-width="120px">
+      <el-table-column label="合同单价（不含税）" prop="unitContractPrice" min-width="150px" v-if="tableCol['unitContractPrice'].have">
+        <template slot="header">
+          <span>合同单价（不含税）<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('unitContractPrice')"/></span>
+        </template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.unitContractPrice" 
+          <el-input v-model="scope.row.unitContractPrice"
                     v-if="!scope.row.countRow"
                     @change="inputChange(scope.$index, 'unitContractPrice')"
-                    v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+                    v-number-input.float="{ decimal: 2 }"></el-input>
           <span v-else>{{scope.row.unitContractPrice}}</span>
         </template>
       </el-table-column>
@@ -104,29 +128,38 @@
           <el-input v-if="!scope.row.countRow"
                     v-model="scope.row.loanAmount" 
                     @change="inputChange(scope.$index, 'loanAmount')"
-                    v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+                    v-number-input.float="{ decimal: 2 }"></el-input>
           <span v-else>{{scope.row.loanAmount}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="快递费" prop="expressFee" min-width="120px">
+      <el-table-column label="快递费" prop="expressFee" min-width="120px" v-if="tableCol['expressFee'].have">
+        <template slot="header">
+          <span>快递费<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('expressFee')"/></span>
+        </template>
         <template slot-scope="scope">
           <el-input v-if="!scope.row.countRow"
-                    v-model="scope.row.expressFee" 
+                    v-model="scope.row.expressFee"
                     @change="inputChange(scope.$index, 'expressFee')"
-                    v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+                    v-number-input.float="{ decimal: 2 }"></el-input>
           <span v-else>{{scope.row.expressFee}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="扣款" prop="deductionAmount" min-width="120px">
+      <el-table-column label="扣款" prop="deductionAmount" min-width="120px" v-if="tableCol['deductionAmount'].have">
+        <template slot="header">
+          <span>扣款<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('deductionAmount')"/></span>
+        </template>
         <template slot-scope="scope">
           <el-input v-if="!scope.row.countRow"
-                    v-model="scope.row.deductionAmount" 
+                    v-model="scope.row.deductionAmount"
                     @change="inputChange(scope.$index, 'deductionAmount')"
-                    v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+                    v-number-input.float="{ decimal: 2 }"></el-input>
           <span v-else>{{scope.row.deductionAmount}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退货" prop="returnQuantity" min-width="120px">
+      <el-table-column label="退货" prop="returnQuantity" min-width="120px" v-if="tableCol['returnQuantity'].have">
+        <template slot="header">
+          <span>退货<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('returnQuantity')"/></span>
+        </template>
         <template slot-scope="scope">
           <el-input v-model="scope.row.returnQuantity" v-if="!scope.row.countRow"
                         v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
@@ -138,20 +171,26 @@
           <el-input v-if="!scope.row.countRow"
                     v-model="scope.row.settlementAmount" 
                     @change="inputChange(scope.$index, 'settlementAmount')"
-                    v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+                    v-number-input.float="{ decimal: 2 }"></el-input>
           <span v-else>{{scope.row.settlementAmount}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="定金" prop="depositAmount" min-width="120px">
+      <el-table-column label="定金" prop="depositAmount" min-width="120px" v-if="tableCol['depositAmount'].have">
+        <template slot="header">
+          <span>定金<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('depositAmount')"/></span>
+        </template>
         <template slot-scope="scope">
           <el-input v-if="!scope.row.countRow"
-                    v-model="scope.row.depositAmount" 
+                    v-model="scope.row.depositAmount"
                     @change="inputChange(scope.$index, 'depositAmount')"
-                    v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+                    v-number-input.float="{ decimal: 2 }"></el-input>
           <span v-else>{{scope.row.depositAmount}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" prop="remark" min-width="225px">
+      <el-table-column label="备注" prop="remarks" min-width="225px" v-if="tableCol['remarks'].have">
+        <template slot="header">
+          <span>备注<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('remarks')"/></span>
+        </template>
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-input v-model="scope.row.remarks" type="textarea" style="width: 200px" :rows="3" :title="scope.row.remarks"></el-input>
         </template>
@@ -188,7 +227,8 @@
     <el-dialog :visible.sync="importVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <reconciliation-entry-import v-if="importVisible" @onImport="onImport"/>
     </el-dialog>
-    <el-dialog :title="columnDialogtitle" :visible.sync="columnVisible" width="400px" append-to-body :close-on-click-modal="false">
+    <el-dialog :title="columnDialogtitle" :visible.sync="columnVisible" width="400px" 
+                append-to-body :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false">
       <append-column v-if="columnVisible" :modifyColumn="modifyColumn" @toModifyColumn="_modifyColumn" @addColumn="addColumn" @callback="callback" />
     </el-dialog>
   </div>
@@ -200,7 +240,18 @@ import ReconciliationEntryImport from './ReconciliationEntryImport'
 import AppendColumn from '../../components/AppendColumn.vue';
 export default {
   name: 'ReconciliationInfoTable',
-  props: ['formData'],
+  props: {
+    formData: {
+      required: true
+    },
+    tableCol: {
+      required: true
+    },
+    isCreate: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     tableData: function () {
       let data = [];
@@ -209,15 +260,7 @@ export default {
         data.push({
           countRow: '合计',
           orderQuantity: this.countColumn(this.formData.entries, 'orderQuantity'),
-          // cutQuantity: this.countColumn(this.formData.entries, 'cutQuantity'),
-          packageQuantity: this.countColumn(this.formData.entries, 'packageQuantity'),
-          storageQuantity: this.countColumn(this.formData.entries, 'storageQuantity'),
-          // unitContractPrice: this.countColumn(this.formData.entries, 'unitContractPrice'),
           loanAmount: this.countColumn(this.formData.entries, 'loanAmount'),
-          expressFee: this.countColumn(this.formData.entries, 'expressFee'),
-          // deductionAmount: this.countColumn(this.formData.entries, 'deductionAmount'),
-          // returnQuantity: this.countColumn(this.formData.entries, 'returnQuantity'),
-          depositAmount: this.countColumn(this.formData.entries, 'depositAmount'),
           settlementAmount: this.countColumn(this.formData.entries, 'settlementAmount')
         });
       }
@@ -274,10 +317,11 @@ export default {
           count += Number.parseFloat(item[attribute]);
         }
       })
+      const flag = arr.some(item => !Number.isNaN(Number.parseFloat(item[attribute])));
       
       let regexp = /^.*\.0*$/;
       if (regexp.test(count.toFixed(2) + '')) {
-        return count.toFixed(0) == 0 ? '' : count.toFixed(0);
+        return flag ? count.toFixed(0) : '';
       }
       return count.toFixed(2);
     },
@@ -289,7 +333,6 @@ export default {
       }
     },
     onAdd () {
-      // this.formData.entries.push(Object.assign({}, this.item));
       this.formData.entries.push(JSON.parse(JSON.stringify(this.item)));
     },
     onCopy (index, row) {
@@ -378,6 +421,15 @@ export default {
       })
 
       this.$delete(this.item, column.id);
+    },
+    onDeleteOri (attribute) {
+      this.tableCol[attribute].have = false;
+
+      this.$delete(this.item, attribute);
+
+      this.formData.entries.forEach(item => {
+        this.$delete(item, attribute);
+      })
     },
     callback () {
       this.columnVisible = false;

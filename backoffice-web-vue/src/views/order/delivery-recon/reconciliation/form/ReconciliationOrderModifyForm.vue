@@ -1,6 +1,15 @@
 <template>
   <div>
-    <reconciliation-info-table :formData="order"/>
+    <el-form :model="order">
+      <reconciliation-info-table :formData="order" :tableCol="tableCol"/>
+      <reconciliation-additional :formData="order"/>
+      <el-row type="flex" style="margin-top: 10px">
+        <h6 class="title-text">附件</h6>
+      </el-row>
+      <el-row type="flex" class="basic-container">
+        <files-upload ref="filesUpload" :slotData="order.medias" :limit="20"/>
+      </el-row>
+    </el-form>
     <el-row type="flex" justify="center" style="margin-top: 20px">
       <el-button class="sumbit-btn" @click="onModify">修改</el-button>
     </el-row>
@@ -9,11 +18,16 @@
 
 <script>
 import ReconciliationInfoTable from './ReconciliationInfoTable'
+import ReconciliationAdditional from './ReconciliationAdditional.vue'
+import { FilesUpload } from '@/components'
+
 export default {
   name: 'ReconciliationOrderModifyForm',
-  props: ['order'],
+  props: ['order', 'tableCol'],
   components: {
-    ReconciliationInfoTable
+    ReconciliationInfoTable,
+    ReconciliationAdditional,
+    FilesUpload
   },
   methods: {
     onModify () {
@@ -31,11 +45,11 @@ export default {
       });
     },
     async _onModify () {
-      let form = JSON.parse(JSON.stringify(this.order));
+      let data = JSON.parse(JSON.stringify(this.order));
 
-      form.entries.forEach(item => {
+      data.entries.forEach(item => {
         item.customColumns = [];
-        form.colNames.forEach(val => {
+        data.colNames.forEach(val => {
           item.customColumns.push({
             id: item[val.id].id !== '' ? item[val.id].id : null, 
             name: val.value,
@@ -43,12 +57,30 @@ export default {
           })
           this.$delete(item, val.id);
         })
-      })
-      
-      form.colNames = form.colNames.map(item => item.value);
+
+        // 将非必须字段都转换为自定义字段
+        for (const key in this.tableCol) {
+          const element = this.tableCol[key];
+          if (element.have) {
+            item.customColumns.push({
+              name: element.name,
+              value: item[key]
+            })
+          }
+          this.$delete(item, key);
+        }
+      });
+
+      data.colNames = this.order.colNames.map(item => item.value);
+
+      for (const key in this.tableCol) {
+        if (this.tableCol[key].have) {
+          data.colNames.push(this.tableCol[key].name);
+        }
+      }
 
       const url = this.apis().reconciliationOrderModify();
-      const result = await this.$http.put(url, form);
+      const result = await this.$http.put(url, data);
 
       if (result.code === 1) {
         this.$message.success('操作成功！');
@@ -71,5 +103,9 @@ export default {
     border-color: #ffd60c;
     color: #606266;
     width: 80px;
+  }
+
+  .basic-container {
+    margin: 10px 0px 20px 25px;
   }
 </style>

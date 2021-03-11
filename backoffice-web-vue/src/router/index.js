@@ -543,6 +543,19 @@ const router = new Router({
             name: '采购单',
             props: true,
             component: () => import( /* webpackChunkName: 'purchase' */ '@/views/purchase/order/details/PurchaseOrderDetail')
+          }, {
+            path: 'cost',
+            name: '成本单',
+            component: () => import( /* webpackChunkName: 'purchase' */ '@/views/purchase/cost/CostOrderPage')
+          }, {
+            path: 'cost/create',
+            name: '创建成本单',
+            component: () => import( /* webpackChunkName: 'purchase' */ '@/views/purchase/cost/form/CostOrderForm')
+          }, {
+            path: 'cost/:id',
+            name: '成本单详情',
+            props: true,
+            component: () => import( /* webpackChunkName: 'purchase' */ '@/views/purchase/cost/details/CostOrderDetail')
           }]
         },
         {
@@ -1154,6 +1167,75 @@ const router = new Router({
             component: () => import( /* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/reconciliation-task/details/ReconciliationTasksDetail')
           }]
         },
+        // {
+        //   path: 'inventory',
+        //   redirect: '/inventory/stock',
+        //   name: '库存管理',
+        //   component: {
+        //     render(c) {
+        //       return c('router-view');
+        //     }
+        //   },
+        //   children: [
+        //     {
+        //       path: 'stock',
+        //       name: '进货单',
+        //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/stock/StockPage')
+        //     },
+        //     {
+        //       path: 'stock/create',
+        //       name: '创建进货单',
+        //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/stock/form/StockForm')
+        //     },
+        //     {
+        //       path: 'retail',
+        //       name: '销售单',
+        //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/retail/RetailPage')
+        //     },
+        //     {
+        //       path: 'retail/create',
+        //       name: '创建销售单',
+        //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/retail/form/RetailForm')
+        //     },
+        //     {
+        //       path: 'skus',
+        //       name: '库存状况',
+        //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/warehouse/SkusPage')
+        //     },
+        //     {
+        //       path: 'flow',
+        //       name: '库存流水',
+        //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/warehouse/FlowPage')
+        //     },
+        //     {
+        //       path: 'inventory',
+        //       name: '库存盘点',
+        //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/warehouse/InventoryPage')
+        //     }
+        //   ]
+        // }, 
+        {
+          path: 'activity',
+          redirect: '/activity/points/record',
+          name: '活动',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [
+            {
+              path: 'points/record',
+              name: '积分记录',
+              component: () => import( /*webpackChunkName: 'activity' */ '@/views/activity/points/PointsRecordPage')
+            },
+            {
+              path: 'points/exchange',
+              name: '积分申请',
+              component: () => import( /*webpackChunkName: 'activity' */ '@/views/activity/points/PointsExchangePage')
+            }
+          ]
+        }
       ]
     },
     {

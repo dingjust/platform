@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="over-tabs" v-if="!readOnly">
+    <div class="over-tabs" v-if="!readOnly && !readCostOnly">
       <el-row type="flex">
         <!-- <el-button class="material-btn" @click="onBOMImport">BOM导入</el-button> -->
         <el-button class="material-btn" @click="appendMateriel">添加物料</el-button>
@@ -17,7 +17,7 @@
           </el-table-column>
           <el-table-column label="物料编号" prop="code"></el-table-column>
           <el-table-column label="物料单位" prop="unit"></el-table-column>
-          <el-table-column label="供应商" v-if="!readOnly" prop="cooperatorName"></el-table-column>
+          <el-table-column label="供应商" v-if="!readOnly && !isFromCost" prop="cooperatorName"></el-table-column>
           <el-table-column label="幅宽/型号" prop="modelName"></el-table-column>
           <el-table-column label="克重/规格" prop="specName"></el-table-column>
           <el-table-column label="物料颜色" prop="colorName"></el-table-column>
@@ -25,14 +25,14 @@
           <el-table-column label="单位用量" prop="unitQuantity" v-if="!readOnly"></el-table-column>
           <el-table-column label="预计损耗" prop="estimatedLoss" v-if="!readOnly">
             <template slot-scope="scope">
-              <span>{{scope.row.estimatedLoss * 100}}%</span>
+              <span>{{(scope.row.estimatedLoss * 100).toFixed(2)}}%</span>
             </template>
           </el-table-column>
           <el-table-column label="预计用量" prop="estimatedUsage" v-if="!readOnly"></el-table-column>
           <el-table-column label="订单数" prop="orderCount" v-if="!readOnly"></el-table-column>
           <el-table-column label="空差" prop="emptySent" v-if="!readOnly">
             <template slot-scope="scope">
-              <span>{{scope.row.emptySent * 100}}%</span>
+              <span>{{(scope.row.emptySent * 100).toFixed(2)}}%</span>
             </template>
           </el-table-column>
           <el-table-column label="需求数量" prop="requiredAmount" min-width="100px" v-if="!readOnly">
@@ -103,22 +103,25 @@
               <span>{{getEnum('PurchaseWorksheetState', scope.row.state)}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" min-width="100px" v-if="!readOnly" fixed="right">
-            <template slot-scope="scope">
-              <el-button type="text" @click="onModify(scope.row, scope.$index)">修改</el-button>
-              <el-button type="text" @click="onDelete(scope.row, scope.$index)">删除</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" min-width="50px" v-else fixed="right">
-            <template slot-scope="scope">
-              <el-button type="text" @click="onDetail(scope.row, scope.$index)">详情</el-button>
-            </template>
-          </el-table-column>
+          <template v-if="!readCostOnly">
+            <el-table-column label="操作" min-width="100px" v-if="!readOnly" fixed="right">
+              <template slot-scope="scope">
+                <el-button type="text" @click="onModify(scope.row, scope.$index)">修改</el-button>
+                <el-button type="text" @click="onDelete(scope.row, scope.$index)">删除</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" min-width="50px" v-else fixed="right">
+              <template slot-scope="scope">
+                <el-button type="text" @click="onDetail(scope.row, scope.$index)">详情</el-button>
+              </template>
+            </el-table-column>
+          </template>
         </el-table>
       </el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="appendVisible" width="80%" append-to-body :close-on-click-modal="false">
-      <material-append-table v-if="appendVisible" :formData="formData" @onSelect="onSelect" :entries="entries" />
+      <material-append-table v-if="appendVisible" :formData="formData" 
+                            @onSelect="onSelect" :entries="entries" :isFromCost="isFromCost"/>
     </el-dialog>
   </div>
 </template>
@@ -135,6 +138,14 @@ export default {
     readOnly: {
       type: Boolean,
       default: false
+    },
+    isFromCost: {
+      type: Boolean,
+      detault: false
+    },
+    readCostOnly: {
+      type: Boolean,
+      detault: false
     }
   },
   components: {
@@ -228,7 +239,11 @@ export default {
       return result;
     },
     onModify (row, index) {
-      this.entries.workOrders = this.formData.workOrders;
+      this.entries.workOrders = JSON.parse(JSON.stringify(this.formData.workOrders));
+      this.entries.workOrders.forEach(item => {
+        item.estimatedLoss = item.estimatedLoss * 100;
+        item.emptySent = item.emptySent * 100;
+      })
       this.appendVisible = true;
       this.isModify = true;
     },
@@ -273,6 +288,25 @@ export default {
 
 <style scoped>
   .over-tabs {
+    position: absolute;
+    z-index: 100;
+    right: 30px;
+    margin-top: 2px;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
+  }
+
+  /deep/ .el-dialog__header {
+    padding: 0px;
+  }
+</style>
+abs {
     position: absolute;
     z-index: 100;
     right: 30px;

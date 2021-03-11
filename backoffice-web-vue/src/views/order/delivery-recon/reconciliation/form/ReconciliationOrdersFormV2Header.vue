@@ -5,7 +5,7 @@
         <el-input v-model="formData.title"></el-input>
       </el-form-item>
     </el-row>
-    <el-row style="margin-top: 10px">
+    <el-row>
       <div style="display: flex;">
         <div>
           <el-form-item label="合作商" prop="cooperator" :rules="{ required: true, message: '不能为空', trigger: 'change' }">
@@ -17,15 +17,11 @@
         </div>
       </div>
     </el-row>
-    <el-row type="flex" align="top" style="margin-left: 10px">
-      <div style="display: flex;">
-        <div>
-          <el-form-item label="单据" style="margin: 0px"></el-form-item>
-        </div>
-        <div>
-          <el-button type="primary" size="mini" class="select-btn" @click="selectVisible = true">选择</el-button>
-        </div>
-      </div>
+    <el-row type="flex" align="top">
+      <el-form-item label="单据" style="margin: 0px">
+        <template slot="label"><span style="padding-left: 10px">单据</span></template>
+        <el-button type="primary" size="mini" class="select-btn" @click="selectVisible = true">选择</el-button>
+      </el-form-item>
     </el-row>
     <el-row v-if="formData.shippingSheets.length > 0" style="margin-left: 10px;">
       发货单：
@@ -95,18 +91,22 @@ export default {
         this.formData.shippingSheets = selection;
         this.appendEntries(selection);
 
-        this.formData.cooperator = {
-          name: selection[0].shipParty.name,
-          approvalStatus: selection[0].shipParty.approvalStatus
+        if (!this.formData.name) {
+          this.formData.cooperator = {
+            name: selection[0].shipParty.name,
+            approvalStatus: selection[0].shipParty.approvalStatus
+          }
         }
         this.shippingListVisible = false;
       } else if (this.formData.type === 'fastShippingSheets') {
         this.formData.fastShippingSheets = selection;
 
-        this.formData.cooperator = {
-          id: selection[0].cooperator.id,
-          name: selection[0].cooperator.partner.name,
-          approvalStatus: selection[0].cooperator.partner.approvalStatus
+        if (!this.formData.name) {
+          this.formData.cooperator = {
+            id: selection[0].cooperator.id,
+            name: selection[0].cooperator.partner.name,
+            approvalStatus: selection[0].cooperator.partner.approvalStatus
+          }
         }
         this.deliveryVisible = false;
       }

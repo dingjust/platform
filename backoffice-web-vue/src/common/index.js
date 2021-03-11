@@ -382,8 +382,14 @@ const COMMON_APIS = {
   createRequirementOrder () {
     return '/b2b/orders/requirement/new';
   },
+  createPublishByPlatform () {
+    return '/b2b/orders/requirement/publishByPlatform';
+  },
   updateRequirementOrder (code) {
     return '/b2b/orders/requirement/' + code + '/request';
+  },
+  updateRequirementOrderByPlatform () {
+    return '/b2b/orders/requirement/updateByPaltform'
   },
   getQuote (code) {
     return '/b2b/orders/quote/' + code;
@@ -1199,8 +1205,8 @@ let TENANT_APIS = {
     return '/b2b/fdd/api/clear/company/verify/data/' + companyCode;
   },
   // 清除个人认证
-  clearPersonAuth (code) {
-    return '/b2b/fdd/api/clear/personal/verify/data/' + code;
+  clearPersonAuth (uid) {
+    return '/b2b/fdd/api/clear/personal/verify/data/' + uid;
   },
   // 获取全部合同列表
   getAgreementList () {
@@ -1213,6 +1219,19 @@ let TENANT_APIS = {
   // 重新下载合同
   onRefreshDownloadContract () {
     return '/b2b/fail/log/add';
+  },
+
+  // 积分记录列表
+  searchPointsRecord () {
+    return '/b2b/user/points/record/search';
+  },
+  // 积分申请记录
+  searchPointsExchange () {
+    return '/b2b/user/points/exchange/search';
+  },
+  // 处理积分申请
+  processPointsExchange (id) {
+    return '/b2b/user/points/exchange/process/' + id;
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
@@ -1798,6 +1817,44 @@ let NONE_TENANT_APIS = {
   // 获取外发外接数量，金额统计
   getDashboardOrderStatistics () {
     return '/b2b/sales/production/order/count';
+  },
+  /** --------------------成本单----------------------------------- */
+  // 创建成本单
+  createCostOrder () {
+    return '/b2b/cost/order/create';
+  },
+  // 查询成本单列表
+  searchCostOrder () {
+    return '/b2b/cost/order';
+  },
+  // 成本单统计
+  searchCostOrderCout () {
+    return '/b2b/cost/order/state/count'
+  },
+  // 查询成本单详情
+  getCostOrder (id) {
+    return '/b2b/cost/order/' + id;
+  },
+  // 更新成本单
+  updateCostOrder () {
+    return '/b2b/cost/order/update';
+  },
+  // 成本单取消
+  cancelCostOrder (id) {
+    return '/b2b/cost/order/cancel/' + id;
+  },
+  // 根据生产工单id查询成本单列表
+  getCostOrderByProductionId (id) {
+    return '/b2b/cost/order/listByProductionOrder/' + id;
+  },
+
+  // 添加自定义颜色
+  addCustomColor () {
+    return '/b2b/colors/customize';
+  },
+  // 添加自定义尺码
+  addCustomSize () {
+    return '/b2b/sizes/customize';
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

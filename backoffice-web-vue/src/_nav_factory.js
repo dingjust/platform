@@ -192,6 +192,9 @@ export default {
       permissions: ['PURCHASE']
     },
     children: [{
+      name: '成本单',
+      url: '/purchase/cost'
+    }, {
       name: '采购需求',
       url: '/purchase/requirement',
       meta: {

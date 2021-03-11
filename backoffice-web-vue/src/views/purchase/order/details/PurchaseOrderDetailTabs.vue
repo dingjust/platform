@@ -96,7 +96,16 @@ export default {
       this.editVisible = true;
       this.isOnEdit = true;
     },
-    async onEditSave () {
+    onEditSave () {
+      this.$confirm('是否进行保存操作?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this._onEditSave()
+      });
+    },
+    async _onEditSave () {
       let form = {
         id: this.order.id,
         entries: this.order.entries.map(item => {
@@ -124,7 +133,16 @@ export default {
         return;
       }
     },
-    async receiveComplete () {
+    receiveComplete () {
+      this.$confirm('是否进行收料完成操作?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this._receiveComplete()
+      });
+    },
+    async _receiveComplete () {
       const url = this.apis().purchaseOrderComplete(this.order.id);
       const result = await this.$http.post(url);
       if (result['errors']) {

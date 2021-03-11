@@ -2,8 +2,8 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" >
       <el-table-column label="采购需求号" prop="code" />
-      <el-table-column label="关联款号" prop="productionTask.product.skuID" />
-      <el-table-column label="关联订单" prop="productionTask.code"/>
+      <el-table-column label="关联款号" prop="costOrder.productionOrder.productSkuID" />
+      <el-table-column label="关联订单" prop="costOrder.code"/>
       <el-table-column label="采购人" prop="merchandiser.name"/>
       <el-table-column label="创建人" prop="creator.name" />
       <el-table-column label="创建时间">

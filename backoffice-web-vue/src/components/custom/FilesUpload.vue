@@ -48,18 +48,20 @@
         return true;
       },
       onSuccess(response, file, fileList) {
-        console.log(JSON.stringify(fileList));
         let uploadingIndex = fileList.findIndex((e) => e.status == 'uploading');
         if (uploadingIndex < 0) {
           let data = fileList.filter((e) => e.status == 'success').map((e) => e.response);
-          this.slotData = data;
+          data.forEach(item => {
+            if (item) {
+              this.slotData.push(item);
+            }
+          });
         }
         if (this.slotData.length === this.limit) {
           this.uploadDisabled = true;
         } else {
           this.uploadDisabled = false;
         }
-        // let data=fileList.filter((e)=>e.status=='sucess').map((e)=>e.response);                          
       },
       async handleRemove(file) {
         // TODO: 自定义删除方法（删除图片之前，清理product的others属性
@@ -80,10 +82,11 @@
         // });
         // this.slotData = newImages;
         // this.$message.success("删除成功");
-
         const images = this.fileList || [];
         const index = images.indexOf(file);
-        this.slotData.splice(index, 1);
+        if (index > -1) {
+          this.slotData.splice(index, 1);
+        }
         if (this.slotData.length === this.limit) {
           this.uploadDisabled = true;
         } else {

@@ -14,6 +14,60 @@ const getDefaultState = () => {
       totalPages: 1, // 总页数
       totalElements: 0, // 总数目数
       content: [] // 当前页数据
+    },
+    tableCol: {
+      waveBand: {
+        have: true,
+        name: '波段'
+      },
+      orderItemNo: {
+        have: true,
+        name: '订单款号'
+      },
+      deliveryDate: {
+        have: true,
+        name: '交货时间'
+      },
+      contractDate: {
+        have: true,
+        name: '合同时间'
+      },
+      customizedMode: {
+        have: true,
+        name: '定作方式'
+      },
+      packageQuantity: {
+        have: true,
+        name: '装箱单数'
+      },
+      storageQuantity: {
+        have: true,
+        name: '正品入库数'
+      },
+      unitContractPrice: {
+        have: true,
+        name: '合同单价（不含税）'
+      },
+      expressFee: {
+        have: true,
+        name: '快递费'
+      },
+      deductionAmount: {
+        have: true,
+        name: '扣款'
+      },
+      returnQuantity: {
+        have: true,
+        name: '退货'
+      },
+      depositAmount: {
+        have: true,
+        name: '定金'
+      },
+      remarks: {
+        have: true,
+        name: '备注'
+      }
     }
   }
 }
@@ -84,7 +138,8 @@ const getters = {
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  tableCol: state => JSON.parse(JSON.stringify(state.tableCol))
 };
 
 export default {

@@ -38,7 +38,7 @@
       </div> 
     </collapse-transition>
     <el-row type="flex">
-      <el-radio label="PERSON" v-model="selection" :disabled="true">{{options.PERSON}}</el-radio>
+      <el-radio label="PERSON" v-model="selection">{{options.PERSON}}</el-radio>
     </el-row>
     <el-row type="flex" justify="end">
       <el-button @click="onCancel">取消</el-button>
@@ -167,7 +167,24 @@ export default {
       }
     },
     async clearPersonAuth () {
+      const contactUid = this.clearRow.contactUid;
 
+      const url = this.apis().clearPersonAuth(contactUid);
+      const result = await this.$http.post(url);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message ? result['errors'][0].message : '操作失败，请稍后再试');
+        return;
+      }
+      
+      if (result.code === 1) {
+        this.$message.success('操作成功！');
+        this.$emit('callback');
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+      } else {
+        this.$message.error('操作失败！');
+      }
     }
   },
   watch: {

@@ -10,23 +10,18 @@
       <contract-supplement-form v-if="dialogOrderVisible" @openPreviewPdf="previewPdf" :slotData="thisContract"
         @onSearch="onSearch" @closeDialogOrderVisible="closeDialogOrderVisible" />
     </el-dialog>
-    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
+    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed"
       :height="autoHeight">
-      <el-table-column label="合同名称" fixed>
-        <template slot-scope="scope">
-          <span class="ellipsis-name" :title="scope.row.title">
-            {{scope.row.title}}
-            <!--<el-link @click="dialogTableVisible = true">{{scope.row.title}}</el-link>-->
-          </span>
-        </template>
+      <el-table-column label="合同名称" prop="title" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
-      <el-table-column label="合作商" prop="belongTo.name">
+      <el-table-column label="系统编号" prop="code" min-width="125px"></el-table-column>
+      <el-table-column label="合同编号" prop="customizeCode" min-width="125px"></el-table-column>
+      <el-table-column label="合作商" prop="belongTo.name" min-width="150px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.partner}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="对应单号" prop="orderCode">
+      <el-table-column label="对应单号" prop="orderCode" min-width="100px">
         <template slot-scope="scope">
           <div v-if="isShowMore(scope.row.orderCodes) && isMore">
             <template v-for="(code,index) in scope.row.orderCodes">
@@ -48,17 +43,17 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间">
+      <el-table-column label="创建时间" min-width="90px">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合同类型">
+      <el-table-column label="合同类型" min-width="100px">
         <template slot-scope="scope">
           <span>{{getEnum('TemplateType', scope.row.type)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="当前状态" prop="state" :column-key="'state'">
+      <el-table-column label="当前状态" prop="state" :column-key="'state'" min-width="100px">
         <template slot-scope="scope">
           <!-- <el-tag disable-transitions></el-tag> -->
           {{getEnum('contractStates', scope.row.state)}}

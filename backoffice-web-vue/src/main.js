@@ -181,9 +181,11 @@ new Vue({
   components: {
     App
   },
-  created() {
+  created () {
     this.$store.dispatch('GlobalSizesModule/getSizesData');
     this.$store.dispatch('GlobalColorsModule/getcolorsData');
     this.$store.dispatch('GlobalCategoriesModule/getCategoriesData');
+
+    this.$store.dispatch('PointsExchangeModule/pollingSearch');
   }
 });

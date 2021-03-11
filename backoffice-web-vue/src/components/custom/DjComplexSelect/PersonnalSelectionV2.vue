@@ -1,7 +1,7 @@
 <template>
   <el-cascader v-model="person" 
                 :disabled="disabled"
-                :options="deptList" 
+                :options="treeData" 
                 :show-all-levels="false"
                 :props="{ label: 'name', value: value }" 
                 clearable></el-cascader>
@@ -10,12 +10,12 @@
 <script>
 import {
   createNamespacedHelpers
-} from "vuex";
+} from 'vuex';
 
 const {
-  mapState,
+  mapGetters,
 } = createNamespacedHelpers(
-  "OrganizationModule"
+  'PersonnelModule'
 );
 export default {
   name: 'PersonnalSelectionV2',
@@ -48,27 +48,38 @@ export default {
   },
   data () {
     return {
-      deptList: [],
-      person: [],
-      personList: []
+      treeData: [],
+      person: []
     }
   },
   computed: {
-    ...mapState({
-      deptOptions: state => state.deptList.options,
-      loading: state => state.deptList.loading,
-      personOptions: state => state.personList.options,
+    ...mapGetters({
+      deptListLoaded: 'deptListLoaded',
+      personListLoaded: 'personListLoaded',
+      deptList: 'cacheDeptList',
+      personList: 'cachePersonList'
     })
   },
   methods: {
-    initData () {
-      this.deptList = JSON.parse(JSON.stringify(this.deptOptions));
-      this.personList = JSON.parse(JSON.stringify(this.personOptions));
-      this.createDeptPersonTree();
+    async initData () {
+      if (!this.deptListLoaded) {
+        // 部门数据没有加载过，调用加载函数
+        await this.$store.dispatch('PersonnelModule/searchDeptList');
+      }
+      if (!this.personListLoaded) {
+        // 员工数据没有加载过，调用加载函数
+        await this.$store.dispatch('PersonnelModule/searchPersonList');
+      }
+
+      if (this.deptList.loaded && this.personList.loaded) {
+        this.createDeptPersonTree();
+      }
     },
     createDeptPersonTree () {
+      this.treeData = JSON.parse(JSON.stringify(this.deptList.options));
+
       let index;
-      this.personList.forEach(item => {
+      this.personList.options.forEach(item => {
         if (item.uid === this.$store.getters.currentUser.uid && this.excludeMySelf) {
           return;
         }
@@ -85,19 +96,19 @@ export default {
 
         if (item.b2bDept) {
           this.$set(item, 'parentId', item.b2bDept.id);
-          let temp = this.breadthQuery(this.deptList, item.b2bDept.id);
+          let temp = this.breadthQuery(this.treeData, item.b2bDept.id);
           temp.children.push(item);
         }
 
         // 主账号没所属部门时，跟一级部门同级
         if (item.root && item.b2bDept == null) {
-          this.deptList.push(item);
+          this.treeData.push(item);
         } 
       })
 
       // 处理数据回显
       if (this.vPerson && this.vPerson.id) {
-        let arr = this.familyTree(this.deptList, this.vPerson.id);
+        let arr = this.familyTree(this.treeData, this.vPerson.id);
         this.person = arr.map(item => item.id);
       }
     },
@@ -144,32 +155,21 @@ export default {
       this.$emit('update:vPerson', newVal);
     },
     selectedRow: function (newVal, oldVal) {
-      this.initData();
+      this.createDeptPersonTree();
     },
-    loading: function (nval, oval) {
-      if (nval === false) {
-        this.initData();
+    'deptList.options': function (nval, oval) {
+      if (this.deptList.loaded && this.personList.loaded && this.treeData.length <= 0) {
+        this.createDeptPersonTree();
+      }
+    },
+    'personList.options': function (nval, oval) {
+      if (this.deptList.loaded && this.personList.loaded && this.treeData.length <= 0) {
+        this.createDeptPersonTree();
       }
     }
   },
   created () {
-    if (this.loading === false) {
-      this.initData();
-      // 处理数据回显
-      if (this.vPerson && this.vPerson.id) {  
-        let arr = this.familyTree(this.deptList, this.vPerson.id);
-        this.person = arr.map(item => item.id);
-      }
-    }
-  },
-  beforeCreate () {
-    this.$store.commit('OrganizationModule/deptList', {cmd: 'plusRef'});
-    if (this.$store.state.OrganizationModule.deptList.refNum <= 1 || this.$store.state.OrganizationModule.deptList.options.length <= 0) {
-      this.$store.dispatch('OrganizationModule/loadDeptList', this);
-    }
-  },
-  destroyed() {
-    this.$store.commit('OrganizationModule/deptList', {cmd: "minusRef"});
+    this.initData();
   }
 }
 </script>

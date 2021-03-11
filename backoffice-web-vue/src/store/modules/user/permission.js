@@ -1,13 +1,24 @@
 import http from '@/common/js/http';
 
 const state = {
-  permissions: []
+  permissions: [],
+  dataPermission: []
 };
 
 const mutations = {
   permissions (state, permissions) {
     sessionStorage.setItem('permissions', JSON.stringify(permissions));
     state.permissions = permissions;
+  },
+  dataPermission (state, data) {
+    if (data != null && data.length > 0) {
+      let dataPermission = {};
+      data.forEach(item => {
+        dataPermission[item.code] = item.permission;
+      })
+      sessionStorage.setItem('dataPermission', JSON.stringify(dataPermission));
+      state.dataPermission = dataPermission;
+    }
   }
 };
 
@@ -20,12 +31,11 @@ const actions = {
     uid
   }) {
     // 获取账号权限
-    const result = await http.get('/b2b/b2bCustomers/role/' + uid);
-    if (result.code === 0) {
-      this.$message.error(result.msg);
-      return;
+    const response = await http.get('/b2b/b2bCustomers/role/' + uid);
+    if (!response['errors']) {
+      commit('permissions', response.data.roleList);
+      commit('dataPermission', response.data.dataPermissionList);
     }
-    commit('permissions', result.data);
   }
 };
 
@@ -35,6 +45,12 @@ const getters = {
       return JSON.parse(sessionStorage.getItem('permissions'));
     }
     return state.permissions;
+  },
+  dataPermission () {
+    if (state.dataPermission.length <= 0) {
+      return JSON.parse(sessionStorage.getItem('dataPermission'));
+    }
+    return state.dataPermission;
   }
 };
 

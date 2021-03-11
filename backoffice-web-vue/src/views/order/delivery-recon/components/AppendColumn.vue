@@ -1,8 +1,10 @@
 <template>
   <el-form ref="form" :model="column">
     <el-row>
-      <el-form-item label="" prop="value" :rules="[{ required: true, message: '必填', trigger: 'blur'}]">
-        <el-input v-model="column.value" :placeholder="placeholder"></el-input>
+      <el-form-item label="" prop="value" :rules="[{ required: true, message: '必填', trigger: 'blur'}]" @submit.native.prevent>
+        <el-input v-model="column.value" 
+                  :placeholder="placeholder" 
+                  @keyup.enter.native="onConfirm"></el-input>
       </el-form-item>
     </el-row>
     <el-row type="flex" justify="end" style="margin-top: 20px">

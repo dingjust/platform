@@ -19,10 +19,13 @@
         </el-col>
       </el-row>
       <reconciliation-detail-header :order="order" @showPDF="showPDF"/>
-      <reconciliation-detail-table class="basic-container" v-if="order.id" :order="order"/>
-      <el-row type="flex" class="basic-container">
-        <div><h6>附件：</h6></div>
-        <files-upload v-if="order.medias && order.medias.length > 0" :slotData="order.medias" :readOnly="true" :disabled="true"/>
+      <reconciliation-detail-table class="basic-container" v-if="order.id" :order="order" :tableCol="tableCol"/>
+      <reconciliation-detail-addition class="basic-container" v-if="order.id" :order="order"/>
+      <el-row type="flex" style="margin-left: 12px;">
+        <h6 class="title-text">附件：</h6>
+      </el-row>
+      <el-row type="flex" style="margin-left: 30px;" v-if="order.medias && order.medias.length > 0">
+        <files-upload :slotData="order.medias" :readOnly="true" :disabled="true"/>
       </el-row>
       <div v-if="isReceiveParty">
         <template v-if="order.auditWorkOrder && order.auditWorkOrder.processes && order.auditWorkOrder.processes.length > 0">
@@ -54,7 +57,7 @@
       <doc-signatures v-if="pdfVisible" :fileUrl="fileUrl" :pdfItem="pdfItem" :order="order"/>
     </el-dialog>
     <el-dialog :visible.sync="modifyVisible" :show-close="true" width="80%" append-to-body :close-on-click-modal="false">
-      <reconciliation-order-modify-form v-if="modifyVisible" :order="modifyForm" @callback="callback"/>
+      <reconciliation-order-modify-form v-if="modifyVisible" :order="modifyForm" @callback="callback" :tableCol="tableColCopy"/>
     </el-dialog>
   </div>
 </template>
@@ -66,6 +69,7 @@ import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
 import { FilesUpload } from '@/components'
 import DocSignatures from '@/views/order/delivery-recon/components/DocSignatures'
 import ReconciliationOrderModifyForm from '../form/ReconciliationOrderModifyForm'
+import ReconciliationDetailAddition from './ReconciliationDetailAddition'
 
 export default {
   name: 'ReconciliationOrdersDetailV2',
@@ -76,7 +80,8 @@ export default {
     FilesUpload,
     ReconciliationDetailHeader,
     DocSignatures,
-    ReconciliationOrderModifyForm
+    ReconciliationOrderModifyForm,
+    ReconciliationDetailAddition
   },
   computed: {
     isReceiveParty: function () {
@@ -141,7 +146,9 @@ export default {
       modifyForm: {
         id: '',
         entries: []
-      }
+      },
+      tableCol: JSON.parse(JSON.stringify(this.$store.state.ReconciliationOrdersV2Module.tableCol)),
+      tableColCopy: JSON.parse(JSON.stringify(this.$store.state.ReconciliationOrdersV2Module.tableCol))
     }
   },
   methods: {
@@ -164,14 +171,21 @@ export default {
     },
     initData (data) {
       let order = JSON.parse(JSON.stringify(data));
+      order.colNames = [];
 
-      if (order.colNames && order.colNames.length > 0) {
-        order.colNames = data.colNames.map(item => {
-          return {
+      if (data.colNames && data.colNames.length > 0) {
+        // order.colNames = data.colNames.map(item => {
+        //   return {
+        //     id: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36),
+        //     value: item
+        //   }
+        // })
+        data.colNames.forEach(item => {
+          order.colNames.push({
             id: Number(Math.random().toString().substr(3, 3) + Date.now()).toString(36),
             value: item
-          }
-        })  
+          });
+        }) 
   
         let index;
         order.entries.forEach(item => {
@@ -315,9 +329,14 @@ export default {
       const form = {
         id: this.order.id,
         colNames: this.order.colNames,
-        entries: this.order.entries
+        entries: this.order.entries,
+        remarks: this.order.remarks,
+        additionalCharges: this.order.additionalCharges ? this.order.additionalCharges : [],
+        medias: this.order.medias ? this.order.medias : []
       };
       this.modifyForm = JSON.parse(JSON.stringify(form));
+
+      this.tableColCopy = JSON.parse(JSON.stringify(this.tableCol));
       this.modifyVisible = true;
     },
     callback () {
@@ -356,5 +375,11 @@ export default {
     color: white;
     width: 90px;
     height: 35px;
+  }
+
+  .title-text {
+    font-size: 14px;
+    color: #606266;
+    margin: 0px;
   }
 </style>

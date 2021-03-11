@@ -149,7 +149,7 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="供应商" prop="cooperatorName" min-width="100px">
+        <el-table-column label="供应商" prop="cooperatorName" min-width="100px" v-if="!isFromCost">
           <template slot-scope="scope">
             <el-form-item>
               <el-input v-model="scope.row.cooperatorName" style="width: 90px"></el-input>
@@ -231,7 +231,7 @@ import MaterialsImport from './MaterialsImport'
 
 export default {
   name: 'MaterialAppendTable',
-  props: ['formData', 'entries'],
+  props: ['formData', 'entries', 'isFromCost'],
   components: {
     MaterialsImport
   },
@@ -323,12 +323,12 @@ export default {
       result = result.concat(materials);
 
       result.forEach(item => {
-        item.estimatedLoss = Number.parseFloat(item.estimatedLoss) / 100;
+        this.$set(item, 'estimatedLoss', (Number.parseFloat(item.estimatedLoss) / 100).toFixed(2));
         
         if (Number.isNaN(Number.parseFloat(item.emptySent))) {
-          item.emptySent = 1;
+          this.$set(item, 'emptySent', 1.00);
         } else {
-          item.emptySent = Number.parseFloat(item.emptySent) / 100;
+          this.$set(item, 'emptySent', (Number.parseFloat(item.emptySent) / 100).toFixed(2));
         }
       })
       return result;

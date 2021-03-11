@@ -92,12 +92,16 @@
   }
 </script>
 
-<style>
+<style scoped>
   .requirement-toolbar .formLabel {
     font-size: 12px;display: inline-block;
   }
 
   .requirement-toolbar .el-range-editor--mini .el-range-separator{
     width: 30px;
+  }
+
+  .requirement-toolbar >>> .el-form-item {
+    margin-bottom: 0px;
   }
 </style>

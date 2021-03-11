@@ -18,7 +18,7 @@
             <h6>工单号：{{formData.code}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>关联款号：{{formData.task.productionTask.product.skuID}}</h6>
+            <h6>关联款号：{{formData.task.costOrder.productionOrder.productSkuID}}</h6>
           </el-col>
           <el-col :span="6">
             <h6>关联需求：
@@ -168,7 +168,13 @@ export default {
         item.state !== 'WAIT_TO_REV_MATERIALS'
       )
       if (flag) {
-        this._onFinish();
+        this.$confirm('是否确认采购完成?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onFinish();
+        });
       } else {
         this.$message.error('工单内的所有采购单收料完成才能执行采购完成操作！');
       }
