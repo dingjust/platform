@@ -28,7 +28,8 @@ class FactoryButtonsSection extends StatelessWidget {
                   _buildRequirementCenter(context),
                   _buildMaterial(context),
                   _buildContractManage(context),
-                  _buildOrderCoordination(context),
+                  // _buildOrderCoordination(context),
+                  _buildProductOrdering(context),
                   _builRequirement(context),
                 ],
               ),
@@ -114,6 +115,20 @@ class FactoryButtonsSection extends StatelessWidget {
           },
           title: '我的发布',
         ));
+  }
+
+  Widget _buildProductOrdering(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: ImageNumButton(
+        image: B2BImage.productOrdering(),
+        onPressed: () {
+          // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
+          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
+        },
+        title: '看款下单',
+      ),
+    );
   }
 }
 

@@ -45,8 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
-        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
-            AppRoutes.ROUTE_MY_ACCOUNT),
+        // MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
+        //     AppRoutes.ROUTE_MY_ACCOUNT),
+        MenuItem(B2BImage.myIntegral(width: 25, height: 25), '积分中心',
+            AppRoutes.ROUTE_MY_INTEGRAL_CENTER),
         menuSeparator,
         CompanyIntroductionMenuItem(),
         menuSeparator,
@@ -59,6 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
         MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理',
             AppRoutes.ROUTE_MY_INVOICES),
         menuSeparator,
+      ]),
+      Menu('', <Widget>[
+        MenuItem(B2BImage.luckeyMoney(width: 25, height: 25), '邀请好友',
+            AppRoutes.ROUTE_ACTIVITY_INVITE),
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服',
@@ -184,24 +190,52 @@ class _MyHomePageState extends State<MyHomePage> {
       return Container(
         height: 100,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 20),
-                      child: Text(
-                        "${user.name}",
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: const Color.fromRGBO(36, 38, 41, 1),
+                Container(
+                  child: Text(
+                    "${user.name}",
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: const Color.fromRGBO(36, 38, 41, 1),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  decoration: BoxDecoration(
+                      color: Color(0xFFffb118),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 5),
+                        child: Icon(
+                          B2BIcons.integral,
+                          size: 12,
                         ),
                       ),
-                    ))
+                      FutureBuilder(
+                          future: IntegralRepository.getIntegralInfo(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<UserIntegralInfo> snapshot) {
+                            int i = 0;
+                            if (snapshot.hasData)
+                              i = snapshot.data.availablePoints;
+                            return Text(
+                              '积分:$i',
+                              style: TextStyle(fontSize: 12),
+                            );
+                          })
+                    ],
+                  ),
+                )
               ],
             ),
             Row(
@@ -404,10 +438,9 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  MyFactoryPage(
-                    factoryUid: UserBLoC.instance.currentUser.companyCode,
-                  ),
+              builder: (context) => MyFactoryPage(
+                factoryUid: UserBLoC.instance.currentUser.companyCode,
+              ),
             ),
           );
 //          });

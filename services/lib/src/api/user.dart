@@ -91,8 +91,7 @@ abstract class UserApis {
       };
 
   ///重置密码
-  static get resetPasswordByPassword =>
-          (id) {
+  static get resetPasswordByPassword => (id) {
         return '/{baseSiteId}/users/$id/password';
       };
 
@@ -258,4 +257,20 @@ abstract class UserApis {
 
   ///创建印章
   static get sealSave => '/{baseSiteId}/user/seal/save';
+
+  ///获取用户当前积分信息
+  static get userIntegralInfo => '/{baseSiteId}/user/points';
+
+  ///获取用户当前积分记录
+  static get userIntegralHistory => '/{baseSiteId}/user/points/record';
+
+  ///获取用户当前积分兑换记录
+  static get userIntegralExchangeHistory =>
+      '/{baseSiteId}/user/points/exchange/my/apply/list';
+
+  ///获取积分兑换规则
+  static get userIntegralExchangeRule => '/{baseSiteId}/points/exchange/ratio';
+
+  ///积分兑换
+  static get integralExchange => '/{baseSiteId}/user/points/exchange/apply';
 }

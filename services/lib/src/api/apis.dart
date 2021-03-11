@@ -10,8 +10,7 @@ class Apis {
       };
 
   /// 获取省份下的城市列表 GET
-  static get citiesForRegion =>
-          (region) {
+  static get citiesForRegion => (region) {
         return '/{baseSiteId}/regions/$region/cities';
       };
 

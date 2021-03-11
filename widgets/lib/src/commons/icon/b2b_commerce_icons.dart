@@ -161,6 +161,14 @@ class B2BIcons {
   /// 合同
   static const IconData agreement = const IconData(0xe63a,
       fontFamily: 'b2bIcons22', matchTextDirection: true);
+
+  /// 积分
+  static const IconData integral = const IconData(0xe6b0,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
+
+  /// 兑换箭头
+  static const IconData swap = const IconData(0xe672,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
 }
 
 class CommonImage {

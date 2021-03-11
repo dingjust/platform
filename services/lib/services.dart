@@ -162,8 +162,15 @@ export 'src/user/response/company_response.dart';
 export 'src/user/response/cooperator_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
+export 'src/user/repository/integral_repository.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/websocket/websocket_service.dart';
+export 'src/user/repository/integral_repository.dart';
+
+export 'src/user/state/user_integral_state.dart';
+export 'src/user/response/integral_response.dart';
+
+export 'src/activity/invite_acivity.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

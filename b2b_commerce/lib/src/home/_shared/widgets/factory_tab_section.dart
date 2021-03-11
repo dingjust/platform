@@ -74,7 +74,7 @@ class NewFactoryListView extends StatelessWidget {
                     .toList(),
               )
             : Column(
-          children: <Widget>[NoDataShow()],
+                children: <Widget>[NoDataShow()],
               ),
       )),
     );
@@ -233,11 +233,10 @@ class _FactoryItem extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            MyFactoryPage(
-              factoryUid: model.uid,
-              isFactoryDetail: true,
-            ),
+        builder: (context) => MyFactoryPage(
+          factoryUid: model.uid,
+          isFactoryDetail: true,
+        ),
       ),
     );
   }

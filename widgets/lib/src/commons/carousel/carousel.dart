@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 
 /// 轮播图
-class Carousel<T extends MediaModel> extends StatefulWidget {
+class Carousel<T extends CarouselItem> extends StatefulWidget {
   Carousel(this.items, this.height, {this.scrollDirection = Axis.horizontal});
 
   final List<T> items;
@@ -26,7 +26,7 @@ class _CarouselState extends State<Carousel> {
   PageController _pageController = PageController(initialPage: length ~/ 2);
 
   List<Widget> _indicators = [];
-  List<MediaModel> _items = [];
+  List<CarouselItem> _items = [];
 
   Timer _timer;
   Duration _duration = Duration(seconds: 3);
@@ -138,7 +138,7 @@ class _CarouselState extends State<Carousel> {
   }
 
   Widget _buildItem(BuildContext context, int index) {
-    MediaModel item = _items[index];
+    CarouselItem item = _items[index];
     return GestureDetector(
       onTapDown: (down) {
         _isEndScroll = false;
@@ -146,22 +146,25 @@ class _CarouselState extends State<Carousel> {
       onTapUp: (up) {
         _isEndScroll = true;
       },
+      onLongPress: () {
+        if (item.onTap != null) {
+          item.onTap.call();
+        }
+      },
       onTap: () {
-//          Navigator.of(context).push(MaterialPageRoute(
-//              builder: (context) => BannerJumpDetailPage())
-//          );
+        if (item.onTap != null) {
+          item.onTap.call();
+        }
       },
       child: CachedNetworkImage(
-          imageUrl: item.url,
+          imageUrl: item.model.url,
           fit: BoxFit.fill,
-          placeholder: (context, url) =>
-              SpinKitRing(
+          placeholder: (context, url) => SpinKitRing(
                 color: Colors.black12,
                 lineWidth: 2,
                 size: 30.0,
               ),
-          errorWidget: (context, url, error) =>
-              SpinKitRing(
+          errorWidget: (context, url, error) => SpinKitRing(
                 color: Colors.black12,
                 lineWidth: 2,
                 size: 30,
@@ -181,4 +184,11 @@ class _CarouselState extends State<Carousel> {
       ),
     );
   }
+}
+
+class CarouselItem {
+  final MediaModel model;
+  final VoidCallback onTap;
+
+  CarouselItem({this.model, this.onTap});
 }

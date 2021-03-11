@@ -60,6 +60,10 @@ class UserModel extends PrincipalModel {
   ///钉钉昵称
   String dingTalkNickname;
 
+  ///会员积分
+  @JsonKey(fromJson: _pointFromJson)
+  int points;
+
   Image get avatar =>
       profilePicture ??
       CachedNetworkImage(
@@ -83,17 +87,18 @@ class UserModel extends PrincipalModel {
       int id,
       String uid,
       String name,
-      this.loginDisabled,
-      this.type,
-      this.roles,
-      this.status,
-      this.mobileNumber,
-      this.b2bUnit,
-      this.weChatOpenid,
-      this.weChatHeadImg,
-      this.dingTalkOpenid,
-      this.dingTalkHeadImg,
-      this.dingTalkNickname})
+        this.loginDisabled,
+        this.type,
+        this.roles,
+        this.status,
+        this.mobileNumber,
+        this.b2bUnit,
+        this.weChatOpenid,
+        this.weChatHeadImg,
+        this.dingTalkOpenid,
+        this.dingTalkHeadImg,
+        this.dingTalkNickname,
+        this.points = 0})
       : super(profilePicture: profilePicture, uid: uid, name: name, id: id);
 
   UserModel.empty() {
@@ -118,6 +123,8 @@ class UserModel extends PrincipalModel {
 
   static Map<String, dynamic> _mediaToJson(MediaModel model) =>
       model == null ? null : MediaModel.toJson(model);
+
+  static int _pointFromJson(int val) => val == null ? 0 : val;
 }
 
 /// 客户
@@ -133,14 +140,16 @@ class CustomerModel extends UserModel {
     bool loginDisabled,
     List<RoleModel> roles,
     String mobileNumber,
+    int points,
   }) : super(
-            id: id,
-            profilePicture: profilePicture,
-            uid: uid,
-            name: name,
-            loginDisabled: loginDisabled,
-            roles: roles,
-            mobileNumber: mobileNumber);
+      id: id,
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      loginDisabled: loginDisabled,
+      roles: roles,
+      mobileNumber: mobileNumber,
+      points: points);
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CustomerModelFromJson(json);
@@ -197,7 +206,7 @@ class B2BCustomerModelExt extends B2BCustomerModel {
   @JsonKey(toJson: B2BDeptModel.toJson)
   B2BDeptModel b2bDept;
 
-  ///是否主主张
+  ///是否主账号
   bool root;
 
   B2BCustomerModelExt({int id,

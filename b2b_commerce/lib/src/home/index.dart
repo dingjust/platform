@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_tab_section.dart';
@@ -106,6 +107,9 @@ class _HomePageState extends State<HomePage> {
       helper.checkCertificationStatus(context);
       helper.hasInfoValidate = true;
     }
+
+    //活动弹窗
+    // ActivityHelper.instance.showActivity(context);
   }
 
   @override
@@ -175,35 +179,58 @@ class HomeTitle extends StatelessWidget {
 
 /// 首页Banner
 class HomeBrandBannerSection extends StatelessWidget {
-  final List<MediaModel> items = <MediaModel>[
-    MediaModel(
-      url: '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%9B%BE%E7%89%87.png',
-    ),
-    MediaModel(
-      url:
-          '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
-    )
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Carousel(items, 240);
+    return Carousel(<CarouselItem>[
+      CarouselItem(
+        model: MediaModel(
+          url: '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%9B%BE%E7%89%87.png',
+        ),
+      ),
+      CarouselItem(
+        model: MediaModel(
+          url:
+          '${GlobalConfigs
+              .CDN_OSS_DOMAIN}/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+        ),
+      ),
+      CarouselItem(
+          model: MediaModel(
+            url:
+            '${GlobalConfigs
+                .CDN_OSS_DOMAIN}/activity/invite_activity_banner1.jpg',
+          ),
+          onTap: () {
+            Navigator.of(context).pushNamed(AppRoutes.ROUTE_ACTIVITY_INVITE);
+          })
+    ], 240);
   }
 }
 
 class HomeFactoryBannerSection extends StatelessWidget {
-  final List<MediaModel> items = <MediaModel>[
-    MediaModel(
-      url: '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%9B%BE%E7%89%87.png',
-    ),
-    MediaModel(
-      url:
-          '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
-    )
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Carousel(items, 240);
+    return Carousel(<CarouselItem>[
+      CarouselItem(
+        model: MediaModel(
+          url: '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%9B%BE%E7%89%87.png',
+        ),
+      ),
+      CarouselItem(
+          model: MediaModel(
+            url:
+            '${GlobalConfigs
+                .CDN_OSS_DOMAIN}/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
+          )),
+      CarouselItem(
+          model: MediaModel(
+            url:
+            '${GlobalConfigs
+                .CDN_OSS_DOMAIN}/activity/invite_activity_banner1.jpg',
+          ),
+          onTap: () {
+            Navigator.of(context).pushNamed(AppRoutes.ROUTE_ACTIVITY_INVITE);
+          })
+    ], 240);
   }
 }

@@ -116,6 +116,10 @@ class B2BImage {
     return getImage('temp/my/my_account.png', width: width, height: height);
   }
 
+  static Image myIntegral({double width, double height}) {
+    return getImage('temp/my/my_integral.png', width: width, height: height);
+  }
+
   static Image setting({double width, double height}) {
     return getImage('temp/my/setting.png', width: width, height: height);
   }
@@ -154,6 +158,10 @@ class B2BImage {
 
   static Image qqZone({double width, double height}) {
     return getImage('temp/common/qq_zone.png', width: width, height: height);
+  }
+
+  static Image shareQrCode({double width, double height}) {
+    return getImage('temp/common/qr_code.png', width: width, height: height);
   }
 
   static Image signed({double width, double height}) {
@@ -329,5 +337,26 @@ class B2BImage {
   static Image quoteProcess({double width, double height}) {
     return getImage('temp/index/quote_process.png',
         width: width, height: height);
+  }
+
+  ///红包
+  static Image luckeyMoney({double width, double height}) {
+    return getImage('temp/my/lucky_money.png', width: width, height: height);
+  }
+
+  ///红包2
+  static Image luckeyMoney2({double width, double height}) {
+    return getImage('temp/activity/lucky_money2.png',
+        width: width, height: height);
+  }
+
+  ///礼物
+  static Image gifit({double width, double height}) {
+    return getImage('temp/activity/gifit.png', width: width, height: height);
+  }
+
+  ///成功
+  static Image success({double width, double height}) {
+    return getImage('temp/success.png', width: width, height: height);
   }
 }

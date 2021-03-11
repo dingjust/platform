@@ -75,7 +75,7 @@ void showUncertifiedDialog(bool blockPopup,
     VoidCallback physicalBackButton}) {
   BotToast.showCustomText(
     clickClose: false,
-    onlyOne: true,
+    onlyOne: false,
     duration: null,
     // wrapAnimation: (controller, cancel, child) => BackgroundRoute(
     //   child: child,
@@ -85,8 +85,7 @@ void showUncertifiedDialog(bool blockPopup,
     //     physicalBackButton?.call();
     //   },
     // ),
-    wrapToastAnimation: (controller, cancel, child) =>
-        Stack(
+    wrapToastAnimation: (controller, cancel, child) => Stack(
           children: <Widget>[
             GestureDetector(
               onTap: () {

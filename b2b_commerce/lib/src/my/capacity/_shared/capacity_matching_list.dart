@@ -48,13 +48,12 @@ class CapacityMatchingListView extends StatelessWidget {
             children: [
               capacityMatchingState.factoryCapacityModels.isNotEmpty
                   ? Column(
-                children: capacityMatchingState.factoryCapacityModels
-                    .map((model) =>
-                    CapacityMatchingItem(
-                      model: model,
-                    ))
-                    .toList(),
-              )
+                      children: capacityMatchingState.factoryCapacityModels
+                          .map((model) => CapacityMatchingItem(
+                                model: model,
+                              ))
+                          .toList(),
+                    )
                   : _NoDataInfoRow(),
               ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
                 opacity: capacityMatchingState.loadingMore ? 1.0 : 0,

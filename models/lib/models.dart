@@ -40,6 +40,7 @@ export 'src/user_agreement/user_agreement.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
 export 'src/doc/doc_signature.dart';
+export 'src/user/integral.dart';
 
 part 'models.g.dart';
 

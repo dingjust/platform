@@ -85,21 +85,21 @@ class ProductsHomePageView extends StatelessWidget {
               ),
             ],
           ),
-            )),
+        )),
         ProductsRecommendSection(),
         SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '已到底',
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '已到底',
+                textAlign: TextAlign.center,
               ),
-            )),
+            ],
+          ),
+        )),
       ],
     ));
   }
@@ -132,18 +132,19 @@ class ProductsHeaderCarousels extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ProductHomeCarouselsState>(
         builder: (context, ProductHomeCarouselsState state, _) {
-      List<MediaModel> medias = state
-          .headerCarousels()
-          .where((carousel) => carousel.media != null)
-          .map((carousel) => MediaModel(url: carousel.media.normalUrl()))
-          .toList();
+          List<CarouselItem> items = state
+              .headerCarousels()
+              .where((carousel) => carousel.media != null)
+              .map((carousel) =>
+              CarouselItem(model: MediaModel(url: carousel.media.normalUrl())))
+              .toList();
 
       // //若为空采用静态图
-      if (medias == null || medias.isEmpty) {
-        return Container();
-      }
+          if (items == null || items.isEmpty) {
+            return Container();
+          }
 
-      return Carousel(medias, 240);
+          return Carousel(items, 240);
     });
   }
 }
@@ -158,16 +159,17 @@ class ProductsBodyCarousels extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ProductHomeCarouselsState>(
         builder: (context, ProductHomeCarouselsState state, _) {
-      List<MediaModel> medias = state
-          .bodyCarousels()
-          .where((carousel) => carousel.media != null)
-          .map((carousel) => MediaModel(url: carousel.media.detailUrl()))
-          .toList();
+          List<CarouselItem> items = state
+              .bodyCarousels()
+              .where((carousel) => carousel.media != null)
+              .map((carousel) =>
+              CarouselItem(model: MediaModel(url: carousel.media.detailUrl())))
+              .toList();
 
       // //若为空采用静态图
-      if (medias == null || medias.isEmpty) {
-        return Container();
-      }
+          if (items == null || items.isEmpty) {
+            return Container();
+          }
 
       return Container(
           height: height,
@@ -175,7 +177,7 @@ class ProductsBodyCarousels extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Carousel(
-              medias,
+              items,
               height,
               scrollDirection: Axis.vertical,
             ),

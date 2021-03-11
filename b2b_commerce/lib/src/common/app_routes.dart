@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/activity/invite/invite_page.dart';
 import 'package:b2b_commerce/src/business/apparel_products_brand.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperator_form.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
@@ -29,6 +30,7 @@ import 'package:b2b_commerce/src/home/product/index.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
+import 'package:b2b_commerce/src/my/integral/integral_center_page.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
@@ -146,6 +148,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_CLIENT_SERVICES = '/my/my_client_services';
   static const ROUTE_MY_SETTINGS = '/my/my_settings';
   static const ROUTE_MY_HELP = '/my/my_helps';
+  static const ROUTE_MY_INTEGRAL_CENTER = '/my/integral_center';
 
   static const ROUTE_MY_REGISTER = '/my/account/register';
   static const ROUTE_MY_REGISTER_BRAND = '/my/account/register_brand';
@@ -160,6 +163,8 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_WEBVIEW_PAGE = '/webview_page';
 
   static const ROUTE_AUTH_REQUEST_PAGE = '/auth_request_page';
+
+  static const ROUTE_ACTIVITY_INVITE = '/activity/invite';
 
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
@@ -186,6 +191,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
     ROUTE_MY_SETTINGS: (context) => MySettingsPage(),
     ROUTE_MY_REGISTER: (context) => RegisterPage(),
+    ROUTE_MY_INTEGRAL_CENTER: (context) => IntegralCenterPage(),
     // ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
     ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
     ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage(),
@@ -205,26 +211,34 @@ class AppRoutes with GlobalRoutes {
     ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT: (context) =>
         ExternalSaleOrderImportPage(),
     ROUTE_OUT_ORDERS: (context) => OutOrdersPage(),
-    ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
+    ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) =>
+        ExternalSaleOrderDetailPage(
           id: getVal('id', context),
           titile: getVal('title', context),
         ),
     ROUTE_PRODUCTION_TASK_ORDER_DETAIL: (context) =>
         ProductionTaskOrderEntryDetailPage(
-            id: ModalRoute.of(context).settings.arguments),
+            id: ModalRoute
+                .of(context)
+                .settings
+                .arguments),
     ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage(),
-    ROUTE_OUT_PRODUCTION_TASK_ORDERS: (context) => OutProductionTaskOrdersPage(),
+    ROUTE_OUT_PRODUCTION_TASK_ORDERS: (context) =>
+        OutProductionTaskOrdersPage(),
     ROUTE_OUT_ORDER_FORM: (context) => OutOrderForm(),
     ROUTE_COOPERATORS: (context) => CooperatorsPage(),
     ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm(),
     ROUTE_DELIVERY_ORDERS: (context) => DeliveryOrdersPage(),
-    ROUTE_DELIVERY_ORDER_DETAIL: (context) => DeliveryOrderDetailPage(
-        id: getVal('id', context), needRefresh: getVal('needRefresh', context)),
+    ROUTE_DELIVERY_ORDER_DETAIL: (context) =>
+        DeliveryOrderDetailPage(
+            id: getVal('id', context),
+            needRefresh: getVal('needRefresh', context)),
     ROUTE_RECONCILIATION_ORDERS: (context) => ReconciliationOrdersPage(),
     ROUTE_RECONCILIATION_ORDER_DETAIL: (context) =>
         ReconciliationOrderDetailPage(
             id: getVal('id', context),
             needRefresh: getVal('needRefresh', context)),
+    ROUTE_ACTIVITY_INVITE: (context) => InvitePage(),
   };
 
   static dynamic getVal(String key, BuildContext context) {
