@@ -15,7 +15,7 @@
       <cost-order-toolbar @onAdvancedSearch="onAdvancedSearch" :queryFormData="queryFormData" />
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
-          <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
+          <el-tab-pane :label="tabName(item)" :name="item.code" :key="item.code">
             <cost-order-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
           </el-tab-pane>
         </template>
@@ -47,7 +47,8 @@ export default {
         statuses: 'PENDING_ACCOUNT'
       },
       activeName: 'PENDING_ACCOUNT',
-      statuses: this.$store.state.EnumsModule.CostOrderType
+      statuses: this.$store.state.EnumsModule.CostOrderType,
+      stateCount: {}
     }
   },
   computed: {
@@ -59,15 +60,42 @@ export default {
     ...mapActions({
       searchAdvanced: 'searchAdvanced'
     }),
-    onAdvancedSearch (page, size) {
+    onAdvancedSearch (page, size, isTabChange) {
       const query = this.queryFormData;
       const url = this.apis().searchCostOrder();
  
       this.searchAdvanced({url, query, page, size});
+      if (!isTabChange) {
+        this.searchCostOrderCout();
+      }
+    },
+    async searchCostOrderCout() {
+      let query = Object.assign({}, this.queryFormData);
+      query.statuses = '';
+
+      const url = this.apis().searchCostOrderCout();
+      const result = await this.$http.post(url, query);
+      if (result['errors']) {
+        this.stateCount = {};
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 0) {
+        this.stateCount = {};
+        this.$message.error(result.msg);
+        return;
+      }
+      this.stateCount = result.data;
+    },
+    tabName(tab) {
+      if (this.stateCount.hasOwnProperty(tab.code)) {
+        return tab.name + '(' + this.stateCount[tab.code] + ')';
+      }
+      return tab.name;
     },
     handleClick (tab, event) {
       this.queryFormData.statuses = tab.name;
-      this.onAdvancedSearch();
+      this.onAdvancedSearch(0, 10, true);
     }
   },
   created () {

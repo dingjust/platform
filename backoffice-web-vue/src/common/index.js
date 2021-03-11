@@ -1827,6 +1827,10 @@ let NONE_TENANT_APIS = {
   searchCostOrder () {
     return '/b2b/cost/order';
   },
+  // 成本单统计
+  searchCostOrderCout () {
+    return '/b2b/cost/order/state/count'
+  },
   // 查询成本单详情
   getCostOrder (id) {
     return '/b2b/cost/order/' + id;
