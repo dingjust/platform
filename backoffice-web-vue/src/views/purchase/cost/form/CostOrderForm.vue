@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label="关联订单" prop="productionOrder.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
             <el-input v-model="formData.productionOrder.code" :disabled="true">
-              <el-button slot="suffix" @click="taskDialogVisible = true" v-if="!formData.id">选择</el-button>
+              <el-button slot="suffix" @click="selectVisible = true" v-if="!formData.id">选择</el-button>
             </el-input>
           </el-form-item>
           <el-form-item label="关联款号">
@@ -35,9 +35,15 @@
         <el-button class="create-btn" @click="onCreate">{{formData.id ? '修改' : '创建'}}</el-button>
       </el-row>
     </el-card> 
+    <el-dialog :visible.sync="selectVisible" title="选择工单类型" width="400px" append-to-body :close-on-click-modal="false">
+      <el-row type="flex" justify="space-around" align="middle">
+        <el-button size="medium" plain class="order-btn" @click="selectProduction('PRODUCTION')">生产工单</el-button>
+        <el-button size="medium" plain class="order-btn" @click="selectProduction('OUT_PRODUCTION')">外发生产工单</el-button>
+      </el-row>
+    </el-dialog>
     <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <production-task-select-dialog v-if="taskDialogVisible" @onSelectTask="onSelectTask" 
+      <production-task-select-dialog v-if="taskDialogVisible" @onSelectTask="onSelectTask" :productionType="productionType"
                                 :isSingleChoice="true" selectType="PURCHASE_REQUIREMENT"/>
     </el-dialog>
   </div>
@@ -58,6 +64,7 @@ export default {
   data () {
     return {
       taskDialogVisible: false,
+      selectVisible: false,
       formData: {
         code: '',
         productionOrder: {
@@ -74,6 +81,11 @@ export default {
     }
   },
   methods: {
+    selectProduction (flag) {
+      this.productionType = flag;
+      this.selectVisible = false;
+      this.taskDialogVisible = true;
+    },
     onSelectTask (data) {
       this.formData.productionOrder = {
         id: data[0] ? data[0].id : '',

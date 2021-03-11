@@ -65,9 +65,14 @@ export default {
         totalElements: 0, // 总数目数
         content: [] // 当前页数据
       },
-      orderType: 'DELIVERY', // 页面订单类型 DELIVERY(出货单) RECONCILIATION(对账单新)
-      activeName: 'PENDING_RECONCILED',
+      orderType: 'RECONCILIATION', // 页面订单类型 DELIVERY(出货单) RECONCILIATION(对账单新)
+      activeName: '全部',
       statuses: [
+        // 对账单全部在前
+         {
+          code: '全部',
+          name: '全部'
+        },
         // 出货单状态
         {
           code: 'PENDING_RECONCILED',
@@ -89,15 +94,12 @@ export default {
         }, {
           code: 'CANCELLED',
           name: '已取消'
-        }, {
-          code: '全部',
-          name: '全部'
         }
       ],
       queryFormData: {
         keyword: '',
         cooperatorName: '',
-        states: 'PENDING_RECONCILED',
+        states: '',
         // partyType: "PARTYB",
         createdDateFrom: '',
         createdDateTo: ''

@@ -20,7 +20,9 @@
         <el-table-column label="金额">
           <template slot-scope="scope">
             <el-form-item :prop="'additionalCharges.' + scope.$index + '.amount'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <el-input v-model="scope.row.amount"></el-input>
+              <el-input v-model="scope.row.amount" 
+                @change="inputChange(scope.$index, 'unitContractPrice')"
+                v-number-input.float="{ decimal: 2 }"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -56,7 +58,14 @@ export default {
     },
     onDelete (index) {
       this.formData.additionalCharges.splice(index, 1);
-    }
+    },
+    inputChange (index, attribute) {
+      const regexp = /^.*\.$/;
+      if (regexp.test(this.formData.additionalCharges[index][attribute])) {
+        this.formData.additionalCharges[index][attribute] = 
+          Number.parseFloat(this.formData.additionalCharges[index][attribute].slice(0, this.formData.additionalCharges[index][attribute].length - 1));
+      }
+    },
   }
 }
 </script>
