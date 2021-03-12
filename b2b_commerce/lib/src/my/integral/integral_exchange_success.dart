@@ -36,10 +36,10 @@ class _IntegralExchangeSuccessPageState
                     margin: EdgeInsets.only(top: 10),
                     child: Text('兑换申请已提交，请等待审核'),
                   ),
-                  ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Color(0xFFFFD60C))),
+                  TextButton(
+                      // style: ButtonStyle(
+                      //     backgroundColor:
+                      //         MaterialStateProperty.all(Color(0xFFFFD60C))),
                       onPressed: () {
                         Navigator.of(context).pop(true);
                       },
