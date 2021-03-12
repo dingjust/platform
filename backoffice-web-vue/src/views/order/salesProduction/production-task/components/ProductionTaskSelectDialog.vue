@@ -68,6 +68,10 @@
       },
       selectType: {
         type: String
+      },
+      productionType: {
+        type: String,
+        default: 'PRODUCTION'
       }
     },
     components: {
@@ -103,7 +107,12 @@
           sizeS = size;
         }
         const query = this.queryFormData;
-        const url = this.apis().getProductionOrders();
+        let url;
+        if (this.productionType === 'PRODUCTION') {
+          url = this.apis().getProductionOrders();
+        } else {
+          url = this.apis().getoutboundProductionList();
+        }
         const result = await this.$http.post(url, query, {
           page: pageS,
           size: sizeS
@@ -191,7 +200,7 @@
       if (this.selectType === 'OUTBOUND_ORDER') {
         this.queryFormData.haveOutOrder = 'nothaveOutOrder'
       } else if (this.selectType === 'PURCHASE_REQUIREMENT') {
-        this.queryFormData.haveOutOrder = 'nothaveOutOrder'
+        // this.queryFormData.haveOutOrder = 'nothaveOutOrder'
         this.queryFormData.state = 'TO_BE_PRODUCED'
       }
       this.onAdvancedSearch(0, 10);

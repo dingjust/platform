@@ -49,6 +49,13 @@
           <span> {{getEnum('CooperatorType',scope.row.type)}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="认证状态">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.approvalStatus === 'approved' ? 'success' : 'error'" v-if="scope.row.partner">
+            {{getEnum('AuthApprovalStatus', scope.row.partner.approvalStatus)}}
+          </el-tag>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pt-2"></div>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
