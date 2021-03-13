@@ -306,7 +306,7 @@ class _Header extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-                '${CooperatorHelper.getCooperatorName(order.targetCooperator, order.originCompany, order.originCooperator)}',
+            '${CooperatorHelper.getCooperatorName(order.targetCooperator, order.originCompany, order.originCooperator)}',
             style: TextStyle(fontSize: 16),
             overflow: TextOverflow.ellipsis,
           )),
@@ -351,7 +351,7 @@ class _EntriesInfo extends StatelessWidget {
   }
 
   Widget _buildItem(BuildContext context, ProductionTaskOrderModel entry,
-      {double height = 60.0}) {
+      {double height = 80.0}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
       child: Material(
@@ -382,12 +382,15 @@ class _EntriesInfo extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    '${entry.product.name}',
-                                    style: TextStyle(fontSize: 18),
+                                  Expanded(
+                                    child: Text(
+                                      '${entry.product.name}',
+                                      style: TextStyle(fontSize: 17),
+                                    ),
                                   ),
                                   Text(
-                                      '交货时间：${DateFormatUtil.formatYMD(entry.deliveryDate)}')
+                                      '交货：${DateFormatUtil.formatYMD(
+                                          entry.deliveryDate)}')
                                 ],
                               ),
                               Row(
@@ -400,7 +403,7 @@ class _EntriesInfo extends StatelessWidget {
                                   ),
                                   Text('￥${entry.unitPrice}',
                                       style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 17,
                                           color: Color(0xffff1744)))
                                 ],
                               )
