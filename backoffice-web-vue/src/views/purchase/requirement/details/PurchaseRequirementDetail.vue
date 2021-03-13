@@ -51,7 +51,9 @@
           <order-audit-detail :processes="formData.auditWorkOrder.processes" />
         </template>
       </div>
-      <relation-cost-order v-if="formData.costOrder.id" :costOrderId="formData.costOrder.id"/>
+      <el-row style="margin-top: 20px">
+        <relation-cost-order v-if="formData.costOrder.id" :costOrderId="formData.costOrder.id"/>
+      </el-row>
       <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">

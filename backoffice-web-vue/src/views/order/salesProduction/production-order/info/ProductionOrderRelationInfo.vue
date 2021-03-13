@@ -35,7 +35,7 @@
         <purchase-order-basic-table v-if="isMySelf" :purchaseList="purchaseList"/>
       </el-tab-pane>
       <el-tab-pane label="成本单" name="成本单" :lazy="true">
-        <production-cost-list v-if="isMySelf" :productionId="id"/>
+        <production-cost-list :productionId="id"/>
       </el-tab-pane>
       <!-- <el-tab-pane label="财务" :lazy="true" v-if="isMySelf">
         <el-row v-if="isBrand()">

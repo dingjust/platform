@@ -79,15 +79,19 @@
       </el-table-column>
       <el-table-column label="下单数" prop="orderQuantity" min-width="120px">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.orderQuantity" v-if="!scope.row.countRow"
-                        v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
+          <el-input key="orderQuantity-Key"
+                    v-model="scope.row.orderQuantity" 
+                    v-if="!scope.row.countRow"
+                    v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
           <span v-else>{{scope.row.orderQuantity}}</span>
         </template>
       </el-table-column>
       <el-table-column label="裁数" prop="cutQuantity" min-width="120px">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.cutQuantity" v-if="!scope.row.countRow"
-                        v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
+          <el-input key="cutQuantity-Key" 
+                    v-model="scope.row.cutQuantity" 
+                    v-if="!scope.row.countRow"
+                    v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
           <span v-else>{{scope.row.cutQuantity}}</span>
         </template>
       </el-table-column>
@@ -96,8 +100,10 @@
           <span>装箱单数<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('packageQuantity')"/></span>
         </template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.packageQuantity" v-if="!scope.row.countRow"
-                        v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
+          <el-input key="packageQuantity-Key" 
+                    v-model="scope.row.packageQuantity" 
+                    v-if="!scope.row.countRow"
+                    v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
           <span v-else>{{scope.row.packageQuantity}}</span>
         </template>
       </el-table-column>
@@ -106,8 +112,10 @@
           <span>正品入库数<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('storageQuantity')"/></span>
         </template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.storageQuantity" v-if="!scope.row.countRow"
-                        v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
+          <el-input key="storageQuantity-Key" 
+                    v-model="scope.row.storageQuantity" 
+                    v-if="!scope.row.countRow"
+                    v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
           <span v-else>{{scope.row.storageQuantity}}</span>
         </template>
       </el-table-column>
@@ -116,7 +124,8 @@
           <span>合同单价（不含税）<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('unitContractPrice')"/></span>
         </template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.unitContractPrice"
+          <el-input key="unitContractPrice-Key" 
+                    v-model="scope.row.unitContractPrice"
                     v-if="!scope.row.countRow"
                     @change="inputChange(scope.$index, 'unitContractPrice')"
                     v-number-input.float="{ decimal: 2 }"></el-input>
@@ -128,7 +137,8 @@
           <span>快递费<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('expressFee')"/></span>
         </template>
         <template slot-scope="scope">
-          <el-input v-if="!scope.row.countRow"
+          <el-input key="expressFee-Key" 
+                    v-if="!scope.row.countRow"
                     v-model="scope.row.expressFee"
                     @change="inputChange(scope.$index, 'expressFee')"
                     v-number-input.float="{ decimal: 2 }"></el-input>
@@ -140,7 +150,8 @@
           <span>扣款<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('deductionAmount')"/></span>
         </template>
         <template slot-scope="scope">
-          <el-input v-if="!scope.row.countRow"
+          <el-input key="deductionAmount-Key" 
+                    v-if="!scope.row.countRow"
                     v-model="scope.row.deductionAmount"
                     @change="inputChange(scope.$index, 'deductionAmount')"
                     v-number-input.float="{ decimal: 2 }"></el-input>
@@ -152,8 +163,10 @@
           <span>退货<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('returnQuantity')"/></span>
         </template>
         <template slot-scope="scope">
-          <el-input v-model="scope.row.returnQuantity" v-if="!scope.row.countRow"
-                        v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+          <el-input key="returnQuantity-Key" 
+                    v-model="scope.row.returnQuantity" 
+                    v-if="!scope.row.countRow"
+                    v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
           <span v-else>{{scope.row.returnQuantity}}</span>
         </template>
       </el-table-column>
@@ -162,7 +175,8 @@
           <span>定金<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('depositAmount')"/></span>
         </template>
         <template slot-scope="scope">
-          <el-input v-if="!scope.row.countRow"
+          <el-input key="depositAmount-Key"
+                    v-if="!scope.row.countRow"
                     v-model="scope.row.depositAmount"
                     @change="inputChange(scope.$index, 'depositAmount')"
                     v-number-input.float="{ decimal: 2 }"></el-input>

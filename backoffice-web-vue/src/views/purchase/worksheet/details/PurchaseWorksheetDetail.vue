@@ -223,6 +223,11 @@ export default {
         },
         cooperatorName: '',
         task: {
+          costOrder: {
+            productionOrder: {
+              productSkuID: ''
+            }
+          },
           productionTask: {
             code: '',
             product: {

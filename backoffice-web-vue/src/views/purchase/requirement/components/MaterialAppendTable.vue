@@ -40,7 +40,7 @@
         </el-table-column>
         <el-table-column label="物料编号" prop="code" min-width="100px">
           <template slot="header">
-            <span>物料编号<span style="color: #F56C6C"> *</span></span>
+            <span>物料编号</span>
           </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.code'">
@@ -50,7 +50,7 @@
         </el-table-column>
         <el-table-column label="幅宽/型号" prop="modelName" min-width="100px">
           <template slot="header">
-            <span>幅宽/型号<span style="color: #F56C6C"> *</span></span>
+            <span>幅宽/型号</span>
           </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.modelName'">
@@ -76,7 +76,7 @@
         </el-table-column>
         <el-table-column label="物料颜色" prop="colorName" min-width="100px">
           <template slot="header">
-            <span>物料颜色<span style="color: #F56C6C"> *</span></span>
+            <span>物料颜色</span>
           </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.colorName'">

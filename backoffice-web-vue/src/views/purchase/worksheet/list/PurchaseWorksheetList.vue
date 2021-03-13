@@ -2,7 +2,7 @@
   <div class="shipping-order-list-container">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" >
       <el-table-column label="采购工单号" prop="code" min-width="100px"></el-table-column>
-      <el-table-column label="关联款号" prop="task.productionTask.product.skuID"></el-table-column>
+      <el-table-column label="关联款号" prop="task.costOrder.productionOrder.productSkuID"></el-table-column>
       <el-table-column label="物料名称" prop="materials.name"></el-table-column>
       <el-table-column label="物料类别" prop="materials.materialsType">
         <template slot-scope="scope">
@@ -15,7 +15,7 @@
           <span>{{requiredAmount(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="采购员" prop="cooperatorName"></el-table-column>
+      <el-table-column label="采购员" prop="task.merchandiser.name"></el-table-column>
       <el-table-column label="单位" prop="materials.unit"></el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
