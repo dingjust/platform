@@ -135,7 +135,7 @@
   }
 
   .elTagClass{
-    color: #0b0e0f;
+    color: #0b0e0f!important;
     margin-right: 20px;
     margin-bottom: 10px;
     cursor:pointer;

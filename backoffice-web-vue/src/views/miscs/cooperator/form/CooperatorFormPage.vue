@@ -177,7 +177,8 @@
 
   import ProgressPlanSelectDialog from '@/views/user/progress-plan/components/ProgressPlanSelectDialog';
   import ReconciliationPlanSelector from '@/views/user/reconciliation-plan/components/ReconciliationPlanSelector';
-  import { FilesUpload, FormLabel } from '@/components';
+  import FilesUpload from '@/components/custom/FilesUpload'
+  import FormLabel from '@/components/custom/FormLabel'
 
   export default {
     name: 'CooperatorFormPage',

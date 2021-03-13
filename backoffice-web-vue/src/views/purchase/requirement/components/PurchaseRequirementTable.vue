@@ -186,6 +186,7 @@ export default {
       }
     },
     appendMateriel () {
+      this.isModify = false;
       this.appendVisible = true;
     },
     onBOMImport () {

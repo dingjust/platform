@@ -17,7 +17,7 @@
           <span>{{getEnum('PointsExchangeState', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="提交时间" prop="processTime" min-width="120px">
+      <el-table-column label="处理时间" prop="processTime" min-width="120px">
         <template slot-scope="scope">
           <span v-if="scope.row.processTime">{{scope.row.processTime | formatDate}}</span>
         </template>
