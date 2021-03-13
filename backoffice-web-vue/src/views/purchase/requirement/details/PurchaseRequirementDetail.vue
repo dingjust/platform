@@ -51,6 +51,7 @@
           <order-audit-detail :processes="formData.auditWorkOrder.processes" />
         </template>
       </div>
+      <relation-cost-order v-if="formData.costOrder.id" :costOrderId="formData.costOrder.id"/>
       <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
@@ -85,6 +86,7 @@ import { OrderAuditDetail } from '@/views/order/salesProduction/components/'
 import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
 import { PrinterButton } from '@/components/index.js'
 import CostOrderDetail from '@/views/purchase/cost/details/CostOrderDetail'
+import RelationCostOrder from '../components/RelationCostOrder'
 
 export default {
   name: 'PurchaseRequirementDetail',
@@ -94,7 +96,8 @@ export default {
     OrderAuditDetail,
     ProductionOrderDetail,
     PrinterButton,
-    CostOrderDetail
+    CostOrderDetail,
+    RelationCostOrder
   },
   computed: {
     canReturn: function () {

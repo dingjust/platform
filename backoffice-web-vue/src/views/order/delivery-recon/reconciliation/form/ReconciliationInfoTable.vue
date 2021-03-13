@@ -177,6 +177,26 @@
           <el-input v-model="scope.row.remarks" type="textarea" style="width: 200px" :rows="3" :title="scope.row.remarks"></el-input>
         </template>
       </el-table-column>
+      <el-table-column label="货款金额" prop="loanAmount" min-width="120px" key="loanAmount">
+        <template slot-scope="scope">
+          <el-input v-if="!scope.row.countRow"
+                    key="loanAmount-Key"
+                    v-model="scope.row.loanAmount" 
+                    @change="inputChange(scope.$index, 'loanAmount')"
+                    v-number-input.float="{ decimal: 2 }"></el-input>
+          <span v-else>{{scope.row.loanAmount}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="结算金额" prop="settlementAmount" min-width="120px" key="settlementAmount">
+        <template slot-scope="scope">
+          <el-input v-if="!scope.row.countRow"
+                    key="settlementAmount-Key"
+                    v-model="scope.row.settlementAmount" 
+                    @change="inputChange(scope.$index, 'settlementAmount')"
+                    v-number-input.float="{ decimal: 2 }"></el-input>
+          <span v-else>{{scope.row.settlementAmount}}</span>
+        </template>
+      </el-table-column>
       <template v-if="formData.colNames.length > 0">
         <el-table-column v-for="column in formData.colNames" :label="column.id" :key="column.id" min-width="120px">
           <template slot="header" slot-scope="scope">
@@ -191,24 +211,6 @@
           </template>
         </el-table-column>
       </template>
-      <el-table-column label="货款金额" prop="loanAmount" min-width="120px">
-        <template slot-scope="scope">
-          <el-input v-if="!scope.row.countRow"
-                    v-model="scope.row.loanAmount" 
-                    @change="inputChange(scope.$index, 'loanAmount')"
-                    v-number-input.float="{ decimal: 2 }"></el-input>
-          <span v-else>{{scope.row.loanAmount}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="结算金额" prop="settlementAmount" min-width="120px">
-        <template slot-scope="scope">
-          <el-input v-if="!scope.row.countRow"
-                    v-model="scope.row.settlementAmount" 
-                    @change="inputChange(scope.$index, 'settlementAmount')"
-                    v-number-input.float="{ decimal: 2 }"></el-input>
-          <span v-else>{{scope.row.settlementAmount}}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" min-width="80px" fixed="right">
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-button type="text" size="medium" @click="onCopy(scope.$index, scope.row)">
@@ -423,7 +425,9 @@ export default {
       this.$delete(this.item, column.id);
     },
     onDeleteOri (attribute) {
-      this.tableCol[attribute].have = false;
+
+      this.$set(this.tableCol[attribute],'have',false);
+      // this.tableCol[attribute].have = false;
 
       this.$delete(this.item, attribute);
 

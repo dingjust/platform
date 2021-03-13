@@ -3,7 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" 
               :highlight-current-row="isSelect"  @current-change="handleCurrentChange">
       <el-table-column label="采购单号" prop="code" min-width="120px"></el-table-column>
-      <el-table-column label="关联款号" prop="workOrder.task.productionTask.product.skuID"></el-table-column>
+      <el-table-column label="关联款号" prop="workOrder.task.costOrder.productionOrder.productSkuID"></el-table-column>
       <el-table-column label="物料名称" prop="workOrder.materials.name"></el-table-column>
       <el-table-column label="物料类别" prop="workOrder.materials.materialsType">
         <template slot-scope="scope">

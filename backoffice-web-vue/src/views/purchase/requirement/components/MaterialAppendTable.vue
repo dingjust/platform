@@ -293,7 +293,11 @@ export default {
       })
     },
     onCopy (index, row) {
-      this.entries.workOrders.splice(index + 1, 0, Object.assign({}, row));
+      const copyData = Object.assign({}, row);
+      copyData.id = '';
+      copyData.materialsId = '';
+      copyData.specListId = '';
+      this.entries.workOrders.splice(index + 1, 0, copyData);
     },
     onDelete (index, row) {
       this.entries.workOrders.splice(index, 1);

@@ -89,9 +89,9 @@ export default {
         return false;
       }
       // 订单审核状态在待审核且登陆账号为审核人
-      const flag = this.orderDetail.auditWorkOrder && 
-          this.orderDetail.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid &&
-          this.orderDetail.auditWorkOrder.currentUserAuditState == 'AUDITING';
+      const flag = this.orderDetail.currentAuditWork && 
+          this.orderDetail.currentAuditWork.auditingUser.uid === this.$store.getters.currentUser.uid &&
+          this.orderDetail.currentAuditWork.currentUserAuditState == 'AUDITING';
           
       if (flag) {
         return true;
@@ -237,6 +237,11 @@ export default {
             }]
           },
           task: {
+            costOrder: {
+              productionOrder: {
+                skuID: ''
+              }
+            },
             productionTask: {
               product: {
                 skuID: ''
