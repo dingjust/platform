@@ -63,9 +63,10 @@ export default {
     }
   },
   methods: {
-    onDetail (item) {
+    onDetail (itemData) {
+      const item = JSON.parse(JSON.stringify(itemData));
       if (item.state === 'NOT_COMMITED' || item.state === 'AUDIT_FAILED') {
-        this.order = {
+        this.$set(this, 'order', {
           id: item.id,
           state: item.state,
           cooperator: item.cooperator ? item.cooperator : {},
@@ -92,7 +93,7 @@ export default {
               estimatedRecTime: val.estimatedRecTime
             }
           })
-        }
+        })
         this.orderVisible = true;
       } else {
         this.detailVisible = true;

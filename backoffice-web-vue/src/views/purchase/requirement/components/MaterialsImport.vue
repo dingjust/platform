@@ -4,11 +4,11 @@
     <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
       <el-table-column label="物料编号">
         <template slot="header">
-          <span>物料编号<span style="color: #F56C6C">*</span></span>
+          <span>物料编号</span>
         </template>
         <template slot-scope="scope">
           <span v-if="scope.row['物料编号*']">{{scope.row['物料编号*']}}</span>
-          <i v-else class="el-icon-error row-icon"></i>
+          <!-- <i v-else class="el-icon-error row-icon"></i> -->
         </template>
       </el-table-column>
       <el-table-column label="物料名称">
@@ -31,11 +31,11 @@
       </el-table-column>
       <el-table-column label="幅宽/型号">
         <template slot="header">
-          <span>幅宽/型号<span style="color: #F56C6C">*</span></span>
+          <span>幅宽/型号</span>
         </template>
         <template slot-scope="scope">
           <span v-if="scope.row['幅宽/型号*']">{{scope.row['幅宽/型号*']}}</span>
-          <i class="el-icon-error row-icon" v-else></i>
+          <!-- <i class="el-icon-error row-icon" v-else></i> -->
         </template>
       </el-table-column>
       <el-table-column label="克重/规格">
@@ -54,11 +54,11 @@
       </el-table-column>
       <el-table-column label="物料颜色">
         <template slot="header">
-          <span>物料颜色<span style="color: #F56C6C">*</span></span>
+          <span>物料颜色</span>
         </template>
         <template slot-scope="scope">
           <span v-if="scope.row['物料颜色*']">{{scope.row['物料颜色*']}}</span>
-          <i class="el-icon-error row-icon" v-else></i>
+          <!-- <i class="el-icon-error row-icon" v-else></i> -->
         </template>
       </el-table-column>
       <el-table-column label="单件用量">
