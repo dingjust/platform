@@ -136,9 +136,8 @@ class _InvitePageState extends State<InvitePage> {
               InviteBottomeSheet(
                   title: '邀请您使用钉单APP',
                   description: '服装供应链专业平台',
-                  imageUrl: UserBLoC?.instance?.currentUser?.profilePicture
-                          ?.previewUrl() ??
-                      GlobalConfigs.LOGO_URL,
+                  imageUrl:
+                      'https://cdn-oss.nbyjy.net/activity/invite_activity.jpg',
                   url:
                       '${GlobalConfigs.APP_TARO_CONTEXT_PATH}/#/pages/register/register?code=${snapshot.data}'),
         ));

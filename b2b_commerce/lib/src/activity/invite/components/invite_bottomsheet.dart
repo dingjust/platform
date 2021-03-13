@@ -6,6 +6,7 @@ import 'package:fluwx/fluwx.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
 
 class InviteBottomeSheet extends StatelessWidget {
   final String url;
@@ -131,7 +132,8 @@ class InviteBottomeSheet extends StatelessWidget {
                           errorCorrectionLevel: QrErrorCorrectLevel.H,
                           embeddedImageStyle:
                               QrEmbeddedImageStyle(size: Size(50, 50)),
-                          embeddedImage: NetworkImage('$imageUrl'),
+                          embeddedImage:
+                              NetworkImage('${GlobalConfigs.LOGO_URL}'),
                         ),
                       ),
                       Expanded(
