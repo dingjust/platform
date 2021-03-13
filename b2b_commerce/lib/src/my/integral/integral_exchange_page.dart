@@ -140,14 +140,43 @@ class _IntegralExchangePageState extends State<IntegralExchangePage> {
     );
   }
 
-  void onSubmit() async {
+  Future<bool> onSubmit() async {
     //校验
+    if (getExchangeAmount() == 0.toStringAsFixed(2)) {
+      BotToast.showText(text: '兑换金额不能为0');
+      return false;
+    }
+
     int point = int.parse(_controller.text, onError: (val) => 0);
     if (point > 0 && point <= info.availablePoints) {
-      _submit(point);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('提示'),
+            content: Text('是否确认兑换?'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('确认'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _submit(point);
+                },
+              ),
+            ],
+          );
+        },
+      );
     } else {
       BotToast.showText(text: '请输入正确积分数');
     }
+    return true;
   }
 
   void _submit(int val) async {

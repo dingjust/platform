@@ -115,7 +115,7 @@ class IntegralExchangeHistoryModel {
   int points;
 
   ///兑换数
-  int exchangeAmount;
+  double exchangeAmount;
 
   /// 状态
   PointsExchangeState state;
