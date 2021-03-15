@@ -31,9 +31,9 @@
           </el-row>
         </template>
       </el-tab-pane>
-      <el-tab-pane label="采购订单" name="采购订单" :lazy="true">
+      <!-- <el-tab-pane label="采购订单" name="采购订单" :lazy="true">
         <purchase-order-basic-table v-if="isMySelf" :purchaseList="purchaseList"/>
-      </el-tab-pane>
+      </el-tab-pane> -->
       <el-tab-pane label="成本单" name="成本单" :lazy="true">
         <production-cost-list :productionId="id"/>
       </el-tab-pane>

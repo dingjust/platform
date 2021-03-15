@@ -31,7 +31,7 @@
       </el-row>
       <el-row type="flex" style="padding-left: 20px">
         <el-col>
-          <images-upload class="order-purchase-upload" :slot-data="formData.attachments" :readOnly="true"/>
+          <images-upload class="order-purchase-upload" :slot-data="formData.attachments" :readOnly="true" :disabled="true"/>
         </el-col>
       </el-row>
       <el-row class="basic-form-row" type="flex" align="middle"
