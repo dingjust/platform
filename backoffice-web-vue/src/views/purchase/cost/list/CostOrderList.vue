@@ -63,35 +63,37 @@ export default {
     initData (resultData) {
       let data = Object.assign({}, resultData);
       let purchaseMaterials = [];
-      resultData.purchaseMaterials.forEach(row => {
-        if (row.specList && row.specList.length > 0) {
-          purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
-            return {
-              // id: row.id,
-              materialsId: row.id,
-              specListId: item.id,
-              name: row.name,
-              code: row.code,
-              unit: row.unit,
-              materialsType: row.materialsType,
-              unitQuantity: item.unitQuantity,
-              specName: item.specName,
-              colorName: item.colorName,
-              modelName: item.modelName,
-              emptySent: item.emptySent,
-              requiredAmount: item.requiredAmount,
-              estimatedLoss: item.estimatedLoss,
-              estimatedUsage: item.estimatedUsage,
-              orderCount: item.orderCount,
-              auditColor: item.auditColor,
-              estimatedRecTime: item.estimatedRecTime,
-              // cooperatorName: row.cooperatorName,
-              price: item.price,
-              totalPrice: item.totalPrice
-            }
-          }))
-        }
-      })
+      if (resultData.purchaseMaterials && resultData.purchaseMaterials.length > 0) {
+        resultData.purchaseMaterials.forEach(row => {
+          if (row.specList && row.specList.length > 0) {
+            purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
+              return {
+                // id: row.id,
+                materialsId: row.id,
+                specListId: item.id,
+                name: row.name,
+                code: row.code,
+                unit: row.unit,
+                materialsType: row.materialsType,
+                unitQuantity: item.unitQuantity,
+                specName: item.specName,
+                colorName: item.colorName,
+                modelName: item.modelName,
+                emptySent: item.emptySent,
+                requiredAmount: item.requiredAmount,
+                estimatedLoss: item.estimatedLoss,
+                estimatedUsage: item.estimatedUsage,
+                orderCount: item.orderCount,
+                auditColor: item.auditColor,
+                estimatedRecTime: item.estimatedRecTime,
+                // cooperatorName: row.cooperatorName,
+                price: item.price,
+                totalPrice: item.totalPrice
+              }
+            }))
+          }
+        })
+      }
 
       let customRows = [];
       if (resultData.customRows) {

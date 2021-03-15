@@ -47,6 +47,11 @@
           <el-table-column label="单价" prop="price"></el-table-column>
         </el-table>
       </div>
+      <div class="detail-container" v-if="formData.purchaseTask && formData.purchaseTask.id" style="margin-top: 20px">
+        <h6>关联采购需求：
+          <el-button type="text" @click="onPurchaseDetail(formData.purchaseTask.id)" class="code-btn">{{formData.purchaseTask.code}}</el-button>
+        </h6>
+      </div>
       <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50" v-if="formData.status === 'PENDING_ACCOUNT'">
         <el-button type="text" @click="onCancel">取消</el-button>
         <el-button class="create-btn" @click="onEdit">编辑</el-button>
@@ -55,19 +60,24 @@
     <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
       <production-order-detail v-if="productionVisible" :id="productionId" />
     </el-dialog>
+    <el-dialog :visible.sync="purchaseVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <purchase-requirement-detail v-if="purchaseVisible" :id="purchaseId"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import PurchaseRequirementTable from '@/views/purchase/requirement/components/PurchaseRequirementTable'
 import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
+import PurchaseRequirementDetail from '@/views/purchase/requirement/details/PurchaseRequirementDetail'
 
 export default {
   name: 'CostOrderDetail',
   props: ['id'],
   components: {
     PurchaseRequirementTable,
-    ProductionOrderDetail
+    ProductionOrderDetail,
+    PurchaseRequirementDetail
   },
   data () {
     return {
@@ -83,7 +93,9 @@ export default {
         purchaseMaterials: []
       },
       productionId: '',
-      productionVisible: false
+      productionVisible: false,
+      purchaseId: '',
+      purchaseVisible: false
     }
   },
   methods: {
@@ -104,35 +116,37 @@ export default {
     initData (resultData) {
       let data = Object.assign({}, resultData);
       let purchaseMaterials = [];
-      resultData.purchaseMaterials.forEach(row => {
-        if (row.specList && row.specList.length > 0) {
-          purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
-            return {
-              // id: row.id,
-              materialsId: row.id,
-              specListId: item.id,
-              name: row.name,
-              code: row.code,
-              unit: row.unit,
-              materialsType: row.materialsType,
-              unitQuantity: item.unitQuantity,
-              specName: item.specName,
-              colorName: item.colorName,
-              modelName: item.modelName,
-              emptySent: item.emptySent,
-              requiredAmount: item.requiredAmount,
-              estimatedLoss: item.estimatedLoss,
-              estimatedUsage: item.estimatedUsage,
-              orderCount: item.orderCount,
-              auditColor: item.auditColor,
-              estimatedRecTime: item.estimatedRecTime,
-              // cooperatorName: row.cooperatorName,
-              price: item.price,
-              totalPrice: item.totalPrice
-            }
-          }))
-        }
-      })
+      if (resultData.purchaseMaterials && resultData.purchaseMaterials.length > 0) {
+        resultData.purchaseMaterials.forEach(row => {
+          if (row.specList && row.specList.length > 0) {
+            purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
+              return {
+                // id: row.id,
+                materialsId: row.id,
+                specListId: item.id,
+                name: row.name,
+                code: row.code,
+                unit: row.unit,
+                materialsType: row.materialsType,
+                unitQuantity: item.unitQuantity,
+                specName: item.specName,
+                colorName: item.colorName,
+                modelName: item.modelName,
+                emptySent: item.emptySent,
+                requiredAmount: item.requiredAmount,
+                estimatedLoss: item.estimatedLoss,
+                estimatedUsage: item.estimatedUsage,
+                orderCount: item.orderCount,
+                auditColor: item.auditColor,
+                estimatedRecTime: item.estimatedRecTime,
+                // cooperatorName: row.cooperatorName,
+                price: item.price,
+                totalPrice: item.totalPrice
+              }
+            }))
+          }
+        })
+      }
 
       let customRows = [];
       if (resultData.customRows) {
@@ -161,6 +175,10 @@ export default {
     onProductDetail (id) {
       this.productionId = id;
       this.productionVisible = true;
+    },
+    onPurchaseDetail (id) {
+      this.purchaseId = id;
+      this.purchaseVisible = true;
     },
     onEdit () {
       this.$confirm('是否执行编辑成本单操作?', '', {
