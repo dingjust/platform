@@ -34,8 +34,8 @@ class ExternalSaleOrderItem extends StatelessWidget {
               model: model,
               type: type,
             ),
+            _End(model: model),
             _Row2(model: model),
-            _End(model: model)
           ],
         ),
         decoration: BoxDecoration(
@@ -161,6 +161,7 @@ class _Row1 extends StatelessWidget {
           style: TextStyle(fontSize: 16),
           overflow: TextOverflow.ellipsis,
         )),
+        _buildTypeTag(),
         _buildTag()
       ],
     );
@@ -190,32 +191,29 @@ class _Row1 extends StatelessWidget {
           color: isDone ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
     );
   }
+
+  ///合作方式
+  Widget _buildTypeTag() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      child: Center(
+        child: Text(
+          '${CooperationModeLocalizedMap[model.cooperationMode]}',
+          style: TextStyle(color: Colors.black54, fontSize: 10),
+        ),
+      ),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black54, width: 0.5),
+          borderRadius: BorderRadius.circular(10)),
+    );
+  }
 }
 
 class _Row2 extends StatelessWidget {
   final SalesProductionOrderModel model;
 
   const _Row2({Key key, this.model}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text('合作方式：${CooperationModeLocalizedMap[model.cooperationMode]}'),
-        Text(
-          '创建时间：${DateFormatUtil.formatYMD(model.creationtime)}',
-          style: TextStyle(fontSize: 14),
-        )
-      ],
-    );
-  }
-}
-
-class _End extends StatelessWidget {
-  final SalesProductionOrderModel model;
-
-  const _End({Key key, this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -234,6 +232,25 @@ class _End extends StatelessWidget {
                           style: TextStyle(
                               color: Color.fromRGBO(255, 102, 102, 1)))
                     ]))),
+        Text(
+          '${DateFormatUtil.formatYMD(model.creationtime)}',
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        )
+      ],
+    );
+  }
+}
+
+class _End extends StatelessWidget {
+  final SalesProductionOrderModel model;
+
+  const _End({Key key, this.model}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
         Expanded(
             flex: 4,
             child: RichText(
