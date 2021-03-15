@@ -166,6 +166,9 @@ class _MainInfo extends StatelessWidget {
                 ),
               ],
             ),
+            buildRow('订单总数量', '${order.totalQuantity}件'),
+            buildRow('订单总金额', '￥${order.totalAmount.toStringAsFixed(2)}',
+                valStryle: TextStyle(color: Color.fromRGBO(255, 102, 102, 1))),
             buildRow(
                 '合作方式', CooperationModeLocalizedMap[order.cooperationMode]),
             buildRow('是否开票', order.invoiceNeeded ? '开发票' : '不开发票'),
@@ -178,7 +181,8 @@ class _MainInfo extends StatelessWidget {
         ));
   }
 
-  Widget buildRow(String title, String val) {
+  Widget buildRow(String title, String val,
+      {TextStyle valStryle = const TextStyle()}) {
     if (val == null || val == '') {
       return Container();
     }
@@ -189,7 +193,13 @@ class _MainInfo extends StatelessWidget {
               Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text('$title'), Text('$val')],
+        children: [
+          Text('$title'),
+          Text(
+            '$val',
+            style: valStryle,
+          )
+        ],
       ),
     );
   }

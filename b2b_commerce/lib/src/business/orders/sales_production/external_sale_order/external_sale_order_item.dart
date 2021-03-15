@@ -169,7 +169,7 @@ class _Row1 extends StatelessWidget {
   Widget _buildTag() {
     bool isDone = model.agreements != null
         ? model.agreements
-        .any((element) => element.state == ContractStatus.COMPLETE)
+            .any((element) => element.state == ContractStatus.COMPLETE)
         : false;
 
     return Container(
@@ -242,7 +242,7 @@ class _End extends StatelessWidget {
                     style: TextStyle(color: Colors.black87),
                     children: [
                       TextSpan(
-                          text: '300',
+                          text: '${model.totalQuantity}',
                           style: TextStyle(
                               color: Color.fromRGBO(255, 102, 102, 1)))
                     ]))),
@@ -250,12 +250,13 @@ class _End extends StatelessWidget {
             flex: 6,
             child: RichText(
                 textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
                 text: TextSpan(
                     text: '订单金额：',
                     style: TextStyle(color: Colors.black87),
                     children: [
                       TextSpan(
-                          text: '￥1300.0',
+                          text: '￥${model.totalAmount.toStringAsFixed(2)}',
                           style: TextStyle(
                               color: Color.fromRGBO(255, 102, 102, 1)))
                     ]))),
