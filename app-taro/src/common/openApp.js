@@ -1,4 +1,4 @@
-var download_schema = "nbyjy://callphone/startapp"; //app的协议有安卓同事提供，这里是用的淘宝
+var download_schema = "nbyjy://callphone/startapp"; //app的协议有安卓同事提供
 var universal_link =
   "https://itunes.apple.com/cn/app/%E9%92%89%E5%8D%95/id1459206673?mt=8"; //ios下载地址
 var getVersionUrl =
@@ -10,7 +10,6 @@ var isAndroid = u.indexOf("android") > -1 || u.indexOf("linux") > -1; //android�
 var isiOS = !!u.match(/(iphone|ipod|ipad|mac)/i);
 
 function openApp() {
-  console.log("Open1");
   if (isAndroid) {
     android1();
   }

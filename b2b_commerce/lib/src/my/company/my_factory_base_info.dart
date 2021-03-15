@@ -63,6 +63,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
     }
     if (quoteResponse.content.length > 0) {
       quoteModel = quoteResponse.content[0];
+    } else {
+      return Future.value(QuoteModel());
     }
     return Future.value(quoteModel);
   }
@@ -84,6 +86,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
     }
     if (purchaseOrdersResponse.content.length > 0) {
       purchaseOrderModel = purchaseOrdersResponse.content[0];
+    } else {
+      return Future.value(PurchaseOrderModel());
     }
     return Future.value(purchaseOrderModel);
   }
@@ -131,7 +135,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                 Container(
                   color: Colors.white,
                   padding:
-                  const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   child: _buildhistoryOrdersCount(),
                 ),
                 SizedBox(
@@ -253,6 +257,10 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
             child: Center(child: CircularProgressIndicator()),
           );
         } else {
+          if (snapshot?.data?.code == null) {
+            return Container();
+          }
+
           return Column(
             children: <Widget>[
               SizedBox(
@@ -284,8 +292,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => CompanyPurchaseListPage(
-                                    companyUid: widget.factory.uid,
-                                  )));
+                                companyUid: widget.factory.uid,
+                              )));
                     },
                   ),
                 ),
@@ -307,6 +315,10 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
             child: Center(child: CircularProgressIndicator()),
           );
         } else {
+          if (snapshot?.data?.code == null) {
+            return Container();
+          }
+
           return Column(
             children: <Widget>[
               SizedBox(
@@ -339,8 +351,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => CompanyQuoteListPage(
-                                    companyUid: widget.factory.uid,
-                                  )));
+                                companyUid: widget.factory.uid,
+                              )));
                     },
                   ),
                 ),

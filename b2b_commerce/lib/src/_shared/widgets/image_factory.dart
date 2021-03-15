@@ -30,11 +30,6 @@ class ImageFactory {
     double containerSize = 80,
     BoxFit fit = BoxFit.fill,
   }) {
-    if (media == null) {
-      return buildDefaultThumbnailImage(
-          size: size, containerSize: containerSize);
-    }
-
     // TODO：拿media format为Thumbnail的converted图片
     return Container(
         width: containerSize,
@@ -43,8 +38,8 @@ class ImageFactory {
           width: containerSize,
           height: containerSize,
           child: CachedNetworkImage(
-            imageUrl: '${media.previewUrl()}',
-            fit: fit,
+            imageUrl: '${media?.previewUrl() ?? ''}',
+            // fit: fit,
             imageBuilder: (context, imageProvider) => Container(
               width: containerSize,
               height: containerSize,

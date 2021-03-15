@@ -39,10 +39,10 @@ class _FactoryTabSectionState extends State<FactoryTabSection>
                 controller: _tabController,
                 tabs: [
                   Tab(
-                    child: Text('热门工厂'),
+                    child: Text('最新工厂'),
                   ),
                   Tab(
-                    child: Text('最新工厂'),
+                    child: Text('热门工厂'),
                   ),
                 ],
                 indicatorSize: TabBarIndicatorSize.label,
@@ -51,8 +51,8 @@ class _FactoryTabSectionState extends State<FactoryTabSection>
                 physics: AlwaysScrollableScrollPhysics(),
                 controller: _tabController,
                 children: <Widget>[
-                  HotFactoryListView(),
                   NewFactoryListView(),
+                  HotFactoryListView(),
                 ],
               )),
         ));

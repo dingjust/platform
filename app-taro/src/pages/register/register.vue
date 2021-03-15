@@ -16,7 +16,7 @@
         </view>
       </view>
       <view class="at-row at-row__justify--center">
-        <view class="at-col at-col-1 at-col--auto register-company-name">
+        <view class="register-company-name">
           <h6>{{ user.name }}</h6>
         </view>
       </view>
