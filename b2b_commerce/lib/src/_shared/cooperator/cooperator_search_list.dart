@@ -9,7 +9,8 @@ class CooperatorSearchList extends StatefulWidget {
   final CooperatorState cooperatorState;
   List<CooperatorModel> models;
 
-  CooperatorSearchList({Key key, this.cooperatorState,this.models}) : super(key: key);
+  CooperatorSearchList({Key key, this.cooperatorState, this.models})
+      : super(key: key);
 
   _CooperatorSearchListState createState() => _CooperatorSearchListState();
 }
@@ -20,7 +21,7 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
 
   @override
   void initState() {
-    if(widget.models != null){
+    if (widget.models != null) {
       _selectIds = widget.models.map((model) => model.id).toList();
     }
 
@@ -88,7 +89,9 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
     return Column(
         children: widget.cooperatorState.cooperatorModels != null
             ? widget.cooperatorState.cooperatorModels.map((cooperator) {
-                return _selectIds.contains(cooperator.id) ? _buildSelectedRow(cooperator) : _buildRow(cooperator);
+                return _selectIds.contains(cooperator.id)
+                    ? _buildSelectedRow(cooperator)
+                    : _buildRow(cooperator);
               }).toList()
             : Center(
                 child: CircularProgressIndicator(),
@@ -97,44 +100,46 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
 
   Row _buildSelectedRow(CooperatorModel cooperator) {
     return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: GestureDetector(
-                        onTap: (){
-                          setState(() {
-                            if(_selectIds.contains(cooperator.id)){
-                              widget.models.removeWhere((model) => model.id == cooperator.id);
-                              _selectIds.remove(cooperator.id);
-                            }else{
-                              widget.models.add(cooperator);
-                              _selectIds.add(cooperator.id);
-                            }
-                          });
-                        },
-                        child: CooperatorSelectedItem(
-                          model: cooperator,
-                        ),
-                      ),
-                    ),
-                  ),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  if (_selectIds.contains(cooperator.id)) {
+                    widget.models
+                        .removeWhere((model) => model.id == cooperator.id);
+                    _selectIds.remove(cooperator.id);
+                  } else {
+                    widget.models.add(cooperator);
+                    _selectIds.add(cooperator.id);
+                  }
+                });
+              },
+              child: CooperatorSelectedItem(
+                model: cooperator,
+              ),
+            ),
+          ),
+        ),
 //                  IconButton(icon: Icon(Icons.check_circle,color: Color(0xffffd60c),), onPressed: () {}),
-                ],
-              );
+      ],
+    );
   }
+
   Widget _buildRow(CooperatorModel cooperator) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: CooperatorItem(
         model: cooperator,
-        onTap: (){
+        onTap: () {
           setState(() {
-            if(_selectIds.contains(cooperator.id)){
+            if (_selectIds.contains(cooperator.id)) {
               widget.models.removeWhere((model) => model.id == cooperator.id);
               _selectIds.remove(cooperator.id);
-            }else{
+            } else {
               widget.models.add(cooperator);
               _selectIds.add(cooperator.id);
             }

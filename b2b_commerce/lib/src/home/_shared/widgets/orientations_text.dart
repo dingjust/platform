@@ -5,13 +5,19 @@ import 'package:models/models.dart';
 class OrientationsText extends StatelessWidget {
   final List<RegionModel> regions;
 
-  const OrientationsText({Key key, this.regions}) : super(key: key);
+  final TextStyle textStyle;
+
+  const OrientationsText({
+    Key key,
+    this.regions,
+    this.textStyle = const TextStyle(color: Color.fromRGBO(97, 95, 95, 1)),
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       '区域：${regionsStr()}',
-      style: TextStyle(color: Color.fromRGBO(97, 95, 95, 1)),
+      style: textStyle,
       overflow: TextOverflow.ellipsis,
     );
   }

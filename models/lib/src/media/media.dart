@@ -73,17 +73,6 @@ class MediaModel extends ItemModel {
     source.mediaType = null;
   }
 
-  // static List<MediaModel> _fromConvertedMedias(List<dynamic> medias) =>
-  //     medias.map((media) {
-  //       return MediaModel(
-  //           id: media.id,
-  //           name: media.name,
-  //           url: media.url,
-  //           mime: media.mime,
-  //           mediaFormat: media.mediaFormat,
-  //           mediaType: media.mediaType);
-  //     }).toList();
-
   String get actualUrl => '${GlobalConfigs.MEDIA_CONTEXT_PATH}${url}';
 
   ///workingUrl
@@ -92,7 +81,6 @@ class MediaModel extends ItemModel {
         MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_WORKING_FORMAT]);
 
     if (mediaModel != null) {
-      // print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
       return actualUrl;
@@ -105,7 +93,6 @@ class MediaModel extends ItemModel {
         getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
 
     if (mediaModel != null) {
-      // print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
       return actualUrl;
@@ -140,10 +127,8 @@ class MediaModel extends ItemModel {
   String normalUrl() {
     MediaModel mediaModel = getFormatMedia(MediaFormatMap[MediaFormat.NORMAL]);
     if (mediaModel != null) {
-      // print('NORMAL:${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
-      // print('ACTUAL:${actualUrl}');
       return actualUrl;
     }
   }
@@ -151,10 +136,9 @@ class MediaModel extends ItemModel {
   ///分享图
   String shareUrl() {
     MediaModel mediaModel =
-    getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
+        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
 
     if (mediaModel != null) {
-      // print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
       return '${GlobalConfigs.CONTEXT_PATH}${mediaModel.url}';
     } else {
       return actualUrl;
@@ -173,6 +157,11 @@ class MediaModel extends ItemModel {
       });
       return result;
     }
+  }
+
+  ///阿里云图片预处理详情参考https://help.aliyun.com/document_detail/171050.html?spm=a2c4g.11174283.6.649.5e987035rNG7GN
+  String imageProcessUrl(String processParams) {
+    return '${GlobalConfigs.MEDIA_CONTEXT_PATH}$url?$processParams';
   }
 }
 

@@ -6,8 +6,8 @@ import 'package:services/services.dart';
 
 class RequirementOrderRepository {
   /// 发布需求
-  Future<String> publishNewRequirement(RequirementOrderModel form,
-      String factoryUid, bool privacy,
+  Future<String> publishNewRequirement(
+      RequirementOrderModel form, String factoryUid, bool privacy,
       {String factories}) async {
     Map<String, dynamic> map = {};
     if (factoryUid != null) {
@@ -139,5 +139,25 @@ class RequirementOrderRepository {
       return 'success';
     } else
       return null;
+  }
+
+  ///获取需求池信息
+  static Future<RequirementOrdersResponse> getRequirementsAnonymous(
+      {Map<String, dynamic> params = const {},
+        Map<String, dynamic> data = const {}}) async {
+    Response response;
+    try {
+      response = await http$.post(OrderApis.requirementOrdersAnonymous,
+          data: {}, queryParameters: params);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      RequirementOrdersResponse result =
+      RequirementOrdersResponse.fromJson(response.data);
+      return result;
+    } else {
+      return null;
+    }
   }
 }

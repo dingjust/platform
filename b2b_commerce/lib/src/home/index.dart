@@ -1,24 +1,22 @@
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_staggered_grid.dart';
+
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
-import 'package:b2b_commerce/src/home/_shared/widgets/factory_tab_section.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 import '../_shared/shares.dart';
 import '../common/app_keys.dart';
+import '_shared/widgets/banner.dart';
 import '_shared/widgets/brand_section.dart';
 import '_shared/widgets/factory_section.dart';
 import '_shared/widgets/location.dart';
-import '_shared/widgets/more_factory_section.dart';
-import '_shared/widgets/more_requirement_section.dart';
-import '_shared/widgets/requirement_tab_section.dart';
+import 'home_appbar.dart';
 
 /// 首页
 class HomePage extends StatefulWidget {
@@ -32,15 +30,15 @@ class HomePage extends StatefulWidget {
       // HomeReportSection(),
       BrandEntranceSection(),
       // ProductsSection(),
-      FactoryTabSection(),
-      MoreFactorySection()
+      // FactoryTabSection(),
+      // MoreFactorySection()
     ],
     UserType.FACTORY: <Widget>[
       FactoryButtonsSection(),
       // HomeReportSection(),
       FactoryEntranceSection(),
-      RequirementTabSection(),
-      MoreRequirementSection()
+      // RequirementTabSection(),
+      // MoreRequirementSection()
     ]
   };
 
@@ -63,13 +61,15 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => new _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   GlobalKey homePageKey = GlobalKey();
+  TabController _tabController;
 
   _HomePageState();
 
   @override
   void initState() {
+    _tabController = TabController(length: 3, vsync: this);
     MessageBLoC.instance.snackMessageStream.listen((value) {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text('$value'),
@@ -79,21 +79,11 @@ class _HomePageState extends State<HomePage> {
 
     ///获取未读消息数
     notificationsPool$.checkUnread();
-    // 安卓端自动更新
-    // TargetPlatform platform = defaultTargetPlatform;
-    // if (platform != TargetPlatform.iOS) {
     WidgetsBinding.instance.addPostFrameCallback((_) => homeInit());
-    // }
     super.initState();
   }
 
   void homeInit() async {
-    //版本检查
-    // bool isNew = await AppVersion(homePageKey.currentContext,
-    //         ignoreVersionNotification:
-    //             UserBLoC.instance.ignoreVersionNotification)
-    //     .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
-
     AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
     bool isNew = await appVersionHelper.checkVersion(
         context, AppBLoC.instance.packageInfo.version, 'nbyjy');
@@ -114,44 +104,88 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController _scrollController = ScrollController();
-
     ///极光初始化
     jpush$.setContext(context);
 
-    return Scaffold(
-      key: homePageKey,
-      body: Container(
-        color: Color.fromRGBO(245, 245, 245, 1),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            SliverAppBar(
-              expandedHeight: 188.0,
-              pinned: true,
-              elevation: 0.5,
-              title: HomeTitle(
-                leading: widget.searchInputWidgetsByUserType,
-              ),
-              backgroundColor: Constants.THEME_COLOR_MAIN,
-              brightness: Brightness.dark,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    UserBLoC.instance.currentUser.type == UserType.BRAND
-                        ? HomeBrandBannerSection()
-                        : HomeFactoryBannerSection(),
-                  ],
-                ),
-              ),
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate(widget.widgetsByUserType)),
-          ],
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => RequirementState()),
+        ],
+        child: Container(
+          color: Color.fromRGBO(245, 245, 245, 1),
+          child: NestedScrollView(
+              key: homePageKey,
+              headerSliverBuilder: _slverBuilder,
+              body: TabBarView(
+                controller: _tabController,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: RequirementStaggeredGrid(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: RequirementStaggeredGrid(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: RequirementStaggeredGrid(),
+                  ),
+                ],
+              )),
+        ));
+  }
+
+  List<Widget> _slverBuilder(BuildContext context, bool innerBoxIsScrolled) {
+    return [
+      SliverAppBar(
+        expandedHeight: 188.0,
+        pinned: true,
+        elevation: 0.5,
+        title: HomeTitle(
+          leading: widget.searchInputWidgetsByUserType,
+        ),
+        backgroundColor: Constants.THEME_COLOR_MAIN,
+        brightness: Brightness.dark,
+        flexibleSpace: FlexibleSpaceBar(
+          background: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              UserBLoC.instance.currentUser.type == UserType.BRAND
+                  ? HomeBrandBannerSection()
+                  : HomeFactoryBannerSection(),
+            ],
+          ),
         ),
       ),
-    );
+      SliverList(delegate: SliverChildListDelegate(widget.widgetsByUserType)),
+      SliverPersistentHeader(
+          pinned: true,
+          delegate: HomeAppBarDelegate(TabBar(
+            controller: _tabController,
+            indicatorSize: TabBarIndicatorSize.label,
+            labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            unselectedLabelStyle:
+                TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            tabs: <Widget>[
+              Tab(
+                text: "需求",
+              ),
+              Tab(
+                text: "工厂",
+              ),
+              Tab(
+                text: "看款",
+              ),
+            ],
+          ))),
+    ];
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }
 
@@ -174,63 +208,5 @@ class HomeTitle extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-/// 首页Banner
-class HomeBrandBannerSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Carousel(<CarouselItem>[
-      CarouselItem(
-        model: MediaModel(
-          url: '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%9B%BE%E7%89%87.png',
-        ),
-      ),
-      CarouselItem(
-        model: MediaModel(
-          url:
-          '${GlobalConfigs
-              .CDN_OSS_DOMAIN}/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
-        ),
-      ),
-      CarouselItem(
-          model: MediaModel(
-            url:
-            '${GlobalConfigs
-                .CDN_OSS_DOMAIN}/activity/invite_activity_banner1.jpg',
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed(AppRoutes.ROUTE_ACTIVITY_INVITE);
-          })
-    ], 240);
-  }
-}
-
-class HomeFactoryBannerSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Carousel(<CarouselItem>[
-      CarouselItem(
-        model: MediaModel(
-          url: '${GlobalConfigs.CDN_OSS_DOMAIN}/%E5%9B%BE%E7%89%87.png',
-        ),
-      ),
-      CarouselItem(
-          model: MediaModel(
-            url:
-            '${GlobalConfigs
-                .CDN_OSS_DOMAIN}/%E5%B7%A5%E5%8E%82%E8%BD%AE%E6%92%AD%E5%9B%BE2.png',
-          )),
-      CarouselItem(
-          model: MediaModel(
-            url:
-            '${GlobalConfigs
-                .CDN_OSS_DOMAIN}/activity/invite_activity_banner1.jpg',
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed(AppRoutes.ROUTE_ACTIVITY_INVITE);
-          })
-    ], 240);
   }
 }

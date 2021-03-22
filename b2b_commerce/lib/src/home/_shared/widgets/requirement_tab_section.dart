@@ -60,7 +60,7 @@ class NewRequirementsListView extends StatelessWidget {
                           ? Column(
                               children: state
                                   .getNewRequirements()
-                                  .map((requirement) => _RequirementItem(
+                                  .map((requirement) => RequirementItem(
                                         model: requirement,
                                       ))
                                   .toList(),
@@ -86,10 +86,11 @@ class NearbyRequirementsListView extends StatelessWidget {
             ? Column(
                 children: state
                     .getNearbyRequirements(
-                        amapState.longitude, amapState.latitude)
-                    .map((requirement) => _RequirementItem(
-                          model: requirement,
-                        ))
+                    amapState.longitude, amapState.latitude)
+                    .map((requirement) =>
+                    RequirementItem(
+                      model: requirement,
+                    ))
                     .toList(),
               )
             : Column(
@@ -100,12 +101,12 @@ class NearbyRequirementsListView extends StatelessWidget {
   }
 }
 
-class _RequirementItem extends StatelessWidget {
+class RequirementItem extends StatelessWidget {
   final RequirementOrderModel model;
 
   final double height;
 
-  const _RequirementItem({Key key, this.model, this.height = 120})
+  const RequirementItem({Key key, this.model, this.height = 120})
       : super(key: key);
 
   @override

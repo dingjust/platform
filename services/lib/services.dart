@@ -85,6 +85,7 @@ export 'src/order/state/reconciliation_orders_state.dart';
 export 'src/order/state/requirement_order_form_state.dart';
 export 'src/order/state/requirement_order_select_state.dart';
 export 'src/order/state/requirement_tab_section_state.dart';
+export 'src/order/state/requirement_state.dart';
 export 'src/order/state/sale_orders_state.dart';
 export 'src/payment/alipay/alipay_response.dart';
 export 'src/payment/alipay/alipay_service_impl.dart';
