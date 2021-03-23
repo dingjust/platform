@@ -15,7 +15,7 @@ import 'package:services/services.dart';
 class RequirementGridItem extends StatelessWidget {
   final RequirementOrderModel model;
 
-  // final double height;
+  static const borderRadius = 10.0;
 
   const RequirementGridItem({
     Key key,
@@ -24,95 +24,92 @@ class RequirementGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10))),
-      child: GestureDetector(
-        onTap: () {
-          Provider.of<CertificationStatusHelper>(context).oncheckProfile(
-              context: context, onJump: () => jumpToDetailPage(context));
-        },
-        child: Container(
-            padding: EdgeInsets.only(bottom: 5),
-            child: Column(
-              children: <Widget>[
-                _buildImage(context),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '${model.details.productName ?? ''}',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
+    return GestureDetector(
+      onTap: () {
+        Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+            context: context, onJump: () => jumpToDetailPage(context));
+      },
+      child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(borderRadius)),
+          padding: EdgeInsets.only(bottom: 5),
+          child: Column(
+            children: <Widget>[
+              _buildImage(context),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        '${model.details.productName ?? ''}',
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(right: 10),
-                              child: Text(
-                                '${model.details.expectedMachiningQuantity}件',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                            Text(
-                              '${model.details.category.name}',
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 10),
-                            ),
-                          ],
-                        ),
-                      ),
-                      DistanceText(
-                        val: model.distance,
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: OrientationsText(
-                            regions: model.details.productiveOrientations ?? [],
-                            textStyle: TextStyle(
-                                color: Color.fromRGBO(97, 95, 95, 1),
-                                fontSize: 10)),
-                      ),
-                      Row(
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Row(
                         children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(right: 10),
+                            child: Text(
+                              '${model.details.expectedMachiningQuantity}件',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
                           Text(
-                            '${DateExpress2Util.express(model.creationTime)}',
-                            style: TextStyle(
-                                color: Color.fromRGBO(97, 95, 95, 1),
-                                fontSize: 10),
-                          )
+                            '${model.details.category.name}',
+                            style:
+                                TextStyle(color: Colors.black54, fontSize: 10),
+                          ),
                         ],
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                    DistanceText(
+                      val: model.distance,
+                    )
+                  ],
                 ),
-              ],
-            )),
-      ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                margin: EdgeInsets.only(bottom: 5),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: OrientationsText(
+                          regions: model.details.productiveOrientations ?? [],
+                          textStyle: TextStyle(
+                              color: Color.fromRGBO(97, 95, 95, 1),
+                              fontSize: 10)),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          '${DateExpress2Util.express(model.creationTime)}',
+                          style: TextStyle(
+                              color: Color.fromRGBO(97, 95, 95, 1),
+                              fontSize: 10),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          )),
     );
   }
 
@@ -123,17 +120,26 @@ class RequirementGridItem extends StatelessWidget {
       const processUrl =
           'image_process=format,WEBP/resize,w_320/crop,mid,w_320,h_320';
 
-      return CachedNetworkImage(
-        imageUrl: '${model.details.pictures.first.imageProcessUrl(processUrl)}',
-        placeholder: (context, url) => SpinKitRing(
-          color: Colors.grey[300],
-          lineWidth: 2,
-          size: 30,
-        ),
-        errorWidget: (context, url, error) => SpinKitRing(
-          color: Colors.grey[300],
-          lineWidth: 2,
-          size: 30,
+      return ClipRRect(
+        //剪裁为圆角矩形
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(borderRadius),
+            topRight: Radius.circular(borderRadius)),
+        child: CachedNetworkImage(
+          imageUrl:
+          '${model.details.pictures.first.imageProcessUrl(processUrl)}',
+          placeholder: (context, url) =>
+              SpinKitRing(
+                color: Colors.grey[300],
+                lineWidth: 2,
+                size: 30,
+              ),
+          errorWidget: (context, url, error) =>
+              SpinKitRing(
+                color: Colors.grey[300],
+                lineWidth: 2,
+                size: 30,
+              ),
         ),
       );
     }

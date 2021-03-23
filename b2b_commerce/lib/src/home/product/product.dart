@@ -52,56 +52,55 @@ class RecommendProductItem extends StatelessWidget {
                           model.thumbnails.isNotEmpty &&
                           model?.thumbnails[0].url != null
                       ? Container(
-                    width: 200,
-                    height: 200,
-                    child: CachedNetworkImage(
-                        imageUrl: '${model?.thumbnails[0].normalUrl()}',
-                        width: 200,
-                        height: 200,
-                        fit: BoxFit.fill,
-                        imageBuilder: (context, imageProvider) =>
-                            Container(
+                          width: 200,
+                          height: 200,
+                          child: CachedNetworkImage(
+                              imageUrl: '${model?.thumbnails[0].normalUrl()}',
                               width: 200,
                               height: 200,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.fill,
+                              fit: BoxFit.fill,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                    width: 200,
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5),
+                                          topRight: Radius.circular(5)),
+                                    ),
+                                  ),
+                              placeholder: (context, url) => SpinKitCircle(
+                                    color: Colors.black12,
+                                    size: 60,
+                                  ),
+                              errorWidget: (context, url, error) =>
+                                  SpinKitCircle(
+                                    color: Colors.black12,
+                                    size: 60,
+                                  )),
+                        )
+                      : Container(
+                          height: imageSize,
+                          padding: EdgeInsets.all(20),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5)),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'temp/picture.png',
+                                  package: "assets",
                                 ),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    topRight: Radius.circular(5)),
+                                fit: BoxFit.contain,
                               ),
                             ),
-                        placeholder: (context, url) =>
-                            SpinKitCircle(
-                              color: Colors.black12,
-                              size: 60,
-                            ),
-                        errorWidget: (context, url, error) =>
-                            SpinKitCircle(
-                              color: Colors.black12,
-                              size: 60,
-                            )),
-                  )
-                      : Container(
-                    height: imageSize,
-                    padding: EdgeInsets.all(20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(5)),
-                        image: DecorationImage(
-                          image: AssetImage(
-                            'temp/picture.png',
-                            package: "assets",
                           ),
-                          fit: BoxFit.contain,
                         ),
-                      ),
-                    ),
-                  ),
                   Expanded(
                     flex: 1,
                     child: Container(

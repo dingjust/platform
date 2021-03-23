@@ -105,8 +105,8 @@ class RequirementOrderRepository {
   }
 
   //邀请报价（推荐需求）
-  Future<bool> doRecommendations(List<String> codes,
-      List<String> factoryUids) async {
+  Future<bool> doRecommendations(
+      List<String> codes, List<String> factoryUids) async {
     print(codes);
     print(factoryUids.join(','));
     Response response;
@@ -148,7 +148,7 @@ class RequirementOrderRepository {
     Response response;
     try {
       response = await http$.post(OrderApis.requirementOrdersAnonymous,
-          data: {}, queryParameters: params);
+          data: data, queryParameters: params);
     } on DioError catch (e) {
       print(e);
     }

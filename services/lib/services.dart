@@ -30,6 +30,7 @@ export 'src/home/factory/response/factory_condition.dart';
 export 'src/home/factory/state/factories_state.dart';
 export 'src/home/factory/state/factory_tab_section_state.dart';
 export 'src/home/product/bloc/order_product_bloc.dart';
+export 'src/home/product/state/order_product_state.dart';
 export 'src/message/jpush_service.dart';
 export 'src/message/message_bloc.dart';
 export 'src/message/notifications_pool.dart';

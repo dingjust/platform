@@ -1,26 +1,25 @@
 import 'package:models/models.dart';
-import 'package:services/src/home/factory/repository/factory_repository.dart';
+import 'package:services/src/home/product/respository/order_product_respository.dart';
 import 'package:services/src/state/state.dart';
 
-///工厂信息状态管理
-class FactoriesState extends PageState {
-  List<FactoryModel> _factories;
+///看款状态管理
+class ProductState extends PageState {
+  List<ApparelProductModel> _products;
 
-  List<FactoryModel> get factories {
-    if (_factories == null) {
+  List<ApparelProductModel> get products {
+    if (_products == null) {
       getData();
     }
-    return _factories;
+    return _products;
   }
 
   @override
   getData() {
-    FactoryRepository.getFactories(
-            params: {'page': 0, 'size': pageSize, "sort": "creationtime,DESC"},
-            data: getParamsData())
+    OrderProductRepository.getProducts(
+            params: {'page': 0, 'size': pageSize}, data: getParamsData())
         .then((response) {
       if (response != null) {
-        _factories = response.content;
+        _products = response.content;
         pageSize = response.size;
         currentPage = response.number;
         totalPages = response.totalPages;
@@ -39,14 +38,13 @@ class FactoriesState extends PageState {
       workingStart();
       //接口调用：
       if (currentPage + 1 != totalPages) {
-        await FactoryRepository.getFactories(params: {
+        await OrderProductRepository.getProducts(params: {
           'page': ++currentPage,
           'size': pageSize,
-          "sort": "creationtime,DESC"
         }, data: getParamsData())
             .then((response) {
           if (response != null) {
-            _factories.addAll(response.content);
+            _products.addAll(response.content);
             pageSize = response.size;
             currentPage = response.number;
             totalPages = response.totalPages;
@@ -59,15 +57,16 @@ class FactoriesState extends PageState {
     }
   }
 
+  ///请求参数
   Map<String, dynamic> getParamsData() {
     return {
-      'profileCompleted': 1,
+      'approvalStatuses': ["approved"]
     };
   }
 
   @override
   clear() {
-    _factories = null;
+    _products = null;
     reset();
     notifyListeners();
   }
