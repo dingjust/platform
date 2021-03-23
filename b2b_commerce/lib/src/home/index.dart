@@ -16,6 +16,7 @@ import '_shared/widgets/banner.dart';
 import '_shared/widgets/brand_section.dart';
 import '_shared/widgets/factory_section.dart';
 import '_shared/widgets/location.dart';
+import 'factory/factory_list_v2.dart';
 import 'home_appbar.dart';
 
 /// 首页
@@ -110,6 +111,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => RequirementState()),
+          ChangeNotifierProvider(create: (_) => FactoriesState()),
         ],
         child: Container(
           color: Color.fromRGBO(245, 245, 245, 1),
@@ -123,10 +125,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     child: RequirementStaggeredGrid(),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: RequirementStaggeredGrid(),
-                  ),
+                  FactoryList(),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     child: RequirementStaggeredGrid(),

@@ -245,6 +245,8 @@ flutter:
     - packages/assets/temp/activity/lucky_money2.png
     - packages/assets/temp/activity/gifit.png
     - packages/assets/temp/success.png
+    - packages/assets/temp/icon/auth.png
+
 
   fonts:
     - family: b2bIcons

@@ -112,9 +112,7 @@ class MyFactoryServiceInfoState extends State<MyFactoryServiceInfo> {
                   ),
                   Expanded(
                     child: Text(
-                      '${formatEnumSelectsText(widget.factory.qualityLevels,
-                          FactoryQualityLevelsEnum,
-                          FactoryQualityLevelsEnum.length) ?? ''}',
+                      '${formatEnumSelectsText(widget.factory.qualityLevels, FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length) ?? ''}',
                       style: const TextStyle(
                         fontSize: 16,
                       ),

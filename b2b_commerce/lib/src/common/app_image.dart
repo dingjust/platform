@@ -359,4 +359,9 @@ class B2BImage {
   static Image success({double width, double height}) {
     return getImage('temp/success.png', width: width, height: height);
   }
+
+  ///认证
+  static Image auth({double width, double height}) {
+    return getImage('temp/icon/auth.png', width: width, height: height);
+  }
 }

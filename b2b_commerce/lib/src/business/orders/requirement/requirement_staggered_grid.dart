@@ -30,60 +30,32 @@ class RequirementStaggeredGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-
-        // NotificationListener<ScrollNotification>(
-        //     onNotification: (notification) {
-        //       print('yjy:${notification.metrics.pixels}');
-        //       if (notification.metrics.pixels ==
-        //           notification.metrics.maxScrollExtent) {
-        //         state.loadMore();
-        //         print('yjy:End');
-        //       }
-        //       return false;
-        //     },
-        //     child: ListView.builder(
-        //         itemCount: state.requirements.length + 1,
-        //         // itemExtent: 50.0,
-        //         itemBuilder: (BuildContext context, int index) {
-        //           if (index == (state.requirements.length)) {
-        //             return ProgressIndicatorFactory
-        //                 .buildPaddedOpacityProgressIndicator(
-        //               opacity: state.loadingMore ? 1.0 : 0,
-        //             );
-        //           }
-
-        //           return RequirementItem(
-        //             model: state.requirements[index],
-        //           );
-        //         }));
-
-        NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification.metrics.pixels ==
-                  notification.metrics.maxScrollExtent) {
-                state.loadMore();
+    return NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification.metrics.pixels ==
+              notification.metrics.maxScrollExtent) {
+            state.loadMore();
+          }
+          return false;
+        },
+        child: StaggeredGridView.countBuilder(
+            shrinkWrap: true,
+            crossAxisCount: 4,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            itemCount: state.requirements.length + 1,
+            itemBuilder: (context, index) {
+              if (index == (state.requirements.length)) {
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
+                  opacity: state.loadingMore ? 1.0 : 0,
+                );
+              } else {
+                return RequirementGridItem(
+                  model: state.requirements[index],
+                );
               }
-              return false;
             },
-            child: StaggeredGridView.countBuilder(
-                shrinkWrap: true,
-                crossAxisCount: 4,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                itemCount: state.requirements.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == (state.requirements.length)) {
-                    return ProgressIndicatorFactory
-                        .buildPaddedOpacityProgressIndicator(
-                      opacity: state.loadingMore ? 1.0 : 0,
-                    );
-                  } else {
-                    return RequirementGridItem(
-                      model: state.requirements[index],
-                    );
-                  }
-                },
-                staggeredTileBuilder: (index) => StaggeredTile.fit(2)));
+            staggeredTileBuilder: (index) => StaggeredTile.fit(2)));
   }
 }
