@@ -121,12 +121,12 @@ class FactoryButtonsSection extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: ImageNumButton(
-        image: B2BImage.productOrdering(),
+        image: B2BImage.materielProducts(),
         onPressed: () {
           // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
-          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
+          Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
         },
-        title: '看款下单',
+        title: '面辅料',
       ),
     );
   }

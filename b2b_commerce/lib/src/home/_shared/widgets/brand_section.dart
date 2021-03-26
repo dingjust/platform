@@ -3,7 +3,6 @@ import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
@@ -76,11 +75,11 @@ class BrandEntranceSection extends StatelessWidget {
 
   void _jumpToFastFactory(BuildContext context) async {
     List<CategoryModel> categories =
-    await Provider.of<MajorCategoryState>(context).getMajorCategories();
+        await Provider.of<MajorCategoryState>(context).getMajorCategories();
     List<LabelModel> labels =
-    await Provider.of<LabelState>(context).getLabels();
+        await Provider.of<LabelState>(context).getLabels();
     List<LabelModel> conditionLabels =
-    labels.where((label) => label.name == '快反工厂').toList();
+        labels.where((label) => label.name == '快反工厂').toList();
     labels = labels
         .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
         .toList();
@@ -88,17 +87,16 @@ class BrandEntranceSection extends StatelessWidget {
     if (categories != null && labels != null) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) =>
-              FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    labels: conditionLabels,
-                    cooperationModes: []),
-                route: '快反工厂',
-                categories: categories,
-                labels: labels,
-              ),
+          builder: (context) => FactoryPage(
+            FactoryCondition(
+                starLevel: 0,
+                adeptAtCategories: [],
+                labels: conditionLabels,
+                cooperationModes: []),
+            route: '快反工厂',
+            categories: categories,
+            labels: labels,
+          ),
         ),
       );
     }
@@ -202,12 +200,12 @@ class BrandButtonsSection extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: ImageNumButton(
-        image: B2BImage.productOrdering(),
+        image: B2BImage.materielProducts(),
         onPressed: () {
           // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
-          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
+          Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
         },
-        title: '看款下单',
+        title: '面辅料',
       ),
     );
   }

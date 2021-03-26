@@ -339,6 +339,12 @@ class B2BImage {
         width: width, height: height);
   }
 
+  ///面辅料
+  static Image materielProducts({double width, double height}) {
+    return getImage('temp/index/materiel_products.png',
+        width: width, height: height);
+  }
+
   ///红包
   static Image luckeyMoney({double width, double height}) {
     return getImage('temp/my/lucky_money.png', width: width, height: height);

@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_staggered_grid.dart';
-
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:core/core.dart';
@@ -18,6 +17,7 @@ import '_shared/widgets/factory_section.dart';
 import '_shared/widgets/location.dart';
 import 'factory/factory_list_v2.dart';
 import 'home_appbar.dart';
+import 'product/order_product_grid.dart';
 
 /// 首页
 class HomePage extends StatefulWidget {
@@ -30,6 +30,7 @@ class HomePage extends StatefulWidget {
       BrandButtonsSection(),
       // HomeReportSection(),
       BrandEntranceSection(),
+      // HomeEntrance()
       // ProductsSection(),
       // FactoryTabSection(),
       // MoreFactorySection()
@@ -38,6 +39,7 @@ class HomePage extends StatefulWidget {
       FactoryButtonsSection(),
       // HomeReportSection(),
       FactoryEntranceSection(),
+      // HomeEntrance()
       // RequirementTabSection(),
       // MoreRequirementSection()
     ]
@@ -112,6 +114,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         providers: [
           ChangeNotifierProvider(create: (_) => RequirementState()),
           ChangeNotifierProvider(create: (_) => FactoriesState()),
+          ChangeNotifierProvider(create: (_) => ProductState()),
         ],
         child: Container(
           color: Color.fromRGBO(245, 245, 245, 1),
@@ -128,7 +131,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   FactoryList(),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: RequirementStaggeredGrid(),
+                    child: ProductStaggeredGrid(),
                   ),
                 ],
               )),

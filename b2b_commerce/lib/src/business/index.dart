@@ -172,7 +172,7 @@ class BrandMenusSection extends StatelessWidget {
               children: <Widget>[
                 buildChild(
                     context,
-                    MenuItemImage.productFactory,
+                    MenuItemImage.clothesManage,
                     '产品管理',
                     UserBLoC.instance.currentUser.type == UserType.FACTORY
                         ? AppRoutes.ROUTE_PRODUCTS
@@ -183,9 +183,15 @@ class BrandMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.partnerFactory, '合作商管理',
                     AppRoutes.ROUTE_COOPERATORS,
                     authorizations: [Authorization.COMPANY_COOPERATOR]),
-                buildChild(context, MenuItemImage.clothesManage, '样衣借还',
-                    AppRoutes.ROUTE_SAMPLE_GARMENTS,
-                    authorizations: [Authorization.PRODUCT_SAMPLEPRODUCT]),
+                // buildChild(context, MenuItemImage.clothesManage, '样衣借还',
+                //     AppRoutes.ROUTE_SAMPLE_GARMENTS,
+                //     authorizations: [Authorization.PRODUCT_SAMPLEPRODUCT]),
+                buildChild(
+                  context,
+                  MenuItemImage.productFactory,
+                  '面辅料管理',
+                  AppRoutes.ROUTE_MATERIEL_PRODUCT_MANAGE,
+                ),
               ],
             )
           ],
@@ -455,7 +461,7 @@ class FactoryMenusSection extends StatelessWidget {
               crossAxisSpacing: 4.0,
               childAspectRatio: (1.3),
               children: <Widget>[
-                buildChild(context, MenuItemImage.productFactory, '产品管理',
+                buildChild(context, MenuItemImage.clothesManage, '产品管理',
                     AppRoutes.ROUTE_PRODUCTS,
                     authorizations: [Authorization.PRODUCT]),
                 // buildChild(context, MenuItemImage.employeeManage, '员工管理',
@@ -463,15 +469,21 @@ class FactoryMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.partnerFactory, '合作商管理',
                     AppRoutes.ROUTE_COOPERATORS,
                     authorizations: [Authorization.COMPANY_COOPERATOR]),
-                buildChild(context, MenuItemImage.clothesManage, '样衣借还',
-                    AppRoutes.ROUTE_SAMPLE_GARMENTS,
-                    authorizations: [Authorization.PRODUCT_SAMPLEPRODUCT]),
+                // buildChild(context, MenuItemImage.clothesManage, '样衣借还',
+                //     AppRoutes.ROUTE_SAMPLE_GARMENTS,
+                //     authorizations: [Authorization.PRODUCT_SAMPLEPRODUCT]),
                 buildChild(
                     context,
                     B2BImage.free_capacity2(height: 25, width: 25),
                     '空闲产能',
                     AppRoutes.ROUTE_MY_CAPACITY,
                     authorizations: [Authorization.FACTORY_CAPACITY]),
+                buildChild(
+                  context,
+                  MenuItemImage.productFactory,
+                  '面辅料管理',
+                  AppRoutes.ROUTE_MATERIEL_PRODUCT_MANAGE,
+                ),
               ],
             )
           ],

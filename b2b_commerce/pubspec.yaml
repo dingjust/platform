@@ -222,6 +222,7 @@ flutter:
     - packages/assets/temp/index/material.png
     - packages/assets/temp/index/requirement_center.png
     - packages/assets/temp/index/free_capacity2.png
+    - packages/assets/temp/index/materiel_products.png
     - packages/assets/img-temp/200x200/category.png
     - packages/assets/img-temp/200x200/tail_goods.png
     - packages/assets/img-temp/200x200/spot_goods.png

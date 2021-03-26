@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
@@ -25,5 +24,46 @@ class HomeReportSection extends StatelessWidget {
                 ],
               ),
             ));
+  }
+}
+
+class HomeEntrance extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.all(5),
+        child: Row(
+          children: [
+            Expanded(
+                child: Container(
+              height: 250,
+              color: Colors.green,
+            )),
+            Container(
+              width: 5,
+            ),
+            Expanded(
+                child: Container(
+              height: 250,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Container(
+                    height: 5,
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.grey,
+                    ),
+                  )
+                ],
+              ),
+            ))
+          ],
+        ));
   }
 }

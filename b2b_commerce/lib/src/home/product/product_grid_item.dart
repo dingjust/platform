@@ -110,9 +110,9 @@ class ProductGridItem extends StatelessWidget {
 
   String getAddressStr() {
     if (model?.belongTo?.contactAddress?.city != null) {
-      return model?.belongTo?.contactAddress?.city.name;
+      return model.belongTo.contactAddress.city.name;
     } else if (model?.belongTo?.contactAddress?.region != null) {
-      return model?.belongTo?.contactAddress?.region.name;
+      return model.belongTo.contactAddress.region.name;
     }
     return '';
   }

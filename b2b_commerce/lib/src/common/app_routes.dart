@@ -18,6 +18,8 @@ import 'package:b2b_commerce/src/business/orders/sales_production/out_order/out_
 import 'package:b2b_commerce/src/business/orders/sales_production/out_production_task_order/out_production_task_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_order_entry_detail.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_orders_page.dart';
+import 'package:b2b_commerce/src/business/products/materiel_product_manage.dart';
+import 'package:b2b_commerce/src/business/products/materiel_products.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/quote_my_orders.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
@@ -166,6 +168,13 @@ class AppRoutes with GlobalRoutes {
 
   static const ROUTE_ACTIVITY_INVITE = '/activity/invite';
 
+  ///面辅料管理
+  static const ROUTE_MATERIEL_PRODUCT_MANAGE =
+      '/business/materiel_product/manage';
+
+  ///面辅料
+  static const ROUTE_MATERIEL_PRODUCTS = '/home/materiel_product';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -211,17 +220,13 @@ class AppRoutes with GlobalRoutes {
     ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT: (context) =>
         ExternalSaleOrderImportPage(),
     ROUTE_OUT_ORDERS: (context) => OutOrdersPage(),
-    ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) =>
-        ExternalSaleOrderDetailPage(
+    ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
           id: getVal('id', context),
           titile: getVal('title', context),
         ),
     ROUTE_PRODUCTION_TASK_ORDER_DETAIL: (context) =>
         ProductionTaskOrderEntryDetailPage(
-            id: ModalRoute
-                .of(context)
-                .settings
-                .arguments),
+            id: ModalRoute.of(context).settings.arguments),
     ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage(),
     ROUTE_OUT_PRODUCTION_TASK_ORDERS: (context) =>
         OutProductionTaskOrdersPage(),
@@ -229,16 +234,16 @@ class AppRoutes with GlobalRoutes {
     ROUTE_COOPERATORS: (context) => CooperatorsPage(),
     ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm(),
     ROUTE_DELIVERY_ORDERS: (context) => DeliveryOrdersPage(),
-    ROUTE_DELIVERY_ORDER_DETAIL: (context) =>
-        DeliveryOrderDetailPage(
-            id: getVal('id', context),
-            needRefresh: getVal('needRefresh', context)),
+    ROUTE_DELIVERY_ORDER_DETAIL: (context) => DeliveryOrderDetailPage(
+        id: getVal('id', context), needRefresh: getVal('needRefresh', context)),
     ROUTE_RECONCILIATION_ORDERS: (context) => ReconciliationOrdersPage(),
     ROUTE_RECONCILIATION_ORDER_DETAIL: (context) =>
         ReconciliationOrderDetailPage(
             id: getVal('id', context),
             needRefresh: getVal('needRefresh', context)),
     ROUTE_ACTIVITY_INVITE: (context) => InvitePage(),
+    ROUTE_MATERIEL_PRODUCT_MANAGE: (context) => MaterielProductManagePage(),
+    ROUTE_MATERIEL_PRODUCTS: (context) => MaterielProductsPage()
   };
 
   static dynamic getVal(String key, BuildContext context) {

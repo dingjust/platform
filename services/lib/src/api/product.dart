@@ -19,10 +19,12 @@ abstract class ProductApis {
   static get list => '/{baseSiteId}/products/apparel';
 
   //品牌获取所有工厂的现款产品
-  static get getProductsOfFactories => '/{baseSiteId}/products/apparel/factories';
+  static get getProductsOfFactories =>
+      '/{baseSiteId}/products/apparel/factories';
 
   //品牌获取工厂的现款产品
-  static get getProductsOfFactory => (uid) => '/{baseSiteId}/products/apparel/factories/$uid';
+  static get getProductsOfFactory =>
+      (uid) => '/{baseSiteId}/products/apparel/factories/$uid';
 
   ///根据code获取产品详情
   static get detail => (code) => '/{baseSiteId}/products/apparel/$code';
@@ -34,22 +36,18 @@ abstract class ProductApis {
   static get update => (code) => '/{baseSiteId}/products/apparel/$code';
 
   ///删除产品
-  static get delete =>
-      (code) => '/{baseSiteId}/products/apparel/$code/deleted';
+  static get delete => (code) => '/{baseSiteId}/products/apparel/$code/deleted';
 
   //产品上架
-  static get on =>
-          (code) => '/{baseSiteId}/products/apparel/$code/on';
+  static get on => (code) => '/{baseSiteId}/products/apparel/$code/on';
   //产品下架
-  static get off =>
-          (code) => '/{baseSiteId}/products/apparel/$code/off';
+  static get off => (code) => '/{baseSiteId}/products/apparel/$code/off';
 
   ///获取所有样衣
   static get samples => '/{baseSiteId}/products/sample/all';
 
   ///根据code获取样衣详情
-  static get sampleDetail =>
-      (code) => '/{baseSiteId}/products/sample/$code';
+  static get sampleDetail => (code) => '/{baseSiteId}/products/sample/$code';
 
   ///创建样衣
   static get sampleCreate => '/{baseSiteId}/products/sample/create';
@@ -66,14 +64,32 @@ abstract class ProductApis {
   //创建样衣借还记录
   static get sampleHistoryCreate =>
       '/{baseSiteId}/products/sampleCheckoutHist/create';
+
   //更新样衣借还记录
   static get sampleHistoryUpdate =>
-      (id) => '/{baseSiteId}/products/sampleCheckoutHist/update/$id';
+          (id) => '/{baseSiteId}/products/sampleCheckoutHist/update/$id';
+
   //删除样衣借还记录
   static get sampleHistoryDelete =>
-      (id) => '/{baseSiteId}/products/sampleCheckoutHist/$id';
+          (id) => '/{baseSiteId}/products/sampleCheckoutHist/$id';
 
   /// 看款下单（工厂款）
-  static get factoriesApparel =>
-      '/{baseSiteId}/products/apparel/factories';
+  static get factoriesApparel => '/{baseSiteId}/products/apparel/factories';
+
+  /// 创建面辅料
+  static get materielProductCreate => '/{baseSiteId}/materiel/product';
+
+  /// 公司面辅料查询
+  static get materielProductSearch => '/{baseSiteId}/materiel/product/search';
+
+  /// 所有在售
+  static get materielProductAll => '/{baseSiteId}/materiel/product/all';
+
+  /// 面辅料详情
+  static get getMaterielProduct => (id) => '/{baseSiteId}/materiel/product/$id';
+
+  /// 面辅料删除
+  static get deleteMaterielProduct =>
+          (
+          id) => '/{baseSiteId}/materiel/product/update/state/$id?state=DELETED';
 }

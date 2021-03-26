@@ -14,10 +14,12 @@ class FormTitle extends StatelessWidget {
 
   final bool require;
 
-  const FormTitle(
-    this.title, {
+  final String remarks;
+
+  const FormTitle(this.title, {
     this.require = false,
     Key key,
+    this.remarks,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,10 @@ class FormTitle extends StatelessWidget {
                 )
               : Container(),
           Text('$title'),
+          Text(
+            '${remarks ?? ''}',
+            style: TextStyle(color: Colors.grey, fontSize: 12),
+          )
         ],
       ),
     );
