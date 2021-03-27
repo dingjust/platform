@@ -247,7 +247,19 @@ flutter:
     - packages/assets/temp/activity/gifit.png
     - packages/assets/temp/success.png
     - packages/assets/temp/icon/auth.png
-
+    - packages/assets/temp/index/index_factory.jpg
+    - packages/assets/temp/index/index_products.jpg
+    - packages/assets/temp/index/index_requirement.jpg
+    - packages/assets/temp/index/arrow.png
+    - packages/assets/temp/index/home_communite.png
+    - packages/assets/temp/index/home_contract.png
+    - packages/assets/temp/index/home_factory.png
+    - packages/assets/temp/index/home_production.png
+    - packages/assets/temp/index/home_protect.png
+    - packages/assets/temp/index/home_publish.png
+    - packages/assets/temp/index/home_validate.png
+    - packages/assets/temp/index/home_order.png
+    - packages/assets/temp/index/home_deliver.png
 
   fonts:
     - family: b2bIcons

@@ -43,6 +43,7 @@ class RequirementStaggeredGridView extends StatelessWidget {
             crossAxisCount: 4,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
+            padding: EdgeInsets.only(top: 5),
             itemCount: state.requirements.length + 1,
             itemBuilder: (context, index) {
               if (index == (state.requirements.length)) {

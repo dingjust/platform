@@ -14,6 +14,7 @@ import '../common/app_keys.dart';
 import '_shared/widgets/banner.dart';
 import '_shared/widgets/brand_section.dart';
 import '_shared/widgets/factory_section.dart';
+import '_shared/widgets/home_section.dart';
 import '_shared/widgets/location.dart';
 import 'factory/factory_list_v2.dart';
 import 'home_appbar.dart';
@@ -25,26 +26,21 @@ class HomePage extends StatefulWidget {
 
   final UserType userType;
 
-  final Map<UserType, List<Widget>> widgets = <UserType, List<Widget>>{
+  ///头部
+  final Map<UserType, List<Widget>> _headWidgets = <UserType, List<Widget>>{
     UserType.BRAND: <Widget>[
       BrandButtonsSection(),
-      // HomeReportSection(),
-      BrandEntranceSection(),
-      // HomeEntrance()
-      // ProductsSection(),
-      // FactoryTabSection(),
-      // MoreFactorySection()
+      HomeEntrance(),
+      ServiceFlow()
     ],
     UserType.FACTORY: <Widget>[
       FactoryButtonsSection(),
-      // HomeReportSection(),
-      FactoryEntranceSection(),
-      // HomeEntrance()
-      // RequirementTabSection(),
-      // MoreRequirementSection()
+      HomeEntrance(),
+      ServiceFlow()
     ]
   };
 
+  ///搜索栏
   final Map<UserType, Widget> searchInputWidgets = <UserType, Widget>{
     UserType.BRAND: GlobalSearchInput<String>(
       tips: ' 找工厂、找款式...',
@@ -56,9 +52,67 @@ class HomePage extends StatefulWidget {
     ),
   };
 
-  get widgetsByUserType => widgets[userType];
+  ///tab
+  final Map<UserType, List<Widget>> _tabs = <UserType, List<Widget>>{
+    UserType.BRAND: <Widget>[
+      Tab(
+        text: "工厂",
+      ),
+      Tab(
+        text: "看款",
+      ),
+      Tab(
+        text: "需求",
+      ),
+    ],
+    UserType.FACTORY: <Widget>[
+      Tab(
+        text: "需求",
+      ),
+      Tab(
+        text: "工厂",
+      ),
+      Tab(
+        text: "看款",
+      ),
+    ],
+  };
 
+  ///tab
+  final Map<UserType, List<Widget>> _tabBarViews = <UserType, List<Widget>>{
+    UserType.BRAND: <Widget>[
+      FactoryList(),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        child: ProductStaggeredGrid(),
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        child: RequirementStaggeredGrid(),
+      ),
+    ],
+    UserType.FACTORY: <Widget>[
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        child: RequirementStaggeredGrid(),
+      ),
+      FactoryList(),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        child: ProductStaggeredGrid(),
+      ),
+    ],
+  };
+
+  ///头部
+  get headWidgets => _headWidgets[userType];
+
+  ///搜索栏
   get searchInputWidgetsByUserType => searchInputWidgets[userType];
+
+  get tabs => _tabs[userType];
+
+  get tabBarViews => _tabBarViews[userType];
 
   @override
   _HomePageState createState() => new _HomePageState();
@@ -122,19 +176,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               key: homePageKey,
               headerSliverBuilder: _slverBuilder,
               body: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: RequirementStaggeredGrid(),
-                  ),
-                  FactoryList(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: ProductStaggeredGrid(),
-                  ),
-                ],
-              )),
+                  controller: _tabController, children: widget.tabBarViews)),
         ));
   }
 
@@ -160,27 +202,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ),
       ),
-      SliverList(delegate: SliverChildListDelegate(widget.widgetsByUserType)),
+      SliverList(delegate: SliverChildListDelegate(widget.headWidgets)),
       SliverPersistentHeader(
           pinned: true,
           delegate: HomeAppBarDelegate(TabBar(
-            controller: _tabController,
-            indicatorSize: TabBarIndicatorSize.label,
-            labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            unselectedLabelStyle:
-                TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            tabs: <Widget>[
-              Tab(
-                text: "需求",
+              controller: _tabController,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorColor: Constants.THEME_COLOR_ORANGE,
+              labelStyle: TextStyle(
+                fontSize: 18,
               ),
-              Tab(
-                text: "工厂",
+              unselectedLabelColor: Color(0xff646464),
+              labelColor: Constants.THEME_COLOR_ORANGE,
+              unselectedLabelStyle: TextStyle(
+                fontSize: 18,
               ),
-              Tab(
-                text: "看款",
-              ),
-            ],
-          ))),
+              tabs: widget.tabs))),
     ];
   }
 
