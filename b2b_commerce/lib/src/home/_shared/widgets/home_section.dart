@@ -1,9 +1,11 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
+import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
@@ -12,22 +14,22 @@ class HomeReportSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<HomeSectionState>(
         builder: (context, HomeSectionState state, _) => Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '衣报送',
-                style: TextStyle(
-                    color: Constants.THEME_COLOR_MAIN,
-                    fontWeight: FontWeight.bold),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    '衣报送',
+                    style: TextStyle(
+                        color: Constants.THEME_COLOR_MAIN,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text('需求 ${state.requirementOrder ?? 0}'),
+                  Text('报价 ${state.quoteOrder ?? 0}'),
+                  Text('今日成交 12'),
+                ],
               ),
-              Text('需求 ${state.requirementOrder ?? 0}'),
-              Text('报价 ${state.quoteOrder ?? 0}'),
-              Text('今日成交 12'),
-            ],
-          ),
-        ));
+            ));
   }
 }
 
@@ -139,7 +141,7 @@ class ServiceFlow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -150,30 +152,15 @@ class ServiceFlow extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _icon('temp/index/home_publish.png', '发布需求'),
-                _arrow(),
-                _icon('temp/index/home_factory.png', '匹配工厂'),
-                _arrow(),
-                _icon('temp/index/home_communite.png', '沟通方案'),
-                _arrow(),
                 _icon('temp/index/home_order.png', '创建订单'),
+                _arrow(),
+                _icon('temp/index/home_contract.png', '签订合同'),
+                _arrow(),
+                _icon('temp/index/home_production.png', '研发生产'),
+                _arrow(),
+                _icon('temp/index/home_deliver.png', '出货对账'),
               ],
             ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _icon('temp/index/home_contract.png', '签订合同'),
-                  _arrow(),
-                  _icon('temp/index/home_production.png', '研发生产'),
-                  _arrow(),
-                  _icon('temp/index/home_deliver.png', '出货对账'),
-                  _arrow(),
-                  _icon('temp/index/home_protect.png', '享受保障'),
-                ],
-              ),
-            )
           ],
         ));
   }
@@ -206,6 +193,196 @@ class ServiceFlow extends StatelessWidget {
         package: 'assets',
         width: 20,
         fit: BoxFit.fitWidth,
+      ),
+    );
+  }
+}
+
+///品牌按钮组
+class BrandBtnsSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          HomeAssetsBtn(
+            url: 'temp/index/nearby_factory.png',
+            label: '就近找厂',
+            onTap: () async {
+              List<CategoryModel> categories =
+              await Provider.of<MajorCategoryState>(context)
+                  .getMajorCategories();
+              List<LabelModel> labels =
+              await Provider.of<LabelState>(context).getLabels();
+              labels = labels
+                  .where((label) =>
+              label.group == 'FACTORY' || label.group == 'PLATFORM')
+                  .toList();
+              if (categories != null && labels != null) {
+                //埋点>>>就近找厂
+                FlutterUmplus.event(
+                  "factory_finding_location",
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        FactoryPage(
+                          FactoryCondition(
+                              starLevel: 0,
+                              adeptAtCategories: [],
+                              labels: [],
+                              cooperationModes: []),
+                          route: '就近找厂',
+                          categories: categories,
+                          labels: labels,
+                        ),
+                  ),
+                );
+              }
+            },
+          ),
+          HomeAssetsBtn(
+            url: 'temp/index/free_capacity.png',
+            label: '空闲产能',
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
+            },
+          ),
+          HomeAssetsBtn(
+            url: 'temp/index/materiel_products.png',
+            label: '面辅料',
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
+            },
+          ),
+          HomeAssetsBtn(
+            url: 'temp/index/quote_process.png',
+            label: '报价处理',
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoutes.ROUTE_QUOTES);
+            },
+          ),
+          HomeAssetsBtn(
+            url: 'temp/index/requirement.png',
+            label: '我的需求',
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+///工厂按钮组
+class FactoryBtnsSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          HomeAssetsBtn(
+            url: 'temp/index/material.png',
+            label: '转包/裁片',
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_SUBCONTRACTS_POOL);
+            },
+          ),
+          HomeAssetsBtn(
+            url: 'temp/index/free_capacity.png',
+            label: '空闲产能',
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
+            },
+          ),
+          HomeAssetsBtn(
+            url: 'temp/index/materiel_products.png',
+            label: '面辅料',
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
+            },
+          ),
+          HomeAssetsBtn(
+            url: 'temp/index/production_factory.png',
+            label: '生产找厂',
+            onTap: () {
+              //埋点>>>推荐工厂
+              FlutterUmplus.event(
+                "factory_finding_all",
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      FindingFactoryPage(
+                        FactoryCondition(
+                            starLevel: 0,
+                            adeptAtCategories: [],
+                            labels: [],
+                            cooperationModes: []),
+                        route: '推荐工厂',
+                      ),
+                ),
+              );
+            },
+          ),
+          HomeAssetsBtn(
+            url: 'temp/index/quote_process.png',
+            label: '我的报价',
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.ROUTE_QUOTES);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeAssetsBtn extends StatelessWidget {
+  final String url;
+
+  final String label;
+
+  final Function onTap;
+
+  final String package;
+
+  const HomeAssetsBtn(
+      {Key key, this.url, this.label, this.onTap, this.package = 'assets'})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (onTap != null) onTap.call();
+      },
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              url,
+              package: package,
+              fit: BoxFit.fitWidth,
+              width: 50,
+            ),
+            Text(
+              '$label',
+              style: TextStyle(color: Colors.grey, fontSize: 10),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -12,8 +12,6 @@ import 'package:services/services.dart';
 import '../_shared/shares.dart';
 import '../common/app_keys.dart';
 import '_shared/widgets/banner.dart';
-import '_shared/widgets/brand_section.dart';
-import '_shared/widgets/factory_section.dart';
 import '_shared/widgets/home_section.dart';
 import '_shared/widgets/location.dart';
 import 'factory/factory_list_v2.dart';
@@ -28,13 +26,9 @@ class HomePage extends StatefulWidget {
 
   ///头部
   final Map<UserType, List<Widget>> _headWidgets = <UserType, List<Widget>>{
-    UserType.BRAND: <Widget>[
-      BrandButtonsSection(),
-      HomeEntrance(),
-      ServiceFlow()
-    ],
+    UserType.BRAND: <Widget>[BrandBtnsSection(), HomeEntrance(), ServiceFlow()],
     UserType.FACTORY: <Widget>[
-      FactoryButtonsSection(),
+      FactoryBtnsSection(),
       HomeEntrance(),
       ServiceFlow()
     ]

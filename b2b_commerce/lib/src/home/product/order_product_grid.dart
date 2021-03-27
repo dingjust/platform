@@ -41,6 +41,7 @@ class ProductStaggeredGridView extends StatelessWidget {
         },
         child: StaggeredGridView.countBuilder(
             shrinkWrap: true,
+            padding: EdgeInsets.only(top: 5),
             crossAxisCount: 4,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
