@@ -158,7 +158,7 @@ class _CarouselState extends State<Carousel> {
       },
       child: CachedNetworkImage(
           imageUrl: item.model.url,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
           placeholder: (context, url) => SpinKitRing(
                 color: Colors.black12,
                 lineWidth: 2,

@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_f
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
@@ -33,7 +34,7 @@ class HomeReportSection extends StatelessWidget {
   }
 }
 
-class HomeEntrance extends StatelessWidget {
+class BrandHomeEntrance extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -136,6 +137,86 @@ class HomeEntrance extends StatelessWidget {
   }
 }
 
+class FactoryHomeEntrance extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(top: 5),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        color: Colors.white,
+        child: Row(
+          children: [
+            Expanded(
+                child: GestureDetector(
+                    onTap: () {
+                      Provider.of<MajorCategoryState>(context)
+                          .getMajorCategories()
+                          .then((categories) {
+                        if (categories != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => RequirementPoolAllPage(
+                                  categories: categories),
+                            ),
+                          );
+                        }
+                      });
+                    },
+                    child: Container(
+                      height: 250,
+                      child: Image.asset(
+                        'temp/index/home_production_requirement.jpg',
+                        package: 'assets',
+                        fit: BoxFit.cover,
+                      ),
+                    ))),
+            Container(
+              width: 5,
+            ),
+            Expanded(
+                child: Container(
+              height: 250,
+              child: Column(
+                children: [
+                  Expanded(
+                      child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.ROUTE_PUBLISH_CENTER);
+                    },
+                    child: Container(
+                      child: Image.asset(
+                        'temp/index/home_publish_infos.jpg',
+                        package: 'assets',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  )),
+                  Container(
+                    height: 5,
+                  ),
+                  Expanded(
+                      child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.ROUTE_ORDER_PRODUCTS);
+                    },
+                    child: Container(
+                      child: Image.asset(
+                        'temp/index/index_products.jpg',
+                        package: 'assets',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ))
+                ],
+              ),
+            ))
+          ],
+        ));
+  }
+}
+
 class ServiceFlow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -152,13 +233,59 @@ class ServiceFlow extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _icon('temp/index/home_order.png', '创建订单'),
+                // _icon('temp/index/home_order.png', '创建订单'),
+                // _arrow(),
+                // _icon('temp/index/home_contract.png', '签订合同'),
+                // _arrow(),
+                // _icon('temp/index/home_production.png', '研发生产'),
+                // _arrow(),
+                // _icon('temp/index/home_deliver.png', '出货对账'),
+                UserBLoC.instance.currentUser.type == UserType.BRAND
+                    ? HomeAssetsBtn(
+                  label: '创建订单',
+                  url: 'temp/index/home_order.png',
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(AppRoutes.ROUTE_OUT_ORDERS);
+                  },
+                )
+                    : HomeAssetsBtn(
+                  label: '承接订单',
+                  url: 'temp/index/home_order.png',
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS);
+                  },
+                ),
                 _arrow(),
-                _icon('temp/index/home_contract.png', '签订合同'),
+                HomeAssetsBtn(
+                  label: '签订合同',
+                  url: 'temp/index/home_contract.png',
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.ROUTE_MY_CONTRACT);
+                  },
+                ),
                 _arrow(),
-                _icon('temp/index/home_production.png', '研发生产'),
+                HomeAssetsBtn(
+                  label: '研发生产',
+                  url: 'temp/index/home_production.png',
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context,
+                        UserBLoC.instance.currentUser.type == UserType.BRAND
+                            ? AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS
+                            : AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS);
+                  },
+                ),
                 _arrow(),
-                _icon('temp/index/home_deliver.png', '出货对账'),
+                HomeAssetsBtn(
+                  label: '出货对账',
+                  url: 'temp/index/home_deliver.png',
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(AppRoutes.ROUTE_RECONCILIATION_ORDERS);
+                  },
+                ),
               ],
             ),
           ],

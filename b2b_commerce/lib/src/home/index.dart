@@ -26,10 +26,14 @@ class HomePage extends StatefulWidget {
 
   ///头部
   final Map<UserType, List<Widget>> _headWidgets = <UserType, List<Widget>>{
-    UserType.BRAND: <Widget>[BrandBtnsSection(), HomeEntrance(), ServiceFlow()],
+    UserType.BRAND: <Widget>[
+      BrandBtnsSection(),
+      BrandHomeEntrance(),
+      ServiceFlow()
+    ],
     UserType.FACTORY: <Widget>[
       FactoryBtnsSection(),
-      HomeEntrance(),
+      FactoryHomeEntrance(),
       ServiceFlow()
     ]
   };
@@ -177,7 +181,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<Widget> _slverBuilder(BuildContext context, bool innerBoxIsScrolled) {
     return [
       SliverAppBar(
-        expandedHeight: 188.0,
+        expandedHeight: 160.0,
         pinned: true,
         elevation: 0.5,
         title: HomeTitle(
