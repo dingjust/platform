@@ -5,10 +5,11 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:services/services.dart'
-    show LoginResult, UserBLoC, UserRepositoryImpl, WechatServiceImpl;
+    show LoginResult, UserBLoC, UserRepositoryImpl, BaseResponse;
 import 'package:widgets/widgets.dart';
 
 import 'auth_login.dart';
+import 'code_login_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -31,8 +32,6 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
   final GlobalKey _scaffoldKey = GlobalKey();
 
-  String phoneValidateStr = "";
-
   TextEditingController _phoneController;
   TextEditingController _passwordController;
   TextEditingController _smsCaptchaController;
@@ -43,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordHide = true;
   bool _isPasswordLogin = false;
   bool validate = false;
-  bool _isAgree = true;
 
   ///倒计时间
   int countdownTime = 60;
@@ -88,14 +86,28 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           InputRow(
             leading: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Icon(
-                Icons.phone_iphone,
-                color: Colors.grey,
-              ),
-            ),
+                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                padding: EdgeInsets.only(top: 5),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.phone_iphone,
+                      color: Colors.grey,
+                    ),
+                    Text(
+                      '(+86)',
+                      style: TextStyle(color: Colors.grey),
+                    )
+                  ],
+                )),
             field: TextField(
               autofocus: false,
+              maxLength: 11,
+
+              buildCounter: (context,
+                      {int currentLength, bool isFocused, int maxLength}) =>
+                  null,
+              maxLengthEnforced: true,
               onChanged: (value) async {
                 formValidate();
               },
@@ -105,8 +117,10 @@ class _LoginPageState extends State<LoginPage> {
                 FilteringTextInputFormatter.digitsOnly
               ],
               controller: _phoneController,
-              decoration:
-                  InputDecoration(hintText: '请输入手机号', border: InputBorder.none),
+              decoration: InputDecoration(
+                  hintText: '请输入手机号',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 0)),
             ),
             surfix: Container(
                 child: Row(
@@ -120,23 +134,22 @@ class _LoginPageState extends State<LoginPage> {
                     _phoneController.clear();
                   },
                 ),
-                Text(
-                  phoneValidateStr,
-                  style: TextStyle(color: Colors.red),
-                ),
               ],
             )),
           ),
           _isPasswordLogin
               ? InputRow(
                   leading: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 56, 0),
                     child: Container(
-                      child: Icon(
-                        Icons.lock,
-                        color: Colors.grey,
-                      ),
-                    ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.lock,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        )),
                   ),
                   field: TextField(
                     autofocus: false,
@@ -164,64 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.black54,
                         ),
                       )))
-              : InputRow(
-                  leading: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                    child: Icon(
-                      Icons.sms,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  field: TextField(
-                    autofocus: false,
-                    onChanged: (value) {
-                      formValidate();
-                    },
-                    keyboardType: TextInputType.phone,
-                    //只能输入数字
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    focusNode: _smsFocusNode,
-                    controller: _smsCaptchaController,
-                    decoration: InputDecoration(
-                        hintText: '请输入短信验证码', border: InputBorder.none),
-                  ),
-                  surfix: Countdown(
-                    controller: controller,
-                    seconds: countdownTime,
-                    build: (_, double time) =>
-                        OutlinedButton(
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50))),
-                              side: MaterialStateProperty.all(
-                                  BorderSide(
-                                      color: Constants.THEME_COLOR_MAIN))),
-                          onPressed: (time == 0 || time == countdownTime)
-                              ? () async {
-                            bool legal = await validatePhone();
-                            if (legal) {
-                              UserRepositoryImpl()
-                                  .sendCaptchaForLogin(_phoneController.text)
-                                  .then((a) {
-                                controller.restart();
-                              });
-                            }
-                            }
-                          : null,
-                      child: Text(
-                        (time == 0 || time == countdownTime)
-                            ? '获取验证码'
-                            : '${time.toInt()}s',
-                        style: TextStyle(color: Constants.THEME_COLOR_MAIN),
-                      ),
-                    ),
-                    interval: Duration(milliseconds: 1000),
-                    onFinished: () {},
-                  ),
-                ),
+              : Container(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -300,24 +256,20 @@ class _LoginPageState extends State<LoginPage> {
               margin: EdgeInsets.symmetric(vertical: 40),
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: OutlinedButton(
-                onPressed: (_formKey.currentState as FormState) == null
-                    ? null
-                    : (_formKey.currentState as FormState).validate()
-                        ? () {
-                            onLogin(bloc);
-                          }
-                        : null,
+                onPressed: () {
+                  onLogin(bloc);
+                },
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all(
                         EdgeInsets.symmetric(vertical: 10)),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50))),
                     backgroundColor:
-                        MaterialStateProperty.all(Constants.THEME_COLOR_MAIN),
+                    MaterialStateProperty.all(Constants.THEME_COLOR_MAIN),
                     side: MaterialStateProperty.all(
                         BorderSide(color: Constants.THEME_COLOR_MAIN))),
                 child: Text(
-                  '登录',
+                  _isPasswordLogin ? '登录' : '获取验证码',
                   style: TextStyle(color: Colors.black87, fontSize: 18),
                 ),
               ),
@@ -349,15 +301,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void formValidate() {
-    if (!RegexUtil.isMobile(_phoneController.text)) {
-      setState(() {
-        phoneValidateStr = '输入正确手机号';
-      });
-    } else {
-      setState(() {
-        phoneValidateStr = '';
-      });
-    }
     setState(() {
       if (_isPasswordLogin) {
         validate = _phoneController.text.trim().length == 11 &&
@@ -391,11 +334,6 @@ class _LoginPageState extends State<LoginPage> {
         result = "输入正确手机号";
       }
     }
-
-    setState(() {
-      phoneValidateStr = result;
-    });
-
     return isExist;
   }
 
@@ -409,9 +347,7 @@ class _LoginPageState extends State<LoginPage> {
           remember: _isRemember);
     } else {
       result = await bloc.loginByAuthorizationCode(
-          username: _phoneController.text,
-          code: _smsCaptchaController.text,
-          remember: _isRemember);
+          code: _smsCaptchaController.text, remember: _isRemember);
     }
     cancelFunc.call();
     if (result == LoginResult.SUCCESS) {
@@ -426,8 +362,32 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void onLogin(UserBLoC bloc) {
-    doLogin(bloc);
+  void onLogin(UserBLoC bloc) async {
+    if (_phoneController.text.length < 11) {
+      BotToast.showText(text: '手机号码格式错误');
+      throw Exception('手机号码格式错误');
+    }
+    if (_isPasswordLogin) {
+      doLogin(bloc);
+    } else {
+      Function cancelFunc = BotToast.showLoading();
+      BaseResponse baseResponse =
+      await UserRepositoryImpl.loginByCaptcha(_phoneController.text);
+      cancelFunc.call();
+      if (baseResponse == null) {
+        BotToast.showText(text: '未知错误');
+      } else {
+        if (baseResponse.code == 0)
+          BotToast.showText(text: '${baseResponse.msg}');
+        else
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  CodeLoginPage(
+                    accountNum: baseResponse.data,
+                    phone: _phoneController.text,
+                  )));
+      }
+    }
   }
 
   void showSnackBar(BuildContext context) {
@@ -507,17 +467,6 @@ class InputRow extends StatelessWidget {
                   ),
                 )
               : Container(),
-          // isRequired
-          //     ? Container(
-          //         margin: EdgeInsets.only(right: 10),
-          //         child: Text(
-          //           '*',
-          //           style: TextStyle(color: Colors.red, fontSize: 20),
-          //         ),
-          //       )
-          //     : Container(
-          //         margin: EdgeInsets.only(right: 20),
-          //       ),
           leading != null ? leading : Container(),
           Expanded(
             flex: 1,

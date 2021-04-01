@@ -303,8 +303,8 @@ class UserRepositoryImpl implements UserRepository {
   @override
 
   /// 更新用户资料
-  Future<bool> updateUserInfo(String uid, String name, String phone,
-      MediaModel media) async {
+  Future<bool> updateUserInfo(
+      String uid, String name, String phone, MediaModel media) async {
     Response response;
     bool result;
     Map data = {
@@ -353,6 +353,56 @@ class UserRepositoryImpl implements UserRepository {
     try {
       response = await http$.post(AuthApis.bindingRegister(type),
           data: CompanyRegisterDTO.toJson(form));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  ///验证码登录(含子账号)
+  static Future<BaseResponse> loginByCaptcha(String phone) async {
+    Response response;
+    try {
+      http$.removeAuthorization();
+      response = await http$.get(
+        UserApis.loginByCaptcha(phone),
+      );
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  ///验证验证码并返回所有账号
+  static Future<BaseResponse> validateCaptchaAccount(String phone,
+      String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.validateCaptchaAccount(phone, code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  ///选择登录账号
+  static Future<BaseResponse> selectLoginAccount(String phone, String uid,
+      String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.selectLoginAccount(phone, uid, code));
     } on DioError catch (e) {
       print(e);
     }

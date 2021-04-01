@@ -35,6 +35,11 @@ class UserGroupModel extends PrincipalGroupModel {
 
   static Map<String, dynamic> toJson(UserGroupModel model) =>
       model == null ? null : _$UserGroupModelToJson(model);
+
+  static List<Map<String, dynamic>> listToJson(List<UserGroupModel> models) =>
+      models == null
+          ? null
+          : models.map((e) => UserGroupModel.toJson(e)).toList();
 }
 
 ///认证状态

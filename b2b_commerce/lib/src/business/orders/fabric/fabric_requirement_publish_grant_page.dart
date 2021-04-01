@@ -101,14 +101,6 @@ class _FabricRequirementPublishGrantPageState
               color: Color.fromRGBO(255, 214, 12, 1),
               onPressed: (time == 0 || time == countdownTime)
                   ? () async {
-                      // bool legal = await validatePhone();
-                      // if (legal) {
-                      //   UserRepositoryImpl()
-                      //       .sendCaptchaForLogin(_phoneController.text)
-                      //       .then((a) {
-                      //     controller.restart();
-                      //   });
-                      // }
                       controller.restart();
                     }
                   : null,

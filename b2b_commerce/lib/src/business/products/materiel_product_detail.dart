@@ -153,13 +153,13 @@ class _MaterielProductDetailState extends State<MaterielProductDetail> {
 
   Widget _buildInfo() {
     var infoMap = {
-      '编号': data.code,
-      '货号': data.skuID ?? '',
-      '品类': data.category.name ?? '',
-      '成分': data.basis ?? '',
+      '编号': '${data.code}',
+      '货号': '${data.skuID ?? ''}',
+      '品类': '${data?.category?.name ?? ''}',
+      '成分': '${data?.basis ?? ''}',
       '克重': '${data.gramWeight ?? ''}g/㎡',
       '有效幅宽': '${data.width ?? ''}cm',
-      '用途': data.uses.join('、')
+      '用途': data?.uses?.join('、') ?? ''
     };
     List<Widget> infoRows = [];
     infoMap.forEach((key, value) {
