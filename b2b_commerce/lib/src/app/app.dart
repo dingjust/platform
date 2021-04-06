@@ -186,65 +186,28 @@ class _B2BAppState extends State<B2BApp> {
     List<NavigationMenu> menus = <NavigationMenu>[
       NavigationMenu(
         BottomNavigationBarItem(
-          icon: Container(
-            child: const Icon(B2BIcons.home),
-          ),
-          activeIcon: Container(
-            child: const Icon(B2BIcons.home_active),
-          ),
-          label: '商机',
+          icon: Icon(B2BIcons.home_2),
+          label: '首页',
         ),
         HomePage(userType: widget.userType),
       ),
       NavigationMenu(
-          BottomNavigationBarItem(
-              icon: Container(
-                child: const Icon(B2BIcons.production),
-              ),
-              activeIcon: Container(
-                child: const Icon(B2BIcons.production_active),
-              ),
-              label: '生产'),
-          AuthorizationDector(
-            authorizations: [Authorization.PURCHASE_ORDER],
-            show: false,
-            message: '无操作权限',
-            // child: ProductionPage(),
-            child: ProductionProgressPage(),
-          )),
+          BottomNavigationBarItem(icon: Icon(B2BIcons.production), label: '生产'),
+          ProductionProgressPage()),
       NavigationMenu(
+        // BottomNavigationBarItem(icon: BottomNotificationsIcon(), label: '消息'),
         BottomNavigationBarItem(
-            icon: Container(
-              child: BottomNotificationsIcon(),
-            ),
-            activeIcon: Container(
-              child: BottomNotificationsActiveIcon(),
-            ),
-            label: '消息'),
+            icon: Icon(Icons.notifications_none), label: '消息'),
         MessagePage(),
       ),
       NavigationMenu(
-        BottomNavigationBarItem(
-            icon: Container(
-              child: const Icon(B2BIcons.business),
-            ),
-            activeIcon: Container(
-              child: const Icon(B2BIcons.business_active),
-            ),
-            label: '工作'),
+        BottomNavigationBarItem(icon: Icon(B2BIcons.business), label: '工作'),
         BusinessHomePage(userType: widget.userType),
       ),
       NavigationMenu(
         BottomNavigationBarItem(
-            icon: Container(
-              child: const Icon(
-                B2BIcons.my,
-              ),
-            ),
-            activeIcon: Container(
-              child: const Icon(
-                B2BIcons.my_active,
-              ),
+            icon: Icon(
+              B2BIcons.my,
             ),
             label: '我的'),
         MyHomePage(turnToHome: () {
@@ -280,11 +243,15 @@ class _B2BAppState extends State<B2BApp> {
         return Scaffold(
           key: AppKeys.appPage,
           body: menus[_currentIndex].page,
-          bottomNavigationBar: BottomNavigation(
-            currentIndex: _currentIndex,
-            onChanged: _handleNavigation,
-            items: menus.map((menu) => menu.item).toList(),
-          ),
+          bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: _handleNavigation,
+              items: menus.map((menu) => menu.item).toList(),
+              type: BottomNavigationBarType.fixed,
+              selectedFontSize: 12,
+              selectedLabelStyle:
+                  TextStyle(color: Constants.THEME_COLOR_ORANGE),
+              selectedItemColor: Constants.THEME_COLOR_ORANGE),
         );
       }),
       routes: AppRoutes.allRoutes,

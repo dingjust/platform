@@ -5,10 +5,11 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:services/services.dart'
-    show LoginResult, UserBLoC, UserRepositoryImpl, WechatServiceImpl;
+    show LoginResult, UserBLoC, UserRepositoryImpl, BaseResponse;
 import 'package:widgets/widgets.dart';
 
 import 'auth_login.dart';
+import 'code_login_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -31,8 +32,6 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
   final GlobalKey _scaffoldKey = GlobalKey();
 
-  String phoneValidateStr = "";
-
   TextEditingController _phoneController;
   TextEditingController _passwordController;
   TextEditingController _smsCaptchaController;
@@ -43,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordHide = true;
   bool _isPasswordLogin = false;
   bool validate = false;
-  bool _isAgree = true;
 
   ///倒计时间
   int countdownTime = 60;
@@ -81,40 +79,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildServiceRow() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => widget.forgetPasswordPage));
-            },
-            child: Text(
-              '忘记密码',
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => widget.registerPage));
-            },
-            child: Container(
-              child: Text(
-                '注册',
-                style: TextStyle(color: Colors.black, fontSize: 15),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildInputArea() {
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
@@ -122,14 +86,28 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           InputRow(
             leading: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Icon(
-                Icons.phone_iphone,
-                color: Colors.grey,
-              ),
-            ),
+                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                padding: EdgeInsets.only(top: 5),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.phone_iphone,
+                      color: Colors.grey,
+                    ),
+                    Text(
+                      '(+86)',
+                      style: TextStyle(color: Colors.grey),
+                    )
+                  ],
+                )),
             field: TextField(
               autofocus: false,
+              maxLength: 11,
+
+              buildCounter: (context,
+                      {int currentLength, bool isFocused, int maxLength}) =>
+                  null,
+              maxLengthEnforced: true,
               onChanged: (value) async {
                 formValidate();
               },
@@ -139,8 +117,10 @@ class _LoginPageState extends State<LoginPage> {
                 FilteringTextInputFormatter.digitsOnly
               ],
               controller: _phoneController,
-              decoration:
-                  InputDecoration(hintText: '请输入手机号', border: InputBorder.none),
+              decoration: InputDecoration(
+                  hintText: '请输入手机号',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 0)),
             ),
             surfix: Container(
                 child: Row(
@@ -154,23 +134,22 @@ class _LoginPageState extends State<LoginPage> {
                     _phoneController.clear();
                   },
                 ),
-                Text(
-                  phoneValidateStr,
-                  style: TextStyle(color: Colors.red),
-                ),
               ],
             )),
           ),
           _isPasswordLogin
               ? InputRow(
                   leading: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 56, 0),
                     child: Container(
-                      child: Icon(
-                        Icons.lock,
-                        color: Colors.grey,
-                      ),
-                    ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.lock,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        )),
                   ),
                   field: TextField(
                     autofocus: false,
@@ -198,59 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.black54,
                         ),
                       )))
-              : InputRow(
-                  leading: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                    child: Icon(
-                      Icons.sms,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  field: TextField(
-                    autofocus: false,
-                    onChanged: (value) {
-                      formValidate();
-                    },
-                    keyboardType: TextInputType.phone,
-                    //只能输入数字
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    focusNode: _smsFocusNode,
-                    controller: _smsCaptchaController,
-                    decoration: InputDecoration(
-                        hintText: '请输入短信验证码', border: InputBorder.none),
-                  ),
-                  surfix: Countdown(
-                    controller: controller,
-                    seconds: countdownTime,
-                    build: (_, double time) => FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)),
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      onPressed: (time == 0 || time == countdownTime)
-                          ? () async {
-                              bool legal = await validatePhone();
-                              if (legal) {
-                                UserRepositoryImpl()
-                                    .sendCaptchaForLogin(_phoneController.text)
-                                    .then((a) {
-                                  controller.restart();
-                                });
-                              }
-                            }
-                          : null,
-                      child: Text(
-                        (time == 0 || time == countdownTime)
-                            ? '获取验证码'
-                            : '${time.toInt()}s',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    interval: Duration(milliseconds: 1000),
-                    onFinished: () {},
-                  ),
-                ),
+              : Container(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -275,23 +202,16 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 15, color: Colors.black54),
                 ),
               ),
-              Row(
-                children: <Widget>[
-                  Text(
-                    '记住账号',
-                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                  ),
-                  Checkbox(
-                    onChanged: (v) {
-                      setState(() {
-                        _isRemember = v;
-                      });
-                    },
-                    activeColor: Colors.orange,
-                    value: _isRemember,
-                  )
-                ],
-              )
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => widget.forgetPasswordPage));
+                },
+                child: Text(
+                  '忘记密码',
+                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                ),
+              ),
             ],
           )
         ],
@@ -325,14 +245,6 @@ class _LoginPageState extends State<LoginPage> {
                 fit: StackFit.expand,
                 children: <Widget>[
                   _buildLogo(),
-                  // Positioned(
-                  //   bottom: 5,
-                  //   left: 5,
-                  //   child: Text(
-                  //     '当前选择:${UserTypeLocalizedMap[UserBLoC.instance.currentUser.type]}',
-                  //     style: TextStyle(fontSize: 16),
-                  //   ),
-                  // )
                 ],
               ),
             ),
@@ -341,29 +253,47 @@ class _LoginPageState extends State<LoginPage> {
               delegate: SliverChildListDelegate([
             _buildInputArea(),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              margin: EdgeInsets.symmetric(vertical: 40),
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: RaisedButton(
-                onPressed: (_formKey.currentState as FormState) == null
-                    ? null
-                    : (_formKey.currentState as FormState).validate()
-                        ? () {
-                            onLogin(bloc);
-                          }
-                        : null,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                color: Color.fromRGBO(255, 214, 12, 1),
-                padding: EdgeInsets.symmetric(vertical: 10),
+              child: OutlinedButton(
+                onPressed: () {
+                  onLogin(bloc);
+                },
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 10)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50))),
+                    backgroundColor:
+                    MaterialStateProperty.all(Constants.THEME_COLOR_MAIN),
+                    side: MaterialStateProperty.all(
+                        BorderSide(color: Constants.THEME_COLOR_MAIN))),
                 child: Text(
-                  '登录',
-                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  _isPasswordLogin ? '登录' : '获取验证码',
+                  style: TextStyle(color: Colors.black87, fontSize: 18),
                 ),
               ),
             ),
-            _buildServiceRow(),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => widget.registerPage));
+                },
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                      EdgeInsets.symmetric(vertical: 10)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50))),
+                ),
+                child: Text(
+                  '注册',
+                  style: TextStyle(color: Colors.black54, fontSize: 18),
+                ),
+              ),
+            ),
             OtherAuthLoginBtnGroup(),
-            _buildProtocolArea()
           ])),
         ],
       ),
@@ -371,15 +301,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void formValidate() {
-    if (!RegexUtil.isMobile(_phoneController.text)) {
-      setState(() {
-        phoneValidateStr = '输入正确手机号';
-      });
-    } else {
-      setState(() {
-        phoneValidateStr = '';
-      });
-    }
     setState(() {
       if (_isPasswordLogin) {
         validate = _phoneController.text.trim().length == 11 &&
@@ -413,11 +334,6 @@ class _LoginPageState extends State<LoginPage> {
         result = "输入正确手机号";
       }
     }
-
-    setState(() {
-      phoneValidateStr = result;
-    });
-
     return isExist;
   }
 
@@ -431,9 +347,7 @@ class _LoginPageState extends State<LoginPage> {
           remember: _isRemember);
     } else {
       result = await bloc.loginByAuthorizationCode(
-          username: _phoneController.text,
-          code: _smsCaptchaController.text,
-          remember: _isRemember);
+          code: _smsCaptchaController.text, remember: _isRemember);
     }
     cancelFunc.call();
     if (result == LoginResult.SUCCESS) {
@@ -448,52 +362,32 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void onLogin(UserBLoC bloc) {
-    //加载条
-    // showDialog(
-    //   context: context,
-    //   builder: (context) =>
-    //       ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-    // );
-    // bloc.checkUserExist(_phoneController.text).then((value) {
-    //   if (value == null) {
-    //     bloc.loginStreamController.sink.add('网络链接失败');
-    //   } else if (value == UserType.DEFAULT) {
-    //     bloc.loginStreamController.sink.add('账号不存在请注册后登录');
-    //   } else {
-    //     if (bloc.currentUser.type != value) {
-    //       Navigator.of(context).pop();
-    //       showDialog(
-    //           context: context,
-    //           barrierDismissible: false,
-    //           builder: (_) {
-    //             return CustomizeDialog(
-    //               dialogType: DialogType.LOGIN_MESSAGE_DIALOG,
-    //               failTips:
-    //                   '您当前选择的是${UserTypeLocalizedMap[bloc.currentUser.type]},但您登录的账号为${UserTypeLocalizedMap[value]}账号，请问是否继续登录。',
-    //               callbackResult: false,
-    //               cancelButtonText: '换个账户',
-    //               confirmButtonText: '继续登录',
-    //               confirmAction: () {
-    //                 Navigator.of(context).pop();
-    //                 //加载条
-    //                 showDialog(
-    //                   context: context,
-    //                   builder: (context) => ProgressIndicatorFactory
-    //                       .buildDefaultProgressIndicator(),
-    //                 );
-    //                 doLogin(bloc);
-    //               },
-    //               cancelAction: () {
-    //                 Navigator.of(context).pop();
-    //               },
-    //             );
-    //           });
-    //     } else {
-    doLogin(bloc);
-    //     }
-    //   }
-    // });
+  void onLogin(UserBLoC bloc) async {
+    if (_phoneController.text.length < 11) {
+      BotToast.showText(text: '手机号码格式错误');
+      throw Exception('手机号码格式错误');
+    }
+    if (_isPasswordLogin) {
+      doLogin(bloc);
+    } else {
+      Function cancelFunc = BotToast.showLoading();
+      BaseResponse baseResponse =
+      await UserRepositoryImpl.loginByCaptcha(_phoneController.text);
+      cancelFunc.call();
+      if (baseResponse == null) {
+        BotToast.showText(text: '未知错误');
+      } else {
+        if (baseResponse.code == 0)
+          BotToast.showText(text: '${baseResponse.msg}');
+        else
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  CodeLoginPage(
+                    accountNum: baseResponse.data,
+                    phone: _phoneController.text,
+                  )));
+      }
+    }
   }
 
   void showSnackBar(BuildContext context) {
@@ -517,169 +411,6 @@ class _LoginPageState extends State<LoginPage> {
         _phoneController.text = oldUserName;
       });
     }
-  }
-
-  Widget _buildProtocolArea() {
-    return Container(
-        // padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
-        margin: EdgeInsets.only(top: 20),
-        child: Row(
-          children: <Widget>[
-            Checkbox(
-              onChanged: (v) {
-                setState(() {
-                  _isAgree = v;
-                  formValidate();
-                });
-              },
-              value: _isAgree,
-            ),
-            Expanded(
-              flex: 1,
-              child: Wrap(
-                alignment: WrapAlignment.start, //沿主轴方向居中
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '我已阅读并同意',
-                    style: TextStyle(color: Colors.black54),
-                  ),
-                  GestureDetector(
-                    onTap: showServiceProtocol,
-                    child: Text(
-                      '《钉单平台服务协议》',
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                  Text(
-                    '和',
-                    style: TextStyle(color: Colors.black54),
-                  ),
-                  GestureDetector(
-                    onTap: showPayProtocol,
-                    child: Text(
-                      '《钉单平台货款代收代付服务协议》',
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: showPrivacyProtocol,
-                    child: Text(
-                      '《隐私协议》',
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ));
-  }
-
-  void showPayProtocol() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString("packages/assets/document/paymentProtocol.txt"),
-            initialData: null,
-            builder: (context, snapshot) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                          child: Text(
-                            '钉单货款代收代付服务协议',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      snapshot.data != null
-                          ? Text(snapshot.data)
-                          : Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                ),
-              );
-            });
-      },
-    );
-  }
-
-  void showServiceProtocol() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString("packages/assets/document/serviceProtocol.txt"),
-            initialData: null,
-            builder: (context, snapshot) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                          child: Text(
-                            '钉单平台服务协议',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      snapshot.data != null
-                          ? Text(snapshot.data)
-                          : Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                ),
-              );
-            });
-      },
-    );
-  }
-
-  void showPrivacyProtocol() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString("packages/assets/document/privacyProtocol.txt"),
-            initialData: null,
-            builder: (context, snapshot) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                          child: Text(
-                            '隐私政策声明',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      snapshot.data != null
-                          ? Text(snapshot.data)
-                          : Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                ),
-              );
-            });
-      },
-    );
   }
 }
 
@@ -736,17 +467,6 @@ class InputRow extends StatelessWidget {
                   ),
                 )
               : Container(),
-          // isRequired
-          //     ? Container(
-          //         margin: EdgeInsets.only(right: 10),
-          //         child: Text(
-          //           '*',
-          //           style: TextStyle(color: Colors.red, fontSize: 20),
-          //         ),
-          //       )
-          //     : Container(
-          //         margin: EdgeInsets.only(right: 20),
-          //       ),
           leading != null ? leading : Container(),
           Expanded(
             flex: 1,

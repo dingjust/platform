@@ -70,6 +70,7 @@ class UserBLoC extends BLoCBase {
   Future<LoginResult> login(
       {String username, String password, bool remember}) async {
     Response loginResponse;
+    http$.removeAuthorization();
     try {
       loginResponse = await http$
           .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
@@ -150,18 +151,11 @@ class UserBLoC extends BLoCBase {
 
   //授权码登录 传入username则校验账号存在
   Future<LoginResult> loginByAuthorizationCode(
-      {String username, String code, bool remember}) async {
+      {String code, bool remember}) async {
     print(code);
     Response loginResponse;
+    http$.removeAuthorization();
     try {
-      //校验账号存在
-      if (username != null) {
-        UserType type = await UserRepositoryImpl().phoneExist(username);
-        if (type == null || type == UserType.DEFAULT) {
-          _loginResultController.sink.add('账号不存在请注册后登录');
-          return LoginResult.FAIL;
-        }
-      }
       loginResponse = await http$
           .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
         'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
@@ -212,7 +206,7 @@ class UserBLoC extends BLoCBase {
         }
       } else if (_user.type == UserType.FACTORY) {
         FactoryModel factoryModel =
-        await UserRepositoryImpl().getFactory(_user.companyCode);
+            await UserRepositoryImpl().getFactory(_user.companyCode);
         if (factoryModel != null) {
           _user.b2bUnit = factoryModel;
         }
@@ -222,7 +216,7 @@ class UserBLoC extends BLoCBase {
       if (remember) {
         LocalStorage.save(
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
-        LocalStorage.save(GlobalConfigs.USER_KEY, username);
+        LocalStorage.save(GlobalConfigs.USER_KEY, _user.mobileNumber);
       }
 
       //埋点>>>登录成功

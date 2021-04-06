@@ -150,8 +150,7 @@ class AddressList extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.grey,
                               ),
-                            )
-                        ),
+                            )),
                       ],
                     );
                   }
@@ -204,46 +203,8 @@ class AddressItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildRow(String name, String telephone, bool isDefaultAddress) {
-      List<Container> containers = <Container>[
-        Container(
-          padding: const EdgeInsets.only(right: 22.0),
-          child: Column(
-            children: <Widget>[
-              Text(name),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(right: 22.0),
-          child: Column(
-            children: <Widget>[
-              Text(
-                telephone,
-                style: const TextStyle(fontSize: 11, color: Colors.grey),
-              ),
-            ],
-          ),
-        ),
-      ];
-
-      if (isDefaultAddress != null && isDefaultAddress) {
-        containers.add(
-          Container(
-            padding: const EdgeInsets.all(0),
-            child: Column(
-              children: <Widget>[
-                const Text(
-                  '默认地址',
-                  style: const TextStyle(fontSize: 11, color: Constants.THEME_COLOR_MAIN),
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-
-      return Row(children: containers);
+    if (item.region == null && item.city == null && item.cityDistrict == null) {
+      return Container();
     }
 
     return ListTile(
@@ -265,5 +226,48 @@ class AddressItem extends StatelessWidget {
       subtitle: Text(item.details),
       trailing: Icon(Icons.chevron_right),
     );
+  }
+
+  Widget _buildRow(String name, String telephone, bool isDefaultAddress) {
+    List<Container> containers = <Container>[
+      Container(
+        padding: const EdgeInsets.only(right: 22.0),
+        child: Column(
+          children: <Widget>[
+            Text('$name'),
+          ],
+        ),
+      ),
+      Container(
+        padding: const EdgeInsets.only(right: 22.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              '$telephone',
+              style: const TextStyle(fontSize: 11, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    ];
+
+    if (isDefaultAddress != null && isDefaultAddress) {
+      containers.add(
+        Container(
+          padding: const EdgeInsets.all(0),
+          child: Column(
+            children: <Widget>[
+              const Text(
+                '默认地址',
+                style: const TextStyle(
+                    fontSize: 11, color: Constants.THEME_COLOR_MAIN),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Row(children: containers);
   }
 }

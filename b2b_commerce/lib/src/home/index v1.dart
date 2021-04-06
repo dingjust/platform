@@ -30,7 +30,7 @@ class HomePage extends StatefulWidget {
     UserType.BRAND: <Widget>[
       BrandButtonsSection(),
       // HomeReportSection(),
-      BrandEntranceSection(),
+      // BrandEntranceSection(),
       // ProductsSection(),
       FactoryTabSection(),
       MoreFactorySection()

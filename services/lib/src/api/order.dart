@@ -175,8 +175,7 @@ class OrderApis {
       };
 
   ///看款创建打样单
-  static get proofingCreateByProduct =>
-          (productBelongTo) {
+  static get proofingCreateByProduct => (productBelongTo) {
         return '/{baseSiteId}/orders/proofing/createByProduct/$productBelongTo';
       };
 
@@ -350,19 +349,19 @@ class OrderApis {
   ///创建生产进度单据
   static get createProductionProgressOrder =>
           (id) {
-        return '/b2b/orders/purchase/progress/$id/order';
+        return '/{baseSiteId}/orders/purchase/progress/$id/order';
       };
 
   ///作废生产进度单据
   static get deleteProductionProgressOrder =>
           (id, orderId) {
-        return '/b2b/orders/purchase/progress/$id/order/$orderId';
+        return '/{baseSiteId}/orders/purchase/progress/$id/order/$orderId';
       };
 
   ///修改生产进度单据
   static get updateProductionProgressOrder =>
           (id, orderId) {
-        return '/b2b/orders/purchase/progress/$id/order/$orderId';
+        return '/{baseSiteId}orders/purchase/progress/$id/order/$orderId';
       };
 
   ///看款下单创建销售订单 POST

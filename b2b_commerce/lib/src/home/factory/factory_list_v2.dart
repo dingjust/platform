@@ -39,6 +39,7 @@ class FactoryListView extends StatelessWidget {
           return false;
         },
         child: ListView.builder(
+            padding: EdgeInsets.only(top: 5),
             itemCount: state.factories.length + 1,
             // itemExtent: 50.0,
             itemBuilder: (BuildContext context, int index) {

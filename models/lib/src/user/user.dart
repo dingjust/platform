@@ -87,18 +87,18 @@ class UserModel extends PrincipalModel {
       int id,
       String uid,
       String name,
-        this.loginDisabled,
-        this.type,
-        this.roles,
-        this.status,
-        this.mobileNumber,
-        this.b2bUnit,
-        this.weChatOpenid,
-        this.weChatHeadImg,
-        this.dingTalkOpenid,
-        this.dingTalkHeadImg,
-        this.dingTalkNickname,
-        this.points = 0})
+      this.loginDisabled,
+      this.type,
+      this.roles,
+      this.status,
+      this.mobileNumber,
+      this.b2bUnit,
+      this.weChatOpenid,
+      this.weChatHeadImg,
+      this.dingTalkOpenid,
+      this.dingTalkHeadImg,
+      this.dingTalkNickname,
+      this.points = 0})
       : super(profilePicture: profilePicture, uid: uid, name: name, id: id);
 
   UserModel.empty() {
@@ -165,6 +165,9 @@ class B2BCustomerModel extends CustomerModel {
   @JsonKey(toJson: b2bUnitToJson)
   B2BUnitModel defaultB2BUnit;
 
+  @JsonKey(toJson: UserGroupModel.listToJson)
+  List<UserGroupModel> groups;
+
   B2BCustomerModel({
     int id,
     MediaModel profilePicture,
@@ -175,6 +178,7 @@ class B2BCustomerModel extends CustomerModel {
     List<RoleModel> roles,
     this.active,
     this.defaultB2BUnit,
+    this.groups
   }) : super(
     id: id,
     profilePicture: profilePicture,

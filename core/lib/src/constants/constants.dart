@@ -10,5 +10,7 @@ class Constants {
   static const THEME_COLOR_BACKGROUND = Color.fromRGBO(245, 245, 245, 1);
   static const THEME_COLOR_RED = Color(0xffff1744);
 
+  static const THEME_COLOR_ORANGE = Color(0xffff9f2d);
+
   static const WHOLE_COUNTRY_ISOCODE = 'CN-10';
 }

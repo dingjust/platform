@@ -109,7 +109,7 @@ abstract class UserApis {
 
   ///提现取消
   static get cashOutCanceled =>
-          (id) => '/{baseSiteId}/companyWallet/cashOutCanceled/$id';
+      (id) => '/{baseSiteId}/companyWallet/cashOutCanceled/$id';
 
   ///获取账单列表
   static get bills => '/{baseSiteId}/bill';
@@ -273,4 +273,22 @@ abstract class UserApis {
 
   ///积分兑换
   static get integralExchange => '/{baseSiteId}/user/points/exchange/apply';
+
+  ///验证码登录（含子账号）
+  static get loginByCaptcha =>
+          (phone) {
+        return '/{baseSiteId}/sms/login/captcha/$_clientId/B2B/$phone';
+      };
+
+  ///验证验证码并返回所有账号
+  static get validateCaptchaAccount =>
+          (phone, code) {
+        return '/{baseSiteId}/sms/validate/login/captcha/$phone/$code';
+      };
+
+  ///选择登录账号
+  static get selectLoginAccount =>
+          (phone, uid, code) {
+        return '/{baseSiteId}/sms/switch/captcha/$_clientId/login/user/$phone/$uid/$code';
+      };
 }
