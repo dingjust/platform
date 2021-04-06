@@ -430,23 +430,34 @@ export default {
       this.callback();
     },
     onDeleteCol (column) {
-      let index = this.formData.colNames.findIndex(item => item.id === column.id);
-      this.formData.colNames.splice(index, 1);
-      this.formData.entries.forEach(item => {
-        this.$delete(item, column.id);
-      })
-
-      this.$delete(this.item, column.id);
+      this.$confirm('是否删除此列?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        let index = this.formData.colNames.findIndex(item => item.id === column.id);
+        this.formData.colNames.splice(index, 1);
+        this.formData.entries.forEach(item => {
+          this.$delete(item, column.id);
+        })
+  
+        this.$delete(this.item, column.id);
+      });
     },
     onDeleteOri (attribute) {
-
-      this.$set(this.tableCol[attribute],'have',false);
-      // this.tableCol[attribute].have = false;
-
-      this.$delete(this.item, attribute);
-
-      this.formData.entries.forEach(item => {
-        this.$delete(item, attribute);
+      this.$confirm('是否删除此列?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this.$set(this.tableCol[attribute],'have',false);
+        // this.tableCol[attribute].have = false;
+  
+        this.$delete(this.item, attribute);
+  
+        this.formData.entries.forEach(item => {
+          this.$delete(item, attribute);
+        })
       })
     },
     callback () {

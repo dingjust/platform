@@ -195,6 +195,12 @@ export default {
       name: '成本单',
       url: '/purchase/cost'
     }, {
+      name: '报价单',
+      url: '/purchase/quote'
+    }, {
+      name: '盈亏分析',
+      url: '/purchase/profitloss'
+    }, {
       name: '采购需求',
       url: '/purchase/requirement',
       meta: {

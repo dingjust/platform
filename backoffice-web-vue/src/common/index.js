@@ -1035,6 +1035,11 @@ const COMMON_APIS = {
   },
   createApplication () {
     return '/b2b/application/save'
+  },
+
+  // 获取公司认证信息详情
+  getCooperatorAuthDetail (uid) {
+    return '/b2b/cert/enterprise/cert/info/' + uid;
   }
 };
 
@@ -1843,6 +1848,10 @@ let NONE_TENANT_APIS = {
   cancelCostOrder (id) {
     return '/b2b/cost/order/cancel/' + id;
   },
+  // 根据成本单查询关联报价单
+  searchQuoteByCostId (id) {
+    return '/b2b/quotation/sheet/searchByCostOrder/' + id;
+  },
   // 根据生产工单id查询成本单列表
   getCostOrderByProductionId (id) {
     return '/b2b/cost/order/listByProductionOrder/' + id;
@@ -1855,6 +1864,50 @@ let NONE_TENANT_APIS = {
   // 添加自定义尺码
   addCustomSize () {
     return '/b2b/sizes/customize';
+  },
+
+  // 根据产品id查询关联成本单
+  searchCostOrderByProductId (id) {
+    return '/b2b/cost/order/listByProduct/' + id;
+  },
+  // 创建盈亏分析
+  createProfitLoss () {
+    return '/b2b/profit/loss/analysis/create';
+  },
+  // 编辑盈亏分析
+  updateProfitLoss () {
+    return '/b2b/profit/loss/analysis/update';
+  },
+  // 查询盈亏分析列表
+  searchProfitLoss () {
+    return '/b2b/profit/loss/analysis';
+  },
+  // 根据id查询盈亏分析
+  getProfitLoss (id) {
+    return '/b2b/profit/loss/analysis/' + id;
+  },
+  cancelProfitLoss (id) {
+    return '/b2b/profit/loss/analysis/cancel/' + id;
+  },
+
+  // 创建报价单v2
+  createQuoteOrderV2 () {
+    return '/b2b/quotation/sheet/create';
+  },
+  // 更新报价单v2
+  updateQuoteOrderV2 () {
+    return '/b2b/quotation/sheet/update';
+  },
+  cancelQuoteOrderV2 (id) {
+    return '/b2b/quotation/sheet/cancel/' + id;
+  },
+  // 获取报价单
+  getQuoteOrderV2 (id) {
+    return '/b2b/quotation/sheet/' + id;
+  },
+  // 查询报价单列表
+  searchQuoteOrderV2 () {
+    return '/b2b/quotation/sheet';
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

@@ -546,17 +546,66 @@ const router = new Router({
           }, {
             path: 'cost',
             name: '成本单',
-            component: () => import( /* webpackChunkName: 'purchase' */ '@/views/purchase/cost/CostOrderPage')
+            component: () => import( /* webpackChunkName: 'cost' */ '@/views/purchase/cost/CostOrderPage')
           }, {
             path: 'cost/create',
             name: '创建成本单',
-            component: () => import( /* webpackChunkName: 'purchase' */ '@/views/purchase/cost/form/CostOrderForm')
+            component: () => import( /* webpackChunkName: 'cost' */ '@/views/purchase/cost/form/CostOrderForm')
           }, {
             path: 'cost/:id',
             name: '成本单详情',
             props: true,
-            component: () => import( /* webpackChunkName: 'purchase' */ '@/views/purchase/cost/details/CostOrderDetail')
-          }]
+            component: () => import( /* webpackChunkName: 'cost' */ '@/views/purchase/cost/details/CostOrderDetail')
+          },
+          {
+            path: 'cost/edit/:id',
+            name: '编辑成本单',
+            props: true,
+            component: () => import( /* webpackChunkName: 'cost' */ '@/views/purchase/cost/form/CostOrderForm')
+          }, 
+          {
+            path: 'quote',
+            name: '报价单',
+            component: () => import( /* webpackChunkName: 'quote' */ '@/views/purchase/quoteV2/QuoteOrderPageV2')
+          },
+          {
+            path: 'quote/create',
+            name: '创建报价单',
+            component: () => import( /* webpackChunkName: 'quote' */ '@/views/purchase/quoteV2/form/QuoteOrderFormV2'),
+          }, 
+          {
+            path: 'quote/:id',
+            name: '报价单详情',
+            props: true,
+            component: () => import( /* webpackChunkName: 'quote' */ '@/views/purchase/quoteV2/detail/QuoteOrderDetailV2'),
+          }, 
+          {
+            path: 'quote/edit/:id',
+            name: '编辑报价单',
+            props: true,
+            component: () => import( /* webpackChunkName: 'quote' */ '@/views/purchase/quoteV2/form/QuoteOrderFormV2'),
+          }, 
+          {
+            path: 'profitloss',
+            name: '盈亏分析',
+            component: () => import( /* webpackChunkName: 'profitloss' */ '@/views/purchase/profit-loss/ProfitLossPage'),
+          },
+          {
+            path: 'profitloss/create',
+            name: '创建盈亏分析',
+            component: () => import( /* webpackChunkName: 'profitloss' */ '@/views/purchase/profit-loss/form/ProfitLossForm'),
+          }, {
+            path: 'profitloss/edit/:id',
+            name: '编辑盈亏分析',
+            props: true,
+            component: () => import( /* webpackChunkName: 'profitloss' */ '@/views/purchase/profit-loss/form/ProfitLossForm'),
+          }, {
+            path: 'profitloss/:id',
+            name: '盈亏分析详情',
+            props: true,
+            component: () => import( /* webpackChunkName: 'profitloss' */ '@/views/purchase/profit-loss/detail/ProfitLossDetail'),
+          }
+        ]
         },
         {
           path: 'account',
