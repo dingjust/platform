@@ -18,25 +18,26 @@
     <div class="over-tabs">
       <el-row type="flex">
         <el-button v-if="canChangeProduct" class="material-btn" @click="appendProduct">添加商品</el-button>
+        <el-button v-if="canCreateProfitLoss" class="material-btn" @click="createProfitLoss">创建盈亏分析</el-button>
       </el-row>
     </div>
     <el-tabs type="border-card">
-      <el-tab-pane label="订单明细" v-if="form.auditState!='PASSED'">
+      <el-tab-pane label="订单明细" v-if="form.auditState!='PASSED'" key="order">
         <sales-production-products-table :data="form.taskOrderEntries" :canDelete="canChangeProduct" @onDelete="onProductDelete"
           :canUpdate="canUpdate" @onModify="onProductModify" @onDetail="onProductDetail"/>
       </el-tab-pane>
-      <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'">
+      <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'" key="production">
         <sales-production-tasks-table :data="form.taskOrderEntries" @onDetail="onTaskDetail"/>
+      </el-tab-pane>
+      <el-tab-pane label="盈亏分析" v-if="showProfitLoss" key="profitLoss" :lazy="true">
+        <profit-loss-detail-subject v-if="form.profitLossAnalysis" 
+                                    :id="form.profitLossAnalysis.id" @callback="callback"/>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-  import {
-    Popconfirm
-  } from 'element-ui';
-
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import SalesProductionProductsTable from './SalesProductionProductsTable';
   import SalesProductionTasksTable from './SalesProductionTasksTable';
@@ -50,7 +51,8 @@
       SalesProductionProductsTable,
       SalesProductionTasksTable,
       SalesPlanEntryForm,
-      SalesPlanEntryDetail
+      SalesPlanEntryDetail,
+      ProfitLossDetailSubject: () => import('@/views/purchase/profit-loss/detail/ProfitLossDetailSubject')
     },
     props: {
       canUpdate: {
@@ -77,7 +79,13 @@
             return false;
         }
       },
-
+      showProfitLoss: function () {
+        // 订单为外接订单，且状态为生产中或已完成
+        return this.form.sendBy && this.form.sendBy.id && (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED');
+      },
+      canCreateProfitLoss: function () {
+        return !this.form.profitLossAnalysis && this.showProfitLoss;
+      }
     },
     methods: {
       appendProduct() {
@@ -153,6 +161,21 @@
       },
       onTaskDetail(index){
         
+      },
+      createProfitLoss () {
+        this.$router.push({
+          name: '创建盈亏分析',
+          params: {
+            formData: {
+              id: this.form.id,
+              code: this.form.code,
+              taskOrderEntries: this.form.taskOrderEntries
+            }
+          }
+        })
+      },
+      callback () {
+        this.$emit('callback');
       }
     },
     data() {
@@ -206,7 +229,7 @@
   .over-tabs {
     position: absolute;
     z-index: 100;
-    right: 30px;
+    right: 50px;
     margin-top: 2px;
   }
 
@@ -214,7 +237,7 @@
     background-color: #ffd60c;
     border-color: #FFD5CE;
     color: #000;
-    width: 90px;
+    /* width: 90px; */
     height: 35px;
   }
 

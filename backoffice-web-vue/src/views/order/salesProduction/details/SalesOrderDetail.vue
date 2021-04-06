@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
         <div class="sales-plan-form-title">
@@ -21,22 +21,22 @@
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
-          @appendProduct="appendProduct" />
+          @appendProduct="appendProduct" @callback="callback"/>
       </div>
       <template
         v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">
         <order-audit-detail :processes="formData.auditWorkOrder.processes" />
       </template>
-      <div v-if="showFinancial" style="margin-top:20px">
-        <!-- <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
+      <!-- <div v-if="showFinancial" style="margin-top:20px">
+        <div style="padding-left: 10px;margin-top: 20px" v-if="formData.originCompany">
           <el-row v-if="formData.payPlan != null">
             <purchase-order-info-receipt-finance :slotData="formData" />
           </el-row>
-        </div> -->
+        </div>
         <div v-if="formData.originCompany && formData.paymentBill != null">
           <financial-tabs :formData="formData.paymentBill" belongTo="RECEIVABLE_PAGE" @callback="callback" />
         </div>
-      </div>
+      </div> -->
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
           <h5 style="font-weight: bold">拒绝原因</h5>
@@ -80,9 +80,6 @@
     'SalesProductionOrdersModule'
   );
 
-  import {
-    accMul
-  } from '@/common/js/number';
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
@@ -404,7 +401,7 @@
         }
         this.$message.success('作废订单成功');
         await this.$router.go(-1);
-      },
+      }
     },
     data() {
       return {
@@ -425,6 +422,9 @@
           deliveryAddress: {},
           id: '',
           status: '',
+          profitLossAnalysis: {
+            id: null
+          },
           user: {},
           payPlan: {},
           quality: '',
