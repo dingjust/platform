@@ -166,6 +166,7 @@
 
   export default {
     name: 'MaterialsImport',
+    props: ['singleton'],
     components: {
       UploadExcelComponent,
     },
@@ -194,7 +195,7 @@
             estimatedLoss: (row['损耗*'] * 100) + '',
             estimatedUsage: row['预计用量*'] + '',
             emptySent: (row['空差*'] * 100) + '',
-            orderCount: row['订单数*'] + '',
+            orderCount: this.singleton ? 1 : row['订单数*'] + '',
             requiredAmount: row['需求总量*'] + '',
             cooperatorName: (row['供应商'] + '').replace(/[\r\n]/g,"").trim(),
             price: row['物料单价*'] + '',

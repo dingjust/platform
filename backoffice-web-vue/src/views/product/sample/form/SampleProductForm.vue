@@ -24,7 +24,8 @@
         <el-divider></el-divider>
         <apparel-product-images-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
         </apparel-product-images-form>
-        <sample-attach-orders-form :entries.sync="slotData.entries" :medias.sync="slotData.medias"
+        <sample-product-cost-part v-if="slotData.id" :slotData="slotData"/>
+        <!-- <sample-attach-orders-form :entries.sync="slotData.entries" :medias.sync="slotData.medias"
           :productionProcessContent.sync="slotData.productionProcessContent" :productsColors="getClothesColors()" />
         <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">
           <el-col :span="4">
@@ -40,7 +41,7 @@
               </el-button>
             </template>
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-card>
       <el-row type="flex" justify="center" class="product-form-row">
         <el-button class="product-form-btn" @click="onUpdate()"
@@ -70,7 +71,6 @@
   import SampleAccountingSheetForm from './SampleAccountingSheetForm';
   import SampleAccountingSheet from '../components/SampleAccountingSheet';
 
-
   export default {
     name: 'SampleProductForm',
     components: {
@@ -79,7 +79,8 @@
       ApparelProductBasicForm,
       SampleAttachOrdersForm,
       SampleAccountingSheetForm,
-      SampleAccountingSheet
+      SampleAccountingSheet,
+      SampleProductCostPart: () => import('./SampleProductCostPart')
     },
     props: ['readOnly', 'isRead', 'isDialogOpen'],
     computed: {
@@ -255,7 +256,7 @@
           });
         }
         return result;
-      },
+      }
     },
     data() {
       return {

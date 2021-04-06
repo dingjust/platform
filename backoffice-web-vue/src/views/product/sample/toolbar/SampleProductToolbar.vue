@@ -213,4 +213,8 @@
     width: 150px;
   }
 
+  /deep/ .el-form-item {
+    margin-bottom: 0px;
+  }
+
 </style>
