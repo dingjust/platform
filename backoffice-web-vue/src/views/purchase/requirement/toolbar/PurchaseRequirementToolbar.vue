@@ -29,11 +29,11 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
-        <el-col :span="2">
+        <!-- <el-col :span="2">
           <authorized :permission="['PURCHASE_TASK_CREATE']">
             <el-button type="primary" class="create-button" @click="onCreate">创建采购需求</el-button>
           </authorized>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-form>
   </div>

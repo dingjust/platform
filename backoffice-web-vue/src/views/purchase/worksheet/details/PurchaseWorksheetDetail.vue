@@ -17,9 +17,9 @@
           <el-col :span="6">
             <h6>工单号：{{formData.code}}</h6>
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <h6>关联款号：{{formData.task.costOrder.productionOrder.productSkuID}}</h6>
-          </el-col>
+          </el-col> -->
           <el-col :span="6">
             <h6>关联需求：
               <el-button type="text" @click="onTaskDetail(formData.task.id)" class="code-btn">{{formData.task.code}}</el-button>

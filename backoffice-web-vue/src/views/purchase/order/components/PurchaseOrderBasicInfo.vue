@@ -4,9 +4,9 @@
       <el-col :span="6">
         <h6>采购单号：{{order.code}}</h6>
       </el-col>
-      <el-col :span="6">
+      <!-- <el-col :span="6">
         <h6>关联款号：{{formData.task.costOrder.productionOrder.productSkuID}}</h6>
-      </el-col>
+      </el-col> -->
       <el-col :span="6">
         <h6>关联需求：{{formData.task.code}}</h6>
       </el-col>

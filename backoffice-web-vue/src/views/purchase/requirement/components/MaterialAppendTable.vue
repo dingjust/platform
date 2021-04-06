@@ -14,7 +14,7 @@
     </el-row>
     <el-form ref="form" :model="entries" :hide-required-asterisk="true">
       <el-table ref="resultTable" stripe :data="entries.workOrders" :height="autoHeight">
-        <el-table-column min-width="100px">
+        <el-table-column min-width="100px" label="物料名称">
           <template slot="header">
             <span>物料名称<span style="color: #F56C6C"> *</span></span>
           </template>
@@ -24,7 +24,7 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column prop="materialsType" min-width="100px">
+        <el-table-column label="物料类别" prop="materialsType" min-width="100px">
           <template slot="header">
             <span>物料类别<span style="color: #F56C6C"> *</span></span>
           </template>
@@ -39,9 +39,6 @@
           </template>
         </el-table-column>
         <el-table-column label="物料编号" prop="code" min-width="100px">
-          <template slot="header">
-            <span>物料编号</span>
-          </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.code'">
               <el-input v-model="scope.row.code" style="width: 90px"></el-input>
@@ -49,9 +46,6 @@
           </template>
         </el-table-column>
         <el-table-column label="幅宽/型号" prop="modelName" min-width="100px">
-          <template slot="header">
-            <span>幅宽/型号</span>
-          </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.modelName'">
               <el-input v-model="scope.row.modelName" style="width: 90px"></el-input>
@@ -75,9 +69,6 @@
           </template>
         </el-table-column>
         <el-table-column label="物料颜色" prop="colorName" min-width="100px">
-          <template slot="header">
-            <span>物料颜色</span>
-          </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.colorName'">
               <el-input v-model="scope.row.colorName" style="width: 90px"></el-input>
@@ -102,7 +93,7 @@
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedLoss'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.estimatedLoss" style="width: 90px"
-                        v-number-input.float="{ min: 0, max: 100, decimal: 2 }">
+                        v-number-input.float="{ min: null, max: null, decimal: null }">
                 <span slot="suffix">%</span>
               </el-input>
             </el-form-item>
@@ -124,7 +115,8 @@
           </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.orderCount'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
-              <el-input v-model="scope.row.orderCount" style="width: 90px"
+              <el-input v-if="singleton" v-model="scope.row.orderCount" style="width: 90px" :disabled="true"></el-input>
+              <el-input v-else v-model="scope.row.orderCount" style="width: 90px"
                         v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
             </el-form-item>
           </template>
@@ -175,11 +167,12 @@
           </template>
         </el-table-column>
         <el-table-column label="到料时间" prop="estimatedRecTime" min-width="150px">
-          <template slot="header">
+          <!-- <template slot="header">
             <span>到料时间<span style="color: #F56C6C"> *</span></span>
-          </template>
+          </template> -->
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedRecTime'" :rules="[{required: true, type: 'number',message: '必填', tigger: 'blur'}]">
+            <!-- <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedRecTime'" :rules="[{required: true, type: 'number',message: '必填', tigger: 'blur'}]"> -->
+            <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedRecTime'" >
               <el-date-picker
                 v-model="scope.row.estimatedRecTime"
                 type="date"
@@ -221,7 +214,7 @@
       <el-button class="sumbit-btn" @click="onSumbit">确认</el-button>
     </el-row>
     <el-dialog :visible.sync="importVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <materials-import v-if="importVisible" @onImport="onImport"/>
+      <materials-import v-if="importVisible" @onImport="onImport" :singleton="singleton"/>
     </el-dialog>
   </div>  
 </template>
@@ -231,7 +224,7 @@ import MaterialsImport from './MaterialsImport'
 
 export default {
   name: 'MaterialAppendTable',
-  props: ['formData', 'entries', 'isFromCost'],
+  props: ['formData', 'entries', 'isFromCost', 'singleton'],
   components: {
     MaterialsImport
   },
@@ -242,8 +235,10 @@ export default {
     },
     getExpectQuantity (index) {
       let count = 0;
-      if (!Number.isNaN(Number.parseFloat(this.entries.workOrders[index].unitQuantity)) && !Number.isNaN(Number.parseFloat(this.entries.workOrders[index].estimatedLoss))) {
-        count = Number.parseFloat(this.entries.workOrders[index].unitQuantity) * (1 + Number.parseFloat(this.entries.workOrders[index].estimatedLoss) / 100);
+      let unitQuantity = Number.parseFloat(this.entries.workOrders[index].unitQuantity);
+      let estimatedLoss = Number.parseFloat(this.entries.workOrders[index].estimatedLoss);
+      if (!Number.isNaN(unitQuantity) && !Number.isNaN(estimatedLoss)) {
+        count = unitQuantity * (1 + estimatedLoss / 100);
       }
       this.entries.workOrders[index].estimatedUsage = count.toFixed(2);
       return count.toFixed(2);
@@ -251,21 +246,21 @@ export default {
     getNeedQuantity (index) {
       let count = 0;
       const estimatedUsage = this.getExpectQuantity(index);
-      if (!Number.isNaN(Number.parseFloat(this.entries.workOrders[index].orderCount))) {
-        const orderCount = Number.parseFloat(this.entries.workOrders[index].orderCount);
-        let emptySent = 100;
-        if (!Number.isNaN(Number.parseFloat(this.entries.workOrders[index].emptySent))) {
-          emptySent = Number.parseFloat(this.entries.workOrders[index].emptySent);
-        }
-        count = estimatedUsage * orderCount / (emptySent / 100);
-      }
+
+      let orderCount = Number.isNaN(Number.parseFloat(this.entries.workOrders[index].orderCount)) ? 
+                                    0 : Number.parseFloat(this.entries.workOrders[index].orderCount);
+      let emptySent = Number.isNaN(Number.parseFloat(this.entries.workOrders[index].emptySent)) ? 
+                                    100 : Number.parseFloat(this.entries.workOrders[index].emptySent);
+
+      count = estimatedUsage * orderCount / (emptySent / 100);
       this.entries.workOrders[index].requiredAmount = count.toFixed(2);
       return count.toFixed(2);
     },
     getTotalPrice (index) {
       let count = 0;
-      if (!Number.isNaN(Number.parseFloat(this.entries.workOrders[index].price))) {
-        count = Number.parseFloat(this.entries.workOrders[index].price) * this.getNeedQuantity(index);
+      let price = Number.parseFloat(this.entries.workOrders[index].price);
+      if (!Number.isNaN(price)) {
+        count = price * this.getNeedQuantity(index);
       }
       this.entries.workOrders[index].totalPrice = count.toFixed(2);
       return count.toFixed(2);
@@ -284,7 +279,7 @@ export default {
         requiredAmount: '',
         estimatedLoss: '',
         estimatedUsage: '',
-        orderCount: '',
+        orderCount: 1,
         auditColor: '',
         estimatedRecTime: '',
         cooperatorName: '',
@@ -337,32 +332,32 @@ export default {
       })
       return result;
     },
-    checkRepeat (materials) {
-      let stark = [];
+    // checkRepeat (materials) {
+    //   let stark = [];
 
-      stark = stark.concat(materials);
+    //   stark = stark.concat(materials);
 
-      let repeat;
-      let formRepeat;
-      while (stark.length) {
-        let temp = stark.shift();
-        repeat = stark.filter(item => item.code === temp.code);
-        if (repeat.length > 0) {
-          if (repeat.filter(val => val.name === temp.name && val.materialsType === temp.materialsType && val.unit === temp.unit && val.cooperatorName === temp.cooperatorName).length !== repeat.length) {
-            this.$message.warning('添加表单中存在相同物料编号 ' + temp.code + '，但名字、类型、单位，供应商其一不一致的物料，请先进行处理');
-            return false;
-          }
-        }
-        formRepeat = this.formData.workOrders.filter(item => item.code === temp.code);
-        if (formRepeat.length > 0) {
-          if (formRepeat.filter(val => val.name === temp.name && val.materialsType === temp.materialsType && val.unit === temp.unit && val.cooperatorName === temp.cooperatorName).length !== formRepeat.length) {
-            this.$message.warning('采购明细中已存在相同物料编号 ' + temp.code + '，但名字、类型、单位，供应商其一不一致的物料，请先进行处理');
-            return false;
-          }
-        }
-      }
-      return true;
-    },
+    //   let repeat;
+    //   let formRepeat;
+    //   while (stark.length) {
+    //     let temp = stark.shift();
+    //     repeat = stark.filter(item => item.code === temp.code);
+    //     if (repeat.length > 0) {
+    //       if (repeat.filter(val => val.name === temp.name && val.materialsType === temp.materialsType && val.unit === temp.unit && val.cooperatorName === temp.cooperatorName).length !== repeat.length) {
+    //         this.$message.warning('添加表单中存在相同物料编号 ' + temp.code + '，但名字、类型、单位，供应商其一不一致的物料，请先进行处理');
+    //         return false;
+    //       }
+    //     }
+    //     formRepeat = this.formData.workOrders.filter(item => item.code === temp.code);
+    //     if (formRepeat.length > 0) {
+    //       if (formRepeat.filter(val => val.name === temp.name && val.materialsType === temp.materialsType && val.unit === temp.unit && val.cooperatorName === temp.cooperatorName).length !== formRepeat.length) {
+    //         this.$message.warning('采购明细中已存在相同物料编号 ' + temp.code + '，但名字、类型、单位，供应商其一不一致的物料，请先进行处理');
+    //         return false;
+    //       }
+    //     }
+    //   }
+    //   return true;
+    // },
     validateValue (rule, value, callback) {
       if (value && value !== '') {
         callback();
@@ -376,7 +371,7 @@ export default {
       materialsType: this.$store.state.EnumsModule.MaterialsType,
       importVisible: false
     }
-  }  
+  }
 }
 </script>
 
