@@ -1,9 +1,9 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/my/company/_shared/company_certificate_info.dart';
-import 'package:flutter/material.dart';
-
+import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -79,7 +79,10 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
               icon: Icon(
                 B2BIcons.share,
               ),
-              onPressed: () => onShare())
+              onPressed: () => onShare()),
+          UserBLoC.instance.currentUser.companyCode == data.uid
+              ? TextButton(onPressed: onEdit, child: Text('编辑'))
+              : Container()
         ],
         brightness: Brightness.dark,
       ),
@@ -111,7 +114,7 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
                 text: "公司资料",
               ),
               Tab(
-                text: "公司认证",
+                text: data.approvalType == 'PERSONAL' ? "个人认证" : '公司认证',
               ),
               Tab(
                 text: "空闲产能",
@@ -137,18 +140,7 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
 
   ///分享
   void onShare() {
-    // String description = "";
-    // int i = 0;
-
-    // data.adeptAtCategories.forEach((v) {
-    //   if (i < 4) {
-    //     description = "${description} ${v.name}";
-    //     i++;
-    //   }
-    // });
-
     String description = data.adeptAtCategories.map((e) => e.name).join(' ');
-
     ShareDialog.showShareDialog(context,
         title: '${data.name}',
         description: description != null ? '$description ...' : '',
@@ -156,6 +148,21 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
             ? '${GlobalConfigs.LOGO_URL}'
             : '${data.profilePicture.previewUrl()}',
         url: Apis.shareFactory(widget.uid));
+  }
+
+  void onEdit() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyFactoryBaseFormPage(
+                  data,
+                ))).then((v) {
+      if (v == true) {
+        setState(() {
+          data = null;
+        });
+      }
+    });
   }
 }
 

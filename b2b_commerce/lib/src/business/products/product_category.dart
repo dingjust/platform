@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -19,6 +17,7 @@ class CategorySelectPage extends StatefulWidget {
     this.hasNextPage = false,
     this.multiple = false,
     this.categoryActionType = CategoryActionType.none,
+    this.max = 99,
   });
 
   final FastRequirementForm fastRequirementForm;
@@ -29,6 +28,8 @@ class CategorySelectPage extends StatefulWidget {
 
   ///分类选择动作类型
   final CategoryActionType categoryActionType;
+
+  final int max;
 
   CategorySelectPageState createState() => CategorySelectPageState();
 }
@@ -47,12 +48,12 @@ class CategorySelectPageState extends State<CategorySelectPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FactoryPage(
-              FactoryCondition(
-                  starLevel: 0,
-                  adeptAtCategories: [category],
-                  labels: [],
-                  cooperationModes: []),
-            ),
+          FactoryCondition(
+              starLevel: 0,
+              adeptAtCategories: [category],
+              labels: [],
+              cooperationModes: []),
+        ),
       ),
     );
   }
@@ -101,11 +102,11 @@ class CategorySelectPageState extends State<CategorySelectPage> {
         break;
       default:
         categorySelect = CategorySelect(
-          categories: widget.categories,
-          categorySelect: _categorySelects,
-          multiple: widget.multiple,
-          hasButton: false,
-        );
+            categories: widget.categories,
+            categorySelect: _categorySelects,
+            multiple: widget.multiple,
+            hasButton: false,
+            max: widget.max);
     }
 
     return Scaffold(
@@ -128,8 +129,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
               ? FlatButton(
                   onPressed: () {
                     if (widget.fastRequirementForm.categories.isEmpty) {
-                      (_scaffoldKey.currentState as ScaffoldState)
-                          .showSnackBar(
+                      (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
                         SnackBar(
                           content: Text('请选择品类'),
                           duration: Duration(seconds: 1),
@@ -138,9 +138,9 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                     } else {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => RequirementDatePick(
-                                fastRequirementForm:
-                                    widget.fastRequirementForm,
+                          builder: (context) =>
+                              RequirementDatePick(
+                                fastRequirementForm: widget.fastRequirementForm,
                                 nowTime: DateTime.now(),
                               ),
                         ),
@@ -160,7 +160,7 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                 // style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
               ),
               onPressed: () {
-                Navigator.pop(context,_categorySelects);
+                Navigator.pop(context, _categorySelects);
               },
             ),
           )

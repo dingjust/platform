@@ -123,42 +123,43 @@ class CompanyModel extends UserGroupModel {
   // 联系人uid
   String contactUid;
 
-  CompanyModel({MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    ArticleApprovalStatus approvalStatus,
-    //联系人
-    String contactPerson,
-    //联系电话
-    String contactPhone,
-    this.starLevel,
-    this.address,
-    this.describe,
-    this.contactAddress,
-    this.creationTime,
-    this.taxNumber,
-    this.bankOfDeposit,
-    this.certificates,
-    this.cooperativeBrand,
-    this.qq,
-    this.wechat,
-    this.businessRegistrationNo,
-    this.certificateOfLegal,
-    this.legalRepresentative,
-    this.type,
-    this.profiles,
-    this.labels,
-    this.duties,
-    this.contactUid})
+  CompanyModel(
+      {MediaModel profilePicture,
+      String uid,
+      String name,
+      List<PrincipalModel> members,
+      ArticleApprovalStatus approvalStatus,
+      //联系人
+      String contactPerson,
+      //联系电话
+      String contactPhone,
+      this.starLevel,
+      this.address,
+      this.describe,
+      this.contactAddress,
+      this.creationTime,
+      this.taxNumber,
+      this.bankOfDeposit,
+      this.certificates,
+      this.cooperativeBrand,
+      this.qq,
+      this.wechat,
+      this.businessRegistrationNo,
+      this.certificateOfLegal,
+      this.legalRepresentative,
+      this.type,
+      this.profiles,
+      this.labels,
+      this.duties,
+      this.contactUid})
       : super(
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      members: members,
-      approvalStatus: approvalStatus,
-      contactPerson: contactPerson,
-      contactPhone: contactPhone);
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            members: members,
+            approvalStatus: approvalStatus,
+            contactPerson: contactPerson,
+            contactPhone: contactPhone);
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CompanyModelFromJson(json);
@@ -571,6 +572,10 @@ class FactoryModel extends B2BUnitModel {
   @JsonKey(toJson: MediaModel.toJson)
   MediaModel sewingWorkshopPhoto;
 
+  ///尾部照片
+  @JsonKey(toJson: MediaModel.toJson)
+  MediaModel backEndPhoto;
+
   ///简介
   String intro;
 
@@ -636,7 +641,8 @@ class FactoryModel extends B2BUnitModel {
     this.gatePhoto,
     this.cuttingTablePhoto,
     this.sewingWorkshopPhoto,
-    this.intro})
+    this.intro,
+    this.backEndPhoto})
       : super(
       profilePicture: profilePicture,
       uid: uid,

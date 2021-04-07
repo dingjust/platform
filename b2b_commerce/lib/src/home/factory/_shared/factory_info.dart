@@ -1,6 +1,7 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:core/core.dart';
+import 'package:widgets/widgets.dart';
 
 import 'factory_widgets.dart';
 
@@ -18,7 +19,9 @@ class FactoryInfo extends StatelessWidget {
           FactoryDivider(),
           _Scale(model),
           FactoryDivider(),
-          _Ability(model)
+          _Ability(model),
+          FactoryDivider(),
+          _Pictures(model)
         ],
       ),
     );
@@ -60,7 +63,7 @@ class _Scale extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
           FactoryTitle('工厂规模'),
@@ -75,7 +78,7 @@ class _Scale extends StatelessWidget {
           FactoryInfoRow(
               label: '厂房',
               val:
-                  '${model.factoryBuildingsQuantity == null ? '0' : model.factoryBuildingsQuantity.toString()}间'),
+              '${model.factoryBuildingsQuantity == null ? '0' : model.factoryBuildingsQuantity.toString()}间'),
           FactoryInfoRow(
               label: '产值', val: ScaleRangesLocalizedMap[model.scaleRange]),
           FactoryInfoRow(
@@ -90,13 +93,10 @@ class _Scale extends StatelessWidget {
   ///设备
   String getEquipmentStr() {
     List<String> strs = [];
-    strs
-      ..addAll((model?.cuttingDepartment ?? [])
-          .map((e) => enumMap(CuttingDepartmentsEnum, e)))
-      ..addAll((model?.productionWorkshop ?? [])
-          .map((e) => enumMap(ProductionWorkshopsEnum, e)))
-      ..addAll((model?.lastDepartment ?? [])
-          .map((e) => enumMap(LastDepartmentsEnum, e)));
+    strs..addAll((model?.cuttingDepartment ?? [])
+        .map((e) => enumMap(CuttingDepartmentsEnum, e)))..addAll((model?.productionWorkshop ?? [])
+        .map((e) => enumMap(ProductionWorkshopsEnum, e)))..addAll((model?.lastDepartment ?? [])
+        .map((e) => enumMap(LastDepartmentsEnum, e)));
     return strs.join(',');
   }
 }
@@ -110,7 +110,7 @@ class _Ability extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
           FactoryTitle('工厂能力'),
@@ -130,6 +130,54 @@ class _Ability extends StatelessWidget {
               label: '生产大类',
               val: (model?.categories ?? []).map((e) => e.name).join(',')),
           FactoryInfoRow(label: '擅长品类', val: getAdeptCategoriesStr()),
+        ],
+      ),
+    );
+  }
+
+  ///擅长品类
+  String getAdeptCategoriesStr() {
+    if (model.adeptAtCategories == null) return '';
+    if (model.adeptAtCategories.length > 5) {
+      return model.adeptAtCategories
+          .getRange(0, 5)
+          .map((e) => e.name)
+          .join(',');
+    } else {
+      return model.adeptAtCategories.map((e) => e.name).join(',');
+    }
+  }
+}
+
+///工厂照片
+class _Pictures extends StatelessWidget {
+  final FactoryModel model;
+
+  const _Pictures(this.model);
+
+  @override
+  Widget build(BuildContext context) {
+    List<MediaModel> medias = [
+      model.gatePhoto,
+      model.cuttingTablePhoto,
+      model.sewingWorkshopPhoto,
+      model.backEndPhoto
+    ];
+    medias = medias.where((element) => element != null).toList();
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        children: [
+          FactoryTitle('工厂照片'),
+          Divider(),
+          medias.isNotEmpty
+              ? Attachments(
+            list: medias,
+          )
+              : Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Text('暂无照片'),
+          )
         ],
       ),
     );

@@ -406,6 +406,9 @@ const PopulationScaleEnum = <EnumModel>[
   EnumModel('N02', '51~100人'),
   EnumModel('N03', '101到200人'),
   EnumModel('N04', '200人以上'),
+  EnumModel('N05', '20人以下'),
+  EnumModel('N06', '21至35人'),
+  EnumModel('N07', '36人至50人'),
 ];
 
 //合作方式枚举

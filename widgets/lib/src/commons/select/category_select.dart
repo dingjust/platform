@@ -12,6 +12,7 @@ class CategorySelect extends StatefulWidget {
     this.categoryActionType,
     this.onJumpToFactories,
     this.onJumpToProducts,
+    this.max = 99,
   });
 
   final List<CategoryModel> categories;
@@ -28,6 +29,8 @@ class CategorySelect extends StatefulWidget {
 
   /// 跳转到产品列表
   final ValueChanged<CategoryModel> onJumpToProducts;
+
+  final int max;
 
   CategorySelectState createState() => CategorySelectState();
 }
@@ -51,18 +54,21 @@ class CategorySelectState extends State<CategorySelect> {
 
   @override
   void initState() {
-
     _multiple = widget.multiple;
     if (widget.categorySelect.isNotEmpty) {
       _selectLeft = widget.categorySelect[0].parent?.code;
       _selectRights =
           widget.categorySelect.map((category) => category.code).toList();
-      if(widget.categorySelect[0].parent != null){
-        _valueItem = widget.categories.firstWhere((category) => category.code == widget.categorySelect[0].parent.code,orElse: ()=>null).children;
-      }else{
+      if (widget.categorySelect[0].parent != null) {
+        _valueItem = widget.categories
+            .firstWhere(
+                (category) =>
+                    category.code == widget.categorySelect[0].parent.code,
+                orElse: () => null)
+            .children;
+      } else {
         _valueItem = widget.categories[0].children;
       }
-
     } else {
       _selectLeft = widget.categories[0].code;
       _valueItem = widget.categories[0].children;
@@ -89,7 +95,7 @@ class CategorySelectState extends State<CategorySelect> {
                 widget.categorySelect.removeWhere(
                     (category1) => category1.code == category.code);
                 if (!_multiple) {
-                  Navigator.pop(context,widget.categorySelect);
+                  Navigator.pop(context, widget.categorySelect);
                 }
               });
             } else {
@@ -104,7 +110,7 @@ class CategorySelectState extends State<CategorySelect> {
                   widget.categorySelect.add(category);
                   _selectRights.clear();
                   _selectRights.add(category.code);
-                  Navigator.pop(context,widget.categorySelect);
+                  Navigator.pop(context, widget.categorySelect);
                 });
               }
             }
@@ -119,8 +125,10 @@ class CategorySelectState extends State<CategorySelect> {
             } else {
               if (_multiple) {
                 setState(() {
-                  _selectRights.add(category.code);
-                  widget.categorySelect.add(category);
+                  if (widget.categorySelect.length < widget.max) {
+                    _selectRights.add(category.code);
+                    widget.categorySelect.add(category);
+                  }
                 });
               } else {
                 setState(() {
