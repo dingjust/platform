@@ -516,7 +516,14 @@ const FactoryQualityLevelsEnum = [
   EnumModel('REGIONAL_CHAIN', '区域品牌'),
   EnumModel('STALL_WHOLESALE', '档口精品'),
   EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
-  EnumModel('WHOLESALE_TRADE', '外贸跑量'),
+  EnumModel('WHOLESALE_TRADE', '外贸批发'),
+  EnumModel('LEVEL01', '二线'),
+  EnumModel('LEVEL02', '三线'),
+  EnumModel('LEVEL03', '三线以下'),
+  EnumModel('LEVEL04', '档口跑量'),
+  EnumModel('LEVEL05', '电商高品质'),
+  EnumModel('LEVEL06', '电商跑量'),
+  EnumModel('LEVEL07', '跨境电商'),
 ];
 
 //转包类型

@@ -7,6 +7,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 
+import 'factory_introduction.dart';
+
 class FactoryItem extends StatelessWidget {
   final FactoryModel model;
 
@@ -109,7 +111,7 @@ class FactoryItem extends StatelessWidget {
   Widget _buildTagsRow() {
     return Row(
       children: [
-        _AuthTag(
+        AuthTag(
           model: model,
         ),
         ...model.labels
@@ -216,9 +218,13 @@ class FactoryItem extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MyFactoryPage(
-          factoryUid: model.uid,
-          isFactoryDetail: true,
+        builder: (context) =>
+            // MyFactoryPage(
+            //   factoryUid: model.uid,
+            //   isFactoryDetail: true,
+            // ),
+            FactoryIntroductionPage(
+          uid: model.uid,
         ),
       ),
     );
@@ -244,10 +250,10 @@ class FactoryItem extends StatelessWidget {
   }
 }
 
-class _AuthTag extends StatelessWidget {
+class AuthTag extends StatelessWidget {
   final FactoryModel model;
 
-  const _AuthTag({Key key, this.model}) : super(key: key);
+  const AuthTag({Key key, this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

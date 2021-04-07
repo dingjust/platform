@@ -127,8 +127,7 @@ abstract class UserApis {
   static get contractList => '/{baseSiteId}/user/agreement/list';
 
   //获取pdf文件
-  static get downContract =>
-          (code) {
+  static get downContract => (code) {
         return '/{baseSiteId}/user/agreement/get/download/token/' + code;
       };
 
@@ -290,5 +289,11 @@ abstract class UserApis {
   static get selectLoginAccount =>
           (phone, uid, code) {
         return '/{baseSiteId}/sms/switch/captcha/$_clientId/login/user/$phone/$uid/$code';
+      };
+
+  ///获取公司认证信息
+  static get getCompanyCertificateInfo =>
+          (code) {
+        return '/{baseSiteId}/cert/enterprise/cert/info/$code';
       };
 }
