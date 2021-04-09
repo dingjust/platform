@@ -166,7 +166,7 @@ export default {
 
       if (result.code === 1) {
         this.$message.success('编辑盈亏分析表成功！');
-        this.$router.push('/purchase/profitloss/' + result.msg);
+        this.$router.push('/purchase/profitloss/' + this.id);
       } else if (result['errors']) {
         this.$message.error(result['errors'].message);
       } else if (result.code === 0) {

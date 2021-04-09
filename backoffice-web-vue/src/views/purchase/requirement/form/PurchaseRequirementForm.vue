@@ -139,7 +139,7 @@ export default {
       }
       if (result.code === 1) {
         this.$message.success('添加采购需求成功！');
-        this.$router.push('/purchase/requirement');
+        this.$router.push('/purchase/requirement/' + result.data.id);
       } else if (result.code === 0) {
         this.$message.error(result.msg);
       } else {

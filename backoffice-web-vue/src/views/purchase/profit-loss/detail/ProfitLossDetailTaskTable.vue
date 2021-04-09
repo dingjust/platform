@@ -50,7 +50,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.skuID !== '合计' && !scope.row.purchaseTaskId" type="text" @click="onCreatePurchase(scope.row)">创建采购</el-button>
+          <el-button v-if="canPurchase(scope.row)" type="text" @click="onCreatePurchase(scope.row)">创建采购</el-button>
           <el-button type="text" v-if="scope.row.purchaseTaskId" @click="onPurchaseDetail(scope.row)">采购详情</el-button>
         </template>
       </el-table-column>
@@ -105,6 +105,9 @@ export default {
   
         return str.substring(0, str.length - 2);
       }
+    },
+    canPurchase (row) {
+      return row.skuID !== '合计' && !row.purchaseTaskId && this.detail.status !== 'CANCELLED';
     },
     onCreatePurchase (row) {
       this.$router.push({
