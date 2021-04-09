@@ -269,8 +269,11 @@
     },
     data() {
       return {
-        activeStatus: 'TO_BE_PRODUCED',
-        statues: Object.assign([], this.$store.state.EnumsModule.ProductionTaskOrderState),
+        activeStatus: '',
+        statues: [{
+          code: '',
+          name: '全部'
+        }],
         outboundOrderTypeSelect: false,
         selectRow: [],
         allocatingVisible: false,
@@ -279,7 +282,7 @@
           createdDateTo: null,
           keyword: '',
           categories: [],
-          state: 'TO_BE_PRODUCED',
+          state: '',
           type: ''
         },
         formData: {
@@ -336,10 +339,7 @@
       this.dataQuery = this.getDataPerQuery('PRODUCTION_TASK_ORDER');
       this.onResetQuery();
       this.onAdvancedSearch();
-      this.statues.push({
-        code: '',
-        name: '全部'
-      })
+      this.statues = this.statues.concat(this.$store.state.EnumsModule.ProductionTaskOrderState);
     },
     mounted() {
 

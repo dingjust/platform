@@ -111,11 +111,14 @@ export default {
         cooperatorName: '',
         createdDateFrom: '',
         createdDateTo: '',
-        state: 'WAIT_TO_PURCHASE'
+        state: ''
       },
       dataQuery: {},
-      activeName: 'WAIT_TO_PURCHASE',
+      activeName: '',
       statuses: [{
+          code: '',
+          name: '全部'
+        }, {
           code: 'WAIT_TO_PURCHASE',
           name: '待采购'  
         }, {
@@ -124,10 +127,8 @@ export default {
         }, {
           code: 'COMPLETE',
           name: '采购完成'
-        }, {
-          code: '',
-          name: '全部'
-      }],
+        }
+      ],
       stateCount: {}
     }
   },

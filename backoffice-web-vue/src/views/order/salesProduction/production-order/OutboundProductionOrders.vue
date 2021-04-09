@@ -127,8 +127,11 @@
     data() {
       return {
         formData: this.$store.state.ProductionOrdersModule.formData,
-        activeStatus: 'TO_BE_PRODUCED',
+        activeStatus: '',
         statues: [{
+          code: '',
+          name: '全部'
+        }, {
           code: 'TO_BE_PRODUCED',
           name: '待生产'
         }, {
@@ -146,16 +149,13 @@
         }, {
           code: 'CANCED',
           name: '已取消'
-        }, {
-          code: '',
-          name: '全部'
         }],
         queryFormData: {
           createdDateFrom: null,
           createdDateTo: null,
           keyword: '',
           categories: [],
-          state: 'TO_BE_PRODUCED'
+          state: ''
         },
         stateCount: {},
         dataQuery: {}

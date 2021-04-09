@@ -137,14 +137,17 @@
     },
     data() {
       return {
-        activeName: 'TO_BE_SUBMITTED',
-        statuses: [],
+        activeName: '',
+        statuses: [{
+          code: '',
+          name: '全部'
+        }],
         queryFormData: {
           keyword: '',
           planLeader: '',
           originCooperator: '',
           cooperator: '',
-          state: 'TO_BE_SUBMITTED'
+          state: ''
         },
         stateCount: {},
         dataQuery: {}
@@ -154,11 +157,7 @@
       this.dataQuery = this.getDataPerQuery('SALES_PLAN');
       this.onResetQuery();
       this.onAdvancedSearch(0, 10);
-      this.statuses = Object.assign([], this.$store.state.EnumsModule.SalesProductionOrderState);
-      this.statuses.push({
-        code: '',
-        name: '全部'
-      })
+      this.statuses = this.statuses.concat(this.$store.state.EnumsModule.SalesProductionOrderState);
       // 去除未接单
       let index = this.statuses.findIndex(item => item.code == 'TO_BE_ACCEPTED');
       this.statuses.splice(index, 1);

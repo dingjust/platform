@@ -44,10 +44,13 @@ export default {
     return {
       queryFormData: {
         keyword: '',
-        statuses: 'PENDING_ACCOUNT'
+        statuses: ''
       },
-      activeName: 'PENDING_ACCOUNT',
-      statuses: this.$store.state.EnumsModule.CostOrderType,
+      activeName: '',
+      statuses: [{
+        code: '',
+        name: '全部'
+      }].concat(this.$store.state.EnumsModule.CostOrderType),
       stateCount: {}
     }
   },
