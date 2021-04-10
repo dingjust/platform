@@ -1,18 +1,20 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
-import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'factory_item_v2.dart';
+
 class FactoryListView extends StatefulWidget {
-  FactoryListView({this.showButton = false,
-    this.factoryCondition,
-    this.requirementCode,
-    this.currentLocalCondition,
-    this.isLocalFind = false,
-    @required this.currentCondition,
-    this.scrollController});
+  FactoryListView(
+      {this.showButton = false,
+      this.factoryCondition,
+      this.requirementCode,
+      this.currentLocalCondition,
+      this.isLocalFind = false,
+      @required this.currentCondition,
+      this.scrollController});
 
   FactoryCondition factoryCondition;
 
@@ -143,10 +145,13 @@ class _FactoryListViewState extends State<FactoryListView> {
                     children: snapshot.data.map((item) {
                       return FactoryItem(
                         model: item,
-                        requirementCode: widget.requirementCode,
-                        showButton: widget.showButton,
-                        isLocalFind: widget.isLocalFind,
                       );
+                      // FactoryItem(
+                      //   model: item,
+                      //   requirementCode: widget.requirementCode,
+                      //   showButton: widget.showButton,
+                      //   isLocalFind: widget.isLocalFind,
+                      // );
                     }).toList(),
                   );
                 } else if (snapshot.hasError) {

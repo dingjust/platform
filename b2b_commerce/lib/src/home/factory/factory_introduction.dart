@@ -1,15 +1,19 @@
-import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/helper/requirement_helper.dart';
 import 'package:b2b_commerce/src/my/company/_shared/company_certificate_info.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 import '_shared/factory_capacities.dart';
 import '_shared/factory_info.dart';
+import '_shared/factory_widgets.dart';
 import 'factory_item_v2.dart';
 
 ///工厂介绍页
@@ -42,19 +46,21 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
         future: _getData(),
         builder: (BuildContext context, AsyncSnapshot<FactoryModel> snapshot) {
           if (data != null) {
-            return Container(
-              color: Colors.white,
-              child: NestedScrollView(
-                  headerSliverBuilder: _slverBuilder,
-                  body: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      FactoryInfo(model: data),
-                      CompanyCertificateInfo(code: data.uid),
-                      FactoryCapacities(model: data)
-                    ],
-                  )),
-            );
+            return Scaffold(
+                body: Container(
+                  color: Colors.white,
+                  child: NestedScrollView(
+                      headerSliverBuilder: _slverBuilder,
+                      body: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          FactoryInfo(model: data),
+                          CompanyCertificateInfo(code: data.uid),
+                          FactoryCapacities(model: data)
+                        ],
+                      )),
+                ),
+                bottomNavigationBar: _bottom());
           } else {
             return Container(
               color: Colors.white,
@@ -119,12 +125,74 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
               Tab(
                 text: "空闲产能",
               ),
-              // Tab(
-              //   text: "需求",
-              // ),
             ],
           ))),
     ];
+  }
+
+  Widget _bottom() {
+    return Offstage(
+      offstage: UserBLoC.instance.currentUser.companyCode == data.uid,
+      child: Container(
+        height: 65,
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          children: [
+            Expanded(
+                child: FactoryBottomBtn(
+              color: Colors.green,
+              label: '联系对方',
+              info: '电话沟通协商',
+              onTap: _onContact,
+            )),
+            Expanded(
+                child: FactoryBottomBtn(
+              color: Colors.blueAccent,
+              label: '发布需求',
+              info: '邀请对方报价',
+              onTap: () {
+                RequirementHelper.publishToFactory(
+                    context: context, factory: data);
+              },
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///联系
+  void _onContact() {
+    String tel = data.contactPhone;
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('拨打电话'),
+              onTap: () async {
+                var url = 'tel:' + tel;
+                await launch(url);
+              },
+            ),
+            tel.indexOf('-') > -1
+                ? Container()
+                : ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('发送短信'),
+                    onTap: () async {
+                      var url = 'sms:' + tel;
+                      await launch(url);
+                    },
+                  ),
+          ],
+        );
+      },
+    );
   }
 
   ///获取工厂信息
@@ -206,17 +274,17 @@ class _InfoHeadRow extends StatelessWidget {
       color: Colors.white,
       child: Row(
         children: [
-          ImageFactory.buildDefaultAvatar(data.profilePicture),
+          _buildProfile(),
           Expanded(
               child: Container(
-            height: 80,
-            margin: EdgeInsets.only(left: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
+                height: 80,
+                margin: EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Expanded(
+                    Row(
+                      children: [
+                        Expanded(
                         child: Text(
                       '${data.name}',
                       style: TextStyle(fontSize: 20),
@@ -245,12 +313,46 @@ class _InfoHeadRow extends StatelessWidget {
                         .toList()
                   ],
                 ),
-              ],
-            ),
-          ))
+                  ],
+                ),
+              ))
         ],
       ),
     );
+  }
+
+  Widget _buildProfile() {
+    if (data?.profilePicture == null) {
+      return Container(
+        width: 80,
+        height: 80,
+      );
+    } else {
+      const processUrl =
+          'image_process=format,WEBP/resize,w_80/crop,mid,w_80,h_80';
+      return Container(
+        width: 80,
+        height: 80,
+        child: ClipOval(
+          child: CachedNetworkImage(
+            imageUrl: '${data.profilePicture.imageProcessUrl(processUrl)}',
+            fit: BoxFit.fill,
+            placeholder: (context, url) =>
+                SpinKitRing(
+                  color: Colors.grey[300],
+                  lineWidth: 2,
+                  size: 30,
+                ),
+            errorWidget: (context, url, error) =>
+                SpinKitRing(
+                  color: Colors.grey[300],
+                  lineWidth: 2,
+                  size: 30,
+                ),
+          ),
+        ),
+      );
+    }
   }
 }
 

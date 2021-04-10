@@ -74,11 +74,12 @@ class _Scale extends StatelessWidget {
           FactoryInfoRow(
               label: '月均产能',
               val: MonthlyCapacityRangesLocalizedMap[
-                  model?.monthlyCapacityRange]),
+              model?.monthlyCapacityRange]),
           FactoryInfoRow(
               label: '厂房',
               val:
-              '${model.factoryBuildingsQuantity == null ? '0' : model.factoryBuildingsQuantity.toString()}间'),
+              '${model.factoryBuildingsQuantity == null ? '0' : model
+                  .factoryBuildingsQuantity.toString()}间'),
           FactoryInfoRow(
               label: '产值', val: ScaleRangesLocalizedMap[model.scaleRange]),
           FactoryInfoRow(
@@ -93,10 +94,13 @@ class _Scale extends StatelessWidget {
   ///设备
   String getEquipmentStr() {
     List<String> strs = [];
-    strs..addAll((model?.cuttingDepartment ?? [])
-        .map((e) => enumMap(CuttingDepartmentsEnum, e)))..addAll((model?.productionWorkshop ?? [])
-        .map((e) => enumMap(ProductionWorkshopsEnum, e)))..addAll((model?.lastDepartment ?? [])
-        .map((e) => enumMap(LastDepartmentsEnum, e)));
+    strs
+      ..addAll((model?.cuttingDepartment ?? [])
+          .map((e) => enumMap(CuttingDepartmentsEnum, e)))
+      ..addAll((model?.productionWorkshop ?? [])
+          .map((e) => enumMap(ProductionWorkshopsEnum, e)))
+      ..addAll((model?.lastDepartment ?? [])
+          .map((e) => enumMap(LastDepartmentsEnum, e)));
     return strs.join(',');
   }
 }
@@ -165,6 +169,7 @@ class _Pictures extends StatelessWidget {
     ];
     medias = medias.where((element) => element != null).toList();
     return Container(
+      margin: EdgeInsets.only(bottom: 65),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [

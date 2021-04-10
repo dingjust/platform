@@ -134,10 +134,10 @@ class FactoryItem extends StatelessWidget {
   Widget _buildAttributeRow() {
     List<String> attribute = [];
     //加工方式
-    model.cooperationModes.forEach((mode) {
+    model.cooperationModes?.forEach((mode) {
       attribute.add(CooperationModesLocalizedMap[mode]);
     });
-    model.qualityLevels.forEach((level) {
+    model.qualityLevels?.forEach((level) {
       attribute.add(FactoryQualityLevelsEnum.firstWhere(
           (element) => element.code == level).name);
     });
@@ -218,13 +218,9 @@ class FactoryItem extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            // MyFactoryPage(
-            //   factoryUid: model.uid,
-            //   isFactoryDetail: true,
-            // ),
             FactoryIntroductionPage(
-          uid: model.uid,
-        ),
+              uid: model.uid,
+            ),
       ),
     );
   }

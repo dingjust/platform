@@ -31,11 +31,14 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       TextEditingController();
   TextEditingController _factoryBuildingsQuantityController =
       TextEditingController();
+  TextEditingController _introController = TextEditingController();
+
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _cooperativeBrandFocusNode = FocusNode();
   FocusNode _coverageAreaFocusNode = FocusNode();
   FocusNode _productionLineQuantityFocusNode = FocusNode();
   FocusNode _factoryBuildingsQuantityFocusNode = FocusNode();
+  FocusNode _introFocusNode = FocusNode();
 
   List<MediaModel> _medias = [];
 
@@ -55,16 +58,17 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
 //    _factory = widget.factory;
     _nameController.text = _factory.name ?? '';
+    _introController.text = _factory.intro ?? '';
     _cooperativeBrandController.text = _factory.cooperativeBrand ?? '';
     _coverageAreaController.text = _factory.coverageArea ?? '';
     _factoryBuildingsQuantityController.text =
-        _factory.factoryBuildingsQuantity == null
-            ? ''
-            : _factory.factoryBuildingsQuantity.toString();
+    _factory.factoryBuildingsQuantity == null
+        ? ''
+        : _factory.factoryBuildingsQuantity.toString();
     _productionLineQuantityController.text =
-        _factory.productionLineQuantity == null
-            ? ''
-            : _factory.productionLineQuantity.toString();
+    _factory.productionLineQuantity == null
+        ? ''
+        : _factory.productionLineQuantity.toString();
     if (_factory.scaleRange != null) {
       _scaleRange.add(_factory.scaleRange.toString().split('.')[1]);
     }
@@ -113,7 +117,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         color: Colors.grey[200],
         child: ListView(
           children: <Widget>[
-            // _buildProfilePicture(),
             _PictureRow(
               fontSize: _fontSize,
               required: true,
@@ -121,6 +124,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               medias: _medias,
             ),
             _buildName(),
+            _divider,
+            _buildIntro(),
             _divider,
             _buildContactInfo(context),
             _divider,
@@ -333,6 +338,44 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               onChanged: (v) {
                 _factory.name =
                 _nameController.text == '' ? null : _nameController.text;
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _buildIntro() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 5,
+      ),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                  text: '公司简介',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: _fontSize,
+                  )),
+            ]),
+          ),
+          Expanded(
+            child: TextFieldComponent(
+              padding: EdgeInsets.all(0),
+              focusNode: _introFocusNode,
+              controller: _introController,
+              hintText: '请输入公司简介',
+              hideDivider: true,
+              maxLength: 120,
+              onChanged: (v) {
+                _factory.intro =
+                _introController.text == '' ? null : _introController.text;
               },
             ),
           ),
