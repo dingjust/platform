@@ -24,19 +24,22 @@
           <h6>任务单号：{{formData.code}}</h6>
         </el-col>
         <el-col :span="6">
-          <h6>关联工单：
-            <el-button type="text" @click="onProductDetail(formData.productionOrder.id)" class="code-btn">{{formData.productionOrder.code}}</el-button>
+          <!-- <h6>关联工单：
+            <el-button type="text" @click="onTaskDetail(formData.productionOrder.id)" class="code-btn">{{formData.productionOrder.code}}</el-button>
+          </h6> -->
+          <h6>关联产品：
+            <el-button type="text" @click="onProductDetail(formData.product)" class="code-btn">{{formData.product.code}}</el-button>
           </h6>
         </el-col>
         <el-col :span="6">
-          <h6>关联款号：{{formData.productionOrder.product.skuID}}</h6>
+          <h6>关联款号：{{formData.product.skuID}}</h6>
         </el-col>
         <el-col :span="6">
           <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
         </el-col>
       </el-row>
       <div class="detail-container">
-        <purchase-requirement-table :formData="formData" :readCostOnly="true" :isFromCost="true"/>
+        <cost-purchase-table :formData="formData" :readOnly="true" :isFromCost="true"/>
       </div>
       <div class="detail-container">
         <h6 class="additional-title">附加项</h6>
@@ -47,6 +50,11 @@
           <el-table-column label="单价" prop="price"></el-table-column>
         </el-table>
       </div>
+      <el-row class="detail-container" style="margin-top: 30px" type="flex" justify="end">
+        <el-col :span="4">
+          <h5>成本总额：{{totalCost}}</h5>
+        </el-col>
+      </el-row>
       <div class="detail-container" v-if="formData.purchaseTask && formData.purchaseTask.id" style="margin-top: 20px">
         <h6>关联采购需求：
           <el-button type="text" @click="onPurchaseDetail(formData.purchaseTask.id)" class="code-btn">{{formData.purchaseTask.code}}</el-button>
@@ -55,10 +63,14 @@
       <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50" v-if="formData.status === 'PENDING_ACCOUNT'">
         <el-button type="text" @click="onCancel">取消</el-button>
         <el-button class="create-btn" @click="onEdit">编辑</el-button>
+        <el-button class="create-btn" @click="onCreatePurchase">创建报价单</el-button>
       </el-row>
     </el-card> 
-    <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
+    <!-- <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
       <production-order-detail v-if="productionVisible" :id="productionId" />
+    </el-dialog> -->
+    <el-dialog :visible.sync="productVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <sample-product-details-page v-if="productVisible" :formData="sample" :readOnly="true" />
     </el-dialog>
     <el-dialog :visible.sync="purchaseVisible" width="80%" append-to-body :close-on-click-modal="false">
       <purchase-requirement-detail v-if="purchaseVisible" :id="purchaseId"/>
@@ -67,22 +79,56 @@
 </template>
 
 <script>
-import PurchaseRequirementTable from '@/views/purchase/requirement/components/PurchaseRequirementTable'
+import {
+  createNamespacedHelpers
+} from 'vuex';
+
+const {
+  mapGetters,
+  mapMutations,
+  mapActions
+} = createNamespacedHelpers('SampleProductsModule');
 import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
-import PurchaseRequirementDetail from '@/views/purchase/requirement/details/PurchaseRequirementDetail'
+import SampleProductDetailsPage from '@/views/product/sample/details/SampleProductDetailsPage'
+import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 
 export default {
   name: 'CostOrderDetail',
-  props: ['id'],
+  props: ['id', 'isFormDialog'],
   components: {
-    PurchaseRequirementTable,
     ProductionOrderDetail,
-    PurchaseRequirementDetail
+    PurchaseRequirementDetail:()=>import('@/views/purchase/requirement/details/PurchaseRequirementDetail'),
+    SampleProductDetailsPage,
+    CostPurchaseTable
+  },
+  computed: {
+    ...mapGetters({
+      newFormData: 'newFormData',
+    }),
+    totalCost: function () {
+      let totalCost = 0;
+      this.formData.workOrders.forEach(item => {
+        if (!Number.isNaN(Number.parseFloat(item.totalPrice))) {
+          totalCost += Number.parseFloat(item.totalPrice);
+        }
+      })
+
+      this.formData.customRows.forEach(item => {
+        if (!Number.isNaN(Number.parseFloat(item.price))) {
+          totalCost += Number.parseFloat(item.price);
+        }
+      })
+
+      return totalCost;
+    }
   },
   data () {
     return {
       formData: {
         code: '',
+        product: {
+          code: ''
+        },
         productionOrder: {
           code: '',
           product: {
@@ -90,12 +136,15 @@ export default {
           }
         },
         customRows: [],
-        purchaseMaterials: []
+        purchaseMaterials: [],
+        workOrders: []
       },
       productionId: '',
       productionVisible: false,
+      productVisible: false,
       purchaseId: '',
-      purchaseVisible: false
+      purchaseVisible: false,
+      sample: ''
     }
   },
   methods: {
@@ -155,10 +204,10 @@ export default {
             return {
               materialsId: row.id,
               specListId: item.id,
-                name: row.name,
-                unit: row.unit,
-                customCategoryName: row.customCategoryName,
-                price: item.price,
+              name: row.name,
+              unit: row.unit,
+              customCategoryName: row.customCategoryName,
+              price: item.price,
             }
           }))
         })
@@ -166,13 +215,23 @@ export default {
 
       data.workOrders = purchaseMaterials;
       data.customRows = customRows;
-      data.productionOrder.product = {
-        skuID: data.productionOrder.productSkuID
-      }
 
       this.$set(this, 'formData', data);
     },
-    onProductDetail (id) {
+    async onProductDetail (product) {
+      const url = this.apis().getSampleProduct(product.code);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+
+      this.sample = result;
+      Object.assign(this.newFormData, result);
+
+      this.productVisible = true;
+    },
+    onTaskDetail (id) {
       this.productionId = id;
       this.productionVisible = true;
     },
@@ -190,12 +249,7 @@ export default {
       });
     },
     _onEdit () {
-      this.$router.push({
-        name: '创建成本单',
-        params: {
-          formData: Object.assign({}, this.formData)
-        }
-      });
+      this.$router.push('/purchase/cost/edit/' + this.formData.id);
     },
     onCancel () {
       this.$confirm('是否执行取消成本单操作?', '', {
@@ -212,12 +266,24 @@ export default {
 
       if (result.code === 1) {
         this.$message.success('成本单取消成功！');
+        if (this.isFormDialog) {
+          this.$emit('callback');
+          return;
+        }
         this.$router.push('/purchase/cost');
       } else if (result.code === 0) {
         this.$message.error(result.msg);
       } else if (result['errors']) {
         this.$message.error(result['errors'][0].message);
       }
+    },
+    onCreatePurchase () {
+      this.$router.push({
+        name: '创建报价单',
+        params: {
+          costOrder: this.formData
+        }
+      });
     }
   },
   created () {

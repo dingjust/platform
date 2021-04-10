@@ -29,7 +29,7 @@
             :autosize="{ minRows: 4, maxRows: 6 }" /> -->
         </el-col>
       </el-row>
-      <el-row type="flex" style="padding-left: 20px">
+      <el-row type="flex" style="padding-left: 20px" v-if="formData.attachments">
         <el-col>
           <images-upload class="order-purchase-upload" :slot-data="formData.attachments" :readOnly="true" :disabled="true"/>
         </el-col>

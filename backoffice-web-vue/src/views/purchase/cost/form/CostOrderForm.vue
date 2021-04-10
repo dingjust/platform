@@ -4,7 +4,7 @@
 * @Author L.G.Y
 -->
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card>
       <el-row>
         <div class="cost-order-title">
@@ -14,65 +14,89 @@
       <div class="pt-2"></div>
       <div class="cost-row">
         <el-form ref="form" class="cost-form" :model="formData" :inline="true">
-          <el-form-item label="系统单号">
-            <el-input placeholder="系统生成" v-model="formData.code" :disabled="true"></el-input>
-          </el-form-item>
-          <el-form-item label="关联订单" prop="productionOrder.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
-            <el-input v-model="formData.productionOrder.code" :disabled="true">
-              <el-button slot="suffix" @click="selectVisible = true" v-if="!formData.id">选择</el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="关联款号">
-            <el-input v-model="formData.productionOrder.product.skuID" :disabled="true"></el-input>
-          </el-form-item>
+          <el-row type="flex" justify="start">
+            <el-form-item label="系统单号">
+              <el-input placeholder="系统生成" v-model="formData.code" :disabled="true"></el-input>
+            </el-form-item>
+          </el-row>
+          <div class="basic-container">
+            <el-form-item label="标题" prop="title" :rules="[{ required: true, message: '请填写标题', trigger: 'change' }]">
+              <el-input v-model="formData.title"></el-input>
+            </el-form-item>
+            <el-form-item label="关联产品" prop="product.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
+              <el-input v-model="formData.product.code" :disabled="true">
+                <!-- <el-button slot="suffix" @click="productVisible = true" v-if="!formData.id">选择</el-button> -->
+              </el-input>
+            </el-form-item>
+            <el-form-item label="关联款号">
+              <el-input v-model="formData.product.skuID" :disabled="true"></el-input>
+            </el-form-item>
+          </div>
         </el-form>
-        <purchase-requirement-table :formData="formData" :isFromCost="true"/>
+        <cost-purchase-table :formData="formData" :isFromCost="true"/>
         <el-row class="additional-container">
           <additional-item ref="additional" :formData="formData"/>
+        </el-row>
+        <el-row class="additional-container" type="flex" justify="end">
+          <el-col :span="4">
+            <h5>成本总额：{{totalCost}}</h5>
+          </el-col>
         </el-row>
       </div>
       <el-row type="flex" justify="center" style="margin-top: 20px">
         <el-button class="create-btn" @click="onCreate">{{formData.id ? '修改' : '创建'}}</el-button>
       </el-row>
     </el-card> 
-    <el-dialog :visible.sync="selectVisible" title="选择工单类型" width="400px" append-to-body :close-on-click-modal="false">
-      <el-row type="flex" justify="space-around" align="middle">
-        <el-button size="medium" plain class="order-btn" @click="selectProduction('PRODUCTION')">生产工单</el-button>
-        <el-button size="medium" plain class="order-btn" @click="selectProduction('OUT_PRODUCTION')">外发生产工单</el-button>
-      </el-row>
-    </el-dialog>
-    <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="productVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <production-task-select-dialog v-if="taskDialogVisible" @onSelectTask="onSelectTask" :productionType="productionType"
-                                :isSingleChoice="true" selectType="PURCHASE_REQUIREMENT"/>
+      <sample-products-select-dialog v-if="productVisible" @onSelectSample="onSelectSample" :isSingleSelect="true"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import ProductionTaskSelectDialog from '@/views/order/salesProduction/production-task/components/ProductionTaskSelectDialog'
-import PurchaseRequirementTable from '@/views/purchase/requirement/components/PurchaseRequirementTable'
+import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 import AdditionalItem from '../components/AdditionalItem.vue'
+import SampleProductsSelectDialog from '@/views/product/sample/components/SampleProductsSelectDialog'
 
 export default {
   name: 'CostOrderForm',
+  props: ['product', 'id'],
   components: {
-    ProductionTaskSelectDialog,
-    PurchaseRequirementTable,
-    AdditionalItem
+    CostPurchaseTable,
+    AdditionalItem,
+    SampleProductsSelectDialog
+  },
+  computed: {
+    totalCost: function () {
+      let totalCost = 0;
+      this.formData.workOrders.forEach(item => {
+        if (!Number.isNaN(Number.parseFloat(item.totalPrice))) {
+          totalCost += Number.parseFloat(item.totalPrice);
+        }
+      })
+
+      this.formData.customRows.forEach(item => {
+        if (!Number.isNaN(Number.parseFloat(item.price))) {
+          totalCost += Number.parseFloat(item.price);
+        }
+      })
+
+      return totalCost;
+    }
   },
   data () {
     return {
       taskDialogVisible: false,
       selectVisible: false,
+      productVisible: false,
       formData: {
+        title: '',
         code: '',
-        productionOrder: {
+        product: {
           id: '',
           code: '',
-          product: {
-            skuID: ''
-          }
+          skuID: ''
         },
         workOrders: [],
         purchaseMaterials: [],
@@ -81,21 +105,35 @@ export default {
     }
   },
   methods: {
+    selectProduct () {
+      this.selectVisible = false;
+      this.productVisible = true;
+    },
+    onSelectSample (data) {
+      if (data && data.length > 0) {
+        this.formData.product = {
+          id: data[0].id,
+          code: data[0].code,
+          skuID: data[0].skuID
+        }
+      }
+      this.productVisible = false;
+    },
     selectProduction (flag) {
       this.productionType = flag;
       this.selectVisible = false;
       this.taskDialogVisible = true;
     },
-    onSelectTask (data) {
-      this.formData.productionOrder = {
-        id: data[0] ? data[0].id : '',
-        code: data[0] ? data[0].code : '',
-        product: {
-          skuID: data[0] ? data[0].product.skuID : '' 
-        }
-      };
-      this.taskDialogVisible = false;
-    },
+    // onSelectTask (data) {
+    //   this.formData.productionOrder = {
+    //     id: data[0] ? data[0].id : '',
+    //     code: data[0] ? data[0].code : '',
+    //     product: {
+    //       skuID: data[0] ? data[0].product.skuID : '' 
+    //     }
+    //   };
+    //   this.taskDialogVisible = false;
+    // },
     onCreate () {
       const additionalForm = this.$refs.additional.$refs.form;
       this.$refs.form.validate((v1) => {
@@ -163,11 +201,13 @@ export default {
 
       return {
         id: this.formData.id ? this.formData.id : null, 
-        productionOrder: this.formData.productionOrder,
+        // productionOrder: this.formData.productionOrder,
+        type: 'PRODUCT',
+        title: this.formData.title,
+        product: this.formData.product,
         purchaseMaterials: purchaseMaterials,
         customRows: customRows
       };    
-
     },
     async _onCreate () {
       const form = this.arrangement();
@@ -176,8 +216,12 @@ export default {
       const result = await this.$http.post(url, form);
 
       if (result.code === 1) {
+        if (this.product.id) {
+          this.$emit('callback');
+          return;
+        }
         this.$message.success('创建成功！');
-        this.$router.push('/purchase/cost');
+        this.$router.push('/purchase/cost/' + result.msg);
       } else if (result['errors']) {
         this.$message.error(result['errors'][0].message);
       } else if (result.code === 0) {
@@ -185,6 +229,7 @@ export default {
       } else {
         this.$message.error('创建失败！');
       }
+
     },
     async _onUpdate () {
       const form = this.arrangement();
@@ -194,7 +239,7 @@ export default {
 
       if (result.code === 1) {
         this.$message.success('编辑成功！');
-        this.$router.push('/purchase/cost');
+        this.$router.push('/purchase/cost/' + this.id);
       } else if (result['errors']) {
         this.$message.error(result['errors'][0].message);
       } else if (result.code === 0) {
@@ -202,11 +247,86 @@ export default {
       } else {
         this.$message.error('创建失败！');
       }
+    },
+    async getDetail () {
+      const url = this.apis().getCostOrder(this.id);
+      const result = await this.$http.get(url);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      if (result.code === 1) {
+        this.initData(result.data);
+      } else if (result.code === 0) {
+        this.$message.error(result.msg);
+      }
+    },
+    initData (resultData) {
+      let data = Object.assign({}, resultData);
+      let purchaseMaterials = [];
+      if (resultData.purchaseMaterials && resultData.purchaseMaterials.length > 0) {
+        resultData.purchaseMaterials.forEach(row => {
+          if (row.specList && row.specList.length > 0) {
+            purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
+              return {
+                // id: row.id,
+                materialsId: row.id,
+                specListId: item.id,
+                name: row.name,
+                code: row.code,
+                unit: row.unit,
+                materialsType: row.materialsType,
+                unitQuantity: item.unitQuantity,
+                specName: item.specName,
+                colorName: item.colorName,
+                modelName: item.modelName,
+                emptySent: item.emptySent,
+                requiredAmount: item.requiredAmount,
+                estimatedLoss: item.estimatedLoss,
+                estimatedUsage: item.estimatedUsage,
+                orderCount: item.orderCount,
+                auditColor: item.auditColor,
+                estimatedRecTime: item.estimatedRecTime,
+                // cooperatorName: row.cooperatorName,
+                price: item.price,
+                totalPrice: item.totalPrice
+              }
+            }))
+          }
+        })
+      }
+
+      let customRows = [];
+      if (resultData.customRows) {
+        resultData.customRows.forEach(row => {
+          if (row.specList && row.specList.length > 0) {
+            customRows = customRows.concat(row.specList.map(item => {
+              return {
+                materialsId: row.id,
+                specListId: item.id,
+                  name: row.name,
+                  unit: row.unit,
+                  customCategoryName: row.customCategoryName,
+                  price: item.price,
+              }
+            }))
+          }
+        })
+      }
+
+      data.workOrders = purchaseMaterials;
+      data.customRows = customRows;
+
+      this.$set(this, 'formData', Object.assign({}, data));
     }
   },
   created () {
-    if (this.$route.params.formData) {
-      this.formData = this.$route.params.formData;
+    if (this.id) {
+      this.getDetail();
+    }
+    if (this.product) {
+      this.onSelectSample([this.product]);
     }
   }
 }
@@ -224,6 +344,9 @@ export default {
 
   .cost-form {
     margin: 10px 0px 0px 10px;
+  }
+
+  .basic-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

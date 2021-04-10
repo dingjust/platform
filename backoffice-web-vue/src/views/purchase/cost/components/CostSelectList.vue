@@ -16,6 +16,7 @@
               <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
               <el-button native-type="reset" @click="onReset">重置</el-button>
             </el-button-group>
+            <el-button type="primary" class="toolbar-search_input" @click="dialogVisible = true">创建成本单</el-button>
           </div>
         </div>
       </el-form>
@@ -34,19 +35,26 @@
         </el-table-column>
       </el-table>
       <div class="pt-2"></div>
-      <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-        @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-        :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
-      </el-pagination>
+      <template v-if="product.id">
+        <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
+          @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+          :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+        </el-pagination>
+      </template>
     </div>
     <el-row type="flex" justify="center" style="margin-top:20px">
       <el-button round class="submit-btn" @click="onSubmit">确定</el-button>
     </el-row>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <cost-order-form :product="product" @callback="callback"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
+import CostOrderForm from '../form/CostOrderForm.vue';
 
 const { mapGetters, mapActions } = createNamespacedHelpers(
   'CostOrderModule'
@@ -54,6 +62,8 @@ const { mapGetters, mapActions } = createNamespacedHelpers(
 
 export default {
   name: 'CostSelectList',
+  props: ['product'],
+  components: { CostOrderForm },
   computed: {
     ...mapGetters({
       page: 'page'
@@ -61,6 +71,7 @@ export default {
   },
   data () {
     return {
+      dialogVisible: false,
       queryFormData: {
         keyword: '',
         statuses: 'PENDING_ACCOUNT'
@@ -73,10 +84,22 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch (page, size) {
-      const query = this.queryFormData;
-      const url = this.apis().searchCostOrder();
- 
-      this.searchAdvanced({url, query, page, size});
+      if (this.product.id) {
+        this.searchByProductId();
+      } else {
+        const query = this.queryFormData;
+        const url = this.apis().searchCostOrder();
+   
+        this.searchAdvanced({url, query, page, size});
+      }
+    },
+    async searchByProductId () {
+      const url = this.apis().searchCostOrderByProductId(this.product.id);
+      const result = await this.$http.post(url, {});
+
+      if (!result['errors']) {
+        this.page.content = result.data;
+      }
     },
     onReset () {
       this.queryFormData.keyword = '';
@@ -108,6 +131,10 @@ export default {
     },
     onSubmit () {
       this.$emit('onSelectCost', this.multipleSelection[0]);
+    },
+    callback () {
+      this.dialogVisible = false;
+      this.onAdvancedSearch();
     }
   },
   created () {

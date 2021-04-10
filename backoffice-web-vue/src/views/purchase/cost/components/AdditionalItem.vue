@@ -62,24 +62,9 @@ export default {
     onAdd () {
       this.formData.customRows.push({
         name: '',
-        code: '',
-        unit: '',
-        materialsType: '',
         customCategoryName: '',
-        unitQuantity: '',
-        specName: '',
-        colorName: '',
-        modelName: '',
-        emptySent: '',
-        requiredAmount: '',
-        estimatedLoss: '',
-        estimatedUsage: '',
-        orderCount: '',
-        auditColor: '',
-        estimatedRecTime: '',
-        cooperatorName: '',
         price: '',
-        totalPrice: ''
+        unit: ''
       })
     },
     onDelete (index) {

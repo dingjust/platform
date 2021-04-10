@@ -18,12 +18,7 @@
             <h6>任务单号：{{formData.code}}</h6>
           </el-col>
           <el-col :span="6">
-            <h6>关联成本单：
-              <el-button type="text" @click="onCostDetail(formData.costOrder.id)" class="code-btn">{{formData.costOrder.code}}</el-button>
-            </h6>
-          </el-col>
-          <el-col :span="6">
-            <h6>关联款号：{{formData.costOrder.productionOrder.productSkuID}}</h6>
+            <h6>关联信息：{{contextInfo}}</h6>
           </el-col>
           <el-col :span="6">
             <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
@@ -51,9 +46,6 @@
           <order-audit-detail :processes="formData.auditWorkOrder.processes" />
         </template>
       </div>
-      <!-- <el-row style="margin-top: 20px">
-        <relation-cost-order v-if="formData.costOrder.id" :costOrderId="formData.costOrder.id"/>
-      </el-row> -->
       <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
         <el-col :span="3">
           <authorized :permission="['DO_AUDIT']">
@@ -68,14 +60,12 @@
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
         <el-button v-if="canReturn" class="sumbit-btn" @click="onReturn">撤回</el-button>
+        <el-button v-if="formData.state === 'NOT_COMMITED'" class="sumbit-btn" @click="onEdit">编辑</el-button>
       </el-row>
       <el-row type="flex" justify="center">
         <printer-button v-print="'#purchase-requirement-detail'" />
       </el-row>
     </el-card>
-    <!-- <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
-      <production-order-detail v-if="productionVisible" :id="productionId" />
-    </el-dialog> -->
     <el-dialog :visible.sync="costOrderVisible" width="80%" append-to-body :close-on-click-modal="false">
       <cost-order-detail v-if="costOrderVisible" :id="costOrderId"/>
     </el-dialog>
@@ -102,6 +92,11 @@ export default {
     RelationCostOrder
   },
   computed: {
+    contextInfo: function () {
+      if (this.formData.profitLossAnalysisEntry) {
+        return this.formData.profitLossAnalysisEntry.skuID + ' / ' + this.formData.profitLossAnalysisEntry.colors.map(item => item.name).toString()
+      }
+    },
     canReturn: function () {
       if (this.formData.state !== 'AUDITING') {
         return false;
@@ -267,6 +262,31 @@ export default {
       })
       data.workOrders = workOrders;
       this.formData = Object.assign({}, data);
+    },
+    onEdit () {
+      this.$confirm('是否前往编辑采购需求页面?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this._onEdit();
+      });
+    },
+    _onEdit () {
+      let data = Object.assign({}, this.formData);
+      if (!data.approvers) {
+        data.approvers = [null];
+        data.auditNeeded = false
+      } else {
+        data.auditNeeded = true;
+      }
+
+      this.$router.push({
+        name: '创建采购需求',
+        params: {
+          formData: data
+        }
+      });
     }
   },
   data () {

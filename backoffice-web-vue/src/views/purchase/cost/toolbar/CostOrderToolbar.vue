@@ -12,7 +12,7 @@
           </el-button-group>
         </div>
         <div>
-          <el-button type="primary" class="toolbar-search_input" @click="onCreate">创建成本单</el-button>
+          <!-- <el-button type="primary" class="toolbar-search_input" @click="onCreate">创建成本单</el-button> -->
         </div>
       </div>
     </el-form>

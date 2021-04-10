@@ -188,6 +188,7 @@ export default {
     appendMateriel () {
       this.isModify = false;
       this.appendVisible = true;
+      this.resetItem();
     },
     onBOMImport () {
 
@@ -200,6 +201,10 @@ export default {
       } else {
         this.formData.workOrders = this.arrangeData(this.formData.workOrders.concat(entries));
       }
+
+      this.resetItem();
+    },
+    resetItem () {
       this.entries = {
         workOrders: [
           {
@@ -215,7 +220,7 @@ export default {
             requiredAmount: '',
             estimatedLoss: '',
             estimatedUsage: '',
-            orderCount: '',
+            orderCount: 1,
             auditColor: '',
             estimatedRecTime: '',
             cooperatorName: '',
@@ -273,7 +278,7 @@ export default {
             requiredAmount: '',
             estimatedLoss: '',
             estimatedUsage: '',
-            orderCount: '',
+            orderCount: 1,
             auditColor: '',
             estimatedRecTime: '',
             cooperatorName: '',
@@ -291,26 +296,7 @@ export default {
   .over-tabs {
     position: absolute;
     z-index: 100;
-    right: 30px;
-    margin-top: 2px;
-  }
-
-  .material-btn {
-    background-color: #ffd60c;
-    border-color: #FFD5CE;
-    color: #000;
-    width: 90px;
-    height: 35px;
-  }
-
-  /deep/ .el-dialog__header {
-    padding: 0px;
-  }
-</style>
-abs {
-    position: absolute;
-    z-index: 100;
-    right: 30px;
+    right: 50px;
     margin-top: 2px;
   }
 

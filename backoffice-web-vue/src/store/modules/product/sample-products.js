@@ -227,7 +227,7 @@ const actions = {
       costingSheets: [],
       productionProcessContent: '',
       medias: []
-    }, );
+    });
   }
 };
 
