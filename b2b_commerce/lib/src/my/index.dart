@@ -196,11 +196,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
+                Expanded(
                   child: Text(
                     "${user.name}",
                     overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+                    // textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,

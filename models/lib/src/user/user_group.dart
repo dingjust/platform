@@ -1059,22 +1059,22 @@ const FactoryFreeProofingLocalizedMap = {
   FactoryFreeProofing.NOT_SUPPORTED: '不支持'
 };
 
-//质量等级
-enum FactoryQualityLevel {
-  A_CHAIN,
-  REGIONAL_CHAIN,
-  STALL_WHOLESALE,
-  ELECTRONIC_COMMERCE_QUALITY,
-  WHOLESALE_TRADE
-}
+// //质量等级
+// enum FactoryQualityLevel {
+//   A_CHAIN,
+//   REGIONAL_CHAIN,
+//   STALL_WHOLESALE,
+//   ELECTRONIC_COMMERCE_QUALITY,
+//   WHOLESALE_TRADE
+// }
 
-const FactoryQualityLevelLocalizedMap = {
-  FactoryQualityLevel.A_CHAIN: '一线连锁',
-  FactoryQualityLevel.REGIONAL_CHAIN: '区域连锁',
-  FactoryQualityLevel.STALL_WHOLESALE: '档口批发',
-  FactoryQualityLevel.ELECTRONIC_COMMERCE_QUALITY: '电商品质',
-  FactoryQualityLevel.WHOLESALE_TRADE: '外贸批发',
-};
+// const FactoryQualityLevelLocalizedMap = {
+//   FactoryQualityLevel.A_CHAIN: '一线连锁',
+//   FactoryQualityLevel.REGIONAL_CHAIN: '区域连锁',
+//   FactoryQualityLevel.STALL_WHOLESALE: '档口批发',
+//   FactoryQualityLevel.ELECTRONIC_COMMERCE_QUALITY: '电商品质',
+//   FactoryQualityLevel.WHOLESALE_TRADE: '外贸批发',
+// };
 
 //年龄段
 enum AgeRanges {

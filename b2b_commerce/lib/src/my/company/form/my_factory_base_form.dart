@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
+import 'package:b2b_commerce/src/my/company/_shared/quality_select.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_contact_form.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:common_utils/common_utils.dart';
@@ -9,6 +10,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -62,13 +64,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     _cooperativeBrandController.text = _factory.cooperativeBrand ?? '';
     _coverageAreaController.text = _factory.coverageArea ?? '';
     _factoryBuildingsQuantityController.text =
-    _factory.factoryBuildingsQuantity == null
-        ? ''
-        : _factory.factoryBuildingsQuantity.toString();
+        _factory.factoryBuildingsQuantity == null
+            ? ''
+            : _factory.factoryBuildingsQuantity.toString();
     _productionLineQuantityController.text =
-    _factory.productionLineQuantity == null
-        ? ''
-        : _factory.productionLineQuantity.toString();
+        _factory.productionLineQuantity == null
+            ? ''
+            : _factory.productionLineQuantity.toString();
     if (_factory.scaleRange != null) {
       _scaleRange.add(_factory.scaleRange.toString().split('.')[1]);
     }
@@ -542,25 +544,26 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           child: Row(
             children: <Widget>[
-              Expanded(
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: '生产大类',
-                        style: TextStyle(
-                            color: Colors.black, fontSize: _fontSize)),
-                    TextSpan(
-                        text: '*',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: _fontSize,
-                        )),
-                  ]),
-                ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '生产大类',
+                      style:
+                      TextStyle(color: Colors.black, fontSize: _fontSize)),
+                  TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: _fontSize,
+                      )),
+                ]),
               ),
-              Text(
-                formatCategorySelectText(_factory.categories),
-                style: TextStyle(color: Colors.grey),
+              Expanded(
+                child: Text(
+                  (_factory.categories ?? []).map((e) => e.name).join(','),
+                  style: TextStyle(color: Colors.grey),
+                  textAlign: TextAlign.right,
+                ),
               ),
               Icon(
                 Icons.chevron_right,
@@ -590,6 +593,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       color: Colors.red,
                       fontSize: _fontSize,
                     )),
+                TextSpan(
+                    text: '(限5个)',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    )),
               ]),
             ),
             Expanded(
@@ -610,7 +619,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       ),
       onTap: () async {
         List<CategoryModel> categories =
-        await ProductRepositoryImpl().cascadedCategories();
+        await Provider.of<CategoryState>(context).getCascadedCategories();
+
         dynamic result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -648,12 +658,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   text: '合作品牌',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: _fontSize,
-                  )),
-              TextSpan(
-                  text: '*',
-                  style: TextStyle(
-                    color: Colors.red,
                     fontSize: _fontSize,
                   )),
             ]),
@@ -1115,7 +1119,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   void _onMajorCategorySelect() async {
     List<CategoryModel> categorys =
-    await ProductRepositoryImpl().majorCategories();
+    await Provider.of<MajorCategoryState>(context).getMajorCategories();
+    // await ProductRepositoryImpl().majorCategories();
 
     showModalBottomSheet(
       context: context,
@@ -1124,12 +1129,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
           title: '生产大类',
           items: categorys,
           models: _factory.categories,
-          multiple: true,
+          multiple: false,
         );
       },
     ).then((result) {
       setState(() {
-        if (result != null) {
+        if (result != null && result is List<CategoryModel>) {
           _factory.categories = result;
         }
       });
@@ -1140,21 +1145,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return EnumSelectPage(
-          title: '质量等级',
-          items: FactoryQualityLevelsEnum,
-          codes: _factory.qualityLevels,
-          count: 3,
-          multiple: true,
+        return QualitySelector(
+          values: _factory.qualityLevels,
+          onChange: (values) {
+            setState(() {
+              _factory.qualityLevels = values;
+            });
+          },
         );
       },
-    ).then((result) {
-      setState(() {
-        if (result != null) {
-          _factory.qualityLevels = result;
-        }
-      });
-    });
+    );
   }
 
   void _onMonthlySelect() async {
@@ -1234,7 +1234,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   }
 
   void _onLabelSelect() async {
-    List<LabelModel> labels = await UserRepositoryImpl().labels();
+    List<LabelModel> labels =
+    await Provider.of<LabelState>(context).getLabels();
+
     labels.removeWhere((label) => label.group != 'FACTORY');
     if (_factory.labels == null) _factory.labels = [];
 
@@ -1325,20 +1327,26 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     //   ShowDialogUtil.showValidateMsg(context, '请填写合作品牌');
     //   throw Exception('合作品牌必填');
     // }
-    // if (_factory.monthlyCapacityRange == null) {
-    //   ShowDialogUtil.showValidateMsg(context, '请选择月均产能');
-    //   throw Exception('月均产能必填');
-    // }
+    if (_factory.monthlyCapacityRange == null) {
+      ShowDialogUtil.showValidateMsg(context, '请选择月均产能');
+      throw Exception('月均产能必填');
+    }
     if (_medias.length > 0) {
       _factory.profilePicture = _medias[0];
     } else {
       _factory.profilePicture = null;
     }
 
-    _factory.gatePhoto = _gatePhotos?.first;
-    _factory.cuttingTablePhoto = _cuttingTablePhotos?.first;
-    _factory.sewingWorkshopPhoto = _sewingWorkshopPhotos?.first;
-    _factory.backEndPhoto = _backEndPhotos?.first;
+    _factory.gatePhoto = _gatePhotos.isNotEmpty ? _gatePhotos.first : null;
+
+    _factory.cuttingTablePhoto =
+    _cuttingTablePhotos.isNotEmpty ? _cuttingTablePhotos.first : null;
+
+    _factory.sewingWorkshopPhoto =
+    _sewingWorkshopPhotos.isNotEmpty ? _sewingWorkshopPhotos.first : null;
+
+    _factory.backEndPhoto =
+    _backEndPhotos.isNotEmpty ? _backEndPhotos.first : null;
 
     _factory.name = _nameController.text == '' ? null : _nameController.text;
     _factory.cooperativeBrand = _cooperativeBrandController.text == ''
