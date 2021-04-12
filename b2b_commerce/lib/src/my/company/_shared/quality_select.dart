@@ -73,7 +73,9 @@ class QualitySelectorState extends State<QualitySelector> {
                 color: Colors.grey,
               ),
             ),
-            onPressed: () {}),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
         actions: <Widget>[
           IconButton(
             icon: Text(

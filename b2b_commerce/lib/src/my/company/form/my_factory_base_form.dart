@@ -206,8 +206,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         CompanyModel result = await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    MyBrandContactFormPage(
+                builder: (context) => MyBrandContactFormPage(
                       company: _factory,
                     )));
 
@@ -1296,7 +1295,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       ShowDialogUtil.showValidateMsg(context, '请选择工厂规模');
       return;
     }
-    if (_factory.cooperationModes == null) {
+    if (_factory.cooperationModes == null ||
+        ObjectUtil.isEmptyList(_factory.cooperationModes)) {
       ShowDialogUtil.showValidateMsg(context, '请选择合作方式');
       return;
     }
