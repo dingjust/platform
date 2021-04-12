@@ -54,6 +54,9 @@ class FactoryCondition {
   //经度
   double longitude;
 
+  ///认证状态
+  String approvalStatuses;
+
   FactoryCondition(
       {this.starLevel,
       this.historyOrdersCount,
@@ -65,11 +68,12 @@ class FactoryCondition {
       @required this.cooperationModes,
       this.industrialCuster,
       this.cities,
-        this.latitude,
-        this.longitude,
-        this.distance,
-        this.qualityLevels,
-      this.keyword});
+      this.latitude,
+      this.longitude,
+      this.distance,
+      this.qualityLevels,
+      this.keyword,
+      this.approvalStatuses});
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FactoryConditionFromJson(json);
@@ -92,7 +96,6 @@ class FactoryCondition {
     List<String> adeptAtCategoryArray = [];
     List<int> labelsArray = [];
     List<String> cooperationModesArray = [];
-    String approvalStatus;
 
     if (adeptAtCategories != null) {
       adeptAtCategories.forEach((category) {
@@ -104,9 +107,6 @@ class FactoryCondition {
       labels.forEach((label) {
         if (label.name != '已认证') {
           labelsArray.add(label.id);
-        } else {
-          approvalStatus =
-              ArticleApprovalStatusMap[ArticleApprovalStatus.approved];
         }
       });
     }
@@ -135,7 +135,7 @@ class FactoryCondition {
             ? [_$PopulationScaleEnumMap[populationScale]]
             : [],
         'keyword': keyword ?? '',
-        'approvalStatuses': approvalStatus ?? '',
+        'approvalStatuses': approvalStatuses ?? '',
         'industrialClusters':
         industrialCuster != null ? [industrialCuster.code] : [],
         'longitude': longitude != null && longitude > 0 ? longitude : '',
@@ -162,7 +162,7 @@ class FactoryCondition {
             ? [_$PopulationScaleEnumMap[populationScale]]
             : [],
         'keyword': keyword ?? '',
-        'approvalStatuses': approvalStatus ?? '',
+        'approvalStatuses': approvalStatuses ?? '',
         'industrialClusters':
         industrialCuster != null ? [industrialCuster.code] : [],
         'qualityLevels': qualityLevels ?? []

@@ -92,10 +92,12 @@ class FactoryBottomBtn extends StatelessWidget {
                 '$label',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-              Text(
-                '$info',
-                style: TextStyle(color: Colors.white54, fontSize: 14),
-              )
+              info != null
+                  ? Text(
+                      '$info',
+                      style: TextStyle(color: Colors.white54, fontSize: 14),
+                    )
+                  : Container()
             ],
           ),
         ),
