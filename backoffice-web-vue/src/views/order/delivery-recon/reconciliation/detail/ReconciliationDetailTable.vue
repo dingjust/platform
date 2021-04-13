@@ -13,12 +13,12 @@
       <el-table-column label="波段" prop="waveBand" min-width="120px" v-if="tableCol['waveBand'].have"/>
       <el-table-column label="产品款号" prop="product.skuID" min-width="120px" />
       <el-table-column label="订单款号" prop="orderItemNo" min-width="120px" v-if="tableCol['orderItemNo'].have"/>
-      <el-table-column label="交货时间" prop="deliveryDate" min-width="160px" v-if="tableCol['deliveryDate'].have">
+      <el-table-column label="交货时间" prop="deliveryDate" min-width="160px">
         <template slot-scope="scope">
           <span>{{scope.row.deliveryDate | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合同时间" prop="contractDate" min-width="160px" v-if="tableCol['contractDate'].have">
+      <el-table-column label="合同时间" prop="contractDate" min-width="160px">
         <template slot-scope="scope">
           <span>{{scope.row.contractDate | timestampToTime}}</span>
         </template>

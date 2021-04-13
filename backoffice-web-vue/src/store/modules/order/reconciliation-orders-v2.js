@@ -24,14 +24,14 @@ const getDefaultState = () => {
         have: true,
         name: '订单款号'
       },
-      deliveryDate: {
-        have: true,
-        name: '交货时间'
-      },
-      contractDate: {
-        have: true,
-        name: '合同时间'
-      },
+      // deliveryDate: {
+      //   have: true,
+      //   name: '交货时间'
+      // },
+      // contractDate: {
+      //   have: true,
+      //   name: '合同时间'
+      // },
       customizedMode: {
         have: true,
         name: '定作方式'
