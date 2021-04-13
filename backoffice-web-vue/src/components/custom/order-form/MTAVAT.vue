@@ -19,11 +19,20 @@
       </el-col>
       <el-col :span="layoutScale[2]" v-if="curNeedVoice">
         <el-form-item label="税点" label-width="60px" prop="tax">
-          <el-select v-model="curTax" placeholder="选择税点" :disabled="readOnly" size="mini" style="width:80px">
+          <el-input v-model="curTax" 
+                    placeholder="填写税点" 
+                    :disabled="readOnly" 
+                    size="mini"
+                    @change="inputChange"
+                    v-number-input.float="{ min: 0, decimal: 2, max: 100 }"
+                    style="width:80px" >
+            <span slot="suffix">%</span>
+          </el-input>
+          <!-- <el-select v-model="curTax" placeholder="选择税点" :disabled="readOnly" size="mini" style="width:80px">
             <el-option label="3%" :value="0.03" />
             <el-option label="6%" :value="0.06" />
             <el-option label="13%" :value="0.13" />
-          </el-select>
+          </el-select> -->
         </el-form-item>
       </el-col>
     </el-row>
@@ -66,6 +75,14 @@
         curTax: this.tax
       };
     },
+    methods: {
+      inputChange () {
+        const regexp = /^.*\.$/;
+        if (regexp.test(this.curTax)) {
+          this.curTax = Number.parseFloat(this.curTax);
+        }
+      }
+    },
     watch: {
       machiningTypes: function (newVal, oldVal) {
         this.curMachiningTypes = newVal;
@@ -80,11 +97,16 @@
         this.$emit("update:needVoice", newVal);
       },
       tax: function (newVal, oldVal) {
-        this.curTax = newVal;
+        if(this.curTax!=newVal*100){
+          this.curTax = newVal*100;
+        }        
       },
-      curTax: function (newVal, oldVal) {
-        this.$emit("update:tax", newVal);
+      curTax: function (newVal, oldVal) {        
+        this.$emit("update:tax", newVal*0.01);
       },
+    },
+    created () {
+      this.curTax = this.tax * 100;
     }
   }
 
