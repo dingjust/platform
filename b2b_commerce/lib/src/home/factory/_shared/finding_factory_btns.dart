@@ -125,9 +125,6 @@ class FindingFactoryBtnsBar extends StatelessWidget {
                 label.group == 'FACTORY' || label.group == 'PLATFORM')
             .toList();
 
-        ///筛选标签=>免费打样
-        List<LabelModel> conditionlabels =
-            labels.where((label) => label.name == '已认证').toList();
         if (categories != null && labels != null) {
           Navigator.pushReplacement(
             context,
@@ -136,8 +133,9 @@ class FindingFactoryBtnsBar extends StatelessWidget {
                 FactoryCondition(
                     starLevel: 0,
                     adeptAtCategories: [],
-                    labels: conditionlabels,
-                    cooperationModes: []),
+                    cooperationModes: [],
+                    approvalStatuses: 'approved',
+                    labels: []),
                 route: '认证工厂',
                 categories: categories,
                 labels: labels,

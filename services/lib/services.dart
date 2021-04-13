@@ -44,6 +44,7 @@ export 'src/my/bloc/my_help_bloc.dart';
 export 'src/my/repository/bankcard_repository.dart';
 export 'src/my/repository/bankcard_repository.dart';
 export 'src/my/repository/bill_repository.dart';
+export 'src/my/repository/certificate_repository.dart';
 export 'src/my/repository/contract_repository.dart';
 export 'src/my/repository/seal_repository.dart';
 export 'src/my/repository/user_guideline_repository.dart';

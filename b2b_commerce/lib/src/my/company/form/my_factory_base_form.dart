@@ -2,12 +2,15 @@ import 'dart:ui';
 
 import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
+import 'package:b2b_commerce/src/my/company/_shared/quality_select.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_contact_form.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -27,16 +30,25 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   TextEditingController _cooperativeBrandController = TextEditingController();
   TextEditingController _coverageAreaController = TextEditingController();
   TextEditingController _productionLineQuantityController =
-  TextEditingController();
+      TextEditingController();
   TextEditingController _factoryBuildingsQuantityController =
-  TextEditingController();
+      TextEditingController();
+  TextEditingController _introController = TextEditingController();
+
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _cooperativeBrandFocusNode = FocusNode();
   FocusNode _coverageAreaFocusNode = FocusNode();
   FocusNode _productionLineQuantityFocusNode = FocusNode();
   FocusNode _factoryBuildingsQuantityFocusNode = FocusNode();
+  FocusNode _introFocusNode = FocusNode();
 
   List<MediaModel> _medias = [];
+
+  List<MediaModel> _gatePhotos = [];
+  List<MediaModel> _cuttingTablePhotos = [];
+  List<MediaModel> _sewingWorkshopPhotos = [];
+  List<MediaModel> _backEndPhotos = [];
+
   List<String> _scaleRange = [];
   List<String> _monthlyCapacityRanges = [];
   List<String> _populationScale = [];
@@ -45,21 +57,20 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   @override
   void initState() {
-    print(FactoryModel.toJson(widget.factory));
-    print(FactoryModel.toJson(widget.factory)['statistics']);
     _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
 //    _factory = widget.factory;
     _nameController.text = _factory.name ?? '';
+    _introController.text = _factory.intro ?? '';
     _cooperativeBrandController.text = _factory.cooperativeBrand ?? '';
     _coverageAreaController.text = _factory.coverageArea ?? '';
     _factoryBuildingsQuantityController.text =
-    _factory.factoryBuildingsQuantity == null
-        ? ''
-        : _factory.factoryBuildingsQuantity.toString();
+        _factory.factoryBuildingsQuantity == null
+            ? ''
+            : _factory.factoryBuildingsQuantity.toString();
     _productionLineQuantityController.text =
-    _factory.productionLineQuantity == null
-        ? ''
-        : _factory.productionLineQuantity.toString();
+        _factory.productionLineQuantity == null
+            ? ''
+            : _factory.productionLineQuantity.toString();
     if (_factory.scaleRange != null) {
       _scaleRange.add(_factory.scaleRange.toString().split('.')[1]);
     }
@@ -79,6 +90,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     if (_factory.profilePicture != null) {
       _medias = [_factory.profilePicture];
     }
+    if (_factory.gatePhoto != null) _gatePhotos = [_factory.gatePhoto];
+    if (_factory.cuttingTablePhoto != null)
+      _cuttingTablePhotos = [_factory.cuttingTablePhoto];
+    if (_factory.sewingWorkshopPhoto != null)
+      _sewingWorkshopPhotos = [_factory.sewingWorkshopPhoto];
+    if (_factory.backEndPhoto != null) _backEndPhotos = [_factory.backEndPhoto];
 
     if (_factory.qualityLevels == null) {
       _factory.qualityLevels = [];
@@ -95,180 +112,88 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         actions: <Widget>[
           IconButton(
               icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
-              onPressed: () {
-                if (ObjectUtil.isEmptyList(_medias)) {
-                  ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
-                  return;
-                }
-                if (ObjectUtil.isEmptyString(_factory.name)) {
-                  ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
-                  return;
-                }
-                if (ObjectUtil.isEmptyString(_factory.duties) ||
-                    ObjectUtil.isEmptyString(_factory.contactPerson) ||
-                    ObjectUtil.isEmptyString(_factory.contactPhone)) {
-                  ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
-                  return;
-                }
-                if (_factory.contactAddress == null ||
-                    _factory.contactAddress.region?.isocode == null) {
-                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
-                  return;
-                }
-                if (_factory.populationScale == null) {
-                  ShowDialogUtil.showValidateMsg(context, '请选择工厂规模');
-                  return;
-                }
-                if (_factory.cooperationModes == null) {
-                  ShowDialogUtil.showValidateMsg(context, '请选择合作方式');
-                  return;
-                }
-//                if(_factory.contactAddress == null){
-//                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
-//                  return;
-//                }
-                _factory.contactAddress.id = null;
-                if (ObjectUtil.isEmptyList(_factory.categories)) {
-                  ShowDialogUtil.showValidateMsg(context, '请选择生产大类');
-                  return;
-                }
-                if (ObjectUtil.isEmptyList(_factory.adeptAtCategories)) {
-                  ShowDialogUtil.showValidateMsg(context, '请选择优势类目');
-                  return;
-                }
-                if (ObjectUtil.isEmptyList(_factory.cuttingDepartment) &&
-                    ObjectUtil.isEmptyList(_factory.productionWorkshop) &&
-                    ObjectUtil.isEmptyList(_factory.lastDepartment)) {
-                  ShowDialogUtil.showValidateMsg(context, '请选择设备');
-                  return;
-                }
-                if (ObjectUtil.isEmptyList(_factory.qualityLevels)) {
-                  ShowDialogUtil.showValidateMsg(context, '请选择质量等级');
-                  return;
-                }
-                if (_medias.length > 0) {
-                  _factory.profilePicture = _medias[0];
-                } else {
-                  _factory.profilePicture = null;
-                }
-                _factory.name =
-                _nameController.text == '' ? null : _nameController.text;
-                _factory.cooperativeBrand =
-                _cooperativeBrandController.text == ''
-                    ? null
-                    : _cooperativeBrandController.text;
-
-                UserRepositoryImpl().factoryUpdate(_factory).then((a) {
-                  UserBLoC.instance.refreshUser().then((v) {
-                    print('+++++++++++++++++++++');
-                  });
-                  Navigator.pop(context, true);
-                });
-              })
+              onPressed: _onSubmit)
         ],
       ),
       body: Container(
         color: Colors.grey[200],
         child: ListView(
           children: <Widget>[
-
-            _buildProfilePicture(),
+            _PictureRow(
+              fontSize: _fontSize,
+              required: true,
+              label: '企业LOGO',
+              medias: _medias,
+            ),
             _buildName(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
+            _buildIntro(),
+            _divider,
             _buildContactInfo(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildContactAddress(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildPopulationScale(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildCooperationModes(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildCategories(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildAdeptAtCategories(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildEquipment(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildInkFactoryQuantityLevel(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildCooperativeBrand(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildMonthlyCapacityRange(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildScaleRange(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildProductionMode(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildProductionLineQuantity(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildFactoryBuildingsQuantity(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildDesign(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildPattern(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildFreeProofing(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildCoverageArea(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            _divider,
             _buildLabels(context),
+            _divider,
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Text('厂房照片：'),
+            ),
+            _PictureRow(
+              fontSize: _fontSize,
+              // required: true,
+              label: '工厂门牌',
+              medias: _gatePhotos,
+            ),
+            _PictureRow(
+              fontSize: _fontSize,
+              // required: true,
+              label: '车缝车间',
+              medias: _sewingWorkshopPhotos,
+            ),
+            _PictureRow(
+              fontSize: _fontSize,
+              label: '裁床',
+              medias: _cuttingTablePhotos,
+            ),
+            _PictureRow(
+              fontSize: _fontSize,
+              label: '尾部',
+              medias: _backEndPhotos,
+            ),
           ],
         ),
       ),
@@ -277,16 +202,15 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   GestureDetector _buildContactInfo(BuildContext context) {
     return GestureDetector(
-      onTap: () async{
+      onTap: () async {
         CompanyModel result = await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    MyBrandContactFormPage(
+                builder: (context) => MyBrandContactFormPage(
                       company: _factory,
                     )));
 
-        if(result != null){
+        if (result != null) {
           setState(() {
             _factory.contactPerson = result.contactPerson;
             _factory.contactPhone = result.contactPhone;
@@ -347,14 +271,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       style: TextStyle(color: Colors.red, fontSize: _fontSize)),
                 ]),
               ),
-              Container(
-                width: MediaQueryData.fromWindow(window).size.width - 130,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    '${_factory.contactAddress != null && _factory.contactAddress.details != null ? _factory.contactAddress.details : ''}',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
+              Expanded(
+                child: Text(
+                  '${_factory.contactAddress != null &&
+                      _factory.contactAddress.details != null ? _factory
+                      .contactAddress.details : ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  textAlign: TextAlign.right,
                 ),
               ),
               Icon(
@@ -364,7 +287,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ],
           ),
         ),
-        onTap: () async{
+        onTap: () async {
           B2BUnitModel result = await Navigator.push(
             context,
             MaterialPageRoute(
@@ -379,47 +302,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             _factory.longitude = result.longitude;
           });
         });
-  }
-
-  Widget _buildProfilePicture() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-      child: Row(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: '企业logo',
-                      style:
-                      TextStyle(color: Colors.black, fontSize: _fontSize)),
-                  TextSpan(
-                      text: '*',
-                      style: TextStyle(color: Colors.red, fontSize: _fontSize)),
-
-                ]),
-              ),
-              Text('（长按编辑）',style: TextStyle(color: Colors.grey),),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 20),
-            child: EditableAttachments(
-              list: _medias,
-              imageHeight: 80,
-              imageWidth: 80,
-              maxNum: 1,
-              ratioX: 1,
-              ratioY: 1,
-              //  isCut: true,
-              circleShape: true,
-              loogPressDelete: false,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Container _buildName() {
@@ -465,6 +347,44 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     );
   }
 
+  Container _buildIntro() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 5,
+      ),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                  text: '公司简介',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: _fontSize,
+                  )),
+            ]),
+          ),
+          Expanded(
+            child: TextFieldComponent(
+              padding: EdgeInsets.all(0),
+              focusNode: _introFocusNode,
+              controller: _introController,
+              hintText: '请输入公司简介',
+              hideDivider: true,
+              maxLength: 120,
+              onChanged: (v) {
+                _factory.intro =
+                _introController.text == '' ? null : _introController.text;
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   InkWell _buildMonthlyCapacityRange(BuildContext context) {
     return InkWell(
         child: Container(
@@ -479,6 +399,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         text: '月均产能',
                         style: TextStyle(
                             color: Colors.black, fontSize: _fontSize)),
+                    TextSpan(
+                        text: '*',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: _fontSize,
+                        )),
                   ]),
                 ),
               ),
@@ -617,25 +543,26 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           child: Row(
             children: <Widget>[
-              Expanded(
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: '生产大类',
-                        style: TextStyle(
-                            color: Colors.black, fontSize: _fontSize)),
-                    TextSpan(
-                        text: '*',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: _fontSize,
-                        )),
-                  ]),
-                ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '生产大类',
+                      style:
+                      TextStyle(color: Colors.black, fontSize: _fontSize)),
+                  TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: _fontSize,
+                      )),
+                ]),
               ),
-              Text(
-                formatCategorySelectText(_factory.categories, 5),
-                style: TextStyle(color: Colors.grey),
+              Expanded(
+                child: Text(
+                  (_factory.categories ?? []).map((e) => e.name).join(','),
+                  style: TextStyle(color: Colors.grey),
+                  textAlign: TextAlign.right,
+                ),
               ),
               Icon(
                 Icons.chevron_right,
@@ -654,25 +581,33 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: Row(
           children: <Widget>[
-            Expanded(
-              child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: '优势类目',
-                      style:
-                      TextStyle(color: Colors.black, fontSize: _fontSize)),
-                  TextSpan(
-                      text: '*',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: _fontSize,
-                      )),
-                ]),
-              ),
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: '优势类目',
+                    style: TextStyle(color: Colors.black, fontSize: _fontSize)),
+                TextSpan(
+                    text: '*',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: _fontSize,
+                    )),
+                TextSpan(
+                    text: '(限5个)',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    )),
+              ]),
             ),
-            Text(_factory.adeptAtCategories == null || _factory.adeptAtCategories.length == 0 ? '请选择':
-              formatCategorySelectText(_factory.adeptAtCategories, 2),
-              style: TextStyle(color: Colors.grey),
+            Expanded(
+              child: Text(
+                  _factory.adeptAtCategories == null ||
+                      _factory.adeptAtCategories.length == 0
+                      ? '请选择'
+                      : formatCategorySelectText(_factory.adeptAtCategories),
+                  style: TextStyle(color: Colors.grey),
+                  textAlign: TextAlign.right),
             ),
             Icon(
               Icons.chevron_right,
@@ -683,7 +618,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       ),
       onTap: () async {
         List<CategoryModel> categories =
-        await ProductRepositoryImpl().cascadedCategories();
+        await Provider.of<CategoryState>(context).getCascadedCategories();
+
         dynamic result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -692,6 +628,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   categories: categories,
                   minCategorySelect: _factory.adeptAtCategories,
                   multiple: true,
+                  max: 5,
                 ),
           ),
         );
@@ -972,7 +909,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         controller: _productionLineQuantityController,
         dividerPadding: EdgeInsets.all(0),
         inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly,
+          FilteringTextInputFormatter.digitsOnly,
         ],
         onChanged: (v) {
           _factory.productionLineQuantity =
@@ -994,7 +931,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         controller: _factoryBuildingsQuantityController,
         dividerPadding: EdgeInsets.all(0),
         inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly,
+          FilteringTextInputFormatter.digitsOnly,
         ],
         onChanged: (v) {
           _factory.factoryBuildingsQuantity = ClassHandleUtil.transInt(
@@ -1043,26 +980,11 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     );
   }
 
-  String formatCategorySelectText(List<CategoryModel> categorys, int count) {
-    String text = '';
-
-    if (categorys != null) {
-      text = '';
-      for (int i = 0; i < categorys.length; i++) {
-        if (i > count - 1) {
-          text += '...';
-          break;
-        }
-
-        if (i == categorys.length - 1) {
-          text += categorys[i].name;
-        } else {
-          text += categorys[i].name + '、';
-        }
-      }
-    }
-
-    return text;
+  String formatCategorySelectText(List<CategoryModel> categorys) {
+    return categorys
+        .map((e) =>
+    e.parent != null ? '${e.parent.name}-${e.name}' : '${e.name}')
+        .join(',');
   }
 
   String formatLabelsSelectText(List<LabelModel> labels) {
@@ -1089,6 +1011,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
     return text;
   }
+
+  Widget get _divider =>
+      const Divider(
+        height: 0,
+        color: Color(Constants.DIVIDER_COLOR),
+      );
 
   //格式化合作方式
   String formatCooperationModesSelectText(
@@ -1129,7 +1057,14 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       context: context,
       builder: (BuildContext context) {
         return EnumSelectPage(
-          items: PopulationScaleEnum,
+          items: [
+            EnumModel('N05', '20人以下'),
+            EnumModel('N06', '21至35人'),
+            EnumModel('N07', '36人至50人'),
+            EnumModel('N02', '51~100人'),
+            EnumModel('N03', '101到200人'),
+            EnumModel('N04', '200人以上'),
+          ],
           title: '工厂规模',
           codes: _populationScale,
           count: 3,
@@ -1183,7 +1118,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   void _onMajorCategorySelect() async {
     List<CategoryModel> categorys =
-    await ProductRepositoryImpl().majorCategories();
+    await Provider.of<MajorCategoryState>(context).getMajorCategories();
+    // await ProductRepositoryImpl().majorCategories();
 
     showModalBottomSheet(
       context: context,
@@ -1192,12 +1128,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
           title: '生产大类',
           items: categorys,
           models: _factory.categories,
-          multiple: true,
+          multiple: false,
         );
       },
     ).then((result) {
       setState(() {
-        if (result != null) {
+        if (result != null && result is List<CategoryModel>) {
           _factory.categories = result;
         }
       });
@@ -1208,21 +1144,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return EnumSelectPage(
-          title: '质量等级',
-          items: FactoryQualityLevelsEnum,
-          codes: _factory.qualityLevels,
-          count: 3,
-          multiple: true,
+        return QualitySelector(
+          values: _factory.qualityLevels,
+          onChange: (values) {
+            setState(() {
+              _factory.qualityLevels = values;
+            });
+          },
         );
       },
-    ).then((result) {
-      setState(() {
-        if (result != null) {
-          _factory.qualityLevels = result;
-        }
-      });
-    });
+    );
   }
 
   void _onMonthlySelect() async {
@@ -1302,7 +1233,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   }
 
   void _onLabelSelect() async {
-    List<LabelModel> labels = await UserRepositoryImpl().labels();
+    List<LabelModel> labels =
+    await Provider.of<LabelState>(context).getLabels();
+
     labels.removeWhere((label) => label.group != 'FACTORY');
     if (_factory.labels == null) _factory.labels = [];
 
@@ -1323,6 +1256,112 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         }
       });
     });
+  }
+
+  void _onSubmit() async {
+    if (ObjectUtil.isEmptyList(_medias)) {
+      ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
+      return;
+    }
+    // if (ObjectUtil.isEmptyList(_gatePhotos)) {
+    //   ShowDialogUtil.showValidateMsg(context, '请上传门牌照片');
+    //   throw Exception('门牌照片必传');
+    // }
+    // if (ObjectUtil.isEmptyList(_sewingWorkshopPhotos)) {
+    //   ShowDialogUtil.showValidateMsg(context, '请上传车缝车间照片');
+    //   throw Exception('车缝车间照片必传');
+    // }
+
+    if (ObjectUtil.isEmptyList(_medias)) {
+      ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
+      return;
+    }
+    if (ObjectUtil.isEmptyString(_factory.name)) {
+      ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
+      return;
+    }
+    if (ObjectUtil.isEmptyString(_factory.duties) ||
+        ObjectUtil.isEmptyString(_factory.contactPerson) ||
+        ObjectUtil.isEmptyString(_factory.contactPhone)) {
+      ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
+      return;
+    }
+    if (_factory.contactAddress == null ||
+        _factory.contactAddress.region?.isocode == null) {
+      ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
+      return;
+    }
+    if (_factory.populationScale == null) {
+      ShowDialogUtil.showValidateMsg(context, '请选择工厂规模');
+      return;
+    }
+    if (_factory.cooperationModes == null ||
+        ObjectUtil.isEmptyList(_factory.cooperationModes)) {
+      ShowDialogUtil.showValidateMsg(context, '请选择合作方式');
+      return;
+    }
+//                if(_factory.contactAddress == null){
+//                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
+//                  return;
+//                }
+    _factory.contactAddress.id = null;
+    if (ObjectUtil.isEmptyList(_factory.categories)) {
+      ShowDialogUtil.showValidateMsg(context, '请选择生产大类');
+      return;
+    }
+    if (ObjectUtil.isEmptyList(_factory.adeptAtCategories)) {
+      ShowDialogUtil.showValidateMsg(context, '请选择优势类目');
+      return;
+    }
+    if (ObjectUtil.isEmptyList(_factory.cuttingDepartment) &&
+        ObjectUtil.isEmptyList(_factory.productionWorkshop) &&
+        ObjectUtil.isEmptyList(_factory.lastDepartment)) {
+      ShowDialogUtil.showValidateMsg(context, '请选择设备');
+      return;
+    }
+    if (ObjectUtil.isEmptyList(_factory.qualityLevels)) {
+      ShowDialogUtil.showValidateMsg(context, '请选择质量等级');
+      return;
+    }
+    // if (ObjectUtil.isEmptyString(_factory.cooperativeBrand)) {
+    //   ShowDialogUtil.showValidateMsg(context, '请填写合作品牌');
+    //   throw Exception('合作品牌必填');
+    // }
+    if (_factory.monthlyCapacityRange == null) {
+      ShowDialogUtil.showValidateMsg(context, '请选择月均产能');
+      throw Exception('月均产能必填');
+    }
+    if (_medias.length > 0) {
+      _factory.profilePicture = _medias[0];
+    } else {
+      _factory.profilePicture = null;
+    }
+
+    _factory.gatePhoto = _gatePhotos.isNotEmpty ? _gatePhotos.first : null;
+
+    _factory.cuttingTablePhoto =
+    _cuttingTablePhotos.isNotEmpty ? _cuttingTablePhotos.first : null;
+
+    _factory.sewingWorkshopPhoto =
+    _sewingWorkshopPhotos.isNotEmpty ? _sewingWorkshopPhotos.first : null;
+
+    _factory.backEndPhoto =
+    _backEndPhotos.isNotEmpty ? _backEndPhotos.first : null;
+
+    _factory.name = _nameController.text == '' ? null : _nameController.text;
+    _factory.cooperativeBrand = _cooperativeBrandController.text == ''
+        ? null
+        : _cooperativeBrandController.text;
+
+    Function cancelFunc =
+    BotToast.showLoading(crossPage: false, clickClose: true);
+
+    String result = await UserRepositoryImpl().factoryUpdate(_factory);
+    if (result != null) {
+      UserModel user = await UserBLoC.instance.refreshUser();
+      Navigator.pop(context, true);
+    }
+    cancelFunc.call();
   }
 }
 
@@ -1360,8 +1399,6 @@ class _EquipmentPageState extends State<EquipmentPage> {
     if (widget.item.lastDepartment != null) {
       _attributes[2].valueSelects = widget.item.lastDepartment;
     }
-
-    // TODO: implement initState
     super.initState();
   }
 
@@ -1387,14 +1424,15 @@ class _EquipmentPageState extends State<EquipmentPage> {
                 );
                 print(result);
                 if (result != null) {
-                 setState(() {
-                   _attributes[0].valueSelects = result['cuttingDepartment'];
-                   _attributes[1].valueSelects = result['productionWorkshop'];
-                   _attributes[2].valueSelects = result['lastDepartment'];
-                   widget.item.cuttingDepartment = result['cuttingDepartment'];
-                   widget.item.productionWorkshop = result['productionWorkshop'];
-                   widget.item.lastDepartment = result['lastDepartment'];
-                 });
+                  setState(() {
+                    _attributes[0].valueSelects = result['cuttingDepartment'];
+                    _attributes[1].valueSelects = result['productionWorkshop'];
+                    _attributes[2].valueSelects = result['lastDepartment'];
+                    widget.item.cuttingDepartment = result['cuttingDepartment'];
+                    widget.item.productionWorkshop =
+                    result['productionWorkshop'];
+                    widget.item.lastDepartment = result['lastDepartment'];
+                  });
                 }
               },
               child: _buildAttributesInfo()
@@ -1503,9 +1541,68 @@ class _EquipmentPageState extends State<EquipmentPage> {
       }
     }
 
-    if(text.endsWith("\n")){
-      text = text.substring(0,text.length-1);
+    if (text.endsWith("\n")) {
+      text = text.substring(0, text.length - 1);
     }
     return text;
+  }
+}
+
+class _PictureRow extends StatelessWidget {
+  final List<MediaModel> medias;
+
+  final bool required;
+
+  final double fontSize;
+
+  final String label;
+
+  const _PictureRow(
+      {Key key, this.medias, this.required = false, this.fontSize, this.label})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '$label',
+                      style:
+                      TextStyle(color: Colors.black, fontSize: fontSize)),
+                  TextSpan(
+                      text: required ? '*' : '',
+                      style: TextStyle(color: Colors.red, fontSize: fontSize)),
+                ]),
+              ),
+              Text(
+                '（长按编辑）',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: EditableAttachments(
+              list: medias,
+              imageHeight: 80,
+              imageWidth: 80,
+              maxNum: 1,
+              ratioX: 1,
+              ratioY: 1,
+              //  isCut: true,
+              circleShape: true,
+              loogPressDelete: false,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

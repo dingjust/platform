@@ -123,42 +123,43 @@ class CompanyModel extends UserGroupModel {
   // 联系人uid
   String contactUid;
 
-  CompanyModel({MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    ArticleApprovalStatus approvalStatus,
-    //联系人
-    String contactPerson,
-    //联系电话
-    String contactPhone,
-    this.starLevel,
-    this.address,
-    this.describe,
-    this.contactAddress,
-    this.creationTime,
-    this.taxNumber,
-    this.bankOfDeposit,
-    this.certificates,
-    this.cooperativeBrand,
-    this.qq,
-    this.wechat,
-    this.businessRegistrationNo,
-    this.certificateOfLegal,
-    this.legalRepresentative,
-    this.type,
-    this.profiles,
-    this.labels,
-    this.duties,
-    this.contactUid})
+  CompanyModel(
+      {MediaModel profilePicture,
+      String uid,
+      String name,
+      List<PrincipalModel> members,
+      ArticleApprovalStatus approvalStatus,
+      //联系人
+      String contactPerson,
+      //联系电话
+      String contactPhone,
+      this.starLevel,
+      this.address,
+      this.describe,
+      this.contactAddress,
+      this.creationTime,
+      this.taxNumber,
+      this.bankOfDeposit,
+      this.certificates,
+      this.cooperativeBrand,
+      this.qq,
+      this.wechat,
+      this.businessRegistrationNo,
+      this.certificateOfLegal,
+      this.legalRepresentative,
+      this.type,
+      this.profiles,
+      this.labels,
+      this.duties,
+      this.contactUid})
       : super(
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      members: members,
-      approvalStatus: approvalStatus,
-      contactPerson: contactPerson,
-      contactPhone: contactPhone);
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            members: members,
+            approvalStatus: approvalStatus,
+            contactPerson: contactPerson,
+            contactPhone: contactPhone);
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CompanyModelFromJson(json);
@@ -276,69 +277,70 @@ class B2BUnitModel extends OrgUnitModel {
   ///认证类型
   String approvalType;
 
-  B2BUnitModel({MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    String path,
-    int starLevel,
-    AddressModel contactAddress,
-    String address,
-    String describe,
-    DateTime creationTime,
-    String taxNumber,
-    String bankOfDeposit,
-    List<MediaModel> certificates,
-    String contactPerson,
-    String contactPhone,
-    String cooperativeBrand,
-    String qq,
-    String wechat,
-    String businessRegistrationNo,
-    String legalRepresentative,
-    String certificateOfLegal,
-    CompanyType type,
-    ArticleApprovalStatus approvalStatus,
-    List<CompanyProfileModel> companyProfiles,
-    List<LabelModel> labels,
-    String duties,
-    String contactUid,
-    this.approvalType,
-    this.active,
-    this.email,
-    this.phone,
-    this.profileCompleted,
-    this.locationAddress,
-    this.longitude,
-    this.latitude})
+  B2BUnitModel(
+      {MediaModel profilePicture,
+      String uid,
+      String name,
+      List<PrincipalModel> members,
+      String path,
+      int starLevel,
+      AddressModel contactAddress,
+      String address,
+      String describe,
+      DateTime creationTime,
+      String taxNumber,
+      String bankOfDeposit,
+      List<MediaModel> certificates,
+      String contactPerson,
+      String contactPhone,
+      String cooperativeBrand,
+      String qq,
+      String wechat,
+      String businessRegistrationNo,
+      String legalRepresentative,
+      String certificateOfLegal,
+      CompanyType type,
+      ArticleApprovalStatus approvalStatus,
+      List<CompanyProfileModel> companyProfiles,
+      List<LabelModel> labels,
+      String duties,
+      String contactUid,
+      this.approvalType,
+      this.active,
+      this.email,
+      this.phone,
+      this.profileCompleted,
+      this.locationAddress,
+      this.longitude,
+      this.latitude})
       : super(
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      members: members,
-      path: path,
-      starLevel: starLevel,
-      address: address,
-      contactAddress: contactAddress,
-      describe: describe,
-      creationTime: creationTime,
-      taxNumber: taxNumber,
-      bankOfDeposit: bankOfDeposit,
-      certificates: certificates,
-      contactPerson: contactPerson,
-      contactPhone: contactPhone,
-      cooperativeBrand: cooperativeBrand,
-      qq: qq,
-      wechat: wechat,
-      businessRegistrationNo: businessRegistrationNo,
-      certificateOfLegal: certificateOfLegal,
-      legalRepresentative: legalRepresentative,
-      type: type,
-      approvalStatus: approvalStatus,
-      companyProfiles: companyProfiles,
-      labels: labels,
-      duties: duties,
-      contactUid: contactUid);
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            members: members,
+            path: path,
+            starLevel: starLevel,
+            address: address,
+            contactAddress: contactAddress,
+            describe: describe,
+            creationTime: creationTime,
+            taxNumber: taxNumber,
+            bankOfDeposit: bankOfDeposit,
+            certificates: certificates,
+            contactPerson: contactPerson,
+            contactPhone: contactPhone,
+            cooperativeBrand: cooperativeBrand,
+            qq: qq,
+            wechat: wechat,
+            businessRegistrationNo: businessRegistrationNo,
+            certificateOfLegal: certificateOfLegal,
+            legalRepresentative: legalRepresentative,
+            type: type,
+            approvalStatus: approvalStatus,
+            companyProfiles: companyProfiles,
+            labels: labels,
+            duties: duties,
+            contactUid: contactUid);
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$B2BUnitModelFromJson(json);
@@ -558,6 +560,25 @@ class FactoryModel extends B2BUnitModel {
   @JsonKey(toJson: _capacitiesToJson)
   List<FactoryCapacityModel> capacities;
 
+  ///厂门照片
+  @JsonKey(toJson: MediaModel.toJson)
+  MediaModel gatePhoto;
+
+  ///裁床照片
+  @JsonKey(toJson: MediaModel.toJson)
+  MediaModel cuttingTablePhoto;
+
+  ///车缝照片
+  @JsonKey(toJson: MediaModel.toJson)
+  MediaModel sewingWorkshopPhoto;
+
+  ///尾部照片
+  @JsonKey(toJson: MediaModel.toJson)
+  MediaModel backEndPhoto;
+
+  ///简介
+  String intro;
+
   FactoryModel({MediaModel profilePicture,
     String uid,
     String name,
@@ -616,7 +637,12 @@ class FactoryModel extends B2BUnitModel {
     this.coverageArea,
     this.proprietaryProducts,
     this.capacities,
-    this.populationScale})
+    this.populationScale,
+    this.gatePhoto,
+    this.cuttingTablePhoto,
+    this.sewingWorkshopPhoto,
+    this.intro,
+    this.backEndPhoto})
       : super(
       profilePicture: profilePicture,
       uid: uid,
@@ -852,6 +878,15 @@ ScaleRanges scaleRangeFromString(String val) {
 }
 
 enum PopulationScale {
+  ///20人以下
+  N05,
+
+  ///21至35人
+  N06,
+
+  ////36人至50人
+  N07,
+
   /// 50人以下
   N01,
 
@@ -861,8 +896,8 @@ enum PopulationScale {
   /// 101到200人
   N03,
 
-  /// 200人以下<
-  N04
+  /// 200人以上
+  N04,
 }
 
 const PopulationScaleLocalizedMap = {
@@ -870,6 +905,9 @@ const PopulationScaleLocalizedMap = {
   PopulationScale.N02: "51~100人",
   PopulationScale.N03: "101~200人",
   PopulationScale.N04: "200人以上",
+  PopulationScale.N05: "20人以下",
+  PopulationScale.N06: "21至35人",
+  PopulationScale.N07: "36人至50人",
 };
 
 //生产模式
@@ -1021,22 +1059,22 @@ const FactoryFreeProofingLocalizedMap = {
   FactoryFreeProofing.NOT_SUPPORTED: '不支持'
 };
 
-//质量等级
-enum FactoryQualityLevel {
-  A_CHAIN,
-  REGIONAL_CHAIN,
-  STALL_WHOLESALE,
-  ELECTRONIC_COMMERCE_QUALITY,
-  WHOLESALE_TRADE
-}
+// //质量等级
+// enum FactoryQualityLevel {
+//   A_CHAIN,
+//   REGIONAL_CHAIN,
+//   STALL_WHOLESALE,
+//   ELECTRONIC_COMMERCE_QUALITY,
+//   WHOLESALE_TRADE
+// }
 
-const FactoryQualityLevelLocalizedMap = {
-  FactoryQualityLevel.A_CHAIN: '一线连锁',
-  FactoryQualityLevel.REGIONAL_CHAIN: '区域连锁',
-  FactoryQualityLevel.STALL_WHOLESALE: '档口批发',
-  FactoryQualityLevel.ELECTRONIC_COMMERCE_QUALITY: '电商品质',
-  FactoryQualityLevel.WHOLESALE_TRADE: '外贸批发',
-};
+// const FactoryQualityLevelLocalizedMap = {
+//   FactoryQualityLevel.A_CHAIN: '一线连锁',
+//   FactoryQualityLevel.REGIONAL_CHAIN: '区域连锁',
+//   FactoryQualityLevel.STALL_WHOLESALE: '档口批发',
+//   FactoryQualityLevel.ELECTRONIC_COMMERCE_QUALITY: '电商品质',
+//   FactoryQualityLevel.WHOLESALE_TRADE: '外贸批发',
+// };
 
 //年龄段
 enum AgeRanges {
@@ -1160,8 +1198,10 @@ class AuthenticationInfoModel extends ItemModel {
 
   MediaModel certImg;
 
-  AuthenticationInfoModel({
-    this.code,
+  ///公司编号
+  String companyCode;
+
+  AuthenticationInfoModel({this.code,
     this.name,
     this.idCard,
     this.mobile,
@@ -1178,7 +1218,7 @@ class AuthenticationInfoModel extends ItemModel {
     this.agent,
     this.legal,
     this.certImg,
-  });
+    this.companyCode});
 
   factory AuthenticationInfoModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$AuthenticationInfoModelFromJson(json);

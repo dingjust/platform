@@ -2,12 +2,11 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
+import 'package:b2b_commerce/src/home/factory/_shared/factory_widgets.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -142,93 +141,6 @@ class _RequirementOrderDetailByFactoryPageState
       color: Colors.white,
       child: Column(
         children: <Widget>[
-          // Row(
-          //   children: <Widget>[
-          //     orderModel.belongTo.profilePicture == null
-          //         ? Container(
-          //             margin: EdgeInsets.only(right: 10),
-          //             width: 60,
-          //             height: 60,
-          //             decoration: BoxDecoration(
-          //                 borderRadius: BorderRadius.circular(10),
-          //                 image: DecorationImage(
-          //                   image: AssetImage(
-          //                     'temp/picture.png',
-          //                     package: "assets",
-          //                   ),
-          //                   fit: BoxFit.cover,
-          //                 )),
-          //           )
-          //         : Container(
-          //             margin: EdgeInsets.only(right: 10),
-          //             width: 60,
-          //             height: 60,
-          //             child: CachedNetworkImage(
-          //                 width: 80,
-          //                 height: 80,
-          //                 imageUrl:
-          //                     '${orderModel.belongTo.profilePicture.previewUrl()}',
-          //                 fit: BoxFit.cover,
-          //                 imageBuilder: (context, imageProvider) => Container(
-          //                       width: 80,
-          //                       height: 80,
-          //                       decoration: BoxDecoration(
-          //                         image: DecorationImage(
-          //                           image: imageProvider,
-          //                           fit: BoxFit.cover,
-          //                         ),
-          //                         borderRadius: BorderRadius.circular(10),
-          //                       ),
-          //                     ),
-          //                 placeholder: (context, url) => SpinKitRing(
-          //                       color: Colors.black12,
-          //                       lineWidth: 2,
-          //                       size: 30,
-          //                     ),
-          //                 errorWidget: (context, url, error) => SpinKitRing(
-          //                       color: Colors.black12,
-          //                       lineWidth: 2,
-          //                       size: 30,
-          //                     )),
-          //             decoration: BoxDecoration(
-          //               borderRadius: BorderRadius.circular(10),
-          //             ),
-          //           ),
-          //     Container(
-          //         child: Column(
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: <Widget>[
-          //         Container(
-          //           margin: EdgeInsets.only(bottom: 5),
-          //           child: Text(
-          //             orderModel.belongTo == null || orderModel.belongTo == null
-          //                 ? ''
-          //                 : '${orderModel.belongTo.name}',
-          //             textScaleFactor: 1.3,
-          //           ),
-          //         ),
-          //         orderModel.belongTo == null ||
-          //                 orderModel.belongTo.approvalStatus == null
-          //             ? Container()
-          //             : Container(
-          //                 margin: EdgeInsets.only(top: 5),
-          //                 color: Color.fromRGBO(254, 252, 235, 1),
-          //                 child: orderModel.belongTo.approvalStatus !=
-          //                         ArticleApprovalStatus.approved
-          //                     ? Text('  未认证  ',
-          //                         style: TextStyle(
-          //                           color: Color.fromRGBO(255, 133, 148, 1),
-          //                         ))
-          //                     : Text(
-          //                         '  已认证  ',
-          //                         style: TextStyle(
-          //                           color: Color.fromRGBO(255, 133, 148, 1),
-          //                         ),
-          //                       ))
-          //       ],
-          //     ))
-          //   ],
-          // ),
           Container(
             padding: EdgeInsets.only(top: 10),
             child: Row(
@@ -384,8 +296,7 @@ class _RequirementOrderDetailByFactoryPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    '${DateFormatUtil.formatYMD(
-                        orderModel.details.expectedDeliveryDate)}',
+                    '${DateFormatUtil.formatYMD(orderModel.details.expectedDeliveryDate)}',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -660,89 +571,51 @@ class _RequirementOrderDetailByFactoryPageState
   }
 
   Widget _buildBottomButtons(RequirementOrderModel model) {
-    return Container(
-      height: 65,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: FlatButton(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Icon(
-                      Icons.phone,
-                      color: Colors.white,
-                    ),
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(8)),
-                    padding: EdgeInsets.all(2),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          model?.details?.contactPerson ?? '',
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              onPressed: () {
-                _selectActionButton(model?.details?.contactPhone);
-              },
-            ),
-          ),
-          isMyself()
-              ? Container()
-              : Expanded(
-            flex: 1,
-            child: Container(
-                height: double.infinity,
-                child: Builder(
-                  builder: (BuildContext buttonContext) =>
-                      FlatButton(
-                        color: Color.fromRGBO(255, 214, 12, 1),
-                        onPressed: () async {
-                          QuoteModel newQuote = await Navigator.of(context)
-                              .push(MaterialPageRoute(
-                              builder: (context) =>
-                                  RequirementQuoteOrderForm(
-                                    model: orderModel,
-                                    quoteModel:
-                                    QuoteModel(attachments: []),
-                                  )));
-
-                          if (newQuote != null) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    QuoteOrderDetailPage(
-                                      newQuote.code,
-                                    )));
-                          }
-                        },
-                        disabledColor: Colors.grey[300],
-                        child: Text(
-                          '去报价',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
+    return Offstage(
+      offstage: isMyself(),
+      child: Container(
+        height: 65,
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          children: [
+            Expanded(
+                child: FactoryBottomBtn(
+                  color: Colors.green,
+                  label: '联系对方',
+                  onTap: () {
+                    _selectActionButton(model?.details?.contactPhone);
+                  },
                 )),
-          )
-        ],
+            Expanded(
+                child: FactoryBottomBtn(
+                  color: Colors.blueAccent,
+                  label: '生产报价',
+                  onTap: () async {
+                    QuoteModel newQuote =
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            RequirementQuoteOrderForm(
+                              model: orderModel,
+                              quoteModel: QuoteModel(attachments: []),
+                            )));
+
+                    if (newQuote != null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              QuoteOrderDetailPage(
+                                newQuote.code,
+                              )));
+                    }
+                  },
+                ))
+          ],
+        ),
       ),
     );
   }
 
-  ///TODO分享
+  ///分享
   void onShare() {
     String title = '';
     String description =

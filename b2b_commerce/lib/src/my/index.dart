@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
+import 'package:b2b_commerce/src/home/factory/factory_introduction.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
@@ -195,11 +196,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
+                Expanded(
                   child: Text(
                     "${user.name}",
                     overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+                    // textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -432,18 +433,13 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
         }
         // 工厂详情
         if (bloc.currentUser.type == UserType.FACTORY) {
-//          UserRepositoryImpl()
-//              .getFactory(bloc.currentUser.companyCode)
-//              .then((factory) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyFactoryPage(
-                factoryUid: UserBLoC.instance.currentUser.companyCode,
-              ),
+              builder: (context) => FactoryIntroductionPage(
+                  uid: UserBLoC.instance.currentUser.companyCode),
             ),
           );
-//          });
         }
       },
     );

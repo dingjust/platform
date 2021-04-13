@@ -406,6 +406,9 @@ const PopulationScaleEnum = <EnumModel>[
   EnumModel('N02', '51~100人'),
   EnumModel('N03', '101到200人'),
   EnumModel('N04', '200人以上'),
+  EnumModel('N05', '20人以下'),
+  EnumModel('N06', '21至35人'),
+  EnumModel('N07', '36人至50人'),
 ];
 
 //合作方式枚举
@@ -512,11 +515,18 @@ const EffectiveDaysEnum = [
 
 //质量等级
 const FactoryQualityLevelsEnum = [
-  EnumModel('A_CHAIN', '一线大牌'),
+  EnumModel('A_CHAIN', '一线品牌'),
   EnumModel('REGIONAL_CHAIN', '区域品牌'),
   EnumModel('STALL_WHOLESALE', '档口精品'),
   EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
-  EnumModel('WHOLESALE_TRADE', '外贸跑量'),
+  EnumModel('WHOLESALE_TRADE', '外贸批发'),
+  EnumModel('LEVEL01', '二线品牌'),
+  EnumModel('LEVEL02', '三线品牌'),
+  EnumModel('LEVEL03', '三线以下'),
+  EnumModel('LEVEL04', '档口跑量'),
+  EnumModel('LEVEL05', '电商高品质'),
+  EnumModel('LEVEL06', '电商跑量'),
+  EnumModel('LEVEL07', '跨境电商'),
 ];
 
 //转包类型
