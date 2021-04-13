@@ -13,6 +13,11 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="审批人" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{approvalNames(scope.row)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="审批时间">
         <template slot-scope="scope">
           <template v-if="scope.row.currentUserAuditTime">
@@ -54,6 +59,11 @@
     name: 'TaskApprovalList',
     props: ['page'],
     methods: {
+      approvalNames (row) {
+        if (row.processes && row.processes.length > 0) {
+          return row.processes.map(item => item.auditUser.name).toString();
+        }
+      },
       canAudit (row) {
         return row.state === 'AUDITING' && row.currentUserAuditState === 'AUDITING';
       },
