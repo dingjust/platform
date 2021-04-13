@@ -89,7 +89,16 @@
       openPreviewPdf (code) {
         this.$emit('openPreviewPdf', code);
       },
-      async onDelete (code) {
+      onDelete (code) {
+        this.$confirm('是否执行删除合同模板操作?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onDelete(code);
+        });
+      },
+      async _onDelete (code) {
         const url = this.apis().deleteTemplate(code);
         const result = await this.$http.get(url);
         if (result['errors']) {
