@@ -509,6 +509,8 @@
       }
     },
     created() {
+      this.form.auditNeeded = false;
+      
       if (this.$route.params.order != null) {
         Object.assign(this.form, this.$route.params.order);
         // 设置对应供应商
@@ -520,7 +522,6 @@
       }
     },
     mounted() {
-      this.form.auditNeeded = false;
       // if (checkAuditFree('SALES_OUT_NO_AUDIT')) {
       //   this.form.auditNeeded = false;
       // } else {

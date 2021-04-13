@@ -32,6 +32,9 @@
       <el-tab-pane label="盈亏分析" v-if="showProfitLoss" key="profitLoss" :lazy="true">
         <profit-loss-detail-subject v-if="form.profitLossAnalysis" 
                                     :id="form.profitLossAnalysis.id" @callback="callback"/>
+        <el-row v-else type="flex" justify="center" align="middle" style="padding: 20px;">
+          <h6 style="color: #909399">暂无数据</h6>
+        </el-row>
       </el-tab-pane>
     </el-tabs>
   </div>

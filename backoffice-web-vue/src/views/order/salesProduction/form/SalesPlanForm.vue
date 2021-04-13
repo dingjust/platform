@@ -323,9 +323,7 @@
       }
     },
     mounted() {
-      if (checkAuditFree('SALES_PLAN_NO_AUDIT')) {
-        this.form.auditNeeded = false;
-      } else {
+      if (!checkAuditFree('SALES_PLAN_NO_AUDIT')) {
         this.form.auditNeeded = true;
       }
     }

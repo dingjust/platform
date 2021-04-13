@@ -2,7 +2,8 @@
   <el-form ref="form" :model="column" @submit.native.prevent>
     <el-row>
       <el-form-item label="" prop="value" :rules="[{ required: true, message: '必填', trigger: 'blur'}]" @submit.native.prevent>
-        <el-input v-model="column.value" 
+        <el-input ref="input"
+                  v-model="column.value" 
                   :placeholder="placeholder" 
                   @keyup.enter.native="onConfirm"></el-input>
       </el-form-item>
@@ -60,6 +61,11 @@ export default {
         this.$emit('toModifyColumn', this.column);
       });
     },
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.$refs.input.focus();
+    })
   },
   created () {
     if (this.modifyColumn && this.modifyColumn != '') {

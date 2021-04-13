@@ -82,7 +82,7 @@ export default {
         }
       })
 
-      return totalCost;
+      return totalCost.toFixed(2);
     }
   },
   data () {

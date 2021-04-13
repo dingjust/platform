@@ -59,9 +59,9 @@
               <span>{{scope.row.unitCostAmount.toFixed(2)}}</span>
               <div>
                 <el-button v-if="scope.row.costOrder.id" type="text" :disabled="scope.row.purchaseTaskId != null"
-                            @click="modifyCost(scope.$index, scope.row.costOrder)">修改</el-button>
+                            @click="modifyCost(scope.$index, scope.row.costOrder)" :title="tips">修改</el-button>
                 <el-button type="text" style="margin: 0px" :disabled="scope.row.purchaseTaskId != null" 
-                            @click="openCostList(scope.$index)">选择</el-button>
+                            @click="openCostList(scope.$index)" :title="tips">选择</el-button>
               </div>
             </div>
           </template>
@@ -110,7 +110,7 @@
       </el-table-column>
       <el-table-column label="操作" min-width="120px">
         <template slot-scope="scope" v-if="!scope.row.countRow">
-          <el-button :disabled="scope.row.purchaseTaskId != null" type="text" @click="onDelete(scope.$index)">删除</el-button>
+          <el-button :disabled="scope.row.purchaseTaskId != null" type="text" @click="onDelete(scope.$index)" :title="tips">删除</el-button>
           <el-button v-if="scope.row.purchaseTaskId" type="text" @click="onPurhcaseDetail(scope.row)">采购详情</el-button>
         </template>
       </el-table-column>
@@ -142,7 +142,7 @@ import CostEditForm from '@/views/purchase/profit-loss/form/CostEditForm'
 import PurchaseRequirementDetail from '../../requirement/details/PurchaseRequirementDetail.vue'
 export default {
   name: 'ProfitLossTaskTable',
-  props: ['task', 'taskRows'],
+  props: ['task', 'taskRows', 'tips'],
   components: {
     AppendColumn,
     CostSelectList,
@@ -413,6 +413,7 @@ export default {
   
       rows.forEach(item => {
         this.plRows.push({
+          id: item.id,
           purchaseTaskId: item.purchaseTaskId ? item.purchaseTaskId : null,
           productionTaskOrderCode: item.productionTaskOrderCode,
           productionTaskOrderId: item.productionTaskOrderId,

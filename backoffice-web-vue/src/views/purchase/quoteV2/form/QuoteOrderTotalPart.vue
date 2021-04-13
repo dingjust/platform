@@ -63,7 +63,7 @@ export default {
         }
       })
 
-      return totalCost;
+      return totalCost.toFixed(2);
     },
     totalProfit: function () {
       let profitRate = Number.isNaN(Number.parseFloat(this.formData.profitRate)) ? 

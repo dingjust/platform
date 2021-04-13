@@ -15,9 +15,9 @@
       <el-form ref="form" :model="formData" :inline="true" style="margin-left: 20px" @submit.native.prevent
                :hide-required-asterisk="true" label-width="100px" label-position="left">
         <profit-loss-form-top :formData="formData"/>
-        <h6 v-if="this.id" style="color: #F56C6C">* 已进行采购的信息无法修改</h6>
+        <h6 v-if="this.id" style="color: #F56C6C">* {{tips}}</h6>
         <template v-for="item in formData.tasks">
-          <profit-loss-task-table ref="taskTable" :task="item" :key="item.id" :taskRows="taskRows"/>
+          <profit-loss-task-table ref="taskTable" :task="item" :key="item.id" :taskRows="taskRows" :tips="tips"/>
         </template>
         <profit-loss-remarks :formData="formData"/>
       </el-form>
@@ -55,7 +55,8 @@ export default {
         explain: '',
         remarks: ''
       },
-      taskRows: []
+      taskRows: [],
+      tips: '已进行采购的信息无法修改'
     }
   },
   methods: {
@@ -66,7 +67,7 @@ export default {
       const result = await this.$http.get(url);
 
       if (result['errors']) {
-        this.$message.error(result['errors'].message);
+        this.$message.error(result['errors'][0].message);
         return;
       }
 
@@ -117,12 +118,14 @@ export default {
           // 数据处理
           let entries = [];
           this.$refs.taskTable.forEach(item => {
-            entries = entries.concat(item.plRows.map(val => {
+            entries = entries.concat(item.plRows.filter(v => v.colors.length > 0).map(val => {
               return {
+                id: val.id ? val.id : null,
                 productionTaskOrderId: val.productionTaskOrderId,
                 colors: val.colors,
                 costOrder: val.costOrder,
-                additionalCharges: val.additionalCharges
+                additionalCharges: val.additionalCharges,
+                purchaseTaskId: val.purchaseTaskId ? val.purchaseTaskId : null
               }
             }))
           })
@@ -153,7 +156,7 @@ export default {
         this.$message.success('创建盈亏分析表成功！');
         this.$router.push('/purchase/profitloss/' + result.msg);
       } else if (result['errors']) {
-        this.$message.error(result['errors'].message);
+        this.$message.error(result['errors'][0].message);
       } else if (result.code === 0) {
         this.$message.error(result.msg);
       } else {
@@ -168,7 +171,7 @@ export default {
         this.$message.success('编辑盈亏分析表成功！');
         this.$router.push('/purchase/profitloss/' + this.id);
       } else if (result['errors']) {
-        this.$message.error(result['errors'].message);
+        this.$message.error(result['errors'][0].message);
       } else if (result.code === 0) {
         this.$message.error(result.msg);
       } else {

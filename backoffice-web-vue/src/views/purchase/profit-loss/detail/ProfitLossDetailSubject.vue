@@ -54,7 +54,7 @@ export default {
       const result = await this.$http.get(url);
 
       if (result['errors']) {
-        this.$message.error(result['errors'].message);
+        this.$message.error(result['errors'][0].message);
         return;
       }
 
