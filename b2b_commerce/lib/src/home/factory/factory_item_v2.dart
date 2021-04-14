@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/distance_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -11,7 +12,11 @@ import 'factory_introduction.dart';
 class FactoryItem extends StatelessWidget {
   final FactoryModel model;
 
-  const FactoryItem({Key key, this.model}) : super(key: key);
+  ///显示距离
+  final bool showDistance;
+
+  const FactoryItem({Key key, this.model, this.showDistance = false})
+      : super(key: key);
 
   static const logoSize = 80.0;
 
@@ -170,7 +175,7 @@ class FactoryItem extends StatelessWidget {
                   color: Colors.grey,
                 ),
                 Text(
-                  '${PopulationScaleLocalizedMap[model.populationScale]}',
+                  '${PopulationScaleLocalizedMap[model.populationScale] ?? ''}',
                   style: TextStyle(color: Colors.grey),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -205,10 +210,14 @@ class FactoryItem extends StatelessWidget {
           size: 15,
           color: Colors.grey,
         ),
-        Text(
-          getAddressStr(),
-          style: TextStyle(color: Colors.grey),
-        )
+        showDistance
+            ? DistanceText(
+                val: model.distance,
+              )
+            : Text(
+                getAddressStr(),
+                style: TextStyle(color: Colors.grey),
+              )
       ],
     );
   }

@@ -8,7 +8,6 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './my_brand.dart';
-import './my_factory.dart';
 import '../_shared/widgets/image_factory.dart';
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
@@ -209,6 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Container(
+                  margin: EdgeInsets.only(right: 10),
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   decoration: BoxDecoration(
                       color: Color(0xFFffb118),
