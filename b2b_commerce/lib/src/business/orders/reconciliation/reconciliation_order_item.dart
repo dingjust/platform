@@ -189,7 +189,9 @@ class _MediasRow extends StatelessWidget {
     return Row(
       children: [
         Text('单据：'),
-        for (DocSignatureModel doc in model.docSignatures ?? []) _buildBtn(doc)
+        for (DocSignatureModel doc in (model.docSignatures ?? [])
+            .where((element) => element.state != DocSignatureState.CANCELED))
+          _buildBtn(doc)
       ],
     );
   }
