@@ -35,13 +35,13 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pt-2"></div>
+      <!-- <div class="pt-2"></div>
       <template v-if="product.id">
         <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
           @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
           :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
         </el-pagination>
-      </template>
+      </template> -->
     </div>
     <el-row type="flex" justify="center" style="margin-top:20px">
       <el-button round class="submit-btn" @click="onSubmit">确定</el-button>
@@ -99,7 +99,7 @@ export default {
       const result = await this.$http.post(url, {});
 
       if (!result['errors']) {
-        this.page.content = result.data;
+        this.page.content = result.data.filter(item => item.status !== 'CANCELLED');
       }
     },
     onReset () {
