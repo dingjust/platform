@@ -84,8 +84,7 @@ class ProductGridItem extends StatelessWidget {
     if (model?.thumbnail == null) {
       return Container();
     } else {
-      const processUrl =
-          'image_process=format,WEBP/resize,w_320/crop,mid,w_320,h_320';
+      const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
       return ClipRRect(
         //剪裁为圆角矩形
         borderRadius: BorderRadius.only(

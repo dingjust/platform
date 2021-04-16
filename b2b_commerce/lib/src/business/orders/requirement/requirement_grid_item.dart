@@ -117,8 +117,7 @@ class RequirementGridItem extends StatelessWidget {
     if (model?.details?.pictures == null || model.details.pictures.isEmpty) {
       return Container();
     } else {
-      const processUrl =
-          'image_process=format,WEBP/resize,w_320/crop,mid,w_320,h_320';
+      const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
 
       return ClipRRect(
         //剪裁为圆角矩形
@@ -127,9 +126,8 @@ class RequirementGridItem extends StatelessWidget {
             topRight: Radius.circular(borderRadius)),
         child: CachedNetworkImage(
           imageUrl:
-          '${model.details.pictures.first.imageProcessUrl(processUrl)}',
-          placeholder: (context, url) =>
-              SpinKitRing(
+              '${model.details.pictures.first.imageProcessUrl(processUrl)}',
+          placeholder: (context, url) => SpinKitRing(
                 color: Colors.grey[300],
                 lineWidth: 2,
                 size: 30,

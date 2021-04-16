@@ -328,8 +328,7 @@ class _InfoHeadRow extends StatelessWidget {
         height: 80,
       );
     } else {
-      const processUrl =
-          'image_process=format,WEBP/resize,w_80/crop,mid,w_80,h_80';
+      const processUrl = 'image_process=resize,w_80/crop,mid,w_80,h_80';
       return Container(
         width: 80,
         height: 80,
@@ -337,10 +336,9 @@ class _InfoHeadRow extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: '${data.profilePicture.imageProcessUrl(processUrl)}',
             fit: BoxFit.fill,
-            placeholder: (context, url) =>
-                SpinKitRing(
-                  color: Colors.grey[300],
-                  lineWidth: 2,
+            placeholder: (context, url) => SpinKitRing(
+              color: Colors.grey[300],
+              lineWidth: 2,
                   size: 30,
                 ),
             errorWidget: (context, url, error) =>

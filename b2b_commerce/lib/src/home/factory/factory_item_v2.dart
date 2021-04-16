@@ -83,8 +83,7 @@ class FactoryItem extends StatelessWidget {
         height: logoSize,
       );
     } else {
-      const processUrl =
-          'image_process=format,WEBP/resize,w_80/crop,mid,w_80,h_80';
+      const processUrl = 'image_process=resize,w_80/crop,mid,w_80,h_80';
 
       return Container(
         width: 80,

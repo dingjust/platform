@@ -85,8 +85,7 @@ class MaterielProductStaggeredGridItem extends StatelessWidget {
     if (model?.images == null || model.images.isEmpty) {
       return Container();
     } else {
-      const processUrl =
-          'image_process=format,WEBP/resize,w_320/crop,mid,w_320,h_320';
+      const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
       return ClipRRect(
         //剪裁为圆角矩形
         borderRadius: BorderRadius.only(
@@ -214,7 +213,7 @@ class MaterielProductGridItem extends StatelessWidget {
       return Container();
     } else {
       const processUrl =
-          'image_process=format,WEBP/resize,w_320/crop,mid,w_320,h_320';
+          'image_process=resize,w_320/crop,mid,w_320,h_320';
       return ClipRRect(
         //剪裁为圆角矩形
         borderRadius: BorderRadius.only(
@@ -223,8 +222,9 @@ class MaterielProductGridItem extends StatelessWidget {
         child: CachedNetworkImage(
           imageUrl: '${model.images.first.imageProcessUrl(processUrl)}',
           fit: BoxFit.cover,
-          placeholder: (context, url) => SpinKitRing(
-            color: Colors.grey[300],
+          placeholder: (context, url) =>
+              SpinKitRing(
+                color: Colors.grey[300],
             lineWidth: 2,
             size: 30,
           ),
