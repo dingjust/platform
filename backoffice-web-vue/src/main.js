@@ -160,7 +160,7 @@ Vue.mixin({
     getEnum(enumsName, code) {
       if (code !== null && code !== '') {
         const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);
-        return result ? result['name'] : 'UNKNOWN';
+        return result ? result['name'] : '';
       } else {
         return '';
       }

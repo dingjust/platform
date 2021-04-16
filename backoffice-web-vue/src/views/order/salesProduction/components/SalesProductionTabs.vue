@@ -83,8 +83,9 @@
         }
       },
       showProfitLoss: function () {
-        // 订单为外接订单，且状态为生产中或已完成
-        return this.form.sendBy && this.form.sendBy.id && (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED');
+        // 状态为生产中或已完成
+        return this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED';
+        // return this.form.sendBy && this.form.sendBy.id && (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED');
       },
       canCreateProfitLoss: function () {
         return !this.form.profitLossAnalysis && this.showProfitLoss;

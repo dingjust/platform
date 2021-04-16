@@ -17,7 +17,9 @@
           </el-table-column>
           <el-table-column label="物料编号" prop="code"></el-table-column>
           <el-table-column label="物料单位" prop="unit"></el-table-column>
-          <el-table-column label="供应商" v-if="!readOnly && !isFromCost" prop="cooperatorName"></el-table-column>
+          <el-table-column label="成分" prop="composition"></el-table-column>
+          <el-table-column label="用途" prop="purpose"></el-table-column>
+          <el-table-column label="供应商" v-if="!readOnly" prop="cooperatorName"></el-table-column>
           <el-table-column label="幅宽/型号" prop="modelName"></el-table-column>
           <el-table-column label="克重/规格" prop="specName"></el-table-column>
           <el-table-column label="物料颜色" prop="colorName"></el-table-column>
@@ -50,7 +52,7 @@
             </template>
           </el-table-column>
           <el-table-column label="物料单价" prop="price" v-if="!readOnly"></el-table-column>
-          <el-table-column label="总金额" prop="totalPrice" v-if="!readOnly"></el-table-column>
+          <el-table-column label="实际金额" prop="totalPrice" v-if="!readOnly"></el-table-column>
           <!-- 详情显示内容 -->
           <el-table-column label="预计用量/订单数/需求数量" min-width="170px" v-if="readOnly">
             <template slot-scope="scope">
@@ -121,7 +123,7 @@
     </el-tabs>
     <el-dialog :visible.sync="appendVisible" width="80%" append-to-body :close-on-click-modal="false">
       <material-append-table v-if="appendVisible" :formData="formData" 
-                            @onSelect="onSelect" :entries="entries" :isFromCost="isFromCost"/>
+                            @onSelect="onSelect" :entries="entries"/>
     </el-dialog>
   </div>
 </template>
@@ -138,10 +140,6 @@ export default {
     readOnly: {
       type: Boolean,
       default: false
-    },
-    isFromCost: {
-      type: Boolean,
-      detault: false
     },
     readCostOnly: {
       type: Boolean,
@@ -225,7 +223,12 @@ export default {
             estimatedRecTime: '',
             cooperatorName: '',
             price: '',
-            totalPrice: ''
+            totalPrice: '',
+            composition: '',
+            purpose: '',
+            quoteLossRate: '',
+            quoteAmount: '',
+            remarks: ''
           }
         ]
       }
@@ -283,7 +286,12 @@ export default {
             estimatedRecTime: '',
             cooperatorName: '',
             price: '',
-            totalPrice: ''
+            totalPrice: '',
+            composition: '',
+            purpose: '',
+            quoteLossRate: '',
+            quoteAmount: '',
+            remarks: ''
           }
         ]
       }

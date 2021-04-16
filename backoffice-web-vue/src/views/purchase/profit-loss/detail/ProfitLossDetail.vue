@@ -6,12 +6,6 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-row>
-        <div class="cost-order-title">
-          <h6>盈亏分析详情</h6>
-        </div>
-      </el-row>
-      <div class="pt-2"></div>
       <profit-loss-detail-subject :id="id" :isFromDetail="true"/>
     </el-card> 
   </div>
@@ -29,8 +23,4 @@ export default {
 </script>
 
 <style scoped>
-  .cost-order-title {
-    border-left: 2px solid #ffd60c;
-    padding-left: 10px;
-  }
 </style>

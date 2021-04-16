@@ -25,7 +25,7 @@ export default {
         code: '',
         value: ''
       },
-      placeholder: '请输入新增列名'
+      placeholder: '请输入'
     }
   },
   methods: {
@@ -70,7 +70,7 @@ export default {
   created () {
     if (this.modifyColumn && this.modifyColumn != '') {
       this.column = this.modifyColumn;
-      this.placeholder = '请输入修改列名'
+      this.placeholder = '请输入'
     }
   }  
 }

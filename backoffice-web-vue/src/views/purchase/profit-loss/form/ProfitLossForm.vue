@@ -108,16 +108,22 @@ export default {
     onCreate () {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          let flag = this.$refs.taskTable.some(item => item.todoColor !== '');
+          const taskTable = this.$refs.taskTable;
+          let flag = taskTable.some(item => item.todoColor !== '');
 
           if (flag) {
-            this.$message.error('存在工单产品未进行盈亏分析，请先进行盈亏分析！');
+            this.$message.warning('存在工单产品未进行盈亏分析，请先进行盈亏分析！');
+            return;
+          }
+
+          if (taskTable.some(item => item.plRows.some(val => !val.costOrder.product))) {
+            this.$message.warning('存在数据行未选择成本单，请先进行处理！');
             return;
           }
 
           // 数据处理
           let entries = [];
-          this.$refs.taskTable.forEach(item => {
+          taskTable.forEach(item => {
             entries = entries.concat(item.plRows.filter(v => v.colors.length > 0).map(val => {
               return {
                 id: val.id ? val.id : null,

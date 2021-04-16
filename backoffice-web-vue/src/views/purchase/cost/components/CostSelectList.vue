@@ -26,7 +26,8 @@
         row-key="id" @selection-change="handleSelectionChange" @row-click="rowClick">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="单号" prop="code"></el-table-column>
-        <el-table-column label="关联工单" prop="productionOrder.code"></el-table-column>
+        <el-table-column label="关联款号" prop="product.skuID"></el-table-column>
+        <el-table-column label="总成本" prop="totalCost"></el-table-column>
         <el-table-column label="创建人" prop="creator.name"></el-table-column>
         <el-table-column label="创建时间" min-width="80">
           <template slot-scope="scope">
@@ -85,7 +86,7 @@ export default {
     }),
     onAdvancedSearch (page, size) {
       if (this.product.id) {
-        this.searchByProductId();
+        this.searchCostOrderBySkuID();
       } else {
         const query = this.queryFormData;
         const url = this.apis().searchCostOrder();
@@ -93,8 +94,8 @@ export default {
         this.searchAdvanced({url, query, page, size});
       }
     },
-    async searchByProductId () {
-      const url = this.apis().searchCostOrderByProductId(this.product.id);
+    async searchCostOrderBySkuID () {
+      const url = this.apis().searchCostOrderBySkuID(this.product.skuID);
       const result = await this.$http.post(url, {});
 
       if (!result['errors']) {

@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form :inline="true">
-      <el-row type="flex" justify="space-between">
-        <el-col :span="19">
+      <div class="toolbar-form">
+        <div>
           <el-form-item label="产品信息">
             <el-input v-model="queryFormData.keyword" placeholder="输入产品名、款号、编号"></el-input>
           </el-form-item>
@@ -27,8 +27,8 @@
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
-        </el-col>
-        <el-col :span="5">
+        </div>
+        <div>
           <el-row type="flex" justify="end">
             <el-button-group>
               <Authorized :permission="['SAMPLE_CLOTHES_PRODUCT_CREATE']">
@@ -48,8 +48,8 @@
               <!-- </el-dropdown> -->
             </el-button-group>
           </el-row>
-        </el-col>
-      </el-row>
+        </div>
+      </div>
     </el-form>
     <el-dialog :visible.sync="importDialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -217,4 +217,9 @@
     margin-bottom: 0px;
   }
 
+  .toolbar-form {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
 </style>

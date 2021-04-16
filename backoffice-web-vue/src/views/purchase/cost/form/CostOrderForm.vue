@@ -58,6 +58,7 @@
 import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 import AdditionalItem from '../components/AdditionalItem.vue'
 import SampleProductsSelectDialog from '@/views/product/sample/components/SampleProductsSelectDialog'
+import { handleSumbitData, handleInitData } from '../../components/handleTableData'
 
 export default {
   name: 'CostOrderForm',
@@ -82,7 +83,7 @@ export default {
         }
       })
 
-      return totalCost.toFixed(2);
+      return totalCost.toFixed(4);
     }
   },
   data () {
@@ -124,16 +125,6 @@ export default {
       this.selectVisible = false;
       this.taskDialogVisible = true;
     },
-    // onSelectTask (data) {
-    //   this.formData.productionOrder = {
-    //     id: data[0] ? data[0].id : '',
-    //     code: data[0] ? data[0].code : '',
-    //     product: {
-    //       skuID: data[0] ? data[0].product.skuID : '' 
-    //     }
-    //   };
-    //   this.taskDialogVisible = false;
-    // },
     onCreate () {
       const additionalForm = this.$refs.additional.$refs.form;
       this.$refs.form.validate((v1) => {
@@ -157,51 +148,12 @@ export default {
       });
     },
     arrangement () {
-      let purchaseMaterials = [];
+      let purchaseMaterials = handleSumbitData(this.formData.workOrders, 'WORKORDERS');
 
-      this.formData.workOrders.forEach(item => {
-        purchaseMaterials.push({
-          id: item.materialsId ? item.materialsId : '',
-          name: item.name,
-          code: item.code,
-          unit: item.unit,
-          materialsType: item.materialsType,
-          specList: [{
-            id: item.specListId,
-            unitQuantity: item.unitQuantity,
-            specName: item.specName.trim(),
-            colorName: item.colorName.trim(),
-            modelName: item.modelName.trim(),
-            emptySent: item.emptySent,
-            requiredAmount: item.requiredAmount,
-            estimatedLoss: item.estimatedLoss,
-            estimatedUsage: item.estimatedUsage,
-            orderCount: item.orderCount,
-            price: item.price,
-            totalPrice: item.totalPrice,
-            estimatedRecTime: item.estimatedRecTime
-          }]
-        })
-      })
-
-      let customRows = []
-
-      this.formData.customRows.forEach(item => {
-        customRows.push({
-          id: item.materialsId ? item.materialsId : '',
-          name: item.name,
-          code: item.code,
-          unit: item.unit,
-          customCategoryName: item.customCategoryName,
-          specList: [{
-            price: item.price
-          }]
-        })
-      })
+      let customRows = handleSumbitData(this.formData.customRows, 'CUSTOMROWS');
 
       return {
         id: this.formData.id ? this.formData.id : null, 
-        // productionOrder: this.formData.productionOrder,
         type: 'PRODUCT',
         title: this.formData.title,
         product: this.formData.product,
@@ -216,7 +168,7 @@ export default {
       const result = await this.$http.post(url, form);
 
       if (result.code === 1) {
-        if (this.product.id) {
+        if (this.product) {
           this.$emit('callback');
           return;
         }
@@ -264,59 +216,9 @@ export default {
     },
     initData (resultData) {
       let data = Object.assign({}, resultData);
-      let purchaseMaterials = [];
-      if (resultData.purchaseMaterials && resultData.purchaseMaterials.length > 0) {
-        resultData.purchaseMaterials.forEach(row => {
-          if (row.specList && row.specList.length > 0) {
-            purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
-              return {
-                // id: row.id,
-                materialsId: row.id,
-                specListId: item.id,
-                name: row.name,
-                code: row.code,
-                unit: row.unit,
-                materialsType: row.materialsType,
-                unitQuantity: item.unitQuantity,
-                specName: item.specName,
-                colorName: item.colorName,
-                modelName: item.modelName,
-                emptySent: item.emptySent,
-                requiredAmount: item.requiredAmount,
-                estimatedLoss: item.estimatedLoss,
-                estimatedUsage: item.estimatedUsage,
-                orderCount: item.orderCount,
-                auditColor: item.auditColor,
-                estimatedRecTime: item.estimatedRecTime,
-                // cooperatorName: row.cooperatorName,
-                price: item.price,
-                totalPrice: item.totalPrice
-              }
-            }))
-          }
-        })
-      }
 
-      let customRows = [];
-      if (resultData.customRows) {
-        resultData.customRows.forEach(row => {
-          if (row.specList && row.specList.length > 0) {
-            customRows = customRows.concat(row.specList.map(item => {
-              return {
-                materialsId: row.id,
-                specListId: item.id,
-                  name: row.name,
-                  unit: row.unit,
-                  customCategoryName: row.customCategoryName,
-                  price: item.price,
-              }
-            }))
-          }
-        })
-      }
-
-      data.workOrders = purchaseMaterials;
-      data.customRows = customRows;
+      data.workOrders = handleInitData(resultData.purchaseMaterials, 'WORKORDERS');
+      data.customRows = handleInitData(resultData.customRows, 'CUSTOMROWS');
 
       this.$set(this, 'formData', Object.assign({}, data));
     }
@@ -328,6 +230,9 @@ export default {
     if (this.product) {
       this.onSelectSample([this.product]);
     }
+    if (this.$route.params.product) {
+      this.onSelectSample([this.$route.params.product]);
+    } 
   }
 }
 </script>

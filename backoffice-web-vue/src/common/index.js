@@ -1870,6 +1870,10 @@ let NONE_TENANT_APIS = {
   searchCostOrderByProductId (id) {
     return '/b2b/cost/order/listByProduct/' + id;
   },
+  // 根据款号查询关联成本单
+  searchCostOrderBySkuID (skuID) {
+    return '/b2b/cost/order/listByProductSkuID/' + skuID;
+  },
   // 创建盈亏分析
   createProfitLoss () {
     return '/b2b/profit/loss/analysis/create';

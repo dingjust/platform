@@ -13,7 +13,9 @@
     </el-table-column>
     <el-table-column label="物料编号" prop="code"></el-table-column>
     <el-table-column label="物料单位" prop="unit"></el-table-column>
-    <el-table-column label="供应商" v-if="!isFromCost" prop="cooperatorName"></el-table-column>
+    <el-table-column label="成分" prop="composition"></el-table-column>
+    <el-table-column label="用途" prop="purpose"></el-table-column>
+    <el-table-column label="供应商" prop="factoryName"></el-table-column>
     <el-table-column label="幅宽/型号" prop="modelName"></el-table-column>
     <el-table-column label="克重/规格" prop="specName"></el-table-column>
     <el-table-column label="物料颜色" prop="colorName"></el-table-column>
@@ -46,7 +48,14 @@
       </template>
     </el-table-column>
     <el-table-column label="物料单价" prop="price"></el-table-column>
-    <el-table-column label="总金额" prop="totalPrice"></el-table-column>
+    <el-table-column label="实际金额" prop="totalPrice"></el-table-column>
+    <el-table-column label="报价损耗" prop="quoteLossRate">
+      <template slot-scope="scope">
+        <span>{{(scope.row.quoteLossRate * 100).toFixed(2)}}%</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="报价金额" prop="quoteAmount"></el-table-column>
+    <el-table-column label="备注" prop="remarks"></el-table-column>
     <el-table-column label="操作" min-width="100px" v-if="!readOnly" fixed="right">
       <template slot-scope="scope">
         <el-button type="text" @click="onModify(scope.row, scope.$index)">修改</el-button>
@@ -59,7 +68,7 @@
 <script>
 export default {
   name: 'CostPurchaseInfo',
-  props: ['formData', 'readOnly', 'isFromCost', 'readCostOnly'],
+  props: ['formData', 'readOnly', 'readCostOnly'],
   data () {
     return {
       title: '需求数量 = 预计用量 * 订单数 / 空差'

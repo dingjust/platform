@@ -12,7 +12,7 @@
     </div>
     <el-tabs type="border-card">
       <el-tab-pane label="采购明细">
-        <cost-purchase-info :formData="formData" :readOnly="readOnly" :isFromCost="isFromCost"
+        <cost-purchase-info :formData="formData" :readOnly="readOnly"
                            @onModify="onModify" @onDelete="onDelete"/>
       </el-tab-pane>
       <el-tab-pane label="报价单" v-if="isFromCost && formData.id">
@@ -21,7 +21,7 @@
     </el-tabs>
     <el-dialog :visible.sync="appendVisible" width="80%" append-to-body :close-on-click-modal="false">
       <material-append-table v-if="appendVisible" :formData="formData" 
-                            @onSelect="onSelect" :entries="entries" :isFromCost="isFromCost" :singleton="true"/>
+                            @onSelect="onSelect" :entries="entries" :singleton="true"/>
     </el-dialog>
   </div>
 </template>
@@ -66,6 +66,8 @@ export default {
         this.formData.workOrders = this.arrangeData(this.formData.workOrders.concat(entries));
       }
 
+      this.formData.workOrders.forEach(item => item.factoryName = item.cooperatorName);
+
       this.resetItem();
     },
     resetItem () {
@@ -89,7 +91,12 @@ export default {
             estimatedRecTime: '',
             cooperatorName: '',
             price: '',
-            totalPrice: ''
+            totalPrice: '',
+            composition: '',
+            purpose: '',
+            quoteLossRate: '',
+            quoteAmount: '',
+            remarks: ''
           }
         ]
       }
@@ -111,6 +118,7 @@ export default {
     onModify (row, index) {
       this.entries.workOrders = JSON.parse(JSON.stringify(this.formData.workOrders));
       this.entries.workOrders.forEach(item => {
+        item.quoteLossRate = item.quoteLossRate * 100;
         item.estimatedLoss = item.estimatedLoss * 100;
         item.emptySent = item.emptySent * 100;
       })
@@ -146,7 +154,12 @@ export default {
             estimatedRecTime: '',
             cooperatorName: '',
             price: '',
-            totalPrice: ''
+            totalPrice: '',
+            composition: '',
+            purpose: '',
+            quoteLossRate: '',
+            quoteAmount: '',
+            remarks: ''
           }
         ]
       }

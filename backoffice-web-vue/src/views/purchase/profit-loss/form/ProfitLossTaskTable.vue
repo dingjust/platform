@@ -14,7 +14,7 @@
         </h6>
       </div>
       <div>
-        <el-button type="text" @click="columnVisible = true">添加列</el-button>
+        <el-button type="text" @click="columnVisible = true">添加成本费用</el-button>
         <el-divider direction="vertical"></el-divider>
         <el-button type="text" @click="addRow">添加行</el-button>
       </div>
@@ -56,9 +56,9 @@
         <el-table-column label="单价成本" prop="unitCostAmount" min-width="120px">
           <template slot-scope="scope" v-if="!scope.row.countRow">
             <div class="top-row">
-              <span>{{scope.row.unitCostAmount.toFixed(2)}}</span>
+              <span>{{scope.row.unitCostAmount.toFixed(4)}}</span>
               <div>
-                <el-button v-if="scope.row.costOrder.id" type="text" :disabled="scope.row.purchaseTaskId != null"
+                <el-button v-if="scope.row.costOrder.code" type="text" :disabled="scope.row.purchaseTaskId != null"
                             @click="modifyCost(scope.$index, scope.row.costOrder)" :title="tips">修改</el-button>
                 <el-button type="text" style="margin: 0px" :disabled="scope.row.purchaseTaskId != null" 
                             @click="openCostList(scope.$index)" :title="tips">选择</el-button>
@@ -69,13 +69,13 @@
         <el-table-column label="成本总额" prop="totalCostAmount" min-width="120px">
           <template slot-scope="scope">
             <span v-if="scope.row.countRow">{{scope.row.totalCostAmount}}</span>
-            <span v-else>{{calculation(scope.row, 'unitCostAmount').toFixed(2)}}</span>
+            <span v-else>{{calculation(scope.row, 'unitCostAmount').toFixed(4)}}</span>
           </template>
         </el-table-column>
         <template v-if="item.additionalCharges.length > 0">
           <el-table-column v-for="(column, index) in item.additionalCharges" :key="column.key" min-width="120px">
             <template slot="header" slot-scope="scope">
-              <div style="display: flex;align-items: center">
+              <div style="display: flex;align-items: baseline">
                 <span>{{column.remarks}}</span>
                 <el-button type="text" @click="onModifyColName(column)">修改</el-button>
                 <el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteCol(index)"/>
@@ -92,7 +92,7 @@
         <el-table-column label="总金额" prop="totalAmount" min-width="120px">
           <template slot-scope="scope">
             <span v-if="scope.row.countRow">{{scope.row.totalAmount}}</span>
-            <span v-else>{{totalAmount(scope.row).toFixed(2)}}</span>
+            <span v-else>{{totalAmount(scope.row).toFixed(4)}}</span>
           </template>
         </el-table-column>
       </el-table-column>
@@ -104,7 +104,7 @@
         </el-table-column>
         <el-table-column label="盈亏比例" prop="profitLossRatio" min-width="120px">
           <template slot-scope="scope">
-            <span>{{profitLossRatio(scope.row)}}</span>
+            <span>{{profitLossRatio(scope.row)}}%</span>
           </template>
         </el-table-column>
       </el-table-column>
@@ -180,7 +180,7 @@ export default {
     return {
       purchaseId: null,
       purchaseDialogVisible: false,
-      columnDialogtitle: '添加表单列',
+      columnDialogtitle: '添加成本费用',
       plRows: [],
       options: [],
       modifyColumn: '',
@@ -262,15 +262,30 @@ export default {
         this.plRows[this.handleIndex].unitCostAmount = 0;
         this.plRows[this.handleIndex].costOrder = {};
       } else {
+
         let amount = 0;
-        if (data.customRows && data.customRows.length > 0) {
-          data.customRows.forEach(item => amount += Number.parseFloat(item.specList[0].price));
-        }
-        if (data.purchaseMaterials && data.purchaseMaterials.length > 0) {
-          data.purchaseMaterials.forEach(item => amount += Number.parseFloat(item.specList[0].totalPrice));
+
+        if (data.totalCost) {
+          amount = data.totalCost;
+        } else {
+          if (data.customRows && data.customRows.length > 0) {
+            data.customRows.forEach(item => amount += Number.parseFloat(item.specList[0].price));
+          }
+          if (data.purchaseMaterials && data.purchaseMaterials.length > 0) {
+            data.purchaseMaterials.forEach(item => amount += Number.parseFloat(item.specList[0].totalPrice));
+          }
         }
   
         this.plRows[this.handleIndex].unitCostAmount = amount;
+        
+        // 无id的情况下为新建
+        if (this.plRows[this.handleIndex].costOrder.id) {
+          data.id = this.plRows[this.handleIndex].costOrder.id;
+        } else {
+          data.id = null;
+        }
+        data.type = 'PRODUCT';
+        
         this.plRows[this.handleIndex].costOrder = data;
       }      
 
@@ -292,7 +307,7 @@ export default {
     },
     profitLossRatio (row) {
       if (!Number.isNaN((row.totalContractAmount - row.totalAmount) / row.totalContractAmount)) {
-        return ((row.totalContractAmount - row.totalAmount) / row.totalContractAmount * 100).toFixed(2) + '%';
+        return ((row.totalContractAmount - row.totalAmount) / row.totalContractAmount * 100).toFixed(2);
       }
       return 0.00;
     },
@@ -324,7 +339,7 @@ export default {
       this.columnVisible = false;
     },
     onModifyColName (column) {
-      this.columnDialogtitle = '修改表单列名';
+      this.columnDialogtitle = '修改成本费用';
       this.modifyColumn = {
         id: column.id,
         value: column.remarks

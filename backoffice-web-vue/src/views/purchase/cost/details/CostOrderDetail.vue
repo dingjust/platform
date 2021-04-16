@@ -6,64 +6,69 @@
 <template>
   <div class="animated fadeIn">
     <el-card>
-      <el-row type="flex" justify="space-between">
-        <div class="cost-order-title">
-          <h6>成本单详情</h6>
+      <div id="cost-order-detail">
+        <el-row type="flex" justify="space-between">
+          <div class="cost-order-title">
+            <h6>成本单详情</h6>
+          </div>
+          <div>
+            <h6>订单状态：
+              <span :style="formData.status === 'CANCELLED' ? 'color: #F56C6C' : ''">
+                {{getEnum('CostOrderType', formData.status)}}
+              </span>
+            </h6>
+          </div>
+        </el-row>
+        <div class="pt-2"></div>
+        <el-row type="flex" justify="start" class="detail-container">
+          <el-col :span="6">
+            <h6>任务单号：{{formData.code}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <!-- <h6>关联工单：
+              <el-button type="text" @click="onTaskDetail(formData.productionOrder.id)" class="code-btn">{{formData.productionOrder.code}}</el-button>
+            </h6> -->
+            <h6>关联产品：
+              <el-button type="text" @click="onProductDetail(formData.product)" class="code-btn">{{formData.product.code}}</el-button>
+            </h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>关联款号：{{formData.product.skuID}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
+          </el-col>
+        </el-row>
+        <div class="detail-container">
+          <cost-purchase-table :formData="formData" :readOnly="true" :isFromCost="true"/>
         </div>
-        <div>
-          <h6>订单状态：
-            <span :style="formData.status === 'CANCELLED' ? 'color: #F56C6C' : ''">
-              {{getEnum('CostOrderType', formData.status)}}
-            </span>
+        <div class="detail-container">
+          <h6 class="additional-title">附加项</h6>
+          <el-table :data="formData.customRows">
+            <el-table-column label="类型" prop="customCategoryName"></el-table-column>
+            <el-table-column label="名称" prop="name"></el-table-column>
+            <el-table-column label="单位" prop="unit"></el-table-column>
+            <el-table-column label="单价" prop="price"></el-table-column>
+          </el-table>
+        </div>
+        <el-row class="detail-container" style="margin-top: 30px" type="flex" justify="end">
+          <el-col :span="4">
+            <h5>成本总额：{{totalCost}}</h5>
+          </el-col>
+        </el-row>
+        <div class="detail-container" v-if="formData.purchaseTask && formData.purchaseTask.id" style="margin-top: 20px">
+          <h6>关联采购需求：
+            <el-button type="text" @click="onPurchaseDetail(formData.purchaseTask.id)" class="code-btn">{{formData.purchaseTask.code}}</el-button>
           </h6>
         </div>
-      </el-row>
-      <div class="pt-2"></div>
-      <el-row type="flex" justify="start" class="detail-container">
-        <el-col :span="6">
-          <h6>任务单号：{{formData.code}}</h6>
-        </el-col>
-        <el-col :span="6">
-          <!-- <h6>关联工单：
-            <el-button type="text" @click="onTaskDetail(formData.productionOrder.id)" class="code-btn">{{formData.productionOrder.code}}</el-button>
-          </h6> -->
-          <h6>关联产品：
-            <el-button type="text" @click="onProductDetail(formData.product)" class="code-btn">{{formData.product.code}}</el-button>
-          </h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>关联款号：{{formData.product.skuID}}</h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>创建时间：{{formData.creationtime | timestampToTime}}</h6>
-        </el-col>
-      </el-row>
-      <div class="detail-container">
-        <cost-purchase-table :formData="formData" :readOnly="true" :isFromCost="true"/>
-      </div>
-      <div class="detail-container">
-        <h6 class="additional-title">附加项</h6>
-        <el-table :data="formData.customRows">
-          <el-table-column label="类型" prop="customCategoryName"></el-table-column>
-          <el-table-column label="名称" prop="name"></el-table-column>
-          <el-table-column label="单位" prop="unit"></el-table-column>
-          <el-table-column label="单价" prop="price"></el-table-column>
-        </el-table>
-      </div>
-      <el-row class="detail-container" style="margin-top: 30px" type="flex" justify="end">
-        <el-col :span="4">
-          <h5>成本总额：{{totalCost}}</h5>
-        </el-col>
-      </el-row>
-      <div class="detail-container" v-if="formData.purchaseTask && formData.purchaseTask.id" style="margin-top: 20px">
-        <h6>关联采购需求：
-          <el-button type="text" @click="onPurchaseDetail(formData.purchaseTask.id)" class="code-btn">{{formData.purchaseTask.code}}</el-button>
-        </h6>
       </div>
       <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50" v-if="formData.status === 'PENDING_ACCOUNT'">
         <el-button type="text" @click="onCancel">取消</el-button>
         <el-button class="create-btn" @click="onEdit">编辑</el-button>
         <el-button class="create-btn" @click="onCreatePurchase">创建报价单</el-button>
+      </el-row>
+      <el-row type="flex" justify="center" style="margin-top: 10px">
+        <printer-button v-print="'#cost-order-detail'" />
       </el-row>
     </el-card> 
     <!-- <el-dialog :visible.sync="productionVisible" width="80%" append-to-body :close-on-click-modal="false">
@@ -91,6 +96,8 @@ const {
 import ProductionOrderDetail from '@/views/order/salesProduction/production-order/details/ProductionOrderDetail'
 import SampleProductDetailsPage from '@/views/product/sample/details/SampleProductDetailsPage'
 import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
+import { PrinterButton } from '@/components/index.js'
+import { handleSumbitData, handleInitData } from '../../components/handleTableData'
 
 export default {
   name: 'CostOrderDetail',
@@ -99,7 +106,8 @@ export default {
     ProductionOrderDetail,
     PurchaseRequirementDetail:()=>import('@/views/purchase/requirement/details/PurchaseRequirementDetail'),
     SampleProductDetailsPage,
-    CostPurchaseTable
+    CostPurchaseTable,
+    PrinterButton
   },
   computed: {
     ...mapGetters({
@@ -119,7 +127,7 @@ export default {
         }
       })
 
-      return totalCost.toFixed(2);
+      return totalCost.toFixed(4);
     }
   },
   data () {
@@ -164,57 +172,9 @@ export default {
     },
     initData (resultData) {
       let data = Object.assign({}, resultData);
-      let purchaseMaterials = [];
-      if (resultData.purchaseMaterials && resultData.purchaseMaterials.length > 0) {
-        resultData.purchaseMaterials.forEach(row => {
-          if (row.specList && row.specList.length > 0) {
-            purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
-              return {
-                // id: row.id,
-                materialsId: row.id,
-                specListId: item.id,
-                name: row.name,
-                code: row.code,
-                unit: row.unit,
-                materialsType: row.materialsType,
-                unitQuantity: item.unitQuantity,
-                specName: item.specName,
-                colorName: item.colorName,
-                modelName: item.modelName,
-                emptySent: item.emptySent,
-                requiredAmount: item.requiredAmount,
-                estimatedLoss: item.estimatedLoss,
-                estimatedUsage: item.estimatedUsage,
-                orderCount: item.orderCount,
-                auditColor: item.auditColor,
-                estimatedRecTime: item.estimatedRecTime,
-                // cooperatorName: row.cooperatorName,
-                price: item.price,
-                totalPrice: item.totalPrice
-              }
-            }))
-          }
-        })
-      }
-
-      let customRows = [];
-      if (resultData.customRows) {
-        resultData.customRows.forEach(row => {
-          customRows = customRows.concat(row.specList.map(item => {
-            return {
-              materialsId: row.id,
-              specListId: item.id,
-              name: row.name,
-              unit: row.unit,
-              customCategoryName: row.customCategoryName,
-              price: item.price,
-            }
-          }))
-        })
-      }
-
-      data.workOrders = purchaseMaterials;
-      data.customRows = customRows;
+      
+      data.workOrders = handleInitData(resultData.purchaseMaterials, 'WORKORDERS');
+      data.customRows = handleInitData(resultData.customRows, 'CUSTOMROWS');
 
       this.$set(this, 'formData', data);
     },

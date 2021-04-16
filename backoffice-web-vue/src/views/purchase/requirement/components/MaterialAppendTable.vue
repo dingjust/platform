@@ -45,6 +45,20 @@
             </el-form-item>
           </template>
         </el-table-column>
+        <el-table-column label="成分" prop="composition" min-width="100px">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.composition"></el-input>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="用途" prop="purpose" min-width="100px">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.purpose"></el-input>
+            </el-form-item>
+          </template>
+        </el-table-column>
         <el-table-column label="幅宽/型号" prop="modelName" min-width="100px">
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.modelName'">
@@ -64,7 +78,10 @@
           </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.unit'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <el-input v-model="scope.row.unit" style="width: 90px"></el-input>
+              <!-- <el-input v-model="scope.row.unit" style="width: 90px"></el-input> -->
+              <el-select v-model="scope.row.unit" style="width: 90px">
+                <el-option v-for="unit in unitsOpt" :key="unit" :label="unit" :value="unit"></el-option>
+              </el-select>
             </el-form-item>
           </template>
         </el-table-column>
@@ -82,7 +99,7 @@
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.unitQuantity'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.unitQuantity" style="width: 90px" 
-                        v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+                        v-number-input.float="{ min: 0, decimal: 4 }"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -93,7 +110,7 @@
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedLoss'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.estimatedLoss" style="width: 90px"
-                        v-number-input.float="{ min: null, max: null, decimal: null }">
+                        v-number-input.float="{ min: 0, max: 100, decimal: 0 }">
                 <span slot="suffix">%</span>
               </el-input>
             </el-form-item>
@@ -125,7 +142,7 @@
           <template slot-scope="scope">
             <el-form-item>
               <el-input v-model="scope.row.emptySent" style="width: 90px" placeholder="100"
-                        v-number-input.float="{ min: 0, max: 100, decimal: 2 }">
+                        v-number-input.float="{ min: 0, max: 100, decimal: 0 }">
                 <span slot="suffix">%</span>
               </el-input>
             </el-form-item>
@@ -141,7 +158,7 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="供应商" prop="cooperatorName" min-width="100px" v-if="!isFromCost">
+        <el-table-column label="供应商" prop="cooperatorName" min-width="100px">
           <template slot-scope="scope">
             <el-form-item>
               <el-input v-model="scope.row.cooperatorName" style="width: 90px"></el-input>
@@ -155,14 +172,32 @@
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.price'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.price" style="width: 90px"
-                        v-number-input.float="{ min: 0, decimal: 2 }"></el-input>
+                        v-number-input.float="{ min: 0, decimal: 4 }"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="总金额" prop="totalPrice" min-width="100px">
+        <el-table-column label="实际金额" prop="totalPrice" min-width="100px">
           <template slot-scope="scope">
             <el-form-item>
               <span>{{getTotalPrice(scope.$index)}}</span>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="报价损耗" prop="quoteLossRate" min-width="100px">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.quoteLossRate" style="width: 90px" placeholder="0"
+                        v-number-input.float="{ min: 0, max: 100, decimal: 0 }">
+                <span slot="suffix">%</span>
+              </el-input>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="报价金额" prop="quoteAmount" min-width="100px">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input v-model="scope.row.quoteAmount" style="width: 90px"
+                        v-number-input.float="{ min: 0, decimal: 4 }"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -180,6 +215,13 @@
                 style="width: 130px"
                 placeholder="选择日期">
               </el-date-picker>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" prop="remarks" min-width="150px">
+          <template slot-scope="scope">
+            <el-form-item>
+              <el-input el-input v-model="scope.row.remarks"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -224,7 +266,7 @@ import MaterialsImport from './MaterialsImport'
 
 export default {
   name: 'MaterialAppendTable',
-  props: ['formData', 'entries', 'isFromCost', 'singleton'],
+  props: ['formData', 'entries', 'singleton'],
   components: {
     MaterialsImport
   },
@@ -240,8 +282,8 @@ export default {
       if (!Number.isNaN(unitQuantity) && !Number.isNaN(estimatedLoss)) {
         count = unitQuantity * (1 + estimatedLoss / 100);
       }
-      this.entries.workOrders[index].estimatedUsage = count.toFixed(2);
-      return count.toFixed(2);
+      this.entries.workOrders[index].estimatedUsage = count.toFixed(4);
+      return count.toFixed(4);
     },
     getNeedQuantity (index) {
       let count = 0;
@@ -253,8 +295,8 @@ export default {
                                     100 : Number.parseFloat(this.entries.workOrders[index].emptySent);
 
       count = estimatedUsage * orderCount / (emptySent / 100);
-      this.entries.workOrders[index].requiredAmount = count.toFixed(2);
-      return count.toFixed(2);
+      this.entries.workOrders[index].requiredAmount = count.toFixed(4);
+      return count.toFixed(4);
     },
     getTotalPrice (index) {
       let count = 0;
@@ -262,8 +304,8 @@ export default {
       if (!Number.isNaN(price)) {
         count = price * this.getNeedQuantity(index);
       }
-      this.entries.workOrders[index].totalPrice = count.toFixed(2);
-      return count.toFixed(2);
+      this.entries.workOrders[index].totalPrice = count.toFixed(4);
+      return count.toFixed(4);
     },
     onAdd (index, row) {
       this.entries.workOrders.splice(index + 1, 0 , {
@@ -322,12 +364,18 @@ export default {
       result = result.concat(materials);
 
       result.forEach(item => {
-        this.$set(item, 'estimatedLoss', (Number.parseFloat(item.estimatedLoss) / 100).toFixed(2));
+        this.$set(item, 'estimatedLoss', (Number.parseFloat(item.estimatedLoss) / 100).toFixed(4));
         
         if (Number.isNaN(Number.parseFloat(item.emptySent))) {
           this.$set(item, 'emptySent', 1.00);
         } else {
           this.$set(item, 'emptySent', (Number.parseFloat(item.emptySent) / 100).toFixed(2));
+        }
+        
+        if (Number.isNaN(Number.parseFloat(item.quoteLossRate))) {
+          this.$set(item, 'quoteLossRate', 0.00);
+        } else {
+          this.$set(item, 'quoteLossRate', (Number.parseFloat(item.quoteLossRate) / 100).toFixed(2));
         }
       })
       return result;
@@ -369,7 +417,8 @@ export default {
   data () {
     return {
       materialsType: this.$store.state.EnumsModule.MaterialsType,
-      importVisible: false
+      importVisible: false,
+      unitsOpt: ['米', '个', '粒', '包', '张', '千克']
     }
   }
 }
@@ -398,4 +447,5 @@ export default {
     color: #606266;
     background-color: #ffd60c;
   }
+
 </style>

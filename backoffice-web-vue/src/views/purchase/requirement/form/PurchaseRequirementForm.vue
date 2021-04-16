@@ -99,7 +99,12 @@ export default {
               orderCount: item.orderCount,
               price: item.price,
               totalPrice: item.totalPrice,
-              estimatedRecTime: item.estimatedRecTime
+              estimatedRecTime: item.estimatedRecTime,
+              composition: item.composition,
+              purpose: item.purpose,
+              quoteLossRate: item.quoteLossRate,
+              quoteAmount: item.quoteAmount,
+              remarks: item.remarks
             }]
           }
         })

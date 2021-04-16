@@ -16,16 +16,16 @@
         <el-form-item label="系统单号">
           <el-input placeholder="系统生成" v-model="formData.code" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="关联 工单 / 产品" prop="productionOrder.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
-          <el-input v-model="formData.productionOrder.code" :disabled="true">
+        <el-form-item label="关联产品" prop="product.code" :rules="[{ required: true, message: '请选择关联订单', trigger: 'change' }]">
+          <el-input v-model="formData.product.code" :disabled="true">
             <el-button slot="suffix" @click="selectVisible = true" v-if="!formData.id">选择</el-button>
           </el-input>
         </el-form-item>
         <el-form-item label="关联款号">
-          <el-input v-model="formData.productionOrder.product.skuID" :disabled="true"></el-input>
+          <el-input v-model="formData.product.skuID" :disabled="true"></el-input>
         </el-form-item>
       </el-form>
-      <purchase-requirement-table :formData="formData" :isFromCost="true"/>
+      <cost-purchase-table :formData="formData" :isFromCost="true"/>
       <el-row class="additional-container">
         <additional-item ref="additional" :formData="formData"/>
       </el-row>
@@ -42,14 +42,14 @@
 </template>
 
 <script>
-import PurchaseRequirementTable from '@/views/purchase/requirement/components/PurchaseRequirementTable'
 import AdditionalItem from '@/views/purchase/cost/components/AdditionalItem'
+import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 export default {
   name: 'CostEditForm',
   props: ['costOrder'],
   components: {
-    PurchaseRequirementTable,
-    AdditionalItem
+    AdditionalItem,
+    CostPurchaseTable
   },
   computed: {
     totalCost: function () {
@@ -66,7 +66,7 @@ export default {
         }
       })
 
-      return totalCost.toFixed(2);
+      return totalCost.toFixed(4);
     }
   },
   data () {
@@ -102,6 +102,7 @@ export default {
                 code: row.code,
                 unit: row.unit,
                 materialsType: row.materialsType,
+                factoryName: row.factoryName,
                 unitQuantity: item.unitQuantity,
                 specName: item.specName,
                 colorName: item.colorName,
@@ -114,7 +115,12 @@ export default {
                 auditColor: item.auditColor,
                 estimatedRecTime: item.estimatedRecTime,
                 price: item.price,
-                totalPrice: item.totalPrice
+                totalPrice: item.totalPrice,
+                composition: item.composition,
+                purpose: item.purpose,
+                quoteLossRate: item.quoteLossRate,
+                quoteAmount: item.quoteAmount,
+                remarks: item.remarks
               }
             }))
           }
@@ -141,9 +147,6 @@ export default {
 
       data.workOrders = purchaseMaterials;
       data.customRows = customRows;
-      data.productionOrder.product = {
-        skuID: data.productionOrder.productSkuID
-      }
 
       this.formData = data;
     },
@@ -157,6 +160,7 @@ export default {
           code: item.code,
           unit: item.unit,
           materialsType: item.materialsType,
+          factoryName: item.factoryName,
           specList: [{
             id: item.specListId,
             unitQuantity: item.unitQuantity,
@@ -170,7 +174,12 @@ export default {
             orderCount: item.orderCount,
             price: item.price,
             totalPrice: item.totalPrice,
-            estimatedRecTime: item.estimatedRecTime
+            estimatedRecTime: item.estimatedRecTime,
+            composition: item.composition,
+            purpose: item.purpose,
+            quoteLossRate: item.quoteLossRate,
+            quoteAmount: item.quoteAmount,
+            remarks: item.remarks
           }]
         })
       })
@@ -194,8 +203,10 @@ export default {
       return {
         id: this.formData.id ? this.formData.id : null, 
         productionOrder: this.formData.productionOrder,
+        product: this.formData.product,
         purchaseMaterials: purchaseMaterials,
-        customRows: customRows
+        customRows: customRows,
+
       };    
 
     },
