@@ -112,11 +112,14 @@ export default {
         cooperatorName: '',
         createdDateFrom: '',
         createdDateTo: '',
-        state: 'NOT_COMMITED'
+        state: ''
       },
       dataQuery: {},
-      activeName: 'NOT_COMMITED',
-      statuses: [{
+      activeName: '',
+      statuses: [ {
+          code: '',
+          name: '全部'
+        }, {
           code: 'NOT_COMMITED',
           name: '待提交'
         }, {
@@ -131,9 +134,6 @@ export default {
         }, {
           code: 'COMPLETED',
           name: '已完成'
-        }, {
-          code: '',
-          name: '全部'
         }
       ],
       stateCount: {}

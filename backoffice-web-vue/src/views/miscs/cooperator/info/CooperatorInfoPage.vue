@@ -7,7 +7,7 @@
             <el-col :span="6">合作商类型</el-col>
             <el-col :span="18">{{getEnum('CooperatorType',itemData.type)}}</el-col>
           </el-row>
-          <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
+          <el-row type="flex" justify="space-between">
             <el-col :span="6">合作商名称</el-col>
             <el-col :span="18">
               <el-row type="flex" justify="space-between" v-if="itemData.type == 'ONLINE'">
@@ -29,6 +29,11 @@
               <div v-else>
                 {{itemData.partner == null ? itemData.name : itemData.partner.name}}
               </div>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="space-between" v-if="itemData.partner.approvalStatus === 'approved'">
+            <el-col :span="18" :offset="6">
+              <el-button type="text" @click="authVisible = true">查看认证信息</el-button>
             </el-col>
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
@@ -86,6 +91,9 @@
       class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <brand-from1 :slotData="brandDetailsData" :read-only="readOnly"></brand-from1>
     </el-dialog>
+    <el-dialog title="认证详情" :visible.sync="authVisible" width="500px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false"> 
+      <cooperator-auth-detail v-if="authVisible" :uid="itemData.partner.uid"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -95,6 +103,7 @@
   } from 'vuex';
   import FactoryFrom from '../../../user/company/factory/form/FactoryForm';
   import BrandFrom1 from '../../../user/company/brand/form/BrandForm1';
+  import CooperatorAuthDetail from './CooperatorAuthDetail.vue';
 
   const {
     mapGetters,
@@ -106,7 +115,8 @@
     props: ['itemData'],
     components: {
       BrandFrom1,
-      FactoryFrom
+      FactoryFrom,
+      CooperatorAuthDetail
     },
     computed: {
       ...mapGetters({})
@@ -157,7 +167,8 @@
         factoryDetailsData: '',
         brandDetailsDialogVisible: false,
         brandDetailsData: '',
-        readOnly: false
+        readOnly: false,
+        authVisible: false
       };
     },
     created() {

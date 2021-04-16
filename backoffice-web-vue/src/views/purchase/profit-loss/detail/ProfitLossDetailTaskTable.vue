@@ -24,7 +24,16 @@
         <el-table-column label="合同金额" prop="totalContractAmount"></el-table-column>
       </el-table-column>
       <el-table-column label="成本费用" header-align="center">
-        <el-table-column label="单价成本" prop="unitCostAmount"></el-table-column>
+        <el-table-column label="单价成本" prop="unitCostAmount">
+          <template slot-scope="scope">
+            <div class="top-row">
+              <span>{{scope.row.unitCostAmount}}</span>
+              <div v-if="scope.row.skuID !== '合计'">
+                <el-button style="padding: 0px" type="text" @click="onCostDetail(scope.row)">详情</el-button>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column label="成本总额" prop="totalCostAmount"></el-table-column>
         <template v-if="taskRow[0].additionalCharges && taskRow[0].additionalCharges.length > 0">
           <el-table-column v-for="(column, index) in taskRow[0].additionalCharges" :key="column.id">
@@ -50,18 +59,26 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.skuID !== '合计' && !scope.row.purchaseTaskId" type="text" @click="onCreatePurchase(scope.row)">创建采购</el-button>
+          <el-button v-if="canPurchase(scope.row)" type="text" @click="onCreatePurchase(scope.row)">创建采购</el-button>
           <el-button type="text" v-if="scope.row.purchaseTaskId" @click="onPurchaseDetail(scope.row)">采购详情</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog :visible.sync="costVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <cost-order-detail v-if="costVisible" :id="costId" :isFormDialog="true" @callback="costVisible=false"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import CostOrderDetail from '../../cost/details/CostOrderDetail.vue';
 export default {
   name: 'ProfitLossDetailTaskTable',
   props: ['detail', 'taskRow', 'showWhole'],
+  components: {
+    CostOrderDetail
+  },
   computed: {
     tableData: function () {
       let stack = [];
@@ -85,7 +102,17 @@ export default {
       return this.totalProfitLossAmount / this.countColumn(this.taskRow, 'totalContractAmount');
     }
   },
+  data () {
+    return {
+      costVisible: false,
+      costId: null
+    }
+  },
   methods: {
+    onCostDetail (row) {
+      this.costVisible = true;
+      this.costId = row.costOrder.id;
+    },
     countColumn (arr, attribute) {
       let count = 0;
       arr.forEach(item => {
@@ -106,6 +133,9 @@ export default {
         return str.substring(0, str.length - 2);
       }
     },
+    canPurchase (row) {
+      return row.skuID !== '合计' && !row.purchaseTaskId && this.detail.status !== 'CANCELLED';
+    },
     onCreatePurchase (row) {
       this.$router.push({
         name: '创建采购需求',
@@ -119,6 +149,7 @@ export default {
                 materialsType: item.materialsType,
                 code: item.code,
                 unit: item.unit,
+                cooperatorName: item.factoryName,
                 modelName: item.specList[0].modelName ? item.specList[0].modelName : '',
                 specName: item.specList[0].specName ? item.specList[0].specName : '',
                 colorName: item.specList[0].colorName ? item.specList[0].colorName : '',
@@ -129,7 +160,12 @@ export default {
                 emptySent: item.specList[0].emptySent ? item.specList[0].emptySent : '',
                 requiredAmount: item.specList[0].requiredAmount ? item.specList[0].requiredAmount : '',
                 price: item.specList[0].price ? item.specList[0].price : '',
-                totalPrice: item.specList[0].totalPrice ? item.specList[0].totalPrice : ''
+                totalPrice: item.specList[0].totalPrice ? item.specList[0].totalPrice : '',
+                composition: item.specList[0].composition ? item.specList[0].composition : '',
+                purpose: item.specList[0].purpose ? item.specList[0].purpose : '',
+                quoteLossRate: item.specList[0].quoteLossRate ? item.specList[0].quoteLossRate : '',
+                quoteAmount: item.specList[0].quoteAmount ? item.specList[0].quoteAmount : '',
+                remarks: item.specList[0].remarks ? item.specList[0].remarks : ''
               }
             })
           }
@@ -155,5 +191,11 @@ export default {
   .table-title {
     font-size: 14px;
     color: #606266;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 </style>

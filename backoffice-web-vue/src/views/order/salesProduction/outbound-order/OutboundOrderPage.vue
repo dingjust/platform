@@ -225,8 +225,11 @@
     data() {
       return {
         outboundOrderTypeSelect: false,
-        activeName: 'TO_BE_SUBMITTED',
-        statuses: Object.assign([], this.$store.state.EnumsModule.OutboundOrderStatuses),
+        activeName: '',
+        statuses: [{
+          code: '',
+          name: '全部'
+        }],
         formData: {
           id: null,
           outboundCompanyName: '',
@@ -277,7 +280,7 @@
           keyword: '',
           targetCooperator: '',
           merchandiser: '',
-          state: 'TO_BE_SUBMITTED',
+          state: '',
           name: ''
         },
         stateCount: {},
@@ -288,10 +291,7 @@
       this.dataQuery = this.getDataPerQuery('SALES_OUT_ORDER');
       this.onResetQuery();
       this.onAdvancedSearch(0, 10);
-      this.statuses.push({
-        code: '',
-        name: '全部'
-      })
+      this.statuses = this.statuses.concat(this.$store.state.EnumsModule.OutboundOrderStatuses);
     },
     mounted() {
 

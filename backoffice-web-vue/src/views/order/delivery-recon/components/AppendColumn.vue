@@ -2,7 +2,8 @@
   <el-form ref="form" :model="column" @submit.native.prevent>
     <el-row>
       <el-form-item label="" prop="value" :rules="[{ required: true, message: '必填', trigger: 'blur'}]" @submit.native.prevent>
-        <el-input v-model="column.value" 
+        <el-input ref="input"
+                  v-model="column.value" 
                   :placeholder="placeholder" 
                   @keyup.enter.native="onConfirm"></el-input>
       </el-form-item>
@@ -24,7 +25,7 @@ export default {
         code: '',
         value: ''
       },
-      placeholder: '请输入新增列名'
+      placeholder: '请输入'
     }
   },
   methods: {
@@ -61,10 +62,15 @@ export default {
       });
     },
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.$refs.input.focus();
+    })
+  },
   created () {
     if (this.modifyColumn && this.modifyColumn != '') {
       this.column = this.modifyColumn;
-      this.placeholder = '请输入修改列名'
+      this.placeholder = '请输入'
     }
   }  
 }

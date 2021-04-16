@@ -52,7 +52,7 @@
       <el-table-column label="认证状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.partner">
-            <span v-if="scope.row.approvalStatus">
+            <span v-if="scope.row.partner.approvalStatus">
               {{getEnum('AuthApprovalStatus', scope.row.partner.approvalStatus)}}
             </span>
             <span v-else>未认证</span>

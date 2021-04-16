@@ -255,7 +255,12 @@ export default {
               actuallyTotalPrice: item.actuallyTotalPrice,
               receiveQuantity: item.receiveQuantity,
               remainQuantity: item.remainQuantity,
-              completeTime: row.completeTime
+              completeTime: row.completeTime,
+              composition: item.composition,
+              purpose: item.purpose,
+              quoteLossRate: item.quoteLossRate,
+              quoteAmount: item.quoteAmount,
+              remarks: item.remarks
             }
           }));
         }

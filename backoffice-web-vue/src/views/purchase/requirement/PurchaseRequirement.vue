@@ -103,12 +103,15 @@ export default {
         creator: '',
         createdDateFrom: '',
         createdDateTo: '',
-        state: 'NOT_COMMITED'
+        state: ''
       },
       dataQuery: {},
-      activeName: 'NOT_COMMITED',
+      activeName: '',
       statuses: [{
-          code: 'NOT_COMMITED',
+          code: '',
+          name: '全部'
+        }, {
+          code: '',
           name: '待提交'
         }, {
           code: 'AUDITING',
@@ -122,10 +125,8 @@ export default {
         }, {
           code: 'PURCHASE_COMPLETE',
           name: '采购完成'
-        }, {
-          code: '',
-          name: '全部'
-      }],
+        }
+      ],
       stateCount: {},
     }
   },

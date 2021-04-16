@@ -5,18 +5,29 @@
 -->
 <template>
   <div v-if="detail.id">
-    <profit-loss-detail-top :detail="detail"/>
-    <el-radio-group class="detail-container" v-model="showWhole">
-      <el-radio :label="true">统一展示</el-radio>
-      <el-radio :label="false">根据工单分类</el-radio>
-    </el-radio-group>
-    <div v-show="!showWhole">
-      <profit-loss-detail-task-table v-for="taskRow in taskRows" :key="taskRow.id" :detail="detail" :taskRow="taskRow"/>
+    <div id="profitloss-detail">
+      <el-row>
+          <div class="cost-order-title">
+            <h6>盈亏分析详情</h6>
+          </div>
+        </el-row>
+      <div class="pt-2"></div>
+      <profit-loss-detail-top :detail="detail"/>
+      <el-radio-group class="detail-container" v-model="showWhole">
+        <el-radio :label="true">统一展示</el-radio>
+        <el-radio :label="false">根据工单分类</el-radio>
+      </el-radio-group>
+      <div v-show="!showWhole">
+        <profit-loss-detail-task-table v-for="taskRow in taskRows" :key="taskRow.id" :detail="detail" :taskRow="taskRow"/>
+      </div>
+      <profit-loss-detail-task-table :detail="detail" :taskRow="detail.entries" :showWhole="showWhole" v-show="showWhole"/>
+      <profit-loss-echarts v-if="detail.id" :detail="detail"/>
+      <profit-loss-detail-remarks :detail="detail" />
     </div>
-    <profit-loss-detail-task-table :detail="detail" :taskRow="detail.entries" :showWhole="showWhole" v-show="showWhole"/>
-    <profit-loss-echarts v-if="detail.id" :detail="detail"/>
-    <profit-loss-detail-remarks :detail="detail" />
     <profit-loss-detail-btn :detail="detail" @callback="callback"/>
+    <el-row type="flex" justify="center" style="margin-top: 10px">
+      <printer-button v-print="'#profitloss-detail'" />
+    </el-row>
   </div>
 </template>
 
@@ -26,6 +37,7 @@ import ProfitLossDetailRemarks from './ProfitLossDetailRemarks'
 import ProfitLossDetailTaskTable from './ProfitLossDetailTaskTable'
 import ProfitLossEcharts from './ProfitLossEcharts'
 import ProfitLossDetailBtn from './ProfitLossDetailBtn.vue'
+import { PrinterButton } from '@/components/index.js'
 
 export default {
   name: 'ProfitLossDetailSubject',
@@ -35,7 +47,8 @@ export default {
     ProfitLossDetailRemarks,
     ProfitLossDetailTaskTable,
     ProfitLossEcharts,
-    ProfitLossDetailBtn
+    ProfitLossDetailBtn,
+    PrinterButton
   },
   data () {
     return {
@@ -54,7 +67,7 @@ export default {
       const result = await this.$http.get(url);
 
       if (result['errors']) {
-        this.$message.error(result['errors'].message);
+        this.$message.error(result['errors'][0].message);
         return;
       }
 
@@ -84,6 +97,11 @@ export default {
 </script>
 
 <style scoped>
+  .cost-order-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
+
   .detail-container {
     margin: 0px 0px 10px 20px;
   }

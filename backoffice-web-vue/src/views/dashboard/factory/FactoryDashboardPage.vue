@@ -144,14 +144,12 @@ export default {
 
       if (!this.isTenant()) {
         const date = new Date();
-  
-        const lastMonth = date.getFullYear() + '-' + (date.getMonth() === 0 ? 12 : date.getMonth()) + '-01';
-        const thisMonth = date.getFullYear() + '-' 
-                            + ((date.getMonth() + 1) > 12 ? (date.getMonth() + 1) -12 : (date.getMonth() + 1)) 
-                            + '-01';
-        const nextMonth = ((date.getMonth() + 2) > 12 ? (date.getFullYear() + 1) : date.getFullYear()) + '-' 
-                            + ((date.getMonth() + 2) > 12 ? (date.getMonth() + 2) -12 : (date.getMonth() + 2)) 
-                            + '-01';
+
+        const fullYear = date.getFullYear();
+        const month = date.getMonth();
+        const lastMonth = month - 1 < 0 ? ((fullYear - 1) + '-12-01') : (fullYear + '-' + month + '-01'); 
+        const thisMonth = fullYear + '-' + (month + 1) + '-01';
+        const nextMonth = month + 1 > 11 ? ((fullYear + 1) + '-01-01') : (fullYear + '-' + (month + 2) + '-01');
   
         // 获取外发外接数量，金额统计
         this.lastMonthIncome = await this.getDashboardOrderStatistics({

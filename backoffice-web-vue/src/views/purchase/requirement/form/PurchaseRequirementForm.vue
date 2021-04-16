@@ -99,7 +99,12 @@ export default {
               orderCount: item.orderCount,
               price: item.price,
               totalPrice: item.totalPrice,
-              estimatedRecTime: item.estimatedRecTime
+              estimatedRecTime: item.estimatedRecTime,
+              composition: item.composition,
+              purpose: item.purpose,
+              quoteLossRate: item.quoteLossRate,
+              quoteAmount: item.quoteAmount,
+              remarks: item.remarks
             }]
           }
         })
@@ -139,7 +144,7 @@ export default {
       }
       if (result.code === 1) {
         this.$message.success('添加采购需求成功！');
-        this.$router.push('/purchase/requirement');
+        this.$router.push('/purchase/requirement/' + result.data.id);
       } else if (result.code === 0) {
         this.$message.error(result.msg);
       } else {

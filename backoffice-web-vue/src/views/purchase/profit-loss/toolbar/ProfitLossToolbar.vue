@@ -11,9 +11,9 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </div>
-        <div>
+        <!-- <div>
           <el-button type="primary" class="toolbar-search_input" @click="onCreate">创建盈亏分析</el-button>
-        </div>
+        </div> -->
       </div>
     </el-form>
   </div>

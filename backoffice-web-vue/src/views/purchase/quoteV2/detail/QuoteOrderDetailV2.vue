@@ -6,46 +6,51 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-row type="flex" justify="space-between">
-        <div class="quote-order-title">
-          <h6 style="margin: 0px">报价单详情</h6>
+      <div id="quote-order-detail">
+        <el-row type="flex" justify="space-between">
+          <div class="quote-order-title">
+            <h6 style="margin: 0px">报价单详情</h6>
+          </div>
+          <div v-if="detail.status === 'CANCELLED'">
+            <h6 style="margin: 0px; color: #F56C6C">
+              订单已取消
+            </h6>
+          </div>
+        </el-row>
+        <div class="pt-2"></div>
+        <el-row type="flex" justify="start" class="detail-container">
+          <el-col :span="6">
+            <h6>任务单号：{{detail.code}}</h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>关联成本单：
+              <el-button type="text" @click="costVisible = true" class="code-btn">{{detail.refCostOrderCode}}</el-button>
+            </h6>
+          </el-col>
+          <el-col :span="6">
+            <h6>创建时间：{{detail.creationtime | timestampToTime}}</h6>
+          </el-col>
+        </el-row>
+        <div class="detail-container">
+          <cost-purchase-table :formData="detail.costOrder" :readOnly="true"/>
         </div>
-        <div v-if="detail.status === 'CANCELLED'">
-          <h6 style="margin: 0px; color: #F56C6C">
-            订单已取消
-          </h6>
+        <div class="detail-container">
+          <h6 class="additional-title">附加项</h6>
+          <el-table :data="detail.costOrder.customRows">
+            <el-table-column label="类型" prop="customCategoryName"></el-table-column>
+            <el-table-column label="名称" prop="name"></el-table-column>
+            <el-table-column label="单位" prop="unit"></el-table-column>
+            <el-table-column label="单价" prop="price"></el-table-column>
+          </el-table>
         </div>
-      </el-row>
-      <div class="pt-2"></div>
-      <el-row type="flex" justify="start" class="detail-container">
-        <el-col :span="6">
-          <h6>任务单号：{{detail.code}}</h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>关联成本单：
-            <el-button type="text" @click="costVisible = true" class="code-btn">{{detail.refCostOrderCode}}</el-button>
-          </h6>
-        </el-col>
-        <el-col :span="6">
-          <h6>创建时间：{{detail.creationtime | timestampToTime}}</h6>
-        </el-col>
-      </el-row>
-      <div class="detail-container">
-        <cost-purchase-table :formData="detail.costOrder" :readOnly="true"/>
+        <quote-order-detail-total class="detail-container" :detail="detail" />
       </div>
-      <div class="detail-container">
-        <h6 class="additional-title">附加项</h6>
-        <el-table :data="detail.costOrder.customRows">
-          <el-table-column label="类型" prop="customCategoryName"></el-table-column>
-          <el-table-column label="名称" prop="name"></el-table-column>
-          <el-table-column label="单位" prop="unit"></el-table-column>
-          <el-table-column label="单价" prop="price"></el-table-column>
-        </el-table>
-      </div>
-      <quote-order-detail-total class="detail-container" :detail="detail" />
       <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50" v-if="detail.status !== 'CANCELLED'">
         <el-button type="text" @click="onCancel">取消</el-button>
         <el-button class="create-btn" @click="onEdit">编辑</el-button>
+      </el-row>
+      <el-row type="flex" justify="center" style="margin-top: 10px">
+        <printer-button v-print="'#quote-order-detail'" />
       </el-row>
     </el-card>
     <el-dialog :visible.sync="costVisible" width="80%" append-to-body :close-on-click-modal="false">
@@ -58,11 +63,12 @@
 import CostOrderDetail from '../../cost/details/CostOrderDetail.vue';
 import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 import QuoteOrderDetailTotal from './QuoteOrderDetailTotal'
+import { PrinterButton } from '@/components/index.js'
 
 export default {
   name: 'QuoteOrderDetailV2',
   props: ['id'],
-  components: { CostOrderDetail, CostPurchaseTable, QuoteOrderDetailTotal },
+  components: { CostOrderDetail, CostPurchaseTable, QuoteOrderDetailTotal, PrinterButton },
   data () {
     return {
       detail: {
@@ -96,13 +102,13 @@ export default {
           if (row.specList && row.specList.length > 0) {
             purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
               return {
-                // id: row.id,
                 materialsId: row.id,
                 specListId: item.id,
                 name: row.name,
                 code: row.code,
                 unit: row.unit,
                 materialsType: row.materialsType,
+                factoryName: row.factoryName,
                 unitQuantity: item.unitQuantity,
                 specName: item.specName,
                 colorName: item.colorName,
@@ -114,9 +120,13 @@ export default {
                 orderCount: item.orderCount,
                 auditColor: item.auditColor,
                 estimatedRecTime: item.estimatedRecTime,
-                // cooperatorName: row.cooperatorName,
                 price: item.price,
-                totalPrice: item.totalPrice
+                totalPrice: item.totalPrice,
+                composition: item.composition,
+                purpose: item.purpose,
+                quoteLossRate: item.quoteLossRate,
+                quoteAmount: item.quoteAmount,
+                remarks: item.remarks
               }
             }))
           }

@@ -32,6 +32,9 @@
       <el-tab-pane label="盈亏分析" v-if="showProfitLoss" key="profitLoss" :lazy="true">
         <profit-loss-detail-subject v-if="form.profitLossAnalysis" 
                                     :id="form.profitLossAnalysis.id" @callback="callback"/>
+        <el-row v-else type="flex" justify="center" align="middle" style="padding: 20px;">
+          <h6 style="color: #909399">暂无数据</h6>
+        </el-row>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -80,8 +83,9 @@
         }
       },
       showProfitLoss: function () {
-        // 订单为外接订单，且状态为生产中或已完成
-        return this.form.sendBy && this.form.sendBy.id && (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED');
+        // 状态为生产中或已完成
+        return this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED';
+        // return this.form.sendBy && this.form.sendBy.id && (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED');
       },
       canCreateProfitLoss: function () {
         return !this.form.profitLossAnalysis && this.showProfitLoss;

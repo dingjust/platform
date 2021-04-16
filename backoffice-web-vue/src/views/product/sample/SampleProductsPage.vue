@@ -2,11 +2,9 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-row>
-        <el-col :span="2">
-          <div class="orders-list-title">
-            <h6>样衣列表</h6>
-          </div>
-        </el-col>
+        <div class="orders-list-title">
+          <h6>样衣列表</h6>
+        </div>
       </el-row>
       <div class="pt-2"></div>
       <sample-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" 

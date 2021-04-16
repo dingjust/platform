@@ -41,10 +41,7 @@
           <el-input v-model="scope.row.orderItemNo"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="交货时间" prop="deliveryDate" min-width="160px" v-if="tableCol['deliveryDate'].have">
-        <template slot="header">
-          <span>交货时间<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('deliveryDate')"/></span>
-        </template>
+      <el-table-column label="交货时间" prop="deliveryDate" min-width="160px">
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-date-picker
             v-model="scope.row.deliveryDate"
@@ -55,10 +52,7 @@
           </el-date-picker>
         </template>
       </el-table-column>
-      <el-table-column label="合同时间" prop="contractDate" min-width="160px" v-if="tableCol['contractDate'].have">
-        <template slot="header">
-          <span>合同时间<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('contractDate')"/></span>
-        </template>
+      <el-table-column label="合同时间" prop="contractDate" min-width="160px" >
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-date-picker
               v-model="scope.row.contractDate"

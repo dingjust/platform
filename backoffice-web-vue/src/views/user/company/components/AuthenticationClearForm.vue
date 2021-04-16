@@ -8,7 +8,7 @@
     </el-row>
     <el-row style="margin-bottom: 10px">
       <h6 class="form-h" >认证状态：
-        <span :class="approvalStatus ? 'approval-color' : ''">{{approvalStatus ? '已认证' : '未认证'}}</span>
+        <span :class="approvalStatus ? 'approval-color' : ''">{{getEnum('AuthApprovalStatus', approvalStatus)}}</span>
         <span v-if="clearRow.approvalType" class="approval-color"> ({{getEnum('ApprovalType', clearRow.approvalType)}})</span>
       </h6>
     </el-row>
@@ -57,7 +57,10 @@ export default {
   },
   computed: {
     approvalStatus: function () {
-      return this.clearRow.approvalStatus != undefined && this.clearRow.approvalStatus == 'approved';
+      if (!this.clearRow.approvalStatus) {
+        return 'unapproved';
+      }
+      return this.clearRow.approvalStatus;
     },
     confirmText: function () {
       return '是否对公司编号：' + this.clearRow.uid + ', ' + this.clearRow.name + ' 执行 ' + this.options[this.selection] + ' 操作？'

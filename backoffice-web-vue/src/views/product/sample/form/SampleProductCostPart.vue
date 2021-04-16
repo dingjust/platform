@@ -18,13 +18,13 @@
           type="info">
           <el-button type="text" class="tag-btn" @click="onCostDetail(tag)">{{tag.title}}</el-button>
         </el-tag>
-        <el-button @click="formVisible = true">创建成本单</el-button>
+        <el-button @click="onCreateCost">创建成本单</el-button>
       </el-col>
     </el-row>
-    <el-dialog :visible.sync="formVisible" width="80%" class="purchase-dialog" append-to-body
+    <!-- <el-dialog :visible.sync="formVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <cost-order-form v-if="formVisible" :product="product" @callback="searchByProductId"/>
-    </el-dialog>
+      <cost-order-form v-if="formVisible" :product="product" @callback="searchCostOrderBySkuID"/>
+    </el-dialog> -->
     <el-dialog :visible.sync="detailVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <cost-order-detail v-if="detailVisible" :id="costId" :isFormDialog="true" @callback="callback"/>
@@ -59,14 +59,22 @@ export default {
     }
   },
   methods: {
-    async searchByProductId () {
-      const url = this.apis().searchCostOrderByProductId(this.slotData.id);
+    async searchCostOrderBySkuID () {
+      const url = this.apis().searchCostOrderBySkuID(this.slotData.skuID);
       const result = await this.$http.post(url, {});
 
       if (!result['errors']) {
         this.costList = result.data;
       }
       this.formVisible = false;
+    },
+    onCreateCost () {
+      this.$router.push({
+        name: '创建成本单',
+        params: {
+          product: this.product
+        }
+      })
     },
     onCostDetail (cost) { 
       this.costId = cost.id;
@@ -87,7 +95,7 @@ export default {
 
       if (result.code === 1) {
         this.$message.success('成本单取消成功！');
-        this.searchByProductId();
+        this.searchCostOrderBySkuID();
       } else if (result.code === 0) {
         this.$message.error(result.msg);
       } else if (result['errors']) {
@@ -96,11 +104,11 @@ export default {
     },
     callback () {
       this.detailVisible = false;
-      this.searchByProductId();
+      this.searchCostOrderBySkuID();
     }
   },
   created () {
-    this.searchByProductId();
+    this.searchCostOrderBySkuID();
   }
 }
 </script>
