@@ -36,7 +36,7 @@ export default {
             title: item.skuID + ' / ' + this.colorName(item),
             totalProfitLossAmount: item.totalProfitLossAmount,
             totalContractAmount: item.totalContractAmount,
-            totalCostAmount: -item.totalCostAmount
+            totalAmount: -item.totalAmount
           }
         })).reverse(); 
       }
@@ -111,7 +111,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: this.echartData.map(item => item.totalCostAmount)
+            data: this.echartData.map(item => item.totalAmount)
           },
           {
             name: '总盈亏',
