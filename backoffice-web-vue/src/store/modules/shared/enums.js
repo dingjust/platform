@@ -1572,7 +1572,7 @@ const state = {
     },
     {
       code: 'PACKING',
-      name: '包装'
+      name: '包装物料'
     }
   ],
   MaterialsUnit: [{

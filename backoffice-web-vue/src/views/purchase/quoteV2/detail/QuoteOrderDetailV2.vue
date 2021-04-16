@@ -64,6 +64,7 @@ import CostOrderDetail from '../../cost/details/CostOrderDetail.vue';
 import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 import QuoteOrderDetailTotal from './QuoteOrderDetailTotal'
 import { PrinterButton } from '@/components/index.js'
+import { handleInitData } from '../../components/handleTableData'
 
 export default {
   name: 'QuoteOrderDetailV2',
@@ -96,61 +97,9 @@ export default {
     },
     initData (resultData) {
       let data = Object.assign({}, resultData);
-      let purchaseMaterials = [];
-      if (resultData.costOrder.purchaseMaterials && resultData.costOrder.purchaseMaterials.length > 0) {
-        resultData.costOrder.purchaseMaterials.forEach(row => {
-          if (row.specList && row.specList.length > 0) {
-            purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
-              return {
-                materialsId: row.id,
-                specListId: item.id,
-                name: row.name,
-                code: row.code,
-                unit: row.unit,
-                materialsType: row.materialsType,
-                factoryName: row.factoryName,
-                unitQuantity: item.unitQuantity,
-                specName: item.specName,
-                colorName: item.colorName,
-                modelName: item.modelName,
-                emptySent: item.emptySent,
-                requiredAmount: item.requiredAmount,
-                estimatedLoss: item.estimatedLoss,
-                estimatedUsage: item.estimatedUsage,
-                orderCount: item.orderCount,
-                auditColor: item.auditColor,
-                estimatedRecTime: item.estimatedRecTime,
-                price: item.price,
-                totalPrice: item.totalPrice,
-                composition: item.composition,
-                purpose: item.purpose,
-                quoteLossRate: item.quoteLossRate,
-                quoteAmount: item.quoteAmount,
-                remarks: item.remarks
-              }
-            }))
-          }
-        })
-      }
 
-      let customRows = [];
-      if (resultData.costOrder.customRows) {
-        resultData.costOrder.customRows.forEach(row => {
-          customRows = customRows.concat(row.specList.map(item => {
-            return {
-              materialsId: row.id,
-              specListId: item.id,
-              name: row.name,
-              unit: row.unit,
-              customCategoryName: row.customCategoryName,
-              price: item.price,
-            }
-          }))
-        })
-      }
-
-      data.costOrder.workOrders = purchaseMaterials;
-      data.costOrder.customRows = customRows;
+      data.costOrder.workOrders = handleInitData(resultData.costOrder.purchaseMaterials, 'WORKORDERS');
+      data.costOrder.customRows = handleInitData(resultData.costOrder.customRows, 'CUSTOMROWS');
 
       this.$set(this, 'detail', data);
     },

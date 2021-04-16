@@ -149,7 +149,6 @@ export default {
     },
     arrangement () {
       let purchaseMaterials = handleSumbitData(this.formData.workOrders, 'WORKORDERS');
-
       let customRows = handleSumbitData(this.formData.customRows, 'CUSTOMROWS');
 
       return {

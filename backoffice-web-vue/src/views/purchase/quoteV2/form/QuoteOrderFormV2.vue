@@ -42,6 +42,7 @@ import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 import AdditionalItem from '@/views/purchase/cost/components/AdditionalItem'
 import QuoteOrderTotalPart from './QuoteOrderTotalPart'
 import QuoteOrderBtnGruop from './QuoteOrderBtnGruop.vue'
+import { handleSumbitData, handleInitData } from '../../components/handleTableData'
 
 export default {
   name: 'QuoteOrderFormV2',
@@ -96,53 +97,9 @@ export default {
       return res.every(item => !!item);
     },
     arrangement () {
-      let purchaseMaterials = [];
 
-      this.formData.costOrder.workOrders.forEach(item => {
-        purchaseMaterials.push({
-          id: item.materialsId ? item.materialsId : '',
-          name: item.name,
-          code: item.code,
-          unit: item.unit,
-          materialsType: item.materialsType,
-          specList: [{
-            id: item.specListId,
-            unitQuantity: item.unitQuantity,
-            specName: item.specName.trim(),
-            colorName: item.colorName.trim(),
-            modelName: item.modelName.trim(),
-            emptySent: item.emptySent,
-            requiredAmount: item.requiredAmount,
-            estimatedLoss: item.estimatedLoss,
-            estimatedUsage: item.estimatedUsage,
-            orderCount: item.orderCount,
-            price: item.price,
-            totalPrice: item.totalPrice,
-            estimatedRecTime: item.estimatedRecTime,
-            composition: item.composition,
-            purpose: item.purpose,
-            quoteLossRate: item.quoteLossRate,
-            quoteAmount: item.quoteAmount,
-            remarks: item.remarks
-          }]
-        })
-      })
-
-      let customRows = []
-
-      this.formData.costOrder.customRows.forEach(item => {
-        customRows.push({
-          id: item.materialsId ? item.materialsId : '',
-          name: item.name,
-          code: item.code,
-          unit: item.unit,
-          customCategoryName: item.customCategoryName,
-          specList: [{
-            id: item.specListId,
-            price: item.price
-          }]
-        })
-      })
+      let purchaseMaterials = handleSumbitData(this.formData.costOrder.workOrders, 'WORKORDERS');
+      let customRows = handleSumbitData(this.formData.costOrder.customRows, 'CUSTOMROWS');
 
       return {
         id: this.formData.id,
@@ -212,81 +169,33 @@ export default {
     },
     initData (resultData) {
       let data = Object.assign({}, resultData);
-      let purchaseMaterials = [];
-      if (resultData.costOrder.purchaseMaterials && resultData.costOrder.purchaseMaterials.length > 0) {
-        resultData.costOrder.purchaseMaterials.forEach(row => {
-          if (row.specList && row.specList.length > 0) {
-            purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
-              return {
-                // id: row.id,
-                materialsId: row.id,
-                specListId: item.id,
-                name: row.name,
-                code: row.code,
-                unit: row.unit,
-                materialsType: row.materialsType,
-                unitQuantity: item.unitQuantity,
-                specName: item.specName,
-                colorName: item.colorName,
-                modelName: item.modelName,
-                emptySent: item.emptySent,
-                requiredAmount: item.requiredAmount,
-                estimatedLoss: item.estimatedLoss,
-                estimatedUsage: item.estimatedUsage,
-                orderCount: item.orderCount,
-                auditColor: item.auditColor,
-                estimatedRecTime: item.estimatedRecTime,
-                // cooperatorName: row.cooperatorName,
-                price: item.price,
-                totalPrice: item.totalPrice,
-                composition: item.composition,
-                purpose: item.purpose,
-                quoteLossRate: item.quoteLossRate,
-                quoteAmount: item.quoteAmount,
-                remarks: item.remarks
-              }
-            }))
-          }
-        })
-      }
 
-      let customRows = [];
-      if (resultData.costOrder.customRows) {
-        resultData.costOrder.customRows.forEach(row => {
-          customRows = customRows.concat(row.specList.map(item => {
-            return {
-              materialsId: row.id,
-              specListId: item.id,
-              name: row.name,
-              unit: row.unit,
-              customCategoryName: row.customCategoryName,
-              price: item.price,
-            }
-          }))
-        })
-      }
+      data.costOrder.workOrders = handleInitData(resultData.costOrder.purchaseMaterials, 'WORKORDERS');
+      data.costOrder.customRows = handleInitData(resultData.costOrder.customRows, 'CUSTOMROWS');
 
-      data.costOrder.workOrders = purchaseMaterials;
-      data.costOrder.customRows = customRows;
       data.profitRate = data.profitRate * 100;
 
       this.$set(this, 'formData', data);
+    },
+    setCostOrder (costOrder) {
+      this.formData.refCostOrderId = costOrder.id;
+      this.formData.refCostOrderCode = costOrder.code;
+
+      this.formData.costOrder = {
+        id: null,
+        product: {
+          id: costOrder.product.id,
+          code: costOrder.product.code,
+          skuID: costOrder.product.skuID
+        },
+        workOrders: costOrder.workOrders,
+        customRows: costOrder.customRows
+      }
     }
   },
   created () {
     if (this.$route.params.costOrder) {
-      this.formData.refCostOrderId = this.$route.params.costOrder.id;
-      this.formData.refCostOrderCode = this.$route.params.costOrder.code;
-      this.formData.costOrder = {
-        id: null,
-        product: {
-          id: this.$route.params.costOrder.product.id,
-          code: this.$route.params.costOrder.product.code,
-          skuID: this.$route.params.costOrder.product.skuID
-        },
-        workOrders: this.$route.params.costOrder.workOrders,
-        customRows: this.$route.params.costOrder.customRows
-      }
+      this.setCostOrder(this.$route.params.costOrder);
     }
     if (this.id) {
       this.getDetail();

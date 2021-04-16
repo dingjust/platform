@@ -14,16 +14,6 @@
     </el-row>
     <el-form ref="form" :model="entries" :hide-required-asterisk="true">
       <el-table ref="resultTable" stripe :data="entries.workOrders" :height="autoHeight">
-        <el-table-column min-width="100px" label="物料名称">
-          <template slot="header">
-            <span>物料名称<span style="color: #F56C6C"> *</span></span>
-          </template>
-          <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.name'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <el-input v-model="scope.row.name" style="width: 90px"></el-input>
-            </el-form-item>
-          </template>
-        </el-table-column>
         <el-table-column label="物料类别" prop="materialsType" min-width="100px">
           <template slot="header">
             <span>物料类别<span style="color: #F56C6C"> *</span></span>
@@ -35,6 +25,23 @@
                   <el-option :label="item.name" :value="item.code" :key="item.code"></el-option>
                 </template>
               </el-select>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column min-width="150px" label="物料名称">
+          <template slot="header">
+            <span>物料名称<span style="color: #F56C6C"> *</span></span>
+          </template>
+          <template slot-scope="scope">
+            <el-form-item :prop="'workOrders.' + scope.$index + '.name'" :rules="[{required: true, message: '必填', tigger: 'change'}]">
+              <!-- <el-input v-model="scope.row.name" style="width: 90px"></el-input> -->
+                <el-autocomplete class="inline-input"
+                  style="width: 140px"
+                  v-model="scope.row.name"
+                  :fetch-suggestions="((queryString,cb)=>{querySearch(queryString, cb, scope.row)})"
+                  :popper-class="scope.row.materialsType === '' ? 'hide-popper' : ''"
+                  placeholder="请输入内容">
+              </el-autocomplete>
             </el-form-item>
           </template>
         </el-table-column>
@@ -412,13 +419,102 @@ export default {
       } else {
         callback(new Error('必填'));
       }
+    },
+    querySearch(queryString, cb, row) {
+      if (row.materialsType !== '') {
+        cb(this.specialProcess[row.materialsType]);
+      } else {
+        cb([]);
+      }
     }
   },
   data () {
     return {
       materialsType: this.$store.state.EnumsModule.MaterialsType,
       importVisible: false,
-      unitsOpt: ['米', '个', '粒', '包', '张', '千克']
+      unitsOpt: ['米', '个', '粒', '包', '张', '千克'],
+      specialProcess: {
+        'PLUS_MATERIAL': [
+          { value: '面布' },
+          { value: '里布' },
+          { value: '衬布' },
+          { value: '棉' },
+          { value: '羽绒' },
+          { value: '别布' },
+          { value: '配布' },
+          { value: '针织' }
+        ],
+        'SUBSIDIARY_MATERIAL': [
+          { value: '拉链' },
+          { value: '线' },
+          { value: '钮扣' },
+          { value: '松紧带' },
+          { value: '棉包' },
+          { value: '牵条' },
+          { value: '织带' },
+          { value: '吊带' },
+          { value: '硬衬' },
+          { value: '暗扣' },
+          { value: '裙钩' },
+          { value: '旗袍钩' },
+          { value: '特殊标' },
+          { value: '成分标' },
+          { value: '产地标' },
+          { value: '尺寸标' },
+          { value: '尺寸产地标' },
+          { value: '尺寸成分产地标' },
+          { value: '衬条' },
+          { value: '棉条' },
+          { value: '扣环' },
+          { value: '双面衬' },
+          { value: '肩扣带' },
+          { value: '挂耳' },
+          { value: '棉绳' },
+          { value: '滚条' },
+          { value: '鸡眼' },
+          { value: '魔术贴' },
+          { value: '珠子' },
+          { value: '珠管' },
+          { value: '纸朴' },
+          { value: '布朴' },
+          { value: '螺纹' },
+          { value: '针织' },
+          { value: '透明扣' },
+          { value: '帽绳' },
+          { value: '橡筋' },
+          { value: '花边' },
+          { value: '备用袋' },
+          { value: '雪纺朴' },
+          { value: '主唛' },
+          { value: '洗水唛' },
+          { value: '拷贝纸' },
+          { value: '包装袋' },
+          { value: '四合扣' },
+          { value: '四合扣磨具' },
+          { value: '版费' },
+          { value: '猪鼻扣' }
+        ],
+        'PACKING': [
+          { value: '衣架棉' },
+          { value: '方块棉' },
+          { value: '套环' },
+          { value: '止点珠' },
+          { value: '备扣袋' },
+          { value: '贴纸' },
+          { value: '色系标' },
+          { value: '衣架贴标' },
+          { value: '胶袋贴标' },
+          { value: '胶袋' },
+          { value: '橡筋' },
+          { value: '主唛' },
+          { value: '洗水唛' },
+          { value: '拷贝纸' },
+          { value: '包装袋' },
+          { value: '四合扣' },
+          { value: '版费' },
+          { value: '猪鼻扣' }
+        ]
+      }
     }
   }
 }
