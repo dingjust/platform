@@ -10,144 +10,158 @@
 </template>
 
 <script>
-// 按需引入
-const echarts = require('echarts/lib/echarts');
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/grid');
-require('echarts/lib/component/legend');
-require('echarts/lib/chart/bar');
+import * as echarts from "echarts/core";
+import {
+  TooltipComponent,
+  GridComponent,
+  LegendComponent,
+} from "echarts/components";
+import { BarChart } from "echarts/charts";
+import { CanvasRenderer } from "echarts/renderers";
+
+echarts.use([
+  TooltipComponent,
+  GridComponent,
+  LegendComponent,
+  BarChart,
+  CanvasRenderer,
+]);
 
 export default {
-  name: 'ProfitLossEcharts',
-  props: ['detail'],
-  data () {
+  name: "ProfitLossEcharts",
+  props: ["detail"],
+  data() {
     return {
       echartHeight: 100,
-      echartData: []
-    }
+      echartData: [],
+    };
   },
   methods: {
-    initData () {
+    initData() {
       if (this.detail && this.detail.entries) {
         this.echartHeight += 60 * this.detail.entries.length;
 
-        this.echartData = this.echartData.concat(this.detail.entries.map(item => {
-          return {
-            title: item.skuID + ' / ' + this.colorName(item),
-            totalProfitLossAmount: item.totalProfitLossAmount,
-            totalContractAmount: item.totalContractAmount,
-            totalCostAmount: -item.totalCostAmount
-          }
-        })).reverse(); 
+        this.echartData = this.echartData
+          .concat(
+            this.detail.entries.map((item) => {
+              return {
+                title: item.skuID + " / " + this.colorName(item),
+                totalProfitLossAmount: item.totalProfitLossAmount,
+                totalContractAmount: item.totalContractAmount,
+                totalCostAmount: -item.totalCostAmount,
+              };
+            })
+          )
+          .reverse();
       }
     },
-    colorName (row) {
+    colorName(row) {
       if (row.colors) {
-        let str = ''
-        row.colors.forEach(item => {
-          str += (item.name + '， ')
-        })
-  
+        let str = "";
+        row.colors.forEach((item) => {
+          str += item.name + "， ";
+        });
+
         return str.substring(0, str.length - 2);
       }
     },
-    initEchart () {
-      let chartDom = document.getElementById('main');
+    initEchart() {
+      let chartDom = document.getElementById("main");
       let myChart = echarts.init(chartDom);
 
       let option;
 
       option = {
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-          }
+          trigger: "axis",
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+          },
         },
         legend: {
-          data: ['合同金额', '总金额（成本）', '总盈亏']
+          data: ["合同金额", "总金额（成本）", "总盈亏"],
         },
         grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
         },
         xAxis: [
           {
-            type: 'value'
-          }
+            type: "value",
+          },
         ],
         yAxis: [
           {
-            type: 'category',
+            type: "category",
             axisTick: {
-                show: false
+              show: false,
             },
-            data: this.echartData.map(item => item.title)
-          }
+            data: this.echartData.map((item) => item.title),
+          },
         ],
         series: [
           {
-            name: '合同金额',
-            type: 'bar',
-            stack: '总量',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: this.echartData.map(item => item.totalContractAmount)
-          },
-          {
-            name: '总金额（成本）',
-            type: 'bar',
-            stack: '总量',
+            name: "合同金额",
+            type: "bar",
+            stack: "总量",
             label: {
               show: true,
-              position: 'left'
             },
             emphasis: {
-              focus: 'series'
+              focus: "series",
             },
-            data: this.echartData.map(item => item.totalCostAmount)
+            data: this.echartData.map((item) => item.totalContractAmount),
           },
           {
-            name: '总盈亏',
-            type: 'bar',
+            name: "总金额（成本）",
+            type: "bar",
+            stack: "总量",
             label: {
               show: true,
-              position: 'inside'
+              position: "left",
             },
             emphasis: {
-              focus: 'series'
+              focus: "series",
             },
-            data: this.echartData.map(item => item.totalProfitLossAmount)
-          }
-        ]
-      }
+            data: this.echartData.map((item) => item.totalCostAmount),
+          },
+          {
+            name: "总盈亏",
+            type: "bar",
+            label: {
+              show: true,
+              position: "inside",
+            },
+            emphasis: {
+              focus: "series",
+            },
+            data: this.echartData.map((item) => item.totalProfitLossAmount),
+          },
+        ],
+      };
 
       option && myChart.setOption(option);
 
       let that = this;
-      window.addEventListener('resize', function () {
+      window.addEventListener("resize", function () {
         that.$nextTick(() => {
           myChart.resize();
-        })
-      })
-    }
+        });
+      });
+    },
   },
-  mounted () {
+  mounted() {
     this.initData();
 
     this.$nextTick(() => {
       this.initEchart();
-    })
-  }
-}
+    });
+  },
+};
 </script>
 
 <style scoped>
-
 </style>
