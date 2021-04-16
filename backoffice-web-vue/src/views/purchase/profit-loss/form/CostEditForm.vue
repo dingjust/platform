@@ -44,6 +44,8 @@
 <script>
 import AdditionalItem from '@/views/purchase/cost/components/AdditionalItem'
 import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
+import { handleSumbitData, handleInitData } from '../../components/handleTableData'
+
 export default {
   name: 'CostEditForm',
   props: ['costOrder'],
@@ -89,115 +91,15 @@ export default {
   methods: {
     initData (resultData) {
       let data = Object.assign({}, resultData);
-      let purchaseMaterials = [];
-      if (resultData.purchaseMaterials && resultData.purchaseMaterials.length > 0) {
-        resultData.purchaseMaterials.forEach(row => {
-          if (row.specList && row.specList.length > 0) {
-            purchaseMaterials = purchaseMaterials.concat(row.specList.map(item => {
-              return {
-                // id: row.id,
-                materialsId: row.id,
-                specListId: item.id,
-                name: row.name,
-                code: row.code,
-                unit: row.unit,
-                materialsType: row.materialsType,
-                factoryName: row.factoryName,
-                unitQuantity: item.unitQuantity,
-                specName: item.specName,
-                colorName: item.colorName,
-                modelName: item.modelName,
-                emptySent: item.emptySent,
-                requiredAmount: item.requiredAmount,
-                estimatedLoss: item.estimatedLoss,
-                estimatedUsage: item.estimatedUsage,
-                orderCount: item.orderCount,
-                auditColor: item.auditColor,
-                estimatedRecTime: item.estimatedRecTime,
-                price: item.price,
-                totalPrice: item.totalPrice,
-                composition: item.composition,
-                purpose: item.purpose,
-                quoteLossRate: item.quoteLossRate,
-                quoteAmount: item.quoteAmount,
-                remarks: item.remarks
-              }
-            }))
-          }
-        })
-      }
 
-      let customRows = [];
-      if (resultData.customRows) {
-        resultData.customRows.forEach(row => {
-          if (row.specList && row.specList.length > 0) {
-            customRows = customRows.concat(row.specList.map(item => {
-              return {
-                materialsId: row.id,
-                specListId: item.id,
-                  name: row.name,
-                  unit: row.unit,
-                  customCategoryName: row.customCategoryName,
-                  price: item.price,
-              }
-            }))
-          }
-        })
-      }
-
-      data.workOrders = purchaseMaterials;
-      data.customRows = customRows;
+      data.workOrders = handleInitData(resultData.purchaseMaterials, 'WORKORDERS');
+      data.customRows = handleInitData(resultData.customRows, 'CUSTOMROWS');
 
       this.formData = data;
     },
     arrangement () {
-      let purchaseMaterials = [];
-
-      this.formData.workOrders.forEach(item => {
-        purchaseMaterials.push({
-          id: item.materialsId ? item.materialsId : '',
-          name: item.name,
-          code: item.code,
-          unit: item.unit,
-          materialsType: item.materialsType,
-          factoryName: item.factoryName,
-          specList: [{
-            id: item.specListId,
-            unitQuantity: item.unitQuantity,
-            specName: item.specName.trim(),
-            colorName: item.colorName.trim(),
-            modelName: item.modelName.trim(),
-            emptySent: item.emptySent,
-            requiredAmount: item.requiredAmount,
-            estimatedLoss: item.estimatedLoss,
-            estimatedUsage: item.estimatedUsage,
-            orderCount: item.orderCount,
-            price: item.price,
-            totalPrice: item.totalPrice,
-            estimatedRecTime: item.estimatedRecTime,
-            composition: item.composition,
-            purpose: item.purpose,
-            quoteLossRate: item.quoteLossRate,
-            quoteAmount: item.quoteAmount,
-            remarks: item.remarks
-          }]
-        })
-      })
-
-      let customRows = []
-
-      this.formData.customRows.forEach(item => {
-        customRows.push({
-          id: item.materialsId ? item.materialsId : '',
-          name: item.name,
-          code: item.code,
-          unit: item.unit,
-          customCategoryName: item.customCategoryName,
-          specList: [{
-            price: item.price
-          }]
-        })
-      })
+      let purchaseMaterials = handleSumbitData(this.formData.workOrders, 'WORKORDERS');
+      let customRows = handleSumbitData(this.formData.customRows, 'CUSTOMROWS');
 
       // TODO: 处理选择产品时候的productionOrder数据
       return {
@@ -206,9 +108,7 @@ export default {
         product: this.formData.product,
         purchaseMaterials: purchaseMaterials,
         customRows: customRows,
-
       };    
-
     },
     onEdit () {
       this.$emit('editCostForm', this.arrangement());

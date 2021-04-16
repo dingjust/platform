@@ -55,10 +55,10 @@
       <el-table-column label="成本费用" header-align="center">
         <el-table-column label="单价成本" prop="unitCostAmount" min-width="120px">
           <template slot-scope="scope" v-if="!scope.row.countRow">
-            <div class="top-row">
+            <div class="top-row" style="flex-wrap: wrap">
               <span>{{scope.row.unitCostAmount.toFixed(4)}}</span>
               <div>
-                <el-button v-if="scope.row.costOrder.code" type="text" :disabled="scope.row.purchaseTaskId != null"
+                <el-button v-if="scope.row.costOrder.product" type="text" :disabled="scope.row.purchaseTaskId != null"
                             @click="modifyCost(scope.$index, scope.row.costOrder)" :title="tips">修改</el-button>
                 <el-button type="text" style="margin: 0px" :disabled="scope.row.purchaseTaskId != null" 
                             @click="openCostList(scope.$index)" :title="tips">选择</el-button>

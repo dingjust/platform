@@ -11,7 +11,7 @@
       </el-row>
     </div>
     <el-tabs type="border-card">
-      <el-tab-pane label="采购明细">
+      <el-tab-pane label="物料清单">
         <cost-purchase-info :formData="formData" :readOnly="readOnly"
                            @onModify="onModify" @onDelete="onDelete"/>
       </el-tab-pane>

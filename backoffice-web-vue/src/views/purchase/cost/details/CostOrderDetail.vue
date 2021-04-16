@@ -97,7 +97,7 @@ import ProductionOrderDetail from '@/views/order/salesProduction/production-orde
 import SampleProductDetailsPage from '@/views/product/sample/details/SampleProductDetailsPage'
 import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 import { PrinterButton } from '@/components/index.js'
-import { handleSumbitData, handleInitData } from '../../components/handleTableData'
+import { handleInitData } from '../../components/handleTableData'
 
 export default {
   name: 'CostOrderDetail',

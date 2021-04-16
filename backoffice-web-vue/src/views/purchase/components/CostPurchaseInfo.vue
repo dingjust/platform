@@ -23,14 +23,14 @@
     <el-table-column label="单位用量" prop="unitQuantity"></el-table-column>
     <el-table-column label="预计损耗" prop="estimatedLoss">
       <template slot-scope="scope">
-        <span>{{(scope.row.estimatedLoss * 100).toFixed(2)}}%</span>
+        <span>{{scope.row.estimatedLoss * 100}}%</span>
       </template>
     </el-table-column>
     <el-table-column label="预计用量" prop="estimatedUsage" ></el-table-column>
     <el-table-column label="订单数" prop="orderCount"></el-table-column>
     <el-table-column label="空差" prop="emptySent">
       <template slot-scope="scope">
-        <span>{{(scope.row.emptySent * 100).toFixed(2)}}%</span>
+        <span>{{scope.row.emptySent * 100}}%</span>
       </template>
     </el-table-column>
     <el-table-column label="需求数量" prop="requiredAmount" min-width="100px">
@@ -51,7 +51,7 @@
     <el-table-column label="实际金额" prop="totalPrice"></el-table-column>
     <el-table-column label="报价损耗" prop="quoteLossRate">
       <template slot-scope="scope">
-        <span>{{(scope.row.quoteLossRate * 100).toFixed(2)}}%</span>
+        <span>{{scope.row.quoteLossRate * 100}}%</span>
       </template>
     </el-table-column>
     <el-table-column label="报价金额" prop="quoteAmount"></el-table-column>
