@@ -153,7 +153,7 @@ export default {
                 modelName: item.specList[0].modelName ? item.specList[0].modelName : '',
                 specName: item.specList[0].specName ? item.specList[0].specName : '',
                 colorName: item.specList[0].colorName ? item.specList[0].colorName : '',
-                unitQuantity: item.specList[0].unitQuantity ? item.specList[0].unitQuantity : '',
+                unitQuantity: row.totalQuantity,
                 estimatedLoss: item.specList[0].estimatedLoss ? item.specList[0].estimatedLoss : '',
                 estimatedUsage: item.specList[0].estimatedUsage ? item.specList[0].estimatedUsage : '',
                 orderCount: item.specList[0].orderCount ? item.specList[0].orderCount : '',
