@@ -209,7 +209,7 @@ export default {
         taxPoint: 0.03,
         qualityRequirement: '',
         auditNeeded: true,
-        merchandiser: {},
+        merchandiser: null,
         approvers: [null],
         shippingAddress: {},
         workOrders: [],
