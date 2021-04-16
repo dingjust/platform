@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import CostSelectList from '@/views/purchase/cost/components/CostSelectList'
 import CostPurchaseTable from '@/views/purchase/components/CostPurchaseTable'
 import AdditionalItem from '@/views/purchase/cost/components/AdditionalItem'
 import QuoteOrderTotalPart from './QuoteOrderTotalPart'
@@ -48,7 +47,6 @@ export default {
   name: 'QuoteOrderFormV2',
   props: ['id'],
   components: {
-    CostSelectList,
     CostPurchaseTable,
     AdditionalItem,
     QuoteOrderTotalPart,
