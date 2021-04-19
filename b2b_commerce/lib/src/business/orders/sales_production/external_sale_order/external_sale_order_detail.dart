@@ -173,10 +173,17 @@ class _MainInfo extends StatelessWidget {
                 '合作方式', CooperationModeLocalizedMap[order.cooperationMode]),
             buildRow('是否开票', order.invoiceNeeded ? '开发票' : '不开发票'),
             buildRow('定金', _getDepositStr()),
-            buildRow('创建人', order?.creator?.name),
-            for (B2BCustomerModel approver in order?.approvers ?? [])
+            buildRow(
+                '创建人', isOrigin() ? order?.sendBy?.name : order?.creator?.name),
+            for (B2BCustomerModel approver in isOrigin()
+                ? (order?.sendApprovers ?? [])
+                : (order?.approvers ?? []))
               buildRow('审批人', approver.name),
-            buildRow('跟单员', order?.productionLeader?.name),
+            buildRow(
+                '跟单员',
+                isOrigin()
+                    ? order.merchandiser?.name
+                    : order?.productionLeader?.name),
           ],
         ));
   }
@@ -209,6 +216,12 @@ class _MainInfo extends StatelessWidget {
     return order.payPlan.isHaveDeposit
         ? '有定金'
         : '无定金' + PayPlanTypeLocalizedMap[order.payPlan.payPlanType];
+  }
+
+  ///是否发单方
+  bool isOrigin() {
+    String companyCode = UserBLoC.instance.currentUser.companyCode;
+    return companyCode == order?.originCompany?.uid;
   }
 }
 
@@ -399,8 +412,7 @@ class _EntriesInfo extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                      '交货：${DateFormatUtil.formatYMD(
-                                          entry.deliveryDate)}')
+                                      '交货：${DateFormatUtil.formatYMD(entry.deliveryDate)}')
                                 ],
                               ),
                               Row(

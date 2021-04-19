@@ -231,7 +231,9 @@ class _ReconciliationOrderDetailPageState
 
   Widget _buildDocs() {
     return Row(children: [
-      for (DocSignatureModel doc in order?.docSignatures ?? []) _buildBtn(doc)
+      for (DocSignatureModel doc in (order.docSignatures ?? [])
+          .where((element) => element.state != DocSignatureState.CANCELED))
+        _buildBtn(doc)
     ]);
   }
 
@@ -277,8 +279,7 @@ class _ReconciliationOrderDetailPageState
         clickClose: false,
         crossPage: false,
         backgroundColor: Colors.black38,
-        toastBuilder: (cancelFunc) =>
-            AlertDialog(
+        toastBuilder: (cancelFunc) => AlertDialog(
               content: Container(
                 height: 100,
                 child: Column(

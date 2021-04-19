@@ -67,7 +67,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
               builder: _buildItem,
               itemCount: widget.galleryItems.length,
               loadingBuilder: (context, event) =>
-              widget.loadingChild ??
+                  widget.loadingChild ??
                   Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -140,15 +140,15 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
       //         minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       //         maxScale: PhotoViewComputedScale.covered * 1.1,
       //         heroAttributes: PhotoViewHeroAttributes(tag: item.id),
-        //       )
-        //     :
-        PhotoViewGalleryPageOptions(
-      imageProvider: NetworkImage(item.model.detailUrl()),
-      initialScale: PhotoViewComputedScale.contained,
-      minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
-      maxScale: PhotoViewComputedScale.covered * 1.1,
-      heroAttributes: PhotoViewHeroAttributes(tag: item.model.id),
-    );
+      //       )
+      //     :
+      PhotoViewGalleryPageOptions(
+        imageProvider: NetworkImage(item.model.actualUrl),
+        initialScale: PhotoViewComputedScale.contained,
+        minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
+        maxScale: PhotoViewComputedScale.covered * 1.1,
+        heroAttributes: PhotoViewHeroAttributes(tag: item.model.id),
+      );
   }
 
   ///保存图片

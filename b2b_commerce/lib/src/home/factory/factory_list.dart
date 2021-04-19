@@ -132,11 +132,11 @@ class _FactoryListViewState extends State<FactoryListView> {
                       ),
                       Container(
                           child: Text(
-                            '未找到符合要求的工厂',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          )),
+                        '未找到符合要求的工厂',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      )),
                     ],
                   );
                 }
@@ -145,6 +145,7 @@ class _FactoryListViewState extends State<FactoryListView> {
                     children: snapshot.data.map((item) {
                       return FactoryItem(
                         model: item,
+                        showDistance: widget.isLocalFind,
                       );
                       // FactoryItem(
                       //   model: item,

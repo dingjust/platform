@@ -10,10 +10,10 @@ function resolve(dir) {
 module.exports = {
   entry: {
     app: ["babel-polyfill", "./src/main.js"],
-    vendor_jquery: ['jquery'],
-    vendor_echarts: ['echarts'],
-    vendor_tui_editor: ['tui-editor', 'highlight'],
-    vendor_codemirror: ['codemirror'],
+    // vendor_jquery: ['jquery'],
+    // vendor_echarts: ['echarts'],
+    // vendor_tui_editor: ['tui-editor', 'highlight'],
+    // vendor_codemirror: ['codemirror'],
   },
   output: {
     path: config.build.assetsRoot,
@@ -52,7 +52,7 @@ module.exports = {
           // resolve('node_modules/element-ui/src'),
           // resolve('node_modules/element-ui/packages'),
           // resolve('node_modules/_element-ui@2.13.2@element-ui/src'),
-          // resolve('node_modules/_element-ui@2.13.2@element-ui/packages'),          
+          // resolve('node_modules/_element-ui@2.13.2@element-ui/packages'),
         ]
       },
       {
@@ -83,7 +83,7 @@ module.exports = {
     ]
   },
   externals: {
-    'echarts':'echarts',
+    // 'echarts':'echarts',
     // 'xlsx':'XLSX',
  },
 };

@@ -142,14 +142,14 @@ class _Ability extends StatelessWidget {
   ///擅长品类
   String getAdeptCategoriesStr() {
     if (model.adeptAtCategories == null) return '';
-    if (model.adeptAtCategories.length > 5) {
-      return model.adeptAtCategories
-          .getRange(0, 5)
-          .map((e) => e.name)
-          .join(',');
-    } else {
-      return model.adeptAtCategories.map((e) => e.name).join(',');
-    }
+    // if (model.adeptAtCategories.length > 5) {
+    //   return model.adeptAtCategories
+    //       .getRange(0, 5)
+    //       .map((e) => e.name)
+    //       .join(',');
+    // } else {
+    return model.adeptAtCategories.map((e) => e.name).join(',');
+    // }
   }
 }
 

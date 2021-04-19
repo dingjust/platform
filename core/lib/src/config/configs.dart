@@ -16,7 +16,7 @@ class GlobalConfigs {
   // 生产
   static const CONTEXT_PATH = 'https://ht.nbyjy.net';
 
-  //全站加速
+  // 全站加速
   static const MEDIA_CONTEXT_PATH = 'https://ht.nbyjy.net';
 
   //   // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';

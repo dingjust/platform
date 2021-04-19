@@ -57,12 +57,16 @@ class _CompanyCertificateInfoState extends State<CompanyCertificateInfo> {
       if (response == null) {
         BotToast.showText(text: '未知错误');
       } else {
-        ///未认证
+        //未认证
         if (response.code == 0) {
           info = AuthenticationInfoModel();
         } else {
           info = AuthenticationInfoModel.fromJson(response.data);
           type = response.resultCode;
+          //经营执照水印处理
+          String imageProcess =
+              'image_process=watermark,text_6ZKJ5Y2V,fill_1,color_F5F5F5,t_50';
+          info.certImg.url = '${info.certImg.url}?$imageProcess';
         }
       }
     }
