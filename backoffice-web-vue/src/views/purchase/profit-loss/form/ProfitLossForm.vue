@@ -125,6 +125,9 @@ export default {
           let entries = [];
           taskTable.forEach(item => {
             entries = entries.concat(item.plRows.filter(v => v.colors.length > 0).map(val => {
+              // 所有成本单类型都为 PRODUCT,不然会报 未知类型
+              val.costOrder.type = 'PRODUCT';
+
               return {
                 id: val.id ? val.id : null,
                 productionTaskOrderId: val.productionTaskOrderId,

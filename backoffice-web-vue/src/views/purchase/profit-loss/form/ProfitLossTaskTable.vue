@@ -168,8 +168,8 @@ export default {
           countRow: '合计',
           totalQuantity: this.countColumn(this.plRows, 'totalQuantity').toFixed(0),
           totalContractAmount: this.countColumn(this.plRows, 'totalContractAmount').toFixed(2),
-          totalCostAmount: this.countColumn(this.plRows, 'totalCostAmount').toFixed(2),
-          totalAmount: this.countColumn(this.plRows, 'totalAmount').toFixed(2)
+          totalCostAmount: this.countColumn(this.plRows, 'totalCostAmount').toFixed(4),
+          totalAmount: this.countColumn(this.plRows, 'totalAmount').toFixed(4)
         });
       }
 
@@ -444,6 +444,7 @@ export default {
           totalAmount: item.totalAmount,
           additionalCharges: item.additionalCharges ? item.additionalCharges.map(val => {
             return {
+              id: val.id ? val.id : null,
               remarks: val.remarks,
               amount: val.amount,
               key: this.item.additionalCharges.filter(v => v.remarks === val.remarks)[0].key

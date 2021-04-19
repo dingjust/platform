@@ -35,15 +35,15 @@
           </template>
         </el-table-column>
         <el-table-column label="成本总额" prop="totalCostAmount"></el-table-column>
-        <template v-if="taskRow[0].additionalCharges && taskRow[0].additionalCharges.length > 0">
-          <el-table-column v-for="(column, index) in taskRow[0].additionalCharges" :key="column.id">
+        <template v-if="showAdditionalCharges">
+          <el-table-column v-for="(column, index) in additionalCharges" :key="column.id">
             <template slot="header" slot-scope="scope">
               <div style="display: flex;align-items: center">
                 <span>{{column.remarks}}</span>
               </div>
             </template>
             <template slot-scope="scope">
-              <span v-if="scope.row.additionalCharges">{{scope.row.additionalCharges[index].amount}}</span>
+              <span v-if="scope.row.additionalCharges">{{additionVal(column, scope.row.additionalCharges)}}</span>
             </template>
           </el-table-column>
         </template>
@@ -80,6 +80,9 @@ export default {
     CostOrderDetail
   },
   computed: {
+    showAdditionalCharges: function () {
+      return this.taskRow.some(item => item.additionalCharges && item.additionalCharges.length > 0);
+    },
     tableData: function () {
       let stack = [];
       stack = stack.concat(this.taskRow);
@@ -105,10 +108,15 @@ export default {
   data () {
     return {
       costVisible: false,
-      costId: null
+      costId: null,
+      additionalCharges: []
     }
   },
   methods: {
+    additionVal (column, additionalCharges) {
+      const index = additionalCharges.findIndex(item => item.remarks === column.remarks);
+      return index > -1 ? additionalCharges[index].amount : '';
+    },
     onCostDetail (row) {
       this.costVisible = true;
       this.costId = row.costOrder.id;
@@ -153,10 +161,10 @@ export default {
                 modelName: item.specList[0].modelName ? item.specList[0].modelName : '',
                 specName: item.specList[0].specName ? item.specList[0].specName : '',
                 colorName: item.specList[0].colorName ? item.specList[0].colorName : '',
-                unitQuantity: row.totalQuantity,
+                unitQuantity: item.specList[0].unitQuantity ? item.specList[0].unitQuantity : '',
                 estimatedLoss: item.specList[0].estimatedLoss ? item.specList[0].estimatedLoss : '',
                 estimatedUsage: item.specList[0].estimatedUsage ? item.specList[0].estimatedUsage : '',
-                orderCount: item.specList[0].orderCount ? item.specList[0].orderCount : '',
+                orderCount: row.totalQuantity,
                 emptySent: item.specList[0].emptySent ? item.specList[0].emptySent : '',
                 requiredAmount: item.specList[0].requiredAmount ? item.specList[0].requiredAmount : '',
                 price: item.specList[0].price ? item.specList[0].price : '',
@@ -174,7 +182,23 @@ export default {
     },
     onPurchaseDetail (row) {
       this.$router.push('/purchase/requirement/' + row.purchaseTaskId);
+    },
+    initAdditionalCharges () {
+      if (this.showWhole && this.showAdditionalCharges) {
+        this.taskRow.forEach(item => {
+          item.additionalCharges.forEach(val => {
+            if (this.additionalCharges.findIndex(v => v.remarks === val.remarks) < 0) {
+              this.additionalCharges.push(val);
+            }
+          })
+        })
+      } else if (!this.showWhole) {
+        this.additionalCharges = this.taskRow[0].additionalCharges;
+      }
     }
+  },
+  mounted () {
+    this.initAdditionalCharges();
   }
 }
 </script>
