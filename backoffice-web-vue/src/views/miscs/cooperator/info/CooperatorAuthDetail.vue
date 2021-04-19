@@ -44,7 +44,8 @@
         <el-image v-if="detail.certImg"
           style="width: 100px; height: 100px; border-radius: 5px;"
           :src="detail.certImg.url"
-          :preview-src-list="[detail.certImg.url]">
+          :preview-src-list="[detail.certImg.url]"
+          :z-index="9999">
         </el-image>
       </el-row>
     </template>

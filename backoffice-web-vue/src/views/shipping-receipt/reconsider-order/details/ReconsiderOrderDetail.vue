@@ -116,7 +116,7 @@
       <el-row type="flex" justify="space-between" style="margin-top:20px">
         <el-col :span="6" :offset="2">
           <template v-for="(media,index) in formData.medias">
-            <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="mediasUrlList">
+            <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="mediasUrlList" :z-index="9999">
             </el-image>
           </template>
         </el-col>

@@ -2,7 +2,7 @@
   <div class="show-body">
     <!-- <el-row type="flex"> -->
     <template v-for="(item,index) in medias">
-      <el-image class="show-image" :src="item.url" :key="index" :preview-src-list="previewList">
+      <el-image class="show-image" :src="item.url" :key="index" :preview-src-list="previewList" :z-index="9999">
       </el-image>
     </template>
     <!-- </el-row> -->

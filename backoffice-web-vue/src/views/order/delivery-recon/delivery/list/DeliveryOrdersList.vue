@@ -13,7 +13,8 @@
               title="点击查看大图及更多"
               class="media-image"
               :src="scope.row.medias[0].url"
-              :preview-src-list="scope.row.medias.map(item => item.url)" />
+              :preview-src-list="scope.row.medias.map(item => item.url)" 
+              :z-index="9999"/>
           </template>
         </template>
       </el-table-column>

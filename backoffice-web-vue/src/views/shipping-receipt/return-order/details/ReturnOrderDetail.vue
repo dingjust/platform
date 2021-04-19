@@ -95,7 +95,7 @@
       </el-row>
       <el-row type="flex" style="margin-top:20px">
         <template v-for="(media,index) in formData.medias">
-          <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="mediasUrlList">
+          <el-image :key="'img'+index" class="image-item" :src="media.url" :preview-src-list="mediasUrlList" :z-index="9999">
           </el-image>
         </template>
       </el-row>

@@ -7,7 +7,7 @@
           <el-image
             style="width: 100px; height: 100px;border-radius: 9px"
             :src="slotData.details.pictures != null && slotData.details.pictures.length > 0 ? slotData.details.pictures[0].url : 'static/img/nopicture.png'"
-            :preview-src-list="picUrls">
+            :preview-src-list="picUrls" :z-index="9999">
           </el-image>
         </div>
       </el-col>

@@ -37,7 +37,8 @@
               :key="media.id"
               class="media-image"
               :src="media.url"
-              :preview-src-list="order.medias.map(item => item.url)" />
+              :preview-src-list="order.medias.map(item => item.url)" 
+              :z-index="9999"/>
           </template>
         </div>
       </el-row>
