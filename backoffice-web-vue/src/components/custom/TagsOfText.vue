@@ -9,6 +9,7 @@
       <el-tag class="elTagTextClass"
               style="margin-right: 10px"
               v-for="keyword of keywords"
+              :key="keyword"
               @close="onKeywordRemove(keyword)"
               closable>
         {{keyword}}

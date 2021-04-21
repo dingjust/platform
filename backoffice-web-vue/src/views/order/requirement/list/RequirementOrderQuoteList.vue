@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-row type="flex" v-for="item of page.content" align="middle" style="margin-top: 10px">
+    <el-row type="flex" v-for="item of page.content" :key="item.id" align="middle" style="margin-top: 10px">
       <el-col :span="18">
         <el-row type="flex">
           <el-col :span="3">

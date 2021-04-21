@@ -17,7 +17,7 @@
       </el-row>
       <el-row class="rowClass">
         <el-tag  size="mini" style="margin-right: 10px;" type="info">{{slotData.approvalStatus == 'approved' ? '已认证':'未认证'}}</el-tag>
-        <el-tag v-for="label of slotData.labels" size="mini" style="margin-right: 10px;margin-bottom: 10px;" type="danger">{{label.name}}</el-tag>
+        <el-tag v-for="(label, index) of slotData.labels" :key="index" size="mini" style="margin-right: 10px;margin-bottom: 10px;" type="danger">{{label.name}}</el-tag>
       </el-row>
       <el-row class="rowClass" type="flex" justify="space-between">
         <el-col :span="8">

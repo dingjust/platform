@@ -4,7 +4,7 @@
       <el-col :span="22">
         <el-row type="flex" justify="space-between" style="width: 100%">
           <el-col :span="12" style="margin-bottom: 8px"><h6>{{slotData.name}}</h6></el-col>
-          <el-tag v-for="label of slotData.labels"
+          <el-tag v-for="(label, index) of slotData.labels" :key="index"
                   style="padding: 0px 8px;height: 16px;line-height: 12px;margin-right: 5px;font-size: 10px;">
             {{label.name}}
           </el-tag>

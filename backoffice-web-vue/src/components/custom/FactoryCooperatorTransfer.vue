@@ -46,6 +46,7 @@
               <el-row>
                 <el-tag
                   v-for="(item,index) of majorCategories"
+                  :key="index"
                   :style="{'margin-right':(index+1) % 3 !== 0 ? '20px':'0px','color': '#0b0e0f', 'margin-bottom': '10px',  'cursor': 'pointer', }"
                   :color="factoryQueryFormData.categories.indexOf(item.code) > -1 ? '#FFD60C' : '#ffffff'"
                   @click="handleMajorCategoriesTagClick(item)"
@@ -57,6 +58,7 @@
               <el-row type="flex" justify="space-around">
                 <el-tag
                   v-for="(item,index) of machiningTypes"
+                  :key="index"
                   class="elTagClass"
                   :color="factoryQueryFormData.machiningTypes.indexOf(item.code) > -1 ? '#FFD60C' : '#ffffff'"
                   @click="handleMachiningTypesTagClick(item)"
@@ -68,6 +70,7 @@
               <el-row>
                 <el-tag
                   v-for="(item,index) of populationScales"
+                  :key="index"
                   class="elTagClass"
                   :color="factoryQueryFormData.populationScales.indexOf(item.code) > -1 ? '#FFD60C' : '#ffffff'"
                   @click="handlePopulationScalesTagClick(item)"
@@ -79,6 +82,7 @@
               <el-row>
                 <el-tag
                   v-for="(item,index) of labels"
+                  :key="index"
                   class="elTagClass"
                   :color="factoryQueryFormData.labels.indexOf(item.id) > -1 ? '#FFD60C' : '#ffffff'"
                   @click="handleLabelsTagClick(item)"
@@ -93,25 +97,29 @@
             <el-input v-model="cooperatorQueryFormData.keyword" placeholder="请输入合作商名称" ></el-input>
             <el-button @click="onSearch">搜索</el-button>
           </el-row>
-          <div v-if="!isFactorySelection" v-for="item of cooperatorPage.content" style="margin-bottom: 10px">
-            <cooperator-item
-              class="transfer-item"
-              :slotData="item"
-              :selectedTip="selectTempUids.indexOf(item.partner.uid) > -1 ? '该工厂已选择' : selectedTip"
-              :isSelected="isCooperatorSelected(item)"
-              @handleCooperatorSelectionChange="handleCooperatorSelect">
+          <div v-if="!isFactorySelection">
+            <div v-for="(item, index) of cooperatorPage.content" :key="index" style="margin-bottom: 10px">
+              <cooperator-item
+                class="transfer-item"
+                :slotData="item"
+                :selectedTip="selectTempUids.indexOf(item.partner.uid) > -1 ? '该工厂已选择' : selectedTip"
+                :isSelected="isCooperatorSelected(item)"
+                @handleCooperatorSelectionChange="handleCooperatorSelect">
 
-            </cooperator-item>
+              </cooperator-item>
+            </div>
           </div>
-          <div v-if="isFactorySelection" v-for="item of factoryPage.content" style="margin-bottom: 10px">
-            <factory-item
-              class="transfer-item"
-              :slotData="item"
-              :selectedTip="selectTempUids.indexOf(item.uid) > -1 ? '该工厂已选择' : selectedTip"
-              :isSelected="isFactorySelected(item)"
-              @handleFactorySelectionChange="handleFactorySelect">
+          <div v-if="isFactorySelection">
+            <div v-for="(item, index) of factoryPage.content" :key="index" style="margin-bottom: 10px">
+              <factory-item
+                class="transfer-item"
+                :slotData="item"
+                :selectedTip="selectTempUids.indexOf(item.uid) > -1 ? '该工厂已选择' : selectedTip"
+                :isSelected="isFactorySelected(item)"
+                @handleFactorySelectionChange="handleFactorySelect">
 
-            </factory-item>
+              </factory-item>
+            </div>
           </div>
           <el-row type="flex" style="position:sticky; bottom:0;background-color: white">
             <el-pagination v-if="!isFactorySelection" layout="total, sizes, prev, pager, next, jumper" small
@@ -144,7 +152,7 @@
       </el-col>
       <el-col :span="11">
         <div style="padding: 10px;border:1px solid #c8c8c8;border-radius: 8px;height: 400px;overflow:scroll;">
-          <div v-for="item of selectCooperators" style="margin-bottom: 10px">
+          <div v-for="(item, index) of selectCooperators" :key="index" style="margin-bottom: 10px">
             <cooperator-item
               class="transfer-item"
               :slotData="item"
@@ -154,7 +162,7 @@
 
             </cooperator-item>
           </div>
-          <div v-for="item of selectFactories" style="margin-bottom: 10px">
+          <div v-for="(item, index) of selectFactories" :key="index" style="margin-bottom: 10px">
               <factory-item
                 class="transfer-item"
                 :slotData="item"

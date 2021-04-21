@@ -65,7 +65,7 @@
         <template slot="label">
           <h6 class="titleTextClass">风格</h6>
         </template>
-        <el-tag v-for="val of styles" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
+        <el-tag v-for="val of styles" :key="val.code" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
                 @click="handleTagClick(val)" size="medium">
                 {{val.name}}
         </el-tag>

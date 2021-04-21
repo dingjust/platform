@@ -113,7 +113,7 @@
               <h6 class="titleTextClass">生产大类<span style="color: red">*</span></h6>
             </template>
             <el-tag v-for="val of majorCategories" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
-                    @click="handleTagClick(val)" size="medium">
+                    @click="handleTagClick(val)" size="medium" :key="val.id">
               {{val.name}}
             </el-tag>
           </el-form-item>

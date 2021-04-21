@@ -9,7 +9,7 @@
       <h6 style="color: grey;font-size: 10px">建议上传图片的分辨率尺寸为16:9</h6>
     </el-row>
     <div>
-      <el-row type="flex" v-for="item of profiles" style="margin-bottom: 60px">
+      <el-row type="flex" v-for="(item, index) of profiles" :key="index" style="margin-bottom: 60px">
         <el-col :span="8">
           <images-upload :limit="1" :picClass="true" :slot-data="item.medias" >
           </images-upload>

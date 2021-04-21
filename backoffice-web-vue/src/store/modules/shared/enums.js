@@ -1030,25 +1030,43 @@ const state = {
     }
   ],
   // 质量等级
-  FactoryQualityLevel: [{
+  FactoryQualityLevel: [
+    {
       code: 'A_CHAIN',
       name: '一线大牌'
-    },
-    {
+    }, {
+      code: 'LEVEL01',
+      name: '二线品牌'
+    }, {
+      code: 'LEVEL02',
+      name: '三线品牌'
+    }, {
+      code: 'LEVEL03',
+      name: '三线以下'
+    }, {
       code: 'REGIONAL_CHAIN',
       name: '区域品牌'
-    },
-    {
+    }, {
       code: 'STALL_WHOLESALE',
       name: '档口精品'
-    },
-    {
+    }, {
+      code: 'LEVEL04',
+      name: '档口跑量'
+    }, {
       code: 'ELECTRONIC_COMMERCE_QUALITY',
       name: '电商品质'
-    },
-    {
+    }, {
+      code: 'LEVEL05',
+      name: '电商高品质'
+    }, {
       code: 'WHOLESALE_TRADE',
       name: '外贸跑量'
+    }, {
+      code: 'LEVEL06',
+      name: '电商跑量'
+    }, {
+      code: 'LEVEL07',
+      name: '跨境电商'
     }
   ],
   // 裁剪部
@@ -1480,25 +1498,43 @@ const state = {
     name: '已确定'
   }],
   // 质量等级
-  SalesMarkets: [{
+  SalesMarkets: [
+    {
       code: 'A_CHAIN',
       name: '一线大牌'
-    },
-    {
+    }, {
+      code: 'LEVEL01',
+      name: '二线品牌'
+    }, {
+      code: 'LEVEL02',
+      name: '三线品牌'
+    }, {
+      code: 'LEVEL03',
+      name: '三线以下'
+    }, {
       code: 'REGIONAL_CHAIN',
       name: '区域品牌'
-    },
-    {
+    }, {
       code: 'STALL_WHOLESALE',
       name: '档口精品'
-    },
-    {
+    }, {
+      code: 'LEVEL04',
+      name: '档口跑量'
+    }, {
       code: 'ELECTRONIC_COMMERCE_QUALITY',
       name: '电商品质'
-    },
-    {
+    }, {
+      code: 'LEVEL05',
+      name: '电商高品质'
+    }, {
       code: 'WHOLESALE_TRADE',
       name: '外贸跑量'
+    }, {
+      code: 'LEVEL06',
+      name: '电商跑量'
+    }, {
+      code: 'LEVEL07',
+      name: '跨境电商'
     }
   ],
   // 有效期限

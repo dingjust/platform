@@ -126,7 +126,7 @@
                 <h6 class="titleTextClass">加工类型</h6>
               </template>
               <el-radio-group v-model="formData.details.machiningType">
-                <el-radio v-for="item of machiningTypes" border :label="item.code">{{item.name}}</el-radio>
+                <el-radio v-for="item of machiningTypes" border :label="item.code" :key="item.code">{{item.name}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>

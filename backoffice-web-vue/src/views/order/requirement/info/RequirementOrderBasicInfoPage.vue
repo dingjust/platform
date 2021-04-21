@@ -106,7 +106,7 @@
           <h6 class="titleTextClass2">附件</h6>
         </el-col>
         <el-col>
-          <el-row type="flex" align="middle" v-for="item of slotData.attachments">
+          <el-row type="flex" align="middle" v-for="(item, index) of slotData.attachments" :key="index">
               <h6 class="contentTextClass" style="margin-right: 20px">{{getFileName(item.url)}}</h6>
               <el-link class="linkClass" :href="item.url" :download="getFileName(item.url)" target="_blank" :underline="false">下载</el-link>
           </el-row>

@@ -1,18 +1,14 @@
 <template>
   <div class="material-append-table">
-    <el-row type="flex">
-      <el-col :span="12">
-        <el-row type="flex" justify="end">
-          <h6>添加物料</h6>
-        </el-row>
-      </el-col>
-      <el-col :span="12">
-        <el-row type="flex" justify="end">
-          <!-- <el-button type="text" @click="importVisible=true">批量导入</el-button> -->
+    <el-row type="flex" align="middle" style="margin-top: 20px;">
+      <el-col :offset="12" :span="12">
+        <el-row type="flex" justify="space-between" align="middle">
+          <h6 style="margin: 0px">添加物料</h6>
+          <!-- <el-button style="padding: 0px" type="text" @click="importVisible=true">批量导入</el-button> -->
         </el-row>
       </el-col>
     </el-row>
-    <el-form ref="form" :model="entries" :hide-required-asterisk="true">
+    <el-form ref="form" :model="entries">
       <el-table ref="resultTable" stripe :data="entries.workOrders" :height="autoHeight">
         <el-table-column label="物料类别" prop="materialsType" min-width="100px">
           <template slot="header">
@@ -34,7 +30,6 @@
           </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.name'" :rules="[{required: true, message: '必填', tigger: 'change'}]">
-              <!-- <el-input v-model="scope.row.name" style="width: 90px"></el-input> -->
                 <el-autocomplete class="inline-input"
                   style="width: 140px"
                   v-model="scope.row.name"
@@ -47,36 +42,27 @@
         </el-table-column>
         <el-table-column label="物料编号" prop="code" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.code'">
-              <el-input v-model="scope.row.code" style="width: 90px"></el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.code" class="table-input"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="成分" prop="composition" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item>
-              <el-input v-model="scope.row.composition"></el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.composition" class="table-input"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="用途" prop="purpose" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item>
-              <el-input v-model="scope.row.purpose"></el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.purpose" class="table-input"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="幅宽/型号" prop="modelName" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.modelName'">
-              <el-input v-model="scope.row.modelName" style="width: 90px"></el-input>
-            </el-form-item>
-          </template></el-table-column>
+              <el-input v-model="scope.row.modelName" class="table-input"></el-input>
+          </template>
+        </el-table-column>
         <el-table-column label="克重/规格" prop="specName" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item>
-              <el-input v-model="scope.row.specName" style="width: 90px"></el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.specName" class="table-input"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="物料单位" prop="unit" min-width="100px">
@@ -85,7 +71,6 @@
           </template>
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.unit'" :rules="[{required: true, message: '必填', tigger: 'blur'}]">
-              <!-- <el-input v-model="scope.row.unit" style="width: 90px"></el-input> -->
               <el-select v-model="scope.row.unit" style="width: 90px">
                 <el-option v-for="unit in unitsOpt" :key="unit" :label="unit" :value="unit"></el-option>
               </el-select>
@@ -94,9 +79,7 @@
         </el-table-column>
         <el-table-column label="物料颜色" prop="colorName" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item :prop="'workOrders.' + scope.$index + '.colorName'">
-              <el-input v-model="scope.row.colorName" style="width: 90px"></el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.colorName" class="table-input"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单件用量" prop="unitQuantity" min-width="100px">
@@ -106,6 +89,7 @@
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.unitQuantity'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.unitQuantity" style="width: 90px" 
+                        @change="inputChange(scope.row, 'unitQuantity')"
                         v-number-input.float="{ min: 0, decimal: 4 }"></el-input>
             </el-form-item>
           </template>
@@ -117,6 +101,7 @@
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedLoss'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.estimatedLoss" style="width: 90px"
+                        @change="inputChange(scope.row, 'estimatedLoss')"
                         v-number-input.float="{ min: 0, max: 100, decimal: 0 }">
                 <span slot="suffix">%</span>
               </el-input>
@@ -124,13 +109,8 @@
           </template>
         </el-table-column>
         <el-table-column label="预计用量" prop="estimatedUsage" min-width="100px">
-          <template slot="header">
-            <span>预计用量<span style="color: #F56C6C"> *</span></span>
-          </template>
           <template slot-scope="scope">
-            <el-form-item>
-              <span>{{getExpectQuantity(scope.$index)}}</span>
-            </el-form-item>
+            <h6 class="table-input table-text">{{getExpectQuantity(scope.row)}}</h6>
           </template>
         </el-table-column>
         <el-table-column label="订单数" prop="orderCount" min-width="100px">
@@ -141,35 +121,28 @@
             <el-form-item :prop="'workOrders.' + scope.$index + '.orderCount'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-if="singleton" v-model="scope.row.orderCount" style="width: 90px" :disabled="true"></el-input>
               <el-input v-else v-model="scope.row.orderCount" style="width: 90px"
+                        @change="inputChange(scope.row, 'orderCount')"
                         v-number-input.float="{ min: 0, decimal: 0 }"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
         <el-table-column label="空差" prop="emptySent" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item>
-              <el-input v-model="scope.row.emptySent" style="width: 90px" placeholder="100"
-                        v-number-input.float="{ min: 0, max: 100, decimal: 0 }">
-                <span slot="suffix">%</span>
-              </el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.emptySent" class="table-input" placeholder="100"
+                      @change="inputChange(scope.row, 'emptySent')"
+                      v-number-input.float="{ min: 0, max: 100, decimal: 0 }">
+              <span slot="suffix" style="top: 4px">%</span>
+            </el-input>
           </template>
         </el-table-column>
         <el-table-column label="需求数量" prop="requiredAmount" min-width="100px">
-          <template slot="header">
-            <span>需求数量<span style="color: #F56C6C"> *</span></span>
-          </template>
           <template slot-scope="scope">
-            <el-form-item>
-              <span>{{getNeedQuantity(scope.$index)}}</span>
-            </el-form-item>
+            <h6 class="table-input table-text">{{getNeedQuantity(scope.row)}}</h6>
           </template>
         </el-table-column>
         <el-table-column label="供应商" prop="cooperatorName" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item>
-              <el-input v-model="scope.row.cooperatorName" style="width: 90px"></el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.cooperatorName" class="table-input"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="物料单价" prop="price" min-width="100px">
@@ -179,69 +152,47 @@
           <template slot-scope="scope">
             <el-form-item :prop="'workOrders.' + scope.$index + '.price'" :rules="[{required: true, validator: validateValue, tigger: 'change'}]">
               <el-input v-model="scope.row.price" style="width: 90px"
+                        @change="inputChange(scope.row, 'price')"
                         v-number-input.float="{ min: 0, decimal: 4 }"></el-input>
             </el-form-item>
           </template>
         </el-table-column>
         <el-table-column label="实际金额" prop="totalPrice" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item>
-              <span>{{getTotalPrice(scope.$index)}}</span>
-            </el-form-item>
+            <h6 class="table-input table-text">{{getTotalPrice(scope.row)}}</h6>
           </template>
         </el-table-column>
         <el-table-column label="报价损耗" prop="quoteLossRate" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item>
-              <el-input v-model="scope.row.quoteLossRate" style="width: 90px" placeholder="0"
-                        v-number-input.float="{ min: 0, max: 100, decimal: 0 }">
-                <span slot="suffix">%</span>
-              </el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.quoteLossRate" class="table-input" placeholder="0"
+                      v-number-input.float="{ min: 0, max: 100, decimal: 0 }">
+              <span slot="suffix" style="top: 4px">%</span>
+            </el-input>
           </template>
         </el-table-column>
         <el-table-column label="报价金额" prop="quoteAmount" min-width="100px">
           <template slot-scope="scope">
-            <el-form-item>
-              <el-input v-model="scope.row.quoteAmount" style="width: 90px"
-                        v-number-input.float="{ min: 0, decimal: 4 }"></el-input>
-            </el-form-item>
+            <el-input v-model="scope.row.quoteAmount" class="table-input"
+                      v-number-input.float="{ min: 0, decimal: 4 }"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="到料时间" prop="estimatedRecTime" min-width="150px">
-          <!-- <template slot="header">
-            <span>到料时间<span style="color: #F56C6C"> *</span></span>
-          </template> -->
           <template slot-scope="scope">
-            <!-- <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedRecTime'" :rules="[{required: true, type: 'number',message: '必填', tigger: 'blur'}]"> -->
-            <el-form-item :prop="'workOrders.' + scope.$index + '.estimatedRecTime'" >
-              <el-date-picker
-                v-model="scope.row.estimatedRecTime"
-                type="date"
-                value-format="timestamp"
-                style="width: 130px"
-                placeholder="选择日期">
-              </el-date-picker>
-            </el-form-item>
+            <el-date-picker
+              v-model="scope.row.estimatedRecTime"
+              type="date"
+              value-format="timestamp"
+              class="table-input"
+              style="width: 130px"
+              placeholder="选择日期">
+            </el-date-picker>
           </template>
         </el-table-column>
         <el-table-column label="备注" prop="remarks" min-width="150px">
           <template slot-scope="scope">
-            <el-form-item>
-              <el-input el-input v-model="scope.row.remarks"></el-input>
-            </el-form-item>
+            <el-input class="table-input" v-model="scope.row.remarks"></el-input>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="是否批色" prop="auditColor" min-width="110px">
-          <template slot-scope="scope">
-            <el-form-item>
-              <el-select v-model="scope.row.auditColor" style="width:90px" placeholder="否">
-                <el-option label="是" :value="true"></el-option>
-                <el-option label="否" :value="false"></el-option>
-              </el-select>
-            </el-form-item>
-          </template>
-        </el-table-column> -->
         <el-table-column label="操作" min-width="100px" fixed="right">
           <template slot-scope="scope">
             <el-form-item>
@@ -282,36 +233,43 @@ export default {
       this.entries.workOrders = data;
       this.importVisible = false;
     },
-    getExpectQuantity (index) {
+    inputChange (row, attribute) {
+      const regexp = /^.*\.$/;
+      if (regexp.test(row[attribute])) {
+        row[attribute] = Number.parseInt(row[attribute]);
+      }
+    },
+    getExpectQuantity (row) {
       let count = 0;
-      let unitQuantity = Number.parseFloat(this.entries.workOrders[index].unitQuantity);
-      let estimatedLoss = Number.parseFloat(this.entries.workOrders[index].estimatedLoss);
+      let unitQuantity = Number.parseFloat(row.unitQuantity);
+      let estimatedLoss = Number.parseFloat(row.estimatedLoss);
       if (!Number.isNaN(unitQuantity) && !Number.isNaN(estimatedLoss)) {
         count = unitQuantity * (1 + estimatedLoss / 100);
       }
-      this.entries.workOrders[index].estimatedUsage = count.toFixed(4);
+      row.estimatedUsage = count.toFixed(4);
       return count.toFixed(4);
     },
-    getNeedQuantity (index) {
+    getNeedQuantity (row) {
       let count = 0;
-      const estimatedUsage = this.getExpectQuantity(index);
+      const estimatedUsage = this.getExpectQuantity(row);
 
-      let orderCount = Number.isNaN(Number.parseFloat(this.entries.workOrders[index].orderCount)) ? 
-                                    0 : Number.parseFloat(this.entries.workOrders[index].orderCount);
-      let emptySent = Number.isNaN(Number.parseFloat(this.entries.workOrders[index].emptySent)) ? 
-                                    100 : Number.parseFloat(this.entries.workOrders[index].emptySent);
+      let orderCount = Number.isNaN(Number.parseFloat(row.orderCount)) ? 
+                                    0 : Number.parseFloat(row.orderCount);
+      let emptySent = Number.isNaN(Number.parseFloat(row.emptySent)) ? 
+                                    100 : Number.parseFloat(row.emptySent);
 
       count = estimatedUsage * orderCount / (emptySent / 100);
-      this.entries.workOrders[index].requiredAmount = count.toFixed(4);
+      row.requiredAmount = count.toFixed(4);
       return count.toFixed(4);
     },
-    getTotalPrice (index) {
+    getTotalPrice (row) {
       let count = 0;
-      let price = Number.parseFloat(this.entries.workOrders[index].price);
+      let price = Number.parseFloat(row.price);
       if (!Number.isNaN(price)) {
-        count = price * this.getNeedQuantity(index);
+        const needQuantity = this.getNeedQuantity(row);
+        count = price * needQuantity;
       }
-      this.entries.workOrders[index].totalPrice = count.toFixed(4);
+      row.totalPrice = count.toFixed(4);
       return count.toFixed(4);
     },
     onAdd (index, row) {
@@ -359,11 +317,7 @@ export default {
       })
     },
     _onImport () {
-      // const flag = this.checkRepeat(this.entries.workOrders);
-
-      // if (flag) {
-        this.$emit('onSelect', this.arrangeData(this.entries.workOrders));
-      // }
+      this.$emit('onSelect', this.arrangeData(this.entries.workOrders));
     },
     arrangeData (materials) {
       let result = [];
@@ -387,32 +341,6 @@ export default {
       })
       return result;
     },
-    // checkRepeat (materials) {
-    //   let stark = [];
-
-    //   stark = stark.concat(materials);
-
-    //   let repeat;
-    //   let formRepeat;
-    //   while (stark.length) {
-    //     let temp = stark.shift();
-    //     repeat = stark.filter(item => item.code === temp.code);
-    //     if (repeat.length > 0) {
-    //       if (repeat.filter(val => val.name === temp.name && val.materialsType === temp.materialsType && val.unit === temp.unit && val.cooperatorName === temp.cooperatorName).length !== repeat.length) {
-    //         this.$message.warning('添加表单中存在相同物料编号 ' + temp.code + '，但名字、类型、单位，供应商其一不一致的物料，请先进行处理');
-    //         return false;
-    //       }
-    //     }
-    //     formRepeat = this.formData.workOrders.filter(item => item.code === temp.code);
-    //     if (formRepeat.length > 0) {
-    //       if (formRepeat.filter(val => val.name === temp.name && val.materialsType === temp.materialsType && val.unit === temp.unit && val.cooperatorName === temp.cooperatorName).length !== formRepeat.length) {
-    //         this.$message.warning('采购明细中已存在相同物料编号 ' + temp.code + '，但名字、类型、单位，供应商其一不一致的物料，请先进行处理');
-    //         return false;
-    //       }
-    //     }
-    //   }
-    //   return true;
-    // },
     validateValue (rule, value, callback) {
       if (value && value !== '') {
         callback();
@@ -521,12 +449,12 @@ export default {
 </script>
 
 <style scoped>
-  /deep/ .el-input__suffix {
+  .material-append-table >>> .el-input__suffix {
     display: flex;
     align-items: center;
   }
 
-  /deep/ .el-table--small td, .el-table--small th {
+  .material-append-table >>> .el-table--small td, .el-table--small th {
     padding: 8px 0px 0px 0px;
   }
 
@@ -534,7 +462,7 @@ export default {
     outline:none;
   }
    
-  /deep/ .el-table .warning-row {
+  .material-append-table >>> .el-table .warning-row {
     background: oldlace;
   }
 
@@ -544,4 +472,12 @@ export default {
     background-color: #ffd60c;
   }
 
+  .table-input {
+    margin-bottom: 18px;
+  }
+
+  .table-text {
+    font-weight: unset;
+    font-size: 12px;
+  }
 </style>

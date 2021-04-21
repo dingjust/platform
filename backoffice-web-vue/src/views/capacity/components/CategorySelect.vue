@@ -2,13 +2,13 @@
   <div class="animated fadeIn category-select">
     <el-row type="flex">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane v-for="(item,index) in listData" :label="item.name" :name="item.name">
+        <el-tab-pane v-for="(item,index) in listData" :label="item.name" :name="item.name" :key="index">
           <!-- <span slot="label" v-if="selectCounts[item.code]" >
             <el-badge :value="selectCounts[item.code]" class="item">
               {{item.name}}
             </el-badge>
           </span> -->
-          <el-tag  v-for="val of item.children" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
+          <el-tag  v-for="(val, i) of item.children" :key="i" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
             @click="handleTagClick(val)" size="medium">
             {{val.name}}
           </el-tag>

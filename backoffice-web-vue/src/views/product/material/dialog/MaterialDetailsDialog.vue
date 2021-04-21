@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn material-page">
     <el-row type="flex" justify="space-between" align="middle">
       <div class="material-list-title">
         <h6>{{isCreate && !formData.id ? '添加物料' : '物料详情'}}</h6>
@@ -100,18 +100,20 @@
                 </el-checkbox>
               </template>
             </el-checkbox-group>
-            <el-row type="flex" v-for="(color,index) in customColors" v-if="index%4 == 0">
-              <template v-for="(customColor) in customColors.slice(index,index+4)" >
-                <el-col :span="6">
-                  <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
-                    <el-input v-model="customColor.name" @change="editCustomColor(customColor)" :disabled="colorDisabled(customColor)"></el-input>
-                    <el-button type="text" @click="removeCustomColor(customColor)" :disabled="colorDisabled(customColor)"> 删除</el-button>
-                  </el-row>
-                </el-col>
+            <el-row type="flex" v-for="(color,index) in customColors" :key="index">
+              <template v-if="index%4 == 0">
+                <template v-for="(customColor, cusIndex) in customColors.slice(index,index+4)" >
+                  <el-col :span="6" :key="cusIndex">
+                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                      <el-input v-model="customColor.name" @change="editCustomColor(customColor)" :disabled="colorDisabled(customColor)"></el-input>
+                      <el-button type="text" @click="removeCustomColor(customColor)" :disabled="colorDisabled(customColor)"> 删除</el-button>
+                    </el-row>
+                  </el-col>
+                </template>
+                <el-row type="flex" v-if="Math.floor(index/4) == Math.floor(customColors.length/4)">
+                  <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
+                </el-row>
               </template>
-              <el-row type="flex" v-if="Math.floor(index/4) == Math.floor(customColors.length/4)">
-                <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
-              </el-row>
             </el-row>
             <el-row type="flex" v-if="customColors.length%4 == 0">
               <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
@@ -122,14 +124,16 @@
             <el-row type="flex" style="margin-bottom: 18px">
               <h6>规格/克重</h6>&nbsp;&nbsp;<h6>最多支持30个规格</h6>
             </el-row>
-            <el-row type="flex" align="middle" v-for="(specItem,index) in formData.specs" v-if="index % 4 == 0">
-              <template  v-for="(spec) in formData.specs.slice(index, index+4)">
-                <el-col :span="6">
-                  <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
-                    <el-input ref="input" v-model="spec.name" @change="editSpec(spec)" :disabled="specDisabled(spec)"></el-input>
-                    <el-button type="text" @click="removeSpec(spec)" :disabled="specDisabled(spec)">删除</el-button>
-                  </el-row>
-                </el-col>
+            <el-row type="flex" align="middle" v-for="(specItem,index) in formData.specs" :key="index">
+              <template v-if="index % 4 == 0">
+                <template  v-for="(spec, specIndex) in formData.specs.slice(index, index+4)">
+                  <el-col :span="6" :key="specIndex">
+                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                      <el-input ref="input" v-model="spec.name" @change="editSpec(spec)" :disabled="specDisabled(spec)"></el-input>
+                      <el-button type="text" @click="removeSpec(spec)" :disabled="specDisabled(spec)">删除</el-button>
+                    </el-row>
+                  </el-col>
+                </template>
               </template>
             </el-row>
             <el-row type="flex">
@@ -141,14 +145,16 @@
             <el-row type="flex" style="margin-bottom: 18px">
               <h6>尺寸/型号</h6>&nbsp;&nbsp;<h6>最多支持30个规格</h6>
             </el-row>
-            <el-row type="flex" align="middle" v-for="(modelItem,index) in formData.models" v-if="index % 4 == 0">
-              <template  v-for="(model) in formData.models.slice(index, index+4)">
-                <el-col :span="6">
-                  <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
-                    <el-input ref="input" v-model="model.name" @change="editModel(model)" :disabled="modelDisabled(model)"></el-input>
-                    <el-button type="text" @click="removeModel(model)" :disabled="modelDisabled(model)">删除</el-button>
-                  </el-row>
-                </el-col>
+            <el-row type="flex" align="middle" v-for="(modelItem,index) in formData.models" :key="index">
+              <template v-if="index % 4 == 0">
+                <template  v-for="(model, modelIndex) in formData.models.slice(index, index+4)">
+                  <el-col :span="6" :key="modelIndex">
+                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                      <el-input ref="input" v-model="model.name" @change="editModel(model)" :disabled="modelDisabled(model)"></el-input>
+                      <el-button type="text" @click="removeModel(model)" :disabled="modelDisabled(model)">删除</el-button>
+                    </el-row>
+                  </el-col>
+                </template>
               </template>
             </el-row>
             <el-row type="flex">
@@ -613,13 +619,13 @@
     padding-bottom: 90px;
   }
 
-  /deep/ .el-upload--picture-card {
+  .material-page >>> .el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  /deep/ .el-upload-list--picture-card .el-upload-list__item {
+  .material-page >>> .el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }

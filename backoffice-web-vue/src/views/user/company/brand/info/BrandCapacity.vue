@@ -69,7 +69,7 @@
           <h6 class="titleTextClass">风格</h6>
         </el-col>
         <el-col :span="18">
-          <el-tag v-for="val of styles" class="elTagClass" color="#FFD60C" v-if="isSelected(val)" size="medium">
+          <el-tag v-for="val of styles" :key="val.code" class="elTagClass" color="#FFD60C" v-if="isSelected(val)" size="medium">
             {{val.name}}
           </el-tag>
         </el-col>

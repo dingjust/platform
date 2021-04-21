@@ -45,9 +45,7 @@
           </template>
         </el-table-column>
         <el-table-column label="单位" min-width="60">
-          <template slot-scope="scope">
-            <span>{{getEnum('MaterialsUnit', formData.materialsUnit)}}</span>
-          </template>
+          <span>{{getEnum('MaterialsUnit', formData.materialsUnit)}}</span>
         </el-table-column>
         <el-table-column prop="quantity" label="库存数量" min-width="80">
           <template slot-scope="scope">

@@ -2,14 +2,15 @@
   <div class="animated fadeIn enum-select">
     <el-row type="flex" >
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane v-for="(values, key) in mapData" :label="key" :name="key" >
+        <el-tab-pane v-for="(values, key) in mapData" :label="key" :name="key" :key="key">
           <span slot="label" v-if="mapSelectData[key].length > 0">
              <el-badge :value="mapSelectData[key].length" class="item">
                {{key}}
              </el-badge>
           </span>
           <el-tag
-            v-for="val of values"
+            v-for="(val, i) of values"
+            :key="i"
             class="elTagClass"
             :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
             @click="handleTagClick(key,val)"
