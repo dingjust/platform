@@ -10,22 +10,22 @@
 </template>
 
 <script>
-import * as echarts from "echarts/core";
-import {
-  TooltipComponent,
-  GridComponent,
-  LegendComponent,
-} from "echarts/components";
-import { BarChart } from "echarts/charts";
-import { CanvasRenderer } from "echarts/renderers";
+// import * as echarts from "echarts/core";
+// import {
+//   TooltipComponent,
+//   GridComponent,
+//   LegendComponent,
+// } from "echarts/components";
+// import { BarChart } from "echarts/charts";
+// import { CanvasRenderer } from "echarts/renderers";
 
-echarts.use([
-  TooltipComponent,
-  GridComponent,
-  LegendComponent,
-  BarChart,
-  CanvasRenderer,
-]);
+// echarts.use([
+//   TooltipComponent,
+//   GridComponent,
+//   LegendComponent,
+//   BarChart,
+//   CanvasRenderer,
+// ]);
 
 export default {
   name: "ProfitLossEcharts",

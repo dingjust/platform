@@ -1,54 +1,55 @@
 <template>
   <div class="animated fadeIn">
-<!--    <el-card>-->
-      <el-container>
-        <el-main>
+    <!--    <el-card>-->
+    <el-container>
+      <el-main>
+        <div>
+          <!--<el-row type="flex" justify="space-between" align="middle">-->
+          <!--<el-col :span="4">-->
+          <!--<div class="template-form-header">-->
+          <!--<h6>新建合同模板</h6>-->
+          <!--</div>-->
+          <!--</el-col>-->
+          <!--<el-col :span="4">-->
+          <!--            <div style="float:right;margin-bottom: 10px">-->
+          <!--                <el-button-group>-->
+          <!--&lt;!&ndash;                  <el-button @click="onBack">返回</el-button>&ndash;&gt;-->
+          <!--                </el-button-group>-->
+          <!--              &lt;!&ndash;</el-col>&ndash;&gt;-->
+          <!--              &lt;!&ndash;</el-row>&ndash;&gt;-->
+          <!--            </div>-->
           <div>
-            <!--<el-row type="flex" justify="space-between" align="middle">-->
-              <!--<el-col :span="4">-->
-                <!--<div class="template-form-header">-->
-                  <!--<h6>新建合同模板</h6>-->
-                <!--</div>-->
-              <!--</el-col>-->
-              <!--<el-col :span="4">-->
-<!--            <div style="float:right;margin-bottom: 10px">-->
-<!--                <el-button-group>-->
-<!--&lt;!&ndash;                  <el-button @click="onBack">返回</el-button>&ndash;&gt;-->
-<!--                </el-button-group>-->
-<!--              &lt;!&ndash;</el-col>&ndash;&gt;-->
-<!--              &lt;!&ndash;</el-row>&ndash;&gt;-->
-<!--            </div>-->
-            <div>
-              <el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>
-            </div>
-            <el-row class="contract_custom-row">
-              <el-input placeholder="请输入名称" size="mini" v-model="slotData.title" @blur="checkTempName"><template slot="prepend">合同模板名称</template>
-              </el-input>
-              <h6 style="color: #F56C6C;margin-left: 120px">{{this.passCheck?'': this.validateText}}</h6>
-            </el-row>
-            <el-row class="contract_custom-row">
-              <el-input placeholder="请输入备注" size="mini" v-model="slotData.remarks"><template slot="prepend">备注</template>
-              </el-input>
-            </el-row>
-            <el-row class="contract_custom-row"><span></span></el-row>
-            <el-row class="contract_custom-row text-align-left"><span>固定条款</span></el-row>
-            <el-row>
-              <div class="contract_custom-fixed_terms">
-                <Viewer :value="slotData.content" class="contract_custom-viewer" />
-              </div>
-            </el-row>
-            <el-row class="contract_custom-row text-align-left"><span>自定义条款</span></el-row>
-            <el-row>
-              <div class="contract_custom-fixed_terms">
-                <!--<Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />-->
-                <Editor v-model="slotData.customizeContent" :html="editorHtml" :options="editorOptions"
-                        :visible="editorVisible"  class="contract_custom-editor"/>
-              </div>
-            </el-row>
+            <el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>
           </div>
-        </el-main>
-      </el-container>
-<!--    </el-card>-->
+          <el-row class="contract_custom-row">
+            <el-input placeholder="请输入名称" size="mini" v-model="slotData.title" @blur="checkTempName"><template
+                slot="prepend">合同模板名称</template>
+            </el-input>
+            <h6 style="color: #F56C6C;margin-left: 120px">{{this.passCheck?'': this.validateText}}</h6>
+          </el-row>
+          <el-row class="contract_custom-row">
+            <el-input placeholder="请输入备注" size="mini" v-model="slotData.remarks"><template slot="prepend">备注</template>
+            </el-input>
+          </el-row>
+          <el-row class="contract_custom-row"><span></span></el-row>
+          <el-row class="contract_custom-row text-align-left"><span>固定条款</span></el-row>
+          <el-row>
+            <div class="contract_custom-fixed_terms">
+              <Viewer :value="slotData.content" class="contract_custom-viewer" />
+            </div>
+          </el-row>
+          <el-row class="contract_custom-row text-align-left"><span>自定义条款</span></el-row>
+          <el-row>
+            <div class="contract_custom-fixed_terms">
+              <!--<Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />-->
+              <Editor v-model="slotData.customizeContent" :html="editorHtml" :options="editorOptions"
+                :visible="editorVisible" class="contract_custom-editor" />
+            </div>
+          </el-row>
+        </div>
+      </el-main>
+    </el-container>
+    <!--    </el-card>-->
   </div>
 </template>
 <script>
@@ -63,9 +64,13 @@
     Editor
   } from '@toast-ui/vue-editor';
 
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
-  const {mapActions} = createNamespacedHelpers('ContractTemplateModule');
+  const {
+    mapActions
+  } = createNamespacedHelpers('ContractTemplateModule');
 
   export default {
     name: 'TemplateDetail',
@@ -75,20 +80,20 @@
         refresh: 'refresh',
         search: 'search'
       }),
-      onSelect (item) {
+      onSelect(item) {
         this.slotData.content = item.header;
         this.slotData.customizeContent = item.content;
         this.slotData.code = item.code;
         this.slotData.type = item.type;
       },
-      async getTemplate (code) {
+      async getTemplate(code) {
         const url = this.apis().getTemplates(code);
         const result = await this.$http.get(url);
       },
-      onBack () {
+      onBack() {
         this.fn.closeSlider(true);
       },
-      async onSave () {
+      async onSave() {
         if (this.slotData.title === this.originalTitle) {
           this.passCheck = true;
         }
@@ -121,13 +126,14 @@
         this.$emit('closeDetails');
         // this.fn.closeSlider(true);
       },
-      async checkTempName () {
+      async checkTempName() {
         this.passCheck = false;
         if (this.slotData.title === this.originalTitle) {
           this.passCheck = true;
           return;
         }
-        if (this.slotData.title == null || this.slotData.title == '' || this.slotData.title.replace(/(^\s*)|(\s*$)/g, '').length === 0) {
+        if (this.slotData.title == null || this.slotData.title == '' || this.slotData.title.replace(/(^\s*)|(\s*$)/g,
+            '').length === 0) {
           this.validateText = '请输入模板名称';
           return;
         }
@@ -147,7 +153,7 @@
         //   this.validateText = '模板名称重复，请重新输入';
         // }
       },
-      async getTemplateListPt () {
+      async getTemplateListPt() {
         const url = this.apis().getTemplatesListPt();
         const result = await http.post(url, {
           keyword: ''
@@ -158,7 +164,7 @@
         this.mockData = result.content;
       }
     },
-    data () {
+    data() {
       return {
         editorHtml: '',
         editorOptions: {
@@ -186,20 +192,20 @@
     },
 
     computed: {
-      contractName () {
+      contractName() {
         return this.propdata.contractName;
       }
     },
 
     watch: {
-      propdata (newValue, oldValue) {
-      }
+      propdata(newValue, oldValue) {}
     },
-    created () {
+    created() {
       // this.getTemplateListPt();
       this.originalTitle = this.slotData.title;
     }
   };
+
 </script>
 <style lang="scss" scoped>
   .template-file {
