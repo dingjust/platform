@@ -1,9 +1,10 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -70,6 +71,7 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
         child: ListView(
           children: [
             _buildSeal(),
+            _buildRebuildBtn(),
             Divider(),
             _buildName(),
             _buildSealName(),
@@ -111,6 +113,18 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
             }
           }),
     );
+  }
+
+  ///重新生成印章按钮
+  Widget _buildRebuildBtn() {
+    //Android不需要
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return Container();
+    } else {
+      return Container(
+        child: TextButton(onPressed: previewSeal, child: Text('预览印章')),
+      );
+    }
   }
 
   ///章名
@@ -192,6 +206,7 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
               controller: sealTitleController,
               focusNode: sealTitleFocusNode,
               onChanged: (v) {
+                print(v);
                 reGenerateSeal();
               },
             ),
@@ -265,6 +280,8 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
   }
 
   void _onSubmit() async {
+    await previewSeal();
+
     if (imgBytes == null) {
       BotToast.showText(text: '生成印章失败');
       throw Exception('[DingDan]印章生成失败');
@@ -276,10 +293,10 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
     }
 
     Function cancelFunc =
-        BotToast.showLoading(crossPage: false, clickClose: true);
+    BotToast.showLoading(crossPage: false, clickClose: true);
 
     BaseResponse response =
-        await SealRepository.create(imgBytes, sealNameController.text);
+    await SealRepository.create(imgBytes, sealNameController.text);
 
     cancelFunc.call();
     if (response != null && response.code == 1) {
@@ -302,6 +319,17 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
 
   ///重新生成印章
   void reGenerateSeal() async {
+    ByteData data = await _generateSeal();
+    //ANDROID平台直接刷新印章
+    if (defaultTargetPlatform == TargetPlatform.android)
+      setState(() {
+        imgBytes = data;
+      });
+    else //其他平台不刷新
+      imgBytes = data;
+  }
+
+  Future<void> previewSeal() async {
     ByteData data = await _generateSeal();
     setState(() {
       imgBytes = data;
