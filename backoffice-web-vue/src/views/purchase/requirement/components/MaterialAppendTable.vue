@@ -176,7 +176,7 @@
                       v-number-input.float="{ min: 0, decimal: 4 }"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="到料时间" prop="estimatedRecTime" min-width="150px">
+        <el-table-column label="到料时间" prop="estimatedRecTime" min-width="150px" v-if="!singleton">
           <template slot-scope="scope">
             <el-date-picker
               v-model="scope.row.estimatedRecTime"

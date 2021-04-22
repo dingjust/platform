@@ -61,6 +61,13 @@
           </el-input>
         </el-col>
       </el-row>
+      <el-row class="create-contract-row" v-if="contractType=='1'">
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="广东省广州市白云区" v-model="selectFile.signLocation">
+            <template slot="prepend">签订地点</template>
+          </el-input>
+        </el-col>
+      </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="请输入合同编号" v-model="contractCode">
@@ -280,7 +287,8 @@
           'agreementType': agreementType,
           'customizeCode': this.contractCode,
           'partnerCompanyCode': this.suppliers.id,
-          'customizeType': 'KJXY'
+          'customizeType': 'KJXY',
+          'signLocation': this.selectFile.signLocation !== '' ? this.selectFile.signLocation : '广东省广州市白云区'
         }
 
         if (this.contractType === '2') {

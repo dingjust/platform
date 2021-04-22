@@ -254,10 +254,22 @@ export default {
       this.editDialogVisible = true;
     },
     editCostForm (data) {
-      this.onSelectCost(data);
+      this._onSelectCost(data);
       this.editDialogVisible = false;
     },
     onSelectCost (data) {
+      data.customRows.forEach(item => {
+        item.id = null;
+        item.specList.forEach(val => val.id = null);
+      });
+      data.purchaseMaterials.forEach(item => {
+        item.id = null;
+        item.specList.forEach(val => val.id = null);
+      });
+
+      this._onSelectCost(data);
+    },
+    _onSelectCost (data) {
       if (!data) {
         this.plRows[this.handleIndex].unitCostAmount = 0;
         this.plRows[this.handleIndex].costOrder = {};
