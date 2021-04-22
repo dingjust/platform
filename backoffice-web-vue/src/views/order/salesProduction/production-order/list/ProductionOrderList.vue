@@ -97,7 +97,7 @@
       <el-table-column :key="14" label="操作" min-width="80">
         <template slot-scope="scope">
           <el-row>
-            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>
+            <el-button v-if="scope.row.state !== 'CANCED'" type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>
           </el-row>
         </template>
       </el-table-column>
