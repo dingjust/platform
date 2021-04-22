@@ -5,27 +5,27 @@
 </template>
 
 <script>
-import * as echarts from "echarts/core";
-import {
-  ToolboxComponent,
-  TooltipComponent,
-  GridComponent,
-  LegendComponent,
-} from "echarts/components";
-import { BarChart, LineChart } from "echarts/charts";
-import { CanvasRenderer } from "echarts/renderers";
+// import * as echarts from "echarts/core";
+// import {
+//   ToolboxComponent,
+//   TooltipComponent,
+//   GridComponent,
+//   LegendComponent,
+// } from "echarts/components";
+// import { BarChart, LineChart } from "echarts/charts";
+// import { CanvasRenderer } from "echarts/renderers";
 
-// var colors = ['#5793f3', '#d14a61', '#675bba'];
+// // var colors = ['#5793f3', '#d14a61', '#675bba'];
 
-echarts.use([
-  ToolboxComponent,
-  TooltipComponent,
-  GridComponent,
-  LegendComponent,
-  BarChart,
-  LineChart,
-  CanvasRenderer,
-]);
+// echarts.use([
+//   ToolboxComponent,
+//   TooltipComponent,
+//   GridComponent,
+//   LegendComponent,
+//   BarChart,
+//   LineChart,
+//   CanvasRenderer,
+// ]);
 
 export default {
   name: "ChartCard",

@@ -66,7 +66,7 @@
       ...mapMutations({
         setKeyword: 'keyword',
         setType: 'type',
-        type: 'type'
+        // type: 'type'
       }),
       onSearch () {
         this.setKeyword(this.keyword);
@@ -94,7 +94,7 @@
           size: 10
         });
         this.mockData = result.content.sort((o1, o2) => {
-          return this.templateSequence[o1.type] - this.templateSequence[o2.type]; 
+          return this.templateSequence[o1.type] - this.templateSequence[o2.type];
         });
       }
     },
@@ -121,7 +121,7 @@
         {
           code: 'KJXY',
           name: '框架协议'
-        }, 
+        },
         {
           code: 'ZFXY',
           name: '作废协议'
@@ -132,7 +132,7 @@
           KJXY: 2,
           BCXY: 3,
           ZFXY: 4
-        }, 
+        },
       };
     },
     created () {

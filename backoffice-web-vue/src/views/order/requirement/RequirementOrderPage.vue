@@ -40,7 +40,7 @@
 
     </el-card>
 
-    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false" :append-to-body	="true">
       <requirement-order-details-page v-if="detailsDialogVisible"
                                     :slotData="slotData"
                                     @onSearchQuotes="onSearchQuotes"
