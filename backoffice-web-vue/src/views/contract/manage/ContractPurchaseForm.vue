@@ -345,8 +345,7 @@
             'frameAgreementCode': frameAgreementCode,
             // 'orderCodes': this.orderSelectFiles.map((order) => order.code)
             'items': this.orderSelectFiles.map((order) => order.id),
-            'customizeType': 'CGDD',
-            'signLocation': this.selectFile.signLocation !== '' ? this.selectFile.signLocation : '广东省广州市白云区'
+            'customizeType': 'CGDD'
           }
 
           if (this.contractType === '2') {
@@ -437,7 +436,8 @@
             'frameAgreementCode': frameAgreementCode,
             // 'orderCodes': this.orderSelectFiles.map((order) => order.code)
             'items': this.orderSelectFiles.map((order) => order.id),
-            'customizeType': 'CGDD'
+            'customizeType': 'CGDD',
+            'signLocation': this.selectFile.signLocation !== '' ? this.selectFile.signLocation : '广东省广州市白云区'
           }
           const url = this.apis().saveContract();
           let formData = Object.assign({}, data);
