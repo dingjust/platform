@@ -7,7 +7,6 @@ import 'package:b2b_commerce/src/business/orders/sale/sale_order_detail_page.dar
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alipay/flutter_alipay.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
