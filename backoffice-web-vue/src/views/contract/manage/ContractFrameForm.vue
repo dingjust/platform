@@ -287,8 +287,7 @@
           'agreementType': agreementType,
           'customizeCode': this.contractCode,
           'partnerCompanyCode': this.suppliers.id,
-          'customizeType': 'KJXY',
-          'signLocation': this.selectFile.signLocation !== '' ? this.selectFile.signLocation : '广东省广州市白云区'
+          'customizeType': 'KJXY'
         }
 
         if (this.contractType === '2') {
@@ -355,7 +354,8 @@
           'title': '',
           'isFrame': true,
           'partnerCompanyCode': this.suppliers.id,
-          'customizeType': 'KJXY'
+          'customizeType': 'KJXY',
+          'signLocation': this.selectFile.signLocation !== '' ? this.selectFile.signLocation : '广东省广州市白云区'
         }
 
         const url = this.apis().saveContract();
