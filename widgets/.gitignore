@@ -17,3 +17,5 @@ ios/
 .metadata
 **/generated/
 .flutter-plugins
+
+/ios

@@ -5,6 +5,8 @@
 .pub/
 *.g.dart
 
+/ios
+
 build/
 ios/.generated/
 ios/Flutter/Generated.xcconfig
