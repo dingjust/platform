@@ -11,7 +11,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,7 +21,8 @@ import 'components/clip_widget.dart';
 class ProductDetailPage extends StatefulWidget {
   final String code;
 
-  ProductDetailPage(this.code, {
+  ProductDetailPage(
+    this.code, {
     Key key,
   }) : super(key: key);
 
@@ -42,10 +42,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     if (widget.code != null) {
       //数据埋点>>>看款详情
-      FlutterUmplus.event("order_product_detail_page", label: widget.code);
-
-      // //点击量
-      // ItemRepository().onDetail(data.id);
+      UmengPlugin.onEvent('order_product_detail_page',
+          properties: {'code': widget.code});
     }
   }
 

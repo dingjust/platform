@@ -10,7 +10,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alipay/flutter_alipay.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -39,9 +38,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   StreamSubscription wechatSubscription;
 
   void initState() {
-    //埋点>>>进入支付页面
-    FlutterUmplus.event("payment_page");
-
     WidgetsBinding.instance.addPostFrameCallback((_) => initCheck());
     //监听微信回调
     wechatSubscription = weChatResponseEventHandler.listen((data) async {
@@ -772,9 +768,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPaymentSucess() {
-    //埋点>>>支付成功
-    FlutterUmplus.event("payment_success", label: '${widget.order.totalPrice}');
-
     // Navigator.of(context).pop();
     //成功
     showDialog<void>(

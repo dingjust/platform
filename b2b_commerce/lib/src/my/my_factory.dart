@@ -14,7 +14,6 @@ import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -70,13 +69,6 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   @override
   void initState() {
-    if (widget.isFactoryDetail) {
-      //埋点>>>工厂详情
-      FlutterUmplus.event(
-        "factory_detail",
-      );
-    }
-
     _getFactoryFuture = _getFactoryData();
     _tabController = TabController(vsync: this, length: _states.length);
     super.initState();
@@ -352,15 +344,14 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        MultiProvider(
+                                    builder: (context) => MultiProvider(
                                           providers: [
                                             ChangeNotifierProvider(
                                               create: (_) =>
                                                   RequirementOrderFormState(
-                                                    uid: _factory.uid,
-                                                    factoryDetailModel: _factory,
-                                                  ),
+                                                uid: _factory.uid,
+                                                factoryDetailModel: _factory,
+                                              ),
                                             ),
                                           ],
                                           child: Consumer(builder: (context,

@@ -4,7 +4,7 @@ import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
-as yj;
+    as yj;
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
@@ -98,6 +98,9 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
 
   @override
   void initState() {
+    //页面统计
+    UmengPlugin.onPageStart('生产找厂');
+
     if (widget.factoryCondition != null) {
       if (widget.route == '就近找厂') {
         isLocalFind = true;
@@ -141,6 +144,8 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
   void dispose() {
     //注意这里关闭
     AMapLocationClient.shutdown();
+    //页面统计
+    UmengPlugin.onPageEnd('生产找厂');
     super.dispose();
   }
 
@@ -242,7 +247,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                           fit: StackFit.expand,
                           children: <Widget>[
                             NestedScrollView(
-                              headerSliverBuilder: _sliverBuilder, 
+                              headerSliverBuilder: _sliverBuilder,
                               controller: _scrollController,
                               body: FactoryListView(
                                 factoryCondition: factoryCondition,

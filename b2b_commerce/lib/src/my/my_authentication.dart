@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/my/authentication/authentication_person_from.da
 import 'package:b2b_commerce/src/my/authentication/my_authentication_enterprise_result.dart';
 import 'package:b2b_commerce/src/my/authentication/my_authentication_result.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -26,9 +25,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   @override
   void initState() {
     //埋点>>>我要认证
-    FlutterUmplus.event(
-      "my_authentication",
-    );
+    UmengPlugin.onEvent('my_authentication');
     //权限预获取
     PermissionHelper.check();
 
@@ -163,8 +160,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      MyAuthenticationEnterpriseResult(
+                  builder: (context) => MyAuthenticationEnterpriseResult(
                         isCompany: _isCompany,
                         authenticationModel: model,
                       )),

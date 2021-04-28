@@ -10,7 +10,6 @@ import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.da
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -36,8 +35,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
   @override
   void initState() {
     //埋点>>>需求发布页面进入
-    FlutterUmplus.event("requirement_publish_page",
-        label: '${UserTypeMap[UserBLoC.instance.currentUser.type]}');
+    UmengPlugin.onEvent('requirement_publish_page');
 
     if (widget.formState.factoryUid != null) {
       _factoryUids.add(widget.formState.factoryUid);
@@ -1237,8 +1235,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
     }
     ShowDialogUtil.showChoseDiglog(context, '是否确认发布', () {
       //埋点>>>需求发布2填写并发布
-      FlutterUmplus.event("requirement_publish_finsh",
-          label: '${UserTypeMap[UserBLoC.instance.currentUser.type]}');
+      UmengPlugin.onEvent('requirement_publish_finsh');
 
       showDialog(
           context: context,
@@ -1255,18 +1252,17 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
           }).then((code) async {
         if (code != null && code != '') {
           //埋点>>>需求发布成功
-          FlutterUmplus.event("requirement_publish_success",
-              label: '${UserTypeMap[UserBLoC.instance.currentUser.type]}');
-
+          UmengPlugin.onEvent('requirement_publish_success');
           widget.formState.model.code = code;
           //根据code查询明
           RequirementOrderModel model = await RequirementOrderRepository()
               .getRequirementOrderDetail(code);
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => PublishRequirementSuccessDialog(
-                  model: model,
-                ),
+                builder: (context) =>
+                    PublishRequirementSuccessDialog(
+                      model: model,
+                    ),
               ),
               ModalRoute.withName('/'));
         }

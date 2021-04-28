@@ -70,7 +70,6 @@ dependencies:
   flutter_date_pickers: ^0.0.6
   flutter_alipay: ^0.1.2
   auto_orientation: ^1.0.6
-  flutter_umplus: ^0.0.1
   video_thumbnail: ^0.2.2
   device_info: ^0.4.2+8
   flutter_image_compress: ^0.7.0

@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -64,18 +63,17 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   List<String> _dropDownHeaderItemStrings = ['综合', '加工方式', '商品大类'];
   GZXDropdownMenuController _dropdownMenuController =
-  GZXDropdownMenuController();
+      GZXDropdownMenuController();
 
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   GlobalKey _stackKey = GlobalKey();
 
   @override
   void initState() {
-    // TODO: implement initState
     if (widget.categories != null) {
       categoriesConditionEntries.addAll(widget.categories
           .map((category) =>
-          FilterConditionEntry(label: category.name, value: category))
+              FilterConditionEntry(label: category.name, value: category))
           .toList());
     }
 
@@ -89,10 +87,8 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
     }
 
     //埋点>>>需求中心
-    FlutterUmplus.event(
-      "requirement_center",
-    );
-
+    UmengPlugin.onEvent('requirement_center');
+    UmengPlugin.onPageStart('全部需求');
     super.initState();
   }
 
@@ -278,5 +274,11 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
     } else {
       return '${currentCondition.keyword}';
     }
+  }
+
+  @override
+  void dispose() {
+    UmengPlugin.onPageEnd('全部需求');
+    super.dispose();
   }
 }

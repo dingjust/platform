@@ -2,7 +2,6 @@ import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/factory/factory_introduction.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -418,11 +417,6 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
         ),
       ),
       onTap: () {
-        //埋点>>>公司介绍
-        FlutterUmplus.event(
-          "company_introduction",
-        );
-
         // 品牌详情
         if (bloc.currentUser.type == UserType.BRAND) {
           Navigator.push(

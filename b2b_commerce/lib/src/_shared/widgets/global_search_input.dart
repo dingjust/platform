@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:widgets/widgets.dart';
 
 /// 全局搜索框
@@ -46,11 +45,6 @@ class GlobalSearchInput<T> extends StatelessWidget {
   }
 
   void onTap(BuildContext context) {
-    //埋点>>>搜索
-    FlutterUmplus.event(
-      "home_search",
-    );
-
     showSearch(context: context, delegate: delegate);
   }
 }

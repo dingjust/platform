@@ -124,12 +124,16 @@ class _FactoryPageState extends State<FactoryPage> {
     if (widget.route == '就近找厂') {
       _dropDownHeaderItemStrings[1] = '加工方式';
     }
+    //页面统计
+    UmengPlugin.onPageStart('生产找厂');
   }
 
   @override
   void dispose() {
     //注意这里关闭
     AMapLocationClient.shutdown();
+    //页面统计
+    UmengPlugin.onPageEnd('生产找厂');
     super.dispose();
   }
 

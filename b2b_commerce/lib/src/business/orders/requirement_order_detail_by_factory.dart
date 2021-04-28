@@ -38,6 +38,14 @@ class _RequirementOrderDetailByFactoryPageState
   int _flexR = 3;
 
   @override
+  void initState() {
+    //埋点>>>需求明细
+    UmengPlugin.onEvent('requirement_detail',
+        properties: {'code': widget.code});
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<RequirementOrderModel>(
       builder: (BuildContext context,
@@ -330,7 +338,7 @@ class _RequirementOrderDetailByFactoryPageState
                     orderModel.details.machiningType == null
                         ? ''
                         : MachiningTypeLocalizedMap[
-                    orderModel.details.machiningType],
+                            orderModel.details.machiningType],
                     style: TextStyle(
                       fontSize: 14,
                     ),

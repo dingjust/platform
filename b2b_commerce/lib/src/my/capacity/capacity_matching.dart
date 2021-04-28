@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
 import 'package:b2b_commerce/src/helper/login_check.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -32,19 +31,17 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
     with LoginCheck {
   List<String> _dropDownHeaderItemStrings = ['全国', '品类', '时间', '筛选'];
   GZXDropdownMenuController _dropdownMenuController =
-  GZXDropdownMenuController();
+      GZXDropdownMenuController();
 
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   GlobalKey _stackKey = GlobalKey();
 
   @override
   void initState() {
-    // TODO: implement initState
     //埋点>>>空闲产能
-    FlutterUmplus.event(
-      "capacity_matching",
+    UmengPlugin.onEvent(
+      'capacity_matching',
     );
-
     super.initState();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => checkLoginStatus(context));

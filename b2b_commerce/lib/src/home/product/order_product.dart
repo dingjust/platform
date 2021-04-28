@@ -1,11 +1,10 @@
 import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
-as yj;
+    as yj;
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -55,12 +54,14 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     WidgetsBinding.instance
         .addPostFrameCallback((_) => getCascadedCategories());
     productCondition = ProductCondition([], widget.keyword ?? '');
     //埋点>>>看款下单
-    FlutterUmplus.event("order_product_page");
+    UmengPlugin.onEvent('order_product_page');
+    //页面统计
+    UmengPlugin.onPageStart('看款下单');
+
     super.initState();
   }
 
@@ -296,7 +297,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    UmengPlugin.onPageEnd('看款下单');
     OrderByProductBLoc.instance.clear();
 
     super.dispose();

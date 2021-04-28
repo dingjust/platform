@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -17,10 +16,6 @@ class OrderCoordinationPage extends StatefulWidget {
 class _OrderCoordinationPageState extends State<OrderCoordinationPage> {
   @override
   void initState() {
-    //埋点>>>订单协同
-    FlutterUmplus.event(
-      "order_coordination",
-    );
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => checkLoginStatus());
   }

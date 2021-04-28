@@ -6,7 +6,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -496,8 +495,9 @@ class _RegisterPageV2State extends State<RegisterPageV2> {
     if (response != null) {
       //注册成功
       //埋点>>>用户注册-成功
-      FlutterUmplus.event("user_register_success",
-          label: UserTypeLocalizedMap[userType]);
+      UmengPlugin.onEvent(
+        'user_register_success',
+      );
 
       //授权码登录
       UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
@@ -768,7 +768,7 @@ class _RegisterPageV2State extends State<RegisterPageV2> {
           _nameController.text != "") {
         //注册填写
         //埋点>>>用户注册-用户填写过参数
-        FlutterUmplus.event("user_register_form_input");
+        UmengPlugin.onEvent('user_register_form_input');
         setState(() {
           _formEventTracked = true;
         });
