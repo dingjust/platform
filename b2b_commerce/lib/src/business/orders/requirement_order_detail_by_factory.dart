@@ -645,8 +645,6 @@ class _RequirementOrderDetailByFactoryPageState
             ? '${GlobalConfigs.LOGO_URL}'
             : '${orderModel.details.pictures[0].shareUrl()}',
         url: Apis.shareRequirement(orderModel.code));
-
-    print('${orderModel.details.pictures[0].shareUrl()}');
   }
 
   void onReview() {

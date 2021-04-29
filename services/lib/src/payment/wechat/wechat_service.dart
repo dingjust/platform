@@ -6,10 +6,10 @@ abstract class WechatService {
   Future<String> pay(String orderCode, {PaymentFor paymentFor});
 
   ///微信文字分享
-  Future shareText(String content, WeChatScene scene);
+  Future<bool> shareText(String content, WeChatScene scene);
 
   ///微信WEB分享
-  Future shareWeb(String url, WeChatScene scene, String title,
+  Future<bool> shareWeb(String url, WeChatScene scene, String title,
       String description, String thumbnail);
 
   Future<bool> sendAuth();

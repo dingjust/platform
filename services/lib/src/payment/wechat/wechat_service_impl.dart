@@ -57,7 +57,7 @@ class WechatServiceImpl implements WechatService {
       {PaymentFor paymentFor = PaymentFor.DEFAULT}) async {
     //通过Helper获取预支付信息
     WechatPrepayModel prepayModel =
-    await WechatPayHelper.prepay(orderCode, paymentFor: paymentFor);
+        await WechatPayHelper.prepay(orderCode, paymentFor: paymentFor);
 
     if (prepayModel != null) {
       payWithWeChat(
@@ -77,11 +77,9 @@ class WechatServiceImpl implements WechatService {
   }
 
   @override
-  Future shareText(String content, WeChatScene scene) {
-    shareToWeChat(WeChatShareTextModel(content, scene: WeChatScene.SESSION))
-        .then((val) {
-      print(val);
-    });
+  Future<bool> shareText(String content, WeChatScene scene) {
+    return shareToWeChat(
+        WeChatShareTextModel(content, scene: WeChatScene.SESSION));
   }
 
   @override
@@ -90,16 +88,19 @@ class WechatServiceImpl implements WechatService {
   }
 
   @override
-  Future shareWeb(String url, WeChatScene scene, String title,
+  Future<bool> shareWeb(String url, WeChatScene scene, String title,
       String description, String thumbnail) {
+    //阿里云图片处理
+    const processUrl = 'image_process=resize,w_200/crop,mid,w_200,h_200';
+
     var model = WeChatShareWebPageModel(
       url,
       title: '$title',
       description: '$description',
-      thumbnail: WeChatImage.network(thumbnail),
+      thumbnail: WeChatImage.network('$thumbnail?$processUrl'),
       scene: scene,
     );
-    shareToWeChat(model);
+    return shareToWeChat(model);
   }
 
   @override
