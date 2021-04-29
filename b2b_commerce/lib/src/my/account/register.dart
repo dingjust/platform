@@ -585,6 +585,9 @@ class _RegisterPageState extends State<RegisterPage> {
       ..captchaCode = _captchaController.text
       ..password = _passwordController.text;
 
+    //提交注册信息前设置推送别名
+    jpush$.setAlias(_phoneController.text);
+
     // 加载条
     showDialog(
       context: context,
@@ -604,13 +607,13 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) =>
-                B2BLoginPage(
+            builder: (BuildContext context) => B2BLoginPage(
                   snackBarMessage: '注册成功',
                 )),
         ModalRoute.withName('/'),
       );
     } else {
+      jpush$.deleteAlias();
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       showDialog<void>(
