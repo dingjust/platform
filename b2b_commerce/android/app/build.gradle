@@ -74,6 +74,7 @@ android {
         debug {
             signingConfig signingConfigs.release
             matchingFallbacks = ['release', 'debug']
+//            applicationIdSuffix ".test"//测试包名后缀
         }
         dynamicProfile {
             signingConfig signingConfigs.release
@@ -86,6 +87,7 @@ android {
         profile {
             signingConfig signingConfigs.release
             matchingFallbacks = ['release', 'debug']
+//            applicationIdSuffix ".profile"//测试包名后缀
         }
     }
 

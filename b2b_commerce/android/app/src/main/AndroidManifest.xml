@@ -53,6 +53,12 @@
             <meta-data
                 android:name="io.flutter.embedding.android.SplashScreenDrawable"
                 android:resource="@drawable/launch_background" />
+            <meta-data
+                android:name="UMENG_APPKEY"
+                android:value="5e61b75d0cafb2aa19000058" />
+            <meta-data
+                android:name="UMENG_CHANNEL"
+                android:value="Umeng" />
         </activity>
         <activity
             android:name="com.tencent.connect.common.AssistActivity"

@@ -46,8 +46,9 @@ public class MainActivity extends FlutterActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("[nbyjy]", "******OnCreate******");
-        //友盟初始化
-        UMConfigure.init(this, "5e61b75d0cafb2aa19000058", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
+//        //友盟初始化
+        UMConfigure.preInit(this, "5e61b75d0cafb2aa19000058", "Umeng");
+        UMConfigure.init(this, "5e61b75d0cafb2aa19000058", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
 //        UMConfigure.setLogEnabled(true);//日志开启
         com.umeng.umeng_common_sdk.UmengCommonSdkPlugin.setContext(this);
 
