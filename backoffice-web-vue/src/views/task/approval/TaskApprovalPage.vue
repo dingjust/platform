@@ -2,11 +2,9 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-row>
-        <el-col :span="4">
-          <div class="approval-list-title">
-            <h6>待我审批</h6>
-          </div>
-        </el-col>
+        <div class="approval-list-title">
+          <h6>待我审批</h6>
+        </div>
       </el-row>
       <div class="pt-2"></div>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">

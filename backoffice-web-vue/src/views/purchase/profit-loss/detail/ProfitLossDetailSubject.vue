@@ -5,6 +5,11 @@
 -->
 <template>
   <div v-if="detail.id">
+    <div v-show="false">
+      <div id="print-page" >
+        <profit-loss-print-page :detail="detail" :taskRow="detail.entries"/>
+      </div>
+    </div>
     <div id="profitloss-detail">
       <el-row>
           <div class="cost-order-title">
@@ -26,7 +31,7 @@
     </div>
     <profit-loss-detail-btn :detail="detail" @callback="callback"/>
     <el-row type="flex" justify="center" style="margin-top: 10px">
-      <printer-button v-print="'#profitloss-detail'" />
+      <printer-button v-print="'#print-page'" />
     </el-row>
   </div>
 </template>
@@ -38,6 +43,7 @@ import ProfitLossDetailTaskTable from './ProfitLossDetailTaskTable'
 import ProfitLossEcharts from './ProfitLossEcharts'
 import ProfitLossDetailBtn from './ProfitLossDetailBtn.vue'
 import { PrinterButton } from '@/components/index.js'
+import ProfitLossPrintPage from './ProfitLossPrintPage.vue'
 
 export default {
   name: 'ProfitLossDetailSubject',
@@ -48,7 +54,8 @@ export default {
     ProfitLossDetailTaskTable,
     ProfitLossEcharts,
     ProfitLossDetailBtn,
-    PrinterButton
+    PrinterButton,
+    ProfitLossPrintPage
   },
   data () {
     return {
@@ -104,5 +111,9 @@ export default {
 
   .detail-container {
     margin: 0px 0px 10px 20px;
+  }
+
+  @page {
+    size: auto;
   }
 </style>

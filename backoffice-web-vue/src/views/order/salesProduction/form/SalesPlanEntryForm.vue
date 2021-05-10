@@ -153,7 +153,7 @@
         default: false
       },
       productionLeader: {
-        type: Object
+        // type: Object
       },
       readOnly: {
         type: Boolean,

@@ -36,7 +36,7 @@
         </el-table-column>
         <el-table-column label="成本总额" prop="totalCostAmount"></el-table-column>
         <template v-if="showAdditionalCharges">
-          <el-table-column v-for="(column, index) in additionalCharges" :key="column.id">
+          <el-table-column v-for="column in additionalCharges" :key="column.id">
             <template slot="header" slot-scope="scope">
               <div style="display: flex;align-items: center">
                 <span>{{column.remarks}}</span>
@@ -186,11 +186,13 @@ export default {
     initAdditionalCharges () {
       if (this.showWhole && this.showAdditionalCharges) {
         this.taskRow.forEach(item => {
-          item.additionalCharges.forEach(val => {
-            if (this.additionalCharges.findIndex(v => v.remarks === val.remarks) < 0) {
-              this.additionalCharges.push(val);
-            }
-          })
+          if (item.additionalCharges && item.additionalCharges.length > 0) {
+            item.additionalCharges.forEach(val => {
+              if (this.additionalCharges.findIndex(v => v.remarks === val.remarks) < 0) {
+                this.additionalCharges.push(val);
+              }
+            })
+          }
         })
       } else if (!this.showWhole) {
         this.additionalCharges = this.taskRow[0].additionalCharges;
@@ -208,7 +210,7 @@ export default {
     margin: 0px 0px 20px 20px;
   }
 
-  /deep/ .el-table--enable-row-hover .el-table__body tr:hover > td {
+  .detail-container >>> .el-table--enable-row-hover .el-table__body tr:hover > td {
     background-color: #ffffff !important;
   }
 

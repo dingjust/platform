@@ -54,12 +54,24 @@
       <el-table-column label="操作" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onProductionOrderDetail(scope.row.id)">详情</el-button>
+          <el-button v-if="canModifyPrice(scope.row)" type="text" @click="onModifyPrice(scope.row)">修改价格</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <production-order-detail :id="openId" v-if="dialogVisible" />
+    </el-dialog>
+    <el-dialog :visible.sync="updatePriceVisible" title="修改产品价格" width="400px" append-to-body :close-on-click-modal="false">
+      <el-form ref="form" :model="updateForm" :inline="true">
+        <el-form-item label="单价" prop="unitPrice" :rules="[{ required: true, message: '请输入', tigger: 'change' }]">
+          <el-input v-model="updateForm.unitPrice" ></el-input>
+        </el-form-item>
+      </el-form>
+      <el-row type="flex" justify="end" align="middle">
+        <el-button @click="updatePriceVisible = false">取消</el-button>
+        <el-button type="primary" @click="_onModifyPrice">确定</el-button>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -75,9 +87,15 @@
     props: {
       data: {
         type: Array
+      },
+      isSelfCreated: {
+        type: Boolean
       }
     },
     methods: {
+      canModifyPrice (row) {
+        return this.isSelfCreated && row.state === 'TO_BE_PRODUCED';
+      },
       //entry detail
       onDetail(id) {
         this.$router.push('/sales/entry/' + id);
@@ -110,11 +128,49 @@
         });
         return result;
       },
+      onModifyPrice (row) {
+        this.updateForm = {
+          id: row.id,
+          unitPrice: row.unitPrice
+        }
+        this.updatePriceVisible = true;
+      },
+      _onModifyPrice () {
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            this.__onModifyPrice();
+          }
+        });
+      },
+      async __onModifyPrice () {
+        const url = this.apis().updateSalesProductionItemPrice();
+        const result = await this.$http.post(url, {}, {
+          id: this.updateForm.id,
+          price: this.updateForm.unitPrice
+        });
+        
+        if (result.code == 1) {
+          this.$message.success('修改成功');
+          this.$emit('callback');
+          this.updatePriceVisible = false;
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+        } else if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+        } else {
+          this.$message.error('操作失败！');
+        }
+
+      }
     },
     data() {
       return {
         dialogVisible: false,
-        openId: ''
+        openId: '',
+        updatePriceVisible: false,
+        updateForm: {
+          unitPrice: ''
+        }
       }
     }
   }
