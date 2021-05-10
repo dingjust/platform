@@ -1,5 +1,7 @@
 # See https://www.dartlang.org/guides/libraries/private-files
 
+.DS_Store
+
 #VSCode
 .vscode/
 *.code-workspace
@@ -37,8 +39,16 @@ wrapper/
 .classpath
 gradle.properties
 
-ios/
+/ios
 res/
 backoffice-web/node_modules
 backoffice-web/out-tsc
+
 /b2b_commerce/android/android.zip
+/b2b_commerce/android/
+/b2b_commerce/test/
+
+/backoffice
+/backoffice-web
+/models/test/
+/models/android/

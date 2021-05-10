@@ -7,7 +7,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:toast/toast.dart';
@@ -52,7 +51,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   EdgeInsetsGeometry widgetPadding = const EdgeInsets.fromLTRB(20, 0, 20, 0);
 
   Map<String, List<EditApparelSizeVariantProductEntry>> colorResultList =
-  Map<String, List<EditApparelSizeVariantProductEntry>>();
+      Map<String, List<EditApparelSizeVariantProductEntry>>();
 
   //总数流
   var _streamController = StreamController<int>.broadcast();
@@ -204,25 +203,28 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                 height: imageSize,
                 imageUrl: '${widget.product.thumbnail.previewUrl()}',
                 fit: BoxFit.cover,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: imageSize,
-                  height: imageSize,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+                imageBuilder: (context, imageProvider) =>
+                    Container(
+                      width: imageSize,
+                      height: imageSize,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-                placeholder: (context, url) => SpinKitCircle(
-                  color: Colors.black12,
-                  size: imageSize,
-                ),
-                errorWidget: (context, url, error) => SpinKitCircle(
-                  color: Colors.black12,
-                  size: imageSize,
-                )),
+                placeholder: (context, url) =>
+                    SpinKitCircle(
+                      color: Colors.black12,
+                      size: imageSize,
+                    ),
+                errorWidget: (context, url, error) =>
+                    SpinKitCircle(
+                      color: Colors.black12,
+                      size: imageSize,
+                    )),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Colors.white,
@@ -276,7 +278,8 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     );
   }
 
-  Widget _buildColorBlock(List<EditApparelSizeVariantProductEntry> entries, String color) {
+  Widget _buildColorBlock(List<EditApparelSizeVariantProductEntry> entries,
+      String color) {
     //色值
     String colorCode =
     entries[0].model.color.colorCode?.replaceAll(RegExp('#'), '');
@@ -369,25 +372,27 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     );
   }
 
-  Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries, String color) {
+  Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries,
+      String color) {
     List<Widget> widgets = entries
-        .map((entry) => Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            // margin: EdgeInsets.only(right: 150),
-            child: Text(
-              '${entry.model.size.name}',
-              style: TextStyle(fontSize: 14),
-            ),
+        .map((entry) =>
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                // margin: EdgeInsets.only(right: 150),
+                child: Text(
+                  '${entry.model.size.name}',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              Text('${entry.controller.text}'),
+            ],
           ),
-          Text('${entry.controller.text}'),
-        ],
-      ),
-    ))
+        ))
         .toList();
     return Expanded(
         child: Column(
@@ -651,7 +656,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
   ///校验表单
   bool validateForm() {
-    if (widget.orderType == OrderType.PURCHASE || (widget.orderType == OrderType.SALES && widget.salesOrderType == SalesOrderType.FUTURE_GOODS)) {
+    if (widget.orderType == OrderType.PURCHASE ||
+        (widget.orderType == OrderType.SALES &&
+            widget.salesOrderType == SalesOrderType.FUTURE_GOODS)) {
       if (widget.product.steppedPrices != null &&
           widget.product.steppedPrices.isNotEmpty) {
         if (totalNum < widget.product.steppedPrices[0].minimumQuantity &&
@@ -704,8 +711,6 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   void onSubmit() {
-    //埋点>>>看款下单-确认下单
-    FlutterUmplus.event("order_product_confirm");
     switch (widget.orderType) {
       case OrderType.PROOFING:
         onProofingSubmit();
@@ -852,11 +857,11 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       ..deliveryAddress = addressModel
       ..remarks = widget.remarksEditingController.text;
     //销售订单类型
-      if(widget.salesOrderType != null){
-        model.type = widget.salesOrderType;
-      }else{
-        model.type = SalesOrderType.DEFAULT_GOODS;
-      }
+    if (widget.salesOrderType != null) {
+      model.type = widget.salesOrderType;
+    } else {
+      model.type = SalesOrderType.DEFAULT_GOODS;
+    }
 
     showDialog(
         context: context,
@@ -879,9 +884,6 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
   ///下单成功则调用付款
   void onPaying(String code) async {
-    //埋点>>>"确认下单"成功生成订单
-    FlutterUmplus.event("order_product_success");
-
     if (code != null && code != '') {
       switch (widget.orderType) {
         case OrderType.PROOFING:
@@ -906,16 +908,13 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     PurchaseOrderModel detailModel =
     await PurchaseOrderRepository().getPurchaseOrderDetail(code);
 
-     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) =>
-          OrderPaymentPage(
-            order: detailModel,
-            paymentFor: PaymentFor.DEPOSIT,
-            isFormDetail: true,
-          )
-      )
-     ); 
+            OrderPaymentPage(
+              order: detailModel,
+              paymentFor: PaymentFor.DEPOSIT,
+              isFormDetail: true,
+            )));
     // Navigator.of(context).pushAndRemoveUntil(
     //     MaterialPageRoute(
     //         builder: (context) => OrderPaymentPage(
@@ -923,7 +922,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     //               paymentFor: PaymentFor.DEPOSIT,
     //             )),
     //     ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
-        // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
+    // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   void onProofingPaying(String code) async {
@@ -931,27 +930,25 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     await ProofingOrderRepository().proofingDetail(code);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-            builder: (context) => OrderPaymentPage(
+            builder: (context) =>
+                OrderPaymentPage(
                   order: detailModel,
                 )),
         ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
-        // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
+    // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   void onSalesPaying(String code) async {
     SalesOrderModel detailModel =
     await SalesOrderRespository().getSalesOrderDetail(code);
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) =>
-          OrderPaymentPage(
-            order: detailModel,
-            paymentFor: PaymentFor.SALES,
-            isFormDetail: true,
-          )
-      )
-    );
+            OrderPaymentPage(
+              order: detailModel,
+              paymentFor: PaymentFor.SALES,
+              isFormDetail: true,
+            )));
     // Navigator.of(context).pushAndRemoveUntil(
     //     MaterialPageRoute(
     //         builder: (context) =>
@@ -961,7 +958,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     //               isFormDetail: true,
     //             )),
     //     ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
-        // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
+    // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   @override

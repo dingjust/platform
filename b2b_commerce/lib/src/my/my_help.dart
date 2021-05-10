@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/my/my_help_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -16,10 +15,6 @@ class _MyHelpPageState extends State<MyHelpPage> {
   @override
   void initState() {
     super.initState();
-    //埋点>>>问题与帮助
-    FlutterUmplus.event(
-      "question_and_help",
-    );
   }
 
   @override

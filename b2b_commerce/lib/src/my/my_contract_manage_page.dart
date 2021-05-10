@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_umplus/flutter_umplus.dart';
-
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
@@ -21,10 +19,6 @@ class _MyContractManagePageState extends State<MyContractManagePage> {
 
   @override
   void initState() {
-    //埋点>>>合同管理
-    FlutterUmplus.event(
-      "contract_management",
-    );
     initSeal();
     _futureBuilderFuture = getData();
     super.initState();
@@ -148,8 +142,7 @@ class _MyContractManagePageState extends State<MyContractManagePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ContractSealPage(
+                      builder: (context) => ContractSealPage(
                             isSelect: false,
                           )));
             },

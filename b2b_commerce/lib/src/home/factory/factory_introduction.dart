@@ -36,6 +36,9 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
   @override
   void initState() {
     super.initState();
+    if (UserBLoC.instance.currentUser.companyCode != widget.uid) {
+      UmengPlugin.onEvent('factory_detail', properties: {'uid': widget.uid});
+    }
     _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -277,14 +280,14 @@ class _InfoHeadRow extends StatelessWidget {
           _buildProfile(),
           Expanded(
               child: Container(
-                height: 80,
-                margin: EdgeInsets.only(left: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+            height: 80,
+            margin: EdgeInsets.only(left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
+                    Expanded(
                         child: Text(
                       '${data.name}',
                       style: TextStyle(fontSize: 20),
@@ -304,15 +307,15 @@ class _InfoHeadRow extends StatelessWidget {
                                   border: Border.all(
                                       color: Colors.green, width: 0.5),
                                   borderRadius: BorderRadius.circular(2)),
-                              child: Text(
-                                '${e.name}',
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.green),
-                              ),
-                            ))
+                      child: Text(
+                        '${e.name}',
+                        style: TextStyle(
+                            fontSize: 10, color: Colors.green),
+                      ),
+                    ))
                         .toList()
-                  ],
-                ),
+                      ],
+                    ),
                   ],
                 ),
               ))
@@ -336,9 +339,10 @@ class _InfoHeadRow extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: '${data.profilePicture.imageProcessUrl(processUrl)}',
             fit: BoxFit.fill,
-            placeholder: (context, url) => SpinKitRing(
-              color: Colors.grey[300],
-              lineWidth: 2,
+            placeholder: (context, url) =>
+                SpinKitRing(
+                  color: Colors.grey[300],
+                  lineWidth: 2,
                   size: 30,
                 ),
             errorWidget: (context, url, error) =>

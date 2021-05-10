@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:b2b_commerce/src/_shared/widgets/authorization_dector.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/progress_work_sheet/progress_work_sheets_page.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
@@ -9,8 +8,6 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/global_message_helper.dart';
 import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
-import 'package:b2b_commerce/src/home/_shared/widgets/bottom_navigation.dart';
-import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
 import 'package:b2b_commerce/src/home/account/client_select_v2.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/index.dart';
@@ -24,7 +21,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -71,25 +67,11 @@ class _MyAppState extends State<MyApp> {
     // .checkCertificationStatus(context);
 
     //友盟初始化
-    initUMeng();
+    //页面统计
+    UmengPlugin.setPageCollectionModeManual();
 
     // 预加载全局数据
     AppProvider.preloading(context);
-  }
-
-  ///友盟初始化
-  initUMeng() {
-    if (!GlobalConfigs.DEBUG) {
-      TargetPlatform platform = defaultTargetPlatform;
-      FlutterUmplus.init(
-        platform == TargetPlatform.android
-            ? GlobalConfigs.UMENG_APP_KEY_ANDROID
-            : GlobalConfigs.UMENG_APP_KEY_IOS,
-        reportCrash: false,
-        logEnable: GlobalConfigs.DEBUG,
-        encrypt: true,
-      );
-    }
   }
 
 //监听异常消息,dialog

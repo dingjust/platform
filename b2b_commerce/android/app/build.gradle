@@ -74,6 +74,7 @@ android {
         debug {
             signingConfig signingConfigs.release
             matchingFallbacks = ['release', 'debug']
+//            applicationIdSuffix ".test"//测试包名后缀
         }
         dynamicProfile {
             signingConfig signingConfigs.release
@@ -86,6 +87,7 @@ android {
         profile {
             signingConfig signingConfigs.release
             matchingFallbacks = ['release', 'debug']
+//            applicationIdSuffix ".profile"//测试包名后缀
         }
     }
 
@@ -116,8 +118,8 @@ android {
         /// 注意这里需要在主项目增加一条依赖，否则可能发生编译不通过的情况-----高德
         implementation 'com.amap.api:location:latest.integration'
 
-        implementation 'com.umeng.umsdk:analytics:8.1.6'
-        implementation 'com.umeng.umsdk:common:2.0.0'
+//        implementation 'com.umeng.umsdk:analytics:8.1.6'
+//        implementation 'com.umeng.umsdk:common:2.0.0'
 
         implementation 'com.android.support:multidex:1.0.3'
     }

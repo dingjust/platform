@@ -1,7 +1,10 @@
-import 'package:b2b_commerce/b2b_commerce.dart';
-import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:b2b_commerce/b2b_commerce.dart';
+import 'package:core/core.dart';
+
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -20,34 +23,37 @@ class JPushService {
 
   JPushService._internal() {
     _jpush = JPush();
-    // 初始化
-    _jpush.addEventHandler(
-      // 接收通知回调方法。
-      onReceiveNotification: (Map<String, dynamic> message) async {
-        print("flutter onReceiveNotification: $message");
+    try {
+      // 初始化
+      _jpush.addEventHandler(
+        // 接收通知回调方法。
+        onReceiveNotification: (Map<String, dynamic> message) async {
+          print("flutter onReceiveNotification: $message");
 
-        ///更新未读消息数
-        notificationsPool$.checkUnread();
+          ///更新未读消息数
+          notificationsPool$.checkUnread();
 
-        ///是否生产消息
-        notificationsPool$.analysProductionMessage(message);
-      },
-      // 点击通知回调方法。
-      onOpenNotification: (Map<String, dynamic> message) async {
-        print("flutter onOpenNotification: $message");
+          ///是否生产消息
+          notificationsPool$.analysProductionMessage(message);
+        },
+        // 点击通知回调方法。
+        onOpenNotification: (Map<String, dynamic> message) async {
+          print("flutter onOpenNotification: $message");
 
-        //页面跳转
-        onOpenNotification(message);
-      },
-      // 接收自定义消息回调方法。
-      onReceiveMessage: (Map<String, dynamic> message) async {
-        print("flutter onReceiveMessage: $message");
+          //页面跳转
+          onOpenNotification(message);
+        },
+        // 接收自定义消息回调方法。
+        onReceiveMessage: (Map<String, dynamic> message) async {
+          print("flutter onReceiveMessage: $message");
 
-        ///更新未读消息数
-        notificationsPool$.checkUnread();
-      },
-    );
-
+          ///更新未读消息数
+          notificationsPool$.checkUnread();
+        },
+      );
+    } on PlatformException {
+      print('[JPush]Failed to get platform version');
+    }
     _jpush.setup(
       appKey: GlobalConfigs.JPUSH_APPKEY,
       channel: "developer-default",
@@ -64,6 +70,11 @@ class JPushService {
       _instance = new JPushService._internal();
     }
     return _instance;
+  }
+
+  //发送本地推送
+  Future<String> sendLocalNotification(LocalNotification localNotification) {
+    return _jpush.sendLocalNotification(localNotification);
   }
 
   void onOpenMessage(NotifyModel message, BuildContext context) async {
@@ -112,7 +123,7 @@ class JPushService {
       case 4:
         return UserBLoC.instance.currentUser.type == UserType.FACTORY
             ? RequirementOrderDetailByFactoryPage(
-            response.extras.androidExtras.params)
+                response.extras.androidExtras.params)
             : RequirementOrderDetailPage(response.extras.androidExtras.params);
       case 5:
         return SaleOrderDetailPage(code: response.extras.androidExtras.params);

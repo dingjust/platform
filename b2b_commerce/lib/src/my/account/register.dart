@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/home/account/login_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -270,7 +269,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ],
               controller: _captchaController,
               decoration:
-              InputDecoration(border: InputBorder.none, hintText: '请输入验证码'),
+                  InputDecoration(border: InputBorder.none, hintText: '请输入验证码'),
             ),
             surfix: FlatButton(
               shape: RoundedRectangleBorder(
@@ -494,9 +493,15 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     }
     setState(() {
-      validate = _phoneController.text.trim().length > 0 &&
-          _captchaController.text.trim().length > 0 &&
-          _passwordController.text.trim().length > 0 &&
+      validate = _phoneController.text
+          .trim()
+          .length > 0 &&
+          _captchaController.text
+              .trim()
+              .length > 0 &&
+          _passwordController.text
+              .trim()
+              .length > 0 &&
           _againPasswordController.text
               .trim()
               .length > 0 &&
@@ -580,6 +585,9 @@ class _RegisterPageState extends State<RegisterPage> {
       ..captchaCode = _captchaController.text
       ..password = _passwordController.text;
 
+    //提交注册信息前设置推送别名
+    jpush$.setAlias(_phoneController.text);
+
     // 加载条
     showDialog(
       context: context,
@@ -594,18 +602,18 @@ class _RegisterPageState extends State<RegisterPage> {
     if (response != null) {
       //注册成功
       //埋点>>>用户注册-成功
-      FlutterUmplus.event("user_register_success",
-          label: UserTypeLocalizedMap[userType]);
+      UmengPlugin.onEvent('user_register_success');
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) =>
-                B2BLoginPage(
+            builder: (BuildContext context) => B2BLoginPage(
                   snackBarMessage: '注册成功',
                 )),
         ModalRoute.withName('/'),
       );
     } else {
+      jpush$.deleteAlias();
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       showDialog<void>(
@@ -868,7 +876,7 @@ class _RegisterPageState extends State<RegisterPage> {
           _nameController.text != "") {
         //注册填写
         //埋点>>>用户注册-用户填写过参数
-        FlutterUmplus.event("user_register_form_input");
+        UmengPlugin.onEvent('user_register_form_input');
         setState(() {
           _formEventTracked = true;
         });

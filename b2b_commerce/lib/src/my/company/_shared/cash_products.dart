@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/home/product/product.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -14,7 +13,6 @@ class CashProducts extends StatefulWidget {
 class _CashProductsState extends State<CashProducts> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -28,16 +26,15 @@ class CashProductsListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<CashProductsState>(
-      builder: (context, CashProductsState cashProductsState, _) =>
-          Container(
-            child: cashProductsState.apparelProductModels != null
-                ? CashProductsListView(
-              cashProductsState: cashProductsState,
-            )
-                : Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
+      builder: (context, CashProductsState cashProductsState, _) => Container(
+        child: cashProductsState.apparelProductModels != null
+            ? CashProductsListView(
+                cashProductsState: cashProductsState,
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
+      ),
     );
   }
 }
@@ -116,7 +113,8 @@ class CashProductsListView extends StatelessWidget {
             showAddress: true,
             onClick: () {
               //数据埋点=>工厂详情页点击“上架产品”进入看款详情
-              FlutterUmplus.event("factory_detail_product_click");
+              UmengPlugin.onEvent('factory_detail_product_click',
+                  properties: {'code': product.code ?? ''});
             },
           ))
           .toList();

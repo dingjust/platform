@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -86,8 +85,8 @@ class BrandHomeEntrance extends StatelessWidget {
                       child: GestureDetector(
                     onTap: () {
                       //埋点>>>推荐工厂
-                      FlutterUmplus.event(
-                        "factory_finding_all",
+                      UmengPlugin.onEvent(
+                        'factory_finding_all',
                       );
 
                       Navigator.push(
@@ -350,9 +349,7 @@ class BrandBtnsSection extends StatelessWidget {
                   .toList();
               if (categories != null && labels != null) {
                 //埋点>>>就近找厂
-                FlutterUmplus.event(
-                  "factory_finding_location",
-                );
+                UmengPlugin.onEvent('factory_finding_location');
 
                 Navigator.push(
                   context,
@@ -443,9 +440,8 @@ class FactoryBtnsSection extends StatelessWidget {
             label: '生产找厂',
             onTap: () {
               //埋点>>>推荐工厂
-              FlutterUmplus.event(
-                "factory_finding_all",
-              );
+              UmengPlugin.onEvent('factory_finding_all');
+
               Navigator.push(
                 context,
                 MaterialPageRoute(

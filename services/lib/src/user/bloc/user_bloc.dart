@@ -4,7 +4,6 @@ import 'package:b2b_commerce/b2b_commerce.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/api/user.dart';
@@ -137,10 +136,8 @@ class UserBLoC extends BLoCBase {
 
       //设置JPUSH别名
       jpush$.setAlias(currentUser.mobileNumber);
-
-      //埋点>>>登录成功
-      FlutterUmplus.event("user_login_success",
-          label: UserTypeLocalizedMap[_user.type]);
+      //友盟设置用户账号
+      UmengPlugin.onProfileSignIn(_user.mobileNumber);
 
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
@@ -219,12 +216,10 @@ class UserBLoC extends BLoCBase {
         LocalStorage.save(GlobalConfigs.USER_KEY, _user.mobileNumber);
       }
 
-      //埋点>>>登录成功
-      FlutterUmplus.event("user_login_success",
-          label: UserTypeLocalizedMap[_user.type]);
-
       //设置JPUSH别名
       jpush$.setAlias(currentUser.mobileNumber);
+      //友盟设置用户账号
+      UmengPlugin.onProfileSignIn(_user.mobileNumber);
 
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
@@ -249,6 +244,8 @@ class UserBLoC extends BLoCBase {
 
     //JPUSH删除别名
     jpush$.deleteAlias();
+    //友盟取消用户账号
+    UmengPlugin.onProfileSignOff();
 
     _controller.sink.add(_user);
 
@@ -320,11 +317,9 @@ class UserBLoC extends BLoCBase {
           }
         }
 
-        //埋点>>>登录成功
-        FlutterUmplus.event("user_login_success",
-            label: UserTypeLocalizedMap[_user.type]);
-
         jpush$.setAlias(currentUser.mobileNumber);
+        //友盟设置用户账号
+        UmengPlugin.onProfileSignIn(_user.mobileNumber);
 
         //  记录refresh_token
         LocalStorage.save(
