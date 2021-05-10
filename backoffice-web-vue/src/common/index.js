@@ -1912,6 +1912,11 @@ let NONE_TENANT_APIS = {
   // 查询报价单列表
   searchQuoteOrderV2 () {
     return '/b2b/quotation/sheet';
+  },
+
+  // 修改外接订单 生产明细价格
+  updateSalesProductionItemPrice () {
+    return '/b2b/sales/production/order/update/item/price'
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

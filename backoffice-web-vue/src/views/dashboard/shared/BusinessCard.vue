@@ -70,7 +70,7 @@
             this.$router.push('/sales/pending-order');
             break;
           case 'PRODUCTION_TASK_ORDER':
-            this.$router.push('/sales/productionOrder ');
+            this.$router.push('/sales/productionOrder');
             break;
           case 'RECEIPT_SHEET':
             this.$router.push('/receipt/shipping-receipt-sheet');

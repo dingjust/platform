@@ -32,7 +32,7 @@
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>销售价格：{{productionOrder.unitPrice}}</h6>
+                <h6>销售价格：{{productionOrder.unitPrice.toFixed(2)}}</h6>
               </el-col>
               <el-col :span="12">
                 <h6>合作方式：{{getEnum('machiningTypes', slotData.cooperationMode)}}</h6>
@@ -201,7 +201,7 @@
               "category": "",
               "approvalStatus": "",
             },
-            "unitPrice": "",
+            "unitPrice": 0,
             "shippingAddress": "",
             "quantity": "",
             "deliveryDate": "",

@@ -1,28 +1,30 @@
 <template>
   <div>
     <el-form :inline="true">
-      <el-row type="flex">
-        <el-col :span="20">
-          <el-form-item label="任务关键词" class="toolbar-form-item">
-            <el-input placeholder="输入任务编号、名称" v-model="queryFormData.keyword"></el-input>
-          </el-form-item>
-          <el-form-item label="部门/人员" class="toolbar-form-item">
-            <!-- <el-input placeholder="输入负责人名称" v-model="queryFormData.charge"></el-input> -->
-            <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
-          </el-form-item>
-          <el-form-item label="创建时间" class="toolbar-form-item">
-            <el-date-picker v-model="queryFormData.creationtime" type="date" placeholder="选择日期"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-row type="flex" align="top" justify="start" :gutter="20">
-            <el-button-group>
-              <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
-              <el-button native-type="reset" @click="onReset">重置</el-button>
-            </el-button-group>
-          </el-row>
-        </el-col>
-      </el-row>
+      <div style="display: flex;flex-wrap: wrap">
+        <!-- <el-row type="flex"> -->
+          <!-- <el-col :span="20"> -->
+            <el-form-item label="任务关键词" class="toolbar-form-item">
+              <el-input placeholder="输入任务编号、名称" v-model="queryFormData.keyword"></el-input>
+            </el-form-item>
+            <el-form-item label="部门/人员" class="toolbar-form-item">
+              <!-- <el-input placeholder="输入负责人名称" v-model="queryFormData.charge"></el-input> -->
+              <dept-person-select ref="deptPersonSelect" :dataQuery="dataQuery" :selectDept="queryFormData.depts" :selectPerson="queryFormData.users"/>
+            </el-form-item>
+            <el-form-item label="创建时间" class="toolbar-form-item">
+              <el-date-picker v-model="queryFormData.creationtime" type="date" placeholder="选择日期"/>
+            </el-form-item>
+          <!-- </el-col> -->
+          <!-- <el-col :span="4"> -->
+            <!-- <el-row type="flex" align="top" justify="start" :gutter="20"> -->
+              <el-button-group>
+                <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+                <el-button native-type="reset" @click="onReset">重置</el-button>
+              </el-button-group>
+            <!-- </el-row> -->
+          <!-- </el-col> -->
+        <!-- </el-row> -->
+      </div>
 <!--      <el-row>-->
 <!--        <span class="status_name_label">工单状态：</span>-->
 <!--        <el-radio-group v-model="queryFormData.status" @change="onAdvancedSearch">-->

@@ -1,13 +1,13 @@
 <template>
   <div class="animated fadeIn">
-    <el-dialog title="温馨提示" :visible.sync="profileDialogVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog title="温馨提示" :visible.sync="profileDialogVisible" width="400px" :close-on-click-modal="false">
       <profile-complete-dialog @onCancel="onCancel"/>
     </el-dialog>
-    <el-dialog title="温馨提示" :visible.sync="authenticationDialogVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog title="温馨提示" :visible.sync="authenticationDialogVisible" width="400px" :close-on-click-modal="false">
       <authentication-dialog @onCancel="onCancel"/>
     </el-dialog>
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="24" :lg="14" :xl="14">
+      <el-col :xs="24" :sm="24" :lg="14">
         <el-row>
           <business-card/>
         </el-row>
@@ -32,7 +32,7 @@
           <img class="dashboard-img" :src="CONFIG.CDN_OSS_DOMAIN+'/%E5%9B%BE%E7%89%87.png'"/>
         </el-row>
       </el-col>
-      <el-col class="hidden-md-and-down" :lg="10" :xl="10">
+      <el-col class="hidden-md-and-down" :lg="10">
         <el-row>
           <account-entry-card/>
         </el-row>
@@ -243,5 +243,4 @@ export default {
     width: 100%;
     border-radius: 5px;
   }
-
 </style>

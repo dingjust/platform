@@ -61,22 +61,18 @@
         return row.approvalStatus === 'unapproved';
       },
       onPageSizeChanged(val) {
-        this._reset();
+        this.$emit('onAdvancedSearch', 0, val);
 
-        if (this.$store.state.SampleProductsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
-          return;
-        }
-
-        this.$emit('onSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       onCurrentPageChanged(val) {
-        if (this.$store.state.SampleProductsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
-          return;
-        }
+        this.$emit('onAdvancedSearch', val - 1);
 
-        this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       _reset() {
         this.$refs.resultTable.clearSort();

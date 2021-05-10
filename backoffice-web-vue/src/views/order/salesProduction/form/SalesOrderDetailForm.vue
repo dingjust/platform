@@ -26,7 +26,7 @@
         </el-row>
         <el-row type="flex" justify="start" style="margin-left: 24px;">
           <el-col :span="9">
-            <h6 class="sales-plan-h6"><span class="info-title">订单金额：</span>{{totalPrice}}元</h6>
+            <h6 class="sales-plan-h6"><span class="info-title">订单金额：</span>{{totalPrice.toFixed(2)}}元</h6>
           </el-col>
           <el-col :span="5">
             <h6 class="sales-plan-h6-hide">

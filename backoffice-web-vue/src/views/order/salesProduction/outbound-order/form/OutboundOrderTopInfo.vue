@@ -28,7 +28,7 @@
         </el-row>
         <el-row type="flex" justify="start" style="margin: 10px 0px 0px 24px;">
           <el-col :span="9">
-            <h6>生产总价：{{totalAmount}}元</h6>
+            <h6>生产总价：{{totalAmount.toFixed(2)}}元</h6>
           </el-col>
           <el-col :span="5">
             <h6 class="hide-text" :title="slotData.merchandiser ? slotData.merchandiser.name : ''">
