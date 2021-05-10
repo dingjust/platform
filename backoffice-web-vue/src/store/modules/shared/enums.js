@@ -958,7 +958,20 @@ const state = {
     }
   ],
   // 人数
-  populationScales: [{
+  populationScales: [
+    {
+      code: 'N05',
+      name: '20人以下'
+    },
+    {
+      code: 'N06',
+      name: '21至35人'
+    },
+    {
+      code: 'N07',
+      name: '36人至50人'
+    },
+    {
       code: 'N01',
       name: '50人以下'
     },
@@ -973,7 +986,7 @@ const state = {
     {
       code: 'N04',
       name: '200人以上'
-    }
+    },
   ],
   // 生产模式
   ProductionModes: [{
@@ -2103,7 +2116,7 @@ const state = {
       name: '无'
     }, {
         code: 'WAIT_TO_PURCHASE',
-        name: '待采购'  
+        name: '待采购'
     }, {
         code: 'WAIT_TO_RECYCLE_MATERIAL',
         name: '待回料'

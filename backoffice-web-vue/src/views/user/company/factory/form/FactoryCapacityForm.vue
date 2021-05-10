@@ -1,165 +1,189 @@
 <template>
   <div class="animated fadeIn factory-capacity-form">
-        <el-row>
-          <div class="titleClass">
-            <h6>工厂能力</h6>
-          </div>
-        </el-row>
-        <div style="margin: 20px 20px 40px 40px">
-          <el-row type="flex" align="middle" :gutter="20">
-            <el-col :span="8">
-              <el-form-item prop="design">
-                <template slot="label">
-                  <h6 class="titleTextClass">设计</h6>
-                </template>
-                <el-select v-model="formData.design" size="mini" placeholder="请选择" style="width: 100%;">
-                  <el-option
-                    v-for="item in factoryDesigns"
-                    :key="item.code"
-                    :label="item.name"
-                    :value="item.code">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="pattern">
-                <template slot="label">
-                  <h6 class="titleTextClass">免费打板</h6>
-                </template>
-                <el-select v-model="formData.pattern" size="mini" placeholder="请选择" style="width: 100%;">
-                  <el-option
-                    v-for="item in factoryPatterns"
-                    :key="item.code"
-                    :label="item.name"
-                    :value="item.code">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="coverageArea">
-                <template slot="label">
-                  <h6 class="titleTextClass">覆盖范围</h6>
-                </template>
-                <el-input placeholder="请填写覆盖范围" v-model="formData.coverageArea" size="mini"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row type="flex" align="middle" :gutter="20">
-            <el-col :span="8">
-              <el-form-item prop="cooperationModes">
-                <template slot="label">
-                  <h6 class="titleTextClass">合作方式<span style="color: red">*</span></h6>
-                </template>
-                <el-select v-model="formData.cooperationModes" multiple placeholder="请选择" size="mini" style="width: 100%;">
-                  <el-option
-                    v-for="item in cooperationModes"
-                    :key="item.code"
-                    :label="item.name"
-                    :value="item.code">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-<!--              <el-form-item prop="qualityLevel">-->
-<!--                <template slot="label">-->
-<!--                  <h6 class="titleTextClass">质量等级<span style="color: red">*</span></h6>-->
-<!--                </template>-->
-<!--                <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini" style="width: 100%;">-->
-<!--                  <el-option-->
-<!--                    v-for="item in factoryQualityLevels"-->
-<!--                    :key="item.code"-->
-<!--                    :label="item.name"-->
-<!--                    :value="item.code">-->
-<!--                  </el-option>-->
-<!--                </el-select>-->
-<!--              </el-form-item>-->
-              <el-form-item prop="qualityLevels">
-                <template slot="label">
-                  <h6 class="titleTextClass">质量等级<span style="color: red">*</span></h6>
-                </template>
-                <el-select v-model="formData.qualityLevels" multiple placeholder="请选择" style="width: 100%">
-                  <el-option v-for="item in FactoryQualityLevel" :key="item.code" :label="item.name" :value="item.code">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="labels">
-                <template slot="label">
-                  <h6 class="titleTextClass">工厂标签</h6>
-                </template>
-                <el-select v-model="formData.labels" multiple value-key="id" size="mini" placeholder="请选择" style="width: 100%;">
-                  <el-option
-                    v-for="item in labels"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-form-item prop="cooperativeBrand">
+    <el-row>
+      <div class="titleClass">
+        <h6>工厂能力</h6>
+      </div>
+    </el-row>
+    <div style="margin: 20px 20px 40px 40px">
+      <el-row type="flex" align="middle" :gutter="20">
+        <el-col :span="8">
+          <el-form-item prop="design">
             <template slot="label">
-              <h6 class="titleTextClass">合作商</h6>
+              <h6 class="titleTextClass">设计</h6>
             </template>
-            <tags-of-text :label="'合作商'" @remove="onRemoveCooperativeBrand" @add="onAddCooperativeBrand" :textData="formData.cooperativeBrand" :symbol="'，'"></tags-of-text>
+            <el-select v-model="formData.design" size="mini" placeholder="请选择" style="width: 100%;">
+              <el-option v-for="item in factoryDesigns" :key="item.code" :label="item.name" :value="item.code">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item prop="categories">
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="pattern">
             <template slot="label">
-              <h6 class="titleTextClass">生产大类<span style="color: red">*</span></h6>
+              <h6 class="titleTextClass">免费打板</h6>
             </template>
-            <el-tag v-for="val of majorCategories" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
-                    @click="handleTagClick(val)" size="medium" :key="val.id">
-              {{val.name}}
-            </el-tag>
+            <el-select v-model="formData.pattern" size="mini" placeholder="请选择" style="width: 100%;">
+              <el-option v-for="item in factoryPatterns" :key="item.code" :label="item.name" :value="item.code">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item prop="adeptAtCategories">
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="coverageArea">
             <template slot="label">
-              <h6 class="titleTextClass">优势品类<span style="color: red">*</span></h6>
+              <h6 class="titleTextClass">覆盖范围</h6>
             </template>
-            <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories" :readOnly="readOnly"></category-select>
+            <el-input placeholder="请填写覆盖范围" v-model="formData.coverageArea" size="mini"></el-input>
           </el-form-item>
-          <el-form-item prop="keyword">
+        </el-col>
+      </el-row>
+      <el-row type="flex" align="middle" :gutter="20">
+        <el-col :span="8">
+          <el-form-item prop="cooperationModes">
             <template slot="label">
-              <h6 class="titleTextClass">关键词</h6>
+              <h6 class="titleTextClass">合作方式<span style="color: red">*</span></h6>
             </template>
-            <tags-of-text :label="'关键词'" @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword" :symbol="'，'"></tags-of-text>
-            <span style="font-size: 10px;color: #F56C6C">{{readOnly? '您可以通过关键词搜索到此公司' : '品牌用户可以通过关键词搜索到您'}}</span>
+            <el-select v-model="formData.cooperationModes" multiple placeholder="请选择" size="mini" style="width: 100%;">
+              <el-option v-for="item in cooperationModes" :key="item.code" :label="item.name" :value="item.code">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-row type="flex" justify="start" align="middle">
-            <el-col :span="4" style="margin-left: 20px">
-              <h6>
-                上传资质荣誉照片：
-              </h6>
-              <h6 style="color: grey">
-                &nbsp;&nbsp;&nbsp;&nbsp;(最多五张)
-              </h6>
-            </el-col>
-            <el-col :span="22">
-              <images-upload :limit="5" :slot-data="formData.certificates" :read-only="readOnly"/>
-              <h6 style="margin-left: 30px;font-size: 10px;color: grey" v-if="!readOnly">只支持.jpg格式</h6>
-            </el-col>
-          </el-row>
-        </div>
+        </el-col>
+        <el-col :span="8">
+          <!--              <el-form-item prop="qualityLevel">-->
+          <!--                <template slot="label">-->
+          <!--                  <h6 class="titleTextClass">质量等级<span style="color: red">*</span></h6>-->
+          <!--                </template>-->
+          <!--                <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini" style="width: 100%;">-->
+          <!--                  <el-option-->
+          <!--                    v-for="item in factoryQualityLevels"-->
+          <!--                    :key="item.code"-->
+          <!--                    :label="item.name"-->
+          <!--                    :value="item.code">-->
+          <!--                  </el-option>-->
+          <!--                </el-select>-->
+          <!--              </el-form-item>-->
+          <el-form-item prop="qualityLevels">
+            <template slot="label">
+              <h6 class="titleTextClass">质量等级<span style="color: red">*</span></h6>
+            </template>
+            <el-select v-model="formData.qualityLevels" multiple placeholder="请选择" style="width: 100%">
+              <el-option v-for="item in FactoryQualityLevel" :key="item.code" :label="item.name" :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="labels">
+            <template slot="label">
+              <h6 class="titleTextClass">工厂标签</h6>
+            </template>
+            <el-select v-model="formData.labels" multiple value-key="id" size="mini" placeholder="请选择"
+              style="width: 100%;">
+              <el-option v-for="item in labels" :key="item.id" :label="item.name" :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-form-item prop="cooperativeBrand">
+        <template slot="label">
+          <h6 class="titleTextClass">合作商</h6>
+        </template>
+        <tags-of-text :label="'合作商'" @remove="onRemoveCooperativeBrand" @add="onAddCooperativeBrand"
+          :textData="formData.cooperativeBrand" :symbol="'，'"></tags-of-text>
+      </el-form-item>
+      <el-form-item prop="categories">
+        <template slot="label">
+          <h6 class="titleTextClass">生产大类<span style="color: red">*</span></h6>
+        </template>
+        <el-tag v-for="val of majorCategories" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
+          @click="handleTagClick(val)" size="medium" :key="val.id">
+          {{val.name}}
+        </el-tag>
+      </el-form-item>
+      <el-form-item prop="adeptAtCategories">
+        <template slot="label">
+          <h6 class="titleTextClass">优势品类<span style="color: red">*</span></h6>
+        </template>
+        <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"
+          :readOnly="readOnly"></category-select>
+      </el-form-item>
+      <el-form-item prop="keyword">
+        <template slot="label">
+          <h6 class="titleTextClass">关键词</h6>
+        </template>
+        <tags-of-text :label="'关键词'" @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword"
+          :symbol="'，'"></tags-of-text>
+        <span style="font-size: 10px;color: #F56C6C">{{readOnly? '您可以通过关键词搜索到此公司' : '品牌用户可以通过关键词搜索到您'}}</span>
+      </el-form-item>
+      <el-form-item prop="cooperativeBrand">
+        <template slot="label">
+          <h6 class="titleTextClass">工厂门牌</h6>
+        </template>
+        <images-upload :limit="1" :slot-data="gatePhotos" :read-only="readOnly" />
+      </el-form-item>
+      <el-form-item prop="cooperativeBrand">
+        <template slot="label">
+          <h6 class="titleTextClass">裁床照片</h6>
+        </template>
+        <images-upload :limit="1" :slot-data="cuttingTablePhotos" :read-only="readOnly" />
+      </el-form-item>
+      <el-form-item prop="cooperativeBrand">
+        <template slot="label">
+          <h6 class="titleTextClass">车缝照片</h6>
+        </template>
+        <images-upload :limit="1" :slot-data="sewingWorkshopPhotos" :read-only="readOnly" />
+      </el-form-item>
+      <el-form-item prop="cooperativeBrand">
+        <template slot="label">
+          <h6 class="titleTextClass">尾部照片</h6>
+        </template>
+        <images-upload :limit="1" :slot-data="backEndPhotos" :read-only="readOnly" />
+      </el-form-item>
+      <el-row type="flex" justify="start" align="middle">
+        <el-col :span="4" style="margin-left: 20px">
+          <h6>
+            上传资质荣誉照片：
+          </h6>
+          <h6 style="color: grey">
+            &nbsp;&nbsp;&nbsp;&nbsp;(最多五张)
+          </h6>
+        </el-col>
+        <el-col :span="22">
+          <images-upload :limit="5" :slot-data="formData.certificates" :read-only="readOnly" />
+          <h6 style="margin-left: 30px;font-size: 10px;color: grey" v-if="!readOnly">只支持.jpg格式</h6>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
-  const {mapGetters, mapMutations} = createNamespacedHelpers('FactoriesModule');
+  const {
+    mapGetters,
+    mapMutations
+  } = createNamespacedHelpers('FactoriesModule');
 
   import CategorySelect from '../../../../../components/custom/CategorySelect';
   import TagsOfText from '../../../../../components/custom/TagsOfText';
   import ImagesUpload from '../../../../../components/custom/ImagesUpload';
+    import {ImagesUploadSingle} from '@/components/index.js'
+
   export default {
     name: 'FactoryCapacityForm',
     props: ['formData', 'readOnly'],
-    components: {ImagesUpload, TagsOfText, CategorySelect},
+    components: {
+      ImagesUpload,
+      TagsOfText,
+      CategorySelect,
+      ImagesUploadSingle
+    },
     computed: {
       ...mapGetters({
         factoryFormVisible: 'factoryFormVisible',
@@ -170,7 +194,7 @@
       ...mapMutations({
         setLabels: 'setLabels'
       }),
-      async getLabels () {
+      async getLabels() {
         const url = this.apis().getGroupLabels('FACTORY');
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -180,7 +204,7 @@
 
         this.setLabels(result);
       },
-      async getCategories () {
+      async getCategories() {
         const url = this.apis().getMinorCategories();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -190,7 +214,7 @@
 
         this.categories = result;
       },
-      onRemoveKeyword (word) {
+      onRemoveKeyword(word) {
         if (this.readOnly) {
           return;
         }
@@ -209,7 +233,7 @@
 
         this.formData.keyword = text;
       },
-      onAddKeyword (word) {
+      onAddKeyword(word) {
         if (this.formData.keyword == null || this.formData.keyword === '') {
           this.formData.keyword = word;
           this.$forceUpdate();
@@ -236,7 +260,7 @@
 
         this.$forceUpdate();
       },
-      onRemoveCooperativeBrand (word) {
+      onRemoveCooperativeBrand(word) {
         if (this.readOnly) {
           return;
         }
@@ -255,7 +279,7 @@
 
         this.formData.cooperativeBrand = text;
       },
-      onAddCooperativeBrand (word) {
+      onAddCooperativeBrand(word) {
         if (this.formData.cooperativeBrand == null || this.formData.cooperativeBrand === '') {
           this.formData.cooperativeBrand = word;
           return;
@@ -279,7 +303,7 @@
           this.formData.cooperativeBrand = word;
         }
       },
-      async getMajorCategories () {
+      async getMajorCategories() {
         const url1 = this.apis().getMajorCategories();
         const result1 = await this.$http.get(url1);
         if (result1['errors']) {
@@ -289,7 +313,7 @@
 
         this.majorCategories = result1;
       },
-      isSelected (val) {
+      isSelected(val) {
         var index = this.selectCodes.indexOf(val.code);
         if (index > -1) {
           return true;
@@ -297,7 +321,7 @@
           return false;
         }
       },
-      handleTagClick (val) {
+      handleTagClick(val) {
         if (this.readOnly) {
           return;
         }
@@ -320,13 +344,48 @@
           this.selectCodes.push(val.code);
         }
       },
-      initShowMajorCategories () {
+      initShowMajorCategories() {
         for (let i = 0; i < this.formData.categories.length; i++) {
           this.selectCodes.push(this.formData.categories[i].code);
         }
+      },
+      //删除图片
+      onRemovePicture(key){
+        this.formData[key]=null;
       }
     },
-    data () {
+    watch: {
+      //图片数组转对象监听
+      'gatePhotos': function (n, o) {
+        if (n != null && n.length > 0) {
+          this.formData.gatePhoto = n[0];
+        } else {
+          this.formData.gatePhoto = null;
+        }
+      },
+      'cuttingTablePhotos': function (n, o) {
+        if (n != null && n.length > 0) {
+          this.formData.cuttingTablePhoto = n[0];
+        } else {
+          this.formData.cuttingTablePhoto = null;
+        }
+      },
+      'sewingWorkshopPhotos': function (n, o) {
+        if (n != null && n.length > 0) {
+          this.formData.sewingWorkshopPhoto = n[0];
+        } else {
+          this.formData.sewingWorkshopPhoto = null;
+        }
+      },
+      'backEndPhotos': function (n, o) {
+        if (n != null && n.length > 0) {
+          this.formData.backEndPhoto = n[0];
+        } else {
+          this.formData.backEndPhoto = null;
+        }
+      },
+    },
+    data() {
       return {
         categories: [],
         majorCategories: [],
@@ -334,28 +393,46 @@
         factoryDesigns: this.$store.state.EnumsModule.FactoryDesign,
         factoryPatterns: this.$store.state.EnumsModule.FactoryPattern,
         FactoryQualityLevel: this.$store.state.EnumsModule.FactoryQualityLevel,
-        cooperationModes: this.$store.state.EnumsModule.cooperationModes
+        cooperationModes: this.$store.state.EnumsModule.cooperationModes,
+        gatePhotos: [],
+        cuttingTablePhotos: [],
+        sewingWorkshopPhotos: [],
+        backEndPhotos: []
       };
     },
-    created () {
+    created() {
       this.getCategories();
       this.getMajorCategories();
       this.initShowMajorCategories();
+      //图片初始化处理
+      if (this.formData.gatePhoto != null) {
+        this.gatePhotos = [this.formData.gatePhoto];
+      }
+      if (this.formData.cuttingTablePhoto != null) {
+        this.cuttingTablePhotos = [this.formData.cuttingTablePhoto];
+      }
+      if (this.formData.sewingWorkshopPhoto != null) {
+        this.sewingWorkshopPhotos = [this.formData.sewingWorkshopPhoto];
+      }
+      if (this.formData.backEndPhoto != null) {
+        this.backEndPhotos = [this.formData.backEndPhoto];
+      }
     }
   };
+
 </script>
 
 <style>
-  .factory-capacity-form .rowClass{
-    margin-top:20px;
+  .factory-capacity-form .rowClass {
+    margin-top: 20px;
   }
 
-  .factory-capacity-form .titleClass{
+  .factory-capacity-form .titleClass {
     padding: 10px 0px 1px 10px;
     background-color: #DCDCDC;
   }
 
- .factory-capacity-form .factory-upload {
+  .factory-capacity-form .factory-upload {
     margin-left: 80px;
   }
 
@@ -377,7 +454,7 @@
     font-size: 10px;
   }
 
-  .factory-capacity-form .titleTextClass{
+  .factory-capacity-form .titleTextClass {
     text-align: justify;
     text-align-last: justify;
     display: inline-block;
@@ -386,10 +463,12 @@
     /*font-weight: bold;*/
   }
 
-  .factory-capacity-form .el-input--mini .el-input__inner{
+  .factory-capacity-form .el-input--mini .el-input__inner {
     width: 100%;
   }
-  .el-tag{
+
+  .el-tag {
     border-color: white;
   }
+
 </style>
