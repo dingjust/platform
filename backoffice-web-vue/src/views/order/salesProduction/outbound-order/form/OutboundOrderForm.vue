@@ -75,9 +75,9 @@
             <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" />
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="8">
-                <el-form-item label="发单价格" prop="unitPrice"
+                <el-form-item label="发单总价" prop="totalPrimeCost"
                   :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
-                  <el-input v-model="item.unitPrice" placeholder="请输入" @blur="onBlur(item,'billPrice')"
+                  <el-input v-model="item.totalPrimeCost" placeholder="请输入" @blur="onBlur(item,'totalPrimeCost')"
                     v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
                 </el-form-item>
               </el-col>
