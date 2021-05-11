@@ -64,6 +64,11 @@ export default {
           name: '合同管理',
           url: '/contract/backstage',
           icon: 'iconNone'
+        },
+        {
+          name: '模板管理',
+          url: '/contract/template/backstage',
+          icon: 'iconNone'
         }
       ]
     },

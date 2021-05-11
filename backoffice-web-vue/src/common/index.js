@@ -1237,7 +1237,16 @@ let TENANT_APIS = {
   // 处理积分申请
   processPointsExchange (id) {
     return '/b2b/user/points/exchange/process/' + id;
-  }
+  },
+
+  // 获取合同模板列表（平台    post
+  searchContractTempOnPlatform: () => '/b2b/agreement/temp/list',
+  // 获取合同模板（平台        get 
+  getContractTempOnPlatform: (code) => '/b2b/agreement/temp/source/' + code,
+  // 更新合同模板（平台       post
+  updateContractTempOnPlatform: () => '/b2b/agreement/temp/save',
+  // 删除合同模板（平台       get
+  deleteContractTempOnPlatform: (code) => '/b2b/agreement/temp/delete/' + code
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

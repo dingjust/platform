@@ -14,7 +14,10 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
-  queryFormData: {},
+  queryFormData: {
+    title: '',
+    type: ''
+  },
 };
 
 const mutations = {
@@ -28,18 +31,14 @@ const mutations = {
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword,type, page, size}) {
-    commit('url', url);
-    commit('keyword', keyword);
-    commit('type', type);
-    commit('currentPageNumber', page);
-    if (size) {
+  async search({dispatch, commit, state}, {url, query, page, size}) {
+    if (page !== null || page !== undefined) {
+      commit('currentPageNumber', page);
+    }
+    if (size !== null || size !== undefined) {
       commit('currentPageSize', size);
     }
-    const response = await http.post(url, {
-      title: state.keyword,
-      type:type,
-    }, {
+    const response = await http.post(url, query, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
