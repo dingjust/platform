@@ -1239,6 +1239,7 @@ let TENANT_APIS = {
     return '/b2b/user/points/exchange/process/' + id;
   },
 
+  /** 平台端处理合同原型模板 */
   // 获取合同模板列表（平台    post
   searchContractTempOnPlatform: () => '/b2b/agreement/temp/list',
   // 获取合同模板（平台        get 
@@ -1246,7 +1247,18 @@ let TENANT_APIS = {
   // 更新合同模板（平台       post
   updateContractTempOnPlatform: () => '/b2b/agreement/temp/save',
   // 删除合同模板（平台       get
-  deleteContractTempOnPlatform: (code) => '/b2b/agreement/temp/delete/' + code
+  deleteContractTempOnPlatform: (code) => '/b2b/agreement/temp/delete/' + code,
+
+
+  /** 工厂审阅 */
+  // 获取工厂修改备份
+  getFactoryBackups: (code) => '/b2b/factories/backups/' + code,
+  // 通过审阅  put
+  FactoryReviewPass: (code) => '/b2b/factories/review/' + code + '/pass',
+  // 审阅驳回   put
+  FactoryReviewReject: (code) => '/b2b/factories/review/' + code + '/reject',
+  // 工厂是否可以展示 put
+  FactoryShow: (uid, isShow) => '/b2b/factories/enableShow/' + uid + '/' + isShow
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

@@ -2285,6 +2285,24 @@ const state = {
       code: 'PAY_FAIL',
       name: '支付失败'
     }
+  ],
+  FactoryReviewState: [
+    {
+      code: 'NONE',
+      name: '无'
+    },
+    {
+      code: 'REVIEWING',
+      name: '审核中'
+    },
+    {
+      code: 'REVIEW_PASSED',
+      name: '审核通过'
+    },
+    {
+      code: 'REVIEW_REJECTED',
+      name: '审核失败'
+    }
   ]
 };
 

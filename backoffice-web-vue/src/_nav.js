@@ -15,6 +15,17 @@ export default {
       icon: 'el-icon-s-home'
     },
     {
+      name: '任务',
+      icon: 'el-icon-notebook-1',
+      children: [
+        {
+          name: '工厂审阅',
+          url: '/task/factory/review',
+          icon: 'iconNone'
+        }
+      ]
+    },
+    {
       name: '产品',
       url: '/product',
       icon: 'el-icon-goods',

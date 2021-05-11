@@ -874,19 +874,25 @@ const router = new Router({
           return c('router-view');
         }
       },
-      children: [{
-        path: 'handle',
-        name: '待我处理',
-        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/handle/TaskHandlePage')
-      }, {
-        path: 'approval',
-        name: '我的审批',
-        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/approval/TaskApprovalPage')
-      }, {
-        path: 'assign',
-        name: '待我分配',
-        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/assign/TaskAssignPage')
-      }]
+      children: [
+        {
+          path: 'handle',
+          name: '待我处理',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/handle/TaskHandlePage')
+        }, {
+          path: 'approval',
+          name: '我的审批',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/approval/TaskApprovalPage')
+        }, {
+          path: 'assign',
+          name: '待我分配',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/assign/TaskAssignPage')
+        }, {
+          path: 'factory/review',
+          name: '工厂审阅',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/factory-review/FactoryReview')
+        }
+      ]
     },
     {
       path: '/miscs',

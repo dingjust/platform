@@ -22,9 +22,8 @@
               <el-button v-if="props.item.loginDisabled" type="text" @click="onCannelDelete(props.item)">
                 解禁
               </el-button>
-              <el-button type="text" @click="clearAuth(props.item)">
-                清除认证
-              </el-button>
+              <el-button type="text" @click="clearAuth(props.item)">清除认证</el-button>
+              <el-button type="text" @click="modifyIsShow(props.item)">{{props.item.enableShow === true ? '关闭显示' : '开启显示'}}</el-button>
             </template>
           </factory-list>
         </el-tab-pane>
@@ -106,7 +105,6 @@
         this.$message.success('保存成功');
         this.dialogFormVisible = false;
       },
-
       onSearch (page, size) {
         this.setIsAdvancedSearch(false);
         const keyword = this.keyword;
@@ -115,6 +113,8 @@
       },
       onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
+
+        this.queryFormData.reviewState = '';
         const queryFormData = this.queryFormData;
         let url = this.apis().getFactories();
         if (this.isTenant()) {
@@ -220,6 +220,47 @@
           page = this.page.number - 1;
         }
         this.onAdvancedSearch(page);
+      },
+      modifyIsShow (row) {
+        if (row.enableShow === true) {
+          this.$prompt('请输入关闭工厂：' + row.name + ' 展示的原因', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
+            inputErrorMessage: '请输入原因',
+            closeOnClickModal: false,
+            closeOnPressEscape: false
+          }).then(({ value }) => {
+            this._modifyIsShow(row.uid, false, value);
+          })
+        } else {
+          this.$confirm('是否开启工厂：' + row.name + ' 展示', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            closeOnClickModal: false,
+            closeOnPressEscape: false
+          }).then(() => {
+            this._modifyIsShow(row.uid, true);
+          })
+        }
+      },
+      async _modifyIsShow (uid, isShow, message) {
+        const url = this.apis().FactoryShow(uid, isShow);
+        const result = await this.$http.put(url, {
+          reason: message ? message : ''
+        });
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return
+        }
+
+        this.onAdvancedSearch();
       }
     },
     data () {
