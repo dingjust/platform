@@ -973,6 +973,18 @@ const state = {
     {
       code: 'N04',
       name: '200人以上'
+    },
+    {
+      code: 'N05',
+      name: '20人以下'
+    },
+    {
+      code: 'N06',
+      name: '21至35人'
+    },
+    {
+      code: 'N07',
+      name: '36人至50人'
     }
   ],
   // 生产模式
@@ -2302,6 +2314,26 @@ const state = {
     {
       code: 'REVIEW_REJECTED',
       name: '审核失败'
+    }
+  ],
+  RequirementSizeType: [
+    {
+      code: 'FREE_SIZE',
+      name: '均码'
+    },
+    {
+      code: 'MULTIPLE_SIZE',
+      name: '多码'
+    }
+  ],
+  RequirementColorType: [
+    {
+      code: 'SINGLE_COLOR',
+      name: '单色'
+    },
+    {
+      code: 'MULTIPLE_COLOR',
+      name: '多色'
     }
   ]
 };

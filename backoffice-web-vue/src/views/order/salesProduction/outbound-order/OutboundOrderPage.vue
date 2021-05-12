@@ -191,7 +191,8 @@
           },
           taskOrderEntries: data.taskOrderEntries.map(item => {
             return {
-              unitPrice: item.unitPrice,
+              id: item.id ? item.id : null,
+              totalPrimeCost: item.totalPrimeCost,
               deliveryDate: item.deliveryDate,
               shippingAddress: item.shippingAddress,
               product: item.product,

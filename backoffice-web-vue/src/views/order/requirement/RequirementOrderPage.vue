@@ -263,6 +263,15 @@
           text = text.slice(0, text.length - 1);
         }
         params['factories'] = text;
+
+        // 处理地区
+        let form = Object.assign({}, this.formData);
+        form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
+          return {
+            code: item[item.length - 1]
+          }
+        })
+
         const url = this.apis().createRequirementOrder();
         const result = await this.$http.post(url, this.formData, params);
         if (result['errors']) {

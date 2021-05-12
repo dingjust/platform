@@ -38,7 +38,7 @@
           </template>
           <category-select :listData="categories" :selectDatas="selectDatas" :multiple="false"></category-select>
         </el-form-item>
-        <el-form-item prop="details.productiveOrientations">
+        <!-- <el-form-item prop="details.productiveOrientations">
           <template slot="label">
             <h6 class="titleTextClass">选择地区<span style="color: red">*</span></h6>
           </template>
@@ -53,6 +53,24 @@
               </el-option>
             </el-select>
           </el-row>
+        </el-form-item> -->
+        <el-form-item prop="details.productiveDistricts">
+          <template slot="label">
+            <h6 class="titleTextClass">选择地区<span style="color: red">*</span></h6>
+          </template>
+            <el-cascader v-model="formData.details.productiveDistricts"
+              style="width: 300px"
+              :options="province"
+              :collapse-tags="true"
+              :props="{
+                multiple: true,
+                value: 'code',
+                label: 'name',
+                children: 'children',
+                disabled: 'disabled',
+                checkStrictly: true
+              }"
+              clearable></el-cascader>
         </el-form-item>
         <el-form-item prop="details.productName">
           <template slot="label">
@@ -183,6 +201,7 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <requirement-order-other-info :formData="formData"/>
         <el-form-item prop="attachments">
           <template slot="label">
             <h6 class="titleTextClass">附件</h6>
@@ -227,6 +246,8 @@
 </template>
 
 <script>
+  import { province } from '@/common/js/province';
+
   import {
     createNamespacedHelpers
   } from 'vuex';
@@ -235,6 +256,7 @@
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
   import FactoryCooperatorTransferForm from './FactoryCooperatorTransferForm';
   import CompanySelect from '@/components/custom/order-form/CompanySelect'
+  import RequirementOrderOtherInfo from './RequirementOrderOtherInfo.vue';
 
   const {
     mapGetters,
@@ -249,7 +271,8 @@
       ImagesUpload,
       TemplateDetail,
       CategorySelect,
-      CompanySelect
+      CompanySelect,
+      RequirementOrderOtherInfo
     },
     computed: {
       ...mapGetters({
@@ -412,6 +435,13 @@
           callback();
         }
       };
+      var checkProductiveDistricts = (rule, value, callback) => {
+        if (value.length <= 0) {
+          return callback(new Error('请选择地区'));
+        } else {
+          callback();
+        }
+      };
       var checkReplaceCompany = (rule, value, callback) => {
         if (value.id) {
           callback();
@@ -420,6 +450,7 @@
         }
       };
       return {
+        province: [],
         selectDatas: [],
         pickerOptions: {
           disabledDate(time) {
@@ -486,9 +517,14 @@
             validator: checkMajorCategory,
             trigger: 'change'
           }],
-          'details.productiveOrientations': [{
+          // 'details.productiveOrientations': [{
+          //   type: 'array',
+          //   validator: checkProductiveOrientations,
+          //   trigger: 'change'
+          // }],
+          'details.productiveDistricts': [{
             type: 'array',
-            validator: checkProductiveOrientations,
+            validator: checkProductiveDistricts,
             trigger: 'change'
           }],
           'belongTo': [{
@@ -500,6 +536,13 @@
       }
     },
     created() {
+      province.forEach(item => {
+        // 将省, 市设置为禁止选择
+        this.$set(item, 'disabled', true),
+        item.children.forEach(val => this.$set(val, 'disabled', true))
+      });
+      this.province = province;
+
       if (this.isTenant()) {
         this.formData.publishType = 'PUBLISH_BY_OTHERS';
       } else {
@@ -529,6 +572,22 @@
         this.getRegions();
       }
       this.getSelectUids();
+    },
+    mounted () {
+      if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
+        let productiveDistricts = [];
+        this.formData.details.productiveDistricts.forEach(district => {
+          province.forEach(item => {
+            item.children.forEach(val => {
+              if (val.children.findIndex(v => v.code === district.code) > -1) {
+                productiveDistricts.push([item.code, val.code, district.code]);
+              }
+            })
+          })
+        })
+
+        this.formData.details.productiveDistricts = productiveDistricts;
+      }
     },
     destroyed() {
       this.clearFormData();
