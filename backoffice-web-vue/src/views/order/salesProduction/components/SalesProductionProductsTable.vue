@@ -26,10 +26,14 @@
           <span>{{getEntryTotalAmount(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="unitPrice" label="接单单价/元" min-width="100"></el-table-column>
+      <el-table-column prop="unitPrice" label="接单单价/元" min-width="100">
+        <template slot-scope="scope">
+          {{getUnitPrice(scope.row)}}
+        </template>
+      </el-table-column>
       <el-table-column label="接单总价/元" min-width="100">
         <template slot-scope="scope">
-          {{getEntryTotalPrice(scope.row)}}
+          {{scope.row.totalPrimeCost ? scope.row.totalPrimeCost : getEntryTotalPrice(scope.row)}}
         </template>
       </el-table-column>
       <!-- <el-table-column label="预计总成本">
@@ -118,6 +122,14 @@
       getEntryTotalCost,
       getEntryProfit,
       getEntryProfitPercent,
+      getUnitPrice (row) {
+        if (row.unitPrice) {
+          return row.unitPrice;
+        }
+        if (row.totalPrimeCost) {
+          return (Number.parseFloat(row.totalPrimeCost) / getEntryTotalAmount(row)).toFixed(2);
+        }
+      },
       onProductDetail(row) {
         // this.salesProductDetailsVisible = true;
       },

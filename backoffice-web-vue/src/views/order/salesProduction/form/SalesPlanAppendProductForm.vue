@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn sales-plan-append-form">
     <el-dialog :visible.sync="materialDialogVisible" width="95%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" 
@@ -22,31 +22,18 @@
       :close-on-click-modal="false">
       <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="setProgressPlan" />
     </el-dialog>
-    <el-form :model="appendProductForm" ref="appendProductForm" label-position="left" :disabled="readOnly">
+    <el-form :model="appendProductForm" ref="appendProductForm" label-position="left" :disabled="readOnly" :inline="true">
       <template v-for="(entry, productIndex) in appendProductForm.sampleList">
         <div :key="productIndex">
-          <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20">
-            <el-col :span="20">
-              <el-row type="flex" align="middle">
-                <el-col :span="14" style="padding-top:25px">
-                  <el-form-item :prop="'sampleList.' + productIndex + '.product.name'" label="产品名" label-width="100px"
-                    :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                    <el-input placeholder="名称" v-model="entry.product.name" size="mini" :disabled="true"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-button style="margin-left: 10px" @click="appendSample(productIndex)" size="mini"
-                    :disabled="isUpdate">{{entry.product.id ? '更换产品' : '添加产品'}}</el-button>
-                </el-col>
-                <el-col :span="2"><span style="color:#ff1744">(选择款式)</span></el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="2">
-              <el-row type="flex" align="middle">
-                <el-button class="remove-btn" v-if="productIndex!=0" @click="removeRow(productIndex)">删除</el-button>
-              </el-row>
-            </el-col>
-          </el-row>
+          <div class="info-sales-row" style="display:flex;flex-wrap: wrap;">
+            <el-form-item :prop="'sampleList.' + productIndex + '.product.name'" label="产品名" label-width="100px"
+              :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+              <el-input placeholder="名称" v-model="entry.product.name" size="mini" :disabled="true"></el-input>
+            </el-form-item>
+            <el-button style="margin: 2px 0 0 10px;height: 28px;" @click="appendSample(productIndex)" size="mini"
+              :disabled="isUpdate">{{entry.product.id ? '更换产品' : '添加产品'}}</el-button>
+            <h6 style="color:#ff1744;margin: 8px 0 0 10px;">(选择款式)</h6>
+          </div>
           <el-row type="flex" v-if="entry.product.code != null" class="info-order-row">
             <el-col :span="4">
               <el-row type="flxe">
@@ -85,60 +72,31 @@
               </table>
             </el-col>
           </el-row>
-          <!-- <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20" v-if="orderType == 'SALES_ORDER'">
-            <el-col :span="16">
-              <el-row type="flex" align="middle">
-                <el-col :span="14" style="padding-top:25px">
-                  <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案" label-width="100px"
-                    :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="2">
-                  <el-button style="margin-left: 10px" @click="appendProgressPlan(productIndex)" size="mini"
-                    :disabled="isUpdate">点击选择</el-button>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row> -->
-          <el-row type="flex" :gutter="10">
-            <el-col :span="8">
-              <el-row type="flex" align="middle">
-                <el-form-item :prop="'sampleList.' + productIndex + '.unitPrice'" label="订单报价" label-width="100px"
-                  :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                  <el-input placeholder="订单报价" v-model="entry.unitPrice" :disabled="fromOrigin"
-                    v-number-input.float="{ min: 0 ,decimal:2}" size="mini">
-                    <span slot="suffix">元</span>
-                  </el-input>
-                </el-form-item>
-              </el-row>
-            </el-col>
-            <el-col :span="8">
-              <el-row type="flex" align="middle">
-                <el-form-item :prop="'sampleList.' + productIndex + '.deliveryDate'" label="交货日期" label-width="100px"
-                  :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                  <el-date-picker v-model="entry.deliveryDate" type="date" placeholder="选择日期" :disabled="fromOrigin">
-                  </el-date-picker>
-                </el-form-item>
-              </el-row>
-            </el-col>
-            <el-col :span="8">
-              <el-row type="flex" align="top">
-                <el-col :span="16">
-                  <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案"
-                    label-width="100px" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-                    <el-input placeholder="名称" v-model="entry.progressPlan.name" size="mini" :disabled="true"
-                      v-if="entry.progressPlan!=null">
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-button style="margin-left: 10px;padding-top: 10px" @click="appendProgressPlan(productIndex)"
-                    size="mini" :disabled="isUpdate">点击选择</el-button>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
+          <div class="price-row">
+            <div style="display:flex">
+              <el-form-item :prop="'sampleList.' + productIndex + '.totalPrimeCost'" label="订单报价"
+                :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+                <el-input placeholder="订单报价" v-model="entry.totalPrimeCost" :disabled="fromOrigin" size="mini"
+                  v-number-input.float="{ min: 0 ,decimal:2}" >
+                  <span slot="suffix">元</span>
+                </el-input>
+              </el-form-item>
+              <h6 style="margin:0;padding:8px 0 0 10px;width:130px">报价单价：{{(getPrice(entry))}}</h6>
+            </div>
+            <el-form-item :prop="'sampleList.' + productIndex + '.deliveryDate'" label="交货日期"
+              :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+              <el-date-picker v-model="entry.deliveryDate" type="date" placeholder="选择日期" :disabled="fromOrigin" size="mini">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item :prop="'sampleList.' + productIndex + '.progressPlan.name'" label="节点方案"
+               :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+              <el-input placeholder="名称" v-model="entry.progressPlan.name" :disabled="true"
+                v-if="entry.progressPlan!=null" size="mini">
+                <el-button slot="suffix" size="mini" @click="appendProgressPlan(productIndex)"
+                   :disabled="isUpdate">点击选择</el-button>
+              </el-input>
+            </el-form-item>
+          </div>
           <el-row style="padding-left: 6px">
             <my-address-form :vAddress.sync="entry.shippingAddress" ref="addressComp"
               :readOnly="readOnly||fromOrigin" />
@@ -277,6 +235,16 @@
       }
     },
     methods: {
+      getPrice (row) {
+        let quantity = 0;
+        row.colorSizeEntries.forEach(item => quantity += (item.quantity ? Number.parseInt(item.quantity) : 0));
+
+        let price = 0;
+        if (!Number.isNaN(Number.parseFloat(row.totalPrimeCost))) {
+          price = Number.parseFloat(row.totalPrimeCost) / (quantity === 0 ? 1 : quantity);
+        }
+        return price.toFixed(2);
+      },
       appendSample(index) {
         this.isSingleSelect = true;
         this.currentProductIndex = index;
@@ -336,7 +304,6 @@
           var entry = {
             product: data,
             colorSizeEntries: colorSizeEntries,
-            unitPrice: '',
             deliveryDate: '',
             // materialsSpecEntries: data.entries,
             productionProcessContent: '',

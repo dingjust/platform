@@ -83,33 +83,28 @@
             <el-row type="flex" v-if="item.code" style="margin: 0px 0px 10px 30px;">
               <el-button @click="openColorSize(item)"> + 添加颜色尺码</el-button>
             </el-row>
-            <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-              <el-col :span="8">
+            <div class="outbound-basic-row price-row">
+              <div style="display:flex">
                 <el-form-item label="发单总价" prop="totalPrimeCost"
-                  :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
+                  :rules="[{required: true, message: '请填写发单总价', trigger: 'blur'}]">
                   <el-input v-model="item.totalPrimeCost" placeholder="请输入" @blur="onBlur(item,'totalPrimeCost')"
                     v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
                 </el-form-item>
-              </el-col>
-              <el-col :span="7">
-                <el-form-item label="交货日期" prop="deliveryDate"
-                  :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
-                  <el-date-picker v-model="item.deliveryDate" type="date" value-format="timestamp" placeholder="选择日期">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="生产节点" prop="progressPlan"
+                <h6 style="margin:0;padding:8px 0 0 10px;width:130px">发单单价：{{(getPrice(item))}}</h6>
+              </div>
+              <el-form-item label="交货日期" prop="deliveryDate"
+                :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
+                <el-date-picker v-model="item.deliveryDate" type="date" value-format="timestamp" placeholder="选择日期">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="生产节点" prop="progressPlan"
                   :rules="[{ required: true, type: 'object', validator: validateProgressPlan, trigger: 'change' }]">
-                  <el-input v-model="item.progressPlan.name" :disabled="true" placeholder="请输入"></el-input>
+                  <el-input v-model="item.progressPlan.name" :disabled="true" placeholder="请输入">
+                    <el-button slot="suffix" v-if="item.progressPlan.isFromOrder" @click="editProgressPlan(index, item)">编辑</el-button>
+                    <el-button slot="suffix" v-else @click="onProgressPlanSelect(index)">选择节点</el-button>
+                  </el-input>
                 </el-form-item>
-              </el-col>
-              <el-col :span="3">
-                <el-button v-if="item.progressPlan.isFromOrder" @click="editProgressPlan(index, item)" size="mini">编辑
-                </el-button>
-                <el-button v-else @click="onProgressPlanSelect(index)" size="mini">选择节点</el-button>
-              </el-col>
-            </el-row>
+            </div>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="24">
                 <my-address-form :vAddress.sync="item.shippingAddress" ref="addressForm" />
@@ -313,6 +308,16 @@
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
+      getPrice (row) {
+        let quantity = 0;
+        row.colorSizeEntries.forEach(item => quantity += (item.quantity ? Number.parseInt(item.quantity) : 0));
+
+        let price = 0;
+        if (!Number.isNaN(Number.parseFloat(row.totalPrimeCost))) {
+          price = Number.parseFloat(row.totalPrimeCost) / (quantity === 0 ? 1 : quantity);
+        }
+        return price.toFixed(2);
+      },
       appendApprover() {
         this.formData.sendApprovers.push({});
       },
@@ -403,7 +408,6 @@
             code: item.code,
             colors: item.colors,
             sizes: item.sizes,
-            unitPrice: '',
             deliveryDate: '',
             shippingAddress: {},
             product: {
@@ -498,7 +502,6 @@
               originOrder: {
                 id: item.id
               },
-              unitPrice: item.unitPrice,
               deliveryDate: item.deliveryDate,
               shippingAddress: item.shippingAddress,
               product: {
@@ -820,4 +823,13 @@
     height: 100px;
   }
 
+  /deep/ .el-input__suffix {
+    right: 0px;
+  }
+
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
 </style>

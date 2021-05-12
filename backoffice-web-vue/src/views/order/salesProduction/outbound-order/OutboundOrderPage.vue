@@ -209,7 +209,8 @@
           attachments: data.attachments ? data.attachments : [],
           sendApprovers: data.sendApprovers,
           merchandiser: data.merchandiser,
-          title: data.title
+          title: data.title,
+          state: data.state
         }
         return formData;
       },
