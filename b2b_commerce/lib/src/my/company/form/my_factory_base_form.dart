@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:b2b_commerce/src/business/products/product_category.dart';
@@ -30,9 +31,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   TextEditingController _cooperativeBrandController = TextEditingController();
   TextEditingController _coverageAreaController = TextEditingController();
   TextEditingController _productionLineQuantityController =
-      TextEditingController();
+  TextEditingController();
   TextEditingController _factoryBuildingsQuantityController =
-      TextEditingController();
+  TextEditingController();
   TextEditingController _introController = TextEditingController();
 
   FocusNode _nameFocusNode = FocusNode();
@@ -58,48 +59,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   @override
   void initState() {
     _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
-//    _factory = widget.factory;
-    _nameController.text = _factory.name ?? '';
-    _introController.text = _factory.intro ?? '';
-    _cooperativeBrandController.text = _factory.cooperativeBrand ?? '';
-    _coverageAreaController.text = _factory.coverageArea ?? '';
-    _factoryBuildingsQuantityController.text =
-        _factory.factoryBuildingsQuantity == null
-            ? ''
-            : _factory.factoryBuildingsQuantity.toString();
-    _productionLineQuantityController.text =
-        _factory.productionLineQuantity == null
-            ? ''
-            : _factory.productionLineQuantity.toString();
-    if (_factory.scaleRange != null) {
-      _scaleRange.add(_factory.scaleRange.toString().split('.')[1]);
-    }
-    if (_factory.monthlyCapacityRange != null) {
-      _monthlyCapacityRanges
-          .add(_factory.monthlyCapacityRange.toString().split('.')[1]);
-    }
-    if (_factory.populationScale != null) {
-      _populationScale.add(_factory.populationScale.toString().split('.')[1]);
-    }
-    if (_factory.cooperationModes != null) {
-      _cooperationModes.addAll(
-        _factory.cooperationModes
-            .map((cooperationMode) => cooperationMode.toString().split('.')[1]),
-      );
-    }
-    if (_factory.profilePicture != null) {
-      _medias = [_factory.profilePicture];
-    }
-    if (_factory.gatePhoto != null) _gatePhotos = [_factory.gatePhoto];
-    if (_factory.cuttingTablePhoto != null)
-      _cuttingTablePhotos = [_factory.cuttingTablePhoto];
-    if (_factory.sewingWorkshopPhoto != null)
-      _sewingWorkshopPhotos = [_factory.sewingWorkshopPhoto];
-    if (_factory.backEndPhoto != null) _backEndPhotos = [_factory.backEndPhoto];
-
-    if (_factory.qualityLevels == null) {
-      _factory.qualityLevels = [];
-    }
+    initForm();
+    checkReviewInfo();
     super.initState();
   }
 
@@ -119,13 +80,56 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         color: Colors.grey[200],
         child: ListView(
           children: <Widget>[
+            _buildReviewInfo(),
+            _buildName(),
+            _divider,
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Row(
+                children: [
+                  Text(
+                    '工厂照片',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    '*',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  Text(
+                    '（长按图片编辑）',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  )
+                ],
+              ),
+            ),
             _PictureRow(
               fontSize: _fontSize,
               required: true,
-              label: '企业LOGO',
+              label: '工厂全景',
               medias: _medias,
             ),
-            _buildName(),
+            _PictureRow(
+              fontSize: _fontSize,
+              required: true,
+              label: '工厂门牌',
+              medias: _gatePhotos,
+            ),
+            _PictureRow(
+              fontSize: _fontSize,
+              label: '车缝车间',
+              medias: _sewingWorkshopPhotos,
+            ),
+            _PictureRow(
+              fontSize: _fontSize,
+              label: '裁床照片',
+              medias: _cuttingTablePhotos,
+            ),
+            _PictureRow(
+              fontSize: _fontSize,
+              label: '尾部照片',
+              medias: _backEndPhotos,
+            ),
             _divider,
             _buildIntro(),
             _divider,
@@ -167,37 +171,54 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             _divider,
             _buildLabels(context),
             _divider,
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Text('厂房照片：'),
-            ),
-            _PictureRow(
-              fontSize: _fontSize,
-              // required: true,
-              label: '工厂门牌',
-              medias: _gatePhotos,
-            ),
-            _PictureRow(
-              fontSize: _fontSize,
-              // required: true,
-              label: '车缝车间',
-              medias: _sewingWorkshopPhotos,
-            ),
-            _PictureRow(
-              fontSize: _fontSize,
-              label: '裁床',
-              medias: _cuttingTablePhotos,
-            ),
-            _PictureRow(
-              fontSize: _fontSize,
-              label: '尾部',
-              medias: _backEndPhotos,
-            ),
           ],
         ),
       ),
     );
+  }
+
+  void initForm() {
+    _nameController.text = _factory.name ?? '';
+    _introController.text = _factory.intro ?? '';
+    _cooperativeBrandController.text = _factory.cooperativeBrand ?? '';
+    _coverageAreaController.text = _factory.coverageArea ?? '';
+    _factoryBuildingsQuantityController.text =
+        _factory.factoryBuildingsQuantity == null
+            ? ''
+            : _factory.factoryBuildingsQuantity.toString();
+    _productionLineQuantityController.text =
+        _factory.productionLineQuantity == null
+            ? ''
+            : _factory.productionLineQuantity.toString();
+    if (_factory.scaleRange != null) {
+      _scaleRange.add(_factory.scaleRange.toString().split('.')[1]);
+    }
+    if (_factory.monthlyCapacityRange != null) {
+      _monthlyCapacityRanges
+          .add(_factory.monthlyCapacityRange.toString().split('.')[1]);
+    }
+    if (_factory.populationScale != null) {
+      _populationScale.add(_factory.populationScale.toString().split('.')[1]);
+    }
+    if (_factory.cooperationModes != null) {
+      _cooperationModes.addAll(
+        _factory.cooperationModes
+            .map((cooperationMode) => cooperationMode.toString().split('.')[1]),
+      );
+    }
+    if (_factory.profilePicture != null) {
+      _medias = [_factory.profilePicture];
+    }
+    if (_factory.gatePhoto != null) _gatePhotos = [_factory.gatePhoto];
+    if (_factory.cuttingTablePhoto != null)
+      _cuttingTablePhotos = [_factory.cuttingTablePhoto];
+    if (_factory.sewingWorkshopPhoto != null)
+      _sewingWorkshopPhotos = [_factory.sewingWorkshopPhoto];
+    if (_factory.backEndPhoto != null) _backEndPhotos = [_factory.backEndPhoto];
+
+    if (_factory.qualityLevels == null) {
+      _factory.qualityLevels = [];
+    }
   }
 
   GestureDetector _buildContactInfo(BuildContext context) {
@@ -316,7 +337,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
           RichText(
             text: TextSpan(children: [
               TextSpan(
-                  text: '公司名称',
+                  text: '工厂名称',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: _fontSize,
@@ -334,7 +355,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               padding: EdgeInsets.all(0),
               focusNode: _nameFocusNode,
               controller: _nameController,
-              hintText: '请输入公司名称',
+              hintText: '请输入工厂名称',
               hideDivider: true,
               onChanged: (v) {
                 _factory.name =
@@ -924,15 +945,21 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       color: Colors.white,
       child: TextFieldComponent(
         focusNode: _factoryBuildingsQuantityFocusNode,
-        leadingText: Text('产房面积',
+        leadingText: Text('厂房面积',
             style: TextStyle(
               fontSize: _fontSize,
             )),
         controller: _factoryBuildingsQuantityController,
         dividerPadding: EdgeInsets.all(0),
+        inputType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly,
         ],
+        hintText: '请填写厂房面积',
+        trailing: Container(
+          margin: EdgeInsets.only(left: 10),
+          child: Text('㎡'),
+        ),
         onChanged: (v) {
           _factory.factoryBuildingsQuantity = ClassHandleUtil.transInt(
               _factoryBuildingsQuantityController.text);
@@ -1019,8 +1046,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       );
 
   //格式化合作方式
-  String formatCooperationModesSelectText(
-      List<CooperationModes> cooperationModes) {
+  String formatCooperationModesSelectText(List<CooperationModes> cooperationModes) {
     String text = '';
 
     if (cooperationModes != null) {
@@ -1260,20 +1286,12 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   void _onSubmit() async {
     if (ObjectUtil.isEmptyList(_medias)) {
-      ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
+      ShowDialogUtil.showValidateMsg(context, '请上传工厂名称/工厂全景图');
       return;
     }
-    // if (ObjectUtil.isEmptyList(_gatePhotos)) {
-    //   ShowDialogUtil.showValidateMsg(context, '请上传门牌照片');
-    //   throw Exception('门牌照片必传');
-    // }
-    // if (ObjectUtil.isEmptyList(_sewingWorkshopPhotos)) {
-    //   ShowDialogUtil.showValidateMsg(context, '请上传车缝车间照片');
-    //   throw Exception('车缝车间照片必传');
-    // }
 
     if (ObjectUtil.isEmptyList(_medias)) {
-      ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
+      ShowDialogUtil.showValidateMsg(context, '请上传工厂名称/工厂全景图');
       return;
     }
     if (ObjectUtil.isEmptyString(_factory.name)) {
@@ -1331,37 +1349,157 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       ShowDialogUtil.showValidateMsg(context, '请选择月均产能');
       throw Exception('月均产能必填');
     }
+
     if (_medias.length > 0) {
       _factory.profilePicture = _medias[0];
     } else {
       _factory.profilePicture = null;
     }
 
+    //工厂照片
     _factory.gatePhoto = _gatePhotos.isNotEmpty ? _gatePhotos.first : null;
-
     _factory.cuttingTablePhoto =
     _cuttingTablePhotos.isNotEmpty ? _cuttingTablePhotos.first : null;
-
     _factory.sewingWorkshopPhoto =
     _sewingWorkshopPhotos.isNotEmpty ? _sewingWorkshopPhotos.first : null;
-
     _factory.backEndPhoto =
     _backEndPhotos.isNotEmpty ? _backEndPhotos.first : null;
+    if (_factory.gatePhoto == null &&
+        _factory.backEndPhoto == null &&
+        _factory.cuttingTablePhoto == null &&
+        _factory.sewingWorkshopPhoto == null) {
+      ShowDialogUtil.showValidateMsg(context, '请上传工厂照片');
+      return;
+    }
 
     _factory.name = _nameController.text == '' ? null : _nameController.text;
     _factory.cooperativeBrand = _cooperativeBrandController.text == ''
         ? null
         : _cooperativeBrandController.text;
+    _submit();
+  }
 
+  void _submit() async {
+    BotToast.showCustomText(
+      onlyOne: true,
+      duration: null,
+      wrapToastAnimation: (controller, cancel, child) =>
+          Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  cancel();
+                },
+                child: AnimatedBuilder(
+                  builder: (_, child) =>
+                      Opacity(
+                        opacity: controller.value,
+                        child: child,
+                      ),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(color: Colors.black26),
+                    child: SizedBox.expand(),
+                  ),
+                  animation: controller,
+                ),
+              ),
+              CustomOffsetAnimation(
+                controller: controller,
+                child: child,
+              )
+            ],
+          ),
+      toastBuilder: (cancelFunc) =>
+          AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5)),
+            title: const Text('是否确认修改资料?'),
+            content: const Text('为了确保信息真实有效性，您提交的信息将由平台审核，审核通过后您提交的资料才会生效'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  cancelFunc();
+                },
+                child: const Text(
+                  '取消',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+              FlatButton(
+                onPressed: () {
+                  cancelFunc();
+                  _formSubmit();
+                },
+                child: const Text(
+                  '确定',
+                  style: TextStyle(color: Colors.lightBlue),
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _formSubmit() async {
     Function cancelFunc =
     BotToast.showLoading(crossPage: false, clickClose: true);
-
     String result = await UserRepositoryImpl().factoryUpdate(_factory);
     if (result != null) {
       UserModel user = await UserBLoC.instance.refreshUser();
       Navigator.pop(context, true);
     }
     cancelFunc.call();
+  }
+
+  Widget _buildReviewInfo() {
+    if (_factory.reviewState == FactoryReviewState.REVIEWING) {
+      return Container(
+        color: Colors.orange,
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Row(
+          children: [
+            Expanded(
+                child: Text(
+                  '您提交的资料正在等待平台审核，请耐心等待',
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
+        ),
+      );
+    } else if (_factory.reviewState == FactoryReviewState.REVIEW_REJECTED) {
+      return Container(
+        color: Colors.red[200],
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Row(
+          children: [
+            Expanded(
+                child: Text(
+                  '您提交的资料平台审核失败，原因：${_factory.reviewReasons}',
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
+        ),
+      );
+    }
+
+    return Container();
+  }
+
+  ///资料修改信息
+  void checkReviewInfo() async {
+    if (_factory.reviewState == FactoryReviewState.REVIEWING ||
+        _factory.reviewState == FactoryReviewState.REVIEW_REJECTED) {
+      BaseResponse response =
+      await UserRepositoryImpl.getFactoryProfileBackup(_factory.uid);
+      if (response != null && response.code == 1) {
+        FactoryModel factoryModel =
+        FactoryModel.fromJson(json.decode(response.data));
+        // setState(() {
+        //   _factory = factoryModel;
+        //   initForm();
+        // });
+      }
+    }
   }
 }
 
@@ -1557,23 +1695,30 @@ class _PictureRow extends StatelessWidget {
 
   final String label;
 
-  const _PictureRow(
-      {Key key, this.medias, this.required = false, this.fontSize, this.label})
+  final String remarks;
+
+  const _PictureRow({Key key,
+    this.medias,
+    this.required = false,
+    this.fontSize,
+    this.label,
+    this.remarks})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       color: Colors.white,
       child: Row(
         children: <Widget>[
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                      text: '$label',
+                      text: '$label：',
                       style:
                       TextStyle(color: Colors.black, fontSize: fontSize)),
                   TextSpan(
@@ -1581,10 +1726,12 @@ class _PictureRow extends StatelessWidget {
                       style: TextStyle(color: Colors.red, fontSize: fontSize)),
                 ]),
               ),
-              Text(
-                '（长按编辑）',
-                style: TextStyle(color: Colors.grey),
-              ),
+              remarks != null
+                  ? Text(
+                '$remarks',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              )
+                  : Container(),
             ],
           ),
           Container(

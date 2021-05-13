@@ -329,8 +329,8 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<bool> resetPasswordByPassword(String old, String password,
-      String uid) async {
+  Future<bool> resetPasswordByPassword(
+      String old, String password, String uid) async {
     Response response;
     try {
       response = await http$.put(UserApis.resetPasswordByPassword(uid),
@@ -403,6 +403,21 @@ class UserRepositoryImpl implements UserRepository {
     Response response;
     try {
       response = await http$.get(UserApis.selectLoginAccount(phone, uid, code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  ///获取提交的修改资料
+  static Future<BaseResponse> getFactoryProfileBackup(String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.factoryProfileBackup(code));
     } on DioError catch (e) {
       print(e);
     }

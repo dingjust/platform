@@ -15,6 +15,9 @@ class CertificationStatusHelper {
 
   bool hasInfoValidate = false;
 
+  ///资料校验忽略
+  bool profileCheckIgnore = false;
+
   CertificationStatusHelper({this.certificationIgnore = false});
 
   ///校验认证状态
@@ -44,18 +47,27 @@ class CertificationStatusHelper {
   }
 
   ///校验资料弹窗
-  void checkProfile(VoidCallback onJump, VoidCallback onProfile) {
+  bool checkProfile(VoidCallback onJump, VoidCallback onProfile) {
+    //校验忽略
+    if (profileCheckIgnore) {
+      onJump();
+      return true;
+    }
     //校验资料
     if (UserBLoC.instance.currentUser.b2bUnit == null) {
       onJump();
-      return;
+      return true;
     }
     bool profileCompleted =
         UserBLoC.instance.currentUser.b2bUnit.profileCompleted;
     if (profileCompleted != null && profileCompleted) {
       onJump();
-    } else {      
-      showProfileCompleteDialog(true, cancel: () {}, confirm: onProfile);
+      return true;
+    } else {
+      showProfileCompleteDialog(true, cancel: () {
+        profileCheckIgnore = true;
+      }, confirm: onProfile);
+      return false;
     }
   }
 
@@ -84,10 +96,9 @@ class CertificationStatusHelper {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                MyFactoryBaseFormPage(
-                  factory,
-                ),
+            builder: (context) => MyFactoryBaseFormPage(
+              factory,
+            ),
           ),
         );
       });
