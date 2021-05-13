@@ -32,7 +32,7 @@
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>销售价格：{{slotData.unitPrice}}</h6>
+                <h6>销售价格：{{getUnitPrice(slotData)}}</h6>
               </el-col>
               <el-col :span="12">
                 <h6>合作方式：{{getEnum('machiningTypes', belongOrder.cooperationMode)}}</h6>
@@ -47,7 +47,10 @@
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
-              <el-col>
+              <el-col :span="12">
+                <h6>销售总价: {{slotData.totalPrimeCost}}</h6>
+              </el-col>
+              <el-col :span="12">
                 <h6>关联订单：{{belongOrder.code}}</h6>
               </el-col>
             </el-row>
@@ -154,6 +157,10 @@
     ColorSizeTable
   } from '@/components/index'
 
+  import {
+    getEntryTotalAmount
+  } from '../js/accounting.js';
+
   export default {
     name: 'SalesPlanEntryDetail',
     props: ['slotData', 'belongOrder'],
@@ -222,7 +229,14 @@
       }
     },
     methods: {
-
+      getUnitPrice (row) {
+        if (row.unitPrice) {
+          return row.unitPrice;
+        }
+        if (row.totalPrimeCost) {
+          return (Number.parseFloat(row.totalPrimeCost) / getEntryTotalAmount(row)).toFixed(2);
+        }
+      }
     },
     data() {
       return {

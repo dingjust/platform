@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-form :model="slotData" ref="form" label-position="left">
+    <el-form :model="slotData" ref="form" label-position="left" :inline="true">
       <el-row class="info-basic-row" type="flex" :gutter="20" v-if="slotData!=null">
         <el-col :span="14">
           <el-row type="flex" :gutter="20">
@@ -96,7 +96,26 @@
           </el-row>
         </el-col>
       </el-row>
-      <el-row type="flex" :gutter="10" style="margin-top:20px">
+      <div class="price-row">
+        <div class="price-row">
+          <el-row type="flex" align="middle">
+            <el-form-item prop="totalPrimeCost" label="订单报价"
+              :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+              <el-input placeholder="订单报价" v-model="slotData.totalPrimeCost" :disabled="fromOrigin"
+                v-number-input.float="{ min: 0 ,decimal:2}" size="mini">
+                <span slot="suffix">元</span>
+              </el-input>
+            </el-form-item>
+          </el-row>
+          <h6 style="margin:0;padding:8px 0 0 10px;width:130px">报价单价：{{(getPrice(slotData))}}</h6>
+        </div>
+        <el-form-item prop="deliveryDate" label="交货日期"
+          :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+          <el-date-picker v-model="slotData.deliveryDate" type="date" placeholder="选择日期" :disabled="fromOrigin">
+          </el-date-picker>
+        </el-form-item>
+      </div>
+      <!-- <el-row type="flex" :gutter="10" style="margin-top:20px">
         <el-col :span="8">
           <el-row type="flex" align="middle">
             <el-form-item prop="unitPrice" label="订单报价" label-width="100px"
@@ -116,7 +135,7 @@
             </el-form-item>
           </el-row>
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-row type="flex">
         <el-col :span="24">
           <my-address-form :vAddress.sync="slotData.shippingAddress" ref="addressComp" :readOnly="fromOrigin" />
@@ -194,6 +213,16 @@
       },
     },
     methods: {
+      getPrice (row) {
+        let quantity = 0;
+        row.colorSizeEntries.forEach(item => quantity += (item.quantity ? Number.parseInt(item.quantity) : 0));
+
+        let price = 0;
+        if (!Number.isNaN(Number.parseFloat(row.totalPrimeCost))) {
+          price = Number.parseFloat(row.totalPrimeCost) / (quantity === 0 ? 1 : quantity);
+        }
+        return price.toFixed(2);
+      },
       onSave() {
         this.$emit('onSave', this.slotData);
       }
@@ -271,6 +300,12 @@
     color: #000;
     width: 120px;
     height: 40px;
+  }
+
+  .price-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
   }
 
 </style>

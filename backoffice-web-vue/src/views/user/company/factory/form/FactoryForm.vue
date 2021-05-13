@@ -37,6 +37,10 @@
         </el-button>
       </Authorized>
     </el-row>
+    <el-row type="flex" justify="center" v-if="showPassAndReject">
+      <el-button type="text" @click="onPass">通过</el-button>
+      <el-button type="text" @click="onReject">驳回</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -53,7 +57,7 @@
 
   export default {
     name: 'FactoryFrom',
-    props: ['formData', 'slotData', 'readOnly'],
+    props: ['formData', 'slotData', 'readOnly', 'showPassAndReject'],
     components: {
       FactoryServiceForm,
       FactoryCapacityForm,
@@ -108,7 +112,64 @@
       },
       onSaveProfiles () {
         this.$emit('onSaveProfiles')
-      }
+      },
+      onPass () {
+        this.$confirm('是否通过工厂：' + this.tranData.name + ' 的修改?', '提示', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          this._onPass();
+        });
+      },
+      async _onPass () {
+        const url = this.apis().FactoryReviewPass(this.tranData.uid);
+        const result = await this.$http.put(url, {}, {
+          versionNo: this.tranData.modifiedTime
+        })
+        if (result['errors']) {
+          this.$message.error(result['errors'][0]);
+          rerutn;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        this.$message.success('操作成功');
+        this.$emit('closeDialog')
+      },
+      onReject () {
+        this.$prompt('是否驳回工厂：' + this.tranData.name + ' 的修改', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
+          inputErrorMessage: '请输入原因',
+          closeOnClickModal: false,
+          closeOnPressEscape: false
+        }).then(({ value }) => {
+          this._onReject(value);
+        })
+      },
+      async _onReject (message) {
+        const url = this.apis().FactoryReviewReject(this.tranData.uid);
+        const result = await this.$http.put(url, {
+          reason: message
+        }, {
+          versionNo: this.tranData.modifiedTime
+        })
+        if (result['errors']) {
+          this.$message.error(result['errors'][0]);
+          rerutn;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        this.$message.success('操作成功');
+        this.$emit('closeDialog')
+      },
     },
     watch: {
       'formData.adeptAtCategories': function (n, o) {

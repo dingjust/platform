@@ -21,7 +21,7 @@
         </el-col>
         <el-col :span="18">
           <el-form-item prop="profilePicture">
-            <images-upload :limit="1" :slot-data="this.profilePictures" />
+            <images-upload :limit="1" :slot-data="profilePictures" />
             <h6 style="margin-left: 9px;font-size: 10px;color: grey" v-if="!readOnly">只支持.jpg格式</h6>
           </el-form-item>
         </el-col>
@@ -316,7 +316,7 @@
         this.getLabels();
       }
       if (this.formData.profilePicture != null) {
-        this.profilePictures = [this.formData.profilePicture];
+        this.profilePictures.push(this.formData.profilePicture);
       }
       this.getRegions();
       if (this.readOnly && this.formData.contactAddress != undefined) {

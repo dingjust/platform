@@ -12,18 +12,24 @@
       <factory-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
-          <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
+          <factory-list :page="page" @onDetails="onDetails" :sequanceSort="sequanceSort" @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
               <el-button type="text" @click="onDetails(props.item)">明细</el-button>
               <el-button type="text" @click="onEdit(props.item)">标签</el-button>
-              <el-button v-if="!props.item.loginDisabled" type="text" @click="onDelete(props.item)">
-                禁用
-              </el-button>
-              <el-button v-if="props.item.loginDisabled" type="text" @click="onCannelDelete(props.item)">
-                解禁
-              </el-button>
-              <el-button type="text" @click="clearAuth(props.item)">清除认证</el-button>
-              <el-button type="text" @click="modifyIsShow(props.item)">{{props.item.enableShow === true ? '关闭显示' : '开启显示'}}</el-button>
+              <el-dropdown @command="handleCommand($event, props.item)">
+                <span class="el-dropdown-link">
+                  更多操作<i class="el-icon--right" style="font-size:12px"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-if="!props.item.loginDisabled" command="DISABLED">禁用</el-dropdown-item>
+                  <el-dropdown-item v-if="props.item.loginDisabled" command="UNDISABLED">解禁</el-dropdown-item>
+                  <el-dropdown-item command="CLEARAUTH">清除认证</el-dropdown-item>
+                  <el-dropdown-item command="SHOW">
+                    {{props.item.enableShow === true ? '关闭显示' : '开启显示'}}
+                  </el-dropdown-item>
+                  <el-dropdown-item command="SORT">修改序列值</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </factory-list>
         </el-tab-pane>
@@ -39,7 +45,6 @@
     </el-dialog>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
-<!--      <factory-details-page :slotData="detailsData"></factory-details-page>-->
       <factory-from v-if="detailsDialogVisible" :slotData="detailsData" :readOnly="true"></factory-from>
     </el-dialog>
     <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
@@ -118,10 +123,64 @@
         const queryFormData = this.queryFormData;
         let url = this.apis().getFactories();
         if (this.isTenant()) {
-          url += '?sort=creationtime,desc';
+          url += '?' + this.sequanceSort.value + 'sort=creationtime,desc';
         }
 
         this.advancedSearch({url, queryFormData, page, size});
+      },
+      handleCommand(command, row) {
+        switch (command) {
+          case 'DISABLED':
+            this.onDelete(row);
+            break;
+          case 'UNDISABLED':
+            this.onCannelDelete(row);
+            break;
+          case 'CLEARAUTH':
+            this.clearAuth(row);
+            break;
+          case 'SHOW':
+            this.modifyIsShow(row);
+            break;
+          case 'SORT':
+            this.setFactorySequence(row);
+          default:
+            break;
+        }
+      },
+      setFactorySequence (row) {
+        this.$prompt('请输入序列值', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^[0-9]*$/,
+          inputErrorMessage: '请输入正确值（0以上正整数）',
+          closeOnClickModal: false,
+          closeOnPressEscape: false
+        }).then(({ value }) => {
+          this.$confirm('是否将工厂 ' + row.name + ' 的序列值设置为 ' + value, '提示', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            this._setFactorySequence(row, value);
+          });
+        })
+      },
+      async _setFactorySequence (row, sequence) {
+        const url = this.apis().setFactorySequence(row.uid, sequence);
+        const result = await this.$http.put(url);
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        this.$message.success('设置序列值成功！');
+        this.onAdvancedSearch();
       },
       async onDetails (item) {
         let url = this.apis().getFactory(item.uid);
@@ -265,6 +324,9 @@
     },
     data () {
       return {
+        sequanceSort: {
+          value: ''
+        },
         dialogFormVisible: false,
         detailsDialogVisible: false,
         item: {},
@@ -293,6 +355,12 @@
     }
   };
 </script>
-<style scoped>
 
+<style scoped>
+.el-dropdown-link {
+  margin-left: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #409EFF;
+}
 </style>

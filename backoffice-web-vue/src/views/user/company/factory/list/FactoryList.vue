@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
+    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight" @sort-change="sortChange">
       <el-table-column label="商家编号" prop="uid" min-width="110"></el-table-column>
       <el-table-column label="商家名称" prop="name" min-width="200"></el-table-column>
       <el-table-column label="登录账号" prop="contactUid" min-width="110"></el-table-column>
@@ -22,6 +22,7 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="序列值" sortable="custom" prop="sequenceNo"></el-table-column>
       <el-table-column label="操作" min-width="200">
         <template slot-scope="scope">
           <slot name="operations" :item="scope.row"></slot>
@@ -43,10 +44,22 @@
 <script>
 export default {
   name: 'FactoryList',
-  props: ['page'],
+  props: ['page', 'sequanceSort'],
   computed: {
   },
   methods: {
+    sortChange ({ column, prop, order }) {
+      // order descending顺序 / ascending倒序
+      if (order === 'descending') {
+        this.sequanceSort.value = 'sort=sequenceNo,desc&';
+      } else if (order === 'ascending') {
+        this.sequanceSort.value = 'sort=sequenceNo,asc&';
+      } else {
+        this.sequanceSort.value = '';
+      }
+
+      this.$emit('onAdvancedSearch');
+    },
     showLabels (arr, approvalStatus) {
       let arr1 = [];
       if (approvalStatus != undefined && approvalStatus == 'approved') {
