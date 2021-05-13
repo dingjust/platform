@@ -384,37 +384,8 @@ class _RequirementOrderDetailByFactoryPageState
           Divider(
             height: 0,
           ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('工厂区域：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    formatAreaSelectsText(
-                        orderModel.details.productiveOrientations,
-                        orderModel.details.productiveOrientations.length),
-//                  overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          //工厂区域
+          _buildOrientations(),
           Divider(
             height: 0,
           ),
@@ -440,8 +411,8 @@ class _RequirementOrderDetailByFactoryPageState
                     orderModel.details.invoiceNeeded == null
                         ? ''
                         : orderModel.details.invoiceNeeded
-                        ? '是'
-                        : '否',
+                            ? '是'
+                            : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -523,7 +494,29 @@ class _RequirementOrderDetailByFactoryPageState
           Divider(
             height: 0,
           ),
-
+          _InfoRow(
+            label: '订单尺码',
+            val: '${OrderSizeTypeLocalizedMap[orderModel.details.sizeType]}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '订单颜色',
+            val: '${OrderColorTypeLocalizedMap[orderModel.details.colorType]}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '工厂规模',
+            val:
+            '${PopulationScaleLocalizedMap[orderModel.details
+                .populationScale]}',
+          ),
+          Divider(
+            height: 0,
+          ),
           Container(
             padding: EdgeInsets.only(
               left: 15,
@@ -620,6 +613,23 @@ class _RequirementOrderDetailByFactoryPageState
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildOrientations() {
+    String val = '';
+
+    //处理旧数据的地区信息
+    if (orderModel.details.productiveDistricts == null) {
+      val = formatAreaSelectsText(orderModel.details.productiveOrientations,
+          orderModel.details.productiveOrientations.length);
+    } else {
+      val = orderModel.details.productiveDistricts.map((e) => e.name).join('、');
+    }
+
+    return _InfoRow(
+      label: '工厂区域',
+      val: '$val',
     );
   }
 
@@ -737,5 +747,37 @@ class _RequirementOrderDetailByFactoryPageState
       return currentUser.companyCode == orderModel.belongTo.uid;
     }
     return false;
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final String label;
+
+  final String val;
+
+  const _InfoRow({Key key, this.label, this.val}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+      child: Row(
+        children: <Widget>[
+          Expanded(flex: 2, child: Text('$label：')),
+          Container(
+            width: 8,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              '$val',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
