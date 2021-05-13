@@ -81,7 +81,8 @@ const state = {
     adeptAtCategories: [],
     industrialClusters: [],
     creationTimeFrom: '',
-    creationTimeTo: ''
+    creationTimeTo: '',
+    reviewState: ''
   },
   cities: [],
   cityDistricts: [],

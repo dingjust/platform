@@ -97,6 +97,38 @@
           </el-row>
         </el-col>
       </el-row>
+      <el-row type="flex">
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">订单尺码</h6>
+            <h6 class="contentTextClass" v-if="slotData.details.sizeType">
+              {{getEnum('RequirementSizeType',slotData.details.sizeType)}}</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">订单颜色</h6>
+            <h6 class="contentTextClass" v-if="slotData.details.colorType">
+              {{getEnum('RequirementColorType',slotData.details.colorType)}}</h6>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row type="flex">
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">工厂规模</h6>
+            <h6 class="contentTextClass" v-if="slotData.details.populationScale">
+              {{getEnum('populationScales',slotData.details.populationScale)}}</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">生产模式</h6>
+            <h6 class="contentTextClass" v-if="slotData.details.productionMode">
+              {{getEnum('ProductionModes',slotData.details.productionMode)}}</h6>
+          </el-row>
+        </el-col>
+      </el-row>
       <el-row type="flex" class="rowClass2">
         <h6 class="titleTextClass2">备注</h6>
         <h6 class="contentTextClass">{{slotData.remarks}}</h6>
@@ -129,19 +161,25 @@
         }
       },
       productionAreas: function () {
-        var text = '';
-        if (this.slotData.details.productiveOrientations != null && this.slotData.details.productiveOrientations.length > 0) {
-          for (let area of this.slotData.details.productiveOrientations) {
-            text += area.name;
-            text += '、';
-          }
-        }
+        // var text = '';
+        // if (this.slotData.details.productiveOrientations != null && this.slotData.details.productiveOrientations.length > 0) {
+        //   for (let area of this.slotData.details.productiveOrientations) {
+        //     text += area.name;
+        //     text += '、';
+        //   }
+        // }
 
-        var index = text.indexOf('、');
-        if (index !== -1) {
-          text = text.slice(0, index);
-        }
-        return text;
+        // var index = text.indexOf('、');
+        // if (index !== -1) {
+        //   text = text.slice(0, index);
+        // }
+        // return text;
+
+        // 新修改 使用productiveDistricts
+        let productiveDistricts = '';
+        this.slotData.details.productiveDistricts.forEach(item => productiveDistricts += item.name + ', ');
+
+        return productiveDistricts.substring(0, productiveDistricts.length - 3);
       }
     },
     methods: {

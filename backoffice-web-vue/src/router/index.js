@@ -163,7 +163,12 @@ const router = new Router({
         {
           path: 'backstage',
           name: '合同管理',
-          component: () => import(/* webpackChunkName: 'contract-manage' */ '@/views/contract/backManage/ContractBackPage')
+          component: () => import(/* webpackChunkName: 'contract-backstage' */ '@/views/contract/backManage/ContractBackPage')
+        },
+        {
+          path: 'template/backstage',
+          name: '模板管理',
+          component: () => import(/* webpackChunkName: 'contract-backstage' */ '@/views/contract/backTemp/ContractBackTemp')
         }
       ]
     },
@@ -869,19 +874,25 @@ const router = new Router({
           return c('router-view');
         }
       },
-      children: [{
-        path: 'handle',
-        name: '待我处理',
-        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/handle/TaskHandlePage')
-      }, {
-        path: 'approval',
-        name: '我的审批',
-        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/approval/TaskApprovalPage')
-      }, {
-        path: 'assign',
-        name: '待我分配',
-        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/assign/TaskAssignPage')
-      }]
+      children: [
+        {
+          path: 'handle',
+          name: '待我处理',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/handle/TaskHandlePage')
+        }, {
+          path: 'approval',
+          name: '我的审批',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/approval/TaskApprovalPage')
+        }, {
+          path: 'assign',
+          name: '待我分配',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/assign/TaskAssignPage')
+        }, {
+          path: 'factory/review',
+          name: '工厂审阅',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/factory-review/FactoryReview')
+        }
+      ]
     },
     {
       path: '/miscs',
@@ -1205,53 +1216,6 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'reconciliation' */ '@/views/shipping-receipt/reconciliation-task/details/ReconciliationTasksDetail')
       }]
     },
-      // {
-      //   path: 'inventory',
-      //   redirect: '/inventory/stock',
-      //   name: '库存管理',
-      //   component: {
-      //     render(c) {
-      //       return c('router-view');
-      //     }
-      //   },
-      //   children: [
-      //     {
-      //       path: 'stock',
-      //       name: '进货单',
-      //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/stock/StockPage')
-      //     },
-      //     {
-      //       path: 'stock/create',
-      //       name: '创建进货单',
-      //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/stock/form/StockForm')
-      //     },
-      //     {
-      //       path: 'retail',
-      //       name: '销售单',
-      //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/retail/RetailPage')
-      //     },
-      //     {
-      //       path: 'retail/create',
-      //       name: '创建销售单',
-      //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/retail/form/RetailForm')
-      //     },
-      //     {
-      //       path: 'skus',
-      //       name: '库存状况',
-      //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/warehouse/SkusPage')
-      //     },
-      //     {
-      //       path: 'flow',
-      //       name: '库存流水',
-      //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/warehouse/FlowPage')
-      //     },
-      //     {
-      //       path: 'inventory',
-      //       name: '库存盘点',
-      //       component: () => import( /*webpackChunkName: 'inventory' */ '@/views/inventory/warehouse/InventoryPage')
-      //     }
-      //   ]
-      // },
     {
       path: 'activity',
       redirect: '/activity/points/record',

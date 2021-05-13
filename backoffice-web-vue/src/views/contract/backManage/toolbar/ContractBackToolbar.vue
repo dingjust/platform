@@ -1,34 +1,36 @@
 <template>
-  <el-form :inline="true">
-    <el-form-item label="合同信息">
-      <el-input v-model="queryFormData.title" placeholder="输入合同名称、编号、单号、合作商"></el-input>
-    </el-form-item>
-    <el-form-item label="日期">
-      <el-date-picker v-model="dateArr" 
-        style="width: 250px"
-        type="daterange" 
-        value-format="timestamp"
-        range-separator="至" 
-        start-placeholder="开始日期" 
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions">
-      </el-date-picker>
-    </el-form-item>
-    <el-form-item label="合同类型">
-      <el-select v-model="queryFormData.type" clearable placeholder="选择合同类型">
-        <el-option
-          v-for="item in TemplateType"
-          :key="item.value"
-          :label="item.name"
-          :value="item.code">
-        </el-option>
-      </el-select>
-    </el-form-item>
+  <div class="contract-back-toolbar">
+    <el-form :inline="true">
+      <el-form-item label="合同信息">
+        <el-input v-model="queryFormData.title" placeholder="输入合同名称、编号、单号、合作商"></el-input>
+      </el-form-item>
+      <el-form-item label="日期">
+        <el-date-picker v-model="dateArr" 
+          style="width: 250px"
+          type="daterange" 
+          value-format="timestamp"
+          range-separator="至" 
+          start-placeholder="开始日期" 
+          end-placeholder="结束日期"
+          :picker-options="pickerOptions">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="合同类型">
+        <el-select v-model="queryFormData.type" clearable placeholder="选择合同类型">
+          <el-option
+            v-for="item in TemplateType"
+            :key="item.value"
+            :label="item.name"
+            :value="item.code">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-button-group>
         <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
         <el-button native-type="reset" @click="onReset">重置</el-button>
       </el-button-group>
-  </el-form>
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -115,11 +117,11 @@ export default {
     border-color: #ffd60c;
   }
   
-  /deep/ .el-date-editor .el-range-separator {
+  .contract-back-toolbar >>> .el-date-editor .el-range-separator {
     width: 8%;
   }
 
-  /deep/ .el-form-item {
+  .contract-back-toolbar >>> .el-form-item {
     margin-bottom: 0px;
   }
 </style>

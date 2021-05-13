@@ -1,8 +1,13 @@
 <template>
   <div class="animated fadeIn factory-edit">
-    <el-row class="factory-info-title-row">
+    <el-row type="flex" justify="space-between">
       <div class="factory-info-title">
         <h6 class="factory-info-title_text">{{readOnly? '公司详情' : '编辑资料'}}</h6>
+      </div>
+      <h6 v-if="tranData.reviewState === 'REVIEWING'" style="color:#F56C6c;width: 145px">修改资料正在审核中</h6>
+      <div v-if="tranData.reviewState === 'REVIEW_REJECTED'" style="display:flex;align-items: flex-start">
+        <h6 style="color:#F56C6c;width: max-content;">修改资料已被驳回</h6>
+        <el-button type="text" style="padding: 0" @click="onReviewReason(tranData.reviewReasons)">点击查看详情</el-button>
       </div>
     </el-row>
     <div class="titleCardClass">
@@ -77,10 +82,15 @@
       ...mapMutations({
         setFactoryFormVisible: 'setFactoryFormVisible',
       }),
+      onReviewReason (message) {
+        this.$alert(message, '驳回原因', {
+          confirmButtonText: '确定'
+        });
+      },
       onSave () {
         this.$refs['factoryForm'].validate((valid) => {
           if (valid) {
-            this.$confirm('是否确认保存', '提示', {
+            this.$confirm('修改公司资料需要提交平台审核，是否确认提交？(资料审核中时，再次提交保存将会覆盖上次提交的信息)', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'

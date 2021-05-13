@@ -191,7 +191,8 @@
           },
           taskOrderEntries: data.taskOrderEntries.map(item => {
             return {
-              unitPrice: item.unitPrice,
+              id: item.id ? item.id : null,
+              totalPrimeCost: item.totalPrimeCost,
               deliveryDate: item.deliveryDate,
               shippingAddress: item.shippingAddress,
               product: item.product,
@@ -209,7 +210,8 @@
           attachments: data.attachments ? data.attachments : [],
           sendApprovers: data.sendApprovers,
           merchandiser: data.merchandiser,
-          title: data.title
+          title: data.title,
+          state: data.state
         }
         return formData;
       },

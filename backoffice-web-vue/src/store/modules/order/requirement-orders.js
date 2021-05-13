@@ -62,7 +62,8 @@ const state = {
       publishingMode: 'PUBLIC',
       effectiveDays: '90',
       salesMarket: [],
-      certificates: []
+      certificates: [],
+      productiveDistricts: []
     },
     attachments: [],
     labels: [],
@@ -267,7 +268,8 @@ const actions = {
         productiveOrientations: [],
         publishingMode: 'PUBLIC',
         effectiveDays: '90',
-        salesMarket: []
+        salesMarket: [],
+        productiveDistricts: []
       },
       attachments: [],
       labels: [],

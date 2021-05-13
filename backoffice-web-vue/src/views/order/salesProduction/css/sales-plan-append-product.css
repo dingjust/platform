@@ -183,3 +183,13 @@
     padding-top: 8px;
     cursor: pointer;
   }
+
+  .sales-plan-append-form >>> .el-input__suffix {
+    right: 0px!important;
+  }
+
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }

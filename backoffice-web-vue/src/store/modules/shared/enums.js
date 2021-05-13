@@ -986,7 +986,7 @@ const state = {
     {
       code: 'N04',
       name: '200人以上'
-    },
+    }
   ],
   // 生产模式
   ProductionModes: [{
@@ -2297,6 +2297,44 @@ const state = {
     }, {
       code: 'PAY_FAIL',
       name: '支付失败'
+    }
+  ],
+  FactoryReviewState: [
+    {
+      code: 'NONE',
+      name: '无'
+    },
+    {
+      code: 'REVIEWING',
+      name: '审核中'
+    },
+    {
+      code: 'REVIEW_PASSED',
+      name: '审核通过'
+    },
+    {
+      code: 'REVIEW_REJECTED',
+      name: '审核失败'
+    }
+  ],
+  RequirementSizeType: [
+    {
+      code: 'FREE_SIZE',
+      name: '均码'
+    },
+    {
+      code: 'MULTIPLE_SIZE',
+      name: '多码'
+    }
+  ],
+  RequirementColorType: [
+    {
+      code: 'SINGLE_COLOR',
+      name: '单色'
+    },
+    {
+      code: 'MULTIPLE_COLOR',
+      name: '多色'
     }
   ]
 };

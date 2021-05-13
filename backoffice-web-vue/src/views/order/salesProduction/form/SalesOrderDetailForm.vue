@@ -132,7 +132,7 @@
         let total = 0;
         if (this.form.taskOrderEntries != null) {
           this.form.taskOrderEntries.forEach(element => {
-            let num = parseFloat(getEntryTotalPrice(element));
+            let num = element.totalPrimeCost ? element.totalPrimeCost : parseFloat(getEntryTotalPrice(element));
             if (num != null && (!Number.isNaN(num))) {
               total += num;
             }

@@ -1,81 +1,74 @@
 <template>
-  <div id="content">
-  <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog"
-             width="80%" append-to-body :close-on-click-modal="false">
-    <template-form v-if="tempFormVisible" @onSearch="onSearch" :tempFormVisible="tempFormVisible" :slotData="mockData"
-                   v-on:turnTempFormVisible="turnTempFormVisible" @getTemplateListPt="getTemplateListPt"></template-form>
-  </el-dialog>
-  <el-form :inline="true">
-    <el-form-item>
-      <el-input style="width: 250px" placeholder="模板名称" v-model="keyword"></el-input>
-    </el-form-item>
-    <el-form-item label="模板类型">
-      <el-select v-model="type" clearable placeholder="选择模板类型">
-        <el-option
-          v-for="item in TemplateType"
-          :key="item.value"
-          :label="item.name"
-          :value="item.code">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
-    <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
-      <el-button type="primary" class="toolbar-search_input" @click="onCreate">新建</el-button>
-    </Authorized>
-  </el-form>
-  <!--<el-form :inline="true">-->
-    <!--<el-row type="flex" justify="space-between">-->
-      <!--&lt;!&ndash;<el-col :span="8">&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-row type="flex" justify="space-around">&ndash;&gt;-->
-          <!--&lt;!&ndash;<el-button-group>&ndash;&gt;-->
-            <!--&lt;!&ndash;<el-button @click="onDel()">删除</el-button>&ndash;&gt;-->
-            <!--&lt;!&ndash;<el-button>下载</el-button>&ndash;&gt;-->
-            <!--&lt;!&ndash;<el-button>启用</el-button>&ndash;&gt;-->
-            <!--&lt;!&ndash;<el-button>禁用</el-button>&ndash;&gt;-->
-          <!--&lt;!&ndash;</el-button-group>&ndash;&gt;-->
-          <!--&lt;!&ndash;<el-button type="text" @click="onCreate()">新建模板</el-button>&ndash;&gt;-->
-        <!--&lt;!&ndash;</el-row>&ndash;&gt;-->
-      <!--&lt;!&ndash;</el-col>&ndash;&gt;-->
-    <!--</el-row>-->
-  <!--</el-form>-->
+  <div id="content" class="template-toolbar">
+    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog"
+              width="80%" append-to-body :close-on-click-modal="false">
+      <template-form v-if="tempFormVisible" @onSearch="onSearch" :tempFormVisible="tempFormVisible" :slotData="mockData"
+                    v-on:turnTempFormVisible="turnTempFormVisible" @getTemplateListPt="getTemplateListPt"></template-form>
+    </el-dialog>
+    <el-form :inline="true">
+      <el-row type="flex" align="top">
+        <el-form-item>
+          <el-input style="width: 250px" placeholder="模板名称" v-model="queryFormData.title"></el-input>
+        </el-form-item>
+        <el-form-item label="模板类型">
+          <el-select v-model="queryFormData.type" clearable placeholder="选择模板类型">
+            <el-option
+              v-for="item in TemplateType"
+              :key="item.value"
+              :label="item.name"
+              :value="item.code">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-button-group>
+          <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
+          <el-button native-type="reset" @click="onReset">重置</el-button>
+        </el-button-group>
+        <Authorized :permission="['AGREEMENT_TMPL_CREATE']">
+          <el-button type="primary" class="toolbar-search_input" @click="onCreate">新建</el-button>
+        </Authorized>
+      </el-row>
+    </el-form>
+    <!--<el-form :inline="true">-->
+      <!--<el-row type="flex" justify="space-between">-->
+        <!--&lt;!&ndash;<el-col :span="8">&ndash;&gt;-->
+          <!--&lt;!&ndash;<el-row type="flex" justify="space-around">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-button-group>&ndash;&gt;-->
+              <!--&lt;!&ndash;<el-button @click="onDel()">删除</el-button>&ndash;&gt;-->
+              <!--&lt;!&ndash;<el-button>下载</el-button>&ndash;&gt;-->
+              <!--&lt;!&ndash;<el-button>启用</el-button>&ndash;&gt;-->
+              <!--&lt;!&ndash;<el-button>禁用</el-button>&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-button-group>&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-button type="text" @click="onCreate()">新建模板</el-button>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-row>&ndash;&gt;-->
+        <!--&lt;!&ndash;</el-col>&ndash;&gt;-->
+      <!--</el-row>-->
+    <!--</el-form>-->
   </div>
 </template>
 
 <script>
   import http from '@/common/js/http';
-  import {
-    createNamespacedHelpers
-  } from 'vuex';
   import TemplateForm from '../components/TemplateForm';
   import TemplateSearchResultList from '../list/TemplateSearchResultList';
 
-  const {
-    mapMutations
-  } = createNamespacedHelpers('ContractTemplateModule');
-
   export default {
     name: 'TemplateToolbar',
-    props: ['code'],
+    props: ['code', 'queryFormData'],
     components: {
       TemplateForm,
       TemplateSearchResultList
     },
     computed: {},
     methods: {
-      ...mapMutations({
-        setKeyword: 'keyword',
-        setType: 'type',
-        // type: 'type'
-      }),
       onSearch () {
-        this.setKeyword(this.keyword);
-        this.setType(this.type);
         this.$emit('onSearch', 0);
       },
+      onReset () {
+        this.queryFormData.title = '';
+        this.queryFormData.type = '';
+      },
       onCreate () {
-        // this.$router.push("templateForm");
-        // this.fn.openSlider("创建", TemplateForm);
         this.tempFormVisible = true;
       },
       async onDel () {
@@ -103,7 +96,6 @@
         tempFormVisible: false,
         keyword: this.$store.state.ContractTemplateModule.keyword,
         formData: this.$store.state.ContractTemplateModule.formData,
-        queryFormData: this.$store.state.ContractTemplateModule.queryFormData,
         type: this.$store.state.ContractTemplateModule.type,
         mockData: [],
         TemplateType: [{
@@ -140,7 +132,7 @@
     }
   };
 </script>
-<style>
+<style scoped>
   .el-input__inner {
     /* border-radius: 5px; */
     line-height: 30px;
@@ -153,4 +145,7 @@
     color: #000;
   }
 
+  .template-toolbar >>> .el-form-item {
+    margin-bottom: 0px;
+  }
 </style>

@@ -25,7 +25,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <template-toolbar ref="tempTool" @onNew="onNew" @onSearch="onSearch" class="template-toolbar"/>
+      <template-toolbar ref="tempTool" @onNew="onNew" @onSearch="onSearch" :queryFormData="queryFormData" class="template-toolbar"/>
       <template-list ref="tempList" :page="page" @onDetails="onDetails" @onSearch="onSearch" @openPreviewPdf="openPreviewPdf"/>
     </el-card>
   </div>
@@ -60,8 +60,7 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword',
-        type: 'type'
+        queryFormData: 'queryFormData'
       })
     },
     methods: {
@@ -69,10 +68,10 @@
         search: 'search'
       }),
       onSearch (page, size) {
-        const keyword = this.keyword;
-        const type = this.type;
+        const query = this.queryFormData;
+
         const url = this.apis().getTemplatesList();
-        this.search({ url, keyword, type, page, size });
+        this.search({ url, query, page, size });
       },
       async openPreviewPdf (code) {
         this.templateCode = code;
@@ -95,7 +94,6 @@
         }
         this.templateData = result.data;
         this.templateDetailVisible = true;
-        // this.fn.openSlider('查看：', TemplateDetail, result.data);
       },
       closeDetails () {
         this.templateDetailVisible = false;
