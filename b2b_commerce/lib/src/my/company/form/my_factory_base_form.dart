@@ -31,9 +31,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   TextEditingController _cooperativeBrandController = TextEditingController();
   TextEditingController _coverageAreaController = TextEditingController();
   TextEditingController _productionLineQuantityController =
-  TextEditingController();
+      TextEditingController();
   TextEditingController _factoryBuildingsQuantityController =
-  TextEditingController();
+      TextEditingController();
   TextEditingController _introController = TextEditingController();
 
   FocusNode _nameFocusNode = FocusNode();
@@ -108,6 +108,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               required: true,
               label: '工厂全景',
               medias: _medias,
+              remarks: '含名称图或LOGO',
             ),
             _PictureRow(
               fontSize: _fontSize,
@@ -1046,7 +1047,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       );
 
   //格式化合作方式
-  String formatCooperationModesSelectText(List<CooperationModes> cooperationModes) {
+  String formatCooperationModesSelectText(
+      List<CooperationModes> cooperationModes) {
     String text = '';
 
     if (cooperationModes != null) {
@@ -1290,10 +1292,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       return;
     }
 
-    if (ObjectUtil.isEmptyList(_medias)) {
-      ShowDialogUtil.showValidateMsg(context, '请上传工厂名称/工厂全景图');
-      return;
-    }
     if (ObjectUtil.isEmptyString(_factory.name)) {
       ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
       return;
@@ -1368,7 +1366,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         _factory.backEndPhoto == null &&
         _factory.cuttingTablePhoto == null &&
         _factory.sewingWorkshopPhoto == null) {
-      ShowDialogUtil.showValidateMsg(context, '请上传工厂照片');
+      ShowDialogUtil.showValidateMsg(context, '请上传工厂相关照片');
       return;
     }
 
@@ -1468,13 +1466,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       );
     } else if (_factory.reviewState == FactoryReviewState.REVIEW_REJECTED) {
       return Container(
-        color: Colors.red[200],
+        color: Colors.red[300],
         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Row(
           children: [
             Expanded(
                 child: Text(
-                  '您提交的资料平台审核失败，原因：${_factory.reviewReasons}',
+                  '您提交的资料平台审核失败,原因如下：${_factory.reviewReasons}',
                   style: TextStyle(color: Colors.white),
                 ))
           ],
@@ -1712,27 +1710,31 @@ class _PictureRow extends StatelessWidget {
       color: Colors.white,
       child: Row(
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: '$label：',
-                      style:
-                      TextStyle(color: Colors.black, fontSize: fontSize)),
-                  TextSpan(
-                      text: required ? '*' : '',
-                      style: TextStyle(color: Colors.red, fontSize: fontSize)),
-                ]),
-              ),
-              remarks != null
-                  ? Text(
-                '$remarks',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
-              )
-                  : Container(),
-            ],
+          Container(
+            width: 100,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: '$label：',
+                        style:
+                        TextStyle(color: Colors.black, fontSize: fontSize)),
+                    TextSpan(
+                        text: required ? '*' : '',
+                        style:
+                        TextStyle(color: Colors.red, fontSize: fontSize)),
+                  ]),
+                ),
+                remarks != null
+                    ? Text(
+                  '$remarks',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                )
+                    : Container(),
+              ],
+            ),
           ),
           Container(
             padding: EdgeInsets.only(left: 20),
