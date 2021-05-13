@@ -129,7 +129,7 @@
           <el-col :span="4">订单金额：<span style="color:red;">{{totalPrice.toFixed(2)}}</span></el-col>
         </el-row>
         <sales-production-tabs :canChangeProduct="canChangeProduct" :canUpdate="!hasOrigin" style="margin-top:20px;"
-          :form="form" @appendProduct="appendProduct" />
+          :form="form" @appendProduct="appendProduct" @getDetails="getDetails"/>
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
@@ -445,6 +445,22 @@
         } else {
           callback()
         }
+      },
+      async getDetails() {
+        const url = this.apis().getSalesProductionOrderDetails(this.form.id);
+        const result = await this.$http.get(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        // 获取详情更新修改的行数据
+        result.data.taskOrderEntries.forEach(item => {
+          let index = this.form.taskOrderEntries.findIndex(val => item.id === val.id);
+          if (index > -1) {
+            this.form.taskOrderEntries.splice(index, 1, item);
+          }
+        })
       }
     },
     data() {

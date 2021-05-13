@@ -1252,13 +1252,16 @@ let TENANT_APIS = {
 
   /** 工厂审阅 */
   // 获取工厂修改备份
-  getFactoryBackups: (code) => '/b2b/factories/backups/' + code,
+  getFactoryBackups: (companyCode) => '/b2b/factories/backups/' + companyCode,
   // 通过审阅  put
-  FactoryReviewPass: (code) => '/b2b/factories/review/' + code + '/pass',
+  FactoryReviewPass: (companyCode) => '/b2b/factories/review/' + companyCode + '/pass',
   // 审阅驳回   put
-  FactoryReviewReject: (code) => '/b2b/factories/review/' + code + '/reject',
+  FactoryReviewReject: (companyCode) => '/b2b/factories/review/' + companyCode + '/reject',
   // 工厂是否可以展示 put
-  FactoryShow: (uid, isShow) => '/b2b/factories/enableShow/' + uid + '/' + isShow
+  FactoryShow: (companyCode, isShow) => '/b2b/factories/enableShow/' + companyCode + '/' + isShow,
+  
+  // 设置工厂序列值
+  setFactorySequence: (companyCode, sequence) => '/b2b/factories/setSequenceNo/' + companyCode + '/' + sequence
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

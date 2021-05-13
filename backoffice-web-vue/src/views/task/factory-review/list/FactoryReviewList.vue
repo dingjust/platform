@@ -25,8 +25,8 @@
       <el-table-column label="操作" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">查看</el-button>
-          <el-button type="text" @click="onPass(scope.row)">通过</el-button>
-          <el-button type="text" @click="onReject(scope.row)">驳回</el-button>
+          <!-- <el-button type="text" @click="onPass(scope.row)">通过</el-button>
+          <el-button type="text" @click="onReject(scope.row)">驳回</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -36,7 +36,8 @@
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
     <el-dialog :visible.sync="detailVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
-      <factory-form v-if="detailVisible && detailsData.id" :slotData="detailsData" :readOnly="true"></factory-form>
+      <factory-form v-if="detailVisible && detailsData.id" :slotData="detailsData" 
+                    :readOnly="true" :showPassAndReject="showPassAndReject" @closeDialog="closeDialog"/>
     </el-dialog>
   </div>
 </template>
@@ -49,6 +50,11 @@ export default {
   props: ['page'],
   components: {
     FactoryForm
+  },
+  computed: {
+    showPassAndReject: function () {
+      return this.isTenant();
+    }
   },
   methods: {
     async onDetail (row) {
@@ -64,64 +70,77 @@ export default {
       }
 
       this.detailsData = JSON.parse(result.data);
+      if (this.detailsData.profilePicture) {
+        this.detailsData.profilePicture.convertedMedias = [];
+      }
+      if (this.detailsData.certificates && this.detailsData.certificates.length > 0) {
+        this.detailsData.certificates.forEach(item => item.convertedMedias = []);
+      }
       this.detailVisible = true;
     },
-    onPass (row) {
-      this.$confirm('是否通过工厂：' + row.name + ' 的修改?', '提示', {
-        confirmButtonText: '是',
-        cancelButtonText: '否',
-        type: 'warning'
-      }).then(() => {
-        this._onPass(row);
-      });
+    closeDialog () {
+      this.detailVisible = false;
+      const size = this.page.size;
+      const page = this.page.content.length <= 1 ? this.page.number - 1 : this.page.number; 
+      this.$emit('onAdvancedSearch', page, size);
     },
-    async _onPass (row) {
-      const url = this.apis().FactoryReviewPass(row.uid);
-      const result = await this.$http.put(url, {
-        versionNo: row.modifiedTime
-      })
-      if (result['errors']) {
-        this.$message.error(result['errors'][0]);
-        rerutn;
-      }
-      if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
+    // onPass (row) {
+    //   this.$confirm('是否通过工厂：' + row.name + ' 的修改?', '提示', {
+    //     confirmButtonText: '是',
+    //     cancelButtonText: '否',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     this._onPass(row);
+    //   });
+    // },
+    // async _onPass (row) {
+    //   const url = this.apis().FactoryReviewPass(row.uid);
+    //   const result = await this.$http.put(url, {}, {
+    //     versionNo: row.modifiedTime
+    //   })
+    //   if (result['errors']) {
+    //     this.$message.error(result['errors'][0]);
+    //     rerutn;
+    //   }
+    //   if (result.code === 0) {
+    //     this.$message.error(result.msg);
+    //     return;
+    //   }
 
-      this.$message.success('操作成功');
-      this.$emit('onAdvancedSearch')
-    },
-    onReject (row) {
-      this.$prompt('是否驳回工厂：' + row.name + ' 的修改', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
-        inputErrorMessage: '请输入原因',
-        closeOnClickModal: false,
-        closeOnPressEscape: false
-      }).then(({ value }) => {
-        this._onReject(row, value);
-      })
-    },
-    async _onReject (row, message) {
-      const url = this.apis().FactoryReviewReject(row.uid);
-      const result = await this.$http.put(url, {
-        reason: message,
-        versionNo: row.modifiedTime
-      })
-      if (result['errors']) {
-        this.$message.error(result['errors'][0]);
-        rerutn;
-      }
-      if (result.code === 0) {
-        this.$message.error(result.msg);
-        return;
-      }
+    //   this.$message.success('操作成功');
+    //   this.$emit('onAdvancedSearch')
+    // },
+    // onReject (row) {
+    //   this.$prompt('是否驳回工厂：' + row.name + ' 的修改', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
+    //     inputErrorMessage: '请输入原因',
+    //     closeOnClickModal: false,
+    //     closeOnPressEscape: false
+    //   }).then(({ value }) => {
+    //     this._onReject(row, value);
+    //   })
+    // },
+    // async _onReject (row, message) {
+    //   const url = this.apis().FactoryReviewReject(row.uid);
+    //   const result = await this.$http.put(url, {
+    //     reason: message
+    //   }, {
+    //     versionNo: row.modifiedTime
+    //   })
+    //   if (result['errors']) {
+    //     this.$message.error(result['errors'][0]);
+    //     rerutn;
+    //   }
+    //   if (result.code === 0) {
+    //     this.$message.error(result.msg);
+    //     return;
+    //   }
 
-      this.$message.success('操作成功');
-      this.$emit('onAdvancedSearch')
-    },
+    //   this.$message.success('操作成功');
+    //   this.$emit('onAdvancedSearch')
+    // },
     showLabels (arr, approvalStatus) {
       let arr1 = [];
       if (approvalStatus != undefined && approvalStatus == 'approved') {

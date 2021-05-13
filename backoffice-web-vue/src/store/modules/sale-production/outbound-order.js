@@ -65,9 +65,7 @@ const state = {
       }]
     },
     attachments: [],
-    sendApprovers: [{
-      id: ''
-    }],
+    sendApprovers: [null],
     merchandiser: {
       id: '',
       name: ''
@@ -219,9 +217,7 @@ const actions = {
         }]
       },
       attachments: [],
-      sendApprovers: [{
-        id: ''
-      }],
+      sendApprovers: [null],
       merchandiser: {
         id: '',
         name: ''
