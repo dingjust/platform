@@ -1941,7 +1941,10 @@ let NONE_TENANT_APIS = {
   // 修改外接订单 生产明细价格
   updateSalesProductionItemPrice () {
     return '/b2b/sales/production/order/update/item/price'
-  }
+  },
+
+  // 获取工厂修改备份
+  getFactoryBackups: (companyCode) => '/b2b/factories/backups/' + companyCode,
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

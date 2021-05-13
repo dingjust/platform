@@ -32,6 +32,13 @@
 
     <el-row type="flex" justify="center">
       <Authorized :permission="['COMPANY_INFO_MODIFY']">
+        <el-button v-if="!readOnly && !isEditing" class="buttonClass" @click="onEdit">
+          <h6>编辑</h6>
+        </el-button>
+      </Authorized>
+    </el-row>
+    <el-row type="flex" justify="center">
+      <Authorized :permission="['COMPANY_INFO_MODIFY']">
         <el-button v-if="saveShow" class="buttonClass" @click="onSave">
           <h6>保存</h6>
         </el-button>
@@ -57,7 +64,7 @@
 
   export default {
     name: 'FactoryFrom',
-    props: ['formData', 'slotData', 'readOnly', 'showPassAndReject'],
+    props: ['formData', 'slotData', 'readOnly', 'showPassAndReject', 'isEditing'],
     components: {
       FactoryServiceForm,
       FactoryCapacityForm,
@@ -71,7 +78,7 @@
         factoryFormVisible: 'factoryFormVisible'
       }),
       saveShow: function () {
-        return !this.readOnly;
+        return !this.readOnly && this.isEditing;
       },
       tranData: function () {
         if (this.readOnly) {
@@ -170,6 +177,9 @@
         this.$message.success('操作成功');
         this.$emit('closeDialog')
       },
+      onEdit () {
+        this.$emit('onEdit');
+      }
     },
     watch: {
       'formData.adeptAtCategories': function (n, o) {
