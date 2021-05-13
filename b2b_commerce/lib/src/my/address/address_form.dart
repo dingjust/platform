@@ -55,7 +55,6 @@ class AddressFormState extends State<AddressFormPage> {
 
       regionCityAndDistrict = widget.address.region.name + widget.address.city.name + widget.address.cityDistrict.name;
     });
-
   }
 
   @override

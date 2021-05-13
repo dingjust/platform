@@ -2,13 +2,16 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:b2b_commerce/b2b_commerce.dart';
+import 'package:b2b_commerce/src/_shared/widgets/address_cascader.dart';
 import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_select_publish_target_form.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -98,16 +101,6 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
           color: Colors.grey[100],
           child: ListView(
             children: <Widget>[
-//            Container(
-//              color: Colors.white,
-//              padding: const EdgeInsets.all(15.0),
-//              child: Text(
-//                  '已选：'
-//                  '${widget.formState.model.details.majorCategory.name}     '
-//                  '${widget.formState.model.details.category.parent != null ? widget.formState.model.details.category.parent.name + '-' : ''}'
-//                  '${widget.formState.model.details.category.name}',
-//                  style: TextStyle(color: Colors.grey, fontSize: 16)),
-//            ),
               Container(
                 color: Colors.white,
                 child: PicturesField(
@@ -130,11 +123,15 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
               ),
               _buildQualityLevel(),
               _buildMachiningType(),
+              _buildProductiveOrientations(),
+              _buildPopulationScale(),
+              _buildProductionMode(),
+              _buildSizeType(),
+              _buildColorType(),
               _buildProofingNeeded(),
               _buildInvoiceNeeded(),
               _buildPublishModes(context),
               _buildEffectiveDays(),
-              _buildProductiveOrientations(),
               _buildRemarks(),
             ],
           ),
@@ -149,7 +146,8 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Column(children: <Widget>[
         Container(
-          color: Colors.white,
+          color: Colors.grey[100],
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: TextFieldComponent(
             padding: EdgeInsets.symmetric(vertical: 5),
             dividerPadding: EdgeInsets.only(),
@@ -171,6 +169,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
     );
   }
 
+  ///有效期限
   Container _buildEffectiveDays() {
     return Container(
         color: Colors.white,
@@ -245,7 +244,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
           RichText(
             text: TextSpan(children: [
               TextSpan(
-                text: '要求地域',
+                text: '要求地区',
                 style: TextStyle(fontSize: 16, color: Colors.black),
               ),
               TextSpan(
@@ -257,42 +256,36 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
           Expanded(
             child: GestureDetector(
                 onTap: () {
-                  //获取所有省份
-                  rootBundle
-                      .loadString('data/province_only_whole_country.json')
-                      .then((v) {
-                    List data = json.decode(v);
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return RegionSelector(
-                          regions: data
-                              .map<RegionModel>(
-                                  (region) => RegionModel.fromJson(region))
-                              .toList(),
-                          regionSelects: widget
-                              .formState.model.details.productiveOrientations,
-                          multiple: true,
-                        );
-                      },
-                    ).then((v) {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(
+                          builder: (context) => AddressCascaderPage(
+                                selected: widget.formState.model.details
+                                        ?.productiveDistricts
+                                        ?.map((e) => DistrictModel.toJson(e))
+                                        .toList() ??
+                                    [],
+                                multi: true,
+                              )))
+                      .then((values) {
+                    if (values != null) {
                       setState(() {
-//                        widget.formState.model.details
-//                            .productiveOrientations
-//                            .removeWhere((region) =>
-//                        region.isocode == 'CN-10');
+                        widget.formState.model.details.productiveDistricts =
+                            (values as List)
+                                .map((e) => DistrictModel.fromJson(e))
+                                .toList();
                       });
-                    });
+                    }
                   });
                 },
                 child: Text(
                   formatAreaSelectsText(
-                      widget.formState.model.details.productiveOrientations, 2),
+                      widget.formState.model.details.productiveDistricts, 3),
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
                   ),
                   textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
                 )),
           ),
           Icon(
@@ -534,38 +527,6 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
                       });
                     },
                   ),
-//                          GestureDetector(
-//                            onTap: (){
-//                              setState(() {
-//                                widget.formState?.model?.details?.proofingNeeded = true;
-//                              });
-//                            },
-//                            child: Container(
-//                              width: 80,
-//                              height: 30,
-//                              decoration: ShapeDecoration(
-//                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50),),
-//                                color: widget.formState?.model?.details?.proofingNeeded ?? false ? Color.fromRGBO(255, 214, 12, 1) : Colors.grey[100],
-//                              ),
-//                              child: Center(child: Text('是')),
-//                            ),
-//                          ),
-//                          GestureDetector(
-//                            onTap: (){
-//                              setState(() {
-//                                widget.formState?.model?.details?.proofingNeeded = false;
-//                              });
-//                            },
-//                            child: Container(
-//                              width: 80,
-//                              height: 30,
-//                              decoration: ShapeDecoration(
-//                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50),),
-//                                color: widget.formState?.model?.details?.proofingNeeded == null ? true : !widget.formState.model.details.proofingNeeded ? Color.fromRGBO(255, 214, 12, 1) : Colors.grey[100],
-//                              ),
-//                              child: Center(child: Text('否')),
-//                            ),
-//                          ),
                   ChoiceChip(
                     label: Container(
                       height: 20,
@@ -634,6 +595,179 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  ///订单尺码类型
+  Container _buildSizeType() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '订单尺码',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ]),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [OrderSizeType.FREE_SIZE, OrderSizeType.MULTIPLE_SIZE]
+                  .map((type) => ChoiceChip(
+                      label: Container(
+                        height: 20,
+                        width: 60,
+                        child: Center(
+                            child: Text('${OrderSizeTypeLocalizedMap[type]}')),
+                      ),
+                      backgroundColor: Colors.grey[100],
+                      selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                      selected: widget.formState.model.details.sizeType == type,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          widget.formState.model.details.sizeType = type;
+                        });
+                      }))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ///订单颜色类型
+  Container _buildColorType() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '订单颜色',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ]),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                OrderColorType.SINGLE_COLOR,
+                OrderColorType.MULTIPLE_COLOR
+              ]
+                  .map((type) => ChoiceChip(
+                      label: Container(
+                        height: 20,
+                        width: 60,
+                        child: Center(
+                            child: Text('${OrderColorTypeLocalizedMap[type]}')),
+                      ),
+                      backgroundColor: Colors.grey[100],
+                      selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                      selected:
+                          widget.formState.model.details.colorType == type,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          widget.formState.model.details.colorType = type;
+                        });
+                      }))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ///工厂规模
+  Widget _buildPopulationScale() {
+    return GestureDetector(
+      onTap: _onPopulationSelect,
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: '工厂规模',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ]),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                widget.formState.model.details.populationScale == null
+                    ? '选择工厂规模'
+                    : PopulationScaleLocalizedMap[
+                        widget.formState.model.details.populationScale],
+                textAlign: TextAlign.right,
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///生产模式
+  Widget _buildProductionMode() {
+    return GestureDetector(
+      onTap: _onProductionModeSelect,
+      child: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Row(
+          children: <Widget>[
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '生产模式',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ]),
+            ),
+            Expanded(
+              child: Text(
+                widget.formState.model.details.productionMode == null
+                    ? '选择生产模式'
+                    : ProductionModeLocalizedMap[
+                        widget.formState.model.details.productionMode],
+                textAlign: TextAlign.right,
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -732,7 +866,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
   Container _buildMachiningQuantity() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -757,9 +891,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
               hideDivider: true,
               isRequired: true,
               textAlign: TextAlign.left,
-              inputFormatters: [
-                WhitelistingTextInputFormatter.digitsOnly,
-              ],
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               inputType: TextInputType.number,
               hintText: '填写',
               controller: super.expectedMachiningQuantityController,
@@ -779,7 +911,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
   Container _buildExceptedPrice() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -1237,6 +1369,43 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
       //埋点>>>需求发布2填写并发布
       UmengPlugin.onEvent('requirement_publish_finsh');
 
+    // BotToast.showCustomText(
+    //     onlyOne: true,
+    //     duration: null,
+    //     clickClose: false,
+    //     crossPage: false,
+    //     backgroundColor: Colors.black38,
+    //     toastBuilder: (cancelFunc) =>
+    //         AlertDialog(
+    //           content: Container(
+    //             height: 100,
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: <Widget>[
+    //                 Container(
+    //                   margin: EdgeInsets.only(bottom: 10),
+    //                   child: Text('是否确认发布需求？'),
+    //                 ),
+    //                 Row(
+    //                   children: [
+    //                     Expanded(
+    //                         child: FlatButton(
+    //                             onPressed: cancelFunc, child: Text('否'))),
+    //                     Expanded(
+    //                         child: FlatButton(
+    //                             onPressed: () => _onPublish(),
+    //                             child: Text('是',
+    //                                 style: TextStyle(
+    //                                   color: Colors.blue,
+    //                                 ))))
+    //                   ],
+    //                 )
+    //               ],
+    //             ),
+    //           ),
+    //         ));
+
+
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -1259,16 +1428,14 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
               .getRequirementOrderDetail(code);
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) =>
-                    PublishRequirementSuccessDialog(
-                      model: model,
-                    ),
+                builder: (context) => PublishRequirementSuccessDialog(
+                  model: model,
+                ),
               ),
               ModalRoute.withName('/'));
         }
       });
     });
-
 //      String code = await RequirementOrderRepository().publishNewRequirement(widget.formState.model,null,false);
 //      if (code != null && code != '') {
 //        widget.formState.model.code = code;
@@ -1303,33 +1470,98 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
 //      }
   }
 
+  
+    void _onPublish(){
+
+    }
+
+
   //格式选中的地区（多选）
-  String formatAreaSelectsText(List<RegionModel> selects, int count) {
+  String formatAreaSelectsText(List<DistrictModel> selects, int count) {
     String text = '';
     if (selects == null || selects.length == 0) {
-      return '选择要求地域';
+      return '选择要求地区';
     }
 
-    if (widget.formState.model.details.productiveOrientations.indexWhere(
-          (region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
-    ) >
-        -1) {
-      return '全国';
-    }
+    // if (widget.formState.model.details.productiveOrientations.indexWhere(
+    //       (region) => region.isocode == Constants.WHOLE_COUNTRY_ISOCODE,
+    //     ) >
+    //     -1) {
+    //   return '全国';
+    // }
 
-    for (int i = 0; i < selects.length; i++) {
-      if (i > count - 1) {
-        text += '...';
-        break;
-      }
+    // for (int i = 0; i < selects.length; i++) {
+    //   if (i > count - 1) {
+    //     text += '...';
+    //     break;
+    //   }
 
-      if (i == selects.length - 1) {
-        text += selects[i].name;
-      } else {
-        text += selects[i].name + '、';
-      }
-    }
+    //   if (i == selects.length - 1) {
+    //     text += selects[i].name;
+    //   } else {
+    //     text += selects[i].name + '、';
+    //   }
+    // }
+
+    text = selects.map((e) => e.name).join('、');
 
     return text;
+  }
+
+  void _onPopulationSelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SingleEnumSelectV2Page(
+          items: [
+            PopulationScale.N05,
+            PopulationScale.N06,
+            PopulationScale.N07,
+            PopulationScale.N02,
+            PopulationScale.N03,
+            PopulationScale.N04
+          ],
+          localizedMap: PopulationScaleLocalizedMap,
+          title: '选择工厂规模',
+          value: widget.formState.model.details.populationScale,
+          count: 3,
+        );
+      },
+    ).then((result) {
+      if (result != null) {
+        setState(() {
+          if (result == false) {
+            widget.formState.model.details.populationScale = null;
+          } else {
+            widget.formState.model.details.populationScale = result;
+          }
+        });
+      }
+    });
+  }
+
+  void _onProductionModeSelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SingleEnumSelectV2Page(
+          items: ProductionMode.values,
+          localizedMap: ProductionModeLocalizedMap,
+          title: '选择生产模式',
+          value: widget.formState.model.details.productionMode,
+          count: 3,
+        );
+      },
+    ).then((result) {
+      if (result != null) {
+        setState(() {
+          if (result == false) {
+            widget.formState.model.details.productionMode = null;
+          } else {
+            widget.formState.model.details.productionMode = result;
+          }
+        });
+      }
+    });
   }
 }
