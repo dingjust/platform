@@ -2,25 +2,29 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-row>
-        <el-col :span="2">
-          <div class="orders-list-title">
-            <h6>工厂商家</h6>
-          </div>
-        </el-col>
+        <div class="orders-list-title">
+          <h6>工厂商家</h6>
+        </div>
       </el-row>
       <div class="pt-2"></div>
-      <factory-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
+      <factory-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" @resetSeachInfo="resetSeachInfo"/>
+      <el-row type="flex" justify="end">
+          <el-checkbox v-model="searchInfo.enableShow" border size="mini" @change="val => val ? searchInfo.unEnableShow=false : ''">已显示</el-checkbox>
+          <el-checkbox v-model="searchInfo.unEnableShow" border size="mini" @change="val => val ? searchInfo.enableShow=false : ''">未显示</el-checkbox>
+          <el-checkbox v-model="searchInfo.profileCom" border size="mini" @change="val => val ? searchInfo.unProfileCom=false : ''">资料完善</el-checkbox>
+          <el-checkbox v-model="searchInfo.unProfileCom" border size="mini" @change="val => val ? searchInfo.profileCom=false : ''">资料未完善</el-checkbox>
+      </el-row>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <factory-list :page="page" @onDetails="onDetails" :sequanceSort="sequanceSort" @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
-              <el-button type="text" @click="onDetails(props.item)">明细</el-button>
-              <el-button type="text" @click="onEdit(props.item)">标签</el-button>
               <el-dropdown @command="handleCommand($event, props.item)">
                 <span class="el-dropdown-link">
                   更多操作<i class="el-icon--right" style="font-size:12px"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="DETAIL">明细</el-dropdown-item>
+                  <el-dropdown-item command="LABEL">标签</el-dropdown-item>
                   <el-dropdown-item v-if="!props.item.loginDisabled" command="DISABLED">禁用</el-dropdown-item>
                   <el-dropdown-item v-if="props.item.loginDisabled" command="UNDISABLED">解禁</el-dropdown-item>
                   <el-dropdown-item command="CLEARAUTH">清除认证</el-dropdown-item>
@@ -116,11 +120,17 @@
         const url = this.apis().getFactories() + '?sort=creationtime,desc';
         this.search({url, keyword, page, size});
       },
+      handleChange () {
+        
+      },
       onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
 
-        this.queryFormData.reviewState = '';
-        const queryFormData = this.queryFormData;
+        let queryFormData = Object.assign({}, this.queryFormData);
+        queryFormData.reviewState = '';
+        queryFormData.enableShow = this.searchInfo.enableShow ? true : (this.searchInfo.unEnableShow ? false : '');
+        queryFormData.profileCompleted = this.searchInfo.profileCom ? true : (this.searchInfo.unProfileCom ? false : '');
+
         let url = this.apis().getFactories();
         if (this.isTenant()) {
           url += '?' + this.sequanceSort.value + 'sort=creationtime,desc';
@@ -130,6 +140,12 @@
       },
       handleCommand(command, row) {
         switch (command) {
+          case 'DETAIL':
+            this.onDetails(row);
+            break;
+          case 'LABEL':
+            this.onEdit(row);
+            break;
           case 'DISABLED':
             this.onDelete(row);
             break;
@@ -320,10 +336,24 @@
         }
 
         this.onAdvancedSearch();
+      },
+      resetSeachInfo () {
+        this.searchInfo = {
+          enableShow: null,
+          unEnableShow: null,
+          profileCom: null,
+          unProfileCom: null,
+        }
       }
     },
     data () {
       return {
+        searchInfo: {
+          enableShow: null,
+          unEnableShow: null,
+          profileCom: null,
+          unProfileCom: null,
+        },
         sequanceSort: {
           value: ''
         },
@@ -358,7 +388,6 @@
 
 <style scoped>
 .el-dropdown-link {
-  margin-left: 8px;
   font-size: 12px;
   cursor: pointer;
   color: #409EFF;
