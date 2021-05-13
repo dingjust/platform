@@ -15,8 +15,7 @@ class Apis {
       };
 
   /// 获取城市下的区域列表 GET
-  static get districtsForCity =>
-          (city) {
+  static get districtsForCity => (city) {
         return '/{baseSiteId}/cities/$city/districts';
       };
 
@@ -72,10 +71,12 @@ class Apis {
   static get applyCertification => '/{baseSiteId}/companies/certification';
 
   /// 全部工厂列表Z
-  static get factories => '/{baseSiteId}/factories';
+  static get factories =>
+      '/{baseSiteId}/factories?sort=sequenceNo,asc&sort=creationtime,desc';
 
   /// 经纬度
-  static get factoriesForMap => '/{baseSiteId}/factories/map';
+  static get factoriesForMap =>
+      '/{baseSiteId}/factories/map?sort=sequenceNo,asc&sort=creationtime,desc';
 
   //邀请报价工厂列表 传入需求单号
   static get requestQuoteFactories =>

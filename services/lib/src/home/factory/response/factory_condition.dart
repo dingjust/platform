@@ -123,11 +123,11 @@ class FactoryCondition {
         'categories': categories != null ? categories : [],
         'adeptAtCategories': adeptAtCategoryArray,
         'productiveOrientations': productiveOrientations != null &&
-            productiveOrientations.isocode != null
+                productiveOrientations.isocode != null
             ? [productiveOrientations.isocode]
             : [],
         'cities':
-        cities == null ? [] : cities.map((city) => city.code).toList(),
+            cities == null ? [] : cities.map((city) => city.code).toList(),
         'starLevel': starLevel > 0 ? starLevel : '',
         'labels': labelsArray,
         'cooperationModes': cooperationModesArray,
@@ -137,7 +137,7 @@ class FactoryCondition {
         'keyword': keyword ?? '',
         'approvalStatuses': approvalStatuses ?? '',
         'industrialClusters':
-        industrialCuster != null ? [industrialCuster.code] : [],
+            industrialCuster != null ? [industrialCuster.code] : [],
         'longitude': longitude != null && longitude > 0 ? longitude : '',
         'latitude': latitude != null && latitude > 0 ? latitude : '',
         'distance': distance != null ? distance : '',
@@ -168,6 +168,8 @@ class FactoryCondition {
         'qualityLevels': qualityLevels ?? []
       };
 
+      result['enableShow'] = true;
+      result['profileCompleted'] = true;
       return result;
     }
   }

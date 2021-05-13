@@ -496,7 +496,7 @@ class _RequirementOrderDetailByFactoryPageState
           ),
           _InfoRow(
             label: '订单尺码',
-            val: '${OrderSizeTypeLocalizedMap[orderModel.details.sizeType]}',
+            val: OrderSizeTypeLocalizedMap[orderModel.details.sizeType],
           ),
           Divider(
             height: 0,
@@ -511,8 +511,7 @@ class _RequirementOrderDetailByFactoryPageState
           _InfoRow(
             label: '工厂规模',
             val:
-            '${PopulationScaleLocalizedMap[orderModel.details
-                .populationScale]}',
+            PopulationScaleLocalizedMap[orderModel.details.populationScale],
           ),
           Divider(
             height: 0,
@@ -770,7 +769,7 @@ class _InfoRow extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Text(
-              '$val',
+              val != null ? '$val' : '',
               style: TextStyle(
                 fontSize: 14,
               ),
