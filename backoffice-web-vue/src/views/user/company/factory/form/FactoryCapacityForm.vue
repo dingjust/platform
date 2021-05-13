@@ -406,19 +406,15 @@
       this.initShowMajorCategories();
       //图片初始化处理
       if (this.formData.gatePhoto != null) {
-        this.formData.gatePhoto.convertedMedias = [];
         this.gatePhotos = [this.formData.gatePhoto];
       }
       if (this.formData.cuttingTablePhoto != null) {
-        this.formData.cuttingTablePhoto.convertedMedias = [];
         this.cuttingTablePhotos = [this.formData.cuttingTablePhoto];
       }
       if (this.formData.sewingWorkshopPhoto != null) {
-        this.formData.sewingWorkshopPhoto.convertedMedias = [];
         this.sewingWorkshopPhotos = [this.formData.sewingWorkshopPhoto];
       }
       if (this.formData.backEndPhoto != null) {
-        this.formData.backEndPhoto.convertedMedias = [];
         this.backEndPhotos = [this.formData.backEndPhoto];
       }
     }

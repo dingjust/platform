@@ -5,7 +5,10 @@
     </template>
     <template v-else-if="isFactory()">
       <el-card>
-        <factory-from :formData="formData" @onSave="onSave" @onSaveProfiles="onSaveProfiles"></factory-from>
+        <template v-if="refresh">
+          <factory-from ref="factoryFrom" :formData="formData" :isEditing="isEditing" 
+          @onSave="onSave" @onSaveProfiles="onSaveProfiles" @onEdit="onEdit" />
+        </template>
       </el-card>
     </template>
     <template v-else>
@@ -61,6 +64,42 @@
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
+      onEdit () {
+        if (this.formData.reviewState !== 'REVIEWING' && this.formData.reviewState !== 'REVIEW_REJECTED') {
+          this.isEditing = true;
+          return;
+        } else {
+          this.$confirm('是否前往编辑页面，页面将会展示上次提交保存但尚未通过审阅的数据', '', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            this._onEdit();
+          });
+        }
+      },
+      async _onEdit () {
+        this.refresh = false;
+        this.isEditing = true;
+        const uid = this.$store.getters.currentUser.companyCode;
+        const url = this.apis().getFactoryBackups(uid);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          this.refresh = true;
+          this.isEditing = false;
+          return;
+        }
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          this.refresh = true;
+          this.isEditing = false;
+          return;
+        }
+
+        this.initData(JSON.parse(result.data));
+        this.refresh = true;
+      },
       async getFactory () {
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().getFactory(uid);
@@ -69,7 +108,9 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
+        this.initData(result);
+      },
+      initData (result) {
         if (result.profiles.length <= 0) {
           result.profiles = [{
             medias: [],
@@ -103,6 +144,11 @@
         this.setFactoryFormVisible(true);
       },
       async onSave () {
+        if (!this.formData.sewingWorkshopPhoto && !this.formData.gatePhoto && !this.formData.cuttingTablePhoto && !this.formData.backEndPhoto) {
+          this.$message.warning('工厂门牌 / 裁床照片 / 车缝照片 / 尾部照片 中必须上传任意一张');
+          return;
+        }
+
         let data = Object.assign({}, this.formData);
         if (data.productionMode === '' || data.productionMode == null) {
           this.$delete(data, 'productionMode');
@@ -115,9 +161,10 @@
           return;
         }
 
-        this.getFactory();
         this.setFactoryFormVisible(false);
         this.$message.success('编辑工厂信息成功');
+
+        location.reload();
       },
       async getRegions () {
         const url = this.apis().getRegions();
@@ -174,9 +221,10 @@
           return;
         }
 
-        this.getFactory();
         this.factoryProfilesFormVisible = false;
         this.$message.success('编辑图文详情信息成功');
+
+        this.getFactory();
       },
       brandLeaveCount () {
         this.count++;
@@ -197,7 +245,9 @@
         count: 0,
         leave: {},
         status: false,
-        tipDialogVisible: false
+        tipDialogVisible: false,
+        refresh: true,
+        isEditing: false
       };
     },
     created () {

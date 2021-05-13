@@ -275,6 +275,7 @@ export default {
       this.region = '';
       this.addressText = '';
       this.queryFormData.productiveOrientations = [];
+      this.$emit('resetSeachInfo')
     }
   },
   data () {

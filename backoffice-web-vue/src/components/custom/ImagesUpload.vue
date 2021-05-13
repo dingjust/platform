@@ -235,7 +235,7 @@
             file.artworkUrl = image.url;
             file.url = image.url;
             // image.url = '';
-            if (image.convertedMedias.length > 0) {
+            if (image.convertedMedias && image.convertedMedias.length > 0) {
               image.convertedMedias.forEach(convertedMedia => {
                 if (convertedMedia.mediaFormat === 'DefaultProductPreview') {
                   file.url = convertedMedia.url;
