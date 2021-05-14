@@ -195,16 +195,13 @@ import brands from '@/store/modules/user/brands';
         orderDetail: '',
         detailVisible: false,
         activeName: 'ORDER_TASK',
-        activeStatus: '',
+        activeStatus: 'AUDITING',
         queryFormData: {
           keyword: '',
           // state: '',
-          searchType: ''
+          searchType: 'AUDITING'
         },
         statuses: [{
-          code: '',
-          name: '全部'
-        }, {
           code: 'AUDITING',
           name: '待审批'
         }, {
@@ -213,6 +210,9 @@ import brands from '@/store/modules/user/brands';
         }, {
           code: 'AUDITED_FAILED',
           name: '已驳回'
+        }, {
+          code: '',
+          name: '全部'
         }],
         dataQuery: {},
         purchaseOrderId: ''
