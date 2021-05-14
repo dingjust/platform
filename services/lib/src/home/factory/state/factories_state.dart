@@ -60,9 +60,7 @@ class FactoriesState extends PageState {
   }
 
   Map<String, dynamic> getParamsData() {
-    return {
-      'profileCompleted': 1,
-    };
+    return {'profileCompleted': true, 'enableShow': true};
   }
 
   @override

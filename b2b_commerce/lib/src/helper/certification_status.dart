@@ -47,7 +47,7 @@ class CertificationStatusHelper {
   }
 
   ///校验资料弹窗
-  bool checkProfile(VoidCallback onJump, VoidCallback onProfile) {
+  Future<bool> checkProfile(VoidCallback onJump, VoidCallback onProfile) async {
     //校验忽略
     if (profileCheckIgnore) {
       onJump();
@@ -58,8 +58,16 @@ class CertificationStatusHelper {
       onJump();
       return true;
     }
+
     bool profileCompleted =
         UserBLoC.instance.currentUser.b2bUnit.profileCompleted;
+
+    //刷新
+    if (!UserBLoC.instance.currentUser.b2bUnit.profileCompleted) {
+      UserModel user = await UserBLoC.instance.refreshUser();
+      profileCompleted = user.b2bUnit.profileCompleted;
+    }
+
     if (profileCompleted != null && profileCompleted) {
       onJump();
       return true;
