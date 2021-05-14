@@ -63,6 +63,9 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
           IconButton(
               icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
+                //关闭键盘
+                FocusScope.of(context).requestFocus(FocusNode());
+
                 if (ObjectUtil.isEmptyList(medias)) {
                   ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
                   return;
