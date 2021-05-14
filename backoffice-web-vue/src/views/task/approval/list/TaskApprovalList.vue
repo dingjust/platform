@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
+          <el-button v-if="scope.row.state !== 'REVOKED'" type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
           <template v-if="canAudit(scope.row)">
             <el-divider direction="vertical" />
             <authorized :permission="['DO_AUDIT']">
