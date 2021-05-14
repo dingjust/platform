@@ -82,21 +82,6 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     });
   }
 
-  //获取工厂现款产品数据
-  _getProductData() {
-    return UserBLoC.instance.currentUser.type == UserType.FACTORY
-        ? ProductRepositoryImpl().list({
-            'approvalStatuses': ['approved'],
-          }, {
-            'size': 6
-          })
-        : ProductRepositoryImpl().getProductsOfFactory({
-            'approvalStatuses': ['approved'],
-          }, {
-            'size': 6
-          }, widget.factoryUid);
-  }
-
   Widget _buildView(String code, FactoryModel factory) {
     switch (code) {
       case 'a':

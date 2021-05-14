@@ -132,8 +132,7 @@ abstract class UserApis {
       };
 
   //APP下载PDF
-  static get downContractInApp =>
-          (code) {
+  static get downContractInApp => (code) {
         return '/{baseSiteId}/user/agreement/download/in/app/' + code;
       };
 
@@ -295,5 +294,11 @@ abstract class UserApis {
   static get getCompanyCertificateInfo =>
           (code) {
         return '/{baseSiteId}/cert/enterprise/cert/info/$code';
+      };
+
+  /// 获取工厂提交修改资料
+  static get factoryProfileBackup =>
+          (code) {
+        return '/{baseSiteId}/factories/backups/$code';
       };
 }

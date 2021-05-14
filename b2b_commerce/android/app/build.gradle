@@ -13,7 +13,7 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '25'
+    flutterVersionCode = '26'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
@@ -48,7 +48,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
-        versionCode 25
+        versionCode 26
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

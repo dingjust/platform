@@ -58,6 +58,29 @@ const AuthenticationStatusLocalizedMap = {
   AuthenticationStatus.FAILED: '认证失败',
 };
 
+///工厂资料审核状态
+enum FactoryReviewState {
+  ///无
+  NONE,
+
+  ///审核中
+  REVIEWING,
+
+  ///审核通过
+  REVIEW_PASSED,
+
+  ///审核失败
+  REVIEW_REJECTED
+}
+
+/// 工厂资料审核状态
+const FactoryReviewStateLocalizedMap = {
+  FactoryReviewState.NONE: '无',
+  FactoryReviewState.REVIEWING: '审核中',
+  FactoryReviewState.REVIEW_PASSED: '审核通过',
+  FactoryReviewState.REVIEW_REJECTED: '审核失败',
+};
+
 /// 公司
 @JsonSerializable()
 class CompanyModel extends UserGroupModel {
@@ -226,32 +249,32 @@ class OrgUnitModel extends CompanyModel {
     String contactUid,
     this.path,
   }) : super(
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      members: members,
-      starLevel: starLevel,
-      address: address,
-      contactAddress: contactAddress,
-      describe: describe,
-      creationTime: creationTime,
-      taxNumber: taxNumber,
-      bankOfDeposit: bankOfDeposit,
-      certificates: certificates,
-      contactPerson: contactPerson,
-      contactPhone: contactPhone,
-      cooperativeBrand: cooperativeBrand,
-      qq: qq,
-      wechat: wechat,
-      businessRegistrationNo: businessRegistrationNo,
-      certificateOfLegal: certificateOfLegal,
-      legalRepresentative: legalRepresentative,
-      type: type,
-      approvalStatus: approvalStatus,
-      profiles: companyProfiles,
-      labels: labels,
-      duties: duties,
-      contactUid: contactUid);
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            members: members,
+            starLevel: starLevel,
+            address: address,
+            contactAddress: contactAddress,
+            describe: describe,
+            creationTime: creationTime,
+            taxNumber: taxNumber,
+            bankOfDeposit: bankOfDeposit,
+            certificates: certificates,
+            contactPerson: contactPerson,
+            contactPhone: contactPhone,
+            cooperativeBrand: cooperativeBrand,
+            qq: qq,
+            wechat: wechat,
+            businessRegistrationNo: businessRegistrationNo,
+            certificateOfLegal: certificateOfLegal,
+            legalRepresentative: legalRepresentative,
+            type: type,
+            approvalStatus: approvalStatus,
+            profiles: companyProfiles,
+            labels: labels,
+            duties: duties,
+            contactUid: contactUid);
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$OrgUnitModelFromJson(json);
@@ -579,6 +602,12 @@ class FactoryModel extends B2BUnitModel {
   ///简介
   String intro;
 
+  ///工厂资料审阅状态
+  FactoryReviewState reviewState;
+
+  ///审核原因
+  String reviewReasons;
+
   FactoryModel({MediaModel profilePicture,
     String uid,
     String name,
@@ -642,7 +671,9 @@ class FactoryModel extends B2BUnitModel {
     this.cuttingTablePhoto,
     this.sewingWorkshopPhoto,
     this.intro,
-    this.backEndPhoto})
+    this.backEndPhoto,
+    this.reviewState,
+    this.reviewReasons})
       : super(
       profilePicture: profilePicture,
       uid: uid,

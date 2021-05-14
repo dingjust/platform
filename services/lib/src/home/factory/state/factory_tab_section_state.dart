@@ -27,7 +27,7 @@ class FactoryTabSectionState with ChangeNotifier {
   void getNewFactories() {
     try {
       http$.post(Apis.factories, data: {
-        'profileCompleted': 1
+        'profileCompleted': true
       }, queryParameters: {
         'page': 0,
         'size': 5,
