@@ -61,7 +61,9 @@
         <el-col :span="8">
           <el-row type="flex" class="rowClass2">
             <h6 class="titleTextClass2">期望价格</h6>
-            <h6 class="contentTextClass">{{slotData.details.maxExpectedPrice}}</h6>
+            <h6 class="contentTextClass">
+              {{slotData.details.maxExpectedPrice === -1 ? '面议' : slotData.details.maxExpectedPrice}}
+            </h6>
           </el-row>
         </el-col>
         <el-col :span="8">
@@ -110,6 +112,12 @@
             <h6 class="titleTextClass2">订单颜色</h6>
             <h6 class="contentTextClass" v-if="slotData.details.colorType">
               {{getEnum('RequirementColorType',slotData.details.colorType)}}</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">生产地区</h6>
+            <h6 class="contentTextClass">{{productiveDistricts}}</h6>
           </el-row>
         </el-col>
       </el-row>
@@ -161,25 +169,20 @@
         }
       },
       productionAreas: function () {
-        // var text = '';
-        // if (this.slotData.details.productiveOrientations != null && this.slotData.details.productiveOrientations.length > 0) {
-        //   for (let area of this.slotData.details.productiveOrientations) {
-        //     text += area.name;
-        //     text += '、';
-        //   }
-        // }
+        if (this.slotData.details.productiveOrientations && this.slotData.details.productiveOrientations.length > 0) {
+          return this.slotData.details.productiveOrientations.map(item => item.name).toString();
+        }
 
-        // var index = text.indexOf('、');
-        // if (index !== -1) {
-        //   text = text.slice(0, index);
-        // }
-        // return text;
-
+        return '';
+      },
+      productiveDistricts: function () {
         // 新修改 使用productiveDistricts
         let productiveDistricts = '';
-        this.slotData.details.productiveDistricts.forEach(item => productiveDistricts += item.name + ', ');
-
-        return productiveDistricts.substring(0, productiveDistricts.length - 3);
+        if (this.slotData.details.productiveDistricts && this.slotData.details.productiveDistricts.length > 0) {
+          this.slotData.details.productiveDistricts.forEach(item => productiveDistricts += item.name + ', ');
+          return productiveDistricts.substring(0, productiveDistricts.length - 3);
+        }
+        return '';
       }
     },
     methods: {

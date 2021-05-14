@@ -231,6 +231,9 @@
         }
 
         result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
+        if (!result.details.certificates) {
+          this.$set(result.details, 'certificates', []);
+        }
         this.setFormData(Object.assign({}, this.formData, result));
 
         this.editFormDialogVisible = !this.editFormDialogVisible;
@@ -266,11 +269,15 @@
 
         // 处理地区
         let form = Object.assign({}, this.formData);
-        form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
-          return {
-            code: item[item.length - 1]
-          }
-        })
+        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
+          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
+            return {
+              code: item[item.length - 1]
+            }
+          })
+        } else {
+          form.details.productiveDistricts = [];
+        }
 
         const url = this.apis().createRequirementOrder();
         const result = await this.$http.post(url, this.formData, params);
@@ -293,6 +300,19 @@
           text = text.slice(0, text.length - 1);
         }
         params['factories'] = text;
+
+        // 处理地区
+        let form = Object.assign({}, this.formData);
+        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
+          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
+            return {
+              code: item[item.length - 1]
+            }
+          })
+        } else {
+          form.details.productiveDistricts = [];
+        }
+
         const url = this.apis().createPublishByPlatform();
         const result = await this.$http.post(url, this.formData, params);
         if (result['errors']) {
@@ -324,11 +344,15 @@
 
         // 处理地区
         let form = Object.assign({}, this.formData);
-        form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
-          return {
-            code: item[item.length - 1]
-          }
-        })
+        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
+          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
+            return {
+              code: item[item.length - 1]
+            }
+          })
+        } else {
+          form.details.productiveDistricts = [];
+        }
 
         const url = this.apis().updateRequirementOrder(this.formData.code);
         const result = await this.$http.put(url, this.formData, params);
@@ -351,6 +375,19 @@
           text = text.slice(0, text.length - 1);
         }
         params['factories'] = text;
+
+        // 处理地区
+        let form = Object.assign({}, this.formData);
+        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
+          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
+            return {
+              code: item[item.length - 1]
+            }
+          })
+        } else {
+          form.details.productiveDistricts = [];
+        }
+
         const url = this.apis().updateRequirementOrderByPlatform();
         const result = await this.$http.put(url, this.formData, params);
         if (result['errors']) {

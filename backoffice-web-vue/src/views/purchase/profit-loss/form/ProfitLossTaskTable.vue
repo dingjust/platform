@@ -258,14 +258,18 @@ export default {
       this.editDialogVisible = false;
     },
     onSelectCost (data) {
-      data.customRows.forEach(item => {
-        item.id = null;
-        item.specList.forEach(val => val.id = null);
-      });
-      data.purchaseMaterials.forEach(item => {
-        item.id = null;
-        item.specList.forEach(val => val.id = null);
-      });
+      if (data.customRows && data.customRows.length > 0) {
+        data.customRows.forEach(item => {
+          item.id = null;
+          item.specList.forEach(val => val.id = null);
+        });
+      }
+      if (data.purchaseMaterials && data.purchaseMaterials.length > 0) {
+        data.purchaseMaterials.forEach(item => {
+          item.id = null;
+          item.specList.forEach(val => val.id = null);
+        });
+      }
 
       this._onSelectCost(data);
     },

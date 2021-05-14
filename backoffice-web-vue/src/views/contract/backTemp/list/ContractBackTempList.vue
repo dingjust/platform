@@ -19,8 +19,8 @@
       </el-table-column> -->
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="onDetail(scope.row.code)">查看</el-button>
-          <el-button type="text" @click="onEdit(scope.row.code)">编辑</el-button>
+          <el-button type="text" @click="onDetail(scope.row)">查看</el-button>
+          <el-button type="text" @click="onEdit(scope.row)">编辑</el-button>
           <!-- <el-button type="text" @click="onDelete(scope.row)">删除</el-button> -->
         </template>
       </el-table-column>
@@ -37,10 +37,10 @@
     <el-dialog :title="dialogTitle" :visible.sync="tempVisible" width="80%" append-to-body
       :close-on-click-modal="false">
       <template v-if="showContent === 'DETAIL'">
-        <contract-back-temp-detail :detail="detail"/>
+        <contract-back-temp-detail v-if="detail.id" :detail="detail"/>
       </template>  
       <template v-else>
-        <contract-back-temp-form :detail="detail" @callback="onDetail"/>
+        <contract-back-temp-form v-if="detail.id" :detail="detail" @callback="onDetail"/>
       </template>
     </el-dialog>
   </div>
@@ -84,17 +84,19 @@ export default {
         this.detail.content = '';
       }
     },
-    async onDetail (code) {
-      await this.getDetail(code)
+     onDetail (row) {
+      this.detail = {};
+      this.getDetail(row.code)
 
-      this.dialogTitle = this.detail.title + '模板';
+      this.dialogTitle = row.title + '模板';
       this.showContent = 'DETAIL';
       this.tempVisible = true;
     },
-    async onEdit (code) {
-      await this.getDetail(code)
+    onEdit (row) {
+      this.detail = {};
+      this.getDetail(row.code)
 
-      this.dialogTitle = '修改' + this.detail.title + '模板';
+      this.dialogTitle = '修改' + row.title + '模板';
       this.showContent = 'FORM';
       this.tempVisible = true;
     },

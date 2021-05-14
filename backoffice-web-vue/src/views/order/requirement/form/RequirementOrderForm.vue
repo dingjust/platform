@@ -38,7 +38,8 @@
           </template>
           <category-select :listData="categories" :selectDatas="selectDatas" :multiple="false"></category-select>
         </el-form-item>
-        <!-- <el-form-item prop="details.productiveOrientations">
+        <!-- <el-form-item prop="details.productiveOrientations"> -->
+        <el-form-item v-if="isTenant()">
           <template slot="label">
             <h6 class="titleTextClass">选择地区<span style="color: red">*</span></h6>
           </template>
@@ -53,7 +54,7 @@
               </el-option>
             </el-select>
           </el-row>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item prop="details.productiveDistricts">
           <template slot="label">
             <h6 class="titleTextClass">选择地区<span style="color: red">*</span></h6>
@@ -436,6 +437,10 @@
         }
       };
       var checkProductiveDistricts = (rule, value, callback) => {
+        if (this.isTenant()) {
+          callback();
+          return;
+        }
         if (value.length <= 0) {
           return callback(new Error('请选择地区'));
         } else {
@@ -517,11 +522,11 @@
             validator: checkMajorCategory,
             trigger: 'change'
           }],
-          // 'details.productiveOrientations': [{
-          //   type: 'array',
-          //   validator: checkProductiveOrientations,
-          //   trigger: 'change'
-          // }],
+          'details.productiveOrientations': [{
+            type: 'array',
+            validator: checkProductiveOrientations,
+            trigger: 'change'
+          }],
           'details.productiveDistricts': [{
             type: 'array',
             validator: checkProductiveDistricts,
