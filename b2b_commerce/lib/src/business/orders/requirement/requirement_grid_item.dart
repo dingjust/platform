@@ -89,11 +89,19 @@ class RequirementGridItem extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: OrientationsText(
-                          regions: model.details.productiveOrientations ?? [],
-                          textStyle: TextStyle(
-                              color: Color.fromRGBO(97, 95, 95, 1),
-                              fontSize: 10)),
+                      child: model.details.productiveDistricts != null
+                          ? DistrictsOrientationsText(
+                              districts:
+                                  model.details.productiveDistricts ?? [],
+                              textStyle: TextStyle(
+                                  color: Color.fromRGBO(97, 95, 95, 1),
+                                  fontSize: 10))
+                          : OrientationsText(
+                              regions:
+                                  model.details.productiveOrientations ?? [],
+                              textStyle: TextStyle(
+                                  color: Color.fromRGBO(97, 95, 95, 1),
+                                  fontSize: 10)),
                     ),
                     Row(
                       children: <Widget>[
@@ -126,8 +134,9 @@ class RequirementGridItem extends StatelessWidget {
             topRight: Radius.circular(borderRadius)),
         child: CachedNetworkImage(
           imageUrl:
-              '${model.details.pictures.first.imageProcessUrl(processUrl)}',
-          placeholder: (context, url) => SpinKitRing(
+          '${model.details.pictures.first.imageProcessUrl(processUrl)}',
+          placeholder: (context, url) =>
+              SpinKitRing(
                 color: Colors.grey[300],
                 lineWidth: 2,
                 size: 30,
