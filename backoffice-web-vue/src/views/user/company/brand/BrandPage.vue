@@ -14,17 +14,18 @@
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
-              <el-button type="text" @click="onDetails(props.item)">明细</el-button>
-              <el-button type="text" @click="onEdit(props.item)">打标</el-button>
-              <el-button v-if="!props.item.loginDisabled" type="text" @click="onForbidden(props.item)">
-                禁用
-              </el-button>
-              <el-button v-if="props.item.loginDisabled" type="text" @click="onCannelDelete(props.item)">
-                解禁
-              </el-button>
-              <el-button type="text" @click="clearAuth(props.item)">
-                清除认证
-              </el-button>
+              <el-dropdown @command="handleCommand($event, props.item)">
+                <span class="el-dropdown-link">
+                  更多操作<i class="el-icon--right" style="font-size:12px"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="DETAIL">明细</el-dropdown-item>
+                  <el-dropdown-item command="LABEL">标签</el-dropdown-item>
+                  <el-dropdown-item v-if="!props.item.loginDisabled" command="DISABLED">禁用</el-dropdown-item>
+                  <el-dropdown-item v-if="props.item.loginDisabled" command="UNDISABLED">解禁</el-dropdown-item>
+                  <el-dropdown-item command="CLEARAUTH">清除认证</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </brand-list>
         </el-tab-pane>
@@ -115,6 +116,27 @@ export default {
       const url = this.apis().getBrands();
       this.setIsAdvancedSearch(true);
       this.advancedSearch({url, queryFormData, page, size});
+    },
+    handleCommand(command, row) {
+      switch (command) {
+        case 'DETAIL':
+          this.onDetails(row);
+          break;
+        case 'LABEL':
+          this.onEdit(row);
+          break;
+        case 'DISABLED':
+          this.onForbidden(row);
+          break;
+        case 'UNDISABLED':
+          this.onCannelDelete(row);
+          break;
+        case 'CLEARAUTH':
+          this.clearAuth(row);
+          break;
+        default:
+          break;
+      }
     },
     async onDetails (item) {
       // const url = this.apis().getBrand(item.uid);
@@ -260,5 +282,11 @@ export default {
   .orders-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+  }
+
+  .el-dropdown-link {
+    font-size: 12px;
+    cursor: pointer;
+    color: #409EFF;
   }
 </style>

@@ -6,7 +6,7 @@
 <template>
   <div>
     <el-row type="flex">
-      <el-input placeholder="请输入名称" v-model="name">
+      <el-input ref="input" placeholder="请输入名称" v-model="name" @keyup.enter.native="onConfirm">
         <el-select v-model="selectType" slot="prepend" placeholder="请选择" style="width: 100px;">
           <el-option label="颜色" value="color"></el-option>
           <el-option label="尺码" value="size"></el-option>
@@ -26,7 +26,8 @@ export default {
   data () {
     return {
       name: '',
-      selectType: 'color'
+      selectType: 'color',
+      lock: false
     }
   },
   methods: {
@@ -34,14 +35,19 @@ export default {
       this.$emit('closeDialog');
     },
     onConfirm () {
+      if (this.lock) {
+        return;
+      }
+      this.lock = true;
+      if (this.name.trim() === '') {
+        this.$message.warning('请填写' + (this.selectType === 'color' ? '颜色' : '尺码') + '名称');
+        return;
+      }
       this.$confirm('是否进行添加操作?', '', {
         confirmButtonText: '是',
         cancelButtonText: '否',
         type: 'warning'
       }).then(() => {
-        if (this.name === '') {
-          this.$message.warning('请填写' + (this.selectType === 'color' ? '颜色' : '尺码') + '名称');
-        }
         if (this.selectType === 'color') {
           this.addColor();
         } else if (this.selectType === 'size') {
@@ -64,6 +70,8 @@ export default {
       } else {
         this.$message.error('操作失败，请稍后再试 . . .');
       }
+
+      this.lock = false;
     },
     async addSize () {
       const url = this.apis().addCustomSize();
@@ -80,7 +88,14 @@ export default {
       } else {
         this.$message.error('操作失败，请稍后再试 . . .');
       }
+
+      this.lock = false;
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.$refs.input.focus();
+    })
   }
 }
 </script>
