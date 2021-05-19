@@ -105,8 +105,8 @@
 
   import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
   import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
-  import OutboundOrderTopInfo from '../form/OutboundOrderTopInfo';
-  import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
+  import OutboundOrderTopInfo from './OutboundOrderTopInfo';
+  import OutboundOrderCenterTable from './OutboundOrderCenterTable';
   import UniqueCodeGenerateForm from '../form/UniqueCodeGenerateForm';
   import OutboundCancelForm from '../form/OutboundCancelForm';
   import SalesOrderCancelDialog from '../../components/SalesOrderCancelDialog';
@@ -207,12 +207,21 @@
       },
       onModify() {
         let data = this.setFormData(this.formData);
-        this.$router.push({
-          name: '创建外发订单',
-          params: {
-            formData: data
-          }
-        });
+        if (data.taskOrderEntries[0].originOrder) {
+          this.$router.push({
+            name: '创建外发订单',
+            params: {
+              formData: data
+            }
+          });
+        } else {
+          this.$router.push({
+            name: '创建产品外发',
+            params: {
+              formData: data
+            }
+          });
+        }
       },
       setFormData(data) {
         let formData = {

@@ -263,8 +263,8 @@
         }
       },
       isDisabled: function () {
-        return false;
-        // return !checkAuditFree('SALES_OUT_NO_AUDIT');
+        // return false;
+        return !checkAuditFree('SALES_OUT_NO_AUDIT');
       }
     },
     methods: {
@@ -538,11 +538,11 @@
       }
     },
     mounted() {
-      // if (checkAuditFree('SALES_OUT_NO_AUDIT')) {
-      //   this.form.auditNeeded = false;
-      // } else {
-      //   this.form.auditNeeded = true;
-      // }
+      if (checkAuditFree('SALES_OUT_NO_AUDIT')) {
+        this.form.auditNeeded = false;
+      } else {
+        this.form.auditNeeded = true;
+      }
     }
   };
 

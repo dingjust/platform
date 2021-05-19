@@ -1,233 +1,34 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <supplier-select @onSelect="onSuppliersSelect" :categories="['SUPPLIER']" />
-    </el-dialog>
     <el-card>
       <el-row>
-        <el-col :span="4">
-          <div class="outbound-order-create-title">
-            <h6>创建外发订单</h6>
-          </div>
-        </el-col>
+        <div class="outbound-order-create-title">
+          <h6>创建外发订单</h6>
+        </div>
       </el-row>
       <div class="pt-2"></div>
       <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
         <outbound-type-select :formData="formData" />
-        <el-row class="outbound-basic-row">
-          <el-form-item label="标题" prop="title">
-            <el-input v-model="formData.title" style="width: 200px"></el-input>
-          </el-form-item>
-        </el-row>
+        <outbound-order-contact-com :formData="formData" />
+        <el-divider />
+        <outbound-order-entry ref="orderEntries" :formData="formData" />
         <el-row>
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>合作对象</h6>
-            </div>
-          </el-col>
+          <h6 style="padding-left: 10px">生产详情</h6>
         </el-row>
-        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-          <el-col :span="8">
-            <el-form-item label="外发工厂" prop="outboundCompanyName">
-              <el-input v-model="formData.outboundCompanyName" :disabled="true"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="联系人" prop="outboundContactPerson">
-              <el-input v-model="formData.outboundContactPerson" :disabled="true"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="联系方式" prop="outboundContactPhone">
-              <el-input v-model="formData.outboundContactPhone" :disabled="true"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
-            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择合作商</el-button>
-          </el-col>
-        </el-row>
-        <template v-for="(item, index) in formData.taskOrderEntries">
-          <el-form ref="itemForm" label-width="80px" :model="item" :key="'form'+index">
-            <el-row type="flex" justify="end" v-if="index > 0">
-              <el-col :span="2">
-                <el-button class="outbound-btn" @click="deleteRow(index)">删除</el-button>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="4">
-                <div style="padding-left: 10px">
-                  <h6>生产详情</h6>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="产品名称" prop="product"
-                  :rules="[{ type: 'object', validator: validateProduct, trigger: 'change' }]">
-                  <el-input v-model="item.product.name" :disabled="true" placeholder="请输入"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-button @click="onProductSelect(index)" size="mini">{{item.product.id ? '更换工单' : '添加工单'}}</el-button>
-              </el-col>
-            </el-row>
-            <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" />
-            <div class="outbound-basic-row price-row">
-              <div style="display: flex">
-                <el-form-item label="发单总价" prop="totalPrimeCost"
-                  :rules="[{required: true, message: '请填写发单总价', trigger: 'blur'}]">
-                  <el-input v-model="item.totalPrimeCost" placeholder="请输入" @blur="onBlur(item,'totalPrimeCost')"
-                    v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
-                </el-form-item>
-                <h6 style="margin:0;padding:8px 0 0 10px;width:130px">发单单价：{{(getPrice(item))}}</h6>
-              </div>
-              <div>
-                <el-form-item label="交货日期" prop="deliveryDate"
-                  :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
-                  <el-date-picker v-model="item.deliveryDate" type="date" value-format="timestamp" placeholder="选择日期">
-                  </el-date-picker>
-                </el-form-item>
-              </div>
-              <div>
-                <el-form-item label="生产节点" prop="progressPlan"
-                  :rules="[{ required: true, type: 'object', validator: validateProgressPlan, trigger: 'change' }]">
-                  <el-input v-model="item.progressPlan.name" :disabled="true" placeholder="请输入">
-                    <el-button slot="suffix" v-if="item.progressPlan.isFromOrder" @click="editProgressPlan(index, item)">编辑</el-button>
-                    <el-button slot="suffix" v-else @click="onProgressPlanSelect(index)">选择节点</el-button>
-                  </el-input>
-                </el-form-item>
-              </div>
-            </div>
-            <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-              <el-col :span="24">
-                <my-address-form :vAddress.sync="item.shippingAddress" ref="addressForm" />
-              </el-col>
-            </el-row>
-          </el-form>
-          <el-divider :key="'divider'+index" />
-        </template>
-        <el-row type="flex" justify="center" class="info-order-row" align="middle">
-          <el-col :span="24">
-            <div class="order-purchase-table-btn_add" @click="addRow">
-              +添加另一生产任务
-            </div>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>生产详情</h6>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-          <el-col :span="18">
-            <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
-              :tax.sync="formData.invoiceTaxPoint" :layoutScale="[9,10,5]" />
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="运费承担：" label-width="120">
-              <el-radio v-model="formData.freightPayer" :label="'PARTYA'">甲方</el-radio>
-              <el-radio v-model="formData.freightPayer" :label="'PARTYB'">乙方</el-radio>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-          <el-col :span="6">
-            <el-form-item label="生产节点" prop="progressPlan">
-              <el-input v-model="formData.progressPlan.name" :disabled="true"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="2">
-            <el-button class="outbound-btn" @click="progressPlanVisible = !progressPlanVisible">选择</el-button>
-          </el-col>
-        </el-row> -->
-        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20" style="margin-bottom: 20px">
-          <el-col :span="24">
-            <pay-plan-form :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom" />
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>人员设置</h6>
-            </div>
-          </el-col>
-        </el-row>
-        <div style="display: flex;flex-wrap: wrap;padding-left: 20px">
-          <el-form-item label="跟单员" prop="merchandiser">
-            <personnel-selection :vPerson.sync="formData.merchandiser" :readOnly="true" />
+        <div class="outbound-basic-row matvat-container">
+          <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
+            :tax.sync="formData.invoiceTaxPoint" :layoutScale="[9,10,5]" />
+          <el-form-item label="运费承担：" label-width="120" style="min-width: 240px">
+            <el-radio v-model="formData.freightPayer" :label="'PARTYA'">甲方</el-radio>
+            <el-radio v-model="formData.freightPayer" :label="'PARTYB'">乙方</el-radio>
           </el-form-item>
-          <el-form-item label="" label-width="10px">
-            <el-checkbox v-model="formData.sendAuditNeeded" :disabled="isDisabled">需审核</el-checkbox>
-          </el-form-item>
-          <template v-for="(item,itemIndex) in formData.sendApprovers">
-            <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px"
-              style="margin-right:10px;" :prop="'sendApprovers.' + itemIndex"
-              :rules="{required: formData.sendAuditNeeded, message: '不能为空', trigger: 'change'}">
-              <personnal-selection-v2 :vPerson.sync="formData.sendApprovers[itemIndex]"
-                :disabled="!formData.sendAuditNeeded" :excludeMySelf="true" style="width: 194px"
-                :selectedRow="formData.sendApprovers" />
-            </el-form-item>
-          </template>
-          <el-button-group style="padding-bottom: 26px;">
-            <el-button v-if="formData.sendApprovers && formData.sendApprovers.length < 5" style="height: 32px"
-              @click="appendApprover">+ 添加审批人</el-button>
-            <el-button v-if="formData.sendApprovers && formData.sendApprovers.length > 1" style="height: 32px"
-              @click="removeApprover">删除</el-button>
-          </el-button-group>
         </div>
-        <div style="padding-left: 20px">
-          <h6 style="color: #F56C6C">* 审批人将按照你选择的顺序逐级审批</h6>
-        </div>
-        <el-row>
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>附件及备注</h6>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row style="padding-left: 20px" type="flex" justify="start" :gutter="20">
-          <el-col :span="24">
-            <el-form-item label="备注">
-              <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="formData.remarks">
-              </el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row class="outbound-basic-row" type="flex" justify="start">
-          <el-form-item label="附件">
-            <images-upload class="order-purchase-upload" :slot-data="formData.attachments" />
-          </el-form-item>
-        </el-row>
+        <pay-plan-form class="outbound-basic-row" :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom" />
+        <outbound-order-audit-part :formData="formData" :isDisabled="isDisabled"/>
+        <outbound-order-addition-info :formData="formData" />
       </el-form>
-      <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
-        <el-col :span="5">
-          <el-button class="material-btn" @click="onCreate(false)">保存</el-button>
-        </el-col>
-        <el-col :span="5">
-          <el-button class="material-btn" @click="onCreate(true)">创建并提交</el-button>
-        </el-col>
-        <el-col :span="5" v-if="canDelete">
-          <el-button @click="onDelete" type="text">作废订单</el-button>
-        </el-col>
-      </el-row>
+      <outbound-order-form-btn :canDelete="canDelete" @onCreate="onCreate" @onDelete="onDelete"/>
     </el-card>
-    <el-dialog :visible.sync="taskDialogVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <production-task-select-dialog v-if="taskDialogVisible" :formData="formData" @onSelectTask="onSelectTask"
-        :selectType="'OUTBOUND_ORDER'" :isSingleChoice="isSingleSelect"/>
-    </el-dialog>
-    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="getProgressPlan" />
-    </el-dialog>
-    <el-dialog :visible.sync="editProgressPlanVisible" width="80%" class="purchase-dialog" append-to-body
-      :close-on-click-modal="false">
-      <progress-plan-edit-form v-if="editProgressPlanVisible" :progressPlan="editProgress"
-        @onEditProgress="onEditProgress" />
-    </el-dialog>
   </div>
 </template>
 
@@ -242,40 +43,30 @@
     'OutboundOrderModule'
   );
 
-  // import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
-  import MyAddressForm from '../../../../../components/custom/order-form/MyAddressForm';
-  import MTAVAT from '../../../../../components/custom/order-form/MTAVAT';
-  import MyPayPlanForm from '../../../../../components/custom/order-form/MyPayPlanForm';
-  import ImagesUpload from '../../../../../components/custom/ImagesUpload';
-  import ProgressPlanSelectDialog from '../../../../user/progress-plan/components/ProgressPlanSelectDialog';
-  import ProductionTaskSelectDialog from '../../production-task/components/ProductionTaskSelectDialog';
-  import OutboundOrderColorSizeTable from '../table/OutboundOrderColorSizeTable';
-  import PersonnelSelection from '@/components/custom/PersonnelSelection';
-  import ProgressPlanEditForm from '@/views/user/progress-plan/components/ProgressPlanEditForm'
-  import OutboundTypeSelect from '../components/OutboundTypeSelect'
   import {
-    SupplierSelect,
-    PersonnalSelectionV2,
-    PayPlanForm
+    PayPlanForm,
+    MTAVAT
   } from '@/components'
   import { checkAuditFree } from '@/auth/auth'
+
+  import OutboundTypeSelect from '../components/OutboundTypeSelect'
+  import OutboundOrderContactCom from './OutboundOrderContactCom'
+  import OutboundOrderAuditPart from './OutboundOrderAuditPart'
+  import OutboundOrderAdditionInfo from './OutboundOrderAdditionInfo'
+  import OutboundOrderFormBtn from './OutboundOrderFormBtn'
+  import OutboundOrderEntry from './OutboundOrderEntry'
 
   export default {
     name: 'OutboundOrderForm',
     components: {
       PayPlanForm,
-      PersonnelSelection,
-      OutboundOrderColorSizeTable,
-      ProductionTaskSelectDialog,
-      ProgressPlanSelectDialog,
-      ImagesUpload,
-      MyPayPlanForm,
       MTAVAT,
-      MyAddressForm,
-      SupplierSelect,
-      ProgressPlanEditForm,
       OutboundTypeSelect,
-      PersonnalSelectionV2
+      OutboundOrderContactCom,
+      OutboundOrderAuditPart,
+      OutboundOrderAdditionInfo,
+      OutboundOrderFormBtn,
+      OutboundOrderEntry
     },
     computed: {
       canDelete: function () {
@@ -293,161 +84,6 @@
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
-      getPrice (row) {
-        let quantity = 0;
-        row.colorSizeEntries.forEach(item => quantity += (item.quantity ? item.quantity : 0));
-
-        let price = 0;
-        if (!Number.isNaN(Number.parseFloat(row.totalPrimeCost))) {
-          price = Number.parseFloat(row.totalPrimeCost) / (quantity === 0 ? 1 : quantity);
-        }
-        return price.toFixed(2);
-      },
-      appendApprover() {
-        this.formData.sendApprovers.push({});
-      },
-      removeApprover() {
-        this.formData.sendApprovers.splice(this.formData.sendApprovers.length - 1, 1);
-      },
-      getProgressPlan(val) {
-        if (val) {
-          this.formData.taskOrderEntries[this.selectIndex].progressPlan = this.copyProgressPlan(val);
-        }
-        this.progressPlanVisible = false;
-      },
-      onEditProgress(val) {
-        this.formData.taskOrderEntries[this.selectIndex].progressPlan.productionProgresses = val;
-        this.editProgressPlanVisible = false;
-      },
-      copyProgressPlan(val) {
-        let row = {
-          name: val.name,
-          remarks: val.remarks,
-          productionProgresses: []
-        }
-        val.productionProgresses.forEach(item => {
-          row.productionProgresses.push({
-            progressPhase: item.progressPhase,
-            warningDays: item.warningDays,
-            medias: item.medias,
-            completeAmount: item.completeAmount,
-            productionProgressOrders: item.productionProgressOrders,
-            quantity: item.quantity,
-            sequence: item.sequence,
-            isCannotRemove: true
-          })
-        })
-        return row;
-      },
-      onBlur(row, attribute) {
-        var reg = /\.$/;
-        if (reg.test(row[attribute])) {
-          this.$set(row, attribute, parseFloat(row[attribute] + '0'));
-        }
-      },
-      onSuppliersSelect(val) {
-        this.suppliersSelectVisible = false;
-        this.formData.outboundCompanyName = val.name;
-        this.formData.outboundContactPerson = val.person;
-        this.formData.outboundContactPhone = val.phone;
-        this.formData.targetCooperator.id = val.id;
-        if (val.payPlan != null) {
-          this.$delete(val.payPlan, 'id');
-          val.payPlan.payPlanItems.forEach(element => {
-            this.$delete(element, 'id');
-          });
-          // this.formData.payPlan = JSON.parse(JSON.stringify(val.payPlan));
-          this.formData.payPlan = Object.assign({}, val.payPlan);
-          this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
-        }
-      },
-      onProductSelect(index) {
-        this.taskDialogVisible = true;
-        this.selectIndex = index;
-      },
-      onProgressPlanSelect(index) {
-        this.progressPlanVisible = true;
-        this.selectIndex = index;
-      },
-      editProgressPlan(index, item) {
-        this.editProgressPlanVisible = true;
-        this.editProgress = item.progressPlan.productionProgresses;
-        this.selectIndex = index;
-      },
-      addRow() {
-        this.selectIndex = '';
-        this.isSingleSelect = false;
-        this.taskDialogVisible = true;
-        // let item = {
-        //   originOrder: {
-        //     id: ''
-        //   },
-        //   unitPrice: '',
-        //   deliveryDate: '',
-        //   shippingAddress: {},
-        //   product: {},
-        //   progressPlan: {
-        //     name: ''
-        //   },
-        //   colorSizeEntries: []
-        // };
-        // this.formData.taskOrderEntries.push(item);
-      },
-      deleteRow(index) {
-        this.formData.taskOrderEntries.splice(index, 1);
-      },
-      onSelectTask(selectTaskList) {
-        if (!selectTaskList || selectTaskList.length <= 0) {
-          this.taskDialogVisible = false;
-          return;
-        }
-        let row = {}
-        let index;
-        let entries = [];
-        selectTaskList.forEach(item => {
-          row = {
-            originOrder: {
-              id: item.id
-            },
-            deliveryDate: item.deliveryDate,
-            shippingAddress: item.shippingAddress,
-            product: {
-              id: item.product.id,
-              name: item.product.name,
-              thumbnail: item.product.thumbnail,
-              skuID:item.product.skuID
-            },
-            progressPlan: {
-              name: ''
-            },
-            colorSizeEntries: item.colorSizeEntries
-          }
-          if (item.progressWorkSheet) {
-            row.progressPlan = this.copyProgressPlan({
-              name: '节点方案1',
-              remarks: '',
-              productionProgresses: item.progressWorkSheet.progresses
-            })
-            row.progressPlan.isFromOrder = true;
-          }
-          entries.push(row);
-          row = {};
-        })
-        if (this.selectIndex === '') {
-          this.formData.taskOrderEntries = this.formData.taskOrderEntries.concat(entries);
-          this.isSingleSelect = true;
-        } else {
-          this.formData.taskOrderEntries.splice(this.selectIndex, 1, entries[0]);
-        }
-        // 回显地址
-        this.formData.taskOrderEntries.forEach((val, index) => {
-          if (this.$refs.addressForm[index]) {
-            this.$refs.addressForm[index].getCities(val.shippingAddress.region);
-            this.$refs.addressForm[index].onCityChanged(val.shippingAddress.city);
-          }
-        })
-        this.taskDialogVisible = false;
-      },
       // 封装Promise对象
       getFormPromise(form) {
         return new Promise(resolve => {
@@ -459,10 +95,10 @@
       async validateForms() {
         var formArr = [];
         formArr.push(this.$refs['form']);
-        this.$refs['itemForm'].forEach(item => {
+        this.$refs['orderEntries'].$refs['itemForm'].forEach(item => {
           formArr.push(item);
         })
-        this.$refs['addressForm'].forEach(item => {
+        this.$refs['orderEntries'].$refs['addressForm'].forEach(item => {
           formArr.push(item.$refs['address']);
         })
         formArr.push(this.$refs['payPlanCom'].$refs['payPlanForm']);
@@ -520,56 +156,29 @@
       validateField(name) {
         this.$refs.form.validateField(name);
       },
-      validateProduct(rule, value, callback) {
-        if (value.id) {
-          return callback();
-        } else {
-          return callback(new Error('请选择产品'))
-        }
-      },
-      validateProgressPlan(rule, value, callback) {
-        if (value.name && value != '') {
-          return callback();
-        } else {
-          return callback(new Error('请选择生产节点'))
-        }
-      },
-      checkApprover(rule, value, callback) {
-        if (value[0] && value[0].id) {
-          return callback();
-        } else {
-          return callback(new Error('请选择审核员'))
-        }
-      },
       initData() {
         if (this.$route.params.formData != null) {
           this.formData = this.$route.params.formData;
-          console.log(this.$route.params.formData);
-          //剔除带过的单价
-          // this.formData.taskOrderEntries.forEach(entry => {
-            //   entry.unitPrice = '';
-          // });
 
           if (this.formData.sendApprovers == null) {
-            this.formData.sendApprovers = [{
-              id: ''
-            }];
+            this.formData.sendApprovers = [null];
           }
           if (this.formData.taskOrderEntries.length <= 0) {
-            this.addRow();
+            this.formData.taskOrderEntries.push({
+              originOrder: {
+                id: ''
+              },
+              deliveryDate: '',
+              shippingAddress: {},
+              product: {},
+              progressPlan: {
+                name: ''
+              },
+              colorSizeEntries: []
+            })
           }
-          // if (this.$route.params.formData.targetCooperator.id != '') {
-          //   this.formData.outboundCompanyName = this.$route.params.formData.targetCooperator.partner.name;
-          //   this.formData.outboundContactPerson = this.$route.params.formData.targetCooperator.partner.contactPerson;
-          //   this.formData.outboundContactPhone = this.$route.params.formData.targetCooperator.partner.contactPhone;
-          //   this.formData.attachments = [];
-          // }
         } 
-        // else {
-
-        //   this.formData = Object.assign({}, this.$store.state.OutboundOrderModule.formData);
-        // }
-        // //默认设置跟单员为当前账号
+        //默认设置跟单员为当前账号
         this.$set(this.formData, 'merchandiser', this.currentUser);
       },
       //作废订单
@@ -595,7 +204,7 @@
           return;
         }
         this.$message.success('取消订单成功');
-        await this.$router.go(-1);
+        this.$router.go(-1);
       },
     },
     data() {
@@ -608,21 +217,6 @@
       };
       return {
         rules: {
-          outboundCompanyName: [{
-            required: true,
-            message: '请选择外发工厂',
-            trigger: 'change'
-          }],
-          outboundContactPerson: [{
-            required: true,
-            message: '请选择联系人',
-            trigger: 'change'
-          }],
-          outboundContactPhone: [{
-            required: true,
-            message: '请选择联系方式',
-            trigger: 'change'
-          }],
           merchandiser: [{
             type: 'object',
             validator: checkPartyAOperator,
@@ -631,9 +225,7 @@
         },
         formData: Object.assign({}, this.$store.state.OutboundOrderModule.formData),
         currentUser: this.$store.getters.currentUser,
-        suppliersSelectVisible: false,
         taskDialogVisible: false,
-        selectIndex: '',
         progressPlanVisible: false,
         editProgressPlanVisible: false,
         editProgress: '',
@@ -643,8 +235,8 @@
       }
     },
     watch: {
-      'formData.progressPlan': function (n, o) {
-        this.validateField('progressPlan', this.currentUser);
+      'formData.managementMode': function (nval, oval) {
+        this.validateField('managementMode');
       },
       'formData.sendApprovers': function (nval, oval) {
         this.formData.sendApprovers.forEach((item, index) => {
@@ -692,14 +284,6 @@
     margin-bottom: 20px;
   }
 
-  .material-btn {
-    background-color: #ffd60c;
-    border-color: #FFD5CE;
-    color: #000;
-    width: 120px;
-    height: 40px;
-  }
-
   .order-purchase-table-btn_add {
     width: 100%;
     height: 50px;
@@ -720,28 +304,19 @@
     margin: 16px 0;
   }
 
-  .order-purchase-upload {
-    margin-left: 5px;
-  }
-
-  .order-purchase-upload>>>.el-upload--picture-card {
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-  }
-
-  .order-purchase-upload>>>.el-upload-list--picture-card .el-upload-list__item {
-    width: 100px;
-    height: 100px;
-  }
-
   /deep/ .el-input__suffix {
     right: 0px;
   }
 
   .price-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
+    flex-wrap: wrap;
+  }
+
+  .matvat-container {
+    display: flex;
+    justify-content: start;
     flex-wrap: wrap;
   }
 </style>

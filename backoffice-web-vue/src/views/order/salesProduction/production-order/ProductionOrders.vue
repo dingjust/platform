@@ -327,9 +327,7 @@
             }]
           },
           attachments: [],
-          sendApprovers: [{
-            id: ''
-          }]
+          sendApprovers: [null]
         },
         stateCount: {},
         dataQuery: {}

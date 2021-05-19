@@ -1,24 +1,23 @@
 <template>
   <!-- 订单表单组件:加工类型-是否发票-税点 -->
-  <div>
-    <el-row type="flex" :gutter="20">
-      <el-col :span="layoutScale[0]">
-        <el-form-item label="合作方式：" label-width="120" prop="machiningTypes">
+  <div class="matvat-container">
+      <!-- <el-col :span="layoutScale[0]"> -->
+        <el-form-item label="合作方式：" label-width="120" prop="machiningTypes" style="min-width: 300px;">
           <template v-for="(item,key) in machiningTypesEnum">
             <el-radio class="info-radio" :key="key" v-model="curMachiningTypes" :label="item.code" :disabled="readOnly">
               {{item.name}}
             </el-radio>
           </template>
         </el-form-item>
-      </el-col>
-      <el-col :span="layoutScale[1]">
-        <el-form-item label="是否开票：" label-width="120" prop="needVoice">
+      <!-- </el-col> -->
+      <!-- <el-col :span="layoutScale[1]"> -->
+        <el-form-item label="是否开票：" label-width="120" prop="needVoice" style="min-width: 300px;">
           <el-radio v-model="curNeedVoice" :label="false" :disabled="readOnly">不开发票</el-radio>
           <el-radio v-model="curNeedVoice" :label="true" :disabled="readOnly">开发票</el-radio>
         </el-form-item>
-      </el-col>
-      <el-col :span="layoutScale[2]" v-if="curNeedVoice">
-        <el-form-item label="税点" label-width="60px" prop="tax">
+      <!-- </el-col> -->
+      <!-- <el-col :span="layoutScale[2]" v-if="curNeedVoice"> -->
+        <el-form-item label="税点" label-width="60px" prop="tax" v-if="curNeedVoice" style="min-width: 160px;">
           <el-input v-model="curTax" 
                     placeholder="填写税点" 
                     :disabled="readOnly" 
@@ -34,8 +33,7 @@
             <el-option label="13%" :value="0.13" />
           </el-select> -->
         </el-form-item>
-      </el-col>
-    </el-row>
+      <!-- </el-col> -->
   </div>
 </template>
 
@@ -112,6 +110,15 @@
 
 </script>
 
-<style>
+<style scoped>
 
+.matvat-container {
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.matvat-container >>> .el-input__suffix {
+    right: 5px;
+}
 </style>

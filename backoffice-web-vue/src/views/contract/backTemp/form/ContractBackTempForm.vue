@@ -1,17 +1,34 @@
 <template>
   <div class="temp-form">
-    <el-row type="flex" justify="start" align="middle">
-      <h6>固定条款</h6>
-    </el-row>
-    <el-row type="flex">
-      <el-input v-model="detail.header" type="textarea" :rows="20"></el-input>
-    </el-row>
-    <el-row type="flex" justify="start" align="middle" style="margin-top: 30px">
-      <h6>自定义条款</h6>
-    </el-row>
-    <el-row type="flex">
-      <el-input v-model="detail.content" type="textarea" :rows="20"></el-input>
-    </el-row>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="编辑" name="EDIT">
+        <div>
+          <el-row type="flex" justify="start" align="middle">
+            <h6>固定条款</h6>
+          </el-row>
+          <el-row type="flex">
+            <Editor style="width: 100%" v-model="detail.header" :options="editorOptions"/>
+          </el-row>
+          <el-row type="flex" justify="start" align="middle" style="margin-top: 30px">
+            <h6>自定义条款</h6>
+          </el-row>
+          <el-row type="flex">
+            <Editor style="width: 100%" v-model="detail.content" :options="editorOptions"/>
+          </el-row>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="预览" name="READ">
+        <div class="read-box">
+          <el-row type="flex" style="padding: 0 10px;">
+            <Viewer :value="detail.header" style="width: 100%"/>
+          </el-row>
+          <el-divider></el-divider>
+          <el-row type="flex" style="padding: 0 10px;">
+            <Viewer :value="detail.content" style="width: 100%"/>
+          </el-row>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
     <el-row type="flex" justify="center" align="middle">
       <el-button type="primary" class="save-btn" @click="onSave">修改</el-button>
     </el-row>
@@ -19,9 +36,15 @@
 </template>
 
 <script>
+import {
+  Viewer,
+  Editor
+} from "@toast-ui/vue-editor";
+
 export default {
   name: 'ContractBackTempForm',
   props: ['detail'],
+  components: { Editor, Viewer },
   methods: {
     onSave () {
       this.$confirm('是否执行修改 ' + this.detail.title +' 模板操作?', '提示', {
@@ -56,6 +79,20 @@ export default {
 
       this.$emit('callback', this.detail.code);
     }
+  },
+  data () {
+    return {
+      activeName: 'EDIT',
+      editorHtml: '',
+      editorOptions: {
+        minHeight: '400px',
+        language: "zh_CN",
+        useCommandShortcut: true,
+        useDefaultHTMLSanitizer: true,
+        usageStatistics: true,
+        hideModeSwitch: true
+      }
+    }
   }
 }
 </script>
@@ -70,5 +107,13 @@ export default {
     margin-top: 20px;
     width: 120px;
     height: 40px;
+  }
+
+  .temp-form >>> .te-md-splitter {
+    width: 100%
+  }
+
+  .read-box {
+    border: 1px solid #dbdbdb;
   }
 </style>

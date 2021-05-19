@@ -26,7 +26,7 @@
             <h6>是否强制清除，已经认证的公司必须强制清除</h6>
             <el-radio-group v-model="enterpriseData.forceClean">
               <el-radio :label="true">是</el-radio>
-              <el-radio :label="false" :disabled="approvalStatus">否</el-radio>
+              <el-radio :label="false" :disabled="approvalStatus === 'approved'">否</el-radio>
             </el-radio-group>
             <h6>是否重新生成customerId</h6>
             <el-radio-group v-model="enterpriseData.recreateCustomerId">
