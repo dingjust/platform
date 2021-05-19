@@ -12,6 +12,7 @@ import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
+///首页需求订单明细
 class RequirementOrderDetailByFactoryPage extends StatefulWidget {
   String code;
 
@@ -446,8 +447,8 @@ class _RequirementOrderDetailByFactoryPageState
                     orderModel.details.proofingNeeded == null
                         ? ''
                         : orderModel.details.proofingNeeded
-                        ? '是'
-                        : '否',
+                            ? '是'
+                            : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),

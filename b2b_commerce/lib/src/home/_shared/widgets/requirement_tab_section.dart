@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail_by_factory.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/distance_text.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
@@ -86,11 +86,10 @@ class NearbyRequirementsListView extends StatelessWidget {
             ? Column(
                 children: state
                     .getNearbyRequirements(
-                    amapState.longitude, amapState.latitude)
-                    .map((requirement) =>
-                    RequirementItem(
-                      model: requirement,
-                    ))
+                        amapState.longitude, amapState.latitude)
+                    .map((requirement) => RequirementItem(
+                          model: requirement,
+                        ))
                     .toList(),
               )
             : Column(
@@ -214,8 +213,8 @@ class RequirementItem extends StatelessWidget {
   }
 
   void jumpToDetailPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RequirementOrderDetailByFactoryPage(model.code)));
+    Navigator.of(context).pushNamed(AppRoutes.ROUTE_REQUIREMENT,
+        arguments: {'code': model.code});
   }
 
   void jumpToCompanyIntroduction(BuildContext context) {

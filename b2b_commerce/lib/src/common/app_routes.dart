@@ -26,11 +26,13 @@ import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/home/account/auth_request_page.dart';
+import 'package:b2b_commerce/src/home/factory/factory_introduction.dart';
 import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/index.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
+import 'package:b2b_commerce/src/my/account/register_channel_page.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
 import 'package:b2b_commerce/src/my/integral/integral_center_page.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
@@ -41,6 +43,7 @@ import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
+import '../../b2b_commerce.dart';
 import '../business/apparel_products.dart';
 import '../business/employees.dart';
 import '../business/purchase_orders.dart';
@@ -175,6 +178,15 @@ class AppRoutes with GlobalRoutes {
   ///面辅料
   static const ROUTE_MATERIEL_PRODUCTS = '/home/materiel_product';
 
+  ///渠道码注册
+  static const ROUTE_CHANNEL_REGISTER = '/my/account/register/channel';
+
+  ///需求订单明细
+  static const ROUTE_REQUIREMENT = '/business/requirement';
+
+  ///工厂介绍明细
+  static const ROUTE_FACTORY_INTRODUCTION = '/factory/introduction';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -221,12 +233,15 @@ class AppRoutes with GlobalRoutes {
         ExternalSaleOrderImportPage(),
     ROUTE_OUT_ORDERS: (context) => OutOrdersPage(),
     ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
-          id: getVal('id', context),
+      id: int.parse(getVal('id', context)),
           titile: getVal('title', context),
         ),
     ROUTE_PRODUCTION_TASK_ORDER_DETAIL: (context) =>
         ProductionTaskOrderEntryDetailPage(
-            id: ModalRoute.of(context).settings.arguments),
+            id: ModalRoute
+                .of(context)
+                .settings
+                .arguments),
     ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage(),
     ROUTE_OUT_PRODUCTION_TASK_ORDERS: (context) =>
         OutProductionTaskOrdersPage(),
@@ -234,16 +249,30 @@ class AppRoutes with GlobalRoutes {
     ROUTE_COOPERATORS: (context) => CooperatorsPage(),
     ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm(),
     ROUTE_DELIVERY_ORDERS: (context) => DeliveryOrdersPage(),
-    ROUTE_DELIVERY_ORDER_DETAIL: (context) => DeliveryOrderDetailPage(
-        id: getVal('id', context), needRefresh: getVal('needRefresh', context)),
+    ROUTE_DELIVERY_ORDER_DETAIL: (context) =>
+        DeliveryOrderDetailPage(
+            id: int.parse(getVal('id', context)),
+            needRefresh: getVal('needRefresh', context)),
     ROUTE_RECONCILIATION_ORDERS: (context) => ReconciliationOrdersPage(),
     ROUTE_RECONCILIATION_ORDER_DETAIL: (context) =>
         ReconciliationOrderDetailPage(
-            id: getVal('id', context),
+            id: int.parse(getVal('id', context)),
             needRefresh: getVal('needRefresh', context)),
     ROUTE_ACTIVITY_INVITE: (context) => InvitePage(),
     ROUTE_MATERIEL_PRODUCT_MANAGE: (context) => MaterielProductManagePage(),
-    ROUTE_MATERIEL_PRODUCTS: (context) => MaterielProductsPage()
+    ROUTE_MATERIEL_PRODUCTS: (context) => MaterielProductsPage(),
+    ROUTE_CHANNEL_REGISTER: (context) =>
+        RegisterChannelPage(
+          channelCode: getVal('code', context),
+        ),
+    ROUTE_REQUIREMENT: (context) =>
+        RequirementOrderDetailByFactoryPage(
+          getVal('code', context),
+        ),
+    ROUTE_FACTORY_INTRODUCTION: (context) =>
+        FactoryIntroductionPage(
+          uid: getVal('uid', context),
+        )
   };
 
   static dynamic getVal(String key, BuildContext context) {

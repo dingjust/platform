@@ -607,6 +607,9 @@ enum AgreementTemplateType {
   ///补充协议
   BCXY,
 
+  ///作废协议
+  ZFXY,
+
   ///未知
   UNKOWN
 }
@@ -616,6 +619,7 @@ const AgreementTemplateTypeLocalizedMap = {
   AgreementTemplateType.CGDD: "采购订单",
   AgreementTemplateType.WTSCHT: '委托生产合同',
   AgreementTemplateType.BCXY: "补充协议",
+  AgreementTemplateType.ZFXY: "作废协议",
   AgreementTemplateType.UNKOWN: "未知"
 };
 
@@ -624,6 +628,7 @@ const AgreementTemplateTypeMap = {
   AgreementTemplateType.CGDD: "CGDD",
   AgreementTemplateType.WTSCHT: 'WTSCHT',
   AgreementTemplateType.BCXY: "BCXY",
+  AgreementTemplateType.ZFXY: "ZFXY",
 };
 
 @JsonSerializable()

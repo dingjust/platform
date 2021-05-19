@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_staggered_grid.dart';
+import 'package:b2b_commerce/src/common/qr_scan_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:core/core.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import '../_shared/shares.dart';
 import '../common/app_keys.dart';
@@ -237,6 +239,15 @@ class HomeTitle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => QrScanPage()));
+              },
+              child: Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: Icon(B2BIcons.qr_scanner, size: 22),
+              )),
           Expanded(
             flex: 1,
             child: leading,

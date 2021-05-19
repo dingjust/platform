@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail_by_factory.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/orientations_text.dart';
@@ -28,9 +28,8 @@ class RequirementPoolOrderItem extends StatelessWidget {
           Provider.of<CertificationStatusHelper>(context).oncheckProfile(
               context: context,
               onJump: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        RequirementOrderDetailByFactoryPage(order.code)));
+                Navigator.of(context).pushNamed(AppRoutes.ROUTE_REQUIREMENT,
+                    arguments: {'code': order.code});
               });
         }
       },
@@ -186,8 +185,8 @@ class RequirementPoolOrderItem extends StatelessWidget {
                 // ),
                 Expanded(
                     child: OrientationsText(
-                      regions: order.details.productiveOrientations ?? [],
-                    ))
+                  regions: order.details.productiveOrientations ?? [],
+                ))
               ],
             )),
       ],
