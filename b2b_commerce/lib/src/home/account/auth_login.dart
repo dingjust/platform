@@ -91,9 +91,9 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
                   ),
                 ),
                 Text(
-                  '其他方式登录方式',
-                  style: TextStyle(color: Colors.grey),
-                ),
+                  '其他方式登录',
+              style: TextStyle(color: Colors.grey),
+            ),
                 Expanded(
                   child: Divider(
                     height: 1,
