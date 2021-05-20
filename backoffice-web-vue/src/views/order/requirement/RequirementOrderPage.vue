@@ -245,6 +245,7 @@
         const url = this.apis().getQuotes();
         var queryFormData = Object.assign({}, this.quoteQueryFormData);
         queryFormData.requirementOrderRef = this.slotData.code;
+        queryFormData.requirementOrderBelongTos = this.$store.getters.currentUser.companyCode;
 
         this.searchQuotesAdvanced({url, query: queryFormData, page, size});
       },
