@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:b2b_commerce/src/helper/uri_helper.dart';
@@ -16,6 +17,7 @@ class _QrScanPageState extends State<QrScanPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode result;
   QRViewController controller;
+  StreamSubscription subscription;
   UriHelper uriHelper;
   bool lightOn = false;
 
@@ -42,58 +44,58 @@ class _QrScanPageState extends State<QrScanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
-      fit: StackFit.expand,
-      children: [
-        QRView(
-          key: qrKey,
-          onQRViewCreated: _onQRViewCreated,
-          overlay: QrScannerOverlayShape(
-            borderColor: Constants.THEME_COLOR_MAIN,
-            borderRadius: 10,
-            borderLength: 30,
-            borderWidth: 5,
-            // cutOutSize: scanArea
-          ),
-        ),
-        Align(
-          alignment: Alignment(0, 0.5),
-          child: Text(
-            '扫二维码/条码',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        Align(
-            alignment: Alignment(0, 0.8),
-            child: GestureDetector(
-                child: Icon(
-                  lightOn ? B2BIcons.flashlight_on : B2BIcons.flashlight_off,
-                  color: Colors.white,
-                  size: 50,
-                ),
-                onTap: () {
-                  controller.toggleFlash();
-                  setState(() {
-                    lightOn = !lightOn;
-                  });
-                })),
-        Align(
-            alignment: Alignment(-0.9, -0.9),
-            child: GestureDetector(
-                child: Icon(
-                  Icons.chevron_left,
-                  color: Colors.white,
-                  size: 40,
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                }))
-      ],
-    ));
+          fit: StackFit.expand,
+          children: [
+            QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                borderColor: Constants.THEME_COLOR_MAIN,
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 5,
+                // cutOutSize: scanArea
+              ),
+            ),
+            Align(
+              alignment: Alignment(0, 0.5),
+              child: Text(
+                '扫二维码/条码',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            Align(
+                alignment: Alignment(0, 0.8),
+                child: GestureDetector(
+                    child: Icon(
+                      lightOn ? B2BIcons.flashlight_on : B2BIcons.flashlight_off,
+                      color: Colors.white,
+                      size: 50,
+                    ),
+                    onTap: () {
+                      controller.toggleFlash();
+                      setState(() {
+                        lightOn = !lightOn;
+                      });
+                    })),
+            Align(
+                alignment: Alignment(-0.9, -0.9),
+                child: GestureDetector(
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: Colors.white,
+                      size: 40,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    }))
+          ],
+        ));
   }
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+    subscription = controller.scannedDataStream.listen((scanData) {
       bool validate = uriHelper.handleUri(
           context: context, uri: scanData.code, controller: controller);
     });
@@ -102,6 +104,7 @@ class _QrScanPageState extends State<QrScanPage> {
   @override
   void dispose() {
     print('[钉单]====================关闭扫一扫=================');
+    subscription.cancel();
     controller?.dispose();
     super.dispose();
   }
