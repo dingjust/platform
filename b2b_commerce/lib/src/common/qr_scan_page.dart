@@ -68,7 +68,8 @@ class _QrScanPageState extends State<QrScanPage> {
                 alignment: Alignment(0, 0.8),
                 child: GestureDetector(
                     child: Icon(
-                      lightOn ? B2BIcons.flashlight_on : B2BIcons.flashlight_off,
+                      lightOn ? B2BIcons.flashlight_on : B2BIcons
+                          .flashlight_off,
                       color: Colors.white,
                       size: 50,
                     ),
@@ -94,10 +95,20 @@ class _QrScanPageState extends State<QrScanPage> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    print('[钉单]====================OnQRViewCreated=================');
     this.controller = controller;
+    subscription?.cancel();
     subscription = controller.scannedDataStream.listen((scanData) {
       bool validate = uriHelper.handleUri(
-          context: context, uri: scanData.code, controller: controller);
+          context: context,
+          uri: scanData.code,
+          controller: controller,
+          onCameraPause: () {
+            this.controller.pauseCamera();
+          },
+          onResumeCamera: () {
+            this.controller.resumeCamera();
+          });
     });
   }
 

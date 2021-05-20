@@ -8,14 +8,17 @@ class UriHelper {
   bool handleUri(
       {@required BuildContext context,
       @required String uri,
-      QRViewController controller}) {
+      QRViewController controller,
+      VoidCallback onCameraPause,
+      VoidCallback onResumeCamera}) {
     //解析URI
     Uri uriObj = Uri.tryParse(uri);
     if (uriObj != null) {
       //校验Origin及一级路由为app
       if (uriObj.origin == GlobalConfigs.CONTEXT_PATH &&
           uriObj.pathSegments.first == 'app') {
-        controller.pauseCamera();
+        //暂停相机
+        onCameraPause?.call();
         //第二级为目标判断（page：页面跳转;action:动作）
         switch (uriObj.pathSegments[1]) {
           case 'page':
@@ -26,7 +29,8 @@ class UriHelper {
             break;
           default:
         }
-        controller.resumeCamera();
+        //重启相机
+        onResumeCamera?.call();
         return true;
       }
     }
