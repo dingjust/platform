@@ -94,15 +94,8 @@ class _QrScanPageState extends State<QrScanPage> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-      // controller.pauseCamera();
       bool validate = uriHelper.handleUri(
-          context: context, uri: result.code, controller: controller);
-      // if (!validate) {
-      // controller.resumeCamera();
-      // }
+          context: context, uri: scanData.code, controller: controller);
     });
   }
 

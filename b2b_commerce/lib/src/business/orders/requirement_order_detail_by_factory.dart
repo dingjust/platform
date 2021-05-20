@@ -101,8 +101,11 @@ class _RequirementOrderDetailByFactoryPageState
                     ),
                   );
                 } else {
-                  return Center(
-                    child: CircularProgressIndicator(),
+                  return Container(
+                    color: Colors.white,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   );
                 }
               },
@@ -512,7 +515,7 @@ class _RequirementOrderDetailByFactoryPageState
           _InfoRow(
             label: '工厂规模',
             val:
-            PopulationScaleLocalizedMap[orderModel.details.populationScale],
+                PopulationScaleLocalizedMap[orderModel.details.populationScale],
           ),
           Divider(
             height: 0,

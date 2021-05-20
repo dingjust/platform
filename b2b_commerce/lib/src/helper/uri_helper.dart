@@ -37,7 +37,6 @@ class UriHelper {
   void _handlePageUri(BuildContext context, Uri uri) {
     // 页面跳转截取路由
     String route = '/' + uri.pathSegments.sublist(2).join('/');
-    print('[钉单][URI处理]页面跳转');
     //校验路由正确性
     if (AppRoutes.allRoutes.keys.contains(route)) {
       Navigator.of(context)
