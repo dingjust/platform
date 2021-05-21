@@ -12,6 +12,7 @@ import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
+///首页需求订单明细
 class RequirementOrderDetailByFactoryPage extends StatefulWidget {
   String code;
 
@@ -100,8 +101,11 @@ class _RequirementOrderDetailByFactoryPageState
                     ),
                   );
                 } else {
-                  return Center(
-                    child: CircularProgressIndicator(),
+                  return Container(
+                    color: Colors.white,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   );
                 }
               },
@@ -446,8 +450,8 @@ class _RequirementOrderDetailByFactoryPageState
                     orderModel.details.proofingNeeded == null
                         ? ''
                         : orderModel.details.proofingNeeded
-                        ? '是'
-                        : '否',
+                            ? '是'
+                            : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -511,7 +515,7 @@ class _RequirementOrderDetailByFactoryPageState
           _InfoRow(
             label: '工厂规模',
             val:
-            PopulationScaleLocalizedMap[orderModel.details.populationScale],
+                PopulationScaleLocalizedMap[orderModel.details.populationScale],
           ),
           Divider(
             height: 0,

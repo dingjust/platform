@@ -377,13 +377,13 @@ class BrandBtnsSection extends StatelessWidget {
               Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
             },
           ),
-          HomeAssetsBtn(
-            url: 'temp/index/materiel_products.png',
-            label: '面辅料',
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
-            },
-          ),
+          // HomeAssetsBtn(
+          //   url: 'temp/index/materiel_products.png',
+          //   label: '面辅料',
+          //   onTap: () {
+          //     Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
+          //   },
+          // ),
           HomeAssetsBtn(
             url: 'temp/index/quote_process.png',
             label: '报价处理',
@@ -428,13 +428,13 @@ class FactoryBtnsSection extends StatelessWidget {
               Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
             },
           ),
-          HomeAssetsBtn(
-            url: 'temp/index/materiel_products.png',
-            label: '面辅料',
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
-            },
-          ),
+          // HomeAssetsBtn(
+          //   url: 'temp/index/materiel_products.png',
+          //   label: '面辅料',
+          //   onTap: () {
+          //     Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
+          //   },
+          // ),
           HomeAssetsBtn(
             url: 'temp/index/production_factory.png',
             label: '生产找厂',

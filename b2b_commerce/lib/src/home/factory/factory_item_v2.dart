@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/distance_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
-
-import 'factory_introduction.dart';
 
 class FactoryItem extends StatelessWidget {
   final FactoryModel model;
@@ -222,15 +221,8 @@ class FactoryItem extends StatelessWidget {
   }
 
   void jumpToDetailPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            FactoryIntroductionPage(
-              uid: model.uid,
-            ),
-      ),
-    );
+    Navigator.of(context).pushNamed(AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+        arguments: {'uid': model.uid});
   }
 
   String getCategoriesStr() {

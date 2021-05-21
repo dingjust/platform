@@ -30,3 +30,33 @@ class OrientationsText extends StatelessWidget {
     return strs.join('、');
   }
 }
+
+///地区显示(区)
+class DistrictsOrientationsText extends StatelessWidget {
+  final List<DistrictModel> districts;
+
+  final TextStyle textStyle;
+
+  const DistrictsOrientationsText({
+    Key key,
+    this.districts,
+    this.textStyle = const TextStyle(color: Color.fromRGBO(97, 95, 95, 1)),
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '区域：${districtsStr()}',
+      style: textStyle,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  String districtsStr() {
+    if (districts == null || districts.isEmpty) {
+      return '';
+    }
+    List<String> strs = districts.map((e) => e.name).toList();
+    return strs.join('、');
+  }
+}

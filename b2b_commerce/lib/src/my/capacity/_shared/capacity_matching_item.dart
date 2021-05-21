@@ -1,9 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
-import 'package:b2b_commerce/src/home/factory/factory_introduction.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 
 class CapacityMatchingItem extends StatelessWidget {
   final FactoryCapacityModel model;
@@ -15,15 +14,9 @@ class CapacityMatchingItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         //点击量
-        ItemRepository().onDetail(model.id);
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FactoryIntroductionPage(
-                    uid: model.belongTo.uid,
-                  )),
-        );
+        // ItemRepository().onDetail(model.id);
+        Navigator.of(context).pushNamed(AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+            arguments: {'uid': model.belongTo.uid});
       },
       child: Container(
         height: 162,
@@ -79,10 +72,8 @@ class CapacityMatchingItem extends StatelessWidget {
     double verticalSpacing = 10.0;
 
     List<Widget> children = model.categoryCapacities
-        .map((capacity) =>
-        LayoutBuilder(
-          builder: (context, constraints) =>
-              Container(
+        .map((capacity) => LayoutBuilder(
+              builder: (context, constraints) => Container(
                 width: constraints.maxWidth / 2 - horizonSpacing,
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 margin: EdgeInsets.only(bottom: 5),
@@ -90,17 +81,17 @@ class CapacityMatchingItem extends StatelessWidget {
                   children: <Widget>[
                     Container(
                         child: Text(
-                          '${capacity.category.name}',
-                          style: TextStyle(fontSize: 10),
-                        )),
+                      '${capacity.category.name}',
+                      style: TextStyle(fontSize: 10),
+                    )),
                     Expanded(
                       child: Container(
                           child: Text(
-                            '${capacity.capacityRange}件/天',
-                            style: TextStyle(color: Colors.red, fontSize: 10),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
-                          )),
+                        '${capacity.capacityRange}件/天',
+                        style: TextStyle(color: Colors.red, fontSize: 10),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                      )),
                     )
                   ],
                 ),
@@ -109,7 +100,7 @@ class CapacityMatchingItem extends StatelessWidget {
                   color: Colors.grey[200],
                 ),
               ),
-        ))
+            ))
         .toList();
 
     //只有一个时

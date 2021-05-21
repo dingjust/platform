@@ -427,13 +427,8 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
         }
         // 工厂详情
         if (bloc.currentUser.type == UserType.FACTORY) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FactoryIntroductionPage(
-                  uid: UserBLoC.instance.currentUser.companyCode),
-            ),
-          );
+          Navigator.of(context).pushNamed(AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+              arguments: {'uid': UserBLoC.instance.currentUser.companyCode});
         }
       },
     );

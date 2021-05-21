@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail_by_factory.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/distance_text.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/orientations_text.dart';
@@ -89,11 +89,19 @@ class RequirementGridItem extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: OrientationsText(
-                          regions: model.details.productiveOrientations ?? [],
-                          textStyle: TextStyle(
-                              color: Color.fromRGBO(97, 95, 95, 1),
-                              fontSize: 10)),
+                      child: model.details.productiveDistricts != null
+                          ? DistrictsOrientationsText(
+                              districts:
+                                  model.details.productiveDistricts ?? [],
+                              textStyle: TextStyle(
+                                  color: Color.fromRGBO(97, 95, 95, 1),
+                                  fontSize: 10))
+                          : OrientationsText(
+                              regions:
+                                  model.details.productiveOrientations ?? [],
+                              textStyle: TextStyle(
+                                  color: Color.fromRGBO(97, 95, 95, 1),
+                                  fontSize: 10)),
                     ),
                     Row(
                       children: <Widget>[
@@ -128,24 +136,23 @@ class RequirementGridItem extends StatelessWidget {
           imageUrl:
               '${model.details.pictures.first.imageProcessUrl(processUrl)}',
           placeholder: (context, url) => SpinKitRing(
-                color: Colors.grey[300],
-                lineWidth: 2,
-                size: 30,
-              ),
-          errorWidget: (context, url, error) =>
-              SpinKitRing(
-                color: Colors.grey[300],
-                lineWidth: 2,
-                size: 30,
-              ),
+            color: Colors.grey[300],
+            lineWidth: 2,
+            size: 30,
+          ),
+          errorWidget: (context, url, error) => SpinKitRing(
+            color: Colors.grey[300],
+            lineWidth: 2,
+            size: 30,
+          ),
         ),
       );
     }
   }
 
   void jumpToDetailPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RequirementOrderDetailByFactoryPage(model.code)));
+    Navigator.of(context).pushNamed(AppRoutes.ROUTE_REQUIREMENT,
+        arguments: {'code': model.code});
   }
 
   void jumpToCompanyIntroduction(BuildContext context) {

@@ -167,7 +167,19 @@ class B2BIcons {
       fontFamily: 'b2bIcons22', matchTextDirection: true);
 
   /// 兑换箭头
-  static const IconData swap = const IconData(0xe672,
+  static const IconData swap = const IconData(0xe6ea,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
+
+  /// 扫一扫
+  static const IconData qr_scanner = const IconData(0xe6ea,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
+
+  /// 手电-开
+  static const IconData flashlight_on = const IconData(0xe621,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
+
+  /// 手电-关
+  static const IconData flashlight_off = const IconData(0xe623,
       fontFamily: 'b2bIcons22', matchTextDirection: true);
 }
 

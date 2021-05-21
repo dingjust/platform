@@ -310,7 +310,7 @@ class AppVersionHelper {
 
     showDialog(
       context: context,
-      barrierDismissible: false,
+      // barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: <Widget>[

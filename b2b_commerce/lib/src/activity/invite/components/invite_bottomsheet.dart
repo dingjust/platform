@@ -1,12 +1,9 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
 import 'package:fluwx/fluwx.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 class InviteBottomeSheet extends StatelessWidget {
   final String url;
@@ -87,62 +84,62 @@ class InviteBottomeSheet extends StatelessWidget {
                   isSendDing: false);
             },
           ),
-          FlatButton(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  B2BImage.shareQrCode(height: 50, width: 50),
-                  Text('二维码')
-                ],
-              ),
-              onPressed: showQrCode)
+          // FlatButton(
+          //     child: Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: <Widget>[
+          //         B2BImage.shareQrCode(height: 50, width: 50),
+          //         Text('二维码')
+          //       ],
+          //     ),
+          //     onPressed: showQrCode)
         ],
       ),
     );
   }
 
-  void showQrCode({double imageSize = 200}) {
-    BotToast.showCustomText(
-        onlyOne: true,
-        duration: null,
-        clickClose: true,
-        crossPage: false,
-        backgroundColor: Colors.black38,
-        align: Alignment.center,
-        toastBuilder: (cancelFunc) => Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xffeacb9f)),
-              child: Container(
-                  height: imageSize + 30,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: imageSize,
-                        width: imageSize,
-                        child: QrImage(
-                          data: "$url",
-                          version: QrVersions.auto,
-                          size: imageSize,
-                          errorCorrectionLevel: QrErrorCorrectLevel.H,
-                          embeddedImageStyle:
-                              QrEmbeddedImageStyle(size: Size(50, 50)),
-                          embeddedImage:
-                              NetworkImage('${GlobalConfigs.LOGO_URL}'),
-                        ),
-                      ),
-                      Expanded(
-                          child: Text(
-                        '使用微信/QQ/浏览器扫一扫',
-                        style: TextStyle(color: Color(0xffeacb9f)),
-                      ))
-                    ],
-                  )),
-            ));
-  }
+// void showQrCode({double imageSize = 200}) {
+//   BotToast.showCustomText(
+//       onlyOne: true,
+//       duration: null,
+//       clickClose: true,
+//       crossPage: false,
+//       backgroundColor: Colors.black38,
+//       align: Alignment.center,
+//       toastBuilder: (cancelFunc) => Container(
+//             padding: EdgeInsets.all(5),
+//             decoration: BoxDecoration(
+//                 borderRadius: BorderRadius.circular(10),
+//                 color: Color(0xffeacb9f)),
+//             child: Container(
+//                 height: imageSize + 30,
+//                 decoration: BoxDecoration(
+//                   color: Colors.white,
+//                   borderRadius: BorderRadius.circular(10),
+//                 ),
+//                 child: Column(
+//                   children: [
+//                     Container(
+//                       height: imageSize,
+//                       width: imageSize,
+//                       child: QrImage(
+//                         data: "$url",
+//                         version: QrVersions.auto,
+//                         size: imageSize,
+//                         errorCorrectionLevel: QrErrorCorrectLevel.H,
+//                         embeddedImageStyle:
+//                             QrEmbeddedImageStyle(size: Size(50, 50)),
+//                         embeddedImage:
+//                             NetworkImage('${GlobalConfigs.LOGO_URL}'),
+//                       ),
+//                     ),
+//                     Expanded(
+//                         child: Text(
+//                       '使用微信/QQ/浏览器扫一扫',
+//                       style: TextStyle(color: Color(0xffeacb9f)),
+//                     ))
+//                   ],
+//                 )),
+//           ));
+// }
 }
