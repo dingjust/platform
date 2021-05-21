@@ -304,6 +304,8 @@
             return;
           }
           this.$message.success('需求关闭成功');
+          
+          this.$emit('onSearchQuotes');
           this.$emit('onRefresh', this.slotData.code);
         });
       },

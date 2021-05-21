@@ -242,12 +242,9 @@
         this.fn.openSlider('急速发布需求', RequirementOrderSimpleForm, formData);
       },
       onSearchQuotes (page, size) {
-        const url = this.apis().getQuotes();
-        var queryFormData = Object.assign({}, this.quoteQueryFormData);
-        queryFormData.requirementOrderRef = this.slotData.code;
-        queryFormData.requirementOrderBelongTos = this.$store.getters.currentUser.companyCode;
+        const url = this.apis().getQuotesByRequirementOrder(this.slotData.code);
 
-        this.searchQuotesAdvanced({url, query: queryFormData, page, size});
+        this.searchQuotesAdvanced({url, page, size});
       },
       onSave (factories, phoneNumbers) {
         if (this.isTenant()) {

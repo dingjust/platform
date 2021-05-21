@@ -190,8 +190,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchQuotesAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
-    commit('quoteQueryFormData', query);
+  async searchQuotesAdvanced ({dispatch, commit, state}, {url, page, size}) {
     if (page || page === 0) {
       commit('quoteCurrentPageNumber', page);
     }
@@ -199,7 +198,7 @@ const actions = {
       commit('quoteCurrentPageSize', size);
     }
 
-    const response = await http.post(url, query, {
+    const response = await http.get(url, {
       page: state.quoteCurrentPageNumber,
       size: state.quoteCurrentPageSize
     });
