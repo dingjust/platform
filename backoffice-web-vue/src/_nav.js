@@ -64,7 +64,11 @@ export default {
           name: '工厂',
           url: '/user/factory',
           icon: 'iconNone'
-        },
+        }, {
+          name: '渠道码',
+          url: '/user/recommend-code',
+          icon: 'iconNone'
+        }
       ]
     },
     {

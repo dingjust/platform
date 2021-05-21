@@ -1261,7 +1261,23 @@ let TENANT_APIS = {
   FactoryShow: (companyCode, isShow) => '/b2b/factories/enableShow/' + companyCode + '/' + isShow,
   
   // 设置工厂序列值
-  setFactorySequence: (companyCode, sequence) => '/b2b/factories/setSequenceNo/' + companyCode + '/' + sequence
+  setFactorySequence: (companyCode, sequence) => '/b2b/factories/setSequenceNo/' + companyCode + '/' + sequence,
+  // 设置工厂代运营手机号
+  setOperatePhone: (companyCode, phoneNumber) => '/b2b/companies/updateAgentOperationPhoneNumber/' + companyCode + '/' + phoneNumber,
+
+  /** 渠道码（平台） */
+  // 查询列表   post
+  searchRecommendCode: () => '/b2b/channel/recommend/code/search',
+  // 根据id获取   get
+  getRecommendCodeById: (id) => '/b2b/channel/recommend/code/' + id,
+  // 新增 / 修改    post
+  saveRecommendCode: () => '/b2b/channel/recommend/code',
+  // 根据id删除 delete
+  deleteRecommendCode: (id) => '/b2b/channel/recommend/code/' + id,
+  // 启用/禁用  put params{ enabled: true/false }
+  modifyRecommendCodeEnable: (id) => '/b2b/channel/recommend/code/update/state/' + id,
+  // 更新公司渠道码 post params{ channelCode: '' }
+  modifyRecommendCodeByCompany: (id) => '/b2b/companies/update/channel/code/' + id
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

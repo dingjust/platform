@@ -13,13 +13,17 @@
       </el-table-column>
       <el-table-column label="标签" prop="labels" min-width="150">
         <template slot-scope="scope">
-          <el-tag size="mini" class="disableTagClass" :disable-transitions="true" v-if="scope.row.loginDisabled">
-            已禁用
-          </el-tag>
-          <el-tag v-for="(item, index) of showLabels(scope.row.labels, scope.row.approvalStatus)"
-                  size="mini" class="elTagClass" :disable-transitions="true" :key="index">
-            {{item}}
-          </el-tag>
+          <div class="tag-container">
+            <el-tag type="danger" class="tag-item" v-if="scope.row.loginDisabled">
+              已禁用
+            </el-tag>
+            <el-tag :type="Certified(scope.row) ? 'success' : 'warning'" class="tag-item">
+              {{Certified(scope.row) ? '已认证' : '未认证'}}
+            </el-tag>
+            <el-tag v-for="item of scope.row.labels" class="tag-item" type="primary" :key="item.id">
+              {{item.name}}
+            </el-tag>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="200">
@@ -46,17 +50,14 @@
     props: ['page'],
     computed: {},
     methods: {
-      showLabels (arr, approvalStatus) {
-        let arr1 = [];
-        if (approvalStatus != undefined && approvalStatus == 'approved') {
-          arr1[0] = '已认证';
-        } else {
-          arr1[0] = '未认证';
+      Certified (row) {
+        if (row.approvalStatus && row.approvalStatus === 'approved') {
+          return true;
         }
-        for (let i = 0; i < arr.length; i++) {
-          arr1[i + 1] = arr[i].name;
-        }
-        return arr1;
+        return false;
+      },
+      showLabels (arr) {
+        return arr.map(item => item.name);
       },
       onPageSizeChanged (val) {
         this.$emit('onAdvancedSearch', 0, val);
@@ -87,21 +88,14 @@
   }
 </script>
 <style scoped>
-  .disableTagClass{
-    color: #0b0e0f;
+  .tag-item {
     margin-right: 10px;
     margin-bottom: 10px;
-    cursor:pointer;
-    background-color: #F2F6FC;
   }
-  .elTagClass{
-    color: #0b0e0f;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    cursor:pointer;
-    background-color: #FFD60C;
-  }
-  .el-tag {
-    border-color: #FFD60C;
+
+  .tag-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
   }
 </style>
