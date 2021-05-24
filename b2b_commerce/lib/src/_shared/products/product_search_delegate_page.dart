@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';

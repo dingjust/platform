@@ -233,15 +233,12 @@ class AppRoutes with GlobalRoutes {
         ExternalSaleOrderImportPage(),
     ROUTE_OUT_ORDERS: (context) => OutOrdersPage(),
     ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
-      id: int.parse(getVal('id', context)),
+          id: int.parse(getVal('id', context).toString()),
           titile: getVal('title', context),
         ),
     ROUTE_PRODUCTION_TASK_ORDER_DETAIL: (context) =>
         ProductionTaskOrderEntryDetailPage(
-            id: ModalRoute
-                .of(context)
-                .settings
-                .arguments),
+            id: ModalRoute.of(context).settings.arguments),
     ROUTE_PRODUCTION_TASK_ORDERS: (context) => ProductionTaskOrdersPage(),
     ROUTE_OUT_PRODUCTION_TASK_ORDERS: (context) =>
         OutProductionTaskOrdersPage(),
@@ -249,10 +246,9 @@ class AppRoutes with GlobalRoutes {
     ROUTE_COOPERATORS: (context) => CooperatorsPage(),
     ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm(),
     ROUTE_DELIVERY_ORDERS: (context) => DeliveryOrdersPage(),
-    ROUTE_DELIVERY_ORDER_DETAIL: (context) =>
-        DeliveryOrderDetailPage(
-            id: int.parse(getVal('id', context)),
-            needRefresh: getVal('needRefresh', context)),
+    ROUTE_DELIVERY_ORDER_DETAIL: (context) => DeliveryOrderDetailPage(
+        id: int.parse(getVal('id', context)),
+        needRefresh: getVal('needRefresh', context)),
     ROUTE_RECONCILIATION_ORDERS: (context) => ReconciliationOrdersPage(),
     ROUTE_RECONCILIATION_ORDER_DETAIL: (context) =>
         ReconciliationOrderDetailPage(
@@ -261,8 +257,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_ACTIVITY_INVITE: (context) => InvitePage(),
     ROUTE_MATERIEL_PRODUCT_MANAGE: (context) => MaterielProductManagePage(),
     ROUTE_MATERIEL_PRODUCTS: (context) => MaterielProductsPage(),
-    ROUTE_CHANNEL_REGISTER: (context) =>
-        RegisterChannelPage(
+    ROUTE_CHANNEL_REGISTER: (context) => RegisterChannelPage(
           channelCode: getVal('code', context),
         ),
     ROUTE_REQUIREMENT: (context) =>
