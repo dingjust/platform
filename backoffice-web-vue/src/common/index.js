@@ -1276,8 +1276,13 @@ let TENANT_APIS = {
   deleteRecommendCode: (id) => '/b2b/channel/recommend/code/' + id,
   // 启用/禁用  put params{ enabled: true/false }
   modifyRecommendCodeEnable: (id) => '/b2b/channel/recommend/code/update/state/' + id,
-  // 更新公司渠道码 post params{ channelCode: '' }
-  modifyRecommendCodeByCompany: (id) => '/b2b/companies/update/channel/code/' + id
+
+  // 所有用户列表
+  searchCustomerList: () => '/b2b/b2bCustomers/all',
+  // 根据渠道码查公司
+  searchCustomerListByRecommend: () => '/b2b/companies/all/recommend',
+  // 更新渠道码 post params{ id: '', channelCode: ''}
+  updateRecommendCode: () => '/b2b/b2bCustomers/update/channel/code'
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

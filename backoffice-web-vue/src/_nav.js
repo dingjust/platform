@@ -65,8 +65,8 @@ export default {
           url: '/user/factory',
           icon: 'iconNone'
         }, {
-          name: '渠道码',
-          url: '/user/recommend-code',
+          name: '用户列表',
+          url: '/user/customer',
           icon: 'iconNone'
         }
       ]
