@@ -30,6 +30,7 @@
     "chart.js": "^2.7.1",
     "element-ui": "^2.7.0",
     "font-awesome": "^4.7.0",
+    "qrcodejs2": "0.0.2",
     "simple-line-icons": "^2.4.1",
     "style-loader": "^0.22.0",
     "vue": "^2.5.10",
