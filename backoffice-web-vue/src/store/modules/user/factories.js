@@ -202,6 +202,15 @@ const actions = {
       keyword: ''
     };
     commit('setFormData', data);
+  },
+  clearPage ({ dispatch, commit, state }) {
+    commit('page', {
+      number: 0, // 当前页，从0开始
+      size: 10, // 每页显示条数
+      totalPages: 1, // 总页数
+      totalElements: 0, // 总数目数
+      content: [] // 当前页数据
+    });
   }
 };
 

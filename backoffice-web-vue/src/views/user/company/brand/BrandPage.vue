@@ -14,7 +14,7 @@
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
-              <el-dropdown @command="handleCommand($event, props.item)">
+              <el-dropdown @command="handleCommand($event, props.item)" trigger="click">
                 <span class="el-dropdown-link">
                   更多操作<i class="el-icon--right" style="font-size:12px"></i>
                 </span>

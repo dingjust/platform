@@ -38,8 +38,7 @@
           </template>
           <category-select :listData="categories" :selectDatas="selectDatas" :multiple="false"></category-select>
         </el-form-item>
-        <!-- <el-form-item prop="details.productiveOrientations"> -->
-        <el-form-item v-if="isTenant()">
+        <el-form-item prop="details.productiveOrientations">
           <template slot="label">
             <h6 class="titleTextClass">选择地区<span style="color: red">*</span></h6>
           </template>
@@ -412,6 +411,12 @@
       },
       'formData.details.majorCategory': function (n, o) {
         this.$refs['requirementForm'].validateField('details.majorCategory');
+      },
+      'formData.details.productiveOrientations': function (n, o) {
+        this.$refs['requirementForm'].validateField('details.productiveDistricts');
+      },
+      'formData.details.productiveDistricts': function (n, o) {
+        this.$refs['requirementForm'].validateField('details.productiveOrientations');
       }
     },
     data() {
@@ -430,18 +435,20 @@
         }
       };
       var checkProductiveOrientations = (rule, value, callback) => {
-        if (value.length <= 0) {
+        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
+          callback();
+        }
+        if (!value || value.length <= 0) {
           return callback(new Error('请选择地区'));
         } else {
           callback();
         }
       };
       var checkProductiveDistricts = (rule, value, callback) => {
-        if (this.isTenant()) {
+        if (this.formData.details.productiveOrientations && this.formData.details.productiveOrientations.length > 0) {
           callback();
-          return;
         }
-        if (value.length <= 0) {
+        if (!value || value.length <= 0) {
           return callback(new Error('请选择地区'));
         } else {
           callback();

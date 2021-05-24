@@ -147,6 +147,10 @@ const router = new Router({
         path: 'factory',
         name: '工厂',
         component: () => import(/* webpackChunkName: 'tenant-users' */ '@/views/user/company/factory/FactoryPage')
+      }, {
+        path: 'customer',
+        name: '用户列表',
+        component: () => import(/* webpackChunkName: 'tenant-users' */ '@/views/user/company/customer/CustomerPage')
       }
       ]
     },

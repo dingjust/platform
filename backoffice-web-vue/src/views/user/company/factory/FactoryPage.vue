@@ -18,22 +18,25 @@
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <factory-list :page="page" @onDetails="onDetails" :sequanceSort="sequanceSort" @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
-              <el-dropdown @command="handleCommand($event, props.item)">
-                <span class="el-dropdown-link">
-                  更多操作<i class="el-icon--right" style="font-size:12px"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="DETAIL">明细</el-dropdown-item>
-                  <el-dropdown-item command="LABEL">标签</el-dropdown-item>
-                  <el-dropdown-item v-if="!props.item.loginDisabled" command="DISABLED">禁用</el-dropdown-item>
-                  <el-dropdown-item v-if="props.item.loginDisabled" command="UNDISABLED">解禁</el-dropdown-item>
-                  <el-dropdown-item command="CLEARAUTH">清除认证</el-dropdown-item>
-                  <el-dropdown-item command="SHOW">
-                    {{props.item.enableShow === true ? '关闭显示' : '开启显示'}}
-                  </el-dropdown-item>
-                  <el-dropdown-item command="SORT">修改序列值</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              <div class="dropdown-container">
+                <el-dropdown @command="handleCommand($event, props.item)" trigger="click">
+                  <span class="el-dropdown-link">
+                    更多操作<i class="el-icon--right" style="font-size:12px"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="DETAIL">明细</el-dropdown-item>
+                    <el-dropdown-item command="LABEL">标签</el-dropdown-item>
+                    <el-dropdown-item v-if="!props.item.loginDisabled" command="DISABLED">禁用</el-dropdown-item>
+                    <el-dropdown-item v-if="props.item.loginDisabled" command="UNDISABLED">解禁</el-dropdown-item>
+                    <el-dropdown-item command="CLEARAUTH">清除认证</el-dropdown-item>
+                    <el-dropdown-item command="SHOW">
+                      {{props.item.enableShow === true ? '关闭显示' : '开启显示'}}
+                    </el-dropdown-item>
+                    <el-dropdown-item command="SORT">修改序列值</el-dropdown-item>
+                    <el-dropdown-item command="SET_PHONE">设置代运营手机号</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
             </template>
           </factory-list>
         </el-tab-pane>
@@ -55,7 +58,7 @@
       <factory-forbidden-dialog  @onCancel="onCancel" @onConfirm="onConfirm"/>
     </el-dialog>
     <el-dialog title="清除认证" :visible.sync="authVisible" width="400px" :close-on-click-modal="false">
-      <authentication-clear-form v-if="authVisible" :clearRow="clearRow" @onCancel="authVisible = false" @callback="callback"/>
+      <authentication-clear-form v-if="authVisible" :clearRow="handleRow" @onCancel="authVisible = false" @callback="callback"/>
     </el-dialog>
   </div>
 </template>
@@ -95,7 +98,8 @@
     methods: {
       ...mapActions({
         search: 'search',
-        advancedSearch: 'advancedSearch'
+        advancedSearch: 'advancedSearch',
+        clearPage: 'clearPage'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch'
@@ -119,9 +123,6 @@
         const keyword = this.keyword;
         const url = this.apis().getFactories() + '?sort=creationtime,desc';
         this.search({url, keyword, page, size});
-      },
-      handleChange () {
-        
       },
       onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
@@ -160,8 +161,48 @@
             break;
           case 'SORT':
             this.setFactorySequence(row);
+            break;
+          case 'SET_PHONE':
+            this.setOperatePhone(row);
+            break;
           default:
             break;
+        }
+      },
+      setOperatePhone (row) {
+        this.$prompt('请输入代运营手机号', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^[1][3,4,5,6,7,8,9][0-9]{9}$/,
+          inputValue: row.agentOperationPhoneNumber ? row.agentOperationPhoneNumber : null,
+          inputErrorMessage: '请输入正确手机号',
+          closeOnClickModal: false,
+          closeOnPressEscape: false
+        }).then(({ value }) => {
+          if (value !== row.agentOperationPhoneNumber) {
+            this.$confirm('是否将工厂 ' + row.name + ' 的代运营手机号设置为 ' + value, '提示', {
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              type: 'warning'
+            }).then(() => {
+                this._setOperatePhone(row, value);
+            });
+          }
+        })
+      },
+      async _setOperatePhone (row, value) {
+        const url = this.apis().setOperatePhone(row.uid, value);
+        const result = await this.$http.put(url);
+
+        if (result.code === 1) {
+          this.$message.success('操作成功！');
+          this.onAdvancedSearch();
+        } else if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+        } else {
+          this.$message.error('操作失败！');
         }
       },
       setFactorySequence (row) {
@@ -286,7 +327,7 @@
       },
       clearAuth (row) {
         this.authVisible = true;
-        this.clearRow = row;
+        this.handleRow = row;
       },
       callback () {
         this.authVisible = false;
@@ -377,10 +418,11 @@
         }],
         activeName: '',
         authVisible: false,
-        clearRow: ''
+        handleRow: ''
       };
     },
     created () {
+      this.clearPage();
       this.onAdvancedSearch();
     }
   };
@@ -391,5 +433,11 @@
   font-size: 12px;
   cursor: pointer;
   color: #409EFF;
+}
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  height: 16px;
+  line-height: 0px;
 }
 </style>

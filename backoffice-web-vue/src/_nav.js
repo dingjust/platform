@@ -64,7 +64,11 @@ export default {
           name: '工厂',
           url: '/user/factory',
           icon: 'iconNone'
-        },
+        }, {
+          name: '用户列表',
+          url: '/user/customer',
+          icon: 'iconNone'
+        }
       ]
     },
     {

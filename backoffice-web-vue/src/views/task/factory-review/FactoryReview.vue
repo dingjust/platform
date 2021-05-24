@@ -39,7 +39,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      advancedSearch: 'advancedSearch'
+      advancedSearch: 'advancedSearch',
+      clearPage: 'clearPage'
     }),
     onAdvancedSearch (page, size) {
       this.queryFormData.reviewState = 'REVIEWING';
@@ -51,6 +52,7 @@ export default {
     }
   },
   created () {
+    this.clearPage();
     this.onAdvancedSearch();
   }
 }

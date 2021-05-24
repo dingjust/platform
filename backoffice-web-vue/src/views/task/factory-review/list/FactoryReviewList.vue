@@ -11,22 +11,24 @@
           <span>{{scope.row.creationTime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签" prop="labels" min-width="150">
+      <el-table-column label="标签" prop="labels" min-width="160">
         <template slot-scope="scope">
-          <el-tag size="mini" class="disableTagClass" :disable-transitions="true" v-if="scope.row.loginDisabled">
-            已禁用
-          </el-tag>
-          <el-tag v-for="(item, index) of showLabels(scope.row.labels, scope.row.approvalStatus)" size="mini"
-            class="elTagClass" :disable-transitions="true" :key="index">
-            {{item}}
-          </el-tag>
+          <div class="tag-container">
+            <el-tag type="danger" class="tag-item" v-if="scope.row.loginDisabled">
+              已禁用
+            </el-tag>
+            <el-tag :type="Certified(scope.row) ? 'success' : 'warning'" class="tag-item">
+              {{Certified(scope.row) ? '已认证' : '未认证'}}
+            </el-tag>
+            <el-tag v-for="item of scope.row.labels" class="tag-item" type="primary" :key="item.id">
+              {{item.name}}
+            </el-tag>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)">查看</el-button>
-          <!-- <el-button type="text" @click="onPass(scope.row)">通过</el-button>
-          <el-button type="text" @click="onReject(scope.row)">驳回</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -84,74 +86,14 @@ export default {
       const page = this.page.content.length <= 1 ? this.page.number - 1 : this.page.number; 
       this.$emit('onAdvancedSearch', page, size);
     },
-    // onPass (row) {
-    //   this.$confirm('是否通过工厂：' + row.name + ' 的修改?', '提示', {
-    //     confirmButtonText: '是',
-    //     cancelButtonText: '否',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     this._onPass(row);
-    //   });
-    // },
-    // async _onPass (row) {
-    //   const url = this.apis().FactoryReviewPass(row.uid);
-    //   const result = await this.$http.put(url, {}, {
-    //     versionNo: row.modifiedTime
-    //   })
-    //   if (result['errors']) {
-    //     this.$message.error(result['errors'][0]);
-    //     rerutn;
-    //   }
-    //   if (result.code === 0) {
-    //     this.$message.error(result.msg);
-    //     return;
-    //   }
-
-    //   this.$message.success('操作成功');
-    //   this.$emit('onAdvancedSearch')
-    // },
-    // onReject (row) {
-    //   this.$prompt('是否驳回工厂：' + row.name + ' 的修改', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
-    //     inputErrorMessage: '请输入原因',
-    //     closeOnClickModal: false,
-    //     closeOnPressEscape: false
-    //   }).then(({ value }) => {
-    //     this._onReject(row, value);
-    //   })
-    // },
-    // async _onReject (row, message) {
-    //   const url = this.apis().FactoryReviewReject(row.uid);
-    //   const result = await this.$http.put(url, {
-    //     reason: message
-    //   }, {
-    //     versionNo: row.modifiedTime
-    //   })
-    //   if (result['errors']) {
-    //     this.$message.error(result['errors'][0]);
-    //     rerutn;
-    //   }
-    //   if (result.code === 0) {
-    //     this.$message.error(result.msg);
-    //     return;
-    //   }
-
-    //   this.$message.success('操作成功');
-    //   this.$emit('onAdvancedSearch')
-    // },
-    showLabels (arr, approvalStatus) {
-      let arr1 = [];
-      if (approvalStatus != undefined && approvalStatus == 'approved') {
-        arr1[0] = '已认证';
-      } else {
-        arr1[0] = '未认证';
+    Certified (row) {
+      if (row.approvalStatus && row.approvalStatus === 'approved') {
+        return true;
       }
-      for (let i = 0; i < arr.length; i++) {
-        arr1[i + 1] = arr[i].name;
-      }
-      return arr1;
+      return false;
+    },
+    showLabels (arr) {
+      return arr.map(item => item.name);
     },
     onPageSizeChanged (val) {
       this.$emit('onAdvancedSearch', 0, val);
@@ -178,20 +120,14 @@ export default {
 </script>
 
 <style scoped>
-  .disableTagClass{
-    color: #0b0e0f;
+  .tag-item {
     margin-right: 10px;
     margin-bottom: 10px;
-    cursor:pointer;
-    background-color: #F2F6FC;
   }
-  .elTagClass{
-    color: #0b0e0f;
-    margin-right: 10px;
-    cursor:pointer;
-    background-color: #FFD60C;
-  }
-  .el-tag {
-    border-color: #FFD60C;
+  
+  .tag-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
   }
 </style>

@@ -82,7 +82,7 @@
         </el-row>
       </el-col>
       <el-col :span="6">
-        <el-row type="flex" justify="space-around" v-if="item.state == 'SELLER_SUBMITTED'">
+        <el-row type="flex" justify="space-around" v-if="item.state == 'SELLER_SUBMITTED' && !isTenant()">
             <el-button class="btn-class" @click="onApprove(item)">确认工厂</el-button>
             <el-button class="btn-class-1" @click="writeReason(item)">拒绝工厂</el-button>
         </el-row>
@@ -148,9 +148,6 @@
         setOrdersPageNumber: 'setOrdersPageNumber',
         setOrdersPageSize: 'setOrdersPageSize',
         setIsShowDetailPrice: 'isShowDetailPrice'
-      }),
-      ...mapActions({
-        searchQuotesAdvanced: 'searchQuotesAdvanced'
       }),
       onPageSizeChanged (val) {
         this.$emit('onSearch', 0, val);
