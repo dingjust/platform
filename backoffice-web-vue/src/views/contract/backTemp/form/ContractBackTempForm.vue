@@ -4,6 +4,12 @@
       <el-tab-pane label="编辑" name="EDIT">
         <div>
           <el-row type="flex" justify="start" align="middle">
+            <h6>模板名称</h6>
+          </el-row>
+          <el-row type="flex">
+            <el-input v-model="detail.title" placeholder=""></el-input>
+          </el-row>
+          <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
             <h6>固定条款</h6>
           </el-row>
           <el-row type="flex">
@@ -18,6 +24,9 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="预览" name="READ">
+        <!-- <el-row type="flex" justify="start">
+          <h6>{{detail.title}}</h6>
+        </el-row> -->
         <div class="read-box">
           <el-row type="flex" style="padding: 0 10px;">
             <Viewer :value="detail.header" style="width: 100%"/>
@@ -57,6 +66,7 @@ export default {
     },
     async _onSave () {
       const form = {
+        id: this.detail.id,
         title: this.detail.title,
         code: this.detail.code,
         header: this.detail.header,
@@ -77,7 +87,7 @@ export default {
         return;
       }
 
-      this.$emit('callback', this.detail.code);
+      this.$emit('callback', this.detail);
     }
   },
   data () {

@@ -355,7 +355,7 @@
           'isFrame': true,
           'partnerCompanyCode': this.suppliers.id,
           'customizeType': 'KJXY',
-          'signLocation': this.selectFile.signLocation !== '' ? this.selectFile.signLocation : '广东省广州市白云区'
+          'signLocation': (this.selectFile.signLocation && this.selectFile.signLocation.trim() !== '') ? this.selectFile.signLocation : '广东省广州市白云区'
         }
 
         const url = this.apis().saveContract();
@@ -433,13 +433,6 @@
       },
       contractTemplateSelect () {
         this.$refs.contractTemplateSelect.onSearchTemp();
-      },
-      gCooperator (cooperator) {
-        if (cooperator.type === 'ONLINE') {
-          return cooperator.partner;
-        } else {
-          return cooperator;
-        }
       }
     },
     data () {
@@ -518,18 +511,14 @@
         this.contractType = '3';
       }
       if (this.slotData && this.slotData.originCooperator && this.slotData.targetCooperator) {
-        let originCooperator = this.gCooperator(this.slotData.originCooperator);
-        let targetCooperator = this.gCooperator(this.slotData.targetCooperator);
-        if (originCooperator.uid === this.$store.getters.currentUser.companyCode) {
-          this.onSuppliersSelect(targetCooperator);
+        if (this.slotData.originCooperator.partner.uid === this.$store.getters.currentUser.companyCode) {
+          this.onSuppliersSelect(this.slotData.targetCooperator);
           this.orderReadOnly = true;
-        } else if (targetCooperator.uid === this.$store.getters.currentUser.companyCode) {
-          this.onSuppliersSelect(originCooperator);
+        } else if (this.slotData.targetCooperator.partner.uid === this.$store.getters.currentUser.companyCode) {
+          this.onSuppliersSelect(this.slotData.originCooperator);
           this.orderReadOnly = true;
         }
       }
-      // this.onSearchOrder('', 0, 10);
-      // this.onSetOrderCode();
     }
   };
 </script>

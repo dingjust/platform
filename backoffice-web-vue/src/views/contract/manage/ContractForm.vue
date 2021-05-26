@@ -405,7 +405,7 @@
           // 'orderCodes': this.orderSelectFiles.map((order) => order.code)
           'items': this.orderSelectFiles.map((order) => order.id),
           'customizeType': 'WTSCHT',
-          'signLocation': this.selectFile.signLocation !== '' ? this.selectFile.signLocation : '广东省广州市白云区'
+          'signLocation': (this.selectFile.signLocation && this.selectFile.signLocation.trim() !== '') ? this.selectFile.signLocation : '广东省广州市白云区'
         }
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
