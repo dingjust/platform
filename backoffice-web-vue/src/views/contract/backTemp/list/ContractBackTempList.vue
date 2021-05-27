@@ -40,7 +40,7 @@
         <contract-back-temp-detail v-if="detail.id" :detail="detail"/>
       </template>  
       <template v-else>
-        <contract-back-temp-form v-if="detail.id" :detail="detail" @callback="onDetail"/>
+        <contract-back-temp-form v-if="detail.id" :detail="detail" @callback="callback"/>
       </template>
     </el-dialog>
   </div>
@@ -66,6 +66,10 @@ export default {
     }
   },
   methods: {
+    callback (row) {
+      this.onDetail(row);
+      this.$emit('onSearch');
+    },
     async getDetail (code) {
       const url = this.apis().getContractTempOnPlatform(code);
       const result = await this.$http.get(url);
@@ -88,7 +92,7 @@ export default {
       this.detail = {};
       this.getDetail(row.code)
 
-      this.dialogTitle = row.title + '模板';
+      this.dialogTitle = '查看模板（' + row.title + '）';
       this.showContent = 'DETAIL';
       this.tempVisible = true;
     },
@@ -96,7 +100,7 @@ export default {
       this.detail = {};
       this.getDetail(row.code)
 
-      this.dialogTitle = '修改' + row.title + '模板';
+      this.dialogTitle = '修改模板';
       this.showContent = 'FORM';
       this.tempVisible = true;
     },
@@ -123,7 +127,7 @@ export default {
       })
     },
     onCurrentPageChanged (page) {
-      this.$emit('onSearch', page);
+      this.$emit('onSearch', page - 1);
 
       this.$nextTick(() => {
         this.$refs.resultTable.bodyWrapper.scrollTop = 0
