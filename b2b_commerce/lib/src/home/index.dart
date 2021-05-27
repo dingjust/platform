@@ -245,8 +245,10 @@ class HomeTitle extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => QrScanPage()));
               },
               child: Padding(
-                padding: EdgeInsets.only(right: 5),
-                child: Icon(B2BIcons.qr_scanner, size: 22),
+                padding: EdgeInsets.only(
+                  right: 5,
+                ),
+                child: Icon(B2BIcons.qr_scanner, size: 25),
               )),
           Expanded(
             flex: 1,
