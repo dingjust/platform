@@ -186,15 +186,14 @@
         return this.formData.state === 'AUDIT_FAIL' && this.formData.applyUser.uid === this.$store.getters.currentUser.uid;
       },
       canAudit: function () {
-        const uid = this.$store.getters.currentUser.uid;
+        if (this.formData.state !== 'AUDITING') {
+          return false;
+        }
         if (this.formData.approvers && this.formData.approvers.length > 0) {
-          // let flag = this.formData.approvers.some(item => item.uid === uid);
-          const flag = this.formData.auditWorkOrder.auditingUser.uid === this.$store.getters.currentUser.uid;
-          if (this.formData.currentAuditWork) {
-            return this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && flag;
-          } else {
-            return false;
-          }
+          const flag = this.formData.currentAuditWork.auditingUser.uid === this.$store.getters.currentUser.uid;
+          return this.formData.currentAuditWork.currentUserAuditState === 'AUDITING' && flag;
+        } else {
+          return false;
         }
       },
       agreementsCode: function () {
