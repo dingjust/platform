@@ -25,14 +25,26 @@
           </template>
         </template>
       </el-table-column>
+      <el-table-column label="个人审批">
+        <template slot-scope="scope">
+          <span v-if="scope.row.currentUserAuditState">{{getEnum('AuditState', scope.row.currentUserAuditState)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="任务状态">
         <template slot-scope="scope">
-          <span>{{getEnum('AuditState', getState(scope.row))}}</span>
+          <div style="display:flex;align-items: center;">
+            <span>
+              {{getEnum('AuditState', scope.row.state)}}
+            </span>
+            <el-tooltip v-if="scope.row.state === 'AUDITED_FAILED'" effect="dark" :content="auditMsg(scope.row)" placement="top-start">
+              <h6 style="color: #F56C6C;margin: 0px">({{failedApprover(scope.row)}})</h6>
+            </el-tooltip>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.state !== 'REVOKED'" type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
+          <el-button v-if="scope.row.state !== 'REVOKED' && scope.row.state !== 'AUDITED_FAILED'" type="text" size="mini" @click="onDetail(scope.row)">查看</el-button>
           <template v-if="canAudit(scope.row)">
             <el-divider direction="vertical" />
             <authorized :permission="['DO_AUDIT']">
@@ -59,6 +71,14 @@
     name: 'TaskApprovalList',
     props: ['page'],
     methods: {
+      failedApprover (row) {
+        const arr = row.processes.filter(item => item.state === 'AUDITED_FAILED');
+        return arr[0].auditUser.name;
+      },
+      auditMsg (row) {
+        const arr = row.processes.filter(item => item.state === 'AUDITED_FAILED');
+        return arr[0].auditMsg;
+      },
       approvalNames (row) {
         if (row.processes && row.processes.length > 0) {
           return row.processes.map(item => item.auditUser.name).toString();
