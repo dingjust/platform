@@ -53,7 +53,7 @@
             </el-button>
           </el-col>
         </el-row>
-        <order-pay-setting ref="paySetting" :formData="form"/>
+        <order-pay-setting ref="paySetting" :formData="form" from="SALES_ORDER" :readOnly="hasOrigin"/>
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -393,6 +393,9 @@
           id: this.form.productionLeader[this.form.productionLeader.length - 1]
         }
 
+        if (!this.form.payOnline) {
+          this.$delete(this.submitForm, 'paymentAccount')
+        }
         if (this.form.payOnline && this.$store.getters.currentUser.agent) {
           submitForm.serviceFeePercent = Number.parseFloat(this.form.serviceFeePercent) / 100
         }
@@ -536,7 +539,7 @@
       this.form.auditNeeded = false;
       
       if (this.$route.params.order != null) {
-        Object.assign(this.form, this.$route.params.order);
+        this.$set(this, 'form', this.$route.params.order)
         // 设置对应供应商
         if (this.form.originCooperator.type == 'ONLINE') {
           this.form.originCooperator.name = this.form.originCooperator.partner.name;
@@ -544,7 +547,9 @@
           this.form.originCooperator.contactPerson = this.form.originCooperator.partner.contactPerson;
         }
 
-        this.form.serviceFeePercent = this.$route.params.order.serviceFeePercent ? this.$route.params.order.serviceFeePercent * 100 : '';
+        const serviceFeePercent = this.$route.params.order.serviceFeePercent ? (this.$route.params.order.serviceFeePercent * 1000000 / 10000) : '';
+
+        this.$set(this.form, 'serviceFeePercent', serviceFeePercent);
       }
     },
     mounted() {

@@ -10,7 +10,7 @@
       <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
         <outbound-type-select :formData="formData" />
         <outbound-order-contact-com :formData="formData" />
-        <order-pay-setting ref="paySetting" :formData="formData"/>
+        <order-pay-setting ref="paySetting" :formData="formData" from="OUTBOUND_ORDER"/>
         <el-divider />
         <outbound-order-entry ref="orderEntries" :formData="formData" />
         <el-row>
@@ -138,14 +138,6 @@
         }
         if (!data.invoiceNeeded) {
           data.invoiceTaxPoint = null;
-        }
-
-        // 处理支付类型数据
-        if (this.formData.payOnline && this.$store.getters.currentUser.agent) {
-          data.serviceFeePercent = Number.parseFloat(this.formData.serviceFeePercent) / 100
-        }
-        if (!this.formData.payOnline) {
-          this.$delete(data, 'paymentAccount');
         }
 
         const url = this.apis().createOutboundOrder();

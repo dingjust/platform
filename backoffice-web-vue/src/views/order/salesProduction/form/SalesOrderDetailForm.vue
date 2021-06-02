@@ -64,7 +64,7 @@
             <h6 v-html="getHtmlText(form.payPlan.previewText)"></h6>
           </el-popover>
         </template>
-        <order-pay-detail :formData="form" style="margin-left: 24px;"/>
+        <order-pay-detail :formData="form" style="margin-left: 24px;" from="SALES_ORDER"/>
       </el-col>
       <el-col :span="6">
         <div class="info-box">
