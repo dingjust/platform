@@ -10,6 +10,7 @@
       <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
         <outbound-type-select :formData="formData" />
         <outbound-order-contact-com :formData="formData" />
+        <order-pay-setting ref="paySetting" :formData="formData"/>
         <el-divider />
         <outbound-order-entry ref="orderEntries" :formData="formData" />
         <el-row>
@@ -55,6 +56,7 @@
   import OutboundOrderAdditionInfo from './OutboundOrderAdditionInfo'
   import OutboundOrderFormBtn from './OutboundOrderFormBtn'
   import OutboundOrderEntry from './OutboundOrderEntry'
+  import OrderPaySetting from '@/views/order/salesProduction/components/OrderPaySetting'
 
   export default {
     name: 'OutboundOrderForm',
@@ -66,7 +68,8 @@
       OutboundOrderAuditPart,
       OutboundOrderAdditionInfo,
       OutboundOrderFormBtn,
-      OutboundOrderEntry
+      OutboundOrderEntry,
+      OrderPaySetting
     },
     computed: {
       canDelete: function () {
@@ -95,6 +98,7 @@
       async validateForms() {
         var formArr = [];
         formArr.push(this.$refs['form']);
+        formArr.push(this.$refs['paySetting'].$refs['form']);
         this.$refs['orderEntries'].$refs['itemForm'].forEach(item => {
           formArr.push(item);
         })
@@ -135,6 +139,15 @@
         if (!data.invoiceNeeded) {
           data.invoiceTaxPoint = null;
         }
+
+        // 处理支付类型数据
+        if (this.formData.payOnline && this.$store.getters.currentUser.agent) {
+          data.serviceFeePercent = Number.parseFloat(this.formData.serviceFeePercent) / 100
+        }
+        if (!this.formData.payOnline) {
+          this.$delete(data, 'paymentAccount');
+        }
+
         const url = this.apis().createOutboundOrder();
         const result = await this.$http.post(url, data, {
           submitAudit: flag

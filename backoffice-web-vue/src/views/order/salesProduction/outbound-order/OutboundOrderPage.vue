@@ -211,7 +211,10 @@
           sendApprovers: data.sendApprovers,
           merchandiser: data.merchandiser,
           title: data.title,
-          state: data.state
+          state: data.state,
+          payOnline: data.payOnline,
+          serviceFeePercent: data.serviceFeePercent ? data.serviceFeePercent * 100 : '',
+          paymentAccount: data.paymentAccount
         }
         return formData;
       },

@@ -64,6 +64,7 @@
             <h6 v-html="getHtmlText(form.payPlan.previewText)"></h6>
           </el-popover>
         </template>
+        <order-pay-detail :formData="form" style="margin-left: 24px;"/>
       </el-col>
       <el-col :span="6">
         <div class="info-box">
@@ -95,6 +96,7 @@
   import {
     PayPlanInfo
   } from '@/components/'
+  import OrderPayDetail from '@/views/order/salesProduction/components/OrderPayDetail'
 
   export default {
     name: 'SalesOrderDetailForm',
@@ -174,7 +176,8 @@
       PurchaseOrderInfoContract,
       PersonnelSelection,
       PayPlanInfo,
-      ProductionContract
+      ProductionContract,
+      OrderPayDetail
     },
     props: {
       form: {

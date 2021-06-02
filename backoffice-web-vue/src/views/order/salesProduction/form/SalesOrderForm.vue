@@ -53,6 +53,7 @@
             </el-button>
           </el-col>
         </el-row>
+        <order-pay-setting ref="paySetting" :formData="form"/>
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -181,6 +182,7 @@
     getEntryTotalAmount,
     getEntryTotalPrice
   } from '../js/accounting.js';
+  import OrderPaySetting from '../components/OrderPaySetting.vue';
 
   export default {
     name: 'SalesOrderForm',
@@ -194,7 +196,8 @@
       ProgressPlanSelectDialog,
       DeptSelection,
       PersonnalSelectionV2,
-      SampleProductsSelectDialog
+      SampleProductsSelectDialog,
+      OrderPaySetting
     },
     computed: {
       // 根据订单类型，加工类型判断是否需要物料清单等
@@ -390,6 +393,10 @@
           id: this.form.productionLeader[this.form.productionLeader.length - 1]
         }
 
+        if (this.form.payOnline && this.$store.getters.currentUser.agent) {
+          submitForm.serviceFeePercent = Number.parseFloat(this.form.serviceFeePercent) / 100
+        }
+
         const result = await this.$http.post(url, submitForm);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -423,6 +430,7 @@
 
         const form = this.$refs.form;
         let forms = [form];
+        forms.push(this.$refs['paySetting'].$refs['form']);
         forms.push(this.$refs['payPlanCom'].$refs['payPlanForm']);
         // 使用Promise.all 并行去校验结果
         let res = await Promise.all(forms.map(this.getFormPromise));
@@ -535,6 +543,8 @@
           this.form.originCooperator.contactPhone = this.form.originCooperator.partner.contactPhone;
           this.form.originCooperator.contactPerson = this.form.originCooperator.partner.contactPerson;
         }
+
+        this.form.serviceFeePercent = this.$route.params.order.serviceFeePercent ? this.$route.params.order.serviceFeePercent * 100 : '';
       }
     },
     mounted() {
