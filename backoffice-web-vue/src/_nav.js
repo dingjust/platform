@@ -22,6 +22,11 @@ export default {
           name: '工厂审阅',
           url: '/task/factory/review',
           icon: 'iconNone'
+        },
+        {
+          name: '代运营审阅',
+          url: '/task/agent-operation/review',
+          icon: 'iconNone'
         }
       ]
     },
