@@ -13,10 +13,10 @@
     <template v-if="from === 'SALES_ORDER'">
       <el-row type="flex">
         <el-col :span="9">
-          <h6 v-if="formData.payOnline && formData.serviceFeePercent">服务费用扣除比列：{{(formData.serviceFeePercent * 100).toFixed(2)}}%</h6>
+          <h6 v-if="formData.payOnline && formData.paymentAccount">付款方式：{{getEnum('PayType', formData.paymentAccount.type)}}</h6>
         </el-col>
         <el-col :span="5">
-          <h6 v-if="formData.payOnline && formData.paymentAccount">付款方式：{{getEnum('PayType', formData.paymentAccount.type)}}</h6>
+          <h6 v-if="formData.payOnline && formData.serviceFeePercent">服务费用扣除比列：{{(formData.serviceFeePercent * 100).toFixed(2)}}%</h6>
         </el-col>
       </el-row>
       <el-row type="flex" v-if="formData.payOnline && formData.paymentAccount && formData.paymentAccount.type === 'BANK'">

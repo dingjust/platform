@@ -539,7 +539,10 @@
       this.form.auditNeeded = false;
       
       if (this.$route.params.order != null) {
-        this.$set(this, 'form', this.$route.params.order)
+        this.$set(this, 'form', this.$route.params.order);
+
+        this.$set(this.form, 'productionLeader', this.$store.getters.currentUser)
+
         // 设置对应供应商
         if (this.form.originCooperator.type == 'ONLINE') {
           this.form.originCooperator.name = this.form.originCooperator.partner.name;
