@@ -30,6 +30,17 @@
           <h6>卡号：{{formData.paymentAccount.no}}</h6>
         </el-col>
       </el-row>
+      <el-row type="flex" v-if="formData.payOnline && formData.paymentAccount && formData.paymentAccount.type === 'WECHAT'">
+        <el-col :span="9">
+          <h6>姓名：{{formData.paymentAccount.name}}</h6>
+        </el-col>
+        <el-col :span="7">
+          <h6>开户行：{{formData.paymentAccount.serviceProvider}}</h6>
+        </el-col>
+        <el-col :span="8">
+          <h6>卡号：{{formData.paymentAccount.no}}</h6>
+        </el-col>
+      </el-row>
     </template>
   </div>
 </template>

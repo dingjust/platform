@@ -29,20 +29,36 @@
           <el-row type="flex">
             <el-form-item label="付款方式">
               <el-radio-group v-model="formData.paymentAccount.type">
-                <!-- <el-radio v-for="item in payType" :key="item.code" :label="item.code">{{item.name}}</el-radio> -->
-                <el-radio label="BANK" key="BANK">银行卡</el-radio>
+                <el-radio v-for="item in payType" :key="item.code" :label="item.code">{{item.name}}</el-radio>
+                <!-- <el-radio label="BANK" key="BANK">银行卡</el-radio> -->
               </el-radio-group>
             </el-form-item>
           </el-row>
           <collapse-transition>
             <div class="collapse-wrap" v-show="formData.paymentAccount.type === 'BANK'">
-              <el-form-item label="收款方姓名" prop="paymentAccount.name" :rules="[{required: formData.payOnline, message: '必填', tigger: 'change'}]">
+              <el-form-item label="收款方姓名" prop="paymentAccount.name" 
+                :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]">
                 <el-input v-model="formData.paymentAccount.name" style="width: 300px"></el-input>
               </el-form-item>
-              <el-form-item label="收款方开户行" prop="paymentAccount.serviceProvider" :rules="[{required: formData.payOnline, message: '必填', tigger: 'change'}]">
+              <el-form-item label="收款方开户行" prop="paymentAccount.serviceProvider" 
+                :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]">
                 <el-input v-model="formData.paymentAccount.serviceProvider" style="width: 300px"></el-input>
               </el-form-item>
-              <el-form-item label="收款方卡号" prop="paymentAccount.no" :rules="[{required: formData.payOnline, message: '必填', tigger: 'change'}]">
+              <el-form-item label="收款方卡号" prop="paymentAccount.no" 
+                :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]">
+                <el-input v-model="formData.paymentAccount.no" style="width: 300px"></el-input>
+              </el-form-item>
+            </div>
+          </collapse-transition>
+          <collapse-transition>
+            <div class="collapse-wrap" v-show="formData.paymentAccount.type === 'WECHAT'">
+              <el-form-item label="收款方姓名" prop="paymentAccount.name">
+                <el-input v-model="formData.paymentAccount.name" style="width: 300px"></el-input>
+              </el-form-item>
+              <el-form-item label="收款方开户行" prop="paymentAccount.serviceProvider">
+                <el-input v-model="formData.paymentAccount.serviceProvider" style="width: 300px"></el-input>
+              </el-form-item>
+              <el-form-item label="收款方卡号" prop="paymentAccount.no">
                 <el-input v-model="formData.paymentAccount.no" style="width: 300px"></el-input>
               </el-form-item>
             </div>
