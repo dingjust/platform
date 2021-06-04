@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/common/order_payment_page.dart';
 import 'package:b2b_commerce/src/helper/cooperator_helper.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -21,7 +23,7 @@ class ExternalSaleOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        height: 120,
+        // height: 120,
         margin: const EdgeInsets.fromLTRB(5, 10, 5, 0),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
@@ -36,6 +38,7 @@ class ExternalSaleOrderItem extends StatelessWidget {
             ),
             _End(model: model),
             _Row2(model: model),
+            ..._buildPaymentInfo(context)
           ],
         ),
         decoration: BoxDecoration(
@@ -51,11 +54,102 @@ class ExternalSaleOrderItem extends StatelessWidget {
           'title': type == SaleOrderItemType.IMPORT ? '外接订单明细' : '外发订单明细'
         }).then((needRefresh) {
           if (needRefresh != null && needRefresh) {
-            Provider.of<ExternalSaleOrdersState>(context).clear();
+            if (type == SaleOrderItemType.IMPORT)
+              //外接订单列表刷新
+              Provider.of<ExternalSaleOrdersState>(context).clear();
+            else
+              //外发订单列表刷新
+              Provider.of<OutOrdersState>(context).clear();
           }
         });
       },
     );
+  }
+
+  List<Widget> _buildPaymentInfo(BuildContext context) {
+    //判断甲乙方，乙方不支付
+    if (isTarget) {
+      return [];
+    }
+
+    //线下支付
+    if (model.payOnline == null ||
+        (!model.payOnline) ||
+        ObjectUtil.isEmptyList(model.paymentOrders)) {
+      return [];
+    }
+
+    return model.paymentOrders
+        .map((e) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                    flex: 3,
+                    child: RichText(
+                        text: TextSpan(
+                            text: e.batch == 1 ? '定金：' : '尾款：',
+                            style: TextStyle(color: Colors.black87),
+                            children: [
+                          TextSpan(
+                              text: '${CmtPaymentStateLocalizedMap[e.state]}',
+                              style: TextStyle(
+                                  color: e.state == CmtPaymentState.PAID
+                                      ? Colors.green
+                                      : Colors.orange))
+                        ]))),
+                e.canPay
+                    ? GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (context) => OrderPaymentPageV2(e)))
+                              .then((needRefresh) {
+                            //刷新
+                            if (needRefresh != null && needRefresh) {
+                              Provider.of<ExternalSaleOrdersState>(context)
+                                  .clear();
+                            }
+                          });
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Colors.orange,
+                                width: 0.5,
+                              )),
+                          child: Text(
+                            '去支付',
+                            style:
+                                TextStyle(color: Colors.orange, fontSize: 14),
+                          ),
+                        ),
+                      )
+                    : Container()
+              ],
+            ))
+        .toList();
+  }
+
+  ///来源方
+  bool get isOrigin {
+    if (model.originCompany != null) {
+      return model?.originCompany?.uid ==
+          UserBLoC.instance.currentUser.companyCode;
+    }
+    return false;
+  }
+
+  ///是否接单方
+  bool get isTarget {
+    if (model.targetCooperator != null) {
+      return model?.targetCooperator?.partner?.uid ==
+          UserBLoC.instance.currentUser.companyCode;
+    }
+    return false;
   }
 }
 

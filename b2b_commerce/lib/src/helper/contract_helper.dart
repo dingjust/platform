@@ -9,11 +9,10 @@ import 'package:services/services.dart';
 
 ///合同工具类
 class ContractHelper {
-  static open(
-      {@required BuildContext context, @required ContractModel model}) async {
+  static Future<dynamic> open(
+      {@required BuildContext context, ContractModel model}) async {
     Function cancelFunc = BotToast.showLoading(
         clickClose: false, allowClick: false, crossPage: false);
-
     SearchResultModel resultModel =
         await ContractRepository().getContractPdfMedia(model.code);
     if (resultModel?.code == 0) {
@@ -47,14 +46,15 @@ class ContractHelper {
       int contentLength = 0;
       contentLength = int.parse(response.headers.map['content-length'][0]);
       if (contentLength > 0) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ContractDetailPage(
+        return await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                ContractDetailPage(
                   pathPDF: filePath,
                   contractModel: model,
                 )));
       }
     } else {
-      BotToast.showText(text: '合同下载失败');
+      BotToast.showText(text: '合同下载失败', crossPage: true);
     }
   }
 }

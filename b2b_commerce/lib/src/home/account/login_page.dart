@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                 )),
             field: TextField(
               autofocus: false,
-              maxLength: 11,
+              // maxLength: 11,
 
               buildCounter: (context,
                       {int currentLength, bool isFocused, int maxLength}) =>
@@ -111,10 +111,10 @@ class _LoginPageState extends State<LoginPage> {
               onChanged: (value) async {
                 formValidate();
               },
-              keyboardType: TextInputType.phone,
+              // keyboardType: TextInputType.phone,
               //只能输入数字
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
+                // FilteringTextInputFormatter.digitsOnly
               ],
               controller: _phoneController,
               decoration: InputDecoration(

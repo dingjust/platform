@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -65,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MenuItem(B2BImage.luckeyMoney(width: 25, height: 25), '邀请好友',
             AppRoutes.ROUTE_ACTIVITY_INVITE),
         MenuItem(MenuItemImage.partnerFactory, '服务申请',
-            AppRoutes.ROUTE_ACTIVITY_INVITE),
+            AppRoutes.ROUTE_SERVICE_APPLY),
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服',

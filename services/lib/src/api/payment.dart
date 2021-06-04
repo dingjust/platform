@@ -26,8 +26,12 @@ class PaymentApis {
       };
 
   /// 销售单支付状态
-  static get salesOrderPayStatus =>
-          (code) {
+  static get salesOrderPayStatus => (code) {
         return '/{baseSiteId}/b2b/orders/sales/$code/check/paid/state';
+      };
+
+  /// 生成支付签名
+  static get paymentSign => (code, batch) {
+        return '/{baseSiteId}/cmt/order/pay/$code/$batch';
       };
 }

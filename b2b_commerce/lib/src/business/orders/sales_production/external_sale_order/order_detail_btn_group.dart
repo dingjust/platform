@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_btns.dart';
+import 'package:b2b_commerce/src/common/order_payment_page.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -51,12 +53,9 @@ class OrderDetailBtnGroup extends StatelessWidget {
           validateFunc: () => true,
         );
       }
-      return Container(
-        height: 0,
-      );
+      //付款状态
+      return _buildPayBtn(context);
     }
-
-    //空
     return Container(
       height: 0,
     );
@@ -105,11 +104,49 @@ class OrderDetailBtnGroup extends StatelessWidget {
     );
   }
 
+  ///支付按钮
+  Widget _buildPayBtn(BuildContext context) {
+    //先判断是否线上支付
+    if (order.payOnline != null && order.payOnline) {
+      if (!ObjectUtil.isEmptyList(order.paymentOrders)) {
+        CmtPayOrderData data = order.paymentOrders
+            .firstWhere((element) => element.canPay, orElse: () => null);
+        if (data != null)
+          return GestureDetector(
+            onTap: () => _onPay(context, data),
+            child: Container(
+              height: 35,
+              margin: EdgeInsets.fromLTRB(20, 0, 20, 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Colors.orange[400],
+                        Color(0xffffd60c),
+                      ])),
+              child: Center(
+                child: Text(
+                  '支付${data.batch == 1 ? '定金' : '尾款'}',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          );
+      }
+    }
+
+    return Container(
+      height: 0,
+    );
+  }
+
   ///接单
   void _onAccept(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute(
-        builder: (context) => OrderAcceptPage(order: order)))
+            builder: (context) => OrderAcceptPage(order: order)))
         .then((value) {
       //回调刷新
       if (value == true && detailCallback != null) {
@@ -180,6 +217,21 @@ class OrderDetailBtnGroup extends StatelessWidget {
     } else {
       BotToast.showText(text: '操作失败');
     }
+  }
+
+  ///支付
+  void _onPay(BuildContext context, CmtPayOrderData data) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => OrderPaymentPageV2(data)))
+        .then((value) {
+      //回调刷新
+      if (value == true && detailCallback != null) {
+        detailCallback.call();
+        if (needCallbackPop != null) {
+          needCallbackPop.call();
+        }
+      }
+    });
   }
 
   ///是否审批人

@@ -8,7 +8,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../_shared/orders/quote/quote_list.dart';
 import '../_shared/widgets/app_bar_factory.dart';
 import '../_shared/widgets/scroll_to_top_button.dart';
 import '../_shared/widgets/tab_factory.dart';

@@ -22,6 +22,7 @@ import 'package:b2b_commerce/src/business/products/materiel_product_manage.dart'
 import 'package:b2b_commerce/src/business/products/materiel_products.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/quote_my_orders.dart';
+import 'package:b2b_commerce/src/business/services/operation_agent_service.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/common/webview_page.dart';
@@ -187,6 +188,9 @@ class AppRoutes with GlobalRoutes {
   ///工厂介绍明细
   static const ROUTE_FACTORY_INTRODUCTION = '/factory/introduction';
 
+  ///服务申请页面
+  static const ROUTE_SERVICE_APPLY = '/business/services/apply';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -233,7 +237,7 @@ class AppRoutes with GlobalRoutes {
         ExternalSaleOrderImportPage(),
     ROUTE_OUT_ORDERS: (context) => OutOrdersPage(),
     ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
-          id: int.parse(getVal('id', context).toString()),
+      id: int.parse('${getVal('id', context)}'),
           titile: getVal('title', context),
         ),
     ROUTE_PRODUCTION_TASK_ORDER_DETAIL: (context) =>
@@ -247,17 +251,18 @@ class AppRoutes with GlobalRoutes {
     ROUTE_COOPERATORS_CREATE: (context) => CooperatorForm(),
     ROUTE_DELIVERY_ORDERS: (context) => DeliveryOrdersPage(),
     ROUTE_DELIVERY_ORDER_DETAIL: (context) => DeliveryOrderDetailPage(
-        id: int.parse(getVal('id', context)),
+        id: int.parse('${getVal('id', context)}'),
         needRefresh: getVal('needRefresh', context)),
     ROUTE_RECONCILIATION_ORDERS: (context) => ReconciliationOrdersPage(),
     ROUTE_RECONCILIATION_ORDER_DETAIL: (context) =>
         ReconciliationOrderDetailPage(
-            id: int.parse(getVal('id', context)),
+            id: int.parse('${getVal('id', context)}'),
             needRefresh: getVal('needRefresh', context)),
     ROUTE_ACTIVITY_INVITE: (context) => InvitePage(),
     ROUTE_MATERIEL_PRODUCT_MANAGE: (context) => MaterielProductManagePage(),
     ROUTE_MATERIEL_PRODUCTS: (context) => MaterielProductsPage(),
-    ROUTE_CHANNEL_REGISTER: (context) => RegisterChannelPage(
+    ROUTE_CHANNEL_REGISTER: (context) =>
+        RegisterChannelPage(
           channelCode: getVal('code', context),
         ),
     ROUTE_REQUIREMENT: (context) =>
@@ -267,7 +272,8 @@ class AppRoutes with GlobalRoutes {
     ROUTE_FACTORY_INTRODUCTION: (context) =>
         FactoryIntroductionPage(
           uid: getVal('uid', context),
-        )
+        ),
+    ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage()
   };
 
   static dynamic getVal(String key, BuildContext context) {

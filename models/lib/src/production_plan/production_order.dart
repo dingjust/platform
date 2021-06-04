@@ -260,6 +260,21 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   ///总金额
   double totalAmount;
 
+  OrderPaymentAccountData paymentAccount;
+
+  ///是否为代理
+  bool agentOrder;
+
+  ///服务费用比例
+  double serviceFeePercent;
+
+  ///线上支付
+  bool payOnline;
+
+  ///支付订单
+  @JsonKey(toJson: paymentOrdersToList)
+  List<CmtPayOrderData> paymentOrders;
+
   SalesProductionOrderModel(
       {String code,
       int originOrderId,
@@ -306,17 +321,21 @@ class SalesProductionOrderModel extends ProductionOrderModel {
       this.auditNeeded,
       this.auditState,
       this.sendAuditNeeded,
-      this.sendApprovers,
-      this.sendAuditState,
-      this.originCompany,
-      this.sendBy,
-      this.remarks,
-      this.currentSendAuditOrder,
-      this.taskOrderEntries,
-      this.agreements,
-      this.entrySize,
-      this.totalQuantity,
-      this.totalAmount})
+    this.sendApprovers,
+    this.sendAuditState,
+    this.originCompany,
+    this.sendBy,
+    this.remarks,
+    this.currentSendAuditOrder,
+    this.taskOrderEntries,
+    this.agreements,
+    this.entrySize,
+    this.totalQuantity,
+    this.totalAmount,
+    this.paymentAccount,
+    this.agentOrder,
+    this.serviceFeePercent,
+    this.payOnline})
       : super(
             code: code,
             originOrderId: originOrderId,
@@ -344,17 +363,21 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   Map<String, dynamic> toJson() => _$SalesProductionOrderModelToJson(this);
 
   static List<Map<String, dynamic>> b2bCutomersToJson(
-          List<B2BCustomerModel> models) =>
+      List<B2BCustomerModel> models) =>
       models == null
           ? null
           : models.map((e) => B2BCustomerModel.toJson(e)).toList();
 
   static List<Map<String, dynamic>> productionTaskOrdersToList(
-          List<ProductionTaskOrderModel> models) =>
+      List<ProductionTaskOrderModel> models) =>
       models == null ? null : models.map((e) => e.toJson()).toList();
 
+  static List<Map<String, dynamic>> paymentOrdersToList(
+      List<CmtPayOrderData> datas) =>
+      datas == null ? null : datas.map((e) => e.toJson()).toList();
+
   static List<Map<String, dynamic>> agreementsToJson(
-          List<UserAgreementModel> models) =>
+      List<UserAgreementModel> models) =>
       models == null ? null : models.map((e) => e.toJson()).toList();
 }
 
