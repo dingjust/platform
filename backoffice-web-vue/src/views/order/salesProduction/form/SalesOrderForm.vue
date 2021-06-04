@@ -394,7 +394,7 @@
         }
 
         if (!this.form.payOnline) {
-          this.$delete(this.submitForm, 'paymentAccount')
+          this.$delete(submitForm, 'paymentAccount')
         }
         if (this.form.payOnline && this.$store.getters.currentUser.agent) {
           submitForm.serviceFeePercent = Number.parseFloat(this.form.serviceFeePercent) / 100

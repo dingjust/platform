@@ -131,6 +131,9 @@
       },
       // 销售总价
       totalPrice: function () {
+        if (this.form.totalAmount) {
+          return this.form.totalAmount;
+        }
         let total = 0;
         if (this.form.taskOrderEntries != null) {
           this.form.taskOrderEntries.forEach(element => {

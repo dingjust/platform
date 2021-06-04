@@ -98,26 +98,7 @@
         formData: this.$store.state.ContractTemplateModule.formData,
         type: this.$store.state.ContractTemplateModule.type,
         mockData: [],
-        TemplateType: [{
-          code: 'BCXY',
-          name: '补充协议'
-        },
-        {
-          code: 'WTSCHT',
-          name: '委托生产合同'
-        },
-        {
-          code: 'CGDD',
-          name: '采购订单'
-        },
-        {
-          code: 'KJXY',
-          name: '框架协议'
-        },
-        {
-          code: 'ZFXY',
-          name: '作废协议'
-        }],
+        TemplateType: this.$store.state.EnumsModule.TemplateType,
         templateSequence: {
           WTSCHT: 0,
           CGDD: 1,

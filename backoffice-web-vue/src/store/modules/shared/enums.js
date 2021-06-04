@@ -1290,8 +1290,12 @@ const state = {
       name: '作废协议'
     },
     {
-      code: 'UNKOWN',
-      name: ''
+      code: 'DYYXY',
+      name: '代运营协议'
+    },
+    {
+      code: 'DYYKJXY',
+      name: '代运营框架协议'
     }
   ],
   // 支付类型
