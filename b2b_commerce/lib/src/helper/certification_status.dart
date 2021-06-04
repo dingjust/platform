@@ -63,7 +63,8 @@ class CertificationStatusHelper {
         UserBLoC.instance.currentUser.b2bUnit.profileCompleted;
 
     //刷新
-    if (!UserBLoC.instance.currentUser.b2bUnit.profileCompleted) {
+    if (UserBLoC.instance.currentUser.b2bUnit.profileCompleted == null ||
+        !UserBLoC.instance.currentUser.b2bUnit.profileCompleted) {
       UserModel user = await UserBLoC.instance.refreshUser();
       profileCompleted = user.b2bUnit.profileCompleted;
     }

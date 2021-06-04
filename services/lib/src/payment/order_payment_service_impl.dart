@@ -5,6 +5,8 @@ import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/payment/order_payment_service.dart';
 import 'package:services/src/payment/payment_for.dart';
 
+import '../../services.dart';
+
 class OrderPaymentServiceImpl implements OrderPaymentService {
   @override
 
@@ -42,6 +44,40 @@ class OrderPaymentServiceImpl implements OrderPaymentService {
 
     if (response != null && response.statusCode == 200) {
       return response.data;
+    } else {
+      return null;
+    }
+  }
+
+  ///生成支付测试订单
+  static Future<BaseResponse> createTestOrder(double amount) async {
+    Response response;
+    try {
+      response = await http$.post(
+          '/{baseSiteId}/cmt/order/pay/create/test/order',
+          queryParameters: {'amount': amount});
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  ///生成支付签名
+  static Future<BaseResponse> orderPaySign(String code, int batch,
+      {String method = 'WECHAT_PAY_APP'}) async {
+    Response response;
+    try {
+      response = await http$.get(PaymentApis.paymentSign(code, batch),
+          data: {'paymentMethod': method});
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
     } else {
       return null;
     }

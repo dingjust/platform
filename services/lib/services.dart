@@ -147,6 +147,7 @@ export 'src/system/notification/message_web_client.dart';
 export 'src/system/page/repository/carousels_respository.dart';
 export 'src/system/page/state/product_home_carousels_state.dart';
 export 'src/system/page/state/product_home_state.dart';
+export 'src/umeng/umeng_plugin.dart';
 export 'src/user/address_repository.dart';
 export 'src/user/address_repository_impl.dart';
 export 'src/user/amount_flow_repository.dart';
@@ -163,6 +164,7 @@ export 'src/user/region_repository.dart';
 export 'src/user/region_repository_impl.dart';
 export 'src/user/repository/integral_repository.dart';
 export 'src/user/repository/integral_repository.dart';
+export 'src/user/repository/operation_agent_repository.dart';
 export 'src/user/repository/payplan_repository_impl.dart';
 export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
@@ -175,7 +177,6 @@ export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/websocket/websocket_service.dart';
-export 'src/umeng/umeng_plugin.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

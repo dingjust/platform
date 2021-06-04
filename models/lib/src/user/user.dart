@@ -64,6 +64,9 @@ class UserModel extends PrincipalModel {
   @JsonKey(fromJson: _pointFromJson)
   int points;
 
+  ///是否代运营账号
+  bool agent;
+
   Image get avatar =>
       profilePicture ??
       CachedNetworkImage(
@@ -88,17 +91,18 @@ class UserModel extends PrincipalModel {
       String uid,
       String name,
       this.loginDisabled,
-      this.type,
-      this.roles,
-      this.status,
-      this.mobileNumber,
-      this.b2bUnit,
-      this.weChatOpenid,
-      this.weChatHeadImg,
-      this.dingTalkOpenid,
-      this.dingTalkHeadImg,
-      this.dingTalkNickname,
-      this.points = 0})
+        this.type,
+        this.roles,
+        this.status,
+        this.mobileNumber,
+        this.b2bUnit,
+        this.weChatOpenid,
+        this.weChatHeadImg,
+        this.dingTalkOpenid,
+        this.dingTalkHeadImg,
+        this.dingTalkNickname,
+        this.points = 0,
+        this.agent})
       : super(profilePicture: profilePicture, uid: uid, name: name, id: id);
 
   UserModel.empty() {
@@ -132,8 +136,7 @@ class UserModel extends PrincipalModel {
 class CustomerModel extends UserModel {
   // String mobileNumber;
 
-  CustomerModel({
-    int id,
+  CustomerModel({int id,
     MediaModel profilePicture,
     String uid,
     String name,
@@ -141,7 +144,8 @@ class CustomerModel extends UserModel {
     List<RoleModel> roles,
     String mobileNumber,
     int points,
-  }) : super(
+    bool agent})
+      : super(
       id: id,
       profilePicture: profilePicture,
       uid: uid,
@@ -149,7 +153,8 @@ class CustomerModel extends UserModel {
       loginDisabled: loginDisabled,
       roles: roles,
       mobileNumber: mobileNumber,
-      points: points);
+      points: points,
+      agent: agent);
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CustomerModelFromJson(json);
@@ -168,8 +173,7 @@ class B2BCustomerModel extends CustomerModel {
   @JsonKey(toJson: UserGroupModel.listToJson)
   List<UserGroupModel> groups;
 
-  B2BCustomerModel({
-    int id,
+  B2BCustomerModel({int id,
     MediaModel profilePicture,
     String uid,
     String name,
@@ -178,8 +182,8 @@ class B2BCustomerModel extends CustomerModel {
     List<RoleModel> roles,
     this.active,
     this.defaultB2BUnit,
-    this.groups
-  }) : super(
+    this.groups})
+      : super(
     id: id,
     profilePicture: profilePicture,
     uid: uid,

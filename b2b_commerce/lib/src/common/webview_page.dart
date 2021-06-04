@@ -12,10 +12,11 @@ class WebviewPage extends StatefulWidget {
   ///是否重定向到合同列表
   bool needRedirectContractList;
 
-  WebviewPage({Key key,
-    this.url = '',
-    this.needRedirectContractList = true,
-    this.title = ''})
+  WebviewPage(
+      {Key key,
+      this.url = '',
+      this.needRedirectContractList = true,
+      this.title = ''})
       : super(key: key);
 
   @override
@@ -55,12 +56,12 @@ class _WebviewPageState extends State<WebviewPage> {
           hidden: true,
         ),
         onWillPop: () {
-          //签署成功跳转到合同列表页
+          // //签署成功跳转到合同列表页
           if (_goContractListPage && widget.needRedirectContractList) {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => MyContractPage()),
-                ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
+                ModalRoute.withName('/'));
           } else if (needRefresh) {
             Navigator.of(context).pop(true);
           } else {

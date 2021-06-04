@@ -28,7 +28,7 @@ class WechatServiceImpl implements WechatService {
 
     //全局监听微信回调
     weChatResponseEventHandler.listen((res) {
-      print('>>>>>微信回调 ${res}');
+      print('[Fluwx]微信回调:${res.isSuccessful}');
       //支付回调
       if (res is WeChatPaymentResponse) {
         // print('>>>>>微信支付回调 ${res.errStr}');
@@ -37,7 +37,7 @@ class WechatServiceImpl implements WechatService {
       //授权登录回调
       if (res is WeChatAuthResponse) {
         print(
-            '>>>>>微信授权登录回调>>> code:${res.code} , _wechatAuthState: $_wechatAuthState  , state:${res.state} ,${_wechatAuthState == res.state}');
+            '[Fluwx]微信授权登录回调>>> code:${res.code} , _wechatAuthState: $_wechatAuthState  , state:${res.state} ,${_wechatAuthState == res.state}');
         //TODO:回调 Code 请求后端获取对应 access_token
         // Clipboard.setData(ClipboardData(text: '${res.code}'));
         // BotToast.showText(text: 'Code已复制到粘贴板：${res.code}');
@@ -73,6 +73,23 @@ class WechatServiceImpl implements WechatService {
     } else {
       print('error get prepay');
       return null;
+    }
+  }
+
+  ///根据与预支付信息支付(2021年5月31日15:18:33)
+  Future<bool> payBySign(WechatPrepayModel info) async {
+    if (info != null) {
+      return await payWithWeChat(
+          appId: info.appId,
+          partnerId: info.partnerId,
+          prepayId: info.prepayId,
+          packageValue: info.packageValue,
+          nonceStr: info.nonceStr,
+          timeStamp: info.timeStamp,
+          sign: info.sign,
+          signType: info.signType);
+    } else {
+      return false;
     }
   }
 

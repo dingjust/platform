@@ -12,6 +12,7 @@ import 'package:services/services.dart';
 
 import 'order_detail_btn_group.dart';
 import 'order_entry_detail.dart';
+import 'order_payment_info.dart';
 
 ///外接订单详情页
 class ExternalSaleOrderDetailPage extends StatefulWidget {
@@ -70,6 +71,9 @@ class _ExternalSaleOrderDetailPageState
                       ),
                       OrderContractsBlock(
                         agreements: order?.agreements,
+                      ),
+                      OrderPaymentInfo(
+                        order: order,
                       ),
                       _OrderInfo(
                         order: order,
@@ -459,7 +463,7 @@ class _EntriesInfo extends StatelessWidget {
                               children: [
                             TextSpan(
                                 text:
-                                    '￥${(entry.quantity * entry.unitPrice).toStringAsFixed(2)}',
+                                    '￥${(entry?.totalPrimeCost)?.toStringAsFixed(2)}',
                                 style: TextStyle(color: Color(0xffff1744)))
                           ])),
                     ],
