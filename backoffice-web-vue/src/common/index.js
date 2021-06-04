@@ -1282,7 +1282,13 @@ let TENANT_APIS = {
   // 根据渠道码查公司
   searchCustomerListByRecommend: () => '/b2b/companies/all/recommend',
   // 更新渠道码 post params{ id: '', channelCode: ''}
-  updateRecommendCode: () => '/b2b/b2bCustomers/update/channel/code'
+  updateRecommendCode: () => '/b2b/b2bCustomers/update/channel/code',
+
+  /** 代运营审阅 */ 
+  // 查询代运营审阅列表
+  searchAgentOperationReview: () => '/b2b/agentOperation/search',
+  // 审阅通过 put 
+  AgentOperationReviewPass: () => '/b2b/agentOperation/review/pass'
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
@@ -1966,6 +1972,10 @@ let NONE_TENANT_APIS = {
 
   // 获取工厂修改备份
   getFactoryBackups: (companyCode) => '/b2b/factories/backups/' + companyCode,
+
+  /** 代运营 */
+  // 提交代运营申请 post data {}
+  AgentOperationSubmit: () => '/b2b/agentOperation/submit'
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

@@ -895,6 +895,10 @@ const router = new Router({
           path: 'factory/review',
           name: '工厂审阅',
           component: () => import(/* webpackChunkName: 'task' */ '@/views/task/factory-review/FactoryReview')
+        }, {
+          path: 'agent-operation/review',
+          name: '代运营审阅',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/agent-operation/AgentOperationReview')
         }
       ]
     },

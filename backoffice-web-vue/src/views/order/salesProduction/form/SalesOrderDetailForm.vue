@@ -64,6 +64,7 @@
             <h6 v-html="getHtmlText(form.payPlan.previewText)"></h6>
           </el-popover>
         </template>
+        <order-pay-detail :formData="form" style="margin-left: 24px;" from="SALES_ORDER"/>
       </el-col>
       <el-col :span="6">
         <div class="info-box">
@@ -95,6 +96,7 @@
   import {
     PayPlanInfo
   } from '@/components/'
+  import OrderPayDetail from '@/views/order/salesProduction/components/OrderPayDetail'
 
   export default {
     name: 'SalesOrderDetailForm',
@@ -129,6 +131,9 @@
       },
       // 销售总价
       totalPrice: function () {
+        if (this.form.totalAmount) {
+          return this.form.totalAmount;
+        }
         let total = 0;
         if (this.form.taskOrderEntries != null) {
           this.form.taskOrderEntries.forEach(element => {
@@ -174,7 +179,8 @@
       PurchaseOrderInfoContract,
       PersonnelSelection,
       PayPlanInfo,
-      ProductionContract
+      ProductionContract,
+      OrderPayDetail
     },
     props: {
       form: {

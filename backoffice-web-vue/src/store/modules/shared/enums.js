@@ -1290,8 +1290,12 @@ const state = {
       name: '作废协议'
     },
     {
-      code: 'UNKOWN',
-      name: ''
+      code: 'DYYXY',
+      name: '代运营协议'
+    },
+    {
+      code: 'DYYKJXY',
+      name: '代运营框架协议'
     }
   ],
   // 支付类型
@@ -2335,6 +2339,18 @@ const state = {
     {
       code: 'MULTIPLE_COLOR',
       name: '多色'
+    }
+  ],
+  PayType: [
+    {
+      code: 'WECHAT',
+      name: '微信钱包'
+    }, {
+      code: 'ALIPAY',
+      name: '支付宝钱包'
+    }, {
+      code: 'BANK',
+      name: '银行卡'
     }
   ]
 };

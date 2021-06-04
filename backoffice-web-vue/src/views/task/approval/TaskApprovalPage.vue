@@ -79,24 +79,17 @@ import brands from '@/store/modules/user/brands';
     },
     methods: {
       ...mapActions({
-        search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
-      onSearch(page, size) {
-        const keyword = this.queryFormData.keyword;
-        const url = this.apis().getAuditList();
-        this.search({
-          url,
-          keyword,
-          page,
-          size
-        });
-      },
       onAdvancedSearch(page, size) {
         if (this.queryFormData.users.length <= 0 && this.queryFormData.depts.length <= 0) {
           this.onResetQuery();
         }
-        const query = this.queryFormData;
+        let query = Object.assign({}, this.queryFormData);
+        if (this.queryFormData.searchType === 'AUDITING') {
+          query.state = 'AUDITING'
+        }
+
         const url = this.apis().getAuditList();
         this.searchAdvanced({
           url,

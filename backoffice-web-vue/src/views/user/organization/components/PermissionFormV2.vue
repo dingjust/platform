@@ -43,7 +43,7 @@
               </el-checkbox-group>
             </div>
             <div style="width: 50%; padding: 10px 0px 15px 20px;">
-              <el-checkbox-group v-model="checkedPer[checkSecondData.id]" v-if="checkSecondData.id" @change="handleChangePer">
+              <el-checkbox-group v-model="checkedPer[checkSecondData.id]" v-if="showDataPer(checkSecondData)" @change="handleChangePer">
                 <el-checkbox v-for="val in dataPermission" :label="val.code" :key="val.code">{{val.name}}</el-checkbox>                                          
               </el-checkbox-group>
             </div>
@@ -76,6 +76,9 @@ export default {
     }
   },
   methods: {
+    showDataPer (checkSecondData) {
+      return checkSecondData.id && checkSecondData.dataPermissionAvl;
+    },
     handleCheckAllChange (event, first) {
       if (event) {
         first.children.forEach(item => {

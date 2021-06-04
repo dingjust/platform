@@ -53,6 +53,7 @@
             </h6>
           </el-col>
         </el-row> -->
+        <order-pay-detail v-if="slotData.payOnline != null" :formData="slotData" style="margin: 10px 0px 0px 24px;"/>
       </el-col>
       <!-- <el-col :span="10">
         <div class="info-box">
@@ -147,6 +148,7 @@
 
 <script>
   import ProductionContract from '@/views/order/salesProduction/components/ProductionContract'
+  import OrderPayDetail from '@/views/order/salesProduction/components/OrderPayDetail'
   import {
     PayPlanInfo
   } from '@/components/'
@@ -155,11 +157,15 @@
     name: 'OutboundOrderTopInfo',
     components: {
       PayPlanInfo,
-      ProductionContract
+      ProductionContract,
+      OrderPayDetail
     },
     props: ['slotData', 'payPlan'],
     computed: {
       totalAmount: function () {
+        if (this.slotData.totalAmount) {
+          return this.slotData.totalAmount;
+        }
         let totalAmount = 0;
         this.slotData.taskOrderEntries.forEach(item => {
           totalAmount += (item.unitPrice * item.quantity);

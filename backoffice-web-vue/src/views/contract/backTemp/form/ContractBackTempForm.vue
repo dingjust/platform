@@ -9,6 +9,14 @@
           <el-row type="flex">
             <el-input v-model="detail.title" placeholder=""></el-input>
           </el-row>
+          <template v-if="isCreate">
+            <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
+              <h6>模板类型</h6>
+            </el-row>
+            <el-row type="flex">
+              <el-input v-model="detail.type" placeholder=""></el-input>
+            </el-row>
+          </template>
           <el-row type="flex" justify="start" align="middle" style="margin-top: 20px">
             <h6>固定条款</h6>
           </el-row>
@@ -39,7 +47,7 @@
       </el-tab-pane>
     </el-tabs>
     <el-row type="flex" justify="center" align="middle">
-      <el-button type="primary" class="save-btn" @click="onSave">修改</el-button>
+      <el-button type="primary" class="save-btn" @click="onSave">{{isCreate ? '创建' : '修改'}}</el-button>
     </el-row>
   </div>
 </template>
@@ -52,11 +60,11 @@ import {
 
 export default {
   name: 'ContractBackTempForm',
-  props: ['detail'],
+  props: ['detail', 'isCreate'],
   components: { Editor, Viewer },
   methods: {
     onSave () {
-      this.$confirm('是否执行修改 ' + this.detail.title +' 模板操作?', '提示', {
+      this.$confirm('是否执行' + (this.isCreate ? '创建 ' : '修改 ') + this.detail.title +' 模板操作?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -66,7 +74,7 @@ export default {
     },
     async _onSave () {
       const form = {
-        id: this.detail.id,
+        id: this.detail.id ? this.detail.id : '',
         title: this.detail.title,
         code: this.detail.code,
         header: this.detail.header,
