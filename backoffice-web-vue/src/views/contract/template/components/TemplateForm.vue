@@ -48,7 +48,7 @@
             </el-col>
           </el-row>
           <el-row class="contract_custom-row">
-            <el-input placeholder="请输入内容" size="mini" v-model="tempName" @blur="checkTempName()"><template
+            <el-input placeholder="请输入内容" size="mini" v-model="tempName" @blur="inputBlur"><template
                 slot="prepend">合同模板名称</template>
             </el-input>
             <h6 style="color: #f56c6c; margin-left: 120px">
@@ -128,13 +128,14 @@
       onBack() {
         this.fn.closeSlider(true);
       },
-      async onSave() {
-        // if (this.tempName == null || this.tempName == '') {
-        //   this.validateText = '请输入模板名称';
-        //   // this.$message.error('请完善模板信息');
-        //   return;
-        // }
-        // this.checkTempName();
+      onSave() {
+        this.checkTempName().then(res => {
+          if (res) {
+            this._onSave();
+          }
+        })
+      },
+      async _onSave() {
         if (!this.passCheck) {
           // this.validateText = '模板名称重复，请重新输入';
           this.$message.error("请完善页面信息");
@@ -162,59 +163,34 @@
         this.$emit("contractTemplateSelect");
         this.fn.closeSlider(true);
       },
-      // async getTemplateListPt () {
-      //   const url = this.apis().getTemplatesListPt();
-      //   const result = await http.post(url, {
-      //     keyword: ''
-      //   }, {
-      //     page: 0,
-      //     size: 10
-      //   });
-      //   this.mockData = result.content;
-      //   this.sortData();
-      // },
-      // sortData () {
-      //   let arr = [];
-      //   this.mockData.map(value => {
-      //     if (value.title === '委托生产合同') {
-      //       arr[0] = value;
-      //     }
-      //     if (value.title === '采购订单') {
-      //       arr[1] = value;
-      //     }
-      //     if (value.title === '框架协议') {
-      //       arr[2] = value;
-      //     }
-      //     if (value.title === '补充协议') {
-      //       arr[3] = value;
-      //     }
-      //   });
-      //   this.mockData = arr;
-      //   // this.onSelect(this.mockData[0]);
-      // },
-      async checkTempName() {
-        if (
-          this.tempName == null ||
-          this.tempName.replace(/(^\s*)|(\s*$)/g, "").length === 0
-        ) {
+      inputBlur () {
+        if (this.tempName == null || this.tempName.replace(/(^\s*)|(\s*$)/g, "").length === 0) {
           this.validateText = "请输入模板名称";
-          return;
+        } else {
+          this.validateText = "";
         }
+      },
+      async checkTempName() {
+        if (this.tempName == null || this.tempName.replace(/(^\s*)|(\s*$)/g, "").length === 0) {
+          this.validateText = "请输入模板名称";
+          return false;
+        }
+
         let formData = {
           name: this.tempName,
         };
         const url = this.apis().checkTempName();
         const result = await http.post(url, formData);
+
         if (result.code == 1) {
           this.passCheck = true;
+          return true;
         } else if (result.code == 0) {
           this.passCheck = false;
           this.validateText = "模板名称重复，请重新输入";
         }
-        // this.passCheck = result;
-        // if (!this.passCheck) {
-        //   this.validateText = '模板名称重复，请重新输入';
-        // }
+
+        return false;
       },
     },
     data() {
@@ -241,16 +217,6 @@
         remarks: "",
         tempType: "",
         tempCode: "",
-        // slotData: {
-        //   title: '',
-        //   content: '',
-        //   customizeContent: '',
-        //   type: '',
-        //   available: '',
-        //   originalTmplCode: '',
-        //   remark: '',
-        //   header: ''
-        // },
         titleName: "",
         passCheck: false,
         validateText: "",

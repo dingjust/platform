@@ -154,7 +154,7 @@
     </el-card>
     <el-dialog :visible.sync="saleProdutionVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <outbound-order-select-page v-if="saleProdutionVisible" @setSelectOrder="setSelectOrder" />
+      <outbound-order-select-page-v-2 v-if="saleProdutionVisible" @onSelect="onSelect" :singleChoice="true" :customQueryFormData="queryFormData"/>
     </el-dialog>
     <el-dialog :visible.sync="purchaseVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -169,10 +169,8 @@
     ImagesUpload,
     PersonnalSelectionV2
   } from '@/components'
-  import {
-    OutboundOrderSelectPage
-  } from '@/views/order/salesProduction/outbound-order/index.js'
   import PurchaseOrderSelectPage from '@/views/purchase/order/components/PurchaseOrderSelectPage'
+  import OutboundOrderSelectPageV2 from '@/views/order/salesProduction/outbound-order/components/OutboundOrderSelectPageV2.vue'
   export default {
     name: 'PaymentRequestForm',
     props: {
@@ -190,9 +188,9 @@
     components: {
       PersonnelSelection,
       ImagesUpload,
-      OutboundOrderSelectPage,
       PersonnalSelectionV2,
-      PurchaseOrderSelectPage
+      PurchaseOrderSelectPage,
+      OutboundOrderSelectPageV2
     },
     computed: {
 
@@ -219,7 +217,9 @@
           return parseFloat(data);
         }
       },
-      setSelectOrder(row) {
+      onSelect(selection) {
+        let row = selection[0];
+
         this.saleProdutionVisible = false;
         this.formData.productionOrder.id = row.id;
         this.formData.productionOrder.code = row.code;
@@ -485,7 +485,15 @@
           remark: '',
           requestVouchers: []
         },
-        deptName: ''
+        deptName: '',
+        queryFormData: {
+          keyword: '',
+          targetCooperator: '',
+          merchandiser: '',
+          state: 'AUDIT_PASSED',
+          name: '',
+          merchandiserPk: 'isMyself'
+        },
       }
     },
     watch: {
