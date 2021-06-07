@@ -349,8 +349,10 @@ export default {
       this.formData.entries.splice(index + 1, 0, Object.assign({}, row));
     },
     onDelete (index, row) {
-      if (row.relationId) {
-        this.$confirm('删除此行将同时删除已选择关联发货单，是否继续？', '提示', {
+      if (row.isOutorPending) {
+        this.formData.entries.splice(index, 1);
+      } else if (row.relationId) {
+        this.$confirm('删除此行将同时删除已选择关联订单，是否继续？', '提示', {
           confirmButtonText: '是',
           cancelButtonText: '否',
           type: 'warning'

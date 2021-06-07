@@ -13,7 +13,7 @@
           </el-form-item>
         </div>
         <div>
-          <el-button type="primary" class="select-btn" @click="cooperatorVisible = true" :disabled="!canSelectCooperator">选择</el-button>
+          <el-button type="primary" class="select-btn" @click="cooperatorVisible = true" :disabled="canSelectCooperator">选择</el-button>
         </div>
       </div>
     </el-row>
@@ -35,19 +35,34 @@
         {{tag.code}}
       </el-tag>
     </el-row>
+    <el-row v-if="formData.salesProductionOrder" style="margin: 10px 0px 0px 10px;">
+      {{formData.salesProductionOrder.showName}}：
+      <el-tag closable @close="closeSalesProductionOrder" style="margin-right: 10px;">
+        {{formData.salesProductionOrder.id}}
+      </el-tag>
+    </el-row>
     <el-dialog :visible.sync="deliveryVisible" width="80%" append-to-body class="purchase-dialog" :close-on-click-modal="false">
       <delivery-orders-page v-if="deliveryVisible" :isSelection="true" @onSelect="onSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="shippingListVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <shipping-orders-page :mode="mode" v-if="shippingListVisible" :isSelection="true" @onSelect="onSelect"/>
     </el-dialog>
+    <el-dialog :visible.sync="outboundVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <outbound-order-select-page-v2 v-if="outboundVisible" :singleChoice="true" @onSelect="onSelect"/>
+    </el-dialog>
+    <el-dialog :visible.sync="pendingVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <pending-sales-select-page v-if="pendingVisible" :singleChoice="true" @onSelect="onSelect"/>
+    </el-dialog>
     <el-dialog :visible.sync="cooperatorVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <supplier-select v-if="cooperatorVisible" @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-dialog :visible.sync="selectVisible" title="选择订单类型" width="400px" append-to-body :close-on-click-modal="false">
+      <h6 style="color: #F56C6C">已选择外发/外接订单的情况下，不能再添加发货及出货单</h6>
       <el-row type="flex" justify="space-around" align="middle">
-        <el-button size="medium" plain class="order-btn" @click="onShipping">发货单</el-button>
-        <el-button size="medium" plain class="order-btn" @click="onDelivery">出货单</el-button>
+        <el-button size="medium" plain class="order-btn" :disabled="formData.salesProductionOrder != null" @click="onShipping">发货单</el-button>
+        <el-button size="medium" plain class="order-btn" :disabled="formData.salesProductionOrder != null" @click="onDelivery">出货单</el-button>
+        <el-button size="medium" plain class="order-btn" @click="onOutbound">外发单</el-button>
+        <el-button size="medium" plain class="order-btn" @click="onPending">外接单</el-button>
       </el-row>
     </el-dialog>
   </div>
@@ -57,6 +72,8 @@
 import ShippingOrdersPage from '@/views/shipping-receipt/shipping-order/ShippingOrdersPage'
 import DeliveryOrdersPage from '@/views/order/delivery-recon/delivery/DeliveryOrdersPage'
 import { SupplierSelect } from '@/components'
+import OutboundOrderSelectPageV2 from '@/views/order/salesProduction/outbound-order/components/OutboundOrderSelectPageV2'
+import PendingSalesSelectPage from '@/views/order/salesProduction/components/PendingSalesSelectPage'
 
 export default {
   name: "ReconciliationOrdersFormV2Header",
@@ -69,11 +86,19 @@ export default {
   components: {
     DeliveryOrdersPage,
     SupplierSelect,
-    ShippingOrdersPage
+    ShippingOrdersPage,
+    OutboundOrderSelectPageV2,
+    PendingSalesSelectPage
   },
   computed: {
     canSelectCooperator: function () {
-      return this.formData.fastShippingSheets.length <= 0 && this.formData.shippingSheets.length <= 0;
+      if (this.formData.salesProductionOrder) {
+        return true;
+      }
+      if (this.formData.fastShippingSheets.length > 0 || this.formData.shippingSheets.length > 0) {
+        return true;
+      }
+      return false;
     }
   },
   data () {
@@ -82,6 +107,8 @@ export default {
       cooperatorVisible: false,
       selectVisible: false,
       shippingListVisible: false,
+      outboundVisible: false,
+      pendingVisible: false,
       mode: 'export'
     }
   },
@@ -109,9 +136,89 @@ export default {
           }
         }
         this.deliveryVisible = false;
+      } else if (this.formData.type === 'outbound') {
+        this.$set(this.formData, 'salesProductionOrder', {
+          id: selection[0].id,
+          code: selection[0].code,
+          showName: '外发订单'
+        })
+
+        this.formData.cooperator = {
+          id: selection[0].targetCooperator.id,
+          name: selection[0].targetCooperator.partner.name,
+          approvalStatus: selection[0].targetCooperator.partner.approvalStatus
+        }
+
+        this.getOutboundDetail(selection[0].id)
+      } else if (this.formData.type === 'pending') {
+        this.$set(this.formData, 'salesProductionOrder', {
+          id: selection[0].id,
+          code: selection[0].code,
+          showName: '外接订单'
+        })
+        if (selection[0].originCompany) {
+          this.formData.cooperator = {
+            id: selection[0].originCooperator.id,
+            name: selection[0].originCooperator.partner.name,
+            approvalStatus: selection[0].originCooperator.partner.approvalStatus
+          }
+        } else {
+          this.formData.cooperator = {
+            id: selection[0].targetCooperator.id,
+            name: selection[0].targetCooperator.partner.name,
+            approvalStatus: selection[0].targetCooperator.partner.approvalStatus
+          }
+        }
+
+        this.getPendingDetail(selection[0].id)
       }
     },
-    appendEntries (selection) {
+    async getPendingDetail(id) {
+      const url = this.apis().getSalesProductionOrderDetails(id);
+      const result = await this.$http.get(url);
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+
+      this.appendEntries(result.data.taskOrderEntries.map(item => {
+        return {
+          id: item.id,
+          product: item.product,
+          productionTaskOrder: {
+            orderQuantity: item.quantity,
+          },
+          deliveryDate: item.deliveryDate,
+          loanAmount: item.totalPrimeCost
+        }
+      }), true)
+
+      this.pendingVisible = false;
+    },
+    async getOutboundDetail(id) {
+      const url = this.apis().getoutboundOrderDetail(id);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+
+      this.appendEntries(result.data.taskOrderEntries.map(item => {
+        return {
+          id: item.id,
+          product: item.product,
+          productionTaskOrder: {
+            orderQuantity: item.quantity,
+          },
+          deliveryDate: item.deliveryDate,
+          loanAmount: item.totalPrimeCost
+        }
+      }), true)
+
+      this.outboundVisible = false;
+    },
+    appendEntries (selection, isOutorPending) {
       // 过滤已经没有选择的发货单的对账行
       this.formData.entries = this.formData.entries.filter(item => {
         if (item.relationId) {
@@ -136,7 +243,7 @@ export default {
           waveBand: '',
           orderItemNo: '',
           customizedMode: '',
-          deliveryDate: '',
+          deliveryDate: item.deliveryDate ? item.deliveryDate : '',
           contractDate: '',
           orderQuantity: item.productionTaskOrder ? item.productionTaskOrder.totalQuantity : '',
           cutQuantity: '',
@@ -144,12 +251,13 @@ export default {
           storageQuantity: '',
           returnQuantity: '',
           unitContractPrice: '',
-          loanAmount: '',
+          loanAmount: item.loanAmount ? item.loanAmount : '',
           expressFee: '',
           deductionAmount: '',
-          settlementAmount: '',
+          settlementAmount: item.settlementAmount ? item.settlementAmount : '',
           remarks: '',
-          relationId: item.id
+          relationId: item.id,
+          isOutorPending: isOutorPending
         })
       })
     },
@@ -164,6 +272,9 @@ export default {
       if (index > -1) {
         this.formData.fastShippingSheets.splice(index, 1);
       }
+    },
+    closeSalesProductionOrder () {
+      this.$delete(this.formData, 'salesProductionOrder');
     },
     onSuppliersSelect (val) {
       if (val.id) {
@@ -182,6 +293,16 @@ export default {
       this.formData.type = 'shippingSheets';
       this.selectVisible = false;
       this.shippingListVisible = true;
+    },
+    onOutbound () {
+      this.formData.type = 'outbound';
+      this.selectVisible = false;
+      this.outboundVisible = true;
+    },
+    onPending () {
+      this.formData.type = 'pending';
+      this.selectVisible = false;
+      this.pendingVisible = true;
     }
   }
 };
