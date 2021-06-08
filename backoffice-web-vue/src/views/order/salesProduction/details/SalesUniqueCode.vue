@@ -10,12 +10,10 @@
     </el-row>
     <el-row type="flex" style="margin-left:20px" align="middle">
       <h6 style="margin: 0px 10px 0px 0px;">{{formData.uniqueCode}}</h6>
-      <el-button type="text" @click="onCopy">复制</el-button>
     </el-row>
     <el-row type="flex" style="margin-left:20px">
       <div id="qrCode" ref="qrCodeDiv"></div>
     </el-row>
-    <textarea v-show="false" cols="20" rows="10" id="biao1" v-model="formData.uniqueCode"></textarea>
   </div>
 </template>
 
@@ -37,11 +35,6 @@ export default {
           correctLevel: QRCode.CorrectLevel.H //容错率，L/M/H
         });
       })
-    },
-    onCopy () {
-      var Url2=document.getElementById("biao1");
-      Url2.select(); // 选择对象
-      document.execCommand("Copy"); // 执行浏览器复制命令
     }
   },
   mounted () {

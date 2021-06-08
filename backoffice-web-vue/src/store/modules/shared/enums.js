@@ -2012,7 +2012,7 @@ const state = {
     code: 'PAID',
     name: '已付款'
   }],
-  // 付款类型
+  // 付款类型(付款申请单)
   PaymentMethod: [{
     code: 'E_BANK',
     name: '网银'
@@ -2352,7 +2352,37 @@ const state = {
       code: 'BANK',
       name: '银行卡'
     }
-  ]
+  ],
+  PayMethod: [
+    {
+      code: 'E_BANK',
+      name: '网银'
+    }, {
+      code: 'CASH',
+      name: '现金'
+    }, {
+      code: 'ACCEPTANCE',
+      name: '承兑'
+    }, {
+      code: 'ALIPAY',
+      name: '支付宝'
+    }, {
+      code: 'WECHAT_PAY',
+      name: '微信支付'
+    }, {
+      code: 'WECHAT_PAY_NATIVE,',
+      name: '微信原生支付'
+    }, {
+      code: 'WECHAT_PAY_APP',
+      name: '微信APP支付'
+    }, {
+      code: 'WECHAT_PAY_QRCODE',
+      name: '微信二维码支付'
+    }, {
+      code: 'WECHAT_PAY_MP',
+      name: '微信内部支付'
+    }
+  ],
 };
 
 const mutations = {};
