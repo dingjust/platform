@@ -15,7 +15,8 @@ class UriHelper {
     Uri uriObj = Uri.tryParse(uri);
     if (uriObj != null) {
       //校验Origin及一级路由为app
-      if (uriObj.origin == GlobalConfigs.CONTEXT_PATH &&
+      // if (uriObj.origin == GlobalConfigs.CONTEXT_PATH &&
+      if (uriObj.origin == 'https://ht.nbyjy.net' &&
           uriObj.pathSegments.first == 'app') {
         //暂停相机
         onCameraPause?.call();

@@ -66,11 +66,22 @@ class _ExternalSaleOrderDetailPageState
                       _EntriesInfo(
                         order: order,
                       ),
-                      _MainInfo(
+                      MainInfo(
                         order: order,
                       ),
                       OrderContractsBlock(
                         agreements: order?.agreements,
+                        beforeTap: recordRouteInfo,
+                      ),
+                      DocSignaturesBlock(
+                        callback: () {
+                          setState(() {
+                            order = null;
+                            callBackPop = true;
+                          });
+                        },
+                        beforeTap: recordRouteInfo,
+                        sheets: order.reconciliationSheetList,
                       ),
                       OrderPaymentInfo(
                         order: order,
@@ -146,13 +157,21 @@ class _ExternalSaleOrderDetailPageState
       return true;
     }
   }
+
+  ///记录路由信息
+  void recordRouteInfo() {
+    ///缓存路由(签合同跳转)
+    NavigatorStack.instance.setCacheRoute(CacheRouteInfo(
+        route: AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+        arguments: {'id': widget.id, 'title': widget.titile}));
+  }
 }
 
 ///主要信息
-class _MainInfo extends StatelessWidget {
+class MainInfo extends StatelessWidget {
   final SalesProductionOrderModel order;
 
-  const _MainInfo({Key key, this.order}) : super(key: key);
+  const MainInfo({Key key, this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

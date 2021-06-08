@@ -88,16 +88,20 @@ class ExternalSaleOrderItem extends StatelessWidget {
                     flex: 3,
                     child: RichText(
                         text: TextSpan(
-                            text: e.batch == 1 ? '定金：' : '尾款：',
+                            text: (e.batch == 1 ? '定金：' : '尾款：'),
                             style: TextStyle(color: Colors.black87),
                             children: [
-                          TextSpan(
-                              text: '${CmtPaymentStateLocalizedMap[e.state]}',
-                              style: TextStyle(
-                                  color: e.state == CmtPaymentState.PAID
-                                      ? Colors.green
-                                      : Colors.orange))
-                        ]))),
+                              TextSpan(
+                                  text: '￥${e.payAmount}',
+                                  style: TextStyle(color: Colors.red)),
+                              TextSpan(
+                                  text: '(${CmtPaymentStateLocalizedMap[e
+                                      .state]})',
+                                  style: TextStyle(
+                                      color: e.state == CmtPaymentState.PAID
+                                          ? Colors.green
+                                          : Colors.orange))
+                            ]))),
                 e.canPay
                     ? GestureDetector(
                         onTap: () {
@@ -107,8 +111,13 @@ class ExternalSaleOrderItem extends StatelessWidget {
                               .then((needRefresh) {
                             //刷新
                             if (needRefresh != null && needRefresh) {
-                              Provider.of<ExternalSaleOrdersState>(context)
-                                  .clear();
+                              if (type == SaleOrderItemType.IMPORT)
+                                //外接订单列表刷新
+                                Provider.of<ExternalSaleOrdersState>(context)
+                                    .clear();
+                              else
+                                //外发订单列表刷新
+                                Provider.of<OutOrdersState>(context).clear();
                             }
                           });
                         },
@@ -280,7 +289,7 @@ class _Row1 extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(
               color:
-              isDone ? Color.fromRGBO(225, 243, 216, 1) : Colors.grey[200],
+                  isDone ? Color.fromRGBO(225, 243, 216, 1) : Colors.grey[200],
               width: 0.5),
           color: isDone ? Color.fromRGBO(240, 249, 235, 1) : Colors.grey[200]),
     );

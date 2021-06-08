@@ -1,9 +1,12 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+
+import 'sales_production/external_sale_order/external_sale_order_detail.dart';
 
 ///订单导入页面
 class OrderImportPage extends StatefulWidget {
@@ -16,8 +19,6 @@ class OrderImportPage extends StatefulWidget {
 }
 
 class _OrderImportPageState extends State<OrderImportPage> {
-  TextEditingController _textEditingController;
-
   int checkCode = 0;
   String checkResult = '';
 
@@ -25,7 +26,6 @@ class _OrderImportPageState extends State<OrderImportPage> {
 
   @override
   void initState() {
-    _textEditingController = TextEditingController();
     super.initState();
   }
 
@@ -46,7 +46,6 @@ class _OrderImportPageState extends State<OrderImportPage> {
             body: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  // borderRadius: BorderRadius.circular(20)
                 ),
                 child: Column(
                   children: [_buildBody()],
@@ -54,7 +53,19 @@ class _OrderImportPageState extends State<OrderImportPage> {
             bottomNavigationBar: _buildBottomBtn(),
           );
         } else {
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('订单导入'),
+              elevation: 0.5,
+              brightness: Brightness.light,
+              centerTitle: true,
+            ),
+            body: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Center(child: CircularProgressIndicator())),
+          );
         }
       },
     );
@@ -100,7 +111,7 @@ class _OrderImportPageState extends State<OrderImportPage> {
   Future<SalesProductionOrderModel> _getData() async {
     if (order == null) {
       SalesProductionOrderModel model =
-          await ExternalSaleOrderRespository().uniqueCodePreview(widget.code);
+          await ExternalSaleOrderRespository().qrCodePreview(widget.code);
       if (model != null) {
         order = model;
       }
@@ -111,15 +122,17 @@ class _OrderImportPageState extends State<OrderImportPage> {
   ///确定
   void _onSubmit() async {
     Function cancelFunc =
-        BotToast.showLoading(clickClose: true, crossPage: false);
+    BotToast.showLoading(clickClose: true, crossPage: false);
 
-    BaseResponse response = await ExternalSaleOrderRespository()
-        .uniqueCodeImport(_textEditingController.text);
+    BaseResponse response = await ExternalSaleOrderRespository().qrCodeImport(
+        code: widget.code, merchandiser: UserBLoC.instance.currentUser.id);
     cancelFunc.call();
     //导入成功
     if (response != null && response.code == 1) {
       BotToast.showText(text: '导入成功');
-      Navigator.of(context).pop(true);
+      Navigator.of(context).pushReplacementNamed(
+          AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+          arguments: {'id': order.id, 'title': '外发订单明细'});
     } else if (response != null && response.code == 0) {
       BotToast.showText(text: '${response.msg}');
     } else {
@@ -137,27 +150,36 @@ class _OrderInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: ListView(
-        children: [
-          Row(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: ListView(
             children: [
-              Expanded(flex: 1, child: Text('订单号：${order.code}')),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Expanded(flex: 1, child: Text('订单号：${order.code}')),
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 1,
+                        child: Text(
+                          '合作商：${order.originCooperator.name}',
+                        )),
+                  ],
+                ),
+              ),
+              Divider(),
+              for (final t in order.taskOrderEntries ?? []) _buildProductRow(t),
+              MainInfo(
+                order: order,
+              ),
             ],
-          ),
-          Divider(),
-          Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: Text(
-                    '合作商：${order.originCooperator.name}',
-                  )),
-            ],
-          ),
-          Divider(),
-          for (final t in order.taskOrderEntries ?? []) _buildProductRow(t)
-        ],
       ),
     ));
   }
@@ -165,7 +187,7 @@ class _OrderInfo extends StatelessWidget {
   Widget _buildProductRow(ProductionTaskOrderModel entry) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       color: Colors.grey[100],
       child: Row(
         children: [

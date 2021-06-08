@@ -27,6 +27,16 @@ class SaleProductionApis {
         return '/{baseSiteId}/sales/production/order/create/from/uniqueCode/$code';
       };
 
+  ///外发订单-二维码-检索
+  static get qrCodePreview => (code) {
+        return '/{baseSiteId}/sales/production/order/preview/$code';
+      };
+
+  ///外发订单-二维码-导入
+  static get qrCodeImport => (code) {
+        return '/{baseSiteId}/sales/production/order/import/from/uniqueCode/$code';
+      };
+
   /// 外发订单列表
   static get outOrderList => '/{baseSiteId}/out/order/search';
 

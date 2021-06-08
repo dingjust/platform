@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:core/core.dart';
+import 'package:services/services.dart';
 
 class OrderPaymentInfo extends StatelessWidget {
   final SalesProductionOrderModel order;
@@ -33,16 +34,29 @@ class OrderPaymentInfo extends StatelessWidget {
 
   ///线上支付信息
   List<Widget> _buildOnlineRows() {
-    if (order.paymentAccount == null) {
-      return [];
+    //罚款方不显示收款人信息
+    if (order.paymentAccount == null ||
+        UserBLoC.instance.currentUser.companyCode ==
+            order?.originCompany?.uid) {
+      return [...buildPayRows()];
     }
 
     return [
       buildRow('收款人姓名', '${order.paymentAccount.name}'),
       buildRow('收款开户行', '${order.paymentAccount.serviceProvider}'),
       buildRow('收款卡号', '${order.paymentAccount.no}'),
+      buildServiceFree(),
       ...buildPayRows()
     ];
+  }
+
+  ///代运营服务费用
+  Widget buildServiceFree() {
+    if (order.agentOrder) {
+      return buildRow('代运营服务费用比例',
+          '${(order.serviceFeePercent * 100).toStringAsFixed(2)}%');
+    }
+    return Container();
   }
 
   Widget buildRow(String title, String val,
