@@ -19,6 +19,7 @@
           <span>{{scope.row.name}}<span v-if="scope.row.root" style="color: #F56C6C"> (主账号)</span></span>
         </template>
       </el-table-column>
+      <el-table-column label="id" prop="id"></el-table-column>
       <el-table-column label="uid" prop="uid"></el-table-column>
       <el-table-column label="联系方式" prop="contactPhone"></el-table-column>
     </el-table>
@@ -72,7 +73,7 @@ export default {
       this.currentRow = val;
     },
     onSelect () {
-      this.$emit('setRecommendCode', this.currentRow.uid);
+      this.$emit('setRecommendCode', this.currentRow);
     }
   },
   data () {

@@ -69,6 +69,10 @@
       },
       form: {
         type: Object
+      },
+      fromOut: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -89,7 +93,7 @@
         // return this.form.sendBy && this.form.sendBy.id && (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED');
       },
       canCreateProfitLoss: function () {
-        return !this.form.profitLossAnalysis && this.showProfitLoss;
+        return !this.form.profitLossAnalysis && this.showProfitLoss && !this.fromOut;
       },
       isSelfCreated: function () {
         return !this.form.originCompany;
