@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +20,11 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
 
   final bool isEditable;
 
-  const ProductionProgressOrderFormPage(
-      {Key key,
-      this.progress,
-      this.model,
-      this.colorSizeEntries,
-      this.isEditable = false})
+  const ProductionProgressOrderFormPage({Key key,
+    this.progress,
+    this.model,
+    this.colorSizeEntries,
+    this.isEditable = false})
       : super(key: key);
 
   @override
@@ -32,8 +32,7 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
       _ProductionProgressOrderFormPageState();
 }
 
-class _ProductionProgressOrderFormPageState
-    extends State<ProductionProgressOrderFormPage> {
+class _ProductionProgressOrderFormPageState extends State<ProductionProgressOrderFormPage> {
   FocusNode _remarksFocusNode = FocusNode();
   TextEditingController _remarksController = TextEditingController();
   List<ColorSizeInputEntry> _colorSizeEntries = [];
@@ -47,7 +46,10 @@ class _ProductionProgressOrderFormPageState
       //回显颜色尺码数量
       Map<String, int> entriesMap = new Map();
 
-      _colorSizeEntries = widget.model.entries.map((e) => ColorSizeInputEntry(color: e.color,size: e.size,quantity: e.quantity)).toList();
+      _colorSizeEntries = widget.model.entries
+          .map((e) => ColorSizeInputEntry(
+              color: e.color, size: e.size, quantity: e.quantity))
+          .toList();
 //      widget.model.entries.forEach((element) {
 //        entriesMap['${element.color}-${element.size}'] = element.quantity;
 //      });
@@ -58,8 +60,6 @@ class _ProductionProgressOrderFormPageState
 
       _remarksController.text = widget.model.remarks;
     }
-
-
   }
 
   @override
@@ -72,18 +72,7 @@ class _ProductionProgressOrderFormPageState
                 ? '编辑'
                 : ''}'),
         elevation: 0.5,
-      ),
-      bottomNavigationBar: Container(
-        height: 50,
-        width: double.infinity,
-        child: FlatButton(
-          onPressed: () => _save(),
-          color: const Color.fromRGBO(255, 219, 0, 1),
-          child: Text(
-            '保存',
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
+        actions: [TextButton(onPressed: _save, child: Text('保存'))],
       ),
       body: Container(
         color: Colors.white,
@@ -221,7 +210,7 @@ class _ProductionProgressOrderFormPageState
                             widget.model.reportTime == null
                                 ? '选取'
                                 : DateFormatUtil.formatYMD(
-                                    widget.model.reportTime),
+                                widget.model.reportTime),
                             style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.grey),
@@ -261,6 +250,8 @@ class _ProductionProgressOrderFormPageState
 
   //保存
   void _save() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     if (widget.model.reportTime == null) {
       BotToast.showText(text: '请填写上报时间');
       return;
@@ -276,24 +267,31 @@ class _ProductionProgressOrderFormPageState
 
     widget.model.remarks = _remarksController.text;
 
-    showConfirmDialog(false, message: '是否确认保存？', confirm: () async {
-      int id = widget.progress.id;
-      var result;
-      if (widget.isEditable) {
-        result = await ProgressOrderRepository()
-            .updateProductionProgressOrder(id, widget.model.id, widget.model);
-      } else {
-        result = await ProgressOrderRepository()
-            .createProductionProgressOrder(id, widget.model);
-      }
+    DialogHelper.showConfirm(
+        title: '是否确认保存？',
+        content: '',
+        confirm: () async {
+          var cancelFunc =
+          BotToast.showLoading(crossPage: false, clickClose: true);
 
-      if (result != null) {
-        BotToast.showText(text: '保存成功');
-        Navigator.pop(context, true);
-      } else {
-        BotToast.showText(text: '保存失败');
-      }
-    });
+          int id = widget.progress.id;
+          var result;
+          if (widget.isEditable) {
+            result = await ProgressOrderRepository()
+                .updateProductionProgressOrder(
+                id, widget.model.id, widget.model);
+          } else {
+            result = await ProgressOrderRepository()
+                .createProductionProgressOrder(id, widget.model);
+          }
+          cancelFunc.call();
+          if (result != null) {
+            BotToast.showText(text: '保存成功');
+            Navigator.pop(context, true);
+          } else {
+            BotToast.showText(text: '保存失败');
+          }
+        });
   }
 }
 
@@ -312,7 +310,7 @@ class _InfoRow extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
           border:
-              Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+          Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [Text('$title'), Text('$val')],
