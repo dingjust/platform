@@ -91,17 +91,16 @@ class ExternalSaleOrderItem extends StatelessWidget {
                             text: (e.batch == 1 ? '定金：' : '尾款：'),
                             style: TextStyle(color: Colors.black87),
                             children: [
-                              TextSpan(
-                                  text: '￥${e.payAmount}',
-                                  style: TextStyle(color: Colors.red)),
-                              TextSpan(
-                                  text: '(${CmtPaymentStateLocalizedMap[e
-                                      .state]})',
-                                  style: TextStyle(
-                                      color: e.state == CmtPaymentState.PAID
-                                          ? Colors.green
-                                          : Colors.orange))
-                            ]))),
+                          TextSpan(
+                              text: '￥${e.payAmount}',
+                              style: TextStyle(color: Colors.red)),
+                          TextSpan(
+                              text: '(${CmtPaymentStateLocalizedMap[e.state]})',
+                              style: TextStyle(
+                                  color: e.state == CmtPaymentState.PAID
+                                      ? Colors.green
+                                      : Colors.orange))
+                        ]))),
                 e.canPay
                     ? GestureDetector(
                         onTap: () {

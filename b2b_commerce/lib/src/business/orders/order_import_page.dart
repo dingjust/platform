@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +104,7 @@ class _OrderImportPageState extends State<OrderImportPage> {
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(50))),
-          onPressed: order != null ? _onSubmit : null),
+          onPressed: order != null ? onSubmit : null),
     );
   }
 
@@ -119,10 +120,14 @@ class _OrderImportPageState extends State<OrderImportPage> {
     return order;
   }
 
+  void onSubmit() {
+    DialogHelper.showConfirm(title: '确定导入订单?', content: '', confirm: submit);
+  }
+
   ///确定
-  void _onSubmit() async {
+  void submit() async {
     Function cancelFunc =
-    BotToast.showLoading(clickClose: true, crossPage: false);
+        BotToast.showLoading(clickClose: true, crossPage: false);
 
     BaseResponse response = await ExternalSaleOrderRespository().qrCodeImport(
         code: widget.code, merchandiser: UserBLoC.instance.currentUser.id);
@@ -180,8 +185,8 @@ class _OrderInfo extends StatelessWidget {
                 order: order,
               ),
             ],
-      ),
-    ));
+          ),
+        ));
   }
 
   Widget _buildProductRow(ProductionTaskOrderModel entry) {
