@@ -17,7 +17,7 @@
       </el-row>
       <outbound-order-top-info :slotData="formData" :payPlan="payPlan" @callback="callback" />
       <div style="margin: 20px 0px 0px 10px;">
-        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData" />
+        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData" :fromOut="true"/>
       </div>
       <el-row class="basic-form-row" type="flex" align="middle">
         <h6>备注及附件</h6>

@@ -1242,13 +1242,12 @@ let TENANT_APIS = {
   /** 平台端处理合同原型模板 */
   // 获取合同模板列表（平台    post
   searchContractTempOnPlatform: () => '/b2b/agreement/temp/list',
-  // 获取合同模板（平台        get 
+  // 获取合同模板（平台        get
   getContractTempOnPlatform: (code) => '/b2b/agreement/temp/source/' + code,
   // 更新合同模板（平台       post
   updateContractTempOnPlatform: () => '/b2b/agreement/temp/save',
   // 删除合同模板（平台       get
   deleteContractTempOnPlatform: (code) => '/b2b/agreement/temp/delete/' + code,
-
 
   /** 工厂审阅 */
   // 获取工厂修改备份
@@ -1259,7 +1258,7 @@ let TENANT_APIS = {
   FactoryReviewReject: (companyCode) => '/b2b/factories/review/' + companyCode + '/reject',
   // 工厂是否可以展示 put
   FactoryShow: (companyCode, isShow) => '/b2b/factories/enableShow/' + companyCode + '/' + isShow,
-  
+
   // 设置工厂序列值
   setFactorySequence: (companyCode, sequence) => '/b2b/factories/setSequenceNo/' + companyCode + '/' + sequence,
   // 设置工厂代运营手机号
@@ -1280,14 +1279,14 @@ let TENANT_APIS = {
   // 所有用户列表
   searchCustomerList: () => '/b2b/b2bCustomers/all',
   // 根据渠道码查公司
-  searchCustomerListByRecommend: () => '/b2b/companies/all/recommend',
+  searchCustomerListByRecommend: () => '/b2b/b2bCustomers/all/recommend',
   // 更新渠道码 post params{ id: '', channelCode: ''}
   updateRecommendCode: () => '/b2b/b2bCustomers/update/channel/code',
 
-  /** 代运营审阅 */ 
+  /** 代运营审阅 */
   // 查询代运营审阅列表
   searchAgentOperationReview: () => '/b2b/agentOperation/search',
-  // 审阅通过 put 
+  // 审阅通过 put
   AgentOperationReviewPass: () => '/b2b/agentOperation/review/pass'
 };
 Object.assign(TENANT_APIS, COMMON_APIS);

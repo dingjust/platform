@@ -10,7 +10,7 @@
         <h6>支付类型：{{formData.payOnline ? '线上支付' : '线下支付'}}</h6>
       </el-col>
     </el-row>
-    <template v-if="from === 'SALES_ORDER'">
+    <template v-if="!fromOut">
       <el-row type="flex">
         <el-col :span="9">
           <h6 v-if="formData.payOnline && formData.paymentAccount">付款方式：{{getEnum('PayType', formData.paymentAccount.type)}}</h6>
@@ -48,7 +48,7 @@
 <script>
 export default {
   name: 'OrderPayDetail',
-  props: ['formData', 'from']
+  props: ['formData', 'fromOut']
 }
 </script>
 

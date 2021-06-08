@@ -152,7 +152,9 @@
           CGDD: 1,
           KJXY: 2,
           BCXY: 3,
-          ZFXY: 4
+          ZFXY: 4,
+          DYYXY: 5,
+          DYYKJXY: 6
         }, 
         contractFormDialogVisible: false,
         contractFormPurchaseDialogVisible: false,

@@ -17,9 +17,9 @@
           <span>{{scope.row.name}}<span v-if="scope.row.root" style="color: #F56C6C"> (主账号)</span></span>
         </template>
       </el-table-column>
+      <el-table-column label="id" prop="id"></el-table-column>
       <el-table-column label="uid" prop="uid"></el-table-column>
       <el-table-column label="联系方式" prop="contactPhone"></el-table-column>
-      <el-table-column label="渠道" prop=""></el-table-column>
     </el-table>
     <div class="pt-2"></div>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
@@ -32,16 +32,16 @@
 <script>
 export default {
   name: 'InviteList',
-  props: ['uid'],
+  props: ['id'],
   methods: {
-    search () {
+    async search () {
       const url = this.apis().searchCustomerListByRecommend();
-      const result = this.$http.post(url, {
-        channelCode: this.uid
+      const result = await this.$http.post(url, {
+        channelCode: this.id
       });
 
       if (!result['errors']) {
-        this.page = result;
+        this.$set(this, 'page', result);
       }
     },
     onPageSizeChanged(val) {

@@ -37,6 +37,9 @@
           <h6 style="color: #909399">暂无数据</h6>
         </el-row>
       </el-tab-pane>
+      <el-tab-pane label="支付信息" key="payment" v-if="showProfitLoss">
+        <sales-payment :formData="form" :fromOut="fromOut"/>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -47,6 +50,7 @@
   import SalesProductionTasksTable from './SalesProductionTasksTable';
   import SalesPlanEntryForm from '../form/SalesPlanEntryForm'
   import SalesPlanEntryDetail from '../form/SalesPlanEntryDetail'
+  import SalesPayment from './SalesPayment.vue';
 
   export default {
     name: 'SalesProductionTabs',
@@ -56,7 +60,8 @@
       SalesProductionTasksTable,
       SalesPlanEntryForm,
       SalesPlanEntryDetail,
-      ProfitLossDetailSubject: () => import('@/views/purchase/profit-loss/detail/ProfitLossDetailSubject')
+      ProfitLossDetailSubject: () => import('@/views/purchase/profit-loss/detail/ProfitLossDetailSubject'),
+      SalesPayment
     },
     props: {
       canUpdate: {
@@ -69,6 +74,10 @@
       },
       form: {
         type: Object
+      },
+      fromOut: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -89,7 +98,7 @@
         // return this.form.sendBy && this.form.sendBy.id && (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED');
       },
       canCreateProfitLoss: function () {
-        return !this.form.profitLossAnalysis && this.showProfitLoss;
+        return !this.form.profitLossAnalysis && this.showProfitLoss && !this.fromOut;
       },
       isSelfCreated: function () {
         return !this.form.originCompany;

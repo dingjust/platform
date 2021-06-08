@@ -6,6 +6,7 @@
           <span>{{scope.row.name}}<span v-if="scope.row.root" style="color: #F56C6C"> (主账号)</span></span>
         </template>
       </el-table-column>
+      <el-table-column label="id" prop="id"></el-table-column>
       <el-table-column label="uid" prop="uid"></el-table-column>
       <el-table-column label="联系方式" prop="contactPhone"></el-table-column>
       <el-table-column label="操作">
@@ -36,10 +37,10 @@
         <el-button type="primary" @click="onDownload">下载</el-button>
       </el-row>
     </el-dialog>
-    <el-dialog :visible.sync="inviteVisible" width="500px" append-to-body :close-on-click-modal="false">
-      <invite-list v-if="inviteVisible" :uid="handleRow.uid" />
+    <el-dialog :visible.sync="inviteVisible" width="80%" append-to-body :close-on-click-modal="false">
+      <invite-list v-if="inviteVisible" :id="handleRow.id" />
     </el-dialog>
-    <el-dialog :visible.sync="selectVisible" width="800px" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="selectVisible" width="80%" append-to-body :close-on-click-modal="false">
       <customer-select-page v-if="selectVisible" @setRecommendCode="setRecommendCode"/>
     </el-dialog>
   </div>
@@ -78,7 +79,7 @@ export default {
       this.handleRow = row;
       this.selectVisible = true;
     },
-    setRecommendCode (recommendCode) {
+    setRecommendCode (row) {
       const h = this.$createElement;
 
       this.$msgbox({
@@ -87,13 +88,13 @@ export default {
           h('p', {style: 'margin-bottom: 10px'}, '正在进行更新渠道码操作，请确认以下信息是否正确'),
           h('p', {style: 'margin-left: 20px'}, ('工厂编号：' + this.handleRow.uid)),
           h('p', {style: 'margin-left: 20px'}, ('工厂名称：' + this.handleRow.name)),
-          h('p', {style: 'margin-left: 20px'}, ('渠道码编号：' + recommendCode)),
+          h('p', {style: 'margin-left: 20px'}, ('渠道码编号：' + row.id)),
         ]),
         showCancelButton: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(() => {
-        this._setRecommendCode(recommendCode);
+        this._setRecommendCode(row.id);
       })
     },
     async _setRecommendCode (recommendCode) {
@@ -108,7 +109,7 @@ export default {
       if (result.code === 1) {
         this.$message.success('操作成功！');
         this.selectVisible = false;
-        this.onAdvancedSearch();
+        this.$emit('onAdvancedSearch');
       } else if (result['errors']) {
         this.$message.error(result['errors'][0].message);
       } else if (result.code === 0) {
