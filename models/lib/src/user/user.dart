@@ -91,18 +91,18 @@ class UserModel extends PrincipalModel {
       String uid,
       String name,
       this.loginDisabled,
-        this.type,
-        this.roles,
-        this.status,
-        this.mobileNumber,
-        this.b2bUnit,
-        this.weChatOpenid,
-        this.weChatHeadImg,
-        this.dingTalkOpenid,
-        this.dingTalkHeadImg,
-        this.dingTalkNickname,
-        this.points = 0,
-        this.agent})
+      this.type,
+      this.roles,
+      this.status,
+      this.mobileNumber,
+      this.b2bUnit,
+      this.weChatOpenid,
+      this.weChatHeadImg,
+      this.dingTalkOpenid,
+      this.dingTalkHeadImg,
+      this.dingTalkNickname,
+      this.points = 0,
+      this.agent})
       : super(profilePicture: profilePicture, uid: uid, name: name, id: id);
 
   UserModel.empty() {
@@ -614,6 +614,12 @@ enum AgreementTemplateType {
   ///作废协议
   ZFXY,
 
+  ///代运营框架协议
+  DYYKJXY,
+
+  ///代运营服务确认协议
+  DYYXY,
+
   ///未知
   UNKOWN
 }
@@ -624,6 +630,8 @@ const AgreementTemplateTypeLocalizedMap = {
   AgreementTemplateType.WTSCHT: '委托生产合同',
   AgreementTemplateType.BCXY: "补充协议",
   AgreementTemplateType.ZFXY: "作废协议",
+  AgreementTemplateType.DYYKJXY: "代运营框架协议",
+  AgreementTemplateType.DYYXY: "代运营服务确认协议",
   AgreementTemplateType.UNKOWN: "未知"
 };
 
@@ -633,6 +641,8 @@ const AgreementTemplateTypeMap = {
   AgreementTemplateType.WTSCHT: 'WTSCHT',
   AgreementTemplateType.BCXY: "BCXY",
   AgreementTemplateType.ZFXY: "ZFXY",
+  AgreementTemplateType.DYYKJXY: "DYYKJXY",
+  AgreementTemplateType.DYYXY: "DYYXY",
 };
 
 @JsonSerializable()

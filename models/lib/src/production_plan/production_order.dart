@@ -275,6 +275,10 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   @JsonKey(toJson: paymentOrdersToList)
   List<CmtPayOrderData> paymentOrders;
 
+  ///对账单
+  @JsonKey(toJson: reconciliationToList)
+  List<FastReconciliationSheetModel> reconciliationSheetList;
+
   SalesProductionOrderModel(
       {String code,
       int originOrderId,
@@ -311,16 +315,16 @@ class SalesProductionOrderModel extends ProductionOrderModel {
       this.freightPayer,
       this.cooperator,
       this.payPlan,
-      this.planLeader,
-      this.approvers,
-      this.purchasingLeader,
-      this.originCooperator,
-      this.targetCooperator,
-      this.state,
-      this.shippingAddress,
-      this.auditNeeded,
-      this.auditState,
-      this.sendAuditNeeded,
+    this.planLeader,
+    this.approvers,
+    this.purchasingLeader,
+    this.originCooperator,
+    this.targetCooperator,
+    this.state,
+    this.shippingAddress,
+    this.auditNeeded,
+    this.auditState,
+    this.sendAuditNeeded,
     this.sendApprovers,
     this.sendAuditState,
     this.originCompany,
@@ -335,7 +339,8 @@ class SalesProductionOrderModel extends ProductionOrderModel {
     this.paymentAccount,
     this.agentOrder,
     this.serviceFeePercent,
-    this.payOnline})
+    this.payOnline,
+    this.reconciliationSheetList})
       : super(
             code: code,
             originOrderId: originOrderId,
@@ -374,6 +379,10 @@ class SalesProductionOrderModel extends ProductionOrderModel {
 
   static List<Map<String, dynamic>> paymentOrdersToList(
       List<CmtPayOrderData> datas) =>
+      datas == null ? null : datas.map((e) => e.toJson()).toList();
+
+  static List<Map<String, dynamic>> reconciliationToList(
+      List<FastReconciliationSheetModel> datas) =>
       datas == null ? null : datas.map((e) => e.toJson()).toList();
 
   static List<Map<String, dynamic>> agreementsToJson(

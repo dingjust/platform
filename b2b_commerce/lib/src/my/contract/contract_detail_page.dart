@@ -846,9 +846,9 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ContractSealPage(
-                            isSelect: true,
-                            onSelect: flowContract,
-                          )),
+                                isSelect: true,
+                                onSelect: flowContract,
+                              )),
                     ).then((val) {
                       setState(() {
                         _showPdf = true;

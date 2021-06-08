@@ -20,7 +20,29 @@ class NavigatorStack {
 
   String get currentRouteName => _currentRouteName;
 
+  ///缓存路由
+  CacheRouteInfo _cacheRouteInfo;
+
+  CacheRouteInfo get cacheRouteInfo => _cacheRouteInfo;
+
   void setCurrentRouteName(String val) {
     _currentRouteName = val;
   }
+
+  void setCacheRoute(CacheRouteInfo val) {
+    _cacheRouteInfo = val;
+  }
+
+  void clearCacheRoute() {
+    _cacheRouteInfo = null;
+  }
+}
+
+///缓存路由信息
+class CacheRouteInfo {
+  final String route;
+
+  final Object arguments;
+
+  CacheRouteInfo({this.route, this.arguments});
 }

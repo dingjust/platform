@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/business/orders/delivery/delivery_orders_page.d
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
+import 'package:b2b_commerce/src/business/orders/order_import_page.dart';
 import 'package:b2b_commerce/src/business/orders/reconciliation/reconciliation_order_detail_page.dart';
 import 'package:b2b_commerce/src/business/orders/reconciliation/reconciliation_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
@@ -191,6 +192,9 @@ class AppRoutes with GlobalRoutes {
   ///服务申请页面
   static const ROUTE_SERVICE_APPLY = '/business/services/apply';
 
+  ///订单导入页面
+  static const ROUTE_ORDER_IMPORT = '/business/orders/import';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -265,15 +269,16 @@ class AppRoutes with GlobalRoutes {
         RegisterChannelPage(
           channelCode: getVal('code', context),
         ),
-    ROUTE_REQUIREMENT: (context) =>
-        RequirementOrderDetailByFactoryPage(
+    ROUTE_REQUIREMENT: (context) => RequirementOrderDetailByFactoryPage(
           getVal('code', context),
         ),
-    ROUTE_FACTORY_INTRODUCTION: (context) =>
-        FactoryIntroductionPage(
+    ROUTE_FACTORY_INTRODUCTION: (context) => FactoryIntroductionPage(
           uid: getVal('uid', context),
         ),
-    ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage()
+    ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage(),
+    ROUTE_ORDER_IMPORT: (context) => OrderImportPage(
+          code: getVal('code', context),
+        )
   };
 
   static dynamic getVal(String key, BuildContext context) {

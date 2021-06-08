@@ -1,5 +1,5 @@
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -25,7 +25,7 @@ class WebviewPage extends StatefulWidget {
 
 class _WebviewPageState extends State<WebviewPage> {
   FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
-  bool _goContractListPage = false;
+  bool _contractProcessed = false;
   bool needRefresh = false;
 
   @override
@@ -38,7 +38,7 @@ class _WebviewPageState extends State<WebviewPage> {
       needRefresh = true;
 
       if (url.contains('result_code=3000')) {
-        _goContractListPage = true;
+        _contractProcessed = true;
       }
     });
   }
@@ -56,8 +56,17 @@ class _WebviewPageState extends State<WebviewPage> {
           hidden: true,
         ),
         onWillPop: () {
+          //优先处理缓存路由跳转
+          if (_contractProcessed &&
+              NavigatorStack.instance.cacheRouteInfo != null) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                NavigatorStack.instance.cacheRouteInfo.route,
+                ModalRoute.withName('/'),
+                arguments: NavigatorStack.instance.cacheRouteInfo.arguments);
+            NavigatorStack.instance.clearCacheRoute();
+          }
           // //签署成功跳转到合同列表页
-          if (_goContractListPage && widget.needRedirectContractList) {
+          else if (_contractProcessed && widget.needRedirectContractList) {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => MyContractPage()),

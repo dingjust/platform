@@ -1,6 +1,7 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:core/core.dart';
+import 'package:services/services.dart';
 
 class OrderPaymentInfo extends StatelessWidget {
   final SalesProductionOrderModel order;
@@ -33,16 +34,29 @@ class OrderPaymentInfo extends StatelessWidget {
 
   ///线上支付信息
   List<Widget> _buildOnlineRows() {
-    if (order.paymentAccount == null) {
-      return [];
+    //罚款方不显示收款人信息
+    if (order.paymentAccount == null ||
+        UserBLoC.instance.currentUser.companyCode ==
+            order?.originCompany?.uid) {
+      return [...buildPayRows()];
     }
 
     return [
       buildRow('收款人姓名', '${order.paymentAccount.name}'),
       buildRow('收款开户行', '${order.paymentAccount.serviceProvider}'),
       buildRow('收款卡号', '${order.paymentAccount.no}'),
+      buildServiceFree(),
       ...buildPayRows()
     ];
+  }
+
+  ///代运营服务费用
+  Widget buildServiceFree() {
+    if (order.agentOrder) {
+      return buildRow('代运营服务费用比例',
+          '${(order.serviceFeePercent * 100).toStringAsFixed(2)}%');
+    }
+    return Container();
   }
 
   Widget buildRow(String title, String val,
@@ -54,7 +68,7 @@ class OrderPaymentInfo extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           border:
-              Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+          Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -95,62 +109,68 @@ class OrderPaymentInfo extends StatelessWidget {
                               ? Colors.green
                               : Colors.red))
                 ])),
-            Text(
-              '￥${data.payAmount}',
-              style: TextStyle(
-                  color: Color.fromRGBO(255, 102, 102, 1), fontSize: 18),
-            )
+            RichText(
+                text: TextSpan(
+                    text: '实付款:',
+                    style: TextStyle(color: Colors.black87, fontSize: 16),
+                    children: [
+                  TextSpan(
+                    text: '￥${data.payAmount}',
+                    style: TextStyle(
+                        color: Color.fromRGBO(255, 102, 102, 1), fontSize: 18),
+                  )
+                ])),
           ],
         ),
       ),
       ...data.state == CmtPaymentState.PAID
           ? [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '支付方式',
-                      style: infoTextStyle,
-                    ),
-                    Text(
-                      '${PaymentMethodLocalizedMap[data.payType]}',
-                      style: infoTextStyle,
-                    )
-                  ],
-                ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '支付方式',
+                style: infoTextStyle,
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '交易编号',
-                      style: infoTextStyle,
-                    ),
-                    Text(
-                      '${data.outOrderNo}',
-                      style: infoTextStyle,
-                    )
-                  ],
-                ),
+              Text(
+                '${PaymentMethodLocalizedMap[data.payType]}',
+                style: infoTextStyle,
+              )
+            ],
+          ),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '交易编号',
+                style: infoTextStyle,
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '支付时间',
-                      style: infoTextStyle,
-                    ),
-                    Text(
-                      '${DateFormatUtil.formatYMDHMS(data.paySuccessTime)}',
-                      style: infoTextStyle,
-                    )
-                  ],
-                ),
+              Text(
+                '${data.outOrderNo}',
+                style: infoTextStyle,
+              )
+            ],
+          ),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '支付时间',
+                style: infoTextStyle,
               ),
-            ]
+              Text(
+                '${DateFormatUtil.formatYMDHMS(data.paySuccessTime)}',
+                style: infoTextStyle,
+              )
+            ],
+          ),
+        ),
+      ]
           : []
     ];
   }
