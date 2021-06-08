@@ -19,7 +19,7 @@
       <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
         <sales-order-detail-form :form="formData" :modifyType="modifyType" :payPlan="payPlan" @callback="callback" />
       </el-form>
-      <div style="margin-top: 10px">
+      <div style="margin: 10px 0 0 24px;">
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
           @appendProduct="appendProduct" @callback="callback"/>
       </div>
@@ -50,6 +50,8 @@
       <sales-plan-detail-btn-group :slotData="formData" @onReturn="onReturn" @onSave="onSave(false)"
         @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw"
         @onCancelProdcution="canelingProductionDialogVisible=true" @onCancel="onDelete" />
+      <!-- 唯一码 -->
+      <sales-unique-code style="margin: 10px 0 0 24px;" v-if="formData.uniqueCode" :formData="formData"/>
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -98,6 +100,7 @@
   import {
     TwinkleWarningButton
   } from '@/components'
+  import SalesUniqueCode from './SalesUniqueCode.vue';
 
   export default {
     name: 'SalesOrderDetail',
@@ -113,7 +116,8 @@
       OrderAuditDetail,
       SalesOrderCancelDialog,
       TwinkleWarningButton,
-      SaleOrderProductionCancelForm
+      SaleOrderProductionCancelForm,
+      SalesUniqueCode
     },
     computed: {
       // ...mapGetters({
