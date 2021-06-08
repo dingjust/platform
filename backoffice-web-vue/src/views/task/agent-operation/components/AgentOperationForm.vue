@@ -15,6 +15,12 @@
       <el-form-item label="密码" prop="agentPassword">
         <el-input v-model="formData.agentPassword" show-password auto-complete="off"></el-input>
       </el-form-item>
+      <el-form-item label="合同编号">
+        <el-input v-model="formData.userAgreementmentForm.userTempCode"></el-input>
+      </el-form-item>
+      <el-form-item label="公司编号">
+        <el-input v-model="formData.userAgreementmentForm.companyCode"></el-input>
+      </el-form-item>
     </el-form>
     <el-row type="flex" justify="end">
       <el-button @click="onCancel">取消</el-button>
@@ -46,25 +52,14 @@ export default {
     },
     async _onSumbit () {
       let date = new Date();
-      console.log(date)
       const validityStart = new Date(date.toLocaleDateString()).getTime();
-      console.log(validityStart);
       date.setFullYear(date.getFullYear() + 1);
       const validityEnd = new Date(date.toLocaleDateString()).getTime();
-      console.log(validityEnd);
 
-      const form = {
-        id: this.handleRow.id,
-        agentName: this.formData.agentName,
-        agentPhone: this.formData.agentPhone,
-        agentPassword: this.formData.agentPassword,
-        userAgreementmentForm: {
-          userTempCode: 'd0b150f3-f3c1-4a00-810f-eafb83096428',
-          validityStart: validityStart,
-          validityEnd: validityEnd,
-          companyCode: 'TPP00012002'
-        }
-      }
+      let form = Object.assign({}, this.formData);
+      form.id = this.handleRow.id;
+      form.userAgreementmentForm.validityStart = validityStart;
+      form.userAgreementmentForm.validityEnd = validityEnd;
 
       const url = this.apis().AgentOperationReviewPass();
       const result = await this.$http.put(url, form);
@@ -96,7 +91,11 @@ export default {
       formData: {
         agentName: '',
         agentPhone: '',
-        agentPassword: ''
+        agentPassword: '',
+        userAgreementmentForm: {
+          userTempCode: 'd0b150f3-f3c1-4a00-810f-eafb83096428',
+          companyCode: 'TPP00012002'
+        }
       },
       rules: {
         agentName: [{required: true, message: '必填', tigger: 'change'}],

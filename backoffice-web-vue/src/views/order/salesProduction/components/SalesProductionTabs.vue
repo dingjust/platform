@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%">
     <el-dialog :visible.sync="detailVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <!-- <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onSave" :isUpdate="true"

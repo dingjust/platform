@@ -1973,6 +1973,11 @@ let NONE_TENANT_APIS = {
   // 获取工厂修改备份
   getFactoryBackups: (companyCode) => '/b2b/factories/backups/' + companyCode,
 
+  // 根据唯一码获取外发单预览 get
+  getOutboundByUniqueCode: (uniqueCode) => `/b2b/sales/production/order/preview/${uniqueCode}`,
+  // 根据唯一码导入外发单
+  createOutboundByUniqueCode: (uniqueCode) => `/b2b/sales/production/order/import/from/uniqueCode/${uniqueCode}`,
+
   /** 代运营 */
   // 提交代运营申请 post data {}
   AgentOperationSubmit: () => '/b2b/agentOperation/submit'
