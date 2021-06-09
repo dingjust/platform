@@ -40,6 +40,9 @@
       <el-tab-pane label="支付信息" key="payment" v-if="showProfitLoss">
         <sales-payment :formData="form" :fromOut="fromOut"/>
       </el-tab-pane>
+      <el-tab-pane label="对账信息" key="reconciliation" v-if="form.reconciliationSheetList && form.reconciliationSheetList.length > 0">
+        <sales-reconciliation :form="form" />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -51,6 +54,7 @@
   import SalesPlanEntryForm from '../form/SalesPlanEntryForm'
   import SalesPlanEntryDetail from '../form/SalesPlanEntryDetail'
   import SalesPayment from './SalesPayment.vue';
+  import SalesReconciliation from './SalesReconciliation.vue';
 
   export default {
     name: 'SalesProductionTabs',
@@ -61,7 +65,8 @@
       SalesPlanEntryForm,
       SalesPlanEntryDetail,
       ProfitLossDetailSubject: () => import('@/views/purchase/profit-loss/detail/ProfitLossDetailSubject'),
-      SalesPayment
+      SalesPayment,
+      SalesReconciliation
     },
     props: {
       canUpdate: {
