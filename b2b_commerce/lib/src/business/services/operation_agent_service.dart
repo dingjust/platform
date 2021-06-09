@@ -89,26 +89,30 @@ class _OperationAgentServiceApplyPageState
           },
         );
         break;
-      //已签署
+      //已通过
       case 'COMPLETED':
-        bottomWidget = _ReviewPassInfo(
-          code: info['userAgreementCode'],
-          color: Colors.green,
-          status: '已签署协议',
-          btnText: '查看协议',
-          before: () {
-            setState(() {
-              show = false;
-            });
-          },
-          afterPop: () {
-            setState(() {
-              show = true;
-            });
-          },
-        );
+      //已通过但没有code
+        if (info['userAgreementCode'] == null) {
+          bottomWidget = _buildAplyBtn();
+        } else {
+          bottomWidget = _ReviewPassInfo(
+            code: info['userAgreementCode'],
+            color: Colors.green,
+            status: '已签署协议',
+            btnText: '查看协议',
+            before: () {
+              setState(() {
+                show = false;
+              });
+            },
+            afterPop: () {
+              setState(() {
+                show = true;
+              });
+            },
+          );
+        }
         break;
-
       default:
         bottomWidget = _buildAplyBtn();
     }
