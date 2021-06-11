@@ -79,7 +79,7 @@ class _Scale extends StatelessWidget {
               label: '厂房',
               val:
               '${model.factoryBuildingsQuantity == null ? '0' : model
-                  .factoryBuildingsQuantity.toString()}间'),
+                  .factoryBuildingsQuantity.toString()}㎡'),
           FactoryInfoRow(
               label: '产值', val: ScaleRangesLocalizedMap[model.scaleRange]),
           FactoryInfoRow(
