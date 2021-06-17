@@ -40,6 +40,7 @@
     "@tarojs/components": "3.1.0",
     "@tarojs/runtime": "3.1.0",
     "@tarojs/taro": "3.1.0",
+    "element-ui": "^2.15.2",
     "lodash": "4.17.15",
     "taro-ui-vue": "^1.0.0-beta.8",
     "vue": "^2.5.0",
@@ -50,14 +51,15 @@
     "@tarojs/mini-runner": "3.1.0",
     "@tarojs/webpack-runner": "3.1.0",
     "@types/webpack-env": "^1.13.6",
+    "@typescript-eslint/eslint-plugin": "^2.x",
+    "@typescript-eslint/parser": "^2.x",
+    "babel-plugin-component": "^1.1.1",
     "babel-preset-taro": "3.1.0",
     "eslint": "^6.8.0",
-    "vue-loader": "^15.9.2",
-    "eslint-plugin-vue": "^6.x",
     "eslint-config-taro": "3.1.0",
+    "eslint-plugin-vue": "^6.x",
     "stylelint": "9.3.0",
-    "@typescript-eslint/parser": "^2.x",
-    "@typescript-eslint/eslint-plugin": "^2.x",
-    "typescript": "^3.7.0"
+    "typescript": "^3.7.0",
+    "vue-loader": "^15.9.2"
   }
 }

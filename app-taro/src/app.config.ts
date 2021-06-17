@@ -4,7 +4,8 @@ export default {
     "pages/register/register",
     "pages/protocol/privacy",
     "pages/protocol/payment",
-    "pages/protocol/service"
+    "pages/protocol/service",
+    "pages/requirement/requirement"
   ],
   window: {
     backgroundTextStyle: "light",

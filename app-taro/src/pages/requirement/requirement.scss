@@ -1,0 +1,31 @@
+@import "~taro-ui-vue/dist/style/components/list.scss";
+@import "~taro-ui-vue/dist/style/components/icon.scss";
+@import "~taro-ui-vue/dist/style/components/flex.scss";
+@import "~taro-ui-vue/dist/style/components/button.scss";
+
+.requirement .remarks {
+  font-size: 0.68267rem;
+  padding: 0 0.512rem 0.512rem 0.512rem;
+  margin-bottom: 80px;
+}
+
+.requirement .divider {
+  color: #d6e4ef;
+  // padding-left: 12px;
+  // padding-right: 12px;
+  width: 100%;
+  border-bottom: 1px solid #d6e4ef;
+}
+
+.requirement .at-list__item-extra {
+  max-width: 70%;
+}
+
+.requirement .bottom {
+  background-color: white;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  // position: fixed;
+  // bottom: 0;
+  // width: 100%;
+}
