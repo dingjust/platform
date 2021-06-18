@@ -7,9 +7,10 @@ import 'package:widgets/widgets.dart';
 class ShareDialog {
   static void showShareDialog(BuildContext context,
       {@required String url,
-        @required String title,
-        @required String description,
-        @required String imageUrl}) {
+      @required String title,
+      @required String description,
+      String path,
+      @required String imageUrl}) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -41,12 +42,22 @@ class ShareDialog {
                             ],
                           ),
                           onPressed: () {
-                            WechatServiceImpl.instance.shareWeb(
-                                '$url',
-                                WeChatScene.SESSION,
-                                '$title',
-                                '$description',
-                                '$imageUrl');
+                            //分享好友为分享小程序
+                            if (path != null) {
+                              WechatServiceImpl.instance.shareMiniProgram(
+                                  '$url',
+                                  '$path',
+                                  '$title',
+                                  '$description',
+                                  '$imageUrl');
+                            } else {
+                              WechatServiceImpl.instance.shareWeb(
+                                  '$url',
+                                  WeChatScene.SESSION,
+                                  '$title',
+                                  '$description',
+                                  '$imageUrl');
+                            }
                           },
                         ),
                         FlatButton(

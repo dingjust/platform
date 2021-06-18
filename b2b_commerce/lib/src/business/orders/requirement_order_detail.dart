@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_s
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/business/requirement_orders.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -355,8 +356,7 @@ class _RequirementOrderDetailPageState
               children: <Widget>[
                 Expanded(
                   child: Text(
-                      '发布时间: ${orderModel.creationTime != null ? DateFormatUtil
-                          .format(orderModel.creationTime) : ''}'),
+                      '发布时间: ${orderModel.creationTime != null ? DateFormatUtil.format(orderModel.creationTime) : ''}'),
                   flex: 1,
                 ),
                 UserBLoC.instance.currentUser.type == UserType.BRAND
@@ -1193,6 +1193,7 @@ class _RequirementOrderDetailPageState
         imageUrl: orderModel.details.pictures.isEmpty
             ? '${GlobalConfigs.LOGO_URL}'
             : '${orderModel.details.pictures[0].shareUrl()}',
+        path: MiniProgramPageRoutes.requirementDetail(orderModel.code),
         url: Apis.shareRequirement(orderModel.code));
 
     print('${orderModel.details.pictures[0].shareUrl()}');

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:models/models.dart';
 import 'package:services/src/payment/payment_for.dart';
@@ -57,7 +58,7 @@ class WechatServiceImpl implements WechatService {
       {PaymentFor paymentFor = PaymentFor.DEFAULT}) async {
     //通过Helper获取预支付信息
     WechatPrepayModel prepayModel =
-        await WechatPayHelper.prepay(orderCode, paymentFor: paymentFor);
+    await WechatPayHelper.prepay(orderCode, paymentFor: paymentFor);
 
     if (prepayModel != null) {
       payWithWeChat(
@@ -122,10 +123,25 @@ class WechatServiceImpl implements WechatService {
 
   @override
   Future<bool> sendAuth() {
-    _wechatAuthState = DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString();
+    _wechatAuthState = DateTime.now().millisecondsSinceEpoch.toString();
     return sendWeChatAuth(scope: "snsapi_userinfo", state: _wechatAuthState);
+  }
+
+  @override
+  Future<bool> shareMiniProgram(String url, String path, String title,
+      String description, String thumbnail) {
+    //阿里云图片处理
+    // const processUrl = 'image_process=resize,w_200/crop,mid,w_200,h_200';
+
+    var model = WeChatShareMiniProgramModel(
+        webPageUrl: url,
+        miniProgramType: WXMiniProgramType.PREVIEW,
+        userName: GlobalConfigs.MINI_PROGRAM_ID,
+        path: '$path',
+        title: '$title',
+        description: '$description',
+        thumbnail: WeChatImage.network('$thumbnail'),
+        compressThumbnail: false);
+    return shareToWeChat(model);
   }
 }
