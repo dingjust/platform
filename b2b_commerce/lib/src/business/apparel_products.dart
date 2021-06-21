@@ -11,8 +11,6 @@ import 'package:widgets/widgets.dart';
 import 'products/apparel_product_form.dart';
 
 class ApparelProductsPage extends StatefulWidget {
-//  final List<ApparelProductModel> items = <ApparelProductModel>[];
-
   ApparelProductsPage();
 
   _ApparelProductsPageState createState() => _ApparelProductsPageState();
@@ -21,14 +19,14 @@ class ApparelProductsPage extends StatefulWidget {
 class _ApparelProductsPageState extends State<ApparelProductsPage>
     with SingleTickerProviderStateMixin {
   final List<EnumModel> _statuses =
-  UserBLoC.instance.currentUser.type == UserType.FACTORY
-      ? <EnumModel>[
-    EnumModel('approved', '上架产品'),
-    EnumModel('unapproved', '下架产品'),
-  ]
-      : [
-    EnumModel('ALL', '全部产品'),
-  ];
+      UserBLoC.instance.currentUser.type == UserType.FACTORY
+          ? <EnumModel>[
+              EnumModel('approved', '上架产品'),
+              EnumModel('unapproved', '下架产品'),
+            ]
+          : [
+              EnumModel('ALL', '全部产品'),
+            ];
 
   TabController _tabController;
   bool isChangeTab = false;
@@ -36,8 +34,6 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>
   @override
   void initState() {
     _tabController = TabController(length: _statuses.length, vsync: this);
-
-    // TODO: implement initState
     super.initState();
   }
 
@@ -45,7 +41,6 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>
   void dispose() {
     //清除缓存
     ApparelProductBLoC.instance.clearProductsMap();
-    // TODO: implement dispose
     super.dispose();
   }
 

@@ -84,7 +84,7 @@ class CategoryModel extends ItemModel {
   @JsonKey(toJson: _categorysToJson)
   List<CategoryModel> children;
 
-  @JsonKey(toJson: _mediaToJson)
+  @JsonKey(toJson: mediaToJson)
   MediaModel thumbnail;
 
   CategoryModel({
@@ -103,7 +103,7 @@ class CategoryModel extends ItemModel {
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
       model == null ? null : CategoryModel.toJson(model);
 
-  static Map<String, dynamic> _mediaToJson(MediaModel model) =>
+  static Map<String, dynamic> mediaToJson(MediaModel model) =>
       model == null ? null : MediaModel.toJson(model);
 
   static List<Map<String, dynamic>> _categorysToJson(
@@ -212,13 +212,13 @@ class ProductModel extends ItemModel {
   double minPrice;
   double maxPrice;
   String skuID;
-  @JsonKey(fromJson: _mediaFromJson, toJson: _mediaToJson)
+  @JsonKey(fromJson: mediaFromJson, toJson: _mediaToJson)
   MediaModel thumbnail;
-  @JsonKey(fromJson: _mediasFromJson, toJson: _mediasToJson)
+  @JsonKey(fromJson: mediasFromJson, toJson: _mediasToJson)
   List<MediaModel> thumbnails;
-  @JsonKey(fromJson: _mediasFromJson, toJson: _mediasToJson)
+  @JsonKey(fromJson: mediasFromJson, toJson: _mediasToJson)
   List<MediaModel> images;
-  @JsonKey(fromJson: _mediasFromJson, toJson: _mediasToJson)
+  @JsonKey(fromJson: mediasFromJson, toJson: _mediasToJson)
   List<MediaModel> details;
   int salesVolume;
   ArticleApprovalStatus approvalStatus;
@@ -274,34 +274,35 @@ class ProductModel extends ItemModel {
   @JsonKey(toJson: _colorSizesToJson)
   List<ColorSizeModel> colorSizes;
 
-  ProductModel({this.code,
-    this.name,
-    this.price,
-    this.minPrice,
-    this.maxPrice,
-    this.thumbnail,
-    this.staircasePrices,
-    this.privacy,
-    this.superCategories,
-    this.category,
-    this.ratingIfPrivacy,
-    this.stockLevel,
-    this.salesVolume,
-    this.approvalStatus,
-    this.images,
-    this.details,
-    this.belongTo,
-    this.thumbnails,
-    this.skuID,
-    this.proofingFee,
-    this.basicProduction,
-    this.productionDays,
-    this.productionIncrement,
-    this.steppedPrices,
-    this.colorSizes,
-    this.productType,
-    this.spotSteppedPrices,
-    this.deliveryDays});
+  ProductModel(
+      {this.code,
+      this.name,
+      this.price,
+      this.minPrice,
+      this.maxPrice,
+      this.thumbnail,
+      this.staircasePrices,
+      this.privacy,
+      this.superCategories,
+      this.category,
+      this.ratingIfPrivacy,
+      this.stockLevel,
+      this.salesVolume,
+      this.approvalStatus,
+      this.images,
+      this.details,
+      this.belongTo,
+      this.thumbnails,
+      this.skuID,
+      this.proofingFee,
+      this.basicProduction,
+      this.productionDays,
+      this.productionIncrement,
+      this.steppedPrices,
+      this.colorSizes,
+      this.productType,
+      this.spotSteppedPrices,
+      this.deliveryDays});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductModelFromJson(json);
@@ -332,10 +333,10 @@ class ProductModel extends ItemModel {
   static Map<String, dynamic> _superCategory(CategoryModel model) =>
       model == null ? null : CategoryModel.toJson(model);
 
-  static MediaModel _mediaFromJson(Map<String, dynamic> json) =>
+  static MediaModel mediaFromJson(Map<String, dynamic> json) =>
       json == null ? null : MediaModel.fromJson(json);
 
-  static List<MediaModel> _mediasFromJson(List<dynamic> jsons) =>
+  static List<MediaModel> mediasFromJson(List<dynamic> jsons) =>
       jsons == null
           ? null
           : jsons.map((json) => MediaModel.fromJson(json)).toList();
@@ -907,33 +908,6 @@ class SizeModel extends ItemModel {
 }
 
 @JsonSerializable()
-class SampleProductModel extends ItemModel {
-  String code;
-  String name;
-  @JsonKey(toJson: _mediasToJson)
-  List<MediaModel> pictures;
-  MediaModel thumbnail;
-
-  SampleProductModel({
-    this.code,
-    this.name,
-    this.pictures,
-    this.thumbnail,
-  });
-
-  factory SampleProductModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$SampleProductModelFromJson(json);
-
-  static Map<String, dynamic> toJson(SampleProductModel model) =>
-      model == null ? null : _$SampleProductModelToJson(model);
-
-  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => MediaModel.toJson(model)).toList();
-}
-
-@JsonSerializable()
 class SampleBorrowReturnHistoryModel extends ItemModel {
   //样衣名
   String name;
@@ -1144,11 +1118,104 @@ class ColorSizeEntryModel extends ItemModel {
   ///是否是自定义
   bool customize;
 
-  ColorSizeEntryModel({this.code, this.quality, this.quantity, this.name, this.customize});
+  ColorSizeEntryModel(
+      {this.code, this.quality, this.quantity, this.name, this.customize});
 
   factory ColorSizeEntryModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ColorSizeEntryModelFromJson(json);
 
   static Map<String, dynamic> toJson(ColorSizeEntryModel model) =>
       model == null ? null : _$ColorSizeEntryModelToJson(model);
+}
+
+///款式
+@JsonSerializable()
+class SampleProductModel extends ApparelProductModel {
+  String productionProcessContent;
+
+  @JsonKey(fromJson: _mediasFromJson, toJson: MediaModel.listToJson)
+  List<MediaModel> medias;
+
+  SampleProductModel({String code,
+    String name,
+    double price,
+    MediaModel thumbnail,
+    List<StaircasePriceModel> staircasePrices,
+    bool privacy,
+    MemberRating ratingIfPrivacy,
+    CategoryModel superCategories,
+    int salesVolume,
+    StockLevelModel stockLevel,
+    List<MediaModel> thumbnails,
+    List<MediaModel> images,
+    double minPrice,
+    double maxPrice,
+    CompanyModel belongTo,
+    double proofingFee,
+    int basicProduction,
+    int productionDays,
+    int productionIncrement,
+    List<SteppedPriceModel> steppedPrices,
+    List<SteppedPriceModel> spotSteppedPrices,
+    int deliveryDays,
+    List<MediaModel> details,
+    List<ProductType> productType,
+    List<ApparelSizeVariantProductModel> variants,
+    ApparelProductAttributesModel attributes,
+    String skuID,
+    String brand,
+    CategoryModel category,
+    double price1,
+    double price2,
+    double price3,
+    double suggestedPrice,
+    bool isRecommend,
+    this.productionProcessContent,
+    this.medias})
+      : super(
+    code: code,
+    name: name,
+    price: price,
+    thumbnail: thumbnail,
+    staircasePrices: staircasePrices,
+    privacy: privacy,
+    salesVolume: salesVolume,
+    ratingIfPrivacy: ratingIfPrivacy,
+    superCategories: superCategories,
+    stockLevel: stockLevel,
+    thumbnails: thumbnails,
+    images: images,
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+    belongTo: belongTo,
+    proofingFee: proofingFee,
+    basicProduction: basicProduction,
+    productionDays: productionDays,
+    productionIncrement: productionIncrement,
+    steppedPrices: steppedPrices,
+    details: details,
+    productType: productType,
+    spotSteppedPrices: spotSteppedPrices,
+    deliveryDays: deliveryDays,
+    variants: variants,
+    attributes: attributes,
+    skuID: skuID,
+    brand: brand,
+    category: category,
+    price1: price1,
+    price2: price2,
+    price3: price3,
+    suggestedPrice: suggestedPrice,
+    isRecommend: isRecommend,
+  );
+
+  factory SampleProductModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$SampleProductModelFromJson(json);
+
+  static List<MediaModel> _mediasFromJson(List<dynamic> jsons) =>
+      jsons == null
+          ? null
+          : jsons.map((json) => MediaModel.fromJson(json)).toList();
+
+  Map<String, dynamic> toJson() => _$SampleProductModelToJson(this);
 }

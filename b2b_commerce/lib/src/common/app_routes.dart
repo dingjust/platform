@@ -21,6 +21,8 @@ import 'package:b2b_commerce/src/business/orders/sales_production/production_tas
 import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_orders_page.dart';
 import 'package:b2b_commerce/src/business/products/materiel_product_manage.dart';
 import 'package:b2b_commerce/src/business/products/materiel_products.dart';
+import 'package:b2b_commerce/src/business/products/sample/sample_product_detail.dart';
+import 'package:b2b_commerce/src/business/products/sample/sample_products.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/quote_my_orders.dart';
 import 'package:b2b_commerce/src/business/services/operation_agent_service.dart';
@@ -51,7 +53,6 @@ import '../business/employees.dart';
 import '../business/purchase_orders.dart';
 import '../business/quote_orders.dart';
 import '../business/requirement_orders.dart';
-import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
 import '../home/account/login.dart';
 import '../my/account/register.dart';
@@ -94,7 +95,6 @@ class AppRoutes with GlobalRoutes {
       '/business/orders/requirement_quote_detail';
   static const ROUTE_PROOFING_ORDERS = '/business/proofing_orders';
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
-  static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
 
   ///新合作商
@@ -195,6 +195,12 @@ class AppRoutes with GlobalRoutes {
   ///订单导入页面
   static const ROUTE_ORDER_IMPORT = '/business/orders/import';
 
+  ///款式管理
+  static const ROUTE_SAMPLE_PRODUCTS = '/business/sample_products';
+
+  ///款式详情
+  static const ROUTE_SAMPLE_PRODUCT = '/business/sample_product';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -204,7 +210,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),
     ROUTE_MY_QUOTES: (context) => QuoteMyOrdersPage(),
-    ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
     ROUTE_SUBCONTRACTS_POOL: (context) => SubContractPoolPage(),
     ROUTE_SUBCONTRACTS_MINE: (context) => SubContractMinePage(),
@@ -269,16 +274,22 @@ class AppRoutes with GlobalRoutes {
         RegisterChannelPage(
           channelCode: getVal('code', context),
         ),
-    ROUTE_REQUIREMENT: (context) => RequirementOrderDetailByFactoryPage(
+    ROUTE_REQUIREMENT: (context) =>
+        RequirementOrderDetailByFactoryPage(
           getVal('code', context),
         ),
-    ROUTE_FACTORY_INTRODUCTION: (context) => FactoryIntroductionPage(
+    ROUTE_FACTORY_INTRODUCTION: (context) =>
+        FactoryIntroductionPage(
           uid: getVal('uid', context),
         ),
     ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage(),
-    ROUTE_ORDER_IMPORT: (context) => OrderImportPage(
+    ROUTE_ORDER_IMPORT: (context) =>
+        OrderImportPage(
           code: getVal('code', context),
-        )
+        ),
+    ROUTE_SAMPLE_PRODUCTS: (context) => SampleProductsPage(),
+    ROUTE_SAMPLE_PRODUCT: (context) =>
+        SampleProductDetailPage(getVal('code', context)),
   };
 
   static dynamic getVal(String key, BuildContext context) {
