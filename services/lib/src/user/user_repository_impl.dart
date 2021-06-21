@@ -16,7 +16,8 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<String> sendCaptcha(String phone) async {
-    Response response = await http$.get(UserApis.sendCaptcha(phone));
+    Response response = await http$.get(UserApis.sendCaptcha(phone),
+        options: Options(headers: {'ignoreHeader': true}));
     return response.data;
   }
 
@@ -157,7 +158,8 @@ class UserRepositoryImpl implements UserRepository {
     /// 公司订单报表
     Response response;
     try {
-      response = await http$.get(UserApis.phoneExists(phone));
+      response = await http$.get(UserApis.phoneExists(phone),
+          options: Options(headers: {'ignoreHeader': true}));
     } on DioError catch (e) {
       print(e);
     }
@@ -382,8 +384,8 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   ///验证验证码并返回所有账号
-  static Future<BaseResponse> validateCaptchaAccount(String phone,
-      String code) async {
+  static Future<BaseResponse> validateCaptchaAccount(
+      String phone, String code) async {
     Response response;
     try {
       response = await http$.get(UserApis.validateCaptchaAccount(phone, code));
@@ -398,8 +400,8 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   ///选择登录账号
-  static Future<BaseResponse> selectLoginAccount(String phone, String uid,
-      String code) async {
+  static Future<BaseResponse> selectLoginAccount(
+      String phone, String uid, String code) async {
     Response response;
     try {
       response = await http$.get(UserApis.selectLoginAccount(phone, uid, code));
