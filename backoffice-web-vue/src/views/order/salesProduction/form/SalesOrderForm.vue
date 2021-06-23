@@ -31,20 +31,20 @@
         </el-row>
         <el-row type="flex" justify="start" :gutter="20">
           <el-col :span="8">
-            <el-form-item label="客户" prop='originCooperator.name'
-              :rules="{required: true, message: '不能为空', trigger: 'change'}">
+            <el-form-item label="客户" prop='originCooperator.name'>
+              <!-- :rules="{required: true, message: '不能为空', trigger: 'change'}"> -->
               <el-input v-model="form.originCooperator.name" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="联系人" prop='originCooperator.contactPerson'
-              :rules="{required: true, message: '不能为空', trigger: 'change'}">
+            <el-form-item label="联系人" prop='originCooperator.contactPerson'>
+              <!-- :rules="{required: true, message: '不能为空', trigger: 'change'}"> -->
               <el-input v-model="form.originCooperator.contactPerson" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="联系方式" prop='originCooperator.contactPhone'
-              :rules="{required: true, message: '不能为空', trigger: 'change'}">
+            <el-form-item label="联系方式" prop='originCooperator.contactPhone'>
+              <!-- :rules="{required: true, message: '不能为空', trigger: 'change'}"> -->
               <el-input v-model="form.originCooperator.contactPhone" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>

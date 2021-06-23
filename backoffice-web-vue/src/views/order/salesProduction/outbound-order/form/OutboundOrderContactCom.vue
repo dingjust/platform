@@ -9,16 +9,16 @@
       <h6>合作对象</h6>
     </el-row>
     <div class="contact-row">
-      <el-form-item label="外发工厂" prop="outboundCompanyName" 
-        :rules="[{required: true, message: '请选择外发工厂', trigger: 'change'}]">
+      <el-form-item label="外发工厂" prop="outboundCompanyName">
+        <!-- :rules="[{required: true, message: '请选择外发工厂', trigger: 'change'}]"> -->
         <el-input v-model="formData.outboundCompanyName" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="联系人" prop="outboundContactPerson"
-        :rules="[{required: true, message: '请选择联系人', trigger: 'change'}]">
+      <el-form-item label="联系人" prop="outboundContactPerson">
+        <!-- :rules="[{required: true, message: '请选择联系人', trigger: 'change'}]"> -->
         <el-input v-model="formData.outboundContactPerson" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="联系方式" prop="outboundContactPhone" style="margin-right: 20px"
-        :rules="[{required: true, message: '请选择联系方式', trigger: 'change'}]">
+      <el-form-item label="联系方式" prop="outboundContactPhone" style="margin-right: 20px">
+        <!-- :rules="[{required: true, message: '请选择联系方式', trigger: 'change'}]"> -->
         <el-input v-model="formData.outboundContactPhone" :disabled="true"></el-input>
       </el-form-item>
       <div>
