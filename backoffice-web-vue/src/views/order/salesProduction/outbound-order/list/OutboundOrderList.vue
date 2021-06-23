@@ -95,6 +95,9 @@
           (row.sendAuditState == 'AUDITED_FAILED' || row.sendAuditState == 'NONE');
       },
       getCooperator(row) {
+        if (!row.targetCooperator) {
+          return '';
+        }
         return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
       },
       onPageSizeChanged(val) {
