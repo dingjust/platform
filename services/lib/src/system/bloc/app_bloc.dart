@@ -1,4 +1,9 @@
+import 'dart:async';
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:services/services.dart';
 
@@ -8,6 +13,9 @@ class AppBLoC extends BLoCBase {
 
   ///网络连接状态
   ConnectivityResult _connectivityResult;
+
+  //网络连接状态监听
+  StreamSubscription _subscription;
 
   //记录跳转登录时间
   DateTime _loginPageLogTime;
@@ -24,6 +32,27 @@ class AppBLoC extends BLoCBase {
       packageInfo = info;
       print(
           'AppName: ${packageInfo.appName} PackageName: ${packageInfo.packageName} Version: ${packageInfo.version} BuildNumber: ${packageInfo.buildNumber}');
+    });
+
+    //监听网络连接状态
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      _connectivityResult = result;
+      if (result == ConnectivityResult.none) {
+        BotToast.showNotification(
+          duration: null,
+          title: (_) => Text(
+            '当前网络不可用,请检查网络设置后重试',
+            style: TextStyle(fontSize: 13, color: Colors.red),
+          ),
+          onlyOne: true,
+          trailing: (cancel) => IconButton(
+            icon: Icon(Icons.cancel),
+            onPressed: cancel,
+          ),
+        );
+      }
     });
   }
 
@@ -47,5 +76,7 @@ class AppBLoC extends BLoCBase {
   }
 
   @override
-  void dispose() {}
+  void dispose() {
+    _subscription.cancel();
+  }
 }

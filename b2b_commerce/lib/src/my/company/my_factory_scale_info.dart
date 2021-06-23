@@ -27,12 +27,11 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     String _equipment = '';
 
-    widget.factory.cuttingDepartment?.forEach((item){
+    widget.factory.cuttingDepartment?.forEach((item) {
       _equipment += enumMap(CuttingDepartmentsEnum, item);
       _equipment += ',';
     });
@@ -45,8 +44,8 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
       _equipment += ',';
     });
 
-    if(_equipment.contains(',')){
-      _equipment = _equipment.substring(0,_equipment.length-1);
+    if (_equipment.contains(',')) {
+      _equipment = _equipment.substring(0, _equipment.length - 1);
     }
 
     return Column(
@@ -57,10 +56,9 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
               padding: EdgeInsets.only(bottom: 15),
               child: Row(
                 children: <Widget>[
-                  Text('工厂规模',style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold
-                  ))
+                  Text('工厂规模',
+                      style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
                 ],
               ),
             ),
@@ -70,19 +68,22 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    width: (ScreenUtil.getScreenW(context) - 15)/2,
+                    width: (ScreenUtil.getScreenW(context) - 15) / 2,
                     child: Row(
                       children: <Widget>[
                         Container(
                           width: 60,
                           child: Text(
                             '人数',
-                            style: const TextStyle(color: Colors.grey, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 16),
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            PopulationScaleLocalizedMap[widget.factory.populationScale] ?? '',
+                            PopulationScaleLocalizedMap[
+                                    widget.factory.populationScale] ??
+                                '',
                             style: const TextStyle(
                               fontSize: 16,
                             ),
@@ -92,14 +93,15 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
                     ),
                   ),
                   Container(
-                    width: (ScreenUtil.getScreenW(context) - 15)/2,
+                    width: (ScreenUtil.getScreenW(context) - 15) / 2,
                     child: Row(
                       children: <Widget>[
                         Container(
                           width: 60,
                           child: Text(
                             '产线',
-                            style: const TextStyle(color: Colors.grey, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 16),
                           ),
                         ),
                         Expanded(
@@ -113,7 +115,6 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -123,18 +124,22 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    width: (ScreenUtil.getScreenW(context) - 15)/2,
+                    width: (ScreenUtil.getScreenW(context) - 15) / 2,
                     child: Row(
                       children: <Widget>[
                         Container(
                           width: 60,
                           child: Text(
                             '厂房',
-                            style: const TextStyle(color: Colors.grey, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 16),
                           ),
                         ),
                         Text(
-                          '${widget.factory.factoryBuildingsQuantity == null ? '0' : widget.factory.factoryBuildingsQuantity.toString()}间',
+                          '${widget.factory.factoryBuildingsQuantity == null
+                              ? '0'
+                              : widget.factory.factoryBuildingsQuantity
+                              .toString()}㎡',
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -143,14 +148,15 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
                     ),
                   ),
                   Container(
-                    width: (ScreenUtil.getScreenW(context) - 15)/2,
+                    width: (ScreenUtil.getScreenW(context) - 15) / 2,
                     child: Row(
                       children: <Widget>[
                         Container(
                           width: 60,
                           child: Text(
                             '产值',
-                            style: const TextStyle(color: Colors.grey, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 16),
                           ),
                         ),
                         Text(
@@ -162,7 +168,6 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -210,7 +215,6 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
                       overflow: TextOverflow.clip,
                     ),
                   )
-
                 ],
               ),
             ),
@@ -219,5 +223,4 @@ class MyFactoryScaleInfoState extends State<MyFactoryScaleInfo> {
       ],
     );
   }
-
 }
