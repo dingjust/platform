@@ -14,6 +14,7 @@ import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_import.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_orders_page.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/form/external_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/out_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/out_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_production_task_order/out_production_task_orders_page.dart';
@@ -113,6 +114,10 @@ class AppRoutes with GlobalRoutes {
       '/business/sale_production/external_sale_order/import';
   static const ROUTE_EXTERNAL_SALE_ORDERS =
       '/business/orders/sales_production/external_sale_orders';
+
+  ///外接订单表单
+  static const ROUTE_EXTERNAL_SALE_ORDER_FORM =
+      '/business/sale_production/external_sale_order/form';
 
   ///外接订单导入
   static const ROUTE_OUT_ORDER_FORM =
@@ -283,13 +288,13 @@ class AppRoutes with GlobalRoutes {
           uid: getVal('uid', context),
         ),
     ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage(),
-    ROUTE_ORDER_IMPORT: (context) =>
-        OrderImportPage(
+    ROUTE_ORDER_IMPORT: (context) => OrderImportPage(
           code: getVal('code', context),
         ),
     ROUTE_SAMPLE_PRODUCTS: (context) => SampleProductsPage(),
     ROUTE_SAMPLE_PRODUCT: (context) =>
         SampleProductDetailPage(getVal('code', context)),
+    ROUTE_EXTERNAL_SALE_ORDER_FORM: (context) => ExternalOrderForm(),
   };
 
   static dynamic getVal(String key, BuildContext context) {

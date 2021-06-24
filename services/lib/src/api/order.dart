@@ -214,8 +214,7 @@ class OrderApis {
       };
 
   //邀请工厂（推荐需求）
-  static get doRecommendation =>
-          (code, uid) {
+  static get doRecommendation => (code, uid) {
         return '/{baseSiteId}/orders/requirement/$code/factory/$uid/recommend';
       };
 
@@ -470,4 +469,13 @@ class OrderApis {
           (id) {
         return '/{baseSiteId}/sheets/fast/reconciliation/confirmByPartyB/$id';
       };
+
+  ///节点方案
+  static get progressPlans => '/{baseSiteId}/progress/plan';
+
+  ///节点方案-创建
+  static get progressPlansCreate => '/{baseSiteId}/progress/plan/create';
+
+  ///所有节点
+  static get progressPhases => '/{baseSiteId}/progress/phase';
 }

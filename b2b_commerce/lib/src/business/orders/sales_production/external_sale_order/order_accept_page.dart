@@ -286,7 +286,7 @@ class _OrderAcceptPageState extends State<OrderAcceptPage> {
       throw Exception('请选择审批人');
     }
     Function cancelFunc =
-    BotToast.showLoading(crossPage: false, clickClose: true);
+        BotToast.showLoading(crossPage: false, clickClose: true);
     BaseResponse response = await ExternalSaleOrderRespository().accept(order);
     cancelFunc.call();
     if (response != null && response.code == 1) {

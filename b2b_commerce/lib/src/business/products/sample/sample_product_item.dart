@@ -3,24 +3,37 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
 
 class SampleProductGridItem extends StatelessWidget {
+  final ValueChanged<SampleProductModel> onItemTap;
+
+  final VoidCallback onItemLongPress;
+
+  final isSelected;
+
   final SampleProductModel model;
 
-  const SampleProductGridItem({Key key, this.model}) : super(key: key);
+  const SampleProductGridItem(
+      {Key key,
+      this.model,
+      this.onItemTap,
+      this.onItemLongPress,
+      this.isSelected = false})
+      : super(key: key);
 
   static const borderRadius = 10.0;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(AppRoutes.ROUTE_SAMPLE_PRODUCT,
-            arguments: {'code': model.code});
-      },
+      onTap: () => onTap(context),
+      onLongPress: () => onLongPress(context),
       child: Container(
           decoration: BoxDecoration(
-              color: Colors.white,
+              color:
+                  isSelected ? Color.fromRGBO(255, 214, 12, 0.2) : Colors.white,
               borderRadius: BorderRadius.circular(borderRadius)),
           padding: EdgeInsets.only(bottom: 5),
           child: Column(
@@ -122,17 +135,22 @@ class SampleProductGridItem extends StatelessWidget {
     return '';
   }
 
-  void jumpToDetailPage(BuildContext context) {
-    //跳转到产品详情页
-    // Navigator.of(context)
-    //     .push(MaterialPageRoute(
-    //         builder: (context) => MaterielProductForm(
-    //               id: model.id,
-    //             )))
-    //     .then((value) {
-    //   if (value) {
-    //     Provider.of<MaterielProductState>(context).clear();
-    //   }
-    // });
+  void onTap(BuildContext context) {
+    //有点击事件调用
+    if (onItemTap != null) {
+      onItemTap.call(model);
+    } else {
+      // 没有则跳转详情页
+      Navigator.of(context).pushNamed(AppRoutes.ROUTE_SAMPLE_PRODUCT,
+          arguments: {'code': model.code}).then((value) {
+        Provider.of<SampleProductsState>(context).clear();
+      });
+    }
+  }
+
+  void onLongPress(BuildContext context) {
+    if (onItemLongPress != null) {
+      onItemLongPress.call();
+    }
   }
 }

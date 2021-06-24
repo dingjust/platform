@@ -58,9 +58,52 @@ class SampleProductGridView extends StatelessWidget {
                 } else {
                   return SampleProductGridItem(
                     model: state.data[index],
+                    isSelected: state?.selectedData
+                        ?.any((e) => e.id == state.data[index].id),
+                    onItemTap: state?.onItemTap,
+                    onItemLongPress: () =>
+                        onItemLongPress(state.data[index].code),
                   );
                 }
               }),
         ));
+  }
+
+  ///长按删除
+  void onItemLongPress(String code) {
+    // BotToast.showCustomText(
+    //     onlyOne: true,
+    //     duration: null,
+    //     clickClose: false,
+    //     crossPage: false,
+    //     backgroundColor: Colors.black38,
+    //     toastBuilder: (cancelFunc) => AlertDialog(
+    //           content: Container(
+    //             height: 100,
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: <Widget>[
+    //                 Container(
+    //                   margin: EdgeInsets.only(bottom: 10),
+    //                   child: Text('是否确认删除合作商？'),
+    //                 ),
+    //                 Row(
+    //                   children: [
+    //                     Expanded(
+    //                         child: FlatButton(
+    //                             onPressed: cancelFunc, child: Text('否'))),
+    //                     Expanded(
+    //                         child: FlatButton(
+    //                             onPressed: () => _onDelete(model),
+    //                             child: Text('是',
+    //                                 style: TextStyle(
+    //                                   color: Colors.blue,
+    //                                 ))))
+    //                   ],
+    //                 )
+    //               ],
+    //             ),
+    //           ),
+    //         ));
   }
 }

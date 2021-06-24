@@ -4,7 +4,7 @@ import 'package:services/services.dart';
 import 'package:services/src/net/http_manager.dart';
 
 class SampleProductRepository {
-  //创建
+  ///创建
   static Future<bool> create(SampleProductModel form) async {
     Response response;
     try {
@@ -21,7 +21,7 @@ class SampleProductRepository {
     }
   }
 
-  //更新
+  ///更新
   static Future<bool> update(SampleProductModel form) async {
     Response response;
     try {

@@ -803,9 +803,11 @@ class RequirementInfoModel extends ItemModel {
   static Map<String, dynamic> _cityDistrictToJson(DistrictModel model) =>
       model == null ? null : DistrictModel.toJson(model);
 
-        static List<Map<String, dynamic>> _cityDistrictListToJson(List<DistrictModel> models) =>
-      models == null ? null : models.map((e) => DistrictModel.toJson(e)).toList();
-
+  static List<Map<String, dynamic>> _cityDistrictListToJson(
+          List<DistrictModel> models) =>
+      models == null
+          ? null
+          : models.map((e) => DistrictModel.toJson(e)).toList();
 
   static List<Map<String, dynamic>> _regionsToJson(List<RegionModel> models) =>
       models == null
@@ -1574,19 +1576,23 @@ class ProductionProgressModel extends ItemModel {
   @JsonKey(toJson: _progressPhaseToJson)
   ProgressPhaseModel progressPhase;
 
-  ProductionProgressModel(
-      {this.phase,
-      this.quantity,
-      this.medias,
-      this.sequence,
-      this.estimatedDate,
-      this.finishDate,
-      this.modifiedtime,
-      this.order,
-      this.updateOnly,
-      this.delayedDays,
-      this.belong,
-      this.remarks});
+  ///警告天数
+  int warningDays;
+
+  ProductionProgressModel({this.phase,
+    this.quantity,
+    this.medias,
+    this.sequence,
+    this.estimatedDate,
+    this.finishDate,
+    this.modifiedtime,
+    this.order,
+    this.updateOnly,
+    this.delayedDays,
+    this.belong,
+    this.remarks,
+    this.progressPhase,
+    this.warningDays});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionProgressModelFromJson(json);

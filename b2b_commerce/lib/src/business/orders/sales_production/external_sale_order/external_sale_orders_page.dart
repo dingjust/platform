@@ -104,12 +104,14 @@ class _AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        //唯一码导入
+        ///创建外接订单
         Navigator.of(context)
-            .pushNamed(AppRoutes.ROUTE_SALE_PRODUCTION_EXTERNAL_ORDERS_IMPORT)
+            .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDER_FORM)
             .then((value) {
-          if (value) {
-            Provider.of<ExternalSaleOrdersState>(context).clear();
+          ExternalSaleOrdersState state =
+              Provider.of<ExternalSaleOrdersState>(context);
+          if (state != null) {
+            state.clear();
           }
         });
       },

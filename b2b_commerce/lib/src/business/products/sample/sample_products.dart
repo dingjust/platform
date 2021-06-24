@@ -76,7 +76,10 @@ class _SampleProductsPageState extends State<SampleProductsPage> {
           onItemTap: widget.selectingMode ? onItemTap : null),
       child: Scaffold(
         appBar: _buildAppbar(),
-        body: SampleProductGrid(),
+        body: Container(
+          child: SampleProductGrid(),
+          margin: EdgeInsets.only(bottom: widget.selectingMode ? 60 : 0),
+        ),
         floatingActionButton: _AddButton(),
         floatingActionButtonLocation: widget.selectingMode
             ? FloatingActionButtonLocation.centerDocked

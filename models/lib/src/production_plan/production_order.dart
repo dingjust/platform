@@ -394,8 +394,8 @@ class SalesProductionOrderModel extends ProductionOrderModel {
 @JsonSerializable()
 class ProductionTaskOrderModel extends ProductionOrderModel {
   ///产品
-  @JsonKey(toJson: ProductModel.toJson)
-  ProductModel product;
+  @JsonKey(toJson: ApparelProductModel.toJson)
+  ApparelProductModel product;
 
   ///收发任务
 
