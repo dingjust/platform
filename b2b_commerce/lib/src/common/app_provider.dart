@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/helper/clipboard_helper.dart';
 import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +51,9 @@ class AppProvider {
     Provider(
       create: (_) => B2BDeptState(),
     ),
+    Provider(
+      create: (_) => ClipboardHelper(),
+    )
   ];
 
   ///预加载
