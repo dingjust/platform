@@ -18,14 +18,7 @@ class B2BLoginPage extends StatelessWidget {
           width: 100.0,
           height: 100.0,
         ),
-        registerPage: RegisterPageV2(
-          logo: Image.asset(
-            'temp/login_logo.png',
-            package: 'assets',
-            width: 100.0,
-            height: 100.0,
-          ),
-        ),
+        registerPage: RegisterPageV2(),
         forgetPasswordPage: ResetPasswordPage(),
         snackBarMessage: snackBarMessage);
   }

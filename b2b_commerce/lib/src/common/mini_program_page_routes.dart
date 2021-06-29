@@ -7,4 +7,9 @@ class MiniProgramPageRoutes {
   static get requirementDetail => (code) {
         return 'pages/order/requirement/detail/index?code=$code';
       };
+
+  ///渠道码注册
+  static get channelCodeRegister => (code) {
+        return 'pages/register/register?channelCode=$code';
+      };
 }

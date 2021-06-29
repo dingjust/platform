@@ -16,6 +16,10 @@ class ClipboardHelper {
     navigatorKey = key;
   }
 
+  void setText(String val) {
+    text = val;
+  }
+
   ///获取粘贴板字符
   Future<String> getClipboardText({BuildContext context}) async {
     ClipboardData data;

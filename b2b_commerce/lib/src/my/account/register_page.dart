@@ -12,15 +12,16 @@ import 'package:widgets/widgets.dart';
 
 ///第三方授权后绑定注册页(注册并绑定第三方)
 class RegisterPageV2 extends StatefulWidget {
-  final Image logo;
-
   ///绑定类型
   final AuthType type;
 
   ///绑定第三方Id
   final String openId;
 
-  const RegisterPageV2({this.type, this.openId, Key key, @required this.logo})
+  ///推广码注册
+  final String channelCode;
+
+  const RegisterPageV2({this.type, this.openId, Key key, this.channelCode})
       : super(key: key);
 
   _RegisterPageV2State createState() => _RegisterPageV2State();
@@ -129,9 +130,15 @@ class _RegisterPageV2State extends State<RegisterPageV2> {
 
   Widget _buildLogo() {
     return Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(255, 214, 12, 1)),
-        padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
-        child: widget.logo);
+      decoration: BoxDecoration(color: Color.fromRGBO(255, 214, 12, 1)),
+      padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
+      child: Image.asset(
+        'temp/login_logo.png',
+        package: 'assets',
+        width: 100.0,
+        height: 100.0,
+      ),
+    );
   }
 
   Widget _buildInputArea() {
@@ -476,7 +483,8 @@ class _RegisterPageV2State extends State<RegisterPageV2> {
       ..contactPerson = _contactPersonController.text
       ..contactPhone = _phoneController.text
       ..mobileNumber = _phoneController.text
-      ..captchaCode = _captchaController.text;
+      ..captchaCode = _captchaController.text
+      ..channelCode = widget.channelCode;
 
     switch (widget.type) {
       case AuthType.WECHAT:

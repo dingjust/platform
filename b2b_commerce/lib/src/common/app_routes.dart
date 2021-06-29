@@ -30,6 +30,7 @@ import 'package:b2b_commerce/src/business/services/operation_agent_service.dart'
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/common/webview_page.dart';
+import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
 import 'package:b2b_commerce/src/home/account/auth_request_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_introduction.dart';
 import 'package:b2b_commerce/src/home/factory/publish_center.dart';
@@ -38,7 +39,9 @@ import 'package:b2b_commerce/src/home/product/index.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/account/register_channel_page.dart';
+import 'package:b2b_commerce/src/my/account/register_page.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
+import 'package:b2b_commerce/src/my/card/my_card.dart';
 import 'package:b2b_commerce/src/my/integral/integral_center_page.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
@@ -66,6 +69,7 @@ import '../my/my_settings.dart';
 
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
+  static const ROUTE_REGISTER = '/register';
   static const ROUTE_MY_HOME = GlobalRoutes.ROUTE_MY_HOME;
   static const ROUTE_HOT_CATEGORY_FACTORY = '/home/factory/hot_category';
   static const ROUTE_HOT_CATEGORY_PRODUCT = '/home/product/hot_category';
@@ -146,6 +150,7 @@ class AppRoutes with GlobalRoutes {
       '/business/orders/reconciliation_orders/detail';
 
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
+  static const ROUTE_MY_CARD = '/my/card';
   static const ROUTE_MY_BRAND = '/my/my_brand';
   static const ROUTE_MY_FACTORY = '/my/my_factory';
   static const ROUTE_MY_BRAND_CERTIFICATE = '/my/my_brand_certificate';
@@ -288,13 +293,23 @@ class AppRoutes with GlobalRoutes {
           uid: getVal('uid', context),
         ),
     ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage(),
-    ROUTE_ORDER_IMPORT: (context) => OrderImportPage(
+    ROUTE_ORDER_IMPORT: (context) =>
+        OrderImportPage(
           code: getVal('code', context),
         ),
     ROUTE_SAMPLE_PRODUCTS: (context) => SampleProductsPage(),
     ROUTE_SAMPLE_PRODUCT: (context) =>
         SampleProductDetailPage(getVal('code', context)),
     ROUTE_EXTERNAL_SALE_ORDER_FORM: (context) => ExternalOrderForm(),
+    ROUTE_MY_CARD: (context) => MyCardPage(),
+    ROUTE_REGISTER: (context) =>
+        RegisterPageV2(
+          openId: getVal('openId', context),
+          type: getVal('type', context) != null
+              ? AuthTypeMap[getVal('type', context)]
+              : null,
+          channelCode: getVal('channelCode', context),
+        )
   };
 
   static dynamic getVal(String key, BuildContext context) {

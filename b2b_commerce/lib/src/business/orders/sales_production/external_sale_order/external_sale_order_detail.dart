@@ -1,7 +1,9 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/common/qr_url.dart';
 import 'package:b2b_commerce/src/helper/cooperator_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
@@ -55,6 +57,17 @@ class _ExternalSaleOrderDetailPageState
                   title: Text('${widget.titile}'),
                   backgroundColor: Constants.THEME_COLOR_MAIN,
                   elevation: 0.5,
+                  actions: [
+                    GestureDetector(
+                      onTap: () {
+                        ShareDialog.orderShareDialog(context,
+                            uniqueCode: order.uniqueCode);
+                      },
+                      child: Row(
+                        children: [Icon(Icons.share), Text('分享')],
+                      ),
+                    )
+                  ],
                 ),
                 body: Container(
                   padding: EdgeInsets.only(bottom: 10),

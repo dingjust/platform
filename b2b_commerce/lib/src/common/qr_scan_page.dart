@@ -130,15 +130,20 @@ class _QrScanPageState extends State<QrScanPage> {
 
   Future _scanBytes() async {
     this.controller.pauseCamera();
-    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    ImagePicker imagePicker = ImagePicker();
+    PickedFile file = await imagePicker.getImage(source: ImageSource.gallery);
     if (file == null) {
       this.controller.resumeCamera();
       return;
     }
-    final String barcode = await FlutterQrReader.imgScan(file);
+    final String barcode = await FlutterQrReader.imgScan(File(file.path));
     this.controller.resumeCamera();
     print('=======================$barcode');
     print(barcode);
+    if (barcode == null) {
+      BotToast.showText(text: '无法识别', align: Alignment(0, 0));
+      throw Exception('二维码为空');
+    }
     bool validate = uriHelper.handleUri(
         context: context,
         uri: barcode,

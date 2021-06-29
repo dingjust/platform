@@ -19,8 +19,8 @@ class AuthApis {
 
   ///钉钉Code获取授权码
   static get authCodeByDingTalk => (String code) {
-    return '/{baseSiteId}/dingtalk/auth/access_login/$_clientId/B2B/$code';
-  };
+        return '/{baseSiteId}/dingtalk/auth/access_login/$_clientId/B2B/$code';
+      };
 
   ///钉钉授权绑定账号
   static get dingTalkAuthBinding =>

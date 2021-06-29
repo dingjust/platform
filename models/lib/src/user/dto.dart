@@ -39,6 +39,9 @@ class CompanyRegisterDTO {
   ///钉钉openId
   String ddOpenid;
 
+  ///渠道码
+  String channelCode;
+
   CompanyRegisterDTO(
       {this.mobileNumber,
       this.password,
@@ -51,7 +54,8 @@ class CompanyRegisterDTO {
       this.locationAddress,
       this.contactAddress,
       this.wxOpenid,
-      this.ddOpenid});
+      this.ddOpenid,
+      this.channelCode});
 
   static Map<String, dynamic> _addressToJson(AddressModel contactAddress) =>
       contactAddress == null
