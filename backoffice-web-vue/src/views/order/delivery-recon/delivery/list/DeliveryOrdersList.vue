@@ -102,10 +102,13 @@ export default {
       }
       if (!this.formData.cooperator) {
         // 未确定合作商时
-        return this.currentRow <= 0 || row.cooperator.name === this.currentRow[0].cooperator.name;
+        return this.currentRow <= 0 || row.cooperator.id === this.currentRow[0].cooperator.id;
       } else {
-        // 已确定合作商时
-        return this.formData.cooperator.name === row.cooperator.name;
+        // 已确定合作商时   发货单没有合作商通过判断公司id
+        if (this.formData.cooperator.partner && this.formData.cooperator.partner.id) {
+          return this.formData.cooperator.partner.id === row.cooperator.partner.id
+        }
+        return this.formData.cooperator.name === (row.cooperator.partner ? row.cooperator.partner.name : row.cooperator.name)
       }
     }
   },

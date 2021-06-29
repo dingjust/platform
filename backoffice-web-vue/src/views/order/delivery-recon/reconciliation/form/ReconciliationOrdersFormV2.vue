@@ -84,7 +84,8 @@ export default {
         medias: [],
         colNames: [],
         remarks: '',
-        additionalCharges: []
+        additionalCharges: [],
+        belongRoleType: 'PARTYA'
       },
       tableCol: this.$store.state.ReconciliationOrdersV2Module.tableCol
     }

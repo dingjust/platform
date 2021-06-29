@@ -2383,6 +2383,31 @@ const state = {
       name: '微信内部支付'
     }
   ],
+  // 支付信息
+  CmtPaymentState: [
+    {
+      code: 'WAIT_TO_PAY',
+      name: '待付款'
+    }, {
+      code: 'PAYING',
+      name: '付款中'
+    }, {
+      code: 'PAID_PART',
+      name: '部分付款'
+    }, {
+      code: 'PAID',
+      name: '已付款'
+    }, {
+      code: 'PAY_FAIL',
+      name: '付款失败'
+    }, {
+      code: 'REFUNDING',
+      name: '退款中'
+    }, {
+      code: 'FUFUNDED',
+      name: '已退款'
+    }
+  ]
 };
 
 const mutations = {};
