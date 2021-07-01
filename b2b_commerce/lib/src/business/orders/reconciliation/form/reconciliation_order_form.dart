@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'form_btns.dart';
@@ -343,7 +344,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
         colNames: colNames,
         additionalCharges: [],
         salesProductionOrder: widget.order,
-        cooperator: widget.order.originCooperator
+        belongRoleType: getRoleType()
         // shipParty: widget.order.targetCooperator.partner,
         // receiveParty: widget.order.originCompany
         );
@@ -385,6 +386,16 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       return entry;
     }).toList();
     return data;
+  }
+
+  //判断用户属于甲乙方
+  AgreementRoleType getRoleType() {
+    if (widget?.order?.originCompany?.uid ==
+        UserBLoC.instance.currentUser.companyCode) {
+      return AgreementRoleType.PARTYA;
+    } else {
+      return AgreementRoleType.PARTYB;
+    }
   }
 
   void addCustomCol() {

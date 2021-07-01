@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/_shared/payplan/form/simple_payplan_form.dart';
 import 'package:b2b_commerce/src/_shared/payplan/payplan_select_page.dart';
-import 'package:b2b_commerce/src/business/cooperator/cooperators_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -74,11 +73,11 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
             body: Container(
               child: ListView(
                 children: <Widget>[
-                  FormCooperatorsSelect(
-                    onCooperatorSelect: onCooperatorSelect,
-                    // value: form.targetCooperator,
-                    value: form.originCooperator,
-                  ),
+                  // FormCooperatorsSelect(
+                  //   onCooperatorSelect: onCooperatorSelect,
+                  //   // value: form.targetCooperator,
+                  //   value: form.originCooperator,
+                  // ),
                   FormProduction(
                     onEntriesChange: (entries) {
                       setState(() {
@@ -96,31 +95,29 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
                     },
                   ),
                   FormPayInfo(
-                    form: form,
-                    updateForm: (val) {
-                      // setState(() {
-                      form = val;
-                      // });
-                    },
-                  ),
+                      form: form,
+                      updateForm: (val) {
+                        // setState(() {
+                        form = val;
+                        // });
+                      }),
                   SimplePayPlanForm(
-                    form: form.payPlan,
-                    onChange: (val) {
-                      setState(() {
-                        form.payPlan = val;
-                      });
-                    },
-                  ),
+                      form: form.payPlan,
+                      onChange: (val) {
+                        setState(() {
+                          form.payPlan = val;
+                        });
+                      }),
                   _buildRemarks(),
                   Container(
                     height: 60,
                   ),
+                  FormBtns(
+                    form: form,
+                    validateFunc: validateForm,
+                  )
                 ],
               ),
-            ),
-            bottomNavigationBar: FormBtns(
-              form: form,
-              validateFunc: validateForm,
             ),
           ),
         ),
@@ -165,31 +162,31 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
     );
   }
 
-  ///合作商选择
-  void onCooperatorSelect() async {
-    List<CooperatorModel> cooperators = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CooperatorsPage(
-                  selectedData: form.targetCooperator != null
-                      ? [form.targetCooperator]
-                      : [],
-                  selectingMode: true,
-                  categories: [CooperatorCategory.SUPPLIER],
-                  max: 1,
-                )));
-    if (cooperators != null) {
-      setState(() {
-        if (cooperators.isNotEmpty) {
-          // form.targetCooperator = cooperators.first;
-          form.originCooperator = cooperators.first;
-        } else {
-          // form.targetCooperator = null;
-          form.originCooperator = null;
-        }
-      });
-    }
-  }
+  // ///合作商选择
+  // void onCooperatorSelect() async {
+  //   List<CooperatorModel> cooperators = await Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => CooperatorsPage(
+  //                 selectedData: form.targetCooperator != null
+  //                     ? [form.targetCooperator]
+  //                     : [],
+  //                 selectingMode: true,
+  //                 categories: [CooperatorCategory.SUPPLIER],
+  //                 max: 1,
+  //               )));
+  //   if (cooperators != null) {
+  //     setState(() {
+  //       if (cooperators.isNotEmpty) {
+  //         // form.targetCooperator = cooperators.first;
+  //         form.originCooperator = cooperators.first;
+  //       } else {
+  //         // form.targetCooperator = null;
+  //         form.originCooperator = null;
+  //       }
+  //     });
+  //   }
+  // }
 
   ///财务选择
   void onPayPlanSelect() async {

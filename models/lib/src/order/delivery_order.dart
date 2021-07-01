@@ -49,6 +49,21 @@ const FastReconciliationSheetStateLocalizedMap = {
   FastReconciliationSheetState.CANCELLED: "已取消",
 };
 
+///对账状态
+enum FastReconciliationSignState {
+  ///待我签署
+  WAIT_ME_SIGN,
+
+  ///待对方签署
+  WAIT_PARTNER_SIGN
+}
+
+///对账状态
+const FastReconciliationSignStateLocalizedMap = {
+  FastReconciliationSignState.WAIT_ME_SIGN: "待我签署",
+  FastReconciliationSignState.WAIT_PARTNER_SIGN: "待对方签署"
+};
+
 /// 物流单
 @JsonSerializable()
 class LogisticsSheetModel {
@@ -227,6 +242,12 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
   @JsonKey(toJson: MediaModel.listToJson)
   List<MediaModel> paperSheetMedias;
 
+  ///签署状态
+  FastReconciliationSignState signState;
+
+  ///创建方
+  AgreementRoleType belongRoleType;
+
   FastReconciliationSheetModel(
       {int id,
       String code,
@@ -243,17 +264,19 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
       this.title,
       this.state,
       this.entries,
-      this.fastShippingSheets,
-      this.isApproval,
-      this.approvers,
-      this.auditWorkOrder,
-      this.reconciliationQuantity,
-      this.cooperator,
-      this.docSignatures,
-      this.colNames,
-      this.additionalCharges,
-      this.salesProductionOrder,
-      this.paperSheetMedias})
+    this.fastShippingSheets,
+    this.isApproval,
+    this.approvers,
+    this.auditWorkOrder,
+    this.reconciliationQuantity,
+    this.cooperator,
+    this.docSignatures,
+    this.colNames,
+    this.additionalCharges,
+    this.salesProductionOrder,
+    this.paperSheetMedias,
+    this.signState,
+    this.belongRoleType})
       : super(
             id: id,
             code: code,
