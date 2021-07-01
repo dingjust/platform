@@ -178,7 +178,7 @@ const actions = {
     if (page != null) {
       commit('currentPageNumber', page);
     }
-    if (size) {
+    if (size != null) {
       commit('currentPageSize', size);
     }
 

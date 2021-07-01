@@ -1287,7 +1287,19 @@ let TENANT_APIS = {
   // 查询代运营审阅列表
   searchAgentOperationReview: () => '/b2b/agentOperation/search',
   // 审阅通过 put
-  AgentOperationReviewPass: () => '/b2b/agentOperation/review/pass'
+  AgentOperationReviewPass: () => '/b2b/agentOperation/review/pass',
+
+  // 需求审阅
+  // 获取需求备份
+  getRequirementOrderBackUp: (code) => '/b2b/orders/requirement/backups/' + code,
+  // 审阅未修改过的需求订单
+  reviewRequirementOrder: (code, flag) => `/b2b/orders/requirement/reviewByCreate/${code}/${flag}`,
+  // 审阅通过->修改过需求订单
+  passRequirementOrder: (code, modifiedtime) => `/b2b/orders/requirement/review/${code}/pass?versionNo=${modifiedtime}`,
+  // 审阅驳回->修改过需求订单
+  rejectRequirementOrder: (code, modifiedtime) => `/b2b/orders/requirement/review/${code}/reject?versionNo=${modifiedtime}`,
+  // 设置需求订单显示关闭
+  showOrHideRequirementOrder: (code, flag) => `/b2b/orders/requirement/enableShow/${code}/${flag}`
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

@@ -27,6 +27,11 @@ export default {
           name: '代运营审阅',
           url: '/task/agent-operation/review',
           icon: 'iconNone'
+        },
+        {
+          name: '需求审阅',
+          url: '/task/requirement/review',
+          icon: 'iconNone'
         }
       ]
     },
