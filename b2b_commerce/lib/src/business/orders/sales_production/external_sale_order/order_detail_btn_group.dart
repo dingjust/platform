@@ -167,36 +167,36 @@ class OrderDetailBtnGroup extends StatelessWidget {
         backgroundColor: Colors.black38,
         allowClick: false,
         toastBuilder: (cancelFunc) => AlertDialog(
-          content: Container(
-            height: 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: [
-                    Expanded(
-                        child: Text(
+              content: Container(
+                height: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Text(
                           '确认拒绝订单?',
                         ))
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    FlatButton(onPressed: cancelFunc, child: Text('否')),
-                    FlatButton(
-                      onPressed: () {
-                        cancelFunc.call();
-                        _resuse();
-                      },
-                      child: Text('是'),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        FlatButton(onPressed: cancelFunc, child: Text('否')),
+                        FlatButton(
+                          onPressed: () {
+                            cancelFunc.call();
+                            _resuse();
+                          },
+                          child: Text('是'),
+                        )
+                      ],
                     )
                   ],
-                )
-              ],
-            ),
-          ),
-        ));
+                ),
+              ),
+            ));
   }
 
   ///拒单接口
@@ -225,12 +225,14 @@ class OrderDetailBtnGroup extends StatelessWidget {
         .push(MaterialPageRoute(builder: (context) => OrderPaymentPageV2(data)))
         .then((value) {
       //回调刷新
-      if (value == true && detailCallback != null) {
-        detailCallback.call();
-        if (needCallbackPop != null) {
-          needCallbackPop.call();
-        }
-      }
+      // if (value == true && detailCallback != null) {
+      //   detailCallback.call();
+      //   if (needCallbackPop != null) {
+      //     needCallbackPop.call();
+      //   }
+      // }
+      detailCallback?.call();
+      needCallbackPop?.call();
     });
   }
 

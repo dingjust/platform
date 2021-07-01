@@ -8,8 +8,15 @@ abstract class WechatService {
   ///微信文字分享
   Future<bool> shareText(String content, WeChatScene scene);
 
+  ///微信图片分享
+  Future<bool> shareImage(WeChatImage image, WeChatScene scene);
+
   ///微信WEB分享
   Future<bool> shareWeb(String url, WeChatScene scene, String title,
+      String description, String thumbnail);
+
+  ///微信小程序分享
+  Future<bool> shareMiniProgram(String url, String title, String path,
       String description, String thumbnail);
 
   Future<bool> sendAuth();

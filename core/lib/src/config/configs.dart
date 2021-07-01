@@ -1,9 +1,9 @@
 class GlobalConfigs {
   static const PAGE_SIZE = 20;
 
-  static const DEBUG = false;
+  // static const DEBUG = false;
 
-  // static const DEBUG = true;
+  static const DEBUG = true;
 
   //测试
   // static const CONTEXT_PATH = 'http://sc.nbyjy.net';
@@ -136,4 +136,7 @@ class GlobalConfigs {
 
   ///CDN-OSS-DOMAIN
   static const CDN_OSS_DOMAIN = "https://cdn-oss.nbyjy.net";
+
+  ///微信小程序原始ID
+  static const MINI_PROGRAM_ID = "gh_07d47c9fd2dd";
 }

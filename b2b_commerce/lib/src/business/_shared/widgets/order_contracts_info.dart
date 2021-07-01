@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
+import 'package:b2b_commerce/src/business/orders/reconciliation/form/reconciliation_order_form.dart';
 import 'package:b2b_commerce/src/helper/contract_helper.dart';
 import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:flutter/material.dart';
@@ -41,17 +42,17 @@ class OrderContractsBlock extends StatelessWidget {
             ),
             (agreements != null && agreements.length > 0)
                 ? Wrap(
-              children: [
-                for (UserAgreementModel e in agreements ?? [])
-                  _buildBtn(context, e)
-              ],
-            )
+                    children: [
+                      for (UserAgreementModel e in agreements ?? [])
+                        _buildBtn(context, e)
+                    ],
+                  )
                 : Center(
-              child: Text(
-                '$hintText',
-                style: TextStyle(color: Colors.grey),
-              ),
-            )
+                    child: Text(
+                      '$hintText',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
           ],
         ));
   }
@@ -108,12 +109,15 @@ class DocSignaturesBlock extends StatelessWidget {
 
   final VoidCallback callback;
 
+  final SalesProductionOrderModel order;
+
   const DocSignaturesBlock({Key key,
     this.sheets,
     this.label = '对账单',
     this.hintText = '暂无对账单',
     this.callback,
-    this.beforeTap})
+    this.beforeTap,
+    this.order})
       : super(key: key);
 
   @override
@@ -140,11 +144,24 @@ class DocSignaturesBlock extends StatelessWidget {
               ],
             )
                 : Center(
-              child: Text(
-                '$hintText',
-                style: TextStyle(color: Colors.grey),
-              ),
-            )
+                child: canCreate()
+                    ? TextButton(
+                    child: Text('创建对账单'),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(
+                          builder: (context) =>
+                              ReconciliationOrderForm(
+                                order: order,
+                              )))
+                          .then((value) {
+                        if (value) {
+                          callback?.call();
+                        }
+                      });
+                    })
+                    : Text('$hintText',
+                    style: TextStyle(color: Colors.grey)))
           ],
         ));
   }
@@ -191,5 +208,13 @@ class DocSignaturesBlock extends StatelessWidget {
   bool signDisable(FastReconciliationSheetModel order) {
     return order.state == FastReconciliationSheetState.PENDING_APPROVAL ||
         order.state == FastReconciliationSheetState.CANCELLED;
+  }
+
+  ///能否创建对账单
+  bool canCreate() {
+    if (order != null) {
+      return order.originCooperator != null && order.targetCooperator != null;
+    }
+    return false;
   }
 }

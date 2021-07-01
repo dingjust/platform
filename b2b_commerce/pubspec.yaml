@@ -78,6 +78,8 @@ dependencies:
   pinput: ^1.0.0
   umeng_common_sdk: ^1.1.2
   qr_code_scanner: ^0.3.5
+  flutter_qr_reader: ^1.0.3
+  qr_flutter: ^3.2.0
 
   # PUB库钉钉插件
   flutter_ddshare: ^1.0.2
@@ -168,6 +170,7 @@ flutter:
     - packages/assets/temp/QRCode.png
     - packages/assets/temp/common/icon64_wx_logo.png
     - packages/assets/temp/common/wechat_login.png
+    - packages/assets/temp/common/mini-program.png
     - packages/assets/temp/common/wechat_friend.png
     - packages/assets/temp/common/qq_logo.png
     - packages/assets/temp/common/qq_zone.png

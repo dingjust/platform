@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/home/factory/_shared/factory_widgets.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:core/core.dart';
@@ -585,34 +586,32 @@ class _RequirementOrderDetailByFactoryPageState
           children: [
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Colors.green,
-                  label: '联系对方',
-                  onTap: () {
-                    _selectActionButton(model?.details?.contactPhone);
-                  },
-                )),
+              color: Colors.green,
+              label: '联系对方',
+              onTap: () {
+                _selectActionButton(model?.details?.contactPhone);
+              },
+            )),
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Colors.blueAccent,
-                  label: '生产报价',
-                  onTap: () async {
-                    QuoteModel newQuote =
+              color: Colors.blueAccent,
+              label: '生产报价',
+              onTap: () async {
+                QuoteModel newQuote =
                     await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            RequirementQuoteOrderForm(
+                        builder: (context) => RequirementQuoteOrderForm(
                               model: orderModel,
                               quoteModel: QuoteModel(attachments: []),
                             )));
 
-                    if (newQuote != null) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              QuoteOrderDetailPage(
-                                newQuote.code,
-                              )));
-                    }
-                  },
-                ))
+                if (newQuote != null) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => QuoteOrderDetailPage(
+                            newQuote.code,
+                          )));
+                }
+              },
+            ))
           ],
         ),
       ),
@@ -657,6 +656,7 @@ class _RequirementOrderDetailByFactoryPageState
         imageUrl: orderModel.details.pictures.isEmpty
             ? '${GlobalConfigs.LOGO_URL}'
             : '${orderModel.details.pictures[0].shareUrl()}',
+        path: MiniProgramPageRoutes.requirementDetail(orderModel.code),
         url: Apis.shareRequirement(orderModel.code));
   }
 

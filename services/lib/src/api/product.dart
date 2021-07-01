@@ -43,36 +43,6 @@ abstract class ProductApis {
   //产品下架
   static get off => (code) => '/{baseSiteId}/products/apparel/$code/off';
 
-  ///获取所有样衣
-  static get samples => '/{baseSiteId}/products/sample/all';
-
-  ///根据code获取样衣详情
-  static get sampleDetail => (code) => '/{baseSiteId}/products/sample/$code';
-
-  ///创建样衣
-  static get sampleCreate => '/{baseSiteId}/products/sample/create';
-
-  ///更新样衣
-  static get sampleUpdate => '/{baseSiteId}/products/sample/update';
-  //获取样衣借还记录
-  static get sampleHistorys =>
-      '/{baseSiteId}/products/sampleCheckoutHist/search';
-  //获取样衣借还记录明细
-  static get getHistory =>
-      (id) => '/{baseSiteId}/products/sampleCheckoutHist/$id';
-
-  //创建样衣借还记录
-  static get sampleHistoryCreate =>
-      '/{baseSiteId}/products/sampleCheckoutHist/create';
-
-  //更新样衣借还记录
-  static get sampleHistoryUpdate =>
-          (id) => '/{baseSiteId}/products/sampleCheckoutHist/update/$id';
-
-  //删除样衣借还记录
-  static get sampleHistoryDelete =>
-          (id) => '/{baseSiteId}/products/sampleCheckoutHist/$id';
-
   /// 看款下单（工厂款）
   static get factoriesApparel => '/{baseSiteId}/products/apparel/factories';
 
@@ -90,6 +60,14 @@ abstract class ProductApis {
 
   /// 面辅料删除
   static get deleteMaterielProduct =>
-          (
-          id) => '/{baseSiteId}/materiel/product/update/state/$id?state=DELETED';
+      (id) => '/{baseSiteId}/materiel/product/update/state/$id?state=DELETED';
+
+  ///款式列表
+  static get sampleProducts => '/{baseSiteId}/sample/clothes';
+
+  ///款式详情(详情-get 更新-put)
+  static get sampleProduct => (code) => '/{baseSiteId}/sample/clothes/$code';
+
+  ///款式创建
+  static get sampleCreate => '/{baseSiteId}/sample/clothes/create';
 }

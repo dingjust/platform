@@ -98,4 +98,40 @@ class SalesOrdersResponse {
       model == null ? null : _$SalesOrdersResponseToJson(model);
 }
 
+/// 节点方案列表响应
+@JsonSerializable()
+class OrderProgressPlanResponse {
+  final int number;
+  final int size;
+  final int totalPages;
+  final int totalElements;
+  final List<OrderProgressPlanModel> content;
 
+  OrderProgressPlanResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
+
+  factory OrderProgressPlanResponse.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$OrderProgressPlanResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(OrderProgressPlanResponse model) =>
+      model == null ? null : _$OrderProgressPlanResponseToJson(model);
+}
+
+/// 节点列表响应
+@JsonSerializable()
+class ProgressPhaseResponse {
+  final int number;
+  final int size;
+  final int totalPages;
+  final int totalElements;
+  final List<ProgressPhaseModel> content;
+
+  ProgressPhaseResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
+
+  factory ProgressPhaseResponse.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ProgressPhaseResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(ProgressPhaseResponse model) =>
+      model == null ? null : _$ProgressPhaseResponseToJson(model);
+}

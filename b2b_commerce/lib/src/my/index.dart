@@ -43,10 +43,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
+        bloc.currentUser.status == UserStatus.OFFLINE
+            ? Container()
+            : MenuItem(Icon(Icons.qr_code), '我的推广码', AppRoutes.ROUTE_MY_CARD),
+      ]),
+      Menu('', <Widget>[
         // MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
         //     AppRoutes.ROUTE_MY_ACCOUNT),
-        MenuItem(B2BImage.myIntegral(width: 25, height: 25), '积分中心',
-            AppRoutes.ROUTE_MY_INTEGRAL_CENTER),
+        // MenuItem(B2BImage.myIntegral(width: 25, height: 25), '积分中心',
+        //     AppRoutes.ROUTE_MY_INTEGRAL_CENTER),
         menuSeparator,
         CompanyIntroductionMenuItem(),
         menuSeparator,

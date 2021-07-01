@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperator_item.dart';
-import 'package:b2b_commerce/src/business/orders/recon/fast_reconciliation_sheet_info.dart';
+import 'package:b2b_commerce/src/business/orders/reconciliation/components/fast_reconciliation_sheet_info.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';

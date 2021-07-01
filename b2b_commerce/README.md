@@ -31,6 +31,4 @@ android:authorities="${applicationId}.fileprovider"
 android:name=".FlutterWebviewFileProvider"
 android:authorities="${applicationId}.flutter_webview_fileprovider"
 
-
-
-
+flutter_qr_reader   与 qr_code_scanner 依赖重复,  其中flutter_qr_reader OpenCameraInterface类需重写类名(CustomOpenCameraInterface)

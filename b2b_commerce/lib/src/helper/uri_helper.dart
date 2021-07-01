@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 

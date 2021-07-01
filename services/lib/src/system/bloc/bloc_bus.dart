@@ -16,8 +16,6 @@ class BLocBus {
       RequirementQuoteDetailBLoC.instance.reset();
       ApparelProductBLoC.instance.clearProductsMap();
       ApparelProductSearchResultBLoC.instance.reset();
-      SampleProductBLoC.instance.reset();
-      SampleProductHistoryBLoC.instance.reset();
       ProductionBLoC.instance.reset();
       ProductionSearchResultBLoC.instance.reset();
       // SuppliersBloc

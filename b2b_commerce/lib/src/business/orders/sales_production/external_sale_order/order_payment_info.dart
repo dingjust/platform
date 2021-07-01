@@ -27,7 +27,7 @@ class OrderPaymentInfo extends StatelessWidget {
               ],
             ),
             buildRow('支付方式', payOnline ? '线上支付' : '线下支付'),
-            ..._buildOnlineRows()
+            ...payOnline ? _buildOnlineRows() : []
           ],
         ));
   }
@@ -68,7 +68,7 @@ class OrderPaymentInfo extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           border:
-          Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+              Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

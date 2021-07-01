@@ -117,10 +117,11 @@ class QualitySelectorState extends State<QualitySelector> {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           EnumModel item = _enum1[index];
+          print('=======${item.code}');
           return _CheckBox(
             selected: values1.contains(item.code),
             model: item,
-            disable: values3.isNotEmpty,
+            // disable: values3.isNotEmpty,
             onTap: () {
               setState(() {
                 if (values1.contains(item.code)) {
@@ -181,7 +182,7 @@ class QualitySelectorState extends State<QualitySelector> {
           return _CheckBox(
             selected: values3.contains(item.code),
             model: item,
-            disable: values1.isNotEmpty,
+            // disable: values1.isNotEmpty,
             onTap: () {
               setState(() {
                 if (values3.contains(item.code)) {
@@ -220,7 +221,6 @@ class _Divider extends StatelessWidget {
 class _CheckBox extends StatelessWidget {
   final bool selected;
 
-  final bool disable;
 
   final EnumModel model;
 
@@ -231,7 +231,6 @@ class _CheckBox extends StatelessWidget {
   const _CheckBox(
       {Key key,
       this.selected = false,
-      this.disable = false,
       this.color = Constants.THEME_COLOR_MAIN,
       this.model,
       this.onTap})
@@ -240,27 +239,27 @@ class _CheckBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //禁用状态
-    if (disable) {
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 14,
-              width: 14,
-              margin: EdgeInsets.only(right: 5),
-              decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  border: Border.all(width: 0.5, color: Colors.grey)),
-            ),
-            Text(
-              '${model.name}',
-              style: TextStyle(color: Colors.grey),
-            )
-          ],
-        ),
-      );
-    }
+    // if (disable) {
+    //   return Container(
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Container(
+    //           height: 14,
+    //           width: 14,
+    //           margin: EdgeInsets.only(right: 5),
+    //           decoration: BoxDecoration(
+    //               color: Colors.grey[100],
+    //               border: Border.all(width: 0.5, color: Colors.grey)),
+    //         ),
+    //         Text(
+    //           '${model.name}',
+    //           style: TextStyle(color: Colors.grey),
+    //         )
+    //       ],
+    //     ),
+    //   );
+    // }
 
     return GestureDetector(
       onTap: onTap,

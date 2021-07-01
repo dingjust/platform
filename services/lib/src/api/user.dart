@@ -137,8 +137,7 @@ abstract class UserApis {
       };
 
   //获取合同MediaModel
-  static get getContractPdfMedia =>
-          (code) {
+  static get getContractPdfMedia => (code) {
         return '/{baseSiteId}/user/agreement/preview/' + code;
       };
 

@@ -49,6 +49,21 @@ const FastReconciliationSheetStateLocalizedMap = {
   FastReconciliationSheetState.CANCELLED: "已取消",
 };
 
+///对账状态
+enum FastReconciliationSignState {
+  ///待我签署
+  WAIT_ME_SIGN,
+
+  ///待对方签署
+  WAIT_PARTNER_SIGN
+}
+
+///对账状态
+const FastReconciliationSignStateLocalizedMap = {
+  FastReconciliationSignState.WAIT_ME_SIGN: "待我签署",
+  FastReconciliationSignState.WAIT_PARTNER_SIGN: "待对方签署"
+};
+
 /// 物流单
 @JsonSerializable()
 class LogisticsSheetModel {
@@ -213,38 +228,68 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
   @JsonKey(toJson: DocSignatureModel.listToJson)
   List<DocSignatureModel> docSignatures;
 
-  FastReconciliationSheetModel({int id,
-    String code,
-    CompanyModel shipParty,
-    CompanyModel receiveParty,
-    AddressModel deliveryAddress,
-    B2BCustomerModel merchandiser,
-    B2BCustomerModel productionLeader,
-    B2BCustomerModel creator,
-    List<MediaModel> medias,
-    CooperatorModel targetCooperator,
-    DateTime creationtime,
-    this.title,
-    this.state,
+  ///自定义行
+  List<String> colNames;
+
+  ///附加项
+  @JsonKey(toJson: ReconciliationAdditionalModel.listToJson)
+  List<ReconciliationAdditionalModel> additionalCharges;
+
+  @JsonKey(toJson: _salesProductionOrderToSjon)
+  SalesProductionOrderModel salesProductionOrder;
+
+  ///纸质对账单
+  @JsonKey(toJson: MediaModel.listToJson)
+  List<MediaModel> paperSheetMedias;
+
+  ///签署状态
+  FastReconciliationSignState signState;
+
+  ///创建方
+  AgreementRoleType belongRoleType;
+
+  FastReconciliationSheetModel(
+      {int id,
+      String code,
+      CompanyModel shipParty,
+      CompanyModel receiveParty,
+      AddressModel deliveryAddress,
+      B2BCustomerModel merchandiser,
+      B2BCustomerModel productionLeader,
+      B2BCustomerModel creator,
+      List<MediaModel> medias,
+      CooperatorModel targetCooperator,
+      DateTime creationtime,
+      String remarks,
+      this.title,
+      this.state,
+      this.entries,
     this.fastShippingSheets,
     this.isApproval,
     this.approvers,
     this.auditWorkOrder,
     this.reconciliationQuantity,
     this.cooperator,
-    this.docSignatures})
+    this.docSignatures,
+    this.colNames,
+    this.additionalCharges,
+    this.salesProductionOrder,
+    this.paperSheetMedias,
+    this.signState,
+    this.belongRoleType})
       : super(
-      id: id,
-      code: code,
-      shipParty: shipParty,
-      receiveParty: receiveParty,
-      deliveryAddress: deliveryAddress,
-      merchandiser: merchandiser,
-      productionLeader: productionLeader,
-      creator: creator,
-      medias: medias,
-      targetCooperator: targetCooperator,
-      creationtime: creationtime);
+            id: id,
+            code: code,
+            shipParty: shipParty,
+            receiveParty: receiveParty,
+            deliveryAddress: deliveryAddress,
+            merchandiser: merchandiser,
+            productionLeader: productionLeader,
+            creator: creator,
+            medias: medias,
+            targetCooperator: targetCooperator,
+            remarks: remarks,
+            creationtime: creationtime);
 
   factory FastReconciliationSheetModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FastReconciliationSheetModelFromJson(json);
@@ -252,14 +297,21 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
   Map<String, dynamic> toJson() => _$FastReconciliationSheetModelToJson(this);
 
   static List<Map<String, dynamic>> mediasToJson(
-      List<FastReconciliationSheetModel> medias) =>
+          List<FastReconciliationSheetModel> medias) =>
       medias == null ? null : medias.map((media) => media.toJson()).toList();
+
+  static Map<String, dynamic> _salesProductionOrderToSjon(
+          SalesProductionOrderModel order) =>
+      order == null ? null : {'id': order.id, 'code': order.code};
 }
 
 /// 快速对账单行
 @JsonSerializable()
 class FastReconciliationSheetEntryModel extends ItemModel {
   String code;
+
+  @JsonKey(toJson: ProductModel.toJson)
+  ProductModel product;
 
   ///波段
   String waveBand;
@@ -311,8 +363,11 @@ class FastReconciliationSheetEntryModel extends ItemModel {
   ///结算金额
   double settlementAmount;
 
-  FastReconciliationSheetEntryModel({
-    this.code,
+  ///自定义列
+  @JsonKey(toJson: ReconciliationCustomColumnModel.listToJson)
+  List<ReconciliationCustomColumnModel> customColumns;
+
+  FastReconciliationSheetEntryModel({this.code,
     this.waveBand,
     this.orderItemNo,
     this.customizedMode,
@@ -329,16 +384,72 @@ class FastReconciliationSheetEntryModel extends ItemModel {
     this.deductionAmount,
     this.increaseAmount,
     this.settlementAmount,
-  });
+    this.customColumns,
+    this.product});
 
   factory FastReconciliationSheetEntryModel.fromJson(
-          Map<String, dynamic> json) =>
+      Map<String, dynamic> json) =>
       json == null ? null : _$FastReconciliationSheetEntryModelFromJson(json);
 
   Map<String, dynamic> toJson() =>
       _$FastReconciliationSheetEntryModelToJson(this);
 
   static List<Map<String, dynamic>> listToJson(
-          List<FastReconciliationSheetEntryModel> models) =>
+      List<FastReconciliationSheetEntryModel> models) =>
+      models == null ? null : models.map((model) => model.toJson()).toList();
+}
+
+/// 快速对账单自定义列
+@JsonSerializable()
+class ReconciliationCustomColumnModel extends ItemModel {
+  String name;
+
+  String value;
+
+  ///创建时间
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime creationtime;
+
+  ///修改时间
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime modifiedtime;
+
+  ReconciliationCustomColumnModel({this.name, this.value});
+
+  factory ReconciliationCustomColumnModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ReconciliationCustomColumnModelFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$ReconciliationCustomColumnModelToJson(this);
+
+  static List<Map<String, dynamic>> listToJson(
+      List<ReconciliationCustomColumnModel> models) =>
+      models == null ? null : models.map((model) => model.toJson()).toList();
+}
+
+/// 快速对账单附加项
+@JsonSerializable()
+class ReconciliationAdditionalModel extends ItemModel {
+  String remarks;
+
+  double amount;
+
+  ///创建时间
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime creationtime;
+
+  ///修改时间
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime modifiedtime;
+
+  ReconciliationAdditionalModel({this.remarks, this.amount});
+
+  factory ReconciliationAdditionalModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ReconciliationAdditionalModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReconciliationAdditionalModelToJson(this);
+
+  static List<Map<String, dynamic>> listToJson(
+      List<ReconciliationAdditionalModel> models) =>
       models == null ? null : models.map((model) => model.toJson()).toList();
 }

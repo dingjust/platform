@@ -40,9 +40,10 @@ class AuthLoginHelper {
           crossPage: true);
       //未绑定，跳转注册页
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            RegisterPageV2(
-                type: AuthType.WECHAT, openId: response.data, logo: _logoImage),
+        builder: (context) => RegisterPageV2(
+          type: AuthType.WECHAT,
+          openId: response.data,
+        ),
       ));
     }
 
@@ -114,9 +115,9 @@ class AuthLoginHelper {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
             RegisterPageV2(
-                type: AuthType.DING_TALK,
-                openId: response.data,
-                logo: _logoImage),
+              type: AuthType.DING_TALK,
+              openId: response.data,
+            ),
       ));
     }
 
@@ -170,3 +171,10 @@ enum AuthType {
   ///钉钉
   DING_TALK
 }
+
+const AuthTypeMap = {
+  'WECHAT': AuthType.WECHAT,
+  'DING_TALK': AuthType.DING_TALK,
+
+
+};

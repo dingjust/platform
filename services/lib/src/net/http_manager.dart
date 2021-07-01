@@ -56,13 +56,15 @@ class HttpManager {
     _instance.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
       print('***${DateTime.now()}***');
-      options.headers['Authorization'] = authorization;
-
-      // 所属信息
-      options.headers['company'] = UserBLoC.instance.currentUser.companyCode;
-      // if (GlobalConfigs.DEBUG) {
-      //   print("REQUEST[${options?.method}] => PATH: ${options?.path}");
-      // }
+      //忽略headers
+      if (options.headers['ignoreHeader'] != null &&
+          options.headers['ignoreHeader']) {
+        options.headers = {};
+        print('IGNORE_HEADER');
+      } else {
+        options.headers['Authorization'] = authorization;
+        options.headers['company'] = UserBLoC.instance.currentUser.companyCode;
+      }
     }, onResponse: (Response response) {
       print('***${DateTime.now()}***');
       //更改网络状态

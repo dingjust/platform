@@ -14,6 +14,7 @@ import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_order_import.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/external_sale_orders_page.dart';
+import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_order/form/external_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/out_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/out_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_production_task_order/out_production_task_orders_page.dart';
@@ -21,12 +22,15 @@ import 'package:b2b_commerce/src/business/orders/sales_production/production_tas
 import 'package:b2b_commerce/src/business/orders/sales_production/production_task_order/production_task_orders_page.dart';
 import 'package:b2b_commerce/src/business/products/materiel_product_manage.dart';
 import 'package:b2b_commerce/src/business/products/materiel_products.dart';
+import 'package:b2b_commerce/src/business/products/sample/sample_product_detail.dart';
+import 'package:b2b_commerce/src/business/products/sample/sample_products.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/quote_my_orders.dart';
 import 'package:b2b_commerce/src/business/services/operation_agent_service.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/common/webview_page.dart';
+import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
 import 'package:b2b_commerce/src/home/account/auth_request_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_introduction.dart';
 import 'package:b2b_commerce/src/home/factory/publish_center.dart';
@@ -35,7 +39,9 @@ import 'package:b2b_commerce/src/home/product/index.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/account/register_channel_page.dart';
+import 'package:b2b_commerce/src/my/account/register_page.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
+import 'package:b2b_commerce/src/my/card/my_card.dart';
 import 'package:b2b_commerce/src/my/integral/integral_center_page.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
@@ -51,7 +57,6 @@ import '../business/employees.dart';
 import '../business/purchase_orders.dart';
 import '../business/quote_orders.dart';
 import '../business/requirement_orders.dart';
-import '../business/sample_garments.dart';
 import '../business/suppliers.dart';
 import '../home/account/login.dart';
 import '../my/account/register.dart';
@@ -64,6 +69,7 @@ import '../my/my_settings.dart';
 
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
+  static const ROUTE_REGISTER = '/register';
   static const ROUTE_MY_HOME = GlobalRoutes.ROUTE_MY_HOME;
   static const ROUTE_HOT_CATEGORY_FACTORY = '/home/factory/hot_category';
   static const ROUTE_HOT_CATEGORY_PRODUCT = '/home/product/hot_category';
@@ -94,7 +100,6 @@ class AppRoutes with GlobalRoutes {
       '/business/orders/requirement_quote_detail';
   static const ROUTE_PROOFING_ORDERS = '/business/proofing_orders';
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
-  static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
 
   ///新合作商
@@ -113,6 +118,10 @@ class AppRoutes with GlobalRoutes {
       '/business/sale_production/external_sale_order/import';
   static const ROUTE_EXTERNAL_SALE_ORDERS =
       '/business/orders/sales_production/external_sale_orders';
+
+  ///外接订单表单
+  static const ROUTE_EXTERNAL_SALE_ORDER_FORM =
+      '/business/sale_production/external_sale_order/form';
 
   ///外接订单导入
   static const ROUTE_OUT_ORDER_FORM =
@@ -141,6 +150,7 @@ class AppRoutes with GlobalRoutes {
       '/business/orders/reconciliation_orders/detail';
 
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
+  static const ROUTE_MY_CARD = '/my/card';
   static const ROUTE_MY_BRAND = '/my/my_brand';
   static const ROUTE_MY_FACTORY = '/my/my_factory';
   static const ROUTE_MY_BRAND_CERTIFICATE = '/my/my_brand_certificate';
@@ -195,6 +205,12 @@ class AppRoutes with GlobalRoutes {
   ///订单导入页面
   static const ROUTE_ORDER_IMPORT = '/business/orders/import';
 
+  ///款式管理
+  static const ROUTE_SAMPLE_PRODUCTS = '/business/sample_products';
+
+  ///款式详情
+  static const ROUTE_SAMPLE_PRODUCT = '/business/sample_product';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -204,7 +220,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),
     ROUTE_MY_QUOTES: (context) => QuoteMyOrdersPage(),
-    ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
     ROUTE_SUBCONTRACTS_POOL: (context) => SubContractPoolPage(),
     ROUTE_SUBCONTRACTS_MINE: (context) => SubContractMinePage(),
@@ -269,15 +284,31 @@ class AppRoutes with GlobalRoutes {
         RegisterChannelPage(
           channelCode: getVal('code', context),
         ),
-    ROUTE_REQUIREMENT: (context) => RequirementOrderDetailByFactoryPage(
+    ROUTE_REQUIREMENT: (context) =>
+        RequirementOrderDetailByFactoryPage(
           getVal('code', context),
         ),
-    ROUTE_FACTORY_INTRODUCTION: (context) => FactoryIntroductionPage(
+    ROUTE_FACTORY_INTRODUCTION: (context) =>
+        FactoryIntroductionPage(
           uid: getVal('uid', context),
         ),
     ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage(),
-    ROUTE_ORDER_IMPORT: (context) => OrderImportPage(
+    ROUTE_ORDER_IMPORT: (context) =>
+        OrderImportPage(
           code: getVal('code', context),
+        ),
+    ROUTE_SAMPLE_PRODUCTS: (context) => SampleProductsPage(),
+    ROUTE_SAMPLE_PRODUCT: (context) =>
+        SampleProductDetailPage(getVal('code', context)),
+    ROUTE_EXTERNAL_SALE_ORDER_FORM: (context) => ExternalOrderForm(),
+    ROUTE_MY_CARD: (context) => MyCardPage(),
+    ROUTE_REGISTER: (context) =>
+        RegisterPageV2(
+          openId: getVal('openId', context),
+          type: getVal('type', context) != null
+              ? AuthTypeMap[getVal('type', context)]
+              : null,
+          channelCode: getVal('channelCode', context),
         )
   };
 

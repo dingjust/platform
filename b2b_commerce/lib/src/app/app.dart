@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/business/orders/sales_production/progress_work_
 import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
+import 'package:b2b_commerce/src/helper/clipboard_helper.dart';
 import 'package:b2b_commerce/src/helper/global_message_helper.dart';
 import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:b2b_commerce/src/home/account/client_select_v2.dart';
@@ -102,7 +103,7 @@ class B2BApp extends StatefulWidget {
   _B2BAppState createState() => _B2BAppState();
 }
 
-class _B2BAppState extends State<B2BApp> {
+class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   int _currentIndex = 0;
 
@@ -117,6 +118,7 @@ class _B2BAppState extends State<B2BApp> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) => initListener());
     _globalChannel = MethodChannel('net.nbyjy.b2b/global_channel');
     _globalChannel.setMethodCallHandler(_globalChannelMethodHandler);
@@ -125,8 +127,11 @@ class _B2BAppState extends State<B2BApp> {
 
   //初始化监听
   void initListener() {
-    // listenMessage();
     listenLogin();
+    //粘贴板是否有值
+    Provider.of<ClipboardHelper>(context)
+      ..setNavigatorKey(_navigatorKey)
+      ..getClipboardText(context: context);
   }
 
   //监听未登录接口调用跳转登录页
@@ -257,6 +262,15 @@ class _B2BAppState extends State<B2BApp> {
     );
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    //APP状态更改
+    print('App状态:$state');
+    if (state == AppLifecycleState.resumed) {
+      Provider.of<ClipboardHelper>(context).getClipboardText(context: context);
+    }
+  }
+
   ///全局消息处理
   Future _globalChannelMethodHandler(MethodCall methodCall) {
     var message =
@@ -272,6 +286,7 @@ class _B2BAppState extends State<B2BApp> {
     _loginJumpSubscription.cancel();
     _loginJumpSubscription = null;
     _globalChannel = null;
+    WidgetsBinding.instance.removeObserver(this);
   }
 }
 

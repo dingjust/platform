@@ -20,8 +20,7 @@ class Apis {
       };
 
   /// 获取品牌明细 GET
-  static get brand =>
-          (uid) {
+  static get brand => (uid) {
         return '/{baseSiteId}/brands/$uid';
       };
 

@@ -147,6 +147,11 @@ class B2BImage {
         width: width, height: height);
   }
 
+  static Image miniProgram({double width, double height}) {
+    return getImage('temp/common/mini-program.png',
+        width: width, height: height);
+  }
+
   static Image wechatFriend({double width, double height}) {
     return getImage('temp/common/wechat_friend.png',
         width: width, height: height);
