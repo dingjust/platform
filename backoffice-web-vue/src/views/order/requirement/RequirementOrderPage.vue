@@ -246,73 +246,49 @@
 
         this.searchQuotesAdvanced({url, page, size});
       },
+      handleData (factories, phoneNumbers) {
+        var params = {};
+        if (factories != null) {
+          var text = '';
+          for (let uid of factories) {
+            text += uid;
+            text += ',';
+          }
+          text = text.slice(0, text.length - 1);
+        }
+        params['factories'] = text;
+
+        // 处理地区
+        let form = Object.assign({}, this.formData);
+        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
+          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
+            return {
+              code: item[item.length - 1]
+            }
+          })
+        } else {
+          form.details.productiveDistricts = [];
+        }
+
+        return {
+          params: params,
+          form: form
+        }
+      },
       onSave (factories, phoneNumbers) {
+        // 处理数据
+        const { params, form } = this.handleData(factories, phoneNumbers);
+
+        let url;
         if (this.isTenant()) {
-          this._onSaveByPlatform(factories, phoneNumbers);
+          url = this.apis().createPublishByPlatform();
         } else {
-          this._onSave(factories, phoneNumbers);
+          url = this.apis().createRequirementOrder();
         }
+        this._onSave(url, params, form);
       },
-      async _onSave (factories, phoneNumbers) {
-        var params = {};
-        if (factories != null) {
-          var text = '';
-          for (let uid of factories) {
-            text += uid;
-            text += ',';
-          }
-          text = text.slice(0, text.length - 1);
-        }
-        params['factories'] = text;
-
-        // 处理地区
-        let form = Object.assign({}, this.formData);
-        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
-          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
-            return {
-              code: item[item.length - 1]
-            }
-          })
-        } else {
-          form.details.productiveDistricts = [];
-        }
-
-        const url = this.apis().createRequirementOrder();
-        const result = await this.$http.post(url, this.formData, params);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('需求订单创建成功，订单编号： ' + result);
-        this.formDialogVisible = !this.formDialogVisible;
-        this.onAdvancedSearch();
-      },
-      async _onSaveByPlatform (factories, phoneNumbers) {
-        var params = {};
-        if (factories != null) {
-          var text = '';
-          for (let uid of factories) {
-            text += uid;
-            text += ',';
-          }
-          text = text.slice(0, text.length - 1);
-        }
-        params['factories'] = text;
-
-        // 处理地区
-        let form = Object.assign({}, this.formData);
-        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
-          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
-            return {
-              code: item[item.length - 1]
-            }
-          })
-        } else {
-          form.details.productiveDistricts = [];
-        }
-
-        const url = this.apis().createPublishByPlatform();
-        const result = await this.$http.post(url, this.formData, params);
+      async _onSave (url, params, form) {
+        const result = await this.$http.post(url, form, params);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -322,72 +298,20 @@
         this.onAdvancedSearch();
       },
       onEditSave (factories, phoneNumbers) {
+        // 处理数据
+        const { params, form } = this.handleData(factories, phoneNumbers);
+
+        let url;
         if (this.isTenant()) {
-          this._onEditSaveByPlatform(factories, phoneNumbers);
+          url = this.apis().updateRequirementOrderByPlatform();
         } else {
-          this._onEditSave(factories, phoneNumbers);
+          url = this.apis().updateRequirementOrder(this.formData.code);
         }
+        this._onEditSave(url, params, form);
       },
-      async _onEditSave (factories, phoneNumbers) {
-        var params = {};
-        if (factories != null) {
-          var text = '';
-          for (let uid of factories) {
-            text += uid;
-            text += ',';
-          }
-          text = text.slice(0, text.length - 1);
-        }
-        params['factories'] = text;
+      async _onEditSave (url, params, form) {
 
-        // 处理地区
-        let form = Object.assign({}, this.formData);
-        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
-          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
-            return {
-              code: item[item.length - 1]
-            }
-          })
-        } else {
-          form.details.productiveDistricts = [];
-        }
-
-        const url = this.apis().updateRequirementOrder(this.formData.code);
-        const result = await this.$http.put(url, this.formData, params);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('需求订单修改成功');
-        this.editFormDialogVisible = false;
-        this.onAdvancedSearch();
-      },
-      async _onEditSaveByPlatform (factories, phoneNumbers) {
-        var params = {};
-        if (factories != null) {
-          var text = '';
-          for (let uid of factories) {
-            text += uid;
-            text += ',';
-          }
-          text = text.slice(0, text.length - 1);
-        }
-        params['factories'] = text;
-
-        // 处理地区
-        let form = Object.assign({}, this.formData);
-        if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
-          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
-            return {
-              code: item[item.length - 1]
-            }
-          })
-        } else {
-          form.details.productiveDistricts = [];
-        }
-
-        const url = this.apis().updateRequirementOrderByPlatform();
-        const result = await this.$http.put(url, this.formData, params);
+        const result = await this.$http.put(url, form, params);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
