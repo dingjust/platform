@@ -111,13 +111,14 @@ class DocSignaturesBlock extends StatelessWidget {
 
   final SalesProductionOrderModel order;
 
-  const DocSignaturesBlock({Key key,
-    this.sheets,
-    this.label = '对账单',
-    this.hintText = '暂无对账单',
-    this.callback,
-    this.beforeTap,
-    this.order})
+  const DocSignaturesBlock(
+      {Key key,
+      this.sheets,
+      this.label = '对账单',
+      this.hintText = '暂无对账单',
+      this.callback,
+      this.beforeTap,
+      this.order})
       : super(key: key);
 
   @override
@@ -155,9 +156,9 @@ class DocSignaturesBlock extends StatelessWidget {
                                 order: order,
                               )))
                           .then((value) {
-                        if (value) {
-                          callback?.call();
-                        }
+                        // if (value) {
+                        callback?.call();
+                        // }
                       });
                     })
                     : Text('$hintText',

@@ -72,36 +72,25 @@ class _ExternalSaleOrderDetailPageState
                   padding: EdgeInsets.only(bottom: 10),
                   child: ListView(
                     children: <Widget>[
-                      _Header(
-                        order: order,
-                      ),
-                      _EntriesInfo(
-                        order: order,
-                      ),
-                      MainInfo(
-                        order: order,
-                      ),
+                      _Header(order: order),
+                      _EntriesInfo(order: order),
+                      MainInfo(order: order),
                       OrderContractsBlock(
-                        agreements: order?.agreements,
-                        beforeTap: recordRouteInfo,
-                      ),
+                          agreements: order?.agreements,
+                          beforeTap: recordRouteInfo),
                       DocSignaturesBlock(
-                        callback: () {
-                          setState(() {
-                            order = null;
-                            callBackPop = true;
-                          });
-                        },
-                        beforeTap: recordRouteInfo,
-                        sheets: order.reconciliationSheetList,
-                        order: order,
-                      ),
-                      OrderPaymentInfo(
-                        order: order,
-                      ),
-                      _OrderInfo(
-                        order: order,
-                      ),
+                          callback: () {
+                            setState(() {
+                              order = null;
+                              callBackPop = true;
+                            });
+                            print('========刷新！');
+                          },
+                          beforeTap: recordRouteInfo,
+                          sheets: order.reconciliationSheetList,
+                          order: order),
+                      OrderPaymentInfo(order: order),
+                      _OrderInfo(order: order),
                       //底部占位
                       Container(
                         height: 80,
