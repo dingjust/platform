@@ -57,7 +57,7 @@
       </requirement-order-form>
     </el-dialog>
     <el-dialog :visible.sync="editFormDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
-      <requirement-order-form v-if="editFormDialogVisible" :formData="formData" @onSave="onEditSave">
+      <requirement-order-form v-if="editFormDialogVisible" :formData="formData" @onSave="onEditSave" :isCreated="false">
 
       </requirement-order-form>
     </el-dialog>
@@ -283,7 +283,7 @@
         if (this.isTenant()) {
           url = this.apis().createPublishByPlatform();
         } else {
-          url = this.apis().createRequirementOrder();
+          url = this.apis().createRequirementOrderNewByType();
         }
         this._onSave(url, params, form);
       },
@@ -305,7 +305,7 @@
         if (this.isTenant()) {
           url = this.apis().updateRequirementOrderByPlatform();
         } else {
-          url = this.apis().updateRequirementOrder(this.formData.code);
+          url = this.apis().updateRequirementOrderNewByType();
         }
         this._onEditSave(url, params, form);
       },

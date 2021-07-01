@@ -46,20 +46,49 @@
         </el-form-item>
       </el-col>
     </el-row>
+    <pay-plan-form :formData="formData.details.payPlan" :isUseForOrder="true" />
+    <my-address-form v-if="isCreated" :vAddress.sync="shippingAddress" :showContact="false"/>
+    <el-row type="flex" :gutter="20" v-if="!isCreated">
+      <el-col :span="12">
+        <el-form-item>
+          <template slot="label">
+            <h6 class="titleTextClass">所在位置</h6>
+          </template>
+          <el-input v-model="formData.details.address"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
+import {
+  MyAddressForm,
+  PayPlanForm
+} from '@/components'
 export default {
   name: 'RequirementOrderOtherInfo',
-  props: ['formData'],
+  components: { PayPlanForm, MyAddressForm },
+  props: ['formData', 'isCreated'],
   data () {
     return {
+      shippingAddress: {},
       populationScales: this.$store.state.EnumsModule.populationScales,
       ProductionModes: this.$store.state.EnumsModule.ProductionModes,
       RequirementSizeType: this.$store.state.EnumsModule.RequirementSizeType,
       RequirementColorType: this.$store.state.EnumsModule.RequirementColorType
     }
+  },
+  watch: {
+    shippingAddress: {
+      handler(val, oldVal) {
+        this.formData.details['provinceStr'] = val.region.name
+        this.formData.details['cityStr'] = val.city.name
+        this.formData.details['districtStr'] = val.cityDistrict.name
+        this.formData.details['address'] = val.region.name + val.city.name + val.cityDistrict.name +val.line1
+      },
+      deep: true
+    },
   }
 }
 </script>

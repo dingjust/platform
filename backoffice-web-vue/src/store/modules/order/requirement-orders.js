@@ -46,6 +46,7 @@ const state = {
   formData: {
     id: null,
     code: '',
+    orderType: 'FINDING_ORDER',
     details: {
       pictures: [],
       category: null,
@@ -63,7 +64,18 @@ const state = {
       effectiveDays: '90',
       salesMarket: [],
       certificates: [],
-      productiveDistricts: []
+      productiveDistricts: [],
+      payPlan: {
+        isHaveDeposit: false,
+        payPlanType: 'PHASEONE',
+        payPlanItems: [{
+          moneyType: 'PHASEONE',
+          payPercent: 0.3,
+          triggerDays: 5,
+          triggerEvent: 'ORDER_CONFIRMED',
+          triggerType: 'INSIDE'
+        }]
+      }
     },
     attachments: [],
     labels: [],
@@ -252,6 +264,7 @@ const actions = {
     commit('formData', {
       id: null,
       code: '',
+      orderType: 'FINDING_ORDER',
       details: {
         pictures: [],
         category: null,
@@ -268,7 +281,18 @@ const actions = {
         publishingMode: 'PUBLIC',
         effectiveDays: '90',
         salesMarket: [],
-        productiveDistricts: []
+        productiveDistricts: [],
+        payPlan: {
+          isHaveDeposit: false,
+          payPlanType: 'PHASEONE',
+          payPlanItems: [{
+            moneyType: 'PHASEONE',
+            payPercent: 0.3,
+            triggerDays: 5,
+            triggerEvent: 'ORDER_CONFIRMED',
+            triggerType: 'INSIDE'
+          }]
+        }
       },
       attachments: [],
       labels: [],

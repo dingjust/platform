@@ -139,6 +139,24 @@
         </el-row>
         <el-row type="flex" :gutter="20">
           <el-col :span="8">
+            <el-form-item >
+              <template slot="label">
+                <h6 class="titleTextClass">身份类型</h6>
+              </template>
+              <el-input v-model="formData.details.identityTypeStr" placeholder="请填写"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item >
+              <template slot="label">
+                <h6 class="titleTextClass">联系微信号</h6>
+              </template>
+              <el-input v-model="formData.details.contactWeChatNo" placeholder="请填写"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" :gutter="20">
+          <el-col :span="8">
             <el-form-item prop="details.machiningType">
               <template slot="label">
                 <h6 class="titleTextClass">加工类型</h6>
@@ -201,7 +219,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <requirement-order-other-info :formData="formData"/>
+        <requirement-order-other-info :formData="formData" :isCreated="isCreated"/>
         <el-form-item prop="attachments">
           <template slot="label">
             <h6 class="titleTextClass">附件</h6>
@@ -286,8 +304,7 @@
         type: Object
       },
       isCreated: {
-        type: Boolean,
-        default: false
+        type: Boolean
       }
     },
     methods: {

@@ -50,7 +50,7 @@
         <!-- </el-col> -->
       <!-- </el-row> -->
       </div>
-      <div class="basic-row">
+      <div class="basic-row" v-if="showContact">
         <!-- <el-row type="flex" align="middle" :gutter="10" v-if="!hideContact"> -->
           <!-- <el-col :span="7"> -->
             <el-form-item label="联系人" label-width="80px" :rules="[
@@ -99,6 +99,10 @@
       hideContact:{
         type:Boolean,
         default:false
+      },
+      showContact: {
+        type: Boolean,
+        default: true
       }
     },
     methods: {
