@@ -34,7 +34,7 @@ class OrderPaymentInfo extends StatelessWidget {
 
   ///线上支付信息
   List<Widget> _buildOnlineRows() {
-    //罚款方不显示收款人信息
+    //付款方不显示收款人信息
     if (order.paymentAccount == null ||
         UserBLoC.instance.currentUser.companyCode ==
             order?.originCompany?.uid) {
@@ -42,9 +42,9 @@ class OrderPaymentInfo extends StatelessWidget {
     }
 
     return [
-      buildRow('收款人姓名', '${order.paymentAccount.name}'),
-      buildRow('收款开户行', '${order.paymentAccount.serviceProvider}'),
-      buildRow('收款卡号', '${order.paymentAccount.no}'),
+      buildRow('收款人姓名', '${order.paymentAccount?.name ?? ''}'),
+      buildRow('收款开户行', '${order.paymentAccount?.serviceProvider ?? ''}'),
+      buildRow('收款卡号', '${order.paymentAccount?.no ?? ''}'),
       buildServiceFree(),
       ...buildPayRows()
     ];
@@ -125,52 +125,52 @@ class OrderPaymentInfo extends StatelessWidget {
       ),
       ...data.state == CmtPaymentState.PAID
           ? [
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '支付方式',
-                style: infoTextStyle,
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '支付方式',
+                      style: infoTextStyle,
+                    ),
+                    Text(
+                      '${PaymentMethodLocalizedMap[data.payType]}',
+                      style: infoTextStyle,
+                    )
+                  ],
+                ),
               ),
-              Text(
-                '${PaymentMethodLocalizedMap[data.payType]}',
-                style: infoTextStyle,
-              )
-            ],
-          ),
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '交易编号',
-                style: infoTextStyle,
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '交易编号',
+                      style: infoTextStyle,
+                    ),
+                    Text(
+                      '${data.outOrderNo}',
+                      style: infoTextStyle,
+                    )
+                  ],
+                ),
               ),
-              Text(
-                '${data.outOrderNo}',
-                style: infoTextStyle,
-              )
-            ],
-          ),
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '支付时间',
-                style: infoTextStyle,
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '支付时间',
+                      style: infoTextStyle,
+                    ),
+                    Text(
+                      '${DateFormatUtil.formatYMDHMS(data.paySuccessTime)}',
+                      style: infoTextStyle,
+                    )
+                  ],
+                ),
               ),
-              Text(
-                '${DateFormatUtil.formatYMDHMS(data.paySuccessTime)}',
-                style: infoTextStyle,
-              )
-            ],
-          ),
-        ),
-      ]
+            ]
           : []
     ];
   }

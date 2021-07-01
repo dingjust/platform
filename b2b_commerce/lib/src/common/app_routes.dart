@@ -256,7 +256,7 @@ class AppRoutes with GlobalRoutes {
         ExternalSaleOrderImportPage(),
     ROUTE_OUT_ORDERS: (context) => OutOrdersPage(),
     ROUTE_EXTERNAL_SALE_ORDERS_DETAIL: (context) => ExternalSaleOrderDetailPage(
-      id: int.parse('${getVal('id', context)}'),
+          id: int.parse('${getVal('id', context)}'),
           titile: getVal('title', context),
         ),
     ROUTE_PRODUCTION_TASK_ORDER_DETAIL: (context) =>
@@ -294,9 +294,7 @@ class AppRoutes with GlobalRoutes {
         ),
     ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage(),
     ROUTE_ORDER_IMPORT: (context) =>
-        OrderImportPage(
-          code: getVal('code', context),
-        ),
+        OrderImportPage(code: getVal('code', context)),
     ROUTE_SAMPLE_PRODUCTS: (context) => SampleProductsPage(),
     ROUTE_SAMPLE_PRODUCT: (context) =>
         SampleProductDetailPage(getVal('code', context)),
