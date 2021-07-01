@@ -66,10 +66,15 @@
       }),
       onEdit () {
         if (this.formData.reviewState !== 'REVIEWING' && this.formData.reviewState !== 'REVIEW_REJECTED') {
-          this.isEditing = true;
-          return;
+          this.$confirm('是否前往编辑页面', '提示', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            this.isEditing = true;
+          });
         } else {
-          this.$confirm('是否前往编辑页面，页面将会展示上次提交保存但尚未通过审阅的数据', '', {
+          this.$confirm('是否前往编辑页面，页面将会展示上次提交保存但尚未通过审阅的数据', '提示', {
             confirmButtonText: '是',
             cancelButtonText: '否',
             type: 'warning'

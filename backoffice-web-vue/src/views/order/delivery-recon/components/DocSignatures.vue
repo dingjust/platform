@@ -34,6 +34,10 @@ export default {
       if (this.order.docSignatures[0].signMethod === 'OFFLINE_SIGN') {
         return false;
       }
+      if (this.order.signState === 'WAIT_ME_SIGN') {
+        return true;
+      }
+
       if (this.order.state === 'PENDING_B_SIGN') {
         return this.order.shipParty.uid === this.$store.getters.currentUser.companyCode;
       } else if (this.order.state === 'PENDING_A_SIGN') {

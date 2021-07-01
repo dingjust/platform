@@ -129,7 +129,7 @@ export default {
 
       this.$nextTick(() => {
         new QRCode(this.$refs.qrCodeDiv, {
-          text: "https://ht.nbyjy.net/app/page/my/account/register/channel?code=" + row.uid,
+          text: "https://ht.nbyjy.net/app/page/register?channelCode=" + row.id,
           width: 200,
           height: 200,
           colorDark: "#333333", //二维码颜色

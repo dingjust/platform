@@ -25,7 +25,12 @@
       <el-table-column label="交易编号" prop="outOrderNo"></el-table-column>
       <el-table-column label="支付时间">
         <template slot-scope="scope">
-          <span>{{scope.row.paySuccessTime | formatDate}}</span>
+          <span v-if="scope.row.paySuccessTime">{{scope.row.paySuccessTime | formatDate}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="支付状态">
+        <template slot-scope="scope">
+          <span>{{getEnum('CmtPaymentState', scope.row.state)}}</span>
         </template>
       </el-table-column>
     </el-table>

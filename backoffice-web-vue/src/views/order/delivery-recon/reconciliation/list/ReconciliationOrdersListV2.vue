@@ -21,7 +21,10 @@
         </template>
       </el-table-column>
       <el-table-column label="" v-if="showTag">
-        <template slot-scope="scope" v-if="scope.row.state === 'PENDING_B_SIGN' || scope.row.state === 'PENDING_A_SIGN'">
+        <template slot-scope="scope" v-if="scope.row.signState">
+          <el-tag>{{signState === 'WAIT_ME_SIGN' ? '待我签署' : '待他签署'}}</el-tag>
+        </template>
+        <template slot-scope="scope" v-else-if="scope.row.state === 'PENDING_B_SIGN' || scope.row.state === 'PENDING_A_SIGN'">
           <el-tag>{{tagTitle(scope.row)}}</el-tag>
         </template>
       </el-table-column>

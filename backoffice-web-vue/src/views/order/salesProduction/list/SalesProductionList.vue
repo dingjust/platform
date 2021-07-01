@@ -98,6 +98,9 @@
         refresh: 'refresh'
       }),
       cooperatorName(row) {
+        if (!row.originCompany && !row.originCooperator) {
+          return '';
+        }
         if (row.originCompany != null) {
           return row.originCompany.name;
         } else {

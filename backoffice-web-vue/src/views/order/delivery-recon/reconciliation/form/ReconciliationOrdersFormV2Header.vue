@@ -5,16 +5,14 @@
         <el-input v-model="formData.title"></el-input>
       </el-form-item>
     </el-row>
-    <el-row>
-      <div style="display: flex;">
-        <div>
-          <el-form-item label="合作商" prop="cooperator" :rules="{ required: true, message: '不能为空', trigger: 'change' }">
-            <el-input v-model="formData.cooperator.name" :disabled="true"></el-input>
-          </el-form-item>
-        </div>
-        <div>
-          <el-button type="primary" class="select-btn" @click="cooperatorVisible = true" :disabled="canSelectCooperator">选择</el-button>
-        </div>
+    <el-row type="flex">
+      <div>
+        <el-form-item label="合作商" prop="cooperator" :rules="{ required: true, message: '不能为空', trigger: 'change' }">
+          <el-input v-model="formData.cooperator.name" :disabled="true"></el-input>
+        </el-form-item>
+      </div>
+      <div>
+        <el-button type="primary" class="select-btn" @click="cooperatorVisible = true" :disabled="canSelectCooperator">选择</el-button>
       </div>
     </el-row>
     <el-row type="flex" align="top">
@@ -38,8 +36,14 @@
     <el-row v-if="formData.salesProductionOrder" style="margin: 10px 0px 0px 10px;">
       {{formData.salesProductionOrder.showName}}：
       <el-tag closable @close="closeSalesProductionOrder" style="margin-right: 10px;">
-        {{formData.salesProductionOrder.id}}
+        {{formData.salesProductionOrder.code}}
       </el-tag>
+    </el-row>
+    <el-row type="flex">
+      <el-form-item label="我的身份" label-width="70px">
+        <el-radio v-model="formData.belongRoleType" label="PARTYA" :disabled="canChange">我是甲方</el-radio>
+        <el-radio v-model="formData.belongRoleType" label="PARTYB" :disabled="canChange">我是乙方</el-radio>
+      </el-form-item>
     </el-row>
     <el-dialog :visible.sync="deliveryVisible" width="80%" append-to-body class="purchase-dialog" :close-on-click-modal="false">
       <delivery-orders-page v-if="deliveryVisible" :isSelection="true" @onSelect="onSelect"/>
@@ -57,12 +61,14 @@
       <supplier-select v-if="cooperatorVisible" @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-dialog :visible.sync="selectVisible" title="选择订单类型" width="400px" append-to-body :close-on-click-modal="false">
-      <h6 style="color: #F56C6C">已选择外发/外接订单的情况下，不能再添加发货及出货单</h6>
+      <h6 style="color: #F56C6C">外发/外接订单 与 发货/出货单不能同时选择</h6>
       <el-row type="flex" justify="space-around" align="middle">
         <el-button size="medium" plain class="order-btn" :disabled="formData.salesProductionOrder != null" @click="onShipping">发货单</el-button>
         <el-button size="medium" plain class="order-btn" :disabled="formData.salesProductionOrder != null" @click="onDelivery">出货单</el-button>
-        <el-button size="medium" plain class="order-btn" @click="onOutbound">外发单</el-button>
-        <el-button size="medium" plain class="order-btn" @click="onPending">外接单</el-button>
+        <el-button size="medium" plain class="order-btn" @click="onOutbound" 
+                  :disabled="formData.fastShippingSheets.length > 0 || formData.shippingSheets.length > 0">外发单</el-button>
+        <el-button size="medium" plain class="order-btn" @click="onPending"
+                  :disabled="formData.fastShippingSheets.length > 0 || formData.shippingSheets.length > 0">外接单</el-button>
       </el-row>
     </el-dialog>
   </div>
@@ -91,6 +97,10 @@ export default {
     PendingSalesSelectPage
   },
   computed: {
+    canChange: function () {
+      // 已选择外接外发不能改变身份状态
+      return this.formData.salesProductionOrder != null && this.formData.salesProductionOrder.id != null;
+    },
     canSelectCooperator: function () {
       if (this.formData.salesProductionOrder) {
         return true;
@@ -120,6 +130,9 @@ export default {
 
         if (!this.formData.name) {
           this.formData.cooperator = {
+            partner: {
+              id: selection[0].shipParty.id
+            },
             name: selection[0].shipParty.name,
             approvalStatus: selection[0].shipParty.approvalStatus
           }
@@ -131,12 +144,17 @@ export default {
         if (!this.formData.name) {
           this.formData.cooperator = {
             id: selection[0].cooperator.id,
+            partner: {
+              id: selection[0].cooperator.partner ? selection[0].cooperator.partner.id : null 
+            },
             name: selection[0].cooperator.partner.name,
             approvalStatus: selection[0].cooperator.partner.approvalStatus
           }
         }
         this.deliveryVisible = false;
       } else if (this.formData.type === 'outbound') {
+        this.formData.belongRoleType = 'PARTYA';
+
         this.$set(this.formData, 'salesProductionOrder', {
           id: selection[0].id,
           code: selection[0].code,
@@ -151,6 +169,8 @@ export default {
 
         this.getOutboundDetail(selection[0].id)
       } else if (this.formData.type === 'pending') {
+        this.formData.belongRoleType = 'PARTYB';
+
         this.$set(this.formData, 'salesProductionOrder', {
           id: selection[0].id,
           code: selection[0].code,
@@ -187,7 +207,7 @@ export default {
           id: item.id,
           product: item.product,
           productionTaskOrder: {
-            orderQuantity: item.quantity,
+            totalQuantity: item.quantity,
           },
           deliveryDate: item.deliveryDate,
           loanAmount: item.totalPrimeCost
@@ -209,7 +229,7 @@ export default {
           id: item.id,
           product: item.product,
           productionTaskOrder: {
-            orderQuantity: item.quantity,
+            totalQuantity: item.quantity,
           },
           deliveryDate: item.deliveryDate,
           loanAmount: item.totalPrimeCost

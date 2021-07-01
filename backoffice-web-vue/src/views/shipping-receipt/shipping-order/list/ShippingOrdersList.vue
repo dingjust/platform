@@ -188,10 +188,10 @@
         }
         if (!this.formData.cooperator) {
           // 未确定合作商时
-          return this.currentRow <= 0 || row.shipParty.name === this.currentRow[0].shipParty.name;
+          return this.currentRow <= 0 || row.shipParty.id === this.currentRow[0].shipParty.id;
         } else {
           // 已确定合作商时
-          return this.formData.cooperator.name === row.shipParty.name;
+          return this.formData.cooperator.partner.id === row.shipParty.id;
         }
       },
       //统计单数
