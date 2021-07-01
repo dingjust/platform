@@ -336,18 +336,19 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
   FastReconciliationSheetModel generateForm() {
     if (widget.order == null) throw Exception('订单数据不能为空');
     FastReconciliationSheetModel data = FastReconciliationSheetModel(
-        title: '电子对账单',
-        medias: [],
-        fastShippingSheets: [],
-        paperSheetMedias: [],
-        approvers: [],
-        colNames: colNames,
-        additionalCharges: [],
-        salesProductionOrder: widget.order,
-        belongRoleType: getRoleType()
-        // shipParty: widget.order.targetCooperator.partner,
-        // receiveParty: widget.order.originCompany
-        );
+      title: '电子对账单',
+      medias: [],
+      fastShippingSheets: [],
+      paperSheetMedias: [],
+      approvers: [],
+      colNames: colNames,
+      additionalCharges: [],
+      salesProductionOrder: widget.order,
+      belongRoleType: getRoleType(),
+
+      // shipParty: widget.order.targetCooperator.partner,
+      // receiveParty: widget.order.originCompany
+    );
     controllersMaps = {};
     nodesMaps = {};
     //填充行

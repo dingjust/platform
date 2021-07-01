@@ -48,11 +48,11 @@ class OrderContractsBlock extends StatelessWidget {
                     ],
                   )
                 : Center(
-              child: Text(
-                '$hintText',
-                style: TextStyle(color: Colors.grey),
-              ),
-            )
+                    child: Text(
+                      '$hintText',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
           ],
         ));
   }
@@ -144,8 +144,9 @@ class DocSignaturesBlock extends StatelessWidget {
               ],
             )
                 : Center(
-                child: IconButton(
-                    icon: Icon(Icons.add),
+                child: canCreate()
+                    ? TextButton(
+                    child: Text('创建对账单'),
                     onPressed: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(
@@ -158,7 +159,9 @@ class DocSignaturesBlock extends StatelessWidget {
                           callback?.call();
                         }
                       });
-                    }))
+                    })
+                    : Text('$hintText',
+                    style: TextStyle(color: Colors.grey)))
           ],
         ));
   }
@@ -205,5 +208,13 @@ class DocSignaturesBlock extends StatelessWidget {
   bool signDisable(FastReconciliationSheetModel order) {
     return order.state == FastReconciliationSheetState.PENDING_APPROVAL ||
         order.state == FastReconciliationSheetState.CANCELLED;
+  }
+
+  ///能否创建对账单
+  bool canCreate() {
+    if (order != null) {
+      return order.originCooperator != null && order.targetCooperator != null;
+    }
+    return false;
   }
 }

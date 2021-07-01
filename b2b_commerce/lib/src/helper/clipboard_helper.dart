@@ -124,12 +124,12 @@ class ClipboardHelper {
                     ),
                     _Row(
                       title: '合作商：',
-                      val: '${order.originCooperator.name}',
+                      val: '${order?.originCooperator?.name ?? ''}',
                     ),
                     _Row(
                       title: '合作方式：',
                       val:
-                          '${CooperationModeLocalizedMap[order.cooperationMode]}',
+                          '${CooperationModeLocalizedMap[order?.cooperationMode]}',
                     ),
                     _Row(
                       title: '是否开票：',
