@@ -67,6 +67,7 @@ class ClipboardHelper {
       //获取订单
       SalesProductionOrderModel model =
           await ExternalSaleOrderRespository().qrCodePreview(code);
+
       if (model != null) {
         showOrderImportDialog(model, code, context: context);
       }

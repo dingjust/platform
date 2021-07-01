@@ -115,6 +115,13 @@ class _OrderImportPageState extends State<OrderImportPage> {
           await ExternalSaleOrderRespository().qrCodePreview(widget.code);
       if (model != null) {
         order = model;
+        //判断是否已接单
+        if (order.cooperator != null && order.targetCooperator != null) {
+          //甲乙双方确定则跳转到订单详情
+          Navigator.of(context).pushReplacementNamed(
+              AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+              arguments: {'id': order.id, 'title': '外发订单明细'});
+        }
       }
     }
     return order;
@@ -155,38 +162,38 @@ class _OrderInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: ListView(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    Expanded(flex: 1, child: Text('订单号：${order.code}')),
-                  ],
-                ),
-              ),
-              Divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child: Text(
-                          '合作商：${order?.originCooperator?.name}',
-                    )),
-                  ],
-                ),
-              ),
-              Divider(),
-              for (final t in order.taskOrderEntries ?? []) _buildProductRow(t),
-              MainInfo(
-                order: order,
-              ),
-            ],
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: ListView(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                Expanded(flex: 1, child: Text('订单号：${order.code}')),
+              ],
+            ),
           ),
-        ));
+          Divider(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Text(
+                      '合作商：${order?.originCooperator?.name}',
+                    )),
+              ],
+            ),
+          ),
+          Divider(),
+          for (final t in order.taskOrderEntries ?? []) _buildProductRow(t),
+          MainInfo(
+            order: order,
+          ),
+        ],
+      ),
+    ));
   }
 
   Widget _buildProductRow(ProductionTaskOrderModel entry) {
