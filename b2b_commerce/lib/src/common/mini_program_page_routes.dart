@@ -10,6 +10,6 @@ class MiniProgramPageRoutes {
 
   ///渠道码注册
   static get channelCodeRegister => (code) {
-        return 'pages/register/register?channelCode=$code';
+        return 'pages/index/index?channelCode=$code';
       };
 }

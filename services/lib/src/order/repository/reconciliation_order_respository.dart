@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/api/order.dart';
+import 'package:services/src/api/sale_production.dart';
 import 'package:services/src/net/http_manager.dart';
 
 ///对账单
@@ -42,5 +43,21 @@ class ReconciliationOrderRespository {
     }
 
     return null;
+  }
+
+  ///创建对账
+  static Future<BaseResponse> create(FastReconciliationSheetModel order) async {
+    try {
+      Response<Map<String, dynamic>> response = await http$.post(
+          SaleProductionApis.createReconciliationOrder,
+          data: order.toJson());
+      if (response.statusCode == 200 && response.data != null) {
+        return BaseResponse.fromJson(response.data);
+      } else
+        return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 }

@@ -61,4 +61,8 @@ class SaleProductionApis {
   /// 创建外接订单
   static get createExternalSaleOrder =>
       '/{baseSiteId}/sales/production/order/save/order';
+
+  /// 创建对账单
+  static get createReconciliationOrder =>
+      '/{baseSiteId}/sheets/fast/reconciliation/create';
 }
