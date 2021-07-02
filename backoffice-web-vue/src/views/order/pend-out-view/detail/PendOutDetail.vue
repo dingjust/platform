@@ -128,8 +128,6 @@ export default {
   },
   created () {
     this.getDetails()
-    const url = '/b2b/company/reports/index/tab2'
-    this.$http.post(url)
   }
 }
 </script>

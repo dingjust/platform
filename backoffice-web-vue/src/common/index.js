@@ -1309,14 +1309,18 @@ let TENANT_APIS = {
 
   // 获取全部外接外发订单
   searchPendOut: () => '/b2b/sales/production/order/all',
-  // 销售计划订单详情
+  // 销售计划订单详情平台
   getSalesProductionOrderDetails (id) {
-    return '/b2b/sales/production/order/' + id;
+    return '/b2b/sales/production/order/get/with/admin/' + id;
   },
   // 生产工单详情
   getProductionOrderDetail (id) {
     return '/b2b/production/task/order/' + id;
-  }
+  },
+  // 获取统计数据1
+  getTenantReportsTab1: () => '/b2b/company/reports/index/tab1',
+  // 获取统计数据2
+  getTenantReportsTab2: () => '/b2b/company/reports/index/tab2'
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
