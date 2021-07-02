@@ -1,99 +1,141 @@
-<style type="scss">
-  .height-70 {
-    height: 70px;
-  }
-</style>
 <template>
-  <div class="animated fadeIn content">
-    <b-row>
-      <b-col sm="6" lg="3">
-        <b-card no-body class="bg-info">
-          <b-card-body class="pb-0">
-            <b-dropdown class="float-right" variant="transparent p-0" right>
-              <template slot="button-content">
-                <i class="icon-settings"></i>
-              </template>
-              <b-dropdown-item>更多...</b-dropdown-item>
-            </b-dropdown>
-            <h4 class="mb-0">{{product}}</h4>
-            <p>产品</p>
-          </b-card-body>
-          <product-card-line-chart class="chart-wrapper px-3 height-70" height="70"/>
-        </b-card>
-      </b-col>
-      <b-col sm="6" lg="3">
-        <b-card no-body class="bg-info">
-          <b-card-body class="pb-0">
-            <b-dropdown class="float-right" variant="transparent p-0" right>
-              <template slot="button-content">
-                <i class="icon-settings"></i>
-              </template>
-              <b-dropdown-item>更多...</b-dropdown-item>
-            </b-dropdown>
-            <h4 class="mb-0">{{order}}</h4>
-            <p>订单</p>
-          </b-card-body>
-          <order-card-line-chart class="chart-wrapper px-3 height-70" height="70"/>
-        </b-card>
-      </b-col>
-      <b-col sm="6" lg="3">
-        <b-card no-body class="bg-info">
-          <b-card-body class="pb-0">
-            <b-dropdown class="float-right" variant="transparent p-0" right>
-              <template slot="button-content">
-                <i class="icon-settings"></i>
-              </template>
-              <b-dropdown-item>更多...</b-dropdown-item>
-            </b-dropdown>
-            <h4 class="mb-0">{{brand}}</h4>
-            <p>品牌</p>
-          </b-card-body>
-          <brand-card-line-chart class="chart-wrapper px-3 height-70" height="70"/>
-        </b-card>
-      </b-col>
-      <b-col sm="6" lg="3">
-        <b-card no-body class="bg-info">
-          <b-card-body class="pb-0">
-            <b-dropdown class="float-right" variant="transparent p-0" right>
-              <template slot="button-content">
-                <i class="icon-settings"></i>
-              </template>
-              <b-dropdown-item>更多...</b-dropdown-item>
-            </b-dropdown>
-            <h4 class="mb-0">{{factory}}</h4>
-            <p>工厂</p>
-          </b-card-body>
-          <factory-card-line-chart class="chart-wrapper px-3 height-70" height="70"/>
-        </b-card>
-      </b-col>
-    </b-row>
+  <div class="animated fadeIn">
+    <el-card>
+      <el-row class="table-row">
+        <template v-for="(item, index) in topData">
+          <el-col :span="4" :title="item.title" :key="item.title">
+            <div class="table-cell" :class="(topData.length - 1 === index) ? 'table-cell_last' : ''">
+              <h6 class="table-cell_title">{{item.title}}</h6>
+              <h6 class="table-cell_value">{{item.value}}</h6>
+            </div>
+          </el-col>
+        </template>
+      </el-row>
+      <div class="pt-3"></div>
+      <h6 style="margin: 0px">生产流程预警</h6>
+      <div class="pt-3"></div>
+      <el-row class="table-row">
+        <template v-for="(item, index) in centerData">
+          <el-col :span="4" :title="item.title" :key="item.title">
+            <div class="table-cell-center" :class="index > 5 ? 'table-cell_last' : ''">
+              <h6 class="table-cell_value">{{item.value}}</h6>
+              <h6 class="table-cell_title">{{item.title}}</h6>
+            </div>
+          </el-col>
+        </template>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
 <script>
-  import ProductCardLineChart from './ProductCardLineChart';
-  import OrderCardLineChart from './OrderCardLineChart';
-  import BrandCardLineChart from './BrandCardLineChart';
-  import FactoryCardLineChart from './FactoryCardLineChart';
-
-  export default {
-    name: 'TenantDashboardPage',
-    components: {
-      ProductCardLineChart,
-      OrderCardLineChart,
-      BrandCardLineChart,
-      FactoryCardLineChart,
-    },
-    data() {
-      return {
-        trafficDimension: 'Month',
-        product: '',
-        order: '',
-        brand: '',
-        factory: '',
-      }
-    },
-    mounted() {
-    },
+export default {
+  name: 'TenantDashboardPage',
+  data () {
+    return {
+      topData: [
+        {
+          title: '今日成交额',
+          value: 23800
+        }, {
+          title: '今日注册用户',
+          value: 29
+        }, {
+          title: '今日需求数',
+          value: 19
+        }, {
+          title: '今日报价数',
+          value: 19
+        }, {
+          title: '今日订单额',
+          value: 10
+        }, {
+          title: '今日签约额',
+          value: 11
+        }
+      ],
+      centerData: [
+        {
+          title: '需求未报价',
+          value: 18
+        }, {
+          title: '报价未确认',
+          value: 18
+        }, {
+          title: '报价确认未做单',
+          value: 18
+        }, {
+          title: '做单未签约',
+          value: 18
+        }, {
+          title: '签约未首付',
+          value: 18
+        }, {
+          title: '首付未结算',
+          value: 18
+        }, {
+          title: '首付后未生产',
+          value: 18
+        }, {
+          title: '工序2天未更新',
+          value: 18
+        }, {
+          title: '生产完成未对账',
+          value: 18
+        }, {
+          title: '对账未付尾款',
+          value: 18
+        }, {
+          title: '尾款未结算',
+          value: 18
+        }
+      ]
+    }
   }
+}
 </script>
+
+<style scoped>
+  .table-row {
+    border: 1px solid #DCDFE6;
+    padding: 4px;
+  }
+
+  .table-cell {
+    min-height: 90px;
+    max-height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-right: 1px solid #DCDFE6;
+  }
+  .table-cell_last {
+    border: none !important;;
+  }
+
+  .table-cell_title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+
+  .table-cell_value {
+    color: #409EFF;
+    margin: 0;
+  }
+
+  .table-cell-center {
+    min-height: 90px;
+    max-height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px solid #DCDFE6;
+  }
+
+</style>
