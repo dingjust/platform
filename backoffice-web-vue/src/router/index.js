@@ -260,6 +260,17 @@ const router = new Router({
         name: '出货对账单详情',
         props: true,
         component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/delivery-recon/reconciliation/detail/ReconciliationOrdersDetailV2')
+      },
+      {
+        path: 'pend-out',
+        name: '交易订单',
+        component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/pend-out-view/PendOutView')
+      },
+      {
+        path: 'pend-out/:id',
+        name: '订单详情',
+        props: true,
+        component: () => import(/* webpackChunkName: 'tenant-orders' */ '@/views/order/pend-out-view/detail/PendOutDetail')
       }
       ]
     },

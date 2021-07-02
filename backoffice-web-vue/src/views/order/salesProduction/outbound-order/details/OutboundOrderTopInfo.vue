@@ -160,8 +160,8 @@
     props: ['slotData', 'payPlan'],
     computed: {
       totalAmount: function () {
-        if (this.slotData.totalAmount) {
-          return this.slotData.totalAmount;
+        if (this.slotData.totalPrimeCost) {
+          return this.slotData.totalPrimeCost;
         }
         let totalAmount = 0;
         this.slotData.taskOrderEntries.forEach(item => {

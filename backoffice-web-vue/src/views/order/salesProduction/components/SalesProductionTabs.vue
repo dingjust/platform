@@ -27,7 +27,7 @@
           :canUpdate="canUpdate" @onModify="onProductModify" @onDetail="onProductDetail"/>
       </el-tab-pane>
       <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'" key="production">
-        <sales-production-tasks-table :data="form.taskOrderEntries" :isSelfCreated="isSelfCreated" 
+        <sales-production-tasks-table :data="form.taskOrderEntries" :isSelfCreated="isSelfCreated" :readOnly="readOnly"
                                       @callback="callback" @onDetail="onTaskDetail"/>
       </el-tab-pane>
       <el-tab-pane label="盈亏分析" v-if="showProfitLoss" key="profitLoss" :lazy="true">
@@ -83,6 +83,10 @@
       fromOut: {
         type: Boolean,
         default: false
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -103,7 +107,7 @@
         // return this.form.sendBy && this.form.sendBy.id && (this.form.state === 'AUDIT_PASSED' || this.form.state === 'COMPLETED');
       },
       canCreateProfitLoss: function () {
-        return !this.form.profitLossAnalysis && this.showProfitLoss && !this.fromOut;
+        return !this.form.profitLossAnalysis && this.showProfitLoss && !this.fromOut && !this.readOnly;
       },
       isSelfCreated: function () {
         return !this.form.originCompany;
