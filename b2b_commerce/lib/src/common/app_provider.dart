@@ -69,6 +69,7 @@ class AppProvider {
     await Provider.of<LabelState>(context).getLabels();
     await Provider.of<ColorState>(context).getAllColors();
     await Provider.of<SizeState>(context).getAllSizes();
+    Provider.of<ProductHomeCarouselsState>(context).getBannerData();
 
     AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
     await appVersionHelper.getAppVersionInfo('nbyjy');

@@ -18,20 +18,13 @@ class BusinessHomePage extends StatefulWidget {
 
   final UserType userType;
 
-  final Map<UserType, List<Widget>> widgets = <UserType, List<Widget>>{
-    UserType.BRAND: <Widget>[
-      BrandSiteStatisticsSection(),
-      SliverSpacing(),
-      BrandMenusSection(),
-    ],
-    UserType.FACTORY: <Widget>[
-      FactorySiteStatisticsSection(),
-      SliverSpacing(),
-      FactoryMenusSection()
-    ]
-  };
+  final List<Widget> widgets = [
+    FactorySiteStatisticsSection(),
+    SliverSpacing(),
+    FactoryMenusSection()
+  ];
 
-  get widgetsByUserType => widgets[userType];
+  get widgetsByUserType => widgets;
 
   @override
   _BusinessHomePageState createState() => new _BusinessHomePageState();
@@ -121,15 +114,15 @@ class BrandMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.priceManage, '报价管理',
                     AppRoutes.ROUTE_QUOTES,
                     authorizations: [Authorization.QUOTE_ORDER]),
-                buildChild(context, MenuItemImage.proofingOrder, '打样订单',
-                    AppRoutes.ROUTE_PROOFING_ORDERS,
-                    authorizations: [Authorization.PROOFING_ORDER]),
-                buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
-                    AppRoutes.ROUTE_PURCHASE_ORDERS,
-                    authorizations: [Authorization.PURCHASE_ORDER]),
-                buildChild(context, MenuItemImage.saleOrder, '销售订单',
-                    AppRoutes.ROUTE_SALE_ORDERS,
-                    authorizations: [Authorization.PURCHASE_ORDER]),
+                // buildChild(context, MenuItemImage.proofingOrder, '打样订单',
+                //     AppRoutes.ROUTE_PROOFING_ORDERS,
+                //     authorizations: [Authorization.PROOFING_ORDER]),
+                // buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
+                //     AppRoutes.ROUTE_PURCHASE_ORDERS,
+                //     authorizations: [Authorization.PURCHASE_ORDER]),
+                // buildChild(context, MenuItemImage.saleOrder, '销售订单',
+                //     AppRoutes.ROUTE_SALE_ORDERS,
+                //     authorizations: [Authorization.PURCHASE_ORDER]),
                 // buildChild(context, MenuItemImage.saleOrder, '面料需求',
                 //     AppRoutes.ROUTE_FABRIC_REQUIREMENT,
                 //     authorizations: [Authorization.PURCHASE_ORDER]),
@@ -170,31 +163,18 @@ class BrandMenusSection extends StatelessWidget {
               crossAxisSpacing: 4.0,
               childAspectRatio: (1.3),
               children: <Widget>[
-                buildChild(
-                    context,
-                    MenuItemImage.clothesManage,
-                    '产品管理',
-                    UserBLoC.instance.currentUser.type == UserType.FACTORY
-                        ? AppRoutes.ROUTE_PRODUCTS
-                        : AppRoutes.ROUTE_PRODUCTS_BRAND,
-                    authorizations: [Authorization.PRODUCT]),
+                // buildChild(context, MenuItemImage.clothesManage, '产品管理',
+                //     AppRoutes.ROUTE_PRODUCTS,
+                //     authorizations: [Authorization.PRODUCT]),
                 //  buildChild(context, MenuItemImage.employeeManage, '员工管理',
                 //      AppRoutes.ROUTE_EMPLOYEES),
                 buildChild(context, MenuItemImage.partnerFactory, '合作商管理',
                     AppRoutes.ROUTE_COOPERATORS,
                     authorizations: [Authorization.COMPANY_COOPERATOR]),
-                buildChild(
-                  context,
-                  MenuItemImage.clothesManage,
-                  '款式管理',
-                  AppRoutes.ROUTE_SAMPLE_PRODUCTS,
-                ),
-                buildChild(
-                  context,
-                  MenuItemImage.productFactory,
-                  '面辅料管理',
-                  AppRoutes.ROUTE_MATERIEL_PRODUCT_MANAGE,
-                ),
+                buildChild(context, MenuItemImage.clothesManage, '款式管理',
+                    AppRoutes.ROUTE_SAMPLE_PRODUCTS),
+                buildChild(context, MenuItemImage.productFactory, '面辅料管理',
+                    AppRoutes.ROUTE_MATERIEL_PRODUCT_MANAGE),
               ],
             )
           ],
@@ -419,15 +399,15 @@ class FactoryMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.priceOrder, '我的报价',
                     AppRoutes.ROUTE_QUOTES,
                     authorizations: [Authorization.QUOTE_ORDER]),
-                buildChild(context, MenuItemImage.proofingOrder, '打样订单',
-                    AppRoutes.ROUTE_PROOFING_ORDERS,
-                    authorizations: [Authorization.PROOFING_ORDER]),
-                buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
-                    AppRoutes.ROUTE_PURCHASE_ORDERS,
-                    authorizations: [Authorization.PURCHASE_ORDER]),
-                buildChild(context, MenuItemImage.saleOrder, '销售订单',
-                    AppRoutes.ROUTE_SALE_ORDERS,
-                    authorizations: [Authorization.PURCHASE_ORDER]),
+                // buildChild(context, MenuItemImage.proofingOrder, '打样订单',
+                //     AppRoutes.ROUTE_PROOFING_ORDERS,
+                //     authorizations: [Authorization.PROOFING_ORDER]),
+                // buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
+                //     AppRoutes.ROUTE_PURCHASE_ORDERS,
+                //     authorizations: [Authorization.PURCHASE_ORDER]),
+                // buildChild(context, MenuItemImage.saleOrder, '销售订单',
+                //     AppRoutes.ROUTE_SALE_ORDERS,
+                //     authorizations: [Authorization.PURCHASE_ORDER]),
                 // buildChild(context, MenuItemImage.saleOrder, '面料需求',
                 //     AppRoutes.ROUTE_FABRIC_REQUIREMENT,
                 //     authorizations: [Authorization.PURCHASE_ORDER]),

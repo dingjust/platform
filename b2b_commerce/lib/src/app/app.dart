@@ -13,7 +13,6 @@ import 'package:b2b_commerce/src/home/account/client_select_v2.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/index.dart';
 import 'package:b2b_commerce/src/my/index.dart';
-import 'package:b2b_commerce/src/my/messages/index.dart';
 import 'package:b2b_commerce/src/observer/b2b_navigator_observer.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
@@ -50,10 +49,6 @@ class _MyAppState extends State<MyApp> {
           initialData: UserBLoC.instance.currentUser,
           stream: UserBLoC.instance.stream,
           builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-            // 未登录,游客
-            if (snapshot.data.type == UserType.ANONYMOUS) {
-              return AnymouseApp();
-            }
             return B2BApp(
               userType: snapshot.data.type,
             );
@@ -74,21 +69,6 @@ class _MyAppState extends State<MyApp> {
     // 预加载全局数据
     AppProvider.preloading(context);
   }
-
-//监听异常消息,dialog
-// void listenMessage() {
-// MessageBLoC.instance.errorMessageStream.listen((value) {
-// final appContext = _navigatorKey.currentState.overlay.context;
-// final dialog = AlertDialog(
-// content: Text('$value'),
-// );
-// try {
-// showDialog(context: appContext, builder: (x) => dialog);
-// } catch (e) {
-// print(e);
-// }
-// });
-// }
 }
 
 ///B2B应用
@@ -181,14 +161,14 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
       NavigationMenu(
           BottomNavigationBarItem(icon: Icon(B2BIcons.production), label: '生产'),
           ProductionProgressPage()),
+      // NavigationMenu(
+      //   // BottomNavigationBarItem(icon: BottomNotificationsIcon(), label: '消息'),
+      //   BottomNavigationBarItem(
+      //       icon: Icon(Icons.notifications_none), label: '消息'),
+      //   MessagePage(),
+      // ),
       NavigationMenu(
-        // BottomNavigationBarItem(icon: BottomNotificationsIcon(), label: '消息'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_none), label: '消息'),
-        MessagePage(),
-      ),
-      NavigationMenu(
-        BottomNavigationBarItem(icon: Icon(B2BIcons.business), label: '工作'),
+        BottomNavigationBarItem(icon: Icon(B2BIcons.work_bench), label: '工作台'),
         BusinessHomePage(userType: widget.userType),
       ),
       NavigationMenu(
@@ -230,21 +210,20 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
         return Scaffold(
           key: AppKeys.appPage,
           body: menus[_currentIndex].page,
+          floatingActionButton: _Fab(),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.miniCenterDocked,
           bottomNavigationBar: BottomNavigationBar(
               currentIndex: _currentIndex,
               onTap: _handleNavigation,
               items: menus.map((menu) => menu.item).toList(),
               type: BottomNavigationBarType.fixed,
               selectedFontSize: 12,
-              selectedLabelStyle:
-                  TextStyle(color: Constants.THEME_COLOR_ORANGE),
-              selectedItemColor: Constants.THEME_COLOR_ORANGE),
+              selectedLabelStyle: TextStyle(color: Constants.THEME_COLOR_MAIN),
+              selectedItemColor: Constants.THEME_COLOR_MAIN),
         );
       }),
       routes: AppRoutes.allRoutes,
-      onUnknownRoute: (RouteSettings settings) {
-        print(settings.name);
-      },
       localizationsDelegates: [
         //此处
         GlobalMaterialLocalizations.delegate,
@@ -287,6 +266,17 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
     _loginJumpSubscription = null;
     _globalChannel = null;
     WidgetsBinding.instance.removeObserver(this);
+  }
+}
+
+class _Fab extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {},
+      elevation: 0,
+      child: Icon(Icons.add),
+    );
   }
 }
 

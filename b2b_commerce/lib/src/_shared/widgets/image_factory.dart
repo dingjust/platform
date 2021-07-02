@@ -99,4 +99,41 @@ class ImageFactory {
       radius: radius,
     );
   }
+
+  // 圆形图片（带图片处理）
+  static Widget buildProcessedAvatar(MediaModel profilePicture,
+      {double radius = 40.0, String processurl}) {
+    if (profilePicture == null) {
+      return ClipOval(
+        child: Container(
+          width: radius,
+          height: radius,
+          color: Colors.grey[50],
+          child: Icon(
+            B2BIcons.noPicture,
+            color: Color.fromRGBO(200, 200, 200, 1),
+          ),
+        ),
+      );
+    }
+
+    return ClipOval(
+      child: CachedNetworkImage(
+        width: radius,
+        height: radius,
+        imageUrl: '${profilePicture.imageProcessUrl(processurl)}',
+        fit: BoxFit.cover,
+        placeholder: (context, url) => SpinKitRing(
+          color: Colors.grey[300],
+          lineWidth: 2,
+          size: 30,
+        ),
+        errorWidget: (context, url, error) => SpinKitRing(
+          color: Colors.grey[300],
+          lineWidth: 2,
+          size: 30,
+        ),
+      ),
+    );
+  }
 }

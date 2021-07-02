@@ -241,21 +241,21 @@ class ServiceFlow extends StatelessWidget {
                 // _icon('temp/index/home_deliver.png', '出货对账'),
                 UserBLoC.instance.currentUser.type == UserType.BRAND
                     ? HomeAssetsBtn(
-                  label: '创建订单',
-                  url: 'temp/index/home_order.png',
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(AppRoutes.ROUTE_OUT_ORDERS);
-                  },
-                )
+                        label: '创建订单',
+                        url: 'temp/index/home_order.png',
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.ROUTE_OUT_ORDERS);
+                        },
+                      )
                     : HomeAssetsBtn(
-                  label: '承接订单',
-                  url: 'temp/index/home_order.png',
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS);
-                  },
-                ),
+                        label: '承接订单',
+                        url: 'temp/index/home_order.png',
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS);
+                        },
+                      ),
                 _arrow(),
                 HomeAssetsBtn(
                   label: '签订合同',
@@ -377,13 +377,6 @@ class BrandBtnsSection extends StatelessWidget {
               Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
             },
           ),
-          // HomeAssetsBtn(
-          //   url: 'temp/index/materiel_products.png',
-          //   label: '面辅料',
-          //   onTap: () {
-          //     Navigator.pushNamed(context, AppRoutes.ROUTE_MATERIEL_PRODUCTS);
-          //   },
-          // ),
           HomeAssetsBtn(
             url: 'temp/index/quote_process.png',
             label: '报价处理',
@@ -507,6 +500,148 @@ class HomeAssetsBtn extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+///首页按钮
+class HomeBtnsSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      color: Colors.white,
+      child: Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // HomeAssetsBtn(
+            //   url: 'temp/index/free_capacity.png',
+            //   label: '空闲产能',
+            //   onTap: () {
+            //     Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
+            //   },
+            // ),
+            HomeAssetsBtn(
+              url: 'temp/index/home_publish.png',
+              label: '我的需求',
+              onTap: () {
+                Navigator.pushNamed(
+                    context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
+              },
+            ),
+            HomeAssetsBtn(
+              url: 'temp/index/home_validate.png',
+              label: '我的报价',
+              onTap: () {
+                Navigator.of(context).pushNamed(AppRoutes.ROUTE_QUOTES);
+              },
+            ),
+            HomeAssetsBtn(
+              url: 'temp/index/nearby_factory.png',
+              label: '离我最近',
+              onTap: () async {
+                List<CategoryModel> categories =
+                await Provider.of<MajorCategoryState>(context)
+                    .getMajorCategories();
+                List<LabelModel> labels =
+                await Provider.of<LabelState>(context).getLabels();
+                labels = labels
+                    .where((label) =>
+                label.group == 'FACTORY' || label.group == 'PLATFORM')
+                    .toList();
+                if (categories != null && labels != null) {
+                  //埋点>>>就近找厂
+                  UmengPlugin.onEvent('factory_finding_location');
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          FactoryPage(
+                            FactoryCondition(
+                                starLevel: 0,
+                                adeptAtCategories: [],
+                                labels: [],
+                                cooperationModes: []),
+                            route: '就近找厂',
+                            categories: categories,
+                            labels: labels,
+                          ),
+                    ),
+                  );
+                }
+              },
+            ),
+            HomeAssetsBtn(
+              url: 'temp/index/home_factory.png',
+              label: '推荐工厂',
+              onTap: () {
+                //埋点>>>推荐工厂
+                UmengPlugin.onEvent(
+                  'factory_finding_all',
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        FindingFactoryPage(
+                          FactoryCondition(
+                              starLevel: 0,
+                              adeptAtCategories: [],
+                              labels: [],
+                              cooperationModes: []),
+                          route: '推荐工厂',
+                        ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        Container(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            HomeAssetsBtn(
+              label: '我的订单',
+              url: 'temp/index/home_order.png',
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS);
+              },
+            ),
+            HomeAssetsBtn(
+              label: '我的合同',
+              url: 'temp/index/home_contract.png',
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.ROUTE_MY_CONTRACT);
+              },
+            ),
+            HomeAssetsBtn(
+              label: '生产进度',
+              url: 'temp/index/home_production.png',
+              onTap: () {
+                Navigator.pushNamed(
+                    context,
+                    UserBLoC.instance.currentUser.type == UserType.BRAND
+                        ? AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS
+                        : AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS);
+              },
+            ),
+            HomeAssetsBtn(
+              label: '财务对账',
+              url: 'temp/index/home_deliver.png',
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(AppRoutes.ROUTE_RECONCILIATION_ORDERS);
+              },
+            ),
+          ],
+        ),
+      ]),
     );
   }
 }
