@@ -2,7 +2,7 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
       @selection-change="handleSelectionChange" @row-click="rowClick">
-      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+      <el-table-column type="selection" :selectable="selectable" :reserve-selection="true" width="55"></el-table-column>
       <el-table-column label="外接订单号" min-width="110">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -71,12 +71,17 @@ export default {
       }
     },
     rowClick(row) {
+      if (row.originCompany == null) {
+        return;
+      }
       this.$refs.resultTable.toggleRowSelection(row);
     },
     onSelect () {
       this.$emit('onSelect', this.selectionRow);
     },
-
+    selectable (row, index) {
+      return row.originCompany != null;
+    },
     cooperatorName(row) {
       if (row.originCompany != null) {
         return row.originCompany.name;

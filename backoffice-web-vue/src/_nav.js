@@ -40,25 +40,25 @@ export default {
       url: '/product',
       icon: 'el-icon-goods',
       children: [{
-          name: '服装产品',
-          url: '/product/apparel',
-          icon: 'iconNone'
-        },
-        {
-          name: '分类',
-          url: '/product/category',
-          icon: 'iconNone'
-        },
-        {
-          name: '颜色',
-          url: '/product/color',
-          icon: 'iconNone'
-        },
-        {
-          name: '尺码',
-          url: '/product/size',
-          icon: 'iconNone'
-        }
+        name: '服装产品',
+        url: '/product/apparel',
+        icon: 'iconNone'
+      },
+      {
+        name: '分类',
+        url: '/product/category',
+        icon: 'iconNone'
+      },
+      {
+        name: '颜色',
+        url: '/product/color',
+        icon: 'iconNone'
+      },
+      {
+        name: '尺码',
+        url: '/product/size',
+        icon: 'iconNone'
+      }
       ]
     },
     {
@@ -66,19 +66,19 @@ export default {
       url: '/backoffice/customer',
       icon: 'el-icon-money',
       children: [{
-          name: '品牌',
-          url: '/user/brand',
-          icon: 'iconNone'
-        },
-        {
-          name: '工厂',
-          url: '/user/factory',
-          icon: 'iconNone'
-        }, {
-          name: '用户列表',
-          url: '/user/customer',
-          icon: 'iconNone'
-        }
+        name: '品牌',
+        url: '/user/brand',
+        icon: 'iconNone'
+      },
+      {
+        name: '工厂',
+        url: '/user/factory',
+        icon: 'iconNone'
+      }, {
+        name: '用户列表',
+        url: '/user/customer',
+        icon: 'iconNone'
+      }
       ]
     },
     {
@@ -102,25 +102,29 @@ export default {
       icon: 'el-icon-s-order',
       url: '/order',
       children: [{
-          name: '需求订单',
-          url: '/order/requirement',
-          icon: 'iconNone'
-        },
-        {
-          name: '报价单',
-          url: '/order/quote',
-          icon: 'iconNone'
-        },
-        {
-          name: '生产订单',
-          url: '/order/purchase',
-          icon: 'iconNone'
-        },
-        {
-          name: '打样订单',
-          url: '/order/proofing',
-          icon: 'iconNone'
-        },
+        name: '需求订单',
+        url: '/order/requirement',
+        icon: 'iconNone'
+      },
+      {
+        name: '报价单',
+        url: '/order/quote',
+        icon: 'iconNone'
+      },
+      {
+        name: '生产订单',
+        url: '/order/purchase',
+        icon: 'iconNone'
+      },
+      {
+        name: '打样订单',
+        url: '/order/proofing',
+        icon: 'iconNone'
+      }, {
+        name: '交易订单',
+        url: '/order/pend-out',
+        icon: 'iconNone'
+      }
       ]
     },
     {
@@ -226,13 +230,13 @@ export default {
         {
           name: '提现',
           url: '/miscs/cashOutManager',
-          icon: 'iconNone',
+          icon: 'iconNone'
         },
         {
           name: '产品运营活动',
           url: '/miscs/promote',
-          icon: 'iconNone',
-        },
+          icon: 'iconNone'
+        }
         // {
         //   name: '未分类',
         //   icon: 'iconNone',

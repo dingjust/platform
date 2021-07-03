@@ -45,8 +45,9 @@
                                     :slotData="slotData"
                                     @onSearchQuotes="onSearchQuotes"
                                     @onRefresh="onRefresh"
-                                      @onRefreshDetails="onRefreshDetails"
+                                    @onRefreshDetails="onRefreshDetails"
                                     @onEditSave="onEditSave"
+                                    @onEdit="onEdit"
                                     :readOnly="false">
 
       </requirement-order-details-page>
@@ -72,6 +73,7 @@
   import {createNamespacedHelpers} from 'vuex';
 
   const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('RequirementOrdersModule');
+  import { province } from '@/common/js/province';
 
   import RequirementOrderToolbar from './toolbar/RequirementOrderToolbar';
   import RequirementOrderSearchResultList from './list/RequirementOrderSearchResultList';
@@ -139,7 +141,14 @@
           this.getMinorCategories();
         }
       },
-      async onDetails (item) {
+      async onDetails(item, isEdit) {
+        if ((item.creationtime !== item.modifiedtime) || item.reviewState === 'REVIEWING' || item.reviewState === 'REVIEW_REJECTED') {
+          await this.getBackup(item, isEdit);
+        } else {
+          await this._onDetails(item, isEdit);
+        }
+      },
+      async _onDetails (item, isEdit) {
         const url = this.apis().getRequirementOrder(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -148,8 +157,28 @@
         }
 
         this.slotData = result;
-        this.detailsDialogVisible = !this.detailsDialogVisible;
-        this.onSearchQuotes(0, 8);
+        if (!isEdit) {
+          this.detailsDialogVisible = !this.detailsDialogVisible;
+          this.onSearchQuotes(0, 8);
+        }
+      },
+      async getBackup (item, isEdit) {
+        const url = this.apis().getRequirementOrderBackUp(item.code);
+        const result = await this.$http.get(url);
+        
+        if (result.code === 1) {
+          this.slotData = JSON.parse(result.data);
+          if (!isEdit) {
+            this.detailsDialogVisible = !this.detailsDialogVisible;
+            this.onSearchQuotes(0, 8);
+          }
+        } else if (result.code === 0) {
+          this.$message.error(result.msg);
+        } else if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+        } else {
+          this.$message.error('获取失败!')
+        }
       },
       async onRefreshDetails (code) {
         const url = this.apis().getRequirementOrder(code);
@@ -223,12 +252,15 @@
         this.formDialogVisible = !this.formDialogVisible;
       },
       async onEdit (item) {
-        const url = this.apis().getRequirementOrder(item.code);
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
+        // const url = this.apis().getRequirementOrder(item.code);
+        // const result = await this.$http.get(url);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
+        await this.onDetails(item, true);
+        this.detailsDialogVisible = false;
+        const result = this.slotData;
 
         result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
         if (!result.details.certificates) {
@@ -261,15 +293,20 @@
         // 处理地区
         let form = Object.assign({}, this.formData);
         if (this.formData.details.productiveDistricts && this.formData.details.productiveDistricts.length > 0) {
-          form.details.productiveDistricts = this.formData.details.productiveDistricts.map(item => {
-            return {
-              code: item[item.length - 1]
-            }
+          let arr = []
+          province.forEach(item => {
+            item.children.forEach(val => {
+              arr = arr.concat(val.children);
+            })
           })
+          let productiveDistricts = this.formData.details.productiveDistricts.map(item => {
+            return arr.find(val => val.code === item[item.length - 1]);
+          })
+
+          form.details.productiveDistricts = productiveDistricts
         } else {
           form.details.productiveDistricts = [];
         }
-
         return {
           params: params,
           form: form
@@ -300,7 +337,7 @@
       onEditSave (factories, phoneNumbers) {
         // 处理数据
         const { params, form } = this.handleData(factories, phoneNumbers);
-
+        this.$set(form, 'reviewState', 'REVIEWING')
         let url;
         if (this.isTenant()) {
           url = this.apis().updateRequirementOrderByPlatform();

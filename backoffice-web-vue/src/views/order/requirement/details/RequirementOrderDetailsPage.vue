@@ -262,16 +262,17 @@
         this.$message.success('邀请工厂报价成功');
       },
       async onEdit () {
-        const url = this.apis().getRequirementOrder(this.slotData.code);
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
+        this.$emit('onEdit', this.slotData);
+        // const url = this.apis().getRequirementOrder(this.slotData.code);
+        // const result = await this.$http.get(url);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
 
-        result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
-        this.setFormData(Object.assign({}, this.formData, result));
-        this.formDialogVisible = !this.formDialogVisible;
+        // result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
+        // this.setFormData(Object.assign({}, this.formData, result));
+        // this.formDialogVisible = !this.formDialogVisible;
       },
       async onSave (factories, phoneNumbers) {
         var params = {};

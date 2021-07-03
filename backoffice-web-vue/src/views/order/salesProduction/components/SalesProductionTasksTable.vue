@@ -90,11 +90,14 @@
       },
       isSelfCreated: {
         type: Boolean
+      },
+      readOnly: {
+        type: Boolean
       }
     },
     methods: {
       canModifyPrice (row) {
-        return this.isSelfCreated && row.state === 'TO_BE_PRODUCED';
+        return this.isSelfCreated && row.state === 'TO_BE_PRODUCED' && !this.readOnly;
       },
       //entry detail
       onDetail(id) {

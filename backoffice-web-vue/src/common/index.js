@@ -382,11 +382,17 @@ const COMMON_APIS = {
   createRequirementOrder () {
     return '/b2b/orders/requirement/new';
   },
+  createRequirementOrderNewByType () {
+    return '/b2b/orders/requirement/newByType';
+  },
   createPublishByPlatform () {
     return '/b2b/orders/requirement/publishByPlatform';
   },
   updateRequirementOrder (code) {
     return '/b2b/orders/requirement/' + code + '/request';
+  },
+  updateRequirementOrderNewByType () {
+    return '/b2b/orders/requirement/updateByType';
   },
   updateRequirementOrderByPlatform () {
     return '/b2b/orders/requirement/updateByPaltform'
@@ -1299,11 +1305,27 @@ let TENANT_APIS = {
   // 审阅驳回->修改过需求订单
   rejectRequirementOrder: (code, modifiedtime) => `/b2b/orders/requirement/review/${code}/reject?versionNo=${modifiedtime}`,
   // 设置需求订单显示关闭
-  showOrHideRequirementOrder: (code, flag) => `/b2b/orders/requirement/enableShow/${code}/${flag}`
+  showOrHideRequirementOrder: (code, flag) => `/b2b/orders/requirement/enableShow/${code}/${flag}`,
+
+  // 获取全部外接外发订单
+  searchPendOut: () => '/b2b/sales/production/order/all',
+  // 销售计划订单详情平台
+  getSalesProductionOrderDetails (id) {
+    return '/b2b/sales/production/order/get/with/admin/' + id;
+  },
+  // 生产工单详情
+  getProductionOrderDetail (id) {
+    return '/b2b/production/task/order/' + id;
+  },
+  // 获取统计数据1
+  getTenantReportsTab1: () => '/b2b/company/reports/index/tab1',
+  // 获取统计数据2
+  getTenantReportsTab2: () => '/b2b/company/reports/index/tab2'
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
 let NONE_TENANT_APIS = {
+  getRequirementOrderBackUp: (code) => '/b2b/orders/requirement/backups/' + code,
   getApparelProducts () {
     return '/b2b/products/apparel';
   },
