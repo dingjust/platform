@@ -1,9 +1,9 @@
-import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_list.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_staggered_grid.dart';
 import 'package:b2b_commerce/src/common/qr_scan_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/home/search/home_search_bar.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../_shared/shares.dart';
 import '../common/app_keys.dart';
 import '_shared/widgets/banner.dart';
 import '_shared/widgets/home_section.dart';
@@ -67,8 +66,7 @@ class HomePage extends StatefulWidget {
   get headWidgets => _headWidgets;
 
   ///搜索栏
-  get searchInputWidget => GlobalSearchInput<String>(
-      tips: ' 找工厂、找款式...', delegate: BrandIndexSearchDelegatePage());
+  get searchInputWidget => HomeSearchBar();
 
   get tabs => _tabs;
 

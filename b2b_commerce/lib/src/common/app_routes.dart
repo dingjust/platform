@@ -37,6 +37,8 @@ import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/index.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
+import 'package:b2b_commerce/src/home/search/home_search_result.dart';
+import 'package:b2b_commerce/src/home/search/home_serach.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/account/register_channel_page.dart';
 import 'package:b2b_commerce/src/my/account/register_page.dart';
@@ -211,6 +213,12 @@ class AppRoutes with GlobalRoutes {
   ///款式详情
   static const ROUTE_SAMPLE_PRODUCT = '/business/sample_product';
 
+  ///首页搜索
+  static const ROUTE_HOME_SEARCH = '/search';
+
+  ///首页搜索结果
+  static const ROUTE_HOME_SEARCH_RESULT = '/search/';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -280,8 +288,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_ACTIVITY_INVITE: (context) => InvitePage(),
     ROUTE_MATERIEL_PRODUCT_MANAGE: (context) => MaterielProductManagePage(),
     ROUTE_MATERIEL_PRODUCTS: (context) => MaterielProductsPage(),
-    ROUTE_CHANNEL_REGISTER: (context) =>
-        RegisterChannelPage(
+    ROUTE_CHANNEL_REGISTER: (context) => RegisterChannelPage(
           channelCode: getVal('code', context),
         ),
     ROUTE_REQUIREMENT: (context) =>
@@ -307,11 +314,22 @@ class AppRoutes with GlobalRoutes {
               ? AuthTypeMap[getVal('type', context)]
               : null,
           channelCode: getVal('channelCode', context),
-        )
+        ),
+    ROUTE_HOME_SEARCH: (context) =>
+        HomeSearchPage(keyword: getVal('keyword', context)),
+    ROUTE_HOME_SEARCH_RESULT: (context) =>
+        HomeSearchResultPage(keyword: getVal('keyword', context)),
   };
 
   static dynamic getVal(String key, BuildContext context) {
-    Map<String, dynamic> map = ModalRoute.of(context).settings.arguments;
-    return map[key];
+    Map<String, dynamic> map = ModalRoute
+        .of(context)
+        .settings
+        .arguments;
+    if (map != null) {
+      return map[key];
+    } else {
+      return null;
+    }
   }
 }

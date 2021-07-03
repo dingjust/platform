@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:b2b_commerce/src/business/index.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_type_select.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/progress_work_sheet/progress_work_sheets_page.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
@@ -273,7 +274,10 @@ class _Fab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => RequirementTypeSelectPage()));
+      },
       elevation: 0,
       child: Icon(Icons.add),
     );

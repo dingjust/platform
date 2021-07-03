@@ -1,15 +1,16 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
-import 'package:b2b_commerce/src/home/_shared/widgets/distance_text.dart';
-import 'package:b2b_commerce/src/home/_shared/widgets/orientations_text.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class RequirementListItem extends StatefulWidget {
   final RequirementOrderModel model;
@@ -35,132 +36,57 @@ class _RequirementListItemState extends State<RequirementListItem> {
             context: context, onJump: () => jumpToDetailPage(context));
       },
       child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            // borderRadius: BorderRadius.circular(borderRadius)
-          ),
+          decoration: BoxDecoration(color: Colors.white),
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           margin: EdgeInsets.only(bottom: 10),
           child: Column(
             children: <Widget>[
-              // _buildImage(context),
               _buildTitleRow(),
               _buildContent(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        '${widget.model.details.productName ?? ''}',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: Text(
-                              '${widget.model.details.expectedMachiningQuantity}件',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                          Text(
-                            '${widget.model.details.category.name}',
-                            style:
-                                TextStyle(color: Colors.black54, fontSize: 10),
-                          ),
-                        ],
-                      ),
-                    ),
-                    DistanceText(
-                      val: widget.model.distance,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                margin: EdgeInsets.only(bottom: 5),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: widget.model.details.productiveDistricts != null
-                          ? DistrictsOrientationsText(
-                              districts:
-                                  widget.model.details.productiveDistricts ??
-                                      [],
-                              textStyle: TextStyle(
-                                  color: Color.fromRGBO(97, 95, 95, 1),
-                                  fontSize: 10))
-                          : OrientationsText(
-                              regions:
-                                  widget.model.details.productiveOrientations ??
-                                      [],
-                              textStyle: TextStyle(
-                                  color: Color.fromRGBO(97, 95, 95, 1),
-                                  fontSize: 10)),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          '${DateExpress2Util.express(widget.model.creationTime)}',
-                          style: TextStyle(
-                              color: Color.fromRGBO(97, 95, 95, 1),
-                              fontSize: 10),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              _buildBottom()
             ],
           )),
     );
   }
 
-  // Widget _buildImage(BuildContext context) {
-  //   if (model?.details?.pictures == null ||
-  //       widget.model.details.pictures.isEmpty) {
-  //     return Container();
-  //   } else {
-  //     const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
+  Widget _buildImages() {
+    var pictures = getPictures();
 
-  //     return ClipRRect(
-  //       //剪裁为圆角矩形
-  //       borderRadius: BorderRadius.only(
-  //           topLeft: Radius.circular(borderRadius),
-  //           topRight: Radius.circular(borderRadius)),
-  //       child: CachedNetworkImage(
-  //         imageUrl:
-  //             '${widget.model.details.pictures.first.imageProcessUrl(processUrl)}',
-  //         placeholder: (context, url) => SpinKitRing(
-  //           color: Colors.grey[300],
-  //           lineWidth: 2,
-  //           size: 30,
-  //         ),
-  //         errorWidget: (context, url, error) => SpinKitRing(
-  //           color: Colors.grey[300],
-  //           lineWidth: 2,
-  //           size: 30,
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
+    if (pictures.length == 0) {
+      return Container();
+    } else {
+      const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
+
+      return Container(
+        margin: EdgeInsets.only(top: 10),
+        child: Row(
+            children: pictures
+                .map((e) => Expanded(
+                        child: GestureDetector(
+                      onTap: () => onPreview(e),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 2),
+                        child: CachedNetworkImage(
+                          height: getImageHeight(pictures.length),
+                          imageUrl: '${e.imageProcessUrl(processUrl)}',
+                          placeholder: (context, url) => SpinKitRing(
+                            color: Colors.grey[300],
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                          errorWidget: (context, url, error) => SpinKitRing(
+                            color: Colors.grey[300],
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )))
+                .toList()),
+      );
+    }
+  }
 
   Widget _buildTitleRow({
     TextStyle style =
@@ -177,7 +103,8 @@ class _RequirementListItemState extends State<RequirementListItem> {
                     margin: EdgeInsets.only(right: 5),
                     child: ImageFactory.buildProcessedAvatar(
                         widget.model.belongTo.profilePicture,
-                        processurl: 'image_process=circle,200')),
+                        processurl:
+                        'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
                 Expanded(
                     child: Text('${widget.model.belongTo.name ?? ''}',
                         style: style,
@@ -194,7 +121,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
 
   Widget _buildContent({TextStyle style = const TextStyle(fontSize: 12)}) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       margin: EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[300], width: 1),
@@ -204,10 +131,11 @@ class _RequirementListItemState extends State<RequirementListItem> {
           children: [
             Expanded(
                 child:
-                    Text('${widget.model.details.productName}', style: style))
+                Text('${widget.model.details.productName}', style: style))
           ],
         ),
-        _buildText()
+        _buildText(),
+        _buildImages()
       ]),
     );
   }
@@ -251,14 +179,66 @@ class _RequirementListItemState extends State<RequirementListItem> {
               children: [
                 Expanded(
                     child: Text(
-                  '${widget.model.remarks ?? ''}',
-                  maxLines: maxLines,
-                  style: style,
-                ))
+                      '${widget.model.remarks ?? ''}',
+                      maxLines: maxLines,
+                      style: style,
+                    ))
               ],
             ));
       }
     });
+  }
+
+  Widget _buildBottom({TextStyle style = const TextStyle(fontSize: 12)}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      margin: EdgeInsets.only(top: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+              child: Row(
+                children: [
+                  Icon(Icons.location_on),
+                  Text('广州市海珠区赤岗', style: style)
+                ],
+              )),
+          Text(
+            '${DateExpress2Util.express(widget.model.creationTime)}',
+            style:
+            TextStyle(color: Color.fromRGBO(97, 95, 95, 1), fontSize: 10),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<MediaModel> getPictures() {
+    if (widget.model?.details?.pictures == null ||
+        widget.model.details.pictures.isEmpty) {
+      return [];
+    }
+
+    if (widget.model.details.pictures.length > 2) {
+      return widget.model.details.pictures.getRange(0, 3).toList();
+    } else {
+      return widget.model.details.pictures;
+    }
+  }
+
+  double getImageHeight(int length) {
+    switch (length) {
+      case 1:
+        return 150;
+        break;
+      case 2:
+        return 120;
+        break;
+      case 3:
+        return 100;
+        break;
+      default:
+        return 100;
+    }
   }
 
   void jumpToDetailPage(BuildContext context) {
@@ -303,5 +283,25 @@ class _RequirementListItemState extends State<RequirementListItem> {
     } else {
       return '${(distance / 1000).toStringAsFixed(2)}KM';
     }
+  }
+
+  //图片预览
+  void onPreview(MediaModel model) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            GalleryPhotoViewWrapper(
+              galleryItems: widget.model.details.pictures
+                  .map((model) => GalleryItem(model: model))
+                  .toList(),
+              backgroundDecoration: const BoxDecoration(
+                color: Colors.black,
+              ),
+              initialIndex: widget.model.details.pictures.indexOf(model),
+              scrollDirection: Axis.horizontal,
+            ),
+      ),
+    );
   }
 }

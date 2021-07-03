@@ -74,3 +74,5 @@ export 'src/commons/table/color_size_note_entry_table.dart';
 export 'src/commons/table/color_size_num_table.dart';
 export 'src/commons/table/report_table.dart';
 export 'src/commons/tag/recommend_product_tag.dart';
+export 'src/commons/gallery/gallery_item.dart';
+export 'src/commons/gallery/gallery_photo_view_wrapper.dart';

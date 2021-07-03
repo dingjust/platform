@@ -100,7 +100,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-
   assets:
     - packages/assets/temp/lake.jpg
     - packages/assets/temp/login_logo.png
@@ -248,6 +247,8 @@ flutter:
     - packages/assets/temp/index/home_deliver.png
     - packages/assets/temp/index/home_production_requirement.jpg
     - packages/assets/temp/index/home_publish_infos.jpg
+    - packages/assets/temp/index/find_factory.png
+    - packages/assets/temp/index/find_order.png
 
   fonts:
     - family: b2bIcons
