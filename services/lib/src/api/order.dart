@@ -203,8 +203,7 @@ class OrderApis {
       };
 
   //确认收货
-  static get shipped =>
-          (code) {
+  static get shipped => (code) {
         return '/{baseSiteId}/orders/proofing/$code/shipped';
       };
 
@@ -478,4 +477,8 @@ class OrderApis {
 
   ///所有节点
   static get progressPhases => '/{baseSiteId}/progress/phase';
+
+  /// 需求发布V2
+  static get requirementOrderNewV2 =>
+      '/{baseSiteId}/orders/requirement/newByType';
 }

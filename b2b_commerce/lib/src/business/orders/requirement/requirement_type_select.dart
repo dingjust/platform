@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
+import 'requirement_identity_form.dart';
+
 class RequirementTypeSelectPage extends StatelessWidget {
   const RequirementTypeSelectPage({Key key}) : super(key: key);
 
@@ -31,7 +33,10 @@ class RequirementTypeSelectPage extends StatelessWidget {
                     child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: OutlineButton(
-                    onPressed: () => onPublish(context),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RequirementIdentityForm()));
+                    },
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Column(
                       children: [
@@ -86,14 +91,14 @@ class RequirementTypeSelectPage extends StatelessWidget {
         builder: (context) => MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              create: (_) => RequirementOrderFormState(),
+              create: (_) => RequirementOrderFormStateV2(),
             ),
           ],
           child: Consumer(
-            builder: (context, RequirementOrderFormState state, _) =>
+            builder: (context, RequirementOrderFormStateV2 state, _) =>
                 RequirementOrderForm(
-              formState: state,
-            ),
+                    // formState: state,
+                    ),
           ),
         ),
       ),

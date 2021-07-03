@@ -144,7 +144,7 @@ class RequirementOrderRepository {
   ///获取需求池信息
   static Future<RequirementOrdersResponse> getRequirementsAnonymous(
       {Map<String, dynamic> params = const {},
-        Map<String, dynamic> data = const {}}) async {
+      Map<String, dynamic> data = const {}}) async {
     Response response;
     try {
       response = await http$.post(OrderApis.requirementOrdersAnonymous,
@@ -154,8 +154,24 @@ class RequirementOrderRepository {
     }
     if (response != null && response.statusCode == 200) {
       RequirementOrdersResponse result =
-      RequirementOrdersResponse.fromJson(response.data);
+          RequirementOrdersResponse.fromJson(response.data);
       return result;
+    } else {
+      return null;
+    }
+  }
+
+  /// 发布需求-v2
+  static Future<BaseResponse> newByType(RequirementOrderModel form) async {
+    Response response;
+    try {
+      response = await http$.post(OrderApis.requirementOrderNewV2,
+          data: RequirementOrderModel.toJson(form));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
     } else {
       return null;
     }

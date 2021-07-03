@@ -71,7 +71,7 @@ class AmapState with ChangeNotifier {
         if (defaultTargetPlatform == TargetPlatform.iOS) {
           AMapLocationClient.startup(AMapLocationOption(
               desiredAccuracy:
-              CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
+                  CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
           _aMapLocation = await AMapLocationClient.getLocation(true);
           _city = _aMapLocation.city;
           _latitude = _aMapLocation.latitude;

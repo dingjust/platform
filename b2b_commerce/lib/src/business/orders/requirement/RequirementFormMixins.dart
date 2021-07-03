@@ -21,6 +21,12 @@ class RequirementFormMixin {
   FocusNode remarksFocusNode;
   TextEditingController remarksController;
 
+  FocusNode contactPhoneFocusNode;
+  TextEditingController contactController;
+
+  FocusNode wechatFocusNode;
+  TextEditingController wechatController;
+
   void initForm() {
     productNameFocusNode = FocusNode();
     productNameController = TextEditingController();
@@ -33,6 +39,12 @@ class RequirementFormMixin {
 
     remarksFocusNode = FocusNode();
     remarksController = TextEditingController();
+
+    contactPhoneFocusNode = FocusNode();
+    contactController = TextEditingController();
+
+    wechatFocusNode = FocusNode();
+    wechatController = TextEditingController();
   }
 
   void initCreate(RequirementOrderModel order) {
@@ -47,5 +59,8 @@ class RequirementFormMixin {
     if (order.details.productiveDistricts == null) {
       order.details.productiveDistricts = [];
     }
+
+    contactController.text = order?.details?.contactPhone ?? '';
+    wechatController.text = order?.details?.contactWeChatNo ?? '';
   }
 }
