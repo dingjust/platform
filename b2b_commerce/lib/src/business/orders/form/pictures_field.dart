@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -9,7 +8,10 @@ class PicturesField extends StatefulWidget {
   ApparelProductModel product;
   bool enabled;
 
-  PicturesField({this.model, this.product, this.enabled = true});
+  final String description;
+
+  PicturesField(
+      {this.model, this.product, this.enabled = true, this.description = ''});
 
   PicturesFieldState createState() => PicturesFieldState();
 }
@@ -31,18 +33,20 @@ class PicturesFieldState extends State<PicturesField> {
           margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
           child: Row(
             children: <Widget>[
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: '添加图片',
-                    style: TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                  TextSpan(
-                    text: '（补充图片可令工厂更快了解需求）',
-                    style: TextStyle(fontSize: 16, color: Colors.orange[800]),
-                  ),
-                ]),
-              ),
+              Expanded(
+                child: RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: '添加图片',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                    TextSpan(
+                      text: '${widget.description}',
+                      style: TextStyle(fontSize: 12, color: Colors.orange[800]),
+                    ),
+                  ]),
+                ),
+              )
             ],
           ),
         ),

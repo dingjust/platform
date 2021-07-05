@@ -2,7 +2,8 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_edit_form.dart';
+import './requirement/requirement_form_factory.dart';
+import './requirement/requirement_form_order.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/business/requirement_orders.dart';
@@ -35,13 +36,9 @@ class RequirementOrderDetailPage extends StatefulWidget {
 
 class _RequirementOrderDetailPageState
     extends State<RequirementOrderDetailPage> {
-  static Map<RequirementOrderStatus, Color> _statusColors = {
-    RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
-    RequirementOrderStatus.COMPLETED: Colors.green,
-    RequirementOrderStatus.CANCELLED: Colors.grey,
-  };
-
   RequirementOrderModel orderModel;
+
+  UserModel currentUser = UserBLoC.instance.currentUser;
 
   List<QuoteModel> quotesList;
 
@@ -88,18 +85,17 @@ class _RequirementOrderDetailPageState
               color: Colors.grey[100],
               child: ListView(
                 children: <Widget>[
-                  //发布公司信息
-//                  _buildCompanyInfo(),
-//                  Divider(
-//                    height: 0,
-//                  ),
                   //标题
                   _buildTitle(),
+                  //描述
+                  _buildRemarks(),
                   Divider(
                     height: 0,
                   ),
                   //需求信息
-                  _buildMain(),
+                  orderModel.orderType == RequirementOrderType.FINDING_ORDER
+                      ? _buildMainOrder
+                      : _buildMainFactory(),
                   //品牌端显示
                   _buildQuote(),
                 ],
@@ -134,183 +130,6 @@ class _RequirementOrderDetailPageState
     return detail;
   }
 
-  Widget _buildCompanyInfo() {
-    /// 工厂端显示
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return Container(
-        padding: EdgeInsets.all(15),
-//        margin: EdgeInsets.only(bottom: 10),
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                orderModel.belongTo.profilePicture == null
-                    ? Container(
-                        margin: EdgeInsets.only(right: 10),
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                'temp/picture.png',
-                                package: "assets",
-                              ),
-                              fit: BoxFit.cover,
-                            )),
-                      )
-                    : Container(
-                        margin: EdgeInsets.only(right: 10),
-                        width: 60,
-                        height: 60,
-                        child: CachedNetworkImage(
-                            width: 80,
-                            height: 80,
-                            imageUrl:
-                                '${orderModel.belongTo.profilePicture.previewUrl()}',
-                            fit: BoxFit.cover,
-                            imageBuilder: (context, imageProvider) => Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                            placeholder: (context, url) => SpinKitRing(
-                                  color: Colors.black12,
-                                  lineWidth: 2,
-                                  size: 30,
-                                ),
-                            errorWidget: (context, url, error) => SpinKitRing(
-                                  color: Colors.black12,
-                                  lineWidth: 2,
-                                  size: 30,
-                                )),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                Container(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        orderModel.belongTo == null ||
-                                orderModel.belongTo == null
-                            ? ''
-                            : '${orderModel.belongTo.name}',
-                        textScaleFactor: 1.3,
-                      ),
-                    ),
-                    orderModel.belongTo == null ||
-                            orderModel.belongTo.approvalStatus == null
-                        ? Container()
-                        : Container(
-                            margin: EdgeInsets.only(top: 5),
-                            color: Color.fromRGBO(254, 252, 235, 1),
-                            child: orderModel.belongTo.approvalStatus !=
-                                    ArticleApprovalStatus.approved
-                                ? Text('  未认证  ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 133, 148, 1),
-                                    ))
-                                : Text(
-                                    '  已认证  ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 133, 148, 1),
-                                    ),
-                                  ))
-                  ],
-                ))
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              child: Row(
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '发布于：',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      TextSpan(
-                        text:
-                            '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ]),
-                  ),
-                ],
-              ),
-            ),
-//            Container(
-//              padding: EdgeInsets.all(15),
-//              child: Row(
-//                children: <Widget>[
-//                  Expanded(
-//                    child: Container(
-//                      child: Text('联系人'),
-//                    ),
-//                  ),
-//                  Container(
-//                    child: Text(
-//                      orderModel.details.contactPerson == null
-//                          ? ''
-//                          : '${orderModel.details.contactPerson}',
-//                      style: TextStyle(
-//                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ),
-//            Divider(
-//              height: 2,
-//            ),
-//            GestureDetector(
-//              child: Container(
-//                padding: EdgeInsets.all(15),
-//                child: Row(
-//                  children: <Widget>[
-//                    Expanded(
-//                      child: Container(
-//                        child: Text('联系手机'),
-//                      ),
-//                    ),
-//                    Container(
-//                      child: Text(
-//                        orderModel.details.contactPhone == null
-//                            ? ''
-//                            : '${orderModel.details.contactPhone}',
-//                        style: TextStyle(
-//                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ),
-//              onTap: () {
-//                orderModel.details.contactPhone == null
-//                    ? null
-//                    : _selectActionButton(orderModel.details.contactPhone);
-//              },
-//            ),
-          ],
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
-
   Widget _buildTitle() {
     return Container(
       padding: EdgeInsets.all(15),
@@ -322,69 +141,12 @@ class _RequirementOrderDetailPageState
     );
   }
 
-  Widget _buildHeader() {
-    return GestureDetector(
-      onTap: () {
-        copyToClipboard(orderModel.code);
-      },
-      child: Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(bottom: 10),
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: Text('需求订单号：' + orderModel.code),
-                    flex: 1,
-                  ),
-                  Text(
-                    '复制',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                      '发布时间: ${orderModel.creationTime != null ? DateFormatUtil.format(orderModel.creationTime) : ''}'),
-                  flex: 1,
-                ),
-                UserBLoC.instance.currentUser.type == UserType.BRAND
-                    ? Text(
-                  '已报价 ${orderModel.totalQuotesCount != null ? orderModel
-                      .totalQuotesCount : ''}',
-                  style: TextStyle(fontSize: 15, color: Colors.red),
-                )
-                    : Container()
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMain() {
+  ///找工厂
+  Widget _buildMainFactory() {
     return Container(
       color: Colors.white,
       child: Column(
         children: <Widget>[
-//          Column(children: [
-//            _buildEntries(),
-//          ]),
-//          Divider(
-//            height: 0,
-//          ),
           Container(
             padding: EdgeInsets.only(
               left: 15,
@@ -405,10 +167,8 @@ class _RequirementOrderDetailPageState
                   flex: _flexR,
                   child: Text(
                       '${orderModel.details?.majorCategory?.name}-'
-                          '${orderModel.details?.category?.parent != null
-                          ? orderModel.details.category.parent.name + '-'
-                          : ''}'
-                          '${orderModel.details?.category?.name}',
+                      '${orderModel.details?.category?.parent != null ? orderModel.details.category.parent.name + '-' : ''}'
+                      '${orderModel.details?.category?.name}',
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
               ],
@@ -576,37 +336,8 @@ class _RequirementOrderDetailPageState
           Divider(
             height: 0,
           ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('工厂区域：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    formatAreaSelectsText(
-                        orderModel.details.productiveOrientations,
-                        orderModel.details.productiveOrientations.length),
-//                  overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          //工厂区域
+          _buildOrientations(),
           Divider(
             height: 0,
           ),
@@ -693,38 +424,6 @@ class _RequirementOrderDetailPageState
                   child: Container(
                     alignment: Alignment.centerLeft,
                     width: _leadingRowWidth,
-                    child: Text('发布方式：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    enumMap(
-                        PublishingModesEnum, orderModel.details.publishingMode),
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
                     child: Text('有效期限：'),
                   ),
                 ),
@@ -743,6 +442,49 @@ class _RequirementOrderDetailPageState
                 ),
               ],
             ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '订单尺码',
+            val: OrderSizeTypeLocalizedMap[orderModel.details.sizeType],
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '订单颜色',
+            val: '${OrderColorTypeLocalizedMap[orderModel.details.colorType]}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '工厂规模',
+            val:
+            PopulationScaleLocalizedMap[orderModel.details.populationScale],
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '支付条件',
+            val: '${payPlanStr()}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '所在位置',
+            val: '${orderModel.details.address ?? ''}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '微信号',
+            val: '${orderModel.details.contactWeChatNo ?? ''}',
           ),
           Divider(
             height: 0,
@@ -770,6 +512,55 @@ class _RequirementOrderDetailPageState
               editable: false,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  ///找订单
+  Widget _buildMainOrder() {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+//                    width: _leadingRowWidth,
+                    child: Text('品       类：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text('${orderModel.details?.majorCategory?.name}',
+                      style: TextStyle(color: Colors.black, fontSize: 14)),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '所在位置',
+            val: '${orderModel.details.address ?? ''}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '微信号',
+            val: '${orderModel.details.contactWeChatNo ?? ''}',
+          ),
           Divider(
             height: 0,
           ),
@@ -781,20 +572,20 @@ class _RequirementOrderDetailPageState
             ),
             child: Row(
               children: <Widget>[
-                Text('备注：'),
+                Text('参考图片：'),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, bottom: 15, right: 5),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text(orderModel.remarks ?? '')),
-              ],
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
             ),
-          ),
-          Divider(
-            height: 0,
+            child: EditableAttachments(
+              list: orderModel.details.pictures,
+              editable: false,
+            ),
           ),
         ],
       ),
@@ -845,143 +636,6 @@ class _RequirementOrderDetailPageState
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => RequirementOrdersPage()),
         ModalRoute.withName('/'));
-  }
-
-  Widget _buildButtonGroups() {
-    //品牌端显示
-    if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
-      return Container(
-        margin: EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                  height: 30,
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-                  child: FlatButton(
-                      color: Colors.red,
-                      child: Text(
-                        '重新发布需求',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      onPressed: () async {
-                        onReview();
-                      })),
-            ),
-            Expanded(
-              child: Container(
-                  height: 30,
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-                  child: FlatButton(
-                      color: Color(0xFFFFD600),
-                      child: Text(
-                        '邀请工厂报价',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  FactoryPage(
-                                    FactoryCondition(
-                                        starLevel: 0,
-                                        adeptAtCategories: [],
-                                        labels: [],
-                                        cooperationModes: []),
-                                    requirementCode: orderModel.code,
-                                    route: '全部工厂',
-                                  )),
-                        );
-                      })),
-            ),
-          ],
-        ),
-      );
-    } else if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        orderModel.status != RequirementOrderStatus.PENDING_QUOTE) {
-      return Container(
-        child: Container(
-            height: 30,
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-            margin: EdgeInsets.only(bottom: 10),
-            child: FlatButton(
-                color: Colors.red,
-                child: Text(
-                  '重新发布需求',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                ),
-                onPressed: () async {
-                  onReview();
-                })),
-      );
-    } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return Container(
-        child: Container(
-          height: 30,
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          margin: EdgeInsets.only(bottom: 20),
-          child: FlatButton(
-              onPressed: () async {
-                QuoteModel newQuote =
-                await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        RequirementQuoteOrderForm(
-                          model: orderModel,
-                          quoteModel: QuoteModel(attachments: []),
-                        )));
-
-                if (newQuote != null) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          QuoteOrderDetailPage(
-                            newQuote.code,
-                          )));
-                }
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '去报价',
-                style: TextStyle(
-                  color: Color.fromRGBO(36, 38, 41, 1),
-                  fontSize: 16,
-                ),
-              )),
-        ),
-      );
-    } else {
-      return Container();
-    }
   }
 
   List<PopupMenuItem<String>> _buildPopupMenu() {
@@ -1074,6 +728,23 @@ class _RequirementOrderDetailPageState
     }
   }
 
+  Widget _buildOrientations() {
+    String val = '';
+
+    //处理旧数据的地区信息
+    if (orderModel.details.productiveDistricts == null) {
+      val = formatAreaSelectsText(orderModel.details.productiveOrientations,
+          orderModel.details.productiveOrientations.length);
+    } else {
+      val = orderModel.details.productiveDistricts.map((e) => e.name).join('、');
+    }
+
+    return _InfoRow(
+      label: '工厂区域',
+      val: '$val',
+    );
+  }
+
   Future<bool> _onCancle() {
     bool result = false;
     try {
@@ -1085,6 +756,19 @@ class _RequirementOrderDetailPageState
 
     return Future.value(result);
   }
+
+  Widget _buildRemarks() {
+    return Container(
+      padding: EdgeInsets.only(left: 15, bottom: 15, right: 5),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          Expanded(child: Text(orderModel.remarks ?? '')),
+        ],
+      ),
+    );
+  }
+
 
   onMenuSelect(String value) async {
     switch (value) {
@@ -1145,31 +829,30 @@ class _RequirementOrderDetailPageState
   }
 
   void onEdit() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) =>
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(
-                create: (_) =>
-                    RequirementOrderFormState(detailModel: orderModel),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (_) =>
+                      RequirementOrderFormStateV2(detailModel: orderModel),
+                ),
+              ],
+              child: Consumer(
+                builder: (context, RequirementOrderFormStateV2 state, _) =>
+                orderModel.orderType == RequirementOrderType.FINDING_ORDER
+                    ? RequirementFormOrder(
+                  formState: state,
+                )
+                    : RequirementFormFactory(
+                  formState: state,
+                ),
               ),
-            ],
-            child: Builder(builder: (context) {
-              RequirementOrderFormState state =
-              Provider.of<RequirementOrderFormState>(context);
-              return RequirementOrderSecondEditForm(
-                formState: state,
-              );
-            }),
-//          child: Consumer(
-//            builder: (context, RequirementOrderFormState state, _) {
-//              state.model = orderModel;
-//              print('dddd');
-//              return RequirementOrderSecondEditForm(formState: state,);
-//            }
-//          ),
-          ),
-    ));
+            ),
+      ),
+    );
   }
 
   ///TODO分享
@@ -1278,5 +961,57 @@ class _RequirementOrderDetailPageState
     }
 
     return text;
+  }
+
+  ///是否自己所属
+  bool isMyself() {
+    if (currentUser?.companyCode != null && orderModel?.belongTo?.uid != null) {
+      return currentUser.companyCode == orderModel.belongTo.uid;
+    }
+    return false;
+  }
+
+  ///支付条件
+  String payPlanStr() {
+    if (orderModel.details?.payPlan == null) {
+      return '';
+    } else {
+      CompanyPayPlanModel payplan = orderModel.details.payPlan;
+      return '${payplan.isHaveDeposit
+          ? '有'
+          : '无'}定金  ${PayPlanTypeLocalizedMap[payplan.payPlanType]}';
+    }
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final String label;
+
+  final String val;
+
+  const _InfoRow({Key key, this.label, this.val}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+      child: Row(
+        children: <Widget>[
+          Expanded(flex: 2, child: Text('$label：')),
+          Container(
+            width: 8,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              val != null ? '$val' : '',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -90,6 +90,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
                 color: Colors.white,
                 child: PicturesField(
                   model: widget.formState.model,
+                  description: '（补充图片可令工厂更快了解需求）',
                 ),
               ),
               _buildMajorCategory(),
@@ -106,6 +107,8 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
               _buildProductiveOrientations(),
               _buildPayInfo(),
               _buildProofingNeeded(),
+              _buildSizeType(),
+              _buildColorType(),
               _buildInvoiceNeeded(),
               _buildEffectiveDays(),
               _buildLocation(),
@@ -1084,6 +1087,102 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
     );
   }
 
+  ///订单尺码类型
+  Container _buildSizeType() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '订单尺码',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ]),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [OrderSizeType.FREE_SIZE, OrderSizeType.MULTIPLE_SIZE]
+                  .map((type) => ChoiceChip(
+                      label: Container(
+                        height: 20,
+                        width: 60,
+                        child: Center(
+                            child: Text('${OrderSizeTypeLocalizedMap[type]}')),
+                      ),
+                      backgroundColor: Colors.grey[100],
+                      selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                      selected: widget.formState.model.details.sizeType == type,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          widget.formState.model.details.sizeType = type;
+                        });
+                      }))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ///订单颜色类型
+  Container _buildColorType() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '订单颜色',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ]),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                OrderColorType.SINGLE_COLOR,
+                OrderColorType.MULTIPLE_COLOR
+              ]
+                  .map((type) => ChoiceChip(
+                      label: Container(
+                        height: 20,
+                        width: 60,
+                        child: Center(
+                            child: Text('${OrderColorTypeLocalizedMap[type]}')),
+                      ),
+                      backgroundColor: Colors.grey[100],
+                      selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                      selected:
+                          widget.formState.model.details.colorType == type,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          widget.formState.model.details.colorType = type;
+                        });
+                      }))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildInfo(String val) {
     return Padding(
         padding: EdgeInsets.only(right: 10),
@@ -1225,6 +1324,11 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
     if (widget.formState.model.details.category == null) {
       ShowDialogUtil.showValidateMsg(context, '请选择商品品类');
       throw Exception('请选择商品品类');
+    }
+
+    if (widget.formState.model.details.majorCategory == null) {
+      ShowDialogUtil.showValidateMsg(context, '请选择面料类型');
+      throw Exception('请选择面料类型');
     }
 
     if (widget.formState.model.details.effectiveDays == -1) {
