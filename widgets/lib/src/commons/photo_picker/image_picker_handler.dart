@@ -22,8 +22,8 @@ class ImagePickerHandler {
   }
 
   openGallery(BuildContext context) async {
+    imagePicker.dismissDialog();
     if (maxNum == 1) {
-      imagePicker.dismissDialog();
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
       _listener.userImage(image);
     } else {

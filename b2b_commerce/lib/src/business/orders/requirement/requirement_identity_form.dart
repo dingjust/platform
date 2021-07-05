@@ -49,7 +49,7 @@ class _RequirementIdentityFormState extends State<RequirementIdentityForm> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
+        child: ListView(
           children: [
             Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
