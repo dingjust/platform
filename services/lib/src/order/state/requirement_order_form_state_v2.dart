@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 ///需求表单状态管理
-class RequirementOrderFormState with ChangeNotifier {
+class RequirementOrderFormStateV2 with ChangeNotifier {
   //需求详情数据（初始化编辑表单）
   final RequirementOrderModel detailModel;
 
@@ -19,7 +19,7 @@ class RequirementOrderFormState with ChangeNotifier {
   ///身份类型
   final String identityTypeStr;
 
-  RequirementOrderFormState({
+  RequirementOrderFormStateV2({
     this.identityTypeStr,
     this.detailModel,
     this.uid,

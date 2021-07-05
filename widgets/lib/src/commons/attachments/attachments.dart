@@ -206,16 +206,15 @@ class _AttachmentsState extends State<Attachments> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            GalleryPhotoViewWrapper(
-              galleryItems:
+        builder: (context) => GalleryPhotoViewWrapper(
+          galleryItems:
               widget.list.map((model) => GalleryItem(model: model)).toList(),
-              backgroundDecoration: const BoxDecoration(
-                color: Colors.black,
-              ),
-              initialIndex: widget.list.indexOf(model),
-              scrollDirection: Axis.horizontal,
-            ),
+          backgroundDecoration: const BoxDecoration(
+            color: Colors.black,
+          ),
+          initialIndex: widget.list.indexOf(model),
+          scrollDirection: Axis.horizontal,
+        ),
       ),
     );
   }
@@ -303,7 +302,7 @@ class EditableAttachments extends StatefulWidget {
     this.height = 80,
     this.imageWidth = 60,
     this.imageHeight = 60,
-    this.maxNum = 5,
+    this.maxNum = 9,
     this.uploadURL,
     this.deleteURL,
     this.isCut = false,
@@ -382,7 +381,8 @@ class _EditableAttachmentsState extends State<EditableAttachments>
       duration: const Duration(milliseconds: 500),
     );
 
-    imagePicker = new ImagePickerHandler(this, _controller);
+    imagePicker =
+    new ImagePickerHandler(this, _controller, maxNum: widget.maxNum);
     imagePicker.build(
         0xFFFFFFFF, 0xFF6495ED, widget.isCut, widget.ratioX, widget.ratioY);
   }

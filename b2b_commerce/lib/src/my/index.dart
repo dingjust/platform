@@ -350,11 +350,15 @@ class CompanyCertificationMenuItem extends StatelessWidget {
               child: B2BImage.certificateInfo(width: 26, height: 19),
             ),
             Expanded(
-              child: const Text(
-                '我要认证',
-                style: const TextStyle(fontSize: 17),
-              ),
-            ),
+                child: RichText(
+                    text: TextSpan(
+                        text: '我要认证',
+                        style: TextStyle(fontSize: 17, color: Colors.black),
+                        children: [
+                  TextSpan(
+                      text: '(通过认证将获得更多客户关注)',
+                      style: TextStyle(fontSize: 12, color: Colors.grey))
+                ]))),
             Icon(
               Icons.chevron_right,
               color: Colors.grey,
@@ -410,11 +414,16 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
               child: B2BImage.companyIntroduce(height: 27, width: 23),
             ),
             Expanded(
-              child: const Text(
-                '公司介绍',
-                style: const TextStyle(fontSize: 17),
-              ),
-            ),
+                child: RichText(
+                    text: TextSpan(
+                        text: '公司介绍',
+                        style: TextStyle(fontSize: 17, color: Colors.black),
+                        children: [
+                          TextSpan(
+                              text: '(让客户快速了解自己)',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey))
+                        ]))),
             Icon(
               Icons.chevron_right,
               color: Colors.grey,

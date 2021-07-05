@@ -88,6 +88,7 @@ export 'src/order/state/production_progress_state.dart';
 export 'src/order/state/production_progress_v2_state.dart';
 export 'src/order/state/reconciliation_orders_state.dart';
 export 'src/order/state/requirement_order_form_state.dart';
+export 'src/order/state/requirement_order_form_state_v2.dart';
 export 'src/order/state/requirement_order_select_state.dart';
 export 'src/order/state/requirement_state.dart';
 export 'src/order/state/requirement_tab_section_state.dart';

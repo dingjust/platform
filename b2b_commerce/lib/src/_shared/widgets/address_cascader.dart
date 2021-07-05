@@ -1,11 +1,8 @@
 import 'dart:convert';
 
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
-import 'package:services/services.dart';
 
 ///地区级联选择
 class AddressCascaderPage extends StatefulWidget {
@@ -62,7 +59,7 @@ class _AddressCascaderPageState extends State<AddressCascaderPage> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text('人员选择'),
+            title: Text('地区选择'),
             elevation: 0.5,
             actions: [
               TextButton(

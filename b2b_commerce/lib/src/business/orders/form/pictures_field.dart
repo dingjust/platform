@@ -17,7 +17,6 @@ class PicturesField extends StatefulWidget {
 class PicturesFieldState extends State<PicturesField> {
   @override
   void initState() {
-    // TODO: implement initState
     if (widget.model.details.pictures == null) {
       widget.model.details.pictures = [];
     }
@@ -35,12 +34,12 @@ class PicturesFieldState extends State<PicturesField> {
               RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: '参考图片',
+                    text: '添加图片',
                     style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
                   TextSpan(
-                    text: '（若无图片可不上传）',
-                    style: TextStyle(fontSize: 16, color: Colors.red),
+                    text: '（补充图片可令工厂更快了解需求）',
+                    style: TextStyle(fontSize: 16, color: Colors.orange[800]),
                   ),
                 ]),
               ),
@@ -50,7 +49,9 @@ class PicturesFieldState extends State<PicturesField> {
 //        PhotoPicker(images: widget.normalImages, width: 350),
         EditableAttachments(
           list: widget.model.details.pictures,
-          maxNum: widget.product == null ? 5 : widget.model.details.pictures.length,
+          // maxNum:
+          //     widget.product == null ? 5 : widget.model.details.pictures.length,
+          // maxNum: ,
           editable: widget.product == null && widget.enabled,
         )
       ],

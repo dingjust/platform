@@ -181,6 +181,10 @@ class B2BIcons {
   /// 手电-关
   static const IconData flashlight_off = const IconData(0xe623,
       fontFamily: 'b2bIcons22', matchTextDirection: true);
+
+  /// 工作台
+  static const IconData work_bench = const IconData(0xe62c,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
 }
 
 class CommonImage {

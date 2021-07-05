@@ -24,6 +24,17 @@ class ProductHomeCarouselsState with ChangeNotifier {
     return _bodyCarousels;
   }
 
+  ///Banner
+  List<CarouselModel> _bannerCarousels;
+
+  List<CarouselModel> get bannerCarousels {
+    if (_bannerCarousels == null) {
+      getBannerData();
+      return null;
+    }
+    return _bannerCarousels;
+  }
+
   void getHeaderData() async {
     await CarouselsRepository()
         .getCarouselsByType(CarouselType.CT004)
@@ -43,6 +54,19 @@ class ProductHomeCarouselsState with ChangeNotifier {
         .then((response) {
       if (response != null) {
         _bodyCarousels = response;
+
+        ///通知刷新
+        notifyListeners();
+      }
+    });
+  }
+
+  void getBannerData() async {
+    await CarouselsRepository()
+        .getCarouselsByType(CarouselType.CT003)
+        .then((response) {
+      if (response != null) {
+        _bannerCarousels = response;
 
         ///通知刷新
         notifyListeners();

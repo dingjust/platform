@@ -750,32 +750,70 @@ class RequirementInfoModel extends ItemModel {
   @JsonKey(toJson: _cityDistrictListToJson)
   List<DistrictModel> productiveDistricts;
 
-  RequirementInfoModel(
-      {this.expectedDeliveryDate,
-      this.maxExpectedPrice,
-      this.machiningType,
-      this.invoiceNeeded = false,
-      this.proofingNeeded = false,
-      this.samplesNeeded = false,
-      this.pictures,
-      this.contactPerson,
-      this.contactPhone,
-      this.productiveOrientations,
-      this.isToRequirementPool = true,
-      this.productName,
-      this.productSkuID,
-      this.expectedMachiningQuantity,
-      this.category,
-      this.majorCategory,
-      this.productCode,
-      this.salesMarket,
-      this.publishingMode,
-      this.effectiveDays,
-      this.sizeType,
-      this.colorType,
-      this.populationScale,
-      this.productionMode,
-      this.productiveDistricts});
+  ///身份类型
+  String identityTypeStr;
+
+  ///所在位置
+  String address;
+
+  ///省
+  String provinceStr;
+
+  ///市
+  String cityStr;
+
+  ///区
+  String districtStr;
+
+  ///联系微信号
+  String contactWeChatNo;
+
+  ///纬度
+  double latitude;
+
+  ///经度
+  double longitude;
+
+  ///付款方案
+  @JsonKey(toJson: CompanyPayPlanModel.toJson)
+  CompanyPayPlanModel payPlan;
+
+  RequirementInfoModel({
+    this.expectedDeliveryDate,
+    this.maxExpectedPrice,
+    this.machiningType,
+    this.invoiceNeeded = false,
+    this.proofingNeeded = false,
+    this.samplesNeeded = false,
+    this.pictures,
+    this.contactPerson,
+    this.contactPhone,
+    this.productiveOrientations,
+    this.isToRequirementPool = true,
+    this.productName,
+    this.productSkuID,
+    this.expectedMachiningQuantity,
+    this.category,
+    this.majorCategory,
+    this.productCode,
+    this.salesMarket,
+    this.publishingMode,
+    this.effectiveDays,
+    this.sizeType,
+    this.colorType,
+    this.populationScale,
+    this.productionMode,
+    this.productiveDistricts,
+    this.identityTypeStr,
+    this.address,
+    this.provinceStr,
+    this.cityStr,
+    this.districtStr,
+    this.contactWeChatNo,
+    this.latitude,
+    this.longitude,
+    this.payPlan,
+  });
 
   factory RequirementInfoModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$RequirementInfoModelFromJson(json);
@@ -866,16 +904,18 @@ class RequirementOrderModel extends OrderModel {
   ///需求距离
   double distance;
 
-  RequirementOrderModel({
-    StatisticsModel statistics,
-    this.status,
-    this.belongTo,
-    this.details,
-    this.totalQuotesCount,
-    this.latestQuotes,
-    this.delayDays,
-    String code,
-    int totalQuantity,
+  RequirementOrderType orderType;
+
+  RequirementOrderModel(
+      {StatisticsModel statistics,
+      this.status,
+      this.belongTo,
+      this.details,
+      this.totalQuotesCount,
+      this.latestQuotes,
+      this.delayDays,
+      String code,
+      int totalQuantity,
     double totalPrice,
     DateTime creationTime,
     DateTime modifiedTime,
@@ -886,6 +926,7 @@ class RequirementOrderModel extends OrderModel {
     this.attachments,
     this.distance,
     this.labels,
+    this.orderType
   }) : super(
             statistics: statistics,
             code: code,
@@ -1821,3 +1862,18 @@ class OrderEventRecordModel extends ItemModel {
   static Map<String, dynamic> toJson(OrderEventRecordModel model) =>
       model == null ? null : _$OrderEventRecordModelToJson(model);
 }
+
+/// 需求订单类型
+enum RequirementOrderType {
+  /// 找工厂
+  FINDING_FACTORY,
+
+  /// 找订单
+  FINDING_ORDER,
+}
+
+/// 需求订单类型
+const RequirementOrderTypeLocalizedMap = {
+  RequirementOrderType.FINDING_FACTORY: "找工厂",
+  RequirementOrderType.FINDING_ORDER: "找订单",
+};

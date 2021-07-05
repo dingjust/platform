@@ -44,6 +44,7 @@ dependencies:
   video_player: ^0.11.0
   video_thumbnail: ^0.2.2
   flutter_image_compress: ^0.7.0
+  wechat_assets_picker: 4.2.2
 
 dev_dependencies:
   flutter_test:

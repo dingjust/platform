@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -53,7 +54,11 @@ class _MySettingsPageState extends State<MySettingsPage> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
-                bloc.logout(context: context);
+                bloc.logout(context: context).then((value) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => B2BLoginPage()),
+                      ModalRoute.withName('/'));
+                });
               },
             ),
           ),
