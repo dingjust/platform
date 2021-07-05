@@ -4,12 +4,12 @@ import 'package:b2b_commerce/src/helper/clipboard_helper.dart';
 import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:services/services.dart';
 
 ///全局 Provider
 class AppProvider {
-  static List<SingleChildCloneableWidget> providers =
-      <SingleChildCloneableWidget>[
+  static List<SingleChildWidget> providers = <SingleChildWidget>[
     ChangeNotifierProvider(create: (_) => MyCapacityState()),
     ChangeNotifierProvider(create: (_) => ProductionProgressState()),
     ChangeNotifierProvider(create: (_) => AmapState()),
@@ -60,16 +60,19 @@ class AppProvider {
   static preloading(BuildContext context) async {
     DateTime start = DateTime.now();
     print('[nbyjy]预加载开始${DateFormatUtil.formatYMDHMS(start)}');
-    Provider.of<RecommendProductState>(context).products;
-    // Provider.of<HomeSectionState>(context).getData();
-    await Provider.of<CategoryState>(context).getCascadedCategories();
-    await Provider.of<AddressState>(context).getRegions();
-    await Provider.of<MajorCategoryState>(context).getMajorCategories();
-    await Provider.of<CarrierState>(context).getCarriers();
-    await Provider.of<LabelState>(context).getLabels();
-    await Provider.of<ColorState>(context).getAllColors();
-    await Provider.of<SizeState>(context).getAllSizes();
-    Provider.of<ProductHomeCarouselsState>(context).getBannerData();
+    Provider.of<RecommendProductState>(context, listen: false).products;
+    // Provider.of<HomeSectionState>(context, listen: false).getData();
+    await Provider.of<CategoryState>(context, listen: false)
+        .getCascadedCategories();
+    await Provider.of<AddressState>(context, listen: false).getRegions();
+    await Provider.of<MajorCategoryState>(context, listen: false)
+        .getMajorCategories();
+    await Provider.of<CarrierState>(context, listen: false).getCarriers();
+    await Provider.of<LabelState>(context, listen: false).getLabels();
+    await Provider.of<ColorState>(context, listen: false).getAllColors();
+    await Provider.of<SizeState>(context, listen: false).getAllSizes();
+    Provider.of<ProductHomeCarouselsState>(context, listen: false)
+        .getBannerData();
 
     AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
     await appVersionHelper.getAppVersionInfo('nbyjy');

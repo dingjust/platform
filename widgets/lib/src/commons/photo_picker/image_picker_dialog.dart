@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'image_picker_handler.dart';
 
 class ImagePickerDialog extends StatelessWidget {
-
   ImagePickerHandler _listener;
   AnimationController _controller;
   BuildContext context;
-   int bgColor;
-   int labelColor;
+  int bgColor;
+  int labelColor;
 
-  ImagePickerDialog(this._listener, this._controller,this.bgColor,this.labelColor);
+  ImagePickerDialog(
+      this._listener, this._controller, this.bgColor, this.labelColor);
 
   Animation<double> _drawerContentsOpacity;
   Animation<Offset> _drawerDetailsPosition;
@@ -40,13 +40,14 @@ class ImagePickerDialog extends StatelessWidget {
     _controller.forward();
     showDialog(
       context: context,
-      builder: (BuildContext context) => new SlideTransition(
-            position: _drawerDetailsPosition,
-            child: new FadeTransition(
-              opacity: new ReverseAnimation(_drawerContentsOpacity),
-              child: this,
-            ),
-          ),
+      builder: (BuildContext context) =>
+      new SlideTransition(
+        position: _drawerDetailsPosition,
+        child: new FadeTransition(
+          opacity: new ReverseAnimation(_drawerContentsOpacity),
+          child: this,
+        ),
+      ),
     );
   }
 
@@ -84,32 +85,38 @@ class ImagePickerDialog extends StatelessWidget {
                 new InkWell(
                   onTap: () => _listener.openCamera(),
                   child: roundedButton(
-                      "拍一张",
-                      EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                      new Color(bgColor),
-                      new Color(labelColor),
-                      BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                    "拍一张",
+                    EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                    new Color(bgColor),
+                    new Color(labelColor),
+                    BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
                   ),
                 ),
-                Divider(height: 0,),
+                Divider(
+                  height: 0,
+                ),
                 new GestureDetector(
-                  onTap: () => _listener.openGallery(),
+                  onTap: () => _listener.openGallery(context),
                   child: roundedButton(
-                      "从相册选择",
-                      EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                      new Color(bgColor),
-                      new Color(labelColor),
-                    BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
+                    "从相册选择",
+                    EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                    new Color(bgColor),
+                    new Color(labelColor),
+                    BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)),
                   ),
                 ),
 //                const SizedBox(height: 15.0),
                 new GestureDetector(
                   onTap: () => dismissDialog(),
                   child: roundedButton(
-                      "取消",
-                      EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                      new Color(bgColor),
-                      new Color(labelColor),
+                    "取消",
+                    EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                    new Color(bgColor),
+                    new Color(labelColor),
                     BorderRadius.all(Radius.circular(10)),
                   ),
                 ),
@@ -119,8 +126,8 @@ class ImagePickerDialog extends StatelessWidget {
         ));
   }
 
-  Widget roundedButton(
-      String buttonLabel, EdgeInsets margin, Color bgColor, Color textColor,BorderRadius borderRadius) {
+  Widget roundedButton(String buttonLabel, EdgeInsets margin, Color bgColor,
+      Color textColor, BorderRadius borderRadius) {
     var loginBtn = new Container(
       margin: margin,
       padding: EdgeInsets.all(15.0),
@@ -138,11 +145,9 @@ class ImagePickerDialog extends StatelessWidget {
       ),
       child: Text(
         buttonLabel,
-        style: new TextStyle(
-            color: textColor, fontSize: 20.0),
+        style: new TextStyle(color: textColor, fontSize: 20.0),
       ),
     );
     return loginBtn;
   }
-
 }

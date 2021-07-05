@@ -110,7 +110,7 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
   void initListener() {
     listenLogin();
     //粘贴板是否有值
-    Provider.of<ClipboardHelper>(context)
+    Provider.of<ClipboardHelper>(context, listen: false)
       ..setNavigatorKey(_navigatorKey)
       ..getClipboardText(context: context);
   }
@@ -247,7 +247,8 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
     //APP状态更改
     print('App状态:$state');
     if (state == AppLifecycleState.resumed) {
-      Provider.of<ClipboardHelper>(context).getClipboardText(context: context);
+      Provider.of<ClipboardHelper>(context, listen: false)
+          .getClipboardText(context: context);
     }
   }
 

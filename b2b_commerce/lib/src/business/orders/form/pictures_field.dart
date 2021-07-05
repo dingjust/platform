@@ -49,8 +49,9 @@ class PicturesFieldState extends State<PicturesField> {
 //        PhotoPicker(images: widget.normalImages, width: 350),
         EditableAttachments(
           list: widget.model.details.pictures,
-          maxNum:
-              widget.product == null ? 5 : widget.model.details.pictures.length,
+          // maxNum:
+          //     widget.product == null ? 5 : widget.model.details.pictures.length,
+          // maxNum: ,
           editable: widget.product == null && widget.enabled,
         )
       ],

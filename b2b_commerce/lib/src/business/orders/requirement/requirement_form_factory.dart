@@ -2,10 +2,8 @@ import 'dart:ui';
 
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/address_cascader.dart';
-import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
-import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -56,6 +54,8 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
           widget.formState?.model?.details?.contactPhone == "") {
         widget.formState.model.details.contactPhone =
             UserBLoC.instance.currentUser.mobileNumber;
+        widget.formState.model.details.contactPerson =
+            UserBLoC.instance.currentUser.name;
         contactController.text =
             '${UserBLoC.instance.currentUser.mobileNumber}';
       }
@@ -1132,7 +1132,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
   }
 
   void getLocation() async {
-    AmapState state = Provider.of<AmapState>(context);
+    AmapState state = Provider.of<AmapState>(context, listen: false);
 
     Widget _dialog = CustomizeDialog(
       dialogType: DialogType.CONFIRM_DIALOG,
@@ -1160,7 +1160,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       },
     );
 
-    AMapLocation aMapLocation = Provider.of<AmapState>(context)
+    AMapLocation aMapLocation = Provider.of<AmapState>(context, listen: false)
         .getAMapLocation(context: context, openDialog: _dialog);
 
     setState(() {
