@@ -105,9 +105,6 @@ class _AddButton extends StatelessWidget {
         Navigator.of(context)
             .pushNamed(AppRoutes.ROUTE_OUT_ORDER_FORM)
             .then((value) {
-          // if (value) {
-          //   Provider.of<ExternalSaleOrdersState>(context).clear();
-          // }
         });
       },
       child: Icon(

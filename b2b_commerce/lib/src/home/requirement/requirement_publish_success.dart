@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/suppliers.dart';
-import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -64,52 +63,51 @@ class _PublishRequirementSuccessDialogState
         body: CustomScrollView(
           slivers: <Widget>[
             SliverToBoxAdapter(child: _buildTitle()),
-            SliverToBoxAdapter(
-              child: Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      '为你推荐',
-                      style: TextStyle(fontSize: 20),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration:
-                  BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
-                  child: FutureBuilder<List<FactoryModel>>(
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<FactoryModel>> snapshot) {
-                        print('${snapshot.data}------=====');
-                        if (snapshot.data != null) {
-                          return Column(
-                              children: _factoryModels
-                                  .map((tip) =>
-                                  FactoryItem(
-                                    model: tip,
-                                    showButton: true,
-                                    requirementCode: widget.model.code,
-                                    hasInvited: tip.invited,
-                                    callback: () {
-                                      setState(() {
-                                        _getData();
-                                      });
-                                    },
-                                  ))
-                                  .toList());
-                        } else {
-                          return Container();
-                        }
-                      },
-                      initialData: null,
-                      future: _getData())),
-            )
+            //     SliverToBoxAdapter(
+            //       child: Container(
+            //         margin: EdgeInsets.only(bottom: 10),
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: <Widget>[
+            //             Text(
+            //               '为你推荐',
+            //               style: TextStyle(fontSize: 20),
+            //             )
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //     SliverToBoxAdapter(
+            //       child: Container(
+            //           padding: EdgeInsets.symmetric(horizontal: 10),
+            //           decoration:
+            //               BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
+            //           child: FutureBuilder<List<FactoryModel>>(
+            //               builder: (BuildContext context,
+            //                   AsyncSnapshot<List<FactoryModel>> snapshot) {
+            //                 print('${snapshot.data}------=====');
+            //                 if (snapshot.data != null) {
+            //                   return Column(
+            //                       children: _factoryModels
+            //                           .map((tip) => FactoryItem(
+            //                                 model: tip,
+            //                                 showButton: true,
+            //                                 requirementCode: widget.model.code,
+            //                                 hasInvited: tip.invited,
+            //                                 callback: () {
+            //                                   setState(() {
+            //                                     _getData();
+            //                                   });
+            //                                 },
+            //                               ))
+            //                           .toList());
+            //                 } else {
+            //                   return Container();
+            //                 }
+            //               },
+            //               initialData: null,
+            //               future: _getData())),
+            //     )
           ],
         ),
         bottomNavigationBar: Container(
@@ -129,8 +127,10 @@ class _PublishRequirementSuccessDialogState
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               onPressed: () async {
-//              Navigator.popUntil(context, ModalRoute.withName('/'));
-                Navigator.pop(context);
+                // Navigator.popUntil(context, ModalRoute.withName('/'));
+                // Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/', (route) => false);
               }),
         ),
       ),
@@ -158,7 +158,7 @@ class _PublishRequirementSuccessDialogState
                       ),
                     ),
                     Text(
-                      '需求发布成功!',
+                      '需求发布成功!请等待平台审核通过',
                       style: TextStyle(
                           fontSize: 20, color: Color.fromRGBO(255, 214, 12, 1)),
                     )
