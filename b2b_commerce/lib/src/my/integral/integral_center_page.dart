@@ -221,8 +221,9 @@ class _IntegralActivityCard extends StatelessWidget {
 
   ///刷新
   void refresh(BuildContext context) {
-    Provider.of<UserIntegralHistoryState>(context).clear();
-    Provider.of<UserIntegralExchangeHistoryState>(context).clear();
+    Provider.of<UserIntegralHistoryState>(context, listen: false).clear();
+    Provider.of<UserIntegralExchangeHistoryState>(context, listen: false)
+        .clear();
   }
 }
 

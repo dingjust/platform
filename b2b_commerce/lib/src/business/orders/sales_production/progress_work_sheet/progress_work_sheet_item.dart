@@ -29,11 +29,15 @@ class ProgressWorkSheetItem extends StatelessWidget {
       ),
       onTap: () async {
         print('------------------------');
-        dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ProgressWorkSheetDetailPage(code: model.code,)));
-        if(result != null){
-          Provider.of<ProgressWorkSheetState>(context).clear();
+        dynamic result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProgressWorkSheetDetailPage(
+                      code: model.code,
+                    )));
+        if (result != null) {
+          Provider.of<ProgressWorkSheetState>(context, listen: false).clear();
         }
-
       },
     );
   }
@@ -49,9 +53,7 @@ class ProgressWorkSheetItem extends StatelessWidget {
           ],
         ),
         Row(
-          children: [
-            Text('工单负责人：${model.personInCharge?.name ?? ''}')
-          ],
+          children: [Text('工单负责人：${model.personInCharge?.name ?? ''}')],
         )
       ],
     );
@@ -139,7 +141,6 @@ class ProgressWorkSheetItem extends StatelessWidget {
 
   ///订单状态
   Widget _getOrderStatus() {
-
     return Text(
       '${ProgressWorkSheetStatusLocalizedMap[model.status]}',
       textAlign: TextAlign.end,

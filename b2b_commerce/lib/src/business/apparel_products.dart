@@ -63,11 +63,10 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            HistorySearch(
+                        builder: (context) => HistorySearch(
                               hintText: '请输入编码，名称，货号搜索',
                               historyKey:
-                              GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
+                                  GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
                             )));
               },
             ),
@@ -101,7 +100,8 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+            Provider.of<CertificationStatusHelper>(context, listen: false)
+                .oncheckProfile(
                 context: context,
                 onJump: () {
                   Navigator.push(

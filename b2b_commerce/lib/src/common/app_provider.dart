@@ -74,7 +74,8 @@ class AppProvider {
     Provider.of<ProductHomeCarouselsState>(context, listen: false)
         .getBannerData();
 
-    AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
+    AppVersionHelper appVersionHelper =
+        Provider.of<AppVersionHelper>(context, listen: false);
     await appVersionHelper.getAppVersionInfo('nbyjy');
     DateTime end = DateTime.now();
     print('[nbyjy]预加载结束${DateFormatUtil.formatYMDHMS(end)}');
@@ -84,9 +85,9 @@ class AppProvider {
 
   ///清理用户相关数据(非系统数据)
   static clearUserData(BuildContext context) {
-    Provider.of<MyCapacityState>(context).clear();
-    Provider.of<ProductionProgressState>(context).clear();
-    Provider.of<B2BCustomersState>(context).clear();
-    Provider.of<B2BDeptState>(context).clear();
+    Provider.of<MyCapacityState>(context, listen: false).clear();
+    Provider.of<ProductionProgressState>(context, listen: false).clear();
+    Provider.of<B2BCustomersState>(context, listen: false).clear();
+    Provider.of<B2BDeptState>(context, listen: false).clear();
   }
 }

@@ -23,9 +23,9 @@ class ProductionTaskOrderItem extends StatelessWidget {
 
   const ProductionTaskOrderItem(this.model,
       {this.isSelected = false,
-        this.isSelectList = false,
-        this.onPressed,
-        Key key})
+      this.isSelectList = false,
+      this.onPressed,
+      Key key})
       : super(key: key);
 
   @override
@@ -50,8 +50,9 @@ class ProductionTaskOrderItem extends StatelessWidget {
           dynamic result = await Navigator.of(context).pushNamed(
               AppRoutes.ROUTE_PRODUCTION_TASK_ORDER_DETAIL,
               arguments: model.id);
-          if(result != null){
-            Provider.of<ProductionTaskOrdersState>(context).clear();
+          if (result != null) {
+            Provider.of<ProductionTaskOrdersState>(context, listen: false)
+                .clear();
           }
         }
       },
@@ -104,7 +105,8 @@ class ProductionTaskOrderItem extends StatelessWidget {
                     child: Text(
                       '品类：${model.product.category?.name}',
                       style: TextStyle(
-                          fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
+                          fontSize: 15,
+                          color: Color.fromRGBO(255, 133, 148, 1)),
                     ),
                   )
                 ],

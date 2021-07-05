@@ -1221,6 +1221,12 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       ShowDialogUtil.showValidateMsg(context, '请选择支付条件');
       throw Exception('请选择支付条件');
     }
+
+    if (widget.formState.model.details.category == null) {
+      ShowDialogUtil.showValidateMsg(context, '请选择商品品类');
+      throw Exception('请选择商品品类');
+    }
+
     if (widget.formState.model.details.effectiveDays == -1) {
       //后台的'长期有效'值是null
       widget.formState.model.details.effectiveDays = null;

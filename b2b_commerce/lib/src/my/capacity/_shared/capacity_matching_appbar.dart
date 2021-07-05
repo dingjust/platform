@@ -132,7 +132,7 @@ class CapacityCondition extends StatelessWidget {
     RegionModel _regionSelect = RegionModel();
     List<CityModel> _citySelects = [];
     List<RegionModel> _regions =
-    await Provider.of<AddressState>(context).getRegions();
+        await Provider.of<AddressState>(context, listen: false).getRegions();
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -157,7 +157,8 @@ class CapacityCondition extends StatelessWidget {
   void onCategorySelect(BuildContext context,
       CapacityMatchingState state) async {
     List<CategoryModel> categories =
-    await Provider.of<CategoryState>(context).getCascadedCategories();
+    await Provider.of<CategoryState>(context, listen: false)
+        .getCascadedCategories();
     List<CategoryModel> _categorySelected = [];
 
     showModalBottomSheet(

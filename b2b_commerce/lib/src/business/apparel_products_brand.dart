@@ -49,11 +49,10 @@ class _ApparelProductsBrandPageState extends State<ApparelProductsBrandPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            HistorySearch(
+                        builder: (context) => HistorySearch(
                               hintText: '请输入编码，名称，货号搜索',
                               historyKey:
-                              GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
+                                  GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
                             )));
               },
             ),
@@ -67,7 +66,8 @@ class _ApparelProductsBrandPageState extends State<ApparelProductsBrandPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+            Provider.of<CertificationStatusHelper>(context, listen: false)
+                .oncheckProfile(
                 context: context,
                 onJump: () {
                   Navigator.push(
@@ -75,7 +75,8 @@ class _ApparelProductsBrandPageState extends State<ApparelProductsBrandPage> {
                       MaterialPageRoute(
                           builder: (context) =>
                               ApparelProductBrandFormPage(
-                                item: ApparelProductBLoC.instance.newProduct,
+                                item:
+                                ApparelProductBLoC.instance.newProduct,
                                 isCreate: true,
                                 enabled: true,
                               ))).then((val) {});

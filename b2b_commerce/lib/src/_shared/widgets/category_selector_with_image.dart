@@ -37,7 +37,8 @@ class _CategorySelectorWithImageState extends State<CategorySelectorWithImage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<CategoryModel>>(
-        future: Provider.of<CategoryState>(context).getCascadedCategories(),
+        future: Provider.of<CategoryState>(context, listen: false)
+            .getCascadedCategories(),
         initialData: [],
         builder: (BuildContext context,
             AsyncSnapshot<List<CategoryModel>> snapshot) {
@@ -75,17 +76,16 @@ class _CategorySelectorWithImageState extends State<CategorySelectorWithImage> {
                                   // alignment: Alignment.center,
                                   child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: majorCategory.name
                                           .split('')
                                           .map(
-                                            (str) =>
-                                            Text(
+                                            (str) => Text(
                                               '${str}',
                                               style: TextStyle(
                                                 color: _selectMajorCategory
-                                                    ?.code ==
-                                                    majorCategory.code
+                                                            ?.code ==
+                                                        majorCategory.code
                                                     ? Colors.orange
                                                     : Colors.black,
                                               ),

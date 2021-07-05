@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/business/products/form/stocks_field.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -129,7 +128,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               return CustomizeDialog(
                 dialogType: DialogType.CONFIRM_DIALOG,
                 contentText2:
-                widget.isCreate ? '正在创建产品，是否确认退出' : '正在编辑产品，是否确认退出',
+                    widget.isCreate ? '正在创建产品，是否确认退出' : '正在编辑产品，是否确认退出',
                 isNeedConfirmButton: true,
                 isNeedCancelButton: true,
                 confirmButtonText: '退出',
@@ -250,9 +249,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
                   List<ColorSizeModel> colors =
-                  await Provider.of<ColorState>(context).getPartColors();
+                  await Provider.of<ColorState>(context, listen: false)
+                      .getPartColors();
                   List<ColorSizeEntryModel> sizes =
-                  await Provider.of<SizeState>(context).getPartSizes();
+                  await Provider.of<SizeState>(context, listen: false)
+                      .getPartSizes();
                   ApparelProductModel result = await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -309,14 +310,14 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 padding: EdgeInsets.all(15),
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () async{
+                  onTap: () async {
                     dynamic result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 StocksField(_product, enabled: true)));
 
-                    if(result != null){
+                    if (result != null) {
                       setState(() {
                         _product.colorSizes = result;
                       });

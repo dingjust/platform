@@ -20,8 +20,9 @@ class ProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<CertificationStatusHelper>(context).oncheckProfile(
-            context: context, onJump: () => jumpToDetailPage(context));
+        Provider.of<CertificationStatusHelper>(context, listen: false)
+            .oncheckProfile(
+                context: context, onJump: () => jumpToDetailPage(context));
       },
       child: Container(
           decoration: BoxDecoration(

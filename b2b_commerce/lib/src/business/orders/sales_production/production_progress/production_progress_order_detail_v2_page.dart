@@ -66,7 +66,7 @@ class _ProductionProgressOrderDetailV2PageState
                     color: Colors.red,
                     child: Text(
                       '作废',
-                      style: TextStyle(fontSize: 20,color:Colors.white),
+                      style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ),
                 ),
@@ -86,7 +86,8 @@ class _ProductionProgressOrderDetailV2PageState
                 Expanded(child: Text('订单状态：')),
                 Text(
                   '${ProductionProgressOrderStatusLocalizedMap[widget.model.status]}',
-                  style: TextStyle(color: _ORDER_STATUS_COLORS[widget.model.status]),
+                  style: TextStyle(
+                      color: _ORDER_STATUS_COLORS[widget.model.status]),
                 )
               ],
             ),
@@ -103,7 +104,10 @@ class _ProductionProgressOrderDetailV2PageState
               title: '上报时间：',
               val: '${DateFormatUtil.formatYMDHMS(widget.model.reportTime)}'),
           ColorSizeNoteEntryTable(
-            compareFunction: Provider.of<SizeState>(context).compare,
+            compareFunction:
+            Provider
+                .of<SizeState>(context, listen: false)
+                .compare,
             showNeed: false,
             data: widget.model.entries,
           ),
@@ -158,7 +162,6 @@ class _ProductionProgressOrderDetailV2PageState
     );
   }
 
-
   ///预计数量
   int get expectNum {
     int result = 0;
@@ -188,17 +191,18 @@ class _ProductionProgressOrderDetailV2PageState
   }
 
   //修改单据
-  _edit() async{
+  _edit() async {
     dynamic result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ProductionProgressOrderFormPage(
+            builder: (context) =>
+                ProductionProgressOrderFormPage(
                   progress: widget.progress,
                   model: widget.model,
                   colorSizeEntries: widget.colorSizeEntries,
                   isEditable: true,
                 )));
-    if(result != null && result){
+    if (result != null && result) {
       Navigator.pop(context, true);
     }
   }

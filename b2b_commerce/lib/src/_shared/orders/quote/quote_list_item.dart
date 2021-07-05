@@ -65,7 +65,6 @@ class QuoteListItem extends StatelessWidget {
     QuoteState.BUYER_REJECTED: Colors.grey
   };
 
-
   @override
   Widget build(BuildContext context) {
     void _onQuoteDetails() async {
@@ -74,8 +73,7 @@ class QuoteListItem extends StatelessWidget {
 //          await QuoteOrderRepository().getQuoteDetails(model.code);
       Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (context) =>
-                QuoteOrderDetailPage(
+            builder: (context) => QuoteOrderDetailPage(
                   model.code,
                 )),
       );
@@ -232,7 +230,8 @@ class QuoteListItem extends StatelessWidget {
 
     //品牌端显示
 
-    if (UserBLoC.instance.currentUser.companyCode == model.requirementOrder.belongTo.uid) {
+    if (UserBLoC.instance.currentUser.companyCode ==
+        model.requirementOrder.belongTo.uid) {
       if (model.state == QuoteState.SELLER_SUBMITTED) {
         buttons = <Widget>[
           Container(
@@ -251,7 +250,7 @@ class QuoteListItem extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
                               factoryUid: model.belongTo.uid,
-                                  isFactoryDetail: true,
+                              isFactoryDetail: true,
                                 )));
                   },
                 ),
@@ -262,7 +261,7 @@ class QuoteListItem extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
                               factoryUid: model.belongTo.uid,
-                                  isFactoryDetail: true,
+                              isFactoryDetail: true,
                                 )));
                   },
                   shape: RoundedRectangleBorder(
@@ -309,7 +308,7 @@ class QuoteListItem extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
                               factoryUid: model.belongTo.uid,
-                                  isFactoryDetail: true,
+                              isFactoryDetail: true,
                                 )));
                   },
                 ),
@@ -320,7 +319,7 @@ class QuoteListItem extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
                               factoryUid: model.belongTo.uid,
-                                  isFactoryDetail: true,
+                              isFactoryDetail: true,
                                 )));
                   },
                   shape: RoundedRectangleBorder(
@@ -337,7 +336,7 @@ class QuoteListItem extends StatelessWidget {
         ];
       }
     } //工厂端显示
-    else if(UserBLoC.instance.currentUser.companyCode == model.belongTo.uid) {
+    else if (UserBLoC.instance.currentUser.companyCode == model.belongTo.uid) {
       if (model.state == QuoteState.SELLER_SUBMITTED) {
         buttons = [
           Container(),
@@ -499,7 +498,6 @@ class QuoteListItem extends StatelessWidget {
                                     code: model.salesOrderCode,
                                     callback: () {
                                       //回调刷新State
-//                                      Provider.of<SaleOrdersState>(context).clear();
                                     },
                                   )),
                         );
@@ -532,7 +530,6 @@ class QuoteListItem extends StatelessWidget {
                     ),
                   ),
                 ),
-
         ];
       } else if (model.requirementOrder.status ==
           RequirementOrderStatus.PENDING_QUOTE) {
@@ -564,5 +561,4 @@ class QuoteListItem extends StatelessWidget {
       ),
     );
   }
-
 }

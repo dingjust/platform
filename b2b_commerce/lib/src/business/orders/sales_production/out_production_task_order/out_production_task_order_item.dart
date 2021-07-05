@@ -49,8 +49,9 @@ class OutProductionTaskOrderItem extends StatelessWidget {
           dynamic result = await Navigator.of(context).pushNamed(
               AppRoutes.ROUTE_PRODUCTION_TASK_ORDER_DETAIL,
               arguments: model.id);
-          if(result != null){
-            Provider.of<ProductionTaskOrdersState>(context).clear();
+          if (result != null) {
+            Provider.of<ProductionTaskOrdersState>(context, listen: false)
+                .clear();
           }
         }
       },

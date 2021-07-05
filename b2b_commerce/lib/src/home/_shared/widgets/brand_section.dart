@@ -125,21 +125,21 @@ class BrandButtonsSection extends StatelessWidget {
           image: B2BImage.productionFactory(),
           onPressed: () async {
             List<CategoryModel> categories =
-            await Provider.of<MajorCategoryState>(context)
-                .getMajorCategories();
+                await Provider.of<MajorCategoryState>(context)
+                    .getMajorCategories();
             List<LabelModel> labels =
-            await Provider.of<LabelState>(context).getLabels();
+                await Provider.of<LabelState>(context, listen: false)
+                    .getLabels();
             labels = labels
                 .where((label) =>
-            label.group == 'FACTORY' || label.group == 'PLATFORM')
+                    label.group == 'FACTORY' || label.group == 'PLATFORM')
                 .toList();
             if (categories != null && labels != null) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      FactoryPage(
-                        FactoryCondition(
+                  builder: (context) => FactoryPage(
+                    FactoryCondition(
                             starLevel: 0,
                             adeptAtCategories: [],
                             labels: [],

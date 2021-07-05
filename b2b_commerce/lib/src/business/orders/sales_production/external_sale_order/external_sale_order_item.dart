@@ -56,10 +56,11 @@ class ExternalSaleOrderItem extends StatelessWidget {
           if (needRefresh != null && needRefresh) {
             if (type == SaleOrderItemType.IMPORT)
               //外接订单列表刷新
-              Provider.of<ExternalSaleOrdersState>(context).clear();
+              Provider.of<ExternalSaleOrdersState>(context, listen: false)
+                  .clear();
             else
               //外发订单列表刷新
-              Provider.of<OutOrdersState>(context).clear();
+              Provider.of<OutOrdersState>(context, listen: false).clear();
           }
         });
       },
@@ -116,7 +117,9 @@ class ExternalSaleOrderItem extends StatelessWidget {
                                     .clear();
                               else
                                 //外发订单列表刷新
-                                Provider.of<OutOrdersState>(context).clear();
+                                Provider.of<OutOrdersState>(context,
+                                        listen: false)
+                                    .clear();
                             }
                           });
                         },

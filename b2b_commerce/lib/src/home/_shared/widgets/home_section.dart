@@ -339,13 +339,14 @@ class BrandBtnsSection extends StatelessWidget {
             label: '就近找厂',
             onTap: () async {
               List<CategoryModel> categories =
-              await Provider.of<MajorCategoryState>(context)
-                  .getMajorCategories();
+                  await Provider.of<MajorCategoryState>(context)
+                      .getMajorCategories();
               List<LabelModel> labels =
-              await Provider.of<LabelState>(context).getLabels();
+                  await Provider.of<LabelState>(context, listen: false)
+                      .getLabels();
               labels = labels
                   .where((label) =>
-              label.group == 'FACTORY' || label.group == 'PLATFORM')
+                      label.group == 'FACTORY' || label.group == 'PLATFORM')
                   .toList();
               if (categories != null && labels != null) {
                 //埋点>>>就近找厂
@@ -545,7 +546,8 @@ class HomeBtnsSection extends StatelessWidget {
                 await Provider.of<MajorCategoryState>(context)
                     .getMajorCategories();
                 List<LabelModel> labels =
-                await Provider.of<LabelState>(context).getLabels();
+                await Provider.of<LabelState>(context, listen: false)
+                    .getLabels();
                 labels = labels
                     .where((label) =>
                 label.group == 'FACTORY' || label.group == 'PLATFORM')

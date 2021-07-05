@@ -181,7 +181,8 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
               SaleOrderInputRow(
                 label: '物流公司',
                 child: FutureBuilder<List<CarrierModel>>(
-                    future: Provider.of<CarrierState>(context).getCarriers(),
+                    future: Provider.of<CarrierState>(context, listen: false)
+                        .getCarriers(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<CarrierModel>> snapshot) {
                       if (snapshot.data != null) {
@@ -191,14 +192,12 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
                                 carrier = val;
                               });
                             },
-                            itemBuilder: (BuildContext context) =>
-                                snapshot.data
-                                    .map((carrier) =>
-                                    PopupMenuItem<CarrierModel>(
+                            itemBuilder: (BuildContext context) => snapshot.data
+                                .map((carrier) => PopupMenuItem<CarrierModel>(
                                       value: carrier,
                                       child: new Text(carrier.name),
                                     ))
-                                    .toList(),
+                                .toList(),
                             child: Row(
                               children: <Widget>[
                                 Expanded(
@@ -324,7 +323,7 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
         .then((msg) {
       if (msg != null && msg.resultCode == 0) {
         Navigator.of(context).pop(true);
-      }else{
+      } else {
         BotToast.showText(text: "发货失败");
       }
     });

@@ -261,7 +261,8 @@ class _FormEntryItem extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: ColorSizeEntryInputTable(
                 data: entry.colorSizeEntries,
-                compareFunction: Provider.of<SizeState>(context).compare,
+                compareFunction:
+                    Provider.of<SizeState>(context, listen: false).compare,
                 controllerMap: Provider.of<ExternalOrderFormState>(context)
                     .getControllerMapByCode(entry.product.code),
                 nodeMap: Provider.of<ExternalOrderFormState>(context)

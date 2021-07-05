@@ -19,11 +19,12 @@ class DeliverOrderForm extends StatefulWidget {
 
   final VoidCallback onCallback;
 
-  const DeliverOrderForm({Key key,
-    this.deliveryOrder,
-    this.onCallback,
-    this.shippingOrder,
-    this.purchaseOrder})
+  const DeliverOrderForm(
+      {Key key,
+      this.deliveryOrder,
+      this.onCallback,
+      this.shippingOrder,
+      this.purchaseOrder})
       : super(key: key);
 
   @override
@@ -67,7 +68,7 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
   }
 
   Future<List<CarrierModel>> _getCarriers() {
-    return Provider.of<CarrierState>(context).getCarriers();
+    return Provider.of<CarrierState>(context, listen: false).getCarriers();
   }
 
   @override

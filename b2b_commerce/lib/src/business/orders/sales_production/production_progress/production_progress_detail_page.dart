@@ -67,7 +67,8 @@ class _ProductionProgressDetailPageState
             ),
             ColorSizeNoteEntryTable(
               data: totalEntries,
-              compareFunction: Provider.of<SizeState>(context).compareByName,
+              compareFunction:
+                  Provider.of<SizeState>(context, listen: false).compareByName,
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
@@ -77,10 +78,10 @@ class _ProductionProgressDetailPageState
               ),
             ),
             for (ProductionProgressOrderModel order
-              in widget.progress?.productionProgressOrders ?? [])
+            in widget.progress?.productionProgressOrders ?? [])
               _OrderItem(
                 model: order,
-                onItemTap: ()=> orderDeatil(context, order),
+                onItemTap: () => orderDeatil(context, order),
               ),
             Container(
               margin: EdgeInsets.only(top: 10),
@@ -132,15 +133,25 @@ class _ProductionProgressDetailPageState
     );
   }
 
-  void orderDeatil(BuildContext context, ProductionProgressOrderModel order) async{
-    dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
-        ProductionProgressOrderDetailV2Page(
-          progress: widget.progress,
-          model: order,
-          colorSizeEntries: order.entries?.map((e) => ColorSizeInputEntry(
-              color: e.color, size: e.size, quantity: e.quantity))
-              ?.toList() ?? [],)));
-    if(result != null && result){
+  void orderDeatil(BuildContext context,
+      ProductionProgressOrderModel order) async {
+    dynamic result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ProductionProgressOrderDetailV2Page(
+                  progress: widget.progress,
+                  model: order,
+                  colorSizeEntries: order.entries
+                      ?.map((e) =>
+                      ColorSizeInputEntry(
+                          color: e.color,
+                          size: e.size,
+                          quantity: e.quantity))
+                      ?.toList() ??
+                      [],
+                )));
+    if (result != null && result) {
       await _refreshData();
     }
   }
@@ -224,8 +235,11 @@ class _ProductionProgressDetailPageState
     List<ColorSizeInputEntry> _colorSizeEntries = [];
 
     _colorSizeEntries = widget.colorSizeEntries
-        .map((e) => ColorSizeInputEntry(
-            size: e.size.name, color: e.color.name,))
+        .map((e) =>
+        ColorSizeInputEntry(
+          size: e.size.name,
+          color: e.color.name,
+        ))
         .toList();
 
     dynamic result = await Navigator.push(
@@ -243,18 +257,17 @@ class _ProductionProgressDetailPageState
   }
 
   Future _refreshData() async {
-    ProgressWorkSheetModel model = await ProgressWorkSheetRepository()
-        .detail(widget.progress.belong.code);
+    ProgressWorkSheetModel model =
+    await ProgressWorkSheetRepository().detail(widget.progress.belong.code);
     if (model != null) {
       setState(() {
         widget.progress.productionProgressOrders = model.progresses
             .firstWhere((element) => element.id == widget.progress.id,
-                orElse: () => null)
+            orElse: () => null)
             ?.productionProgressOrders;
       });
     }
   }
-
 }
 
 class _InfoRow extends StatelessWidget {

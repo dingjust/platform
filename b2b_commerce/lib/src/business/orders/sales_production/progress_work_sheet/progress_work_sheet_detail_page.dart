@@ -10,19 +10,16 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-
 /// 生产进度工单详情
 class ProgressWorkSheetDetailPage extends StatefulWidget {
   String code;
 
-  ProgressWorkSheetDetailPage({Key key, @required this.code})
-      : super(key: key);
+  ProgressWorkSheetDetailPage({Key key, @required this.code}) : super(key: key);
 
   _ProgressWorkSheetDetailPage createState() => _ProgressWorkSheetDetailPage();
 }
 
-class _ProgressWorkSheetDetailPage
-    extends State<ProgressWorkSheetDetailPage> {
+class _ProgressWorkSheetDetailPage extends State<ProgressWorkSheetDetailPage> {
   ProgressWorkSheetModel order;
 
   bool _returnRefreshListData = false;
@@ -34,11 +31,11 @@ class _ProgressWorkSheetDetailPage
           AsyncSnapshot<ProgressWorkSheetModel> snapshot) {
         if (snapshot.data != null) {
           return WillPopScope(
-            onWillPop: (){
-              if(_returnRefreshListData){
-                Navigator.pop(context,true);
+            onWillPop: () {
+              if (_returnRefreshListData) {
+                Navigator.pop(context, true);
                 return Future.value(false);
-              }else{
+              } else {
                 return Future.value(true);
               }
             },
@@ -54,7 +51,9 @@ class _ProgressWorkSheetDetailPage
                   child: ListView(
                     children: <Widget>[
                       _MainInfo(
-                        order: order, onRefreshData: refreshData,)
+                        order: order,
+                        onRefreshData: refreshData,
+                      )
                     ],
                   )),
             ),
@@ -76,24 +75,23 @@ class _ProgressWorkSheetDetailPage
   Future<ProgressWorkSheetModel> _getData() async {
     if (order == null) {
       ProgressWorkSheetModel detailModel =
-      await ProgressWorkSheetRepository().detail(widget.code);
+          await ProgressWorkSheetRepository().detail(widget.code);
       order = detailModel;
     }
     return order;
   }
 
-  void refreshData(bool returnRefreshData)async{
+  void refreshData(bool returnRefreshData) async {
     ProgressWorkSheetModel detailModel =
     await ProgressWorkSheetRepository().detail(widget.code);
-    if(detailModel != null){
-      setState((){
+    if (detailModel != null) {
+      setState(() {
         order = detailModel;
-        if(returnRefreshData){
+        if (returnRefreshData) {
           _returnRefreshListData = true;
         }
       });
     }
-
   }
 }
 
@@ -119,13 +117,17 @@ class _MainInfo extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 child: ColorSizeEntryTable(
                   data: order.colorSizeEntries,
-                  compareFunction: Provider.of<SizeState>(context).compare,
+                  compareFunction:
+                  Provider
+                      .of<SizeState>(context, listen: false)
+                      .compare,
                 ),
               ),
 //              buildRow('生产数量', '${order?.quantity}'),
               buildRow(
                   '合作方式', CooperationModeLocalizedMap[order?.machiningType]),
-              buildRow('交货日期', DateFormatUtil.formatYMD(order.expectedDeliveryDate)),
+              buildRow(
+                  '交货日期', DateFormatUtil.formatYMD(order.expectedDeliveryDate)),
               _buildProgressTimeLine(),
 //              AddressInfoBlock(
 //                model: order.shippingAddress,
@@ -152,7 +154,6 @@ class _MainInfo extends StatelessWidget {
 
   ///订单状态
   Widget _getOrderStatus() {
-
     return Text(
       '·${ProgressWorkSheetStatusLocalizedMap[order.status]}',
       textAlign: TextAlign.end,
@@ -168,17 +169,20 @@ class _MainInfo extends StatelessWidget {
     bool _enableEdit = false;
     String companyCode = UserBLoC.instance.currentUser.companyCode;
     String belongToUid = order.belongTo?.uid;
-    if(belongToUid == null){
+    if (belongToUid == null) {
       belongToUid = order.partyBCompany?.uid;
     }
-    if(companyCode == belongToUid && order.orderStatus == ProductionTaskOrderState.PRODUCING){
+    if (companyCode == belongToUid &&
+        order.orderStatus == ProductionTaskOrderState.PRODUCING) {
       _enableEdit = true;
     }
 
-    return ProgressTimeLine(model: order,enableEdit: _enableEdit,onRefreshOrderData: onRefreshData,);
+    return ProgressTimeLine(
+      model: order,
+      enableEdit: _enableEdit,
+      onRefreshOrderData: onRefreshData,
+    );
   }
-
-
 
   Widget _partnerInfo(ProgressWorkSheetModel progressWorkSheetModel) {
     CooperatorModel cooperator = progressWorkSheetModel.cooperator;
@@ -193,11 +197,14 @@ class _MainInfo extends StatelessWidget {
           Text('合作商信息', style: TextStyle(color: Colors.grey))
         ]),
         buildRow('客户',
-            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner.name : cooperator.name}'),
+            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner
+                .name : cooperator.name}'),
         buildRow('联系人',
-            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner.contactPerson : cooperator.contactPerson}'),
+            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner
+                .contactPerson : cooperator.contactPerson}'),
         buildRow('联系电话',
-            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner.contactPhone : cooperator.contactPhone}'),
+            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner
+                .contactPhone : cooperator.contactPhone}'),
       ]),
     )
         : Container();
@@ -259,7 +266,8 @@ class _MainInfo extends StatelessWidget {
                       child: Text(
                         '品类：${order.product.category.name}',
                         style: TextStyle(
-                            fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
+                            fontSize: 15,
+                            color: Color.fromRGBO(255, 133, 148, 1)),
                       ),
                     )
                   ],

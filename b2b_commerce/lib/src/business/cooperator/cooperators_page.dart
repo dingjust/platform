@@ -232,7 +232,7 @@ class _AddButton extends StatelessWidget {
             .pushNamed(AppRoutes.ROUTE_COOPERATORS_CREATE)
             .then((needRefresh) {
           if (needRefresh) {
-            Provider.of<CooperatorV2State>(context).clear();
+            Provider.of<CooperatorV2State>(context, listen: false).clear();
           }
         });
       },

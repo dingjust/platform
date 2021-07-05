@@ -94,7 +94,8 @@ class _HomePageState extends State<HomePage> {
     //             UserBLoC.instance.ignoreVersionNotification)
     //     .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
 
-    AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
+    AppVersionHelper appVersionHelper =
+        Provider.of<AppVersionHelper>(context, listen: false);
     bool isNew = await appVersionHelper.checkVersion(
         context, AppBLoC.instance.packageInfo.version, 'nbyjy');
 

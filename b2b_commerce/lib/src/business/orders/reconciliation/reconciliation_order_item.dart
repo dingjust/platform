@@ -46,7 +46,8 @@ class ReconciliationOrderItem extends StatelessWidget {
           'id': model.id,
         }).then((needRefresh) {
           if (needRefresh != null && needRefresh) {
-            Provider.of<ReconciliationOrdersState>(context).clear();
+            Provider.of<ReconciliationOrdersState>(context, listen: false)
+                .clear();
           }
         });
       },

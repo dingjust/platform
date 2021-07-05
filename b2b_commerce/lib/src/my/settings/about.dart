@@ -80,7 +80,7 @@ class AppActions extends StatelessWidget {
           onTap: () {
             //TODO版本检测
             AppVersionHelper appVersionHelper =
-                Provider.of<AppVersionHelper>(context);
+                Provider.of<AppVersionHelper>(context, listen: false);
             appVersionHelper.checkVersion(
                 context, AppBLoC.instance.packageInfo.version, 'nbyjy',
                 showNowMessage: true);

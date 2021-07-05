@@ -143,7 +143,7 @@ class SampleProductGridItem extends StatelessWidget {
       // 没有则跳转详情页
       Navigator.of(context).pushNamed(AppRoutes.ROUTE_SAMPLE_PRODUCT,
           arguments: {'code': model.code}).then((value) {
-        Provider.of<SampleProductsState>(context).clear();
+        Provider.of<SampleProductsState>(context, listen: false).clear();
       });
     }
   }

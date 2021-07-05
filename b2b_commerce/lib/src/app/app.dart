@@ -204,7 +204,7 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
       ),
       home: Builder(builder: (context) {
         AppVersionHelper appVersionHelper =
-            Provider.of<AppVersionHelper>(context);
+            Provider.of<AppVersionHelper>(context, listen: false);
         appVersionHelper.checkVersion(
             context, AppBLoC.instance.packageInfo.version, 'nbyjy');
 

@@ -24,7 +24,7 @@ class ColorSizeInputTable extends StatefulWidget {
   /// ColorSizeInputTable(
   ///   ['蓝色', '绿色', '红色'],
   ///   ['S', 'M', 'L', 'XL', 'XXL'],
-  ///   compareFunction: Provider.of<SizeState>(context).compareByName,
+  ///   compareFunction: Provider.of<SizeState>(context, listen: false).compareByName,
   ///   entries: [
   ///     ColorSizeInputEntry(color: '红色', size: 'L', quantity: 12)
   ///   ],
