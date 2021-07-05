@@ -5,7 +5,7 @@
         <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keyword"></el-input>
       </el-form-item>
       <el-form-item label="合作商" prop="name">
-        <el-input placeholder="请输入合作商名称" v-model="queryFormData.targetCooperator"></el-input>
+        <el-input placeholder="请输入合作商名称" v-model="queryFormData.cooperator"></el-input>
       </el-form-item>
       <el-form-item label="渠道码" prop="name">
         <el-input placeholder="请输入合作商名称" v-model="queryFormData.channelCode"></el-input>
@@ -28,7 +28,7 @@ export default {
     },
     onReset() {
       this.queryFormData.keyword = '';
-      this.queryFormData.targetCooperator = '';
+      this.queryFormData.cooperator = '';
       this.queryFormData.channelCode = '';
     }
   }
