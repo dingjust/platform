@@ -1,12 +1,22 @@
 <template>
   <div class="pend-out-view-list">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id">
-      <el-table-column label="订单号" prop="code" min-width="150"></el-table-column>
+      <el-table-column label="订单号" min-width="110">
+        <template slot-scope="scope">
+          <el-row type="flex" justify="space-between" align="middle">
+            <span>{{scope.row.code}}</span>
+            <el-tag type="info" effect="plain"
+              :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
+              {{scope.row.originCompany == null ? '自创' : '线上'}}</el-tag>
+          </el-row>
+        </template>
+      </el-table-column>
       <el-table-column label="甲方公司" prop="originCooperator.name" show-overflow-tooltip></el-table-column>
       <el-table-column label="乙方公司" prop="belongTo.name" show-overflow-tooltip></el-table-column>
       <el-table-column label="款数" prop="entrySize"></el-table-column>
       <el-table-column label="订单数量" prop="totalQuantity"></el-table-column>
       <el-table-column label="订单金额" prop="totalPrimeCost"></el-table-column>
+      <el-table-column label="渠道码" prop="channelCode"></el-table-column>
       <el-table-column label="创建时间" min-width="110">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
@@ -92,6 +102,16 @@ export default {
     border-color: #ffd60c;
     width: 150px;
     height: 35px;
+  }
+
+  .pending-tag {
+    color: #67c23a;
+    border-Color: #67c23a
+  }
+
+  .business-tag {
+    color: #ffd60c;
+    border-Color: #ffd60c
   }
 
 </style>

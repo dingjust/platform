@@ -42,6 +42,7 @@
           <el-button type="text" @click="onView(scope.row)">查看</el-button>
           <el-button type="text" @click="onPass(scope.row)">通过</el-button>
           <el-button type="text" @click="onReject(scope.row)">驳回</el-button>
+          <el-button type="text" @click="onShow(scope.row)">{{ scope.row.enableShow ? '隐藏' : '展示'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -89,6 +90,10 @@ export default {
     },
     async _onPass(url) {
       const result = await this.$http.put(url)
+
+      if (result === 1) {
+        this.$emit('onAdvancedSearch');
+      }
     },
     onReject (row) {
       this.$prompt('请输入驳回原因', '提示', {
@@ -109,6 +114,27 @@ export default {
       const result = await this.$http.put(url, {
         reason: reason
       })
+
+      if (result === 1) {
+        this.$emit('onAdvancedSearch');
+      }
+    },
+    onShow (row) {
+      this.$confirm('是否改变此需求的显示状态?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this._onShow(row)
+      });
+    },
+    async _onShow(row) {
+      const url = this.apis().showOrHideRequirementOrder(row.code, !row.enableShow)
+      const result = await this.$http.put(url)
+
+      if (result === 1) {
+        this.$emit('onAdvancedSearch');
+      }
     },
     async getBackup (row) {
       const url = this.apis().getRequirementOrderBackUp(row.code);
