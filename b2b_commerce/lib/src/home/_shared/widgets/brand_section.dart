@@ -125,7 +125,7 @@ class BrandButtonsSection extends StatelessWidget {
           image: B2BImage.productionFactory(),
           onPressed: () async {
             List<CategoryModel> categories =
-                await Provider.of<MajorCategoryState>(context)
+                await Provider.of<MajorCategoryState>(context, listen: false)
                     .getMajorCategories();
             List<LabelModel> labels =
                 await Provider.of<LabelState>(context, listen: false)

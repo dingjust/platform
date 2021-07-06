@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_list.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_staggered_grid.dart';
 import 'package:b2b_commerce/src/common/qr_scan_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
@@ -43,23 +42,18 @@ class HomePage extends StatefulWidget {
 
   ///tab
   final List<Widget> _tabBarViews = [
-    // FactoryList(),
-    // Padding(
-    //   padding: EdgeInsets.symmetric(horizontal: 5),
-    //   child: ProductStaggeredGrid(),
-    // ),
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      child: RequirementList(),
+      child: RequirementList<RequirementState>(),
     ),
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      child: RequirementStaggeredGrid(),
+      child: RequirementList<FactoryRequirementState>(),
     ),
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      child: RequirementStaggeredGrid(),
-    ),
+      child: RequirementList<OrderRequirementState>(),
+    )
   ];
 
   ///头部
@@ -126,8 +120,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => RequirementState()),
-          ChangeNotifierProvider(create: (_) => FactoriesState()),
-          ChangeNotifierProvider(create: (_) => ProductState()),
+          ChangeNotifierProvider(create: (_) => FactoryRequirementState()),
+          ChangeNotifierProvider(create: (_) => OrderRequirementState())
         ],
         child: Container(
           color: Color.fromRGBO(245, 245, 245, 1),

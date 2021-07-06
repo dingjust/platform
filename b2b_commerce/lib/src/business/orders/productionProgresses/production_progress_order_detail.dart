@@ -219,7 +219,7 @@ class _ProductionProgressOrderDetailPageState
 
   void onDelete() {
     ProductionProgressState state =
-    Provider.of<ProductionProgressState>(context);
+        Provider.of<ProductionProgressState>(context, listen: false);
 
     showDialog(
         context: context,
@@ -270,7 +270,7 @@ class _ProductionProgressOrderDetailPageState
 
   void onUpdate() {
     ProductionProgressState state =
-    Provider.of<ProductionProgressState>(context);
+    Provider.of<ProductionProgressState>(context, listen: false);
 
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) =>
@@ -283,7 +283,7 @@ class _ProductionProgressOrderDetailPageState
 
   void _submitCallback() async {
     ProductionProgressState state =
-    Provider.of<ProductionProgressState>(context);
+    Provider.of<ProductionProgressState>(context, listen: false);
     await state.refreshPurchaseOrder();
     Navigator.of(context).pop();
     Navigator.of(context).pop();

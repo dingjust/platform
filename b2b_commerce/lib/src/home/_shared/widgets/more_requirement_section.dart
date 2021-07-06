@@ -16,7 +16,7 @@ class MoreRequirementSection extends StatelessWidget {
           children: <Widget>[
             FlatButton(
                 onPressed: () {
-                  Provider.of<MajorCategoryState>(context)
+                  Provider.of<MajorCategoryState>(context, listen: false)
                       .getMajorCategories()
                       .then((categories) {
                     if (categories != null) {

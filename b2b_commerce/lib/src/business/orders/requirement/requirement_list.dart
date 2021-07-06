@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-///需求瀑布流
-class RequirementList extends StatelessWidget {
+///需求列表
+class RequirementList<T extends RequirementState> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<RequirementState>(
-      builder: (context, RequirementState state, _) => Container(
+    return Consumer<T>(
+      builder: (context, T state, _) => Container(
         child: state.requirements != null
             ? RequirementListView(
                 state: state,

@@ -109,7 +109,7 @@ class _AddButton extends StatelessWidget {
             .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDER_FORM)
             .then((value) {
           ExternalSaleOrdersState state =
-              Provider.of<ExternalSaleOrdersState>(context);
+              Provider.of<ExternalSaleOrdersState>(context, listen: false);
           if (state != null) {
             state.clear();
           }

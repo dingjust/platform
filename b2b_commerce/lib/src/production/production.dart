@@ -14,10 +14,10 @@ class ProductionItem extends StatelessWidget {
 
   Future<void> requestCallBack(BuildContext context) async {
     PurchaseOrderModel model =
-    await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+        await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
 
     ///更新生产进度状态数据模型
-    final state = Provider.of<ProductionProgressState>(context);
+    final state = Provider.of<ProductionProgressState>(context, listen: false);
     state.setOrder(model);
     Navigator.push(
       context,
@@ -49,7 +49,8 @@ class ProductionItem extends StatelessWidget {
             }).then((value) {
           if (value != null) {
             ///更新生产进度状态数据模型
-            final state = Provider.of<ProductionProgressState>(context);
+            final state = Provider.of<ProductionProgressState>(
+                context, listen: false);
             state.setOrder(value);
             Navigator.push(
               context,

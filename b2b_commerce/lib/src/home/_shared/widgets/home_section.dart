@@ -148,7 +148,7 @@ class FactoryHomeEntrance extends StatelessWidget {
             Expanded(
                 child: GestureDetector(
                     onTap: () {
-                      Provider.of<MajorCategoryState>(context)
+                      Provider.of<MajorCategoryState>(context, listen: false)
                           .getMajorCategories()
                           .then((categories) {
                         if (categories != null) {
@@ -339,7 +339,7 @@ class BrandBtnsSection extends StatelessWidget {
             label: '就近找厂',
             onTap: () async {
               List<CategoryModel> categories =
-                  await Provider.of<MajorCategoryState>(context)
+              await Provider.of<MajorCategoryState>(context, listen: false)
                       .getMajorCategories();
               List<LabelModel> labels =
                   await Provider.of<LabelState>(context, listen: false)
@@ -543,7 +543,7 @@ class HomeBtnsSection extends StatelessWidget {
               label: '离我最近',
               onTap: () async {
                 List<CategoryModel> categories =
-                await Provider.of<MajorCategoryState>(context)
+                await Provider.of<MajorCategoryState>(context, listen: false)
                     .getMajorCategories();
                 List<LabelModel> labels =
                 await Provider.of<LabelState>(context, listen: false)

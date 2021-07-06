@@ -32,7 +32,7 @@ class _SubContractPoolListState extends State<SubContractPoolList> {
   ];
 
   List<FilterConditionEntry> machiningTypeConditionEntries =
-  <FilterConditionEntry>[
+      <FilterConditionEntry>[
     FilterConditionEntry(
         label: '全部',
         value: "ALL1",
@@ -114,7 +114,8 @@ class _SubContractPoolListState extends State<SubContractPoolList> {
                   ],
                 ),
                 FutureBuilder(
-                  future: Provider.of<MajorCategoryState>(context)
+                  future:
+                  Provider.of<MajorCategoryState>(context, listen: false)
                       .getMajorCategories(),
                   builder: (BuildContext dropMenuContext,
                       AsyncSnapshot<List<CategoryModel>> snapshot) {
@@ -154,7 +155,7 @@ class _SubContractPoolListState extends State<SubContractPoolList> {
                                       callBack: (entry) =>
                                           _onSortConditionSelect(
                                               entry, subContractPoolState)),
-                            ),
+                                ),
                                 GZXDropdownMenuBuilder(
                                   dropDownHeight:
                                   40.0 * categoriesConditionEntries.length + 20,

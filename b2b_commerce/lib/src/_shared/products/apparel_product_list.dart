@@ -39,7 +39,8 @@ class _ApparelProductListState extends State<ApparelProductList> {
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.getDatasLoadingMore(status: widget.status,keyword: widget.keyword);
+        bloc.getDatasLoadingMore(
+            status: widget.status, keyword: widget.keyword);
       }
     });
 
@@ -66,7 +67,8 @@ class _ApparelProductListState extends State<ApparelProductList> {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+            return ApparelProductBLoC.instance
+                .clearProductsMapByStatus(widget.status);
 //            return await bloc.getDatas(status: widget.status,keyword: widget.keyword);
           },
           child: ListView(
@@ -74,18 +76,21 @@ class _ApparelProductListState extends State<ApparelProductList> {
             controller: widget.scrollController,
             children: <Widget>[
               StreamBuilder<PageEntry>(
-                stream: widget.status == null ? bloc.stream : bloc.stream.where((pageEntry) => pageEntry.status == widget.status),
-                builder: (BuildContext context,
-                    AsyncSnapshot<PageEntry> snapshot) {
+                stream: widget.status == null
+                    ? bloc.stream
+                    : bloc.stream.where(
+                        (pageEntry) => pageEntry.status == widget.status),
+                builder:
+                    (BuildContext context, AsyncSnapshot<PageEntry> snapshot) {
                   print(snapshot.data);
                   if (snapshot.data == null) {
-                    bloc.getDatas(status: widget.status,keyword: widget.keyword);
+                    bloc.getDatas(
+                        status: widget.status, keyword: widget.keyword);
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: Center(child: CircularProgressIndicator()),
                     );
-                  }else
-                  if (snapshot.data.data.length <= 0) {
+                  } else if (snapshot.data.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +191,8 @@ class _ApparelProductListState extends State<ApparelProductList> {
       ));
 
 //      ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-      ApparelProductBLoC.instance.deleteProductResetData(widget.status,product.code);
+      ApparelProductBLoC.instance
+          .deleteProductResetData(widget.status, product.code);
     });
   }
 
@@ -196,17 +202,19 @@ class _ApparelProductListState extends State<ApparelProductList> {
         context,
         MaterialPageRoute(
           builder: (context) => BLoCProvider(
-                bloc: ApparelProductBLoC.instance,
-                child: UserBLoC.instance.currentUser.type == UserType.FACTORY ? ApparelProductDetailPage(
-                  item: product,
-                  status: widget.status,
-                ): ApparelProductBrandDetailPage(
-                  item: product,
-                ),
-              ),
+            bloc: ApparelProductBLoC.instance,
+            child: UserBLoC.instance.currentUser.type == UserType.FACTORY
+                ? ApparelProductDetailPage(
+                    item: product,
+                    status: widget.status,
+                  )
+                : ApparelProductBrandDetailPage(
+                    item: product,
+                  ),
+          ),
         ),
-      ).then((val){
-        if(val != null && val){
+      ).then((val) {
+        if (val != null && val) {
           ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
         }
       });
@@ -219,7 +227,8 @@ class _ApparelProductListState extends State<ApparelProductList> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => RequirementOrderFrom(
+            builder: (context) =>
+                RequirementOrderFrom(
                   product: product,
                   isCreate: true,
                   order: orderModel,
@@ -271,82 +280,105 @@ class _ApparelProductListState extends State<ApparelProductList> {
           product.price == null) {
         _showValidateMsg(context, '产品价格为空不可上架');
         return;
-      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY ){
-        if(product.productType.contains(ProductType.SPOT_GOODS) || product.productType.contains(ProductType.TAIL_GOODS)){
+      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+        if (product.productType.contains(ProductType.SPOT_GOODS) ||
+            product.productType.contains(ProductType.TAIL_GOODS)) {
           // if(product.deliveryDays == null){
           //   _showValidateMsg(context, '价格设置资料未完善，不可上架');
           //   return;
           // }
-          if(product.spotSteppedPrices == null || product.spotSteppedPrices.isEmpty){
+          if (product.spotSteppedPrices == null ||
+              product.spotSteppedPrices.isEmpty) {
             _showValidateMsg(context, '价格设置资料未完善，不可上架');
             return;
           }
-          for(int i=0;i<product.spotSteppedPrices.length;i++){
-            if(product.spotSteppedPrices[i].price == null && product.spotSteppedPrices[i].minimumQuantity == null){
+          for (int i = 0; i < product.spotSteppedPrices.length; i++) {
+            if (product.spotSteppedPrices[i].price == null &&
+                product.spotSteppedPrices[i].minimumQuantity == null) {
               product.spotSteppedPrices.remove(product.spotSteppedPrices[i]);
-            }else if(product.spotSteppedPrices[i].price != null && product.spotSteppedPrices[i].minimumQuantity != null){
-
-            }else{
+            } else if (product.spotSteppedPrices[i].price != null &&
+                product.spotSteppedPrices[i].minimumQuantity != null) {} else {
               ShowDialogUtil.showValidateMsg(context, '价格设置资料未完善，不可上架');
               return;
             }
           }
 
-          if(product.spotSteppedPrices.length >1){
-            for(int i=0;i<product.spotSteppedPrices.length;i++){
-              if(i == product.spotSteppedPrices.length - 1){
+          if (product.spotSteppedPrices.length > 1) {
+            for (int i = 0; i < product.spotSteppedPrices.length; i++) {
+              if (i == product.spotSteppedPrices.length - 1) {
                 break;
               }
 
-              if(product.spotSteppedPrices[i + 1].minimumQuantity != null && product.spotSteppedPrices[i].minimumQuantity != null){
-                if(product.spotSteppedPrices[i + 1].minimumQuantity <= product.spotSteppedPrices[i].minimumQuantity){
-                  ShowDialogUtil.showValidateMsg(context, '现货/尾货第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
+              if (product.spotSteppedPrices[i + 1].minimumQuantity != null &&
+                  product.spotSteppedPrices[i].minimumQuantity != null) {
+                if (product.spotSteppedPrices[i + 1].minimumQuantity <=
+                    product.spotSteppedPrices[i].minimumQuantity) {
+                  ShowDialogUtil.showValidateMsg(
+                      context,
+                      '现货/尾货第' +
+                          enumMap(DightEnum, i + 2) +
+                          '阶梯的起订量不可小于或等于' +
+                          '第' +
+                          enumMap(DightEnum, i + 1) +
+                          '阶梯的起订量');
                   return;
                 }
               }
-
             }
           }
 
-          product.spotSteppedPrices.sort((a,b) => a.minimumQuantity.compareTo(b.minimumQuantity));
-          if(_colorTotalNum(product.colorSizes) < product.spotSteppedPrices[0].minimumQuantity){
+          product.spotSteppedPrices
+              .sort((a, b) => a.minimumQuantity.compareTo(b.minimumQuantity));
+          if (_colorTotalNum(product.colorSizes) <
+              product.spotSteppedPrices[0].minimumQuantity) {
             _showValidateMsg(context, '库存总数量小于最小起订量，不可上架');
             return;
           }
         }
-        if(product.productType == null || product.productType.contains(ProductType.FUTURE_GOODS)){
-          if(product.basicProduction == null || product.productionIncrement == null || product.productionDays == null) {
+        if (product.productType == null ||
+            product.productType.contains(ProductType.FUTURE_GOODS)) {
+          if (product.basicProduction == null ||
+              product.productionIncrement == null ||
+              product.productionDays == null) {
             _showValidateMsg(context, '价格设置资料未完善，不可上架');
             return;
           }
-          if(product.steppedPrices == null || product.steppedPrices.isEmpty){
+          if (product.steppedPrices == null || product.steppedPrices.isEmpty) {
             _showValidateMsg(context, '价格设置资料未完善，不可上架');
             return;
           }
-          for(int i=0;i<product.steppedPrices.length;i++){
-            if(product.steppedPrices[i].price == null && product.steppedPrices[i].minimumQuantity == null){
+          for (int i = 0; i < product.steppedPrices.length; i++) {
+            if (product.steppedPrices[i].price == null &&
+                product.steppedPrices[i].minimumQuantity == null) {
               product.steppedPrices.remove(product.steppedPrices[i]);
-            }else if(product.steppedPrices[i].price != null && product.steppedPrices[i].minimumQuantity != null){
-
-            }else{
+            } else if (product.steppedPrices[i].price != null &&
+                product.steppedPrices[i].minimumQuantity != null) {} else {
               ShowDialogUtil.showValidateMsg(context, '价格设置资料未完善，不可上架');
               return;
             }
           }
 
-          if(product.steppedPrices.length >1){
-            for(int i=0;i<product.steppedPrices.length;i++){
-              if(i == product.steppedPrices.length - 1){
+          if (product.steppedPrices.length > 1) {
+            for (int i = 0; i < product.steppedPrices.length; i++) {
+              if (i == product.steppedPrices.length - 1) {
                 break;
               }
 
-              if(product.steppedPrices[i + 1].minimumQuantity != null && product.steppedPrices[i].minimumQuantity != null){
-                if(product.steppedPrices[i + 1].minimumQuantity <= product.steppedPrices[i].minimumQuantity){
-                  ShowDialogUtil.showValidateMsg(context, '期货第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
+              if (product.steppedPrices[i + 1].minimumQuantity != null &&
+                  product.steppedPrices[i].minimumQuantity != null) {
+                if (product.steppedPrices[i + 1].minimumQuantity <=
+                    product.steppedPrices[i].minimumQuantity) {
+                  ShowDialogUtil.showValidateMsg(
+                      context,
+                      '期货第' +
+                          enumMap(DightEnum, i + 2) +
+                          '阶梯的起订量不可小于或等于' +
+                          '第' +
+                          enumMap(DightEnum, i + 1) +
+                          '阶梯的起订量');
                   return;
                 }
               }
-
             }
           }
         }
@@ -363,7 +395,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
               entrance: '',
             );
           }).then((value) {
-            print('value${value}');
+        print('value${value}');
         bool result = false;
         if (value != null && value != '') {
           result = false;
@@ -384,7 +416,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
                 },
               );
             });
-            ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+        ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
       });
     }
   }
@@ -392,7 +424,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
   int _colorTotalNum(List<ColorSizeModel> colorSizes) {
     int result = 0;
     colorSizes?.forEach((colorSize) {
-      colorSize.sizes.forEach((size){
+      colorSize.sizes.forEach((size) {
         result += size.quality ?? 0;
       });
     });

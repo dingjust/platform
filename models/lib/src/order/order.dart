@@ -904,18 +904,24 @@ class RequirementOrderModel extends OrderModel {
   ///需求距离
   double distance;
 
+  ///需求订单类型
   RequirementOrderType orderType;
 
-  RequirementOrderModel(
-      {StatisticsModel statistics,
-      this.status,
-      this.belongTo,
-      this.details,
-      this.totalQuotesCount,
-      this.latestQuotes,
-      this.delayDays,
-      String code,
-      int totalQuantity,
+  ///审核状态
+  RequirementReviewState reviewState;
+
+  ///拒绝原因
+  String reason;
+
+  RequirementOrderModel({StatisticsModel statistics,
+    this.status,
+    this.belongTo,
+    this.details,
+    this.totalQuotesCount,
+    this.latestQuotes,
+    this.delayDays,
+    String code,
+    int totalQuantity,
     double totalPrice,
     DateTime creationTime,
     DateTime modifiedTime,
@@ -926,17 +932,19 @@ class RequirementOrderModel extends OrderModel {
     this.attachments,
     this.distance,
     this.labels,
-    this.orderType
-  }) : super(
-            statistics: statistics,
-            code: code,
-            totalQuantity: totalQuantity,
-            totalPrice: totalPrice,
-            creationTime: creationTime,
-            deliveryAddress: deliveryAddress,
-            remarks: remarks,
-            supplier: supplier,
-            modifiedTime: modifiedTime);
+    this.orderType,
+    this.reviewState,
+    this.reason})
+      : super(
+      statistics: statistics,
+      code: code,
+      totalQuantity: totalQuantity,
+      totalPrice: totalPrice,
+      creationTime: creationTime,
+      deliveryAddress: deliveryAddress,
+      remarks: remarks,
+      supplier: supplier,
+      modifiedTime: modifiedTime);
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$RequirementOrderModelFromJson(json);
@@ -1620,20 +1628,21 @@ class ProductionProgressModel extends ItemModel {
   ///警告天数
   int warningDays;
 
-  ProductionProgressModel({this.phase,
-    this.quantity,
-    this.medias,
-    this.sequence,
-    this.estimatedDate,
-    this.finishDate,
-    this.modifiedtime,
-    this.order,
-    this.updateOnly,
-    this.delayedDays,
-    this.belong,
-    this.remarks,
-    this.progressPhase,
-    this.warningDays});
+  ProductionProgressModel(
+      {this.phase,
+      this.quantity,
+      this.medias,
+      this.sequence,
+      this.estimatedDate,
+      this.finishDate,
+      this.modifiedtime,
+      this.order,
+      this.updateOnly,
+      this.delayedDays,
+      this.belong,
+      this.remarks,
+      this.progressPhase,
+      this.warningDays});
 
   factory ProductionProgressModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionProgressModelFromJson(json);
@@ -1876,4 +1885,46 @@ enum RequirementOrderType {
 const RequirementOrderTypeLocalizedMap = {
   RequirementOrderType.FINDING_FACTORY: "找工厂",
   RequirementOrderType.FINDING_ORDER: "找订单",
+};
+
+/// 需求订单类型
+const RequirementOrderTypeMap = {
+  RequirementOrderType.FINDING_FACTORY: "FINDING_FACTORY",
+  RequirementOrderType.FINDING_ORDER: "FINDING_ORDER",
+};
+
+/// 需求状态
+enum RequirementReviewState {
+  /// 无
+  NONE,
+
+  /// 审核中
+  REVIEWING,
+
+  ///审核通过
+  REVIEW_PASSED,
+
+  ///审核失败
+  REVIEW_REJECTED,
+
+  /// 已完成
+  COMPLETED,
+}
+
+// 需求状态
+const RequirementReviewStateLocalizedMap = {
+  RequirementReviewState.NONE: "无",
+  RequirementReviewState.REVIEWING: "审核中",
+  RequirementReviewState.REVIEW_PASSED: "审核通过",
+  RequirementReviewState.REVIEW_REJECTED: "审核失败",
+  RequirementReviewState.COMPLETED: "已完成",
+};
+
+// 需求状态
+const RequirementReviewStateMap = {
+  RequirementReviewState.NONE: "NONE",
+  RequirementReviewState.REVIEWING: "REVIEWING",
+  RequirementReviewState.REVIEW_PASSED: "REVIEW_PASSED",
+  RequirementReviewState.REVIEW_REJECTED: "REVIEW_REJECTED",
+  RequirementReviewState.COMPLETED: "COMPLETED",
 };

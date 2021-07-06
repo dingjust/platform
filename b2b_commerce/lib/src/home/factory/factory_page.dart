@@ -306,7 +306,7 @@ class _FactoryPageState extends State<FactoryPage> {
   }
 
   void onLocation() async {
-    AmapState amapState = Provider.of<AmapState>(context);
+    AmapState amapState = Provider.of<AmapState>(context, listen: false);
     // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
     Tip tip = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
@@ -322,7 +322,7 @@ class _FactoryPageState extends State<FactoryPage> {
   }
 
   Future<bool> _initData() async {
-    AmapState amapState = Provider.of<AmapState>(context);
+    AmapState amapState = Provider.of<AmapState>(context, listen: false);
 
     if (!inited && !lock) {
       lock = true;

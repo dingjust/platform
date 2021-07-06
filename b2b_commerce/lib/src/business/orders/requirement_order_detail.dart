@@ -1,25 +1,20 @@
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import './requirement/requirement_form_factory.dart';
-import './requirement/requirement_form_order.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/business/requirement_orders.dart';
 import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
-import 'package:b2b_commerce/src/home/factory/factory_page.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
+
+import './requirement/requirement_form_factory.dart';
+import './requirement/requirement_form_order.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
   String code;
@@ -85,6 +80,9 @@ class _RequirementOrderDetailPageState
               color: Colors.grey[100],
               child: ListView(
                 children: <Widget>[
+                  _buildReviewInfo(),
+                  //品牌端显示
+                  _buildQuote(),
                   //标题
                   _buildTitle(),
                   //描述
@@ -96,8 +94,6 @@ class _RequirementOrderDetailPageState
                   orderModel.orderType == RequirementOrderType.FINDING_ORDER
                       ? _buildMainOrder
                       : _buildMainFactory(),
-                  //品牌端显示
-                  _buildQuote(),
                 ],
               ),
             );
@@ -124,7 +120,7 @@ class _RequirementOrderDetailPageState
     quotesList = await RequirementOrderRepository().getRequirementOrderQuotes(
       code: detail.code,
       page: 0,
-      size: 1,
+      size: 99,
     );
 
     return detail;
@@ -255,8 +251,7 @@ class _RequirementOrderDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    '${DateFormatUtil.formatYMD(
-                        orderModel.details.expectedDeliveryDate)}',
+                    '${DateFormatUtil.formatYMD(orderModel.details.expectedDeliveryDate)}',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -594,34 +589,25 @@ class _RequirementOrderDetailPageState
 
   Widget _buildQuote() {
     return Container(
-      color: Colors.white,
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: quotesList != null && quotesList.length > 0
           ? Column(
-        children: <Widget>[
-          QuoteItem(
-            model: quotesList[0],
-            onRefresh: () {
-              onRefreshData();
-            },
-            pageContext: context,
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      RequirementQuoteDetailPage(
-                        order: orderModel,
-                      )));
-            },
-            child: Text(
-              '查看全部报价>>',
-              style: TextStyle(color: Colors.red),
-            ),
-          )
-        ],
-      )
+          children: quotesList
+              .map((e) =>
+              Container(
+                color: Colors.white,
+                margin: EdgeInsets.symmetric(vertical: 5),
+                padding: EdgeInsets.only(bottom: 5),
+                child: QuoteItem(
+                  model: e,
+                  onRefresh: () {
+                    onRefreshData();
+                  },
+                  pageContext: context,
+                ),
+              ))
+              .toList())
           : Center(
         child: Text(
           '暂无报价',
@@ -769,6 +755,41 @@ class _RequirementOrderDetailPageState
     );
   }
 
+  ///审核信息
+  Widget _buildReviewInfo() {
+    if (orderModel.reviewState == RequirementReviewState.REVIEWING) {
+      return Container(
+        color: Colors.orange,
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Row(
+          children: [
+            Expanded(
+                child: Text(
+                  '您提交的需求正在等待平台审核，请耐心等待',
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
+        ),
+      );
+    } else if (orderModel.reviewState ==
+        RequirementReviewState.REVIEW_REJECTED) {
+      return Container(
+        color: Colors.red[300],
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Row(
+          children: [
+            Expanded(
+                child: Text(
+                  '您提交的资料平台审核失败,原因如下：${orderModel.reason}',
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
+        ),
+      );
+    }
+
+    return Container();
+  }
 
   onMenuSelect(String value) async {
     switch (value) {

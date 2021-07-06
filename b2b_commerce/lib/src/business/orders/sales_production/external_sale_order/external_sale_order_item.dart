@@ -113,7 +113,8 @@ class ExternalSaleOrderItem extends StatelessWidget {
                             if (needRefresh != null && needRefresh) {
                               if (type == SaleOrderItemType.IMPORT)
                                 //外接订单列表刷新
-                                Provider.of<ExternalSaleOrdersState>(context)
+                                Provider.of<ExternalSaleOrdersState>(context,
+                                        listen: false)
                                     .clear();
                               else
                                 //外发订单列表刷新

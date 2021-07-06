@@ -7,6 +7,15 @@ import '../../../services.dart';
 class RequirementState extends PageState {
   List<RequirementOrderModel> _requirements;
 
+  ///需求状态
+  final RequirementReviewState reviewState;
+
+  ///需求类型
+  final RequirementOrderType type;
+
+  RequirementState(
+      {this.reviewState = RequirementReviewState.REVIEW_PASSED, this.type});
+
   List<RequirementOrderModel> get requirements {
     if (_requirements == null) {
       getData();
@@ -63,7 +72,16 @@ class RequirementState extends PageState {
   }
 
   Map<String, dynamic> getParamsData() {
-    return {'statuses': "PENDING_QUOTE"};
+    var data = {'statuses': "PENDING_QUOTE"};
+    if (reviewState != null) {
+      data['reviewState'] = RequirementReviewStateMap[reviewState];
+    }
+
+    if (type != null) {
+      data['orderType'] = RequirementOrderTypeMap[type];
+    }
+
+    return data;
   }
 
   @override
@@ -72,4 +90,16 @@ class RequirementState extends PageState {
     reset();
     notifyListeners();
   }
+}
+
+class OrderRequirementState extends RequirementState {
+  final RequirementOrderType type;
+
+  OrderRequirementState({this.type = RequirementOrderType.FINDING_ORDER});
+}
+
+class FactoryRequirementState extends RequirementState {
+  final RequirementOrderType type;
+
+  FactoryRequirementState({this.type = RequirementOrderType.FINDING_FACTORY});
 }

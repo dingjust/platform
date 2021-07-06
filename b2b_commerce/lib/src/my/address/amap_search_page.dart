@@ -216,8 +216,6 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   }
 
   Widget _buildSearchRow(AmapState state) {
-    AmapState amapState = Provider.of<AmapState>(context);
-
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
@@ -309,7 +307,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   }
 
   Widget _buildSuggestionsListView(BuildContext context) {
-    AmapState amapState = Provider.of<AmapState>(context);
+    AmapState amapState = Provider.of<AmapState>(context, listen: false);
 
     return FutureBuilder<AmapResponse>(
       builder: (BuildContext context, AsyncSnapshot<AmapResponse> snapshot) {
@@ -317,8 +315,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
           return ListView(
               children: snapshot.data.tips
                   .map(
-                    (tip) =>
-                    SuggestionsRow(
+                    (tip) => SuggestionsRow(
                       value: tip.name,
                       address: tip.address,
                       location: tip.location,

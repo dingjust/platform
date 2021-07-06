@@ -305,7 +305,8 @@ class _ProductConditionDrawerState extends State<ProductConditionDrawer> {
     );
   }
 
-  PlateProductState get state => Provider.of<PlateProductState>(context);
+  PlateProductState get state =>
+      Provider.of<PlateProductState>(context, listen: false);
 }
 
 class ConditionBlock extends StatelessWidget {
