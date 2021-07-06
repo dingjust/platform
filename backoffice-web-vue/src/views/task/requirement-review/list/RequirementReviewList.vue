@@ -2,8 +2,8 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="需求订单号" prop="code"></el-table-column>
-      <el-table-column label="标题" prop="details.productName" width="200" header-align="center"></el-table-column>
-      <el-table-column label="产品" width="260" header-align="center">
+      <el-table-column label="标题" prop="details.productName" header-align="center"></el-table-column>
+      <el-table-column label="产品" header-align="center" min-width="200px">
         <template slot-scope="scope">
           <el-row type="flex" align="middle" :gutter="10">
             <el-col :span="8">
@@ -12,7 +12,7 @@
                    scope.row.details.pictures[0].url : 'static/img/nopicture.png'" />
             </el-col>
             <el-col :span="16">
-              <h6 style="font-size: 12px">品类：{{scope.row.details.category.parent.name}}-{{scope.row.details.category.name}}</h6>
+              <h6 style="font-size: 12px">品类：{{scope.row.details.majorCategory.name}}-{{scope.row.details.category ? scope.row.details.category.name : ''}}</h6>
               <h6 style="font-size: 12px">货号：{{scope.row.details.productSkuID}}</h6>
               <h6 style="font-size: 12px">数量：{{scope.row.details.expectedMachiningQuantity}}</h6>
             </el-col>
@@ -37,11 +37,11 @@
           <span>{{ getEnum('FactoryReviewState', scope.row.reviewState) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作"  header-align="center" align="center" width="150">
+      <el-table-column label="操作"  header-align="center" align="center" min-width="180px">
         <template slot-scope="scope">
           <el-button type="text" @click="onView(scope.row)">查看</el-button>
-          <el-button type="text" @click="onPass(scope.row)">通过</el-button>
-          <el-button type="text" @click="onReject(scope.row)">驳回</el-button>
+          <el-button type="text" @click="onPass(scope.row, true)">通过</el-button>
+          <el-button type="text" @click="onReject(scope.row, true)">驳回</el-button>
           <el-button type="text" @click="onShow(scope.row)">{{ scope.row.enableShow ? '隐藏' : '展示'}}</el-button>
         </template>
       </el-table-column>
@@ -79,7 +79,7 @@ export default {
         type: 'warning'
       }).then(async () => {
         let url;
-        if (row.creationtime === row.modifiedtime) {
+        if (row.isNewCreated) {
           url = this.apis().reviewRequirementOrder(row.code, true)
         } else {
           const modifiedtime = await this.getBackup(row)
@@ -89,9 +89,9 @@ export default {
       });
     },
     async _onPass(url) {
-      const result = await this.$http.put(url)
+      const result = await this.$http.put(url, {})
 
-      if (result === 1) {
+      if (result.code === 1) {
         this.$emit('onAdvancedSearch');
       }
     },
@@ -101,7 +101,7 @@ export default {
         cancelButtonText: '取消',
       }).then(async ({ value }) => {
         let url;
-        if (row.creationtime === row.modifiedtime) {
+        if (row.isNewCreated) {
           url = this.apis().reviewRequirementOrder(row.code, false)
         } else {
           const modifiedtime = await this.getBackup(row)
@@ -115,7 +115,7 @@ export default {
         reason: reason
       })
 
-      if (result === 1) {
+      if (result.code === 1) {
         this.$emit('onAdvancedSearch');
       }
     },
