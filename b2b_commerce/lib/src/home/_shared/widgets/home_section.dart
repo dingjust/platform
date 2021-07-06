@@ -339,7 +339,7 @@ class BrandBtnsSection extends StatelessWidget {
             label: '就近找厂',
             onTap: () async {
               List<CategoryModel> categories =
-              await Provider.of<MajorCategoryState>(context, listen: false)
+                  await Provider.of<MajorCategoryState>(context, listen: false)
                       .getMajorCategories();
               List<LabelModel> labels =
                   await Provider.of<LabelState>(context, listen: false)
@@ -355,17 +355,16 @@ class BrandBtnsSection extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        FactoryPage(
-                          FactoryCondition(
-                              starLevel: 0,
-                              adeptAtCategories: [],
-                              labels: [],
-                              cooperationModes: []),
-                          route: '就近找厂',
-                          categories: categories,
-                          labels: labels,
-                        ),
+                    builder: (context) => FactoryPage(
+                      FactoryCondition(
+                          starLevel: 0,
+                          adeptAtCategories: [],
+                          labels: [],
+                          cooperationModes: []),
+                      route: '就近找厂',
+                      categories: categories,
+                      labels: labels,
+                    ),
                   ),
                 );
               }
@@ -542,37 +541,8 @@ class HomeBtnsSection extends StatelessWidget {
               url: 'temp/index/nearby_factory.png',
               label: '离我最近',
               onTap: () async {
-                List<CategoryModel> categories =
-                await Provider.of<MajorCategoryState>(context, listen: false)
-                    .getMajorCategories();
-                List<LabelModel> labels =
-                await Provider.of<LabelState>(context, listen: false)
-                    .getLabels();
-                labels = labels
-                    .where((label) =>
-                label.group == 'FACTORY' || label.group == 'PLATFORM')
-                    .toList();
-                if (categories != null && labels != null) {
-                  //埋点>>>就近找厂
-                  UmengPlugin.onEvent('factory_finding_location');
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          FactoryPage(
-                            FactoryCondition(
-                                starLevel: 0,
-                                adeptAtCategories: [],
-                                labels: [],
-                                cooperationModes: []),
-                            route: '就近找厂',
-                            categories: categories,
-                            labels: labels,
-                          ),
-                    ),
-                  );
-                }
+                Navigator.of(context)
+                    .pushNamed(AppRoutes.ROUTE_REQUIREMENT_ORDERS_NEARBY);
               },
             ),
             HomeAssetsBtn(

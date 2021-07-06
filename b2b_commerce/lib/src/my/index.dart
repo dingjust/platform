@@ -66,8 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
         menuSeparator,
       ]),
       Menu('', <Widget>[
-        MenuItem(B2BImage.luckeyMoney(width: 25, height: 25), '邀请好友',
-            AppRoutes.ROUTE_ACTIVITY_INVITE),
+        // MenuItem(B2BImage.luckeyMoney(width: 25, height: 25), '邀请好友',
+        //     AppRoutes.ROUTE_ACTIVITY_INVITE),
         MenuItem(MenuItemImage.partnerFactory, '服务申请',
             AppRoutes.ROUTE_SERVICE_APPLY),
       ]),

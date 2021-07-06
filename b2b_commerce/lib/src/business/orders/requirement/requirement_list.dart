@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/empty.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,16 +10,21 @@ class RequirementList<T extends RequirementState> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<T>(
-      builder: (context, T state, _) => Container(
-        child: state.requirements != null
-            ? RequirementListView(
-                state: state,
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ),
-      ),
+      builder: (context, T state, _) => Container(child: _buildBody(state)),
     );
+  }
+
+  Widget _buildBody(T state) {
+    if (state.requirements == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (state.requirements.isNotEmpty) {
+      return RequirementListView(
+        state: state,
+      );
+    }
+    return Empty();
   }
 }
 

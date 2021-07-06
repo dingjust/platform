@@ -41,7 +41,11 @@ class _HomeSearchResultPageState extends State<HomeSearchResultPage>
             )),
         body: MultiProvider(
             providers: [
-              ChangeNotifierProvider(create: (_) => RequirementState()),
+              ChangeNotifierProvider(
+                  create: (_) =>
+                      FactoryRequirementState(keyword: widget.keyword)),
+              ChangeNotifierProvider(
+                  create: (_) => OrderRequirementState(keyword: widget.keyword))
             ],
             child: Container(
               color: Color.fromRGBO(245, 245, 245, 1),
@@ -49,8 +53,8 @@ class _HomeSearchResultPageState extends State<HomeSearchResultPage>
                   key: pageKey,
                   headerSliverBuilder: _slverBuilder,
                   body: TabBarView(controller: _tabController, children: [
-                    RequirementList(),
-                    RequirementList(),
+                    RequirementList<FactoryRequirementState>(),
+                    RequirementList<OrderRequirementState>(),
                   ])),
             )));
   }

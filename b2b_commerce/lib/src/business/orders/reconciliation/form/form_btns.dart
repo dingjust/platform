@@ -42,8 +42,8 @@ class FormBtns extends StatelessWidget {
                           fontWeight: FontWeight.bold, color: Colors.black87),
                       children: [
                     TextSpan(
-                        text: '￥${totalAmount()}',
-                        style: TextStyle(color: Colors.red))
+                        text: '￥${totalAmount().toStringAsFixed(2)}',
+                        style: TextStyle(color: Colors.red, fontSize: 20))
                   ]))),
           Expanded(
               flex: 1,
