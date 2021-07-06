@@ -13,10 +13,11 @@ const state = {
   },
   queryFormData: {
     keyword: '',
-    targetCooperator: '',
+    cooperator: '',
     merchandiser: '',
     state: '',
-    name: ''
+    name: '',
+    channelCode: ''
   }
 };
 
