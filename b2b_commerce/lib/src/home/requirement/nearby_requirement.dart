@@ -106,6 +106,7 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
             latitude: double.parse(locationArray[1]));
       },
     );
+
     Provider.of<AmapState>(context, listen: false)
         .getAMapLocation(context: context, openDialog: _dialog);
   }
