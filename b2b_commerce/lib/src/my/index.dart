@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -11,6 +12,8 @@ import '../common/app_image.dart';
 import '../common/app_keys.dart';
 import '../common/app_routes.dart';
 import 'account/profile.dart';
+import 'company/form/my_brand_base_form.dart';
+import 'company/form/my_factory_base_form.dart';
 import 'my_authentication.dart';
 
 var menuSeparator = Container(
@@ -419,11 +422,10 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
                         text: '公司介绍',
                         style: TextStyle(fontSize: 17, color: Colors.black),
                         children: [
-                          TextSpan(
-                              text: '(让客户快速了解自己)',
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.grey))
-                        ]))),
+                  TextSpan(
+                      text: '(让客户快速了解自己)',
+                      style: TextStyle(fontSize: 12, color: Colors.grey))
+                ]))),
             Icon(
               Icons.chevron_right,
               color: Colors.grey,
@@ -434,16 +436,35 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
       onTap: () {
         // 品牌详情
         if (bloc.currentUser.type == UserType.BRAND) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MyBrandPage(bloc.currentUser.companyCode)));
+          BotToast.showLoading(
+              duration: Duration(milliseconds: 500), clickClose: true);
+          UserRepositoryImpl()
+              .getBrand(bloc.currentUser.companyCode)
+              .then((brand) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyBrandBaseFormPage(brand)));
+          });
         }
         // 工厂详情
         if (bloc.currentUser.type == UserType.FACTORY) {
-          Navigator.of(context).pushNamed(AppRoutes.ROUTE_FACTORY_INTRODUCTION,
-              arguments: {'uid': UserBLoC.instance.currentUser.companyCode});
+          // Navigator.of(context).pushNamed(AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+          //     arguments: {'uid': UserBLoC.instance.currentUser.companyCode});
+
+          BotToast.showLoading(
+              duration: Duration(milliseconds: 500), clickClose: true);
+          UserRepositoryImpl()
+              .getFactory(bloc.currentUser.companyCode)
+              .then((value) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyFactoryBaseFormPage(
+                          value,
+                        )));
+          });
         }
       },
     );
