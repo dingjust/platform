@@ -131,7 +131,7 @@ export default {
         notAcceptRequirementOrder: '报价未确认',
         agreementTotal: '今日签约数',
         orderAmount: '今日成交额',
-        quoteTotal: '今日报价书',
+        quoteTotal: '今日报价数',
         registerTotal: '今日注册数',
         requirementTotal: '今日需求数',
         salesOrderTotal: '今日订单数'
@@ -139,7 +139,7 @@ export default {
       chartTitle: {
         agreementTotal: '签约数',
         orderAmount: '成交额',
-        quoteTotal: '报价书',
+        quoteTotal: '报价数',
         registerTotal: '注册数',
         requirementTotal: '需求数',
         salesOrderTotal: '订单数'

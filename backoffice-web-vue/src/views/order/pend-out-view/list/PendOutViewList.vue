@@ -16,9 +16,14 @@
       <el-table-column label="款数" prop="entrySize"></el-table-column>
       <el-table-column label="订单数量" prop="totalQuantity"></el-table-column>
       <el-table-column label="订单金额" prop="totalPrimeCost"></el-table-column>
-      <el-table-column label="渠道码">
+      <el-table-column label="甲方渠道码">
         <template slot-scope="scope">
-          <span v-if="scope.row.sendBy || scope.row.creator">{{scope.row.sendBy ? scope.row.sendBy.channelCode : scope.row.creator.channelCode}}</span>
+          <span v-if="scope.row.sendBy">{{scope.row.sendBy.channelCode}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="乙方渠道码">
+        <template slot-scope="scope">
+          <span v-if="scope.row.creator">{{scope.row.creator.channelCode}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" min-width="110">

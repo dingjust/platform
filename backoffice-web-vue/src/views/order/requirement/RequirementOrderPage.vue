@@ -142,7 +142,7 @@
         }
       },
       async onDetails(item, isEdit) {
-        if ((item.creationtime !== item.modifiedtime) || item.reviewState === 'REVIEWING' || item.reviewState === 'REVIEW_REJECTED') {
+        if (!item.isNewCreated) {
           await this.getBackup(item, isEdit);
         } else {
           await this._onDetails(item, isEdit);
