@@ -1,15 +1,12 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
-import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
-import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementListItem extends StatefulWidget {
@@ -105,7 +102,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
                     child: ImageFactory.buildProcessedAvatar(
                         widget.model.belongTo.profilePicture,
                         processurl:
-                        'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
+                            'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
                 Expanded(
                     child: Text('${widget.model.belongTo.name ?? ''}',
                         style: style,
@@ -113,9 +110,11 @@ class _RequirementListItemState extends State<RequirementListItem> {
                         overflow: TextOverflow.ellipsis))
               ],
             )),
-            Text('找订单', style: style),
+            Text('${RequirementOrderTypeLocalizedMap[widget.model.orderType]}',
+                style: style),
             Expanded(
-                child: Text('十三行', textAlign: TextAlign.right, style: style))
+                child: Text('${widget.model.details.identityTypeStr ?? ''}',
+                    textAlign: TextAlign.right, style: style))
           ],
         ));
   }
@@ -131,8 +130,8 @@ class _RequirementListItemState extends State<RequirementListItem> {
         Row(
           children: [
             Expanded(
-                child:
-                Text('${widget.model.details.productName}', style: style))
+                child: Text('${widget.model.details.productName ?? ''}',
+                    style: style))
           ],
         ),
         _buildText(),
@@ -180,10 +179,10 @@ class _RequirementListItemState extends State<RequirementListItem> {
               children: [
                 Expanded(
                     child: Text(
-                      '${widget.model.remarks ?? ''}',
-                      maxLines: maxLines,
-                      style: style,
-                    ))
+                  '${widget.model.remarks ?? ''}',
+                  maxLines: maxLines,
+                  style: style,
+                ))
               ],
             ));
       }
@@ -197,12 +196,15 @@ class _RequirementListItemState extends State<RequirementListItem> {
       child: Row(
         children: <Widget>[
           Expanded(
-              child: Row(
-                children: [
-                  Icon(Icons.location_on),
-                  Text('广州市海珠区赤岗', style: style)
-                ],
-              )),
+              child: Row(children: [
+                Icon(Icons.location_on),
+                Expanded(
+                    child: Text(
+                      '${widget.model.details.address ?? ''}',
+                      style: style,
+                      overflow: TextOverflow.ellipsis,
+                    ))
+              ])),
           Text(
             '${DateExpress2Util.express(widget.model.creationTime)}',
             style:
@@ -245,34 +247,6 @@ class _RequirementListItemState extends State<RequirementListItem> {
   void jumpToDetailPage(BuildContext context) {
     Navigator.of(context).pushNamed(AppRoutes.ROUTE_REQUIREMENT,
         arguments: {'code': widget.model.code});
-  }
-
-  void jumpToCompanyIntroduction(BuildContext context) {
-    UserBLoC bloc = UserBLoC.instance;
-    // 品牌详情
-    if (bloc.currentUser.type == UserType.BRAND) {
-      UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MyBrandBaseFormPage(brand)));
-      });
-    }
-    // 工厂详情
-    if (bloc.currentUser.type == UserType.FACTORY) {
-      UserRepositoryImpl()
-          .getFactory(bloc.currentUser.companyCode)
-          .then((factory) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyFactoryBaseFormPage(
-              factory,
-            ),
-          ),
-        );
-      });
-    }
   }
 
   String generateDistanceStr(double distance) {

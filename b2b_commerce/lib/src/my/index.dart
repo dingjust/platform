@@ -6,7 +6,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import './my_brand.dart';
 import '../_shared/widgets/image_factory.dart';
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
@@ -460,8 +459,7 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        MyFactoryBaseFormPage(
+                    builder: (context) => MyFactoryBaseFormPage(
                           value,
                         )));
           });

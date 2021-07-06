@@ -285,7 +285,7 @@ class _RequirementOrderDetailPageState
                     orderModel.details.machiningType == null
                         ? ''
                         : MachiningTypeLocalizedMap[
-                    orderModel.details.machiningType],
+                            orderModel.details.machiningType],
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -780,7 +780,7 @@ class _RequirementOrderDetailPageState
           children: [
             Expanded(
                 child: Text(
-                  '您提交的资料平台审核失败,原因如下：${orderModel.reason}',
+                  '您提交的资料平台审核失败,原因如下：${orderModel.enableShowReasons}',
                   style: TextStyle(color: Colors.white),
                 ))
           ],

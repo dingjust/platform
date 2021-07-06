@@ -71,14 +71,14 @@ class RequirementOrderFormStateV2 with ChangeNotifier {
       _editModel = this.detailModel;
       if (_editModel.details == null) {
         _editModel.details = RequirementInfoModel(
-          productiveOrientations: [],
-          salesMarket: [],
-          machiningType: MachiningType.LABOR_AND_MATERIAL,
-          proofingNeeded: false,
-          invoiceNeeded: false,
-          publishingMode: 'PUBLIC',
-          effectiveDays: 90,
-        );
+            productiveOrientations: [],
+            salesMarket: [],
+            machiningType: MachiningType.LABOR_AND_MATERIAL,
+            proofingNeeded: false,
+            invoiceNeeded: false,
+            publishingMode: 'PUBLIC',
+            effectiveDays: 90,
+            identityTypeStr: identityTypeStr);
       } else {
         if (_editModel.details.productiveOrientations == null) {
           _editModel.details.productiveOrientations = [];
