@@ -126,15 +126,18 @@ class _MainInfo extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 child: ColorSizeEntryTable(
                   data: order.colorSizeEntries,
-                  compareFunction: Provider.of<SizeState>(context).compareByName,
+                  compareFunction:
+                      Provider.of<SizeState>(context, listen: false)
+                          .compareByName,
                 ),
               ),
               buildRow('生产数量', '${order.quantity}'),
               buildRow(
                   '合作方式', CooperationModeLocalizedMap[order.cooperationMode]),
               buildRow('交货日期', DateFormatUtil.formatYMD(order.deliveryDate)),
-              order.progressWorkSheet != null ?
-              _buildProgressTimeLine() : Container(),
+              order.progressWorkSheet != null
+                  ? _buildProgressTimeLine()
+                  : Container(),
               AddressInfoBlock(
                 model: order.shippingAddress,
               ),
@@ -182,8 +185,8 @@ class _MainInfo extends StatelessWidget {
     }
     if (companyCode == belongToUid &&
         (order.state == ProductionTaskOrderState.PRODUCING ||
-            order.state == ProductionTaskOrderState.TO_BE_PRODUCED)
-        && (order.outboundOrderCode == null )) {
+            order.state == ProductionTaskOrderState.TO_BE_PRODUCED) &&
+        (order.outboundOrderCode == null)) {
       _enableEdit = true;
     }
 

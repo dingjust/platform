@@ -21,8 +21,9 @@ class MaterielProductStaggeredGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<CertificationStatusHelper>(context).oncheckProfile(
-            context: context, onJump: () => jumpToDetailPage(context));
+        Provider.of<CertificationStatusHelper>(context, listen: false)
+            .oncheckProfile(
+                context: context, onJump: () => jumpToDetailPage(context));
       },
       child: Container(
           decoration: BoxDecoration(
@@ -137,7 +138,8 @@ class MaterielProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+        Provider.of<CertificationStatusHelper>(context, listen: false)
+            .oncheckProfile(
             context: context, onJump: () => jumpToDetailPage(context));
       },
       child: Container(
@@ -256,7 +258,7 @@ class MaterielProductGridItem extends StatelessWidget {
                 )))
         .then((value) {
       if (value) {
-        Provider.of<MaterielProductState>(context).clear();
+        Provider.of<MaterielProductState>(context, listen: false).clear();
       }
     });
   }

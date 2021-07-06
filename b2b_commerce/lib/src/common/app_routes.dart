@@ -37,6 +37,7 @@ import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/index.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
+import 'package:b2b_commerce/src/home/requirement/nearby_requirement.dart';
 import 'package:b2b_commerce/src/home/search/home_search_result.dart';
 import 'package:b2b_commerce/src/home/search/home_serach.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
@@ -219,6 +220,10 @@ class AppRoutes with GlobalRoutes {
   ///首页搜索结果
   static const ROUTE_HOME_SEARCH_RESULT = '/search/';
 
+  ///离我最近
+  static const ROUTE_REQUIREMENT_ORDERS_NEARBY =
+      '/business/requirement_orders_nearby';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -291,8 +296,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_CHANNEL_REGISTER: (context) => RegisterChannelPage(
           channelCode: getVal('code', context),
         ),
-    ROUTE_REQUIREMENT: (context) =>
-        RequirementOrderDetailByFactoryPage(
+    ROUTE_REQUIREMENT: (context) => RequirementOrderDetailByFactoryPage(
           getVal('code', context),
         ),
     ROUTE_FACTORY_INTRODUCTION: (context) =>
@@ -319,6 +323,7 @@ class AppRoutes with GlobalRoutes {
         HomeSearchPage(keyword: getVal('keyword', context)),
     ROUTE_HOME_SEARCH_RESULT: (context) =>
         HomeSearchResultPage(keyword: getVal('keyword', context)),
+    ROUTE_REQUIREMENT_ORDERS_NEARBY: (context) => NearbyRequirementPage(),
   };
 
   static dynamic getVal(String key, BuildContext context) {

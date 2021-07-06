@@ -91,13 +91,18 @@ class _RequirementOrderDetailByFactoryPageState
                         ),
                         //标题
                         _buildTitle(),
+                        //描述
+                        _buildRemarks(),
                         //发布公司信息
                         _buildCompanyInfo(),
                         Divider(
                           height: 0,
                         ),
                         //需求信息
-                        _buildMain(),
+                        orderModel.orderType ==
+                                RequirementOrderType.FINDING_ORDER
+                            ? _buildMainOrder()
+                            : _buildMainFactory(),
                       ],
                     ),
                   );
@@ -190,17 +195,12 @@ class _RequirementOrderDetailByFactoryPageState
     );
   }
 
-  Widget _buildMain() {
+  ///找工厂
+  Widget _buildMainFactory() {
     return Container(
       color: Colors.white,
       child: Column(
         children: <Widget>[
-//          Column(children: [
-//            _buildEntries(),
-//          ]),
-//          Divider(
-//            height: 0,
-//          ),
           Container(
             padding: EdgeInsets.only(
               left: 15,
@@ -516,7 +516,28 @@ class _RequirementOrderDetailByFactoryPageState
           _InfoRow(
             label: '工厂规模',
             val:
-                PopulationScaleLocalizedMap[orderModel.details.populationScale],
+            PopulationScaleLocalizedMap[orderModel.details.populationScale],
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '支付条件',
+            val: '${payPlanStr()}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '所在位置',
+            val: '${orderModel.details.address ?? ''}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '微信号',
+            val: '${orderModel.details.contactWeChatNo ?? ''}',
           ),
           Divider(
             height: 0,
@@ -544,6 +565,55 @@ class _RequirementOrderDetailByFactoryPageState
               editable: false,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  ///找订单
+  Widget _buildMainOrder() {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+//                    width: _leadingRowWidth,
+                    child: Text('品       类：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text('${orderModel.details?.majorCategory?.name}',
+                      style: TextStyle(color: Colors.black, fontSize: 14)),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '所在位置',
+            val: '${orderModel.details.address ?? ''}',
+          ),
+          Divider(
+            height: 0,
+          ),
+          _InfoRow(
+            label: '微信号',
+            val: '${orderModel.details.contactWeChatNo ?? ''}',
+          ),
           Divider(
             height: 0,
           ),
@@ -555,20 +625,20 @@ class _RequirementOrderDetailByFactoryPageState
             ),
             child: Row(
               children: <Widget>[
-                Text('备注：'),
+                Text('参考图片：'),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, bottom: 15, right: 5),
-            child: Row(
-              children: <Widget>[
-                Expanded(child: Text(orderModel.remarks ?? '')),
-              ],
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
             ),
-          ),
-          Divider(
-            height: 0,
+            child: EditableAttachments(
+              list: orderModel.details.pictures,
+              editable: false,
+            ),
           ),
         ],
       ),
@@ -632,6 +702,18 @@ class _RequirementOrderDetailByFactoryPageState
     return _InfoRow(
       label: '工厂区域',
       val: '$val',
+    );
+  }
+
+  Widget _buildRemarks() {
+    return Container(
+      padding: EdgeInsets.only(left: 15, bottom: 15, right: 5),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          Expanded(child: Text(orderModel.remarks ?? '')),
+        ],
+      ),
     );
   }
 
@@ -750,6 +832,18 @@ class _RequirementOrderDetailByFactoryPageState
       return currentUser.companyCode == orderModel.belongTo.uid;
     }
     return false;
+  }
+
+  ///支付条件
+  String payPlanStr() {
+    if (orderModel.details?.payPlan == null) {
+      return '';
+    } else {
+      CompanyPayPlanModel payplan = orderModel.details.payPlan;
+      return '${payplan.isHaveDeposit
+          ? '有'
+          : '无'}定金  ${PayPlanTypeLocalizedMap[payplan.payPlanType]}';
+    }
   }
 }
 

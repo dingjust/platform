@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_order.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -58,7 +58,7 @@ class RequirementTypeSelectPage extends StatelessWidget {
                     child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: OutlineButton(
-                    onPressed: () {},
+                    onPressed: () => onPublish(context),
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Column(
                       children: [
@@ -96,9 +96,9 @@ class RequirementTypeSelectPage extends StatelessWidget {
           ],
           child: Consumer(
             builder: (context, RequirementOrderFormStateV2 state, _) =>
-                RequirementOrderForm(
-                    // formState: state,
-                    ),
+                RequirementFormOrder(
+              formState: state,
+            ),
           ),
         ),
       ),

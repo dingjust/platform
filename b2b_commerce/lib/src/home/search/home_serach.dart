@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:flutter/material.dart';
-
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
 class HomeSearchPage extends StatefulWidget {
@@ -170,7 +169,9 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
             future: getLocalHistory(),
             builder:
                 (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-              if (snapshot.hasData && snapshot.data != null) {
+              if (snapshot.hasData &&
+                  snapshot.data != null &&
+                  _historyKeywords != null) {
                 return Container(
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 15),
                   child: Wrap(

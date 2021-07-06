@@ -199,7 +199,7 @@ class FormProduction extends StatelessWidget {
     if (products != null) {
       List<ProductionTaskOrderModel> entries = generateEntries(products);
       ExternalOrderFormState state =
-          Provider.of<ExternalOrderFormState>(context);
+          Provider.of<ExternalOrderFormState>(context, listen: false);
       if (state != null) {
         state.updateEntries(entries);
       }
@@ -261,10 +261,13 @@ class _FormEntryItem extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: ColorSizeEntryInputTable(
                 data: entry.colorSizeEntries,
-                compareFunction: Provider.of<SizeState>(context).compare,
-                controllerMap: Provider.of<ExternalOrderFormState>(context)
+                compareFunction:
+                    Provider.of<SizeState>(context, listen: false).compare,
+                controllerMap: Provider.of<ExternalOrderFormState>(
+                    context, listen: false)
                     .getControllerMapByCode(entry.product.code),
-                nodeMap: Provider.of<ExternalOrderFormState>(context)
+                nodeMap: Provider.of<ExternalOrderFormState>(
+                    context, listen: false)
                     .getNodeMapByCode(entry.product.code),
                 onChanged: (values) {
                   entry.colorSizeEntries = values;

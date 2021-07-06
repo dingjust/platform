@@ -319,9 +319,9 @@ class _EmployeeSelectPageState extends State<EmployeeSelectPage> {
 
     //获取数据
     List<B2BDeptModel> cDepts =
-        await Provider.of<B2BDeptState>(context).getTreeList();
+        await Provider.of<B2BDeptState>(context, listen: false).getTreeList();
     List<B2BCustomerModelExt> cB2bCustomers =
-        await Provider.of<B2BCustomersState>(context).list();
+        await Provider.of<B2BCustomersState>(context, listen: false).list();
     if (cDepts != null && cB2bCustomers != null) {
       depts.addAll(cDepts);
       b2bCustomers.addAll(cB2bCustomers);

@@ -214,7 +214,7 @@ class _AddButton extends StatelessWidget {
                       enabled: true,
                     ))).then((val) {
           if (val) {
-            Provider.of<SampleProductsState>(context).clear();
+            Provider.of<SampleProductsState>(context, listen: false).clear();
           }
         });
       },

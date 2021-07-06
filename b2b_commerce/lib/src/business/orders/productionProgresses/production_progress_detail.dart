@@ -28,29 +28,27 @@ class _ProductionProgressDetailPageState
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductionProgressState>(
-      builder: (context, ProductionProgressState state, _) =>
-          Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              elevation: 0.5,
-              title: Text(
-                  '${ProductionProgressPhaseLocalizedMap[state.progress
-                      .phase]}'),
-              backgroundColor: Constants.THEME_COLOR_MAIN,
-            ),
-            body: Container(
-              color: Constants.THEME_COLOR_BACKGROUND,
-              child: ListView(
-                children: <Widget>[
-                  _buildInfoBlock(state),
-                  _buildTableBlock(state),
-                  _buildMediasBlock(state),
-                  _buildRemarksBlock(state),
-                  _buildReadOrderBtn(),
-                  _buildProgressOrdersBlock(state),
-                  _buildBtn(state)
-                ],
-              ),
+      builder: (context, ProductionProgressState state, _) => Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0.5,
+          title: Text(
+              '${ProductionProgressPhaseLocalizedMap[state.progress.phase]}'),
+          backgroundColor: Constants.THEME_COLOR_MAIN,
+        ),
+        body: Container(
+          color: Constants.THEME_COLOR_BACKGROUND,
+          child: ListView(
+            children: <Widget>[
+              _buildInfoBlock(state),
+              _buildTableBlock(state),
+              _buildMediasBlock(state),
+              _buildRemarksBlock(state),
+              _buildReadOrderBtn(),
+              _buildProgressOrdersBlock(state),
+              _buildBtn(state)
+            ],
+          ),
         ),
       ),
     );
@@ -274,7 +272,7 @@ class _ProductionProgressDetailPageState
   }
 
   void _onOrderDetail(ProductionProgressOrderModel model) {
-    final state = Provider.of<ProductionProgressState>(context);
+    final state = Provider.of<ProductionProgressState>(context, listen: false);
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ProductionProgressOrderDetailPage(model: model)));
   }

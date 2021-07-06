@@ -95,10 +95,6 @@ class FastReconSheetBlock extends StatelessWidget {
     Navigator.of(context)
         .pushNamed(AppRoutes.ROUTE_RECONCILIATION_ORDER_DETAIL, arguments: {
       'id': sheet.id,
-    }).then((needRefresh) {
-      // if (needRefresh != null && needRefresh) {
-      //   Provider.of<DeliveryOrdersState>(context).clear();
-      // }
-    });
+    }).then((needRefresh) {});
   }
 }

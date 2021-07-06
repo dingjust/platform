@@ -13,7 +13,8 @@ class ProductFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PlateProductState state = Provider.of<PlateProductState>(context);
+    PlateProductState state =
+        Provider.of<PlateProductState>(context, listen: false);
 
     return Container(
       height: 50,
@@ -117,17 +118,18 @@ class _FilterItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PlateProductState state = Provider.of<PlateProductState>(context);
+    PlateProductState state = Provider.of<PlateProductState>(
+        context, listen: false);
 
     return Expanded(
         child: Material(
-      color: Colors.white,
-      child: Ink(
-        child: InkWell(
-          onTap: () {
-            state.condition.sortCondition = value;
-            if (state.condition.sort == 'desc') {
-              state.condition.sort = 'asc';
+          color: Colors.white,
+          child: Ink(
+            child: InkWell(
+              onTap: () {
+                state.condition.sortCondition = value;
+                if (state.condition.sort == 'desc') {
+                  state.condition.sort = 'asc';
             } else {
               state.condition.sort = 'desc';
             }

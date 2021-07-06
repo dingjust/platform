@@ -498,7 +498,6 @@ class QuoteMyListItem extends StatelessWidget {
                                     code: model.salesOrderCode,
                                     callback: () {
                                       //回调刷新State
-//                                      Provider.of<SaleOrdersState>(context).clear();
                                     },
                                   )),
                         );

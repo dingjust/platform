@@ -12,7 +12,7 @@ typedef CompareFunction = int Function(String code1, String code2);
 /// ```dart preamble
 /// ColorSizeEntryTable(
 /// data: order.colorSizeEntries,
-/// compareFunction: Provider.of<SizeState>(context).compare,
+/// compareFunction: Provider.of<SizeState>(context, listen: false).compare,
 /// ),
 /// ```
 class ColorSizeEntryTable extends StatelessWidget {
@@ -207,7 +207,7 @@ class ColorSizeEntryTable extends StatelessWidget {
 /// ```dart preamble
 /// ColorSizeEntryInputTable(
 /// data: order.colorSizeEntries,
-/// compareFunction: Provider.of<SizeState>(context).compare,
+/// compareFunction: Provider.of<SizeState>(context, listen: false).compare,
 /// ),
 /// ```
 class ColorSizeEntryInputTable extends StatelessWidget {

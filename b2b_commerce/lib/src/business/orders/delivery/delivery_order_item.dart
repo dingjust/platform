@@ -45,7 +45,7 @@ class DeliveryOrderItem extends StatelessWidget {
           'id': model.id,
         }).then((needRefresh) {
           if (needRefresh != null && needRefresh) {
-            Provider.of<DeliveryOrdersState>(context).clear();
+            Provider.of<DeliveryOrdersState>(context, listen: false).clear();
           }
         });
       },

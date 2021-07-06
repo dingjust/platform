@@ -151,7 +151,8 @@ class ShareDialog {
     );
   }
 
-  static void orderShareDialog(BuildContext context, {
+  static void orderShareDialog(
+    BuildContext context, {
     @required String uniqueCode,
   }) {
     GlobalKey qrKey = GlobalKey();
@@ -246,7 +247,8 @@ class ShareDialog {
                             Clipboard.setData(ClipboardData(text: text))
                                 .then((value) {
                               //粘贴板缓存更新，避免打开导入弹窗
-                              Provider.of<ClipboardHelper>(context)
+                              Provider.of<ClipboardHelper>(context,
+                                  listen: false)
                                   .setText(text);
                               BotToast.showText(text: '订单导入口令已复制，快去粘贴吧~');
                             });

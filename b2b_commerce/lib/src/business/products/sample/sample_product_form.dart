@@ -209,9 +209,11 @@ class _ApparelProductBrandFormState extends State<SampleProductFormPage> {
                 onTap: () async {
                   // print('=============qweqwe');
                   List<ColorSizeModel> colors =
-                      await Provider.of<ColorState>(context).getPartColors();
+                      await Provider.of<ColorState>(context, listen: false)
+                          .getPartColors();
                   List<ColorSizeEntryModel> sizes =
-                      await Provider.of<SizeState>(context).getPartSizes();
+                      await Provider.of<SizeState>(context, listen: false)
+                          .getPartSizes();
                   dynamic result = await Navigator.push(
                       context,
                       MaterialPageRoute(

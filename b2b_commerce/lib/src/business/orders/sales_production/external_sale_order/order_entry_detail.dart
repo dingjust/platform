@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:flutter/material.dart';
-
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -33,7 +32,8 @@ class ExternalSaleOrderEntryDetailPage extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: ColorSizeEntryTable(
                 data: entry.colorSizeEntries,
-                compareFunction: Provider.of<SizeState>(context).compare,
+                compareFunction:
+                    Provider.of<SizeState>(context, listen: false).compare,
               ),
             ),
             buildRow('生产数量', '${entry.quantity}'),

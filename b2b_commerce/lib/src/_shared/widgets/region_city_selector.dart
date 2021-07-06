@@ -26,7 +26,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<RegionModel>>(
-        future: Provider.of<AddressState>(context).getRegions(),
+        future: Provider.of<AddressState>(context, listen: false).getRegions(),
         initialData: [],
         builder:
             (BuildContext context, AsyncSnapshot<List<RegionModel>> snapshot) {
@@ -98,7 +98,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                                                         _citySelects = [city];
                                                       } else {
                                                         if (_citySelects
-                                                            .length <
+                                                                .length <
                                                             widget.maximum) {
                                                           _citySelects
                                                               .add(city);

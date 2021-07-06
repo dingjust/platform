@@ -640,18 +640,18 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       ),
       onTap: () async {
         List<CategoryModel> categories =
-        await Provider.of<CategoryState>(context).getCascadedCategories();
+            await Provider.of<CategoryState>(context, listen: false)
+                .getCascadedCategories();
 
         dynamic result = await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                CategorySelectPage(
-                  categories: categories,
-                  minCategorySelect: _factory.adeptAtCategories,
-                  multiple: true,
-                  max: 5,
-                ),
+            builder: (context) => CategorySelectPage(
+              categories: categories,
+              minCategorySelect: _factory.adeptAtCategories,
+              multiple: true,
+              max: 5,
+            ),
           ),
         );
 
@@ -1146,7 +1146,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   void _onMajorCategorySelect() async {
     List<CategoryModel> categorys =
-    await Provider.of<MajorCategoryState>(context).getMajorCategories();
+    await Provider.of<MajorCategoryState>(context, listen: false)
+        .getMajorCategories();
     // await ProductRepositoryImpl().majorCategories();
 
     showModalBottomSheet(
@@ -1262,7 +1263,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   void _onLabelSelect() async {
     List<LabelModel> labels =
-    await Provider.of<LabelState>(context).getLabels();
+    await Provider.of<LabelState>(context, listen: false).getLabels();
 
     labels.removeWhere((label) => label.group != 'FACTORY');
     if (_factory.labels == null) _factory.labels = [];

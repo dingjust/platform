@@ -868,7 +868,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                               code: pageItem.salesOrderCode,
                               callback: () {
                                 //回调刷新State
-//                                      Provider.of<SaleOrdersState>(context).clear();
                               },
                             )),
                   );

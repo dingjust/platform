@@ -76,7 +76,7 @@ class _DeliveryOrdersPageState extends State<DeliveryOrdersPage> {
             title: Consumer<DeliveryOrdersState>(
               builder: (context, DeliveryOrdersState state, _) =>
                   SearchAppbarTitle(
-                    controller: controller,
+                controller: controller,
                 focusNode: focusNode,
                 hintText: '请输入单号...',
                 onSearch: () {
@@ -107,7 +107,7 @@ class _AddButton extends StatelessWidget {
             .push(MaterialPageRoute(builder: (context) => DeliveryOrderForm()))
             .then((value) {
           if (value) {
-            Provider.of<DeliveryOrdersState>(context).clear();
+            Provider.of<DeliveryOrdersState>(context, listen: false).clear();
           }
         });
       },

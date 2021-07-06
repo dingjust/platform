@@ -25,12 +25,13 @@ class RequirementPoolOrderItem extends StatelessWidget {
       onTap: () async {
         if (order.code != null) {
           ///资料完善度校验
-          Provider.of<CertificationStatusHelper>(context).oncheckProfile(
-              context: context,
-              onJump: () {
-                Navigator.of(context).pushNamed(AppRoutes.ROUTE_REQUIREMENT,
-                    arguments: {'code': order.code});
-              });
+          Provider.of<CertificationStatusHelper>(context, listen: false)
+              .oncheckProfile(
+                  context: context,
+                  onJump: () {
+                    Navigator.of(context).pushNamed(AppRoutes.ROUTE_REQUIREMENT,
+                        arguments: {'code': order.code});
+                  });
         }
       },
       child: Container(

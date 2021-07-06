@@ -148,35 +148,35 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       ),
       bottomNavigationBar: UserBLoC().isBrandUser
           ? Container(
-        padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
-        child: RaisedButton(
-            color: Color.fromRGBO(15, 213, 30, 1),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.phone,
-                  color: Colors.white,
-                ),
-                Text(
-                  '一键核实',
-                  style: TextStyle(
-                    color: Colors.white,
+              padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
+              child: RaisedButton(
+                  color: Color.fromRGBO(15, 213, 30, 1),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.phone,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        '一键核实',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: () async {
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  onPressed: () async {
 //              setEstimatedDate(context);
-              if (order.salesApplication == SalesApplication.ONLINE) {
-                _selectActionButton(order.belongTo.contactPhone);
-              } else {
-                _selectActionButton(order.contactOfSeller);
-              }
-            }),
-      )
+                    if (order.salesApplication == SalesApplication.ONLINE) {
+                      _selectActionButton(order.belongTo.contactPhone);
+                    } else {
+                      _selectActionButton(order.contactOfSeller);
+                    }
+                  }),
+            )
           : null,
     );
   }
@@ -203,7 +203,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     for (int i = 0; i < order.progresses.length; i++) {
       _list.add(GestureDetector(
         onTap: () {
-          final state = Provider.of<ProductionProgressState>(context);
+          final state =
+          Provider.of<ProductionProgressState>(context, listen: false);
           state.jumpToProgressDetail(
               context: context,
               materialPageRoute: MaterialPageRoute(
@@ -380,7 +381,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 onPressed: () {
-                  final state = Provider.of<ProductionProgressState>(context);
+                  final state = Provider.of<ProductionProgressState>(
+                      context, listen: false);
                   state.jumpToProgressDetail(
                       context: context,
                       materialPageRoute: MaterialPageRoute(

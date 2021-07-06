@@ -419,7 +419,7 @@ class _ProductionProgressOrderFormState
   }
 
   void jumpToDetail(int id) async {
-    final state = Provider.of<ProductionProgressState>(context);
+    final state = Provider.of<ProductionProgressState>(context, listen: false);
     PurchaseOrderModel order = await state.refreshPurchaseOrder();
     ProductionProgressOrderModel newOrder = state
         .progress.productionProgressOrders
@@ -427,8 +427,7 @@ class _ProductionProgressOrderFormState
     if (newOrder != null) {
       Navigator.of(context).pop();
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) =>
-              ProductionProgressOrderDetailPage(
+          builder: (context) => ProductionProgressOrderDetailPage(
                 model: newOrder,
               )));
     } else {

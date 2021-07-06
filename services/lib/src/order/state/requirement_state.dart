@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:models/models.dart';
 import 'package:services/src/state/state.dart';
 
@@ -6,6 +7,26 @@ import '../../../services.dart';
 ///需求信息状态管理
 class RequirementState extends PageState {
   List<RequirementOrderModel> _requirements;
+
+  ///需求状态
+  final RequirementReviewState reviewState;
+
+  ///需求类型
+  final RequirementOrderType type;
+
+  ///搜素关键字
+  final String keyword;
+
+  final double longtitude;
+
+  final double latitude;
+
+  RequirementState(
+      {this.reviewState = RequirementReviewState.REVIEW_PASSED,
+      this.type,
+      this.keyword,
+      this.longtitude,
+      this.latitude});
 
   List<RequirementOrderModel> get requirements {
     if (_requirements == null) {
@@ -19,8 +40,8 @@ class RequirementState extends PageState {
     pageSize = 20;
 
     RequirementOrderRepository.getRequirementsAnonymous(
-            params: {'page': 0, 'size': pageSize, "sort": "creationtime,DESC"},
-            data: getParamsData())
+        params: {'page': 0, 'size': pageSize, "sort": "creationtime,DESC"},
+        data: getParamsData())
         .then((response) {
       if (response != null) {
         _requirements = response.content;
@@ -63,7 +84,28 @@ class RequirementState extends PageState {
   }
 
   Map<String, dynamic> getParamsData() {
-    return {'statuses': "PENDING_QUOTE"};
+    Map<String, dynamic> data = {'statuses': "PENDING_QUOTE"};
+    if (reviewState != null) {
+      data['reviewState'] = RequirementReviewStateMap[reviewState];
+    }
+
+    if (type != null) {
+      data['orderType'] = RequirementOrderTypeMap[type];
+    }
+
+    if (keyword != null) {
+      data['keyword'] = keyword;
+    }
+
+    if (latitude != null &&
+        longtitude != null &&
+        latitude > 0 &&
+        longtitude > 0) {
+      data['longtitude'] = longtitude;
+      data['latitude'] = latitude;
+    }
+
+    return data;
   }
 
   @override
@@ -72,4 +114,35 @@ class RequirementState extends PageState {
     reset();
     notifyListeners();
   }
+}
+
+class OrderRequirementState extends RequirementState {
+  final RequirementOrderType type;
+
+  OrderRequirementState({
+    this.type = RequirementOrderType.FINDING_ORDER,
+    String keyword,
+    RequirementReviewState reviewState,
+    double longtitude,
+    double latitude,
+  }) : super(
+      keyword: keyword,
+      reviewState: reviewState,
+      longtitude: longtitude,
+      latitude: latitude);
+}
+
+class FactoryRequirementState extends RequirementState {
+  final RequirementOrderType type;
+
+  FactoryRequirementState({this.type = RequirementOrderType.FINDING_FACTORY,
+    String keyword,
+    RequirementReviewState reviewState,
+    double longtitude,
+    double latitude})
+      : super(
+      keyword: keyword,
+      reviewState: reviewState,
+      longtitude: longtitude,
+      latitude: latitude);
 }

@@ -25,7 +25,11 @@ class RequirementOrderFormStateV2 with ChangeNotifier {
     this.uid,
     this.cid,
     this.factoryDetailModel,
-  });
+  }) {
+    if (detailModel != null) {
+      _model = detailModel;
+    }
+  }
 
   //创建表单数据
   RequirementOrderModel _model;

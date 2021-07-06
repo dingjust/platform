@@ -893,8 +893,9 @@ class _PurchaseDetailOnlinePageState
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       onPressed: () {
                         ///更新生产进度状态数据模型
-                        final state =
-                            Provider.of<ProductionProgressState>(context);
+                        final state = Provider.of<ProductionProgressState>(
+                            context,
+                            listen: false);
                         state.setOrder(order);
                         Navigator.push(
                           context,

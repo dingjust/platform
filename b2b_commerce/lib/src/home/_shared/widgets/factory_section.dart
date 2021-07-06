@@ -45,7 +45,7 @@ class FactoryButtonsSection extends StatelessWidget {
         image: B2BImage.requirementCenter(),
         imagePadding: EdgeInsets.all(10),
         onPressed: () async {
-          Provider.of<MajorCategoryState>(context)
+          Provider.of<MajorCategoryState>(context, listen: false)
               .getMajorCategories()
               .then((categories) {
             if (categories != null) {
@@ -149,7 +149,7 @@ class FactoryEntranceSection extends StatelessWidget {
         subTitle: '精准匹配',
         icon: B2BImage.recommend_requirement(width: 65, height: 65),
         onPressed: () async {
-          Provider.of<MajorCategoryState>(context)
+          Provider.of<MajorCategoryState>(context, listen: false)
               .getMajorCategories()
               .then((categories) {
             if (categories != null) {

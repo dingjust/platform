@@ -40,18 +40,19 @@ class FactoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        Provider.of<CertificationStatusHelper>(context).oncheckProfile(
-            context: context,
-            onJump: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyFactoryPage(
-                    factoryUid: model.uid,
-                    isFactoryDetail: true,
-                  ),
-                ),
-              );
+        Provider.of<CertificationStatusHelper>(context, listen: false)
+            .oncheckProfile(
+                context: context,
+                onJump: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyFactoryPage(
+                        factoryUid: model.uid,
+                        isFactoryDetail: true,
+                      ),
+                    ),
+                  );
             });
       },
       child: Container(

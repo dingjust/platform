@@ -99,7 +99,8 @@ class _DownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PlateProductState state = Provider.of<PlateProductState>(context);
+    PlateProductState state =
+        Provider.of<PlateProductState>(context, listen: false);
 
     return Builder(
       builder: (dropMenuContext) => GZXDropDownMenu(
@@ -141,7 +142,8 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PlateProductState state = Provider.of<PlateProductState>(context);
+    PlateProductState state = Provider.of<PlateProductState>(
+        context, listen: false);
 
     if (state.condition.keyword != null && state.condition.keyword != '') {
       return Text('搜索：${state.condition.keyword}');
@@ -162,7 +164,8 @@ class _Title extends StatelessWidget {
 class _SearchBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    PlateProductState state = Provider.of<PlateProductState>(context);
+    PlateProductState state = Provider.of<PlateProductState>(
+        context, listen: false);
 
     return IconButton(
         icon: Icon(Icons.search),
@@ -170,9 +173,10 @@ class _SearchBtn extends StatelessWidget {
           dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => HistorySearch(
+                builder: (context) =>
+                    HistorySearch(
                       historyKey:
-                          GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
+                      GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
                       hintText: '请输入编码，名称，货号搜索',
                       keyword: state.condition.keyword,
                     )),

@@ -94,12 +94,13 @@ class _HomePageState extends State<HomePage> {
     //             UserBLoC.instance.ignoreVersionNotification)
     //     .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
 
-    AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
+    AppVersionHelper appVersionHelper =
+        Provider.of<AppVersionHelper>(context, listen: false);
     bool isNew = await appVersionHelper.checkVersion(
         context, AppBLoC.instance.packageInfo.version, 'nbyjy');
 
     CertificationStatusHelper helper =
-        Provider.of<CertificationStatusHelper>(context);
+        Provider.of<CertificationStatusHelper>(context, listen: false);
 
     //isNew为false 则弹出更新提示框，此时不弹出认证信息弹窗
     if (!helper.hasInfoValidate && isNew ?? true) {

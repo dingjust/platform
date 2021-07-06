@@ -90,16 +90,15 @@ class _ClientSelectPageV2State extends State<ClientSelectPageV2>
                   Align(
                       alignment: Alignment(0, 0.25),
                       child: LayoutBuilder(
-                          builder: (context, constraints) =>
-                              Opacity(
+                          builder: (context, constraints) => Opacity(
                                 opacity:
-                                _brandButtonController.isAnimating ? 0 : 1,
+                                    _brandButtonController.isAnimating ? 0 : 1,
                                 child: _Card(
                                   title: '工厂',
                                   text: '服装生产工厂，需要寻找各类服装加工订单，管理生产进度的企业',
                                   iconName: 'temp/index/select_factory.png',
                                   buttonController:
-                                  _factoryButtonController.view,
+                                      _factoryButtonController.view,
                                   maxHeight: constraints.maxHeight,
                                   onPressed: () {
                                     UserBLoC.instance
@@ -118,7 +117,8 @@ class _ClientSelectPageV2State extends State<ClientSelectPageV2>
 
   void homeInit() async {
     //版本检查
-    AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
+    AppVersionHelper appVersionHelper =
+    Provider.of<AppVersionHelper>(context, listen: false);
     await appVersionHelper.getAppVersionInfo('nbyjy');
     await appVersionHelper.checkVersion(
         context, AppBLoC.instance.packageInfo.version, 'nbyjy');

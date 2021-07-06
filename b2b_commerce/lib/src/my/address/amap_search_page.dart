@@ -16,14 +16,14 @@ class AmapSearchDelegatePage extends SearchDelegate<Tip> {
     return [
       query != ''
           ? IconButton(
-        icon: Icon(
-          B2BIcons.del_blank_card,
-          size: 15,
-        ),
-        onPressed: () {
-          query = '';
-        },
-      )
+              icon: Icon(
+                B2BIcons.del_blank_card,
+                size: 15,
+              ),
+              onPressed: () {
+                query = '';
+              },
+            )
           : Container(),
     ];
   }
@@ -126,7 +126,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   Widget build(BuildContext context) {
     if (oldCity == null) {
       oldCity = Provider
-          .of<AmapState>(context)
+          .of<AmapState>(context, listen: false)
           .city;
     }
     return WillPopScope(
@@ -175,7 +175,8 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                 dialogHeight: 180,
                 cancelAction: () {
                   if (changeGeo == null) {
-                    Provider.of<AmapState>(context).setCity(oldCity);
+                    Provider.of<AmapState>(context, listen: false)
+                        .setCity(oldCity);
                   }
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
@@ -215,8 +216,6 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   }
 
   Widget _buildSearchRow(AmapState state) {
-    AmapState amapState = Provider.of<AmapState>(context);
-
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
@@ -308,7 +307,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   }
 
   Widget _buildSuggestionsListView(BuildContext context) {
-    AmapState amapState = Provider.of<AmapState>(context);
+    AmapState amapState = Provider.of<AmapState>(context, listen: false);
 
     return FutureBuilder<AmapResponse>(
       builder: (BuildContext context, AsyncSnapshot<AmapResponse> snapshot) {
@@ -316,8 +315,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
           return ListView(
               children: snapshot.data.tips
                   .map(
-                    (tip) =>
-                    SuggestionsRow(
+                    (tip) => SuggestionsRow(
                       value: tip.name,
                       address: tip.address,
                       location: tip.location,

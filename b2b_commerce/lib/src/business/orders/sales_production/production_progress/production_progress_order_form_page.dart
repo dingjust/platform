@@ -20,11 +20,12 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
 
   final bool isEditable;
 
-  const ProductionProgressOrderFormPage({Key key,
-    this.progress,
-    this.model,
-    this.colorSizeEntries,
-    this.isEditable = false})
+  const ProductionProgressOrderFormPage(
+      {Key key,
+      this.progress,
+      this.model,
+      this.colorSizeEntries,
+      this.isEditable = false})
       : super(key: key);
 
   @override
@@ -32,7 +33,8 @@ class ProductionProgressOrderFormPage extends StatefulWidget {
       _ProductionProgressOrderFormPageState();
 }
 
-class _ProductionProgressOrderFormPageState extends State<ProductionProgressOrderFormPage> {
+class _ProductionProgressOrderFormPageState
+    extends State<ProductionProgressOrderFormPage> {
   FocusNode _remarksFocusNode = FocusNode();
   TextEditingController _remarksController = TextEditingController();
   List<ColorSizeInputEntry> _colorSizeEntries = [];
@@ -157,7 +159,10 @@ class _ProductionProgressOrderFormPageState extends State<ProductionProgressOrde
     return ColorSizeInputTable(
       _colors,
       _sizes,
-      compareFunction: Provider.of<SizeState>(context).compareByName,
+      compareFunction:
+      Provider
+          .of<SizeState>(context, listen: false)
+          .compareByName,
       entries: _colorSizeEntries,
       onChanged: onEntriesChange,
     );

@@ -39,9 +39,10 @@ class FindingFactoryBtnsBar extends StatelessWidget {
       title: '全部工厂',
       onPressed: () async {
         List<CategoryModel> categories =
-            await Provider.of<MajorCategoryState>(context).getMajorCategories();
+            await Provider.of<MajorCategoryState>(context, listen: false)
+                .getMajorCategories();
         List<LabelModel> labels =
-            await Provider.of<LabelState>(context).getLabels();
+            await Provider.of<LabelState>(context, listen: false).getLabels();
         labels = labels
             .where((label) =>
                 label.group == 'FACTORY' || label.group == 'PLATFORM')
@@ -75,17 +76,18 @@ class FindingFactoryBtnsBar extends StatelessWidget {
       title: '免费打样',
       onPressed: () async {
         List<CategoryModel> categories =
-            await Provider.of<MajorCategoryState>(context).getMajorCategories();
+        await Provider.of<MajorCategoryState>(context, listen: false)
+            .getMajorCategories();
         List<LabelModel> labels =
-            await Provider.of<LabelState>(context).getLabels();
+        await Provider.of<LabelState>(context, listen: false).getLabels();
         labels = labels
             .where((label) =>
-                label.group == 'FACTORY' || label.group == 'PLATFORM')
+        label.group == 'FACTORY' || label.group == 'PLATFORM')
             .toList();
 
         ///筛选标签=>免费打样
         List<LabelModel> conditionlabels =
-            labels.where((label) => label.name == '免费打样').toList();
+        labels.where((label) => label.name == '免费打样').toList();
         if (categories != null && labels != null) {
           Navigator.pushReplacement(
             context,
@@ -117,19 +119,21 @@ class FindingFactoryBtnsBar extends StatelessWidget {
       title: '认证工厂',
       onPressed: () async {
         List<CategoryModel> categories =
-            await Provider.of<MajorCategoryState>(context).getMajorCategories();
+        await Provider.of<MajorCategoryState>(context, listen: false)
+            .getMajorCategories();
         List<LabelModel> labels =
-            await Provider.of<LabelState>(context).getLabels();
+        await Provider.of<LabelState>(context, listen: false).getLabels();
         labels = labels
             .where((label) =>
-                label.group == 'FACTORY' || label.group == 'PLATFORM')
+        label.group == 'FACTORY' || label.group == 'PLATFORM')
             .toList();
 
         if (categories != null && labels != null) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => FactoryPage(
+              builder: (context) =>
+                  FactoryPage(
                 FactoryCondition(
                     starLevel: 0,
                     adeptAtCategories: [],
@@ -157,17 +161,18 @@ class FindingFactoryBtnsBar extends StatelessWidget {
       title: '快反工厂',
       onPressed: () async {
         List<CategoryModel> categories =
-            await Provider.of<MajorCategoryState>(context).getMajorCategories();
+        await Provider.of<MajorCategoryState>(context, listen: false)
+            .getMajorCategories();
         List<LabelModel> labels =
-            await Provider.of<LabelState>(context).getLabels();
+        await Provider.of<LabelState>(context, listen: false).getLabels();
         labels = labels
             .where((label) =>
-                label.group == 'FACTORY' || label.group == 'PLATFORM')
+        label.group == 'FACTORY' || label.group == 'PLATFORM')
             .toList();
 
         ///筛选标签=>免费打样
         List<LabelModel> conditionlabels =
-            labels.where((label) => label.name == '快反工厂').toList();
+        labels.where((label) => label.name == '快反工厂').toList();
         if (categories != null && labels != null) {
           Navigator.pushReplacement(
             context,

@@ -159,7 +159,7 @@ class _ClientSelectPageState extends State<ClientSelectPage> {
                         children: <TextSpan>[
                           TextSpan(
                               text:
-                              '服装生产工厂，需要在钉单APP上寻找各类服装加工订单，管理生产进度的企业选择“工厂”注册。',
+                                  '服装生产工厂，需要在钉单APP上寻找各类服装加工订单，管理生产进度的企业选择“工厂”注册。',
                               style: TextStyle(color: Colors.black))
                         ]),
                   ),
@@ -183,7 +183,8 @@ class _ClientSelectPageState extends State<ClientSelectPage> {
 
   void homeInit() async {
     //版本检查
-    AppVersionHelper appVersionHelper = Provider.of<AppVersionHelper>(context);
+    AppVersionHelper appVersionHelper =
+    Provider.of<AppVersionHelper>(context, listen: false);
     await appVersionHelper.getAppVersionInfo('nbyjy');
     await appVersionHelper.checkVersion(
         context, AppBLoC.instance.packageInfo.version, 'nbyjy');

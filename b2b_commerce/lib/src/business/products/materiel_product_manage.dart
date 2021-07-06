@@ -42,7 +42,7 @@ class _AddButton extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => MaterielProductForm()))
             .then((value) {
           if (value) {
-            Provider.of<MaterielProductState>(context).clear();
+            Provider.of<MaterielProductState>(context, listen: false).clear();
           }
         });
       },

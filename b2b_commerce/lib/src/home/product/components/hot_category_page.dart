@@ -30,7 +30,8 @@ class _HoteCategoryPageState extends State<HoteCategoryPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<CategoryModel>>(
-        future: Provider.of<CategoryState>(context).getCascadedCategories(),
+        future: Provider.of<CategoryState>(context, listen: false)
+            .getCascadedCategories(),
         initialData: [],
         builder: (BuildContext context,
             AsyncSnapshot<List<CategoryModel>> snapshot) {

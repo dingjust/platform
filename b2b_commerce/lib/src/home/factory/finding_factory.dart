@@ -91,7 +91,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
 
   List<String> _dropDownHeaderItemStrings = ['综合', '全国', '品类', '筛选'];
   GZXDropdownMenuController _dropdownMenuController =
-  GZXDropdownMenuController();
+      GZXDropdownMenuController();
 
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   GlobalKey _stackKey = GlobalKey();
@@ -369,8 +369,10 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
     if (!inited && !lock) {
       lock = true;
       majorCategories =
-      await Provider.of<MajorCategoryState>(context).getMajorCategories();
-      labels = await Provider.of<LabelState>(context).getLabels();
+      await Provider.of<MajorCategoryState>(context, listen: false)
+          .getMajorCategories();
+      labels =
+      await Provider.of<LabelState>(context, listen: false).getLabels();
       labels = labels
           .where(
               (label) => label.group == 'FACTORY' || label.group == 'PLATFORM')

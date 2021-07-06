@@ -57,7 +57,7 @@ class _ShippingOrderFormState extends State<ShippingOrderForm>
   }
 
   Future<List<CarrierModel>> _getCarriers() {
-    return Provider.of<CarrierState>(context).getCarriers();
+    return Provider.of<CarrierState>(context, listen: false).getCarriers();
   }
 
   @override

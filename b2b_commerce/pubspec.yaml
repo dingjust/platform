@@ -250,6 +250,7 @@ flutter:
     - packages/assets/temp/index/home_publish_infos.jpg
     - packages/assets/temp/index/find_factory.png
     - packages/assets/temp/index/find_order.png
+    - packages/assets/temp/empty-image-search.png
 
   fonts:
     - family: b2bIcons

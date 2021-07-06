@@ -120,8 +120,9 @@ class RequirementItem extends StatelessWidget {
       ),
       child: FlatButton(
         onPressed: () {
-          Provider.of<CertificationStatusHelper>(context).oncheckProfile(
-              context: context, onJump: () => jumpToDetailPage(context));
+          Provider.of<CertificationStatusHelper>(context, listen: false)
+              .oncheckProfile(
+                  context: context, onJump: () => jumpToDetailPage(context));
         },
         child: Container(
             padding: EdgeInsets.symmetric(vertical: 10),
