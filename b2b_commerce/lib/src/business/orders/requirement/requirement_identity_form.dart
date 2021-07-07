@@ -1,13 +1,20 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'requirement_form_factory.dart';
+import 'requirement_form_order.dart';
 
 class RequirementIdentityForm extends StatefulWidget {
-  const RequirementIdentityForm({Key key}) : super(key: key);
+  final RequirementOrderType type;
+
+  const RequirementIdentityForm(
+    this.type, {
+    Key key,
+  }) : super(key: key);
 
   @override
   _RequirementIdentityFormState createState() =>
@@ -121,12 +128,16 @@ class _RequirementIdentityFormState extends State<RequirementIdentityForm> {
         builder: (context) => MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              create: (_) => RequirementOrderFormStateV2(),
+              create: (_) => RequirementOrderFormStateV2(identityTypeStr: val),
             ),
           ],
           child: Consumer(
             builder: (context, RequirementOrderFormStateV2 state, _) =>
-                RequirementFormFactory(
+            widget.type == RequirementOrderType.FINDING_ORDER
+                ? RequirementFormOrder(
+              formState: state,
+            )
+                : RequirementFormFactory(
               formState: state,
             ),
           ),

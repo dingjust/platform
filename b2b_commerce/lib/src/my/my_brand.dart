@@ -53,11 +53,10 @@ class _MyBrandPageState extends State<MyBrandPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder<BrandModel>(
-      future: _getData(),
-      initialData: BrandModel(),
-      builder: (context, snapshot) {
+        future: _getData(),
+        initialData: BrandModel(),
+        builder: (context, snapshot) {
           _brand = snapshot.data;
           return Scaffold(
             appBar: AppBar(
@@ -67,46 +66,57 @@ class _MyBrandPageState extends State<MyBrandPage> {
               actions: <Widget>[
                 Offstage(
                   offstage:
-                  UserBLoC.instance.currentUser.companyCode != _brand?.uid,
+                      UserBLoC.instance.currentUser.companyCode != _brand?.uid,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        IconButton(icon: Text('编辑',style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1),),), onPressed: ()async{
-                          dynamic result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MyBrandBaseFormPage(_brand)));
-                          if(result == true){
-                            dynamic brand = await UserRepositoryImpl().getBrand(_brand.uid);
-                            print(brand.name);
-                            if(brand != null){
-                              _brand = brand;
-                            }
-                          }
-                        })
+                        IconButton(
+                            icon: Text(
+                              '编辑',
+                              style: TextStyle(
+                                color: Color.fromRGBO(255, 214, 12, 1),
+                              ),
+                            ),
+                            onPressed: () async {
+                              dynamic result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MyBrandBaseFormPage(_brand)));
+                              if (result == true) {
+                                dynamic brand = await UserRepositoryImpl()
+                                    .getBrand(_brand.uid);
+                                print(brand.name);
+                                if (brand != null) {
+                                  _brand = brand;
+                                }
+                              }
+                            })
                       ],
                     ),
                   ),
                 ),
               ],
             ),
-            body:
-
-            snapshot.data != null ? Container(
-              color: Colors.grey[100],
-              child: ListView(
-                children: _buildWidgets(),
-              ),
-            ):Column(children: <Widget>[NoDataShow()],crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,),
+            body: snapshot.data != null
+                ? Container(
+                    color: Colors.grey[100],
+                    child: ListView(
+                      children: _buildWidgets(),
+                    ),
+                  )
+                : Column(
+                    children: <Widget>[NoDataShow()],
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  ),
           );
-      }
-    );
+        });
   }
 
-  _buildWidgets(){
+  _buildWidgets() {
     List<Widget> _widgets = [
       SizedBox(
         height: 10,
@@ -114,10 +124,13 @@ class _MyBrandPageState extends State<MyBrandPage> {
           color: Colors.grey[Constants.SIZEDBOX_COLOR],
         ),
       ),
-      Container(color: Colors.white,child: _buildBrandBaseInfo(context),),
+      Container(
+        color: Colors.white,
+        child: _buildBrandBaseInfo(context),
+      ),
     ];
     //获取与该品牌最新的报价单
-    if(widget.isSupplier){
+    if (widget.isSupplier) {
       _widgets.add(Container(
         color: Colors.white,
         child: Column(
@@ -137,7 +150,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
       ));
     }
     //获取与该品牌最新的生产订单
-    if(widget.isSupplier){
+    if (widget.isSupplier) {
       _widgets.add(Container(
         color: Colors.white,
         child: Column(
@@ -165,7 +178,8 @@ class _MyBrandPageState extends State<MyBrandPage> {
         ),
       ),
     );
-    _widgets.add(Container(color: Colors.white,child: _buildBrandCertificate(context)));
+    _widgets.add(
+        Container(color: Colors.white, child: _buildBrandCertificate(context)));
     _widgets.add(
       SizedBox(
         height: 10,
@@ -174,7 +188,8 @@ class _MyBrandPageState extends State<MyBrandPage> {
         ),
       ),
     );
-    _widgets.add(Container(color: Colors.white,child: _buildBrandRegisterDate()));
+    _widgets
+        .add(Container(color: Colors.white, child: _buildBrandRegisterDate()));
     return _widgets;
   }
 
@@ -269,8 +284,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
   Future<PurchaseOrderModel> getPurchaseOrderItem() async {
     PurchaseOrderModel purchaseOrderModel;
     PurchaseOrdersResponse purchaseOrdersResponse =
-        await PurchaseOrderRepository()
-            .getPurchaseOrdersByBrand(_brand.uid, {
+    await PurchaseOrderRepository().getPurchaseOrdersByBrand(_brand.uid, {
       'size': 1,
     });
 
@@ -301,8 +315,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
       margin: EdgeInsets.only(top: 10),
       child: ListTile(
         title: Text('注册时间'),
-        trailing:
-            Text(DateFormatUtil.formatYMD(_brand.creationTime) ?? ''),
+        trailing: Text(DateFormatUtil.formatYMD(_brand.creationTime) ?? ''),
       ),
     );
   }
@@ -354,8 +367,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                         child: CachedNetworkImage(
                             width: 100,
                             height: 100,
-                            imageUrl:
-                                '${_brand.profilePicture.previewUrl()}',
+                            imageUrl: '${_brand.profilePicture.previewUrl()}',
                             fit: BoxFit.cover,
                             imageBuilder: (context, imageProvider) =>
                                 Container(
@@ -526,9 +538,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 Expanded(
                   flex: 5,
                   child: Text(
-                    '${_brand.contactAddress != null && _brand.contactAddress.region != null
-                  ? _brand.contactAddress.details
-                      : ''}',
+                    '${_brand.contactAddress != null &&
+                        _brand.contactAddress.region != null ? _brand
+                        .contactAddress.details : ''}',
                     textAlign: TextAlign.end,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
@@ -634,8 +646,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                         });
                   },
                   child: Text(
-                    formatCategoriesSelectText(
-                        _brand.adeptAtCategories, 2),
+                    formatCategoriesSelectText(_brand.adeptAtCategories, 2),
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
@@ -658,7 +669,8 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   ),
                 ),
                 Text(
-                  formatEnumSelectsText(_brand.salesMarket, FactoryQualityLevelsEnum, 2),
+                  formatEnumSelectsText(
+                      _brand.salesMarket, FactoryQualityLevelsEnum, 2),
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],

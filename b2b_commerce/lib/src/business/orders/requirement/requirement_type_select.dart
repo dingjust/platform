@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_order.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
@@ -33,10 +34,8 @@ class RequirementTypeSelectPage extends StatelessWidget {
                     child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: OutlineButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RequirementIdentityForm()));
-                    },
+                    onPressed: () =>
+                        toNext(context, RequirementOrderType.FINDING_FACTORY),
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Column(
                       children: [
@@ -58,7 +57,8 @@ class RequirementTypeSelectPage extends StatelessWidget {
                     child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   child: OutlineButton(
-                    onPressed: () => onPublish(context),
+                    onPressed: () =>
+                        toNext(context, RequirementOrderType.FINDING_ORDER),
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Column(
                       children: [
@@ -84,24 +84,8 @@ class RequirementTypeSelectPage extends StatelessWidget {
     );
   }
 
-  void onPublish(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (_) => RequirementOrderFormStateV2(),
-            ),
-          ],
-          child: Consumer(
-            builder: (context, RequirementOrderFormStateV2 state, _) =>
-                RequirementFormOrder(
-              formState: state,
-            ),
-          ),
-        ),
-      ),
-    );
+  void toNext(BuildContext context, RequirementOrderType type) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => RequirementIdentityForm(type)));
   }
 }

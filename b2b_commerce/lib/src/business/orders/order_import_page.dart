@@ -181,7 +181,7 @@ class _OrderInfo extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Text(
-                      '合作商：${order?.originCooperator?.name}',
+                      '合作商：${order?.originCooperator?.name ?? ''}',
                     )),
               ],
             ),

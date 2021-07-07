@@ -1,4 +1,5 @@
 import 'package:amap_location/amap_location.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location_permissions/location_permissions.dart';
@@ -47,9 +48,9 @@ class AmapState with ChangeNotifier {
       return _aMapLocation;
     } else if (context != null && openDialog != null) {
       //IOS进来不取定位权限
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        getLocation(context, openDialog);
-      }
+      // if (defaultTargetPlatform == TargetPlatform.android) {
+      getLocation(context, openDialog);
+      // }
       return AMapLocation(
           city: '广州',
           AOIName: '广州',
@@ -85,18 +86,39 @@ class AmapState with ChangeNotifier {
 
       //禁用或者询问状态去设置
       if (permission != PermissionStatus.granted) {
-        bool result = await showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => openDialog);
-
-        //打开设置失败
-        if (!result) {
-          return;
-        } else {
-          bool queryResult = await loopQueryStatus();
-          return;
-        }
+        BotToast.showCustomText(
+          onlyOne: true,
+          duration: null,
+          clickClose: false,
+          crossPage: false,
+          backgroundColor: Colors.black38,
+          toastBuilder: (cancelFunc) => AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            // title: Text('钉单正在请求定位权限,请设置'),
+            content: Text('钉单正在请求定位权限,请设置'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  cancelFunc();
+                },
+                child: const Text('忽略', style: TextStyle(color: Colors.grey)),
+              ),
+              TextButton(
+                onPressed: () async {
+                  cancelFunc();
+                  bool result = await openAppSetting();
+                  if (result ?? false) {
+                    bool queryResult = await loopQueryStatus();
+                  }
+                },
+                child: const Text(
+                  '设置',
+                ),
+              ),
+            ],
+          ),
+        );
       }
 
       AMapLocationClient.startup(AMapLocationOption(

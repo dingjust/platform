@@ -43,11 +43,13 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
                       ChangeNotifierProvider(
                           create: (_) => FactoryRequirementState(
                               latitude: state.latitude,
-                              longtitude: state.longitude)),
+                              longitude: state.longitude,
+                              sortCondition: 'distance,DESC')),
                       ChangeNotifierProvider(
                           create: (_) => OrderRequirementState(
                               latitude: state.latitude,
-                              longtitude: state.longitude))
+                              longitude: state.longitude,
+                              sortCondition: 'distance,DESC'))
                     ],
                     child: Container(
                       color: Color.fromRGBO(245, 245, 245, 1),
@@ -106,6 +108,7 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
             latitude: double.parse(locationArray[1]));
       },
     );
+
     Provider.of<AmapState>(context, listen: false)
         .getAMapLocation(context: context, openDialog: _dialog);
   }

@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:models/models.dart';
 import 'package:services/src/state/state.dart';
 
@@ -8,7 +7,10 @@ import '../../../services.dart';
 class RequirementState extends PageState {
   List<RequirementOrderModel> _requirements;
 
-  ///需求状态
+  ///是否前端显示
+  final bool enableShow;
+
+  ///需求审核状态
   final RequirementReviewState reviewState;
 
   ///需求类型
@@ -17,16 +19,21 @@ class RequirementState extends PageState {
   ///搜素关键字
   final String keyword;
 
-  final double longtitude;
+  final double longitude;
 
   final double latitude;
 
+  final String sortCondition;
+
   RequirementState(
-      {this.reviewState = RequirementReviewState.REVIEW_PASSED,
+      {this.reviewState,
       this.type,
       this.keyword,
-      this.longtitude,
-      this.latitude});
+      this.longitude,
+      this.latitude,
+      this.enableShow = true,
+      //默认时间倒序
+      this.sortCondition = 'creationtime,DESC'});
 
   List<RequirementOrderModel> get requirements {
     if (_requirements == null) {
@@ -40,7 +47,7 @@ class RequirementState extends PageState {
     pageSize = 20;
 
     RequirementOrderRepository.getRequirementsAnonymous(
-        params: {'page': 0, 'size': pageSize, "sort": "creationtime,DESC"},
+        params: {'page': 0, 'size': pageSize, "sort": sortCondition},
         data: getParamsData())
         .then((response) {
       if (response != null) {
@@ -66,7 +73,7 @@ class RequirementState extends PageState {
         await RequirementOrderRepository.getRequirementsAnonymous(params: {
           'page': ++currentPage,
           'size': pageSize,
-          "sort": "creationtime,DESC"
+          "sort": sortCondition
         }, data: getParamsData())
             .then((response) {
           if (response != null) {
@@ -98,11 +105,15 @@ class RequirementState extends PageState {
     }
 
     if (latitude != null &&
-        longtitude != null &&
+        longitude != null &&
         latitude > 0 &&
-        longtitude > 0) {
-      data['longtitude'] = longtitude;
+        longitude > 0) {
+      data['longitude'] = longitude;
       data['latitude'] = latitude;
+    }
+
+    if (enableShow != null) {
+      data['enableShow'] = enableShow;
     }
 
     return data;
@@ -117,32 +128,35 @@ class RequirementState extends PageState {
 }
 
 class OrderRequirementState extends RequirementState {
-  final RequirementOrderType type;
-
-  OrderRequirementState({
-    this.type = RequirementOrderType.FINDING_ORDER,
-    String keyword,
+  OrderRequirementState({String keyword,
     RequirementReviewState reviewState,
-    double longtitude,
+    double longitude,
     double latitude,
-  }) : super(
-      keyword: keyword,
-      reviewState: reviewState,
-      longtitude: longtitude,
-      latitude: latitude);
-}
-
-class FactoryRequirementState extends RequirementState {
-  final RequirementOrderType type;
-
-  FactoryRequirementState({this.type = RequirementOrderType.FINDING_FACTORY,
-    String keyword,
-    RequirementReviewState reviewState,
-    double longtitude,
-    double latitude})
+    bool enableShow = true,
+    String sortCondition = 'creationtime,DESC'})
       : super(
       keyword: keyword,
       reviewState: reviewState,
-      longtitude: longtitude,
-      latitude: latitude);
+      longitude: longitude,
+      latitude: latitude,
+      enableShow: enableShow,
+      type: RequirementOrderType.FINDING_ORDER,
+      sortCondition: sortCondition);
+}
+
+class FactoryRequirementState extends RequirementState {
+  FactoryRequirementState({String keyword,
+    RequirementReviewState reviewState,
+    double longitude,
+    double latitude,
+    bool enableShow = true,
+    String sortCondition = 'creationtime,DESC'})
+      : super(
+      keyword: keyword,
+      reviewState: reviewState,
+      longitude: longitude,
+      latitude: latitude,
+      enableShow: enableShow,
+      type: RequirementOrderType.FINDING_FACTORY,
+      sortCondition: sortCondition);
 }

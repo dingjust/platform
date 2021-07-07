@@ -910,41 +910,46 @@ class RequirementOrderModel extends OrderModel {
   ///审核状态
   RequirementReviewState reviewState;
 
-  ///拒绝原因
-  String reason;
+  ///前端是否显示
+  bool enableShow;
 
-  RequirementOrderModel({StatisticsModel statistics,
-    this.status,
-    this.belongTo,
-    this.details,
-    this.totalQuotesCount,
-    this.latestQuotes,
-    this.delayDays,
-    String code,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    DateTime modifiedTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    PrincipalModel supplier,
-    this.editable,
-    this.attachments,
-    this.distance,
-    this.labels,
-    this.orderType,
-    this.reviewState,
-    this.reason})
+  ///拒绝原因
+  String enableShowReasons;
+
+  RequirementOrderModel(
+      {StatisticsModel statistics,
+      this.status,
+      this.belongTo,
+      this.details,
+      this.totalQuotesCount,
+      this.latestQuotes,
+      this.delayDays,
+      String code,
+      int totalQuantity,
+      double totalPrice,
+      DateTime creationTime,
+      DateTime modifiedTime,
+      AddressModel deliveryAddress,
+      String remarks,
+      PrincipalModel supplier,
+      this.editable,
+      this.attachments,
+      this.distance,
+      this.labels,
+      this.orderType,
+      this.reviewState,
+      this.enableShow,
+      this.enableShowReasons})
       : super(
-      statistics: statistics,
-      code: code,
-      totalQuantity: totalQuantity,
-      totalPrice: totalPrice,
-      creationTime: creationTime,
-      deliveryAddress: deliveryAddress,
-      remarks: remarks,
-      supplier: supplier,
-      modifiedTime: modifiedTime);
+            statistics: statistics,
+            code: code,
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice,
+            creationTime: creationTime,
+            deliveryAddress: deliveryAddress,
+            remarks: remarks,
+            supplier: supplier,
+            modifiedTime: modifiedTime);
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$RequirementOrderModelFromJson(json);

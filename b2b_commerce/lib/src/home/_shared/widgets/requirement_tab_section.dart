@@ -218,35 +218,6 @@ class RequirementItem extends StatelessWidget {
         arguments: {'code': model.code});
   }
 
-  void jumpToCompanyIntroduction(BuildContext context) {
-    UserBLoC bloc = UserBLoC.instance;
-    // 品牌详情
-    if (bloc.currentUser.type == UserType.BRAND) {
-      UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MyBrandBaseFormPage(brand)));
-      });
-    }
-    // 工厂详情
-    if (bloc.currentUser.type == UserType.FACTORY) {
-      UserRepositoryImpl()
-          .getFactory(bloc.currentUser.companyCode)
-          .then((factory) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                MyFactoryBaseFormPage(
-                  factory,
-                ),
-          ),
-        );
-      });
-    }
-  }
-
   String generateDistanceStr(double distance) {
     if (distance == null) {
       return '';

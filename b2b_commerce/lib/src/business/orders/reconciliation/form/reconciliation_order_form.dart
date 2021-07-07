@@ -88,6 +88,11 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
                   val: '${DateFormatUtil.formatYMD(e.contractDate)}'),
               ReconciliationInfoRow(
                   title: '合同单价', val: '${e.unitContractPrice}'),
+              TextButton(
+                  onPressed: () {
+                    addCustomCol();
+                  },
+                  child: Text('添加自定义列')),
               ReconciliationEditRow(
                 title: '裁数',
                 controller: controllersMaps[e.product.code]['裁数'],
@@ -133,11 +138,6 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
                   });
                 },
               ),
-              TextButton(
-                  onPressed: () {
-                    addCustomCol();
-                  },
-                  child: Text('添加自定义列'))
             ],
           ),
         )
@@ -301,7 +301,8 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
                 isRequired: true,
                 textAlign: TextAlign.right,
                 hintText: '增扣款',
-                inputType: TextInputType.number,
+                inputType: TextInputType.numberWithOptions(
+                    decimal: true, signed: true),
                 controller: additionValControllers[i],
                 focusNode: additionValNodes[i],
                 onChanged: (value) {
@@ -410,6 +411,10 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                Text(
+                  '注：添加自定义列后将清空数据',
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
                 TextField(
                   controller: dialogText,
                   keyboardType: TextInputType.number,

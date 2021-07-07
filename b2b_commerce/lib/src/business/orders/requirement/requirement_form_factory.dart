@@ -1266,7 +1266,10 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       widget.formState.model.details
         ..latitude = aMapLocation.latitude
         ..longitude = aMapLocation.longitude
-        ..address = aMapLocation.formattedAddress;
+        ..address = aMapLocation.formattedAddress
+        ..provinceStr = aMapLocation.province
+        ..cityStr = aMapLocation.city
+        ..districtStr = aMapLocation.district;
     });
   }
 
