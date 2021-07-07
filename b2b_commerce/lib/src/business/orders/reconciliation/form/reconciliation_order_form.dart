@@ -287,9 +287,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
                 controller: additionNameControllers[i],
                 focusNode: additionNameNodes[i],
                 onChanged: (value) {
-                  setState(() {
-                    form.additionalCharges[i].remarks = value;
-                  });
+                  form.additionalCharges[i].remarks = value;
                 },
               ),
             ),
