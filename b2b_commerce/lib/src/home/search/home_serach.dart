@@ -112,13 +112,17 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     onPressed: () {
                       String keyword = controller.text;
-                      //记录
+                      if (_historyKeywords == null) {
+                        _historyKeywords = [];
+                      }
                       if (keyword != null &&
                           keyword != '' &&
                           (!_historyKeywords.contains(keyword))) {
+                        //记录
                         _historyKeywords.add(keyword);
                         LocalStorage.save(_key, json.encode(_historyKeywords));
                       }
+
                       onSearch(keyword ?? '');
                     }),
               ),
