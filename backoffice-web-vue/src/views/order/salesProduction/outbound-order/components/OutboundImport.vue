@@ -131,6 +131,7 @@ export default {
       if (result.code === 1) {
         this.$message.success('操作成功');        
         this.$emit('closeDialog');
+        this.$emit('onAdvancedSearch')
       } else if (result.code === 0) {
         this.$message.error(result.msg);
       } else if (result['errors']) {

@@ -25,10 +25,11 @@
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
-                <el-divider direction="vertical"></el-divider>
+                <!-- <el-divider direction="vertical"></el-divider> -->
                 <el-button class="list-button" type="text" @click="onEdit(props.item)" v-if="canModify(props.item)">修改</el-button>
-                <el-divider direction="vertical" v-if="canModify(props.item)"></el-divider>
+                <!-- <el-divider direction="vertical" v-if="canModify(props.item)"></el-divider> -->
                 <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
+                <el-button v-if="isTenant()" class="list-button" type="text" @click="openAgentDialog(props.item)">设置代理人</el-button>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
@@ -65,6 +66,20 @@
     <el-dialog title="关闭" :visible.sync="requirementOrderCloseVisible" width="30%" :close-on-click-modal="false">
       <requirement-order-close-dialog v-if="requirementOrderCloseVisible"
                                         @onCancel="onCloseCancel" @onConfirm="onCloseConfirm"/>
+    </el-dialog>
+    <el-dialog title="设置代理人" :visible.sync="agentVisible" width="400px" :close-on-click-modal="false">
+      <el-form :model="agentData" ref="agentForm">
+        <el-form-item label="" prop="agentContactPerson" :rules="[{ required: true, message: '请输入代理人', tigger: 'change' }]">
+          <el-input v-model="agentData.agentContactPerson" placeholder="请输入代理人"></el-input>
+        </el-form-item>
+        <el-form-item label="" prop="agentContactPhone" :rules="[{ required: true, message: '请输入联系电话', tigger: 'change' }]">
+          <el-input v-model="agentData.agentContactPhone" placeholder="请输入联系电话"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-row type="flex" justify="end">
+        <el-button @click="agentVisible=false">取消</el-button>
+        <el-button type="primary" @click="onSetAgent">确定</el-button>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -378,6 +393,46 @@
       },
       onCloseCancel () {
         this.requirementOrderCloseVisible = false;
+      },
+      openAgentDialog (row) {
+        this.agentVisible = true
+        this.agentData = {
+          code: row.code,
+          agentContactPerson: row.details.agentContactPerson ? row.details.agentContactPerson : '',
+          agentContactPhone: row.details.agentContactPhone ? row.details.agentContactPhone: ''
+        }
+        this.agentData.code = row.code
+      },
+      onSetAgent () {
+        this.$refs.agentForm.validate(valid => {
+          if (valid) {
+            this._onSetAgent();
+          } else {
+            this.$message.error('请完善表单信息')
+          }
+        })
+      },
+      async _onSetAgent () {
+        const data = this.agentData
+            
+        const url = this.apis().setRequirementAgent(data.code);
+        const result = await this.$http.put(url, {
+          code: data.code,
+          details: {
+            agentContactPerson: data.agentContactPerson,
+            agentContactPhone: data.agentContactPhone
+          }
+        });
+
+        if (result.code === 1) {
+          this.onAdvancedSearch();
+        } else if (result.code === 0) {
+          this.$message.error(result.msg)
+        } else if (result['errors']) {
+          this.$message.error(result['errors'][0].message)
+        } else {
+          this.$message.error('操作失败！')
+        }
       }
     },
     data () {
@@ -407,7 +462,13 @@
             name: '已关闭'
           }
         ],
-        activeName: 'ALL'
+        activeName: 'ALL',
+        agentVisible: false,
+        agentData: {
+          code: null,
+          agentContactPerson: '',
+          agentContactPhone: ''
+        }
       };
     },
     watch: {

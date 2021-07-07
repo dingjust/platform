@@ -27,7 +27,7 @@
             </el-col>
             <el-col :span="16">
               <el-row>
-                <span>{{scope.row.product.category.parent.name}}-{{scope.row.product.category.name}}</span>
+                <span v-if="scope.row.product.category">{{scope.row.product.category.parent.name}}-{{scope.row.product.category.name}}</span>
               </el-row>
               <el-row>
                 <span>货号:{{scope.row.product!=null?scope.row.product.skuID:''}}</span>

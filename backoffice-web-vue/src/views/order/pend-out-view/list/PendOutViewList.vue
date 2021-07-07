@@ -1,7 +1,7 @@
 <template>
   <div class="pend-out-view-list">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id">
-      <el-table-column label="订单号" min-width="110">
+      <el-table-column label="订单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
@@ -13,15 +13,15 @@
       </el-table-column>
       <el-table-column label="甲方公司" prop="originCooperator.name" show-overflow-tooltip></el-table-column>
       <el-table-column label="乙方公司" prop="belongTo.name" show-overflow-tooltip></el-table-column>
-      <el-table-column label="款数" prop="entrySize"></el-table-column>
-      <el-table-column label="订单数量" prop="totalQuantity"></el-table-column>
-      <el-table-column label="订单金额" prop="totalPrimeCost"></el-table-column>
-      <el-table-column label="甲方渠道码">
+      <el-table-column label="款数" prop="entrySize" min-width="60"></el-table-column>
+      <el-table-column label="订单数量" prop="totalQuantity" min-width="70"></el-table-column>
+      <el-table-column label="订单金额" prop="totalPrimeCost" min-width="70"></el-table-column>
+      <el-table-column label="甲方渠道码" min-width="100">
         <template slot-scope="scope">
           <span v-if="scope.row.sendBy">{{scope.row.sendBy.channelCode}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="乙方渠道码">
+      <el-table-column label="乙方渠道码" min-width="100">
         <template slot-scope="scope">
           <span v-if="scope.row.creator">{{scope.row.creator.channelCode}}</span>
         </template>
@@ -36,14 +36,14 @@
           <span>{{getEnum('SalesProductionOrderState', scope.row.state)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签" min-width="90">
+      <el-table-column label="订单标签" min-width="100px">
         <template slot-scope="scope">
           <el-tag :type="isAgreementsComplete(scope.row)?'success':'info'">
             {{isAgreementsComplete(scope.row)?'已签合同':'未签合同'}}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="90">
+      <el-table-column label="操作" min-width="60px">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)" class="purchase-list-button">详情</el-button>
         </template>

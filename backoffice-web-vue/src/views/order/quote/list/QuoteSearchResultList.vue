@@ -11,7 +11,12 @@
                    scope.row.requirementOrder.details.pictures[0].url : 'static/img/nopicture.png'" />
             </el-col>
             <el-col :span="16">
-              <h6 style="font-size: 12px">品类：{{scope.row.requirementOrder.details.category.parent.name}}-{{scope.row.requirementOrder.details.category.name}}</h6>
+              <h6 style="font-size: 12px">品类：
+                <span v-if="scope.row.requirementOrder.details.majorCategory">{{scope.row.requirementOrder.details.majorCategory.name}}</span>
+                <span v-if="scope.row.requirementOrder.details.category">
+                  -{{(scope.row.requirementOrder.details.category.parent ? scope.row.requirementOrder.details.category.parent.name + '-' : '') + scope.row.requirementOrder.details.category.name}}
+                </span>
+              </h6>
               <h6 style="font-size: 12px">货号：{{scope.row.requirementOrder.details.productSkuID}}</h6>
               <h6 style="font-size: 12px">数量：{{scope.row.requirementOrder.details.expectedMachiningQuantity}}</h6>
             </el-col>
