@@ -97,6 +97,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
                 title: '裁数',
                 controller: controllersMaps[e.product.code]['裁数'],
                 node: nodesMaps[e.product.code]['裁数'],
+                inputType: TextInputType.number,
                 formatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],
@@ -156,9 +157,9 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
           ReconciliationCustomColumnModel item = entry.customColumns
               .firstWhere((element) => element.name == e, orElse: () => null);
           if (item != null) {
-            setState(() {
-              item.value = val;
-            });
+            // setState(() {
+            item.value = val;
+            // });
           }
         },
       );
@@ -287,9 +288,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
                 controller: additionNameControllers[i],
                 focusNode: additionNameNodes[i],
                 onChanged: (value) {
-                  setState(() {
-                    form.additionalCharges[i].remarks = value;
-                  });
+                  form.additionalCharges[i].remarks = value;
                 },
               ),
             ),

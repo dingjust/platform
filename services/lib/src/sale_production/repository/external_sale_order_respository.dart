@@ -53,7 +53,7 @@ class ExternalSaleOrderRespository {
   ///拒单
   Future<BaseResponse> refuse(int id) async {
     Response<Map<String, dynamic>> response =
-    await http$.get(SaleProductionApis.refuse(id));
+        await http$.get(SaleProductionApis.refuse(id));
     if (response.statusCode == 200 && response.data != null) {
       return BaseResponse.fromJson(response.data);
     } else
@@ -101,14 +101,16 @@ class ExternalSaleOrderRespository {
   }
 
   /// 外发订单二维码检索
-  Future<SalesProductionOrderModel> qrCodePreview(String code) async {
-    Response<Map<String, dynamic>> response =
-    await http$.get(SaleProductionApis.qrCodePreview(code));
+  Future<BaseResponse> qrCodePreview(String code) async {
+    Response response;
+    try {
+      response = await http$.get(SaleProductionApis.qrCodePreview(code));
+    } on DioError catch (e) {
+      print(e);
+    }
 
-    if (response.statusCode == 200 && response.data['code'] == 1) {
-      SalesProductionOrderModel model =
-      SalesProductionOrderModel.fromJson(response.data['data']);
-      return model;
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
     } else
       return null;
   }

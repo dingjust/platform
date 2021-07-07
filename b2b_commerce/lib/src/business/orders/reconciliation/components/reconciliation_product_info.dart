@@ -106,6 +106,8 @@ class ReconciliationEditRow extends StatelessWidget {
 
   final List<TextInputFormatter> formatters;
 
+  final TextInputType inputType;
+
   const ReconciliationEditRow(
       {Key key,
       this.title,
@@ -113,7 +115,8 @@ class ReconciliationEditRow extends StatelessWidget {
       this.node,
       this.onChaged,
       this.titleStyle = const TextStyle(),
-      this.formatters = const []})
+      this.formatters = const [],
+      this.inputType})
       : super(key: key);
 
   @override
@@ -135,6 +138,7 @@ class ReconciliationEditRow extends StatelessWidget {
                 hideDivider: true,
                 isRequired: true,
                 textAlign: TextAlign.right,
+                inputType: inputType,
                 // hintText: '请输入内容',
                 inputFormatters: formatters,
                 controller: controller,

@@ -145,9 +145,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
             maxLength: 200,
             controller: remarksController,
             onChanged: (v) {
-              setState(() {
-                widget.formState.model.remarks = remarksController.text;
-              });
+              widget.formState.model.remarks = remarksController.text;
             },
           ),
         )
@@ -576,11 +574,9 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
               controller: super.expectedMachiningQuantityController,
               focusNode: super.expectedMachiningQuantityNode,
               onChanged: (v) {
-                setState(() {
-                  widget.formState.model.details.expectedMachiningQuantity =
-                      ClassHandleUtil.transInt(
-                          super.expectedMachiningQuantityController.text);
-                });
+                widget.formState.model.details.expectedMachiningQuantity =
+                    ClassHandleUtil.transInt(
+                        super.expectedMachiningQuantityController.text);
               },
             ),
           ),
@@ -866,10 +862,8 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
               controller: super.productNameController,
               focusNode: super.productNameFocusNode,
               onChanged: (v) {
-                setState(() {
-                  widget.formState.model.details.productName =
-                      super.productNameController.text;
-                });
+                widget.formState.model.details.productName =
+                    super.productNameController.text;
               },
             ),
           ),
@@ -941,10 +935,10 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
                 text: '支付条件',
                 style: TextStyle(fontSize: 16, color: Colors.black),
               ),
-              TextSpan(
-                text: ' *',
-                style: TextStyle(fontSize: 16, color: Colors.red),
-              )
+              // TextSpan(
+              //   text: ' *',
+              //   style: TextStyle(fontSize: 16, color: Colors.red),
+              // )
             ]),
           ),
           Expanded(
@@ -1053,9 +1047,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
               controller: super.wechatController,
               focusNode: super.wechatFocusNode,
               onChanged: (v) {
-                setState(() {
-                  widget.formState.model.details.contactWeChatNo = v;
-                });
+                widget.formState.model.details.contactWeChatNo = v;
               },
             ),
           ),
@@ -1318,11 +1310,11 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       return;
     }
 
-    if (widget.formState.model.details.payPlan == null ||
-        widget.formState.model.details.payPlan?.payPlanType == null) {
-      ShowDialogUtil.showValidateMsg(context, '请选择支付条件');
-      throw Exception('请选择支付条件');
-    }
+    // if (widget.formState.model.details.payPlan == null ||
+    //     widget.formState.model.details.payPlan?.payPlanType == null) {
+    //   ShowDialogUtil.showValidateMsg(context, '请选择支付条件');
+    //   throw Exception('请选择支付条件');
+    // }
 
     if (widget.formState.model.details.category == null) {
       ShowDialogUtil.showValidateMsg(context, '请选择商品品类');
