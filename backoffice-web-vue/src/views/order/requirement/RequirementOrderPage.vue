@@ -158,7 +158,7 @@
         }
       },
       async onDetails(item, isEdit) {
-        if (item.isNewCreated === false && item.reviewState === 'REVIEWING') {
+        if (item.isNewCreated === false && item.reviewState === 'REVIEWING' && item.status === 'PENDING_QUOTE') {
           await this.getBackup(item, isEdit);
         } else {
           await this._onDetails(item, isEdit);

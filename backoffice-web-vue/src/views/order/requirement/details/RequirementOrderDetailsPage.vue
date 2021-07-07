@@ -44,9 +44,11 @@
       </div>
       <!--<i class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>-->
     </el-row>
-    <el-row v-if="slotData.reviewState === 'REVIEWING' || slotData.reviewState === 'REVIEW_REJECTED'" type="flex" justify="space-between" class="review-cell">
-      <h6 style="margin:0px">{{slotData.reviewState === 'REVIEWING' ? '需求订单审阅中,请稍等' : '审阅驳回：' + slotData.reviewReasons}}</h6>
-    </el-row>
+    <template v-if="slotData.status === 'PENDING_QUOTE'">
+      <el-row v-if="slotData.reviewState === 'REVIEWING' || slotData.reviewState === 'REVIEW_REJECTED'" type="flex" justify="space-between" class="review-cell">
+        <h6 style="margin:0px">{{slotData.reviewState === 'REVIEWING' ? '需求订单审阅中,请稍等' : '审阅驳回：' + slotData.reviewReasons}}</h6>
+      </el-row>
+    </template>
     <el-row type="flex" align="middle" style="margin-bottom: 20px">
       <el-col :span="6">
         <span>需求编号：{{slotData.code}}</span>

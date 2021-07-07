@@ -84,7 +84,7 @@ export default {
         type: 'warning'
       }).then(async () => {
         let url;
-        if (row.isNewCreated === false && row.reviewState === 'REVIEWING') {
+        if (row.isNewCreated === false && row.reviewState === 'REVIEWING' && row.status === 'PENDING_QUOTE') {
           const modifiedtime = await this.getBackup(row)
           url = this.apis().passRequirementOrder(row.code, modifiedtime)
         } else {
@@ -112,7 +112,7 @@ export default {
         cancelButtonText: '取消',
       }).then(async ({ value }) => {
         let url;
-        if (row.isNewCreated === false && row.reviewState === 'REVIEWING') {
+        if (row.isNewCreated === false && row.reviewState === 'REVIEWING' && row.status === 'PENDING_QUOTE') {
           const modifiedtime = await this.getBackup(row)
           url = this.apis().rejectRequirementOrder(row.code, modifiedtime)
         } else {
