@@ -44,13 +44,13 @@
           <el-col :span="12">
             <el-row type="flex">
               <h6 class="titleTextClass2">联系人</h6>
-              <h6 class="contentTextClass">{{slotData.details.contactPerson}}</h6>
+              <h6 class="contentTextClass">{{slotData.details.agentContactPerson ? slotData.details.agentContactPerson : slotData.details.contactPerson}}</h6>
             </el-row>
           </el-col>
           <el-col :span="12">
             <el-row type="flex">
               <h6 class="titleTextClass2">联系方式</h6>
-              <h6 class="contentTextClass">{{slotData.details.contactPhone}}</h6>
+              <h6 class="contentTextClass">{{slotData.details.agentContactPhone ? slotData.details.agentContactPhone : slotData.details.contactPhone}}</h6>
             </el-row>
           </el-col>
         </el-row>

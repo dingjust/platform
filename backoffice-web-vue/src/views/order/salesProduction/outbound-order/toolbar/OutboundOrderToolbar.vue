@@ -34,7 +34,7 @@
       </el-row>
     </el-form>
     <el-dialog title="唯一码导入" :visible.sync="importVisible" width="80%" :close-on-click-modal="false" :close-on-press-escape="false">
-      <outbound-import v-if="importVisible" @closeDialog="importVisible = false"/>
+      <outbound-import v-if="importVisible" @closeDialog="importVisible = false" @onAdvancedSearch="onAdvancedSearch"/>
     </el-dialog>
   </div>
 </template>

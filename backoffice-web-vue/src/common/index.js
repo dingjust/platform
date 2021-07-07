@@ -1306,6 +1306,8 @@ let TENANT_APIS = {
   rejectRequirementOrder: (code, modifiedtime) => `/b2b/orders/requirement/review/${code}/reject?versionNo=${modifiedtime}`,
   // 设置需求订单显示关闭
   showOrHideRequirementOrder: (code, flag) => `/b2b/orders/requirement/enableShow/${code}/${flag}`,
+  // 需求订单设置代理人
+  setRequirementAgent: (code) => `/b2b/orders/requirement/updateAgentContact/${code}`,
 
   // 获取全部外接外发订单
   searchPendOut: () => '/b2b/sales/production/order/all',

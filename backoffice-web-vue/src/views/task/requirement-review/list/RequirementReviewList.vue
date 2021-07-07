@@ -3,7 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="需求订单号" prop="code"></el-table-column>
       <el-table-column label="标题" prop="details.productName" header-align="center"></el-table-column>
-      <el-table-column label="产品" header-align="center" min-width="200px">
+      <el-table-column label="产品" width="260" header-align="center">
         <template slot-scope="scope">
           <el-row type="flex" align="middle" :gutter="10">
             <el-col :span="8">
@@ -12,7 +12,12 @@
                    scope.row.details.pictures[0].url : 'static/img/nopicture.png'" />
             </el-col>
             <el-col :span="16">
-              <h6 style="font-size: 12px">品类：{{scope.row.details.majorCategory.name}}-{{scope.row.details.category ? scope.row.details.category.name : ''}}</h6>
+              <h6 style="font-size: 12px">品类：
+                <span v-if="scope.row.details.majorCategory">{{scope.row.details.majorCategory.name}}</span>
+                <span v-if="scope.row.details.category">
+                  -{{(scope.row.details.category.parent ? scope.row.details.category.parent.name + '-' : '') + scope.row.details.category.name}}
+                </span>
+              </h6>
               <h6 style="font-size: 12px">货号：{{scope.row.details.productSkuID}}</h6>
               <h6 style="font-size: 12px">数量：{{scope.row.details.expectedMachiningQuantity}}</h6>
             </el-col>
@@ -93,6 +98,12 @@ export default {
 
       if (result.code === 1) {
         this.$emit('onAdvancedSearch');
+      } else if (result.code === 0) {
+        this.$message.error(result.msg)
+      } else if (result['errors']) {
+        this.$message.error(result['errors'][0].message)
+      } else {
+        this.$message.error('操作失败')
       }
     },
     onReject (row) {
@@ -117,6 +128,12 @@ export default {
 
       if (result.code === 1) {
         this.$emit('onAdvancedSearch');
+      } else if (result.code === 0) {
+        this.$message.error(result.msg)
+      } else if (result['errors']) {
+        this.$message.error(result['errors'][0].message)
+      } else {
+        this.$message.error('操作失败')
       }
     },
     onShow (row) {
