@@ -778,42 +778,49 @@ class RequirementInfoModel extends ItemModel {
   @JsonKey(toJson: CompanyPayPlanModel.toJson)
   CompanyPayPlanModel payPlan;
 
-  RequirementInfoModel({
-    this.expectedDeliveryDate,
-    this.maxExpectedPrice,
-    this.machiningType,
-    this.invoiceNeeded = false,
-    this.proofingNeeded = false,
-    this.samplesNeeded = false,
-    this.pictures,
-    this.contactPerson,
-    this.contactPhone,
-    this.productiveOrientations,
-    this.isToRequirementPool = true,
-    this.productName,
-    this.productSkuID,
-    this.expectedMachiningQuantity,
-    this.category,
-    this.majorCategory,
-    this.productCode,
-    this.salesMarket,
-    this.publishingMode,
-    this.effectiveDays,
-    this.sizeType,
-    this.colorType,
-    this.populationScale,
-    this.productionMode,
-    this.productiveDistricts,
-    this.identityTypeStr,
-    this.address,
-    this.provinceStr,
-    this.cityStr,
-    this.districtStr,
-    this.contactWeChatNo,
-    this.latitude,
-    this.longitude,
-    this.payPlan,
-  });
+  ///代理联系人
+  String agentContactPerson;
+
+  ///代理联系电话
+  String agentContactPhone;
+
+  RequirementInfoModel(
+      {this.expectedDeliveryDate,
+      this.maxExpectedPrice,
+      this.machiningType,
+      this.invoiceNeeded = false,
+      this.proofingNeeded = false,
+      this.samplesNeeded = false,
+      this.pictures,
+      this.contactPerson,
+      this.contactPhone,
+      this.productiveOrientations,
+      this.isToRequirementPool = true,
+      this.productName,
+      this.productSkuID,
+      this.expectedMachiningQuantity,
+      this.category,
+      this.majorCategory,
+      this.productCode,
+      this.salesMarket,
+      this.publishingMode,
+      this.effectiveDays,
+      this.sizeType,
+      this.colorType,
+      this.populationScale,
+      this.productionMode,
+      this.productiveDistricts,
+      this.identityTypeStr,
+      this.address,
+      this.provinceStr,
+      this.cityStr,
+      this.districtStr,
+      this.contactWeChatNo,
+      this.latitude,
+      this.longitude,
+      this.payPlan,
+      this.agentContactPerson,
+      this.agentContactPhone});
 
   factory RequirementInfoModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$RequirementInfoModelFromJson(json);

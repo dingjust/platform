@@ -516,7 +516,7 @@ class _RequirementOrderDetailByFactoryPageState
           _InfoRow(
             label: '工厂规模',
             val:
-            PopulationScaleLocalizedMap[orderModel.details.populationScale],
+                PopulationScaleLocalizedMap[orderModel.details.populationScale],
           ),
           Divider(
             height: 0,
@@ -659,7 +659,15 @@ class _RequirementOrderDetailByFactoryPageState
               color: Colors.green,
               label: '联系对方',
               onTap: () {
-                _selectActionButton(model?.details?.contactPhone);
+                var tel = '';
+                if (model?.details?.agentContactPhone != null &&
+                    model?.details?.agentContactPhone != '') {
+                  //代理电话
+                  tel = model.details.agentContactPhone;
+                } else {
+                  tel = model.details.contactPhone;
+                }
+                _selectActionButton(tel);
               },
             )),
             Expanded(

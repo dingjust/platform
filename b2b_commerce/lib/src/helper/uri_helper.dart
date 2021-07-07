@@ -4,12 +4,14 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 ///URI处理
 class UriHelper {
-  bool handleUri(
-      {@required BuildContext context,
-      @required String uri,
-      QRViewController controller,
-      VoidCallback onCameraPause,
-      VoidCallback onResumeCamera}) {
+  bool handleUri({@required BuildContext context,
+    @required String uri,
+    QRViewController controller,
+    VoidCallback onCameraPause,
+    VoidCallback onResumeCamera,
+
+    ///是否替换跳转
+    bool isReplace = true}) {
     //解析URI
     Uri uriObj = Uri.tryParse(uri);
     if (uriObj != null) {
@@ -38,13 +40,20 @@ class UriHelper {
   }
 
   ///页面URI处理
-  void _handlePageUri(BuildContext context, Uri uri) {
+  void _handlePageUri(BuildContext context, Uri uri,
+
+      ///是否替换跳转
+      {bool isReplace = true}) {
     // 页面跳转截取路由
     String route = '/' + uri.pathSegments.sublist(2).join('/');
     //校验路由正确性
     if (AppRoutes.allRoutes.keys.contains(route)) {
-      Navigator.of(context)
-          .pushReplacementNamed(route, arguments: uri.queryParameters);
+      if (isReplace) {
+        Navigator.of(context)
+            .pushReplacementNamed(route, arguments: uri.queryParameters);
+      } else {
+        Navigator.of(context).pushNamed(route, arguments: uri.queryParameters);
+      }
     }
   }
 }

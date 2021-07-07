@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/common/webview_page.dart';
+import 'package:b2b_commerce/src/helper/uri_helper.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -72,15 +73,14 @@ class HomeFactoryBannerSection extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    FindingFactoryPage(
-                      FactoryCondition(
-                          starLevel: 0,
-                          adeptAtCategories: [],
-                          labels: [],
-                          cooperationModes: []),
-                      route: '推荐工厂',
-                    ),
+                builder: (context) => FindingFactoryPage(
+                  FactoryCondition(
+                      starLevel: 0,
+                      adeptAtCategories: [],
+                      labels: [],
+                      cooperationModes: []),
+                  route: '推荐工厂',
+                ),
               ),
             );
           }),
@@ -151,18 +151,26 @@ class HomeBannerSection extends StatelessWidget {
                     CarouselItem(
                         model: MediaModel(url: carousel.media.detailUrl()),
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      WebviewPage(
-                                        url: carousel.url,
-                                        needRedirectContractList: false,
-                                      )));
+                          onTap(context, carousel.url);
                         }))
                     .toList(),
                 240);
           }
         });
+  }
+
+  void onTap(BuildContext context, String url) {
+    bool result =
+    UriHelper().handleUri(context: context, uri: url, isReplace: true);
+    if (!result) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  WebviewPage(
+                    url: url,
+                    needRedirectContractList: false,
+                  )));
+    }
   }
 }
