@@ -85,7 +85,7 @@ export default {
     cooperatorName(row) {
       if (row.originCompany != null) {
         return row.originCompany.name;
-      } else {
+      } else if (row.originCooperator != null) {
         return row.originCooperator.type == 'ONLINE' ? row.originCooperator.partner.name : row.originCooperator.name;
       }
     },

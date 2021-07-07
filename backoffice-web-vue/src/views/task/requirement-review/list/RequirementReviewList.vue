@@ -84,7 +84,7 @@ export default {
         type: 'warning'
       }).then(async () => {
         let url;
-        if (row.isNewCreated === false) {
+        if (row.isNewCreated === false && row.reviewState === 'REVIEWING') {
           const modifiedtime = await this.getBackup(row)
           url = this.apis().passRequirementOrder(row.code, modifiedtime)
         } else {
@@ -112,7 +112,7 @@ export default {
         cancelButtonText: '取消',
       }).then(async ({ value }) => {
         let url;
-        if (row.isNewCreated === false) {
+        if (row.isNewCreated === false && row.reviewState === 'REVIEWING') {
           const modifiedtime = await this.getBackup(row)
           url = this.apis().rejectRequirementOrder(row.code, modifiedtime)
         } else {
@@ -147,9 +147,9 @@ export default {
     },
     async _onShow(row) {
       const url = this.apis().showOrHideRequirementOrder(row.code, !row.enableShow)
-      const result = await this.$http.put(url)
+      const result = await this.$http.put(url, {})
 
-      if (result === 1) {
+      if (result.code === 1) {
         this.$emit('onAdvancedSearch');
       }
     },

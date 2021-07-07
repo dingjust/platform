@@ -47,7 +47,7 @@
       </el-col>
     </el-row>
     <pay-plan-form :formData="formData.details.payPlan" :isUseForOrder="true" />
-    <my-address-form v-if="isCreated" :vAddress.sync="shippingAddress" :showContact="false"/>
+    <!-- <my-address-form v-if="isCreated" :vAddress.sync="shippingAddress" :showContact="false"/>
     <el-row type="flex" :gutter="20" v-if="!isCreated">
       <el-col :span="12">
         <el-form-item>
@@ -57,7 +57,7 @@
           <el-input v-model="formData.details.address"></el-input>
         </el-form-item>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 

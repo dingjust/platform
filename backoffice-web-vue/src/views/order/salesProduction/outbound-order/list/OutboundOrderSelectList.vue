@@ -84,7 +84,9 @@ export default {
     },
 
     getCooperator(row) {
-      return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
+      if (row.targetCooperator) {
+        return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
+      }
     },
     //判断是否已签合同
     isAgreementsComplete(row) {
