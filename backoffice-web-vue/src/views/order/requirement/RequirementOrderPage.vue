@@ -157,7 +157,7 @@
         }
       },
       async onDetails(item, isEdit) {
-        if (!item.isNewCreated) {
+        if (item.isNewCreated === false) {
           await this.getBackup(item, isEdit);
         } else {
           await this._onDetails(item, isEdit);
