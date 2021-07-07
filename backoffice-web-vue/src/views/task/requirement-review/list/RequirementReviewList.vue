@@ -84,11 +84,11 @@ export default {
         type: 'warning'
       }).then(async () => {
         let url;
-        if (row.isNewCreated) {
-          url = this.apis().reviewRequirementOrder(row.code, true)
-        } else {
+        if (row.isNewCreated === false) {
           const modifiedtime = await this.getBackup(row)
           url = this.apis().passRequirementOrder(row.code, modifiedtime)
+        } else {
+          url = this.apis().reviewRequirementOrder(row.code, true)
         }
         this._onPass(url)
       });
@@ -112,11 +112,11 @@ export default {
         cancelButtonText: '取消',
       }).then(async ({ value }) => {
         let url;
-        if (row.isNewCreated) {
-          url = this.apis().reviewRequirementOrder(row.code, false)
-        } else {
+        if (row.isNewCreated === false) {
           const modifiedtime = await this.getBackup(row)
           url = this.apis().rejectRequirementOrder(row.code, modifiedtime)
+        } else {
+          url = this.apis().reviewRequirementOrder(row.code, false)
         }
         this._onReject(url, value)
       })
