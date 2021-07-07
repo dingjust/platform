@@ -206,8 +206,11 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
       dynamic value = await LocalStorage.get(_key);
       if (value != null && value != '') {
         List<dynamic> list = json.decode(value);
-        _historyKeywords = list.map((item) => item as String).toList();
+        if (list != null) {
+          _historyKeywords = list.map((item) => item as String).toList();
+        }
       }
+      _historyKeywords = [];
     }
     return _historyKeywords;
   }
