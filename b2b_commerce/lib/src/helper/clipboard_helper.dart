@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,11 +66,19 @@ class ClipboardHelper {
     String code = val.substring(val.indexOf('⇤') + 1, val.indexOf('⇥'));
     if (code != null && code.isNotEmpty) {
       //获取订单
-      SalesProductionOrderModel model =
+      BaseResponse baseResponse =
           await ExternalSaleOrderRespository().qrCodePreview(code);
 
-      if (model != null) {
-        showOrderImportDialog(model, code, context: context);
+      if (baseResponse != null) {
+        //订单没导入
+        if (baseResponse.code == 1) {
+          SalesProductionOrderModel model =
+              SalesProductionOrderModel.fromJson(baseResponse.data);
+          showOrderImportDialog(model, code, context: context);
+        } else if (baseResponse.code == 0 && baseResponse.msg != null) {
+          //订单已导入
+          // showOrderDetailDialog(baseResponse.msg);
+        }
       }
     }
   }
@@ -158,8 +167,110 @@ class ClipboardHelper {
                   ],
                 ),
               ),
+        ),
+        animationDuration: Duration(milliseconds: 300));
+  }
+
+  ///订单详情弹窗
+  void showOrderDetailDialog(String code,
+      {BuildContext context,
+        VoidCallback cancel,
+        VoidCallback confirm,
+        VoidCallback backgroundReturn}) {
+    BotToast.showAnimationWidget(
+        clickClose: false,
+        allowClick: false,
+        onlyOne: true,
+        crossPage: true,
+        backButtonBehavior: BackButtonBehavior.none,
+        wrapToastAnimation: (controller, cancel, child) =>
+            Stack(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    cancel();
+                    backgroundReturn?.call();
+                  },
+                  child: AnimatedBuilder(
+                    builder: (_, child) =>
+                        Opacity(
+                          opacity: controller.value,
+                          child: child,
+                        ),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(color: Colors.black26),
+                      child: SizedBox.expand(),
+                    ),
+                    animation: controller,
+                  ),
+                ),
+                _CustomOffsetAnimation(
+                  controller: controller,
+                  child: child,
+                )
+              ],
+            ),
+        toastBuilder: (cancelFunc) =>
+            AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              title: const Text('检测到订单'),
+              content: Container(
+                height: 280,
+                child: Column(
+                  children: [
+                    _Row(
+                      title: '订单号：',
+                      val: '$code',
+                    ),
+                    TextButton(
+                        onPressed: () async {
+                          if (navigatorKey != null) {
+                            cancelFunc.call();
+
+                            int id = await queryIdFromList(code);
+                            if (id != null) {
+                              navigatorKey.currentState.pushNamed(
+                                  AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+                                  arguments: {'code': code});
+                            }
+                          }
+                        },
+                        child: Text('查看详情'))
+                  ],
+                ),
+              ),
             ),
         animationDuration: Duration(milliseconds: 300));
+  }
+
+  Future<int> queryIdFromList(String code) async {
+    Response<Map<String, dynamic>> response;
+
+    try {
+      response = await http$.post('/{baseSiteId}/out/order/search', data: {
+        'name': code
+      }, queryParameters: {
+        'size': 10,
+      });
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      try {
+        List<dynamic> content = response.data['content'];
+        var result = content.firstWhere((element) => element['code'] == code,
+            orElse: () => null);
+        if (result != null) {
+          print('=====================${result['id']}');
+          return result['id'];
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+    return null;
   }
 }
 

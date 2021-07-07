@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -111,12 +112,22 @@ class _OrderImportPageState extends State<OrderImportPage> {
   ///检索
   Future<SalesProductionOrderModel> _getData() async {
     if (order == null) {
-      SalesProductionOrderModel model =
+      BaseResponse response =
           await ExternalSaleOrderRespository().qrCodePreview(widget.code);
-      if (model != null) {
-        order = model;
+      if (response != null) {
+        if (response.code == 1) {
+          order = SalesProductionOrderModel.fromJson(response.data);
+        } else if (response.code == 0 && response.msg != null) {
+          String orderCode = response.msg;
+          //列表筛出来ID
+          int id = await queryIdFromList(orderCode);
+          if (id != null) {
+            order = await ExternalSaleOrderRespository().getOrderDetail(id);
+          }
+        }
+
         //判断是否已接单
-        if (order.cooperator != null && order.targetCooperator != null) {
+        if (order.originCooperator != null && order.targetCooperator != null) {
           //甲乙双方确定则跳转到订单详情
           Navigator.of(context).pushReplacementNamed(
               AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
@@ -150,6 +161,35 @@ class _OrderImportPageState extends State<OrderImportPage> {
     } else {
       BotToast.showText(text: '操作失败');
     }
+  }
+
+  Future<int> queryIdFromList(String code) async {
+    Response<Map<String, dynamic>> response;
+
+    try {
+      response = await http$.post('/{baseSiteId}/out/order/search', data: {
+        'name': code
+      }, queryParameters: {
+        'size': 10,
+      });
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      try {
+        List<dynamic> content = response.data['content'];
+        var result = content.firstWhere((element) => element['code'] == code,
+            orElse: () => null);
+        if (result != null) {
+          print('=====================${result['id']}');
+          return result['id'];
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+    return null;
   }
 }
 

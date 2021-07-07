@@ -935,10 +935,10 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
                 text: '支付条件',
                 style: TextStyle(fontSize: 16, color: Colors.black),
               ),
-              TextSpan(
-                text: ' *',
-                style: TextStyle(fontSize: 16, color: Colors.red),
-              )
+              // TextSpan(
+              //   text: ' *',
+              //   style: TextStyle(fontSize: 16, color: Colors.red),
+              // )
             ]),
           ),
           Expanded(
@@ -1310,11 +1310,11 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       return;
     }
 
-    if (widget.formState.model.details.payPlan == null ||
-        widget.formState.model.details.payPlan?.payPlanType == null) {
-      ShowDialogUtil.showValidateMsg(context, '请选择支付条件');
-      throw Exception('请选择支付条件');
-    }
+    // if (widget.formState.model.details.payPlan == null ||
+    //     widget.formState.model.details.payPlan?.payPlanType == null) {
+    //   ShowDialogUtil.showValidateMsg(context, '请选择支付条件');
+    //   throw Exception('请选择支付条件');
+    // }
 
     if (widget.formState.model.details.category == null) {
       ShowDialogUtil.showValidateMsg(context, '请选择商品品类');
