@@ -110,7 +110,8 @@ class _RequirementListItemState extends State<RequirementListItem> {
                         overflow: TextOverflow.ellipsis))
               ],
             )),
-            Text('${RequirementOrderTypeLocalizedMap[widget.model.orderType]}',
+            Text(
+                '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ?? ''}',
                 style: style),
             Expanded(
                 child: Text('${widget.model.details.identityTypeStr ?? ''}',
@@ -194,8 +195,10 @@ class _RequirementListItemState extends State<RequirementListItem> {
       padding: EdgeInsets.symmetric(horizontal: 5),
       margin: EdgeInsets.only(top: 5),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Expanded(
+          widget.model.details.address != null
+              ? Expanded(
               child: Row(children: [
                 Icon(Icons.location_on),
                 Expanded(
@@ -204,7 +207,8 @@ class _RequirementListItemState extends State<RequirementListItem> {
                       style: style,
                       overflow: TextOverflow.ellipsis,
                     ))
-              ])),
+              ]))
+              : Container(),
           Text(
             '${DateExpress2Util.express(widget.model.creationTime)}',
             style:
