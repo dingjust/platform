@@ -127,9 +127,7 @@ class _RequirementFormOrderState extends State<RequirementFormOrder>
             maxLength: 200,
             controller: remarksController,
             onChanged: (v) {
-              setState(() {
-                widget.formState.model.remarks = remarksController.text;
-              });
+              widget.formState.model.remarks = remarksController.text;
             },
           ),
         )
@@ -229,10 +227,8 @@ class _RequirementFormOrderState extends State<RequirementFormOrder>
               controller: super.productNameController,
               focusNode: super.productNameFocusNode,
               onChanged: (v) {
-                setState(() {
-                  widget.formState.model.details.productName =
-                      super.productNameController.text;
-                });
+                widget.formState.model.details.productName =
+                    super.productNameController.text;
               },
             ),
           ),
@@ -364,9 +360,7 @@ class _RequirementFormOrderState extends State<RequirementFormOrder>
               controller: super.wechatController,
               focusNode: super.wechatFocusNode,
               onChanged: (v) {
-                setState(() {
-                  widget.formState.model.details.contactWeChatNo = v;
-                });
+                widget.formState.model.details.contactWeChatNo = v;
               },
             ),
           ),
