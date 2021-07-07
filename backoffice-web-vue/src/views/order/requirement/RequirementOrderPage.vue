@@ -30,6 +30,7 @@
                 <!-- <el-divider direction="vertical" v-if="canModify(props.item)"></el-divider> -->
                 <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
                 <el-button v-if="isTenant()" class="list-button" type="text" @click="openAgentDialog(props.item)">设置代理人</el-button>
+                <el-button v-if="isTenant()" class="list-button" type="text" @click="onShow(props.item)">{{ props.item.enableShow === false ? '展示' : '隐藏'}}</el-button>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
@@ -157,7 +158,7 @@
         }
       },
       async onDetails(item, isEdit) {
-        if (item.isNewCreated === false) {
+        if (item.isNewCreated === false && item.reviewState === 'REVIEWING' && item.status === 'PENDING_QUOTE') {
           await this.getBackup(item, isEdit);
         } else {
           await this._onDetails(item, isEdit);
@@ -426,6 +427,7 @@
 
         if (result.code === 1) {
           this.onAdvancedSearch();
+          this.agentVisible = false
         } else if (result.code === 0) {
           this.$message.error(result.msg)
         } else if (result['errors']) {
@@ -433,7 +435,24 @@
         } else {
           this.$message.error('操作失败！')
         }
-      }
+      },
+      onShow (row) {
+        this.$confirm('是否改变此需求的显示状态?', '', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          this._onShow(row)
+        });
+      },
+      async _onShow(row) {
+        const url = this.apis().showOrHideRequirementOrder(row.code, !row.enableShow)
+        const result = await this.$http.put(url, {})
+
+        if (result.code === 1) {
+          this.onAdvancedSearch();
+        }
+      },
     },
     data () {
       return {

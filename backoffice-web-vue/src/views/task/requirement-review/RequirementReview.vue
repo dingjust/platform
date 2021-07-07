@@ -34,7 +34,6 @@ export default {
   computed: {
     ...mapGetters({
       page: 'page',
-      queryFormData: 'queryFormData',
       categories: 'categories'
     })
   },
@@ -66,6 +65,18 @@ export default {
 
       this.setCategories(result);
     },
+  },
+  data () {
+    return {
+      queryFormData: {
+        keyword: '',
+        username: '',
+        statuses: [],
+        categories: [],
+        createdDateFrom: null,
+        createdDateTo: null
+      },
+    }
   },
   created () {
     this.onAdvancedSearch()
