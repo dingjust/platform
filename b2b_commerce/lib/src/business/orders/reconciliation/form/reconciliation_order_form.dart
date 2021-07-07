@@ -417,7 +417,6 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
                 ),
                 TextField(
                   controller: dialogText,
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: '请输入列名',
                   ),
