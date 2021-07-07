@@ -161,13 +161,12 @@ class HomeBannerSection extends StatelessWidget {
 
   void onTap(BuildContext context, String url) {
     bool result =
-    UriHelper().handleUri(context: context, uri: url, isReplace: true);
+        UriHelper().handleUri(context: context, uri: url, isReplace: false);
     if (!result) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  WebviewPage(
+              builder: (context) => WebviewPage(
                     url: url,
                     needRedirectContractList: false,
                   )));
