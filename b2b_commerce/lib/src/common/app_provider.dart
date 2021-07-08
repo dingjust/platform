@@ -62,21 +62,18 @@ class AppProvider {
     print('[nbyjy]预加载开始${DateFormatUtil.formatYMDHMS(start)}');
     Provider.of<RecommendProductState>(context, listen: false).products;
     // Provider.of<HomeSectionState>(context, listen: false).getData();
-    await Provider.of<CategoryState>(context, listen: false)
-        .getCascadedCategories();
-    await Provider.of<AddressState>(context, listen: false).getRegions();
-    await Provider.of<MajorCategoryState>(context, listen: false)
+    Provider.of<CategoryState>(context, listen: false).getCascadedCategories();
+    Provider.of<AddressState>(context, listen: false).getRegions();
+    Provider.of<MajorCategoryState>(context, listen: false)
         .getMajorCategories();
-    await Provider.of<CarrierState>(context, listen: false).getCarriers();
-    await Provider.of<LabelState>(context, listen: false).getLabels();
-    await Provider.of<ColorState>(context, listen: false).getAllColors();
-    await Provider.of<SizeState>(context, listen: false).getAllSizes();
+    Provider.of<CarrierState>(context, listen: false).getCarriers();
+    Provider.of<LabelState>(context, listen: false).getLabels();
+    Provider.of<ColorState>(context, listen: false).getAllColors();
+    Provider.of<SizeState>(context, listen: false).getAllSizes();
     Provider.of<ProductHomeCarouselsState>(context, listen: false)
         .getBannerData();
-
-    AppVersionHelper appVersionHelper =
-        Provider.of<AppVersionHelper>(context, listen: false);
-    await appVersionHelper.getAppVersionInfo('nbyjy');
+    Provider.of<AppVersionHelper>(context, listen: false)
+        .getAppVersionInfo('nbyjy');
     DateTime end = DateTime.now();
     print('[nbyjy]预加载结束${DateFormatUtil.formatYMDHMS(end)}');
     print(

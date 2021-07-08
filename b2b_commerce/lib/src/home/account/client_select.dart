@@ -184,10 +184,10 @@ class _ClientSelectPageState extends State<ClientSelectPage> {
   void homeInit() async {
     //版本检查
     AppVersionHelper appVersionHelper =
-    Provider.of<AppVersionHelper>(context, listen: false);
+        Provider.of<AppVersionHelper>(context, listen: false);
     await appVersionHelper.getAppVersionInfo('nbyjy');
     await appVersionHelper.checkVersion(
-        context, AppBLoC.instance.packageInfo.version, 'nbyjy');
+        context, AppBLoC.instance?.packageInfo?.version, 'nbyjy');
   }
 
   ///全局消息处理

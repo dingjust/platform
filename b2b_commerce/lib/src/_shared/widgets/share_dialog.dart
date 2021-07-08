@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/qr_url.dart';
 import 'package:b2b_commerce/src/helper/clipboard_helper.dart';
@@ -5,7 +7,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'dart:ui' as ui;
 import 'package:fluwx/fluwx.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -16,10 +17,10 @@ import 'package:widgets/widgets.dart';
 class ShareDialog {
   static void showShareDialog(BuildContext context,
       {@required String url,
-      @required String title,
-      @required String description,
-      String path,
-      @required String imageUrl}) {
+        @required String title,
+        @required String description,
+        String path,
+        @required String imageUrl}) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -32,8 +33,9 @@ class ShareDialog {
                   flex: 3,
                   child: Container(
                     color: Color.fromRGBO(245, 245, 245, 1),
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
+                    child: Row(
+                      // scrollDirection: Axis.horizontal,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         FlatButton(
                           child: Column(
@@ -86,46 +88,46 @@ class ShareDialog {
                                 '$imageUrl');
                           },
                         ),
-                        FlatButton(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              B2BImage.qq(height: 50, width: 50),
-                              Text('发送给好友')
-                            ],
-                          ),
-                          onPressed: () {
-                            QQService.instance.share('$url',
-                                imageUrl: '$imageUrl',
-                                summary: '$description',
-                                title: '$title');
-                          },
-                        ),
-                        FlatButton(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              B2BImage.qqZone(height: 50, width: 50),
-                              Text('分享到空间')
-                            ],
-                          ),
-                          onPressed: () {
-                            QQService.instance.shareQQzone('$url',
-                                imageUrl: '$imageUrl',
-                                summary: '$description',
-                                title: '$title');
-                          },
-                        ),
-                        FlatButton(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              B2BImage.qqZone(height: 50, width: 50),
-                              Text('分享到空间')
-                            ],
-                          ),
-                          onPressed: () {},
-                        )
+                        // FlatButton(
+                        //   child: Column(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: <Widget>[
+                        //       B2BImage.qq(height: 50, width: 50),
+                        //       Text('发送给好友')
+                        //     ],
+                        //   ),
+                        //   onPressed: () {
+                        //     QQService.instance.share('$url',
+                        //         imageUrl: '$imageUrl',
+                        //         summary: '$description',
+                        //         title: '$title');
+                        //   },
+                        // ),
+                        // FlatButton(
+                        //   child: Column(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: <Widget>[
+                        //       B2BImage.qqZone(height: 50, width: 50),
+                        //       Text('分享到空间')
+                        //     ],
+                        //   ),
+                        //   onPressed: () {
+                        //     QQService.instance.shareQQzone('$url',
+                        //         imageUrl: '$imageUrl',
+                        //         summary: '$description',
+                        //         title: '$title');
+                        //   },
+                        // ),
+                        // FlatButton(
+                        //   child: Column(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: <Widget>[
+                        //       B2BImage.qqZone(height: 50, width: 50),
+                        //       Text('分享到空间')
+                        //     ],
+                        //   ),
+                        //   onPressed: () {},
+                        // )
                       ],
                     ),
                   ),
@@ -151,8 +153,7 @@ class ShareDialog {
     );
   }
 
-  static void orderShareDialog(
-    BuildContext context, {
+  static void orderShareDialog(BuildContext context, {
     @required String uniqueCode,
   }) {
     GlobalKey qrKey = GlobalKey();

@@ -25,7 +25,7 @@ class _ProfileAboutPageState extends State<ProfileAboutPage> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: AppProfile(
                   name: '钉单',
-                  version: '${AppBLoC.instance.packageInfo.version}'),
+                  version: '${AppBLoC.instance?.packageInfo?.version}'),
             ),
             AppActions(),
             AppProtocols(context),
@@ -82,7 +82,7 @@ class AppActions extends StatelessWidget {
             AppVersionHelper appVersionHelper =
                 Provider.of<AppVersionHelper>(context, listen: false);
             appVersionHelper.checkVersion(
-                context, AppBLoC.instance.packageInfo.version, 'nbyjy',
+                context, AppBLoC.instance?.packageInfo?.version, 'nbyjy',
                 showNowMessage: true);
           },
         )
