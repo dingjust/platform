@@ -5,13 +5,17 @@ import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/home/factory/_shared/factory_widgets.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
+
+import 'widget/company_header.dart';
 
 ///首页需求订单明细
 class RequirementOrderDetailByFactoryPage extends StatefulWidget {
@@ -83,26 +87,64 @@ class _RequirementOrderDetailByFactoryPageState
                   AsyncSnapshot<RequirementOrderModel> snapshot) {
                 if (snapshot.data != null) {
                   return Container(
-                    color: Colors.grey[100],
-                    child: ListView(
-                      children: <Widget>[
-                        Divider(
-                          height: 0,
+                    color: Colors.white,
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        SliverList(
+                            delegate: SliverChildListDelegate(<Widget>[
+                          Divider(
+                            height: 0,
+                          ),
+                          //标题
+                          _buildTitle(),
+                          //描述
+                          _buildRemarks(),
+                          //发布公司信息
+                          _buildCompanyInfo(),
+                          Divider(
+                            height: 0,
+                          ),
+                          //需求信息
+                          orderModel.orderType ==
+                                  RequirementOrderType.FINDING_ORDER
+                              ? _buildMainOrder()
+                              : _buildMainFactory(),
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: 15,
+                              bottom: 15,
+                              top: 15,
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Text('参考图片：'),
+                              ],
+                            ),
+                          ),
+                        ])),
+                        SliverPadding(
+                          padding: const EdgeInsets.all(8.0),
+                          sliver: SliverGrid(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, //Grid按两列显示
+                              mainAxisSpacing: 10.0,
+                              crossAxisSpacing: 10.0,
+                              childAspectRatio: 0.8,
+                            ),
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                //创建子widget
+                                return _ImageItem(
+                                  e: getImages()[index],
+                                  onTap: () => onPreview(index),
+                                );
+                              },
+                              childCount: getImages().length,
+                            ),
+                          ),
                         ),
-                        //标题
-                        _buildTitle(),
-                        //描述
-                        _buildRemarks(),
-                        //发布公司信息
-                        _buildCompanyInfo(),
-                        Divider(
-                          height: 0,
-                        ),
-                        //需求信息
-                        orderModel.orderType ==
-                                RequirementOrderType.FINDING_ORDER
-                            ? _buildMainOrder()
-                            : _buildMainFactory(),
+                        _buildCompanyHeader()
                       ],
                     ),
                   );
@@ -542,29 +584,29 @@ class _RequirementOrderDetailByFactoryPageState
           Divider(
             height: 0,
           ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Text('参考图片：'),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: EditableAttachments(
-              list: orderModel.details.pictures,
-              editable: false,
-            ),
-          ),
+          // Container(
+          //   padding: EdgeInsets.only(
+          //     left: 15,
+          //     bottom: 15,
+          //     top: 15,
+          //   ),
+          //   child: Row(
+          //     children: <Widget>[
+          //       Text('参考图片：'),
+          //     ],
+          //   ),
+          // ),
+          // Container(
+          //   padding: EdgeInsets.only(
+          //     left: 15,
+          //     bottom: 15,
+          //     top: 15,
+          //   ),
+          //   child: EditableAttachments(
+          //     list: orderModel.details.pictures,
+          //     editable: false,
+          //   ),
+          // ),
         ],
       ),
     );
@@ -617,35 +659,66 @@ class _RequirementOrderDetailByFactoryPageState
           Divider(
             height: 0,
           ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Text('参考图片：'),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: EditableAttachments(
-              list: orderModel.details.pictures,
-              editable: false,
-            ),
-          ),
+          // Container(
+          //   padding: EdgeInsets.only(
+          //     left: 15,
+          //     bottom: 15,
+          //     top: 15,
+          //   ),
+          //   child: Row(
+          //     children: <Widget>[
+          //       Text('参考图片：'),
+          //     ],
+          //   ),
+          // ),
+          // Container(
+          //   padding: EdgeInsets.only(
+          //     left: 15,
+          //     bottom: 15,
+          //     top: 15,
+          //   ),
+          //   child: EditableAttachments(
+          //     list: orderModel.details.pictures,
+          //     editable: false,
+          //   ),
+          // ),
         ],
       ),
     );
   }
 
   Widget _buildBottomButtons(RequirementOrderModel model) {
+    if (orderModel?.orderType == RequirementOrderType.FINDING_ORDER) {
+      return Offstage(
+        offstage: isMyself(),
+        child: Container(
+          height: 65,
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: [
+              Expanded(
+                  child: FactoryBottomBtn(
+                    color: Colors.green,
+                    label: '联系对方',
+                    onTap: () {
+                      var tel = '';
+                      if (model?.details?.agentContactPhone != null &&
+                          model?.details?.agentContactPhone != '') {
+                        //代理电话
+                        tel = model.details.agentContactPhone;
+                      } else {
+                        tel = model.details.contactPhone;
+                      }
+                      _selectActionButton(tel);
+                    },
+                  )),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Offstage(
       offstage: isMyself(),
       child: Container(
@@ -723,6 +796,19 @@ class _RequirementOrderDetailByFactoryPageState
         ],
       ),
     );
+  }
+
+  Widget _buildCompanyHeader() {
+    if (orderModel.orderType == RequirementOrderType.FINDING_ORDER) {
+      return SliverToBoxAdapter(
+        child: Container(
+          color: Colors.grey[100],
+          padding: EdgeInsets.only(top: 20),
+          child: CompanyHeader(orderModel.belongTo),
+        ),
+      );
+    }
+    return SliverToBoxAdapter();
   }
 
   ///分享
@@ -853,6 +939,32 @@ class _RequirementOrderDetailByFactoryPageState
           : '无'}定金  ${PayPlanTypeLocalizedMap[payplan.payPlanType]}';
     }
   }
+
+  List<MediaModel> getImages() {
+    if (orderModel.details.pictures != null) {
+      return orderModel.details.pictures;
+    }
+    return [];
+  }
+
+  //图片预览
+  void onPreview(int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            GalleryPhotoViewWrapper(
+              galleryItems:
+              getImages().map((model) => GalleryItem(model: model)).toList(),
+              backgroundDecoration: const BoxDecoration(
+                color: Colors.black,
+              ),
+              initialIndex: index,
+              scrollDirection: Axis.horizontal,
+            ),
+      ),
+    );
+  }
 }
 
 class _InfoRow extends StatelessWidget {
@@ -882,6 +994,48 @@ class _InfoRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ImageItem extends StatelessWidget {
+  final MediaModel e;
+
+  final VoidCallback onTap;
+
+  final String processUrl;
+
+  const _ImageItem({Key key,
+    this.e,
+    this.onTap,
+    this.processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320'})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        onTap?.call();
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 2),
+        child: CachedNetworkImage(
+          imageUrl: '${e.imageProcessUrl(processUrl)}',
+          placeholder: (context, url) =>
+              SpinKitRing(
+                color: Colors.grey[300],
+                lineWidth: 2,
+                size: 30,
+              ),
+          errorWidget: (context, url, error) =>
+              SpinKitRing(
+                color: Colors.grey[300],
+                lineWidth: 2,
+                size: 30,
+              ),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

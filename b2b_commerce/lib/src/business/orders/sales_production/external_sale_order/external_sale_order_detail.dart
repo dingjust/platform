@@ -104,6 +104,15 @@ class _ExternalSaleOrderDetailPageState
                   detailCallback: _clearData,
                   needCallbackPop: needCallbackPop,
                 ),
+                floatingActionButton: FloatingActionButton(
+                  child: Icon(Icons.refresh),
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      order = null;
+                    });
+                  },
+                ),
                 resizeToAvoidBottomPadding: true,
               ),
               onWillPop: onPop);

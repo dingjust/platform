@@ -48,12 +48,12 @@ class HomePage extends StatefulWidget {
     ),
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      child: RequirementList<FactoryRequirementState>(),
+      child: RequirementList<OrderRequirementState>(),
     ),
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      child: RequirementList<OrderRequirementState>(),
-    )
+      child: RequirementList<FactoryRequirementState>(),
+    ),
   ];
 
   ///头部
