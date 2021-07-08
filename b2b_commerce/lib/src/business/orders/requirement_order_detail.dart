@@ -92,7 +92,7 @@ class _RequirementOrderDetailPageState
                   ),
                   //需求信息
                   orderModel.orderType == RequirementOrderType.FINDING_ORDER
-                      ? _buildMainOrder
+                      ? _buildMainOrder()
                       : _buildMainFactory(),
                 ],
               ),
@@ -358,8 +358,8 @@ class _RequirementOrderDetailPageState
                     orderModel.details.invoiceNeeded == null
                         ? ''
                         : orderModel.details.invoiceNeeded
-                        ? '是'
-                        : '否',
+                            ? '是'
+                            : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),
