@@ -4,14 +4,15 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 ///URI处理
 class UriHelper {
-  bool handleUri({@required BuildContext context,
-    @required String uri,
-    QRViewController controller,
-    VoidCallback onCameraPause,
-    VoidCallback onResumeCamera,
+  bool handleUri(
+      {@required BuildContext context,
+      @required String uri,
+      QRViewController controller,
+      VoidCallback onCameraPause,
+      VoidCallback onResumeCamera,
 
-    ///是否替换跳转
-    bool isReplace = true}) {
+      ///是否替换跳转
+      bool isReplace = true}) {
     //解析URI
     Uri uriObj = Uri.tryParse(uri);
     if (uriObj != null) {
@@ -24,7 +25,7 @@ class UriHelper {
         //第二级为目标判断（page：页面跳转;action:动作）
         switch (uriObj.pathSegments[1]) {
           case 'page':
-            _handlePageUri(context, uriObj);
+            _handlePageUri(context, uriObj, isReplace: isReplace);
             break;
           case 'action':
             //TODO:动作处理
