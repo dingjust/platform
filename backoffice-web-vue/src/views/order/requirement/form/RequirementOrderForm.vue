@@ -8,7 +8,7 @@
     <div>
       <el-form ref="requirementForm" :model="formData" :rules="rules" label-position="left" label-width="88px"
         hide-required-asterisk>
-        <el-form-item prop="belongTo" v-if="isTenant() && isCreated">
+        <el-form-item prop="belongTo" v-if="isTenant()">
           <template slot="label">
             <h6 class="titleTextClass">所属公司<span style="color: red">*</span></h6>
           </template>

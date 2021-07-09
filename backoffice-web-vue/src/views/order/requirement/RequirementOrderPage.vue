@@ -1,16 +1,27 @@
 <template>
   <div class="animated fadeIn content">
+    <el-dialog title="发布需求" :visible.sync="newVisible" width="400px" :close-on-click-modal="false" append-to-body>
+      <el-row type="flex" justify="space-around" align="center">
+        <el-col :span="8">
+          <el-button @click="onNewFindOrder">抢订单</el-button>
+        </el-col>
+        <el-col :span="8">
+          <el-button @click="onNew">找工厂</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
+    <el-dialog :visible.sync="findOrderVisible" width="80%" :close-on-click-modal="false" append-to-body class="purchase-dialog">
+      <requirement-with-find-order-form v-if="findOrderVisible" :slotData="slotData" :isCreated="!editRequirement" @callback="callback"/>
+    </el-dialog>
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
-        <el-col :span="3">
-          <div class="orders-list-title">
-            <h6>需求订单列表</h6>
-          </div>
-        </el-col>
-        <el-col :span="2">
-          <el-button class="btn-class" @click="onNew" v-if="!isTenant()"><span style="font-size: 14px">+</span>发布需求</el-button>
-          <el-button class="btn-class" @click="onNew" v-else><span style="font-size: 14px">+</span>代发需求</el-button>
-        </el-col>
+        <div class="orders-list-title">
+          <h6>需求订单列表</h6>
+        </div>
+        <div>
+          <el-button class="btn-class" @click="newVisible=true" v-if="!isTenant()"><span style="font-size: 14px">+</span>发布需求</el-button>
+          <el-button class="btn-class" @click="newVisible=true" v-else><span style="font-size: 14px">+</span>代发需求</el-button>
+        </div>
       </el-row>
       <div class="pt-3"></div>
       <requirement-order-toolbar
@@ -97,6 +108,7 @@
   import RequirementOrderSimpleForm from './form/RequirementOrderSimpleForm';
   import RequirementOrderForm from './form/RequirementOrderForm';
   import RequirementOrderCloseDialog from './form/RequirementOrderCloseDialog';
+  import RequirementWithFindOrderForm from './form/RequirementWithFindOrderForm'
 
   export default {
     name: 'RequirementOrderPage',
@@ -105,7 +117,8 @@
       RequirementOrderForm,
       RequirementOrderDetailsPage,
       RequirementOrderToolbar,
-      RequirementOrderSearchResultList
+      RequirementOrderSearchResultList,
+      RequirementWithFindOrderForm
     },
     computed: {
       ...mapGetters({
@@ -260,12 +273,19 @@
         this.onAdvancedSearch();
       },
       onNew (formData) {
+        this.newVisible = false;
+
         this.formData.belongTo = {
           id: null,
           name: ''
         }
         this.formData.details.certificates = [];
         this.formDialogVisible = !this.formDialogVisible;
+      },
+      onNewFindOrder () {
+        this.editRequirement = false
+        this.newVisible = false;
+        this.findOrderVisible = true;
       },
       async onEdit (item) {
         // const url = this.apis().getRequirementOrder(item.code);
@@ -276,15 +296,22 @@
         // }
         await this.onDetails(item, true);
         this.detailsDialogVisible = false;
+
+        if (!this.slotData.details.certificates) {
+          this.$set(this.slotData.details, 'certificates', []);
+        }
+
         const result = this.slotData;
 
-        result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
-        if (!result.details.certificates) {
-          this.$set(result.details, 'certificates', []);
+        if (result.orderType === 'FINDING_ORDER') {
+          this.editRequirement = true
+          this.findOrderVisible = true;
+        } else {
+          result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
+          this.setFormData(Object.assign({}, this.formData, result));
+  
+          this.editFormDialogVisible = !this.editFormDialogVisible;
         }
-        this.setFormData(Object.assign({}, this.formData, result));
-
-        this.editFormDialogVisible = !this.editFormDialogVisible;
       },
       onSimpleNew (formData) {
         this.fn.openSlider('急速发布需求', RequirementOrderSimpleForm, formData);
@@ -353,11 +380,11 @@
       onEditSave (factories, phoneNumbers) {
         // 处理数据
         const { params, form } = this.handleData(factories, phoneNumbers);
-        this.$set(form, 'reviewState', 'REVIEWING')
         let url;
         if (this.isTenant()) {
           url = this.apis().updateRequirementOrderByPlatform();
         } else {
+          this.$set(form, 'reviewState', 'REVIEWING')
           url = this.apis().updateRequirementOrderNewByType();
         }
         this._onEditSave(url, params, form);
@@ -446,17 +473,23 @@
         });
       },
       async _onShow(row) {
-        const url = this.apis().showOrHideRequirementOrder(row.code, !row.enableShow)
+        let enableShow = row.enableShow === false
+
+        const url = this.apis().showOrHideRequirementOrder(row.code, enableShow)
         const result = await this.$http.put(url, {})
 
         if (result.code === 1) {
           this.onAdvancedSearch();
         }
       },
+      callback () {
+        this.findOrderVisible = false
+        this.onAdvancedSearch(0);
+      }
     },
     data () {
       return {
-        slotData: '',
+        slotData: null,
         isAdvancedSearch: this.$store.state.RequirementOrdersModule.isAdvancedSearch,
         detailsDialogVisible: false,
         formDialogVisible: false,
@@ -487,7 +520,10 @@
           code: null,
           agentContactPerson: '',
           agentContactPhone: ''
-        }
+        },
+        newVisible: false,
+        findOrderVisible: false,
+        editRequirement: false
       };
     },
     watch: {

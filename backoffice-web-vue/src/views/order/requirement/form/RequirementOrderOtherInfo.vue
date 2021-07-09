@@ -46,7 +46,7 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <pay-plan-form :formData="formData.details.payPlan" :isUseForOrder="true" />
+    <!-- <pay-plan-form :formData="formData.details.payPlan" :isUseForOrder="true" /> -->
     <!-- <my-address-form v-if="isCreated" :vAddress.sync="shippingAddress" :showContact="false"/>
     <el-row type="flex" :gutter="20" v-if="!isCreated">
       <el-col :span="12">
