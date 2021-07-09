@@ -209,8 +209,9 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
         if (list != null) {
           _historyKeywords = list.map((item) => item as String).toList();
         }
+      } else {
+        _historyKeywords = [];
       }
-      _historyKeywords = [];
     }
     return _historyKeywords;
   }

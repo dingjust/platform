@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
     AppVersionHelper appVersionHelper =
         Provider.of<AppVersionHelper>(context, listen: false);
     bool isNew = await appVersionHelper.checkVersion(
-        context, AppBLoC.instance.packageInfo.version, 'nbyjy');
+        context, AppBLoC.instance?.packageInfo?.version, 'nbyjy');
 
     CertificationStatusHelper helper =
         Provider.of<CertificationStatusHelper>(context, listen: false);

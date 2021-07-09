@@ -13,10 +13,9 @@ import '_shared/widgets/site_statistics.dart';
 
 /// 生意
 class BusinessHomePage extends StatefulWidget {
-  BusinessHomePage({Key key, this.userType})
-      : super(key: AppKeys.businessHomePage);
-
-  final UserType userType;
+  BusinessHomePage({
+    Key key,
+  }) : super(key: AppKeys.businessHomePage);
 
   final List<Widget> widgets = [
     FactorySiteStatisticsSection(),

@@ -1,10 +1,8 @@
-import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_list.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'package:core/core.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -41,15 +39,15 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
             builder: (context, AmapState state, _) => MultiProvider(
                     providers: [
                       ChangeNotifierProvider(
-                          create: (_) => FactoryRequirementState(
+                          create: (_) => OrderRequirementState(
                               latitude: state.latitude,
                               longitude: state.longitude,
                               sortCondition: 'distance,DESC')),
                       ChangeNotifierProvider(
-                          create: (_) => OrderRequirementState(
+                          create: (_) => FactoryRequirementState(
                               latitude: state.latitude,
                               longitude: state.longitude,
-                              sortCondition: 'distance,DESC'))
+                              sortCondition: 'distance,DESC')),
                     ],
                     child: Container(
                       color: Color.fromRGBO(245, 245, 245, 1),

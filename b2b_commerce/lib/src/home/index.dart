@@ -18,9 +18,9 @@ import 'home_appbar.dart';
 
 /// 首页
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.userType}) : super(key: AppKeys.homePage);
-
-  final UserType userType;
+  HomePage({
+    Key key,
+  }) : super(key: AppKeys.homePage);
 
   ///头部
   final List<Widget> _headWidgets = [
@@ -48,12 +48,12 @@ class HomePage extends StatefulWidget {
     ),
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      child: RequirementList<FactoryRequirementState>(),
+      child: RequirementList<OrderRequirementState>(),
     ),
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      child: RequirementList<OrderRequirementState>(),
-    )
+      child: RequirementList<FactoryRequirementState>(),
+    ),
   ];
 
   ///头部
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     AppVersionHelper appVersionHelper =
         Provider.of<AppVersionHelper>(context, listen: false);
     bool isNew = await appVersionHelper.checkVersion(
-        context, AppBLoC.instance.packageInfo.version, 'nbyjy');
+        context, AppBLoC.instance?.packageInfo?.version, 'nbyjy');
 
     CertificationStatusHelper helper =
         Provider.of<CertificationStatusHelper>(context, listen: false);

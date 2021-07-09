@@ -50,9 +50,7 @@ class _MyAppState extends State<MyApp> {
           initialData: UserBLoC.instance.currentUser,
           stream: UserBLoC.instance.stream,
           builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-            return B2BApp(
-              userType: snapshot.data.type,
-            );
+            return B2BApp();
           }),
     );
   }
@@ -76,10 +74,7 @@ class _MyAppState extends State<MyApp> {
 class B2BApp extends StatefulWidget {
   B2BApp({
     Key key,
-    @required this.userType,
   }) : super(key: key);
-
-  final UserType userType;
 
   _B2BAppState createState() => _B2BAppState();
 }
@@ -157,7 +152,7 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
           icon: Icon(B2BIcons.home_2),
           label: '首页',
         ),
-        HomePage(userType: widget.userType),
+        HomePage(),
       ),
       NavigationMenu(
           BottomNavigationBarItem(icon: Icon(B2BIcons.production), label: '生产'),
@@ -170,7 +165,7 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
       // ),
       NavigationMenu(
         BottomNavigationBarItem(icon: Icon(B2BIcons.work_bench), label: '工作台'),
-        BusinessHomePage(userType: widget.userType),
+        BusinessHomePage(),
       ),
       NavigationMenu(
         BottomNavigationBarItem(
@@ -206,7 +201,7 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
         AppVersionHelper appVersionHelper =
             Provider.of<AppVersionHelper>(context, listen: false);
         appVersionHelper.checkVersion(
-            context, AppBLoC.instance.packageInfo.version, 'nbyjy');
+            context, AppBLoC.instance?.packageInfo?.version, 'nbyjy');
 
         return Scaffold(
           key: AppKeys.appPage,
