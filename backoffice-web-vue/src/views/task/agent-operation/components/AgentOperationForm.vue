@@ -93,7 +93,7 @@ export default {
         agentPhone: '',
         agentPassword: '',
         userAgreementmentForm: {
-          userTempCode: '428f1c4b-a827-4388-8466-88e57c508e8a',
+          userTempCode: '9f503d6a-8aeb-4b44-a9cc-10f9e62572a6',
           companyCode: 'PP00002002'
         }
       },
