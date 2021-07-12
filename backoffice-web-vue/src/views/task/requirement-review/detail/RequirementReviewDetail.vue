@@ -112,10 +112,10 @@ export default {
     }
   },
   created () {
-    if (this.row.creationtime === this.row.modifiedtime) {
-      this.getDetail();
-    } else {
+    if (this.row.isNewCreated === false && this.row.reviewState === 'REVIEWING' && this.row.status === 'PENDING_QUOTE') {
       this.getBackup();
+    } else {
+      this.getDetail();
     }
   }
 }
