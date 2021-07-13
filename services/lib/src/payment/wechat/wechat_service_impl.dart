@@ -139,7 +139,7 @@ class WechatServiceImpl implements WechatService {
 
     var model = WeChatShareMiniProgramModel(
         webPageUrl: url,
-        miniProgramType: WXMiniProgramType.PREVIEW,
+        miniProgramType: WXMiniProgramType.RELEASE,
         userName: GlobalConfigs.MINI_PROGRAM_ID,
         path: '$path',
         title: '$title',

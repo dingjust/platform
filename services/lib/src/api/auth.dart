@@ -23,8 +23,7 @@ class AuthApis {
       };
 
   ///钉钉授权绑定账号
-  static get dingTalkAuthBinding =>
-          (String code) {
+  static get dingTalkAuthBinding => (String code) {
         return '/{baseSiteId}/dingtalk/auth/access_bind/$code';
       };
 

@@ -294,7 +294,7 @@ class AnymouseApp extends StatelessWidget {
       home: ClientSelectPageV2(),
       routes: {
         AppRoutes.ROUTE_AUTH_REQUEST_PAGE:
-        AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
+            AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
       },
       builder: (context, child) {
         final botToastBuilder = BotToastInit(); //1.调用BotToastInit

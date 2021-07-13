@@ -699,20 +699,20 @@ class _RequirementOrderDetailByFactoryPageState
             children: [
               Expanded(
                   child: FactoryBottomBtn(
-                    color: Colors.green,
-                    label: '联系对方',
-                    onTap: () {
-                      var tel = '';
-                      if (model?.details?.agentContactPhone != null &&
-                          model?.details?.agentContactPhone != '') {
-                        //代理电话
-                        tel = model.details.agentContactPhone;
-                      } else {
-                        tel = model.details.contactPhone;
-                      }
-                      _selectActionButton(tel);
-                    },
-                  )),
+                color: Colors.green,
+                label: '联系对方',
+                onTap: () {
+                  var tel = '';
+                  if (model?.details?.agentContactPhone != null &&
+                      model?.details?.agentContactPhone != '') {
+                    //代理电话
+                    tel = model.details.agentContactPhone;
+                  } else {
+                    tel = model.details.contactPhone;
+                  }
+                  _selectActionButton(tel);
+                },
+              )),
             ],
           ),
         ),
@@ -826,12 +826,14 @@ class _RequirementOrderDetailByFactoryPageState
       title = orderModel.details.category.name;
     }
 
+    const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
+
     ShareDialog.showShareDialog(context,
         title: '$title',
         description: '$description',
         imageUrl: orderModel.details.pictures.isEmpty
             ? '${GlobalConfigs.LOGO_URL}'
-            : '${orderModel.details.pictures[0].shareUrl()}',
+            : '${orderModel.details.pictures[0].imageProcessUrl(processUrl)}',
         path: MiniProgramPageRoutes.requirementDetail(orderModel.code),
         url: Apis.shareRequirement(orderModel.code));
   }

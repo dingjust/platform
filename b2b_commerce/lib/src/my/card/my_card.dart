@@ -133,13 +133,13 @@ class _MyCardPageState extends State<MyCardPage> {
               Container(
                 height: 300,
                 child: QrImage(
-                  data: "$channelCodeUrl",
-                  version: QrVersions.auto,
-                  size: 300,
-                  errorCorrectionLevel: QrErrorCorrectLevel.H,
-                  embeddedImageStyle: QrEmbeddedImageStyle(size: Size(80, 80)),
-                  embeddedImage: NetworkImage('${imgUrl()}'),
-                ),
+                    data: "$channelCodeUrl",
+                    version: QrVersions.auto,
+                    size: 300,
+                    errorCorrectionLevel: QrErrorCorrectLevel.H,
+                    embeddedImageStyle:
+                        QrEmbeddedImageStyle(size: Size(80, 80)),
+                    embeddedImage: NetworkImage('${imgUrl()}')),
               ),
               Container(
                   height: 50,
@@ -246,7 +246,10 @@ class _MyCardPageState extends State<MyCardPage> {
     if (user?.profilePicture == null) {
       url = GlobalConfigs.LOGO_URL;
     } else {
-      url = user?.profilePicture?.previewUrl();
+      const processUrl = 'image_process=resize,w_320/crop,mid,w_300,h_300';
+
+      url = user?.profilePicture?.imageProcessUrl(processUrl);
+      print('=======$url');
     }
     return url;
   }

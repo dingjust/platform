@@ -21,9 +21,9 @@ import 'package:widgets/widgets.dart';
 import '_shared/finding_factory_btns.dart';
 
 class FindingFactoryPage extends StatefulWidget {
-  FindingFactoryPage(
-    this.factoryCondition, {
-    this.route,
+  FindingFactoryPage({
+    this.factoryCondition,
+    this.route = '推荐工厂',
     this.requirementCode,
   });
 
@@ -101,38 +101,41 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
     //页面统计
     UmengPlugin.onPageStart('生产找厂');
 
-    if (widget.factoryCondition != null) {
-      if (widget.route == '就近找厂') {
-        isLocalFind = true;
-        factoryCondition = FactoryCondition(
-          starLevel: 0,
-          adeptAtCategories: [],
-          labels: [],
-          cooperationModes: [],
-        );
-      } else {
-        factoryCondition = widget.factoryCondition;
-      }
-    } else {
-      if (widget.route == '就近找厂') {
-        isLocalFind = true;
-        factoryCondition = FactoryCondition(
-          starLevel: 0,
-          adeptAtCategories: [],
-          labels: [],
-          cooperationModes: [],
-        );
-      } else {
-        factoryCondition = FactoryCondition(
-            starLevel: 0,
-            adeptAtCategories: [],
-            labels: [],
-            cooperationModes: []);
-      }
-    }
+    factoryCondition = FactoryCondition(
+        starLevel: 0, adeptAtCategories: [], labels: [], cooperationModes: []);
+
+    // if (widget.factoryCondition != null) {
+    //   if (widget.route == '就近找厂') {
+    //     isLocalFind = true;
+    //     factoryCondition = FactoryCondition(
+    //       starLevel: 0,
+    //       adeptAtCategories: [],
+    //       labels: [],
+    //       cooperationModes: [],
+    //     );
+    //   } else {
+    //     factoryCondition = widget.factoryCondition;
+    //   }
+    // } else {
+    //   if (widget.route == '就近找厂') {
+    //     isLocalFind = true;
+    //     factoryCondition = FactoryCondition(
+    //       starLevel: 0,
+    //       adeptAtCategories: [],
+    //       labels: [],
+    //       cooperationModes: [],
+    //     );
+    //   } else {
+    //     factoryCondition = FactoryCondition(
+    //         starLevel: 0,
+    //         adeptAtCategories: [],
+    //         labels: [],
+    //         cooperationModes: []);
+    //   }
+    // }
     super.initState();
 
-    //初始化滚动控制器\
+    //初始化滚动控制器
     _scrollController = ScrollController();
     _factoryScrollController = ScrollController();
     _factoryScrollController.addListener(() {
@@ -188,17 +191,16 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                         String result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                SearchModelPage(
-                                  searchModel: SearchModel(
-                                    historyKeywords: historyKeywords,
-                                    keyword: factoryCondition.keyword,
-                                    searchModelType: SearchModelType.FACTORY,
-                                    factoryCondition: factoryCondition,
-                                    route:
+                            builder: (context) => SearchModelPage(
+                              searchModel: SearchModel(
+                                historyKeywords: historyKeywords,
+                                keyword: factoryCondition.keyword,
+                                searchModelType: SearchModelType.FACTORY,
+                                factoryCondition: factoryCondition,
+                                route:
                                     GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-                                  ),
-                                ),
+                              ),
+                            ),
                           ),
                         );
                       },

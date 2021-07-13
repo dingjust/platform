@@ -24,11 +24,11 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
             _buildTelephone(context),
             const Divider(height: 5),
             _buildWechat(context),
-            const Divider(height: 5),
-            _buildQQ(context),
+            // const Divider(height: 5),
+            // _buildQQ(context),
             const Divider(height: 5),
             _buildQRCode(),
-            _buildTips(context),
+            // _buildTips(context),
           ],
         ),
       ),
@@ -68,7 +68,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
             style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
           trailing: const Text(
-            '15202020805',
+            'yiy80088',
             style: const TextStyle(
               fontSize: 16,
             ),

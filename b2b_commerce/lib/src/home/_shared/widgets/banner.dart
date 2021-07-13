@@ -30,14 +30,7 @@ class HomeBrandBannerSection extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => FindingFactoryPage(
-                  FactoryCondition(
-                      starLevel: 0,
-                      adeptAtCategories: [],
-                      labels: [],
-                      cooperationModes: []),
-                  route: '推荐工厂',
-                ),
+                builder: (context) => FindingFactoryPage(),
               ),
             );
           }),
@@ -73,22 +66,14 @@ class HomeFactoryBannerSection extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => FindingFactoryPage(
-                  FactoryCondition(
-                      starLevel: 0,
-                      adeptAtCategories: [],
-                      labels: [],
-                      cooperationModes: []),
-                  route: '推荐工厂',
-                ),
+                builder: (context) => FindingFactoryPage(),
               ),
             );
           }),
       CarouselItem(
           model: MediaModel(
             url:
-            '${GlobalConfigs
-                .CDN_OSS_DOMAIN}/activity/invite_activity_banner1.jpg',
+                '${GlobalConfigs.CDN_OSS_DOMAIN}/activity/invite_activity_banner1.jpg',
           ),
           onTap: () {
             Navigator.of(context).pushNamed(AppRoutes.ROUTE_ACTIVITY_INVITE);
