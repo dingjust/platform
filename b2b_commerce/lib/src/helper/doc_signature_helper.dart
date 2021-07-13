@@ -14,6 +14,7 @@ class DocSignatureHelper {
   static Future<bool> open(
       {@required BuildContext context,
       @required DocSignatureModel model,
+      VoidCallback onEdit,
       bool disable = false}) async {
     Function cancelFunc = BotToast.showLoading(
         clickClose: false, allowClick: false, crossPage: false);
@@ -32,10 +33,11 @@ class DocSignatureHelper {
     if (contentLength > 0) {
       bool result = await Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => DocSignatureDetailPage(
-                pathPDF: filePath,
-                doc: model,
-                title: '电子对账单详情',
-                disable: disable,
+            pathPDF: filePath,
+            doc: model,
+            title: '电子对账单详情',
+            disable: disable,
+            onEdit: onEdit,
               )));
       return result;
     } else {

@@ -130,37 +130,33 @@ class DocSignaturesBlock extends StatelessWidget {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   '$label',
                   style: TextStyle(color: Colors.grey),
                 ),
+                Visibility(
+                  visible: filterSheets.length > 0,
+                  child: IconButton(
+                    icon: Icon(Icons.add, color: Colors.blue),
+                    onPressed: () => onCreate(context),
+                  ),
+                ),
               ],
             ),
-            (sheets != null && sheets.length > 0)
+            (filterSheets != null && filterSheets.length > 0)
                 ? Wrap(
-              children: [
-                for (FastReconciliationSheetModel e in sheets ?? [])
-                  _buildBtn(context, e)
-              ],
-            )
+                    children: [
+                      for (FastReconciliationSheetModel e in filterSheets ?? [])
+                        _buildBtn(context, e)
+                    ],
+                  )
                 : Center(
                 child: canCreate()
                     ? TextButton(
                     child: Text('创建对账单'),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(
-                          builder: (context) =>
-                              ReconciliationOrderForm(
-                                order: order,
-                              )))
-                          .then((value) {
-                        // if (value) {
-                        callback?.call();
-                        // }
-                      });
-                    })
+                    onPressed: () => onCreate(context))
                     : Text('$hintText',
                     style: TextStyle(color: Colors.grey)))
           ],
@@ -181,6 +177,7 @@ class DocSignaturesBlock extends StatelessWidget {
             DocSignatureHelper.open(
                 context: context,
                 model: model.docSignatures.first,
+                onEdit: () => onEdit(context, model),
                 disable: signDisable(model))
                 .then((value) {
               //需要刷新
@@ -206,6 +203,17 @@ class DocSignaturesBlock extends StatelessWidget {
     );
   }
 
+  ///有效对账单
+  List<FastReconciliationSheetModel> get filterSheets {
+    if (sheets != null) {
+      return sheets
+          .where((element) =>
+      element.state != FastReconciliationSheetState.CANCELLED)
+          .toList();
+    }
+    return [];
+  }
+
   bool signDisable(FastReconciliationSheetModel order) {
     return order.state == FastReconciliationSheetState.PENDING_APPROVAL ||
         order.state == FastReconciliationSheetState.CANCELLED;
@@ -217,5 +225,32 @@ class DocSignaturesBlock extends StatelessWidget {
       return order.originCooperator != null && order.targetCooperator != null;
     }
     return false;
+  }
+
+  void onCreate(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+        builder: (context) =>
+            ReconciliationOrderForm(
+              order: order,
+            )))
+        .then((value) {
+      // if (value) {
+      callback?.call();
+      // }
+    });
+  }
+
+  ///更新
+  void onEdit(BuildContext context, FastReconciliationSheetModel model) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+        builder: (context) =>
+            ReconciliationOrderForm(
+              order: order,
+            )))
+        .then((value) {
+      callback?.call();
+    });
   }
 }

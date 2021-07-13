@@ -22,12 +22,15 @@ class DocSignatureDetailPage extends StatefulWidget {
   ///PDF路径
   String pathPDF;
 
+  final VoidCallback onEdit;
+
   DocSignatureDetailPage(
       {this.pathPDF = '',
       this.route,
       this.title = '账单详情',
       this.doc,
-      this.disable = false});
+      this.disable = false,
+      this.onEdit});
 
   @override
   _DocSignatureDetailPageState createState() =>
@@ -93,12 +96,29 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
+                widget.onEdit != null
+                    ? Expanded(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        widget?.onEdit?.call();
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                          MaterialStateProperty.all(Colors.white)),
+                      child: Text('修改',
+                          style: TextStyle(color: Colors.black54))),
+                )
+                    : Container(),
+                Container(
+                  width: widget.onEdit != null ? 20 : 0,
+                ),
                 Expanded(
                     child: ElevatedButton(
                         onPressed: () {
                           _onSign();
                         },
-                        child: Text('去签署')))
+                        child: Text('签署'))),
               ],
             ),
           )
