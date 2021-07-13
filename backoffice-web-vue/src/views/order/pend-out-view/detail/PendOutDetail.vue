@@ -36,6 +36,9 @@
               <el-col>
                 <h6>生产总价：{{totalAmount.toFixed(2)}}元</h6>
               </el-col>
+              <el-col v-if="detail.serviceFeePercent">
+                <h6>服务费比例：{{(detail.serviceFeePercent * 100).toFixed(2)}}</h6>
+              </el-col>
             </el-row>
             <el-row type="flex" justify="space-between" align="center" style="margin-bottom: 12px;">
               <el-col>
@@ -45,14 +48,17 @@
                 <h6>是否开票：{{detail.invoiceNeeded ? '是' : '否'}}<span style="margin-left:5px"
                     v-if="detail.invoiceNeeded">{{detail.invoiceTaxPoint * 100}}%</span></h6>
               </el-col>
-              <el-col v-if="detail.payPlan">
+              <el-col>
                 <h6 style="display: inline-block;" v-popover:popover>
                   有无定金：{{detail.payPlan.isHaveDeposit ? '有定金' : '无定金'}} + {{payPlanType[detail.payPlan.payPlanType]}}
                 </h6>
-                <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
-                  <h6 v-html="getHtmlText(detail.payPlan.previewText)"></h6>
-                </el-popover>
               </el-col>
+            </el-row>
+            <el-row type="flex" justify="space-between" align="center" style="margin-bottom: 12px;">
+              <h6 class="preview-text">{{resultPreview}}</h6>
+              <!-- <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
+                <h6 v-html="getHtmlText(detail.payPlan.previewText)"></h6>
+              </el-popover> -->
             </el-row>
           </el-col>
           <el-col :xs="24" :sm="6">
@@ -96,6 +102,66 @@ export default {
       }
       return [];
     },
+    resultPreview: function () {
+      var result = '';
+
+      if (this.detail.payPlan.payPlanItems.length <= 0) {
+        return result;
+      }
+
+      this.detail.payPlan.payPlanItems.forEach((payPlanItem) => {
+        if (!(payPlanItem.moneyType == 'MONTHLY_SETTLEMENT_TWO' && payPlanItem.isRange == true)) {
+          result += this.getEnum('PayMoneyType', payPlanItem.moneyType);
+        }
+
+        switch (payPlanItem.moneyType) {
+          case 'DEPOSIT':
+            result += '：在双方' + this.getEnum('TriggerEvent', payPlanItem.triggerEvent) + '后' + payPlanItem
+              .triggerDays +
+              '天以内，甲方应向乙方支付订单总金额的' + (payPlanItem.payPercent * 100).toFixed(0) + '%为定金\n';
+            break;
+          case 'PHASEONE':
+          case 'PHASETWO':
+          case 'PHASETHREE':
+            result += '：在双方' + this.getEnum('TriggerEvent', payPlanItem.triggerEvent) + '后' + payPlanItem
+              .triggerDays + '天以内，';
+            if (payPlanItem.isLast) {
+              result += '甲方应向乙方支付合同剩余部分款项（以上所有款项金额以双方对账金额为准）';
+            } else {
+              result += '甲方应向乙方支付合同总额的' + (payPlanItem.payPercent * 100).toFixed(0) + '%货款\n';
+            }
+            break;
+          case 'MONTHLY_SETTLEMENT_ONE':
+          case 'MONTHLY_SETTLEMENT_TWO':
+            if (payPlanItem.isRange) {
+              result += '，' + (payPlanItem.monthlyStartDayNum ?
+                  (payPlanItem.monthlyStartDayNum == -1 ? '月底' : payPlanItem.monthlyStartDayNum + '号') : '*') +
+                '后至' + (payPlanItem.monthlyEndDayNum ?
+                  (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*') +
+                '前完成' + (payPlanItem.triggerEvent ? this.getEnum('TriggerEvent', payPlanItem.triggerEvent) :
+                  '****') +
+                '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
+                (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
+                  ' *') + '支付相应款项';
+              result += '（以上所有款项金额以双方对账金额为准）';
+            } else {
+              result += '：每月' + (payPlanItem.monthlyEndDayNum ?
+                  (payPlanItem.monthlyEndDayNum == -1 ? '月底' : payPlanItem.monthlyEndDayNum + '号') : '*') +
+                '前完成' + (payPlanItem.triggerEvent ? this.getEnum('TriggerEvent', payPlanItem.triggerEvent) :
+                  '****') +
+                '后于' + (payPlanItem.monthType ? this.getEnum('MonthType', payPlanItem.monthType) : '**') +
+                (payPlanItem.payDayNum ? (payPlanItem.payDayNum == -1 ? '月底' : payPlanItem.payDayNum + '号') :
+                  ' *') + '支付相应款项';
+              if (payPlanItem.moneyType === 'MONTHLY_SETTLEMENT_ONE') {
+                result += '（以上所有款项金额以双方对账金额为准）';
+              }
+            }
+            break;
+        }
+      });
+
+      return result;
+    }
   },
   methods: {
     async getDetails() {
@@ -123,6 +189,17 @@ export default {
         'MONTHLY_SETTLEMENT': '月结',
         'MONTHLY_SETTLEMENT_ONE': '一月一结',
         'MONTHLY_SETTLEMENT_TWO': '一月两结',
+      },
+      triggerEvent: {
+        'ORDER_CONFIRMED': '确认订单',
+        'CONTRACT_SIGNED': '签署合同',
+        'DELIVERY_CONFIRMED': '确认收货',
+        'RECONCILIATION_CONFIRMED': '确认对账',
+        'INVOICE_RECEIVED': '收到发票'
+      },
+      triggerType: {
+        'INSIDE': '以内',
+        'OUTSIDE': '以外'
       }
     }
   },
@@ -154,5 +231,10 @@ export default {
 
   .info-cell {
     padding: 0px 16px;
+  }
+
+  .preview-text {
+    white-space: pre-line;
+    line-height: 24px;
   }
 </style>

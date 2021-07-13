@@ -17,7 +17,11 @@
       <el-table-column label="乙方公司" prop="belongTo.name" show-overflow-tooltip min-width="150px"></el-table-column>
       <el-table-column label="款数" prop="entrySize" min-width="60px"></el-table-column>
       <el-table-column label="订单数量" prop="totalQuantity" min-width="70px"></el-table-column>
-      <el-table-column label="服务费比例" prop="serviceFeePercent" min-width="80px"></el-table-column>
+      <el-table-column label="服务费比例" prop="serviceFeePercent" min-width="80px">
+        <template slot-scope="scope">
+          <span v-if="scope.row.serviceFeePercent">{{ (scope.row.serviceFeePercent * 100).toFixed(2) }}%</span>
+        </template>
+      </el-table-column>
       <el-table-column label="订单金额" prop="totalPrimeCost" min-width="70px"></el-table-column>
       <el-table-column label="结算金额" prop="onlinePaidAmount" min-width="70px"></el-table-column>
       <el-table-column label="甲方渠道码" min-width="105px">
@@ -47,7 +51,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="60px">
+      <el-table-column label="操作" min-width="60px" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="onDetail(scope.row)" class="purchase-list-button">详情</el-button>
         </template>

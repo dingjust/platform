@@ -43,8 +43,8 @@
         <h6 class="detail-title">经营执照：<span v-if="!detail.certImg" style="color: #909399">暂无信息</span></h6>
         <el-image v-if="detail.certImg"
           style="width: 100px; height: 100px; border-radius: 5px;"
-          :src="detail.certImg.url"
-          :preview-src-list="[detail.certImg.url]"
+          :src="detail.certImg.url + '?image_process=watermark,text_6ZKJ5Y2V,fill_1,color_F5F5F5,t_50'"
+          :preview-src-list="[detail.certImg.url + '?image_process=watermark,text_6ZKJ5Y2V,fill_1,color_F5F5F5,t_50']"
           :z-index="9999">
         </el-image>
       </el-row>

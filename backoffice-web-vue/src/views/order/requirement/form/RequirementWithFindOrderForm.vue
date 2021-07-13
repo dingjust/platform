@@ -75,7 +75,7 @@
       </el-form-item>
     </el-form>
     <el-row type="flex" justify="center" align="center">
-      <el-button type="primary" size="medium" @click="onSave">{{isCreated ? '需求发出' : '编辑需求'}}</el-button>
+      <el-button type="primary" size="medium" @click="onSave">{{isCreated ? '需求发出' : '保存'}}</el-button>
     </el-row>
     <el-dialog :visible.sync="companyDialogVisible" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">

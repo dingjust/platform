@@ -186,6 +186,6 @@ new Vue({
     this.$store.dispatch('GlobalColorsModule/getcolorsData');
     this.$store.dispatch('GlobalCategoriesModule/getCategoriesData');
 
-    this.$store.dispatch('PointsExchangeModule/pollingSearch');
+    // this.$store.dispatch('PointsExchangeModule/pollingSearch');
   }
 });
