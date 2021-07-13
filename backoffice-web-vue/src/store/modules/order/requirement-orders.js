@@ -46,7 +46,7 @@ const state = {
   formData: {
     id: null,
     code: '',
-    orderType: 'FINDING_ORDER',
+    orderType: 'FINDING_FACTORY',
     details: {
       pictures: [],
       category: null,
@@ -263,7 +263,7 @@ const actions = {
     commit('formData', {
       id: null,
       code: '',
-      orderType: 'FINDING_ORDER',
+      orderType: 'FINDING_FACTORY',
       details: {
         pictures: [],
         category: null,

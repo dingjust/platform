@@ -28,16 +28,25 @@ export default {
           show: true,
           text: this.title
         },
+        tooltip: {
+          trigger: 'axis'
+        },
         xAxis: {
-            type: 'category',
-            data: bottom
+          type: 'category',
+          data: bottom
         },
         yAxis: {
-            type: 'value'
+          type: 'value',
+          name: this.chartData.name === 'orderAmount' ? '单位 / 千元' : '',
+          axisLabel: {
+            formatter: (value, index) => {
+              return this.chartData.name === 'orderAmount' ? (value / 1000) : value
+            }
+          }
         },
         series: [{
-            data: values,
-            type: 'line'
+          data: values,
+          type: 'line'
         }]
       };
       option && myChart.setOption(option);
