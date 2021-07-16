@@ -19,7 +19,7 @@
         <el-row style="padding: 8px 0px;">
           <el-col :xs="24" :sm="18" class="info-cell">
             <el-row v-if="detail.title" style="margin-bottom: 12px;">
-              <h6>{{detail.title}}</h6>
+              <h6>标题：{{detail.title}}</h6>
             </el-row>
             <el-row type="flex" justify="space-between" align="center" style="margin-bottom: 12px;">
               <el-col>
@@ -56,9 +56,6 @@
             </el-row>
             <el-row type="flex" justify="space-between" align="center" style="margin-bottom: 12px;">
               <h6 class="preview-text">{{resultPreview}}</h6>
-              <!-- <el-popover ref="popover" placement="top-start" width="500" trigger="hover">
-                <h6 v-html="getHtmlText(detail.payPlan.previewText)"></h6>
-              </el-popover> -->
             </el-row>
           </el-col>
           <el-col :xs="24" :sm="6">
@@ -81,7 +78,7 @@ export default {
   name: 'PendOutDetail',
   components: {
     ProductionContract,
-    SalesProductionTabs
+    SalesProductionTabs,
   },
   props: ['id'],
   computed: {

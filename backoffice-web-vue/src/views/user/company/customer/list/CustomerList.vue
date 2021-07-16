@@ -9,6 +9,7 @@
       <el-table-column label="id" prop="id"></el-table-column>
       <el-table-column label="uid" prop="uid"></el-table-column>
       <el-table-column label="联系方式" prop="contactPhone"></el-table-column>
+      <el-table-column label="受邀渠道码" prop="channelCode"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-dropdown @command="handleCommand($event, scope.row)" trigger="click">
