@@ -44,10 +44,17 @@
         <sales-reconciliation :form="form" />
       </el-tab-pane>
     </el-tabs>
+    <el-row type="flex" justify="start" style="margin-top:20px">
+      <el-button type="primary" @click="printVisible=true">打印付款申请单</el-button>
+    </el-row>
+    <el-dialog title="打印付款申请单" :visible.sync="printVisible" width="80%" :close-on-click-modal="false" append-to-body>
+      <payment-application-table :detail="form" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import PaymentApplicationTable from '@/views/order/components/PaymentApplicationTable'
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import SalesProductionProductsTable from './SalesProductionProductsTable';
   import SalesProductionTasksTable from './SalesProductionTasksTable';
@@ -66,7 +73,8 @@
       SalesPlanEntryDetail,
       ProfitLossDetailSubject: () => import('@/views/purchase/profit-loss/detail/ProfitLossDetailSubject'),
       SalesPayment,
-      SalesReconciliation
+      SalesReconciliation,
+      PaymentApplicationTable
     },
     props: {
       canUpdate: {
@@ -213,7 +221,8 @@
         salesProductAppendVisible: false,
         productFormReadOnly: false,
         detailVisible: false,
-        formVisible: false
+        formVisible: false,
+        printVisible: false
       }
     }
   }

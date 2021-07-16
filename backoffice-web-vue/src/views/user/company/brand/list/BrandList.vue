@@ -5,7 +5,8 @@
       <el-table-column label="商家名称" prop="name" min-width="200"></el-table-column>
       <el-table-column label="登录账号" prop="contactUid" min-width="110"></el-table-column>
       <el-table-column label="联系人" prop="contactPerson" min-width="110"></el-table-column>
-      <el-table-column label="积分" prop="points"></el-table-column>
+      <!-- <el-table-column label="积分" prop="points"></el-table-column> -->
+      <el-table-column label="受邀渠道码" prop="channelCode" min-width="120" show-overflow-tooltip></el-table-column>
       <el-table-column label="注册时间" prop="creationTime" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.creationTime | formatDate}}</span>

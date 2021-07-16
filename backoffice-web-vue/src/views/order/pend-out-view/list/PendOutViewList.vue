@@ -83,7 +83,7 @@ export default {
       });
     },
     onCurrentPageChanged(val) {
-      this.$emit('onAdvancedSearch', val - 1);
+      this.$emit('onAdvancedSearch', val - 1, this.page.size);
 
       this.$nextTick(() => {
         this.$refs.resultTable.bodyWrapper.scrollTop = 0
