@@ -264,19 +264,19 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
       this.title,
       this.state,
       this.entries,
-    this.fastShippingSheets,
-    this.isApproval,
-    this.approvers,
-    this.auditWorkOrder,
-    this.reconciliationQuantity,
-    this.cooperator,
-    this.docSignatures,
-    this.colNames,
-    this.additionalCharges,
-    this.salesProductionOrder,
-    this.paperSheetMedias,
-    this.signState,
-    this.belongRoleType})
+      this.fastShippingSheets,
+      this.isApproval,
+      this.approvers,
+      this.auditWorkOrder,
+      this.reconciliationQuantity,
+      this.cooperator,
+      this.docSignatures,
+      this.colNames,
+      this.additionalCharges,
+      this.salesProductionOrder,
+      this.paperSheetMedias,
+      this.signState,
+      this.belongRoleType})
       : super(
             id: id,
             code: code,
@@ -442,7 +442,10 @@ class ReconciliationAdditionalModel extends ItemModel {
   @JsonKey(fromJson: dateTimefromMilliseconds)
   DateTime modifiedtime;
 
-  ReconciliationAdditionalModel({this.remarks, this.amount});
+  ///是否固定项
+  bool isDefault;
+
+  ReconciliationAdditionalModel({this.remarks, this.amount, this.isDefault});
 
   factory ReconciliationAdditionalModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ReconciliationAdditionalModelFromJson(json);

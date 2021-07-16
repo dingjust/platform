@@ -14,7 +14,7 @@ class DocSignatureHelper {
   static Future<bool> open(
       {@required BuildContext context,
       @required DocSignatureModel model,
-      VoidCallback onEdit,
+      ValueChanged<BuildContext> onEdit,
       bool disable = false}) async {
     Function cancelFunc = BotToast.showLoading(
         clickClose: false, allowClick: false, crossPage: false);

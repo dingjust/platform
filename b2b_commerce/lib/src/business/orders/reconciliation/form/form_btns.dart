@@ -95,7 +95,9 @@ class FormBtns extends StatelessWidget {
 
   ///表单校验
   bool validateForm() {
-    List<FormValidateItem> items = [];
+    List<FormValidateItem> items = [
+      FormValidateItem((totalAmount() <= 0), '结算金额要求大于0'),
+    ];
 
     //行校验
     if (form.entries != null) {

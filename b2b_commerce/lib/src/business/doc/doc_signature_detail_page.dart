@@ -26,7 +26,7 @@ class DocSignatureDetailPage extends StatefulWidget {
   ///PDF路径
   String pathPDF;
 
-  final VoidCallback onEdit;
+  final ValueChanged<BuildContext> onEdit;
 
   DocSignatureDetailPage(
       {this.pathPDF = '',
@@ -117,8 +117,8 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
           _buildIconBtn(
               show: canEdit(),
               onPressed: () {
-                Navigator.of(context).pop();
-                widget?.onEdit?.call();
+                widget?.onEdit?.call(context);
+                // Navigator.of(context).pop();
               },
               icon: Icon(B2BIcons.edit, color: Colors.blueAccent),
               label: '修改'),

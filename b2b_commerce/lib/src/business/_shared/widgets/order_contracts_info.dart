@@ -2,8 +2,10 @@ import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
 import 'package:b2b_commerce/src/business/orders/reconciliation/form/reconciliation_order_form.dart';
 import 'package:b2b_commerce/src/helper/contract_helper.dart';
 import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 ///订单合同信息显示
 class OrderContractsBlock extends StatelessWidget {
@@ -111,6 +113,8 @@ class DocSignaturesBlock extends StatelessWidget {
 
   final SalesProductionOrderModel order;
 
+  // BuildContext
+
   const DocSignaturesBlock(
       {Key key,
       this.sheets,
@@ -165,6 +169,10 @@ class DocSignaturesBlock extends StatelessWidget {
 
   Widget _buildBtn(BuildContext context, FastReconciliationSheetModel model,
       {double height = 80, double width = 80}) {
+    DocSignatureModel doc = model.docSignatures.firstWhere(
+            (element) => element.state != DocSignatureState.CANCELED,
+        orElse: () => null);
+
     return Container(
       height: height,
       width: width,
@@ -176,8 +184,8 @@ class DocSignaturesBlock extends StatelessWidget {
             beforeTap?.call();
             DocSignatureHelper.open(
                 context: context,
-                model: model.docSignatures.first,
-                onEdit: () => onEdit(context, model),
+                model: doc,
+                onEdit: (nContext) => onEdit(nContext, model),
                 disable: signDisable(model))
                 .then((value) {
               //需要刷新
@@ -189,13 +197,12 @@ class DocSignaturesBlock extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              DocSignatureHelper.getDocTypeIcon(
-                  signMethod: model.docSignatures.first.signMethod),
+              DocSignatureHelper.getDocTypeIcon(signMethod: doc.signMethod),
               Expanded(
                 child: Text('${model.title}'),
                 flex: 1,
               ),
-              DocSignatureTag(doc: model.docSignatures.first)
+              DocSignatureTag(doc: doc)
             ],
           ),
         ),
@@ -242,12 +249,20 @@ class DocSignaturesBlock extends StatelessWidget {
   }
 
   ///更新
-  void onEdit(BuildContext context, FastReconciliationSheetModel model) {
+  void onEdit(BuildContext context, FastReconciliationSheetModel model) async {
+    //获取详情
+    Function cancelFunc =
+    BotToast.showLoading(crossPage: false, clickClose: false);
+    FastReconciliationSheetModel old =
+    await ReconciliationOrderRespository.getDetail(model.id);
+    cancelFunc.call();
+
     Navigator.of(context)
-        .push(MaterialPageRoute(
+        .pushReplacement(MaterialPageRoute(
         builder: (context) =>
             ReconciliationOrderForm(
               order: order,
+              model: old,
             )))
         .then((value) {
       callback?.call();
