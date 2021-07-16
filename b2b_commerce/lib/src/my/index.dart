@@ -299,37 +299,11 @@ class _MyHomePageState extends State<MyHomePage> {
         color: Color.fromRGBO(253, 246, 67, 0.5),
         child: Container(
           child: Row(
-            children: <Widget>[
-              Icon(B2BIcons.switch_identity),
-              Text(
-                  '切换至${UserBLoC.instance.currentUser.type == UserType.BRAND ? '工厂' : '品牌'}')
-            ],
+            children: <Widget>[Icon(B2BIcons.switch_identity), Text('切换账号')],
           ),
         ),
         onPressed: () {
-          if (UserBLoC.instance.currentUser.status == UserStatus.OFFLINE) {
-            UserBLoC.instance.changeUserType(
-                UserBLoC.instance.currentUser.type == UserType.BRAND
-                    ? UserType.FACTORY
-                    : UserType.BRAND);
-            widget.turnToHome?.call();
-            return;
-          }
-          showConfirmDialog(true, message: '切换身份将会退出登录状态，是否确认？', confirm: () {
-            UserBLoC.instance.logout(
-                type: UserBLoC.instance.currentUser.type == UserType.BRAND
-                    ? UserType.FACTORY
-                    : UserType.BRAND,
-                context: context);
-            widget.turnToHome?.call();
-            //           .then((val) {
-            //   UserBLoC.instance.changeUserType(
-            //       UserBLoC.instance.currentUser.type == UserType.BRAND
-            //           ? UserType.FACTORY
-            //           : UserType.BRAND);
-            //   widget.turnToHome?.call();
-            // });
-          });
+          Navigator.of(context).pushNamed(AppRoutes.ROUTE_SWITCH_ACCOUNT);
         },
       ),
     );

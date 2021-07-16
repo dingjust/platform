@@ -153,12 +153,12 @@ class DocSignaturesBlock extends StatelessWidget {
                     ],
                   )
                 : Center(
-                child: canCreate()
-                    ? TextButton(
-                    child: Text('创建对账单'),
-                    onPressed: () => onCreate(context))
-                    : Text('$hintText',
-                    style: TextStyle(color: Colors.grey)))
+                    child: canCreate()
+                        ? TextButton(
+                            child: Text('创建对账单'),
+                            onPressed: () => onCreate(context))
+                        : Text('$hintText',
+                            style: TextStyle(color: Colors.grey)))
           ],
         ));
   }

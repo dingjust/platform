@@ -5,8 +5,11 @@ import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:b2b_commerce/src/my/seal/contract_seal_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:open_file/open_file.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 ///签署文档详情页
 class DocSignatureDetailPage extends StatefulWidget {
@@ -43,15 +46,21 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
   bool _showPdf = true;
   double bottomHeight = 50.0;
 
+  UserModel user = UserBLoC.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
     if (widget.doc != null) {
       this.doc = widget.doc;
     }
-    if (!needToSign()) {
-      bottomHeight = 0;
-    }
+    // if (!needToSign()) {
+    //   bottomHeight = 0;
+    // }
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft, //全屏时旋转方向，左边
+    ]);
   }
 
   @override
@@ -90,51 +99,69 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
   }
 
   Widget _buildBottomSheet() {
-    return needToSign()
-        ? Container(
-            height: bottomHeight,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                widget.onEdit != null
-                    ? Expanded(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        widget?.onEdit?.call();
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                          MaterialStateProperty.all(Colors.white)),
-                      child: Text('修改',
-                          style: TextStyle(color: Colors.black54))),
-                )
-                    : Container(),
-                Container(
-                  width: widget.onEdit != null ? 20 : 0,
-                ),
-                Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          _onSign();
-                        },
-                        child: Text('签署'))),
-              ],
-            ),
-          )
-        : Container(
-            height: bottomHeight,
-          );
+    return Container(
+      height: bottomHeight,
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildIconBtn(
+              icon: Icon(Icons.open_in_browser, color: Colors.blueAccent),
+              label: '其他应用打开',
+              onPressed: () {
+                OpenFile.open(widget.pathPDF);
+              }),
+          _buildIconBtn(
+              show: canEdit(),
+              onPressed: () {
+                Navigator.of(context).pop();
+                widget?.onEdit?.call();
+              },
+              icon: Icon(B2BIcons.edit, color: Colors.blueAccent),
+              label: '修改'),
+          _buildIconBtn(
+              show: needToSign(),
+              onPressed: _onSign,
+              icon: Icon(B2BIcons.seal, color: Colors.blueAccent),
+              label: '签署')
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIconBtn(
+      {void Function() onPressed,
+      Widget icon,
+      String label,
+      bool show = true}) {
+    if (!show) {
+      return Container();
+    }
+
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: bottomHeight,
+        child: Column(
+          children: [
+            icon,
+            Text(label, style: TextStyle(color: Colors.blueAccent))
+          ],
+        ),
+      ),
+    );
   }
 
   void _onSign() async {
     setState(() {
       _showPdf = false;
     });
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
 
     SealModel seal = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            ContractSealPage(
+        builder: (context) => ContractSealPage(
               isSelect: true,
             )));
 
@@ -143,6 +170,9 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
       setState(() {
         _showPdf = true;
       });
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft, //全屏时旋转方向，左边
+      ]);
       throw Exception('印章为空');
     }
 
@@ -176,5 +206,29 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
     } else {
       return false;
     }
+  }
+
+  ///判断是否能修改
+  bool canEdit() {
+    if (widget.onEdit == null) {
+      return false;
+    }
+    //没签署可以修改
+    if (doc.state == DocSignatureState.WAIT_PARTYA_SIGN) {
+      return user.companyCode != doc.partyA.uid;
+    } else if (doc.state == DocSignatureState.WAIT_PARTYB_SIGN) {
+      return user.companyCode != doc.partyB.uid;
+    } else if (doc.state == DocSignatureState.WAIT_SIGN) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    super.dispose();
   }
 }

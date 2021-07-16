@@ -558,8 +558,12 @@ class HomeBtnsSection extends StatelessWidget {
               label: '我的订单',
               url: 'temp/index/home_order.png',
               onTap: () {
-                Navigator.of(context)
-                    .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS);
+                if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+                  Navigator.of(context).pushNamed(AppRoutes.ROUTE_OUT_ORDERS);
+                } else {
+                  Navigator.of(context)
+                      .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS);
+                }
               },
             ),
             HomeAssetsBtn(

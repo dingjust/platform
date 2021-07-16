@@ -31,6 +31,7 @@ import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
+import 'package:b2b_commerce/src/home/account/account_switch_login.dart';
 import 'package:b2b_commerce/src/home/account/auth_request_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_introduction.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
@@ -228,6 +229,9 @@ class AppRoutes with GlobalRoutes {
   ///推荐工厂
   static const ROUTE_FACTORIES = '/factories';
 
+  ///切换账号
+  static const ROUTE_SWITCH_ACCOUNT = '/my/account/switch';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -314,8 +318,7 @@ class AppRoutes with GlobalRoutes {
         SampleProductDetailPage(getVal('code', context)),
     ROUTE_EXTERNAL_SALE_ORDER_FORM: (context) => ExternalOrderForm(),
     ROUTE_MY_CARD: (context) => MyCardPage(),
-    ROUTE_REGISTER: (context) =>
-        RegisterPageV2(
+    ROUTE_REGISTER: (context) => RegisterPageV2(
           openId: getVal('openId', context),
           type: getVal('type', context) != null
               ? AuthTypeMap[getVal('type', context)]
@@ -327,7 +330,8 @@ class AppRoutes with GlobalRoutes {
     ROUTE_HOME_SEARCH_RESULT: (context) =>
         HomeSearchResultPage(keyword: getVal('keyword', context)),
     ROUTE_REQUIREMENT_ORDERS_NEARBY: (context) => NearbyRequirementPage(),
-    ROUTE_FACTORIES: (context) => FindingFactoryPage()
+    ROUTE_FACTORIES: (context) => FindingFactoryPage(),
+    ROUTE_SWITCH_ACCOUNT: (context) => AccountSwitchLogin()
   };
 
   static dynamic getVal(String key, BuildContext context) {

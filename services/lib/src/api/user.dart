@@ -150,8 +150,7 @@ abstract class UserApis {
       '/{baseSiteId}/fdd/api/get/enterprise/verify/url';
 
   ///个体工商户
-  static get individualBusiness =>
-          (verifyType, companyType) {
+  static get individualBusiness => (verifyType, companyType) {
         return '/{baseSiteId}/fdd/api/get/enterprise/verify/url?verifyType=$verifyType&companyType=$companyType';
       };
 
@@ -299,5 +298,14 @@ abstract class UserApis {
   static get factoryProfileBackup =>
           (code) {
         return '/{baseSiteId}/factories/backups/$code';
+      };
+
+  /// 获取当前用户所有关联账号
+  static get relationAccounts => '/{baseSiteId}/get/all/relation/account';
+
+  /// 获取当前用户所有关联账号
+  static get switchAccount =>
+          (uid) {
+        return '/{baseSiteId}/switch/to/user/$_clientId/$uid';
       };
 }

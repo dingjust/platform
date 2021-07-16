@@ -429,6 +429,36 @@ class UserRepositoryImpl implements UserRepository {
       return null;
     }
   }
+
+  ///获取当前用户手机所有账号
+  static Future<BaseResponse> getRelationAccounts() async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.relationAccounts);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  ///切换账号
+  static Future<BaseResponse> switchAccount(dynamic uid) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.switchAccount(uid));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
 }
 
 class ModelData<T> {

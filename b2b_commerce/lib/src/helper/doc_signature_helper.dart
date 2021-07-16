@@ -23,6 +23,8 @@ class DocSignatureHelper {
     String fileName = model.docPdf.name;
     String filePath = "$dir/$fileName";
 
+    print('$filePath');
+
     String downUrl = Apis.docSignaturePreview(model.code);
 
     Response response = await http$.download(downUrl, filePath);
@@ -33,11 +35,11 @@ class DocSignatureHelper {
     if (contentLength > 0) {
       bool result = await Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => DocSignatureDetailPage(
-            pathPDF: filePath,
-            doc: model,
-            title: '电子对账单详情',
-            disable: disable,
-            onEdit: onEdit,
+                pathPDF: filePath,
+                doc: model,
+                title: '电子对账单详情',
+                disable: disable,
+                onEdit: onEdit,
               )));
       return result;
     } else {

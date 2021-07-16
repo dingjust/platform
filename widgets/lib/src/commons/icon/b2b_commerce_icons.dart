@@ -114,7 +114,7 @@ class B2BIcons {
   static const IconData share = const IconData(0xe60d,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
 
-  ///分享
+  ///编辑
   static const IconData edit = const IconData(0xe6f5,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
 
@@ -184,6 +184,11 @@ class B2BIcons {
 
   /// 工作台
   static const IconData work_bench = const IconData(0xe62c,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
+
+  ///印章
+  ///&#xe644;
+  static const IconData seal = const IconData(0xe644,
       fontFamily: 'b2bIcons22', matchTextDirection: true);
 }
 
