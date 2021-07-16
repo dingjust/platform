@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:b2b_commerce/src/my/seal/contract_seal_page.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -57,10 +58,12 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
     // if (!needToSign()) {
     //   bottomHeight = 0;
     // }
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft, //全屏时旋转方向，左边
-    ]);
+    //安卓横屏
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft, //全屏时旋转方向，左边
+      ]);
+    }
   }
 
   @override
