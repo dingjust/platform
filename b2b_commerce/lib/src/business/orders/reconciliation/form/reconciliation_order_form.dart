@@ -12,7 +12,10 @@ import 'form_btns.dart';
 class ReconciliationOrderForm extends StatefulWidget {
   final SalesProductionOrderModel order;
 
-  const ReconciliationOrderForm({Key key, this.order}) : super(key: key);
+  final FastReconciliationSheetModel model;
+
+  const ReconciliationOrderForm({Key key, this.order, this.model})
+      : super(key: key);
 
   @override
   _ReconciliationOrderFormState createState() =>

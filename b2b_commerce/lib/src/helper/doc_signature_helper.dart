@@ -14,6 +14,7 @@ class DocSignatureHelper {
   static Future<bool> open(
       {@required BuildContext context,
       @required DocSignatureModel model,
+      VoidCallback onEdit,
       bool disable = false}) async {
     Function cancelFunc = BotToast.showLoading(
         clickClose: false, allowClick: false, crossPage: false);
@@ -21,6 +22,8 @@ class DocSignatureHelper {
     String dir = (await getApplicationDocumentsDirectory()).path;
     String fileName = model.docPdf.name;
     String filePath = "$dir/$fileName";
+
+    print('$filePath');
 
     String downUrl = Apis.docSignaturePreview(model.code);
 
@@ -36,6 +39,7 @@ class DocSignatureHelper {
                 doc: model,
                 title: '电子对账单详情',
                 disable: disable,
+                onEdit: onEdit,
               )));
       return result;
     } else {

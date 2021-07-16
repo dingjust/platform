@@ -92,14 +92,7 @@ class BrandHomeEntrance extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FindingFactoryPage(
-                            FactoryCondition(
-                                starLevel: 0,
-                                adeptAtCategories: [],
-                                labels: [],
-                                cooperationModes: []),
-                            route: '推荐工厂',
-                          ),
+                          builder: (context) => FindingFactoryPage(),
                         ),
                       );
                     },
@@ -433,20 +426,12 @@ class FactoryBtnsSection extends StatelessWidget {
             label: '生产找厂',
             onTap: () {
               //埋点>>>推荐工厂
-              UmengPlugin.onEvent('factory_finding_all');
+              // UmengPlugin.onEvent('factory_finding_all');
 
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      FindingFactoryPage(
-                        FactoryCondition(
-                            starLevel: 0,
-                            adeptAtCategories: [],
-                            labels: [],
-                            cooperationModes: []),
-                        route: '推荐工厂',
-                      ),
+                  builder: (context) => FindingFactoryPage(),
                 ),
               );
             },
@@ -556,15 +541,7 @@ class HomeBtnsSection extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        FindingFactoryPage(
-                          FactoryCondition(
-                              starLevel: 0,
-                              adeptAtCategories: [],
-                              labels: [],
-                              cooperationModes: []),
-                          route: '推荐工厂',
-                        ),
+                    builder: (context) => FindingFactoryPage(),
                   ),
                 );
               },
@@ -581,8 +558,12 @@ class HomeBtnsSection extends StatelessWidget {
               label: '我的订单',
               url: 'temp/index/home_order.png',
               onTap: () {
-                Navigator.of(context)
-                    .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS);
+                if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+                  Navigator.of(context).pushNamed(AppRoutes.ROUTE_OUT_ORDERS);
+                } else {
+                  Navigator.of(context)
+                      .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS);
+                }
               },
             ),
             HomeAssetsBtn(

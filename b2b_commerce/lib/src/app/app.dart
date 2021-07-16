@@ -164,6 +164,14 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
       //   MessagePage(),
       // ),
       NavigationMenu(
+          BottomNavigationBarItem(
+              label: '一键发布',
+              activeIcon: IgnorePointer(
+                  child: Opacity(opacity: 0, child: Icon(Icons.nature))),
+              icon: IgnorePointer(
+                  child: Opacity(opacity: 0, child: Icon(Icons.nature)))),
+          RequirementTypeSelectPage()),
+      NavigationMenu(
         BottomNavigationBarItem(icon: Icon(B2BIcons.work_bench), label: '工作台'),
         BusinessHomePage(),
       ),
@@ -294,7 +302,7 @@ class AnymouseApp extends StatelessWidget {
       home: ClientSelectPageV2(),
       routes: {
         AppRoutes.ROUTE_AUTH_REQUEST_PAGE:
-        AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
+            AppRoutes.allRoutes[AppRoutes.ROUTE_AUTH_REQUEST_PAGE]
       },
       builder: (context, child) {
         final botToastBuilder = BotToastInit(); //1.调用BotToastInit

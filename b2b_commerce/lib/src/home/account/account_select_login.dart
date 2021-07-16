@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-///账号选择登录
+///账号选择登录(短信登录)
 class AccountSelectLogin extends StatefulWidget {
   final String phone;
 

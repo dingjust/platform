@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
 import 'package:flutter/material.dart';
-import 'package:services/services.dart';
 
 class MoreFactorySection extends StatelessWidget {
   @override
@@ -18,14 +17,7 @@ class MoreFactorySection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FindingFactoryPage(
-                        FactoryCondition(
-                            starLevel: 0,
-                            adeptAtCategories: [],
-                            labels: [],
-                            cooperationModes: []),
-                        route: '全部工厂',
-                      ),
+                      builder: (context) => FindingFactoryPage(),
                     ),
                   );
                 },

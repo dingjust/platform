@@ -70,9 +70,7 @@ class _ProductionProgressOrderFormPageState
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-            '${widget.progress?.progressPhase?.name ?? ''}报工${widget.isEditable
-                ? '编辑'
-                : ''}'),
+            '${widget.progress?.progressPhase?.name ?? ''}报工${widget.isEditable ? '编辑' : ''}'),
         elevation: 0.5,
         actions: [TextButton(onPressed: _save, child: Text('保存'))],
       ),
@@ -139,7 +137,7 @@ class _ProductionProgressOrderFormPageState
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
-        children: [Text('附件：')],
+        children: [Text('当前节点证明图片：')],
       ),
     );
   }

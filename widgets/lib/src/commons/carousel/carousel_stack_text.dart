@@ -6,12 +6,13 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:transparent_image/transparent_image.dart';
-import 'package:widgets/src/commons/carousel/banner_jump_detail.dart';
 
 /// 文本轮播图
 class CarouselStackText extends StatefulWidget {
-  CarouselStackText(this.items, {this.height = 240,});
+  CarouselStackText(
+    this.items, {
+    this.height = 240,
+  });
 
   final List<CompanyProfileModel> items;
   final double height;
