@@ -29,6 +29,7 @@
           <span>{{getEntryTotalAmount(scope.row)}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="金额" prop="totalPrimeCost" />
       <!-- <el-table-column label="关联任务单" prop="productionTask.code" min-width="120">
         <template slot-scope="scope">
           <el-button type="text" @click="onTaskDetail(scope.row.productionTask.id)">{{scope.row.productionTask.code}}

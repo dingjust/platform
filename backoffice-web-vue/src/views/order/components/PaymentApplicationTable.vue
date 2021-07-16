@@ -474,6 +474,7 @@ export default {
     color: #303133!important;
     padding: 12px 0px;
   }
+  
   .companyName-cell >>> .el-input__inner{
     font-size: 20px;
     font-weight: bold;
@@ -492,23 +493,24 @@ export default {
     color: #303133;
     text-align: center;
   }
-  .order-table {
+  .payment-application-table >>> .order-table {
     width: 100%;
     height: 100%; 
     border-collapse: collapse;
     margin-bottom: 20px;
     border: 1px solid #909399;
   }
-  .order-table tr td,
-  .order-table tr th {
+  .payment-application-table >>> .order-table tr td,
+  .payment-application-table >>> .order-table tr th {
     padding: 0px 16px;
     text-align: center;
     height: 40px;
     font-size: 14px;
     border-right: 1px solid #909399;
     border-bottom: 1px solid #909399;
+    background-color: #FFFFFF;
   }
-  .order-table label {
+  .payment-application-table >>> .order-table label {
     margin: 0;
   }
   .radio-cell {
