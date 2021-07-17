@@ -49,6 +49,13 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
 
   UserModel user = UserBLoC.instance.currentUser;
 
+  ///允许修改状态
+  final List<DocSignatureState> canEditStates = [
+    DocSignatureState.WAIT_PARTYA_SIGN,
+    DocSignatureState.WAIT_PARTYB_SIGN,
+    DocSignatureState.WAIT_SIGN
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -217,14 +224,17 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
       return false;
     }
     //没签署可以修改
-    if (doc.state == DocSignatureState.WAIT_PARTYA_SIGN) {
-      return user.companyCode != doc.partyA.uid;
-    } else if (doc.state == DocSignatureState.WAIT_PARTYB_SIGN) {
-      return user.companyCode != doc.partyB.uid;
-    } else if (doc.state == DocSignatureState.WAIT_SIGN) {
-      return true;
-    }
-    return false;
+
+    return canEditStates.contains(doc.state);
+
+    // if (doc.state == DocSignatureState.WAIT_PARTYA_SIGN) {
+    //   return user.companyCode != doc.partyA.uid;
+    // } else if (doc.state == DocSignatureState.WAIT_PARTYB_SIGN) {
+    //   return user.companyCode != doc.partyB.uid;
+    // } else if (doc.state == DocSignatureState.WAIT_SIGN) {
+    //   return true;
+    // }
+    // return false;
   }
 
   @override

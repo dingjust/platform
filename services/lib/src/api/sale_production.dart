@@ -65,4 +65,13 @@ class SaleProductionApis {
   /// 创建对账单
   static get createReconciliationOrder =>
       '/{baseSiteId}/sheets/fast/reconciliation/create';
+
+  /// 修改对账单
+  static get updateReconciliationOrder =>
+      '/{baseSiteId}/sheets/fast/reconciliation/update';
+
+  /// 取消对账单
+  static get cancelReconciliationOrder => (id) {
+        return '/{baseSiteId}/sheets/fast/reconciliation/cancel/$id';
+      };
 }

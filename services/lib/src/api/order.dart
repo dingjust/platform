@@ -223,8 +223,7 @@ class OrderApis {
       };
 
   //确认打样订单
-  static get proofingConfirm =>
-          (code) {
+  static get proofingConfirm => (code) {
         return '/{baseSiteId}/orders/proofing/$code/paid';
       };
 
@@ -481,4 +480,7 @@ class OrderApis {
   /// 需求发布V2
   static get requirementOrderNewV2 =>
       '/{baseSiteId}/orders/requirement/newByType';
+
+  /// 工作台数据
+  static get businessReport => '/{baseSiteId}/company/reports/apptab1';
 }

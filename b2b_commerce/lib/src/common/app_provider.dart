@@ -17,6 +17,7 @@ class AppProvider {
     ChangeNotifierProvider(create: (_) => ProductHomeState()),
     ChangeNotifierProvider(create: (_) => ProductHomeCarouselsState()),
     ChangeNotifierProvider(create: (_) => RecommendProductState()),
+    ChangeNotifierProvider(create: (_) => BusinessReportState()),
     // ChangeNotifierProvider(create: (_) => HomeSectionState()),
     Provider(
       create: (_) => AddressState(),

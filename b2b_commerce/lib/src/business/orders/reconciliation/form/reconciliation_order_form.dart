@@ -39,6 +39,9 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
 
   List<String> colNames = ['装箱数', '入库数'];
 
+  ///修改旧的对账单ID
+  int oldFormId;
+
   @override
   void initState() {
     remarksController = TextEditingController(text: form?.remarks ?? '');
@@ -77,7 +80,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
           _buildAdditional(),
           _buildRemarks(),
           Container(height: 60),
-          FormBtns(form: form),
+          FormBtns(form: form, oldFormId: oldFormId),
         ],
       )),
     );
@@ -432,21 +435,23 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       colNames = widget.model.colNames;
     }
 
-    // FastReconciliationSheetModel data = FastReconciliationSheetModel(
-    //   title: '电子对账单',
-    //   medias: widget.model.medias ?? [],
-    //   fastShippingSheets: widget.model.fastShippingSheets ?? [],
-    //   paperSheetMedias: widget.model.paperSheetMedias ?? [],
-    //   approvers: [],
-    //   colNames: colNames,
-    //   additionalCharges: widget.model.additionalCharges ?? [],
-    //   salesProductionOrder: widget.order,
-    //   belongRoleType: getRoleType(),
-    // );
     FastReconciliationSheetModel data = widget.model;
+    if (data.medias == null) {
+      data.medias = [];
+    }
 
     controllersMaps = {};
     nodesMaps = {};
+
+    if (widget.order.taskOrderEntries != null) {
+      //完善订单行信息
+      for (int i = 0; i < widget.order.taskOrderEntries.length; i++) {
+        data.entries[i].product = widget.order.taskOrderEntries[i].product;
+        data.entries[i].unitContractPrice =
+            widget.order.taskOrderEntries[i].unitPrice;
+      }
+    }
+
     //行
     data.entries.forEach((element) {
       //以产品编号为key
@@ -479,6 +484,22 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
           .add(TextEditingController(text: element.amount.toStringAsFixed(2)));
       additionValNodes.add(FocusNode());
     });
+
+    //判断是否对方修改
+    if (data.belongRoleType != getRoleType()) {
+      oldFormId = data.id;
+
+      data
+        ..belongRoleType = getRoleType()
+        ..id = null
+        ..cooperator = null
+        ..creator = null
+        ..shipParty = null
+        ..receiveParty = null
+        ..signState = null
+        ..state = null
+        ..code = null;
+    }
 
     return data;
   }
