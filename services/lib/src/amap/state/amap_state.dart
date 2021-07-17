@@ -48,9 +48,9 @@ class AmapState with ChangeNotifier {
       return _aMapLocation;
     } else if (context != null && openDialog != null) {
       //IOS进来不取定位权限
-      // if (defaultTargetPlatform == TargetPlatform.android) {
-      getLocation(context, openDialog);
-      // }
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        getLocation(context, openDialog);
+      }
       return AMapLocation(
           city: '广州',
           AOIName: '广州',
