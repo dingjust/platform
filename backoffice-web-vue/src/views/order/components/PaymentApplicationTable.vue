@@ -344,16 +344,42 @@ export default {
         this.form.contract.total = totalAmount.toFixed(2)
       }
 
+      const serviceFeePercent = detail.serviceFeePercent ? detail.serviceFeePercent : 0
       if (detail.paymentOrders && detail.paymentOrders.length > 0) {
         detail.paymentOrders.forEach((item, index) => {
           if (index > 3) return
           this.form.orderCollect[this.arr[index]] = item.payAmount
-          this.form.charges[this.arr[index]] = (item.payAmount * (detail.serviceFeePercent ? detail.serviceFeePercent : 0)).toFixed(2)
-          this.form.receivable[this.arr[index]] = (item.payAmount - (item.payAmount * (detail.serviceFeePercent ? detail.serviceFeePercent : 0))).toFixed(2)
+          this.form.charges[this.arr[index]] = (item.payAmount * serviceFeePercent).toFixed(2)
+          this.form.receivable[this.arr[index]] = (item.payAmount - (item.payAmount * serviceFeePercent)).toFixed(2)
         })
 
         this.form.thisApply.title = '此次申请第（' + detail.paymentOrders.length + '）次数'
-        this.form.thisApply.total = (detail.paymentOrders[detail.paymentOrders.length - 1].payAmount * (1 - (detail.serviceFeePercent ? detail.serviceFeePercent : 0))).toFixed(2)
+        this.form.thisApply.total = (detail.paymentOrders[detail.paymentOrders.length - 1].payAmount * (1 - serviceFeePercent)).toFixed(2)
+
+      }
+      this.form.paymentContent = '付款内容：' + this.form.contract.code + 
+                                  '订单生产总价：' + this.form.contract.total + '元'
+
+      let serviceStr1 = serviceFeePercent != 0 ? ('扣除' + (serviceFeePercent * 100).toFixed(2) + '%的技术服务费：') : '：'
+      let serviceStr2 = serviceFeePercent != 0 ? ('*' + (serviceFeePercent * 100).toFixed(2) + '%') : ''
+
+      let payPercent = ''
+      if (detail.paymentOrders.length == 1 && detail.payPlan.isHaveDeposit == true) {
+        payPercent = (detail.payPlan.payPlanItems[0].payPercent * 100).toFixed(2)
+        this.form.paymentContent =
+          this.form.paymentContent + '，支付定金' + payPercent + '%' + serviceStr1 +
+          this.form.contract.total + '*' + payPercent + '%' +
+          (serviceStr2 != '' ? (' - ' + this.form.contract.total + '*' + payPercent + '%' + serviceStr2) : '') + 
+          ' = ' + this.form.thisApply.total + '元'
+      } else if (detail.paymentOrders.length > 1 || detail.payPlan.isHaveDeposit == false) {
+        payPercent = detail.payPlan.payPlanItems[detail.paymentOrders.length - 1] ? (detail.payPlan.payPlanItems[detail.paymentOrders.length - 1].payPercent * 100).toFixed(2) : ''
+        if (payPercent != '') {
+          this.form.paymentContent = 
+            this.form.paymentContent + '，支付尾款' + payPercent + '%' + serviceStr1 +
+            this.form.contract.total + '*' + payPercent + '%' +
+            (serviceStr2 != '' ? (' - ' + this.form.contract.total + '*' + payPercent + '%' + serviceStr2) : '') + 
+            ' = ' + this.form.thisApply.total + '元'
+        }
       }
     }
   },
