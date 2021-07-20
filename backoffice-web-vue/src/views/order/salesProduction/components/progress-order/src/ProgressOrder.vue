@@ -63,18 +63,19 @@
         }
       },
       canEdit: function () {
-        if (this.order != null) {
-          let isOperator = false;
-          let operators = [
-            this.order.merchandiser ? this.order.merchandiser.uid : '',
-            this.order.productionLeader ? this.order.productionLeader.uid : '',
-            this.order.personInCharge ? this.order.personInCharge.uid : ''
-          ];
-          isOperator = operators.findIndex(item => item == this.$store.getters.currentUser.uid) != -1;
-          return (this.order.state == 'TO_BE_PRODUCED' ||
-            this.order.state == 'PRODUCING' ||
-            this.order.state == 'IN_PRODUCTION') && isOperator
-        }
+        // if (this.order != null) {
+        //   let isOperator = false;
+        //   let operators = [
+        //     this.order.merchandiser ? this.order.merchandiser.uid : '',
+        //     this.order.productionLeader ? this.order.productionLeader.uid : '',
+        //     this.order.personInCharge ? this.order.personInCharge.uid : ''
+        //   ];
+        //   isOperator = operators.findIndex(item => item == this.$store.getters.currentUser.uid) != -1;
+        //   return (this.order.state == 'TO_BE_PRODUCED' ||
+        //     this.order.state == 'PRODUCING' ||
+        //     this.order.state == 'IN_PRODUCTION') && isOperator
+        // }
+        return true
       },
       isOutCollaboration: function () {
         // 判断已外发并且是协同的生产工单不能编辑
