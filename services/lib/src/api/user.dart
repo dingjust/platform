@@ -164,8 +164,7 @@ abstract class UserApis {
   static get saveContract => '/{baseSiteId}/user/agreement/save';
 
   ///开启合同
-  static get flowContract =>
-          (code, sealCode) {
+  static get flowContract => (code, sealCode) {
         return '/{baseSiteId}/user/agreement/start/flow/$code?sealCode=$sealCode';
       };
 
@@ -308,4 +307,11 @@ abstract class UserApis {
           (uid) {
         return '/{baseSiteId}/switch/to/user/$_clientId/$uid';
       };
+
+  /// 注销账号
+  static get accountCancellation => '/{baseSiteId}/account/write/off/apply';
+
+  /// 注销状态
+  static get cancellationState =>
+      '/{baseSiteId}/account/write/off/my/last/apply';
 }

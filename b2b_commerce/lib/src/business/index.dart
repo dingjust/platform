@@ -1,9 +1,8 @@
-import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/widgets/authorization_dector.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
 import '../common/app_image.dart';
@@ -18,7 +17,8 @@ class BusinessHomePage extends StatefulWidget {
   }) : super(key: AppKeys.businessHomePage);
 
   final List<Widget> widgets = [
-    FactorySiteStatisticsSection(),
+    // FactorySiteStatisticsSection(),
+    BusinessReportSection(),
     SliverSpacing(),
     FactoryMenusSection()
   ];
@@ -46,43 +46,43 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
   }
 }
 
-class BrandSiteStatisticsSection extends StatelessWidget {
-  final StreamController _reportsStreamController =
-      StreamController<Reports>.broadcast();
+// class BrandSiteStatisticsSection extends StatelessWidget {
+//   final StreamController _reportsStreamController =
+//       StreamController<Reports>.broadcast();
 
-  void queryReports() async {
-    Reports response = await ReportsRepository().report();
-    if (response != null) {
-      _reportsStreamController.add(response);
-    }
-  }
+//   void queryReports() async {
+//     Reports response = await ReportsRepository().report();
+//     if (response != null) {
+//       _reportsStreamController.add(response);
+//     }
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (UserBLoC.instance.currentUser.status == UserStatus.ONLINE) {
-      queryReports();
-    }
+//   @override
+//   Widget build(BuildContext context) {
+//     if (UserBLoC.instance.currentUser.status == UserStatus.ONLINE) {
+//       queryReports();
+//     }
 
-    return StreamBuilder<Reports>(
-      stream: _reportsStreamController.stream,
-      initialData: new Reports(),
-      builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
-        return SiteStatistics(<SiteStatisticsModel>[
-          SiteStatisticsModel(
-              label: '需求报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
-          SiteStatisticsModel(
-              label: '打样待付款', value: '${snapshot.data?.ordersCount2 ?? 0}'),
-          SiteStatisticsModel(
-              label: '生产待付款', value: '${snapshot.data?.ordersCount4 ?? 0}'),
-          SiteStatisticsModel(
-              label: '正在打样', value: '${snapshot.data?.ordersCount3 ?? 0}'),
-          SiteStatisticsModel(
-              label: '正在生产', value: '${snapshot.data?.ordersCount6 ?? 0}'),
-        ]);
-      },
-    );
-  }
-}
+//     return StreamBuilder<Reports>(
+//       stream: _reportsStreamController.stream,
+//       initialData: new Reports(),
+//       builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
+//         return SiteStatistics(<SiteStatisticsModel>[
+//           SiteStatisticsModel(
+//               label: '需求报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
+//           SiteStatisticsModel(
+//               label: '打样待付款', value: '${snapshot.data?.ordersCount2 ?? 0}'),
+//           SiteStatisticsModel(
+//               label: '生产待付款', value: '${snapshot.data?.ordersCount4 ?? 0}'),
+//           SiteStatisticsModel(
+//               label: '正在打样', value: '${snapshot.data?.ordersCount3 ?? 0}'),
+//           SiteStatisticsModel(
+//               label: '正在生产', value: '${snapshot.data?.ordersCount6 ?? 0}'),
+//         ]);
+//       },
+//     );
+//   }
+// }
 
 class BrandMenusSection extends StatelessWidget {
   Widget _buildOrderMenu(BuildContext context) {
@@ -332,37 +332,63 @@ class BrandMenusSection extends StatelessWidget {
   }
 }
 
-class FactorySiteStatisticsSection extends StatelessWidget {
-  final StreamController _reportsStreamController =
-      StreamController<Reports>.broadcast();
+// class FactorySiteStatisticsSection extends StatelessWidget {
+//   final StreamController _reportsStreamController =
+//       StreamController<Reports>.broadcast();
 
-  void queryReports() async {
-    Reports response = await ReportsRepository().report();
-    if (response != null) {
-      _reportsStreamController.add(response);
-    }
-  }
+//   void queryReports() async {
+//     Reports response = await ReportsRepository().report();
+//     if (response != null) {
+//       _reportsStreamController.add(response);
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (UserBLoC.instance.currentUser.status == UserStatus.ONLINE) {
+//       queryReports();
+//     }
+
+//     return StreamBuilder<Reports>(
+//       stream: _reportsStreamController.stream,
+//       initialData: Reports(),
+//       builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
+//         return SiteStatistics(<SiteStatisticsModel>[
+//           SiteStatisticsModel(
+//               label: '报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
+//           SiteStatisticsModel(
+//               label: '生产中', value: '${snapshot.data?.ordersCount6 ?? 0}'),
+//           SiteStatisticsModel(
+//               label: '已延期', value: '${snapshot.data?.ordersCount5 ?? 0}'),
+//         ]);
+//       },
+//     );
+//   }
+// }
+
+class BusinessReportSection extends StatelessWidget {
+  const BusinessReportSection({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (UserBLoC.instance.currentUser.status == UserStatus.ONLINE) {
-      queryReports();
-    }
-
-    return StreamBuilder<Reports>(
-      stream: _reportsStreamController.stream,
-      initialData: Reports(),
-      builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
-        return SiteStatistics(<SiteStatisticsModel>[
-          SiteStatisticsModel(
-              label: '报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
-          SiteStatisticsModel(
-              label: '生产中', value: '${snapshot.data?.ordersCount6 ?? 0}'),
-          SiteStatisticsModel(
-              label: '已延期', value: '${snapshot.data?.ordersCount5 ?? 0}'),
-        ]);
-      },
-    );
+    return Container(child: Consumer<BusinessReportState>(
+        builder: (context, BusinessReportState state, _) {
+      if (state.updateTime == null) {
+        state.getData();
+      }
+      return SiteStatistics(<SiteStatisticsModel>[
+        SiteStatisticsModel(
+            label: '我的需求', value: '${state.requirementCount ?? 0}'),
+        SiteStatisticsModel(label: '我的报价', value: '${state.quoteCount ?? 0}'),
+        SiteStatisticsModel(label: '订单数', value: '${state.orderCount ?? 0}'),
+        SiteStatisticsModel(
+            label: '合同数', value: '${state.agreementCount ?? 0}'),
+        SiteStatisticsModel(
+            label: '待付款', value: '${state.pendingPayCount ?? 0}'),
+        SiteStatisticsModel(
+            label: '生产中', value: '${state.productionCount ?? 0}'),
+      ]);
+    }));
   }
 }
 

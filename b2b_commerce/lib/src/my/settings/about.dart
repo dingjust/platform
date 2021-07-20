@@ -19,15 +19,20 @@ class _ProfileAboutPageState extends State<ProfileAboutPage> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8.0),
-        child: ListView(
+        child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: AppProfile(
-                  name: '钉单',
-                  version: '${AppBLoC.instance?.packageInfo?.version}'),
-            ),
-            AppActions(),
+            Expanded(
+                child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: AppProfile(
+                      name: '钉单',
+                      version: '${AppBLoC.instance?.packageInfo?.version}'),
+                ),
+                AppActions()
+              ],
+            )),
             AppProtocols(context),
             AppCopyright()
           ],
@@ -116,6 +121,13 @@ class AppProtocols extends StatelessWidget {
             style: TextStyle(color: Colors.blue),
           ),
         ),
+        GestureDetector(
+          onTap: showPrivacyProtocol,
+          child: Text(
+            '《隐私政策声明》',
+            style: TextStyle(color: Colors.blue),
+          ),
+        ),
       ],
     );
   }
@@ -189,13 +201,50 @@ class AppProtocols extends StatelessWidget {
       },
     );
   }
+
+  void showPrivacyProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/privacyProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '隐私政策声明',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
 }
 
 class AppCopyright extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('宁波钉单 版权所有'),
-    );
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Center(
+            child: Text('© 2019-2020 宁波衣加衣供应链管理有限公司 版权所有',
+                style: TextStyle(color: Colors.grey, fontSize: 12))));
   }
 }

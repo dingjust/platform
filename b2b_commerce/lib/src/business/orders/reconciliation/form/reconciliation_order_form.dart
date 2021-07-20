@@ -9,6 +9,7 @@ import 'package:widgets/widgets.dart';
 
 import 'form_btns.dart';
 
+///对账单表单页
 class ReconciliationOrderForm extends StatefulWidget {
   final SalesProductionOrderModel order;
 
@@ -38,6 +39,9 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
 
   List<String> colNames = ['装箱数', '入库数'];
 
+  ///修改旧的对账单ID
+  int oldFormId;
+
   @override
   void initState() {
     remarksController = TextEditingController(text: form?.remarks ?? '');
@@ -48,7 +52,12 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
     additionValControllers = [];
     additionValNodes = [];
 
-    form = generateForm();
+    if (widget.model == null) {
+      //新建
+      form = generateForm();
+    } else {
+      form = reGenerateForm();
+    }
     super.initState();
   }
 
@@ -71,7 +80,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
           _buildAdditional(),
           _buildRemarks(),
           Container(height: 60),
-          FormBtns(form: form),
+          FormBtns(form: form, oldFormId: oldFormId),
         ],
       )),
     );
@@ -278,59 +287,66 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
 
     for (int i = 0; i < form.additionalCharges.length; i++) {
       entries.add(Container(
-        margin: EdgeInsets.symmetric(vertical: 5),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFieldBorderComponent(
-                padding: EdgeInsets.all(0),
-                hideDivider: true,
-                isRequired: true,
-                textAlign: TextAlign.left,
-                hintText: '名称',
-                controller: additionNameControllers[i],
-                focusNode: additionNameNodes[i],
-                onChanged: (value) {
-                  form.additionalCharges[i].remarks = value;
-                },
+          margin: EdgeInsets.symmetric(vertical: 5),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFieldBorderComponent(
+                  padding: EdgeInsets.all(0),
+                  hideDivider: true,
+                  isRequired: true,
+                  textAlign: TextAlign.left,
+                  hintText: '名称',
+                  enabled: form.additionalCharges[i].isDefault == null,
+                  controller: additionNameControllers[i],
+                  focusNode: additionNameNodes[i],
+                  onChanged: (value) {
+                    form.additionalCharges[i].remarks = value;
+                  },
+                ),
               ),
-            ),
-            Container(width: 10),
-            Expanded(
-              child: TextFieldBorderComponent(
-                padding: EdgeInsets.all(0),
-                hideDivider: true,
-                isRequired: true,
-                textAlign: TextAlign.right,
-                hintText: '增扣款',
-                inputType: TextInputType.numberWithOptions(
-                    decimal: true, signed: true),
-                controller: additionValControllers[i],
-                focusNode: additionValNodes[i],
-                onChanged: (value) {
-                  double result = double.tryParse(value);
-                  setState(() {
-                    if (result != null) {
-                      form.additionalCharges[i].amount = result;
-                    }
-                  });
-                },
+              Container(width: 10),
+              Expanded(
+                child: TextFieldBorderComponent(
+                  padding: EdgeInsets.all(0),
+                  hideDivider: true,
+                  isRequired: true,
+                  textAlign: TextAlign.right,
+                  hintText: '增扣款',
+                  enabled: form.additionalCharges[i].isDefault == null,
+                  inputType: TextInputType.numberWithOptions(
+                      decimal: true, signed: true),
+                  controller: additionValControllers[i],
+                  focusNode: additionValNodes[i],
+                  onChanged: (value) {
+                    double result = double.tryParse(value);
+                    setState(() {
+                      if (result != null) {
+                        form.additionalCharges[i].amount = result;
+                      }
+                    });
+                  },
+                ),
               ),
-            ),
-            TextButton(
-                onPressed: () {
-                  setState(() {
-                    form.additionalCharges.removeAt(i);
-                    additionNameControllers.removeAt(i);
-                    additionNameNodes.removeAt(i);
-                    additionValControllers.removeAt(i);
-                    additionValNodes.removeAt(i);
-                  });
-                },
-                child: Text('删除'))
-          ],
-        ),
-      ));
+              Opacity(
+                opacity: form.additionalCharges[i].isDefault ?? false ? 0 : 1,
+                child: TextButton(
+                    onPressed: () {
+                      if (form.additionalCharges[i].isDefault == null ||
+                          !form.additionalCharges[i].isDefault) {
+                        setState(() {
+                          form.additionalCharges.removeAt(i);
+                          additionNameControllers.removeAt(i);
+                          additionNameNodes.removeAt(i);
+                          additionValControllers.removeAt(i);
+                          additionValNodes.removeAt(i);
+                        });
+                      }
+                    },
+                    child: Text('删除')),
+              )
+            ],
+          )));
     }
     return entries;
   }
@@ -389,6 +405,102 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       nodesMaps[element.product.code] = nodesMap;
       return entry;
     }).toList();
+
+    //已支付账单添加进附加项
+    for (int i = 0; i < widget.order.paymentOrders.length; i++) {
+      String name = '';
+      if (i == 0) {
+        name = '定金';
+      } else {
+        name = '${i + 1}期款项';
+      }
+      double amount = -widget.order.paymentOrders[i].payAmount;
+      additionNameControllers.add(TextEditingController(text: name));
+      additionNameNodes.add(FocusNode());
+      additionValControllers
+          .add(TextEditingController(text: amount.toStringAsFixed(2)));
+      additionValNodes.add(FocusNode());
+      data.additionalCharges.add(ReconciliationAdditionalModel(
+          remarks: name, amount: amount, isDefault: true));
+    }
+
+    return data;
+  }
+
+  ///初始化表单数据(更新操作)
+  FastReconciliationSheetModel reGenerateForm() {
+    if (widget.order == null || widget.model == null)
+      throw Exception('订单数据不能为空');
+    if (widget.model.colNames != null && widget.model.colNames.length > 0) {
+      colNames = widget.model.colNames;
+    }
+
+    FastReconciliationSheetModel data = widget.model;
+    if (data.medias == null) {
+      data.medias = [];
+    }
+
+    controllersMaps = {};
+    nodesMaps = {};
+
+    if (widget.order.taskOrderEntries != null) {
+      //完善订单行信息
+      for (int i = 0; i < widget.order.taskOrderEntries.length; i++) {
+        data.entries[i].product = widget.order.taskOrderEntries[i].product;
+        data.entries[i].unitContractPrice =
+            widget.order.taskOrderEntries[i].unitPrice;
+      }
+    }
+
+    //行
+    data.entries.forEach((element) {
+      //以产品编号为key
+      Map<String, TextEditingController> controllersMap = {};
+      Map<String, FocusNode> nodesMap = {};
+
+      //默认字段
+      controllersMap['结算金额'] = TextEditingController(
+          text: element.settlementAmount.toStringAsFixed(2));
+      nodesMap['结算金额'] = FocusNode();
+      controllersMap['裁数'] =
+          TextEditingController(text: '${element.cutQuantity}');
+      nodesMap['裁数'] = FocusNode();
+      controllersMap['货款金额'] =
+          TextEditingController(text: '${element.loanAmount}');
+      nodesMap['货款金额'] = FocusNode();
+
+      element.customColumns.forEach((col) {
+        controllersMap[col.name] = TextEditingController(text: col.value);
+        nodesMap[col.name] = FocusNode();
+      });
+      controllersMaps[element.product.code] = controllersMap;
+      nodesMaps[element.product.code] = nodesMap;
+    });
+
+    data.additionalCharges.forEach((element) {
+      additionNameControllers.add(TextEditingController(text: element.remarks));
+      additionNameNodes.add(FocusNode());
+      additionValControllers
+          .add(TextEditingController(text: element.amount.toStringAsFixed(2)));
+      additionValNodes.add(FocusNode());
+    });
+
+    //判断是否对方修改
+    if (data.belongRoleType != getRoleType()) {
+      oldFormId = data.id;
+
+      data
+        ..belongRoleType = getRoleType()
+        ..id = null
+        ..cooperator = null
+        ..creator = null
+        ..shipParty = null
+        ..receiveParty = null
+        ..signState = null
+        ..state = null
+        ..code = null;
+    }
+
     return data;
   }
 

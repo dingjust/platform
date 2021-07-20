@@ -17,6 +17,7 @@ class AppProvider {
     ChangeNotifierProvider(create: (_) => ProductHomeState()),
     ChangeNotifierProvider(create: (_) => ProductHomeCarouselsState()),
     ChangeNotifierProvider(create: (_) => RecommendProductState()),
+    ChangeNotifierProvider(create: (_) => BusinessReportState()),
     // ChangeNotifierProvider(create: (_) => HomeSectionState()),
     Provider(
       create: (_) => AddressState(),
@@ -60,14 +61,17 @@ class AppProvider {
   static preloading(BuildContext context) async {
     DateTime start = DateTime.now();
     print('[nbyjy]预加载开始${DateFormatUtil.formatYMDHMS(start)}');
-    Provider.of<RecommendProductState>(context, listen: false).products;
+    Provider
+        .of<RecommendProductState>(context, listen: false)
+        .products;
     // Provider.of<HomeSectionState>(context, listen: false).getData();
     Provider.of<CategoryState>(context, listen: false).getCascadedCategories();
     Provider.of<AddressState>(context, listen: false).getRegions();
-    Provider.of<MajorCategoryState>(context, listen: false)
-        .getMajorCategories();
     Provider.of<CarrierState>(context, listen: false).getCarriers();
-    Provider.of<LabelState>(context, listen: false).getLabels();
+    //TODO:需要Token
+    // Provider.of<LabelState>(context, listen: false).getLabels();
+    // Provider.of<MajorCategoryState>(context, listen: false)
+    // .getMajorCategories();
     Provider.of<ColorState>(context, listen: false).getAllColors();
     Provider.of<SizeState>(context, listen: false).getAllSizes();
     Provider.of<ProductHomeCarouselsState>(context, listen: false)
@@ -77,7 +81,11 @@ class AppProvider {
     DateTime end = DateTime.now();
     print('[nbyjy]预加载结束${DateFormatUtil.formatYMDHMS(end)}');
     print(
-        '[nbyjy]相差${end.difference(start).inSeconds}秒(${end.difference(start).inMilliseconds})');
+        '[nbyjy]相差${end
+            .difference(start)
+            .inSeconds}秒(${end
+            .difference(start)
+            .inMilliseconds})');
   }
 
   ///清理用户相关数据(非系统数据)

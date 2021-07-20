@@ -60,4 +60,35 @@ class ReconciliationOrderRespository {
       return null;
     }
   }
+
+  ///修改
+  static Future<BaseResponse> update(FastReconciliationSheetModel order) async {
+    try {
+      Response<Map<String, dynamic>> response = await http$.put(
+          SaleProductionApis.updateReconciliationOrder,
+          data: order.toJson());
+      if (response.statusCode == 200 && response.data != null) {
+        return BaseResponse.fromJson(response.data);
+      } else
+        return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  ///取消
+  static Future<BaseResponse> cancel(int id) async {
+    try {
+      Response<Map<String, dynamic>> response =
+          await http$.put(SaleProductionApis.cancelReconciliationOrder(id));
+      if (response.statusCode == 200 && response.data != null) {
+        return BaseResponse.fromJson(response.data);
+      } else
+        return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

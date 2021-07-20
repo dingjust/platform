@@ -140,7 +140,10 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
   /// 处理底部导航
   void _handleNavigation(int index) {
     setState(() {
-      _currentIndex = index;
+      if (index != 2) {
+        //一键发布
+        _currentIndex = index;
+      }
     });
   }
 

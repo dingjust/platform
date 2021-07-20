@@ -26,7 +26,7 @@ class DocSignatureDetailPage extends StatefulWidget {
   ///PDF路径
   String pathPDF;
 
-  final VoidCallback onEdit;
+  final ValueChanged<BuildContext> onEdit;
 
   DocSignatureDetailPage(
       {this.pathPDF = '',
@@ -48,6 +48,13 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
   double bottomHeight = 50.0;
 
   UserModel user = UserBLoC.instance.currentUser;
+
+  ///允许修改状态
+  final List<DocSignatureState> canEditStates = [
+    DocSignatureState.WAIT_PARTYA_SIGN,
+    DocSignatureState.WAIT_PARTYB_SIGN,
+    DocSignatureState.WAIT_SIGN
+  ];
 
   @override
   void initState() {
@@ -117,8 +124,8 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
           _buildIconBtn(
               show: canEdit(),
               onPressed: () {
-                Navigator.of(context).pop();
-                widget?.onEdit?.call();
+                widget?.onEdit?.call(context);
+                // Navigator.of(context).pop();
               },
               icon: Icon(B2BIcons.edit, color: Colors.blueAccent),
               label: '修改'),
@@ -217,14 +224,17 @@ class _DocSignatureDetailPageState extends State<DocSignatureDetailPage> {
       return false;
     }
     //没签署可以修改
-    if (doc.state == DocSignatureState.WAIT_PARTYA_SIGN) {
-      return user.companyCode != doc.partyA.uid;
-    } else if (doc.state == DocSignatureState.WAIT_PARTYB_SIGN) {
-      return user.companyCode != doc.partyB.uid;
-    } else if (doc.state == DocSignatureState.WAIT_SIGN) {
-      return true;
-    }
-    return false;
+
+    return canEditStates.contains(doc.state);
+
+    // if (doc.state == DocSignatureState.WAIT_PARTYA_SIGN) {
+    //   return user.companyCode != doc.partyA.uid;
+    // } else if (doc.state == DocSignatureState.WAIT_PARTYB_SIGN) {
+    //   return user.companyCode != doc.partyB.uid;
+    // } else if (doc.state == DocSignatureState.WAIT_SIGN) {
+    //   return true;
+    // }
+    // return false;
   }
 
   @override

@@ -20,7 +20,11 @@ class FormBtns extends StatelessWidget {
 
   final FormValidateFunc validateFunc;
 
-  const FormBtns({Key key, this.height = 55, this.validateFunc, this.form})
+  ///原来对账单（修改需要作废原来对账单）
+  final int oldFormId;
+
+  const FormBtns(
+      {Key key, this.height = 55, this.validateFunc, this.form, this.oldFormId})
       : super(key: key);
 
   @override
@@ -54,7 +58,7 @@ class FormBtns extends StatelessWidget {
                     disabledColor: Colors.grey,
                     onPressed: () => onSubmit(context),
                     color: Constants.THEME_COLOR_MAIN,
-                    child: Text('创建',
+                    child: Text(form.id != null ? '修改' : '创建',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -95,7 +99,9 @@ class FormBtns extends StatelessWidget {
 
   ///表单校验
   bool validateForm() {
-    List<FormValidateItem> items = [];
+    List<FormValidateItem> items = [
+      FormValidateItem((totalAmount() <= 0), '结算金额要求大于0'),
+    ];
 
     //行校验
     if (form.entries != null) {
@@ -129,30 +135,84 @@ class FormBtns extends StatelessWidget {
 
   void onSubmit(BuildContext context) async {
     if (validateForm()) {
-      Function cancelFunc =
-          BotToast.showLoading(crossPage: false, clickClose: true);
-
-      //   OrderProgressPlanModel orderProgressPlan = await getOrderProgressPlan();
-      //   //订单行设置默认节点方案
-      //   form.taskOrderEntries.forEach((element) {
-      //     element.progressPlan = orderProgressPlan;
-      //   });
-
-      //   LogUtil.v(form.toJson());
-
-      BaseResponse response =
-          // await OutOrderRespository.saveOutOrder(submitAudit, form);
-          await ReconciliationOrderRespository.create(form);
-      cancelFunc.call();
-      if (response != null && response.code == 1) {
-        BotToast.showText(text: '提交成功');
-        // 返回
-        Navigator.of(context).pop(true);
-      } else if (response != null && response.code == 0) {
-        BotToast.showText(text: '${response.msg}');
+      if (form.id == null) {
+        if (oldFormId != null) {
+          _onRecreate(context);
+        } else {
+          //新创建
+          _onCreate(context);
+        }
       } else {
-        BotToast.showText(text: '操作失败');
+        _onUpdate(context);
       }
+    }
+  }
+
+  void _onCreate(BuildContext context) async {
+    Function cancelFunc =
+        BotToast.showLoading(crossPage: false, clickClose: true);
+
+    //   OrderProgressPlanModel orderProgressPlan = await getOrderProgressPlan();
+    //   //订单行设置默认节点方案
+    //   form.taskOrderEntries.forEach((element) {
+    //     element.progressPlan = orderProgressPlan;
+    //   });
+
+    //   LogUtil.v(form.toJson());
+
+    BaseResponse response =
+        // await OutOrderRespository.saveOutOrder(submitAudit, form);
+        await ReconciliationOrderRespository.create(form);
+    cancelFunc.call();
+    if (response != null && response.code == 1) {
+      BotToast.showText(text: '提交成功');
+      // 返回
+      Navigator.of(context).pop(true);
+    } else if (response != null && response.code == 0) {
+      BotToast.showText(text: '${response.msg}');
+    } else {
+      BotToast.showText(text: '操作失败');
+    }
+  }
+
+  void _onUpdate(BuildContext context) async {
+    Function cancelFunc =
+        BotToast.showLoading(crossPage: false, clickClose: true);
+
+    BaseResponse response = await ReconciliationOrderRespository.update(form);
+    cancelFunc.call();
+    if (response != null && response.code == 1) {
+      BotToast.showText(text: '修改成功');
+      // 返回
+      Navigator.of(context).pop(true);
+    } else if (response != null && response.code == 0) {
+      BotToast.showText(text: '${response.msg}');
+    } else {
+      BotToast.showText(text: '修改失败');
+    }
+  }
+
+  ///修改创建-取消原来对账单
+  void _onRecreate(BuildContext context) async {
+    Function cancelFunc =
+        BotToast.showLoading(crossPage: false, clickClose: true);
+    //先创建新的，成功后作废原来旧的
+    BaseResponse response = await ReconciliationOrderRespository.create(form);
+    if (response != null && response.code == 1) {
+      BotToast.showText(text: '创建成功');
+      //取消旧的
+      BaseResponse cancelRes =
+          await ReconciliationOrderRespository.cancel(oldFormId);
+      cancelFunc.call();
+      if (cancelRes == null || cancelRes.code == 0) {
+        print('取消原有对账单shibai');
+      }
+      // 返回
+      Navigator.of(context).pop(true);
+    } else if (response != null && response.code == 0) {
+      BotToast.showText(text: '${response.msg}');
+    } else {
+      BotToast.showText(text: '操作失败');
     }
   }
 }

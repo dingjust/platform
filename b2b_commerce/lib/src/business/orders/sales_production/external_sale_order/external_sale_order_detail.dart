@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
+import 'form/external_order_form.dart';
 import 'order_detail_btn_group.dart';
 import 'order_entry_detail.dart';
 import 'order_payment_info.dart';
@@ -57,13 +59,19 @@ class _ExternalSaleOrderDetailPageState
                   backgroundColor: Constants.THEME_COLOR_MAIN,
                   elevation: 0.5,
                   actions: [
-                    GestureDetector(
-                      onTap: () {
-                        ShareDialog.orderShareDialog(context,
-                            uniqueCode: order.uniqueCode);
-                      },
-                      child: Row(
-                        children: [Icon(Icons.share), Text('分享')],
+                    Container(
+                      width: 60,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 10),
+                      child: PopupMenuButton<String>(
+                        onSelected: (v) => onMenuSelect(v),
+                        icon: Icon(
+                          B2BIcons.more,
+                          size: 5,
+                        ),
+                        offset: Offset(0, 50),
+                        itemBuilder: (BuildContext context) =>
+                            _buildPopupMenu(),
                       ),
                     )
                   ],
@@ -128,6 +136,51 @@ class _ExternalSaleOrderDetailPageState
       initialData: null,
       future: _getData(),
     );
+  }
+
+  List<PopupMenuItem<String>> _buildPopupMenu() {
+    //TODO:可编辑状态
+    if (true) {}
+
+    return <PopupMenuItem<String>>[
+      PopupMenuItem<String>(
+        value: 'edit',
+        child: Row(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(right: 20),
+              child: Icon(Icons.edit),
+            ),
+            Text('编辑')
+          ],
+        ),
+      ),
+      PopupMenuItem<String>(
+        value: 'share',
+        child: Row(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(right: 20),
+              child: Icon(Icons.share),
+            ),
+            Text('分享')
+          ],
+        ),
+      ),
+    ];
+  }
+
+  onMenuSelect(String value) async {
+    switch (value) {
+      case 'edit':
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ExternalOrderForm(model: order)));
+        break;
+      case 'share':
+        ShareDialog.orderShareDialog(context, uniqueCode: order.uniqueCode);
+        break;
+      default:
+    }
   }
 
   /// 查询明细

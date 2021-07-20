@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,14 @@ class AccountSecurityPage extends StatelessWidget {
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ResetPasswordPage()));
+            },
+          ),
+          ListTile(
+            title: Text('账号注销'),
+            trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.ROUTE_CANCELLATION_ACCOUNT);
             },
           ),
         ],
