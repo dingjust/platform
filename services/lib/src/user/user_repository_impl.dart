@@ -459,6 +459,36 @@ class UserRepositoryImpl implements UserRepository {
       return null;
     }
   }
+
+  ///注销账号
+  static Future<BaseResponse> accountCancellation() async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.accountCancellation);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  ///注销状态
+  static Future<BaseResponse> cancellationState() async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.cancellationState);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
 }
 
 class ModelData<T> {

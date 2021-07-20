@@ -53,6 +53,7 @@ import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
+import 'package:b2b_commerce/src/my/settings/account_cancellation.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -232,6 +233,9 @@ class AppRoutes with GlobalRoutes {
   ///切换账号
   static const ROUTE_SWITCH_ACCOUNT = '/my/account/switch';
 
+  ///注销账号
+  static const ROUTE_CANCELLATION_ACCOUNT = '/my/account/cancellation';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -331,7 +335,8 @@ class AppRoutes with GlobalRoutes {
         HomeSearchResultPage(keyword: getVal('keyword', context)),
     ROUTE_REQUIREMENT_ORDERS_NEARBY: (context) => NearbyRequirementPage(),
     ROUTE_FACTORIES: (context) => FindingFactoryPage(),
-    ROUTE_SWITCH_ACCOUNT: (context) => AccountSwitchLogin()
+    ROUTE_SWITCH_ACCOUNT: (context) => AccountSwitchLogin(),
+    ROUTE_CANCELLATION_ACCOUNT: (context) => AccountCancellationPage()
   };
 
   static dynamic getVal(String key, BuildContext context) {

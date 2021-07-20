@@ -46,20 +46,17 @@ class _MySettingsPageState extends State<MySettingsPage> {
               );
             },
           ),
-          InkWell(
-            onTap: () {},
-            child: OutlineButton(
-              child: Text(
-                '退出登录',
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: () {
-                bloc.logout(context: context).then((value) {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => B2BLoginPage()),
-                      ModalRoute.withName('/'));
-                });
-              },
+          TextButton(
+            onPressed: () {
+              bloc.logout(context: context).then((value) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => B2BLoginPage()),
+                    ModalRoute.withName('/'));
+              });
+            },
+            child: Text(
+              '退出登录',
+              style: TextStyle(color: Colors.red),
             ),
           ),
         ],
