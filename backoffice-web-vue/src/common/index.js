@@ -1295,6 +1295,11 @@ let TENANT_APIS = {
   // 审阅通过 put
   AgentOperationReviewPass: () => '/b2b/agentOperation/review/pass',
 
+  // 账号注销列表
+  searchAccountLogoff: () => '/b2b/account/write/off/all/apply/list',
+  // 审核账号注销
+  auditAccountLogoff: () => '/b2b/account/write/off/process',
+
   // 需求审阅
   // 获取需求备份
   getRequirementOrderBackUp: (code) => '/b2b/orders/requirement/backups/' + code,

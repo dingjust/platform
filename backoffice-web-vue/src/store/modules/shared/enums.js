@@ -2319,6 +2319,10 @@ const state = {
     {
       code: 'REVIEW_REJECTED',
       name: '审核失败'
+    },
+    {
+      code: 'COMPLETED',
+      name: '已签署'
     }
   ],
   RequirementSizeType: [

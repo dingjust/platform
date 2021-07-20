@@ -32,6 +32,11 @@ export default {
           name: '需求审阅',
           url: '/task/requirement/review',
           icon: 'iconNone'
+        },
+        {
+          name: '账号注销审阅',
+          url: '/task/account/logoff',
+          icon: 'iconNone'
         }
       ]
     },

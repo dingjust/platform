@@ -1,6 +1,6 @@
 <!--
-* @Description: 代运营审阅
-* @Date 2021/05/22 15:11
+* @Description: 账号注销审阅
+* @Date 2021/07/20 14:47
 * @Author L.G.Y
 -->
 <template>
@@ -8,14 +8,14 @@
     <el-card>
       <el-row>
         <div class="orders-list-title">
-          <h6>代运营审阅</h6>
+          <h6>账号注销审阅</h6>
         </div>
       </el-row>
       <div class="pt-2"></div>
-      <agent-operation-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
+      <account-logoff-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane v-for="item in statuses" :label="item.name" :name="item.code" :key="item.code">
-          <agent-operation-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
+          <account-logoff-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -31,15 +31,15 @@ const {
   mapGetters,
   mapActions
 } = createNamespacedHelpers(
-  'AgentOperationModule'
+  'AccountLogoffModule'
 );
 
-import AgentOperationList from './list/AgentOperationList'
-import AgentOperationToolbar from './toolbar/AgentOperationToolbar'
+import AccountLogoffList from './list/AccountLogoffList'
+import AccountLogoffToolbar from './toolbar/AccountLogoffToolbar'
 
 export default {
-  name: 'AgentOperationReview',
-  components: { AgentOperationToolbar, AgentOperationList },
+  name: 'AccountLogoff',
+  components: { AccountLogoffToolbar, AccountLogoffList },
   computed: {
     ...mapGetters({
       page: 'page'
@@ -52,37 +52,33 @@ export default {
     onAdvancedSearch (page, size) {
       const query = this.queryFormData;
 
-      const url = this.apis().searchAgentOperationReview();
+      const url = this.apis().searchAccountLogoff();
       this.searchAdvanced({url, query, page, size});
     },
     handleClick(tab, event) {
-      this.queryFormData.statuses = tab.name;
+      this.queryFormData.state = tab.name;
       this.onAdvancedSearch(0, this.page.size);
     },
   },
   data () {
     return {
-      activeName: 'REVIEWING',
+      activeName: 'APPLIED',
       queryFormData: {
         keyword: '',
-        statuses: 'REVIEWING'
+        state: 'APPLIED'
       },
-      statuses: [    
+      statuses: [
         {
-          code: 'REVIEWING',
-          name: '审核中'
+          code: 'APPLIED',
+          name: '申请中'
         },
         {
-          code: 'REVIEW_PASSED',
-          name: '审核通过'
+          code: 'AUDIT_PASSED',
+          name: '申请通过'
         },
         {
-          code: 'REVIEW_REJECTED',
-          name: '审核失败'
-        },
-        {
-          code: 'COMPLETED',
-          name: '已签署'
+          code: 'CLOSED',
+          name: '已取消'
         },
         {
           code: '',

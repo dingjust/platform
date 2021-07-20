@@ -25,7 +25,8 @@ function setAuthorization () {
 
 /// 错误处理
 function errorHandler (resolve, error, loading) {
-  loading == null || loading.close();
+  loading === true || loading.close()
+  // loading == null || loading.close();
   // //登录token失效
   // if (error.response.status == 401) {
   //   Message.closeAll();

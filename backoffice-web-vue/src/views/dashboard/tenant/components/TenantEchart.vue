@@ -7,12 +7,17 @@
   <div class="tenant-echart">
     <div class="echart-header">
       <h6>{{chartData.name}}</h6>
+      <el-select v-model="unit" placeholder="请选择" style="width: 60px">
+        <el-option label="日" :value="0" :key="0"/>
+        <el-option label="月" :value="2" :key="2"/>
+      </el-select>
       <el-date-picker
         v-model="time"
         @change="handleChange"
         value-format="yyyy/MM/dd 00:00:00"
         style="width: 270px"
-        type="daterange"
+        :type="unit === 0 ? 'daterange' : 'monthrange'"
+        unlink-panels
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期">
@@ -26,14 +31,26 @@
 </template>
 
 <script>
+import { formatDate } from '@/common/js/filters';
+
 export default {
   props: ['chartData', 'code'],
   methods: {
     handleChange (value) {
-      this.$emit('getEchartData', this.code, 0 , {
-        start: value[0],
-        end: value[1]
-      })
+      let params = {
+        start: value[0]
+      }
+      let endDate = new Date(value[1])
+      if (this.unit == 2) {
+        params['end'] = this.handleTime(endDate.setMonth(endDate.getMonth() + 1))
+      } else {
+        params['end'] = this.handleTime(endDate.setDate(endDate.getDate() + 1))
+      }
+      console.log(params)
+      this.$emit('getEchartData', this.code, this.unit, params)
+    },
+    handleTime (time) {
+      return formatDate(new Date(time), 'yyyy/MM/dd hh:mm:ss');
     },
     downloadDetail () {
       if (this.chartData.data.length <= 0) {
@@ -86,7 +103,8 @@ export default {
   data () {
     return {
       main: null,
-      time: null
+      time: null,
+      unit: 0
     }
   },
   watch: {

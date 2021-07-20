@@ -1,7 +1,7 @@
 <template>
   <div class="echart-cell">
     <template v-for="(value, key) in echartArr">
-      <tenant-echart :key="key" :code="key" :chartData="value" @getEchartData="getEchartData"/>
+      <tenant-echart :key="key" :code="key" :chartData="value" @getEchartData="getEchartData" @handleTime="handleTime"/>
     </template>
   </div>
 </template>
