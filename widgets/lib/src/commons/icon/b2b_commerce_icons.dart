@@ -187,8 +187,11 @@ class B2BIcons {
       fontFamily: 'b2bIcons22', matchTextDirection: true);
 
   ///印章
-  ///&#xe644;
   static const IconData seal = const IconData(0xe644,
+      fontFamily: 'b2bIcons22', matchTextDirection: true);
+
+  ///店铺
+  static const IconData shop = const IconData(0xe6c0,
       fontFamily: 'b2bIcons22', matchTextDirection: true);
 }
 
