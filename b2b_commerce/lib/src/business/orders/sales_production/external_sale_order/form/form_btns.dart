@@ -56,7 +56,7 @@ class FormBtns extends StatelessWidget {
                     disabledColor: Colors.grey,
                     onPressed: () => onSubmit(true, context),
                     color: Constants.THEME_COLOR_MAIN,
-                    child: Text('创建',
+                    child: Text(form.id == null ? '创建' : '修改',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.white,

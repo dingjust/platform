@@ -13,6 +13,10 @@ import 'form_components.dart';
 
 ///外接订单表单页
 class ExternalOrderForm extends StatefulWidget {
+  final SalesProductionOrderModel model;
+
+  const ExternalOrderForm({Key key, this.model}) : super(key: key);
+
   @override
   _ExternalOrderFormState createState() => _ExternalOrderFormState();
 }
@@ -20,38 +24,11 @@ class ExternalOrderForm extends StatefulWidget {
 class _ExternalOrderFormState extends State<ExternalOrderForm> {
   SalesProductionOrderModel form;
   ExternalOrderFormState externalOrderFormState;
+  UserModel currentUser = UserBLoC.instance.currentUser;
 
   @override
   void initState() {
-    UserModel currentUser = UserBLoC.instance.currentUser;
-    externalOrderFormState = ExternalOrderFormState(entries: []);
-    form = SalesProductionOrderModel(
-        sendAuditNeeded: false,
-        managementMode: ManagementMode.COLLABORATION,
-        taskOrderEntries: [],
-        attachments: [],
-        payOnline: false,
-        name: '',
-        type: ProductionOrderType.SALES_ORDER,
-        paymentAccount:
-            OrderPaymentAccountData(type: OrderPaymentAccountType.BANK),
-        payPlan: CompanyPayPlanModel(
-            isHaveDeposit: true,
-            payPlanType: PayPlanType.PHASEONE,
-            payPlanItems: [
-              AbstractPayPlanItemModel(
-                  moneyType: PayMoneyType.DEPOSIT,
-                  triggerEvent: TriggerEvent.CONTRACT_SIGNED,
-                  triggerDays: 5,
-                  payPercent: 0.3),
-              AbstractPayPlanItemModel(
-                moneyType: PayMoneyType.PHASEONE,
-                triggerEvent: TriggerEvent.RECONCILIATION_CONFIRMED,
-                triggerDays: 5,
-              )
-            ]),
-        merchandiser:
-            B2BCustomerModel(id: currentUser.id, name: currentUser.name));
+    initForm();
     super.initState();
   }
 
@@ -160,6 +137,69 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
         ),
       ],
     );
+  }
+
+  ///初始化表单
+  void initForm() {
+    if (widget.model != null) {
+      //更新
+      //拷贝对象操作
+      form = SalesProductionOrderModel.fromJson(widget.model.toJson());
+      externalOrderFormState =
+          ExternalOrderFormState(entries: form.taskOrderEntries);
+      //构造State里的FormEntries
+      externalOrderFormState.formEntries = form.taskOrderEntries.map((e) {
+        Map controllerMap = {};
+        Map nodeMap = {};
+        e.colorSizeEntries.forEach((element) {
+          if (controllerMap[element.color.code] == null) {
+            controllerMap[element.color.code] = {};
+          }
+          controllerMap[element.color.code][element.size.code] =
+              TextEditingController(text: '${element.quantity ?? ''}');
+
+          if (nodeMap[element.color.code] == null) {
+            nodeMap[element.color.code] = {};
+          }
+          nodeMap[element.color.code][element.size.code] = FocusNode();
+        });
+        return ExternalOrderFormEntry(
+            entry: e, controllerMap: controllerMap, nodeMap: nodeMap);
+      }).toList();
+      //附件空处理
+      if (form.attachments == null) {
+        form.attachments = [];
+      }
+    } else {
+      externalOrderFormState = ExternalOrderFormState(entries: []);
+      form = SalesProductionOrderModel(
+          sendAuditNeeded: false,
+          managementMode: ManagementMode.COLLABORATION,
+          taskOrderEntries: [],
+          attachments: [],
+          payOnline: false,
+          name: '',
+          type: ProductionOrderType.SALES_ORDER,
+          paymentAccount:
+              OrderPaymentAccountData(type: OrderPaymentAccountType.BANK),
+          payPlan: CompanyPayPlanModel(
+              isHaveDeposit: true,
+              payPlanType: PayPlanType.PHASEONE,
+              payPlanItems: [
+                AbstractPayPlanItemModel(
+                    moneyType: PayMoneyType.DEPOSIT,
+                    triggerEvent: TriggerEvent.CONTRACT_SIGNED,
+                    triggerDays: 5,
+                    payPercent: 0.3),
+                AbstractPayPlanItemModel(
+                  moneyType: PayMoneyType.PHASEONE,
+                  triggerEvent: TriggerEvent.RECONCILIATION_CONFIRMED,
+                  triggerDays: 5,
+                )
+              ]),
+          merchandiser:
+              B2BCustomerModel(id: currentUser.id, name: currentUser.name));
+    }
   }
 
   // ///合作商选择

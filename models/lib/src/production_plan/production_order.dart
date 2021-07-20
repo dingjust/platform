@@ -27,6 +27,7 @@ class ProductionOrderModel extends ItemModel {
   ProductionOrderModel originOrder;
 
   ///节点方案
+  @JsonKey(toJson: progressPlanToJson)
   OrderProgressPlanModel progressPlan;
 
   ///名称
@@ -126,6 +127,10 @@ class ProductionOrderModel extends ItemModel {
 
   static List<Map<String, dynamic>> mediasToJson(List<MediaModel> models) =>
       models == null ? null : models.map((e) => MediaModel.toJson(e)).toList();
+
+  static Map<String, dynamic> progressPlanToJson(
+          OrderProgressPlanModel model) =>
+      model == null ? null : model.toJson();
 }
 
 ///销售生产单
@@ -260,6 +265,7 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   ///总金额
   double totalAmount;
 
+  @JsonKey(toJson: orderPaymentAccouontToJson)
   OrderPaymentAccountData paymentAccount;
 
   ///是否为代理
@@ -305,42 +311,42 @@ class SalesProductionOrderModel extends ProductionOrderModel {
       this.labels,
       this.outOrderState,
       this.acceptState,
-      this.currentCancelApply,
-      this.acceptProcessTime,
-      this.salesDateStart,
-      this.salesDateEnd,
-      this.currentAuditOrder,
-      this.payPlanType,
-      this.type,
-      this.freightPayer,
-      this.cooperator,
-      this.payPlan,
-    this.planLeader,
-    this.approvers,
-    this.purchasingLeader,
-    this.originCooperator,
-    this.targetCooperator,
-    this.state,
-    this.shippingAddress,
-    this.auditNeeded,
-    this.auditState,
-    this.sendAuditNeeded,
-    this.sendApprovers,
-    this.sendAuditState,
-    this.originCompany,
-    this.sendBy,
-    this.remarks,
-    this.currentSendAuditOrder,
-    this.taskOrderEntries,
-    this.agreements,
-    this.entrySize,
-    this.totalQuantity,
-    this.totalAmount,
-    this.paymentAccount,
-    this.agentOrder,
-    this.serviceFeePercent,
-    this.payOnline,
-    this.reconciliationSheetList})
+        this.currentCancelApply,
+        this.acceptProcessTime,
+        this.salesDateStart,
+        this.salesDateEnd,
+        this.currentAuditOrder,
+        this.payPlanType,
+        this.type,
+        this.freightPayer,
+        this.cooperator,
+        this.payPlan,
+        this.planLeader,
+        this.approvers,
+        this.purchasingLeader,
+        this.originCooperator,
+        this.targetCooperator,
+        this.state,
+        this.shippingAddress,
+        this.auditNeeded,
+        this.auditState,
+        this.sendAuditNeeded,
+        this.sendApprovers,
+        this.sendAuditState,
+        this.originCompany,
+        this.sendBy,
+        this.remarks,
+        this.currentSendAuditOrder,
+        this.taskOrderEntries,
+        this.agreements,
+        this.entrySize,
+        this.totalQuantity,
+        this.totalAmount,
+        this.paymentAccount,
+        this.agentOrder,
+        this.serviceFeePercent,
+        this.payOnline,
+        this.reconciliationSheetList})
       : super(
             code: code,
             originOrderId: originOrderId,
@@ -388,6 +394,10 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   static List<Map<String, dynamic>> agreementsToJson(
       List<UserAgreementModel> models) =>
       models == null ? null : models.map((e) => e.toJson()).toList();
+
+  static Map<String, dynamic> orderPaymentAccouontToJson(
+      OrderPaymentAccountData data) =>
+      data == null ? null : data.toJson();
 }
 
 ///生产任务工单

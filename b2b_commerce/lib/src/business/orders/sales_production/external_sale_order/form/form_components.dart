@@ -182,6 +182,10 @@ class FormProduction extends StatelessWidget {
           _FormEntryItem(
             entry: entry,
             updateEntry: updateEntry,
+            deleteEntry: () {
+              entries.remove(entry);
+              onEntriesChange.call(entries);
+            },
           )
       ],
     );
@@ -192,14 +196,14 @@ class FormProduction extends StatelessWidget {
         MaterialPageRoute(
             builder: (context) => SampleProductsPage(
                 selectedData: entries
-                        .map((e) => e.product as SampleProductModel)
+                        .map((e) => converFromApparelProductModel(e.product))
                         .toList() ??
                     [],
                 selectingMode: true)));
     if (products != null) {
       List<ProductionTaskOrderModel> entries = generateEntries(products);
       ExternalOrderFormState state =
-          Provider.of<ExternalOrderFormState>(context, listen: false);
+      Provider.of<ExternalOrderFormState>(context, listen: false);
       if (state != null) {
         state.updateEntries(entries);
       }
@@ -208,13 +212,18 @@ class FormProduction extends StatelessWidget {
     }
   }
 
+  SampleProductModel converFromApparelProductModel(
+      ApparelProductModel product) {
+    return SampleProductModel.fromJson(ApparelProductModel.toJson(product));
+  }
+
   ///生成当前订单行（包含已有）
   List<ProductionTaskOrderModel> generateEntries(
       List<SampleProductModel> products) {
     return products.map((product) {
       //是否已存在
       ProductionTaskOrderModel entry = this.entries.firstWhere(
-          (element) => element.product.code == product.code,
+              (element) => element.product.code == product.code,
           orElse: () => null);
       if (entry == null) {
         //初始化
@@ -240,7 +249,10 @@ class _FormEntryItem extends StatelessWidget {
 
   final ValueChanged<ProductionTaskOrderModel> updateEntry;
 
-  const _FormEntryItem({Key key, this.entry, this.updateEntry})
+  final VoidCallback deleteEntry;
+
+  const _FormEntryItem(
+      {Key key, this.entry, this.updateEntry, this.deleteEntry})
       : super(key: key);
 
   @override
@@ -262,12 +274,14 @@ class _FormEntryItem extends StatelessWidget {
               child: ColorSizeEntryInputTable(
                 data: entry.colorSizeEntries,
                 compareFunction:
-                    Provider.of<SizeState>(context, listen: false).compare,
-                controllerMap: Provider.of<ExternalOrderFormState>(
-                    context, listen: false)
+                Provider
+                    .of<SizeState>(context, listen: false)
+                    .compare,
+                controllerMap:
+                Provider.of<ExternalOrderFormState>(context, listen: false)
                     .getControllerMapByCode(entry.product.code),
-                nodeMap: Provider.of<ExternalOrderFormState>(
-                    context, listen: false)
+                nodeMap:
+                Provider.of<ExternalOrderFormState>(context, listen: false)
                     .getNodeMapByCode(entry.product.code),
                 onChanged: (values) {
                   entry.colorSizeEntries = values;
@@ -378,11 +392,22 @@ class _FormEntryItem extends StatelessWidget {
               ),
             ),
           ),
-          RichText(
-              text: TextSpan(
-                  text: '订单数：${entryQuatity()}',
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                  children: [])),
+          Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        deleteEntry?.call();
+                      },
+                      child: Text('删除')),
+                  RichText(
+                      text: TextSpan(
+                          text: '订单数：${entryQuatity()}',
+                          style: TextStyle(fontSize: 16, color: Colors.black87),
+                          children: [])),
+                ],
+              ))
         ],
       ),
     );
