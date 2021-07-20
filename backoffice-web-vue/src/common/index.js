@@ -1322,7 +1322,9 @@ let TENANT_APIS = {
   // 获取统计数据1
   getTenantReportsTab1: () => '/b2b/company/reports/index/tab1',
   // 获取统计数据2
-  getTenantReportsTab2: () => '/b2b/company/reports/index/tab2'
+  getTenantReportsTab2: () => '/b2b/company/reports/index/tab2',
+  // 获取平台图表统计数据 sales salesAmount requirement salesQuantity quote agreement
+  getEchartData: (type, unit) => `/b2b/company/reports/count/${type}/${unit}`
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
