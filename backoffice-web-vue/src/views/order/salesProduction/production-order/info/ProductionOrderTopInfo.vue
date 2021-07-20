@@ -6,8 +6,8 @@
           <el-col :span="6">
             <!-- 商品图片 -->
             <div>
-              <img class="purchase-product-img"
-                :src="productionOrder.product.thumbnail!=null?productionOrder.product.thumbnail.url:'static/img/nopicture.png'">
+              <el-image fit="scale-down" class="purchase-product-img"
+                :src="productionOrder.product.thumbnail!=null?productionOrder.product.thumbnail.url:'static/img/nopicture.png'" />
             </div>
           </el-col>
           <el-col :span="18">

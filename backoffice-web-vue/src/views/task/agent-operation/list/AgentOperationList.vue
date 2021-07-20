@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column label="操作" min-width="80px">
         <template slot-scope="scope">
-          <el-button type="text" @click="onPass(scope.row)">通过</el-button>
+          <el-button v-if="scope.row.status === 'REVIEWING'" type="text" @click="onPass(scope.row)">通过</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,7 +63,7 @@ export default {
       });
     },
     onCurrentPageChanged(val) {
-      this.$emit('onAdvancedSearch', val - 1);
+      this.$emit('onAdvancedSearch', val - 1, this.page.size);
 
       this.$nextTick(() => {
         this.$refs.resultTable.bodyWrapper.scrollTop = 0

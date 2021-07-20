@@ -26,24 +26,18 @@
           </template>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="数据看板">
-        <template v-if="chartData">
-          <div class="chart-cell">
-            <template v-for="(item, index) in chartData">
-              <tenant-echart :chartData="item" :key="index" :title="chartTitle[item.name]" style="margin-right:10px;margin-bottom: 10px"/>
-            </template>
-          </div>
-        </template>
+      <el-tab-pane label="数据看板" lazy>
+        <tenant-echart-tab />
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import TenantEchart from './TenantEchart.vue';
+import TenantEchartTab from './components/TenantEchartTab.vue';
 export default {
-  components: { TenantEchart },
   name: 'TenantDashboardPage',
+  components: { TenantEchartTab },
   methods: {
     showLastStyle (tab1, key, index) {
       return (Object.getOwnPropertyNames(tab1).length - 2) === index
@@ -74,52 +68,7 @@ export default {
       const tab2 = await this.$http.post(url2)
 
       return tab2;
-    },
-    getChartData () {
-      const date = new Date();
-      // 获取当天0点时间戳
-      const thisDay = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`).getTime();
-      // 获取前7天（包括今天）的 start，end对象
-      let arr = [{
-        number: 0,
-        start: thisDay,
-        end: thisDay + 24*60*60*1000
-      }]
-      for (let index = 1; index < 7; index++) {
-        arr.push({
-          number: index,
-          start: arr[index - 1].start - 24*60*60*1000,
-          end: arr[index - 1].start
-        })
-      }
-      Promise.all(arr.map(this.getTab1)).then(res => {
-        let chartData = [];
-        res.sort((o1, o2) => o2.section.number - o1.section.number)
-        res.forEach(item => {
-          for (const key in item.data) {
-            if (Object.hasOwnProperty.call(item.data, key)) {
-              const element = item.data[key];
-              var index = chartData.findIndex(v => v.name === key);
-              if (index > -1) {
-                chartData[index].data.push({
-                  time: item.section.start,
-                  value: element
-                })
-              } else {
-                chartData.push({
-                  name: key,
-                  data: [{
-                    time: item.section.start,
-                    value: element
-                  }]
-                })
-              }
-            }
-          }
-        })
-        this.$set(this, 'chartData', chartData)
-      })
-    } 
+    }
   },
   data () {
     return {
@@ -130,26 +79,16 @@ export default {
         noQuoteRequirementOrder: '需求未报价',
         notAcceptRequirementOrder: '报价未确认',
         agreementTotal: '今日签约数',
-        orderAmount: '今日成交额',
         quoteTotal: '今日报价数',
-        registerTotal: '今日注册数',
         requirementTotal: '今日需求数',
-        salesOrderTotal: '今日订单数'
-      },
-      chartTitle: {
-        agreementTotal: '签约数',
-        orderAmount: '成交额',
-        quoteTotal: '报价数',
-        registerTotal: '注册数',
-        requirementTotal: '需求数',
-        salesOrderTotal: '订单数'
-      },
-      chartData: null
+        salesOrderTotal: '今日订单数',
+        orderAmount: '今日成交额',
+        registerTotal: '今日注册数'
+      }
     }
   },
   created () {
     this.init();
-    this.getChartData();
   }
 }
 </script>

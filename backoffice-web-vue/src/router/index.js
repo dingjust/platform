@@ -914,6 +914,10 @@ const router = new Router({
           path: 'requirement/review',
           name: '需求审阅',
           component: () => import(/* webpackChunkName: 'task' */ '@/views/task/requirement-review/RequirementReview')
+        }, {
+          path: 'account/logoff',
+          name: '账号注销审阅',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/account-logoff/AccountLogoff')
         }
       ]
     },
