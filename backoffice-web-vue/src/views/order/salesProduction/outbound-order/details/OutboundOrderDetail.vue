@@ -17,7 +17,7 @@
       </el-row>
       <outbound-order-top-info :slotData="formData" :payPlan="payPlan" @callback="callback" />
       <div style="margin: 20px 0px 0px 10px;">
-        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData" :fromOut="true"/>
+        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData" :fromOut="true" :fromDetail="true"/>
       </div>
       <el-row class="basic-form-row" type="flex" align="middle">
         <h6>备注及附件</h6>
@@ -68,11 +68,6 @@
           <authorized :permission="['DO_AUDIT']">
             <el-button class="material-btn" @click="onApproval(true)">审核通过</el-button>
           </authorized>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">
-        <el-col :span="3">
-          <el-button type="primary" @click="onModify">接单</el-button>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" :gutter="50"

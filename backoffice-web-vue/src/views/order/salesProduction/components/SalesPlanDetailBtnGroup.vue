@@ -39,18 +39,18 @@
       <!-- 外接来源订单 -->
       <template v-if="slotData.state != 'CANCELED'">
         <!-- 销售订单按钮 -->
-        <!-- <template v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin"> -->
+        <template v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin">
           <el-col :span="3">
-            <!-- <authorized :permission="['ACCEPT_REJECT_ORDER']"> -->
+            <authorized :permission="['ACCEPT_REJECT_ORDER']">
               <el-button class="material-btn_red" @click="onRefuse">拒单</el-button>
-            <!-- </authorized> -->
+            </authorized>
           </el-col>
           <el-col :span="3">
-            <!-- <authorized :permission="['ACCEPT_REJECT_ORDER']"> -->
+            <authorized :permission="['ACCEPT_REJECT_ORDER']">
               <el-button class="material-btn" @click="onCommit">接单</el-button>
-            <!-- </authorized> -->
+            </authorized>
           </el-col>
-        <!-- </template> -->
+        </template>
         <!-- 销售计划 -->
         <!-- <template v-else-if="slotData.auditState=='NONE' || (slotData.auditState=='AUDITED_FAILED' && isCreator)">
           <el-col :span="3">
