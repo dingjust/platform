@@ -21,7 +21,7 @@
       </el-form>
       <div style="margin: 10px 0 0 24px;">
         <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="formData"
-          @appendProduct="appendProduct" @callback="callback"/>
+          @appendProduct="appendProduct" @callback="callback" :fromDetail="true"/>
       </div>
       <template
         v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">

@@ -70,6 +70,11 @@
           </authorized>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="center" style="margin-top: 20px" :gutter="50">
+        <el-col :span="3">
+          <el-button type="primary" @click="onModify">接单</el-button>
+        </el-col>
+      </el-row>
       <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" :gutter="50"
         v-if="(formData.state === 'AUDIT_REJECTED'||formData.state === 'TO_BE_SUBMITTED') && isSendBy">
         <el-col :span="3">
@@ -227,15 +232,6 @@
         let formData = {
           id: data.id,
           managementMode: data.managementMode,
-          outboundCompanyName: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.name : data
-            .targetCooperator.name,
-          outboundContactPerson: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner
-            .contactPerson : data.targetCooperator.contactPerson,
-          outboundContactPhone: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPhone :
-            data.targetCooperator.contactPhone,
-          targetCooperator: {
-            id: data.targetCooperator.id
-          },
           taskOrderEntries: data.taskOrderEntries,
           cooperationMode: data.cooperationMode,
           invoiceNeeded: data.invoiceNeeded,
@@ -247,9 +243,20 @@
           attachments: data.attachments ? data.attachments : [],
           sendApprovers: data.sendApprovers,
           merchandiser: data.merchandiser,
-          title: data.title
+          title: data.title,
+          version: data.version
           // state: data.state
         }
+
+        if (data.targetCooperator) {
+          formData.outboundCompanyName = data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.name : data.targetCooperator.name,
+          formData.outboundContactPerson = data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPerson : data.targetCooperator.contactPerson,
+          formData.outboundContactPhone = data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPhone : data.targetCooperator.contactPhone,
+          formData.targetCooperator = {
+            id: data.targetCooperator ? data.targetCooperator.id : ''
+          }
+        }
+
         return formData;
       },
       async getDetail() {

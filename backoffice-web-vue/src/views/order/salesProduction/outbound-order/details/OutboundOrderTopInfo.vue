@@ -12,7 +12,7 @@
         </el-row>
         <el-row type="flex" justify="start" style="margin: 10px 0px 0px 24px;">
           <el-col :span="9">
-            <h6>合作商：{{slotData.targetCooperator.type == 'ONLINE' ?
+            <h6 v-if="slotData.targetCooperator">合作商：{{slotData.targetCooperator.type == 'ONLINE' ?
               slotData.targetCooperator.partner.name : slotData.targetCooperator.name}}</h6>
           </el-col>
           <el-col :span="5">

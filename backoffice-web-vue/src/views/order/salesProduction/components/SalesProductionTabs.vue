@@ -44,7 +44,7 @@
         <sales-reconciliation :form="form" />
       </el-tab-pane>
     </el-tabs>
-    <el-row type="flex" justify="start" style="margin-top:20px">
+    <el-row type="flex" justify="start" style="margin-top:20px" v-if="fromDetail">
       <el-button type="primary" @click="printVisible=true">打印付款申请单</el-button>
     </el-row>
     <el-dialog title="打印付款申请单" :visible.sync="printVisible" width="80%" :close-on-click-modal="false" append-to-body>
@@ -93,6 +93,10 @@
         default: false
       },
       readOnly: {
+        type: Boolean,
+        default: false
+      },
+      fromDetail: {
         type: Boolean,
         default: false
       }

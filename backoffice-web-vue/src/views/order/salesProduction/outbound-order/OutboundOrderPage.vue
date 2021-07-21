@@ -180,14 +180,14 @@
         let formData = {
           id: data.id,
           managementMode: data.managementMode,
-          outboundCompanyName: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.name : data
+          outboundCompanyName: (data.targetCooperator && data.targetCooperator.type == 'ONLINE') ? data.targetCooperator.partner.name : data
             .targetCooperator.name,
-          outboundContactPerson: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner
+          outboundContactPerson: (data.targetCooperator && data.targetCooperator.type == 'ONLINE') ? data.targetCooperator.partner
             .contactPerson : data.targetCooperator.contactPerson,
-          outboundContactPhone: data.targetCooperator.type == 'ONLINE' ? data.targetCooperator.partner.contactPhone :
+          outboundContactPhone: (data.targetCooperator && data.targetCooperator.type == 'ONLINE') ? data.targetCooperator.partner.contactPhone :
             data.targetCooperator.contactPhone,
           targetCooperator: {
-            id: data.targetCooperator.id
+            id: data.targetCooperator ? data.targetCooperator.id : ''
           },
           taskOrderEntries: data.taskOrderEntries.map(item => {
             return {
@@ -214,7 +214,8 @@
           state: data.state,
           payOnline: data.payOnline,
           serviceFeePercent: data.serviceFeePercent ? data.serviceFeePercent * 100 : '',
-          paymentAccount: data.paymentAccount
+          paymentAccount: data.paymentAccount,
+          version: data.version
         }
         return formData;
       },
