@@ -20,7 +20,7 @@
       </el-form>
       <div style="margin-top: 10px">
         <sales-production-tabs :canChangeProduct="false" :form="formData" @getDetails="getDetails" :canUpdate="false"
-          @appendProduct="appendProduct" />
+          @appendProduct="appendProduct" :fromDetail="true"/>
       </div>
       <template
         v-if="formData.auditWorkOrder &&formData.auditWorkOrder.processes&& formData.auditWorkOrder.processes.length > 0">

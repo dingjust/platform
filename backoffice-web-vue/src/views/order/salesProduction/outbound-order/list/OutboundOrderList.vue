@@ -1,8 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
-      @selection-change="handleSelectionChange" @row-click="rowClick">
-      <el-table-column type="selection" :reserve-selection="true" width="55" v-if="isSelect"></el-table-column>
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id">
       <el-table-column label="标题" prop="title" min-width="150"></el-table-column>
       <el-table-column label="外发订单号" prop="code" min-width="150">
         <template slot-scope="scope">
@@ -56,139 +54,85 @@
       </el-table-column>
     </el-table>
     <div class="pt-2"></div>
-    <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
-    <!-- </div> -->
-    <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isSelect">
-      <el-button class="sure-btn" @click="setSelectOrder">确定</el-button>
-    </el-row>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'OutboundOrderList',
-    props: {
-      page: {
-        type: Object
-      },
-      isSelect: {
-        type: Boolean,
-        default: false
-      }
-    },
-    computed: {
-      showCancelList: function () {
-        return this.page.content.some(item => this.isApplyCanceling(item));
-      }
-    },
-    methods: {
-      canModify(row) {
-        if (!row.merchandiser || row.state == 'CANCELED' || row.merchandiser.uid != this.$store.getters.currentUser
-          .uid) {
-          return false;
-        }
-        return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
-          (row.sendAuditState == 'AUDITED_FAILED' || row.sendAuditState == 'NONE');
-      },
-      getCooperator(row) {
-        if (!row.targetCooperator) {
-          return '';
-        }
-        return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
-      },
-      onPageSizeChanged(val) {
-        this.$emit('onAdvancedSearch', 0, val);
-
-        this.$nextTick(() => {
-          this.$refs.resultTable.bodyWrapper.scrollTop = 0
-        });
-      },
-      onCurrentPageChanged(val) {
-        this.$emit('onAdvancedSearch', val - 1);
-
-        this.$nextTick(() => {
-          this.$refs.resultTable.bodyWrapper.scrollTop = 0
-        });
-      },
-      onDetail(row) {
-        this.$router.push('/sales/outboundOrder/' + row.id);
-      },
-      onModify(row) {
-        this.$emit('onModify', row.id);
-      },
-      handleSelectionChange(val) {
-        // 限制单选
-        if (val.length > 1) {
-          this.$refs.resultTable.toggleRowSelection(val[0], false);
-          this.selectionRow = val[val.length - 1];
-        } else if (val.length == 1) {
-          this.selectionRow = val[val.length - 1];
-        } else if (val.length == 0) {
-          this.selectionRow = "";
-        }
-        this.$emit('onSelect', this.selectionRow);
-      },
-      rowClick(row) {
-        if (this.selectionRow == "") {
-          this.$refs.resultTable.toggleRowSelection(row, true);
-        } else {
-          if (this.selectionRow.id == row.id) {
-            this.$refs.resultTable.toggleRowSelection(row, false);
-          } else {
-            this.$refs.resultTable.toggleRowSelection(this.selectionRow, false);
-            this.$refs.resultTable.toggleRowSelection(row, true);
-          }
-        }
-      },
-      setSelectOrder() {
-        this.$emit('setSelectOrder', this.selectionRow);
-      },
-      //判断是否正在申请取消订单
-      isApplyCanceling(row) {
-        if (row.currentCancelApply != null && row.currentCancelApply.state == 'PENDING') {
-          return true;
-        }
-        return false;
-      },
-      //判断是否已签合同
-      isAgreementsComplete(row) {
-        if (row.agreements) {
-          let index = row.agreements.findIndex(entry => entry.state == 'COMPLETE');
-          return index != -1;
-        }
+export default {
+  name: 'OutboundOrderList',
+  props: ['page'],
+  computed: {
+    showCancelList: function () {
+      return this.page.content.some(item => this.isApplyCanceling(item));
+    }
+  },
+  methods: {
+    canModify(row) {
+      if (!row.merchandiser || row.state == 'CANCELED' || row.merchandiser.uid != this.$store.getters.currentUser.uid) {
         return false;
       }
+      return row.merchandiser.uid == this.$store.getters.currentUser.uid &&
+        (row.sendAuditState == 'AUDITED_FAILED' || row.sendAuditState == 'NONE');
     },
-    data() {
-      return {
-        uid: this.$store.getters.currentUser.companyCode,
-        selectionRow: ''
+    getCooperator(row) {
+      if (!row.targetCooperator) {
+        return '';
       }
+      return row.targetCooperator.type == 'ONLINE' ? row.targetCooperator.partner.name : row.targetCooperator.name;
     },
-    created() {}
+    onPageSizeChanged(val) {
+      this.$emit('onAdvancedSearch', 0, val);
+
+      this.$nextTick(() => {
+        this.$refs.resultTable.bodyWrapper.scrollTop = 0
+      });
+    },
+    onCurrentPageChanged(val) {
+      this.$emit('onAdvancedSearch', val - 1, this.page.size);
+
+      this.$nextTick(() => {
+        this.$refs.resultTable.bodyWrapper.scrollTop = 0
+      });
+    },
+    onDetail(row) {
+      this.$router.push('/sales/outboundOrder/' + row.id);
+    },
+    onModify(row) {
+      this.$emit('onModify', row.id);
+    },
+    //判断是否正在申请取消订单
+    isApplyCanceling(row) {
+      if (row.currentCancelApply != null && row.currentCancelApply.state == 'PENDING') {
+        return true;
+      }
+      return false;
+    },
+    //判断是否已签合同
+    isAgreementsComplete(row) {
+      if (row.agreements) {
+        let index = row.agreements.findIndex(entry => entry.state == 'COMPLETE');
+        return index != -1;
+      }
+      return false;
+    }
   }
-
+}
 </script>
 
 <style scoped>
-  /deep/ .el-table th>.cell .el-checkbox {
-    display: none;
-  }
+.warning-icon {
+  color: #ff1744;
+  font-size: 20px;
+}
 
-  .warning-icon {
-    color: #ff1744;
-    font-size: 20px;
-  }
-
-  .sure-btn {
-    background-color: #ffd60c;
-    border-color: #ffd60c;
-    width: 150px;
-    height: 35px;
-  }
-
+.sure-btn {
+  background-color: #ffd60c;
+  border-color: #ffd60c;
+  width: 150px;
+  height: 35px;
+}
 </style>

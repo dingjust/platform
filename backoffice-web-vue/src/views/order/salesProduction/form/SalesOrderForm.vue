@@ -110,12 +110,12 @@
           </el-form-item>
           <template v-for="(item,itemIndex) in form.approvers">
             <el-form-item :key="'a'+itemIndex" :label="'审批人'+(itemIndex+1)" label-width="80px" style="margin-right:10px;"
-              :prop="'approvers.' + itemIndex" :rules="{required: form.auditNeeded, message: '不能为空', trigger: 'change'}">
-              <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!form.auditNeeded" 
+              :prop="'approvers.' + itemIndex" :rules="{required: auditNeeded, message: '不能为空', trigger: 'change'}">
+              <personnal-selection-v2 :vPerson.sync="form.approvers[itemIndex]" :disabled="!auditNeeded" 
                                       :excludeMySelf="true" style="width: 194px" :selectedRow="form.approvers"/>
             </el-form-item>
           </template>
-          <el-button-group style="padding-bottom: 26px;">
+          <el-button-group style="padding-bottom: 26px;" v-if="!form['NEW_MODIFY']">
             <el-button v-if="form.approvers && form.approvers.length < 5" style="height: 32px" @click="appendApprover">+ 添加审批人</el-button>
             <el-button v-if="form.approvers && form.approvers.length > 1" style="height: 32px" @click="removeApprover">删除
             </el-button>
@@ -135,7 +135,7 @@
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
           <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
-          <el-button class="material-btn" @click="onSave(false)">保存</el-button>
+          <el-button class="material-btn" @click="onSave(false)" v-if="!form['NEW_ACCEPTED']">保存</el-button>
           <!-- </authorized> -->
         </el-col>
         <el-col :span="5">
@@ -200,6 +200,12 @@
       OrderPaySetting
     },
     computed: {
+      auditNeeded: function () {
+        if (this.form['NEW_MODIFY']) {
+          return false
+        }
+        return this.form.auditNeeded
+      },
       // 根据订单类型，加工类型判断是否需要物料清单等
       needMaterialsSpec: function () {
         // 销售订单
@@ -238,6 +244,9 @@
       },
       // 是否能添加删除产品
       canChangeProduct: function () {
+        if (this.form['NEW_MODIFY']) {
+          return true
+        }
         // 新建订单
         if (this.form.id == null) {
           return true;
@@ -257,6 +266,9 @@
       },
       // 是否来源外发
       hasOrigin: function () {
+        if (this.form['NEW_MODIFY']) {
+          return false
+        }
         //来源公司
         return this.form.originCompany != null && this.form.originCompany != '';
       },
@@ -266,6 +278,9 @@
         }
       },
       isDisabled: function () {
+        if (this.form['NEW_MODIFY']) {
+          return true
+        }
         // return false;
         return !checkAuditFree('SALES_OUT_NO_AUDIT');
       }
@@ -373,7 +388,10 @@
         }
       },
       async _Save(submitAudit) {
-        const url = this.apis().salesOrderSave(submitAudit);
+        let url = this.apis().salesOrderSave(this.form['NEW_MODIFY'] ? false : submitAudit)
+        if (this.form['NEW_ACCEPTED']) {
+          url = this.apis().receivingOrder()
+        }
         let submitForm = Object.assign({}, this.form);
         if (!submitForm.auditNeeded) {
           submitForm.approvers = [];
@@ -536,7 +554,7 @@
       }
     },
     created() {
-      this.form.auditNeeded = false;
+      this.form.auditNeeded = this.form['NEW_MODIFY'] ? this.form.auditNeeded : false;
       
       if (this.$route.params.order != null) {
         this.$set(this, 'form', this.$route.params.order);
@@ -544,10 +562,17 @@
         this.$set(this.form, 'productionLeader', this.$store.getters.currentUser)
 
         // 设置对应供应商
-        if (this.form.originCooperator.type == 'ONLINE') {
+        if (this.form.originCooperator && this.form.originCooperator.type == 'ONLINE') {
           this.form.originCooperator.name = this.form.originCooperator.partner.name;
           this.form.originCooperator.contactPhone = this.form.originCooperator.partner.contactPhone;
           this.form.originCooperator.contactPerson = this.form.originCooperator.partner.contactPerson;
+        } else {
+          this.form.originCooperator = {
+            id: '',
+            name: '',
+            contactPhone: '',
+            contactPerson: ''
+          }
         }
 
         const serviceFeePercent = this.$route.params.order.serviceFeePercent ? (this.$route.params.order.serviceFeePercent * 1000000 / 10000) : '';
@@ -556,10 +581,12 @@
       }
     },
     mounted() {
-      if (checkAuditFree('SALES_OUT_NO_AUDIT')) {
-        this.form.auditNeeded = false;
-      } else {
-        this.form.auditNeeded = true;
+      if (!this.form['NEW_MODIFY']) {
+        if (checkAuditFree('SALES_OUT_NO_AUDIT')) {
+          this.form.auditNeeded = false;
+        } else {
+          this.form.auditNeeded = true;
+        }
       }
     }
   };

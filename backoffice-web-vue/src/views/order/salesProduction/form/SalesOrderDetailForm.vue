@@ -156,6 +156,10 @@
           return false;
         }
 
+        if (!this.form.creator) {
+          return false
+        }
+
         // 销售计划没有上流，随意可以添加纸质合同
         if (!this.form.originCompany && (this.$store.getters.currentUser.uid === this.form.creator.uid)) {
           return true;

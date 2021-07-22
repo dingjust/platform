@@ -64,7 +64,7 @@
             </div>
           </el-col>
         </el-row>
-        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="detail" :fromOut="false" :readOnly="true"/>
+        <sales-production-tabs :canChangeProduct="false" :canUpdate="false" :form="detail" :fromOut="false" :readOnly="true" :fromDetail="true"/>
       </template>
     </el-card>
   </div>

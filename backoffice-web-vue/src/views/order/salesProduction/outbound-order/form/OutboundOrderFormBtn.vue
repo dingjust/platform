@@ -1,6 +1,6 @@
 <template>
   <el-row style="margin-top: 20px" type="flex" justify="center" align="middle">
-    <el-button class="material-btn" @click="onCreate(false)">保存</el-button>
+    <el-button class="material-btn" @click="onCreate(false)" v-if="!formData['NEW_ACCEPTED'] && !formData['NEW_MODIFY']">保存</el-button>
     <el-button class="material-btn" @click="onCreate(true)">创建并提交</el-button>
     <el-button v-if="canDelete" @click="onDelete" type="text">作废订单</el-button>
   </el-row>
@@ -9,7 +9,7 @@
 <script>
 export default {
   name: 'OutboundOrderFormBtn',
-  props: ['canDelete'],
+  props: ['formData', 'canDelete'],
   methods: {
     onCreate (flag) {
       this.$emit('onCreate', flag);

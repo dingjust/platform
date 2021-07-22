@@ -1046,7 +1046,9 @@ const COMMON_APIS = {
   // 获取公司认证信息详情
   getCooperatorAuthDetail (uid) {
     return '/b2b/cert/enterprise/cert/info/' + uid;
-  }
+  },
+  // 新的外接外发接单接口
+  receivingOrder: () => '/b2b/sales/production/order/accept'
 };
 
 let TENANT_APIS = {
