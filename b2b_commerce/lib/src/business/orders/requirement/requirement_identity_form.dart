@@ -133,13 +133,13 @@ class _RequirementIdentityFormState extends State<RequirementIdentityForm> {
           ],
           child: Consumer(
             builder: (context, RequirementOrderFormStateV2 state, _) =>
-            widget.type == RequirementOrderType.FINDING_ORDER
-                ? RequirementFormOrder(
-              formState: state,
-            )
-                : RequirementFormFactory(
-              formState: state,
-            ),
+                widget.type == RequirementOrderType.FINDING_ORDER
+                    ? RequirementFormOrder(
+                        formState: state,
+                      )
+                    : RequirementFormFactory(
+                        formState: state,
+                      ),
           ),
         ),
       ),

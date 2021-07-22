@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/helper/requirement_helper.dart';
+import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:b2b_commerce/src/my/company/_shared/company_certificate_info.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -155,8 +156,14 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
               label: '发布需求',
               info: '邀请对方报价',
               onTap: () {
-                RequirementHelper.publishToFactory(
-                    context: context, factory: data);
+                DialogHelper.showConfirm(
+                    title: '温馨提示',
+                    content:
+                        '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
+                    confirm: () {
+                      RequirementHelper.publishToFactory(
+                          context: context, factory: data);
+                    });
               },
             ))
           ],
@@ -167,24 +174,29 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
 
   ///联系
   void _onContact() {
-    String tel = data.contactPhone;
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return new Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('拨打电话'),
-              onTap: () async {
-                var url = 'tel:' + tel;
-                await launch(url);
-              },
-            ),
-            tel.indexOf('-') > -1
-                ? Container()
-                : ListTile(
+    DialogHelper.showConfirm(
+        title: '温馨提示',
+        content:
+        '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
+        confirm: () {
+          String tel = data.contactPhone;
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return new Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.phone),
+                    title: Text('拨打电话'),
+                    onTap: () async {
+                      var url = 'tel:' + tel;
+                      await launch(url);
+                    },
+                  ),
+                  tel.indexOf('-') > -1
+                      ? Container()
+                      : ListTile(
                     leading: Icon(Icons.message),
                     title: Text('发送短信'),
                     onTap: () async {
@@ -192,10 +204,11 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
                       await launch(url);
                     },
                   ),
-          ],
-        );
-      },
-    );
+                ],
+              );
+            },
+          );
+        });
   }
 
   ///获取工厂信息
@@ -300,24 +313,25 @@ class _InfoHeadRow extends StatelessWidget {
                       model: data,
                     ),
                     ...data.labels
-                        .map((e) => Container(
-                              padding: EdgeInsets.fromLTRB(2, 1, 2, 2),
-                              margin: EdgeInsets.symmetric(horizontal: 3),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.green, width: 0.5),
-                                  borderRadius: BorderRadius.circular(2)),
-                      child: Text(
-                        '${e.name}',
-                        style: TextStyle(
-                            fontSize: 10, color: Colors.green),
-                      ),
-                    ))
+                        .map((e) =>
+                        Container(
+                          padding: EdgeInsets.fromLTRB(2, 1, 2, 2),
+                          margin: EdgeInsets.symmetric(horizontal: 3),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.green, width: 0.5),
+                              borderRadius: BorderRadius.circular(2)),
+                          child: Text(
+                            '${e.name}',
+                            style: TextStyle(
+                                fontSize: 10, color: Colors.green),
+                          ),
+                        ))
                         .toList()
-                      ],
-                    ),
                   ],
                 ),
+              ],
+            ),
               ))
         ],
       ),

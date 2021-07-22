@@ -19,13 +19,16 @@ class RequirementOrderFormStateV2 with ChangeNotifier {
   ///身份类型
   final String identityTypeStr;
 
-  RequirementOrderFormStateV2({
-    this.identityTypeStr,
-    this.detailModel,
-    this.uid,
-    this.cid,
-    this.factoryDetailModel,
-  }) {
+  ///产品
+  ApparelProductModel product;
+
+  RequirementOrderFormStateV2(
+      {this.identityTypeStr,
+      this.detailModel,
+      this.uid,
+      this.cid,
+      this.factoryDetailModel,
+      this.product}) {
     if (detailModel != null) {
       _model = detailModel;
     }
@@ -55,9 +58,19 @@ class RequirementOrderFormStateV2 with ChangeNotifier {
             invoiceNeeded: false,
             publishingMode: 'PUBLIC',
             effectiveDays: 90,
-            identityTypeStr: identityTypeStr),
+            identityTypeStr: identityTypeStr,
+            pictures: []),
         attachments: [],
       );
+
+      if (product != null) {
+        _model.details
+          ..category = product.category
+          ..majorCategory = product.superCategories
+          ..productName = product.name;
+        _model.details.pictures.addAll(product.thumbnails);
+        _model.details.products = [ApparelProductModel(code: product.code)];
+      }
     }
     return _model;
   }

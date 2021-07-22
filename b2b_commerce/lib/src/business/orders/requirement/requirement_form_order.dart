@@ -506,7 +506,9 @@ class _RequirementFormOrderState extends State<RequirementFormOrder>
     // DialogHelper.showConfirm(
     //     title: '确定发布需求?', content: '', confirm: () async {});
 
-    ShowDialogUtil.showChoseDiglog(context, '是否确认发布', () async {
+    ShowDialogUtil.showChoseDiglog(context,
+        '温馨提示：钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
+        () async {
       Function cancelFunc =
           BotToast.showLoading(clickClose: true, crossPage: false);
       BaseResponse response =
@@ -523,16 +525,17 @@ class _RequirementFormOrderState extends State<RequirementFormOrder>
             .getRequirementOrderDetail(response.msg);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => PublishRequirementSuccessDialog(
-                model: model,
-              ),
+              builder: (context) =>
+                  PublishRequirementSuccessDialog(
+                    model: model,
+                  ),
             ),
             ModalRoute.withName('/'));
-      } else if (response.code == 0) {
-        BotToast.showText(text: '${response.msg}');
-      } else {
-        Navigator.of(context).pop();
-      }
-    });
+          } else if (response.code == 0) {
+            BotToast.showText(text: '${response.msg}');
+          } else {
+            Navigator.of(context).pop();
+          }
+        }, height: 300, confirmButtonText: '我已知晓');
   }
 }

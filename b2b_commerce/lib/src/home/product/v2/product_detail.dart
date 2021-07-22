@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_factory.dart';
 import 'package:core/core.dart';
 
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
@@ -6,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String code;
 
-  ProductDetailPage(
-    this.code, {
+  ProductDetailPage(this.code, {
     Key key,
   }) : super(key: key);
 
@@ -54,9 +55,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               } else {
                 return Center(
                     child: CircularProgressIndicator(
-                  valueColor:
+                      valueColor:
                       AlwaysStoppedAnimation(Constants.THEME_COLOR_MAIN),
-                ));
+                    ));
               }
             },
           ),
@@ -71,13 +72,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     if (data.thumbnails != null) {
       thumbnails = data.thumbnails
           .map((thumbnail) => MediaModel(
-              convertedMedias: thumbnail.convertedMedias,
-              mediaFormat: thumbnail.mediaFormat,
-              mediaType: thumbnail.mediaType,
-              mime: thumbnail.mime,
-              name: thumbnail.name,
-              url: thumbnail.url,
-              id: thumbnail.id))
+          convertedMedias: thumbnail.convertedMedias,
+          mediaFormat: thumbnail.mediaFormat,
+          mediaType: thumbnail.mediaType,
+          mime: thumbnail.mime,
+          name: thumbnail.name,
+          url: thumbnail.url,
+          id: thumbnail.id))
           .toList();
     }
 
@@ -110,10 +111,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
         SliverList(
             delegate: SliverChildListDelegate([
-          _buildHeaderSection(),
-          ProductAttributesTab(data),
-          _buildImagesSection()
-        ])),
+              _buildHeaderSection(),
+              ProductAttributesTab(data),
+              _buildImagesSection()
+            ])),
       ],
     );
   }
@@ -176,7 +177,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-          // mainAxisAlignment: MainAxisAlignment.st,
+        // mainAxisAlignment: MainAxisAlignment.st,
           children: _moneyRows),
     );
   }
@@ -225,20 +226,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                      child: CachedNetworkImage(
-                          imageUrl: '${media.normalUrl()}',
-                          fit: BoxFit.fitWidth,
-                          placeholder: (context, url) => SpinKitRing(
+                          child: CachedNetworkImage(
+                              imageUrl: '${media.normalUrl()}',
+                              fit: BoxFit.fitWidth,
+                              placeholder: (context, url) => SpinKitRing(
                                 color: Colors.black12,
                                 lineWidth: 2,
                                 size: 30,
                               ),
-                          errorWidget: (context, url, error) => SpinKitRing(
+                              errorWidget: (context, url, error) => SpinKitRing(
                                 color: Colors.black12,
                                 lineWidth: 2,
                                 size: 30,
                               )),
-                    ))
+                        ))
                   ],
                 )
             ])
@@ -248,7 +249,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Widget _buildBtn(UserBLoC bloc) {
     return GestureDetector(
-      // onTap: () => _onPay(context, data),
+      onTap: onOrder,
       child: Container(
         height: 35,
         margin: EdgeInsets.fromLTRB(20, 0, 20, 5),
@@ -283,15 +284,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     return data;
   }
+
+  void onOrder() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (_) => RequirementOrderFormStateV2(
+                  identityTypeStr: '看款下单', product: data),
+            ),
+          ],
+          child: Consumer(
+            builder: (context, RequirementOrderFormStateV2 state, _) =>
+                RequirementFormFactory(
+              formState: state,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class BasicInfoRow extends StatelessWidget {
-  const BasicInfoRow(
-      {Key key,
-      @required this.label,
-      @required this.value,
-      this.action,
-      this.onTap})
+  const BasicInfoRow({Key key,
+    @required this.label,
+    @required this.value,
+    this.action,
+    this.onTap})
       : super(key: key);
 
   final String label;

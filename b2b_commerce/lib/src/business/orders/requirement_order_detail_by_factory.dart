@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
+import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:b2b_commerce/src/home/factory/_shared/factory_widgets.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -702,15 +703,21 @@ class _RequirementOrderDetailByFactoryPageState
                 color: Colors.green,
                 label: '联系对方',
                 onTap: () {
-                  var tel = '';
-                  if (model?.details?.agentContactPhone != null &&
-                      model?.details?.agentContactPhone != '') {
-                    //代理电话
-                    tel = model.details.agentContactPhone;
-                  } else {
-                    tel = model.details.contactPhone;
-                  }
-                  _selectActionButton(tel);
+                  DialogHelper.showConfirm(
+                      title: '温馨提示',
+                      content:
+                      '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
+                      confirm: () {
+                        var tel = '';
+                        if (model?.details?.agentContactPhone != null &&
+                            model?.details?.agentContactPhone != '') {
+                          //代理电话
+                          tel = model.details.agentContactPhone;
+                        } else {
+                          tel = model.details.contactPhone;
+                        }
+                        _selectActionButton(tel);
+                      });
                 },
               )),
             ],
@@ -732,15 +739,21 @@ class _RequirementOrderDetailByFactoryPageState
               color: Colors.green,
               label: '联系对方',
               onTap: () {
-                var tel = '';
-                if (model?.details?.agentContactPhone != null &&
-                    model?.details?.agentContactPhone != '') {
-                  //代理电话
-                  tel = model.details.agentContactPhone;
-                } else {
-                  tel = model.details.contactPhone;
-                }
-                _selectActionButton(tel);
+                DialogHelper.showConfirm(
+                    title: '温馨提示',
+                    content:
+                        '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
+                    confirm: () {
+                      var tel = '';
+                      if (model?.details?.agentContactPhone != null &&
+                          model?.details?.agentContactPhone != '') {
+                        //代理电话
+                        tel = model.details.agentContactPhone;
+                      } else {
+                        tel = model.details.contactPhone;
+                      }
+                      _selectActionButton(tel);
+                    });
               },
             )),
             Expanded(
