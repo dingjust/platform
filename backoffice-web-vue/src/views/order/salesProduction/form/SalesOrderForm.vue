@@ -586,12 +586,13 @@
 
         this.$set(this.form, 'serviceFeePercent', serviceFeePercent);
 
-        if (this.form.offLine == null) {
-          this.$set(this.form, 'offLine', false)
-        }
       }
     },
     mounted() {
+      if (this.form.offLine == null) {
+        this.$set(this.form, 'offLine', false)
+      }
+
       if (!this.form['NEW_MODIFY']) {
         if (checkAuditFree('SALES_OUT_NO_AUDIT')) {
           this.form.auditNeeded = false;
