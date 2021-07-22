@@ -784,15 +784,18 @@ class RequirementInfoModel extends ItemModel {
   ///代理联系电话
   String agentContactPhone;
 
-  RequirementInfoModel(
-      {this.expectedDeliveryDate,
-      this.maxExpectedPrice,
-      this.machiningType,
-      this.invoiceNeeded = false,
-      this.proofingNeeded = false,
-      this.samplesNeeded = false,
-      this.pictures,
-      this.contactPerson,
+  ///关联产品
+  @JsonKey(toJson: productsToJson)
+  List<ApparelProductModel> products;
+
+  RequirementInfoModel({this.expectedDeliveryDate,
+    this.maxExpectedPrice,
+    this.machiningType,
+    this.invoiceNeeded = false,
+    this.proofingNeeded = false,
+    this.samplesNeeded = false,
+    this.pictures,
+    this.contactPerson,
       this.contactPhone,
       this.productiveOrientations,
       this.isToRequirementPool = true,
@@ -810,17 +813,18 @@ class RequirementInfoModel extends ItemModel {
       this.populationScale,
       this.productionMode,
       this.productiveDistricts,
-      this.identityTypeStr,
-      this.address,
-      this.provinceStr,
-      this.cityStr,
-      this.districtStr,
-      this.contactWeChatNo,
-      this.latitude,
-      this.longitude,
-      this.payPlan,
-      this.agentContactPerson,
-      this.agentContactPhone});
+    this.identityTypeStr,
+    this.address,
+    this.provinceStr,
+    this.cityStr,
+    this.districtStr,
+    this.contactWeChatNo,
+    this.latitude,
+    this.longitude,
+    this.payPlan,
+    this.agentContactPerson,
+    this.agentContactPhone,
+    this.products});
 
   factory RequirementInfoModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$RequirementInfoModelFromJson(json);
@@ -849,7 +853,7 @@ class RequirementInfoModel extends ItemModel {
       model == null ? null : DistrictModel.toJson(model);
 
   static List<Map<String, dynamic>> _cityDistrictListToJson(
-          List<DistrictModel> models) =>
+      List<DistrictModel> models) =>
       models == null
           ? null
           : models.map((e) => DistrictModel.toJson(e)).toList();
@@ -858,6 +862,12 @@ class RequirementInfoModel extends ItemModel {
       models == null
           ? null
           : models.map((model) => RegionModel.toJson(model)).toList();
+
+  static List<Map<String, dynamic>> productsToJson(
+      List<ApparelProductModel> models) =>
+      models == null
+          ? null
+          : models.map((model) => ApparelProductModel.toJson(model)).toList();
 
   static MachiningType _machiningTypeFromJson(String machiningType) {
     if (machiningType == null) {

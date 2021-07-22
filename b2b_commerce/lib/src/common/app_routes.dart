@@ -39,9 +39,11 @@ import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/index.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
+import 'package:b2b_commerce/src/home/product/v2/product_detail.dart';
 import 'package:b2b_commerce/src/home/requirement/nearby_requirement.dart';
 import 'package:b2b_commerce/src/home/search/home_search_result.dart';
 import 'package:b2b_commerce/src/home/search/home_serach.dart';
+import 'package:b2b_commerce/src/home/search/products_serach.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/account/register_channel_page.dart';
 import 'package:b2b_commerce/src/my/account/register_page.dart';
@@ -236,6 +238,11 @@ class AppRoutes with GlobalRoutes {
   ///注销账号
   static const ROUTE_CANCELLATION_ACCOUNT = '/my/account/cancellation';
 
+  ///看款详情
+  static const ROUTE_APPAREL_PRODUCT = '/apparel_product';
+
+  static const ROUTE_PRODUCTS_SEARCH = '/apparel_product/search';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -336,7 +343,11 @@ class AppRoutes with GlobalRoutes {
     ROUTE_REQUIREMENT_ORDERS_NEARBY: (context) => NearbyRequirementPage(),
     ROUTE_FACTORIES: (context) => FindingFactoryPage(),
     ROUTE_SWITCH_ACCOUNT: (context) => AccountSwitchLogin(),
-    ROUTE_CANCELLATION_ACCOUNT: (context) => AccountCancellationPage()
+    ROUTE_CANCELLATION_ACCOUNT: (context) => AccountCancellationPage(),
+    ROUTE_APPAREL_PRODUCT: (context) =>
+        ProductDetailPage(getVal('code', context)),
+    ROUTE_PRODUCTS_SEARCH: (context) =>
+        ProductsSearchPage(keyword: getVal('keyword', context)),
   };
 
   static dynamic getVal(String key, BuildContext context) {

@@ -1,8 +1,5 @@
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_order.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
-import 'package:services/services.dart';
 
 import 'requirement_identity_form.dart';
 

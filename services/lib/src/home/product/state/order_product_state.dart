@@ -13,6 +13,14 @@ class ProductState extends PageState {
     return _products;
   }
 
+  ///搜素关键字
+  String keyword;
+
+  ///品类
+  CategoryModel category;
+
+  ProductState({this.keyword});
+
   @override
   getData() {
     OrderProductRepository.getProducts(
@@ -59,9 +67,16 @@ class ProductState extends PageState {
 
   ///请求参数
   Map<String, dynamic> getParamsData() {
-    return {
+    Map<String, dynamic> data = {
       'approvalStatuses': ["approved"]
     };
+    data['keyword'] = keyword ?? '';
+
+    if (category != null) {
+      data['categories'] = [category.code];
+    }
+
+    return data;
   }
 
   @override

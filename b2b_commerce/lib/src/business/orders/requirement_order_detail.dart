@@ -393,8 +393,8 @@ class _RequirementOrderDetailPageState
                     orderModel.details.proofingNeeded == null
                         ? ''
                         : orderModel.details.proofingNeeded
-                        ? '是'
-                        : '否',
+                            ? '是'
+                            : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),

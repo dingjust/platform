@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_type_select.dart';
-import 'package:b2b_commerce/src/business/orders/sales_production/progress_work_sheet/progress_work_sheets_page.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
@@ -13,6 +12,7 @@ import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:b2b_commerce/src/home/account/client_select_v2.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/index.dart';
+import 'package:b2b_commerce/src/home/product/v2/products_page.dart';
 import 'package:b2b_commerce/src/my/index.dart';
 import 'package:b2b_commerce/src/observer/b2b_navigator_observer.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -158,8 +158,8 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
         HomePage(),
       ),
       NavigationMenu(
-          BottomNavigationBarItem(icon: Icon(B2BIcons.production), label: '生产'),
-          ProductionProgressPage()),
+          BottomNavigationBarItem(icon: Icon(B2BIcons.shop), label: '看款'),
+          ProductsPage()),
       // NavigationMenu(
       //   // BottomNavigationBarItem(icon: BottomNotificationsIcon(), label: '消息'),
       //   BottomNavigationBarItem(

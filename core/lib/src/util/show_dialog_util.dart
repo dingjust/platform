@@ -141,18 +141,21 @@ class ShowDialogUtil{
   }
 
   //是否操作选择提示框
-  static Future<void> showChoseDiglog(BuildContext context, String tips,VoidCallback action) {
+  static Future<void> showChoseDiglog(
+      BuildContext context, String tips, VoidCallback action,
+      {double height = 210, String confirmButtonText = '确定'}) {
     return showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 210,
+            dialogHeight: height,
             contentText2: tips,
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
             confirmAction: action,
+            confirmButtonText: confirmButtonText,
           );
         }
     );

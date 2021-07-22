@@ -63,9 +63,9 @@ class _MyHomePageState extends State<MyHomePage> {
         MenuItem(B2BImage.addressManage(width: 24, height: 29), '地址管理',
             AppRoutes.ROUTE_MY_ADDRESSES),
         menuSeparator,
-        MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理',
-            AppRoutes.ROUTE_MY_INVOICES),
-        menuSeparator,
+        // MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理',
+        //     AppRoutes.ROUTE_MY_INVOICES),
+        // menuSeparator,
       ]),
       Menu('', <Widget>[
         // MenuItem(B2BImage.luckeyMoney(width: 25, height: 25), '邀请好友',
@@ -214,36 +214,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  decoration: BoxDecoration(
-                      color: Color(0xFFffb118),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(right: 5),
-                        child: Icon(
-                          B2BIcons.integral,
-                          size: 12,
-                        ),
-                      ),
-                      FutureBuilder(
-                          future: IntegralRepository.getIntegralInfo(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<UserIntegralInfo> snapshot) {
-                            int i = 0;
-                            if (snapshot.hasData)
-                              i = snapshot.data.availablePoints;
-                            return Text(
-                              '积分:$i',
-                              style: TextStyle(fontSize: 12),
-                            );
-                          })
-                    ],
-                  ),
-                )
               ],
             ),
             Row(
