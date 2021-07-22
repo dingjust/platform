@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/home/product/components/products_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -20,7 +21,7 @@ class _ProductsPageState extends State<ProductsPage> {
         ],
         child: Scaffold(
           appBar: AppBar(
-            title: Text('现款产品'),
+            title: ProductsSearchBar(),
             brightness: Brightness.light,
             centerTitle: true,
             elevation: 0.5,
@@ -30,5 +31,11 @@ class _ProductsPageState extends State<ProductsPage> {
             child: ProductGrid(),
           ),
         ));
+  }
+
+  Widget _buildTitle() {
+    return Builder(
+      builder: (tContext) => ProductsSearchBar(),
+    );
   }
 }

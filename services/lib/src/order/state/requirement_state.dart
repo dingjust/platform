@@ -8,22 +8,22 @@ class RequirementState extends PageState {
   List<RequirementOrderModel> _requirements;
 
   ///是否前端显示
-  final bool enableShow;
+  bool enableShow;
 
   ///需求审核状态
-  final RequirementReviewState reviewState;
+  RequirementReviewState reviewState;
 
   ///需求类型
-  final RequirementOrderType type;
+  RequirementOrderType type;
 
   ///搜素关键字
-  final String keyword;
+  String keyword;
 
-  final double longitude;
+  double longitude;
 
-  final double latitude;
+  double latitude;
 
-  final String sortCondition;
+  String sortCondition;
 
   RequirementState(
       {this.reviewState,
