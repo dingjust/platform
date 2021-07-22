@@ -22,6 +22,14 @@
             </el-form-item>
           </el-col>
         </el-row> -->
+        <el-row type="flex" class="order-type">
+          <el-form-item label="订单类型">
+            <el-radio-group v-model="form.offLine">
+              <el-radio :label="true">自创</el-radio>
+              <el-radio :label="false">线上</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-row>
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -554,9 +562,8 @@
       }
     },
     created() {
-      this.form.auditNeeded = this.form['NEW_MODIFY'] ? this.form.auditNeeded : false;
-      
       if (this.$route.params.order != null) {
+        this.form.auditNeeded = this.form['NEW_MODIFY'] ? this.form.auditNeeded : false;
         this.$set(this, 'form', this.$route.params.order);
 
         this.$set(this.form, 'productionLeader', this.$store.getters.currentUser)
@@ -578,6 +585,10 @@
         const serviceFeePercent = this.$route.params.order.serviceFeePercent ? (this.$route.params.order.serviceFeePercent * 1000000 / 10000) : '';
 
         this.$set(this.form, 'serviceFeePercent', serviceFeePercent);
+
+        if (this.form.offLine == null) {
+          this.$set(this.form, 'offLine', false)
+        }
       }
     },
     mounted() {
@@ -643,6 +654,10 @@
     background-color: #ffd60c;
     border-color: #FFD5CE;
     color: #000;
+  }
+  
+  .order-type >>> .el-radio {
+    margin-bottom: 0px;
   }
 
 </style>
