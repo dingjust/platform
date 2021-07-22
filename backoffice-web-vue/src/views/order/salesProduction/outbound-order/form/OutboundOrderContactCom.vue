@@ -22,7 +22,7 @@
         <el-input v-model="formData.outboundContactPhone" :disabled="true"></el-input>
       </el-form-item>
       <div>
-        <el-button @click="suppliersSelectVisible=!suppliersSelectVisible">选择合作商</el-button>
+        <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" :disabled="isAccepted">选择合作商</el-button>
       </div>
     </div>
     <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body
@@ -37,7 +37,7 @@ import { SupplierSelect } from '@/components'
 
 export default {
   name: 'OutboundOrderContactCom',
-  props: ['formData'],
+  props: ['formData', 'isAccepted'],
   components: {
     SupplierSelect
   },
