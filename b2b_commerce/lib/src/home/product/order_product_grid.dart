@@ -65,17 +65,20 @@ class ProductStaggeredGridView extends StatelessWidget {
 class ProductGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductState>(
-      builder: (context, ProductState state, _) => Container(
-        child: state.products != null
-            ? ProductGridView(
-                state: state,
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ),
-      ),
-    );
+    return Consumer<ProductState>(builder: (context, ProductState state, _) {
+      if (state.products != null) {
+        if (state.products.length > 0) {
+          return ProductGridView(
+            state: state,
+          );
+        } else {
+          return NoDataInfoRow();
+        }
+      }
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    });
   }
 }
 

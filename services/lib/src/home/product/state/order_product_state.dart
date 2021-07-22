@@ -16,6 +16,9 @@ class ProductState extends PageState {
   ///搜素关键字
   String keyword;
 
+  ///品类
+  CategoryModel category;
+
   ProductState({this.keyword});
 
   @override
@@ -68,6 +71,11 @@ class ProductState extends PageState {
       'approvalStatuses': ["approved"]
     };
     data['keyword'] = keyword ?? '';
+
+    if (category != null) {
+      data['categories'] = [category.code];
+    }
+
     return data;
   }
 

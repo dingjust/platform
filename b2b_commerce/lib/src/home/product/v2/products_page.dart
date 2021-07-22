@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
 import '../order_product_grid.dart';
+import 'products_condition_page.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key key}) : super(key: key);
@@ -13,6 +14,8 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -20,22 +23,30 @@ class _ProductsPageState extends State<ProductsPage> {
           ChangeNotifierProvider(create: (_) => ProductState()),
         ],
         child: Scaffold(
-          appBar: AppBar(
-            title: ProductsSearchBar(),
-            brightness: Brightness.light,
-            centerTitle: true,
-            elevation: 0.5,
-          ),
-          body: Container(
-            color: Color.fromRGBO(245, 245, 245, 1),
-            child: ProductGrid(),
-          ),
-        ));
-  }
-
-  Widget _buildTitle() {
-    return Builder(
-      builder: (tContext) => ProductsSearchBar(),
-    );
+            key: _scaffoldKey,
+            appBar: AppBar(
+              title: ProductsSearchBar(),
+              brightness: Brightness.light,
+              centerTitle: true,
+              elevation: 0.5,
+              actions: [
+                Builder(
+                  builder: (context) => TextButton(
+                    child: Text(
+                      '筛选',
+                      style: TextStyle(color: Colors.black54),
+                    ),
+                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  ),
+                ),
+              ],
+            ),
+            endDrawer: Drawer(
+                child: Builder(
+              builder: (iContext) => ProductsConditionPage(
+                state: Provider.of<ProductState>(iContext, listen: false),
+              ),
+            )),
+            body: ProductGrid()));
   }
 }
