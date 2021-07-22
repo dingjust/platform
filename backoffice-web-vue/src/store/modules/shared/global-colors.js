@@ -16,7 +16,7 @@ const actions = {
   }) {
     // 获取尺码数据
     const url = '/b2b/colors/all';
-    const response = await http.get(url);
+    const response = await http.get(url, {}, true);
     if (!response['errors'] && response instanceof Array) {
       commit('colors', response);
     }
