@@ -9,26 +9,26 @@
       <div class="pt-2"></div>
       <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
         <outbound-type-select :formData="formData" />
-        <outbound-order-contact-com :formData="formData" />
-        <order-pay-setting ref="paySetting" :formData="formData" from="OUTBOUND_ORDER"/>
+        <outbound-order-contact-com :formData="formData" v-if="!isAccepted"/>
+        <order-pay-setting ref="paySetting" :formData="formData" from="OUTBOUND_ORDER" :readOnly="isAccepted"/>
         <el-divider />
-        <product-outbound-order-entry ref="orderEntries" :formData="formData" />
+        <product-outbound-order-entry ref="orderEntries" :formData="formData" :readOnly="isAccepted"/>
         <el-row>
           <h6 style="padding-left: 10px">生产详情</h6>
         </el-row>
         <div class="outbound-basic-row matvat-container">
           <MTAVAT :machiningTypes.sync="formData.cooperationMode" :needVoice.sync="formData.invoiceNeeded"
-            :tax.sync="formData.invoiceTaxPoint" :layoutScale="[9,10,5]" />
+            :tax.sync="formData.invoiceTaxPoint" :layoutScale="[9,10,5]" :readOnly="isAccepted"/>
           <el-form-item label="运费承担：" label-width="120" style="min-width: 240px">
-            <el-radio v-model="formData.freightPayer" :label="'PARTYA'">甲方</el-radio>
-            <el-radio v-model="formData.freightPayer" :label="'PARTYB'">乙方</el-radio>
+            <el-radio v-model="formData.freightPayer" :label="'PARTYA'" :disabled="isAccepted">甲方</el-radio>
+            <el-radio v-model="formData.freightPayer" :label="'PARTYB'" :disabled="isAccepted">乙方</el-radio>
           </el-form-item>
         </div>
-        <pay-plan-form class="outbound-basic-row" :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom" />
+        <pay-plan-form class="outbound-basic-row" :formData="formData.payPlan" :isUseForOrder="true" ref="payPlanCom" :readOnly="isAccepted"/>
         <outbound-order-audit-part :formData="formData" :isDisabled="isDisabled"/>
         <outbound-order-addition-info :formData="formData" />
       </el-form>
-      <outbound-order-form-btn :canDelete="canDelete" @onCreate="onCreate" @onDelete="onDelete"/>
+      <outbound-order-form-btn :formData="formData" :canDelete="canDelete" @onCreate="onCreate" @onDelete="onDelete"/>
     </el-card>
   </div>
 </template>
@@ -81,6 +81,9 @@
       },
       isDisabled: function () {
         return !checkAuditFree('SEND_SALES_OUT_NO_AUDIT');
+      },
+      isAccepted: function () {
+        return this.formData['NEW_ACCEPTED']
       }
     },
     methods: {
@@ -140,9 +143,14 @@
           data.invoiceTaxPoint = null;
         }
 
-        const url = this.apis().createOutboundOrder();
+        let url = this.apis().createOutboundOrder();
+        if (this.formData['NEW_ACCEPTED']) {
+          url = this.apis().receivingOrder()
+        }
+
         const result = await this.$http.post(url, data, {
-          submitAudit: flag
+          // 特殊处理新的修改情况，submitAudit为false
+          submitAudit: data['NEW_MODIFY'] ? false : flag
         });
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

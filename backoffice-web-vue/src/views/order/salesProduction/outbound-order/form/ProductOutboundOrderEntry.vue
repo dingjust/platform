@@ -14,10 +14,10 @@
             <el-input v-model="item.product.name" :disabled="true" placeholder="请输入"></el-input>
           </el-form-item>
           <div style="margin-left: 20px">
-            <el-button @click="onProductSelect(index)" size="mini">{{item.product.id ? '更换产品' : '添加产品'}}</el-button>
+            <el-button :disabled="readOnly" @click="onProductSelect(index)" size="mini">{{item.product.id ? '更换产品' : '添加产品'}}</el-button>
           </div>
         </el-row>
-        <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" :isFromProduct="true"/>
+        <outbound-order-color-size-table v-if="item.colorSizeEntries.length > 0" :product="item" :isFromProduct="true" :readOnly="readOnly"/>
         <el-row type="flex" v-if="item.code" style="margin: 0px 0px 10px 30px;">
           <el-button @click="openColorSize(item)"> + 添加颜色尺码</el-button>
         </el-row>
@@ -26,14 +26,14 @@
             <el-form-item label="发单总价" prop="totalPrimeCost"
               :rules="[{required: true, message: '请填写发单总价', trigger: 'blur'}]">
               <el-input v-model="item.totalPrimeCost" placeholder="请输入" @blur="onBlur(item,'totalPrimeCost')"
-                v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
+                v-number-input.float="{ min: 0 ,decimal:2}" :disabled="readOnly"></el-input>
             </el-form-item>
             <h6 style="margin:0;padding:8px 0 0 10px;width:130px">发单单价：{{(getPrice(item))}}</h6>
           </div>
           <div style="margin-right: 20px">
             <el-form-item label="交货日期" prop="deliveryDate"
               :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
-              <el-date-picker v-model="item.deliveryDate" type="date" value-format="timestamp" placeholder="选择日期">
+              <el-date-picker v-model="item.deliveryDate" type="date" value-format="timestamp" placeholder="选择日期" :disabled="readOnly">
               </el-date-picker>
             </el-form-item>
           </div>
@@ -41,21 +41,21 @@
             <el-form-item label="生产节点" prop="progressPlan"
               :rules="[{ required: true, type: 'object', validator: validateProgressPlan, trigger: 'change' }]">
               <el-input v-model="item.progressPlan.name" :disabled="true" placeholder="请输入">
-                <el-button slot="suffix" v-if="item.progressPlan.isFromOrder" @click="editProgressPlan(index, item)">编辑</el-button>
-                <el-button slot="suffix" v-else @click="onProgressPlanSelect(index)">选择节点</el-button>
+                <el-button slot="suffix" v-if="item.progressPlan.isFromOrder" @click="editProgressPlan(index, item)" :disabled="readOnly">编辑</el-button>
+                <el-button slot="suffix" v-else @click="onProgressPlanSelect(index)" :disabled="readOnly">选择节点</el-button>
               </el-input>
             </el-form-item>
           </div>
         </div>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="24">
-            <my-address-form :vAddress.sync="item.shippingAddress" ref="addressForm" />
+            <my-address-form :vAddress.sync="item.shippingAddress" ref="addressForm" :readOnly="readOnly"/>
           </el-col>
         </el-row>
       </el-form>
       <el-divider :key="'divider'+index" />
     </template>
-    <el-row type="flex" justify="center" class="info-order-row" align="middle">
+    <el-row type="flex" justify="center" class="info-order-row" align="middle" v-if="!readOnly">
       <el-col :span="24">
         <div class="order-purchase-table-btn_add" @click="addRow">
           +添加另一生产任务
@@ -96,7 +96,7 @@ import {
 
 export default {
   name: 'ProductOutboundOrderForm',
-  props: ['formData'],
+  props: ['formData', 'readOnly'],
   components: {
     OutboundOrderColorSizeTable,
     SampleProductsSelectDialog,

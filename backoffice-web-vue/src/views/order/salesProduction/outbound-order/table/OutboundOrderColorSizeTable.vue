@@ -8,7 +8,7 @@
       </el-row>
     </div>
     <div style="margin-left: 20px;width: 100%">
-      <color-size-table :data="product.colorSizeEntries" :readOnly="!isFromProduct"
+      <color-size-table :data="product.colorSizeEntries" :readOnly="!isFromProduct || readOnly"
         :hideEmptyColors="!isFromProduct" />
     </div>
   </div>
@@ -25,6 +25,10 @@
         required: true
       },
       isFromProduct: {
+        type: Boolean,
+        default: false
+      },
+      readOnly: {
         type: Boolean,
         default: false
       }

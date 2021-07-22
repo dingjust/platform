@@ -52,11 +52,15 @@
           <financial-tabs :formData="formData.paymentBill" belongTo="PAYABLE_PAGE" :outboundOrder="formData" />
         </div>
       </div>
-      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px" v-if="isSendBy">
-        <el-button class="purchase-order-btn2" @click="onOrderWithdraw" v-if="canOrderWithdraw" type="text">撤回
+      <el-row type="flex" justify="center" align="middle" style="margin-top: 20px">
+        <el-button class="purchase-order-btn2" @click="onOrderWithdraw" v-if="canOrderWithdraw&&isSendBy" type="text">撤回
         </el-button>
-        <el-button class="purchase-order-btn2" @click="cancelFormVisible=true" v-if="canCancel" type="text">取消订单
+        <el-button class="purchase-order-btn2" @click="cancelFormVisible=true" v-if="canCancel&&isSendBy" type="text">取消订单
         </el-button>
+        <template v-if="formData.state === 'TO_BE_ACCEPTED'">
+          <el-button type="text" v-if="canReceiving" @click="onModify('NEW_ACCEPTED')">接单</el-button>
+          <el-button type="text" v-if="canModify" @click="onModify('NEW_MODIFY')">修改</el-button>
+        </template>
       </el-row>
       <el-row type="flex" justify="space-around" align="middle" style="margin-top: 20px" v-if="canAudit">
         <el-col :span="3">
@@ -145,10 +149,6 @@
       ...mapGetters({
         formData: 'formData'
       }),
-      isReceiver: function () {
-        // const uid = this.$store.getters.currentUser.companyCode;
-        // return !(uid == this.formData.belongTo.uid) && this.formData.status == 'PENDING_CONFIRM';
-      },
       //能否接单撤回(待接单)
       canOrderWithdraw: function () {
         return this.formData.state == 'TO_BE_ACCEPTED';
@@ -195,6 +195,26 @@
           return true;
         }
         return false;
+      },
+      // Recipient 为 partyA  如果当前公司为originCompany 则 显示 接单按钮  belongTo显示修改按钮 
+      // Recipient 为 partyB 如果当前公司为originCompany 则 显示 修改按钮  belongTo显示接单按钮 
+      canReceiving: function () {
+        if (this.formData.recipient === 'PARTYA' && this.formData.originCompany) {
+          return this.$store.getters.currentUser.companyCode === this.formData.originCompany.uid
+        }
+        if (this.formData.recipient === 'PARTYB' && this.formData.belongTo) {
+          return this.$store.getters.currentUser.companyCode === this.formData.belongTo.uid
+        }
+        return false
+      },
+      canModify: function () {
+        if (this.formData.recipient === 'PARTYB' && this.formData.originCompany) {
+          return this.$store.getters.currentUser.companyCode === this.formData.originCompany.uid
+        }
+        if (this.formData.recipient === 'PARTYA' && this.formData.belongTo) {
+          return this.$store.getters.currentUser.companyCode === this.formData.belongTo.uid
+        }
+        return false
       }
     },
     methods: {
@@ -205,8 +225,17 @@
         this.cancelFormVisible = false;
         this.getDetail();
       },
-      onModify() {
+      onReceiving () {
+        
+      },
+      onModify(flag) {
         let data = this.setFormData(this.formData);
+        if (flag == 'NEW_MODIFY') {
+          data['NEW_MODIFY'] = true
+        }
+        if (flag == 'NEW_ACCEPTED') {
+          data['NEW_ACCEPTED'] = true
+        }
         if (data.taskOrderEntries[0].originOrder) {
           this.$router.push({
             name: '创建外发订单',
@@ -361,26 +390,6 @@
           return;
         }
         this.$message.success('取消订单成功');
-        await this.getDetail();
-      },
-      async onConfirm() {
-        const url = this.apis().acceptOutboundOrder(this.formData.code);
-        const result = await this.$http.put(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('接单成功');
-        await this.getDetail();
-      },
-      async onRejected() {
-        const url = this.apis().rejectedOutboundOrder(this.formData.code);
-        const result = await this.$http.put(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('拒绝接单成功');
         await this.getDetail();
       },
       //订单撤回

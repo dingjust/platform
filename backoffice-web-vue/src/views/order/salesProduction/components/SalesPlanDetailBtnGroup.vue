@@ -38,8 +38,8 @@
       </template>
       <!-- 外接来源订单 -->
       <template v-if="slotData.state != 'CANCELED'">
-        <!-- 销售订单按钮 -->
-        <template v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin">
+        <!-- 销售订单按钮 7.21新增判断有recipient字段的使用新的处理机制 -->
+        <template v-if="isSalesOrder&&(slotData.auditState=='NONE'||slotData.auditState=='AUDITED_FAILED')&&hasOrigin&&!slotData.recipient">
           <el-col :span="3">
             <authorized :permission="['ACCEPT_REJECT_ORDER']">
               <el-button class="material-btn_red" @click="onRefuse">拒单</el-button>
@@ -49,6 +49,14 @@
             <authorized :permission="['ACCEPT_REJECT_ORDER']">
               <el-button class="material-btn" @click="onCommit">接单</el-button>
             </authorized>
+          </el-col>
+        </template>
+        <template v-if="slotData.recipient && slotData.state === 'TO_BE_ACCEPTED'">
+          <el-col :span="3">
+            <el-button class="material-btn" v-if="canReceiving" @click="onCommit('NEW_ACCEPTED')">接单</el-button>
+          </el-col>
+          <el-col :span="3">
+            <el-button class="material-btn" v-if="canModify" @click="onCommit('NEW_MODIFY')">修改</el-button>
           </el-col>
         </template>
         <!-- 销售计划 -->
@@ -85,6 +93,24 @@
       }
     },
     computed: {
+      canReceiving: function () {
+        if (this.slotData.recipient === 'PARTYA' && this.slotData.originCompany) {
+          return this.$store.getters.currentUser.companyCode === this.slotData.originCompany.uid
+        }
+        if (this.slotData.recipient === 'PARTYB' && this.slotData.belongTo) {
+          return this.$store.getters.currentUser.companyCode === this.slotData.belongTo.uid
+        }
+        return false
+      },
+      canModify: function () {
+        if (this.slotData.recipient === 'PARTYB' && this.slotData.originCompany) {
+          return this.$store.getters.currentUser.companyCode === this.slotData.originCompany.uid
+        }
+        if (this.slotData.recipient === 'PARTYA' && this.slotData.belongTo) {
+          return this.$store.getters.currentUser.companyCode === this.slotData.belongTo.uid
+        }
+        return false
+      },
       //是否创建人
       isCreator: function () {
         if (this.slotData.creator != null && this.currentUser != null) {
@@ -160,7 +186,13 @@
         this.$emit('onCancelProdcution');
       },
       //跳转接单页面
-      onCommit() {
+      onCommit(flag) {
+        if (flag === 'NEW_ACCEPTED') {
+          this.slotData['NEW_ACCEPTED'] = true
+        }
+        if (flag === 'NEW_MODIFY') {
+          this.slotData['NEW_MODIFY'] = true
+        }
         this.$router.push({
           name: this.slotData.type == 'SALES_ORDER' ? '录入外接订单' : '录入企划订单',
           params: {

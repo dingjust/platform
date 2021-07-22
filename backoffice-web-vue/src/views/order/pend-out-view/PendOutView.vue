@@ -82,7 +82,7 @@ export default {
           name: '审核驳回'
         }, {
           code: 'TO_BE_ACCEPTED',
-          name: '待接单'
+          name: '待确认'
         }, {
           code: 'AUDIT_PASSED',
           name: '生产中'

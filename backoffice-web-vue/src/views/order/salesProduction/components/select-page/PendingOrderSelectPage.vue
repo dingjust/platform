@@ -76,7 +76,7 @@
       tabName (tab) {
         if (this.stateCount.hasOwnProperty(tab.code)) {
           if (tab.code == 'TO_BE_ACCEPTED') {
-            return '待接单/待提交(' + this.stateCount[tab.code] +')';
+            return '待确认/待提交(' + this.stateCount[tab.code] +')';
           }
           return tab.name +'('+ this.stateCount[tab.code] +')';  
         }

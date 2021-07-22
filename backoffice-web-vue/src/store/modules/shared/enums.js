@@ -281,7 +281,7 @@ const state = {
   // 销售计划状态
   SalesProductionStatuses: [{
       code: 'PENDING_CONFIRM',
-      name: '待接单'
+      name: '待确认'
     },
     {
       code: 'PENDING_PAYMENT',
@@ -1709,7 +1709,7 @@ const state = {
     name: '待提交'
   }, {
     code: 'TO_BE_ACCEPTED',
-    name: '待接单'
+    name: '待确认'
   }, {
     code: 'AUDITING',
     name: '待审核'
@@ -1769,7 +1769,7 @@ const state = {
     name: '审核驳回'
   }, {
     code: 'TO_BE_ACCEPTED',
-    name: '待接单'
+    name: '待确认'
   }, {
     code: 'AUDIT_PASSED',
     name: '生产中'
