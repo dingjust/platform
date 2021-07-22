@@ -6,8 +6,8 @@
           <el-row type="flex" justify="start" align="middle">
             <span style="margin-right:5px">{{scope.row.code}}</span>
             <el-tag type="info" effect="plain" style="margin-right:5px"
-              :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
-              {{scope.row.originCompany == null ? '自创' : '线上'}}</el-tag>
+              :class="orderType(scope.row) ? 'business-tag' : 'pending-tag'">
+              {{orderType(scope.row) ? '自创' : '线上'}}</el-tag>
             <el-tag style="margin-right:5px" type="primary" v-if="scope.row.payOnline">线上支付</el-tag>
             <el-tag type="warning" v-if="scope.row.agentOrder">代运营订单</el-tag>
           </el-row>
@@ -69,6 +69,12 @@ export default {
   name: 'PendOutViewList',
   props: ['page'],
   methods: {
+    orderType (row) {
+      if (row.offLine != null) {
+        return row.offLine
+      }
+      return scope.row.originCompany == null
+    },
     getCooperator(row) {
       if (!row.targetCooperator) {
         return '';

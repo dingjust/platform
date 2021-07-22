@@ -8,8 +8,8 @@
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
             <el-tag type="info" effect="plain"
-              :class="scope.row.originCompany == null ? 'business-tag' : 'pending-tag'">
-              {{scope.row.originCompany == null ? '自创' : '线上'}}</el-tag>
+              :class="orderType(scope.row) ? 'business-tag' : 'pending-tag'">
+              {{orderType(scope.row) ? '自创' : '线上'}}</el-tag>
           </el-row>
         </template>
       </el-table-column>
@@ -68,6 +68,12 @@
     components: {},
     computed: {},
     methods: {
+      orderType (row) {
+        if (row.offLine != null) {
+          return row.offLine
+        }
+        return scope.row.originCompany == null
+      },
       cooperatorName(row) {
         if (row.originCompany != null) {
           return row.originCompany.name;
