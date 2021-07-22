@@ -22,11 +22,11 @@
       </el-row>
     </div>
     <el-tabs type="border-card">
-      <el-tab-pane label="订单明细" v-if="form.auditState!='PASSED'" key="order">
+      <el-tab-pane label="订单明细" v-if="form.auditState!='PASSED' || form['NEW_MODIFY']" key="order">
         <sales-production-products-table :data="form.taskOrderEntries" :canDelete="canChangeProduct" @onDelete="onProductDelete"
           :canUpdate="canUpdate" @onModify="onProductModify" @onDetail="onProductDetail"/>
       </el-tab-pane>
-      <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'" key="production">
+      <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED' && !form['NEW_MODIFY']" key="production">
         <sales-production-tasks-table :data="form.taskOrderEntries" :isSelfCreated="isSelfCreated" :readOnly="readOnly"
                                       @callback="callback" @onDetail="onTaskDetail"/>
       </el-tab-pane>

@@ -9,7 +9,7 @@
       <div class="pt-2"></div>
       <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
         <outbound-type-select :formData="formData" />
-        <outbound-order-contact-com :formData="formData" v-if="!isAccepted"/>
+        <outbound-order-contact-com :formData="formData" :isAccepted="isAccepted"/>
         <order-pay-setting ref="paySetting" :formData="formData" from="OUTBOUND_ORDER" :readOnly="isAccepted"/>
         <el-divider />
         <outbound-order-entry ref="orderEntries" :formData="formData" :readOnly="isAccepted"/>

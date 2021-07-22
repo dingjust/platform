@@ -322,7 +322,11 @@ export default {
     },
     init () {
       this.form.companyName = this.$store.getters.currentUser.companyName
-      const detail = this.detail
+      const detail = JSON.parse(JSON.stringify(this.detail))
+      if (detail.paymentOrders && detail.paymentOrders.length) {
+        detail.paymentOrders.reverse()
+      }
+
       if (detail.paymentAccount) {
         this.form.receiving.companyName = detail.belongTo.name
         this.form.receiving.name = detail.paymentAccount.name
