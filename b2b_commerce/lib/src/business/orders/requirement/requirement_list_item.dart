@@ -28,11 +28,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Provider.of<CertificationStatusHelper>(context, listen: false)
-            .oncheckProfile(
-                context: context, onJump: () => jumpToDetailPage(context));
-      },
+      onTap: onDetail,
       child: Container(
           decoration: BoxDecoration(color: Colors.white),
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -151,42 +147,35 @@ class _RequirementListItemState extends State<RequirementListItem> {
       final tp = TextPainter(
           text: span, maxLines: maxLines, textDirection: TextDirection.ltr)
         ..layout(maxWidth: constrants.maxWidth);
-      if (tp.didExceedMaxLines) {
-        return Column(
-          children: [
-            Text(
-              '${widget.model.remarks ?? ''}',
-              maxLines: isLinesLimit ? maxLines : null,
-              style: style,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                    onPressed: () {
-                      setState(() {
-                        isLinesLimit = !isLinesLimit;
-                      });
-                    },
-                    child: Text(isLinesLimit ? '全文' : '收起'))
-              ],
-            )
-          ],
-        );
-      } else {
-        return Container(
-            margin: EdgeInsets.only(top: 5),
-            child: Row(
-              children: [
-                Expanded(
-                    child: Text(
+      return Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
                   '${widget.model.remarks ?? ''}',
-                  maxLines: maxLines,
+                  maxLines: isLinesLimit ? maxLines : null,
                   style: style,
-                ))
-              ],
-            ));
-      }
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              tp.didExceedMaxLines
+                  ? TextButton(
+                      onPressed: () {
+                        setState(() {
+                          isLinesLimit = !isLinesLimit;
+                        });
+                      },
+                      child: Text(isLinesLimit ? '全文' : '收起'))
+                  : TextButton(onPressed: onDetail, child: Text('全文'))
+            ],
+          )
+        ],
+      );
     });
   }
 
@@ -217,6 +206,12 @@ class _RequirementListItemState extends State<RequirementListItem> {
         ],
       ),
     );
+  }
+
+  void onDetail() {
+    Provider.of<CertificationStatusHelper>(context, listen: false)
+        .oncheckProfile(
+        context: context, onJump: () => jumpToDetailPage(context));
   }
 
   List<MediaModel> getPictures() {

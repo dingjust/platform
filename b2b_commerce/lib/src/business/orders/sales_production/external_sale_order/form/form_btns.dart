@@ -47,6 +47,19 @@ class FormBtns extends StatelessWidget {
           //                 color: Colors.red,
           //               ))),
           //     )),
+          Container(
+              width: 200,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: RichText(
+                  text: TextSpan(
+                      text: '总额：',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black87),
+                      children: [
+                    TextSpan(
+                        text: '￥${totalAmount().toStringAsFixed(2)}',
+                        style: TextStyle(color: Colors.red, fontSize: 20))
+                  ]))),
           Expanded(
               flex: 1,
               child: Container(
@@ -67,10 +80,25 @@ class FormBtns extends StatelessWidget {
     );
   }
 
+  //总额
+  double totalAmount() {
+    double result = 0;
+    form.taskOrderEntries
+        .where((element) => element.unitPrice != null && element.unitPrice > 0)
+        .forEach((element) {
+      int amount = 0;
+      element.colorSizeEntries.forEach((entry) {
+        amount += entry.quantity;
+      });
+      result += amount * element?.unitPrice ?? 0;
+    });
+    return result;
+  }
+
   void onSubmit(bool submitAudit, BuildContext context) async {
     if (validateFunc != null && validateFunc()) {
       Function cancelFunc =
-          BotToast.showLoading(crossPage: false, clickClose: true);
+      BotToast.showLoading(crossPage: false, clickClose: true);
 
       OrderProgressPlanModel orderProgressPlan = await getOrderProgressPlan();
       //订单行设置默认节点方案
