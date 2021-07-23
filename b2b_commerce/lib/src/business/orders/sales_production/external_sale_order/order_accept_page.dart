@@ -266,15 +266,15 @@ class _OrderAcceptPageState extends State<OrderAcceptPage> {
 
   void _onAccept() async {
     //校验
-    if (order.payOnline != null && order.payOnline) {
-      //线上支付类型校验
-      if (order?.paymentAccount?.name == null ||
-          order?.paymentAccount?.no == null ||
-          order?.paymentAccount?.serviceProvider == null) {
-        BotToast.showText(text: '请填写收款信息');
-        throw Exception('请填写收款信息');
-      }
-    }
+    // if (order.payOnline != null && order.payOnline) {
+    //   //线上支付类型校验
+    //   if (order?.paymentAccount?.name == null ||
+    //       order?.paymentAccount?.no == null ||
+    //       order?.paymentAccount?.serviceProvider == null) {
+    //     BotToast.showText(text: '请填写收款信息');
+    //     throw Exception('请填写收款信息');
+    //   }
+    // }
 
     if (order?.productionLeader?.id == null) {
       BotToast.showText(text: '请选择跟单员');

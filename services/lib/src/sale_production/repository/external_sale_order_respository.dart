@@ -80,11 +80,11 @@ class ExternalSaleOrderRespository {
   /// 外接订单唯一码检索
   Future<SalesProductionOrderModel> uniqueCodePreview(String code) async {
     Response<Map<String, dynamic>> response =
-    await http$.get(SaleProductionApis.uniqueCodePreview(code));
+        await http$.get(SaleProductionApis.uniqueCodePreview(code));
 
     if (response.statusCode == 200 && response.data['code'] == 1) {
       SalesProductionOrderModel model =
-      SalesProductionOrderModel.fromJson(response.data['data']);
+          SalesProductionOrderModel.fromJson(response.data['data']);
       return model;
     } else
       return null;
@@ -125,5 +125,22 @@ class ExternalSaleOrderRespository {
       return BaseResponse.fromJson(response.data);
     } else
       return null;
+  }
+
+  ///接单V2
+  Future<BaseResponse> acceptV2(SalesProductionOrderModel order) async {
+    try {
+      Response<Map<String, dynamic>> response = await http$.post(
+          SaleProductionApis.acceptV2,
+          data: order.toJson(),
+          queryParameters: {'submitAudit': true});
+      if (response.statusCode == 200 && response.data != null) {
+        return BaseResponse.fromJson(response.data);
+      } else
+        return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 }

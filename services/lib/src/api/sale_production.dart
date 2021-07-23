@@ -74,4 +74,7 @@ class SaleProductionApis {
   static get cancelReconciliationOrder => (id) {
         return '/{baseSiteId}/sheets/fast/reconciliation/cancel/$id';
       };
+
+  ///确认订单V2
+  static get acceptV2 => '/{baseSiteId}/sales/production/order/accept';
 }

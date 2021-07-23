@@ -98,7 +98,7 @@ class FormBtns extends StatelessWidget {
   void onSubmit(bool submitAudit, BuildContext context) async {
     if (validateFunc != null && validateFunc()) {
       Function cancelFunc =
-      BotToast.showLoading(crossPage: false, clickClose: true);
+          BotToast.showLoading(crossPage: false, clickClose: true);
 
       OrderProgressPlanModel orderProgressPlan = await getOrderProgressPlan();
       //订单行设置默认节点方案
@@ -131,15 +131,16 @@ class FormBtns extends StatelessWidget {
     OrderProgressPlanModel orderProgressPlan;
     //获取节点方案
     OrderProgressPlanResponse orderProgressPlanResponse =
-        await OrderProgressPlanRepository.orderProgressPlans();
+    await OrderProgressPlanRepository.orderProgressPlans();
     //默认节点方案
-    OrderProgressPlanModel defaultPlan = orderProgressPlanResponse.content
-        .firstWhere((element) => element.name == DEFAULT_PROGRESS_PLAN_NAME,
-            orElse: () => null);
+    OrderProgressPlanModel defaultPlan = orderProgressPlanResponse?.content
+        ?.firstWhere((element) => element.name == DEFAULT_PROGRESS_PLAN_NAME,
+        orElse: () => null);
+
     if (defaultPlan == null) {
       //没有则创建
       ProgressPhaseResponse progressPhaseResponse =
-          await OrderProgressPlanRepository.progressPhase();
+      await OrderProgressPlanRepository.progressPhase();
       if (progressPhaseResponse == null) {
         BotToast.showText(text: '获取节点信息失败，请重试');
         throw Exception('获取节点信息失败');
