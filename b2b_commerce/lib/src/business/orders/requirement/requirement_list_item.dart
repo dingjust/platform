@@ -138,10 +138,6 @@ class _RequirementListItemState extends State<RequirementListItem> {
   }
 
   Widget _buildText({TextStyle style = const TextStyle(fontSize: 12)}) {
-    if (widget.model.remarks == null) {
-      return Container();
-    }
-
     return LayoutBuilder(builder: (context, constrants) {
       final span = TextSpan(text: widget.model.remarks ?? '', style: style);
       final tp = TextPainter(
@@ -188,15 +184,15 @@ class _RequirementListItemState extends State<RequirementListItem> {
         children: <Widget>[
           widget.model.details.address != null
               ? Expanded(
-              child: Row(children: [
-                Icon(Icons.location_on),
-                Expanded(
-                    child: Text(
-                      '${widget.model.details.address ?? ''}',
-                      style: style,
-                      overflow: TextOverflow.ellipsis,
-                    ))
-              ]))
+                  child: Row(children: [
+                  Icon(Icons.location_on),
+                  Expanded(
+                      child: Text(
+                    '${widget.model.details.address ?? ''}',
+                    style: style,
+                    overflow: TextOverflow.ellipsis,
+                  ))
+                ]))
               : Container(),
           Text(
             '${DateExpress2Util.express(widget.model.creationTime)}',
