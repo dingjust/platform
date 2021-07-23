@@ -47,6 +47,19 @@ class FormBtns extends StatelessWidget {
           //                 color: Colors.red,
           //               ))),
           //     )),
+          Container(
+              width: 200,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: RichText(
+                  text: TextSpan(
+                      text: '总额：',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black87),
+                      children: [
+                    TextSpan(
+                        text: '￥${totalAmount().toStringAsFixed(2)}',
+                        style: TextStyle(color: Colors.red, fontSize: 20))
+                  ]))),
           Expanded(
               flex: 1,
               child: Container(
@@ -67,28 +80,46 @@ class FormBtns extends StatelessWidget {
     );
   }
 
+  //总额
+  double totalAmount() {
+    double result = 0;
+    form.taskOrderEntries
+        .where((element) => element.unitPrice != null && element.unitPrice > 0)
+        .forEach((element) {
+      int amount = 0;
+      element.colorSizeEntries.forEach((entry) {
+        amount += entry.quantity;
+      });
+      result += amount * element?.unitPrice ?? 0;
+    });
+    return result;
+  }
+
   void onSubmit(bool submitAudit, BuildContext context) async {
     if (validateFunc != null && validateFunc()) {
       Function cancelFunc =
-          BotToast.showLoading(crossPage: false, clickClose: true);
+      BotToast.showLoading(crossPage: false, clickClose: true);
 
       OrderProgressPlanModel orderProgressPlan = await getOrderProgressPlan();
       //订单行设置默认节点方案
-      form.taskOrderEntries.forEach((element) {
-        element.progressPlan = orderProgressPlan;
-      });
+      if (form.id == null) {
+        form.taskOrderEntries.forEach((element) {
+          element.progressPlan = orderProgressPlan;
+        });
+      }
 
       LogUtil.v(form.toJson());
 
       BaseResponse response =
-          // await OutOrderRespository.saveOutOrder(submitAudit, form);
-          await ExternalSaleOrderRespository.save(submitAudit, form);
+      // await OutOrderRespository.saveOutOrder(submitAudit, form);
+      await ExternalSaleOrderRespository.save(submitAudit, form);
       cancelFunc.call();
       if (response != null && response.code == 1) {
         BotToast.showText(text: '提交成功');
         //跳转到
-        Navigator.of(context).pushReplacementNamed(
+        Navigator.of(context).pushNamedAndRemoveUntil(
             AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+            ModalRoute.withName('/'),
             arguments: {'id': response.data, 'title': '外发订单明细'});
       } else if (response != null && response.code == 0) {
         BotToast.showText(text: '${response.msg}');
@@ -105,9 +136,10 @@ class FormBtns extends StatelessWidget {
     OrderProgressPlanResponse orderProgressPlanResponse =
         await OrderProgressPlanRepository.orderProgressPlans();
     //默认节点方案
-    OrderProgressPlanModel defaultPlan = orderProgressPlanResponse.content
-        .firstWhere((element) => element.name == DEFAULT_PROGRESS_PLAN_NAME,
+    OrderProgressPlanModel defaultPlan = orderProgressPlanResponse?.content
+        ?.firstWhere((element) => element.name == DEFAULT_PROGRESS_PLAN_NAME,
             orElse: () => null);
+
     if (defaultPlan == null) {
       //没有则创建
       ProgressPhaseResponse progressPhaseResponse =

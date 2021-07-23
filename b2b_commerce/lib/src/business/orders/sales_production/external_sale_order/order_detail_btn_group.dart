@@ -35,27 +35,32 @@ class OrderDetailBtnGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //接单方按钮
-    // if (isTarget) { TODO:接单方判断修改
-    if (!isOrigin) {
-      if ([
-        SalesProductionOrderState.TO_BE_ACCEPTED,
-        SalesProductionOrderState.AUDIT_REJECTED
-      ].contains(order.state)) {
-        //外接来源订单
-        return _acceptBtns(context);
+    //待提交状态
+    if (order.state == SalesProductionOrderState.TO_BE_SUBMITTED) {
+      return FormBtns(
+        form: order,
+        validateFunc: () => true,
+      );
+    }
+    //待接单状态
+    else if (order.state == SalesProductionOrderState.TO_BE_ACCEPTED) {
+      if (order.recipient == AgreementRoleType.PARTYA) {
+        //甲方确认
+        if (isPartyA) {
+          return _acceptBtns(context);
+        }
+      } else if (order.recipient == AgreementRoleType.PARTYB) {
+        if (!isPartyA) {
+          return _acceptBtns(context);
+        }
       }
-    } else if (isOrigin) {
-      //来源方
-      if (order.state == SalesProductionOrderState.TO_BE_SUBMITTED) {
-        return FormBtns(
-          form: order,
-          validateFunc: () => true,
-        );
-      }
-      //付款状态
+    }
+
+    //付款判断
+    if (isPartyA) {
       return _buildPayBtn(context);
     }
+
     return Container(
       height: 0,
     );
@@ -143,19 +148,39 @@ class OrderDetailBtnGroup extends StatelessWidget {
   }
 
   ///接单
-  void _onAccept(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(
-            builder: (context) => OrderAcceptPage(order: order)))
-        .then((value) {
+  void _onAccept(BuildContext context) async {
+    //默认跟单员当前用户
+    if (order.productionLeader == null) {
+      UserModel currentUser = UserBLoC.instance.currentUser;
+      order.productionLeader =
+          B2BCustomerModel(id: currentUser.id, name: currentUser.name);
+    }
+
+    Function cancelFunc =
+        BotToast.showLoading(crossPage: false, clickClose: true);
+    BaseResponse response =
+        await ExternalSaleOrderRespository().acceptV2(order);
+    cancelFunc.call();
+    if (response != null && response.code == 1) {
+      BotToast.showText(text: '接单成功');
+      // Navigator.of(context).pop(true);
       //回调刷新
-      if (value == true && detailCallback != null) {
+      if (detailCallback != null) {
         detailCallback.call();
         if (needCallbackPop != null) {
           needCallbackPop.call();
         }
       }
-    });
+    } else if (response != null && response.code == 0) {
+      BotToast.showText(text: '${response.msg}');
+    } else {
+      BotToast.showText(text: '操作失败');
+    }
+
+    // Navigator.of(context)
+    //     .push(MaterialPageRoute(
+    //         builder: (context) => OrderAcceptPage(order: order)))
+    //     .then((value) {});
   }
 
   ///拒绝
@@ -247,8 +272,8 @@ class OrderDetailBtnGroup extends StatelessWidget {
         element.uid == UserBLoC.instance.currentUser.uid);
   }
 
-  ///来源方
-  bool get isOrigin {
+  ///来源方(我是甲方)
+  bool get isPartyA {
     if (order.originCompany != null) {
       return order?.originCompany?.uid ==
           UserBLoC.instance.currentUser.companyCode;

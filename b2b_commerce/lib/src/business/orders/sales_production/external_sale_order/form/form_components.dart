@@ -203,7 +203,7 @@ class FormProduction extends StatelessWidget {
     if (products != null) {
       List<ProductionTaskOrderModel> entries = generateEntries(products);
       ExternalOrderFormState state =
-      Provider.of<ExternalOrderFormState>(context, listen: false);
+          Provider.of<ExternalOrderFormState>(context, listen: false);
       if (state != null) {
         state.updateEntries(entries);
       }
@@ -309,7 +309,7 @@ class _FormEntryItem extends StatelessWidget {
               controller: textEditingController,
               focusNode: focusNode,
               onChanged: (value) {
-                entry.unitPrice = double.parse(value);
+                entry.unitPrice = double.tryParse(value);
               },
             ),
           ),

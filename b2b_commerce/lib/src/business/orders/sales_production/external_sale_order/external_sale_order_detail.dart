@@ -55,7 +55,7 @@ class _ExternalSaleOrderDetailPageState
               child: Scaffold(
                 appBar: AppBar(
                   centerTitle: true,
-                  title: Text('${widget.titile}'),
+                  title: Text('${isPartyA ? '外发' : '外接'}订单明细'),
                   backgroundColor: Constants.THEME_COLOR_MAIN,
                   elevation: 0.5,
                   actions: [
@@ -92,7 +92,6 @@ class _ExternalSaleOrderDetailPageState
                               order = null;
                               callBackPop = true;
                             });
-                            print('========刷新！');
                           },
                           beforeTap: recordRouteInfo,
                           sheets: order.reconciliationSheetList,
@@ -139,35 +138,42 @@ class _ExternalSaleOrderDetailPageState
   }
 
   List<PopupMenuItem<String>> _buildPopupMenu() {
-    //TODO:可编辑状态
-    if (true) {}
+    // 可编辑状态
+    if ((order.recipient == AgreementRoleType.PARTYA && !isPartyA) ||
+        (order.recipient == AgreementRoleType.PARTYB && isPartyA)) {
+      return [_editItem(), _shareItem()];
+    }
+    return [_shareItem()];
+  }
 
-    return <PopupMenuItem<String>>[
-      PopupMenuItem<String>(
-        value: 'edit',
-        child: Row(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(right: 20),
-              child: Icon(Icons.edit),
-            ),
-            Text('编辑')
-          ],
-        ),
+  PopupMenuItem _editItem() {
+    return PopupMenuItem<String>(
+      value: 'edit',
+      child: Row(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 20),
+            child: Icon(Icons.edit),
+          ),
+          Text('编辑')
+        ],
       ),
-      PopupMenuItem<String>(
-        value: 'share',
-        child: Row(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(right: 20),
-              child: Icon(Icons.share),
-            ),
-            Text('分享')
-          ],
-        ),
+    );
+  }
+
+  PopupMenuItem _shareItem() {
+    return PopupMenuItem<String>(
+      value: 'share',
+      child: Row(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 20),
+            child: Icon(Icons.share),
+          ),
+          Text('分享')
+        ],
       ),
-    ];
+    );
   }
 
   onMenuSelect(String value) async {
@@ -191,6 +197,15 @@ class _ExternalSaleOrderDetailPageState
       order = detailModel;
     }
     return order;
+  }
+
+  ///来源方(我是甲方)
+  bool get isPartyA {
+    if (order.originCompany != null) {
+      return order?.originCompany?.uid ==
+          UserBLoC.instance.currentUser.companyCode;
+    }
+    return false;
   }
 
   ///刷新
@@ -261,14 +276,14 @@ class MainInfo extends StatelessWidget {
             buildRow('是否开票', order.invoiceNeeded ? '开发票' : '不开发票'),
             buildRow('定金', _getDepositStr()),
             buildRow(
-                '创建人', isOrigin() ? order?.sendBy?.name : order?.creator?.name),
-            for (B2BCustomerModel approver in isOrigin()
+                '创建人', isPartyA ? order?.sendBy?.name : order?.creator?.name),
+            for (B2BCustomerModel approver in isPartyA
                 ? (order?.sendApprovers ?? [])
                 : (order?.approvers ?? []))
               buildRow('审批人', approver.name),
             buildRow(
                 '跟单员',
-                isOrigin()
+                isPartyA
                     ? order.merchandiser?.name
                     : order?.productionLeader?.name),
           ],
@@ -305,10 +320,13 @@ class MainInfo extends StatelessWidget {
         : '无定金' + PayPlanTypeLocalizedMap[order.payPlan.payPlanType];
   }
 
-  ///是否发单方
-  bool isOrigin() {
-    String companyCode = UserBLoC.instance.currentUser.companyCode;
-    return companyCode == order?.originCompany?.uid;
+  ///来源方(我是甲方)
+  bool get isPartyA {
+    if (order.originCompany != null) {
+      return order?.originCompany?.uid ==
+          UserBLoC.instance.currentUser.companyCode;
+    }
+    return false;
   }
 }
 

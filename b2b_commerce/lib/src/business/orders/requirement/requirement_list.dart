@@ -20,9 +20,13 @@ class RequirementList<T extends RequirementState> extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     } else if (state.requirements.isNotEmpty) {
-      return RequirementListView(
-        state: state,
-      );
+      return RefreshIndicator(
+          child: RequirementListView(
+            state: state,
+          ),
+          onRefresh: () async {
+            state?.clear();
+          });
     }
     return Empty();
   }
