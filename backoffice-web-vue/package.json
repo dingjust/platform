@@ -39,7 +39,7 @@
     "vue-print-nb": "^1.7.4",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
-    "xlsx": "^0.16.6"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "autoprefixer": "7.2.6",
