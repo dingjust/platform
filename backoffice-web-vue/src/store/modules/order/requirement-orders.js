@@ -64,18 +64,7 @@ const state = {
       effectiveDays: '90',
       salesMarket: [],
       certificates: [],
-      productiveDistricts: [],
-      payPlan: {
-        isHaveDeposit: false,
-        payPlanType: 'PHASEONE',
-        payPlanItems: [{
-          moneyType: 'PHASEONE',
-          payPercent: 0.3,
-          triggerDays: 5,
-          triggerEvent: 'ORDER_CONFIRMED',
-          triggerType: 'INSIDE'
-        }]
-      }
+      productiveDistricts: []
     },
     attachments: [],
     labels: [],
@@ -93,7 +82,8 @@ const state = {
     statuses: [],
     categories: [],
     createdDateFrom: null,
-    createdDateTo: null
+    createdDateTo: null,
+    enableShow: ''
   },
   quoteQueryFormData: {
     requirementOrderRef: ''
@@ -159,7 +149,7 @@ const mutations = {
   majorCategories: (state, majorCategories) => state.majorCategories = majorCategories,
   regions: (state, regions) => state.regions = regions,
   labels: (state, labels) => state.labels = labels,
-  isShowDetailPrice: (state, isShowDetailPrice) => state.isShowDetailPrice = isShowDetailPrice,
+  isShowDetailPrice: (state, isShowDetailPrice) => state.isShowDetailPrice = isShowDetailPrice
 };
 
 const actions = {
@@ -280,18 +270,7 @@ const actions = {
         publishingMode: 'PUBLIC',
         effectiveDays: '90',
         salesMarket: [],
-        productiveDistricts: [],
-        payPlan: {
-          isHaveDeposit: false,
-          payPlanType: 'PHASEONE',
-          payPlanItems: [{
-            moneyType: 'PHASEONE',
-            payPercent: 0.3,
-            triggerDays: 5,
-            triggerEvent: 'ORDER_CONFIRMED',
-            triggerType: 'INSIDE'
-          }]
-        }
+        productiveDistricts: []
       },
       attachments: [],
       labels: [],
@@ -299,14 +278,15 @@ const actions = {
       comment: ''
     });
   },
-  clearQueryFormData ({dispatch, commit, state}){
+  clearQueryFormData ({dispatch, commit, state}) {
     commit('queryFormData', {
       keyword: '',
       username: '',
       statuses: [],
       categories: [],
       createdDateFrom: null,
-      createdDateTo: null
+      createdDateTo: null,
+      enableShow: ''
     });
   },
   clearFactoryQueryFormData ({dispatch, commit, state}) {
@@ -350,7 +330,7 @@ const getters = {
   majorCategories: state => state.majorCategories,
   regions: state => state.regions,
   labels: state => state.labels,
-  isShowDetailPrice: state => state.isShowDetailPrice,
+  isShowDetailPrice: state => state.isShowDetailPrice
 };
 
 export default {

@@ -54,6 +54,14 @@
             </el-row>
           </el-col>
         </el-row>
+        <el-row type="flex" class="rowClass">
+          <el-col :span="12">
+            <el-row type="flex">
+              <h6 class="titleTextClass2">微信号</h6>
+              <h6 class="contentTextClass">{{slotData.details.contactWeChatNo}}</h6>
+            </el-row>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
     <el-row style="padding:10px;border:1px solid #c8c8c8;border-radius: 8px">

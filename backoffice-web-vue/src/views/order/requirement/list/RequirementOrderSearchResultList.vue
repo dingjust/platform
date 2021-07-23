@@ -3,6 +3,10 @@
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" :row-style="{fontSize:'12px'}"
               v-if="isHeightComputed" :height="autoHeight">
       <el-table-column label="需求订单号" prop="code">
+        <template slot-scope="scope">
+          <span>{{scope.row.code}}</span>
+          <el-tag type="warning" v-if="isTenant() && (scope.row.details.agentContactPerson && scope.row.details.agentContactPhone)">已代理</el-tag>
+        </template>
       </el-table-column>
       <el-table-column label="标题" prop="details.productName" width="200" header-align="center">
       </el-table-column>

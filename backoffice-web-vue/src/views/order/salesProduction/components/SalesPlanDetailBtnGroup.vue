@@ -53,6 +53,9 @@
         </template>
         <template v-if="slotData.recipient && slotData.state === 'TO_BE_ACCEPTED'">
           <el-col :span="3">
+            <el-button class="material-btn_red" v-if="canReceiving" @click="onRefuse">拒单</el-button>
+          </el-col>
+          <el-col :span="3">
             <el-button class="material-btn" v-if="canReceiving" @click="onCommit('NEW_ACCEPTED')">接单</el-button>
           </el-col>
           <el-col :span="3">

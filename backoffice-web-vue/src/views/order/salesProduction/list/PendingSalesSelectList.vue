@@ -66,7 +66,7 @@ export default {
       if (row.offLine != null) {
         return row.offLine
       }
-      return scope.row.originCompany == null
+      return row.originCompany == null
     },
     handleSelectionChange(selection) {
       if (this.singleChoice && selection.length > 1) {

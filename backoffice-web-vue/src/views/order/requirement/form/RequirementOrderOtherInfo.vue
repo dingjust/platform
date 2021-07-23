@@ -46,7 +46,10 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <!-- <pay-plan-form :formData="formData.details.payPlan" :isUseForOrder="true" /> -->
+    <el-row type="flex">
+      <el-checkbox v-model="hasPayplan" @change="handleCheckboxChange">财务方案</el-checkbox>
+    </el-row>
+    <pay-plan-form v-if="hasPayplan" :formData="formData.details.payPlan" :isUseForOrder="true" />
     <!-- <my-address-form v-if="isCreated" :vAddress.sync="shippingAddress" :showContact="false"/>
     <el-row type="flex" :gutter="20" v-if="!isCreated">
       <el-col :span="12">
@@ -70,8 +73,28 @@ export default {
   name: 'RequirementOrderOtherInfo',
   components: { PayPlanForm, MyAddressForm },
   props: ['formData', 'isCreated'],
+  methods: {
+    handleCheckboxChange () {
+      if (this.hasPayplan) {
+        this.$set(this.formData.details, 'payPlan', {
+          isHaveDeposit: false,
+          payPlanType: 'PHASEONE',
+          payPlanItems: [{
+            moneyType: 'PHASEONE',
+            payPercent: 0.3,
+            triggerDays: 5,
+            triggerEvent: 'ORDER_CONFIRMED',
+            triggerType: 'INSIDE'
+          }]
+        })
+      } else {
+        this.$delete(this.formData.details, 'payPlan')
+      }
+    }
+  },
   data () {
     return {
+      hasPayplan: false,
       shippingAddress: {},
       populationScales: this.$store.state.EnumsModule.populationScales,
       ProductionModes: this.$store.state.EnumsModule.ProductionModes,
@@ -89,6 +112,13 @@ export default {
       },
       deep: true
     },
+  },
+  mounted () {
+    this.$nextTick(() => {
+      if (this.formData.details.payPlan) {
+        this.$set(this, 'hasPayplan', true)
+      }
+    })
   }
 }
 </script>

@@ -73,7 +73,7 @@ export default {
       if (row.offLine != null) {
         return row.offLine
       }
-      return scope.row.originCompany == null
+      return row.originCompany == null
     },
     getCooperator(row) {
       if (!row.targetCooperator) {

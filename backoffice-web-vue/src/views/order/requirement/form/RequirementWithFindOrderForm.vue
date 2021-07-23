@@ -11,20 +11,22 @@
       </div>
     </el-row>
     <el-form ref="form" :model="formData" :rules="rules" label-position="left" label-width="88px" hide-required-asterisk>
-      <el-form-item prop="belongTo" v-if="isTenant()">
-        <template slot="label">
-          <h6 class="titleTextClass">所属公司<span style="color: red">*</span></h6>
-        </template>
-        <el-input v-model="formData.belongTo.name" :disabled="true" style="width: 300px">
-        </el-input>
-        <el-button @click="companyDialogVisible = true">选择公司</el-button>
-      </el-form-item>
-      <el-form-item prop="certificates" v-if="isTenant()">
-        <template slot="label">
-          <h6 class="titleTextClass">凭证</h6>
-        </template>
-        <images-upload :limit="5" :slot-data="formData.details.certificates" />
-      </el-form-item>
+      <template v-if="formData.publishType === 'PUBLISH_BY_OTHERS'">
+        <el-form-item prop="belongTo" v-if="isTenant()">
+          <template slot="label">
+            <h6 class="titleTextClass">所属公司<span style="color: red">*</span></h6>
+          </template>
+          <el-input v-model="formData.belongTo.name" :disabled="true" style="width: 300px">
+          </el-input>
+          <el-button @click="companyDialogVisible = true">选择公司</el-button>
+        </el-form-item>
+        <el-form-item prop="certificates" v-if="isTenant()">
+          <template slot="label">
+            <h6 class="titleTextClass">凭证</h6>
+          </template>
+          <images-upload :limit="5" :slot-data="formData.details.certificates" />
+        </el-form-item>
+      </template>
       <el-form-item prop="details.productName">
         <template slot="label">
           <h6 class="titleTextClass">标题<span style="color: red">*</span></h6>

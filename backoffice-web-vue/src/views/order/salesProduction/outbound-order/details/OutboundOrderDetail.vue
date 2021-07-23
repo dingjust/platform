@@ -35,7 +35,7 @@
         </el-col>
       </el-row>
       <el-row class="basic-form-row" type="flex" align="middle"
-        v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED'">
+        v-if="formData.uniqueCode && formData.state == 'TO_BE_ACCEPTED' && !canReceiving">
         <h6>唯一码：<span style="color: #F56C6C">{{formData.uniqueCode}}</span></h6>
       </el-row>
       <template
@@ -59,6 +59,7 @@
         </el-button>
         <template v-if="formData.state === 'TO_BE_ACCEPTED'">
           <el-button type="text" v-if="canReceiving" @click="onModify('NEW_ACCEPTED')">接单</el-button>
+          <!-- <el-button type="text" v-if="canReceiving" @click="onRefuse">拒单</el-button> -->
           <el-button type="text" v-if="canModify" @click="onModify('NEW_MODIFY')">修改</el-button>
         </template>
       </el-row>
@@ -225,8 +226,27 @@
         this.cancelFormVisible = false;
         this.getDetail();
       },
-      onReceiving () {
-        
+      onRefuse() {
+        this.$confirm('确认拒绝订单？')
+          .then(_ => {
+            this._onRefuse();
+          })
+          .catch(_ => {});
+      },
+      async _onRefuse() {
+        const url = this.apis().refuseSalesOrder(this.formData.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == '0') {
+          this.$message.error('拒单失败:' + result.msg != null ? result.msg : '');
+          return;
+        } else if (result.code == '1') {
+          this.$message.success('拒单成功');
+          this.getDetail()
+        }
       },
       onModify(flag) {
         let data = this.setFormData(this.formData);

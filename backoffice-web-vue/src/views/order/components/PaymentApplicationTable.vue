@@ -9,17 +9,17 @@
       <div class="payment-application-table">
         <table cellspacing="2" width="100%" class="order-table">
           <tr>
-            <th :colspan="6">
+            <th :colspan="7">
               <el-input class="companyName-cell" v-model="form.companyName" />
             </th>
           </tr>
           <tr>
-            <th :colspan="6">
+            <th :colspan="7">
               <el-input class="title-cell" v-model="form.title" />
             </th>
           </tr>
           <tr>
-            <td v-for="count in 4" :key="count"><el-input v-model="form[count + 'date']"/></td>
+            <td v-for="count in 5" :key="count"><el-input v-model="form[count + 'date']"/></td>
             <td><el-input v-model="form.dateTitle"/></td>
             <td>
               <el-date-picker
@@ -34,7 +34,7 @@
           </tr>
           <tr>
             <td><el-input v-model="form.applyDeptTitle"/></td>
-            <td :colspan="5" class="left-title">
+            <td :colspan="6" class="left-title">
               <el-input v-model="form.applyDept"></el-input>
             </td>
           </tr>
@@ -51,7 +51,7 @@
               </div>
             </td>
             <td><el-input v-model="form.paymentItemTitle"/></td>
-            <td :colspan="2">
+            <td :colspan="3">
               <div class="radio-cell" style="justify-content: space-between">
                 <template v-for="(value, index) in paymentItems">
                   <label class="radio-cell" :key="index">
@@ -64,39 +64,39 @@
           </tr>
           <tr>
             <td><el-input v-model="form.receiving.companyNameTitle"/></td>
-            <td :colspan="5" class="left-title">
+            <td :colspan="6" class="left-title">
               <el-input v-model="form.receiving.companyName" />
             </td>
           </tr>
           <tr>
             <td><el-input v-model="form.receiving.serviceProviderTitle"/></td>
-            <td :colspan="5" class="left-title">
+            <td :colspan="6" class="left-title">
               <el-input v-model="form.receiving.serviceProvider" />
             </td>
           </tr>
           <tr>
             <td><el-input v-model="form.receiving.noTitle"/></td>
-            <td :colspan="5" class="left-title">
+            <td :colspan="6" class="left-title">
               <el-input v-model="form.receiving.no" />
             </td>
           </tr>
           <tr>
             <td><el-input v-model="form.receiving.nameTitle"/></td>
-            <td :colspan="5" class="left-title">
+            <td :colspan="6" class="left-title">
               <el-input v-model="form.receiving.name" />
             </td>
           </tr>
           <tr>
-            <th :colspan="6">
+            <th :colspan="7">
               <el-input class="matter-cell" v-model="form.matter" />
             </th>
           </tr>
           <tr>
             <td><el-input v-model="form.contract.codeTitle" /></td>
-            <td :colspan="3">
+            <td :colspan="4">
               <el-input v-model="form.contract.code"></el-input>
             </td>
-            <td :colspan="1"><el-input v-model="form.contract.applyTermTitle" /></td>
+            <td><el-input v-model="form.contract.applyTermTitle" style="min-width: 8em;"/></td>
             <td>
               <el-date-picker
                 v-model="form.contract.applyTerm"
@@ -112,18 +112,18 @@
             <td><el-input v-model="form.contract.totalLowerTitle" /></td>
             <td><el-input v-model="form.contract.total" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
             <td><el-input v-model="form.contract.totalCapTitle" /></td>
-            <td :colspan="2">{{convertCurrency(form.contract.total)}}</td>
+            <td :colspan="3">{{convertCurrency(form.contract.total)}}</td>
           </tr>
-          <!-- <tr>
+          <tr>
             <td><el-input v-model="form.reconciliation.title" /></td>
             <td><el-input v-model="form.reconciliation.lowerTitle" /></td>
             <td><el-input v-model="form.reconciliation.total" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
             <td><el-input v-model="form.reconciliation.capTitle" /></td>
-            <td :colspan="2"><el-input v-model="form.reconciliation.totalCap" /></td>
-          </tr> -->
+            <td :colspan="3">{{convertCurrency(form.reconciliation.total)}}</td>
+          </tr>
           <tr>
             <td ><el-input v-model="form.contract.clauseTitle" /></td>
-            <td :colspan="5"><el-input v-model="form.contract.clause" /></td>
+            <td :colspan="6"><el-input v-model="form.contract.clause" type="textarea" :rows="3"/></td>
           </tr>
           <tr>
             <td><el-input v-model="form.payment.title" /></td>
@@ -131,59 +131,52 @@
             <td><el-input v-model="form.payment.second" /></td>
             <td><el-input v-model="form.payment.third" /></td>
             <td><el-input v-model="form.payment.fourth" /></td>
+            <td><el-input v-model="form.payment.deduction" /></td>
             <td><el-input v-model="form.payment.total" /></td>
           </tr>
           <tr>
-            <td><el-input v-model="form.orderCollect.title" /></td>
-            <td><el-input v-model="form.orderCollect.frist" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.orderCollect.second" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.orderCollect.third" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.orderCollect.fourth" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td :colspan="2">{{orderCollectTotal}}</td>
+            <td><el-input v-model="form.paymentPrice.title" /></td>
+            <td><el-input v-model="form.paymentPrice.frist" /></td>
+            <td><el-input v-model="form.paymentPrice.second" /></td>
+            <td><el-input v-model="form.paymentPrice.third" /></td>
+            <td><el-input v-model="form.paymentPrice.fourth" /></td>
+            <td><el-input v-model="form.paymentPrice.deduction" /></td>
+            <td><el-input v-model="form.paymentPrice.total" /></td>
           </tr>
           <tr>
-            <td><el-input v-model="form.charges.title" /></td>
-            <td><el-input v-model="form.charges.frist" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.charges.second" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.charges.third" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.charges.fourth" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td :colspan="2">{{chargesTotal}}</td>
+            <td><el-input v-model="form.contractPaid.title" /></td>
+            <td><el-input v-model="form.contractPaid.lowerTitle" /></td>
+            <td><el-input v-model="form.contractPaid.total" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
+            <td><el-input v-model="form.contractPaid.capTitle" /></td>
+            <td :colspan="3">{{convertCurrency(form.contractPaid.total)}}</td>
           </tr>
           <tr>
-            <td><el-input v-model="form.receivable.title" /></td>
-            <td><el-input v-model="form.receivable.frist" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.receivable.second" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.receivable.third" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td><el-input v-model="form.receivable.fourth" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
-            <td :colspan="2">{{receivableTotal}}</td>
-          </tr>
-          <tr>
-            <td><el-input v-model="form.thisApply.title" /></td>
+            <td><el-input v-model="form.thisApply.title" style="width: 11em;"/></td>
             <td><el-input v-model="form.thisApply.lowerTitle" /></td>
             <td><el-input v-model="form.thisApply.total" v-number-input.float="{ min: 0, decimal: 2 }"/></td>
             <td><el-input v-model="form.thisApply.capTitle" /></td>
-            <td :colspan="2">{{convertCurrency(form.thisApply.total)}}</td>
+            <td :colspan="3">{{convertCurrency(form.thisApply.total)}}</td>
           </tr>
           <tr>
-            <td :colspan="6"><el-input v-model="form.paymentContent" type="textarea" rows="3"/></td>
+            <td :colspan="7"><el-input v-model="form.paymentContent" type="textarea" :rows="3"/></td>
           </tr>
           <tr>
             <td><el-input v-model="form.apply.title" /></td>
             <td :colspan="2"><el-input v-model="form.apply.name" /></td>
-            <td :colspan="1"><el-input v-model="form.apply.deptTitle" /></td>
+            <td :colspan="2"><el-input v-model="form.apply.deptTitle" /></td>
             <td :colspan="2"><el-input v-model="form.apply.deptName" /></td>
           </tr>
           <tr>
             <td><el-input v-model="form.apply.managerTile" /></td>
             <td :colspan="2"><el-input v-model="form.apply.managerName" /></td>
-            <td :colspan="1"><el-input v-model="form.apply.financeTitle" /></td>
+            <td :colspan="2"><el-input v-model="form.apply.financeTitle" /></td>
             <td :colspan="2"><el-input v-model="form.apply.financeName" /></td>
           </tr>
         </table>
       </div>
     </div>
     <el-row type="flex" justify="center" style="margin-top: 10px">
-      <printer-button v-print="'#print-page'" />
+      <printer-button v-print="printObj" />
     </el-row>
   </div>
 </template>
@@ -200,37 +193,7 @@ export default {
         return this.detail.agreements.filter(item => item.state !== 'INVALID');
       }
       return [];
-    },
-    orderCollectTotal: function () {
-      let count = 0
-      for (const key in this.form.orderCollect) {
-        const element = Number.parseFloat(this.form.orderCollect[key]);
-        if (!Number.isNaN(element)) {
-          count += element
-        }
-      }
-      return count.toFixed(2)
-    },
-    chargesTotal: function () {
-      let count = 0
-      for (const key in this.form.charges) {
-        const element = Number.parseFloat(this.form.charges[key]);
-        if (!Number.isNaN(element)) {
-          count += element
-        }
-      }
-      return count.toFixed(2)
-    },
-    receivableTotal: function () {
-      let count = 0
-      for (const key in this.form.receivable) {
-        const element = Number.parseFloat(this.form.receivable[key]);
-        if (!Number.isNaN(element)) {
-          count += element
-        }
-      }
-      return count.toFixed(2)
-    },
+    }
   },
   methods: {
     convertCurrency(money) {
@@ -323,9 +286,6 @@ export default {
     init () {
       this.form.companyName = this.$store.getters.currentUser.companyName
       const detail = JSON.parse(JSON.stringify(this.detail))
-      if (detail.paymentOrders && detail.paymentOrders.length) {
-        detail.paymentOrders.reverse()
-      }
 
       if (detail.paymentAccount) {
         this.form.receiving.companyName = detail.belongTo.name
@@ -349,46 +309,37 @@ export default {
       }
 
       const serviceFeePercent = detail.serviceFeePercent ? detail.serviceFeePercent : 0
+      let str = ''
       if (detail.paymentOrders && detail.paymentOrders.length > 0) {
+        let payAmount = 0
+        detail.paymentOrders.reverse()
         detail.paymentOrders.forEach((item, index) => {
-          if (index > 3) return
-          this.form.orderCollect[this.arr[index]] = item.payAmount
-          this.form.charges[this.arr[index]] = (item.payAmount * serviceFeePercent).toFixed(2)
-          this.form.receivable[this.arr[index]] = (item.payAmount - (item.payAmount * serviceFeePercent)).toFixed(2)
+          if (index > 3) {
+            return
+          } 
+          this.form.paymentPrice[this.arr[index][0]] = item.payAmount
+          payAmount += item.payAmount
+
+          str += '第' + this.arr[index][1] + '次付款：' + (item.payAmount * (1 - serviceFeePercent)).toFixed(2) + '元' + (index < detail.paymentOrders.length - 1 ? '，' : '')
         })
+
+        this.form.paymentPrice.deduction = (payAmount * serviceFeePercent).toFixed(2)
+        this.form.paymentPrice.total = payAmount - this.form.paymentPrice.deduction
 
         this.form.thisApply.title = '此次申请第（' + detail.paymentOrders.length + '）次数'
         this.form.thisApply.total = (detail.paymentOrders[detail.paymentOrders.length - 1].payAmount * (1 - serviceFeePercent)).toFixed(2)
-
       }
-      this.form.paymentContent = '付款内容：' + this.form.contract.code + 
-                                  '订单生产总价：' + this.form.contract.total + '元'
 
-      let serviceStr1 = serviceFeePercent != 0 ? ('扣除' + (serviceFeePercent * 100).toFixed(2) + '%的技术服务费：') : '：'
-      let serviceStr2 = serviceFeePercent != 0 ? ('*' + (serviceFeePercent * 100).toFixed(2) + '%') : ''
-
-      let payPercent = ''
-      if (detail.paymentOrders.length == 1 && detail.payPlan.isHaveDeposit == true) {
-        payPercent = (detail.payPlan.payPlanItems[0].payPercent * 100).toFixed(2)
-        this.form.paymentContent =
-          this.form.paymentContent + '，支付定金' + payPercent + '%' + serviceStr1 +
-          this.form.contract.total + '*' + payPercent + '%' +
-          (serviceStr2 != '' ? (' - ' + this.form.contract.total + '*' + payPercent + '%' + serviceStr2) : '') + 
-          ' = ' + this.form.thisApply.total + '元'
-      } else if (detail.paymentOrders.length > 1 || detail.payPlan.isHaveDeposit == false) {
-        payPercent = detail.payPlan.payPlanItems[detail.paymentOrders.length - 1] ? (detail.payPlan.payPlanItems[detail.paymentOrders.length - 1].payPercent * 100).toFixed(2) : ''
-        if (payPercent != '') {
-          this.form.paymentContent = 
-            this.form.paymentContent + '，支付尾款' + payPercent + '%' + serviceStr1 +
-            this.form.contract.total + '*' + payPercent + '%' +
-            (serviceStr2 != '' ? (' - ' + this.form.contract.total + '*' + payPercent + '%' + serviceStr2) : '') + 
-            ' = ' + this.form.thisApply.total + '元'
-        }
-      }
+      this.form.paymentContent = '付款内容：' + this.form.contract.code + ' 订单生产总价：' + this.form.contract.total + '元，' + 
+                                '总服务费' + (serviceFeePercent * 100).toFixed(2) + '%：' + this.form.paymentPrice.deduction + '元' + 
+                                (str !== '' ? ('，' + str) : '')
     }
   },
   data () {
     return {
+      printObj: {
+        id: "print-page",
+      },
       form: {
         companyName: '宁波衣加衣供应链管理有限公司',
         title: '付款申请单',
@@ -437,31 +388,24 @@ export default {
           second: '第二次付款',
           third: '第三次付款',
           fourth: '第四次付款',
+          deduction: '扣技术服务款',
           total: '合计金额',
         },
-        orderCollect: {
-          title: '订单收款金额',
+        paymentPrice: {
+          title: '',
           frist: '',
           second: '',
           third: '',
           fourth: '',
+          deduction: '',
           total: '',
         },
-        charges: {
-          title: '技术服务扣款',
-          frist: '',
-          second: '',
-          third: '',
-          fourth: '',
+        contractPaid: {
+          title: '合同已付金额',
+          lowerTitle: '小写：',
           total: '',
-        },
-        receivable: {
-          title: '应付金额',
-          frist: '',
-          second: '',
-          third: '',
-          fourth: '',
-          total: '',
+          capTitle: '大写：',
+          totalCap: ''
         },
         thisApply: {
           title: '此次申请第（*）次款',
@@ -484,7 +428,12 @@ export default {
       },
       paymentTypes: ['转账汇款', '现金'],
       paymentItems: ['成品', '工程类', '研发面辅料采购', '固定资产', '其他'],
-      arr: ['frist', 'second', 'third', 'fourth']
+      arr: {
+        0: ['frist', '一'],
+        1: ['second', '二'],
+        2: ['third', '三'],
+        3: ['fourth', '四']
+      }
     }
   },
   created () {
@@ -494,6 +443,16 @@ export default {
 </script>
 
 <style scoped>
+  @page {
+    size: auto;
+    width: 100%;
+  }
+
+  .payment-application-table >>> .el-input__inner {
+    border: none;
+    padding: 0px;
+    color: #303133;
+  }
   .payment-application-table >>> .el-input__inner {
     border: none;
     padding: 0px;
