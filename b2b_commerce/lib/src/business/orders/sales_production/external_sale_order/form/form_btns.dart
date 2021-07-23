@@ -98,25 +98,28 @@ class FormBtns extends StatelessWidget {
   void onSubmit(bool submitAudit, BuildContext context) async {
     if (validateFunc != null && validateFunc()) {
       Function cancelFunc =
-          BotToast.showLoading(crossPage: false, clickClose: true);
+      BotToast.showLoading(crossPage: false, clickClose: true);
 
       OrderProgressPlanModel orderProgressPlan = await getOrderProgressPlan();
       //订单行设置默认节点方案
-      form.taskOrderEntries.forEach((element) {
-        element.progressPlan = orderProgressPlan;
-      });
+      if (form.id == null) {
+        form.taskOrderEntries.forEach((element) {
+          element.progressPlan = orderProgressPlan;
+        });
+      }
 
       LogUtil.v(form.toJson());
 
       BaseResponse response =
-          // await OutOrderRespository.saveOutOrder(submitAudit, form);
-          await ExternalSaleOrderRespository.save(submitAudit, form);
+      // await OutOrderRespository.saveOutOrder(submitAudit, form);
+      await ExternalSaleOrderRespository.save(submitAudit, form);
       cancelFunc.call();
       if (response != null && response.code == 1) {
         BotToast.showText(text: '提交成功');
         //跳转到
-        Navigator.of(context).pushReplacementNamed(
+        Navigator.of(context).pushNamedAndRemoveUntil(
             AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+            ModalRoute.withName('/'),
             arguments: {'id': response.data, 'title': '外发订单明细'});
       } else if (response != null && response.code == 0) {
         BotToast.showText(text: '${response.msg}');
@@ -131,16 +134,16 @@ class FormBtns extends StatelessWidget {
     OrderProgressPlanModel orderProgressPlan;
     //获取节点方案
     OrderProgressPlanResponse orderProgressPlanResponse =
-    await OrderProgressPlanRepository.orderProgressPlans();
+        await OrderProgressPlanRepository.orderProgressPlans();
     //默认节点方案
     OrderProgressPlanModel defaultPlan = orderProgressPlanResponse?.content
         ?.firstWhere((element) => element.name == DEFAULT_PROGRESS_PLAN_NAME,
-        orElse: () => null);
+            orElse: () => null);
 
     if (defaultPlan == null) {
       //没有则创建
       ProgressPhaseResponse progressPhaseResponse =
-      await OrderProgressPlanRepository.progressPhase();
+          await OrderProgressPlanRepository.progressPhase();
       if (progressPhaseResponse == null) {
         BotToast.showText(text: '获取节点信息失败，请重试');
         throw Exception('获取节点信息失败');

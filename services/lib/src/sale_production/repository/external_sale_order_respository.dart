@@ -9,17 +9,24 @@ class ExternalSaleOrderRespository {
   ///创建外接订单
   static Future<BaseResponse> save(
       bool submitAudit, SalesProductionOrderModel order) async {
-    //处理数据
-    order.payPlan.id = null;
-    order.payPlan.payPlanItems.forEach((element) {
-      element.id = null;
-    });
-    order.taskOrderEntries.forEach((element) {
-      element.id = null;
-      element?.progressPlan?.id = null;
-      element?.progressPlan?.productionProgresses?.forEach((progress) {
-        progress.id = null;
+    if (order.id == null) {
+      //处理数据
+      order.payPlan.id = null;
+      order.payPlan.payPlanItems.forEach((element) {
+        element.id = null;
       });
+      order.taskOrderEntries.forEach((element) {
+        element.id = null;
+        element?.progressPlan?.id = null;
+        element?.progressPlan?.productionProgresses?.forEach((progress) {
+          progress.id = null;
+        });
+      });
+    }
+
+    ///每次创建修改重新算总价
+    order.taskOrderEntries.forEach((element) {
+      element?.totalPrimeCost = null;
     });
 
     try {
@@ -93,7 +100,7 @@ class ExternalSaleOrderRespository {
   ///外接订单唯一码导入
   Future<BaseResponse> uniqueCodeImport(String code) async {
     Response<Map<String, dynamic>> response =
-    await http$.get(SaleProductionApis.uniqueCodeImport(code));
+        await http$.get(SaleProductionApis.uniqueCodeImport(code));
     if (response.statusCode == 200 && response.data != null) {
       return BaseResponse.fromJson(response.data);
     } else
@@ -117,9 +124,11 @@ class ExternalSaleOrderRespository {
 
   ///外接订单唯一码导入
   Future<BaseResponse> qrCodeImport({String code, int merchandiser}) async {
-    Response<Map<String, dynamic>> response =
-    await http$.post(SaleProductionApis.qrCodeImport(code), data: {
-      'merchandiser': {'id': merchandiser}
+    Response<Map<String, dynamic>> response = await http$
+        .post(SaleProductionApis.qrCodeImport(code), queryParameters: {
+      'accept': true
+    }, data: {
+      'merchandiser': {'id': merchandiser},
     });
     if (response.statusCode == 200 && response.data != null) {
       return BaseResponse.fromJson(response.data);
