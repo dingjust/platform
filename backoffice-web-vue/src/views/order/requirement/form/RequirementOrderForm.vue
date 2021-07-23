@@ -14,7 +14,7 @@
           </template>
           <el-input v-model="formData.belongTo.name" :disabled="true" style="width: 300px">
           </el-input>
-          <el-button @click="companyDialogVisible = true">选择公司</el-button>
+          <el-button v-if="formData.publishType === 'PUBLISH_BY_OTHERS'" @click="companyDialogVisible = true">选择公司</el-button>
         </el-form-item>
         <el-form-item prop="certificates" v-if="isTenant()">
           <template slot="label">
@@ -84,8 +84,11 @@
               <template slot="label">
                 <h6 class="titleTextClass">期望价格<span style="color: red">*</span></h6>
               </template>
-              <el-input :min="0" type="number" v-model.number="formData.details.maxExpectedPrice" placeholder="请填写"
-                @mousewheel.native.prevent></el-input>
+              <div style="display:flex">
+                <el-input :min="0" type="number" v-model.number="formData.details.maxExpectedPrice" placeholder="请填写"
+                  @mousewheel.native.prevent :disabled="isFace"></el-input>
+                <el-checkbox v-model="isFace" @change="handleCheckboxChange">面议</el-checkbox>
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -415,6 +418,11 @@
 
           this.selectUids = result;
         }
+      },
+      handleCheckboxChange () {
+        if (this.isFace) {
+          this.formData.details.maxExpectedPrice = -1
+        }
       }
     },
     watch: {
@@ -499,11 +507,12 @@
         selectFactories: [],
         selectCooperators: [],
         companyDialogVisible: false,
+        isFace: false,
         rules: {
           'details.maxExpectedPrice': [{
             required: true,
             message: '请填写期望价格',
-            trigger: 'blur'
+            trigger: 'change'
           }],
           'details.productName': [{
             required: true,
@@ -572,10 +581,12 @@
       });
       this.province = province;
 
-      if (this.isTenant()) {
-        this.formData.publishType = 'PUBLISH_BY_OTHERS';
-      } else {
-        this.formData.publishType = 'DEFAULT';
+      if (!this.formData.id) {
+        if (this.isTenant()) {
+          this.formData.publishType = 'PUBLISH_BY_OTHERS';
+        } else {
+          this.formData.publishType = 'DEFAULT';
+        }
       }
 
       if (!this.isCreated) {
@@ -616,6 +627,9 @@
         })
 
         this.formData.details.productiveDistricts = productiveDistricts;
+      }
+      if (this.formData.details.maxExpectedPrice === -1) {
+        this.$set(this, 'isFace', true)
       }
     },
     destroyed() {

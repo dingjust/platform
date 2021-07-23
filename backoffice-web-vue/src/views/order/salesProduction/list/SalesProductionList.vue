@@ -102,7 +102,7 @@
         if (row.offLine != null) {
           return row.offLine
         }
-        return scope.row.originCompany == null
+        return row.originCompany == null
       },
       cooperatorName(row) {
         if (!row.originCompany && !row.originCooperator) {

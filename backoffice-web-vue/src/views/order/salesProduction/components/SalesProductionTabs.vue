@@ -48,7 +48,7 @@
       <el-button type="primary" @click="printVisible=true">打印付款申请单</el-button>
     </el-row>
     <el-dialog title="打印付款申请单" :visible.sync="printVisible" width="80%" :close-on-click-modal="false" append-to-body>
-      <payment-application-table :detail="form" />
+      <payment-application-table v-if="printVisible" :detail="form" />
     </el-dialog>
   </div>
 </template>

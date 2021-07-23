@@ -51,7 +51,7 @@
         @onRefuse="onRefuse" @onSubmit="onSave(true)" @callback="onRefresh" @onWithdraw="onWithdraw"
         @onCancelProdcution="canelingProductionDialogVisible=true" @onCancel="onDelete" />
       <!-- 唯一码 -->
-      <sales-unique-code style="margin: 10px 0 0 24px;" v-if="formData.uniqueCode" :formData="formData"/>
+      <sales-unique-code style="margin: 10px 0 0 24px;" v-if="!formData.originCompany && formData.uniqueCode" :formData="formData"/>
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">

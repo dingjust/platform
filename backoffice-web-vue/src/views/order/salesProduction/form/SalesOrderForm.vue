@@ -22,7 +22,7 @@
             </el-form-item>
           </el-col>
         </el-row> -->
-        <el-row type="flex" class="order-type">
+        <el-row type="flex" class="order-type" v-if="!form['NEW_ACCEPTED']">
           <el-form-item label="订单类型">
             <el-radio-group v-model="form.offLine">
               <el-radio :label="true">自创</el-radio>
@@ -148,7 +148,7 @@
         </el-col>
         <el-col :span="5">
           <!-- <authorized :permission="['ROLE_SALES_ORDER_CREATE']"> -->
-          <el-button class="material-btn" @click="onSave(true)">创建并提交审核</el-button>
+          <el-button class="material-btn" @click="onSave(true)" v-if="!form['NEW_MODIFY']">创建并提交审核</el-button>
           <!-- </authorized> -->
         </el-col>
       </el-row>
@@ -600,6 +600,10 @@
           this.form.auditNeeded = true;
         }
       }
+
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate()
+      })
     }
   };
 

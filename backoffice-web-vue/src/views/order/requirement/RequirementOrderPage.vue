@@ -28,28 +28,37 @@
                                  @onSimpleNew="onSimpleNew"
                                  @clearQueryFormData="clearQueryFormData"
                                  @onAdvancedSearch="onAdvancedSearch"/>
-      <el-tabs v-model="activeName" @tab-click="handleTabClick">
-        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
-          <requirement-order-search-result-list :page="page"
-                                                @onSearch="onSearch"
-                                                @onAdvancedSearch="onAdvancedSearch">
-            <template slot="operations" slot-scope="props">
-              <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
-                <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
-                <!-- <el-divider direction="vertical"></el-divider> -->
-                <el-button class="list-button" type="text" @click="onEdit(props.item)" v-if="canModify(props.item)">修改</el-button>
-                <!-- <el-divider direction="vertical" v-if="canModify(props.item)"></el-divider> -->
-                <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
-                <el-button v-if="isTenant()" class="list-button" type="text" @click="openAgentDialog(props.item)">设置代理人</el-button>
-                <el-button v-if="isTenant()" class="list-button" type="text" @click="onShow(props.item)">{{ props.item.enableShow === false ? '展示' : '隐藏'}}</el-button>
-              </el-row>
-              <el-row v-else>
-                <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
-              </el-row>
-            </template>
-          </requirement-order-search-result-list>
-        </el-tab-pane>
-      </el-tabs>
+      <div>
+        <div class="tag-container">
+          <el-select v-model="queryFormData.enableShow" placeholder="请选择" @change="handleEnableShow">
+            <el-option label="所有需求" :value="''"></el-option>
+            <el-option label="已展示需求" :value="true"></el-option>
+            <el-option label="已隐藏需求" :value="false"></el-option>
+          </el-select>
+        </div>
+        <el-tabs v-model="activeName" @tab-click="handleTabClick">
+          <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+            <requirement-order-search-result-list :page="page"
+                                                  @onSearch="onSearch"
+                                                  @onAdvancedSearch="onAdvancedSearch">
+              <template slot="operations" slot-scope="props">
+                <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
+                  <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
+                  <!-- <el-divider direction="vertical"></el-divider> -->
+                  <el-button class="list-button" type="text" @click="onEdit(props.item)" v-if="canModify(props.item)">修改</el-button>
+                  <!-- <el-divider direction="vertical" v-if="canModify(props.item)"></el-divider> -->
+                  <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
+                  <el-button v-if="isTenant()" class="list-button" type="text" @click="openAgentDialog(props.item)">设置代理人</el-button>
+                  <el-button v-if="isTenant()" class="list-button" type="text" @click="onShow(props.item)">{{ props.item.enableShow === false ? '展示' : '隐藏'}}</el-button>
+                </el-row>
+                <el-row v-else>
+                  <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
+                </el-row>
+              </template>
+            </requirement-order-search-result-list>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
 
     </el-card>
 
@@ -144,8 +153,12 @@
         setCategories: 'categories',
         setFormData: 'formData'
       }),
+      handleEnableShow (val) {
+        this.onAdvancedSearch(0, this.page.size)
+      },
       canModify (item) {
-        return !this.isTenant() || (this.isTenant() && item.publishType === 'PUBLISH_BY_OTHERS');
+        return true;
+        // return !this.isTenant() || (this.isTenant() && item.publishType === 'PUBLISH_BY_OTHERS');
       },
       onSearch (page, size) {
         this.setIsAdvancedSearch(false);
@@ -564,4 +577,11 @@
      border-left: 2px solid #ffd60c;
      padding-left: 10px;
    }
+
+  .tag-container {
+    position: absolute;
+    right: 35px;
+    margin-top: 4px;
+    z-index: 999;
+  }
 </style>

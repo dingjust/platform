@@ -102,7 +102,7 @@
     <el-row style="margin-top: 20px" justify="space-around" type="flex" v-if="!readOnly">
       <el-button class="btn-class" @click="onInvitation" v-if="pendingShow">邀请报价</el-button>
       <el-button class="btn-class" @click="onEdit" v-if="modifyShow">修改</el-button>
-      <el-button class="btn-class" @click="onCancel" v-if="closeShow">关闭</el-button>
+      <el-button class="btn-class" @click="onCancel" v-if="closeShow">关闭需求</el-button>
     </el-row>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :append-to-body="true" :close-on-click-modal="false">
