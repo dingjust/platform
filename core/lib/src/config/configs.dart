@@ -1,23 +1,23 @@
 class GlobalConfigs {
   static const PAGE_SIZE = 20;
 
-  // static const DEBUG = false;
+  static const DEBUG = false;
 
-  static const DEBUG = true;
+  // static const DEBUG = true;
 
   //测试
-  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+  // static const CONTEXT_PATH = 'http://sc.nbyjy.net';
+  // static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
 
   //本地
-  // static const CONTEXT_PATH = 'https://192.168.1.179:9002/djwebservices/v2';
-  // static const MEDIA_CONTEXT_PATH = 'http://192.168.1.179';
+  // static const CONTEXT_PATH = 'https://192.168.1.174:9002/djwebservices/v2';
+  // static const MEDIA_CONTEXT_PATH = 'http://192.168.1.174';
 
-  // 生产
-  // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
+  // // 生产
+  static const CONTEXT_PATH = 'https://ht.nbyjy.net';
 
-  // // 全站加速
-  // static const MEDIA_CONTEXT_PATH = 'https://ht.nbyjy.net';
+  // 全站加速
+  static const MEDIA_CONTEXT_PATH = 'https://ht.nbyjy.net';
 
   // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
@@ -37,7 +37,7 @@ class GlobalConfigs {
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
 
   // static const AUTH_SERVER_URL =
-  //     'https://192.168.1.179:9002/authorizationserver';
+  //     'https://192.168.1.174:9002/authorizationserver';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
