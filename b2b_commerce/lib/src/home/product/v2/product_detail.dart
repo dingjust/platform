@@ -1,8 +1,8 @@
+import 'package:b2b_commerce/src/_shared/users/favorite.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_factory.dart';
-import 'package:core/core.dart';
-
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -14,7 +14,8 @@ import 'package:widgets/widgets.dart';
 class ProductDetailPage extends StatefulWidget {
   final String code;
 
-  ProductDetailPage(this.code, {
+  ProductDetailPage(
+    this.code, {
     Key key,
   }) : super(key: key);
 
@@ -71,14 +72,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     List<MediaModel> thumbnails = [];
     if (data.thumbnails != null) {
       thumbnails = data.thumbnails
-          .map((thumbnail) => MediaModel(
-          convertedMedias: thumbnail.convertedMedias,
-          mediaFormat: thumbnail.mediaFormat,
-          mediaType: thumbnail.mediaType,
-          mime: thumbnail.mime,
-          name: thumbnail.name,
-          url: thumbnail.url,
-          id: thumbnail.id))
+          .map((thumbnail) =>
+          MediaModel(
+              convertedMedias: thumbnail.convertedMedias,
+              mediaFormat: thumbnail.mediaFormat,
+              mediaType: thumbnail.mediaType,
+              mime: thumbnail.mime,
+              name: thumbnail.name,
+              url: thumbnail.url,
+              id: thumbnail.id))
           .toList();
     }
 
@@ -128,16 +130,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Text(
-              '${data.name}',
-              style: TextStyle(
-                  color: Color.fromRGBO(50, 50, 50, 1),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
-              overflow: TextOverflow.clip,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    '${data.name}',
+                    style: TextStyle(
+                        color: Color.fromRGBO(50, 50, 50, 1),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.clip,
+                  ),
+                ),
+              ),
+              FavoriteIcon(
+                id: data.id,
+              )
+            ],
           ),
           _buildMoneyRow(),
         ],
@@ -229,16 +240,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           child: CachedNetworkImage(
                               imageUrl: '${media.normalUrl()}',
                               fit: BoxFit.fitWidth,
-                              placeholder: (context, url) => SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              ),
-                              errorWidget: (context, url, error) => SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              )),
+                              placeholder: (context, url) =>
+                                  SpinKitRing(
+                                    color: Colors.black12,
+                                    lineWidth: 2,
+                                    size: 30,
+                                  ),
+                              errorWidget: (context, url, error) =>
+                                  SpinKitRing(
+                                    color: Colors.black12,
+                                    lineWidth: 2,
+                                    size: 30,
+                                  )),
                         ))
                   ],
                 )
@@ -276,7 +289,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Future<ApparelProductModel> _getData() async {
     if (data == null) {
       ApparelProductModel product =
-          await ProductRepositoryImpl().detail(widget.code);
+      await ProductRepositoryImpl().detail(widget.code);
       if (product != null) {
         data = product;
       }
@@ -299,8 +312,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           child: Consumer(
             builder: (context, RequirementOrderFormStateV2 state, _) =>
                 RequirementFormFactory(
-              formState: state,
-            ),
+                  formState: state,
+                ),
           ),
         ),
       ),

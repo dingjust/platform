@@ -81,6 +81,7 @@ dependencies:
   flutter_qr_reader: ^1.0.3
   qr_flutter: ^3.2.0
   wechat_assets_picker: 4.2.2
+  like_button: ^1.0.4
 
   # PUB库钉钉插件
   flutter_ddshare: ^1.0.2

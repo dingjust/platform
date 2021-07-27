@@ -443,35 +443,35 @@ class BrandModel extends B2BUnitModel {
     this.adeptAtCategories,
     this.salesMarket,
   }) : super(
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      members: members,
-      path: path,
-      active: active,
-      starLevel: starLevel,
-      address: address,
-      contactAddress: contactAddress,
-      email: email,
-      phone: phone,
-      creationTime: creationTime,
-      taxNumber: taxNumber,
-      bankOfDeposit: bankOfDeposit,
-      certificates: certificates,
-      contactPerson: contactPerson,
-      contactPhone: contactPhone,
-      cooperativeBrand: cooperativeBrand,
-      qq: qq,
-      wechat: wechat,
-      businessRegistrationNo: businessRegistrationNo,
-      certificateOfLegal: certificateOfLegal,
-      legalRepresentative: legalRepresentative,
-      type: type,
-      approvalStatus: approvalStatus,
-      companyProfiles: companyProfiles,
-      labels: labels,
-      duties: duties,
-      contactUid: contactUid);
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            members: members,
+            path: path,
+            active: active,
+            starLevel: starLevel,
+            address: address,
+            contactAddress: contactAddress,
+            email: email,
+            phone: phone,
+            creationTime: creationTime,
+            taxNumber: taxNumber,
+            bankOfDeposit: bankOfDeposit,
+            certificates: certificates,
+            contactPerson: contactPerson,
+            contactPhone: contactPhone,
+            cooperativeBrand: cooperativeBrand,
+            qq: qq,
+            wechat: wechat,
+            businessRegistrationNo: businessRegistrationNo,
+            certificateOfLegal: certificateOfLegal,
+            legalRepresentative: legalRepresentative,
+            type: type,
+            approvalStatus: approvalStatus,
+            companyProfiles: companyProfiles,
+            labels: labels,
+            duties: duties,
+            contactUid: contactUid);
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$BrandModelFromJson(json);
@@ -608,6 +608,9 @@ class FactoryModel extends B2BUnitModel {
   ///审核原因
   String reviewReasons;
 
+  ///收藏ID
+  int favoriteId;
+
   FactoryModel({MediaModel profilePicture,
     String uid,
     String name,
@@ -673,7 +676,8 @@ class FactoryModel extends B2BUnitModel {
     this.intro,
     this.backEndPhoto,
     this.reviewState,
-    this.reviewReasons})
+    this.reviewReasons,
+    this.favoriteId})
       : super(
       profilePicture: profilePicture,
       uid: uid,

@@ -117,7 +117,7 @@ class FactoryItem extends StatelessWidget {
         AuthTag(
           model: model,
         ),
-        ...model.labels
+        ...(model.labels ?? [])
             .map((e) => Container(
                   padding: EdgeInsets.fromLTRB(2, 1, 2, 2),
                   margin: EdgeInsets.symmetric(horizontal: 3),
@@ -228,7 +228,7 @@ class FactoryItem extends StatelessWidget {
 
   String getCategoriesStr() {
     List<String> strs = [];
-    model.adeptAtCategories.forEach((e) {
+    (model.adeptAtCategories ?? []).forEach((e) {
       if (!strs.contains(e.name)) {
         strs.add(e.name);
       }
