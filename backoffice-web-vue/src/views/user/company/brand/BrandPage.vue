@@ -20,6 +20,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="DETAIL">明细</el-dropdown-item>
+                  <el-dropdown-item command="MODIFY">修改</el-dropdown-item>
                   <el-dropdown-item command="LABEL">标签</el-dropdown-item>
                   <el-dropdown-item v-if="!props.item.loginDisabled" command="DISABLED">禁用</el-dropdown-item>
                   <el-dropdown-item v-if="props.item.loginDisabled" command="UNDISABLED">解禁</el-dropdown-item>
@@ -48,6 +49,9 @@
     <el-dialog title="清除认证" :visible.sync="authVisible" width="400px" :close-on-click-modal="false">
       <authentication-clear-form v-if="authVisible" :clearRow="clearRow" @onCancel="authVisible = false" @callback="callback"/>
     </el-dialog>
+    <el-dialog :visible.sync="modifyVisible" width="80%" :close-on-click-modal="false">
+      <brand-form-by-tenant v-if="modifyVisible" :row="handleRow" @callback="modifyVisible=false"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,6 +68,7 @@ import BrandLabelsForm from './form/BrandLabelsForm';
 import BrandForm1 from './form/BrandForm1';
 import BrandForbiddenDialog from './form/BrandForbiddenDialog';
 import AuthenticationClearForm from '../components/AuthenticationClearForm'
+import BrandFormByTenant from './form/BrandFormByTenant.vue';
 
 export default {
   name: 'BrandPage',
@@ -74,7 +79,8 @@ export default {
     BrandToolbar,
     BrandList,
     BrandLabelsForm,
-    AuthenticationClearForm
+    AuthenticationClearForm,
+    BrandFormByTenant
   },
   computed: {
     ...mapGetters({
@@ -122,6 +128,9 @@ export default {
         case 'DETAIL':
           this.onDetails(row);
           break;
+        case 'MODIFY':
+          this.onModify(row);
+          break;
         case 'LABEL':
           this.onEdit(row);
           break;
@@ -138,20 +147,13 @@ export default {
           break;
       }
     },
+    onModify (row) {
+      this.handleRow = row
+      this.modifyVisible = true
+    },
     async onDetails (item) {
-      // const url = this.apis().getBrand(item.uid);
-      // const result = await this.$http.get(url);
-      // if (result['errors']) {
-      //   this.$message.error(result['errors'][0].message);
-      //   return;
-      // }
-      // this.detailsDialogVisible = true;
-      // this.detailsData = result;
-      // // this.fn.openSlider('品牌：' + item.name, BrandDetailsPage, result);
-      let url = this.apis().getBrand(item.uid);
-      if (this.isTenant()) {
-        url += '?sort=creationtime,desc';
-      }
+      const url = this.apis().getBrand(item.uid);
+
       const result = await this.$http.get(url);
       if (result['errors']) {
         this.$message.error(result['errors'][0].message);
@@ -270,7 +272,9 @@ export default {
       }],
       activeName: '',
       authVisible: false,
-      clearRow: ''
+      clearRow: '',
+      handleRow: null,
+      modifyVisible: false
     };
   },
   created () {

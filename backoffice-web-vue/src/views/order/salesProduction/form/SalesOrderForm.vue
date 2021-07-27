@@ -590,7 +590,7 @@
     },
     mounted() {
       if (this.form.offLine == null) {
-        this.$set(this.form, 'offLine', false)
+        this.$set(this.form, 'offLine', true)
       }
 
       if (!this.form['NEW_MODIFY']) {

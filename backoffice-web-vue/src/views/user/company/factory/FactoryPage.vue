@@ -25,6 +25,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="DETAIL">明细</el-dropdown-item>
+                    <el-dropdown-item command="MODIFY">修改</el-dropdown-item>
                     <el-dropdown-item command="LABEL">标签</el-dropdown-item>
                     <el-dropdown-item v-if="!props.item.loginDisabled" command="DISABLED">禁用</el-dropdown-item>
                     <el-dropdown-item v-if="props.item.loginDisabled" command="UNDISABLED">解禁</el-dropdown-item>
@@ -60,6 +61,9 @@
     <el-dialog title="清除认证" :visible.sync="authVisible" width="400px" :close-on-click-modal="false">
       <authentication-clear-form v-if="authVisible" :clearRow="handleRow" @onCancel="authVisible = false" @callback="callback"/>
     </el-dialog>
+    <el-dialog :visible.sync="modifyVisible" width="80%" :close-on-click-modal="false">
+      <factory-form-by-tenant v-if="modifyVisible" :row="handleRow" @callback="modifyVisible = false"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -75,6 +79,7 @@
   import FactoryFrom from './form/FactoryForm';
   import FactoryForbiddenDialog from './form/FactoryForbiddenDialog';
   import AuthenticationClearForm from '../components/AuthenticationClearForm'
+  import FactoryFormByTenant from './form/FactoryFormByTenant.vue';
 
   export default {
     name: 'FactoryPage',
@@ -86,7 +91,8 @@
       FactoryToolbar,
       FactoryList,
       FactoryLabelsForm,
-      AuthenticationClearForm
+      AuthenticationClearForm,
+      FactoryFormByTenant
     },
     computed: {
       ...mapGetters({
@@ -144,6 +150,9 @@
           case 'DETAIL':
             this.onDetails(row);
             break;
+          case 'MODIFY':
+            this.onModify(row);
+            break;
           case 'LABEL':
             this.onEdit(row);
             break;
@@ -168,6 +177,10 @@
           default:
             break;
         }
+      },
+      onModify (row) {
+        this.handleRow = row
+        this.modifyVisible = true
       },
       setOperatePhone (row) {
         this.$prompt('请输入代运营手机号', '提示', {
@@ -418,7 +431,8 @@
         }],
         activeName: '',
         authVisible: false,
-        handleRow: ''
+        handleRow: '',
+        modifyVisible: false
       };
     },
     created () {

@@ -107,7 +107,7 @@
         <template slot="label">
           <h6 class="titleTextClass">优势品类<span style="color: red">*</span></h6>
         </template>
-        <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"
+        <category-select :listData="categories" :selectDatas="formData.adeptAtCategories"
           :readOnly="readOnly"></category-select>
       </el-form-item>
       <el-form-item prop="keyword">
@@ -212,7 +212,7 @@
           return;
         }
 
-        this.categories = result;
+        this.$set(this, 'categories', result)
       },
       onRemoveKeyword(word) {
         if (this.readOnly) {
@@ -311,7 +311,7 @@
           return;
         }
 
-        this.majorCategories = result1;
+        this.$set(this, 'majorCategories', result1)
       },
       isSelected(val) {
         var index = this.selectCodes.indexOf(val.code);
