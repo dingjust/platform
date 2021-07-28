@@ -123,32 +123,38 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     final GalleryItem item = widget.galleryItems[index];
+
+    String url = item.model.actualUrl;
+    if (item.watermark) {
+      url = item.model.imageProcessUrl(item.waterProcessParams);
+    }
+
     return
-      // item.isSvg
-      //     ?
-      //     PhotoViewGalleryPageOptions.customChild(
-      //         child: Container(
-      //           width: 300,
-      //           height: 300,
-      //           child: SvgPicture.asset(
-      //             item.resource,
-      //             height: 200.0,
-      //           ),
-      //         ),
-      //         childSize: const Size(300, 300),
-      //         initialScale: PhotoViewComputedScale.contained,
-      //         minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
-      //         maxScale: PhotoViewComputedScale.covered * 1.1,
-      //         heroAttributes: PhotoViewHeroAttributes(tag: item.id),
-      //       )
-      //     :
-      PhotoViewGalleryPageOptions(
-        imageProvider: NetworkImage(item.model.actualUrl),
-        initialScale: PhotoViewComputedScale.contained,
-        minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
-        maxScale: PhotoViewComputedScale.covered * 1.1,
-        heroAttributes: PhotoViewHeroAttributes(tag: item.model.id),
-      );
+        // item.isSvg
+        //     ?
+        //     PhotoViewGalleryPageOptions.customChild(
+        //         child: Container(
+        //           width: 300,
+        //           height: 300,
+        //           child: SvgPicture.asset(
+        //             item.resource,
+        //             height: 200.0,
+        //           ),
+        //         ),
+        //         childSize: const Size(300, 300),
+        //         initialScale: PhotoViewComputedScale.contained,
+        //         minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
+        //         maxScale: PhotoViewComputedScale.covered * 1.1,
+        //         heroAttributes: PhotoViewHeroAttributes(tag: item.id),
+        //       )
+        //     :
+        PhotoViewGalleryPageOptions(
+      imageProvider: NetworkImage(url),
+      initialScale: PhotoViewComputedScale.contained,
+      minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
+      maxScale: PhotoViewComputedScale.covered * 1.1,
+      heroAttributes: PhotoViewHeroAttributes(tag: item.model.id),
+    );
   }
 
   ///保存图片

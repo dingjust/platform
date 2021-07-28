@@ -177,8 +177,8 @@ class _Pictures extends StatelessWidget {
           Divider(),
           medias.isNotEmpty
               ? Attachments(
-            list: medias,
-          )
+                  list: medias,
+                )
               : Container(
             margin: EdgeInsets.only(top: 10),
             child: Text('暂无照片'),
@@ -207,6 +207,7 @@ class _Certificates extends StatelessWidget {
           getPictures().isNotEmpty
               ? Attachments(
             list: model.certificates,
+            watermark: true,
           )
               : Container(
             margin: EdgeInsets.only(top: 10),
@@ -218,14 +219,10 @@ class _Certificates extends StatelessWidget {
   }
 
   List<MediaModel> getPictures() {
-    String imageProcess =
-        'image_process=watermark,text_6ZKJ5Y2V,fill_1,color_F5F5F5,t_50';
     if (model.certificates == null) {
       return [];
     } else {
-      return model.certificates
-          .map((e) => e..url = '${e.url}?$imageProcess')
-          .toList();
+      return model.certificates;
     }
   }
 }
