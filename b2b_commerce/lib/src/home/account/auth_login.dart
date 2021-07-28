@@ -8,6 +8,7 @@ import 'package:flutter_ddshare/flutter_ddshare.dart';
 import 'package:flutter_ddshare/response/ddshare_response.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:services/services.dart';
+//import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 ///第三方登录按钮组
 class OtherAuthLoginBtnGroup extends StatefulWidget {
@@ -71,7 +72,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       margin: EdgeInsets.only(top: 120),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
-        children: [_titleRow(), _btnsRow()],
+        children: [_btnsRow()],
       ),
     );
   }
@@ -83,25 +84,25 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       children: [
         Expanded(
             child: Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    height: 1,
-                    thickness: 1,
-                  ),
-                ),
-                Text(
-                  '其他方式登录',
+          children: [
+            Expanded(
+              child: Divider(
+                height: 1,
+                thickness: 1,
+              ),
+            ),
+            Text(
+              '其他方式登录',
               style: TextStyle(color: Colors.grey),
             ),
-                Expanded(
-                  child: Divider(
-                    height: 1,
-                    thickness: 1,
-                  ),
-                ),
-              ],
-            ))
+            Expanded(
+              child: Divider(
+                height: 1,
+                thickness: 1,
+              ),
+            ),
+          ],
+        ))
       ],
     );
   }
@@ -116,37 +117,82 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FlatButton(
-            child: Container(
-              height: btnHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  B2BImage.wechatLogin(height: 40, width: 40),
-                  Text('微信登录')
-                ],
-              ),
-            ),
-            onPressed: () {
-              WechatServiceImpl.instance.sendAuth();
-            },
-          ),
-          FlatButton(
-            child: Container(
-              height: btnHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  B2BImage.dingding_logo(height: 40, width: 40),
-                  Text('钉钉登录')
-                ],
-              ),
-            ),
-            onPressed: () {
-              FlutterDdshare.sendDDAppAuth(
-                  DateTime.now().millisecondsSinceEpoch.toString());
-            },
-          )
+          FutureBuilder(
+              future: WechatServiceImpl.instance.isInstalled(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.hasData && snapshot.data) {
+                  return FlatButton(
+                    child: Container(
+                      height: btnHeight,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          B2BImage.wechatLogin(height: 40, width: 40),
+                          Text('微信登录')
+                        ],
+                      ),
+                    ),
+                    onPressed: () {
+                      WechatServiceImpl.instance.sendAuth();
+                    },
+                  );
+                }
+                return Container();
+              }),
+          FutureBuilder(
+              future: FlutterDdshare.isDDAppInstalled(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.hasData && snapshot.data) {
+                  return FlatButton(
+                    child: Container(
+                      height: btnHeight,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          B2BImage.dingding_logo(height: 40, width: 40),
+                          Text('钉钉登录')
+                        ],
+                      ),
+                    ),
+                    onPressed: () {
+                      FlutterDdshare.sendDDAppAuth(
+                          DateTime.now().millisecondsSinceEpoch.toString());
+                    },
+                  );
+                }
+                return Container();
+              }),
+//          FlatButton(
+//            child: Container(
+//              height: btnHeight,
+//              child: Column(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  B2BImage.dingding_logo(height: 40, width: 40),
+//                  Text('Apple登录')
+//                ],
+//              ),
+//            ),
+//            onPressed: () async {
+//              final credential = await SignInWithApple.getAppleIDCredential(
+//                  scopes: [
+//                    AppleIDAuthorizationScopes.email,
+//                    AppleIDAuthorizationScopes.fullName,
+//                  ],
+//                  webAuthenticationOptions: WebAuthenticationOptions(
+//                    // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+//                    clientId: 'com.nbyjy.b2bcommerce',
+//                    redirectUri: Uri.parse(
+//                      'https://ht.nbyjy.net/app_sign',
+//                    ),
+//                  ));
+//              print(credential.authorizationCode);
+//
+//              print(credential.givenName);
+//
+//              print(credential.email);
+//            },
+//          )
         ],
       ),
     );
