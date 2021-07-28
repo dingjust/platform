@@ -50,6 +50,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   List<MediaModel> _sewingWorkshopPhotos = [];
   List<MediaModel> _backEndPhotos = [];
 
+  List<MediaModel> _certificates = [];
+
   List<String> _scaleRange = [];
   List<String> _monthlyCapacityRanges = [];
   List<String> _populationScale = [];
@@ -130,6 +132,11 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               fontSize: _fontSize,
               label: '尾部照片',
               medias: _backEndPhotos,
+            ),
+            _PictureRow(
+              fontSize: _fontSize,
+              label: '资质荣誉照片',
+              medias: _certificates,
             ),
             _divider,
             _buildIntro(),
@@ -217,6 +224,8 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       _sewingWorkshopPhotos = [_factory.sewingWorkshopPhoto];
     if (_factory.backEndPhoto != null) _backEndPhotos = [_factory.backEndPhoto];
 
+    if (_factory.certificates != null) _certificates = _factory.certificates;
+
     if (_factory.qualityLevels == null) {
       _factory.qualityLevels = [];
     }
@@ -259,10 +268,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ),
             Expanded(
                 child: Text(
-                  _buildContactText(),
-                  textAlign: TextAlign.end,
-                  style: TextStyle(color: Colors.grey, fontSize: _fontSize),
-                )),
+              _buildContactText(),
+              textAlign: TextAlign.end,
+              style: TextStyle(color: Colors.grey, fontSize: _fontSize),
+            )),
             Icon(
               (Icons.chevron_right),
               color: Colors.grey,
@@ -1369,6 +1378,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         _factory.sewingWorkshopPhoto == null) {
       ShowDialogUtil.showValidateMsg(context, '请上传工厂相关照片');
       return;
+    }
+
+    if (_certificates != null) {
+      _factory.certificates = _certificates;
     }
 
     _factory.name = _nameController.text == '' ? null : _nameController.text;

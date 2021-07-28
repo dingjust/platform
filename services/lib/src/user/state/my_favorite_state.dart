@@ -119,26 +119,6 @@ class MyFavoriteTabSectionState with ChangeNotifier {
     return _productFavorites;
   }
 
-  // ///产品收藏
-  // List<MyFavoriteModel> get productFavorites {
-  //   if (_productFavorites == null) {
-  //     FavoriteRepository.search({
-  //       'page': 0,
-  //       'size': 999,
-  //     }, {
-  //       'typeCode': "Product"
-  //     }).then((response) {
-  //       if (response != null) {
-  //         _productFavorites = response.content;
-
-  //         ///通知刷新
-  //         notifyListeners();
-  //       }
-  //     });
-  //   }
-  //   return requirementsFavorites;
-  // }
-
   ///需求
   void getRequirementFavorites() {
     try {
