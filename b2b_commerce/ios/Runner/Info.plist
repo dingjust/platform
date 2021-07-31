@@ -118,6 +118,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MinimumOSVersion</key>
+	<string>9.0</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -132,11 +134,11 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>日历</string>
 	<key>NSCameraUsageDescription</key>
-	<string>是否允许钉单打开相机以便拍照上传图片</string>
+	<string>允许钉单打开相机以便拍照上传图片</string>
 	<key>NSContactsUsageDescription</key>
 	<string>通讯录</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>持续定位权限</string>
+	<string>允许钉单获取持续定位权限</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>需要定位当前城市，是否允许开启定位权限</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -144,11 +146,11 @@
 	<key>NSMotionUsageDescription</key>
 	<string>健康运动</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>添加图片到相册</string>
+	<string>允许钉单为你添加图片到相册</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>是否允许钉单打开相册以供你选择要上传的图片</string>
+	<string>允许钉单打开相册以供你选择要上传的图片</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>语音转文字</string>
+	<string>允许钉单为你语音转文字</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -173,8 +175,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>MinimumOSVersion</key>
-	<string>9.0</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
 </dict>
