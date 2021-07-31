@@ -1331,7 +1331,12 @@ let TENANT_APIS = {
   // 获取统计数据2
   getTenantReportsTab2: () => '/b2b/company/reports/index/tab2',
   // 获取平台图表统计数据 sales salesAmount requirement salesQuantity quote agreement
-  getEchartData: (type, unit) => `/b2b/company/reports/count/${type}/${unit}`
+  getEchartData: (type, unit) => `/b2b/company/reports/count/${type}/${unit}`,
+
+  // 平台端修改工厂详情
+  updateFactoryByPlatform (uid) {
+    return '/b2b/factories/updateByPlatform/' + uid;
+  }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

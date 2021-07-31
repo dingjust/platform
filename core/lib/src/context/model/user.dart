@@ -25,7 +25,8 @@ enum UserType {
   /// 工厂用户
   FACTORY,
   DEFAULT,
-  CUSTOMER
+  CUSTOMER,
+  TENANT
 }
 
 const UserTypeMap = {
@@ -33,7 +34,8 @@ const UserTypeMap = {
   UserType.BRAND: "BRAND",
   UserType.FACTORY: "FACTORY",
   UserType.DEFAULT: "DEFAULT",
-  UserType.CUSTOMER: "CUSTOMER"
+  UserType.CUSTOMER: "CUSTOMER",
+  UserType.TENANT: "TENANT",
 };
 
 const UserTypeValueMap = {
@@ -41,7 +43,8 @@ const UserTypeValueMap = {
   "BRAND": UserType.BRAND,
   "FACTORY": UserType.FACTORY,
   "DEFAULT": UserType.DEFAULT,
-  "CUSTOMER": UserType.CUSTOMER
+  "CUSTOMER": UserType.CUSTOMER,
+  "TENANT": UserType.TENANT
 };
 
 const UserTypeLocalizedMap = {
@@ -49,7 +52,8 @@ const UserTypeLocalizedMap = {
   UserType.BRAND: "品牌端",
   UserType.FACTORY: "工厂端",
   UserType.DEFAULT: "系统默认",
-  UserType.CUSTOMER: "客户"
+  UserType.CUSTOMER: "客户",
+  UserType.TENANT: "平台管理员"
 };
 
 enum UserStatus {

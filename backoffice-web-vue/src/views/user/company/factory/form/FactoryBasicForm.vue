@@ -25,13 +25,13 @@
             <h6 style="margin-left: 9px;font-size: 10px;color: grey" v-if="!readOnly">只支持.jpg格式</h6>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <!-- <el-col :span="4">
           <Authorized :permission="['COMPANY_INFO_MODIFY']">
             <el-button v-if="!readOnly" size="medium" type="primary" class="toolbar-search_input" @click="openProfiles">
               手机头像设置
             </el-button>
           </Authorized>
-        </el-col>
+        </el-col> -->
       </el-row>
       <el-row type="flex" justify="start" align="middle">
         <el-col :span="12">
@@ -95,7 +95,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item prop="contactAddress">
+      <el-form-item prop="contactAddress" v-if="formData.contactAddress">
         <template slot="label">
           <h6 class="titleTextClass">地址<span style="color: red">*</span></h6>
         </template>
@@ -103,7 +103,7 @@
           <el-col :span="3">
             <el-form-item prop="contactAddress.region">
               <el-select class="w-100"
-                v-model="formData.contactAddress == undefined ? '' : formData.contactAddress.region" size="mini"
+                v-model="formData.contactAddress.region" size="mini"
                 value-key="isocode" @change="onRegionChanged">
                 <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
                 </el-option>
@@ -113,7 +113,7 @@
           <el-col :span="3">
             <el-form-item prop="contactAddress.city">
               <el-select class="w-100" size="mini"
-                v-model="formData.contactAddress == undefined ? '' : formData.contactAddress.city"
+                v-model="formData.contactAddress.city"
                 @change="onCityChanged" value-key="code">
                 <el-option v-for="item in (readOnly? readOnlyCities : cities )" :key="item.code" :label="item.name"
                   :value="item">
@@ -124,7 +124,7 @@
           <el-col :span="3">
             <el-form-item prop="contactAddress.cityDistrict">
               <el-select class="w-100" size="mini"
-                v-model="formData.contactAddress == undefined ? '' : formData.contactAddress.cityDistrict"
+                v-model="formData.contactAddress.cityDistrict"
                 value-key="code" @change="onCityDistrictChanged">
                 <el-option v-for="item in (readOnly? readOnlyCityDistricts : cityDistricts )" :key="item.code"
                   :label="item.name" :value="item">
@@ -135,7 +135,7 @@
           <el-col :span="6">
             <el-form-item prop="contactAddress.line1">
               <el-input placeholder="填写详细门牌号"
-                v-model="formData.contactAddress == undefined ? '' : formData.contactAddress.line1"
+                v-model="formData.contactAddress.line1"
                 @change="onCityDistrictChanged" size="mini">
               </el-input>
             </el-form-item>
@@ -247,6 +247,9 @@
         this.setIsDistrictsChanged(true);
       },
       async getCities(region) {
+        if (!region) {
+          return
+        }
         const url = this.apis().getCities(region.isocode);
         const result = await this.$http.get(url);
 
@@ -266,6 +269,9 @@
         this.setIsDistrictsChanged(true);
       },
       async getCityDistricts(city) {
+        if (!city) {
+          return
+        }
         const url = this.apis().getDistricts(city.code);
         const result = await this.$http.get(url);
 
@@ -311,17 +317,24 @@
       //   }
       // }
     },
+    mounted () {
+      this.$nextTick(() => {
+        if (!this.formData.contactAddress) {
+          this.$set(this.formData, 'contactAddress', {})
+        }
+        this.getRegions();
+        if (this.formData.contactAddress) {
+          this.getCities(this.formData.contactAddress.region);
+          this.getCityDistricts(this.formData.contactAddress.city);
+        }
+      })
+    },
     created() {
       if (this.labels <= 0) {
         this.getLabels();
       }
       if (this.formData.profilePicture != null) {
         this.profilePictures.push(this.formData.profilePicture);
-      }
-      this.getRegions();
-      if (this.readOnly && this.formData.contactAddress != undefined) {
-        this.getCities(this.formData.contactAddress.region);
-        this.getCityDistricts(this.formData.contactAddress.city);
       }
       if (this.formData.duties == '') {
         this.formData.duties = '经理';

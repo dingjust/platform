@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/users/favorite.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/helper/requirement_helper.dart';
 import 'package:b2b_commerce/src/helper/dialog_helper.dart';
@@ -98,13 +99,13 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
       ),
       SliverList(
           delegate: SliverChildListDelegate([
-        _InfoHeadRow(data),
-        Divider(),
-        _BriefRow(
-          val: '公司简介：${data.intro ?? '暂无简介'}',
-        ),
-        Container(height: 10, color: Colors.grey[50])
-      ])),
+            _InfoHeadRow(data),
+            Divider(),
+            _BriefRow(
+              val: '公司简介：${data.intro ?? '暂无简介'}',
+            ),
+            Container(height: 10, color: Colors.grey[50])
+          ])),
       SliverPersistentHeader(
           pinned: true,
           delegate: _AppBarDelegate(TabBar(
@@ -145,27 +146,27 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
           children: [
             Expanded(
                 child: FactoryBottomBtn(
-              color: Colors.green,
-              label: '联系对方',
-              info: '电话沟通协商',
-              onTap: _onContact,
-            )),
+                  color: Colors.green,
+                  label: '联系对方',
+                  info: '电话沟通协商',
+                  onTap: _onContact,
+                )),
             Expanded(
                 child: FactoryBottomBtn(
-              color: Colors.blueAccent,
-              label: '发布需求',
-              info: '邀请对方报价',
-              onTap: () {
-                DialogHelper.showConfirm(
-                    title: '温馨提示',
-                    content:
+                  color: Colors.blueAccent,
+                  label: '发布需求',
+                  info: '邀请对方报价',
+                  onTap: () {
+                    DialogHelper.showConfirm(
+                        title: '温馨提示',
+                        content:
                         '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
-                    confirm: () {
-                      RequirementHelper.publishToFactory(
-                          context: context, factory: data);
-                    });
-              },
-            ))
+                        confirm: () {
+                          RequirementHelper.publishToFactory(
+                              context: context, factory: data);
+                        });
+                  },
+                ))
           ],
         ),
       ),
@@ -177,7 +178,7 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
     DialogHelper.showConfirm(
         title: '温馨提示',
         content:
-        '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
+            '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
         confirm: () {
           String tel = data.contactPhone;
           showModalBottomSheet(
@@ -197,13 +198,13 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
                   tel.indexOf('-') > -1
                       ? Container()
                       : ListTile(
-                    leading: Icon(Icons.message),
-                    title: Text('发送短信'),
-                    onTap: () async {
-                      var url = 'sms:' + tel;
-                      await launch(url);
-                    },
-                  ),
+                          leading: Icon(Icons.message),
+                          title: Text('发送短信'),
+                          onTap: () async {
+                            var url = 'sms:' + tel;
+                            await launch(url);
+                          },
+                        ),
                 ],
               );
             },
@@ -239,8 +240,8 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
         context,
         MaterialPageRoute(
             builder: (context) => MyFactoryBaseFormPage(
-                  data,
-                ))).then((v) {
+              data,
+            ))).then((v) {
       if (v == true) {
         setState(() {
           data = null;
@@ -262,8 +263,7 @@ class _AppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => _tabBar.preferredSize.height;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return new Container(
       child: _tabBar,
       // color: overlapsContent ? Colors.white : Color.fromRGBO(245, 245, 245, 1),
@@ -293,45 +293,55 @@ class _InfoHeadRow extends StatelessWidget {
           _buildProfile(),
           Expanded(
               child: Container(
-            height: 80,
-            margin: EdgeInsets.only(left: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
+                height: 100,
+                margin: EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Expanded(
-                        child: Text(
-                      '${data.name}',
-                      style: TextStyle(fontSize: 20),
-                    ))
-                  ],
-                ),
-                Row(
-                  children: [
-                    AuthTag(
-                      model: data,
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Text(
+                              '${data.name}',
+                              style: TextStyle(fontSize: 20),
+                            ))
+                      ],
                     ),
-                    ...data.labels
-                        .map((e) =>
-                        Container(
-                          padding: EdgeInsets.fromLTRB(2, 1, 2, 2),
-                          margin: EdgeInsets.symmetric(horizontal: 3),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.green, width: 0.5),
-                              borderRadius: BorderRadius.circular(2)),
-                          child: Text(
-                            '${e.name}',
-                            style: TextStyle(
-                                fontSize: 10, color: Colors.green),
-                          ),
-                        ))
-                        .toList()
+                    Row(
+                      children: [
+                        AuthTag(
+                          model: data,
+                        ),
+                        Expanded(
+                            child: Row(
+                              children: [
+                                ...(data.labels ?? [])
+                                    .map((e) =>
+                                    Container(
+                                      padding: EdgeInsets.fromLTRB(2, 1, 2, 2),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 3),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.green, width: 0.5),
+                                          borderRadius: BorderRadius.circular(
+                                              2)),
+                                      child: Text(
+                                        '${e.name}',
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.green),
+                                      ),
+                                    ))
+                                    .toList(),
+                              ],
+                            )),
+                        FavoriteIcon(
+                          id: data.id,
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
               ))
         ],
       ),
@@ -387,9 +397,9 @@ class _BriefRow extends StatelessWidget {
         children: [
           Expanded(
               child: Text(
-            val ?? '',
-            style: TextStyle(color: Colors.grey, fontSize: 12),
-          ))
+                val ?? '',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ))
         ],
       ),
     );

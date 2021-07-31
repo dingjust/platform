@@ -336,19 +336,18 @@ class ProductModel extends ItemModel {
   static MediaModel mediaFromJson(Map<String, dynamic> json) =>
       json == null ? null : MediaModel.fromJson(json);
 
-  static List<MediaModel> mediasFromJson(List<dynamic> jsons) =>
-      jsons == null
-          ? null
-          : jsons.map((json) => MediaModel.fromJson(json)).toList();
+  static List<MediaModel> mediasFromJson(List<dynamic> jsons) => jsons == null
+      ? null
+      : jsons.map((json) => MediaModel.fromJson(json)).toList();
 
   static List<Map<String, dynamic>> _steppedPriceToJson(
-      List<SteppedPriceModel> models) =>
+          List<SteppedPriceModel> models) =>
       models == null
           ? null
           : models.map((model) => SteppedPriceModel.toJson(model)).toList();
 
   static List<Map<String, dynamic>> _colorSizesToJson(
-      List<ColorSizeModel> models) =>
+          List<ColorSizeModel> models) =>
       models == null
           ? null
           : models.map((model) => ColorSizeModel.toJson(model)).toList();
@@ -506,10 +505,12 @@ class ApparelProductModel extends ProductModel {
   double gramWeight;
   bool isRecommend;
 
+  ///收藏ID
+  int favoriteId;
+
   CategoryModel get superCategory => superCategories;
 
-  ApparelProductModel({
-    String code,
+  ApparelProductModel({String code,
     String name,
     double price,
     MediaModel thumbnail,
@@ -543,7 +544,8 @@ class ApparelProductModel extends ProductModel {
     this.price3,
     this.suggestedPrice,
     this.isRecommend,
-  }) : super(
+    this.favoriteId})
+      : super(
       code: code,
       name: name,
       price: price,

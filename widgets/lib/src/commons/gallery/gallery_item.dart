@@ -2,9 +2,18 @@ import 'package:flutter/widgets.dart';
 import 'package:models/models.dart';
 
 class GalleryItem {
-  GalleryItem({this.model});
+  GalleryItem(
+      {this.model,
+      this.watermark = false,
+      this.waterProcessParams =
+          'image_process=watermark,text_6ZKJ5Y2V,fill_1,color_F5F5F5,t_50'});
 
   final MediaModel model;
+
+  final bool watermark;
+
+  ///水印处理参数
+  final String waterProcessParams;
 }
 
 class GalleryItemThumbnail extends StatelessWidget {

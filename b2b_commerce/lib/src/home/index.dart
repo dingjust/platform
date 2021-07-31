@@ -1,9 +1,9 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_list.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/qr_scan_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/search/home_search_bar.dart';
-import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +12,7 @@ import 'package:widgets/widgets.dart';
 
 import '../common/app_keys.dart';
 import '_shared/widgets/banner.dart';
+import '_shared/widgets/broadcast.dart';
 import '_shared/widgets/home_section.dart';
 import '_shared/widgets/location.dart';
 import 'home_appbar.dart';
@@ -25,6 +26,10 @@ class HomePage extends StatefulWidget {
   ///头部
   final List<Widget> _headWidgets = [
     HomeBtnsSection(),
+    Container(
+      margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      child: HomeBroadcast(),
+    )
   ];
 
   ///tab
@@ -73,12 +78,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   GlobalKey homePageKey = GlobalKey();
   TabController _tabController;
+  ScrollController _scrollController;
+  bool lastStatus = false;
+
+  double expandedHeight = 220;
 
   _HomePageState();
 
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
     MessageBLoC.instance.snackMessageStream.listen((value) {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text('$value'),
@@ -124,10 +135,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ChangeNotifierProvider(create: (_) => OrderRequirementState())
         ],
         child: Container(
-          color: Color.fromRGBO(245, 245, 245, 1),
+          color: Color(0xffF7F7F7),
           child: NestedScrollView(
               key: homePageKey,
               headerSliverBuilder: _slverBuilder,
+              controller: _scrollController,
               body: TabBarView(
                   controller: _tabController, children: widget.tabBarViews)),
         ));
@@ -136,43 +148,75 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<Widget> _slverBuilder(BuildContext context, bool innerBoxIsScrolled) {
     return [
       SliverAppBar(
-        expandedHeight: 200.0,
+        expandedHeight: expandedHeight,
         pinned: true,
         elevation: 0.5,
         title: HomeTitle(
           leading: widget.searchInputWidget,
         ),
-        backgroundColor: Constants.THEME_COLOR_MAIN,
+        backgroundColor: lastStatus ? Colors.white : Color(0xffF7F7F7),
         brightness: Brightness.dark,
         flexibleSpace: FlexibleSpaceBar(
           background: Stack(
             fit: StackFit.expand,
-            children: <Widget>[HomeBannerSection()],
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    color: Color(0xffF7F7F7),
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color.fromRGBO(254, 216, 0, 1),
+                          Color.fromRGBO(254, 216, 0, 0),
+                        ])),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 105, 0, 0),
+                  child: HomeBannerSection(),
+                ),
+              )
+            ],
           ),
         ),
       ),
       SliverList(delegate: SliverChildListDelegate(widget.headWidgets)),
       SliverPersistentHeader(
-          pinned: true,
-          delegate: HomeAppBarDelegate(TabBar(
-              controller: _tabController,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorColor: Constants.THEME_COLOR_ORANGE,
-              labelStyle: TextStyle(
-                fontSize: 18,
-              ),
-              unselectedLabelColor: Color(0xff646464),
-              labelColor: Constants.THEME_COLOR_ORANGE,
-              unselectedLabelStyle: TextStyle(
-                fontSize: 18,
-              ),
-              tabs: widget.tabs))),
+        pinned: true,
+        delegate: HomeAppBarDelegate(TabBar(
+            controller: _tabController,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicator: B2BTabIndicator(
+                borderSide: BorderSide(
+              width: 6,
+              color: Color(0xffFED800),
+            )),
+            labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            unselectedLabelColor: Color(0xff222222),
+            labelColor: Color(0xff222222),
+            unselectedLabelStyle:
+                TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            tabs: widget.tabs)),
+      )
     ];
+  }
+
+  _scrollListener() {
+    if (isShrink != lastStatus) {
+      setState(() {
+        lastStatus = isShrink;
+      });
+    }
+  }
+
+  bool get isShrink {
+    return _scrollController.hasClients &&
+        _scrollController.offset > (expandedHeight - kToolbarHeight);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.removeListener(_scrollListener);
     super.dispose();
   }
 }
@@ -188,22 +232,23 @@ class HomeTitle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 20),
+            child: LocationIcon(),
+          ),
+          Expanded(
+            flex: 1,
+            child: leading,
+          ),
           GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => QrScanPage()));
               },
               child: Padding(
-                padding: EdgeInsets.only(
-                  right: 5,
-                ),
-                child: Icon(B2BIcons.qr_scanner, size: 25),
+                padding: EdgeInsets.only(left: 13),
+                child: B2BV2Image.top_3(width: 24, height: 24),
               )),
-          Expanded(
-            flex: 1,
-            child: leading,
-          ),
-          LocationIcon()
         ],
       ),
     );

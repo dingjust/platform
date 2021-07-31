@@ -63,6 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
         MenuItem(B2BImage.addressManage(width: 24, height: 29), '地址管理',
             AppRoutes.ROUTE_MY_ADDRESSES),
         menuSeparator,
+        MenuItem(
+            MenuItemImage.myCollection, '我的收藏', AppRoutes.ROUTE_MY_FAVORITES),
         // MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理',
         //     AppRoutes.ROUTE_MY_INVOICES),
         // menuSeparator,

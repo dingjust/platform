@@ -1,6 +1,6 @@
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:widgets/widgets.dart';
 
 class HomeSearchBar extends StatelessWidget {
   final double width;
@@ -31,10 +31,12 @@ class HomeSearchBar extends StatelessWidget {
         ),
         child: Row(
           children: <Widget>[
-            const Icon(B2BIcons.search, color: Colors.grey, size: 18),
+            Container(
+              child: B2BV2Image.top_2(width: 16, height: 16),
+            ),
             Text(
               tips,
-              style: const TextStyle(color: Colors.grey, fontSize: 16),
+              style: const TextStyle(color: Color(0xff999999), fontSize: 13),
             )
           ],
         ),

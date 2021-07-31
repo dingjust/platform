@@ -101,7 +101,7 @@ class SimplePayPlanForm extends StatelessWidget {
                       },
                       itemBuilder: (BuildContext context) {
                         List<PopupMenuItem> items = [];
-                        for (int i = 1; i < 10; i++) {
+                        for (int i = 1; i < 30; i++) {
                           items.add(PopupMenuItem(
                             child: Text(
                               '$i天',
@@ -154,7 +154,7 @@ class SimplePayPlanForm extends StatelessWidget {
               },
               itemBuilder: (BuildContext context) {
                 List<PopupMenuItem> items = [];
-                for (int i = 1; i < 10; i++) {
+                for (int i = 1; i < 30; i++) {
                   items.add(PopupMenuItem(
                     child: Text(
                       '$i天',

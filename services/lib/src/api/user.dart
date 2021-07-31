@@ -172,8 +172,7 @@ abstract class UserApis {
   static get getContractCount => '/{baseSiteId}/user/agreement/count';
 
   ///查看合同
-  static get getContract =>
-          (code) {
+  static get getContract => (code) {
         return '/{baseSiteId}/user/agreement/get/$code';
       };
 
@@ -314,4 +313,16 @@ abstract class UserApis {
   /// 注销状态
   static get cancellationState =>
       '/{baseSiteId}/account/write/off/my/last/apply';
+
+  /// 添加(POST)/删除（DEL）收藏
+  static get favorite =>
+          (id) {
+        return '/{baseSiteId}/my/favorite/$id';
+      };
+
+  ///批量删除（DEL）收藏
+  static get favoriteBatchDel => '/{baseSiteId}/my/favorite/batch/delete';
+
+  /// 收藏列表
+  static get favoriteSearch => '/{baseSiteId}/my/favorite/search';
 }

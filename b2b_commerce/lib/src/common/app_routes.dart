@@ -54,6 +54,7 @@ import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
+import 'package:b2b_commerce/src/my/my_favorite.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:b2b_commerce/src/my/settings/account_cancellation.dart';
 import 'package:core/core.dart';
@@ -243,6 +244,8 @@ class AppRoutes with GlobalRoutes {
 
   static const ROUTE_PRODUCTS_SEARCH = '/apparel_product/search';
 
+  static const ROUTE_MY_FAVORITES = '/my/favorites';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -348,13 +351,11 @@ class AppRoutes with GlobalRoutes {
         ProductDetailPage(getVal('code', context)),
     ROUTE_PRODUCTS_SEARCH: (context) =>
         ProductsSearchPage(keyword: getVal('keyword', context)),
+    ROUTE_MY_FAVORITES: (context) => MyFavoritePage()
   };
 
   static dynamic getVal(String key, BuildContext context) {
-    Map<String, dynamic> map = ModalRoute
-        .of(context)
-        .settings
-        .arguments;
+    Map<String, dynamic> map = ModalRoute.of(context).settings.arguments;
     if (map != null) {
       return map[key];
     } else {
