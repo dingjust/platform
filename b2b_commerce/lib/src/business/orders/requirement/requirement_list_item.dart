@@ -22,9 +22,6 @@ class _RequirementListItemState extends State<RequirementListItem> {
   ///文字最大行数
   int maxLines = 3;
 
-  ///是否限制最大行数
-  bool isLinesLimit = true;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -32,8 +29,8 @@ class _RequirementListItemState extends State<RequirementListItem> {
       child: Container(
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(8)),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
           child: Column(
             children: <Widget>[
               _buildTitleRow(),
@@ -52,43 +49,56 @@ class _RequirementListItemState extends State<RequirementListItem> {
     } else {
       const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
 
+      List<Widget> imageWidgets = pictures
+          .map((e) => Expanded(
+                  child: GestureDetector(
+                onTap: () => onPreview(e),
+                child: Container(
+                    child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) =>
+                      CachedNetworkImage(
+                    height:
+                        getImageHeight(pictures.length, constraints.maxWidth),
+                    imageUrl: '${e.imageProcessUrl(processUrl)}',
+                    placeholder: (context, url) => SpinKitRing(
+                      color: Colors.grey[300],
+                      lineWidth: 2,
+                      size: 30,
+                    ),
+                    errorWidget: (context, url, error) => SpinKitRing(
+                      color: Colors.grey[300],
+                      lineWidth: 2,
+                      size: 30,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                )),
+              )))
+          .toList();
+
+      List<Widget> widgets = [];
+
+      for (int i = 0; i < imageWidgets.length; i++) {
+        widgets.add(imageWidgets[i]);
+        if (i != imageWidgets.length - 1) {
+          widgets.add(Container(width: 10));
+        }
+      }
+
       return Container(
-        margin: EdgeInsets.only(top: 6),
-        child: Row(
-            children: pictures
-                .map((e) => Expanded(
-                        child: GestureDetector(
-                      onTap: () => onPreview(e),
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 2),
-                        child: CachedNetworkImage(
-                          height: getImageHeight(pictures.length),
-                          imageUrl: '${e.imageProcessUrl(processUrl)}',
-                          placeholder: (context, url) => SpinKitRing(
-                            color: Colors.grey[300],
-                            lineWidth: 2,
-                            size: 30,
-                          ),
-                          errorWidget: (context, url, error) => SpinKitRing(
-                            color: Colors.grey[300],
-                            lineWidth: 2,
-                            size: 30,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )))
-                .toList()),
+        margin: EdgeInsets.only(top: 8),
+        child: Row(children: widgets),
       );
     }
   }
 
-  Widget _buildTitleRow({
-    TextStyle style =
-    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-  }) {
+  Widget _buildTitleRow(
+      {TextStyle style = const TextStyle(
+          color: Color(0xff222222),
+          fontSize: 14,
+          fontWeight: FontWeight.w500)}) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         child: Row(
           children: [
             Container(
@@ -96,11 +106,11 @@ class _RequirementListItemState extends State<RequirementListItem> {
                 child: Row(
                   children: [
                     Container(
-                        margin: EdgeInsets.only(right: 5),
+                        margin: EdgeInsets.only(right: 8),
                         child: ImageFactory.buildProcessedAvatar(
                             widget.model.belongTo.profilePicture,
                             processurl:
-                            'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
+                                'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
                     Expanded(
                         child: Text('${widget.model.belongTo.name ?? ''}',
                             style: style,
@@ -111,7 +121,9 @@ class _RequirementListItemState extends State<RequirementListItem> {
             Expanded(
               child: Text(
                 '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ??
-                    ''}·${widget.model.details.identityTypeStr ?? ''}',
+                    ''}${widget.model.details.identityTypeStr != null
+                    ? '·'
+                    : ''}${widget.model.details.identityTypeStr ?? ''}',
                 style: style,
                 textAlign: TextAlign.end,
               ),
@@ -120,86 +132,124 @@ class _RequirementListItemState extends State<RequirementListItem> {
         ));
   }
 
-  Widget _buildContent({TextStyle style =
-  const TextStyle(fontSize: 13, color: const Color(0xff666666))}) {
+  Widget _buildContent() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.fromLTRB(8, 1, 8, 10),
+      margin: EdgeInsets.only(left: 40),
       child: Column(children: [
         Row(
           children: [
             Expanded(
                 child: Text('${widget.model.details.productName ?? ''}',
-                    style: TextStyle(fontSize: 14, color: Color(0xff222222))))
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xff222222),
+                        fontWeight: FontWeight.bold)))
           ],
         ),
-        _buildText(),
+        Container(
+          margin: EdgeInsets.only(top: 4),
+          child: _buildText(),
+        ),
         _buildImages()
       ]),
     );
   }
 
-  Widget _buildText({TextStyle style = const TextStyle(fontSize: 12)}) {
+  Widget _buildText({TextStyle style = const TextStyle(
+      fontSize: 13,
+      color: Color(0xff666666),
+      fontWeight: FontWeight.w500)}) {
     return LayoutBuilder(builder: (context, constrants) {
       final span = TextSpan(text: widget.model.remarks ?? '', style: style);
       final tp = TextPainter(
           text: span, maxLines: maxLines, textDirection: TextDirection.ltr)
         ..layout(maxWidth: constrants.maxWidth);
-      return Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
+
+      //超过行的情况
+      if (tp.didExceedMaxLines) {
+        //文字分两部分
+        //单行字数
+        int lineNum = tp.width ~/ tp.text.style.fontSize;
+
+        var strs1 = span.text.substring(0, lineNum * (maxLines - 1));
+        var strs2 = span.text.substring(lineNum * (maxLines - 1));
+
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '$strs1',
+                    style: style,
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '$strs2',
+                    style: style,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Text(
+                  '查看更多',
+                  style: TextStyle(
+                      color: Color(0xff1486fa), fontSize: style.fontSize),
+                )
+              ],
+            ),
+          ],
+        );
+      } else {
+        return Row(
+          children: [
+            Expanded(
                 child: Text(
                   '${widget.model.remarks ?? ''}',
-                  maxLines: isLinesLimit ? maxLines : null,
                   style: style,
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              tp.didExceedMaxLines
-                  ? TextButton(
-                      onPressed: () {
-                        setState(() {
-                          isLinesLimit = !isLinesLimit;
-                        });
-                      },
-                      child: Text(isLinesLimit ? '全文' : '收起'))
-                  : TextButton(onPressed: onDetail, child: Text('全文'))
-            ],
-          )
-        ],
-      );
+                ))
+          ],
+        );
+      }
     });
   }
 
-  Widget _buildBottom({TextStyle style = const TextStyle(fontSize: 12)}) {
+  Widget _buildBottom({TextStyle style =
+  const TextStyle(fontSize: 10, color: Color(0xff999999))}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5),
-      margin: EdgeInsets.only(top: 5),
+      margin: EdgeInsets.only(left: 40),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           widget.model.details.address != null
               ? Expanded(
-                  child: Row(children: [
-                  Icon(Icons.location_on),
-                  Expanded(
-                      child: Text(
-                    '${widget.model.details.address ?? ''}',
-                    style: style,
-                    overflow: TextOverflow.ellipsis,
-                  ))
-                ]))
+              child: Row(children: [
+                Container(
+                  margin: EdgeInsets.only(right: 2),
+                  child: Icon(
+                    Icons.location_on,
+                    size: 16,
+                    color: Color(0xff999999),
+                  ),
+                ),
+                Expanded(
+                    child: Text(
+                      '${widget.model.details.cityStr ?? ''}·${widget.model
+                          .details.districtStr ?? ''}',
+                      style: style,
+                      overflow: TextOverflow.ellipsis,
+                    ))
+              ]))
               : Container(),
           Text(
             '${DateExpress2Util.express(widget.model.creationTime)}',
-            style:
-            TextStyle(color: Color.fromRGBO(97, 95, 95, 1), fontSize: 10),
+            style: style,
           )
         ],
       ),
@@ -225,19 +275,21 @@ class _RequirementListItemState extends State<RequirementListItem> {
     }
   }
 
-  double getImageHeight(int length) {
+  double getImageHeight(int length, double width) {
     switch (length) {
       case 1:
-        return 150;
+      //16:9
+        return width * (9 / 16);
         break;
       case 2:
-        return 120;
+      //4:3
+        return width * (3 / 4);
         break;
       case 3:
-        return 100;
+        return width;
         break;
       default:
-        return 100;
+        return width;
     }
   }
 
