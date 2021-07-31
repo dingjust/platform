@@ -13,4 +13,15 @@ class Constants {
   static const THEME_COLOR_ORANGE = Color(0xffff9f2d);
 
   static const WHOLE_COUNTRY_ISOCODE = 'CN-10';
+
+  /* UI v2 */
+  static const FONT_COLOR_1 = const Color(0xff222222);
+
+  static const FONT_COLOR_2 = const Color(0xff666666);
+
+  static const FONT_SIZE_1 = 13;
+
+  static const FONT_SIZE_2 = 12;
+
+  static const FONT_SIZE_3 = 13;
 }

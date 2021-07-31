@@ -16,7 +16,7 @@ class HomeAppBarDelegate extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return new Container(
       child: _tabBar,
-      color: overlapsContent ? Colors.white : Color.fromRGBO(245, 245, 245, 1),
+      color: overlapsContent ? Colors.white : Color(0xffF7F7F7),
     );
   }
 

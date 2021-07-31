@@ -1,5 +1,7 @@
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -9,8 +11,7 @@ class LocationIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AmapState>(
-        builder: (context, state, _) =>
-            GestureDetector(
+        builder: (context, state, _) => GestureDetector(
               onTap: () async {
                 Tip tip = await Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => AmapSearchPage()));
@@ -24,13 +25,11 @@ class LocationIcon extends StatelessWidget {
                 padding: EdgeInsets.only(left: 5),
                 child: Row(
                   children: <Widget>[
-                    _buildLocatingText(context, state),
                     Container(
-                      padding: EdgeInsets.only(right: 5),
-                      child: Icon(
-                        Icons.location_on,
-                      ),
-                    )
+                      margin: EdgeInsets.only(right: 4),
+                      child: B2BV2Image.top_1(width: 18, height: 22),
+                    ),
+                    _buildLocatingText(context, state),
                   ],
                 ),
               ),
@@ -68,22 +67,21 @@ class LocationIcon extends StatelessWidget {
     state.getAMapLocation(context: context, openDialog: _dialog);
     if (aMapLocation == null) {
       return Container(
-          width: 60,
-          child: Center(
-              child: Text(
-                '选择城市',
-            style: TextStyle(fontSize: 12, color: Colors.black54),
+          child: Text(
+            '选择城市',
+            style: TextStyle(fontSize: 13, color: Colors.black54),
             overflow: TextOverflow.ellipsis,
-          )));
+          ));
     } else {
       return Container(
-          width: 60,
-          child: Center(
-              child: Text(
-                '${state.city}',
-            style: TextStyle(fontSize: 12, color: Colors.black54),
+          child: Text(
+            '${state.city}·${state.district}',
+            style: TextStyle(
+                fontSize: 13,
+                color: Constants.FONT_COLOR_1,
+                fontWeight: FontWeight.w500),
             overflow: TextOverflow.ellipsis,
-          )));
+          ));
     }
   }
 }

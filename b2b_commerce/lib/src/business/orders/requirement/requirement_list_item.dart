@@ -30,9 +30,10 @@ class _RequirementListItemState extends State<RequirementListItem> {
     return GestureDetector(
       onTap: onDetail,
       child: Container(
-          decoration: BoxDecoration(color: Colors.white),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(8)),
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          margin: EdgeInsets.only(bottom: 10),
+          margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
           child: Column(
             children: <Widget>[
               _buildTitleRow(),
@@ -52,7 +53,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
       const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
 
       return Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 6),
         child: Row(
             children: pictures
                 .map((e) => Expanded(
@@ -84,51 +85,52 @@ class _RequirementListItemState extends State<RequirementListItem> {
 
   Widget _buildTitleRow({
     TextStyle style =
-        const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
   }) {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         child: Row(
           children: [
-            Expanded(
+            Container(
+                width: 150,
                 child: Row(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(right: 5),
-                    child: ImageFactory.buildProcessedAvatar(
-                        widget.model.belongTo.profilePicture,
-                        processurl:
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(right: 5),
+                        child: ImageFactory.buildProcessedAvatar(
+                            widget.model.belongTo.profilePicture,
+                            processurl:
                             'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
-                Expanded(
-                    child: Text('${widget.model.belongTo.name ?? ''}',
-                        style: style,
-                        textAlign: TextAlign.left,
-                        overflow: TextOverflow.ellipsis))
-              ],
-            )),
-            Text(
-                '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ?? ''}',
-                style: style),
+                    Expanded(
+                        child: Text('${widget.model.belongTo.name ?? ''}',
+                            style: style,
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis))
+                  ],
+                )),
             Expanded(
-                child: Text('${widget.model.details.identityTypeStr ?? ''}',
-                    textAlign: TextAlign.right, style: style))
+              child: Text(
+                '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ??
+                    ''}·${widget.model.details.identityTypeStr ?? ''}',
+                style: style,
+                textAlign: TextAlign.end,
+              ),
+            )
           ],
         ));
   }
 
-  Widget _buildContent({TextStyle style = const TextStyle(fontSize: 12)}) {
+  Widget _buildContent({TextStyle style =
+  const TextStyle(fontSize: 13, color: const Color(0xff666666))}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       margin: EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[300], width: 1),
-          borderRadius: BorderRadius.circular(10)),
       child: Column(children: [
         Row(
           children: [
             Expanded(
                 child: Text('${widget.model.details.productName ?? ''}',
-                    style: style))
+                    style: TextStyle(fontSize: 14, color: Color(0xff222222))))
           ],
         ),
         _buildText(),

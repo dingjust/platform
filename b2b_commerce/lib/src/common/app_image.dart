@@ -376,3 +376,110 @@ class B2BImage {
     return getImage('temp/icon/auth.png', width: width, height: height);
   }
 }
+
+class B2BV2Image {
+  static Image fab({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/fab@2x.png',
+        width: width, height: height);
+  }
+
+  static Image tab_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/tab_1.0@2x.png',
+        width: width, height: height);
+  }
+
+  static Image tab_1_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/tab_1.1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image tab_2({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/tab_2.0@2x.png',
+        width: width, height: height);
+  }
+
+  static Image tab_2_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/tab_2.1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image tab_3({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/tab_3.0@2x.png',
+        width: width, height: height);
+  }
+
+  static Image tab_3_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/tab_3.1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image tab_4({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/tab_4.0@2x.png',
+        width: width, height: height);
+  }
+
+  static Image tab_4_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/navigator/tab_4.1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image top_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/header/top_1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image top_2({double width, double height}) {
+    return getImage('img/icons/b2b-v2/header/top_2@2x.png',
+        width: width, height: height);
+  }
+
+  static Image top_3({double width, double height}) {
+    return getImage('img/icons/b2b-v2/header/top_3@2x.png',
+        width: width, height: height);
+  }
+
+  static Image main_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/main/main_1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image main_2({double width, double height}) {
+    return getImage('img/icons/b2b-v2/main/main_2@2x.png',
+        width: width, height: height);
+  }
+
+  static Image main_3({double width, double height}) {
+    return getImage('img/icons/b2b-v2/main/main_3@2x.png',
+        width: width, height: height);
+  }
+
+  static Image main_4({double width, double height}) {
+    return getImage('img/icons/b2b-v2/main/main_4@2x.png',
+        width: width, height: height);
+  }
+
+  static Image main_5({double width, double height}) {
+    return getImage('img/icons/b2b-v2/main/main_5@2x.png',
+        width: width, height: height);
+  }
+
+  static Image main_6({double width, double height}) {
+    return getImage('img/icons/b2b-v2/main/main_6@2x.png',
+        width: width, height: height);
+  }
+
+  static Image main_7({double width, double height}) {
+    return getImage('img/icons/b2b-v2/main/main_7@2x.png',
+        width: width, height: height);
+  }
+
+  static Image main_8({double width, double height}) {
+    return getImage('img/icons/b2b-v2/main/main_8@2x.png',
+        width: width, height: height);
+  }
+
+  static Image notice({double width, double height}) {
+    return getImage('img/icons/b2b-v2/notice@2x.png',
+        width: width, height: height);
+  }
+}
