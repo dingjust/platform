@@ -30,7 +30,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(8)),
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-          margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
+          margin: EdgeInsets.fromLTRB(12, 0, 12, 12),
           child: Column(
             children: <Widget>[
               _buildTitleRow(),

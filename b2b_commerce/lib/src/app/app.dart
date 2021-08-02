@@ -163,7 +163,7 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
           BottomNavigationBarItem(
               icon: B2BV2Image.tab_2_1(width: 20, height: 20),
               activeIcon: B2BV2Image.tab_2(width: 20, height: 20),
-              label: '看款'),
+              label: '看款下单'),
           ProductsPage()),
       // NavigationMenu(
       //   // BottomNavigationBarItem(icon: BottomNotificationsIcon(), label: '消息'),
@@ -235,8 +235,8 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
               backgroundColor: Colors.white,
               selectedFontSize: 10,
               unselectedFontSize: 10,
-              selectedLabelStyle: TextStyle(color: Constants.THEME_COLOR_MAIN),
-              selectedItemColor: Constants.THEME_COLOR_MAIN),
+              selectedLabelStyle: TextStyle(color: Color(0xff222222)),
+              selectedItemColor: Color(0xff222222)),
         );
       }),
       routes: AppRoutes.allRoutes,
@@ -290,7 +290,8 @@ class _Fab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(
+          top: defaultTargetPlatform == TargetPlatform.android ? 18 : 16),
       child: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
