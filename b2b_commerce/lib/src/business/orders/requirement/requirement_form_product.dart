@@ -20,21 +20,24 @@ import 'package:widgets/widgets.dart';
 import 'RequirementFormMixins.dart';
 import 'requirement_pay_form.dart';
 
-class RequirementFormFactory extends StatefulWidget {
-  RequirementFormFactory({
+class RequirementFormProduct extends StatefulWidget {
+  RequirementFormProduct({
     this.formState,
   });
 
   final RequirementOrderFormStateV2 formState;
 
-  _RequirementFormFactoryState createState() => _RequirementFormFactoryState();
+  _RequirementFormProductState createState() => _RequirementFormProductState();
 }
 
-class _RequirementFormFactoryState extends State<RequirementFormFactory>
+class _RequirementFormProductState extends State<RequirementFormProduct>
     with RequirementFormMixin {
   GlobalKey _scaffoldKey = GlobalKey();
 
   bool isPhoneSame = false;
+
+  //看款下单类型
+  ProductType type;
 
   @override
   void initState() {
@@ -78,13 +81,14 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
         appBar: AppBar(
           elevation: 0.5,
           centerTitle: true,
-          title: Text('需求发布-找工厂'),
+          title: Text('看款下单'),
           actions: <Widget>[],
         ),
         body: Container(
           color: Colors.white,
           child: ListView(
             children: <Widget>[
+              _buildTypeRadio(),
               _buildTitleName(),
               _buildRemarks(),
               Container(
@@ -151,6 +155,33 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
           ),
         )
       ]),
+    );
+  }
+
+  Widget _buildTypeRadio() {
+    List<ProductType> types =
+        widget.formState.product?.productType ?? [ProductType.SPOT_GOODS];
+
+    return Row(
+      children: types
+          .map((value) => Container(
+                margin: EdgeInsets.only(left: 20),
+                child: Row(
+                  children: <Widget>[
+                    Radio(
+                      groupValue: type,
+                      value: value,
+                      onChanged: (val) {
+                        setState(() {
+                          type = val;
+                        });
+                      },
+                    ),
+                    Text('${ProductTypeLocalizedMap[value]}'),
+                  ],
+                ),
+              ))
+          .toList(),
     );
   }
 
@@ -1337,10 +1368,9 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
             .getRequirementOrderDetail(response.msg);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) =>
-                  PublishRequirementSuccessDialog(
-                    model: model,
-                  ),
+              builder: (context) => PublishRequirementSuccessDialog(
+                model: model,
+              ),
             ),
             ModalRoute.withName('/'));
       } else if (response.code == 0) {
@@ -1348,7 +1378,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       } else {
         Navigator.of(context).pop();
       }
-        }, height: 300, confirmButtonText: '我已知晓');
+    }, height: 300, confirmButtonText: '我已知晓');
   }
 
   //格式选中的地区（多选）

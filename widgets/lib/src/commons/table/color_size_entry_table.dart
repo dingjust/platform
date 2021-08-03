@@ -334,7 +334,7 @@ class ColorSizeEntryInputTable extends StatelessWidget {
                       focusNode: nodeMap[entry.color.code][entry.size.code],
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration.collapsed(hintText: ''),
+                      decoration: InputDecoration.collapsed(hintText: '0'),
                       textAlign: TextAlign.center,
                       autofocus: false,
                       onChanged: (val) {

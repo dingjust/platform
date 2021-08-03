@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/_shared/users/favorite.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_factory.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_product.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -56,9 +56,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               } else {
                 return Center(
                     child: CircularProgressIndicator(
-                      valueColor:
+                  valueColor:
                       AlwaysStoppedAnimation(Constants.THEME_COLOR_MAIN),
-                    ));
+                ));
               }
             },
           ),
@@ -238,7 +238,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Expanded(
                         child: Container(
                           child: CachedNetworkImage(
-                              imageUrl: '${media.normalUrl()}',
+                              imageUrl: '${media.detailUrl()}',
                               fit: BoxFit.fitWidth,
                               placeholder: (context, url) =>
                                   SpinKitRing(
@@ -311,7 +311,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ],
           child: Consumer(
             builder: (context, RequirementOrderFormStateV2 state, _) =>
-                RequirementFormFactory(
+                RequirementFormProduct(
                   formState: state,
                 ),
           ),

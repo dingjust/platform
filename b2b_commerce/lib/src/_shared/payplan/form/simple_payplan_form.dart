@@ -82,7 +82,7 @@ class SimplePayPlanForm extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    Text('签订《生产合同》后：'),
+                    Text('确认订单后：'),
                     PopupMenuButton(
                       child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 10),
