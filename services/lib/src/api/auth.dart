@@ -32,8 +32,17 @@ class AuthApis {
       '/{baseSiteId}/dingtalk/auth/access_unbind';
 
   ///绑定第三方注册
-  static get bindingRegister =>
-          (type) {
+  static get bindingRegister => (type) {
         return '/{baseSiteId}/companies/$_clientId/register/$type';
       };
+
+  ///APPLE获取授权码
+  static get authCodeByApple =>
+      '/{baseSiteId}/apple/auth/access_login/$_clientId';
+
+  ///APPLE绑定
+  static get appleAuthBinding => '/{baseSiteId}/apple/auth/access_bind';
+
+  ///APPLE解除绑定
+  static get appleAuthUnBinding => '/{baseSiteId}/apple/auth/access_unbind';
 }
