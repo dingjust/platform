@@ -337,6 +337,12 @@ const COMMON_APIS = {
   offShelfProduct (code) {
     return '/b2b/products/apparel/' + code + '/off';
   },
+  batchOnShelfProduct () {
+    return '/b2b/products/apparel/onShelfs'
+  },
+  batchOffShelfProduct () {
+    return '/b2b/products/apparel/offShelfs'
+  },
   deleteProduct (code) {
     return '/b2b/products/apparel/' + code + '/deleted';
   },
@@ -1163,8 +1169,17 @@ let TENANT_APIS = {
   orderContractClick () {
     return '/b2b/user/agreement/order/validate';
   },
+  platformOnShelffProduct (code) {
+    return '/b2b/products/apparel/' + code + '/platformOn';
+  },
   platformOffShelfProduct (code) {
     return '/b2b/products/apparel/' + code + '/platformOff';
+  },
+  platformBatchOnShelffProduct () {
+    return '/b2b/products/apparel/platformOnShelfs';
+  },
+  platformBatchOffShelfProduct () {
+    return '/b2b/products/apparel/platformOffShelfs';
   },
   platformDeletedShelfProduct (code) {
     return '/b2b/products/apparel/' + code + '/platformDeleted';
@@ -1336,6 +1351,25 @@ let TENANT_APIS = {
   // 平台端修改工厂详情
   updateFactoryByPlatform (uid) {
     return '/b2b/factories/updateByPlatform/' + uid;
+  },
+
+  // 公告
+  searchNotice () {
+    return '/b2b/notice/search'
+  },
+  createNotice () {
+    return '/b2b/notice'
+  },
+  // 发布
+  publishNotice (id) {
+    return '/b2b/notice/update/publish/state/' + id
+  },
+  // 批量 ?ids=8796158621167,8796125853167&state=DRAFT
+  batchPublishNotice () {
+    return '/b2b/notice/batch/update/publish/state'
+  },
+  delectNotice (id) {
+    return '/b2b/notice/' + id
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);

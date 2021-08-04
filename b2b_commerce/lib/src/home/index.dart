@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
   final List<Widget> _headWidgets = [
     HomeBtnsSection(),
     Container(
-      margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
       child: HomeBroadcast(),
     )
   ];
@@ -146,9 +146,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   List<Widget> _slverBuilder(BuildContext context, bool innerBoxIsScrolled) {
+    print((MediaQuery.of(context).size.width - 24));
     return [
       SliverAppBar(
-        expandedHeight: expandedHeight,
+        expandedHeight:
+            (MediaQuery.of(context).size.width - 24) * (120 / 350) + 85,
         pinned: true,
         elevation: 0.5,
         title: HomeTitle(
@@ -171,7 +173,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           Color.fromRGBO(254, 216, 0, 0),
                         ])),
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(0, 105, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 105, 0, 0),
                   child: HomeBannerSection(),
                 ),
               )
@@ -187,14 +189,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             indicatorSize: TabBarIndicatorSize.label,
             indicator: B2BTabIndicator(
                 borderSide: BorderSide(
-              width: 6,
-              color: Color(0xffFED800),
-            )),
+                  width: 6,
+                  color: Color(0xffFED800),
+                )),
             labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            unselectedLabelColor: Color(0xff222222),
+
+            unselectedLabelColor: Color(0xff666666),
             labelColor: Color(0xff222222),
             unselectedLabelStyle:
-                TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
             tabs: widget.tabs)),
       )
     ];

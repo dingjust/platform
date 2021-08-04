@@ -66,8 +66,7 @@ class _ProductAttributesTabState extends State<ProductAttributesTab>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    _buildInfoRow('货号：${widget.model.skuID}',
-                        '品牌：${widget.model.brand ?? ''}'),
+                    _buildInfoRow('货号：${widget.model.skuID}', ''),
                     _buildInfoRow('品类：${widget.model.category.name}',
                         '面料：${_strArrayResult(enumCodesToNames(widget.model.attributes.fabricCompositions ?? '', FabricCompositionEnum))}'),
                     _buildInfoRow('颜色：${_strArrayResult(colorSet.toList())}',

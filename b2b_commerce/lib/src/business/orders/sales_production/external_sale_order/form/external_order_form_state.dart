@@ -30,7 +30,8 @@ class ExternalOrderFormState with ChangeNotifier {
           controllerMap[element.color.code] = {};
         }
         controllerMap[element.color.code][element.size.code] =
-            TextEditingController(text: '${element.quantity ?? ''}');
+            TextEditingController(
+                text: '${element.quantity != 0 ? element.quantity : ''}');
 
         if (nodeMap[element.color.code] == null) {
           nodeMap[element.color.code] = {};

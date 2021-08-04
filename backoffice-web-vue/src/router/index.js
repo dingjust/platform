@@ -969,6 +969,10 @@ const router = new Router({
         path: '/miscs/cashOutManager',
         name: '提现管理',
         component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/cashOutManager/cashOutManagerPage')
+      }, {
+        path: '/miscs/notice',
+        name: '公告',
+        component: () => import(/* webpackChunkName: 'miscs' */ '@/views/tenant/notice/NoticePage')
       }
       ]
     },

@@ -1,5 +1,3 @@
-import 'package:core/core.dart';
-
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
     as dj;
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
@@ -8,6 +6,7 @@ import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/home/product/buy_stock_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -431,20 +430,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Expanded(
                         child: Container(
                           child: CachedNetworkImage(
-                              imageUrl: '${media.normalUrl()}',
-                              fit: BoxFit.fitWidth,
-                              placeholder: (context, url) =>
-                                  SpinKitRing(
-                                    color: Colors.black12,
-                                    lineWidth: 2,
-                                    size: 30,
-                                  ),
-                              errorWidget: (context, url, error) =>
-                                  SpinKitRing(
-                                    color: Colors.black12,
-                                    lineWidth: 2,
-                                    size: 30,
-                                  )),
+                          imageUrl: '${media.actualUrl}',
+                          fit: BoxFit.fitWidth,
+                          placeholder: (context, url) => SpinKitRing(
+                                color: Colors.black12,
+                                lineWidth: 2,
+                                size: 30,
+                              ),
+                          errorWidget: (context, url, error) => SpinKitRing(
+                                color: Colors.black12,
+                                lineWidth: 2,
+                                size: 30,
+                              )),
                         ))
                   ],
                 )

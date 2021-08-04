@@ -11,13 +11,23 @@
       <div class="pt-2"></div>
       <apparel-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" 
                                :queryFormData="queryFormData" :dataQuery="dataQuery" @onResetQuery="onResetQuery"/>
-      <el-tabs v-model="activeName" @tab-click="handleTabClick">
-        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
-          <apparel-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-            @onBelongDetail="onBelongDetail" @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf"
-            @onOffShelf="onOffShelf" @onDelete="onDelete" />
-        </el-tab-pane>
-      </el-tabs>
+      <div>
+        <div class="batch-opera-btn" v-if="activeName === 'approved' || activeName === 'unapproved'">
+          <el-button v-if="isSelect === false" @click="isSelect = true">批量操作</el-button>
+          <template v-else>
+            <el-button type="text" @click="isSelect = false">取消</el-button>
+            <el-button v-if="activeName === 'unapproved'" type="text" @click="batchOn">批量上架</el-button>
+            <el-button v-if="activeName === 'approved'" type="text" @click="batchOff">批量下架</el-button>
+          </template>
+        </div>
+        <el-tabs v-model="activeName" @tab-click="handleTabClick">
+          <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+            <apparel-product-list ref="list" :page="page" @onDetails="onDetails" @onSearch="onSearch"
+              @onBelongDetail="onBelongDetail" @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf"
+              @onOffShelf="onOffShelf" @onDelete="onDelete" :code="status.code" :isSelection="isSelection"/>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </el-card>
     <el-dialog :visible.sync="apparelProductDetailsPageVisible" width="80%" :close-on-click-modal="false">
       <apparel-product-details-page v-if="apparelProductDetailsPageVisible" :formData="productData" :read-only="true" />
@@ -77,7 +87,10 @@
         page: 'page',
         keyword: 'keyword',
         newFormData: 'newFormData'
-      })
+      }),
+      isSelection () {
+        return this.isSelect && (this.activeName === 'approved' || this.activeName === 'unapproved')
+      }
     },
     methods: {
       ...mapActions({
@@ -120,12 +133,12 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
+        Object.assign(this.newFormData,result);
         if (this.isTenant()) {
           this.productData = result;
           this.apparelProductDetailsPageVisible = true;
           return;
         }
-        Object.assign(this.newFormData,result);
         this.$router.push({
           name: '产品详情',
           params: {
@@ -170,8 +183,22 @@
           return;
         }
       },
-      async onShelf(item) {
-        const url = this.apis().onShelfProduct(item.code);
+      onShelf(item) {
+        this.$confirm('是否确认下架该产品', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onShelf(item)
+        });
+      },
+      async _onShelf(item) {
+        let url;
+        if (this.isTenant()) {
+          url = this.apis().platformOnShelffProduct(item.code)
+        } else {
+          url = this.apis().onShelfProduct(item.code);
+        }
         const result = await this.$http.put(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -289,6 +316,125 @@
       },
       onResetQuery () {
         this.queryFormData = JSON.parse(JSON.stringify(Object.assign(this.queryFormData, this.dataQuery)));
+      },
+      batchOn () {
+        this.$confirm('是否执行批量上架?', '', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          this._batchOn()
+        });
+      },
+      checkOn (row) {
+        if (row.productType == null || row.productType.length <= 0 || row.productType.indexOf('FUTURE_GOODS') > -1) {
+          if (row.steppedPrices == null || row.steppedPrices.length <= 0 || row.basicProduction == null ||
+            row.productionIncrement == null || row.productionDays == null) {
+            return (row.code + '：价格设置资料未完善，不可上架')
+          }
+          let flag = false;
+          row.steppedPrices.some((p) => {
+            if (p.minimumQuantity == null || p.price == null) {
+              flag = true;
+              return true;
+            }
+          });
+          if (flag) {
+            return (row.code + '：价格设置资料未完善，不可上架');
+          }
+        }
+
+        if (row.productType != null && (row.productType.indexOf('SPOT_GOODS') > -1 || row.productType.indexOf(
+            'TAIL_GOODS') > -1)) {
+          if (row.spotSteppedPrices == null || row.spotSteppedPrices.length <= 0) {
+            return (row.code + '：现货/库存尾货价格设置资料未完善，不可上架');
+          }
+          let flag = false;
+          row.spotSteppedPrices.some((p) => {
+            if (p.minimumQuantity == null || p.price == null) {
+              flag = true;
+              return true;
+            }
+          });
+          if (flag) {
+            return (row.code + '：现货/库存尾货价格设置资料未完善，不可上架');
+          }
+          var totalQuality = this.totalQuality(row.colorSizes);
+          row.spotSteppedPrices.sort(function (a, b) {
+            return a.minimumQuantity - b.minimumQuantity;
+          });
+          if (totalQuality < row.spotSteppedPrices[0].minimumQuantity) {
+            return (row.code + '：库存总数量小于现货/库存最小起订量，不可上架');
+          }
+        }
+      },
+      async _batchOn () {
+        const refList = this.$refs.list.find(item => item.code === this.activeName);
+
+        let arrs = refList.multipleSelection.map(item => this.checkOn(item)).filter(val => val != undefined)
+        if (arrs.length > 0) {
+          this.$message({
+            dangerouslyUseHTMLString: true,
+            message: arrs.join('<br/>'),
+            type: 'error'
+          });
+          return
+        }
+
+        const codes = refList.multipleSelection.map(item => item.code)
+
+        let url = this.apis().batchOnShelfProduct()
+        if (this.isTenant()) {
+          url = this.apis().platformBatchOnShelffProduct()
+        }
+        const result = await this.$http.put(url, {}, {
+          codes: codes.toString()
+        })
+
+        if (result.code === 1) {
+          this.$message.success('操作成功！')
+        } else if (result.code === 0) {
+          this.$message.error(result.msg)
+        } else if (result['errors']) {
+          this.$message.error(result['errors'][0].message)
+        } else {
+          this.$message.error('操作失败')
+        }
+
+        this.onAdvancedSearch()
+      },
+      batchOff () {
+        this.$confirm('是否执行批量下架?', '', {
+          confirmButtonText: '是',
+          cancelButtonText: '否',
+          type: 'warning'
+        }).then(() => {
+          this._batchOff()
+        });
+      },
+      async _batchOff () {
+        const refList = this.$refs.list.find(item => item.code === this.activeName);
+        const codes = refList.multipleSelection.map(item => item.code)
+
+        let url = this.apis().batchOffShelfProduct()
+        if (this.isTenant()) {
+          url = this.apis().platformBatchOffShelfProduct()
+        }
+        const result = await this.$http.put(url, {}, {
+          codes: codes.toString()
+        })
+
+        if (result.code === 1) {
+          this.$message.success('操作成功！')
+        } else if (result.code === 0) {
+          this.$message.error(result.msg)
+        } else if (result['errors']) {
+          this.$message.error(result['errors'][0].message)
+        } else {
+          this.$message.error('操作失败')
+        }
+
+        this.onAdvancedSearch()
       }
     },
     data() {
@@ -324,7 +470,8 @@
           categories: [],
           belongToName: ''
         },
-        dataQuery: {}
+        dataQuery: {},
+        isSelect: false
       }
     },
     created() {
@@ -347,4 +494,9 @@
     padding-left: 10px;
   }
 
+  .batch-opera-btn {
+    position: absolute;
+    right: 21px;
+    z-index: 999;
+  }
 </style>
