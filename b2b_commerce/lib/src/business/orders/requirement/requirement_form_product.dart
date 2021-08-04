@@ -64,6 +64,14 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
             '${UserBLoC.instance.currentUser.mobileNumber}';
       }
     }
+
+    if (widget.formState.product != null &&
+        widget.formState.product.spotSteppedPrices != null &&
+        widget.formState.product.spotSteppedPrices.isNotEmpty) {
+      widget.formState.model.details.maxExpectedPrice = widget
+          .formState.product.spotSteppedPrices.first.minimumQuantity
+          .toDouble();
+    }
   }
 
   @override
@@ -98,10 +106,10 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
                   description: '（补充图片可令工厂更快了解需求）',
                 ),
               ),
-              _buildMajorCategory(),
-              _buildCategory(),
               _buildExceptedPrice(),
               _buildMachiningQuantity(),
+              // _buildMajorCategory(),
+              _buildCategory(),
               Container(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -163,25 +171,57 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
         widget.formState.product?.productType ?? [ProductType.SPOT_GOODS];
 
     return Row(
-      children: types
-          .map((value) => Container(
-                margin: EdgeInsets.only(left: 20),
-                child: Row(
-                  children: <Widget>[
-                    Radio(
-                      groupValue: type,
-                      value: value,
-                      onChanged: (val) {
-                        setState(() {
-                          type = val;
-                        });
-                      },
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 10),
+          child: RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: '下单类型',
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              TextSpan(
+                text: ' *',
+                style: TextStyle(fontSize: 16, color: Colors.red),
+              )
+            ]),
+          ),
+        ),
+        Expanded(
+            child: Row(
+              children: types
+                  .map((value) =>
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Radio(
+                          groupValue: type,
+                          value: value,
+                          onChanged: (val) {
+                            setState(() {
+                              type = val;
+                              //现货或库存固定价格
+                              if ([
+                                ProductType.SPOT_GOODS,
+                                ProductType.TAIL_GOODS
+                              ].contains(type)) {
+                                widget.formState.model.details
+                                    .maxExpectedPrice = widget.formState.product
+                                    ?.spotSteppedPrices?.first?.price ??
+                                    0;
+                              }
+                            });
+                          },
+                        ),
+                        Text('${ProductTypeLocalizedMap[value]}'),
+                      ],
                     ),
-                    Text('${ProductTypeLocalizedMap[value]}'),
-                  ],
-                ),
-              ))
-          .toList(),
+                  ))
+                  .toList(),
+            ))
+      ],
     );
   }
 
@@ -566,7 +606,7 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
             child: RichText(
               text: TextSpan(children: [
                 TextSpan(
-                  text: '加工数量',
+                  text: '数量',
                   style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
                 TextSpan(
@@ -601,6 +641,24 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
   }
 
   Container _buildExceptedPrice() {
+    if (type != ProductType.FUTURE_GOODS) {
+      return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('价格', style: TextStyle(fontSize: 16, color: Colors.black)),
+              Text(
+                '￥${widget.formState.product?.spotSteppedPrices?.first
+                    ?.minimumQuantity ?? 0}',
+                style: TextStyle(color: Colors.red, fontSize: 20),
+              )
+            ],
+          ));
+    }
+
+    //期货
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -634,17 +692,17 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
                     }),
                 Expanded(
                     child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      widget.formState.model.details.maxExpectedPrice = -1;
-                    });
-                  },
-                  child: Text(
-                    '面议',
-                    softWrap: false,
-                    overflow: TextOverflow.visible,
-                  ),
-                )),
+                      onTap: () {
+                        setState(() {
+                          widget.formState.model.details.maxExpectedPrice = -1;
+                        });
+                      },
+                      child: Text(
+                        '面议',
+                        softWrap: false,
+                        overflow: TextOverflow.visible,
+                      ),
+                    )),
               ],
             ),
           ),
@@ -652,63 +710,63 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
             flex: 2,
             child: widget.formState.model.details.maxExpectedPrice == -1
                 ? Container(
-                    padding: const EdgeInsets.all(13.0),
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      color: Colors.grey[50],
+              padding: const EdgeInsets.all(13.0),
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                color: Colors.grey[50],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Center(
+                      child: Text(
+                        '面议',
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      )),
+                  InkWell(
+                    child: Icon(
+                      Icons.cancel,
+                      size: 20,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Center(
-                            child: Text(
-                          '面议',
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        )),
-                        InkWell(
-                          child: Icon(
-                            Icons.cancel,
-                            size: 20,
-                          ),
-                          onTap: () {
-                            setState(() {
-                              widget.formState.model.details.maxExpectedPrice =
-                                  null;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                : TextFieldBorderComponent(
-                    padding: EdgeInsets.all(0),
-                    hideDivider: true,
-                    isRequired: true,
-                    textAlign: TextAlign.left,
-                    prefix: '￥',
-                    inputFormatters: [
-                      DecimalInputFormat(),
-                    ],
-                    // inputType: TextInputType.number,
-                    hintText: '填写',
-                    controller: super.maxExpectedPriceController,
-                    focusNode: super.maxExpectedPriceFocusNode,
-                    onChanged: (value) {
+                    onTap: () {
                       setState(() {
-                        if (value.contains('.')) {
-                          int index = value.indexOf('.');
-                          if (value.length > index + 3) {
-                            super.maxExpectedPriceController.text =
-                                value.substring(0, index + 3);
-                          }
-                        }
                         widget.formState.model.details.maxExpectedPrice =
-                            ClassHandleUtil.removeSymbolRMBToDouble(
-                                super.maxExpectedPriceController.text);
+                        null;
                       });
                     },
                   ),
+                ],
+              ),
+            )
+                : TextFieldBorderComponent(
+              padding: EdgeInsets.all(0),
+              hideDivider: true,
+              isRequired: true,
+              textAlign: TextAlign.left,
+              prefix: '￥',
+              inputFormatters: [
+                DecimalInputFormat(),
+              ],
+              // inputType: TextInputType.number,
+              hintText: '填写',
+              controller: super.maxExpectedPriceController,
+              focusNode: super.maxExpectedPriceFocusNode,
+              onChanged: (value) {
+                setState(() {
+                  if (value.contains('.')) {
+                    int index = value.indexOf('.');
+                    if (value.length > index + 3) {
+                      super.maxExpectedPriceController.text =
+                          value.substring(0, index + 3);
+                    }
+                  }
+                  widget.formState.model.details.maxExpectedPrice =
+                      ClassHandleUtil.removeSymbolRMBToDouble(
+                          super.maxExpectedPriceController.text);
+                });
+              },
+            ),
           ),
         ],
       ),
@@ -1297,7 +1355,7 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
       return;
     }
     if (widget.formState.model.details.expectedMachiningQuantity == null) {
-      ShowDialogUtil.showValidateMsg(context, '请填写加工数量');
+      ShowDialogUtil.showValidateMsg(context, '请填写数量');
       return;
     }
     if (widget.formState.model.details.expectedDeliveryDate == null) {
@@ -1336,9 +1394,14 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
       throw Exception('请选择商品品类');
     }
 
-    if (widget.formState.model.details.majorCategory == null) {
-      ShowDialogUtil.showValidateMsg(context, '请选择面料类型');
-      throw Exception('请选择面料类型');
+    // if (widget.formState.model.details.majorCategory == null) {
+    //   ShowDialogUtil.showValidateMsg(context, '请选择面料类型');
+    //   throw Exception('请选择面料类型');
+    // }
+
+    if (type == null) {
+      ShowDialogUtil.showValidateMsg(context, '请选择下单类型');
+      throw Exception('请选择下单类型');
     }
 
     if (widget.formState.model.details.effectiveDays == -1) {

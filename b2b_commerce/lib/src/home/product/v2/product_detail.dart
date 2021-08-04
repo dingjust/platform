@@ -72,8 +72,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     List<MediaModel> thumbnails = [];
     if (data.thumbnails != null) {
       thumbnails = data.thumbnails
-          .map((thumbnail) =>
-          MediaModel(
+          .map((thumbnail) => MediaModel(
               convertedMedias: thumbnail.convertedMedias,
               mediaFormat: thumbnail.mediaFormat,
               mediaType: thumbnail.mediaType,
@@ -151,6 +150,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ],
           ),
           _buildMoneyRow(),
+          _buildTagsRow(),
+          _buildProductionDay()
         ],
       ),
     );
@@ -283,6 +284,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildTagsRow() {
+    return Row(
+        children: data.productType
+            .map((e) =>
+            Container(
+              margin: EdgeInsets.only(right: 10),
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                '${ProductTypeLocalizedMap[e]}',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+              decoration: BoxDecoration(color: Colors.grey[200]),
+            ))
+            .toList());
+  }
+
+  Widget _buildProductionDay(
+      {TextStyle style = const TextStyle(color: Colors.grey, fontSize: 12)}) {
+    if (data.productType.contains(ProductType.FUTURE_GOODS)) {
+      return Container(
+        margin: EdgeInsets.only(top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '生产天数：${data.productionDays}天',
+              style: style,
+            ),
+            Text(
+              '生产增量（数量/天）：${data.productionIncrement}',
+              style: style,
+            )
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 
   ///获取产品信息
