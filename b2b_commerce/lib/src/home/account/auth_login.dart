@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
@@ -83,25 +84,25 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       children: [
         Expanded(
             child: Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    height: 1,
-                    thickness: 1,
-                  ),
-                ),
-                Text(
-                  '其他方式登录',
+          children: [
+            Expanded(
+              child: Divider(
+                height: 1,
+                thickness: 1,
+              ),
+            ),
+            Text(
+              '其他方式登录',
               style: TextStyle(color: Colors.grey),
             ),
-                Expanded(
-                  child: Divider(
-                    height: 1,
-                    thickness: 1,
-                  ),
-                ),
-              ],
-            ))
+            Expanded(
+              child: Divider(
+                height: 1,
+                thickness: 1,
+              ),
+            ),
+          ],
+        ))
       ],
     );
   }
@@ -128,6 +129,11 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
               ),
             ),
             onPressed: () {
+              WechatServiceImpl.instance.isInstalled().then((value) {
+                if (!value) {
+                  BotToast.showText(text: '请确保已安装微信应用程序');
+                }
+              });
               WechatServiceImpl.instance.sendAuth();
             },
           ),
@@ -143,8 +149,16 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
               ),
             ),
             onPressed: () {
+              FlutterDdshare.isDDAppInstalled().then((value) {
+                if (!value) {
+                  BotToast.showText(text: '请确保已安装钉钉应用程序');
+                }
+              });
               FlutterDdshare.sendDDAppAuth(
-                  DateTime.now().millisecondsSinceEpoch.toString());
+                  DateTime
+                      .now()
+                      .millisecondsSinceEpoch
+                      .toString());
             },
           )
         ],

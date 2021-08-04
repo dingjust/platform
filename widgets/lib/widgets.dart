@@ -76,3 +76,4 @@ export 'src/commons/table/report_table.dart';
 export 'src/commons/tag/recommend_product_tag.dart';
 export 'src/commons/gallery/gallery_item.dart';
 export 'src/commons/gallery/gallery_photo_view_wrapper.dart';
+export 'src/commons/indicator/tab_indicator.dart';

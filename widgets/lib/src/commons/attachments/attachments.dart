@@ -26,14 +26,15 @@ import '../../../widgets.dart';
 
 ///横向滚动图片列表
 class Attachments extends StatefulWidget {
-  Attachments(
-      {Key key,
-      @required this.list,
-      this.width = 320,
-      this.height = 100,
-      this.imageWidth = 80,
-      this.imageHeight = 80})
-      : super(key: key);
+  Attachments({
+    Key key,
+    @required this.list,
+    this.width = 320,
+    this.height = 100,
+    this.imageWidth = 80,
+    this.imageHeight = 80,
+    this.watermark = false,
+  }) : super(key: key);
 
   final List<MediaModel> list;
 
@@ -41,6 +42,9 @@ class Attachments extends StatefulWidget {
   final double height;
   final double imageWidth;
   final double imageHeight;
+
+  ///是否有水印（大图）
+  final bool watermark;
 
   _AttachmentsState createState() => _AttachmentsState();
 }
@@ -160,7 +164,7 @@ class _AttachmentsState extends State<Attachments> {
                     child: CachedNetworkImage(
                         width: 100,
                         height: 100,
-                        imageUrl: '${model.previewUrl()}',
+                        imageUrl: '${processImageUrl(model)}',
                         fit: BoxFit.cover,
                         imageBuilder: (context, imageProvider) => Container(
                               width: 100,
@@ -207,8 +211,10 @@ class _AttachmentsState extends State<Attachments> {
       context,
       MaterialPageRoute(
         builder: (context) => GalleryPhotoViewWrapper(
-          galleryItems:
-              widget.list.map((model) => GalleryItem(model: model)).toList(),
+          galleryItems: widget.list
+              .map((model) =>
+              GalleryItem(model: model, watermark: widget.watermark))
+              .toList(),
           backgroundDecoration: const BoxDecoration(
             color: Colors.black,
           ),
@@ -280,7 +286,7 @@ class _AttachmentsState extends State<Attachments> {
           onReceiveProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
         _streamController.sink.add(received / total);
-      });
+          });
       print(response.statusCode);
     } catch (e) {
       print(e);
@@ -289,6 +295,11 @@ class _AttachmentsState extends State<Attachments> {
     Navigator.of(context).pop();
     OpenFile.open(filePath);
     return filePath;
+  }
+
+  ///图片处理(预览小尺寸)
+  String processImageUrl(MediaModel model) {
+    return model.imageProcessUrl('image_process=resize,w_100');
   }
 }
 

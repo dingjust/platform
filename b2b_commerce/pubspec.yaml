@@ -81,6 +81,7 @@ dependencies:
   flutter_qr_reader: ^1.0.3
   qr_flutter: ^3.2.0
   wechat_assets_picker: 4.2.2
+  like_button: ^1.0.4
 
   # PUB库钉钉插件
   flutter_ddshare: ^1.0.2
@@ -251,6 +252,27 @@ flutter:
     - packages/assets/temp/index/find_factory.png
     - packages/assets/temp/index/find_order.png
     - packages/assets/temp/empty-image-search.png
+    - packages/assets/img/icons/b2b-v2/navigator/tab_1.0@2x.png
+    - packages/assets/img/icons/b2b-v2/navigator/tab_1.1@2x.png
+    - packages/assets/img/icons/b2b-v2/navigator/tab_2.0@2x.png
+    - packages/assets/img/icons/b2b-v2/navigator/tab_2.1@2x.png
+    - packages/assets/img/icons/b2b-v2/navigator/tab_3.0@2x.png
+    - packages/assets/img/icons/b2b-v2/navigator/tab_3.1@2x.png
+    - packages/assets/img/icons/b2b-v2/navigator/tab_4.0@2x.png
+    - packages/assets/img/icons/b2b-v2/navigator/tab_4.1@2x.png
+    - packages/assets/img/icons/b2b-v2/navigator/fab@2x.png
+    - packages/assets/img/icons/b2b-v2/header/top_1@2x.png
+    - packages/assets/img/icons/b2b-v2/header/top_2@2x.png
+    - packages/assets/img/icons/b2b-v2/header/top_3@2x.png
+    - packages/assets/img/icons/b2b-v2/main/tab_1@2x.png
+    - packages/assets/img/icons/b2b-v2/main/tab_2@2x.png
+    - packages/assets/img/icons/b2b-v2/main/tab_3@2x.png
+    - packages/assets/img/icons/b2b-v2/main/tab_4@2x.png
+    - packages/assets/img/icons/b2b-v2/main/tab_5@2x.png
+    - packages/assets/img/icons/b2b-v2/main/tab_6@2x.png
+    - packages/assets/img/icons/b2b-v2/main/tab_7@2x.png
+    - packages/assets/img/icons/b2b-v2/main/tab_8@2x.png
+    - packages/assets/img/icons/b2b-v2/notice@2x.png
 
   fonts:
     - family: b2bIcons

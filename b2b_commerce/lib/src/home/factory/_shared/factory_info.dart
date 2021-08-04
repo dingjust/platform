@@ -21,7 +21,8 @@ class FactoryInfo extends StatelessWidget {
           FactoryDivider(),
           _Ability(model),
           FactoryDivider(),
-          _Pictures(model)
+          _Pictures(model),
+          _Certificates(model)
         ],
       ),
     );
@@ -74,12 +75,11 @@ class _Scale extends StatelessWidget {
           FactoryInfoRow(
               label: '月均产能',
               val: MonthlyCapacityRangesLocalizedMap[
-              model?.monthlyCapacityRange]),
+                  model?.monthlyCapacityRange]),
           FactoryInfoRow(
               label: '厂房',
               val:
-              '${model.factoryBuildingsQuantity == null ? '0' : model
-                  .factoryBuildingsQuantity.toString()}㎡'),
+                  '${model.factoryBuildingsQuantity == null ? '0' : model.factoryBuildingsQuantity.toString()}㎡'),
           FactoryInfoRow(
               label: '产值', val: ScaleRangesLocalizedMap[model.scaleRange]),
           FactoryInfoRow(
@@ -169,7 +169,7 @@ class _Pictures extends StatelessWidget {
     ];
     medias = medias.where((element) => element != null).toList();
     return Container(
-      margin: EdgeInsets.only(bottom: 65),
+      // margin: EdgeInsets.only(bottom: 65),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
@@ -177,7 +177,37 @@ class _Pictures extends StatelessWidget {
           Divider(),
           medias.isNotEmpty
               ? Attachments(
-            list: medias,
+                  list: medias,
+                )
+              : Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Text('暂无照片'),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+///工厂资质荣誉
+class _Certificates extends StatelessWidget {
+  final FactoryModel model;
+
+  const _Certificates(this.model);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 65),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        children: [
+          FactoryTitle('工厂资质荣誉'),
+          Divider(),
+          getPictures().isNotEmpty
+              ? Attachments(
+            list: model.certificates,
+            watermark: true,
           )
               : Container(
             margin: EdgeInsets.only(top: 10),
@@ -188,16 +218,11 @@ class _Pictures extends StatelessWidget {
     );
   }
 
-  ///擅长品类
-  String getAdeptCategoriesStr() {
-    if (model.adeptAtCategories == null) return '';
-    if (model.adeptAtCategories.length > 5) {
-      return model.adeptAtCategories
-          .getRange(0, 5)
-          .map((e) => e.name)
-          .join(',');
+  List<MediaModel> getPictures() {
+    if (model.certificates == null) {
+      return [];
     } else {
-      return model.adeptAtCategories.map((e) => e.name).join(',');
+      return model.certificates;
     }
   }
 }

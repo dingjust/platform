@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_type_select.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
@@ -152,13 +153,17 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
     List<NavigationMenu> menus = <NavigationMenu>[
       NavigationMenu(
         BottomNavigationBarItem(
-          icon: Icon(B2BIcons.home_2),
+          icon: B2BV2Image.tab_1_1(width: 20, height: 20),
+          activeIcon: B2BV2Image.tab_1(width: 20, height: 20),
           label: '首页',
         ),
         HomePage(),
       ),
       NavigationMenu(
-          BottomNavigationBarItem(icon: Icon(B2BIcons.shop), label: '看款'),
+          BottomNavigationBarItem(
+              icon: B2BV2Image.tab_2_1(width: 20, height: 20),
+              activeIcon: B2BV2Image.tab_2(width: 20, height: 20),
+              label: '看款下单'),
           ProductsPage()),
       // NavigationMenu(
       //   // BottomNavigationBarItem(icon: BottomNotificationsIcon(), label: '消息'),
@@ -175,14 +180,16 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
                   child: Opacity(opacity: 0, child: Icon(Icons.nature)))),
           RequirementTypeSelectPage()),
       NavigationMenu(
-        BottomNavigationBarItem(icon: Icon(B2BIcons.work_bench), label: '工作台'),
+        BottomNavigationBarItem(
+            icon: B2BV2Image.tab_3_1(width: 20, height: 20),
+            activeIcon: B2BV2Image.tab_3(width: 20, height: 20),
+            label: '工作台'),
         BusinessHomePage(),
       ),
       NavigationMenu(
         BottomNavigationBarItem(
-            icon: Icon(
-              B2BIcons.my,
-            ),
+            icon: B2BV2Image.tab_4_1(width: 20, height: 20),
+            activeIcon: B2BV2Image.tab_4(width: 20, height: 20),
             label: '我的'),
         MyHomePage(turnToHome: () {
           _handleNavigation(0);
@@ -225,9 +232,11 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
               onTap: _handleNavigation,
               items: menus.map((menu) => menu.item).toList(),
               type: BottomNavigationBarType.fixed,
-              selectedFontSize: 12,
-              selectedLabelStyle: TextStyle(color: Constants.THEME_COLOR_MAIN),
-              selectedItemColor: Constants.THEME_COLOR_MAIN),
+              backgroundColor: Colors.white,
+              selectedFontSize: 10,
+              unselectedFontSize: 10,
+              selectedLabelStyle: TextStyle(color: Color(0xff222222)),
+              selectedItemColor: Color(0xff222222)),
         );
       }),
       routes: AppRoutes.allRoutes,
@@ -280,13 +289,17 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
 class _Fab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => RequirementTypeSelectPage()));
-      },
-      elevation: 0,
-      child: Icon(Icons.add),
+    return Container(
+      margin: EdgeInsets.only(
+          top: defaultTargetPlatform == TargetPlatform.android ? 18 : 16),
+      child: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => RequirementTypeSelectPage()));
+          },
+          elevation: 0,
+          backgroundColor: Colors.white,
+          child: B2BV2Image.fab(width: 47, height: 47)),
     );
   }
 }

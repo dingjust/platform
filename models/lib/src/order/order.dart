@@ -788,14 +788,15 @@ class RequirementInfoModel extends ItemModel {
   @JsonKey(toJson: productsToJson)
   List<ApparelProductModel> products;
 
-  RequirementInfoModel({this.expectedDeliveryDate,
-    this.maxExpectedPrice,
-    this.machiningType,
-    this.invoiceNeeded = false,
-    this.proofingNeeded = false,
-    this.samplesNeeded = false,
-    this.pictures,
-    this.contactPerson,
+  RequirementInfoModel(
+      {this.expectedDeliveryDate,
+      this.maxExpectedPrice,
+      this.machiningType,
+      this.invoiceNeeded = false,
+      this.proofingNeeded = false,
+      this.samplesNeeded = false,
+      this.pictures,
+      this.contactPerson,
       this.contactPhone,
       this.productiveOrientations,
       this.isToRequirementPool = true,
@@ -813,18 +814,18 @@ class RequirementInfoModel extends ItemModel {
       this.populationScale,
       this.productionMode,
       this.productiveDistricts,
-    this.identityTypeStr,
-    this.address,
-    this.provinceStr,
-    this.cityStr,
-    this.districtStr,
-    this.contactWeChatNo,
-    this.latitude,
-    this.longitude,
-    this.payPlan,
-    this.agentContactPerson,
-    this.agentContactPhone,
-    this.products});
+      this.identityTypeStr,
+      this.address,
+      this.provinceStr,
+      this.cityStr,
+      this.districtStr,
+      this.contactWeChatNo,
+      this.latitude,
+      this.longitude,
+      this.payPlan,
+      this.agentContactPerson,
+      this.agentContactPhone,
+      this.products});
 
   factory RequirementInfoModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$RequirementInfoModelFromJson(json);
@@ -933,30 +934,33 @@ class RequirementOrderModel extends OrderModel {
   ///拒绝原因
   String enableShowReasons;
 
-  RequirementOrderModel(
-      {StatisticsModel statistics,
-      this.status,
-      this.belongTo,
-      this.details,
-      this.totalQuotesCount,
-      this.latestQuotes,
-      this.delayDays,
-      String code,
+  ///收藏ID
+  int favoriteId;
+
+  RequirementOrderModel({StatisticsModel statistics,
+    this.status,
+    this.belongTo,
+    this.details,
+    this.totalQuotesCount,
+    this.latestQuotes,
+    this.delayDays,
+    String code,
       int totalQuantity,
       double totalPrice,
       DateTime creationTime,
       DateTime modifiedTime,
-      AddressModel deliveryAddress,
-      String remarks,
-      PrincipalModel supplier,
-      this.editable,
-      this.attachments,
-      this.distance,
-      this.labels,
-      this.orderType,
-      this.reviewState,
-      this.enableShow,
-      this.enableShowReasons})
+    AddressModel deliveryAddress,
+    String remarks,
+    PrincipalModel supplier,
+    this.editable,
+    this.attachments,
+    this.distance,
+    this.labels,
+    this.orderType,
+    this.reviewState,
+    this.enableShow,
+    this.enableShowReasons,
+    this.favoriteId})
       : super(
             statistics: statistics,
             code: code,

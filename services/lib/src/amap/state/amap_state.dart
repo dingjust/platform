@@ -11,6 +11,8 @@ class AmapState with ChangeNotifier {
 
   String _city;
 
+  String _district;
+
   double _longitude;
 
   double _latitude;
@@ -43,6 +45,13 @@ class AmapState with ChangeNotifier {
     return '广州';
   }
 
+  String get district {
+    if (_district != null) {
+      return _district;
+    }
+    return '';
+  }
+
   AMapLocation getAMapLocation({BuildContext context, Widget openDialog}) {
     if (_aMapLocation != null) {
       return _aMapLocation;
@@ -54,6 +63,7 @@ class AmapState with ChangeNotifier {
       return AMapLocation(
           city: '广州',
           AOIName: '广州',
+          district: '',
           longitude: DEFAULT_LONGITUDE,
           latitude: DEFAULT_LATITUDE);
     }
@@ -75,6 +85,7 @@ class AmapState with ChangeNotifier {
                   CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
           _aMapLocation = await AMapLocationClient.getLocation(true);
           _city = _aMapLocation.city;
+          _district = _aMapLocation.district;
           _latitude = _aMapLocation.latitude;
           _longitude = _aMapLocation.longitude;
           AMapLocationClient.stopLocation();
@@ -130,10 +141,12 @@ class AmapState with ChangeNotifier {
         _aMapLocation = AMapLocation(
             city: '广州',
             AOIName: '广州',
+            district: '',
             longitude: DEFAULT_LONGITUDE,
             latitude: DEFAULT_LATITUDE);
       } else {
         _city = _aMapLocation.city;
+        _district = _aMapLocation.district;
         _latitude = _aMapLocation.latitude;
         _longitude = _aMapLocation.longitude;
       }
@@ -178,11 +191,19 @@ class AmapState with ChangeNotifier {
     _city = city;
   }
 
+  void setDistrict(String val) {
+    _district = val;
+  }
+
   ///覆盖定位信息
-  void setAMapLocation(
-      {String aOIName, double longitude, double latitude, String city}) {
+  void setAMapLocation({String aOIName,
+    double longitude,
+    double latitude,
+    String city,
+    String district}) {
     _aMapLocation = AMapLocation(
         city: city ?? this.city,
+        district: district ?? this.district,
         AOIName: aOIName ?? _aMapLocation.AOIName,
         longitude: longitude,
         latitude: latitude);
@@ -190,6 +211,9 @@ class AmapState with ChangeNotifier {
     _latitude = latitude;
     if (city != null) {
       _city = city;
+    }
+    if (district != null) {
+      _district = district;
     }
     notifyListeners();
   }

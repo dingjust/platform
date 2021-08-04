@@ -18,6 +18,7 @@ class AppProvider {
     ChangeNotifierProvider(create: (_) => ProductHomeCarouselsState()),
     ChangeNotifierProvider(create: (_) => RecommendProductState()),
     ChangeNotifierProvider(create: (_) => BusinessReportState()),
+    ChangeNotifierProvider(create: (_) => MyFavoriteState()),
     // ChangeNotifierProvider(create: (_) => HomeSectionState()),
     Provider(
       create: (_) => AddressState(),
@@ -61,9 +62,7 @@ class AppProvider {
   static preloading(BuildContext context) async {
     DateTime start = DateTime.now();
     print('[nbyjy]预加载开始${DateFormatUtil.formatYMDHMS(start)}');
-    Provider
-        .of<RecommendProductState>(context, listen: false)
-        .products;
+    Provider.of<RecommendProductState>(context, listen: false).products;
     // Provider.of<HomeSectionState>(context, listen: false).getData();
     Provider.of<CategoryState>(context, listen: false).getCascadedCategories();
     Provider.of<AddressState>(context, listen: false).getRegions();
@@ -81,11 +80,7 @@ class AppProvider {
     DateTime end = DateTime.now();
     print('[nbyjy]预加载结束${DateFormatUtil.formatYMDHMS(end)}');
     print(
-        '[nbyjy]相差${end
-            .difference(start)
-            .inSeconds}秒(${end
-            .difference(start)
-            .inMilliseconds})');
+        '[nbyjy]相差${end.difference(start).inSeconds}秒(${end.difference(start).inMilliseconds})');
   }
 
   ///清理用户相关数据(非系统数据)

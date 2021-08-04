@@ -20,6 +20,8 @@ class AppBLoC extends BLoCBase {
   //记录跳转登录时间
   DateTime _loginPageLogTime;
 
+  Function _cancelFunc;
+
   // 工厂模式
   factory AppBLoC() => _getInstance();
 
@@ -40,7 +42,7 @@ class AppBLoC extends BLoCBase {
         .listen((ConnectivityResult result) {
       _connectivityResult = result;
       if (result == ConnectivityResult.none) {
-        BotToast.showNotification(
+        _cancelFunc = BotToast.showNotification(
           duration: null,
           title: (_) => Text(
             '当前网络不可用,请检查网络设置后重试',
@@ -52,6 +54,8 @@ class AppBLoC extends BLoCBase {
             onPressed: cancel,
           ),
         );
+      } else {
+        _cancelFunc?.call();
       }
     });
   }

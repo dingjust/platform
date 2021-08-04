@@ -396,7 +396,7 @@ class FactoryBtnsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10),
-      color: Colors.white,
+      // color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -494,8 +494,8 @@ class HomeBtnsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      color: Colors.white,
+      padding: EdgeInsets.symmetric(vertical: 24),
+      color: Color(0xffF7F7F7),
       child: Column(children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -508,7 +508,7 @@ class HomeBtnsSection extends StatelessWidget {
             //   },
             // ),
             HomeAssetsBtn(
-              url: 'temp/index/home_publish.png',
+              url: 'img/icons/b2b-v2/main/tab_8@2x.png',
               label: '我的需求',
               onTap: () {
                 Navigator.pushNamed(
@@ -516,14 +516,14 @@ class HomeBtnsSection extends StatelessWidget {
               },
             ),
             HomeAssetsBtn(
-              url: 'temp/index/home_validate.png',
+              url: 'img/icons/b2b-v2/main/tab_2@2x.png',
               label: '我的报价',
               onTap: () {
                 Navigator.of(context).pushNamed(AppRoutes.ROUTE_QUOTES);
               },
             ),
             HomeAssetsBtn(
-              url: 'temp/index/nearby_factory.png',
+              url: 'img/icons/b2b-v2/main/tab_3@2x.png',
               label: '离我最近',
               onTap: () async {
                 Navigator.of(context)
@@ -531,7 +531,7 @@ class HomeBtnsSection extends StatelessWidget {
               },
             ),
             HomeAssetsBtn(
-              url: 'temp/index/home_factory.png',
+              url: 'img/icons/b2b-v2/main/tab_4@2x.png',
               label: '推荐工厂',
               onTap: () {
                 //埋点>>>推荐工厂
@@ -556,7 +556,7 @@ class HomeBtnsSection extends StatelessWidget {
           children: [
             HomeAssetsBtn(
               label: '我的订单',
-              url: 'temp/index/home_order.png',
+              url: 'img/icons/b2b-v2/main/tab_7@2x.png',
               onTap: () {
                 if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
                   Navigator.of(context).pushNamed(AppRoutes.ROUTE_OUT_ORDERS);
@@ -568,14 +568,14 @@ class HomeBtnsSection extends StatelessWidget {
             ),
             HomeAssetsBtn(
               label: '我的合同',
-              url: 'temp/index/home_contract.png',
+              url: 'img/icons/b2b-v2/main/tab_6@2x.png',
               onTap: () {
                 Navigator.pushNamed(context, AppRoutes.ROUTE_MY_CONTRACT);
               },
             ),
             HomeAssetsBtn(
               label: '生产进度',
-              url: 'temp/index/home_production.png',
+              url: 'img/icons/b2b-v2/main/tab_1@2x.png',
               onTap: () {
                 Navigator.pushNamed(
                     context,
@@ -586,7 +586,7 @@ class HomeBtnsSection extends StatelessWidget {
             ),
             HomeAssetsBtn(
               label: '财务对账',
-              url: 'temp/index/home_deliver.png',
+              url: 'img/icons/b2b-v2/main/tab_5@2x.png',
               onTap: () {
                 Navigator.of(context)
                     .pushNamed(AppRoutes.ROUTE_RECONCILIATION_ORDERS);

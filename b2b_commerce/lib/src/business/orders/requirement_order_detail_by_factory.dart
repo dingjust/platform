@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
+import 'package:b2b_commerce/src/_shared/users/favorite.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
@@ -206,19 +207,24 @@ class _RequirementOrderDetailByFactoryPageState
             padding: EdgeInsets.only(top: 10),
             child: Row(
               children: <Widget>[
-                RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: '发布于：',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    TextSpan(
-                      text:
-                          '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ]),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: '发布于：',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text:
+                            '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ]),
+                  ),
                 ),
+                FavoriteIcon(
+                  id: orderModel.id,
+                )
               ],
             ),
           ),
