@@ -199,7 +199,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.st,
+          // mainAxisAlignment: MainAxisAlignment.st,
           children: _moneyRows),
     );
   }
@@ -374,10 +374,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   ///分享
   void onShare() {
-    String title =
-        '钉单看款做货 ${data.productionDays}天 ￥${data.steppedPrices.first.price}';
-    String description =
-        '钉单看款做货 ${data.productionDays}天 ￥${data.steppedPrices.first.price}';
+    var price;
+
+    if (data.steppedPrices != null && data.steppedPrices.isNotEmpty) {
+      price = '￥${data.steppedPrices.first.price}';
+    } else if (data.spotSteppedPrices != null &&
+        data.spotSteppedPrices.isNotEmpty) {
+      price = '￥${data.spotSteppedPrices.first.price}';
+    } else {
+      price = '';
+    }
+
+    var day = data.productionDays != null ? '${data.productionDays}天' : '';
+
+    String title = '钉单看款做货 $day $price';
+    String description = '钉单看款做货 $day $price';
 
     const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
 

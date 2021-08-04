@@ -1,15 +1,14 @@
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/home/product/components/products_search_bar.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 import '../order_product_grid.dart';
 import 'products_condition_page.dart';
-
-import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
-import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key key}) : super(key: key);
@@ -54,10 +53,10 @@ class _ProductsPageState extends State<ProductsPage> {
             ),
             endDrawer: Drawer(
                 child: Builder(
-              builder: (iContext) => ProductsConditionPage(
-                state: Provider.of<ProductState>(iContext, listen: false),
-              ),
-            )),
+                  builder: (iContext) => ProductsConditionPage(
+                    state: Provider.of<ProductState>(iContext, listen: false),
+                  ),
+                )),
             body: ProductGrid()));
   }
 
@@ -71,7 +70,8 @@ class _ProductsPageState extends State<ProductsPage> {
     ShareDialog.showShareDialog(context,
         title: '$title',
         description: '$description',
-        imageUrl: '${GlobalConfigs.LOGO_URL}',
+        imageUrl:
+            'https://cdn-oss.nbyjy.net/%E7%9C%8B%E6%AC%BE%E4%B8%8B%E5%8D%95.jpg?x-oss-process=image/resize,resize,l_420',
         path: MiniProgramPageRoutes.products,
         url: GlobalConfigs.APP_TARO_CONTEXT_PATH);
   }
