@@ -5,12 +5,10 @@ import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
 import 'package:flutter_ddshare/response/ddshare_response.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:services/services.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 ///第三方登录按钮组
 class OtherAuthLoginBtnGroup extends StatefulWidget {
@@ -183,32 +181,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
             ],
           ),
         ),
-        onPressed: () async {
-          final credential = await SignInWithApple.getAppleIDCredential(
-              scopes: [
-                AppleIDAuthorizationScopes.email,
-                AppleIDAuthorizationScopes.fullName,
-              ],
-              webAuthenticationOptions: WebAuthenticationOptions(
-                // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-                clientId: 'com.nbyjy.b2bcommerce',
-                redirectUri: Uri.parse(
-                  'https://ht.nbyjy.net/app_sign',
-                ),
-              ));
-
-          Clipboard.setData(ClipboardData(
-              text:
-                  'Token:${credential.identityToken}\n Code:${credential.authorizationCode}\n User Identify:${credential.userIdentifier}'));
-
-          print(credential.identityToken);
-
-          print(credential.authorizationCode);
-
-          print(credential.givenName);
-
-          print(credential.email);
-        },
+        onPressed: () => authLoginHelper.handlerAppleAuthLogin(context),
       );
     }
 

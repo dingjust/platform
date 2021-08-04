@@ -113,4 +113,60 @@ class AuthRespository {
     }
     return result;
   }
+
+  /********************APPLE *****************/
+
+  ///Apple授权获取系统授权码
+  static Future<AuthorizationCodeResponse> getAuthorizationCodeByAPPLE(
+      String token, String id) async {
+    Response response;
+    AuthorizationCodeResponse result;
+    try {
+      response = await http$.get(AuthApis.authCodeByApple,
+          data: {'identityToken': token, 'userid': id});
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = AuthorizationCodeResponse.fromJson(response.data);
+    } else {
+      result = null;
+    }
+    return result;
+  }
+
+  ///Apple授权绑定账号
+  static Future<BaseResponse> appleAuthBinding(String token, String id) async {
+    Response response;
+    BaseResponse result;
+    try {
+      response = await http$.post(AuthApis.appleAuthBinding,
+          data: {'identityToken': token, 'userid': id});
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = BaseResponse.fromJson(response.data);
+    } else {
+      result = null;
+    }
+    return result;
+  }
+
+  ///Apple解除绑定账号
+  static Future<BaseResponse> appleAuthUnBinding() async {
+    Response response;
+    BaseResponse result;
+    try {
+      response = await http$.put(AuthApis.appleAuthUnBinding);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = BaseResponse.fromJson(response.data);
+    } else {
+      result = null;
+    }
+    return result;
+  }
 }
