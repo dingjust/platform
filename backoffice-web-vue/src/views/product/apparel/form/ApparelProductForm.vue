@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form ref="form" :model="slotData">
-      <el-card v-if="isFactory()" class="box-card product-card-1">
+      <el-card class="box-card product-card-1">
         <el-row type="flex" align="middle">
           <el-col :span="3">
               <h6 class="info-input-prepend">
@@ -12,7 +12,7 @@
           <el-col :span="8">
             <el-form-item prop="productType" :rules="[
                 { required: true, message: '请选择货品类型', trigger: 'change'}]">
-              <el-checkbox-group v-model="slotData.productType">
+              <el-checkbox-group v-model="slotData.productType" :disabled="readOnly">
                 <template v-for="type in productTypes">
                   <el-checkbox :label="type.code" :disabled="isDisabled(type.code)" :key="type.code">{{type.name}}</el-checkbox>
                 </template>
@@ -127,7 +127,7 @@
         resetFormData: 'resetFormData'
       }),
       isShowSpotPrices () {
-        if (this.isFactory() && this.slotData.productType != null &&
+        if (this.slotData.productType != null &&
           (this.slotData.productType.indexOf('SPOT_GOODS') > -1 || this.slotData.productType.indexOf('TAIL_GOODS') > -1)) {
           return true;
         } else {
@@ -135,7 +135,7 @@
         }
       },
       isShowPrices () {
-        if (this.isFactory() && this.slotData.productType != null &&
+        if (this.slotData.productType != null &&
           (this.slotData.productType.indexOf('FUTURE_GOODS') > -1)) {
           return true;
         } else {

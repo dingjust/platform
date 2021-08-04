@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
-      @selection-change="handleSelectionChange">
-      <!-- <el-table-column type="selection" width="32"></el-table-column> -->
+    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id"
+              @selection-change="handleSelectionChange" @row-click="rowClick">
+      <el-table-column v-if="isSelection" type="selection" :reserve-selection="true" width="55" />
       <el-table-column label="产品编号" prop="code" min-width="100"></el-table-column>
       <el-table-column label="产品图片" width="120">
         <template slot-scope="scope">
@@ -58,131 +58,138 @@
 </template>
 
 <script>
-  export default {
-    name: 'ApparelProductList',
-    props: ['page'],
-    computed: {},
-    methods: {
-      approvedShow(row) {
-        return this.isFactory() && row.approvalStatus === 'unapproved';
-      },
-      unapprovedShow(row) {
-        return this.isFactory() && row.approvalStatus === 'approved';
-      },
-      remove(row) {
-        return row.approvalStatus === 'unapproved';
-      },
-      onPageSizeChanged(val) {
-        this._reset();
+export default {
+  name: 'ApparelProductList',
+  props: ['page', 'isSelection', 'code'], 
+  computed: {},
+  methods: {
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    rowClick (row) {
+      this.$refs.resultTable.toggleRowSelection(row)
+    },
+    approvedShow(row) {
+      return row.approvalStatus === 'unapproved';
+    },
+    unapprovedShow(row) {
+      return row.approvalStatus === 'approved';
+    },
+    remove(row) {
+      return row.approvalStatus === 'unapproved';
+    },
+    onPageSizeChanged(val) {
+      this._reset();
 
-        if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
+      this.$emit('onAdvancedSearch', 0, val);
+
+      this.$nextTick(() => {
+        this.$refs.resultTable.bodyWrapper.scrollTop = 0
+      });
+    },
+    onCurrentPageChanged(val) {
+      this.$emit('onAdvancedSearch', val - 1, this.page.size);
+
+      this.$nextTick(() => {
+        this.$refs.resultTable.bodyWrapper.scrollTop = 0
+      });
+    },
+    _reset() {
+      this.$refs.resultTable.clearSort();
+      this.$refs.resultTable.clearFilter();
+      this.$refs.resultTable.clearSelection();
+    },
+    onDetails(row) {
+      this.$emit('onDetails', row);
+    },
+    onBelongDetail(row) {
+      this.$emit('onBelongDetail', row);
+    },
+    onShelf(row) {
+      if (row.productType == null || row.productType.length <= 0 || row.productType.indexOf('FUTURE_GOODS') > -1) {
+        if (row.steppedPrices == null || row.steppedPrices.length <= 0 || row.basicProduction == null ||
+          row.productionIncrement == null || row.productionDays == null) {
+          this.$message.error('价格设置资料未完善，不可上架');
           return;
         }
-
-        this.$emit('onSearch', 0, val);
-      },
-      onCurrentPageChanged(val) {
-        if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
-          return;
-        }
-
-        this.$emit('onSearch', val - 1);
-      },
-      _reset() {
-        this.$refs.resultTable.clearSort();
-        this.$refs.resultTable.clearFilter();
-        this.$refs.resultTable.clearSelection();
-      },
-      onDetails(row) {
-        this.$emit('onDetails', row);
-      },
-      onBelongDetail(row) {
-        this.$emit('onBelongDetail', row);
-      },
-      onShelf(row) {
-        if (row.productType == null || row.productType.length <= 0 || row.productType.indexOf('FUTURE_GOODS') > -1) {
-          if (row.steppedPrices == null || row.steppedPrices.length <= 0 || row.basicProduction == null ||
-            row.productionIncrement == null || row.productionDays == null) {
-            this.$message.error('价格设置资料未完善，不可上架');
-            return;
-          }
-          let flag = false;
-          row.steppedPrices.some((p) => {
-            if (p.minimumQuantity == null || p.price == null) {
-              flag = true;
-              return true;
-            }
-          });
-          if (flag) {
-            this.$message.error('价格设置资料未完善，不可上架');
-            return;
-          }
-        }
-
-        if (row.productType != null && (row.productType.indexOf('SPOT_GOODS') > -1 || row.productType.indexOf(
-            'TAIL_GOODS') > -1)) {
-          if (row.spotSteppedPrices == null || row.spotSteppedPrices.length <= 0) {
-            this.$message.error('现货/库存尾货价格设置资料未完善，不可上架');
-            return;
-          }
-          let flag = false;
-          row.spotSteppedPrices.some((p) => {
-            if (p.minimumQuantity == null || p.price == null) {
-              flag = true;
-              return true;
-            }
-          });
-          if (flag) {
-            this.$message.error('现货/库存尾货价格设置资料未完善，不可上架');
-            return;
-          }
-          var totalQuality = this.totalQuality(row.colorSizes);
-          row.spotSteppedPrices.sort(function (a, b) {
-            return a.minimumQuantity - b.minimumQuantity;
-          });
-          if (totalQuality < row.spotSteppedPrices[0].minimumQuantity) {
-            this.$message.error('库存总数量小于现货/库存最小起订量，不可上架');
-            return;
-          }
-        }
-
-        this.$emit('onShelf', row);
-      },
-      onOffShelf(row) {
-        this.$emit('onOffShelf', row);
-      },
-      onDelete(row) {
-        this.$emit('onDelete', row);
-      },
-      numberFormatter(val) {
-        if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
-          return parseFloat(val.price).toFixed(2);
-        }
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      totalQuality(colorSizes) {
-        var total = 0;
-        colorSizes.forEach((colorSize) => {
-          if (colorSize.sizes != null) {
-            colorSize.sizes.forEach((size) => {
-              if (size.quality != null) {
-                total += size.quality;
-              }
-            });
+        let flag = false;
+        row.steppedPrices.some((p) => {
+          if (p.minimumQuantity == null || p.price == null) {
+            flag = true;
+            return true;
           }
         });
-        return total;
+        if (flag) {
+          this.$message.error('价格设置资料未完善，不可上架');
+          return;
+        }
+      }
+
+      if (row.productType != null && (row.productType.indexOf('SPOT_GOODS') > -1 || row.productType.indexOf(
+          'TAIL_GOODS') > -1)) {
+        if (row.spotSteppedPrices == null || row.spotSteppedPrices.length <= 0) {
+          this.$message.error('现货/库存尾货价格设置资料未完善，不可上架');
+          return;
+        }
+        let flag = false;
+        row.spotSteppedPrices.some((p) => {
+          if (p.minimumQuantity == null || p.price == null) {
+            flag = true;
+            return true;
+          }
+        });
+        if (flag) {
+          this.$message.error('现货/库存尾货价格设置资料未完善，不可上架');
+          return;
+        }
+        var totalQuality = this.totalQuality(row.colorSizes);
+        row.spotSteppedPrices.sort(function (a, b) {
+          return a.minimumQuantity - b.minimumQuantity;
+        });
+        if (totalQuality < row.spotSteppedPrices[0].minimumQuantity) {
+          this.$message.error('库存总数量小于现货/库存最小起订量，不可上架');
+          return;
+        }
+      }
+
+      this.$emit('onShelf', row);
+    },
+    onOffShelf(row) {
+      this.$emit('onOffShelf', row);
+    },
+    onDelete(row) {
+      this.$emit('onDelete', row);
+    },
+    numberFormatter(val) {
+      if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
+        return parseFloat(val.price).toFixed(2);
       }
     },
-    data() {
-      return {
-        multipleSelection: []
-      };
+    totalQuality(colorSizes) {
+      var total = 0;
+      colorSizes.forEach((colorSize) => {
+        if (colorSize.sizes != null) {
+          colorSize.sizes.forEach((size) => {
+            if (size.quality != null) {
+              total += size.quality;
+            }
+          });
+        }
+      });
+      return total;
     }
-  };
-
+  },
+  data() {
+    return {
+      multipleSelection: []
+    };
+  },
+  watch: {
+    'isSelection': function (nval, oval) {
+      if (nval === false) {
+        this.$refs.resultTable.clearSelection()
+      }
+    }
+  }
+};
 </script>
