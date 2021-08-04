@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/_shared/users/favorite.dart';
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_product.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -101,6 +103,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               }),
+          actions: [
+            IconButton(
+                icon: Icon(
+                  B2BIconsV2.share,
+                  color: Color.fromRGBO(0, 0, 0, 0.6),
+                ),
+                onPressed: onShare),
+          ],
           flexibleSpace: FlexibleSpaceBar(
             background: Stack(
               fit: StackFit.expand,
@@ -112,10 +122,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
         SliverList(
             delegate: SliverChildListDelegate([
-              _buildHeaderSection(),
-              ProductAttributesTab(data),
-              _buildImagesSection()
-            ])),
+          _buildHeaderSection(),
+          ProductAttributesTab(data),
+          _buildImagesSection()
+        ])),
       ],
     );
   }
@@ -175,7 +185,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     for (int i = 0; i < steppedPrices.length; i++) {
       if (i == 0) {
         _moneyRows.add(_buildMoneyRowBlock('￥${steppedPrices[i].price}',
-            '${steppedPrices[i].minimumQuantity}件起批'));
+            '${steppedPrices[i].minimumQuantity}件起'));
       }
       //最后一个阶梯价
       else if (i == steppedPrices.length - 1) {
@@ -360,6 +370,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
       ),
     );
+  }
+
+  ///分享
+  void onShare() {
+    String title =
+        '钉单看款做货 ${data.productionDays}天 ￥${data.steppedPrices.first.price}';
+    String description =
+        '钉单看款做货 ${data.productionDays}天 ￥${data.steppedPrices.first.price}';
+
+    const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
+
+    ShareDialog.showShareDialog(context,
+        title: '$title',
+        description: '$description',
+        imageUrl: data.thumbnails.first.imageProcessUrl(processUrl),
+        path: MiniProgramPageRoutes.productDetail(data.code),
+        url: GlobalConfigs.APP_TARO_CONTEXT_PATH);
   }
 }
 

@@ -195,6 +195,12 @@ class B2BIcons {
       fontFamily: 'b2bIcons22', matchTextDirection: true);
 }
 
+class B2BIconsV2 {
+  ///分享
+  static const IconData share = const IconData(0xe601,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+}
+
 class CommonImage {
   static String _package = 'assets';
 

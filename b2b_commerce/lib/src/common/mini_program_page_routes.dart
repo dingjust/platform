@@ -12,4 +12,18 @@ class MiniProgramPageRoutes {
   static get channelCodeRegister => (code) {
         return 'pages/index/index?channelCode=$code';
       };
+
+  ///看款详情
+  static get productDetail => (code) {
+        return 'pages/dd/detail/index?code=$code';
+      };
+
+  ///看款列表
+  static get products => 'pages/dd/dd';
+}
+
+///微信小程序URL Scheme
+class MiniProgramURLScheme {
+  ///看款列表
+  static get products => 'weixin://dl/business/?t=FeOlCjCrojl';
 }
