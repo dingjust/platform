@@ -400,6 +400,15 @@
         backEndPhotos: []
       };
     },
+    mounted () {
+      if (this.readOnly) {
+        if (this.formData.certificates && this.formData.certificates.length > 0) {
+          this.formData.certificates.forEach(item => {
+            item.url = item.url + '?image_process=watermark,text_6ZKJ5Y2V,fill_1,color_F5F5F5,t_50'
+          })
+        }
+      }
+    },
     created() {
       this.getCategories();
       this.getMajorCategories();

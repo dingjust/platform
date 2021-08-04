@@ -215,7 +215,11 @@
           // window.location.href = file.url;
         }
       },
-      getSuffix(str) {
+      getSuffix(url) {
+        let parser = document.createElement('a');
+        parser.href = url
+        let str = parser.pathname
+        
         let index = str.lastIndexOf('.');
         return str.slice(index + 1);
       }
