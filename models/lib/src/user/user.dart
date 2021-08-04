@@ -53,6 +53,9 @@ class UserModel extends PrincipalModel {
   ///钉钉OpenId
   String dingTalkOpenid;
 
+  ///Apple OpenId
+  String appleOpenid;
+
   ///钉钉头像
   @JsonKey(toJson: _mediaToJson)
   MediaModel dingTalkHeadImg;
@@ -101,6 +104,7 @@ class UserModel extends PrincipalModel {
       this.dingTalkOpenid,
       this.dingTalkHeadImg,
       this.dingTalkNickname,
+      this.appleOpenid,
       this.points = 0,
       this.agent})
       : super(profilePicture: profilePicture, uid: uid, name: name, id: id);
