@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
@@ -163,45 +164,55 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
                 }
                 return Container();
               }),
-          FlatButton(
-            child: Container(
-              height: btnHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  B2BImage.dingding_logo(height: 40, width: 40),
-                  Text('Apple登录')
-                ],
-              ),
-            ),
-            onPressed: () async {
-              final credential = await SignInWithApple.getAppleIDCredential(
-                  scopes: [
-                    AppleIDAuthorizationScopes.email,
-                    AppleIDAuthorizationScopes.fullName,
-                  ],
-                  webAuthenticationOptions: WebAuthenticationOptions(
-                    // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-                    clientId: 'com.nbyjy.b2bcommerce',
-                    redirectUri: Uri.parse(
-                      'https://ht.nbyjy.net/app_sign',
-                    ),
-                  ));
-
-              Clipboard.setData(ClipboardData(text: 'Token:${credential.identityToken}\n Code:${credential.authorizationCode}\n User Identify:${credential.userIdentifier}'));
-
-              print(credential.identityToken);
-
-              print(credential.authorizationCode);
-
-              print(credential.givenName);
-
-              print(credential.email);
-            },
-          )
+          _buildAppleBtn(btnHeight)
         ],
       ),
     );
+  }
+
+  Widget _buildAppleBtn(double height) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return FlatButton(
+        child: Container(
+          height: height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              B2BImage.apple(height: 40, width: 40),
+              Text('Apple登录')
+            ],
+          ),
+        ),
+        onPressed: () async {
+          final credential = await SignInWithApple.getAppleIDCredential(
+              scopes: [
+                AppleIDAuthorizationScopes.email,
+                AppleIDAuthorizationScopes.fullName,
+              ],
+              webAuthenticationOptions: WebAuthenticationOptions(
+                // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+                clientId: 'com.nbyjy.b2bcommerce',
+                redirectUri: Uri.parse(
+                  'https://ht.nbyjy.net/app_sign',
+                ),
+              ));
+
+          Clipboard.setData(ClipboardData(
+              text:
+                  'Token:${credential.identityToken}\n Code:${credential.authorizationCode}\n User Identify:${credential.userIdentifier}'));
+
+          print(credential.identityToken);
+
+          print(credential.authorizationCode);
+
+          print(credential.givenName);
+
+          print(credential.email);
+        },
+      );
+    }
+
+    return Container();
   }
 
   @override
