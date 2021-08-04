@@ -6,6 +6,8 @@
         <template slot-scope="scope">
           <span>{{scope.row.code}}</span>
           <el-tag type="warning" v-if="isTenant() && (scope.row.details.agentContactPerson && scope.row.details.agentContactPhone)">已代理</el-tag>
+          <el-tag v-if="scope.row.orderType === 'FINDING_FACTORY'">找工厂</el-tag>
+          <el-tag v-if="scope.row.orderType === 'FINDING_ORDER'" type="success">找订单</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="标题" prop="details.productName" width="200" header-align="center">
