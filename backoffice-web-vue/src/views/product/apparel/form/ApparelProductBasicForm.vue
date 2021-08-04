@@ -22,7 +22,7 @@
               </el-col>
               <el-col :span="18">
                 <el-form-item :rules="[{type: 'object',validator: checkCategory,trigger: 'change'}]" prop="category">
-                  <el-cascader class="product-category-cascader" v-model="slotData.category" :options="cascaderCategories" filterable></el-cascader>
+                  <el-cascader class="product-category-cascader" v-model="slotData.category" :disabled="isRead" :options="cascaderCategories" filterable></el-cascader>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -52,7 +52,7 @@
       </el-col>
       <el-col :span="20">
         <div class="basic-form-attribute">
-          <apparel-product-basic-attributes-form :slot-data="slotData"/>
+          <apparel-product-basic-attributes-form :slot-data="slotData" :readOnly="isRead" :isRead="isRead"/>
         </div>
       </el-col>
     </el-row>

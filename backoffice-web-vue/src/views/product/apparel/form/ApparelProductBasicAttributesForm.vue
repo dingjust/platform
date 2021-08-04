@@ -24,7 +24,7 @@
               </el-col>
               <el-col :span="18">
                 <el-select class="attributes-form-selector" multiple v-model="slotData.attributes.styles"
-                  placeholder="请选择">
+                  placeholder="请选择" :disabled="isRead">
                   <el-option v-for="item in productStyles" :key="item.code" :label="item.name" :value="item.code">
                   </el-option>
                 </el-select>
@@ -45,7 +45,7 @@
                 </el-col>
                 <el-col :span="18">
                   <el-select class="attributes-form-selector" multiple v-model="slotData.attributes.fabricCompositions"
-                    placeholder="请选择">
+                    placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in fabricCompositions" :key="item.code" :label="item.name"
                       :value="item.code">
                     </el-option>
@@ -64,7 +64,7 @@
                 </el-col>
                 <el-col :span="18">
                   <el-select class="attributes-form-selector" v-model="slotData.attributes.editionType"
-                    placeholder="请选择">
+                    placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in editionTypes" :key="item.code" :label="item.name" :value="item.code">
                     </el-option>
                   </el-select>
@@ -83,7 +83,7 @@
                   <h6 class="attributes-row-label" style="">款式</h6>
                 </el-col>
                 <el-col :span="18">
-                  <el-select class="attributes-form-selector" v-model="slotData.attributes.pattern" placeholder="请选择">
+                  <el-select class="attributes-form-selector" v-model="slotData.attributes.pattern" placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in productPatterns" :key="item.code" :label="item.name" :value="item.code">
                     </el-option>
                   </el-select>
@@ -101,7 +101,7 @@
                 </el-col>
                 <el-col :span="18">
                   <el-select class="attributes-form-selector" v-model="slotData.attributes.sleeveType"
-                    placeholder="请选择">
+                    placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in sleeveTypes" :key="item.code" :label="item.name" :value="item.code">
                     </el-option>
                   </el-select>
@@ -121,7 +121,7 @@
                 </el-col>
                 <el-col :span="18">
                   <el-select class="attributes-form-selector" v-model="slotData.attributes.sleeveLength"
-                    placeholder="请选择">
+                    placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in sleeveLengths" :key="item.code" :label="item.name" :value="item.code">
                     </el-option>
                   </el-select>
@@ -139,7 +139,7 @@
                 </el-col>
                 <el-col :span="18">
                   <el-select class="attributes-form-selector" multiple v-model="slotData.attributes.decorativePatterns"
-                    placeholder="请选择">
+                    placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in decorativePatterns" :key="item.code" :label="item.name"
                       :value="item.code">
                     </el-option>
@@ -160,7 +160,7 @@
                 </el-col>
                 <el-col :span="18">
                   <el-select class="attributes-form-selector" multiple v-model="slotData.attributes.popularElements"
-                    placeholder="请选择">
+                    placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in popularElements" :key="item.code" :label="item.name" :value="item.code">
                     </el-option>
                   </el-select>
@@ -177,7 +177,7 @@
                   <h6 class="attributes-row-label" style="">填充物</h6>
                 </el-col>
                 <el-col :span="18">
-                  <el-select class="attributes-form-selector" v-model="slotData.attributes.filler" placeholder="请选择">
+                  <el-select class="attributes-form-selector" v-model="slotData.attributes.filler" placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in productFillers" :key="item.code" :label="item.name" :value="item.code">
                     </el-option>
                   </el-select>
@@ -196,7 +196,7 @@
                   <h6 class="attributes-row-label" style="">厚薄</h6>
                 </el-col>
                 <el-col :span="18">
-                  <el-select class="attributes-form-selector" v-model="slotData.attributes.thickness" placeholder="请选择">
+                  <el-select class="attributes-form-selector" v-model="slotData.attributes.thickness" placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in productThicknesses" :key="item.code" :label="item.name"
                       :value="item.code">
                     </el-option>
@@ -214,7 +214,7 @@
                   <h6 class="attributes-row-label" style="">季节</h6>
                 </el-col>
                 <el-col :span="18">
-                  <el-select class="attributes-form-selector" v-model="slotData.attributes.season" placeholder="请选择">
+                  <el-select class="attributes-form-selector" v-model="slotData.attributes.season" placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in productSeasons" :key="item.code" :label="item.name" :value="item.code">
                     </el-option>
                   </el-select>
@@ -233,7 +233,7 @@
                   <h6 class="attributes-row-label" style="">门襟</h6>
                 </el-col>
                 <el-col :span="18">
-                  <el-select class="attributes-form-selector" v-model="slotData.attributes.placket" placeholder="请选择">
+                  <el-select class="attributes-form-selector" v-model="slotData.attributes.placket" placeholder="请选择" :disabled="isRead">
                     <el-option v-for="item in plackets" :key="item.code" :label="item.name" :value="item.code">
                     </el-option>
                   </el-select>

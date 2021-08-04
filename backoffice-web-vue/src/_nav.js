@@ -241,6 +241,11 @@ export default {
           name: '产品运营活动',
           url: '/miscs/promote',
           icon: 'iconNone'
+        },
+        {
+          name: '公告',
+          url: '/miscs/notice',
+          icon: 'iconNone'
         }
         // {
         //   name: '未分类',

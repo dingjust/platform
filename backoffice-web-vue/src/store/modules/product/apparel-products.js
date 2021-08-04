@@ -51,8 +51,10 @@ const state = {
       uid: '',
       name: ''
     },
-    steppedPrices: []
-
+    steppedPrices: [],
+    basicProduction: '',
+    productionDays: '',
+    productionIncrement: ''
   },
   newFormData: {
     id: null,
@@ -102,7 +104,10 @@ const state = {
       }
     ],
     productType: ['FUTURE_GOODS'],
-    colorSizes: []
+    colorSizes: [],
+    basicProduction: '',
+    productionDays: '',
+    productionIncrement: ''
   },
   queryFormData: {
     code: '',
@@ -223,7 +228,10 @@ const actions = {
         }
       ],
       productType: ['FUTURE_GOODS'],
-      colorSizes: []
+      colorSizes: [],
+      basicProduction: '',
+      productionDays: '',
+      productionIncrement: ''
     });
   }
 };

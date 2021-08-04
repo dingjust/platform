@@ -29,7 +29,7 @@
                                  @clearQueryFormData="clearQueryFormData"
                                  @onAdvancedSearch="onAdvancedSearch"/>
       <div>
-        <div class="tag-container">
+        <div class="tag-container" v-if="isTenant()">
           <el-select v-model="queryFormData.enableShow" placeholder="请选择" @change="handleEnableShow">
             <el-option label="所有需求" :value="''"></el-option>
             <el-option label="已展示需求" :value="true"></el-option>
