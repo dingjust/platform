@@ -359,6 +359,10 @@
           this.form.payPlan = Object.assign({}, val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
+
+        this.form.paymentAccount.name = val.accountName
+        this.form.paymentAccount.serviceProvider = val.bankOfDeposit
+        this.form.paymentAccount.no = val.bankAccount
       },
       // setProgressPlan (val) {
       //   this.form.progressPlan.id = val.id;
@@ -547,8 +551,14 @@
           // },
           productionLeader: this.$store.getters.currentUser,
           approvers: [null],
-          purchasingLeader: null
-        },
+          purchasingLeader: null,
+          paymentAccount: {
+            name: '',
+            serviceProvider: '',
+            no: '',
+            type: 'BANK'
+          }
+        }
       }
     },
     watch: {

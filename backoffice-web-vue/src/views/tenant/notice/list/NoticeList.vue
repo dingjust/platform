@@ -9,6 +9,11 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="公告类型" width="80px" min-width="80px">
+        <template slot-scope="scope">
+          <span>{{getEnum('NoticeType', scope.row.type)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="110px" min-width="110px">
         <template slot-scope="scope">
           <el-button type="text" @click="onPublish(scope.row)">{{scope.row.state === 'DRAFT' ? '发布' : '取消发布'}}</el-button>

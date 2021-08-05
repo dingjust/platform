@@ -161,23 +161,25 @@
         var result = {};
         if (this.selectSupplier.partner != null) {
           result = {
-            id: this.selectSupplier.id,
             name: this.selectSupplier.partner.name,
             person: this.selectSupplier.partner.contactPerson,
             phone: this.selectSupplier.partner.contactPhone,
-            payPlan: this.selectSupplier.payPlan,
             approvalStatus: this.selectSupplier.partner.approvalStatus
           };
         } else {
           result = {
-            id: this.selectSupplier.id,
             name: this.selectSupplier.name,
             person: this.selectSupplier.contactPerson,
             phone: this.selectSupplier.contactPhone,
-            payPlan: this.selectSupplier.payPlan,
             approvalStatus: this.selectSupplier.approvalStatus
           };
         }
+
+        result['id'] = this.selectSupplier.id
+        result['payPlan'] = this.selectSupplier.payPlan
+        result['accountName'] = this.selectSupplier.accountName
+        result['bankOfDeposit'] = this.selectSupplier.bankOfDeposit
+        result['bankAccount'] = this.selectSupplier.bankAccount
         this.$emit('onSelect', result);
       },
       getCooperator(cooperator) {
