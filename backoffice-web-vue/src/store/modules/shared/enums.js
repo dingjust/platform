@@ -2411,6 +2411,18 @@ const state = {
       code: 'FUFUNDED',
       name: '已退款'
     }
+  ],
+  NoticeType: [
+    {
+      code: 'NORMAL',
+      name: '普通公告'
+    }, {
+      code: 'SYSTEM',
+      name: '系统公告'
+    }, {
+      code: 'SYSTEM_ALTERNATE',
+      name: '预设公告'
+    }
   ]
 };
 

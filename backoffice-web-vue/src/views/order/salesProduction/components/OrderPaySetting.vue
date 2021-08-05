@@ -36,16 +36,16 @@
           </el-row>
           <collapse-transition>
             <div class="collapse-wrap" v-show="formData.paymentAccount.type === 'BANK'">
-              <el-form-item label="收款方姓名" prop="paymentAccount.name" 
-                :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]">
+              <el-form-item label="收款方姓名" prop="paymentAccount.name">
+                <!-- :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]"> -->
                 <el-input v-model="formData.paymentAccount.name" style="width: 300px"></el-input>
               </el-form-item>
-              <el-form-item label="收款方开户行" prop="paymentAccount.serviceProvider" 
-                :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]">
+              <el-form-item label="收款方开户行" prop="paymentAccount.serviceProvider">
+                <!-- :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]"> -->
                 <el-input v-model="formData.paymentAccount.serviceProvider" style="width: 300px"></el-input>
               </el-form-item>
-              <el-form-item label="收款方卡号" prop="paymentAccount.no" 
-                :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]">
+              <el-form-item label="收款方卡号" prop="paymentAccount.no">
+                <!-- :rules="[{required: formData.payOnline && formData.paymentAccount.type === 'BANK', message: '必填', tigger: 'change'}]"> -->
                 <el-input v-model="formData.paymentAccount.no" style="width: 300px"></el-input>
               </el-form-item>
             </div>
