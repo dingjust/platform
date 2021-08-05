@@ -50,7 +50,7 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
 
     WidgetsBinding.instance.addPostFrameCallback((_) => getLocation());
 
-    widget.formState.model.orderType = RequirementOrderType.FINDING_FACTORY;
+    widget.formState.model.orderType = RequirementOrderType.LOOK_STYLE;
 
     //设置默认联系人
     if (widget.formState?.model?.details != null) {
@@ -71,6 +71,10 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
       widget.formState.model.details.maxExpectedPrice = widget
           .formState.product.spotSteppedPrices.first.minimumQuantity
           .toDouble();
+    }
+
+    if (widget.formState.product.productType.length == 1) {
+      type = widget.formState.product.productType.first;
     }
   }
 
@@ -189,9 +193,8 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
         ),
         Expanded(
             child: Row(
-              children: types
-                  .map((value) =>
-                  Container(
+          children: types
+              .map((value) => Container(
                     margin: EdgeInsets.only(left: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,

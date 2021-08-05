@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/orders/sales_production/external_sale_
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
@@ -10,22 +11,16 @@ class SimplePayPlanForm extends StatelessWidget {
 
   CompanyPayPlanModel form;
 
-  SimplePayPlanForm({Key key, this.form, this.onChange}) : super(key: key);
-
-  TextEditingController depositTextController = TextEditingController();
-  FocusNode depositFocusNode = FocusNode();
+  SimplePayPlanForm({
+    Key key,
+    this.form,
+    this.onChange,
+  }) : super(key: key);
 
   final Color highlightColor = Colors.orangeAccent;
 
   @override
   Widget build(BuildContext context) {
-    if (form.isHaveDeposit) {
-      AbstractPayPlanItemModel item = depositItem;
-      if (item != null) {
-        depositTextController.text = (item.payPercent * 100).toStringAsFixed(0);
-      }
-    }
-
     return Container(
         child: FormBlock(children: [
       Row(
@@ -83,39 +78,36 @@ class SimplePayPlanForm extends StatelessWidget {
                 child: Row(
                   children: [
                     Text('确认订单后：'),
-                    PopupMenuButton(
-                      child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            children: [
-                              Text(
-                                '${depositItem.triggerDays}天',
-                                style: TextStyle(color: highlightColor),
-                              ),
-                              Icon(Icons.arrow_drop_down)
-                            ],
-                          )),
-                      onSelected: (e) {
-                        depositItem.triggerDays = e;
-                        onChange?.call(form);
-                      },
-                      itemBuilder: (BuildContext context) {
-                        List<PopupMenuItem> items = [];
-                        for (int i = 1; i < 30; i++) {
-                          items.add(PopupMenuItem(
-                            child: Text(
-                              '$i天',
-                              style: TextStyle(
-                                  color: i == depositItem.triggerDays
-                                      ? Constants.THEME_COLOR_MAIN
-                                      : Colors.black87),
-                            ),
-                            value: i,
-                          ));
-                        }
-                        return items;
-                      },
-                    ),
+                    Container(
+                        width: 60,
+                        child: TextField(
+                          controller: TextEditingController.fromValue(
+                              TextEditingValue(
+                                // 设置内容
+                                  text: '${depositItem.triggerDays ?? ''}',
+                                  // 保持光标在最后
+                                  selection: TextSelection.fromPosition(
+                                      TextPosition(
+                                          affinity: TextAffinity.downstream,
+                                          offset:
+                                          ('${depositItem.triggerDays ?? ''}')
+                                              .length)))),
+                          decoration: InputDecoration(
+                            // border: InputBorder.none,
+                            hintText: '0',
+                            hintStyle: TextStyle(fontSize: 15),
+                          ),
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 15),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          onChanged: (val) {
+                            depositItem.triggerDays = int.tryParse(val);
+                            onChange?.call(form);
+                          },
+                        )),
                     Container(
                       margin: EdgeInsets.only(left: 10),
                       child: Text('天内'),
@@ -136,39 +128,66 @@ class SimplePayPlanForm extends StatelessWidget {
         child: Row(
           children: [
             Text('确认《对账单》后：'),
-            PopupMenuButton(
-              child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        '${tailItem.triggerDays}天',
-                        style: TextStyle(color: highlightColor),
-                      ),
-                      Icon(Icons.arrow_drop_down)
-                    ],
-                  )),
-              onSelected: (e) {
-                tailItem.triggerDays = e;
-                onChange?.call(form);
-              },
-              itemBuilder: (BuildContext context) {
-                List<PopupMenuItem> items = [];
-                for (int i = 1; i < 30; i++) {
-                  items.add(PopupMenuItem(
-                    child: Text(
-                      '$i天',
-                      style: TextStyle(
-                          color: i == tailItem.triggerDays
-                              ? Constants.THEME_COLOR_MAIN
-                              : Colors.black87),
-                    ),
-                    value: i,
-                  ));
-                }
-                return items;
-              },
-            ),
+            Container(
+                width: 60,
+                child: TextField(
+                  controller: TextEditingController.fromValue(TextEditingValue(
+                    // 设置内容
+                      text: '${tailItem.triggerDays ?? ''}',
+                      // 保持光标在最后
+                      selection: TextSelection.fromPosition(TextPosition(
+                          affinity: TextAffinity.downstream,
+                          offset:
+                          ('${tailItem.triggerDays ?? ''}').length)))),
+                  decoration: InputDecoration(
+                    // border: InputBorder.none,
+                    hintText: '0',
+                    hintStyle: TextStyle(fontSize: 15),
+                  ),
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChanged: (val) {
+                    tailItem.triggerDays = int.tryParse(val);
+                    onChange?.call(form);
+                  },
+                )),
+            // PopupMenuButton(
+            //   child: Container(
+            //       margin: EdgeInsets.symmetric(horizontal: 10),
+            //       child: Row(
+            //         children: [
+            //           Text(
+            //             '${tailItem.triggerDays}天',
+            //             style: TextStyle(color: highlightColor),
+            //           ),
+            //           Icon(Icons.arrow_drop_down)
+            //         ],
+            //       )),
+            //   onSelected: (e) {
+            //     tailItem.triggerDays = e;
+            //     onChange?.call(form);
+            //   },
+            //   itemBuilder: (BuildContext context) {
+            //     List<PopupMenuItem> items = [];
+            //     for (int i = 1; i < 30; i++) {
+            //       items.add(PopupMenuItem(
+            //         child: Text(
+            //           '$i天',
+            //           style: TextStyle(
+            //               color: i == tailItem.triggerDays
+            //                   ? Constants.THEME_COLOR_MAIN
+            //                   : Colors.black87),
+            //         ),
+            //         value: i,
+            //       ));
+            //     }
+            //     return items;
+            //   },
+            // ),
             Container(
               margin: EdgeInsets.only(left: 10),
               child: Text('天内'),

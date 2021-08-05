@@ -392,20 +392,20 @@ class _FormEntryItem extends StatelessWidget {
           ),
           Container(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        deleteEntry?.call();
-                      },
-                      child: Text('删除')),
-                  RichText(
-                      text: TextSpan(
-                          text: '订单数：${entryQuatity()}',
-                          style: TextStyle(fontSize: 16, color: Colors.black87),
-                          children: [])),
-                ],
-              ))
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    deleteEntry?.call();
+                  },
+                  child: Text('删除')),
+              RichText(
+                  text: TextSpan(
+                      text: '订单数：${entryQuatity()}',
+                      style: TextStyle(fontSize: 16, color: Colors.black87),
+                      children: [])),
+            ],
+          ))
         ],
       ),
     );
@@ -759,7 +759,8 @@ class _FormPayInfoState extends State<FormPayInfo> {
   @override
   void initState() {
     form = widget.form;
-    payNameController = TextEditingController(text: form.paymentAccount.name);
+    payNameController =
+        TextEditingController(text: form.paymentAccount?.name ?? '');
     payNameNode = FocusNode();
     payNoController = TextEditingController(text: form.paymentAccount.no);
     payNoNode = FocusNode();
@@ -826,7 +827,7 @@ class _FormPayInfoState extends State<FormPayInfo> {
                 Text('服务费用比例：'),
                 Expanded(
                   child: Slider(
-                    value: form.serviceFeePercent,
+                    value: form.serviceFeePercent ?? 0,
                     min: 0.00,
                     max: 0.15,
                     divisions: 15,
