@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
 import 'package:flutter_ddshare/response/ddshare_response.dart';
@@ -128,10 +129,7 @@ class _AuthBindingState extends State<AuthBinding> {
                     if (_currentUser.dingTalkOpenid == null) {
                       var cancelFunc = BotToast.showLoading();
                       FlutterDdshare.sendDDAppAuth(
-                          DateTime
-                              .now()
-                              .millisecondsSinceEpoch
-                              .toString())
+                              DateTime.now().millisecondsSinceEpoch.toString())
                           .then((value) {
                         cancelFunc.call();
                       });
@@ -150,26 +148,74 @@ class _AuthBindingState extends State<AuthBinding> {
                                   padding: EdgeInsets.only(right: 10),
                                   child:
                                   B2BImage.dingding_logo(height: 30, width: 30),
-                            ),
-                            Expanded(
-                                child: Text(
-                              '${_currentUser.dingTalkNickname ?? '未绑定钉钉'}',
-                              overflow: TextOverflow.ellipsis,
-                            ))
-                          ],
-                        )),
+                                ),
+                                Expanded(
+                                    child: Text(
+                                      '${_currentUser.dingTalkNickname ??
+                                          '未绑定钉钉'}',
+                                      overflow: TextOverflow.ellipsis,
+                                    ))
+                              ],
+                            )),
                         Text(_currentUser.dingTalkOpenid == null
                             ? '去绑定'
                             : '解除绑定')
                       ],
                     ),
                   ))),
+          _buildApple()
         ],
       ),
     );
   }
 
-  //解除绑定 type  1:微信 2:钉钉
+  Widget _buildApple() {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return _InputRow(
+          top: true,
+          label: '绑定Apple',
+          child: GestureDetector(
+              onTap: () {
+                if (_currentUser.appleOpenid = null) {
+                  var cancelFunc = BotToast.showLoading();
+                  authLoginHelper
+                      .handlerAppleAuthBinding(context)
+                      .then((value) {
+                    cancelFunc.call();
+                  });
+                } else {
+                  _onUnbind(3);
+                }
+              },
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 10),
+                              child: B2BImage.dingding_logo(
+                                  height: 30, width: 30),
+                            ),
+                            Expanded(
+                                child: Text(
+                                  '${_currentUser.dingTalkNickname ?? '未绑定钉钉'}',
+                                  overflow: TextOverflow.ellipsis,
+                                ))
+                          ],
+                        )),
+                    Text(_currentUser.dingTalkOpenid == null ? '去绑定' : '解除绑定')
+                  ],
+                ),
+              )));
+    }
+
+    return Container();
+  }
+
+  //解除绑定 type  1:微信 2:钉钉 3:Apple
   void _onUnbind(int type) {
     showDialog(
         context: context,
@@ -189,6 +235,9 @@ class _AuthBindingState extends State<AuthBinding> {
                   break;
                 case 2:
                   _unbindDingTalk();
+                  break;
+                case 3:
+                  _unbindApple();
                   break;
                 default:
               }
@@ -221,6 +270,22 @@ class _AuthBindingState extends State<AuthBinding> {
       crossPage: false,
     );
     BaseResponse response = await AuthRespository.dingTalkAuthUnBinding();
+    if (response == null || response.code == 0) {
+      cancelFunc.call();
+      BotToast.showText(text: '解除绑定失败');
+    } else if (response.code == 1) {
+      BotToast.showText(text: '解除绑定成功');
+      _updateUserInfo(callback: cancelFunc);
+    }
+  }
+
+  ///解除Apple绑定
+  void _unbindApple() async {
+    var cancelFunc = BotToast.showLoading(
+      clickClose: true,
+      crossPage: false,
+    );
+    BaseResponse response = await AuthRespository.appleAuthUnBinding();
     if (response == null || response.code == 0) {
       cancelFunc.call();
       BotToast.showText(text: '解除绑定失败');

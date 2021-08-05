@@ -223,7 +223,7 @@ class FormProduction extends StatelessWidget {
     return products.map((product) {
       //是否已存在
       ProductionTaskOrderModel entry = this.entries.firstWhere(
-              (element) => element.product.code == product.code,
+          (element) => element.product.code == product.code,
           orElse: () => null);
       if (entry == null) {
         //初始化
@@ -274,15 +274,13 @@ class _FormEntryItem extends StatelessWidget {
               child: ColorSizeEntryInputTable(
                 data: entry.colorSizeEntries,
                 compareFunction:
-                Provider
-                    .of<SizeState>(context, listen: false)
-                    .compare,
+                    Provider.of<SizeState>(context, listen: false).compare,
                 controllerMap:
-                Provider.of<ExternalOrderFormState>(context, listen: false)
-                    .getControllerMapByCode(entry.product.code),
+                    Provider.of<ExternalOrderFormState>(context, listen: false)
+                        .getControllerMapByCode(entry.product.code),
                 nodeMap:
-                Provider.of<ExternalOrderFormState>(context, listen: false)
-                    .getNodeMapByCode(entry.product.code),
+                    Provider.of<ExternalOrderFormState>(context, listen: false)
+                        .getNodeMapByCode(entry.product.code),
                 onChanged: (values) {
                   entry.colorSizeEntries = values;
                   if (updateEntry != null) {
@@ -450,7 +448,7 @@ class _FormEntryItem extends StatelessWidget {
   String entryQuatity() {
     int result = 0;
     entry.colorSizeEntries.forEach((element) {
-      result += element.quantity;
+      result += element?.quantity ?? 0;
     });
     return result.toString();
   }
@@ -821,6 +819,36 @@ class _FormPayInfoState extends State<FormPayInfo> {
   List<Widget> _bankInfo(BuildContext context) {
     if (form.payOnline != null && form.payOnline) {
       return [
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                Text('服务费用比例：'),
+                Expanded(
+                  child: Slider(
+                    value: form.serviceFeePercent,
+                    min: 0.00,
+                    max: 0.15,
+                    divisions: 15,
+                    label:
+                    '${((form.serviceFeePercent ?? 0.00) * 100).toStringAsFixed(
+                        0)}%',
+                    onChanged: (value) {
+                      setState(() {
+                        form.serviceFeePercent = value;
+                      });
+                      _update();
+                    },
+                    onChangeStart: (value) {},
+                    onChangeEnd: (value) {},
+                  ),
+                ),
+                Text(
+                  '${((form.serviceFeePercent ?? 0.00) * 100).toStringAsFixed(
+                      0)}%',
+                )
+              ],
+            )),
         FormTitle('收款人姓名（银行卡)：'),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),

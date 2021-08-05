@@ -375,6 +375,11 @@ class B2BImage {
   static Image auth({double width, double height}) {
     return getImage('temp/icon/auth.png', width: width, height: height);
   }
+
+  ///钉钉Logo
+  static Image apple({double width, double height}) {
+    return getImage('temp/common/apple.png', width: width, height: height);
+  }
 }
 
 class B2BV2Image {

@@ -41,7 +41,7 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
             appBar: AppBar(
               centerTitle: true,
               title: Text(
-                '创建外接订单',
+                '${widget.model != null ? '修改' : '创建'}外接订单',
                 style: TextStyle(
                     color: Color(0xff455a64), fontWeight: FontWeight.bold),
               ),
@@ -156,7 +156,8 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
             controllerMap[element.color.code] = {};
           }
           controllerMap[element.color.code][element.size.code] =
-              TextEditingController(text: '${element.quantity ?? ''}');
+              TextEditingController(
+                  text: '${element.quantity != 0 ? element.quantity : ''}');
 
           if (nodeMap[element.color.code] == null) {
             nodeMap[element.color.code] = {};
@@ -175,9 +176,10 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
       form = SalesProductionOrderModel(
           sendAuditNeeded: false,
           managementMode: ManagementMode.COLLABORATION,
+          serviceFeePercent: 0,
           taskOrderEntries: [],
           attachments: [],
-          payOnline: false,
+          payOnline: true,
           name: '',
           type: ProductionOrderType.SALES_ORDER,
           paymentAccount:
@@ -197,6 +199,8 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
                   triggerDays: 5,
                 )
               ]),
+          productionLeader:
+              B2BCustomerModel(id: currentUser.id, name: currentUser.name),
           merchandiser:
               B2BCustomerModel(id: currentUser.id, name: currentUser.name));
     }
@@ -280,8 +284,15 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
       });
     }
 
+    //代运营判断费用
+    if ((form.id == null && currentUser.agent) ||
+        (form.id != null && form.agentOrder)) {
+      items.add(FormValidateItem(
+          (form.serviceFeePercent == null || form.serviceFeePercent == 0),
+          '请填写服务费用比例'));
+    }
     FormValidateItem item =
-        items.firstWhere((element) => element.result, orElse: () => null);
+    items.firstWhere((element) => element.result, orElse: () => null);
 
     if (item != null) {
       BotToast.showText(

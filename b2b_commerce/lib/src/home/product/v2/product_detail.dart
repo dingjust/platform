@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/_shared/users/favorite.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_form_product.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -56,9 +58,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               } else {
                 return Center(
                     child: CircularProgressIndicator(
-                      valueColor:
+                  valueColor:
                       AlwaysStoppedAnimation(Constants.THEME_COLOR_MAIN),
-                    ));
+                ));
               }
             },
           ),
@@ -72,8 +74,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     List<MediaModel> thumbnails = [];
     if (data.thumbnails != null) {
       thumbnails = data.thumbnails
-          .map((thumbnail) =>
-          MediaModel(
+          .map((thumbnail) => MediaModel(
               convertedMedias: thumbnail.convertedMedias,
               mediaFormat: thumbnail.mediaFormat,
               mediaType: thumbnail.mediaType,
@@ -102,6 +103,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               }),
+          actions: [
+            IconButton(
+                icon: Icon(
+                  B2BIconsV2.share,
+                  color: Color.fromRGBO(0, 0, 0, 0.6),
+                ),
+                onPressed: onShare),
+          ],
           flexibleSpace: FlexibleSpaceBar(
             background: Stack(
               fit: StackFit.expand,
@@ -113,10 +122,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
         SliverList(
             delegate: SliverChildListDelegate([
-              _buildHeaderSection(),
-              ProductAttributesTab(data),
-              _buildImagesSection()
-            ])),
+          _buildHeaderSection(),
+          ProductAttributesTab(data),
+          _buildImagesSection()
+        ])),
       ],
     );
   }
@@ -151,6 +160,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ],
           ),
           _buildMoneyRow(),
+          _buildTagsRow(),
+          _buildProductionDay()
         ],
       ),
     );
@@ -174,7 +185,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     for (int i = 0; i < steppedPrices.length; i++) {
       if (i == 0) {
         _moneyRows.add(_buildMoneyRowBlock('￥${steppedPrices[i].price}',
-            '${steppedPrices[i].minimumQuantity}件起批'));
+            '${steppedPrices[i].minimumQuantity}件起'));
       }
       //最后一个阶梯价
       else if (i == steppedPrices.length - 1) {
@@ -188,7 +199,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.st,
+          // mainAxisAlignment: MainAxisAlignment.st,
           children: _moneyRows),
     );
   }
@@ -238,7 +249,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Expanded(
                         child: Container(
                           child: CachedNetworkImage(
-                              imageUrl: '${media.normalUrl()}',
+                              imageUrl: '${media.detailUrl()}',
                               fit: BoxFit.fitWidth,
                               placeholder: (context, url) =>
                                   SpinKitRing(
@@ -285,6 +296,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
+  Widget _buildTagsRow() {
+    return Row(
+        children: data.productType
+            .map((e) =>
+            Container(
+              margin: EdgeInsets.only(right: 10),
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                '${ProductTypeLocalizedMap[e]}',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+              decoration: BoxDecoration(color: Colors.grey[200]),
+            ))
+            .toList());
+  }
+
+  Widget _buildProductionDay(
+      {TextStyle style = const TextStyle(color: Colors.grey, fontSize: 12)}) {
+    if (data.productType.contains(ProductType.FUTURE_GOODS)) {
+      return Container(
+        margin: EdgeInsets.only(top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '生产天数：${data.productionDays}天',
+              style: style,
+            ),
+            Text(
+              '生产增量（数量/天）：${data.productionIncrement}',
+              style: style,
+            )
+          ],
+        ),
+      );
+    }
+    return Container();
+  }
+
   ///获取产品信息
   Future<ApparelProductModel> _getData() async {
     if (data == null) {
@@ -311,13 +363,41 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ],
           child: Consumer(
             builder: (context, RequirementOrderFormStateV2 state, _) =>
-                RequirementFormFactory(
+                RequirementFormProduct(
                   formState: state,
                 ),
           ),
         ),
       ),
     );
+  }
+
+  ///分享
+  void onShare() {
+    var price;
+
+    if (data.steppedPrices != null && data.steppedPrices.isNotEmpty) {
+      price = '￥${data.steppedPrices.first.price}';
+    } else if (data.spotSteppedPrices != null &&
+        data.spotSteppedPrices.isNotEmpty) {
+      price = '￥${data.spotSteppedPrices.first.price}';
+    } else {
+      price = '';
+    }
+
+    var day = data.productionDays != null ? '${data.productionDays}天' : '';
+
+    String title = '钉单看款做货 $day $price';
+    String description = '钉单看款做货 $day $price';
+
+    const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
+
+    ShareDialog.showShareDialog(context,
+        title: '$title',
+        description: '$description',
+        imageUrl: data.thumbnails.first.imageProcessUrl(processUrl),
+        path: MiniProgramPageRoutes.productDetail(data.code),
+        url: GlobalConfigs.APP_TARO_CONTEXT_PATH);
   }
 }
 

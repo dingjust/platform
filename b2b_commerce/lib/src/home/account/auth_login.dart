@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/helper/autho_login_helper.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ddshare/flutter_ddshare.dart';
 import 'package:flutter_ddshare/response/ddshare_response.dart';
@@ -72,7 +72,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       margin: EdgeInsets.only(top: 120),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
-        children: [_titleRow(), _btnsRow()],
+        children: [_btnsRow()],
       ),
     );
   }
@@ -117,53 +117,75 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FlatButton(
-            child: Container(
-              height: btnHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  B2BImage.wechatLogin(height: 40, width: 40),
-                  Text('微信登录')
-                ],
-              ),
-            ),
-            onPressed: () {
-              WechatServiceImpl.instance.isInstalled().then((value) {
-                if (!value) {
-                  BotToast.showText(text: '请确保已安装微信应用程序');
+          FutureBuilder(
+              future: WechatServiceImpl.instance.isInstalled(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.hasData && snapshot.data) {
+                  return FlatButton(
+                    child: Container(
+                      height: btnHeight,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          B2BImage.wechatLogin(height: 40, width: 40),
+                          Text('微信登录')
+                        ],
+                      ),
+                    ),
+                    onPressed: () {
+                      WechatServiceImpl.instance.sendAuth();
+                    },
+                  );
                 }
-              });
-              WechatServiceImpl.instance.sendAuth();
-            },
-          ),
-          FlatButton(
-            child: Container(
-              height: btnHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  B2BImage.dingding_logo(height: 40, width: 40),
-                  Text('钉钉登录')
-                ],
-              ),
-            ),
-            onPressed: () {
-              FlutterDdshare.isDDAppInstalled().then((value) {
-                if (!value) {
-                  BotToast.showText(text: '请确保已安装钉钉应用程序');
+                return Container();
+              }),
+          FutureBuilder(
+              future: FlutterDdshare.isDDAppInstalled(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.hasData && snapshot.data) {
+                  return FlatButton(
+                    child: Container(
+                      height: btnHeight,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          B2BImage.dingding_logo(height: 40, width: 40),
+                          Text('钉钉登录')
+                        ],
+                      ),
+                    ),
+                    onPressed: () {
+                      FlutterDdshare.sendDDAppAuth(
+                          DateTime.now().millisecondsSinceEpoch.toString());
+                    },
+                  );
                 }
-              });
-              FlutterDdshare.sendDDAppAuth(
-                  DateTime
-                      .now()
-                      .millisecondsSinceEpoch
-                      .toString());
-            },
-          )
+                return Container();
+              }),
+          _buildAppleBtn(btnHeight)
         ],
       ),
     );
+  }
+
+  Widget _buildAppleBtn(double height) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return FlatButton(
+        child: Container(
+          height: height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              B2BImage.apple(height: 40, width: 40),
+              Text('Apple登录')
+            ],
+          ),
+        ),
+        onPressed: () => authLoginHelper.handlerAppleAuthLogin(context),
+      );
+    }
+
+    return Container();
   }
 
   @override

@@ -26,7 +26,7 @@ class _RequirementPayFormState extends State<RequirementPayForm> {
           payPlanItems: [
             AbstractPayPlanItemModel(
                 moneyType: PayMoneyType.DEPOSIT,
-                triggerEvent: TriggerEvent.CONTRACT_SIGNED,
+                triggerEvent: TriggerEvent.ORDER_CONFIRMED,
                 triggerDays: 5,
                 payPercent: 0.3),
             AbstractPayPlanItemModel(
