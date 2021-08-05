@@ -113,7 +113,16 @@
       ApparelProductSizesForm,
       ApparelProductPriceForm
     },
-    props: [ 'readOnly', 'isRead'],
+    props: {
+      readOnly: {
+        type: Boolean,
+        default: false
+      },
+      isRead: {
+        type: Boolean,
+        default: false
+      }
+    },
     computed: {
       ...mapGetters({
         slotData: 'newFormData'
