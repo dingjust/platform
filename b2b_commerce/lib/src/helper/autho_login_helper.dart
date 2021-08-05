@@ -204,7 +204,7 @@ class AuthLoginHelper {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
             RegisterPageV2(
-              type: AuthType.WECHAT,
+              type: AuthType.APPLE,
               openId: response.data,
             ),
       ));

@@ -39,6 +39,9 @@ class CompanyRegisterDTO {
   ///钉钉openId
   String ddOpenid;
 
+  ///Apple
+  String appleOpenid;
+
   ///渠道码
   String channelCode;
 
@@ -55,17 +58,18 @@ class CompanyRegisterDTO {
       this.contactAddress,
       this.wxOpenid,
       this.ddOpenid,
+      this.appleOpenid,
       this.channelCode});
 
   static Map<String, dynamic> _addressToJson(AddressModel contactAddress) =>
       contactAddress == null
           ? null
           : {
-        "region": {"isocode": contactAddress.region.isocode},
-        "city": {"code": contactAddress.city.code},
-        "cityDistrict": {"code": contactAddress.cityDistrict.code},
-        "line1": contactAddress.line1
-      };
+              "region": {"isocode": contactAddress.region.isocode},
+              "city": {"code": contactAddress.city.code},
+              "cityDistrict": {"code": contactAddress.cityDistrict.code},
+              "line1": contactAddress.line1
+            };
 
   factory CompanyRegisterDTO.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CompanyRegisterDTOFromJson(json);

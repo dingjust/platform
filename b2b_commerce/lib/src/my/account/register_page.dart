@@ -493,6 +493,9 @@ class _RegisterPageV2State extends State<RegisterPageV2> {
       case AuthType.DING_TALK:
         form.ddOpenid = widget.openId;
         break;
+      case AuthType.APPLE:
+        form.appleOpenid = widget.openId;
+        break;
       default:
         break;
     }
