@@ -91,8 +91,8 @@ class AuthLoginHelper {
   }
 
   ///处理钉钉回调授权登录
-  Future<int> handlerDingTalkAuthLogin(DDShareAuthResponse res,
-      BuildContext context) async {
+  Future<int> handlerDingTalkAuthLogin(
+      DDShareAuthResponse res, BuildContext context) async {
     Function cancelFunc = BotToast.showLoading(
       clickClose: true,
       crossPage: false,
@@ -100,7 +100,7 @@ class AuthLoginHelper {
 
     //通过钉钉Code获取系统授权码
     AuthorizationCodeResponse response =
-    await AuthRespository.getAuthorizationCodeByDingTalkCode(res.code);
+        await AuthRespository.getAuthorizationCodeByDingTalkCode(res.code);
     if (response == null || response.resultCode == 10002) {
       BotToast.showText(text: '授权失败');
       cancelFunc.call();
@@ -221,6 +221,43 @@ class AuthLoginHelper {
         }
       });
     }
+  }
+
+  ///处理Apple授权绑定
+  Future<int> handlerAppleAuthBinding(BuildContext context) async {
+    Function cancelFunc = BotToast.showLoading(
+      clickClose: true,
+      crossPage: false,
+    );
+
+    final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+          clientId: GlobalConfigs.APPLE_CLIENT_ID,
+          redirectUri: Uri.parse(
+            'https://ht.nbyjy.net/app_sign',
+          ),
+        ));
+
+    //绑定Apple
+    BaseResponse response = await AuthRespository.appleAuthBinding(
+        credential.identityToken, credential.userIdentifier);
+    if (response == null || response.code == 0) {
+      BotToast.showText(
+          text: '绑定Apple失败：' + response?.msg ?? '',
+          duration: Duration(seconds: 5));
+      cancelFunc.call();
+      return -1;
+    } else if (response.code == 1) {
+      cancelFunc.call();
+      BotToast.showText(text: '绑定Apple成功');
+      return 1;
+    }
+    return 0;
   }
 }
 
