@@ -69,6 +69,7 @@ class GlobalConfigs {
   static const FACTORY_HISTORY_KEYWORD_KEY = 'factory_history_keyword_key';
   static const BRAND_INDEX_HISTORY_KEYWORD_KEY =
       'brand_index_history_keyword_key';
+
   static const Requirement_HISTORY_KEYWORD_KEY =
       'requirement_history_keyword_key';
   static const SALE_HISTORY_KEYWORD_KEY = 'sale_history_keyword_key';

@@ -71,18 +71,23 @@ class FactoryBottomBtn extends StatelessWidget {
 
   final String info;
 
+  final Gradient gradient;
+
   const FactoryBottomBtn(
-      {Key key, this.onTap, this.color, this.label, this.info})
+      {Key key, this.onTap, this.color, this.label, this.info, this.gradient})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      // decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+          color: color,
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(24)),
       child: Material(
-        color: color,
-        borderRadius: BorderRadius.circular(5),
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(24),
         child: InkWell(
           onTap: onTap,
           child: Column(
@@ -90,7 +95,10 @@ class FactoryBottomBtn extends StatelessWidget {
             children: [
               Text(
                 '$label',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                    color: Color(0xff222222),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
               ),
               info != null
                   ? Text(

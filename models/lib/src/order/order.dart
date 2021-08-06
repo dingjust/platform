@@ -278,7 +278,7 @@ enum OrderSizeType {
 const OrderSizeTypeLocalizedMap = {
   OrderSizeType.FREE_SIZE: "均码",
   OrderSizeType.MULTIPLE_SIZE: "多码",
-  OrderSizeType.UNKOWN: "未知",
+  OrderSizeType.UNKOWN: "",
 };
 
 /// 订单颜色类型

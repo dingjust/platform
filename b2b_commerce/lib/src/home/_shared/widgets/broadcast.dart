@@ -23,7 +23,7 @@ class _HomeBroadcastState extends State<HomeBroadcast> {
           ),
           Expanded(
               child: Text(
-            '消息体文案第七位群无企鹅我',
+            '钉单看款做货，原创版衣快速生产就在钉单',
             style: TextStyle(
                 color: Color(0xff666666),
                 fontSize: 12,

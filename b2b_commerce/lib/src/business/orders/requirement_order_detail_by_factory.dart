@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
-import 'package:b2b_commerce/src/_shared/users/favorite.dart';
+import 'package:b2b_commerce/src/_shared/widgets/company_bar.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
@@ -11,13 +13,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
-
-import 'widget/company_header.dart';
 
 ///首页需求订单明细
 class RequirementOrderDetailByFactoryPage extends StatefulWidget {
@@ -34,16 +35,13 @@ class RequirementOrderDetailByFactoryPage extends StatefulWidget {
       _RequirementOrderDetailByFactoryPageState();
 }
 
-class _RequirementOrderDetailByFactoryPageState
-    extends State<RequirementOrderDetailByFactoryPage> {
+class _RequirementOrderDetailByFactoryPageState extends State<RequirementOrderDetailByFactoryPage> {
   RequirementOrderModel orderModel;
   UserModel currentUser = UserBLoC.instance.currentUser;
 
   List<QuoteModel> quotesList;
 
-  double _leadingRowWidth = 180;
-  int _flexL = 2;
-  int _flexR = 3;
+  _Divider _divider = const _Divider();
 
   @override
   void initState() {
@@ -60,117 +58,186 @@ class _RequirementOrderDetailByFactoryPageState
           AsyncSnapshot<RequirementOrderModel> snapshot) {
         if (snapshot.data != null) {
           return Scaffold(
+            backgroundColor: Color(0xffF7F7F7),
             appBar: AppBar(
               brightness: Brightness.light,
               centerTitle: true,
-              elevation: 0.5,
+              elevation: 0,
               title: Text(
                 '需求订单明细',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                    color: Color(0xff000000),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
               actions: <Widget>[
-                InkWell(
-                    onTap: () => onShare(),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        children: <Widget>[
-                          Icon(
-                            B2BIcons.share,
-                          ),
-                          Text('分享')
-                        ],
-                      ),
-                    )),
+                IconButton(
+                    icon: Icon(
+                      B2BIconsV2.share,
+                      color: Color(0xff231815),
+                    ),
+                    onPressed: onShare),
               ],
             ),
-            body: FutureBuilder<RequirementOrderModel>(
-              builder: (BuildContext context,
-                  AsyncSnapshot<RequirementOrderModel> snapshot) {
-                if (snapshot.data != null) {
-                  return Container(
-                    color: Colors.white,
-                    child: CustomScrollView(
-                      slivers: <Widget>[
-                        SliverList(
-                            delegate: SliverChildListDelegate(<Widget>[
-                          Divider(
-                            height: 0,
-                          ),
-                          //标题
-                          _buildTitle(),
-                          //描述
-                          _buildRemarks(),
-                          //发布公司信息
-                          _buildCompanyInfo(),
-                          Divider(
-                            height: 0,
-                          ),
-                          //需求信息
-                          orderModel.orderType ==
-                                  RequirementOrderType.FINDING_ORDER
-                              ? _buildMainOrder()
-                              : _buildMainFactory(),
-                          Container(
-                            padding: EdgeInsets.only(
-                              left: 15,
-                              bottom: 15,
-                              top: 15,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Text('参考图片：'),
-                              ],
-                            ),
-                          ),
-                        ])),
-                        SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
-                          sliver: SliverGrid(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3, //Grid按两列显示
-                              mainAxisSpacing: 10.0,
-                              crossAxisSpacing: 10.0,
-                              childAspectRatio: 0.8,
-                            ),
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                //创建子widget
-                                return _ImageItem(
-                                  e: getImages()[index],
-                                  onTap: () => onPreview(index),
-                                );
-                              },
-                              childCount: getImages().length,
-                            ),
-                          ),
-                        ),
-                        _buildCompanyHeader()
-                      ],
-                    ),
-                  );
-                } else {
-                  return Container(
-                    color: Colors.white,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-              },
-              initialData: null,
-              future: _getData(),
+            body: Container(
+              // color: Color(0xffF7F7F7),
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                      delegate: SliverChildListDelegate(<Widget>[
+                    //公司信息
+                    _buildCompany(),
+                    _buildMain(),
+                  ])),
+                  _buildImages(),
+                  _Card(
+                    children: [
+                      _Info(
+                        title: '发布时间',
+                        val:
+                            DateFormatUtil.formatYMDHM(orderModel.creationTime),
+                      ),
+                      _divider,
+                      _Info(
+                        title: '品   类',
+                        val: '${orderModel.details?.category?.name ?? ''}',
+                      ),
+                      _divider,
+                      _Info(
+                        title: '生产数量',
+                        val:
+                            '${orderModel.details.expectedMachiningQuantity ?? 0}件',
+                      ),
+                      _divider,
+                      _Info(
+                        title: '期望价格',
+                        val: orderModel.details.maxExpectedPrice == -1
+                            ? '面议'
+                            : '￥${orderModel.details.maxExpectedPrice ?? 0}',
+                      ),
+                      _divider,
+                      _Info(
+                        title: '交货日期',
+                        val: DateFormatUtil.formatYMD(
+                            orderModel.details.expectedDeliveryDate),
+                      ),
+                      _divider,
+                      _Info(
+                        title: '是否打样',
+                        val: orderModel.details.proofingNeeded == null
+                            ? ''
+                            : orderModel.details.proofingNeeded
+                                ? '是'
+                                : '否',
+                      ),
+                    ],
+                  ),
+                  _Card(
+                    children: [
+                      _Info(
+                        title: '加工类型',
+                        val: orderModel.details.machiningType == null
+                            ? ''
+                            : MachiningTypeLocalizedMap[
+                                orderModel.details.machiningType],
+                      ),
+                      _divider,
+                      _Info(
+                        title: '质量等级',
+                        val: formatEnumSelectsText(
+                            orderModel.details.salesMarket,
+                            FactoryQualityLevelsEnum,
+                            FactoryQualityLevelsEnum.length),
+                      ),
+                      _divider,
+                      _Info(
+                        title: '工厂区域',
+                        val: _buildOrientations(),
+                      ),
+                      _divider,
+                      _Info(
+                        title: '工厂规模',
+                        val: PopulationScaleLocalizedMap[
+                            orderModel.details.populationScale],
+                      ),
+                      _divider,
+                      _Info(
+                        title: '订单尺码',
+                        val: OrderSizeTypeLocalizedMap[
+                            orderModel.details.sizeType],
+                      ),
+                      _divider,
+                      _Info(
+                        title: '订单颜色',
+                        val: OrderColorTypeLocalizedMap[
+                            orderModel.details.colorType],
+                      ),
+                    ],
+                  ),
+                  _Card(
+                    children: [
+                      _Info(
+                        title: '是否开票',
+                        val: orderModel.details.invoiceNeeded == null
+                            ? ''
+                            : orderModel.details.invoiceNeeded
+                                ? '是'
+                                : '否',
+                      ),
+                      _divider,
+                      _Info(
+                        title: '有效期限',
+                        val: enumMap(
+                            EffectiveDaysEnum,
+                            orderModel.details.effectiveDays == null
+                                ? '-1'
+                                : orderModel.details.effectiveDays.toString()),
+                      ),
+                      _divider,
+                      _Info(
+                        title: '支付条件',
+                        val: payPlanStr(),
+                      ),
+                      _divider,
+                      _Info(
+                        title: '所在位置',
+                        val: orderModel.details.address,
+                      ),
+                      _divider,
+                      _Info(
+                        title: '微信号',
+                        val: orderModel.details.contactWeChatNo,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             bottomNavigationBar: _buildBottomButtons(orderModel),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
+          return Scaffold(
+            backgroundColor: Color(0xffF7F7F7),
+            appBar: AppBar(
+              brightness: Brightness.light,
+              centerTitle: true,
+              elevation: 0,
+              title: Text(
+                '需求订单明细',
+                style: TextStyle(
+                    color: Color(0xff000000),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
       },
-      initialData: RequirementOrderModel(details: RequirementInfoModel()),
+      initialData: null,
       future: _getData(),
     );
   }
@@ -195,501 +262,91 @@ class _RequirementOrderDetailByFactoryPageState
     return detail;
   }
 
-  Widget _buildCompanyInfo() {
-    /// 工厂端显示
+  Widget _buildCompany() {
     return Container(
-      padding: EdgeInsets.all(15),
-//        margin: EdgeInsets.only(bottom: 10),
-      color: Colors.white,
+      margin: EdgeInsets.only(top: 16, bottom: 12),
+      child: CompanyBar(
+        companyModel: orderModel.belongTo,
+        favoriteId: orderModel.id,
+      ),
+    );
+  }
+
+  Widget _buildMain() {
+    return Container(
+      // margin: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.fromLTRB(12, 16, 12, 0),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12), topRight: Radius.circular(12))),
       child: Column(
-        children: <Widget>[
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  orderModel.details?.productName ?? '',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xff222222),
+                      fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
           Container(
-            padding: EdgeInsets.only(top: 10),
+            margin: EdgeInsets.symmetric(vertical: 2),
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '发布于：',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      TextSpan(
-                        text:
-                            '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ]),
-                  ),
-                ),
-                FavoriteIcon(
-                  id: orderModel.id,
-                )
+                    child: Text(
+                      orderModel.remarks ?? '',
+                      style: TextStyle(
+                          color: Color(0xff666666),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500),
+                    )),
               ],
             ),
-          ),
+          )
         ],
       ),
     );
   }
 
-  Widget _buildTitle() {
-    return Container(
-      padding: EdgeInsets.all(15),
-      color: Colors.white,
-      child: Text(
-        orderModel.details?.productName ?? '无标题',
-        style: TextStyle(fontSize: 20),
-      ),
-    );
-  }
+  Widget _buildImages() {
+    if (getImages().length == 0) {
+      return SliverToBoxAdapter();
+    }
 
-  ///找工厂
-  Widget _buildMainFactory() {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-//                    width: _leadingRowWidth,
-                    child: Text('品       类：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                      '${orderModel.details?.majorCategory?.name}-'
-                      '${orderModel.details?.category?.parent != null ? orderModel.details.category.parent.name + '-' : ''}'
-                      '${orderModel.details?.category?.name}',
-                      style: TextStyle(color: Colors.black, fontSize: 14)),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('数       量：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                      '${orderModel.details.expectedMachiningQuantity ?? 0}件',
-                      style: TextStyle(color: Colors.black, fontSize: 14)),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('期望价格：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    orderModel.details.maxExpectedPrice == -1
-                        ? '面议'
-                        : '￥${orderModel.details.maxExpectedPrice ?? 0}',
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('交货日期：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    '${DateFormatUtil.formatYMD(orderModel.details.expectedDeliveryDate)}',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('加工类型：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    orderModel.details.machiningType == null
-                        ? ''
-                        : MachiningTypeLocalizedMap[
-                            orderModel.details.machiningType],
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('质量等级：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    formatEnumSelectsText(
-                        orderModel.details.salesMarket,
-                        FactoryQualityLevelsEnum,
-                        FactoryQualityLevelsEnum.length),
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          //工厂区域
-          _buildOrientations(),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('是否开票：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    orderModel.details.invoiceNeeded == null
-                        ? ''
-                        : orderModel.details.invoiceNeeded
-                            ? '是'
-                            : '否',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('是否打样：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    orderModel.details.proofingNeeded == null
-                        ? ''
-                        : orderModel.details.proofingNeeded
-                            ? '是'
-                            : '否',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
-                    child: Text('有效期限：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    enumMap(
-                        EffectiveDaysEnum,
-                        orderModel.details.effectiveDays == null
-                            ? '-1'
-                            : orderModel.details.effectiveDays.toString()),
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          _InfoRow(
-            label: '订单尺码',
-            val: OrderSizeTypeLocalizedMap[orderModel.details.sizeType],
-          ),
-          Divider(
-            height: 0,
-          ),
-          _InfoRow(
-            label: '订单颜色',
-            val: '${OrderColorTypeLocalizedMap[orderModel.details.colorType]}',
-          ),
-          Divider(
-            height: 0,
-          ),
-          _InfoRow(
-            label: '工厂规模',
-            val:
-                PopulationScaleLocalizedMap[orderModel.details.populationScale],
-          ),
-          Divider(
-            height: 0,
-          ),
-          _InfoRow(
-            label: '支付条件',
-            val: '${payPlanStr()}',
-          ),
-          Divider(
-            height: 0,
-          ),
-          _InfoRow(
-            label: '所在位置',
-            val: '${orderModel.details.address ?? ''}',
-          ),
-          Divider(
-            height: 0,
-          ),
-          _InfoRow(
-            label: '微信号',
-            val: '${orderModel.details.contactWeChatNo ?? ''}',
-          ),
-          Divider(
-            height: 0,
-          ),
-          // Container(
-          //   padding: EdgeInsets.only(
-          //     left: 15,
-          //     bottom: 15,
-          //     top: 15,
-          //   ),
-          //   child: Row(
-          //     children: <Widget>[
-          //       Text('参考图片：'),
-          //     ],
-          //   ),
-          // ),
-          // Container(
-          //   padding: EdgeInsets.only(
-          //     left: 15,
-          //     bottom: 15,
-          //     top: 15,
-          //   ),
-          //   child: EditableAttachments(
-          //     list: orderModel.details.pictures,
-          //     editable: false,
-          //   ),
-          // ),
-        ],
+    return SliverGroupBuilder(
+      // margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
       ),
-    );
-  }
-
-  ///找订单
-  Widget _buildMainOrder() {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(
-              left: 15,
-              bottom: 15,
-              top: 15,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-//                    width: _leadingRowWidth,
-                    child: Text('品       类：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text('${orderModel.details?.majorCategory?.name}',
-                      style: TextStyle(color: Colors.black, fontSize: 14)),
-                ),
-              ],
-            ),
+      child: SliverPadding(
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+        sliver: SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCountMap[getImages().length], //Grid按两列显示
+            mainAxisSpacing: 12.0,
+            crossAxisSpacing: 12.0,
+            childAspectRatio: childAspectRatioMap[getImages().length],
           ),
-          Divider(
-            height: 0,
+          delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+              //创建子widget
+              return _ImageItem(
+                e: getImages()[index],
+                onTap: () => onPreview(index),
+              );
+            },
+            childCount: getImages().length,
           ),
-          _InfoRow(
-            label: '所在位置',
-            val: '${orderModel.details.address ?? ''}',
-          ),
-          Divider(
-            height: 0,
-          ),
-          _InfoRow(
-            label: '微信号',
-            val: '${orderModel.details.contactWeChatNo ?? ''}',
-          ),
-          Divider(
-            height: 0,
-          ),
-          // Container(
-          //   padding: EdgeInsets.only(
-          //     left: 15,
-          //     bottom: 15,
-          //     top: 15,
-          //   ),
-          //   child: Row(
-          //     children: <Widget>[
-          //       Text('参考图片：'),
-          //     ],
-          //   ),
-          // ),
-          // Container(
-          //   padding: EdgeInsets.only(
-          //     left: 15,
-          //     bottom: 15,
-          //     top: 15,
-          //   ),
-          //   child: EditableAttachments(
-          //     list: orderModel.details.pictures,
-          //     editable: false,
-          //   ),
-          // ),
-        ],
+        ),
       ),
     );
   }
@@ -699,33 +356,33 @@ class _RequirementOrderDetailByFactoryPageState
       return Offstage(
         offstage: isMyself(),
         child: Container(
-          height: 65,
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          height: 60,
+          // color: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Row(
             children: [
               Expanded(
                   child: FactoryBottomBtn(
-                color: Colors.green,
-                label: '联系对方',
-                onTap: () {
-                  DialogHelper.showConfirm(
-                      title: '温馨提示',
-                      content:
-                      '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
-                      confirm: () {
-                        var tel = '';
-                        if (model?.details?.agentContactPhone != null &&
-                            model?.details?.agentContactPhone != '') {
-                          //代理电话
-                          tel = model.details.agentContactPhone;
-                        } else {
-                          tel = model.details.contactPhone;
-                        }
-                        _selectActionButton(tel);
-                      });
-                },
-              )),
+                    color: Color(0xffFED800),
+                    label: '联系对方',
+                    onTap: () {
+                      DialogHelper.showConfirm(
+                          title: '温馨提示',
+                          content:
+                          '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
+                          confirm: () {
+                            var tel = '';
+                            if (model?.details?.agentContactPhone != null &&
+                                model?.details?.agentContactPhone != '') {
+                              //代理电话
+                              tel = model.details.agentContactPhone;
+                            } else {
+                              tel = model.details.contactPhone;
+                            }
+                            _selectActionButton(tel);
+                          });
+                    },
+                  )),
             ],
           ),
         ),
@@ -735,60 +392,63 @@ class _RequirementOrderDetailByFactoryPageState
     return Offstage(
       offstage: isMyself(),
       child: Container(
-        height: 65,
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        height: 60,
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Row(
           children: [
             Expanded(
                 child: FactoryBottomBtn(
-              color: Colors.green,
-              label: '联系对方',
-              onTap: () {
-                DialogHelper.showConfirm(
-                    title: '温馨提示',
-                    content:
+                  color: Color(0xffFED800),
+                  label: '联系对方',
+                  onTap: () {
+                    DialogHelper.showConfirm(
+                        title: '温馨提示',
+                        content:
                         '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
-                    confirm: () {
-                      var tel = '';
-                      if (model?.details?.agentContactPhone != null &&
-                          model?.details?.agentContactPhone != '') {
-                        //代理电话
-                        tel = model.details.agentContactPhone;
-                      } else {
-                        tel = model.details.contactPhone;
-                      }
-                      _selectActionButton(tel);
-                    });
-              },
-            )),
+                        confirm: () {
+                          var tel = '';
+                          if (model?.details?.agentContactPhone != null &&
+                              model?.details?.agentContactPhone != '') {
+                            //代理电话
+                            tel = model.details.agentContactPhone;
+                          } else {
+                            tel = model.details.contactPhone;
+                          }
+                          _selectActionButton(tel);
+                        });
+                  },
+                )),
+            Container(width: 15),
             Expanded(
                 child: FactoryBottomBtn(
-              color: Colors.blueAccent,
-              label: '生产报价',
-              onTap: () async {
-                QuoteModel newQuote =
+                  color: Colors.blueAccent,
+                  gradient: LinearGradient(
+                      colors: [Color(0xffFFDB34), Color(0xffFF7C18)]),
+                  label: '生产报价',
+                  onTap: () async {
+                    QuoteModel newQuote =
                     await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RequirementQuoteOrderForm(
+                        builder: (context) =>
+                            RequirementQuoteOrderForm(
                               model: orderModel,
                               quoteModel: QuoteModel(attachments: []),
                             )));
 
-                if (newQuote != null) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => QuoteOrderDetailPage(
+                    if (newQuote != null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => QuoteOrderDetailPage(
                             newQuote.code,
                           )));
-                }
-              },
-            ))
+                    }
+                  },
+                ))
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOrientations() {
+  String _buildOrientations() {
     String val = '';
 
     //处理旧数据的地区信息
@@ -799,35 +459,7 @@ class _RequirementOrderDetailByFactoryPageState
       val = orderModel.details.productiveDistricts.map((e) => e.name).join('、');
     }
 
-    return _InfoRow(
-      label: '工厂区域',
-      val: '$val',
-    );
-  }
-
-  Widget _buildRemarks() {
-    return Container(
-      padding: EdgeInsets.only(left: 15, bottom: 15, right: 5),
-      color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          Expanded(child: Text(orderModel.remarks ?? '')),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCompanyHeader() {
-    if (orderModel.orderType == RequirementOrderType.FINDING_ORDER) {
-      return SliverToBoxAdapter(
-        child: Container(
-          color: Colors.grey[100],
-          padding: EdgeInsets.only(top: 20),
-          child: CompanyHeader(orderModel.belongTo),
-        ),
-      );
-    }
-    return SliverToBoxAdapter();
+    return val;
   }
 
   ///分享
@@ -963,6 +595,9 @@ class _RequirementOrderDetailByFactoryPageState
 
   List<MediaModel> getImages() {
     if (orderModel.details.pictures != null) {
+      if (orderModel.details.pictures.length > 9) {
+        return orderModel.details.pictures.getRange(0, 9).toList();
+      }
       return orderModel.details.pictures;
     }
     return [];
@@ -988,38 +623,6 @@ class _RequirementOrderDetailByFactoryPageState
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  final String label;
-
-  final String val;
-
-  const _InfoRow({Key key, this.label, this.val}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-      child: Row(
-        children: <Widget>[
-          Expanded(flex: 2, child: Text('$label：')),
-          Container(
-            width: 8,
-          ),
-          Expanded(
-            flex: 3,
-            child: Text(
-              val != null ? '$val' : '',
-              style: TextStyle(
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _ImageItem extends StatelessWidget {
   final MediaModel e;
 
@@ -1040,7 +643,6 @@ class _ImageItem extends StatelessWidget {
         onTap?.call();
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 2),
         child: CachedNetworkImage(
           imageUrl: '${e.imageProcessUrl(processUrl)}',
           placeholder: (context, url) =>
@@ -1061,3 +663,98 @@ class _ImageItem extends StatelessWidget {
     );
   }
 }
+
+class _Card extends StatelessWidget {
+  final List<Widget> children;
+
+  const _Card({Key key, this.children}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.only(top: 12),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(12)),
+        child: Column(
+          children: children,
+        ),
+      ),
+    );
+  }
+}
+
+class _Info extends StatelessWidget {
+  final String title;
+
+  final String val;
+
+  const _Info({Key key, this.title, this.val}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 56,
+              margin: EdgeInsets.only(right: 24),
+              child: Text(
+                '$title',
+                style: TextStyle(
+                    color: Color(0xff999999),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+            Expanded(
+                child: Text((val != null && val != '') ? '$val' : '-',
+                    style: TextStyle(
+                        color: Color(0xff222222),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500)))
+          ],
+        ));
+  }
+}
+
+class _Divider extends StatelessWidget {
+  const _Divider({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      color: Color(0xffE7E7E7),
+      thickness: 0.5,
+      height: 28,
+    );
+  }
+}
+
+///图片列数
+const crossAxisCountMap = {
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 2,
+  5: 3,
+  6: 3,
+  7: 3,
+  8: 3,
+  9: 3
+};
+
+///图片比列
+const childAspectRatioMap = {
+  1: 16 / 9,
+  2: 4 / 3,
+  3: 1.0,
+  4: 4 / 3,
+  5: 1.0,
+  6: 1.0,
+  7: 1.0,
+  8: 1.0,
+  9: 1.0
+};

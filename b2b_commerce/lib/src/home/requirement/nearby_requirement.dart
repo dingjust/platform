@@ -32,19 +32,29 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            elevation: 0.5,
+            elevation: 0,
             automaticallyImplyLeading: true,
-            title: Text('离我最近')),
+            centerTitle: true,
+            title: Text(
+              '离我最近',
+              style: TextStyle(
+                  color: Color(0xff000000),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            )),
         body: Consumer<AmapState>(
-            builder: (context, AmapState state, _) => MultiProvider(
+            builder: (context, AmapState state, _) =>
+                MultiProvider(
                     providers: [
                       ChangeNotifierProvider(
-                          create: (_) => OrderRequirementState(
-                              latitude: state.latitude,
-                              longitude: state.longitude,
-                              sortCondition: 'distance,DESC')),
+                          create: (_) =>
+                              OrderRequirementState(
+                                  latitude: state.latitude,
+                                  longitude: state.longitude,
+                                  sortCondition: 'distance,DESC')),
                       ChangeNotifierProvider(
-                          create: (_) => FactoryRequirementState(
+                          create: (_) =>
+                              FactoryRequirementState(
                               latitude: state.latitude,
                               longitude: state.longitude,
                               sortCondition: 'distance,DESC')),
@@ -56,9 +66,17 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
                           headerSliverBuilder: _slverBuilder,
                           body:
                               TabBarView(controller: _tabController, children: [
-                            RequirementList<FactoryRequirementState>(),
-                            RequirementList<OrderRequirementState>(),
-                          ])),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: RequirementList<
+                                      FactoryRequirementState>(),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: RequirementList<
+                                      OrderRequirementState>(),
+                                )
+                              ])),
                     ))));
   }
 
@@ -68,6 +86,12 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
           pinned: true,
           delegate: SearchResultDelegate(TabBar(
               controller: _tabController,
+              indicator: B2BTabIndicator(
+                  yPadding: 0,
+                  borderSide: BorderSide(
+                    width: 6,
+                    color: Color(0xffFED800),
+                  )),
               indicatorSize: TabBarIndicatorSize.label,
               indicatorColor: Constants.THEME_COLOR_ORANGE,
               labelStyle: TextStyle(fontSize: 18),

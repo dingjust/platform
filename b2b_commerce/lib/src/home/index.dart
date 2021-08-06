@@ -189,15 +189,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             indicatorSize: TabBarIndicatorSize.label,
             indicator: B2BTabIndicator(
                 borderSide: BorderSide(
-                  width: 6,
-                  color: Color(0xffFED800),
-                )),
+              width: 6,
+              color: Color(0xffFED800),
+            )),
             labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-
             unselectedLabelColor: Color(0xff666666),
             labelColor: Color(0xff222222),
             unselectedLabelStyle:
-            TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
             tabs: widget.tabs)),
       )
     ];

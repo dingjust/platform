@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:core/core.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import 'home_search_bar.dart';
 
@@ -31,9 +32,9 @@ class _HomeSearchResultPageState extends State<HomeSearchResultPage>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            elevation: 0.5,
-            automaticallyImplyLeading: true,
-            title: HomeSearchBar(
+            elevation: 0,
+            titleSpacing: 0,
+            title: SearchBar(
               tips: widget.keyword,
               onTap: () {
                 Navigator.of(context).pop();
@@ -53,8 +54,14 @@ class _HomeSearchResultPageState extends State<HomeSearchResultPage>
                   key: pageKey,
                   headerSliverBuilder: _slverBuilder,
                   body: TabBarView(controller: _tabController, children: [
-                    RequirementList<FactoryRequirementState>(),
-                    RequirementList<OrderRequirementState>(),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: RequirementList<FactoryRequirementState>(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: RequirementList<OrderRequirementState>(),
+                    )
                   ])),
             )));
   }
@@ -67,10 +74,17 @@ class _HomeSearchResultPageState extends State<HomeSearchResultPage>
               controller: _tabController,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorColor: Constants.THEME_COLOR_ORANGE,
-              labelStyle: TextStyle(fontSize: 18),
-              unselectedLabelColor: Color(0xff646464),
-              labelColor: Constants.THEME_COLOR_ORANGE,
-              unselectedLabelStyle: TextStyle(fontSize: 18),
+              indicator: B2BTabIndicator(
+                  yPadding: 0,
+                  borderSide: BorderSide(
+                    width: 6,
+                    color: Color(0xffFED800),
+                  )),
+              labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              unselectedLabelColor: Color(0xff666666),
+              labelColor: Color(0xff222222),
+              unselectedLabelStyle:
+                  TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               tabs: [Tab(text: "找工厂"), Tab(text: "抢订单")]))),
     ];
   }
