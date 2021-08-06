@@ -35,7 +35,8 @@ class RequirementOrderDetailByFactoryPage extends StatefulWidget {
       _RequirementOrderDetailByFactoryPageState();
 }
 
-class _RequirementOrderDetailByFactoryPageState extends State<RequirementOrderDetailByFactoryPage> {
+class _RequirementOrderDetailByFactoryPageState
+    extends State<RequirementOrderDetailByFactoryPage> {
   RequirementOrderModel orderModel;
   UserModel currentUser = UserBLoC.instance.currentUser;
 
@@ -176,6 +177,7 @@ class _RequirementOrderDetailByFactoryPageState extends State<RequirementOrderDe
                     ],
                   ),
                   _Card(
+                    margin: EdgeInsets.only(top: 12, bottom: 60),
                     children: [
                       _Info(
                         title: '是否开票',
@@ -436,9 +438,10 @@ class _RequirementOrderDetailByFactoryPageState extends State<RequirementOrderDe
 
                     if (newQuote != null) {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => QuoteOrderDetailPage(
-                            newQuote.code,
-                          )));
+                          builder: (context) =>
+                              QuoteOrderDetailPage(
+                                newQuote.code,
+                              )));
                     }
                   },
                 ))
@@ -667,13 +670,17 @@ class _ImageItem extends StatelessWidget {
 class _Card extends StatelessWidget {
   final List<Widget> children;
 
-  const _Card({Key key, this.children}) : super(key: key);
+  final EdgeInsetsGeometry margin;
+
+  const _Card(
+      {Key key, this.children, this.margin = const EdgeInsets.only(top: 12)})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.only(top: 12),
+        margin: margin,
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(12)),
