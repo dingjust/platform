@@ -1,7 +1,14 @@
 <template>
   <div>
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="需求订单号" prop="code"></el-table-column>
+      <el-table-column label="需求订单号" prop="code">
+        <template slot-scope="scope">
+          <span>{{scope.row.code}}</span>
+          <el-tag v-if="scope.row.orderType === 'FINDING_FACTORY'">找工厂</el-tag>
+          <el-tag v-if="scope.row.orderType === 'FINDING_ORDER'" type="success">找订单</el-tag>
+          <el-tag v-if="scope.row.orderType === 'LOOK_STYLE'" type="danger">看款下单</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="标题" prop="details.productName" header-align="center"></el-table-column>
       <el-table-column label="产品" width="260" header-align="center">
         <template slot-scope="scope">
