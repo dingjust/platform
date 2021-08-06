@@ -122,7 +122,7 @@ class AuthRespository {
     Response response;
     AuthorizationCodeResponse result;
     try {
-      response = await http$.get(AuthApis.authCodeByApple,
+      response = await http$.post(AuthApis.authCodeByApple,
           data: {'identityToken': token, 'userid': id});
     } on DioError catch (e) {
       print(e);

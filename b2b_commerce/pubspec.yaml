@@ -172,6 +172,7 @@ flutter:
     - packages/assets/temp/QRCode.png
     - packages/assets/temp/common/icon64_wx_logo.png
     - packages/assets/temp/common/wechat_login.png
+    - packages/assets/temp/common/apple.png
     - packages/assets/temp/common/mini-program.png
     - packages/assets/temp/common/wechat_friend.png
     - packages/assets/temp/common/qq_logo.png

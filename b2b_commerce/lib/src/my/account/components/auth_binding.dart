@@ -81,7 +81,7 @@ class _AuthBindingState extends State<AuthBinding> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140,
+//      height: 140,
       child: Column(
         children: [
           _InputRow(
@@ -143,20 +143,19 @@ class _AuthBindingState extends State<AuthBinding> {
                       children: [
                         Expanded(
                             child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child:
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 10),
+                              child:
                                   B2BImage.dingding_logo(height: 30, width: 30),
-                                ),
-                                Expanded(
-                                    child: Text(
-                                      '${_currentUser.dingTalkNickname ??
-                                          '未绑定钉钉'}',
-                                      overflow: TextOverflow.ellipsis,
-                                    ))
-                              ],
-                            )),
+                            ),
+                            Expanded(
+                                child: Text(
+                              '${_currentUser.dingTalkNickname ?? '未绑定钉钉'}',
+                              overflow: TextOverflow.ellipsis,
+                            ))
+                          ],
+                        )),
                         Text(_currentUser.dingTalkOpenid == null
                             ? '去绑定'
                             : '解除绑定')
@@ -170,17 +169,21 @@ class _AuthBindingState extends State<AuthBinding> {
   }
 
   Widget _buildApple() {
+    print('${_currentUser.appleOpenid}');
+
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       return _InputRow(
           top: true,
           label: '绑定Apple',
           child: GestureDetector(
               onTap: () {
-                if (_currentUser.appleOpenid = null) {
-                  var cancelFunc = BotToast.showLoading();
+                if (_currentUser.appleOpenid == null) {
+                  var cancelFunc =
+                      BotToast.showLoading(crossPage: false, clickClose: true);
                   authLoginHelper
                       .handlerAppleAuthBinding(context)
                       .then((value) {
+                    _updateUserInfo();
                     cancelFunc.call();
                   });
                 } else {
@@ -193,20 +196,19 @@ class _AuthBindingState extends State<AuthBinding> {
                   children: [
                     Expanded(
                         child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: B2BImage.dingding_logo(
-                                  height: 30, width: 30),
-                            ),
-                            Expanded(
-                                child: Text(
-                                  '${_currentUser.dingTalkNickname ?? '未绑定钉钉'}',
-                                  overflow: TextOverflow.ellipsis,
-                                ))
-                          ],
-                        )),
-                    Text(_currentUser.dingTalkOpenid == null ? '去绑定' : '解除绑定')
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: B2BImage.apple(height: 30, width: 30),
+                        ),
+                        Expanded(
+                            child: Text(
+                          '${_currentUser.appleOpenid ?? '未绑定Apple'}',
+                          overflow: TextOverflow.ellipsis,
+                        ))
+                      ],
+                    )),
+                    Text(_currentUser.appleOpenid == null ? '去绑定' : '解除绑定')
                   ],
                 ),
               )));
