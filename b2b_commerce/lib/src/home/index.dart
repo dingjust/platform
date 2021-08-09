@@ -85,6 +85,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   _HomePageState();
 
+  List<Color> gradientColors = [
+    Color.fromRGBO(254, 216, 0, 1),
+    Color.fromRGBO(254, 216, 0, 0)
+  ];
+
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
@@ -168,13 +173,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(254, 216, 0, 1),
-                          Color.fromRGBO(254, 216, 0, 0),
-                        ])),
+                        colors: gradientColors)),
                 child: Container(
                   margin: EdgeInsets.fromLTRB(0, 105, 0, 0),
-                  child: HomeBannerSection(),
+                  child: HomeBannerSection(
+                    onChanged: (colors) {
+                      if (colors != null && colors.isNotEmpty) {
+                        setState(() {
+                          gradientColors = colors;
+                        });
+                      }
+                    },
+                  ),
                 ),
               )
             ],
