@@ -497,4 +497,14 @@ class B2BV2Image {
     return getImage('img/icons/b2b-v2/auth_person@2x.png',
         width: width, height: height);
   }
+
+  static Image del1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/search/del_1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image del2({double width, double height}) {
+    return getImage('img/icons/b2b-v2/search/del_2@2x.png',
+        width: width, height: height);
+  }
 }
