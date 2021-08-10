@@ -281,6 +281,9 @@ flutter:
     - packages/assets/img/icons/b2b-v2/auth_person@2x.png
     - packages/assets/img/icons/b2b-v2/search/del_1@2x.png
     - packages/assets/img/icons/b2b-v2/search/del_2@2x.png
+    - packages/assets/img/icons/b2b-v2/location/add_1@2x.png
+    - packages/assets/img/icons/b2b-v2/location/add_2@2x.png
+
 
   fonts:
     - family: b2bIcons

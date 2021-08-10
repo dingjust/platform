@@ -1,4 +1,5 @@
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:city_pickers/city_pickers.dart' as city_pickers;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -114,25 +115,23 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
-  // var _controller = StreamController<AmapAroundResponse>();u
-
-  // // Stream<UserModel> get stream => _controller.stream;
-
-  @override
   Widget build(BuildContext context) {
     if (oldCity == null) {
-      oldCity = Provider
-          .of<AmapState>(context, listen: false)
-          .city;
+      oldCity = Provider.of<AmapState>(context, listen: false).city;
     }
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(
-            title: Text('选择定位地址'),
+            title: Text(
+              '选择定位地址',
+              style: TextStyle(
+                  color: Color(0xff000000),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
             centerTitle: true,
             elevation: 0,
           ),
@@ -143,7 +142,6 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                   child: Column(
                     children: <Widget>[
                       _buildSearchRow(state),
-                      Divider(),
                       _buildLocationRow(),
                       Divider(),
                       _buildAroundLabelRow(),
@@ -194,20 +192,18 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   Widget _buildAroundLabelRow() {
     return textEditingController.text == ''
         ? Container(
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: Icon(
-              Icons.location_on,
-              color: Colors.grey,
-              size: 16,
-            ),
-          ),
+          Container(
+              margin: EdgeInsets.only(right: 4),
+              child: B2BV2Image.location_1(width: 18, height: 22)),
           Text(
             '附近地址',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
+            style: TextStyle(
+                color: Color(0xff999999),
+                fontSize: 13,
+                fontWeight: FontWeight.w500),
           )
         ],
       ),
@@ -219,88 +215,86 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
-            onTap: () async {
-              // city_pickers.Result result2 =
-              //     await
-              city_pickers.CityPickers.showCitiesSelector(
-                  context: context,
-                  sideBarStyle:
-                  city_pickers.BaseStyle(activeColor: Colors.orange))
-                  .then((result) {
-                state.setCity(result.cityName);
-                try {
-                  AmapService.instance
-                      .AmapGeoCode(result.cityName)
-                      .then((response) {
-                    if (response.geocodes.isNotEmpty) {
-                      List<String> locationArray =
-                      response.geocodes.first.location.split(',');
-                      state.setAMapLocation(
-                          city: response.geocodes.first.city,
-                          aOIName: response.geocodes.first.city,
-                          longitude: double.parse(locationArray[0]),
-                          latitude: double.parse(locationArray[1]));
-                      changeGeo = response.geocodes.first;
-                    }
-                  });
-                } catch (e) {
-                  print(e);
-                }
-              });
-            },
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.location_on,
-                  size: 15,
-                ),
-                Text(
-                  '${state.city}',
-                  style: TextStyle(fontSize: 15),
-                ),
-              ],
-            ),
+            onTap: () => onTap(state),
+            child: B2BV2Image.top_1(width: 18, height: 22),
           ),
+          GestureDetector(
+              onTap: () => onTap(state),
+              child: Container(
+                margin: EdgeInsets.only(left: 4, right: 20),
+                child: Text(
+                  '${state.city}',
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xff222222),
+                      fontWeight: FontWeight.w500),
+                ),
+              )),
           Expanded(
-            flex: 1,
-            child: Container(
-              margin: EdgeInsets.only(left: 5),
-              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(240, 240, 240, 0.5),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.search),
-                  Expanded(
-                    flex: 1,
-                    child: TextField(
-                      autofocus: true,
-                      onChanged: (value) {
-                        setState(() {
-                          AmapService.instance.inputtips(
-                              textEditingController.text,
-                              city: state.city);
-                        });
-                      },
-                      scrollPadding: const EdgeInsets.all(1.0),
-                      controller: textEditingController,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 15),
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(0),
-                          hintText: '请输入您的定位地址',
-                          hintStyle: TextStyle(fontSize: 15),
-                          border: InputBorder.none),
+              child: LayoutBuilder(
+                builder: (context, constraints) =>
+                    Container(
+                      width: constraints.maxWidth,
+                      height: 50,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 32,
+                            margin: EdgeInsets.only(right: 12),
+                            decoration: BoxDecoration(
+                              color: Color(0xffF0F0F0),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              width: constraints.maxWidth,
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.only(right: 4),
+                                    child: B2BV2Image.top_2(
+                                        width: 16, height: 16),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: TextField(
+                                      controller: textEditingController,
+                                      autofocus: true,
+                                      style: TextStyle(
+                                          color: Color(0xff222222),
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500),
+                                      decoration: InputDecoration(
+                                        hintText: '请输入您的定位地址',
+                                        hintStyle:
+                                        TextStyle(
+                                            color: Colors.grey, fontSize: 12),
+                                        contentPadding: EdgeInsets.all(0),
+                                        disabledBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        border: InputBorder.none,
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          AmapService.instance.inputtips(
+                                              textEditingController.text,
+                                              city: state.city);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
                     ),
-                  )
-                ],
-              ),
-            ),
-          )
+              )),
         ],
       ),
     );
@@ -404,7 +398,10 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
     // }
   }
 
-  Widget _buildLocationRow() {
+  Widget _buildLocationRow({TextStyle style = const TextStyle(
+      fontSize: 14,
+      color: Color(0xff222222),
+      fontWeight: FontWeight.w500)}) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: Consumer<AmapState>(
@@ -413,15 +410,13 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   state.getAMapLocation() != null
-                      ? Text(
-                    '${state
-                        .getAMapLocation()
-                        .AOIName ?? state.city}',
-                    style: TextStyle(fontSize: 16),
-                  )
+                      ? Text('${state
+                      .getAMapLocation()
+                      .AOIName ?? state.city}',
+                      style: style)
                       : Text(
                     '定位中',
-                    style: TextStyle(fontSize: 16),
+                    style: style,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -431,14 +426,10 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                     child: Container(
                       child: Row(
                         children: <Widget>[
-                          Icon(
-                            B2BIcons.aim,
-                            color: Color.fromRGBO(255, 214, 12, 1),
-                          ),
+                          B2BV2Image.location_2(width: 16, height: 16),
                           Text(
                             '重新定位',
-                            style:
-                            TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                            style: style,
                           )
                         ],
                       ),
@@ -483,6 +474,31 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
     AmapAroundResponse result = await AmapService.instance
         .aroundTips('${amapState.longitude},${amapState.latitude}');
     return result;
+  }
+
+  void onTap(AmapState state) async {
+    city_pickers.CityPickers.showCitiesSelector(
+        context: context,
+        sideBarStyle: city_pickers.BaseStyle(activeColor: Colors.orange))
+        .then((result) {
+      state.setCity(result.cityName);
+      try {
+        AmapService.instance.AmapGeoCode(result.cityName).then((response) {
+          if (response.geocodes.isNotEmpty) {
+            List<String> locationArray =
+            response.geocodes.first.location.split(',');
+            state.setAMapLocation(
+                city: response.geocodes.first.city,
+                aOIName: response.geocodes.first.city,
+                longitude: double.parse(locationArray[0]),
+                latitude: double.parse(locationArray[1]));
+            changeGeo = response.geocodes.first;
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+    });
   }
 
   ///重新定位
