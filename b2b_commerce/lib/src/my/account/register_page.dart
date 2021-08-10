@@ -786,4 +786,10 @@ class _RegisterPageV2State extends State<RegisterPageV2> {
       }
     }
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
+  }
 }

@@ -22,6 +22,12 @@ class CarouselModel extends ItemModel {
 
   String url;
 
+  ///色值1
+  String colorValue1;
+
+  ///色值2
+  String colorValue2;
+
   CarouselModel(
       {this.id,
       this.name,
@@ -30,7 +36,9 @@ class CarouselModel extends ItemModel {
       this.active,
       this.type,
       this.group,
-      this.url});
+      this.url,
+      this.colorValue1,
+      this.colorValue2});
 
   factory CarouselModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CarouselModelFromJson(json);

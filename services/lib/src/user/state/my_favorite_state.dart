@@ -72,7 +72,7 @@ class MyFavoriteState extends PageState {
     }
   }
 
-  ///添加收藏
+  ///取消收藏
   void del(int id) async {
     //直接先集合添加
     idCollection?.remove(id);

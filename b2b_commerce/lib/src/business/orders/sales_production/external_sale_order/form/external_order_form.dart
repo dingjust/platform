@@ -292,7 +292,7 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
           '请填写服务费用比例'));
     }
     FormValidateItem item =
-    items.firstWhere((element) => element.result, orElse: () => null);
+        items.firstWhere((element) => element.result, orElse: () => null);
 
     if (item != null) {
       BotToast.showText(
@@ -313,6 +313,20 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
       result += element.quantity;
     });
     return result;
+  }
+
+  ///定金项
+  AbstractPayPlanItemModel get depositItem {
+    return form.payPlan.payPlanItems.firstWhere(
+            (element) => element.moneyType == PayMoneyType.DEPOSIT,
+        orElse: () => null);
+  }
+
+  ///尾款项
+  AbstractPayPlanItemModel get tailItem {
+    return form.payPlan.payPlanItems.firstWhere(
+            (element) => element.moneyType == PayMoneyType.PHASEONE,
+        orElse: () => null);
   }
 
   ///页面回退回调

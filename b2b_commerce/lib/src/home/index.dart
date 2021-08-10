@@ -48,15 +48,15 @@ class HomePage extends StatefulWidget {
   ///tab
   final List<Widget> _tabBarViews = [
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<RequirementState>(),
     ),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<OrderRequirementState>(),
     ),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<FactoryRequirementState>(),
     ),
   ];
@@ -84,6 +84,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   double expandedHeight = 220;
 
   _HomePageState();
+
+  List<Color> gradientColors = [
+    Color.fromRGBO(254, 216, 0, 1),
+    Color.fromRGBO(254, 216, 0, 0)
+  ];
 
   @override
   void initState() {
@@ -168,13 +173,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(254, 216, 0, 1),
-                          Color.fromRGBO(254, 216, 0, 0),
-                        ])),
+                        colors: gradientColors)),
                 child: Container(
                   margin: EdgeInsets.fromLTRB(0, 105, 0, 0),
-                  child: HomeBannerSection(),
+                  child: HomeBannerSection(
+                    onChanged: (colors) {
+                      if (colors != null && colors.isNotEmpty) {
+                        setState(() {
+                          gradientColors = colors;
+                        });
+                      }
+                    },
+                  ),
                 ),
               )
             ],
@@ -189,15 +199,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             indicatorSize: TabBarIndicatorSize.label,
             indicator: B2BTabIndicator(
                 borderSide: BorderSide(
-                  width: 6,
-                  color: Color(0xffFED800),
-                )),
+              width: 6,
+              color: Color(0xffFED800),
+            )),
             labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-
             unselectedLabelColor: Color(0xff666666),
             labelColor: Color(0xff222222),
             unselectedLabelStyle:
-            TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
             tabs: widget.tabs)),
       )
     ];

@@ -6,6 +6,7 @@ class B2BTabIndicator extends Decoration {
   ///
   /// The [borderSide] and [insets] arguments must not be null.
   const B2BTabIndicator({
+    this.yPadding = 10.0,
     this.borderSide = const BorderSide(width: 2.0, color: Colors.white),
     this.insets = EdgeInsets.zero,
   })  : assert(borderSide != null),
@@ -21,6 +22,9 @@ class B2BTabIndicator extends Decoration {
   /// [TabBarIndicatorSize.label], or the entire tab with
   /// [TabBarIndicatorSize.tab].
   final EdgeInsetsGeometry insets;
+
+  //偏移量
+  final double yPadding;
 
   @override
   Decoration lerpFrom(Decoration a, double t) {
@@ -64,16 +68,20 @@ class B2BTabIndicator extends Decoration {
 
   @override
   _UnderlinePainter createBoxPainter([VoidCallback onChanged]) {
-    return _UnderlinePainter(this, onChanged);
+    return _UnderlinePainter(this, onChanged, yPadding: yPadding);
   }
 }
 
 class _UnderlinePainter extends BoxPainter {
-  _UnderlinePainter(this.decoration, VoidCallback onChanged)
+  _UnderlinePainter(this.decoration, VoidCallback onChanged,
+      {this.yPadding = 10.0})
       : assert(decoration != null),
         super(onChanged);
 
   final B2BTabIndicator decoration;
+
+  //偏移量
+  final double yPadding;
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
@@ -87,8 +95,8 @@ class _UnderlinePainter extends BoxPainter {
     final Paint paint = decoration.borderSide.toPaint()
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(
-        Offset(indicator.bottomLeft.dx, indicator.bottomLeft.dy - 10),
-        Offset(indicator.bottomRight.dx, indicator.bottomRight.dy - 10),
+        Offset(indicator.bottomLeft.dx, indicator.bottomLeft.dy - yPadding),
+        Offset(indicator.bottomRight.dx, indicator.bottomRight.dy - yPadding),
         paint);
   }
 }

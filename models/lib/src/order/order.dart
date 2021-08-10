@@ -278,7 +278,7 @@ enum OrderSizeType {
 const OrderSizeTypeLocalizedMap = {
   OrderSizeType.FREE_SIZE: "均码",
   OrderSizeType.MULTIPLE_SIZE: "多码",
-  OrderSizeType.UNKOWN: "未知",
+  OrderSizeType.UNKOWN: "",
 };
 
 /// 订单颜色类型
@@ -854,7 +854,7 @@ class RequirementInfoModel extends ItemModel {
       model == null ? null : DistrictModel.toJson(model);
 
   static List<Map<String, dynamic>> _cityDistrictListToJson(
-      List<DistrictModel> models) =>
+          List<DistrictModel> models) =>
       models == null
           ? null
           : models.map((e) => DistrictModel.toJson(e)).toList();
@@ -945,10 +945,10 @@ class RequirementOrderModel extends OrderModel {
     this.latestQuotes,
     this.delayDays,
     String code,
-      int totalQuantity,
-      double totalPrice,
-      DateTime creationTime,
-      DateTime modifiedTime,
+    int totalQuantity,
+    double totalPrice,
+    DateTime creationTime,
+    DateTime modifiedTime,
     AddressModel deliveryAddress,
     String remarks,
     PrincipalModel supplier,
@@ -1905,18 +1905,23 @@ enum RequirementOrderType {
 
   /// 找订单
   FINDING_ORDER,
+
+  ///看款下单
+  LOOK_STYLE
 }
 
 /// 需求订单类型
 const RequirementOrderTypeLocalizedMap = {
   RequirementOrderType.FINDING_FACTORY: "找工厂",
   RequirementOrderType.FINDING_ORDER: "找订单",
+  RequirementOrderType.LOOK_STYLE: "看款下单",
 };
 
 /// 需求订单类型
 const RequirementOrderTypeMap = {
   RequirementOrderType.FINDING_FACTORY: "FINDING_FACTORY",
   RequirementOrderType.FINDING_ORDER: "FINDING_ORDER",
+  RequirementOrderType.LOOK_STYLE: "LOOK_STYLE",
 };
 
 /// 需求状态

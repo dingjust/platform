@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/users/favorite.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/helper/requirement_helper.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:b2b_commerce/src/my/company/_shared/company_certificate_info.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
@@ -99,13 +100,13 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
       ),
       SliverList(
           delegate: SliverChildListDelegate([
-            _InfoHeadRow(data),
-            Divider(),
-            _BriefRow(
-              val: '公司简介：${data.intro ?? '暂无简介'}',
-            ),
-            Container(height: 10, color: Colors.grey[50])
-          ])),
+        _InfoHeadRow(data),
+        Divider(),
+        _BriefRow(
+          val: '公司简介：${data.intro ?? '暂无简介'}',
+        ),
+        Container(height: 10, color: Colors.grey[50])
+      ])),
       SliverPersistentHeader(
           pinned: true,
           delegate: _AppBarDelegate(TabBar(
@@ -139,21 +140,24 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
     return Offstage(
       offstage: UserBLoC.instance.currentUser.companyCode == data.uid,
       child: Container(
-        height: 65,
+        height: 68,
         color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Row(
           children: [
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Colors.green,
+                  color: Color(0xffFED800),
                   label: '联系对方',
                   info: '电话沟通协商',
                   onTap: _onContact,
                 )),
+            Container(width: 15),
             Expanded(
                 child: FactoryBottomBtn(
                   color: Colors.blueAccent,
+                  gradient: LinearGradient(
+                      colors: [Color(0xffFFDB34), Color(0xffFF7C18)]),
                   label: '发布需求',
                   info: '邀请对方报价',
                   onTap: () {
@@ -223,6 +227,8 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
     return data;
   }
 
+  var processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
+
   ///分享
   void onShare() {
     String description = data.adeptAtCategories.map((e) => e.name).join(' ');
@@ -231,7 +237,8 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
         description: description != null ? '$description ...' : '',
         imageUrl: data.profilePicture == null
             ? '${GlobalConfigs.LOGO_URL}'
-            : '${data.profilePicture.previewUrl()}',
+            : '${data.profilePicture.imageProcessUrl(processUrl)}',
+        path: MiniProgramPageRoutes.factoryDetail(widget.uid),
         url: Apis.shareFactory(widget.uid));
   }
 
@@ -239,9 +246,10 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MyFactoryBaseFormPage(
-              data,
-            ))).then((v) {
+            builder: (context) =>
+                MyFactoryBaseFormPage(
+                  data,
+                ))).then((v) {
       if (v == true) {
         setState(() {
           data = null;
@@ -263,7 +271,8 @@ class _AppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => _tabBar.preferredSize.height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset,
+      bool overlapsContent) {
     return new Container(
       child: _tabBar,
       // color: overlapsContent ? Colors.white : Color.fromRGBO(245, 245, 245, 1),

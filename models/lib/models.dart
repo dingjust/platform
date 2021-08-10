@@ -31,6 +31,7 @@ export 'src/security/principal.dart';
 export 'src/shared/shared.dart';
 export 'src/subcontract/subcontract.dart';
 export 'src/system/notification/message.dart';
+export 'src/system/notification/notification.dart';
 export 'src/system/page/carousel.dart';
 export 'src/system/page/plate_products.dart';
 export 'src/user/b2b_group.dart';
