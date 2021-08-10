@@ -1,66 +1,28 @@
 <template>
   <div class="product-carousel-style">
-    <el-form ref="form" :inline="true" size="mini">
-      <el-row>
-        <el-form-item>
-          <template slot="label">
-            <h6 style="color: #F56C6C" class="title-style">*图片1</h6>
-          </template>
-          <images-upload-single :formData="carouselData[0].media" @getPicture="getPicture($event, 0)" @removePicture="removePicture(0)"/>
-          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
-        </el-form-item>
-        <el-form-item>
-          <template slot="label">
-            <h6 class="title-style">绑定链接：</h6>
-          </template>
-          <el-input v-model="carouselData[0].url" size="mini" class="input-style"></el-input>
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item>
-          <template slot="label">
-            <h6 class="title-style">图片2</h6>
-          </template>
-          <images-upload-single :formData="carouselData[1].media" @getPicture="getPicture($event, 1)" @removePicture="removePicture(1)"/>
-          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
-        </el-form-item>
-        <el-form-item>
-          <template slot="label">
-            <h6 class="title-style">绑定链接：</h6>
-          </template>
-          <el-input v-model="carouselData[1].url" size="mini" class="input-style"></el-input>
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item>
-          <template slot="label">
-            <h6 class="title-style">图片3</h6>
-          </template>
-          <images-upload-single :formData="carouselData[2].media" @getPicture="getPicture($event, 2)" @removePicture="removePicture(2)"/>
-          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
-        </el-form-item>
-        <el-form-item>
-          <template slot="label">
-            <h6 class="title-style">绑定链接：</h6>
-          </template>
-          <el-input v-model="carouselData[2].url" size="mini" class="input-style"></el-input>
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item>
-          <template slot="label">
-            <h6 class="title-style">图片4</h6>
-          </template>
-          <images-upload-single :formData="carouselData[3].media" @getPicture="getPicture($event, 3)" @removePicture="removePicture(3)"/>
-          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
-        </el-form-item>
-        <el-form-item>
-          <template slot="label">
-            <h6 class="title-style">绑定链接：</h6>
-          </template>
-          <el-input v-model="carouselData[3].url" size="mini" class="input-style"></el-input>
-        </el-form-item>
-      </el-row>
+    <el-form ref="form" size="mini" label-width="100px">
+      <template v-for="index of 4">
+        <el-row type="flex" :key="index" style="margin-bottom: 20px">
+          <div class="image-cell">
+            <h6 class="image-title" :style="index === 1 ? 'color: #F56C6C' : ''">{{(index === 1 ? '*' : '')}} 图片 {{index}}</h6>
+            <el-form-item label-width="0px">
+              <images-upload-single :formData="carouselData[index - 1].media" @getPicture="getPicture($event, index - 1)" @removePicture="removePicture(index - 1)"/>
+              <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
+            </el-form-item>
+          </div>
+          <div class="input-cell">
+            <el-form-item label="绑定链接：">
+              <el-input v-model="carouselData[index-1].url" size="mini" ></el-input>
+            </el-form-item>
+            <el-form-item label="颜色1：">
+              <el-input v-model="carouselData[index-1].colorValue1" size="mini"></el-input>
+            </el-form-item>
+            <el-form-item label="颜色2：">
+              <el-input v-model="carouselData[index-1].colorValue2" size="mini"></el-input>
+            </el-form-item>
+          </div>
+        </el-row>
+      </template>
     </el-form>
     <el-row type="flex" justify="center">
       <el-button @click="onSubmit" style="background-color: #FFD60C" size="medium">保存并提交</el-button>
@@ -161,29 +123,43 @@
 </script>
 
 <style scoped>
+  .image-cell {
+    display: flex;
+  }
 
- .product-carousel-style {
-   padding: 15px;
- }
+  .image-title {
+    margin: 50px 10px 0 0;
+  }
 
- .title-style {
-   padding-top: 40px;
-   padding-right: 10px;
- }
+  .input-cell {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0.5;
+  }
 
- .input-style {
-   margin-top: 35px;
-   width: 400px
- }
+  .product-carousel-style {
+    padding: 15px;
+  }
 
- /deep/ .el-upload--picture-card {
-   width: 192px;
-   height: 108px;
-   line-height: 108px;
- }
+  .title-style {
+    padding-top: 40px;
+    padding-right: 10px;
+  }
 
- /deep/ .el-upload-list--picture-card .el-upload-list__item {
-   width: 192px;
-   height: 108px;
- }
+  .input-style {
+    margin-top: 35px;
+    width: 400px
+  }
+
+  .product-carousel-style >>> .el-upload--picture-card {
+    width: 192px;
+    height: 108px;
+    line-height: 108px;
+  }
+
+  .product-carousel-style >>> .el-upload-list--picture-card .el-upload-list__item {
+    width: 192px;
+    height: 108px;
+  }
 </style>
