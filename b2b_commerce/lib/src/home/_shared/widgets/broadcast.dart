@@ -44,6 +44,7 @@ class _HomeBroadcastState extends State<HomeBroadcast>
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(8)),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             margin: EdgeInsets.only(right: 12),
@@ -55,36 +56,37 @@ class _HomeBroadcastState extends State<HomeBroadcast>
                 height: 16,
                 child: PageView.builder(
                   controller: _pageController,
-                  scrollDirection: Axis.vertical,
-                  allowImplicitScrolling: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Text(
-                      '${state.notifications[index].content}',
-                      style: TextStyle(
-                          color: Color(0xff666666),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500),
-                    );
-                  },
-                  itemCount: state.notifications.length,
-                  onPageChanged: (index) {
-                    if (index == state.notifications.length - 1) {
-                      //轮播完
-                      Future.delayed(_duration).then((value) {
-                        setState(() {
-                          _curPageIndex = 0;
-                          _pageController.jumpToPage(0);
-                        });
-                        state.getData();
-                      });
-                    } else {
-                      setState(() {
-                        _curPageIndex = index;
-                      });
-                    }
-                  },
-                ));
-          }))
+                      scrollDirection: Axis.vertical,
+                      allowImplicitScrolling: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Text(
+                          '${state.notifications[index].content}',
+                          style: TextStyle(
+                              color: Color(0xff666666),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500),
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      },
+                      itemCount: state.notifications.length,
+                      onPageChanged: (index) {
+                        if (index == state.notifications.length - 1) {
+                          //轮播完
+                          Future.delayed(_duration).then((value) {
+                            setState(() {
+                              _curPageIndex = 0;
+                              _pageController.jumpToPage(0);
+                            });
+                            state.getData();
+                          });
+                        } else {
+                          setState(() {
+                            _curPageIndex = index;
+                          });
+                        }
+                      },
+                    ));
+              }))
         ],
       ),
     );

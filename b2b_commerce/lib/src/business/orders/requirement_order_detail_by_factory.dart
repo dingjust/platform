@@ -276,7 +276,6 @@ class _RequirementOrderDetailByFactoryPageState
 
   Widget _buildMain() {
     return Container(
-      // margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.fromLTRB(12, 16, 12, 0),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -290,8 +289,8 @@ class _RequirementOrderDetailByFactoryPageState
                 child: Text(
                   orderModel.details?.productName ?? '',
                   style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xff222222),
+                      fontSize: 16,
+                      color: Color(0xFFAA6E15),
                       fontWeight: FontWeight.bold),
                 ),
               )
@@ -303,12 +302,12 @@ class _RequirementOrderDetailByFactoryPageState
               children: <Widget>[
                 Expanded(
                     child: Text(
-                      orderModel.remarks ?? '',
-                      style: TextStyle(
-                          color: Color(0xff666666),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500),
-                    )),
+                  orderModel.remarks ?? '',
+                  style: TextStyle(
+                      color: Color(0xff666666),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500),
+                )),
               ],
             ),
           )

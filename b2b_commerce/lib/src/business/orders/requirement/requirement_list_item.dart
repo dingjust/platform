@@ -94,7 +94,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
 
   Widget _buildTitleRow(
       {TextStyle style = const TextStyle(
-          color: Color(0xff222222),
+          color: Color(0xFFAA6E15),
           fontSize: 14,
           fontWeight: FontWeight.w500)}) {
     return Padding(
@@ -120,10 +120,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
                 )),
             Expanded(
               child: Text(
-                '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ??
-                    ''}${widget.model.details.identityTypeStr != null
-                    ? '·'
-                    : ''}${widget.model.details.identityTypeStr ?? ''}',
+                '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ?? ''}${widget.model.details.identityTypeStr != null ? '·' : ''}${widget.model.details.identityTypeStr ?? ''}',
                 style: style,
                 textAlign: TextAlign.end,
               ),
