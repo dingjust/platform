@@ -20,6 +20,11 @@ class MiniProgramPageRoutes {
 
   ///看款列表
   static get products => 'pages/dd/dd';
+
+  ///工厂详情
+  static get factoryDetail => (companyCode) {
+        return 'pages/company/factory/profile/index?companyCode=$companyCode';
+      };
 }
 
 ///微信小程序URL Scheme
