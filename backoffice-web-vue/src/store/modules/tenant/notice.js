@@ -13,7 +13,8 @@ const state = {
     content: [] // 当前页数据
   },
   queryFormData: {
-    keyword: ''
+    keyword: '',
+    type: 'NORMAL'
   }
 };
 
