@@ -48,15 +48,15 @@ class HomePage extends StatefulWidget {
   ///tab
   final List<Widget> _tabBarViews = [
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<RequirementState>(),
     ),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<OrderRequirementState>(),
     ),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<FactoryRequirementState>(),
     ),
   ];

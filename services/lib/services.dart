@@ -132,6 +132,7 @@ export 'src/state/home_section_state.dart';
 export 'src/state/label_state.dart';
 export 'src/state/major_category_state.dart';
 export 'src/state/size_state.dart';
+export 'src/state/notification_state.dart';
 export 'src/subcontract/repository/subcontract_repository.dart';
 export 'src/subcontract/repository/subcontract_repository_impl.dart';
 export 'src/subcontract/response/subcontract_response.dart';

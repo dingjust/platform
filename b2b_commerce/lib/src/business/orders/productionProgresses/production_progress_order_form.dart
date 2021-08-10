@@ -271,6 +271,7 @@ class _ProductionProgressOrderFormState
   //       return _getTableContext();
   //     } else {
   //       tableWidth = globalKey.currentContext.size.width;
+
   //       tableHeight = globalKey.currentContext.size.height;
   //       return globalKey.currentContext;
   //     }

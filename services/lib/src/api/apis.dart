@@ -25,8 +25,7 @@ class Apis {
       };
 
   /// 获取品牌明细 GET
-  static get brandUpdate =>
-          (uid) {
+  static get brandUpdate => (uid) {
         return '/{baseSiteId}/brands/$uid';
       };
 
@@ -202,4 +201,7 @@ class Apis {
           (code) {
         return '/{baseSiteId}/doc/signature/$code';
       };
+
+  ///获取所有公告
+  static get notifications => '/{baseSiteId}/notice/all/published';
 }
