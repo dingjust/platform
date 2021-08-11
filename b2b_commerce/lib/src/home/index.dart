@@ -48,15 +48,15 @@ class HomePage extends StatefulWidget {
   ///tab
   final List<Widget> _tabBarViews = [
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<RequirementState>(),
     ),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<OrderRequirementState>(),
     ),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: RequirementList<FactoryRequirementState>(),
     ),
   ];
@@ -84,6 +84,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   double expandedHeight = 220;
 
   _HomePageState();
+
+  List<Color> gradientColors = [Color(0xFF489BFF), Color(0x001460BA)];
 
   @override
   void initState() {
@@ -162,19 +164,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           background: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              Container(
+              AnimatedContainer(
+                duration: Duration(milliseconds: 500),
                 decoration: BoxDecoration(
                     color: Color(0xffF7F7F7),
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(254, 216, 0, 1),
-                          Color.fromRGBO(254, 216, 0, 0),
-                        ])),
+                        colors: gradientColors)),
                 child: Container(
                   margin: EdgeInsets.fromLTRB(0, 105, 0, 0),
-                  child: HomeBannerSection(),
+                  child: HomeBannerSection(
+                    onChanged: (colors) {
+                      if (colors != null && colors.isNotEmpty) {
+                        setState(() {
+                          gradientColors = colors;
+                        });
+                      }
+                    },
+                  ),
                 ),
               )
             ],

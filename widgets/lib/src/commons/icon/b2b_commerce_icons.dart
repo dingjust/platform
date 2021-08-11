@@ -199,6 +199,18 @@ class B2BIconsV2 {
   ///分享
   static const IconData share = const IconData(0xe601,
       fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///搜索
+  static const IconData search = const IconData(0xe602,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///扫描
+  static const IconData scan = const IconData(0xe603,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///位置
+  static const IconData location = const IconData(0xe604,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
 }
 
 class CommonImage {

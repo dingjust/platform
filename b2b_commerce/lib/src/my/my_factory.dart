@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_form.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
     as dj;
 import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
@@ -640,7 +641,6 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     });
   }
 
-  ///TODO分享
   void onShare(MyFactoryState state) {
     String description = "";
     int i = 0;
@@ -651,13 +651,15 @@ class _MyFactoryPageState extends State<MyFactoryPage>
         i++;
       }
     });
+    const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
 
     ShareDialog.showShareDialog(context,
         title: '${state.model.name}',
         description: '$description ...',
         imageUrl: state.model.profilePicture == null
             ? '${GlobalConfigs.LOGO_URL}'
-            : '${state.model.profilePicture.previewUrl()}',
+            : '${state.model.profilePicture.imageProcessUrl(processUrl)}',
+        path: MiniProgramPageRoutes.factoryDetail(widget.factoryUid),
         url: Apis.shareFactory(widget.factoryUid));
   }
 

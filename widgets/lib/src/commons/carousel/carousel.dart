@@ -187,11 +187,13 @@ class _CarouselState extends State<Carousel> {
 }
 
 class CarouselV2<T extends CarouselItem> extends StatefulWidget {
-  CarouselV2(this.items, this.height, {this.scrollDirection = Axis.horizontal});
+  CarouselV2(this.items, this.height,
+      {this.scrollDirection = Axis.horizontal, this.onChanged});
 
   final List<T> items;
   final double height;
   final Axis scrollDirection;
+  final ValueChanged<int> onChanged;
 
   @override
   _CarouselV2State createState() => _CarouselV2State();
@@ -209,7 +211,7 @@ class _CarouselV2State extends State<CarouselV2> {
   List<CarouselItem> _items = [];
 
   Timer _timer;
-  Duration _duration = Duration(seconds: 3);
+  Duration _duration = Duration(seconds: 5);
   Duration _animationDuration = Duration(milliseconds: 500);
 
   bool _isEndScroll = true;
@@ -314,6 +316,7 @@ class _CarouselV2State extends State<CarouselV2> {
           itemCount: _items.length,
           onPageChanged: (index) {
             _changePage(index);
+            widget?.onChanged(index);
           },
         ));
   }

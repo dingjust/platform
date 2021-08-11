@@ -25,8 +25,7 @@ class Apis {
       };
 
   /// 获取品牌明细 GET
-  static get brandUpdate =>
-          (uid) {
+  static get brandUpdate => (uid) {
         return '/{baseSiteId}/brands/$uid';
       };
 
@@ -198,8 +197,15 @@ class Apis {
       };
 
   ///签署文档
-  static get docSignatureSign =>
-          (code) {
+  static get docSignatureSign => (code) {
         return '/{baseSiteId}/doc/signature/$code';
+      };
+
+  ///获取所有公告
+  static get notifications => '/{baseSiteId}/notice/all/published';
+
+  ///隐私通话保护绑定
+  static get privacyCall => (phone) {
+        return '/{baseSiteId}/privacy/phone/num/pool/get/by/phone/$phone';
       };
 }

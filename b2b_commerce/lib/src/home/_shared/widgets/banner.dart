@@ -83,6 +83,10 @@ class HomeFactoryBannerSection extends StatelessWidget {
 }
 
 class HomeBannerSection extends StatelessWidget {
+  final ValueChanged<List<Color>> onChanged;
+
+  const HomeBannerSection({Key key, this.onChanged}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductHomeCarouselsState>(
@@ -95,27 +99,52 @@ class HomeBannerSection extends StatelessWidget {
             state.bannerCarousels
                 .where((carousel) => carousel.media != null)
                 .map((carousel) => CarouselItem(
-                    model: MediaModel(url: carousel.media.detailUrl()),
+                    model: MediaModel(url: carousel.media.actualUrl),
                     onTap: () {
                       onTap(context, carousel.url);
                     }))
                 .toList(),
-            120);
+            120,
+            onChanged: (index) => onMediaChanged(index, state.bannerCarousels));
       }
-    });
+        });
   }
 
   void onTap(BuildContext context, String url) {
     bool result =
-        UriHelper().handleUri(context: context, uri: url, isReplace: false);
+    UriHelper().handleUri(context: context, uri: url, isReplace: false);
     if (!result) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => WebviewPage(
+              builder: (context) =>
+                  WebviewPage(
                     url: url,
                     needRedirectContractList: false,
                   )));
     }
+  }
+
+  void onMediaChanged(int index, List<CarouselModel> list) {
+    int i = index % list.length;
+    CarouselModel carousel = list[i];
+    //数据有色值的情况
+    if (carousel.colorValue1 != null && carousel.colorValue1 != '') {
+      onChanged?.call([
+        Color(int.parse(carousel.colorValue1)),
+        Color(int.parse(carousel.colorValue2))
+      ]);
+    }
+    // else {
+    //   //无色值采用图片主体色
+    //   getColorFromUrl(carousel.media.actualUrl).then((value) {
+    //     if (value != null) {
+    //       onChanged?.call([
+    //         Color.fromRGBO(value[0], value[1], value[2], 1),
+    //         Color.fromRGBO(value[0], value[1], value[2], 0)
+    //       ]);
+    //     }
+    //   });
+    // }
   }
 }

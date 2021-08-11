@@ -766,7 +766,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: <TextSpan>[
                         TextSpan(
                             text:
-                            '服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。',
+                                '服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。',
                             style: TextStyle(color: Colors.black))
                       ]),
                 ),
@@ -882,5 +882,11 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
   }
 }

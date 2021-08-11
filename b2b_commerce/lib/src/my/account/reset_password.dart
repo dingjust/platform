@@ -112,7 +112,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       controller: _againPasswordController,
       obscureText: true,
       decoration:
-      InputDecoration(hintText: '请输入确认密码', border: InputBorder.none),
+          InputDecoration(hintText: '请输入确认密码', border: InputBorder.none),
       validator: (value) {
         return _againPasswordController.text == _passwordController.text
             ? null
@@ -360,6 +360,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
   }
 }
 

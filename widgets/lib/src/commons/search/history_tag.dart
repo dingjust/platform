@@ -13,10 +13,14 @@ class HistoryTag extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Chip(
-        backgroundColor: Color.fromRGBO(245, 245, 245, 1),
+        backgroundColor: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 12),
         label: Text(
           value,
-          style: TextStyle(),
+          style: TextStyle(
+              color: Color(0xff666666),
+              fontSize: 12,
+              fontWeight: FontWeight.w500),
         ),
       ),
     );

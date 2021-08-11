@@ -94,7 +94,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
 
   Widget _buildTitleRow(
       {TextStyle style = const TextStyle(
-          color: Color(0xff222222),
+          color: Color(0xFFAA6E15),
           fontSize: 14,
           fontWeight: FontWeight.w500)}) {
     return Padding(
@@ -120,10 +120,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
                 )),
             Expanded(
               child: Text(
-                '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ??
-                    ''}${widget.model.details.identityTypeStr != null
-                    ? '·'
-                    : ''}${widget.model.details.identityTypeStr ?? ''}',
+                '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ?? ''}${widget.model.details.identityTypeStr != null ? '·' : ''}${widget.model.details.identityTypeStr ?? ''}',
                 style: style,
                 textAlign: TextAlign.end,
               ),
@@ -134,8 +131,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
 
   Widget _buildContent() {
     return Container(
-      padding: EdgeInsets.fromLTRB(8, 1, 8, 10),
-      margin: EdgeInsets.only(left: 40),
+      margin: EdgeInsets.only(top: 12, bottom: 4),
       child: Column(children: [
         Row(
           children: [
@@ -156,10 +152,11 @@ class _RequirementListItemState extends State<RequirementListItem> {
     );
   }
 
-  Widget _buildText({TextStyle style = const TextStyle(
-      fontSize: 13,
-      color: Color(0xff666666),
-      fontWeight: FontWeight.w500)}) {
+  Widget _buildText(
+      {TextStyle style = const TextStyle(
+          fontSize: 13,
+          color: Color(0xff666666),
+          fontWeight: FontWeight.w500)}) {
     return LayoutBuilder(builder: (context, constrants) {
       final span = TextSpan(text: widget.model.remarks ?? '', style: style);
       final tp = TextPainter(
@@ -222,8 +219,8 @@ class _RequirementListItemState extends State<RequirementListItem> {
   Widget _buildBottom({TextStyle style =
   const TextStyle(fontSize: 10, color: Color(0xff999999))}) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5),
-      margin: EdgeInsets.only(left: 40),
+      // padding: EdgeInsets.symmetric(horizontal: 5),
+      margin: EdgeInsets.only(top: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -233,8 +230,8 @@ class _RequirementListItemState extends State<RequirementListItem> {
                 Container(
                   margin: EdgeInsets.only(right: 2),
                   child: Icon(
-                    Icons.location_on,
-                    size: 16,
+                    B2BIconsV2.location,
+                    size: 14,
                     color: Color(0xff999999),
                   ),
                 ),
