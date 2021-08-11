@@ -211,7 +211,7 @@ class _CarouselV2State extends State<CarouselV2> {
   List<CarouselItem> _items = [];
 
   Timer _timer;
-  Duration _duration = Duration(seconds: 3);
+  Duration _duration = Duration(seconds: 5);
   Duration _animationDuration = Duration(milliseconds: 500);
 
   bool _isEndScroll = true;

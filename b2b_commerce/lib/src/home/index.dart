@@ -85,10 +85,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   _HomePageState();
 
-  List<Color> gradientColors = [
-    Color.fromRGBO(254, 216, 0, 1),
-    Color.fromRGBO(254, 216, 0, 0)
-  ];
+  List<Color> gradientColors = [Color(0xFF489BFF), Color(0x001460BA)];
 
   @override
   void initState() {
@@ -167,7 +164,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           background: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              Container(
+              AnimatedContainer(
+                duration: Duration(milliseconds: 500),
                 decoration: BoxDecoration(
                     color: Color(0xffF7F7F7),
                     gradient: LinearGradient(

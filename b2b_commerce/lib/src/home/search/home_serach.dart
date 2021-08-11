@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
@@ -154,16 +155,8 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
                       ),
                     ),
                     IconButton(
-                      icon: B2BV2Image.del2(width: 15, height: 16),
-                      onPressed: () {
-                        setState(() {
-                          List<String> historyKeywords = [];
-                          _historyKeywords = historyKeywords;
-                          LocalStorage.save(
-                              _key, json.encode(_historyKeywords));
-                        });
-                      },
-                    )
+                        icon: B2BV2Image.del2(width: 15, height: 16),
+                        onPressed: onDel)
                   ],
                 ),
               ),
@@ -181,13 +174,12 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
                             runSpacing: 0, // 纵轴（垂直）方向间距
                             alignment: WrapAlignment.start, //沿主轴方向居中
                             children: _historyKeywords
-                                .map((keyword) =>
-                                HistoryTag(
-                                  value: keyword,
-                                  onTap: () {
-                                    onSearch(keyword);
-                                  },
-                                ))
+                                .map((keyword) => HistoryTag(
+                                      value: keyword,
+                                      onTap: () {
+                                        onSearch(keyword);
+                                      },
+                                    ))
                                 .toList()),
                       );
                     } else {
@@ -255,5 +247,32 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
         _historyKeywords = null;
       });
     });
+  }
+
+  void onDel() {
+    showDialog(
+        context: context,
+        child: CupertinoAlertDialog(
+          title: Text('确认删除全部历史记录？'),
+          // content: Text('我是content'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text('确认'),
+              onPressed: () {
+                setState(() {
+                  List<String> historyKeywords = [];
+                  _historyKeywords = historyKeywords;
+                  LocalStorage.save(_key, json.encode(_historyKeywords));
+                });
+              },
+            ),
+          ],
+        ));
   }
 }
