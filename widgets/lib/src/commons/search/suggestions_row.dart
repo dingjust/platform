@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 class SuggestionsRow extends StatelessWidget {
   SuggestionsRow(
@@ -27,7 +26,7 @@ class SuggestionsRow extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
-        margin: EdgeInsets.only(left: 45),
+        margin: EdgeInsets.only(left: 20),
         decoration: BoxDecoration(
             border:
                 Border(bottom: BorderSide(width: 1, color: Color(0xffE7E7E7)))),
