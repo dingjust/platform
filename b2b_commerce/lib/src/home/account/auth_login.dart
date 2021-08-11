@@ -128,7 +128,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           B2BImage.wechatLogin(height: 40, width: 40),
-                          Text('微信登录')
+//                          Text('微信登录')
                         ],
                       ),
                     ),
@@ -150,7 +150,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           B2BImage.dingding_logo(height: 40, width: 40),
-                          Text('钉钉登录')
+//                          Text('钉钉登录')
                         ],
                       ),
                     ),
@@ -177,7 +177,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               B2BImage.apple(height: 40, width: 40),
-              Text('Apple登录')
+//              Text('使用Apple登入')
             ],
           ),
         ),
