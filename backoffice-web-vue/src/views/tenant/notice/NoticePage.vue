@@ -14,17 +14,13 @@
       <div class="pt-2"></div>
       <notice-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
       <div>
-        <div class="batch-opera-btn" v-if="activeName === 'PUBLISHED' || activeName === 'DRAFT'">
-          <el-button v-if="isSelect === false" @click="isSelect = true">批量操作</el-button>
-          <template v-else>
-            <el-button type="text" @click="isSelect = false">取消</el-button>
-            <el-button v-if="activeName === 'PUBLISHED'" type="text" @click="batchCancelPublish">批量取消发布</el-button>
-            <el-button v-if="activeName === 'DRAFT'" type="text" @click="batchPublish">批量发布</el-button>
-          </template>
+        <div class="batch-opera-btn">
+          <el-button type="text" @click="batchCancelPublish">批量取消发布</el-button>
+          <el-button type="text" @click="batchPublish">批量发布</el-button>
         </div>
         <el-tabs v-model="activeName" @tab-click="handleTabClick">
           <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
-            <notice-list ref="list" :page="page" @onAdvancedSearch="onAdvancedSearch" :isSelection="isSelection" :code="status.code"/>
+            <notice-list ref="list" :page="page" @onAdvancedSearch="onAdvancedSearch" :isSelection="true" :code="status.code"/>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -69,7 +65,7 @@ export default {
       this.searchAdvanced({url, query, page, size});
     },
     handleTabClick(tab) {
-      this.queryFormData.state = tab.name
+      this.queryFormData.type = tab.name
       this.onAdvancedSearch();
     },
     batchCancelPublish () {
@@ -81,19 +77,25 @@ export default {
         this._batchCancelPublish()
       });
     },
-    async batchCancelPublish () {
-      const refList = this.$refs.list.find(item => item.code === this.activeName);
-      const ids = refList.multipleSelection.map(item => item.id)
-
+    async _batchCancelPublish () {
+      let arr = []
+      this.$refs.list.forEach(item => {
+        arr = arr.concat(item.multipleSelection.map(val => val.id))
+      })
+      
       const url = this.apis().batchPublishNotice()
       const result = await this.$http.get(url, {
-        ids: ids.toString(),
+        ids: arr.toString(),
         state: 'DRAFT'
       })
 
       if (result.code === 1) {
         this.$message.success('操作成功！')
         this.onAdvancedSearch()
+
+        this.$refs.list.forEach(item => {
+          item.resetSelection()
+        })
       } else if (result.code === 0) {
         this.$message.error(result.msg)
       } else if (result['errors']) {
@@ -111,19 +113,26 @@ export default {
         this._batchPublish()
       });
     },
-    async batchPublish () {
-      const refList = this.$refs.list.find(item => item.code === this.activeName);
-      const ids = refList.multipleSelection.map(item => item.id)
+    async _batchPublish () {
+      let arr = []
+      this.$refs.list.forEach(item => {
+
+        arr = arr.concat(item.multipleSelection.map(val => val.id))
+      })
 
       const url = this.apis().batchPublishNotice()
       const result = await this.$http.get(url, {
-        ids: ids.toString(),
+        ids: arr.toString(),
         state: 'PUBLISHED'
       })
 
       if (result.code === 1) {
         this.$message.success('操作成功！')
         this.onAdvancedSearch()
+
+        this.$refs.list.forEach(item => {
+          item.resetSelection()
+        })
       } else if (result.code === 0) {
         this.$message.error(result.msg)
       } else if (result['errors']) {
@@ -136,17 +145,20 @@ export default {
   data () {
     return {
       isSelect: false,
-      activeName: '',
+      activeName: 'NORMAL',
       statuses: [
         {
+          code: 'NORMAL',
+          name: '普通公告'
+        }, {
+          code: 'SYSTEM',
+          name: '系统公告'
+        }, {
+          code : 'SYSTEM_ALTERNATE',
+          name: '预设公告'
+        }, {
           code: '',
           name: '全部'
-        }, {
-          code: 'PUBLISHED',
-          name: '已发布'
-        }, {
-          code : 'DRAFT',
-          name: '未发布'
         }
       ]
     }
