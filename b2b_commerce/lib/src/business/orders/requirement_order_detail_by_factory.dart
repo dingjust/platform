@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
+import 'package:b2b_commerce/src/helper/call_helper.dart';
 import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:b2b_commerce/src/home/factory/_shared/factory_widgets.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
@@ -17,7 +18,6 @@ import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 ///首页需求订单明细
@@ -264,7 +264,7 @@ class _RequirementOrderDetailByFactoryPageState
           _divider,
           _Info(
             title: '擅长品类',
-            val: '${orderModel.details?.category?.name ?? ''}',
+            val: '${orderModel.details?.majorCategory?.name ?? ''}',
           ),
           _divider,
           _Info(
@@ -307,12 +307,17 @@ class _RequirementOrderDetailByFactoryPageState
   }
 
   Widget _buildMain() {
+    Radius bottomRadius = Radius.circular(getImages().length == 0 ? 12 : 0);
+
     return Container(
       padding: EdgeInsets.fromLTRB(12, 16, 12, 0),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+              bottomLeft: bottomRadius,
+              bottomRight: bottomRadius)),
       child: Column(
         children: [
           Row(
@@ -334,12 +339,12 @@ class _RequirementOrderDetailByFactoryPageState
               children: <Widget>[
                 Expanded(
                     child: Text(
-                  orderModel.remarks ?? '',
-                  style: TextStyle(
-                      color: Color(0xff666666),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500),
-                )),
+                      orderModel.remarks ?? '',
+                      style: TextStyle(
+                          color: Color(0xff666666),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500),
+                    )),
               ],
             ),
           )
@@ -396,26 +401,26 @@ class _RequirementOrderDetailByFactoryPageState
             children: [
               Expanded(
                   child: FactoryBottomBtn(
-                    color: Color(0xffFED800),
-                    label: '联系对方',
-                    onTap: () {
-                      DialogHelper.showConfirm(
-                          title: '温馨提示',
-                          content:
+                color: Color(0xffFED800),
+                label: '联系对方',
+                onTap: () {
+                  DialogHelper.showConfirm(
+                      title: '温馨提示',
+                      content:
                           '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
-                          confirm: () {
-                            var tel = '';
-                            if (model?.details?.agentContactPhone != null &&
-                                model?.details?.agentContactPhone != '') {
-                              //代理电话
-                              tel = model.details.agentContactPhone;
-                            } else {
-                              tel = model.details.contactPhone;
-                            }
-                            _selectActionButton(tel);
-                          });
-                    },
-                  )),
+                      confirm: () {
+                        var tel = '';
+                        if (model?.details?.agentContactPhone != null &&
+                            model?.details?.agentContactPhone != '') {
+                          //代理电话
+                          tel = model.details.agentContactPhone;
+                        } else {
+                          tel = model.details.contactPhone;
+                        }
+                        CallHelper.privacyCall(tel, context: context);
+                      });
+                },
+              )),
             ],
           ),
         ),
@@ -447,7 +452,7 @@ class _RequirementOrderDetailByFactoryPageState
                           } else {
                             tel = model.details.contactPhone;
                           }
-                          _selectActionButton(tel);
+                          CallHelper.privacyCall(tel, context: context);
                         });
                   },
                 )),
@@ -531,41 +536,6 @@ class _RequirementOrderDetailByFactoryPageState
               isReview: true,
               isCreate: true,
             )));
-  }
-
-  //拨打电话或发短信
-  void _selectActionButton(String tel) async {
-    if (tel == null || tel == '') {
-      return;
-    }
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return new Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('拨打电话'),
-              onTap: () async {
-                var url = 'tel:' + tel;
-                await launch(url);
-              },
-            ),
-            tel.indexOf('-') > -1
-                ? Container()
-                : ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   copyToClipboard(final String text) {
