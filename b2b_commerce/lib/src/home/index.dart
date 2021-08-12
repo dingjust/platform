@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return [
       SliverAppBar(
         expandedHeight:
-            (MediaQuery.of(context).size.width - 24) * (120 / 350) + 61,
+            ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105,
         pinned: true,
         elevation: 0.5,
         title: HomeTitle(
@@ -166,6 +166,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             children: <Widget>[
               AnimatedContainer(
                 duration: Duration(milliseconds: 500),
+                padding: EdgeInsets.only(top: 105),
                 decoration: BoxDecoration(
                     color: Color(0xffF7F7F7),
                     gradient: LinearGradient(
@@ -173,8 +174,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         end: Alignment.bottomCenter,
                         colors: gradientColors)),
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(0, 105, 0, 0),
+                  // margin: EdgeInsets.only(top: 105),
                   child: HomeBannerSection(
+                    // height: 240,
                     onChanged: (colors) {
                       if (colors != null && colors.isNotEmpty) {
                         setState(() {
