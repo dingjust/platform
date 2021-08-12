@@ -81,8 +81,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ScrollController _scrollController;
   bool lastStatus = false;
 
-  double expandedHeight = 220;
-
   _HomePageState();
 
   List<Color> gradientColors = [Color(0xFF489BFF), Color(0x001460BA)];
@@ -148,11 +146,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   List<Widget> _slverBuilder(BuildContext context, bool innerBoxIsScrolled) {
-    print((MediaQuery.of(context).size.width - 24));
     return [
       SliverAppBar(
-        expandedHeight:
-            ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105,
+        expandedHeight: expandedHeight,
         pinned: true,
         elevation: 0.5,
         title: HomeTitle(
@@ -166,7 +162,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             children: <Widget>[
               AnimatedContainer(
                 duration: Duration(milliseconds: 500),
-                padding: EdgeInsets.only(top: 105),
+                padding: EdgeInsets.only(top: bannerPadding),
                 decoration: BoxDecoration(
                     color: Color(0xffF7F7F7),
                     gradient: LinearGradient(
@@ -174,9 +170,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         end: Alignment.bottomCenter,
                         colors: gradientColors)),
                 child: Container(
-                  // margin: EdgeInsets.only(top: 105),
                   child: HomeBannerSection(
-                    // height: 240,
                     onChanged: (colors) {
                       if (colors != null && colors.isNotEmpty) {
                         setState(() {
@@ -223,6 +217,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool get isShrink {
     return _scrollController.hasClients &&
         _scrollController.offset > (expandedHeight - kToolbarHeight);
+  }
+
+  ///适配expandedHeight
+  double get expandedHeight {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 17;
+    }
+    return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 10;
+  }
+
+  ///适配banner间隔
+  double get bannerPadding {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return 105 + 17.0;
+    }
+    return 105;
   }
 
   @override
