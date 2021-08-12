@@ -62,13 +62,12 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  SearchModelPage(
-                      searchModel: SearchModel(
-                        historyKeywords: historyKeywords,
-                        searchModelType: SearchModelType.QUOTE_ORDER,
-                        route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-                      )),
+              builder: (context) => SearchModelPage(
+                  searchModel: SearchModel(
+                historyKeywords: historyKeywords,
+                searchModelType: SearchModelType.QUOTE_ORDER,
+                route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+              )),
             ),
           );
         });
@@ -90,7 +89,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
       bloc: QuoteOrdersBLoC.instance,
       child: Scaffold(
         appBar: AppBarFactory.buildDefaultAppBar(
-          '报价管理',
+          '我的报价',
           actions: <Widget>[_buildSearchButton()],
         ),
         body: DefaultTabController(

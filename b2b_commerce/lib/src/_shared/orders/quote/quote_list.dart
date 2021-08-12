@@ -161,14 +161,15 @@ class _QuoteListState extends State<QuoteList>
   void _onProofingCreating(QuoteModel model) async {
     //查询明细
     QuoteModel detailModel =
-    await QuoteOrderRepository().getQuoteDetails(model.code);
+        await QuoteOrderRepository().getQuoteDetails(model.code);
 
     Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) =>
-              ProofingOrderForm(
+          builder: (context) => ProofingOrderForm(
                 quoteModel: detailModel,
-                model: ProofingModel(unitPrice: 0,),
+                model: ProofingModel(
+                  unitPrice: 0,
+                ),
               )),
     );
   }
@@ -231,8 +232,8 @@ class _QuoteListState extends State<QuoteList>
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
 
     return Container(
-      decoration: BoxDecoration(color: Colors.grey[100]),
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(color: Color(0xFFF7F7F7)),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: RefreshIndicator(
         onRefresh: () async {
           if (widget.status != null) {
@@ -318,8 +319,7 @@ class _QuoteListState extends State<QuoteList>
                         onProofingCreating: () => _onProofingCreating(item),
                         onProductionOrderCreating: () =>
                             _onProductionOrderCreating(item),
-                        onSalesOrderCreating: () =>
-                            _onSalesOrderCreating(item),
+                        onSalesOrderCreating: () => _onSalesOrderCreating(item),
                         onQuoteAgain: () => _onQuoteAgain(item),
                         companyUid: widget.companyUid,
                       );

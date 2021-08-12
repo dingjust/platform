@@ -166,15 +166,13 @@ class FactoryItem extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: '${model.profilePicture.imageProcessUrl(processUrl)}',
             fit: BoxFit.fill,
-            placeholder: (context, url) =>
-                SpinKitRing(
-                  color: Colors.grey[300],
-                  lineWidth: 2,
-                  size: 30,
-                ),
-            errorWidget: (context, url, error) =>
-                SpinKitRing(
-                  color: Colors.grey[300],
+            placeholder: (context, url) => SpinKitRing(
+              color: Colors.grey[300],
+              lineWidth: 2,
+              size: 30,
+            ),
+            errorWidget: (context, url, error) => SpinKitRing(
+              color: Colors.grey[300],
               lineWidth: 2,
               size: 30,
             ),
