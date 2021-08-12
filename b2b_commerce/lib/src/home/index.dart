@@ -26,8 +26,9 @@ class HomePage extends StatefulWidget {
   ///头部
   final List<Widget> _headWidgets = [
     HomeBtnsSection(),
+    _HomePoster(),
     Container(
-      margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
+      margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
       child: HomeBroadcast(),
     )
   ];
@@ -155,7 +156,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           leading: widget.searchInputWidget,
         ),
         backgroundColor: lastStatus ? Colors.white : Color(0xffF7F7F7),
-        brightness: Brightness.dark,
+        // brightness: Brightness.dark,
         flexibleSpace: FlexibleSpaceBar(
           background: Stack(
             fit: StackFit.expand,
@@ -272,6 +273,22 @@ class HomeTitle extends StatelessWidget {
                 child: B2BV2Image.top_3(width: 24, height: 24),
               )),
         ],
+      ),
+    );
+  }
+}
+
+class _HomePoster extends StatelessWidget {
+  const _HomePoster({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 12),
+      child: Image.asset(
+        'temp/index/poster1.png',
+        package: 'assets',
+        fit: BoxFit.fitWidth,
       ),
     );
   }
