@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -10,32 +11,22 @@ class FindingFactoryBtnsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
-      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(20)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            _buildFree(context),
-            _buildAuthentication(context),
-            _buildFast(context),
-            _buildAll(context)
-          ],
-        ),
+      decoration: BoxDecoration(color: Colors.white),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          _buildAll(context),
+          _buildFree(context),
+          _buildAuthentication(context),
+          _buildFast(context),
+        ],
       ),
     );
   }
 
   Widget _buildAll(BuildContext context) {
     return _IconButton(
-      icon: Icon(
-        B2BIcons.factory_all,
-        color: Color.fromRGBO(148, 161, 246, 1.0),
-        size: 30,
-      ),
+      icon: B2BV2Image.factory_1(width: 28, height: 28),
       title: '全部工厂',
       onPressed: () async {
         List<CategoryModel> categories =
@@ -68,11 +59,7 @@ class FindingFactoryBtnsBar extends StatelessWidget {
 
   Widget _buildFree(BuildContext context) {
     return _IconButton(
-      icon: Icon(
-        B2BIcons.clothes,
-        color: Colors.lightBlue,
-        size: 30,
-      ),
+      icon: B2BV2Image.factory_2(width: 28, height: 28),
       title: '免费打样',
       onPressed: () async {
         List<CategoryModel> categories =
@@ -92,16 +79,17 @@ class FindingFactoryBtnsBar extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    labels: conditionlabels,
-                    cooperationModes: []),
-                route: '免费打样',
-                categories: categories,
-                labels: labels,
-              ),
+              builder: (context) =>
+                  FactoryPage(
+                    FactoryCondition(
+                        starLevel: 0,
+                        adeptAtCategories: [],
+                        labels: conditionlabels,
+                        cooperationModes: []),
+                    route: '免费打样',
+                    categories: categories,
+                    labels: labels,
+                  ),
             ),
           );
         }
@@ -111,11 +99,7 @@ class FindingFactoryBtnsBar extends StatelessWidget {
 
   Widget _buildAuthentication(BuildContext context) {
     return _IconButton(
-      icon: Icon(
-        B2BIcons.authentication,
-        color: Colors.lightGreen,
-        size: 30,
-      ),
+      icon: B2BV2Image.factory_4(width: 28, height: 28),
       title: '认证工厂',
       onPressed: () async {
         List<CategoryModel> categories =
@@ -134,16 +118,16 @@ class FindingFactoryBtnsBar extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) =>
                   FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    cooperationModes: [],
-                    approvalStatuses: 'approved',
-                    labels: []),
-                route: '认证工厂',
-                categories: categories,
-                labels: labels,
-              ),
+                    FactoryCondition(
+                        starLevel: 0,
+                        adeptAtCategories: [],
+                        cooperationModes: [],
+                        approvalStatuses: 'approved',
+                        labels: []),
+                    route: '认证工厂',
+                    categories: categories,
+                    labels: labels,
+                  ),
             ),
           );
         }
@@ -153,11 +137,7 @@ class FindingFactoryBtnsBar extends StatelessWidget {
 
   Widget _buildFast(BuildContext context) {
     return _IconButton(
-      icon: Icon(
-        B2BIcons.thunder,
-        color: Color.fromRGBO(212, 35, 122, 1.0),
-        size: 30,
-      ),
+      icon: B2BV2Image.factory_3(width: 28, height: 28),
       title: '快反工厂',
       onPressed: () async {
         List<CategoryModel> categories =
@@ -177,16 +157,17 @@ class FindingFactoryBtnsBar extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    labels: conditionlabels,
-                    cooperationModes: []),
-                route: '快反工厂',
-                categories: categories,
-                labels: labels,
-              ),
+              builder: (context) =>
+                  FactoryPage(
+                    FactoryCondition(
+                        starLevel: 0,
+                        adeptAtCategories: [],
+                        labels: conditionlabels,
+                        cooperationModes: []),
+                    route: '快反工厂',
+                    categories: categories,
+                    labels: labels,
+                  ),
             ),
           );
         }
@@ -203,7 +184,7 @@ class _IconButton extends StatelessWidget {
   final String title;
 
   @required
-  final Icon icon;
+  final Widget icon;
 
   const _IconButton({Key key, this.onPressed, this.title, this.icon})
       : super(key: key);
@@ -224,7 +205,10 @@ class _IconButton extends StatelessWidget {
                       child: Text(
                         '$title',
                         overflow: TextOverflow.visible,
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xff666666),
+                            fontWeight: FontWeight.w500),
                       ),
                     )
                   ],

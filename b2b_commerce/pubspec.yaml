@@ -284,7 +284,10 @@ flutter:
     - packages/assets/img/icons/b2b-v2/location/add_1@2x.png
     - packages/assets/img/icons/b2b-v2/location/add_2@2x.png
     - packages/assets/temp/index/poster1.png
-
+    - packages/assets/img/icons/b2b-v2/factory/factory_1@2x.png
+    - packages/assets/img/icons/b2b-v2/factory/factory_2@2x.png
+    - packages/assets/img/icons/b2b-v2/factory/factory_3@2x.png
+    - packages/assets/img/icons/b2b-v2/factory/factory_4@2x.png
 
   fonts:
     - family: b2bIcons
