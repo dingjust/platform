@@ -52,14 +52,12 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  SearchModelPage(
-                      searchModel: SearchModel(
-                        historyKeywords: historyKeywords,
-                        searchModelType: SearchModelType.REQUIREMENT_ORDER,
-                        route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-                      )
-                  ),
+              builder: (context) => SearchModelPage(
+                  searchModel: SearchModel(
+                historyKeywords: historyKeywords,
+                searchModelType: SearchModelType.REQUIREMENT_ORDER,
+                route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+              )),
             ),
           );
         });
@@ -74,7 +72,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
       bloc: RequirementOrderBLoC.instance,
       child: Scaffold(
         appBar: AppBarFactory.buildDefaultAppBar(
-          '需求订单管理',
+          '我的需求',
           actions: <Widget>[_buildSearchButton(context)],
         ),
         body: DefaultTabController(

@@ -29,14 +29,13 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
 
   List<QuoteList> tabViewList = statuses
       .map(
-        (status) =>
-        QuoteList(
+        (status) => QuoteList(
           status: status,
         ),
-  )
+      )
       .toList();
 
-  TabBar tabBar = TabFactory.buildDefaultTabBar(statuses);
+  Widget tabBar = TabFactory.buildDefaultTabBar(statuses);
 
   Widget _buildSearchButton() {
     return IconButton(

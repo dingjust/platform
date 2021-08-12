@@ -126,7 +126,7 @@ class FactoryItem extends StatelessWidget {
             child: Icon(
               B2BIconsV2.location,
               color: Color(0xff999999),
-              size: 12,
+              size: 14,
             ),
           ),
           Expanded(
