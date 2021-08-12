@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return [
       SliverAppBar(
         expandedHeight:
-            (MediaQuery.of(context).size.width - 24) * (120 / 350) + 85,
+            (MediaQuery.of(context).size.width - 24) * (120 / 350) + 61,
         pinned: true,
         elevation: 0.5,
         title: HomeTitle(
