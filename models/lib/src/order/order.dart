@@ -865,7 +865,7 @@ class RequirementInfoModel extends ItemModel {
           : models.map((model) => RegionModel.toJson(model)).toList();
 
   static List<Map<String, dynamic>> productsToJson(
-      List<ApparelProductModel> models) =>
+          List<ApparelProductModel> models) =>
       models == null
           ? null
           : models.map((model) => ApparelProductModel.toJson(model)).toList();
@@ -962,15 +962,15 @@ class RequirementOrderModel extends OrderModel {
     this.enableShowReasons,
     this.favoriteId})
       : super(
-            statistics: statistics,
-            code: code,
-            totalQuantity: totalQuantity,
-            totalPrice: totalPrice,
-            creationTime: creationTime,
-            deliveryAddress: deliveryAddress,
-            remarks: remarks,
-            supplier: supplier,
-            modifiedTime: modifiedTime);
+      statistics: statistics,
+      code: code,
+      totalQuantity: totalQuantity,
+      totalPrice: totalPrice,
+      creationTime: creationTime,
+      deliveryAddress: deliveryAddress,
+      remarks: remarks,
+      supplier: supplier,
+      modifiedTime: modifiedTime);
 
   factory RequirementOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$RequirementOrderModelFromJson(json);
@@ -1532,15 +1532,17 @@ class QuoteModel extends AbstractOrderModel {
   ///销售订单code
   String salesOrderCode;
 
-  QuoteModel(
-      {String code,
-      int totalQuantity,
-      double totalPrice,
-      DateTime creationTime,
-      AddressModel deliveryAddress,
-      String remarks,
-      double unitPrice,
-      PrincipalModel supplier,
+  @JsonKey(toJson: FeedbackData.toJson)
+  FeedbackData newestFeedback;
+
+  QuoteModel({String code,
+    int totalQuantity,
+    double totalPrice,
+    DateTime creationTime,
+    AddressModel deliveryAddress,
+    String remarks,
+    double unitPrice,
+    PrincipalModel supplier,
       this.state,
       this.requirementOrder,
       this.purchaseOrderCode,

@@ -541,4 +541,10 @@ class B2BV2Image {
     return getImage('img/icons/b2b-v2/factory/factory_4@2x.png',
         width: width, height: height);
   }
+
+  ///消息
+  static Image message({double width, double height}) {
+    return getImage('img/icons/b2b-v2/message@2x.png',
+        width: width, height: height);
+  }
 }

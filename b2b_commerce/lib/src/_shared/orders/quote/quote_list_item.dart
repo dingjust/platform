@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -65,8 +66,8 @@ class QuoteListItem extends StatelessWidget {
       Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) => QuoteOrderDetailPage(
-                  model.code,
-                )),
+              model.code,
+            )),
       );
     }
 
@@ -174,13 +175,13 @@ class QuoteListItem extends StatelessWidget {
         children: <Widget>[
           Expanded(
               child: Text(
-            "${model.requirementOrder.details.majorCategoryName()} ${model.requirementOrder.details.category?.name} ${model.requirementOrder.details.expectedMachiningQuantity}件",
-            style: const TextStyle(
-                fontSize: 13,
-                color: const Color(0xff666666),
-                fontWeight: FontWeight.w500),
-            overflow: TextOverflow.ellipsis,
-          )),
+                "${model.requirementOrder.details.majorCategoryName()} ${model.requirementOrder.details.category?.name} ${model.requirementOrder.details.expectedMachiningQuantity}件",
+                style: const TextStyle(
+                    fontSize: 13,
+                    color: const Color(0xff666666),
+                    fontWeight: FontWeight.w500),
+                overflow: TextOverflow.ellipsis,
+              )),
         ],
       ),
     );
@@ -287,7 +288,34 @@ class QuoteListItem extends StatelessWidget {
     else if (UserBLoC.instance.currentUser.companyCode == model.belongTo.uid) {
       if (model.state == QuoteState.SELLER_SUBMITTED) {
         buttons = [
-          Container(),
+          Expanded(
+              child: Row(
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 4),
+                child: B2BV2Image.message(width: 20, height: 18),
+              ),
+              (model.newestFeedback.content != null &&
+                      model.newestFeedback.content != '')
+                  ? Container(
+                      child: Text(
+                      '${model.newestFeedback.content}',
+                      style: TextStyle(
+                        color: Color(0xff222222),
+                        fontSize: 12,
+                      ),
+                    ))
+                  : Container(
+                      child: Text(
+                        '暂无反馈',
+                        style: TextStyle(
+                          color: Color(0xff999999),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+            ],
+          )),
           GestureDetector(
             onTap: onQuoteUpdating,
             child: Container(

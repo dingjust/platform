@@ -165,7 +165,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                pageItem.supplier?.profilePicture == null
+                pageItem.requirementOrder.belongTo?.profilePicture == null
                     ? Container(
                         margin: EdgeInsets.all(10),
                         width: 80,
@@ -188,10 +188,9 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                             width: 100,
                             height: 100,
                             imageUrl:
-                                '${pageItem.supplier.profilePicture.previewUrl()}',
+                                '${pageItem?.requirementOrder?.belongTo?.profilePicture?.previewUrl()}',
                             fit: BoxFit.cover,
-                            imageBuilder: (context, imageProvider) =>
-                                Container(
+                            imageBuilder: (context, imageProvider) => Container(
                                   width: 100,
                                   height: 100,
                                   decoration: BoxDecoration(
@@ -223,94 +222,40 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     Container(
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        pageItem.supplier == null ||
-                                pageItem.supplier.name == null
+                        pageItem?.requirementOrder?.belongTo == null ||
+                            pageItem?.requirementOrder?.belongTo?.name ==
+                                null
                             ? ''
-                            : '${pageItem.supplier?.name}',
+                            : '${pageItem?.requirementOrder?.belongTo?.name}',
                         softWrap: true,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    pageItem.supplier == null ||
-                            pageItem.supplier.approvalStatus == null
+                    pageItem?.requirementOrder?.belongTo == null ||
+                        pageItem?.requirementOrder?.belongTo
+                            .approvalStatus ==
+                            null
                         ? Container()
                         : Container(
-                            margin: EdgeInsets.only(top: 5),
-                            color: Color.fromRGBO(254, 252, 235, 1),
-                            child: pageItem.supplier.approvalStatus !=
-                                    ArticleApprovalStatus.approved
-                                ? Text('  未认证  ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 133, 148, 1),
-                                    ))
-                                : Text(
-                                    '  已认证  ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 133, 148, 1),
-                                    ),
+                        margin: EdgeInsets.only(top: 5),
+                        color: Color.fromRGBO(254, 252, 235, 1),
+                        child: pageItem?.requirementOrder?.belongTo
+                            .approvalStatus !=
+                            ArticleApprovalStatus.approved
+                            ? Text('  未认证  ',
+                            style: TextStyle(
+                              color: Color.fromRGBO(255, 133, 148, 1),
+                            ))
+                            : Text(
+                          '  已认证  ',
+                          style: TextStyle(
+                            color: Color.fromRGBO(255, 133, 148, 1),
+                          ),
                                   ))
                   ],
                 ))
               ],
-            ),
-            Divider(
-              height: 1,
-            ),
-            Container(
-              padding: EdgeInsets.all(15),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text('联系人'),
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      pageItem.supplier == null ||
-                              pageItem.supplier.contactPerson == null
-                          ? ''
-                          : '${pageItem.supplier.contactPerson}',
-                      style: TextStyle(
-                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Divider(
-              height: 2,
-            ),
-            GestureDetector(
-              child: Container(
-                padding: EdgeInsets.all(15),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: Text('联系手机'),
-                      ),
-                    ),
-                    Container(
-                      child: Text(
-                        pageItem.supplier == null ||
-                                pageItem.supplier.contactPhone == null
-                            ? ''
-                            : '${pageItem.supplier.contactPhone}',
-                        style: TextStyle(
-                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                pageItem.supplier == null ||
-                        pageItem.supplier.contactPhone == null
-                    ? null
-                    : _selectActionButton(pageItem.supplier.contactPhone);
-              },
             ),
           ],
         ),

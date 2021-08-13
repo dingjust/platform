@@ -1,4 +1,3 @@
-
 import 'package:b2b_commerce/src/_shared/widgets/authorization_dector.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -413,9 +412,9 @@ class FactoryMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.requirementOrder, '需求订单',
                     AppRoutes.ROUTE_REQUIREMENT_ORDERS,
                     authorizations: [Authorization.REQUIREMENT_ORDER]),
-                buildChild(context, MenuItemImage.priceManage, '报价处理',
-                    AppRoutes.ROUTE_MY_QUOTES,
-                    authorizations: [Authorization.QUOTE_ORDER]),
+                // buildChild(context, MenuItemImage.priceManage, '报价处理',
+                //     AppRoutes.ROUTE_MY_QUOTES,
+                //     authorizations: [Authorization.QUOTE_ORDER]),
                 buildChild(context, MenuItemImage.priceOrder, '我的报价',
                     AppRoutes.ROUTE_QUOTES,
                     authorizations: [Authorization.QUOTE_ORDER]),
