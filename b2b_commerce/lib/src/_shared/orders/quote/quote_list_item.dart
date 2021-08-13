@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/my/my_factory.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -217,31 +217,14 @@ class QuoteListItem extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 GestureDetector(
-                  child: Icon(
-                    Icons.phone,
-                    color: Colors.green,
-                    size: 20,
-                  ),
-                  onTap: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyFactoryPage(
-                              factoryUid: model.belongTo.uid,
-                              isFactoryDetail: true,
-                            )));
-                  },
-                ),
+                    child: Icon(
+                      Icons.phone,
+                      color: Colors.green,
+                      size: 20,
+                    ),
+                    onTap: () => _toFactory(context)),
                 FlatButton(
-                  onPressed: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyFactoryPage(
-                              factoryUid: model.belongTo.uid,
-                              isFactoryDetail: true,
-                            )));
-                  },
+                  onPressed: () => _toFactory(context),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   child: Text(
@@ -252,21 +235,25 @@ class QuoteListItem extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            height: 30,
-            child: FlatButton(
-              onPressed: onQuoteConfirming,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '确认工厂',
-                style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+          GestureDetector(
+            onTap: onQuoteConfirming,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[Color(0xffFA7E1E), Color(0xFFF53C3C)],
+                ),
               ),
+              child: const Text('确认工厂',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500)),
             ),
-          ),
+          )
         ];
       } else {
         buttons = <Widget>[
@@ -275,31 +262,14 @@ class QuoteListItem extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 GestureDetector(
-                  child: Icon(
-                    Icons.phone,
-                    color: Colors.green,
-                    size: 20,
-                  ),
-                  onTap: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyFactoryPage(
-                              factoryUid: model.belongTo.uid,
-                              isFactoryDetail: true,
-                            )));
-                  },
-                ),
+                    child: Icon(
+                      Icons.phone,
+                      color: Colors.green,
+                      size: 20,
+                    ),
+                    onTap: () => _toFactory(context)),
                 FlatButton(
-                  onPressed: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyFactoryPage(
-                              factoryUid: model.belongTo.uid,
-                              isFactoryDetail: true,
-                            )));
-                  },
+                  onPressed: () => _toFactory(context),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   child: Text(
@@ -372,5 +342,10 @@ class QuoteListItem extends StatelessWidget {
         children: buttons ?? [],
       ),
     );
+  }
+
+  void _toFactory(BuildContext context) {
+    Navigator.of(context).pushNamed(AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+        arguments: {'uid': model.belongTo.uid});
   }
 }

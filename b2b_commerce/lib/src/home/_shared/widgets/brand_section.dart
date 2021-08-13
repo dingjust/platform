@@ -171,19 +171,6 @@ class BrandButtonsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderCoordination(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: ImageNumButton(
-        image: B2BImage.orderCoordination(),
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_COORDINATION);
-        },
-        title: '订单协同',
-      ),
-    );
-  }
-
   ///报价处理
   Widget _buildQuoteProcess(BuildContext context) {
     return Expanded(

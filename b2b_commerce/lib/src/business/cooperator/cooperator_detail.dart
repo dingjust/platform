@@ -1,11 +1,12 @@
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/my_brand.dart';
-import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 class CooperatorDetailPage extends StatefulWidget {
   final int id;
+
   CooperatorDetailPage({Key key, @required this.id}) : super(key: key);
 
   @override
@@ -111,7 +112,7 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
   Future<CooperatorModel> _getData() async {
     if (model == null) {
       CooperatorModel detailModel =
-          await CooperatorRepositoryImpl().getDetail(widget.id);
+      await CooperatorRepositoryImpl().getDetail(widget.id);
       model = detailModel;
     }
     return model;
@@ -151,83 +152,76 @@ class _CooperatorDetailPageState extends State<CooperatorDetailPage> {
                           child: Text('$name', style: TextStyle(fontSize: 18)),
                         ),
                         model.partner != null &&
-                                model.partner.approvalStatus ==
-                                    ArticleApprovalStatus.approved
+                            model.partner.approvalStatus ==
+                                ArticleApprovalStatus.approved
                             ? Container(
-                                height: 20,
-                                margin: EdgeInsets.symmetric(horizontal: 5),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 1),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    border: Border.all(
-                                        color:
-                                            Color.fromRGBO(225, 243, 216, 1))),
-                                child: Center(
-                                  child: Text(
-                                    '已认证',
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(103, 194, 58, 1),
-                                        fontSize: 10),
-                                  ),
-                                ),
-                              )
+                          height: 20,
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 1),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              border: Border.all(
+                                  color:
+                                  Color.fromRGBO(225, 243, 216, 1))),
+                          child: Center(
+                            child: Text(
+                              '已认证',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(103, 194, 58, 1),
+                                  fontSize: 10),
+                            ),
+                          ),
+                        )
                             : Container(
-                                height: 20,
-                                margin: EdgeInsets.symmetric(horizontal: 5),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 1),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    border:
-                                        Border.all(color: Colors.grey[200])),
-                                child: Center(
-                                  child: Text(
-                                    '未认证',
-                                    style: TextStyle(
-                                        color: Colors.black54, fontSize: 10),
-                                  ),
-                                ),
-                              )
+                          height: 20,
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 1),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              border:
+                              Border.all(color: Colors.grey[200])),
+                          child: Center(
+                            child: Text(
+                              '未认证',
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 10),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
                   model.partner != null
                       ? Container(
-                          height: 30,
-                          width: 70,
-                          child: FlatButton(
-                            color: Color.fromRGBO(255, 214, 12, 1),
-                            onPressed: () {
-                              if (model.partner.type == CompanyType.FACTORY) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MyFactoryPage(
-                                      factoryUid: model.partner.uid,
-                                      isFactoryDetail: true,
-                                      isSupplier: true,
-                                    ),
-                                  ),
-                                );
+                    height: 30,
+                    width: 70,
+                    child: FlatButton(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: () {
+                        if (model.partner.type == CompanyType.FACTORY) {
+                                Navigator.of(context).pushNamed(
+                                    AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+                                    arguments: {'uid': model.belongTo.uid});
                               } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MyBrandPage(
-                                      model.partner.uid,
-                                      isDetail: true,
-                                      isSupplier: true,
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text(
-                              '详情',
-                              style: TextStyle(fontSize: 16),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyBrandPage(
+                                model.partner.uid,
+                                isDetail: true,
+                                isSupplier: true,
+                              ),
                             ),
-                          ),
+                          );
+                        }
+                      },
+                      child: Text(
+                        '详情',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
                   )
                       : Container()
                 ],
@@ -283,15 +277,14 @@ class _InputRow extends StatelessWidget {
 
   final bool top;
 
-  const _InputRow(
-      {Key key,
-      this.label,
-      this.child,
-      this.suffix,
-      this.labelWidth = 120,
-      this.height = 70,
-      this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      this.top = false})
+  const _InputRow({Key key,
+    this.label,
+    this.child,
+    this.suffix,
+    this.labelWidth = 120,
+    this.height = 70,
+    this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    this.top = false})
       : super(key: key);
 
   @override

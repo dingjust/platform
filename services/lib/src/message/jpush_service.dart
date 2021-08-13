@@ -115,11 +115,6 @@ class JPushService {
       case 1:
         return QuoteOrderDetailPage(response.extras.androidExtras.params);
         break;
-      case 2:
-        return ProofingOrderDetailPage(response.extras.androidExtras.params);
-      case 3:
-        return PurchaseOrderDetailPage(
-            code: response.extras.androidExtras.params);
       case 4:
         return UserBLoC.instance.currentUser.type == UserType.FACTORY
             ? RequirementOrderDetailByFactoryPage(
@@ -139,10 +134,6 @@ class JPushService {
       case 1:
         return QuoteOrderDetailPage(response.params);
         break;
-      case 2:
-        return ProofingOrderDetailPage(response.params);
-      case 3:
-        return PurchaseOrderDetailPage(code: response.params);
       case 4:
         return UserBLoC.instance.currentUser.type == UserType.FACTORY
             ? RequirementOrderDetailByFactoryPage(response.params)
@@ -160,10 +151,6 @@ class JPushService {
       case 1:
         return QuoteOrderDetailPage(message.params);
         break;
-      case 2:
-        return ProofingOrderDetailPage(message.params);
-      case 3:
-        return PurchaseOrderDetailPage(code: message.params);
       case 4:
         return UserBLoC.instance.currentUser.type == UserType.FACTORY
             ? RequirementOrderDetailByFactoryPage(message.params)

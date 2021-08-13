@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
@@ -222,15 +223,15 @@ class SuppliersList extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FactoryPage(
-              FactoryCondition(
-                  starLevel: 0,
-                  adeptAtCategories: [],
-                  labels: conditionLabels,
-                  cooperationModes: []),
-              route: '优选工厂',
-              categories: categories,
-              labels: labels,
-            ),
+          FactoryCondition(
+              starLevel: 0,
+              adeptAtCategories: [],
+              labels: conditionLabels,
+              cooperationModes: []),
+          route: '优选工厂',
+          categories: categories,
+          labels: labels,
+        ),
       ),
     );
   }
@@ -404,16 +405,8 @@ class _SuppliersItemState extends State<SuppliersItem> {
         ),
       ),
       onTap: () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyFactoryPage(
-                  factoryUid: widget.supplierModel.uid,
-                  isFactoryDetail: true,
-                  isSupplier: true,
-                ),
-          ),
-        );
+        Navigator.of(context).pushNamed(AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+            arguments: {'uid': widget.supplierModel.uid});
       },
     );
   }
@@ -439,10 +432,10 @@ class _SuppliersItemState extends State<SuppliersItem> {
 //          ),
           widget.quoteInviting
               ? FlatButton(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  child: invited ? Text('已邀请报价') : Text('邀请报价'),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: invited ? Text('已邀请报价') : Text('邀请报价'),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)),
             onPressed: invited
                 ? null
                 : () {
@@ -459,7 +452,7 @@ class _SuppliersItemState extends State<SuppliersItem> {
                       entrance: '0',
                     );
                   }).then((_) {
-                    Navigator.pop(context);
+                Navigator.pop(context);
                 setState(() {
                   invited = true;
                 });
@@ -497,7 +490,8 @@ class BrandSuppliersItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MyBrandPage(
+            builder: (context) =>
+                MyBrandPage(
                   supplierModel.uid,
                   isDetail: true,
                   isSupplier: true,

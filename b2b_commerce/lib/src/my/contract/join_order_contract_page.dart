@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/business/search/purchase_order_search_result.dart';
-import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/contract/float_select_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -145,21 +143,21 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
   Widget _buildSelectOrderItem(){
     return GestureDetector(
       onTap: () {
-        SearchModel searchModel = SearchModel(keyword: '');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    PurchaseOrderSearchResultPage(
-                      searchModel: searchModel,
-                      isContractSelect: true,
-                    )
-            )
-        ).then((value) {
-          if(value != null) {
-            orderModel = value;
-          }
-        });
+        // SearchModel searchModel = SearchModel(keyword: '');
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) =>
+        //             PurchaseOrderSearchResultPage(
+        //               searchModel: searchModel,
+        //               isContractSelect: true,
+        //             )
+        //     )
+        // ).then((value) {
+        //   if(value != null) {
+        //     orderModel = value;
+        //   }
+        // });
       },
       child: Container(
         margin: EdgeInsets.only(top: 20),

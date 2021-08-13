@@ -1,7 +1,5 @@
-import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
-import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:b2b_commerce/src/my/company/form/my_company_certificate.dart';
 import 'package:b2b_commerce/src/my/company/form/my_personal_certificate.dart';
@@ -161,10 +159,6 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 color: Colors.grey[Constants.SIZEDBOX_COLOR],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: buildPurchaseOrderItem(),
-            ),
           ],
         ),
       ));
@@ -191,52 +185,6 @@ class _MyBrandPageState extends State<MyBrandPage> {
     _widgets
         .add(Container(color: Colors.white, child: _buildBrandRegisterDate()));
     return _widgets;
-  }
-
-  FutureBuilder<PurchaseOrderModel> buildPurchaseOrderItem() {
-    return FutureBuilder(
-      future: getPurchaseOrderItem(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 200),
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
-        return Offstage(
-            offstage: !(snapshot.hasData && snapshot.data != null),
-            child: Column(
-              children: <Widget>[
-                PurchaseOrderListItem(
-                  order: snapshot.data,
-                ),
-                Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Center(
-                    child: GestureDetector(
-                      child: Text(
-                        '查看全部>>',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () async {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CompanyPurchaseListPage(
-                                      companyUid: _brand.uid,
-                                    )));
-                      },
-                    ),
-                  ),
-                )
-              ],
-            ));
-      },
-    );
   }
 
   FutureBuilder<QuoteModel> buildQuoteItem() {

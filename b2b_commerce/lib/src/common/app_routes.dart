@@ -6,7 +6,6 @@ import 'package:b2b_commerce/src/business/orders/delivery/delivery_order_detail_
 import 'package:b2b_commerce/src/business/orders/delivery/delivery_orders_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_page.dart';
 import 'package:b2b_commerce/src/business/orders/fabric/fabric_requirement_publish_form_page.dart';
-import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/orders/order_import_page.dart';
 import 'package:b2b_commerce/src/business/orders/reconciliation/reconciliation_order_detail_page.dart';
 import 'package:b2b_commerce/src/business/orders/reconciliation/reconciliation_orders_page.dart';
@@ -24,7 +23,6 @@ import 'package:b2b_commerce/src/business/products/materiel_product_manage.dart'
 import 'package:b2b_commerce/src/business/products/materiel_products.dart';
 import 'package:b2b_commerce/src/business/products/sample/sample_product_detail.dart';
 import 'package:b2b_commerce/src/business/products/sample/sample_products.dart';
-import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/quote_my_orders.dart';
 import 'package:b2b_commerce/src/business/services/operation_agent_service.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
@@ -63,7 +61,6 @@ import 'package:flutter/material.dart';
 import '../../b2b_commerce.dart';
 import '../business/apparel_products.dart';
 import '../business/employees.dart';
-import '../business/purchase_orders.dart';
 import '../business/quote_orders.dart';
 import '../business/requirement_orders.dart';
 import '../business/suppliers.dart';
@@ -96,7 +93,6 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_PRODUCTS_BRAND = '/business/products_brand';
   static const ROUTE_PRODUCTS_OFF_THE_SHELF =
       '/business/products_off_the_shelf';
-  static const ROUTE_PURCHASE_ORDERS = '/business/purchase_orders';
   static const ROUTE_SALE_ORDERS = '/business/sale_orders';
   static const ROUTE_QUOTES = '/business/quotes';
   static const ROUTE_MY_QUOTES = '/business/my_quotes';
@@ -107,7 +103,6 @@ class AppRoutes with GlobalRoutes {
       '/business/orders/requirement_orders_detail';
   static const ROUTE_REQUIREMENT_QUOTE_DETAIL =
       '/business/orders/requirement_quote_detail';
-  static const ROUTE_PROOFING_ORDERS = '/business/proofing_orders';
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
 
@@ -183,7 +178,6 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_BILL = '/my/my_bill';
   static const ROUTE_DELIVERY = '/business/delivery';
 
-  static const ROUTE_ORDER_COORDINATION = '/business/order_coordination';
   static const ROUTE_PUBLISH_CENTER = '/home/publish_center';
 
   static const ROUTE_WEBVIEW_PAGE = '/webview_page';
@@ -251,7 +245,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
     ROUTE_PRODUCTS: (context) => ApparelProductsPage(),
     ROUTE_PRODUCTS_BRAND: (context) => ApparelProductsBrandPage(),
-    ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),
     ROUTE_MY_QUOTES: (context) => QuoteMyOrdersPage(),
@@ -273,11 +266,9 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_INTEGRAL_CENTER: (context) => IntegralCenterPage(),
     // ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
     ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
-    ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage(),
     ROUTE_MY_BILL: (context) => MyBillPage(),
     ROUTE_MY_HELP: (context) => MyHelpPage(),
     ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage(),
-    ROUTE_ORDER_COORDINATION: (context) => OrderCoordinationPage(),
     ROUTE_PUBLISH_CENTER: (context) => PublishCenterPage(),
     ROUTE_ORDER_PRODUCTS: (context) => ProductsPage(),
     ROUTE_ORDER_PRODUCTS_INDEX: (context) => ProductsHomePage(),

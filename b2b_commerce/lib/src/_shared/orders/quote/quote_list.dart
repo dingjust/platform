@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/sale/sales_order_from.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +6,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './quote_list_item.dart';
-import '../../../business/orders/form/proofing_order_form.dart';
 import '../../../home/pool/requirement_quote_order_form.dart';
-import '../../../production/production_online_order_from.dart';
 import '../../widgets/scrolled_to_end_tips.dart';
 
 class QuoteList extends StatefulWidget {
@@ -158,38 +155,6 @@ class _QuoteListState extends State<QuoteList>
     }
   }
 
-  void _onProofingCreating(QuoteModel model) async {
-    //查询明细
-    QuoteModel detailModel =
-        await QuoteOrderRepository().getQuoteDetails(model.code);
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => ProofingOrderForm(
-                quoteModel: detailModel,
-                model: ProofingModel(
-                  unitPrice: 0,
-                ),
-              )),
-    );
-  }
-
-  void _onProductionOrderCreating(QuoteModel model) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ProductionOnlineOrderFrom(quoteModel: model)),
-    );
-  }
-
-  void _onSalesOrderCreating(QuoteModel model) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => SalesOrderForm(quoteModel: model)),
-    );
-  }
-
   void _onQuoteAgain(QuoteModel model) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -316,10 +281,6 @@ class _QuoteListState extends State<QuoteList>
                         onQuoteRejecting: () => _onQuoteRejecting(item),
                         onQuoteConfirming: () => _onQuoteConfirming(item),
                         onQuoteUpdating: () => _onQuoteUpdating(item),
-                        onProofingCreating: () => _onProofingCreating(item),
-                        onProductionOrderCreating: () =>
-                            _onProductionOrderCreating(item),
-                        onSalesOrderCreating: () => _onSalesOrderCreating(item),
                         onQuoteAgain: () => _onQuoteAgain(item),
                         companyUid: widget.companyUid,
                       );
