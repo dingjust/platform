@@ -24,6 +24,7 @@ import 'package:b2b_commerce/src/business/products/materiel_products.dart';
 import 'package:b2b_commerce/src/business/products/sample/sample_product_detail.dart';
 import 'package:b2b_commerce/src/business/products/sample/sample_products.dart';
 import 'package:b2b_commerce/src/business/quote_my_orders.dart';
+import 'package:b2b_commerce/src/business/services/delegation_service.dart';
 import 'package:b2b_commerce/src/business/services/operation_agent_service.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
@@ -205,6 +206,9 @@ class AppRoutes with GlobalRoutes {
   ///服务申请页面
   static const ROUTE_SERVICE_APPLY = '/business/services/apply';
 
+  ///托管服务
+  static const ROUTE_SERVICE_DELEGATION = '/business/services/delegation';
+
   ///订单导入页面
   static const ROUTE_ORDER_IMPORT = '/business/orders/import';
 
@@ -316,6 +320,7 @@ class AppRoutes with GlobalRoutes {
           uid: getVal('uid', context),
         ),
     ROUTE_SERVICE_APPLY: (context) => OperationAgentServiceApplyPage(),
+    ROUTE_SERVICE_DELEGATION: (context) => DelegationServicePage(),
     ROUTE_ORDER_IMPORT: (context) =>
         OrderImportPage(code: getVal('code', context)),
     ROUTE_SAMPLE_PRODUCTS: (context) => SampleProductsPage(),
