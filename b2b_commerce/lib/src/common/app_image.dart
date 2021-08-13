@@ -547,4 +547,10 @@ class B2BV2Image {
     return getImage('img/icons/b2b-v2/message@2x.png',
         width: width, height: height);
   }
+
+  ///钱
+  static Image money({double width, double height}) {
+    return getImage('img/icons/b2b-v2/money@2x.png',
+        width: width, height: height);
+  }
 }
