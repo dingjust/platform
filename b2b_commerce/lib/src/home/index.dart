@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_list.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/common/qr_scan_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
@@ -283,12 +284,17 @@ class _HomePoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 12),
-      child: Image.asset(
-        'temp/index/poster1.png',
-        package: 'assets',
-        fit: BoxFit.fitWidth,
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed(AppRoutes.ROUTE_SERVICE_DELEGATION);
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 12),
+        child: Image.asset(
+          'temp/index/poster1.png',
+          package: 'assets',
+          fit: BoxFit.fitWidth,
+        ),
       ),
     );
   }

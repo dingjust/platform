@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class HomeSearchPage extends StatefulWidget {
@@ -23,7 +24,7 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
   List<String> _historyKeywords;
 
   //TODO:写死
-  List<String> _recommendKeywords = ['牛仔裤', '连衣裙', 'T恤', '羽绒服', '呢子大衣', '毛衣'];
+  List<String> _recommendKeywords;
 
   @override
   void initState() {
@@ -204,21 +205,27 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
                   ],
                 ),
               ),
-              Container(
-                child: Wrap(
-                    spacing: 8.0, // 主轴(水平)方向间距
-                    runSpacing: 0, // 纵轴（垂直）方向间距
-                    alignment: WrapAlignment.start, //沿主轴方向居中
-                    children: _recommendKeywords
-                        .map((keyword) =>
-                        HistoryTag(
-                          value: keyword,
-                          onTap: () {
-                            onSearch(keyword);
-                          },
-                        ))
-                        .toList()),
-              )
+              FutureBuilder(
+                  future: getRecommendWords(),
+                  builder: (context, snapshot) {
+                    if (_recommendKeywords != null) {
+                      return Container(
+                        child: Wrap(
+                            spacing: 8.0, // 主轴(水平)方向间距
+                            runSpacing: 0, // 纵轴（垂直）方向间距
+                            alignment: WrapAlignment.start, //沿主轴方向居中
+                            children: _recommendKeywords
+                                .map((keyword) => HistoryTag(
+                                      value: keyword,
+                                      onTap: () {
+                                        onSearch(keyword);
+                                      },
+                                    ))
+                                .toList()),
+                      );
+                    }
+                    return Container();
+                  }),
             ],
           ),
         ));
@@ -237,6 +244,19 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
       }
     }
     return _historyKeywords;
+  }
+
+  ///获取推荐关键字
+  Future<List<String>> getRecommendWords() async {
+    if (_recommendKeywords == null) {
+      List<String> words = await RecommendWordsRepository.get();
+      if (words != null) {
+        setState(() {
+          _recommendKeywords = words;
+        });
+      }
+    }
+    return _recommendKeywords;
   }
 
   void onSearch(String keyword) {

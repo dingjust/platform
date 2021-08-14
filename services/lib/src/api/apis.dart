@@ -30,8 +30,7 @@ class Apis {
       };
 
   /// 获取工厂明细 GET
-  static get factory =>
-          (uid) {
+  static get factory => (uid) {
         return '/{baseSiteId}/factories/$uid';
       };
 
@@ -197,7 +196,8 @@ class Apis {
       };
 
   ///签署文档
-  static get docSignatureSign => (code) {
+  static get docSignatureSign =>
+          (code) {
         return '/{baseSiteId}/doc/signature/$code';
       };
 
@@ -205,7 +205,11 @@ class Apis {
   static get notifications => '/{baseSiteId}/notice/all/published';
 
   ///隐私通话保护绑定
-  static get privacyCall => (phone) {
+  static get privacyCall =>
+          (phone) {
         return '/{baseSiteId}/privacy/phone/num/pool/get/by/phone/$phone';
       };
+
+  ///首页热门推荐关键字
+  static get recommendWords => '/{baseSiteId}/recommend/words/list';
 }
