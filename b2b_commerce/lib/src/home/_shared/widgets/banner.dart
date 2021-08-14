@@ -85,7 +85,9 @@ class HomeFactoryBannerSection extends StatelessWidget {
 class HomeBannerSection extends StatelessWidget {
   final ValueChanged<List<Color>> onChanged;
 
-  const HomeBannerSection({Key key, this.onChanged}) : super(key: key);
+  final double height;
+
+  const HomeBannerSection({Key key, this.onChanged,this.height}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +106,7 @@ class HomeBannerSection extends StatelessWidget {
                       onTap(context, carousel.url);
                     }))
                 .toList(),
-            120,
+            60,
             onChanged: (index) => onMediaChanged(index, state.bannerCarousels));
       }
         });

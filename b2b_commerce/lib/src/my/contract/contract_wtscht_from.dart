@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/_shared/contract/contract_purchase_order_select.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/contract/contract_temp_select_page.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
@@ -216,19 +215,19 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
           Divider(height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
           GestureDetector(
             onTap: () async {
-              dynamic result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ContractPurchaseOrderSelectPage(
-                            models: _orderModels,
-                          )));
+              // dynamic result = await Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) =>
+              //             ContractPurchaseOrderSelectPage(
+              //               models: _orderModels,
+              //             )));
 
-              if (result != null) {
-                print(result);
-                _orderModels = result;
-              }
-              print(_orderModels);
+              // if (result != null) {
+              //   print(result);
+              //   _orderModels = result;
+              // }
+              // print(_orderModels);
             },
             child: Container(
               color: Colors.white,

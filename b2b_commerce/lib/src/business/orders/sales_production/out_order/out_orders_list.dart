@@ -51,24 +51,23 @@ class OutOrdersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Color(0xffF7F7F7),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       child: RefreshIndicator(
         child: ListView(
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             children: [
-              state
-                  .orders(status.code)
-                  .isNotEmpty
+              state.orders(status.code).isNotEmpty
                   ? Column(
-                children: state
-                    .orders(status.code)
-                    .map((model) =>
-                    ExternalSaleOrderItem(
-                      model,
-                      type: SaleOrderItemType.EXPORT,
-                    ))
-                    .toList(),
-              )
+                      children: state
+                          .orders(status.code)
+                          .map((model) => ExternalSaleOrderItem(
+                                model,
+                                type: SaleOrderItemType.EXPORT,
+                              ))
+                          .toList(),
+                    )
                   : NoDataInfoRow(),
               ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
                 opacity: state.loadingMore ? 1.0 : 0,

@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/users/favorite.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/helper/requirement_helper.dart';
 import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
+import 'package:b2b_commerce/src/helper/call_helper.dart';
 import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:b2b_commerce/src/my/company/_shared/company_certificate_info.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 import '_shared/factory_capacities.dart';
@@ -185,34 +185,7 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
             '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
         confirm: () {
           String tel = data.contactPhone;
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return new Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.phone),
-                    title: Text('拨打电话'),
-                    onTap: () async {
-                      var url = 'tel:' + tel;
-                      await launch(url);
-                    },
-                  ),
-                  tel.indexOf('-') > -1
-                      ? Container()
-                      : ListTile(
-                          leading: Icon(Icons.message),
-                          title: Text('发送短信'),
-                          onTap: () async {
-                            var url = 'sms:' + tel;
-                            await launch(url);
-                          },
-                        ),
-                ],
-              );
-            },
-          );
+          CallHelper.privacyCall(tel, context: context);
         });
   }
 
@@ -246,8 +219,7 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                MyFactoryBaseFormPage(
+            builder: (context) => MyFactoryBaseFormPage(
                   data,
                 ))).then((v) {
       if (v == true) {

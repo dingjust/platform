@@ -1,4 +1,3 @@
-
 import 'package:b2b_commerce/src/_shared/widgets/authorization_dector.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -113,11 +112,6 @@ class BrandMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.priceManage, '报价管理',
                     AppRoutes.ROUTE_QUOTES,
                     authorizations: [Authorization.QUOTE_ORDER]),
-                // buildChild(context, MenuItemImage.proofingOrder, '打样订单',
-                //     AppRoutes.ROUTE_PROOFING_ORDERS,
-                //     authorizations: [Authorization.PROOFING_ORDER]),
-                // buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
-                //     AppRoutes.ROUTE_PURCHASE_ORDERS,
                 //     authorizations: [Authorization.PURCHASE_ORDER]),
                 // buildChild(context, MenuItemImage.saleOrder, '销售订单',
                 //     AppRoutes.ROUTE_SALE_ORDERS,
@@ -418,18 +412,15 @@ class FactoryMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.requirementOrder, '需求订单',
                     AppRoutes.ROUTE_REQUIREMENT_ORDERS,
                     authorizations: [Authorization.REQUIREMENT_ORDER]),
-                buildChild(context, MenuItemImage.priceManage, '报价处理',
-                    AppRoutes.ROUTE_MY_QUOTES,
-                    authorizations: [Authorization.QUOTE_ORDER]),
+                // buildChild(context, MenuItemImage.priceManage, '报价处理',
+                //     AppRoutes.ROUTE_MY_QUOTES,
+                //     authorizations: [Authorization.QUOTE_ORDER]),
                 buildChild(context, MenuItemImage.priceOrder, '我的报价',
                     AppRoutes.ROUTE_QUOTES,
                     authorizations: [Authorization.QUOTE_ORDER]),
                 // buildChild(context, MenuItemImage.proofingOrder, '打样订单',
                 //     AppRoutes.ROUTE_PROOFING_ORDERS,
                 //     authorizations: [Authorization.PROOFING_ORDER]),
-                // buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
-                //     AppRoutes.ROUTE_PURCHASE_ORDERS,
-                //     authorizations: [Authorization.PURCHASE_ORDER]),
                 // buildChild(context, MenuItemImage.saleOrder, '销售订单',
                 //     AppRoutes.ROUTE_SALE_ORDERS,
                 //     authorizations: [Authorization.PURCHASE_ORDER]),

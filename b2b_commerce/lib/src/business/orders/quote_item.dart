@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,12 @@ class QuoteItem extends StatefulWidget {
 
   bool isSupplier;
 
-  QuoteItem({Key key, this.model, this.isSupplier = false, @required this.onRefresh, @required this.pageContext})
+  QuoteItem(
+      {Key key,
+      this.model,
+      this.isSupplier = false,
+      @required this.onRefresh,
+      @required this.pageContext})
       : super(key: key);
 
   _QuoteItemState createState() => _QuoteItemState();
@@ -39,16 +45,21 @@ class _QuoteItemState extends State<QuoteItem> {
         //查询明细
 //        QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(widget.model.code);
 //        if (detailModel != null) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuoteOrderDetailPage( widget.model.code,)));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                QuoteOrderDetailPage(
+                  widget.model.code,
+                )));
 //        }
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(10,0,10,0),
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Column(
           children: <Widget>[
             _buildHeader(),
             _buildMain(),
-            widget.model.state == QuoteState.SELLER_SUBMITTED && UserBLoC.instance.currentUser.type == UserType.BRAND
+            widget.model.state == QuoteState.SELLER_SUBMITTED &&
+                UserBLoC.instance.currentUser.type == UserType.BRAND
                 ? _buildSummary()
                 : Container(),
           ],
@@ -65,15 +76,8 @@ class _QuoteItemState extends State<QuoteItem> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-
-          //TODO跳转详细页
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyFactoryPage(
-                    factoryUid:widget.model.belongTo.uid,
-                    isFactoryDetail: true,
-                  )));
+          Navigator.of(context).pushNamed(AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+              arguments: {'uid': widget.model.belongTo.uid});
         },
         child: Container(
             color: Colors.white,
@@ -116,7 +120,12 @@ class _QuoteItemState extends State<QuoteItem> {
                             children: <Widget>[
                               Expanded(
                                 child: Text(
-                                  '历史接单${widget.model.belongTo == null || widget.model.belongTo.historyOrdersCount == null ? '0' : widget.model.belongTo.historyOrdersCount}单',
+                                  '历史接单${widget.model.belongTo == null ||
+                                      widget.model.belongTo
+                                          .historyOrdersCount == null
+                                      ? '0'
+                                      : widget.model.belongTo
+                                      .historyOrdersCount}单',
                                   style: TextStyle(color: Colors.grey),
                                 ),
                               ),
@@ -124,7 +133,9 @@ class _QuoteItemState extends State<QuoteItem> {
                                 child: Row(
                                   children: <Widget>[
                                     Text(
-                                      '${widget.model.belongTo.contactAddress?.city?.name} ${widget.model.belongTo.contactAddress?.cityDistrict?.name}',
+                                      '${widget.model.belongTo.contactAddress
+                                          ?.city?.name} ${widget.model.belongTo
+                                          .contactAddress?.cityDistrict?.name}',
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                   ],
@@ -160,16 +171,21 @@ class _QuoteItemState extends State<QuoteItem> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               RichText(
-                text: TextSpan(text: '报价：', style: TextStyle(fontSize: 18, color: Colors.black), children: <TextSpan>[
-                  TextSpan(text: '￥', style: TextStyle(fontSize: 14, color: Colors.red)),
-                  TextSpan(
-                      text:
-                          '${widget.model.unitPrice}',
-                      style: TextStyle(color: Colors.red)),
-                ]),
+                text: TextSpan(
+                    text: '报价：',
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '￥',
+                          style: TextStyle(fontSize: 14, color: Colors.red)),
+                      TextSpan(
+                          text: '${widget.model.unitPrice}',
+                          style: TextStyle(color: Colors.red)),
+                    ]),
               ),
               Text(QuoteStateLocalizedMap[widget.model.state],
-                  style: TextStyle(color: _statusColors[widget.model.state], fontSize: 18))
+                  style: TextStyle(
+                      color: _statusColors[widget.model.state], fontSize: 18))
             ],
           ),
           Container(
@@ -204,7 +220,8 @@ class _QuoteItemState extends State<QuoteItem> {
               height: 30,
               child: FlatButton(
                   onPressed: onReject,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
                   color: Colors.red,
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Text(
@@ -216,12 +233,14 @@ class _QuoteItemState extends State<QuoteItem> {
               height: 30,
               child: FlatButton(
                   onPressed: onApprove,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
                   color: Color.fromRGBO(255, 214, 12, 1),
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Text(
                     '确认工厂',
-                    style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                    style: TextStyle(
+                        color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                   )),
             ),
           ],
@@ -239,12 +258,11 @@ class _QuoteItemState extends State<QuoteItem> {
             dialogType: DialogType.RESULT_DIALOG,
             failTips: '${message}',
             callbackResult: false,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    );
+        });
   }
 
   void onReject() {
@@ -259,15 +277,14 @@ class _QuoteItemState extends State<QuoteItem> {
             title: '填写拒绝原因',
             focusNode1: FocusNode(),
           );
-        }
-    ).then((value){
+        }).then((value) {
       if (value != null && value != '') {
-        rejectQuote(widget.model,value);
+        rejectQuote(widget.model, value);
       }
     });
   }
 
-  rejectQuote(QuoteModel model,String rejectText) async{
+  rejectQuote(QuoteModel model, String rejectText) async {
     bool result = false;
     int statusCode = await QuoteOrderRepository().quoteReject(
       model.code,
@@ -286,12 +303,11 @@ class _QuoteItemState extends State<QuoteItem> {
             successTips: '拒绝成功',
             failTips: '拒绝失败',
             callbackResult: result,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    ).then((_){
+        }).then((_) {
       //触发刷新
       widget.onRefresh();
     });
@@ -310,18 +326,18 @@ class _QuoteItemState extends State<QuoteItem> {
             confirmButtonText: '是',
             cancelButtonText: '否',
             dialogHeight: 180,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
               confirmFactory();
             },
           );
-        }
-    );
+        });
   }
 
   confirmFactory() async {
     bool result = false;
-    int statusCode = await QuoteOrderRepository().quoteApprove(widget.model.code);
+    int statusCode =
+    await QuoteOrderRepository().quoteApprove(widget.model.code);
 
     if (statusCode == 200) {
       result = true;
@@ -336,12 +352,11 @@ class _QuoteItemState extends State<QuoteItem> {
             successTips: '确认成功',
             failTips: '确认失败',
             callbackResult: result,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    ).then((_){
+        }).then((_) {
       //触发刷新
       widget.onRefresh();
     });

@@ -23,7 +23,7 @@ import '_shared/finding_factory_btns.dart';
 class FindingFactoryPage extends StatefulWidget {
   FindingFactoryPage({
     this.factoryCondition,
-    this.route = '推荐工厂',
+    this.route = '输入工厂名称',
     this.requirementCode,
   });
 
@@ -103,36 +103,6 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
 
     factoryCondition = FactoryCondition(
         starLevel: 0, adeptAtCategories: [], labels: [], cooperationModes: []);
-
-    // if (widget.factoryCondition != null) {
-    //   if (widget.route == '就近找厂') {
-    //     isLocalFind = true;
-    //     factoryCondition = FactoryCondition(
-    //       starLevel: 0,
-    //       adeptAtCategories: [],
-    //       labels: [],
-    //       cooperationModes: [],
-    //     );
-    //   } else {
-    //     factoryCondition = widget.factoryCondition;
-    //   }
-    // } else {
-    //   if (widget.route == '就近找厂') {
-    //     isLocalFind = true;
-    //     factoryCondition = FactoryCondition(
-    //       starLevel: 0,
-    //       adeptAtCategories: [],
-    //       labels: [],
-    //       cooperationModes: [],
-    //     );
-    //   } else {
-    //     factoryCondition = FactoryCondition(
-    //         starLevel: 0,
-    //         adeptAtCategories: [],
-    //         labels: [],
-    //         cooperationModes: []);
-    //   }
-    // }
     super.initState();
 
     //初始化滚动控制器
@@ -159,77 +129,10 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
         bloc: FactoryBLoC.instance,
         child: Scaffold(
             appBar: AppBar(
-              brightness: Brightness.light,
-              automaticallyImplyLeading: false,
-              elevation: 0.5,
-              backgroundColor: Constants.THEME_COLOR_MAIN,
-              title: Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      child: Icon(
-                        Icons.keyboard_arrow_left,
-                        size: 32,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        String jsonStr = await LocalStorage.get(
-                            GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
-                        if (jsonStr != null && jsonStr != '') {
-                          List<dynamic> list = json.decode(jsonStr);
-                          historyKeywords =
-                              list.map((item) => item as String).toList();
-                        } else {
-                          historyKeywords = [];
-                        }
-                        String result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SearchModelPage(
-                              searchModel: SearchModel(
-                                historyKeywords: historyKeywords,
-                                keyword: factoryCondition.keyword,
-                                searchModelType: SearchModelType.FACTORY,
-                                factoryCondition: factoryCondition,
-                                route:
-                                    GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        height: 28,
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(20),
-                          border:
-                          Border.all(color: Colors.grey[300], width: 0.5),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            const Icon(B2BIcons.search,
-                                color: Colors.grey, size: 18),
-                            Text(
-                              '   ${generateTitle()}',
-                              style: const TextStyle(
-                                  color: Colors.grey, fontSize: 16),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                brightness: Brightness.light,
+                automaticallyImplyLeading: false,
+                elevation: 0,
+                title: _buildSearchBar()),
             body: DefaultTabController(
               length: 1,
               child: FutureBuilder<bool>(
@@ -249,54 +152,57 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                           fit: StackFit.expand,
                           children: <Widget>[
                             NestedScrollView(
-                              headerSliverBuilder: _sliverBuilder,
-                              controller: _scrollController,
-                              body: FactoryListView(
-                                factoryCondition: factoryCondition,
-                                scrollController: _factoryScrollController,
-                                showButton: widget.requirementCode != null,
-                                requirementCode: widget.requirementCode,
-                                currentCondition: currentCondition,
-                                currentLocalCondition: currentLocalCondition,
-                                isLocalFind: isLocalFind,
-                              ),
-                            ),
+                                headerSliverBuilder: _sliverBuilder,
+                                controller: _scrollController,
+                                body: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 12),
+                                  color: Color(0xffF7F7F7),
+                                  child: FactoryListView(
+                                    factoryCondition: factoryCondition,
+                                    scrollController: _factoryScrollController,
+                                    showButton: widget.requirementCode != null,
+                                    requirementCode: widget.requirementCode,
+                                    currentCondition: currentCondition,
+                                    currentLocalCondition:
+                                        currentLocalCondition,
+                                    isLocalFind: isLocalFind,
+                                  ),
+                                )),
                             Builder(
-                              builder: (dropMenuContext) =>
-                                  GZXDropDownMenu(
-                                    controller: _dropdownMenuController,
-                                    // 下拉菜单显示或隐藏动画时长
-                                    animationMilliseconds: 0,
-                                    menus: [
-                                      GZXDropdownMenuBuilder(
-                                        dropDownHeight:
+                              builder: (dropMenuContext) => GZXDropDownMenu(
+                                controller: _dropdownMenuController,
+                                // 下拉菜单显示或隐藏动画时长
+                                animationMilliseconds: 0,
+                                menus: [
+                                  GZXDropdownMenuBuilder(
+                                    dropDownHeight:
                                         40.0 * filterConditionEntries.length +
                                             20,
-                                        dropDownWidget: FilterConditionSelector(
-                                          // cancell: () {},
-                                            entries: filterConditionEntries,
-                                            callBack: (entry) =>
-                                                _onConditionSelect(entry)),
-                                      ),
-                                      GZXDropdownMenuBuilder(
-                                        dropDownHeight: 40 * 8.0,
-                                        dropDownWidget: yj.RegionCitySelector(
-                                            cancell: () {},
-                                            maximum: 1,
-                                            callBack: (region, cities) =>
-                                                _onCitySelect(region, cities)),
-                                      ),
-                                      GZXDropdownMenuBuilder(
-                                          dropDownHeight: 40 * 8.0,
-                                          dropDownWidget: Builder(
-                                            builder: (selectContext) =>
-                                                CategorySelector(
-                                                    callBack: (category) =>
-                                                        _onCategorySelect(
-                                                            category)),
-                                          )),
-                                    ],
+                                    dropDownWidget: FilterConditionSelector(
+                                        // cancell: () {},
+                                        entries: filterConditionEntries,
+                                        callBack: (entry) =>
+                                            _onConditionSelect(entry)),
                                   ),
+                                  GZXDropdownMenuBuilder(
+                                    dropDownHeight: 40 * 8.0,
+                                    dropDownWidget: yj.RegionCitySelector(
+                                        cancell: () {},
+                                        maximum: 1,
+                                        callBack: (region, cities) =>
+                                            _onCitySelect(region, cities)),
+                                  ),
+                                  GZXDropdownMenuBuilder(
+                                      dropDownHeight: 40 * 8.0,
+                                      dropDownWidget: Builder(
+                                        builder: (selectContext) =>
+                                            CategorySelector(
+                                                callBack: (category) =>
+                                                    _onCategorySelect(
+                                                        category)),
+                                      )),
+                                ],
+                              ),
                             )
                           ],
                         ));
@@ -306,17 +212,82 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                     );
                   }
                 },
-                // initialData: null,
                 future: _initData(),
               ),
             )));
   }
 
+  Widget _buildSearchBar() {
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            child: Icon(
+              Icons.keyboard_arrow_left,
+              size: 32,
+            ),
+          ),
+        ),
+        Expanded(
+          child: GestureDetector(
+            onTap: () async {
+              String jsonStr = await LocalStorage.get(
+                  GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
+              if (jsonStr != null && jsonStr != '') {
+                List<dynamic> list = json.decode(jsonStr);
+                historyKeywords = list.map((item) => item as String).toList();
+              } else {
+                historyKeywords = [];
+              }
+              String result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      SearchModelPage(
+                        searchModel: SearchModel(
+                          historyKeywords: historyKeywords,
+                          keyword: factoryCondition.keyword,
+                          searchModelType: SearchModelType.FACTORY,
+                          factoryCondition: factoryCondition,
+                          route: GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
+                        ),
+                      ),
+                ),
+              );
+            },
+            child: Container(
+              height: 28,
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              decoration: BoxDecoration(
+                color: Color(0xffF0F0F0),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: <Widget>[
+                  const Icon(B2BIconsV2.search,
+                      color: Color(0xff999999), size: 16),
+                  Text(
+                    '   ${generateTitle()}',
+                    style:
+                    const TextStyle(color: Color(0xff999999), fontSize: 13),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {
     return <Widget>[
       SliverAppBar(
-          backgroundColor: Colors.grey[100],
-          expandedHeight: 130,
+          backgroundColor: Colors.white,
+          expandedHeight: 80,
           leading: Container(),
           actions: <Widget>[Container()],
           pinned: false,
@@ -340,9 +311,10 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                 }
               },
               dividerHeight: 0,
-              color: Colors.grey[100],
+              color: Colors.white,
               dropDownStyle: TextStyle(fontSize: 13, color: Colors.orange),
               iconDropDownColor: Colors.orange,
+              borderWidth: 0,
             ),
           )),
     ];
@@ -429,7 +401,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
 
   String generateTitle() {
     if (factoryCondition.keyword == null || factoryCondition.keyword == '') {
-      return widget.route ?? '全部工厂';
+      return widget.route ?? '输入工厂名称';
     } else {
       return '${factoryCondition.keyword}';
     }

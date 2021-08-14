@@ -20,25 +20,27 @@ class RequirementOrderItem extends StatelessWidget {
 
   final RequirementOrderCancleCallback onRequirementCancle;
 
-  static Map<RequirementOrderStatus, Color> _statusColors = {
-    RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
-    RequirementOrderStatus.COMPLETED: Colors.green,
-    RequirementOrderStatus.CANCELLED: Colors.grey,
-  };
-
-  Widget _buildSummary(int totalQuotesCount) {
+  Widget _buildSummary() {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Expanded(
             child: Text(
-              '发布时间: ${DateFormatUtil.formatYMD(model.creationTime)}',
-              style: const TextStyle(fontSize: 14),
+              '${DateFormatUtil.formatYMD(model.creationTime)}',
+              style: const TextStyle(
+                  fontSize: 13,
+                  color: Color(0xff222222),
+                  fontWeight: FontWeight.w500),
             ),
           ),
-          Text('已报价 $totalQuotesCount',
-              style: const TextStyle(color: Colors.red))
+          Text(
+            RequirementOrderStatusLocalizedMap[model.status],
+            style: TextStyle(
+                color: Color(0xFF222222),
+                fontSize: 13,
+                fontWeight: FontWeight.bold),
+          )
         ],
       ),
     );
@@ -50,11 +52,10 @@ class RequirementOrderItem extends StatelessWidget {
       if (model.code != null) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) =>
-                RequirementOrderDetailPage(
-                  model.code,
-                  onRequirementCancle: onRequirementCancle,
-                ),
+            builder: (context) => RequirementOrderDetailPage(
+              model.code,
+              onRequirementCancle: onRequirementCancle,
+            ),
           ),
         );
       }
@@ -63,177 +64,25 @@ class RequirementOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: _onOrderDetails,
       child: Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        margin: const EdgeInsets.only(top: 12),
         child: Column(
           children: <Widget>[
-            // _buildHeader(),
-            _buildEntries(),
-            _buildSummary(model.totalQuotesCount),
+            _buildSummary(),
+            _buildEntries()
           ],
         ),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );
   }
 
-  // Widget _buildHeader() {
-  //   return Container(
-  //     margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: <Widget>[
-  //         Row(
-  //           children: <Widget>[
-  //             Expanded(
-  //               flex: 1,
-  //               child: Text('需求订单号：${model.code}',
-  //                   style: const TextStyle(fontSize: 16)),
-  //             ),
-  //             Text(
-  //               RequirementOrderStatusLocalizedMap[model.status],
-  //               style:
-  //                   TextStyle(color: _statusColors[model.status], fontSize: 18),
-  //             )
-  //           ],
-  //         ),
-  //         Container(
-  //           padding: const EdgeInsets.symmetric(vertical: 5),
-  //           child: Text(
-  //             '发布时间: ${DateFormatUtil.format(model.creationTime)}',
-  //             style: const TextStyle(fontSize: 14),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Widget _buildEntries() {
-    Widget _buildRow1(String productName) {
-      return Row(
-        children: <Widget>[
-          Expanded(
-              child: Text(productName ?? '',
-                  style: TextStyle(fontSize: 15),
-                  overflow: TextOverflow.ellipsis)),
-          Text(
-            RequirementOrderStatusLocalizedMap[model.status],
-            style: TextStyle(
-                color: _statusColors[model.status],
-                fontSize: 15,
-                fontWeight: FontWeight.bold),
-          )
-        ],
-      );
-    }
-
-    Widget _buildProductSkuID(String productSkuID) {
-      if (productSkuID == null) {
-        return Container();
-      }
-
-      return Container(
-        padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text('货号：$productSkuID',
-            style: const TextStyle(fontSize: 12, color: Colors.grey)),
-      );
-    }
-
-    Widget _buildCategories({
-      String majorCategory = '',
-      String category = '',
-    }) {
-      return Container(
-        padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
-        decoration: BoxDecoration(
-          color: const Color.fromRGBO(255, 243, 243, 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          "${model.details
-              .expectedMachiningQuantity}件  $majorCategory-$category",
-          style: const TextStyle(
-              fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
-          overflow: TextOverflow.ellipsis,
-        ),
-      );
-    }
-
-    Widget _buildRow2Col1() {
-      TextStyle textStyle = TextStyle(color: Colors.grey, fontSize: 12);
-
-      return Container(
-        height: 45,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Icon(
-                  Icons.remove_red_eye,
-                  color: Colors.grey,
-                  size: 16,
-                ),
-                Container(
-                  width: 5,
-                ),
-                Text(
-                  '${model?.statistics?.showStatistics ?? 0}',
-                  style: textStyle,
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Icon(
-                  Icons.touch_app,
-                  color: Colors.grey,
-                  size: 16,
-                ),
-                Container(
-                  width: 5,
-                ),
-                Text(
-                  '${model?.statistics?.viewStatistics ?? 0}',
-                  style: textStyle,
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    }
-
-    Widget _buildRow2() {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                _buildCategories(
-                  majorCategory: model.details.majorCategoryName(),
-                  category: model.details.category?.name,
-                ),
-              ],
-            ),
-          ),
-          _buildRow2Col1()
-        ],
-      );
-    }
-
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+      padding: const EdgeInsets.only(top: 16),
       child: Row(
         children: <Widget>[
           ImageFactory.buildThumbnailImageForList(model.details.pictures,
@@ -242,18 +91,81 @@ class RequirementOrderItem extends StatelessWidget {
             flex: 1,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 80,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _buildRow1(model.details.productName),
-                  // _buildProductSkuID(model.details.productSkuID),
-                  _buildRow2()
+                  _buildRow2(),
+                  _buildRow3()
                 ],
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRow1(String productName) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+            child: Text(productName ?? '',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF222222),
+                    fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis)),
+      ],
+    );
+  }
+
+  Widget _buildCategories({
+    String majorCategory = '',
+    String category = '',
+  }) {
+    return Container(
+      // padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
+      child: Text(
+        "$majorCategory $category ${model.details.expectedMachiningQuantity}件",
+        style: const TextStyle(
+            fontSize: 13,
+            color: const Color(0xff666666),
+            fontWeight: FontWeight.w500),
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  Widget _buildRow2() {
+    return Container(
+      margin: EdgeInsets.only(top: 2, bottom: 8),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: _buildCategories(
+              majorCategory: model.details.majorCategoryName(),
+              category: model.details.category?.name,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRow3() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+              child: Text('已报价 ${model.totalQuotesCount}',
+                  style: const TextStyle(
+                      color: Color(0xFFFF4D4F),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold))),
         ],
       ),
     );

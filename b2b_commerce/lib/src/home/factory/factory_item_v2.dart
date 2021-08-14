@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
+import 'package:widgets/widgets.dart';
 
 class FactoryItem extends StatelessWidget {
   final FactoryModel model;
@@ -17,7 +18,7 @@ class FactoryItem extends StatelessWidget {
   const FactoryItem({Key key, this.model, this.showDistance = false})
       : super(key: key);
 
-  static const logoSize = 80.0;
+  static const logoSize = 40.0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,50 +29,121 @@ class FactoryItem extends StatelessWidget {
                 context: context, onJump: () => jumpToDetailPage(context));
       },
       child: Container(
-          height: 150,
+          // height: 150,
           margin: EdgeInsets.only(bottom: 10),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
-          ),
+              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRow1(context),
+              _buildRow2(context),
+              _buildRow3(context),
+              _buildLocationRow(context)
+            ],
+          )),
+    );
+  }
+
+  Widget _buildRow1(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildImage(context),
+        Expanded(
+            child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Expanded(
-                      child: Container(
-                    height: logoSize,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Text(
-                              '${model.name}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
-                              overflow: TextOverflow.ellipsis,
-                            ))
-                          ],
-                        ),
-                        Row(
-                          children: [Expanded(child: _buildTagsRow())],
-                        ),
-                        Row(
-                          children: [Expanded(child: _buildAttributeRow())],
-                        ),
-                      ],
-                    ),
-                  )),
-                  _buildImage(context)
+                      child: Text(
+                    '${model.name}',
+                    style: TextStyle(
+                        color: Color(0xFF222222),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ))
                 ],
               ),
-              Divider(),
-              _buildBottomRow()
+              Container(height: 4),
+              Row(
+                children: [Expanded(child: _buildTagsRow())],
+              ),
             ],
+          ),
+        )),
+      ],
+    );
+  }
+
+  Widget _buildRow2(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 8, bottom: 2),
+      child: Row(
+        children: [
+          Expanded(
+              child: Text(
+            '工厂规模：${PopulationScaleLocalizedMap[model.populationScale] ?? ''}',
+            style: TextStyle(
+                color: Color(0xff666666),
+                fontSize: 13,
+                fontWeight: FontWeight.w500),
+          ))
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRow3(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Expanded(
+              child: Text(
+            '主打款式：${getCategoriesStr()}',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: Color(0xff666666),
+                fontSize: 13,
+                fontWeight: FontWeight.w500),
+          ))
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLocationRow(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 4),
+            child: Icon(
+              B2BIconsV2.location,
+              color: Color(0xff999999),
+              size: 14,
+            ),
+          ),
+          Expanded(
+              child: Text(
+            getAddressStr(),
+            style: TextStyle(
+                color: Color(0xff999999),
+                fontSize: 10,
+                fontWeight: FontWeight.w500),
           )),
+          showDistance
+              ? DistanceText(
+                  val: model.distance,
+                )
+              : Container()
+        ],
+      ),
     );
   }
 
@@ -81,16 +153,16 @@ class FactoryItem extends StatelessWidget {
       return Container(
         width: logoSize,
         height: logoSize,
+        margin: EdgeInsets.only(right: 3),
       );
     } else {
       const processUrl = 'image_process=resize,w_80/crop,mid,w_80,h_80';
 
       return Container(
-        width: 80,
-        height: 80,
-        child: ClipRRect(
-          //剪裁为圆角矩形
-          borderRadius: BorderRadius.circular(10),
+        width: logoSize,
+        height: logoSize,
+        margin: EdgeInsets.only(right: 3),
+        child: ClipOval(
           child: CachedNetworkImage(
             imageUrl: '${model.profilePicture.imageProcessUrl(processUrl)}',
             fit: BoxFit.fill,
@@ -112,113 +184,30 @@ class FactoryItem extends StatelessWidget {
 
   ///标签行
   Widget _buildTagsRow() {
-    return Row(
-      children: [
-        AuthTag(
-          model: model,
-        ),
-        ...(model.labels ?? [])
-            .map((e) => Container(
-                  padding: EdgeInsets.fromLTRB(2, 1, 2, 2),
-                  margin: EdgeInsets.symmetric(horizontal: 3),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green, width: 0.5),
-                      borderRadius: BorderRadius.circular(2)),
-                  child: Text(
-                    '${e.name}',
-                    style: TextStyle(fontSize: 10, color: Colors.green),
-                  ),
-                ))
-            .toList()
-      ],
-    );
-  }
+    List<String> tags = [];
+    if (model.approvalStatus == ArticleApprovalStatus.approved) {
+      tags.add('认证工厂');
+    }
+    tags.addAll((model.labels ?? []).map((e) => e.name));
 
-  ///属性行
-  Widget _buildAttributeRow() {
-    List<String> attribute = [];
-    //加工方式
-    model.cooperationModes?.forEach((mode) {
-      attribute.add(CooperationModesLocalizedMap[mode]);
-    });
-    model.qualityLevels?.forEach((level) {
-      attribute.add(FactoryQualityLevelsEnum.firstWhere(
-          (element) => element.code == level).name);
-    });
-    String attributeStr = attribute.join('/');
     return Row(
-      children: [
-        Expanded(
-            child: Text(
-          '$attributeStr',
-          style: TextStyle(color: Colors.grey, fontSize: 12),
-          overflow: TextOverflow.ellipsis,
-        ))
-      ],
-    );
-  }
-
-  ///底部行
-  Widget _buildBottomRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          flex: 2,
-          child: Container(
-            child: Row(
-              children: [
-                Icon(
-                  Icons.people,
-                  size: 15,
-                  color: Colors.grey,
-                ),
-                Text(
-                  '${PopulationScaleLocalizedMap[model.populationScale] ?? ''}',
-                  style: TextStyle(color: Colors.grey),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 3,
-          child: Container(
-            margin: EdgeInsets.only(right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.local_offer_outlined,
-                  size: 15,
-                  color: Colors.grey,
-                ),
-                Expanded(
-                    child: Text(
-                  '${getCategoriesStr()}',
-                  style: TextStyle(color: Colors.grey),
-                  overflow: TextOverflow.ellipsis,
-                )),
-              ],
-            ),
-          ),
-        ),
-        Icon(
-          Icons.location_on_outlined,
-          size: 15,
-          color: Colors.grey,
-        ),
-        showDistance
-            ? DistanceText(
-                val: model.distance,
-              )
-            : Text(
-                getAddressStr(),
-                style: TextStyle(color: Colors.grey),
-              )
-      ],
-    );
+        children: tags
+            .map((e) =>
+            Container(
+              padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
+              margin: EdgeInsets.only(right: 8),
+              decoration: BoxDecoration(
+                  color: _tagColorMap[e] ?? Color(0xffe8f5e9),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Text(
+                '$e',
+                style: TextStyle(
+                    fontSize: 10,
+                    color: _tagTextColorMap[e] ?? Color(0xff4caf50),
+                    fontWeight: FontWeight.w500),
+              ),
+            ))
+            .toList());
   }
 
   void jumpToDetailPage(BuildContext context) {
@@ -277,3 +266,15 @@ class AuthTag extends StatelessWidget {
     return Container();
   }
 }
+
+const _tagColorMap = {
+  '快反工厂': Color(0xffFFF5D7),
+  '认证工厂': Color(0xFFE8F8FA),
+  '免费打样': Color(0xffFFEDED),
+};
+
+const _tagTextColorMap = {
+  '快反工厂': Color(0xffAA6E15),
+  '认证工厂': Color(0xFF00BBD3),
+  '免费打样': Color(0xffFF4D4F)
+};

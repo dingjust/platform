@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/business/search/product_search_result.dart';
-import 'package:b2b_commerce/src/business/search/proofing_search_result.dart';
-import 'package:b2b_commerce/src/business/search/purchase_order_search_result.dart';
 import 'package:b2b_commerce/src/business/search/quotes_search_result.dart';
 import 'package:b2b_commerce/src/business/search/requirement_search_result.dart';
 import 'package:b2b_commerce/src/business/search/sales_order_search_result.dart';
@@ -133,66 +131,64 @@ class _SearchModelPageState extends State<SearchModelPage> {
               Expanded(
                   flex: 1,
                   child: LayoutBuilder(
-                    builder: (context, constraints) =>
-                        Container(
-                          width: constraints.maxWidth,
-                          height: 50,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
-                              Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                      color: Colors.grey[300], width: 0.5),
-                                ),
-                              ),
-                              Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  width: constraints.maxWidth,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: TextField(
-                                          controller: controller,
-                                          focusNode: focusNode,
-                                          autofocus: true,
-                                          decoration: InputDecoration(
-                                            hintText: '${searchText}',
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 12),
-                                            contentPadding: EdgeInsets.all(0),
-                                            disabledBorder: InputBorder.none,
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                            border: InputBorder.none,
-                                          ),
-                                          onChanged: (value) {},
-                                        ),
-                                      ),
-                                      Container(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              controller.text = '';
-                                            });
-                                          },
-                                          child: Icon(
-                                            Icons.clear,
-                                            size: 20,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                            ],
+                    builder: (context, constraints) => Container(
+                      width: constraints.maxWidth,
+                      height: 50,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                  color: Colors.grey[300], width: 0.5),
+                            ),
                           ),
-                        ),
+                          Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              width: constraints.maxWidth,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 1,
+                                    child: TextField(
+                                      controller: controller,
+                                      focusNode: focusNode,
+                                      autofocus: true,
+                                      decoration: InputDecoration(
+                                        hintText: '${searchText}',
+                                        hintStyle: TextStyle(
+                                            color: Colors.grey, fontSize: 12),
+                                        contentPadding: EdgeInsets.all(0),
+                                        disabledBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        border: InputBorder.none,
+                                      ),
+                                      onChanged: (value) {},
+                                    ),
+                                  ),
+                                  Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          controller.text = '';
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.clear,
+                                        size: 20,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )),
+                        ],
+                      ),
+                    ),
                   )),
               Container(
                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -226,17 +222,11 @@ class _SearchModelPageState extends State<SearchModelPage> {
 
   onSubmit() {
     switch (widget.searchModel.searchModelType) {
-      case SearchModelType.PURCHASE_ORDER:
-        searchPurchaseOrders();
-        break;
       case SearchModelType.QUOTE_ORDER:
         searchQuoteOrders();
         break;
       case SearchModelType.REQUIREMENT_ORDER:
         searchRequirementOrders();
-        break;
-      case SearchModelType.PROOFING_ORDER:
-        searchProofingOrders();
         break;
       case SearchModelType.PRODUCT:
         searchProducts();
@@ -348,25 +338,6 @@ class _SearchModelPageState extends State<SearchModelPage> {
     );
   }
 
-  ///生产单
-  void searchPurchaseOrders() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                PurchaseOrderSearchResultPage(
-                  searchModel: widget.searchModel,
-                )));
-    if (controller.text != '') {
-      if (widget.searchModel.historyKeywords.contains(controller.text)) {
-        widget.searchModel.historyKeywords.remove(controller.text);
-      }
-      widget.searchModel.historyKeywords.add(controller.text);
-      LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
-          json.encode(widget.searchModel.historyKeywords));
-    }
-  }
-
   ///报价单
   void searchQuoteOrders() {
     Navigator.push(
@@ -390,22 +361,6 @@ class _SearchModelPageState extends State<SearchModelPage> {
         MaterialPageRoute(
             builder: (context) =>
                 RequirementSearchResultPage(
-                  searchModel: widget.searchModel,
-                )));
-    if (controller.text != '' && controller.text.isNotEmpty) {
-      widget.searchModel.historyKeywords.add(controller.text);
-      LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-          json.encode(widget.searchModel.historyKeywords));
-    }
-  }
-
-  ///打样订单
-  void searchProofingOrders() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ProofingSearchResultPage(
                   searchModel: widget.searchModel,
                 )));
     if (controller.text != '' && controller.text.isNotEmpty) {

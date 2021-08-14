@@ -69,8 +69,8 @@ class _RequirementOrderListState extends State<RequirementOrderList>
     var bloc = BLoCProvider.of<RequirementOrderBLoC>(context);
 
     return Container(
-      decoration: BoxDecoration(color: Colors.grey[100]),
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(color: Color(0xffF7F7F7)),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: RefreshIndicator(
         onRefresh: () async {
           // if (!bloc.lock)
@@ -82,7 +82,7 @@ class _RequirementOrderListState extends State<RequirementOrderList>
           children: <Widget>[
             StreamBuilder<RequirementData>(
               stream: bloc.stream.where((requirementData) =>
-              requirementData.status == widget.status.code),
+                  requirementData.status == widget.status.code),
               // initialData: null,
               builder: (BuildContext context,
                   AsyncSnapshot<RequirementData> snapshot) {

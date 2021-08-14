@@ -111,9 +111,9 @@ class AppVersionHelper {
         onlyOne: true,
         duration: null,
         crossPage: true,
-        clickClose: force ? false : true,
+        clickClose: false,
         backButtonBehavior: BackButtonBehavior.ignore,
-        allowClick: force ? false : true,
+        allowClick: false,
         backgroundColor: Colors.black38,
         toastBuilder: (cancelFunc) => WillPopScope(
               onWillPop: () async => false,
@@ -204,11 +204,12 @@ class AppVersionHelper {
         onlyOne: true,
         duration: null,
         crossPage: true,
-        clickClose: force ? false : true,
+        clickClose: false,
         backButtonBehavior: BackButtonBehavior.ignore,
-        allowClick: force ? false : true,
+        allowClick: false,
         backgroundColor: Colors.black38,
-        toastBuilder: (cancelFunc) => WillPopScope(
+        toastBuilder: (cancelFunc) =>
+            WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
                 contentPadding: EdgeInsets.only(top: 10),

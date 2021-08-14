@@ -26,8 +26,9 @@ class HomePage extends StatefulWidget {
   ///头部
   final List<Widget> _headWidgets = [
     HomeBtnsSection(),
+    _HomePoster(),
     Container(
-      margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
+      margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
       child: HomeBroadcast(),
     )
   ];
@@ -81,14 +82,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ScrollController _scrollController;
   bool lastStatus = false;
 
-  double expandedHeight = 220;
-
   _HomePageState();
 
-  List<Color> gradientColors = [
-    Color.fromRGBO(254, 216, 0, 1),
-    Color.fromRGBO(254, 216, 0, 0)
-  ];
+  List<Color> gradientColors = [Color(0xFF489BFF), Color(0x001460BA)];
 
   @override
   void initState() {
@@ -151,23 +147,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   List<Widget> _slverBuilder(BuildContext context, bool innerBoxIsScrolled) {
-    print((MediaQuery.of(context).size.width - 24));
     return [
       SliverAppBar(
-        expandedHeight:
-            (MediaQuery.of(context).size.width - 24) * (120 / 350) + 85,
+        expandedHeight: expandedHeight,
         pinned: true,
         elevation: 0.5,
         title: HomeTitle(
           leading: widget.searchInputWidget,
         ),
         backgroundColor: lastStatus ? Colors.white : Color(0xffF7F7F7),
-        brightness: Brightness.dark,
+        // brightness: Brightness.dark,
         flexibleSpace: FlexibleSpaceBar(
           background: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              Container(
+              AnimatedContainer(
+                duration: Duration(milliseconds: 500),
+                padding: EdgeInsets.only(top: bannerPadding),
                 decoration: BoxDecoration(
                     color: Color(0xffF7F7F7),
                     gradient: LinearGradient(
@@ -175,7 +171,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         end: Alignment.bottomCenter,
                         colors: gradientColors)),
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(0, 105, 0, 0),
                   child: HomeBannerSection(
                     onChanged: (colors) {
                       if (colors != null && colors.isNotEmpty) {
@@ -225,6 +220,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         _scrollController.offset > (expandedHeight - kToolbarHeight);
   }
 
+  ///适配expandedHeight
+  double get expandedHeight {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 17;
+    }
+    return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 10;
+  }
+
+  ///适配banner间隔
+  double get bannerPadding {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return 105 + 17.0;
+    }
+    return 105;
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -262,6 +273,22 @@ class HomeTitle extends StatelessWidget {
                 child: B2BV2Image.top_3(width: 24, height: 24),
               )),
         ],
+      ),
+    );
+  }
+}
+
+class _HomePoster extends StatelessWidget {
+  const _HomePoster({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 12),
+      child: Image.asset(
+        'temp/index/poster1.png',
+        package: 'assets',
+        fit: BoxFit.fitWidth,
       ),
     );
   }

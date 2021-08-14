@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/purchase_order_detail_online.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_detail_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -87,44 +84,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               ],
             ),
           )),
-      onWillPop: () {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.CONFIRM_DIALOG,
-                contentText2: '是否继续?',
-                isNeedConfirmButton: true,
-                isNeedCancelButton: true,
-                confirmButtonText: '确定退出',
-                cancelButtonText: '继续支付',
-                cancelButtonTextStyle: TextStyle(color: Colors.blue),
-                confirmlButtonTextStyle: TextStyle(color: Colors.red),
-                dialogHeight: 180,
-                confirmAction: () {
-                  if (widget.paymentFor == PaymentFor.SALES &&
-                      widget.isFormDetail) {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) =>
-                            SaleOrderDetailPage(code: widget.order.code)));
-                  } else if (widget.paymentFor == PaymentFor.DEPOSIT &&
-                      widget.isFormDetail) {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) =>
-                            PurchaseOrderDetailOnlinePage(
-                                code: widget.order.code)));
-                  } else {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  }
-                },
-              );
-            });
-        return Future.value(false);
-      },
     );
   }
 
@@ -151,57 +110,57 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             ),
             widget.order.deliveryAddress != null
                 ? ListTile(
-              leading: Icon(
-                Icons.location_on,
-                color: Colors.black,
-              ),
-              title: Row(
-                children: <Widget>[
-                  widget.order.deliveryAddress == null ||
-                      widget.order.deliveryAddress.fullname == null
-                      ? Container()
-                      : Text(widget.order.deliveryAddress.fullname),
-                  widget.order.deliveryAddress == null ||
-                      widget.order.deliveryAddress.cellphone == null
-                      ? Container()
-                      : Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text(
-                        widget.order.deliveryAddress.cellphone),
+                    leading: Icon(
+                      Icons.location_on,
+                      color: Colors.black,
+                    ),
+                    title: Row(
+                      children: <Widget>[
+                        widget.order.deliveryAddress == null ||
+                                widget.order.deliveryAddress.fullname == null
+                            ? Container()
+                            : Text(widget.order.deliveryAddress.fullname),
+                        widget.order.deliveryAddress == null ||
+                                widget.order.deliveryAddress.cellphone == null
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: Text(
+                                    widget.order.deliveryAddress.cellphone),
+                              )
+                      ],
+                    ),
+                    subtitle: widget.order.deliveryAddress == null ||
+                            widget.order.deliveryAddress.region == null ||
+                            widget.order.deliveryAddress.city == null ||
+                            widget.order.deliveryAddress.cityDistrict == null ||
+                            widget.order.deliveryAddress.line1 == null
+                        ? Container()
+                        : Text(
+                            widget.order.deliveryAddress.region.name +
+                                widget.order.deliveryAddress.city.name +
+                                widget.order.deliveryAddress.cityDistrict.name +
+                                widget.order.deliveryAddress.line1,
+                            style: TextStyle(
+                              color: Colors.black,
+                            )),
+                    trailing: Icon(
+                      Icons.edit,
+                      color: Colors.black,
+                    ),
                   )
-                ],
-              ),
-              subtitle: widget.order.deliveryAddress == null ||
-                  widget.order.deliveryAddress.region == null ||
-                  widget.order.deliveryAddress.city == null ||
-                  widget.order.deliveryAddress.cityDistrict == null ||
-                  widget.order.deliveryAddress.line1 == null
-                  ? Container()
-                  : Text(
-                  widget.order.deliveryAddress.region.name +
-                      widget.order.deliveryAddress.city.name +
-                      widget.order.deliveryAddress.cityDistrict.name +
-                      widget.order.deliveryAddress.line1,
-                  style: TextStyle(
-                    color: Colors.black,
-                  )),
-              trailing: Icon(
-                Icons.edit,
-                color: Colors.black,
-              ),
-            )
                 : Container(
-              height: 100,
-              child: Center(
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        border:
-                        Border.all(width: 0.5, color: Colors.grey[300])),
-                    child: Text('点击选择收货地址',
-                        style: TextStyle(color: Colors.red, fontSize: 20)),
-                  )),
-            ),
+                    height: 100,
+                    child: Center(
+                        child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(width: 0.5, color: Colors.grey[300])),
+                      child: Text('点击选择收货地址',
+                          style: TextStyle(color: Colors.red, fontSize: 20)),
+                    )),
+                  ),
             SizedBox(
               child: Image.asset(
                 'temp/common/address_under_line.png',
@@ -780,29 +739,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             FlatButton(
               child: Text('确定', style: TextStyle(fontSize: 16)),
               onPressed: () async {
-                ///打样订单
-                if (widget.order is ProofingModel) {
-                  //刷新数据
-                  ProofingOrdersBLoC.instance.reset();
-                  this.dispose();
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ProofingOrderDetailPage(
-                                widget.order.code,
-                              )),
-                      ModalRoute.withName('/'));
-
-                  ///TODO:生产单
-                } else if (widget.order is PurchaseOrderModel) {
-                  //查询明细
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              PurchaseOrderDetailPage(code: widget.order.code)),
-                      ModalRoute.withName('/'));
-                } //销售订单
-                else if (widget.order is SalesOrderModel) {
+                if (widget.order is SalesOrderModel) {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) =>
@@ -840,41 +777,41 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void selectDeliveryAddress() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                MyAddressesPage(
-                  isJumpSource: true,
-                  title: '选择地址',
-                )),
-        //接收返回数据并处理
-      ).then((value) async {
-        if (value != null) {
-          setState(() {
-            widget.order.deliveryAddress = value;
-          });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              MyAddressesPage(
+                isJumpSource: true,
+                title: '选择地址',
+              )),
+      //接收返回数据并处理
+    ).then((value) async {
+      if (value != null) {
+        setState(() {
+          widget.order.deliveryAddress = value;
+        });
 
-          bool result = false;
-          if (widget.order is ProofingModel) {
-            //更新打样单地址
-            result = await ProofingOrderRepository()
-                .updateAddress(widget.order.code, widget.order);
-          } else if (widget.order is PurchaseOrderModel) {
-            // 采购单地址
-            result = await PurchaseOrderRepository()
-                .updateAddress(widget.order.code, widget.order);
-          } else if (widget.order is SalesOrderModel){
-            result = await SalesOrderRespository().updateAddress(widget.order.code, widget.order);
-          }
-          if(result){
-            BotToast.showText(text: '修改收货地址成功');
-          }else{
-            BotToast.showText(text: '修改收货地址失败');
-          }
-
+        bool result = false;
+        if (widget.order is ProofingModel) {
+          //更新打样单地址
+          result = await ProofingOrderRepository()
+              .updateAddress(widget.order.code, widget.order);
+        } else if (widget.order is PurchaseOrderModel) {
+          // 采购单地址
+          result = await PurchaseOrderRepository()
+              .updateAddress(widget.order.code, widget.order);
+        } else if (widget.order is SalesOrderModel) {
+          result = await SalesOrderRespository()
+              .updateAddress(widget.order.code, widget.order);
         }
-      });
+        if (result) {
+          BotToast.showText(text: '修改收货地址成功');
+        } else {
+          BotToast.showText(text: '修改收货地址失败');
+        }
+      }
+    });
   }
 
   double getPayAmount() {

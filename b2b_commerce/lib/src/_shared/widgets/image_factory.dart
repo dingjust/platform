@@ -8,13 +8,13 @@ import 'package:widgets/widgets.dart';
 class ImageFactory {
   /// 缩略图
   static Widget buildDefaultThumbnailImage(
-      {double size = 60, double containerSize = 80}) {
+      {double size = 33, double containerSize = 80}) {
     return Container(
       width: containerSize,
       height: containerSize,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: Color.fromRGBO(243, 243, 243, 1),
+        borderRadius: BorderRadius.circular(12),
+        color: Color(0xFFF0F0F0),
       ),
       child: Icon(
         B2BIcons.noPicture,
@@ -66,14 +66,18 @@ class ImageFactory {
 
   static Widget buildThumbnailImageForList(
     List<MediaModel> medias, {
-    double size = 60,
+    double size = 86,
     BoxFit fit = BoxFit.cover,
   }) {
     if (medias == null || medias.isEmpty) {
-      return buildDefaultThumbnailImage();
+      return buildDefaultThumbnailImage(containerSize: size);
     }
 
-    return buildThumbnailImage(medias[0], fit: fit);
+    return buildThumbnailImage(
+      medias[0],
+      fit: fit,
+      size: size,
+    );
   }
 
   // 人物画像

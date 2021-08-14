@@ -1,11 +1,6 @@
 import 'package:b2b_commerce/b2b_commerce.dart';
-import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
-import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/sale/sales_order_from.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
-import 'package:b2b_commerce/src/my/my_factory.dart';
-import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +92,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   Future<QuoteModel> _getData() async {
     // 查询明细
     QuoteModel detailModel =
-    await QuoteOrderRepository().getQuoteDetails(widget.code);
+        await QuoteOrderRepository().getQuoteDetails(widget.code);
     pageItem = detailModel;
     return detailModel;
   }
@@ -170,7 +165,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                pageItem.supplier?.profilePicture == null
+                pageItem.requirementOrder.belongTo?.profilePicture == null
                     ? Container(
                         margin: EdgeInsets.all(10),
                         width: 80,
@@ -193,10 +188,9 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                             width: 100,
                             height: 100,
                             imageUrl:
-                                '${pageItem.supplier.profilePicture.previewUrl()}',
+                                '${pageItem?.requirementOrder?.belongTo?.profilePicture?.previewUrl()}',
                             fit: BoxFit.cover,
-                            imageBuilder: (context, imageProvider) =>
-                                Container(
+                            imageBuilder: (context, imageProvider) => Container(
                                   width: 100,
                                   height: 100,
                                   decoration: BoxDecoration(
@@ -228,94 +222,40 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     Container(
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        pageItem.supplier == null ||
-                                pageItem.supplier.name == null
+                        pageItem?.requirementOrder?.belongTo == null ||
+                            pageItem?.requirementOrder?.belongTo?.name ==
+                                null
                             ? ''
-                            : '${pageItem.supplier?.name}',
+                            : '${pageItem?.requirementOrder?.belongTo?.name}',
                         softWrap: true,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    pageItem.supplier == null ||
-                            pageItem.supplier.approvalStatus == null
+                    pageItem?.requirementOrder?.belongTo == null ||
+                        pageItem?.requirementOrder?.belongTo
+                            .approvalStatus ==
+                            null
                         ? Container()
                         : Container(
-                            margin: EdgeInsets.only(top: 5),
-                            color: Color.fromRGBO(254, 252, 235, 1),
-                            child: pageItem.supplier.approvalStatus !=
-                                    ArticleApprovalStatus.approved
-                                ? Text('  未认证  ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 133, 148, 1),
-                                    ))
-                                : Text(
-                                    '  已认证  ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 133, 148, 1),
-                                    ),
+                        margin: EdgeInsets.only(top: 5),
+                        color: Color.fromRGBO(254, 252, 235, 1),
+                        child: pageItem?.requirementOrder?.belongTo
+                            .approvalStatus !=
+                            ArticleApprovalStatus.approved
+                            ? Text('  未认证  ',
+                            style: TextStyle(
+                              color: Color.fromRGBO(255, 133, 148, 1),
+                            ))
+                            : Text(
+                          '  已认证  ',
+                          style: TextStyle(
+                            color: Color.fromRGBO(255, 133, 148, 1),
+                          ),
                                   ))
                   ],
                 ))
               ],
-            ),
-            Divider(
-              height: 1,
-            ),
-            Container(
-              padding: EdgeInsets.all(15),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text('联系人'),
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      pageItem.supplier == null ||
-                              pageItem.supplier.contactPerson == null
-                          ? ''
-                          : '${pageItem.supplier.contactPerson}',
-                      style: TextStyle(
-                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Divider(
-              height: 2,
-            ),
-            GestureDetector(
-              child: Container(
-                padding: EdgeInsets.all(15),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: Text('联系手机'),
-                      ),
-                    ),
-                    Container(
-                      child: Text(
-                        pageItem.supplier == null ||
-                                pageItem.supplier.contactPhone == null
-                            ? ''
-                            : '${pageItem.supplier.contactPhone}',
-                        style: TextStyle(
-                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                pageItem.supplier == null ||
-                        pageItem.supplier.contactPhone == null
-                    ? null
-                    : _selectActionButton(pageItem.supplier.contactPhone);
-              },
             ),
           ],
         ),
@@ -327,18 +267,14 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
 
   _buildFactory() {
     //品牌端显示
-    if (UserBLoC.instance.currentUser.companyCode == pageItem?.requirementOrder?.belongTo?.uid) {
+    if (UserBLoC.instance.currentUser.companyCode ==
+        pageItem?.requirementOrder?.belongTo?.uid) {
       return GestureDetector(
         onTap: () async {
           if (pageItem.belongTo != null) {
-            //TODO跳转详细页
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyFactoryPage(
-                          factoryUid: pageItem.belongTo.uid,
-                          isFactoryDetail: true,
-                        )));
+            Navigator.of(context).pushNamed(
+                AppRoutes.ROUTE_FACTORY_INTRODUCTION,
+                arguments: {'uid': pageItem.belongTo.uid});
           } else {
             showDialog(
                 context: context,
@@ -786,7 +722,8 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     List<Widget> buttons;
 
     //品牌端显示
-    if (UserBLoC.instance.currentUser.companyCode == pageItem?.requirementOrder?.belongTo?.uid) {
+    if (UserBLoC.instance.currentUser.companyCode ==
+        pageItem?.requirementOrder?.belongTo?.uid) {
       if (pageItem.state == QuoteState.SELLER_SUBMITTED) {
         buttons = <Widget>[
           Container(
@@ -820,7 +757,8 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         ];
       }
     } //工厂端显示
-    else if(UserBLoC.instance.currentUser.companyCode == pageItem.belongTo?.uid){
+    else if (UserBLoC.instance.currentUser.companyCode ==
+        pageItem.belongTo?.uid) {
       if (pageItem.state == QuoteState.SELLER_SUBMITTED) {
         buttons = [
           Container(
@@ -839,27 +777,12 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         ];
       } else if (pageItem.state == QuoteState.BUYER_APPROVED) {
         buttons = <Widget>[
-          pageItem.salesOrderCode == null
-              ? Container(
-            height: 30,
-            child: FlatButton(
-              onPressed: () => onSalesOrderCreating(pageItem),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              child: Text(
-                '创建销售订单',
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-            ),
-          )
-              : Container(
+          Container(
             height: 30,
             child: FlatButton(
               onPressed: () async {
-                QuoteModel quote = await QuoteOrderRepository()
-                    .getQuoteDetails(pageItem.code);
+                QuoteModel quote =
+                await QuoteOrderRepository().getQuoteDetails(pageItem.code);
                 if (quote.salesOrderCode != null) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -1033,26 +956,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     }
   }
 
-  void onCreateProofings() async {
-    //查询明细
-    QuoteModel detailModel =
-        await QuoteOrderRepository().getQuoteDetails(pageItem.code);
-
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ProofingOrderForm(
-              quoteModel: detailModel,
-            )));
-  }
-
-  void onCreateProduction() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProductionOnlineOrderFrom(
-                  quoteModel: pageItem,
-                )));
-  }
-
   //拨打电话或发短信
   void _selectActionButton(String tel) async {
     showModalBottomSheet(
@@ -1102,13 +1005,5 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             );
           });
     }
-  }
-
-  void onSalesOrderCreating(QuoteModel model) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => SalesOrderForm(quoteModel: model)),
-    );
   }
 }

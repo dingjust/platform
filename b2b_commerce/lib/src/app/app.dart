@@ -109,6 +109,13 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
     Provider.of<ClipboardHelper>(context, listen: false)
       ..setNavigatorKey(_navigatorKey)
       ..getClipboardText(context: context);
+    //更新检测
+    Future.delayed(Duration(seconds: 3)).then((r) {
+      AppVersionHelper appVersionHelper =
+          Provider.of<AppVersionHelper>(context, listen: false);
+      appVersionHelper.checkVersion(
+          context, AppBLoC.instance?.packageInfo?.version, 'nbyjy');
+    });
   }
 
   //监听未登录接口调用跳转登录页
@@ -216,11 +223,6 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
         bottomAppBarColor: Colors.grey,
       ),
       home: Builder(builder: (context) {
-        AppVersionHelper appVersionHelper =
-            Provider.of<AppVersionHelper>(context, listen: false);
-        appVersionHelper.checkVersion(
-            context, AppBLoC.instance?.packageInfo?.version, 'nbyjy');
-
         return Scaffold(
           key: AppKeys.appPage,
           body: menus[_currentIndex].page,

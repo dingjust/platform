@@ -1,9 +1,7 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
 import 'package:core/core.dart';
@@ -238,70 +236,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
             offstage: !widget.isSupplier,
             child: _buildNewestQuote(),
           ),
-          Offstage(
-            offstage: !widget.isSupplier,
-            child: _buildNewestPurchase(),
-          ),
         ],
       ),
-    );
-  }
-
-  FutureBuilder<PurchaseOrderModel> _buildNewestPurchase() {
-    return FutureBuilder<PurchaseOrderModel>(
-      future: _getPurchaseFuture,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 200),
-            child: Center(child: CircularProgressIndicator()),
-          );
-        } else {
-          if (snapshot?.data?.code == null) {
-            return Container();
-          }
-
-          return Column(
-            children: <Widget>[
-              SizedBox(
-                height: 10,
-                child: Container(
-                  color: Colors.grey[Constants.SIZEDBOX_COLOR],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: PurchaseOrderListItem(
-                  order: snapshot.data,
-                ),
-              ),
-              Container(
-                color: Colors.white,
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Center(
-                  child: GestureDetector(
-                    child: Text(
-                      '查看全部>>',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 18,
-                      ),
-                    ),
-                    onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CompanyPurchaseListPage(
-                                companyUid: widget.factory.uid,
-                              )));
-                    },
-                  ),
-                ),
-              )
-            ],
-          );
-        }
-      },
     );
   }
 

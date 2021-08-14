@@ -91,19 +91,6 @@ class FactoryButtonsSection extends StatelessWidget {
         ));
   }
 
-  Widget _buildOrderCoordination(BuildContext context) {
-    return Expanded(
-        flex: 1,
-        child: ImageNumButton(
-          image: B2BImage.orderCoordination(),
-          imagePadding: EdgeInsets.all(10),
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_COORDINATION);
-          },
-          title: '订单协同',
-        ));
-  }
-
   Widget _builRequirement(BuildContext context) {
     return Expanded(
         flex: 1,

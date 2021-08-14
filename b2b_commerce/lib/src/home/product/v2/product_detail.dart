@@ -248,22 +248,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          child: CachedNetworkImage(
-                              imageUrl: '${media.detailUrl()}',
-                              fit: BoxFit.fitWidth,
-                              placeholder: (context, url) =>
-                                  SpinKitRing(
-                                    color: Colors.black12,
-                                    lineWidth: 2,
-                                    size: 30,
-                                  ),
-                              errorWidget: (context, url, error) =>
-                                  SpinKitRing(
-                                    color: Colors.black12,
-                                    lineWidth: 2,
-                                    size: 30,
-                                  )),
-                        ))
+                      child: CachedNetworkImage(
+                          imageUrl: '${media.detailUrl()}',
+                          fit: BoxFit.fitWidth,
+                          placeholder: (context, url) => SpinKitRing(
+                                color: Colors.black12,
+                                lineWidth: 2,
+                                size: 30,
+                              ),
+                          errorWidget: (context, url, error) => SpinKitRing(
+                                color: Colors.black12,
+                                lineWidth: 2,
+                                size: 30,
+                              )),
+                    ))
                   ],
                 )
             ])
@@ -357,8 +355,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         builder: (context) => MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              create: (_) => RequirementOrderFormStateV2(
-                  identityTypeStr: '看款下单', product: data),
+              create: (_) =>
+                  RequirementOrderFormStateV2(
+                      identityTypeStr: '', product: data),
             ),
           ],
           child: Consumer(

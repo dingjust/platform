@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 
 class SuggestionsRow extends StatelessWidget {
   SuggestionsRow(
@@ -27,10 +26,10 @@ class SuggestionsRow extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
-        margin: EdgeInsets.only(left: 10),
+        margin: EdgeInsets.only(left: 20),
         decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
+            border:
+                Border(bottom: BorderSide(width: 1, color: Color(0xffE7E7E7)))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -40,26 +39,21 @@ class SuggestionsRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '${value}',
-                      style: TextStyle(color: Colors.black, fontSize: 17),
-                      // overflow: TextOverflow.ellipsis,
+                      '$value',
+                      style: TextStyle(
+                          color: Color(0xff222222),
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '${address}',
+                      '$address',
                       style: TextStyle(
-                          fontSize: 16,
-                          color: Color.fromRGBO(100, 100, 100, 1)),
-                      // overflow: TextOverflow.ellipsis,
+                          fontSize: 13,
+                          color: Color(0xff666666),
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 )),
-            IconButton(
-              icon: Icon(
-                B2BIcons.arrow_left_bottom,
-                color: Color.fromRGBO(100, 100, 100, 1),
-              ),
-              onPressed: onIconPressed,
-            )
           ],
         ),
       ),

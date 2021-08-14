@@ -497,4 +497,60 @@ class B2BV2Image {
     return getImage('img/icons/b2b-v2/auth_person@2x.png',
         width: width, height: height);
   }
+
+  static Image del1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/search/del_1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image del2({double width, double height}) {
+    return getImage('img/icons/b2b-v2/search/del_2@2x.png',
+        width: width, height: height);
+  }
+
+  static Image location_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/location/add_1@2x.png',
+        width: width, height: height);
+  }
+
+  static Image location_2({double width, double height}) {
+    return getImage('img/icons/b2b-v2/location/add_2@2x.png',
+        width: width, height: height);
+  }
+
+  ///全部工厂
+  static Image factory_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/factory/factory_1@2x.png',
+        width: width, height: height);
+  }
+
+  ///免费打样
+  static Image factory_2({double width, double height}) {
+    return getImage('img/icons/b2b-v2/factory/factory_2@2x.png',
+        width: width, height: height);
+  }
+
+  ///快反工厂
+  static Image factory_3({double width, double height}) {
+    return getImage('img/icons/b2b-v2/factory/factory_3@2x.png',
+        width: width, height: height);
+  }
+
+  ///认证工厂
+  static Image factory_4({double width, double height}) {
+    return getImage('img/icons/b2b-v2/factory/factory_4@2x.png',
+        width: width, height: height);
+  }
+
+  ///消息
+  static Image message({double width, double height}) {
+    return getImage('img/icons/b2b-v2/message@2x.png',
+        width: width, height: height);
+  }
+
+  ///钱
+  static Image money({double width, double height}) {
+    return getImage('img/icons/b2b-v2/money@2x.png',
+        width: width, height: height);
+  }
 }

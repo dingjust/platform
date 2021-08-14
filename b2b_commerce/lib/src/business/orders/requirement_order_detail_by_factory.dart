@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
+import 'package:b2b_commerce/src/helper/call_helper.dart';
 import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:b2b_commerce/src/home/factory/_shared/factory_widgets.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
@@ -17,7 +18,6 @@ import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 ///首页需求订单明细
@@ -92,127 +92,7 @@ class _RequirementOrderDetailByFactoryPageState
                     _buildMain(),
                   ])),
                   _buildImages(),
-                  _Card(
-                    children: [
-                      _Info(
-                        title: '发布时间',
-                        val:
-                            DateFormatUtil.formatYMDHM(orderModel.creationTime),
-                      ),
-                      _divider,
-                      _Info(
-                        title: '品   类',
-                        val: '${orderModel.details?.category?.name ?? ''}',
-                      ),
-                      _divider,
-                      _Info(
-                        title: '生产数量',
-                        val:
-                            '${orderModel.details.expectedMachiningQuantity ?? 0}件',
-                      ),
-                      _divider,
-                      _Info(
-                        title: '期望价格',
-                        val: orderModel.details.maxExpectedPrice == -1
-                            ? '面议'
-                            : '￥${orderModel.details.maxExpectedPrice ?? 0}',
-                      ),
-                      _divider,
-                      _Info(
-                        title: '交货日期',
-                        val: DateFormatUtil.formatYMD(
-                            orderModel.details.expectedDeliveryDate),
-                      ),
-                      _divider,
-                      _Info(
-                        title: '是否打样',
-                        val: orderModel.details.proofingNeeded == null
-                            ? ''
-                            : orderModel.details.proofingNeeded
-                                ? '是'
-                                : '否',
-                      ),
-                    ],
-                  ),
-                  _Card(
-                    children: [
-                      _Info(
-                        title: '加工类型',
-                        val: orderModel.details.machiningType == null
-                            ? ''
-                            : MachiningTypeLocalizedMap[
-                                orderModel.details.machiningType],
-                      ),
-                      _divider,
-                      _Info(
-                        title: '质量等级',
-                        val: formatEnumSelectsText(
-                            orderModel.details.salesMarket,
-                            FactoryQualityLevelsEnum,
-                            FactoryQualityLevelsEnum.length),
-                      ),
-                      _divider,
-                      _Info(
-                        title: '工厂区域',
-                        val: _buildOrientations(),
-                      ),
-                      _divider,
-                      _Info(
-                        title: '工厂规模',
-                        val: PopulationScaleLocalizedMap[
-                            orderModel.details.populationScale],
-                      ),
-                      _divider,
-                      _Info(
-                        title: '订单尺码',
-                        val: OrderSizeTypeLocalizedMap[
-                            orderModel.details.sizeType],
-                      ),
-                      _divider,
-                      _Info(
-                        title: '订单颜色',
-                        val: OrderColorTypeLocalizedMap[
-                            orderModel.details.colorType],
-                      ),
-                    ],
-                  ),
-                  _Card(
-                    margin: EdgeInsets.only(top: 12, bottom: 60),
-                    children: [
-                      _Info(
-                        title: '是否开票',
-                        val: orderModel.details.invoiceNeeded == null
-                            ? ''
-                            : orderModel.details.invoiceNeeded
-                                ? '是'
-                                : '否',
-                      ),
-                      _divider,
-                      _Info(
-                        title: '有效期限',
-                        val: enumMap(
-                            EffectiveDaysEnum,
-                            orderModel.details.effectiveDays == null
-                                ? '-1'
-                                : orderModel.details.effectiveDays.toString()),
-                      ),
-                      _divider,
-                      _Info(
-                        title: '支付条件',
-                        val: payPlanStr(),
-                      ),
-                      _divider,
-                      _Info(
-                        title: '所在位置',
-                        val: orderModel.details.address,
-                      ),
-                      _divider,
-                      _Info(
-                        title: '微信号',
-                        val: orderModel.details.contactWeChatNo,
-                      ),
-                    ],
-                  ),
+                  ..._buildCards()
                 ],
               ),
             ),
@@ -242,6 +122,158 @@ class _RequirementOrderDetailByFactoryPageState
       initialData: null,
       future: _getData(),
     );
+  }
+
+  List<Widget> _buildCards() {
+    //工厂需求
+    if (orderModel.orderType == RequirementOrderType.FINDING_ORDER) {
+      return _findOrderCards();
+    }
+    return _finadFactoriesCards();
+  }
+
+  ///找工厂需求内容
+  List<Widget> _finadFactoriesCards() {
+    return [
+      _Card(
+        children: [
+          _Info(
+            title: '发布时间',
+            val: DateFormatUtil.formatYMDHM(orderModel.creationTime),
+          ),
+          _divider,
+          _Info(
+            title: '品   类',
+            val: '${orderModel.details?.category?.name ?? ''}',
+          ),
+          _divider,
+          _Info(
+            title: '生产数量',
+            val: '${orderModel.details.expectedMachiningQuantity ?? 0}件',
+          ),
+          _divider,
+          _Info(
+            title: '期望价格',
+            val: orderModel.details.maxExpectedPrice == -1
+                ? '面议'
+                : '￥${orderModel.details.maxExpectedPrice ?? 0}',
+          ),
+          _divider,
+          _Info(
+            title: '交货日期',
+            val: DateFormatUtil.formatYMD(
+                orderModel.details.expectedDeliveryDate),
+          ),
+          _divider,
+          _Info(
+            title: '是否打样',
+            val: orderModel.details.proofingNeeded == null
+                ? ''
+                : orderModel.details.proofingNeeded
+                    ? '是'
+                    : '否',
+          ),
+        ],
+      ),
+      _Card(
+        children: [
+          _Info(
+            title: '加工类型',
+            val: orderModel.details.machiningType == null
+                ? ''
+                : MachiningTypeLocalizedMap[orderModel.details.machiningType],
+          ),
+          _divider,
+          _Info(
+            title: '质量等级',
+            val: formatEnumSelectsText(orderModel.details.salesMarket,
+                FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length),
+          ),
+          _divider,
+          _Info(
+            title: '工厂区域',
+            val: _buildOrientations(),
+          ),
+          _divider,
+          _Info(
+            title: '工厂规模',
+            val:
+                PopulationScaleLocalizedMap[orderModel.details.populationScale],
+          ),
+          _divider,
+          _Info(
+            title: '订单尺码',
+            val: OrderSizeTypeLocalizedMap[orderModel.details.sizeType],
+          ),
+          _divider,
+          _Info(
+            title: '订单颜色',
+            val: OrderColorTypeLocalizedMap[orderModel.details.colorType],
+          ),
+        ],
+      ),
+      _Card(
+        margin: EdgeInsets.only(top: 12, bottom: 60),
+        children: [
+          _Info(
+            title: '是否开票',
+            val: orderModel.details.invoiceNeeded == null
+                ? ''
+                : orderModel.details.invoiceNeeded
+                    ? '是'
+                    : '否',
+          ),
+          _divider,
+          _Info(
+            title: '有效期限',
+            val: enumMap(
+                EffectiveDaysEnum,
+                orderModel.details.effectiveDays == null
+                    ? '-1'
+                    : orderModel.details.effectiveDays.toString()),
+          ),
+          _divider,
+          _Info(
+            title: '支付条件',
+            val: payPlanStr(),
+          ),
+          _divider,
+          _Info(
+            title: '所在位置',
+            val: orderModel.details.address,
+          ),
+          _divider,
+          _Info(
+            title: '微信号',
+            val: orderModel.details.contactWeChatNo,
+          ),
+        ],
+      )
+    ];
+  }
+
+  ///找订单需求内容
+  List<Widget> _findOrderCards() {
+    return [
+      _Card(
+        children: [
+          _Info(
+            title: '发布时间',
+            val: DateFormatUtil.formatYMDHM(orderModel.creationTime),
+          ),
+          _divider,
+          _Info(
+            title: '擅长品类',
+            val: '${orderModel.details?.majorCategory?.name ?? ''}',
+          ),
+          _divider,
+          _Info(
+            title: '所在位置',
+            val: orderModel.details.address,
+          ),
+        ],
+      ),
+    ];
   }
 
   Future<RequirementOrderModel> _getData() async {
@@ -275,13 +307,17 @@ class _RequirementOrderDetailByFactoryPageState
   }
 
   Widget _buildMain() {
+    Radius bottomRadius = Radius.circular(getImages().length == 0 ? 12 : 0);
+
     return Container(
-      // margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.fromLTRB(12, 16, 12, 0),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+              bottomLeft: bottomRadius,
+              bottomRight: bottomRadius)),
       child: Column(
         children: [
           Row(
@@ -290,8 +326,8 @@ class _RequirementOrderDetailByFactoryPageState
                 child: Text(
                   orderModel.details?.productName ?? '',
                   style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xff222222),
+                      fontSize: 16,
+                      color: Color(0xFFAA6E15),
                       fontWeight: FontWeight.bold),
                 ),
               )
@@ -365,26 +401,26 @@ class _RequirementOrderDetailByFactoryPageState
             children: [
               Expanded(
                   child: FactoryBottomBtn(
-                    color: Color(0xffFED800),
-                    label: '联系对方',
-                    onTap: () {
-                      DialogHelper.showConfirm(
-                          title: '温馨提示',
-                          content:
+                color: Color(0xffFED800),
+                label: '联系对方',
+                onTap: () {
+                  DialogHelper.showConfirm(
+                      title: '温馨提示',
+                      content:
                           '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
-                          confirm: () {
-                            var tel = '';
-                            if (model?.details?.agentContactPhone != null &&
-                                model?.details?.agentContactPhone != '') {
-                              //代理电话
-                              tel = model.details.agentContactPhone;
-                            } else {
-                              tel = model.details.contactPhone;
-                            }
-                            _selectActionButton(tel);
-                          });
-                    },
-                  )),
+                      confirm: () {
+                        var tel = '';
+                        if (model?.details?.agentContactPhone != null &&
+                            model?.details?.agentContactPhone != '') {
+                          //代理电话
+                          tel = model.details.agentContactPhone;
+                        } else {
+                          tel = model.details.contactPhone;
+                        }
+                        CallHelper.privacyCall(tel, context: context);
+                      });
+                },
+              )),
             ],
           ),
         ),
@@ -416,7 +452,7 @@ class _RequirementOrderDetailByFactoryPageState
                           } else {
                             tel = model.details.contactPhone;
                           }
-                          _selectActionButton(tel);
+                          CallHelper.privacyCall(tel, context: context);
                         });
                   },
                 )),
@@ -500,41 +536,6 @@ class _RequirementOrderDetailByFactoryPageState
               isReview: true,
               isCreate: true,
             )));
-  }
-
-  //拨打电话或发短信
-  void _selectActionButton(String tel) async {
-    if (tel == null || tel == '') {
-      return;
-    }
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return new Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('拨打电话'),
-              onTap: () async {
-                var url = 'tel:' + tel;
-                await launch(url);
-              },
-            ),
-            tel.indexOf('-') > -1
-                ? Container()
-                : ListTile(
-              leading: Icon(Icons.message),
-              title: Text('发送短信'),
-              onTap: () async {
-                var url = 'sms:' + tel;
-                await launch(url);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   copyToClipboard(final String text) {

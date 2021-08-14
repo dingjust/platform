@@ -494,7 +494,7 @@ class HomeBtnsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 24),
+      padding: EdgeInsets.only(top: 24, bottom: 12),
       color: Color(0xffF7F7F7),
       child: Column(children: [
         Row(
