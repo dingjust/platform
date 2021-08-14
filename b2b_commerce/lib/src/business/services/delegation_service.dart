@@ -49,21 +49,18 @@ class _DelegationServicePageState extends State<DelegationServicePage> {
         child: ListView(
           children: [
             _buildDetailCard(),
-            user.b2bUnit?.trusteeshipByPlatform ?? false
-                ? Container()
-                : Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Column(
-                      children: [
-                        _buildContactPhone(),
-                        _buildInfo('钉单将通过隐私电话服务保障您的信息安全'),
-                        _buildWechat(),
-                        _buildIsSame(),
-                      ],
-                    ),
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              child: Column(
+                children: [
+                  _buildContactPhone(),
+                  _buildInfo('钉单将通过隐私电话服务保障您的信息安全'),
+                  _buildWechat(),
+                  _buildIsSame(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -266,7 +263,7 @@ class _DelegationServicePageState extends State<DelegationServicePage> {
   void _onSubmit() async {
     if (validateForm()) {
       Function cancelFunc =
-      BotToast.showLoading(crossPage: false, clickClose: true);
+          BotToast.showLoading(crossPage: false, clickClose: true);
 
       BaseResponse response = await DelegationServiceRepository.apply(
           contactController.text, wechatController.text);
