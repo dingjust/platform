@@ -37,6 +37,10 @@ export default {
           name: '账号注销审阅',
           url: '/task/account/logoff',
           icon: 'iconNone'
+        },
+        {
+          name: '托管申请处理',
+          url: '/task/trusteeship'
         }
       ]
     },
@@ -245,6 +249,11 @@ export default {
         {
           name: '公告',
           url: '/miscs/notice',
+          icon: 'iconNone'
+        },
+        {
+          name: '热门推荐',
+          url: '/miscs/recommend/word',
           icon: 'iconNone'
         }
         // {
