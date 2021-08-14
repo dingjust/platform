@@ -13,6 +13,7 @@
           </el-row>
         </template>
       </el-table-column>
+      <el-table-column label="标题" prop="title" v-if="isPending"></el-table-column>
       <el-table-column label="客户" v-if="isPending" :show-overflow-tooltip="true" min-width="120">
         <template slot-scope="scope">
           <span>{{cooperatorName(scope.row)}}</span>

@@ -14,14 +14,13 @@
           </el-col>
         </el-row>
         <div class="pt-2"></div>
-        <!-- <el-row type="flex" :gutter="20">
+        <el-row type="flex" :gutter="20">
           <el-col :span="8">
-            <el-form-item label="订单名称" label-width="110px" prop='name'
-              :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-              <el-input v-model="form.name" placeholder="请输入"></el-input>
+            <el-form-item label="标题" >
+              <el-input v-model="form.title" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
-        </el-row> -->
+        </el-row>
         <el-row type="flex" class="order-type" v-if="!form['NEW_ACCEPTED']">
           <el-form-item label="订单类型">
             <el-radio-group v-model="form.offLine">
