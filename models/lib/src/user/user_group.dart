@@ -300,6 +300,9 @@ class B2BUnitModel extends OrgUnitModel {
   ///认证类型
   String approvalType;
 
+  ///已托管
+  bool trusteeshipByPlatform;
+
   B2BUnitModel(
       {MediaModel profilePicture,
       String uid,
@@ -325,17 +328,18 @@ class B2BUnitModel extends OrgUnitModel {
       CompanyType type,
       ArticleApprovalStatus approvalStatus,
       List<CompanyProfileModel> companyProfiles,
-      List<LabelModel> labels,
-      String duties,
-      String contactUid,
-      this.approvalType,
-      this.active,
-      this.email,
-      this.phone,
-      this.profileCompleted,
-      this.locationAddress,
-      this.longitude,
-      this.latitude})
+    List<LabelModel> labels,
+    String duties,
+    String contactUid,
+    this.approvalType,
+    this.active,
+    this.email,
+    this.phone,
+    this.profileCompleted,
+    this.locationAddress,
+    this.longitude,
+    this.latitude,
+    this.trusteeshipByPlatform})
       : super(
             profilePicture: profilePicture,
             uid: uid,
@@ -433,6 +437,7 @@ class BrandModel extends B2BUnitModel {
     List<LabelModel> labels,
     String duties,
     String contactUid,
+    bool trusteeshipByPlatform,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -461,17 +466,18 @@ class BrandModel extends B2BUnitModel {
             contactPerson: contactPerson,
             contactPhone: contactPhone,
             cooperativeBrand: cooperativeBrand,
-            qq: qq,
-            wechat: wechat,
-            businessRegistrationNo: businessRegistrationNo,
-            certificateOfLegal: certificateOfLegal,
-            legalRepresentative: legalRepresentative,
-            type: type,
-            approvalStatus: approvalStatus,
-            companyProfiles: companyProfiles,
-            labels: labels,
-            duties: duties,
-            contactUid: contactUid);
+      qq: qq,
+      wechat: wechat,
+      businessRegistrationNo: businessRegistrationNo,
+      certificateOfLegal: certificateOfLegal,
+      legalRepresentative: legalRepresentative,
+      type: type,
+      approvalStatus: approvalStatus,
+      companyProfiles: companyProfiles,
+      labels: labels,
+      duties: duties,
+      contactUid: contactUid,
+      trusteeshipByPlatform: trusteeshipByPlatform);
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$BrandModelFromJson(json);
@@ -640,6 +646,7 @@ class FactoryModel extends B2BUnitModel {
     String duties,
     String contactUid,
     String approvalType,
+    bool trusteeshipByPlatform,
     this.historyOrdersCount,
     this.orderedSuccessRate,
     this.monthlyCapacityRange,
@@ -707,7 +714,8 @@ class FactoryModel extends B2BUnitModel {
       labels: labels,
       duties: duties,
       contactUid: contactUid,
-      approvalType: approvalType);
+      approvalType: approvalType,
+      trusteeshipByPlatform: trusteeshipByPlatform);
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FactoryModelFromJson(json);
