@@ -918,6 +918,10 @@ const router = new Router({
           path: 'account/logoff',
           name: '账号注销审阅',
           component: () => import(/* webpackChunkName: 'task' */ '@/views/task/account-logoff/AccountLogoff')
+        }, {
+          path: 'trusteeship',
+          name: '托管',
+          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/trusteeship/TrusteeshipPage')
         }
       ]
     },
@@ -973,6 +977,10 @@ const router = new Router({
         path: '/miscs/notice',
         name: '公告',
         component: () => import(/* webpackChunkName: 'miscs' */ '@/views/tenant/notice/NoticePage')
+      }, {
+        path: '/miscs/recommend/word',
+        name: '热门推荐',
+        component: () => import(/* webpackChunkName: 'miscs' */ '@/views/tenant/recommend-word/RecommendWordPage')
       }
       ]
     },

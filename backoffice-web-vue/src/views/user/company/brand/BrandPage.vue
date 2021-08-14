@@ -25,6 +25,7 @@
                   <el-dropdown-item v-if="!props.item.loginDisabled" command="DISABLED">禁用</el-dropdown-item>
                   <el-dropdown-item v-if="props.item.loginDisabled" command="UNDISABLED">解禁</el-dropdown-item>
                   <el-dropdown-item command="CLEARAUTH">清除认证</el-dropdown-item>
+                  <el-dropdown-item command="AUTH">认证信息</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
@@ -52,6 +53,9 @@
     <el-dialog :visible.sync="modifyVisible" width="80%" :close-on-click-modal="false">
       <brand-form-by-tenant v-if="modifyVisible" :row="handleRow" @callback="modifyVisible=false"/>
     </el-dialog>
+    <el-dialog title="认证详情" :visible.sync="authDetailVisible" width="500px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false"> 
+      <cooperator-auth-detail v-if="authDetailVisible" :uid="handleRow.uid"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -69,6 +73,7 @@ import BrandForm1 from './form/BrandForm1';
 import BrandForbiddenDialog from './form/BrandForbiddenDialog';
 import AuthenticationClearForm from '../components/AuthenticationClearForm'
 import BrandFormByTenant from './form/BrandFormByTenant.vue';
+import CooperatorAuthDetail from '@/views/miscs/cooperator/info/CooperatorAuthDetail'
 
 export default {
   name: 'BrandPage',
@@ -80,7 +85,8 @@ export default {
     BrandList,
     BrandLabelsForm,
     AuthenticationClearForm,
-    BrandFormByTenant
+    BrandFormByTenant,
+    CooperatorAuthDetail
   },
   computed: {
     ...mapGetters({
@@ -143,9 +149,21 @@ export default {
         case 'CLEARAUTH':
           this.clearAuth(row);
           break;
+        case 'AUTH':
+          this.onAuthDetail(row)
+          break;
         default:
           break;
       }
+    },
+    onAuthDetail (row) {
+      if (row.approvalStatus !== 'approved') {
+        this.$message.warning('此公司未进行认证操作，没有认证信息！')
+        return
+      }
+
+      this.handleRow = row
+      this.authDetailVisible = true
     },
     onModify (row) {
       this.handleRow = row
@@ -274,7 +292,8 @@ export default {
       authVisible: false,
       clearRow: '',
       handleRow: null,
-      modifyVisible: false
+      modifyVisible: false,
+      authDetailVisible: false
     };
   },
   created () {

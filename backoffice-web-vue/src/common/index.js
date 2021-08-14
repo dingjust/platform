@@ -1370,6 +1370,26 @@ let TENANT_APIS = {
   },
   delectNotice (id) {
     return '/b2b/notice/' + id
+  },
+  // 查询托管列表
+  searchTrusteeship () {
+    return '/b2b/trusteeship/order/search'
+  },
+  // 处理托管
+  proccessedTrusteeship (id) {
+    return '/b2b/trusteeship/order/proccessed/' + id
+  },
+  // 查询热门推荐
+  searchRecommendWord () {
+    return '/b2b/recommend/words/list'
+  },
+  // 批量保存
+  batchSavesRecommend () {
+    return '/b2b/recommend/words/saves'
+  },
+  // 删除
+  batchDelectRecommend () {
+    return '/b2b/recommend/words/delete'
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
