@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:services/src/home/res/recommend_words_response.dart';
+import 'package:services/src/home/response/recommend_words_response.dart';
 
 import '../../../services.dart';
 
