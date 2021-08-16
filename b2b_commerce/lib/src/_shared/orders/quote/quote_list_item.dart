@@ -366,7 +366,7 @@ class QuoteListItem extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      // padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: buttons ?? [],
