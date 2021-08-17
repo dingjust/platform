@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ShowDialogUtil{
@@ -105,8 +103,10 @@ class ShowDialogUtil{
   static showSnakeBarByKey(final GlobalKey<ScaffoldState> key,
       BuildContext context, String message) {
     final snackBar = SnackBar(
-      content: Text(message), duration: Duration(seconds: 1),);
-    key.currentState.showSnackBar(snackBar);
+      content: Text(message),
+      duration: Duration(seconds: 1),
+    );
+    key.currentState!.showSnackBar(snackBar);
   }
 
   //错误提示（带红色叉号）

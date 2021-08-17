@@ -167,15 +167,31 @@ class ChineseCupertinoLocalizations implements CupertinoLocalizations {
 
   @override
   // TODO: implement todayLabel
-  String get todayLabel => null;
+  String get todayLabel => '今天';
 
   @override
   // TODO: implement modalBarrierDismissLabel
   String get modalBarrierDismissLabel => throw UnimplementedError();
 
   @override
-  String tabSemanticsLabel({int tabIndex, int tabCount}) {
+  String tabSemanticsLabel({int? tabIndex, int? tabCount}) {
     // TODO: implement tabSemanticsLabel
     throw UnimplementedError();
   }
+
+  @override
+  // TODO: implement searchTextFieldPlaceholderLabel
+  String get searchTextFieldPlaceholderLabel => throw UnimplementedError();
+
+  @override
+  // TODO: implement timerPickerHourLabels
+  List<String> get timerPickerHourLabels => throw UnimplementedError();
+
+  @override
+  // TODO: implement timerPickerMinuteLabels
+  List<String> get timerPickerMinuteLabels => throw UnimplementedError();
+
+  @override
+  // TODO: implement timerPickerSecondLabels
+  List<String> get timerPickerSecondLabels => throw UnimplementedError();
 }

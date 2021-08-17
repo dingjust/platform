@@ -8,8 +8,9 @@ import 'package:redux/redux.dart';
  */
 
 /// 通过 flutter_redux 的 combineReducers，实现 Reducer 方法
-final localeReducer = combineReducers<Locale>([
-  TypedReducer<Locale, RefreshLocaleAction>(_refresh),
+final localeReducer = combineReducers<Locale?>([
+  TypedReducer<Locale, RefreshLocaleAction>(_refresh) as Locale? Function(
+      Locale?, dynamic),
 ]);
 
 /// 定义处理 Action 行为的方法，返回新的 State

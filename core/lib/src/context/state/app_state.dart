@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 /// 全局Redux store 的对象，保存State数据
 class AppState {
   /// 用户信息
-  User user;
+  User? user;
 
   /// 主题数据
-  ThemeData theme;
+  ThemeData? theme;
 
   /// 语言
-  Locale locale;
+  Locale? locale;
 
   AppState({this.user, this.theme, this.locale});
 }

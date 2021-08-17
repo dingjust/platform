@@ -4,7 +4,7 @@ part 'user.g.dart';
 
 @JsonSerializable()
 class User {
-  String username;
+  String? username;
 
   User(this.username);
 

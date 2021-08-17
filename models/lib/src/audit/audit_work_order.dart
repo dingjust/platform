@@ -7,49 +7,49 @@ part 'audit_work_order.g.dart';
 @JsonSerializable()
 class AuditWorkOrderModel extends ItemModel {
   ///编码
-  String code;
+  String? code;
 
   ///类型
-  String type;
+  String? type;
 
   ///类型名称
-  String typeLabel;
+  String? typeLabel;
 
   ///原始code
-  String originCode;
+  String? originCode;
 
   ///审核信息
-  String auditMsg;
+  String? auditMsg;
 
   ///审核状态
-  AuditState state;
+  AuditState? state;
 
   ///提交时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime submitTime;
+  DateTime? submitTime;
 
   ///审核时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime auditTime;
+  DateTime? auditTime;
 
   ///撤回时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime revokeTime;
+  DateTime? revokeTime;
 
   ///撤回用户
   @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel revokeUser;
+  B2BCustomerModel? revokeUser;
 
   ///审核对象
-  dynamic auditModel;
+  dynamic? auditModel;
 
   ///提交用户
   @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel submitUser;
+  B2BCustomerModel? submitUser;
 
   ///所属公司
   @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel belongTo;
+  CompanyModel? belongTo;
 
   AuditWorkOrderModel({
     this.code,
@@ -68,13 +68,13 @@ class AuditWorkOrderModel extends ItemModel {
   });
 
   factory AuditWorkOrderModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$AuditWorkOrderModelFromJson(json);
+      _$AuditWorkOrderModelFromJson(json);
 
   static Map<String, dynamic> toJson(AuditWorkOrderModel model) =>
-      model == null ? null : _$AuditWorkOrderModelToJson(model);
+      _$AuditWorkOrderModelToJson(model);
 
   static Map<String, dynamic> companyToJson(CompanyModel model) =>
-      model == null ? null : CompanyModel.toJson(model);
+      CompanyModel.toJson(model);
 }
 
 ///审核状态

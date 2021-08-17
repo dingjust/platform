@@ -1,3 +1,3 @@
 abstract class LocalizationBase {
-  String appTitle;
+  String? appTitle;
 }

@@ -18,12 +18,12 @@ class AppLocalizations {
     'zh': LocaleZh(),
   };
 
-  LocalizationBase get currentLocalized {
+  LocalizationBase? get currentLocalized {
     return _localizedValues[locale.languageCode];
   }
 
   /// 通过 Localizations 加载当前的 AppLocalizations
-  static LocalizationBase of(BuildContext context) {
+  static LocalizationBase? of(BuildContext context) {
     return Localizations.of(context, LocalizationBase);
   }
 }

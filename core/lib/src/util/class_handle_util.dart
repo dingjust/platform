@@ -6,27 +6,27 @@ class ClassHandleUtil {
   }
 
   //去除人民币符号并转成double（输入框）
-  static double removeSymbolRMBToDouble(String price) {
+  static double? removeSymbolRMBToDouble(String price) {
     return price == '' ? null : double.parse(price.replaceFirst('￥', ''));
   }
 
   //将输入框的值转成double
-  static double transDouble(String str) {
+  static double? transDouble(String str) {
     return str == '' ? null : double.parse(str);
   }
 
   //将输入框的值转成int
-  static int transInt(String str) {
+  static int? transInt(String str) {
     return str == '' ? null : int.parse(str);
   }
 
   //将bool字符串转成bool
-  static bool strToBool(String str){
-    bool result;
-    if(str == 'true'){
+  static bool? strToBool(String str) {
+    bool? result;
+    if (str == 'true') {
       result = true;
     }
-    if(str == 'false'){
+    if (str == 'false') {
       result = false;
     }
     return result;

@@ -1,16 +1,14 @@
-import 'package:flutter/cupertino.dart';
-
 class LogUtil {
   static var _separator = "=";
   static var _split =
       "$_separator$_separator$_separator$_separator$_separator$_separator$_separator$_separator$_separator";
-  static var _title = "Yl-Log";
+  static String? _title = "Yl-Log";
   static var _isDebug = true;
   static int _limitLength = 800;
   static String _startLine = "$_split$_title$_split";
   static String _endLine = "$_split$_separator$_separator$_separator$_split";
 
-  static void init({String title, @required bool isDebug, int limitLength}) {
+  static void init({String? title, required bool isDebug, int? limitLength}) {
     _title = title;
     _isDebug = isDebug;
     _limitLength = limitLength ??= _limitLength;
