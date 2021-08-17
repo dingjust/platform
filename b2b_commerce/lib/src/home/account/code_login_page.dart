@@ -134,6 +134,26 @@ class _CodeLoginPageState extends State<CodeLoginPage> {
         }
       }
     } else {
+      if (widget.accountNum == 0) {
+        //未注册
+        BaseResponse defaultRes =
+            await UserRepositoryImpl.defaultRegister(widget.phone, code);
+        if (defaultRes == null) {
+          cancelFunc.call();
+          BotToast.showText(text: '未知错误');
+          throw Exception('未知错误');
+        } else {
+          if (defaultRes.code == 0) {
+            cancelFunc.call();
+            BotToast.showText(text: '${defaultRes.msg}');
+            throw Exception('${defaultRes.msg}');
+          } else {
+            //替换Code
+            code = defaultRes.data;
+          }
+        }
+      }
+
       //单账号直接登录
       LoginResult result = await UserBLoC.instance
           .loginByAuthorizationCode(code: code, remember: true);
