@@ -1,7 +1,8 @@
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
+// import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:models/models.dart';
 
 class FlutterAMap extends StatefulWidget {
@@ -44,7 +45,8 @@ class _FlutterAMapState extends State<FlutterAMap>{
                  Flexible(
                   child:  FlutterMap(
                     options:  MapOptions(
-                      center:  LatLng(widget.locationX, widget.locationY),
+                      center:
+                      LatLng(widget.locationX, widget.locationY),
                       zoom: 12,
                       maxZoom: 15,
                       minZoom: 8,

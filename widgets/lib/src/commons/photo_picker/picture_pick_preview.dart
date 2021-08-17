@@ -364,9 +364,9 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
               title: Text('相机'),
               onTap: () async {
                 var image =
-                await ImagePicker.pickImage(source: ImageSource.camera);
+                await ImagePicker().pickImage(source: ImageSource.camera);
                 if (image != null) {
-                  await _uploadFile(image);
+                  await _uploadFile(File(image.path));
                 }
               },
             ),
@@ -375,9 +375,9 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
               title: Text('相册'),
               onTap: () async {
                 var image =
-                await ImagePicker.pickImage(source: ImageSource.gallery);
+                await ImagePicker().pickImage(source: ImageSource.gallery);
                 if (image != null) {
-                  await _uploadFile(image);
+                  await _uploadFile(File(image.path));
                 }
               },
             ),

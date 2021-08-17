@@ -79,11 +79,12 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
               leading: Icon(Icons.camera),
               title: Text('相机'),
               onTap: () async {
+                var imagePicker=ImagePicker();
                 var image =
-                    await ImagePicker.pickImage(source: ImageSource.camera);
+                    await imagePicker.pickImage(source: ImageSource.camera);
                 if (image != null) {
                   setState(() {
-                    widget.images.add(image);
+                    widget.images.add(File(image.path));
                     _list.removeLast();
 
                     _list.add(Container(
@@ -91,7 +92,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
                       height: widget.height,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: FileImage(image),
+                          image: FileImage(File(image.path)),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -116,11 +117,12 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
               leading: Icon(Icons.photo_album),
               title: Text('相册'),
               onTap: () async {
+                var imagePicker=ImagePicker();
                 var image =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                    await imagePicker.pickImage(source: ImageSource.gallery);
                 if (image != null) {
                   setState(() {
-                    widget.images.add(image);
+                    widget.images.add(File(image.path));
 
                     _list.removeLast();
 
@@ -129,7 +131,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
                       height: widget.height,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: FileImage(image),
+                          image: FileImage(File(image.path)),
                           fit: BoxFit.cover,
                         ),
                       ),

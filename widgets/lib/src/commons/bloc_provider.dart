@@ -12,7 +12,7 @@ class BLoCProvider<T extends BLoCBase> extends InheritedWidget {
 
   static T of<T extends BLoCBase>(BuildContext context) {
     final type = _typeOf<BLoCProvider<T>>();
-    BLoCProvider<T> provider = context.ancestorWidgetOfExactType(type);
+    BLoCProvider<T> provider = context.dependOnInheritedWidgetOfExactType(aspect: type);
     return provider.bloc;
   }
 

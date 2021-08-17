@@ -14,14 +14,14 @@ class ImagePickerVideoHandler {
 
   openCamera() async {
     imagePicker.dismissDialog();
-    var image = await ImagePicker.pickVideo(source: ImageSource.camera);
-    _listener.useVideo(image);
+    var image = await ImagePicker().pickVideo(source: ImageSource.camera);
+    _listener.useVideo(File(image.path));
   }
 
   openGallery() async {
     imagePicker.dismissDialog();
-    var image = await ImagePicker.pickVideo(source: ImageSource.gallery);
-    _listener.useVideo(image);
+    var image = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    _listener.useVideo(File(image.path));
   }
 
   void build(int bgColor, int labelColor) {

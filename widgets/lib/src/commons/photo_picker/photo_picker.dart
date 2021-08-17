@@ -122,9 +122,9 @@ class _PhotoPickerState extends State<PhotoPicker> {
               title: Text('相机'),
               onTap: () async {
                 var image =
-                    await ImagePicker.pickImage(source: ImageSource.camera);
+                    await ImagePicker().pickImage(source: ImageSource.camera);
                 if (image != null) {
-                  _addFile(image);
+                  _addFile(File(image.path));
                 }
               },
             ),
@@ -133,9 +133,9 @@ class _PhotoPickerState extends State<PhotoPicker> {
               title: Text('相册'),
               onTap: () async {
                 var image =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
                 if (image != null) {
-                  _addFile(image);
+                  _addFile(File(image.path));
                 }
               },
             ),

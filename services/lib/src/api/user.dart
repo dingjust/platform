@@ -198,8 +198,7 @@ abstract class UserApis {
   static get cooperators => '/{baseSiteId}/cooperator';
 
   /// 合作商详情
-  static get cooperatorDetail =>
-          (id) {
+  static get cooperatorDetail => (id) {
         return '/{baseSiteId}/cooperator/$id';
       };
 
@@ -207,8 +206,7 @@ abstract class UserApis {
   static get appendCooperator => '/{baseSiteId}/cooperator/create';
 
   /// 删除合作商
-  static get deleteCooperator =>
-          (id) {
+  static get deleteCooperator => (id) {
         return '/{baseSiteId}/cooperator/delete/$id';
       };
 
@@ -222,14 +220,12 @@ abstract class UserApis {
   static get payplansCreate => '/{baseSiteId}/payPlan/create';
 
   ///撤销合同
-  static get revokeContract =>
-          (code) {
+  static get revokeContract => (code) {
         return '/{baseSiteId}/user/agreement/revoke/$code';
       };
 
   ///拒签合同
-  static get rejectContract =>
-          (code) {
+  static get rejectContract => (code) {
         return '/{baseSiteId}/user/agreement/reject/sign/$code';
       };
 
@@ -238,8 +234,7 @@ abstract class UserApis {
       '/{baseSiteId}/user/agreement/order/validate';
 
   /// 用户权限列表
-  static get authorizations =>
-          (id) {
+  static get authorizations => (id) {
         return '/{baseSiteId}/b2bCustomers/role/$id';
       };
 
@@ -269,32 +264,27 @@ abstract class UserApis {
   static get integralExchange => '/{baseSiteId}/user/points/exchange/apply';
 
   ///验证码登录（含子账号）
-  static get loginByCaptcha =>
-          (phone) {
+  static get loginByCaptcha => (phone) {
         return '/{baseSiteId}/sms/login/captcha/$_clientId/B2B/$phone';
       };
 
   ///验证验证码并返回所有账号
-  static get validateCaptchaAccount =>
-          (phone, code) {
+  static get validateCaptchaAccount => (phone, code) {
         return '/{baseSiteId}/sms/validate/login/captcha/$phone/$code';
       };
 
   ///选择登录账号
-  static get selectLoginAccount =>
-          (phone, uid, code) {
+  static get selectLoginAccount => (phone, uid, code) {
         return '/{baseSiteId}/sms/switch/captcha/$_clientId/login/user/$phone/$uid/$code';
       };
 
   ///获取公司认证信息
-  static get getCompanyCertificateInfo =>
-          (code) {
+  static get getCompanyCertificateInfo => (code) {
         return '/{baseSiteId}/cert/enterprise/cert/info/$code';
       };
 
   /// 获取工厂提交修改资料
-  static get factoryProfileBackup =>
-          (code) {
+  static get factoryProfileBackup => (code) {
         return '/{baseSiteId}/factories/backups/$code';
       };
 
@@ -302,8 +292,7 @@ abstract class UserApis {
   static get relationAccounts => '/{baseSiteId}/get/all/relation/account';
 
   /// 获取当前用户所有关联账号
-  static get switchAccount =>
-          (uid) {
+  static get switchAccount => (uid) {
         return '/{baseSiteId}/switch/to/user/$_clientId/$uid';
       };
 
@@ -315,8 +304,7 @@ abstract class UserApis {
       '/{baseSiteId}/account/write/off/my/last/apply';
 
   /// 添加(POST)/删除（DEL）收藏
-  static get favorite =>
-          (id) {
+  static get favorite => (id) {
         return '/{baseSiteId}/my/favorite/$id';
       };
 
@@ -325,4 +313,9 @@ abstract class UserApis {
 
   /// 收藏列表
   static get favoriteSearch => '/{baseSiteId}/my/favorite/search';
+
+  /// 一键注册
+  static get defaultRegister => (phone, captcha) {
+        return '/{baseSiteId}/companies/$_clientId/oneClickRegister/$phone?captchaCode=$captcha';
+      };
 }

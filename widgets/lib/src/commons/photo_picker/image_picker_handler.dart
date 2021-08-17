@@ -17,15 +17,15 @@ class ImagePickerHandler {
 
   openCamera() async {
     imagePicker.dismissDialog();
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    _listener.userImage(image);
+    var image = await ImagePicker().pickImage(source: ImageSource.camera);
+    _listener.userImage(File(image.path));
   }
 
   openGallery(BuildContext context) async {
     if (maxNum == 1) {
       imagePicker.dismissDialog();
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      _listener.userImage(image);
+      var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      _listener.userImage(File(image.path));
     } else {
       openMultiGallery(context);
     }
