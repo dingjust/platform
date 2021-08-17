@@ -16,17 +16,17 @@ typedef CompareFunction = int Function(String code1, String code2);
 /// ),
 /// ```
 class ColorSizeEntryTable extends StatelessWidget {
-  final List<ColorSizeEntryV2Model> data;
+  final List<ColorSizeEntryV2Model>? data;
 
   //过滤后数据
-  List<ColorSizeEntryV2Model> filterData;
+  List<ColorSizeEntryV2Model>? filterData;
 
   ///排序函数
-  final CompareFunction compareFunction;
+  final CompareFunction? compareFunction;
 
-  ColorSizeEntryTable({Key key, this.data, this.compareFunction}) {
+  ColorSizeEntryTable({Key? key, this.data, this.compareFunction}) {
     //过滤数量为0
-    filterData = data.where((element) => element.quantity > 0).toList();
+    filterData = data!.where((element) => element.quantity > 0).toList();
   }
 
   @override
@@ -89,17 +89,17 @@ class ColorSizeEntryTable extends StatelessWidget {
       ])
     ];
 
-    filterData.forEach((entry) {
+    filterData!.forEach((entry) {
       if (colorRowList[entry.color.code] == null) {
         colorRowList[entry.color.code] = [];
       }
-      colorRowList[entry.color.code].add(entry);
+      colorRowList[entry.color.code]!.add(entry);
     });
 
     colorRowList.forEach((color, entries) {
       //排序
       if (compareFunction != null) {
-        entries.sort((o1, o2) => compareFunction(o1.size.code, o2.size.code));
+        entries.sort((o1, o2) => compareFunction!(o1.size.code, o2.size.code));
       }
 
       //构建尺码数量列
@@ -211,18 +211,18 @@ class ColorSizeEntryTable extends StatelessWidget {
 /// ),
 /// ```
 class ColorSizeEntryInputTable extends StatelessWidget {
-  final List<ColorSizeEntryV2Model> data;
+  final List<ColorSizeEntryV2Model>? data;
 
   ///排序函数
-  final CompareFunction compareFunction;
+  final CompareFunction? compareFunction;
 
-  final ValueChanged<List<ColorSizeEntryV2Model>> onChanged;
+  final ValueChanged<List<ColorSizeEntryV2Model>?>? onChanged;
 
-  final Map controllerMap;
-  final Map nodeMap;
+  final Map? controllerMap;
+  final Map? nodeMap;
 
   const ColorSizeEntryInputTable(
-      {Key key,
+      {Key? key,
       this.data,
       this.compareFunction,
       this.onChanged,
@@ -295,17 +295,17 @@ class ColorSizeEntryInputTable extends StatelessWidget {
       ])
     ];
 
-    data.forEach((entry) {
+    data!.forEach((entry) {
       if (colorRowList[entry.color.code] == null) {
         colorRowList[entry.color.code] = [];
       }
-      colorRowList[entry.color.code].add(entry);
+      colorRowList[entry.color.code]!.add(entry);
     });
 
     colorRowList.forEach((color, entries) {
       //排序
       if (compareFunction != null) {
-        entries.sort((o1, o2) => compareFunction(o1.size.code, o2.size.code));
+        entries.sort((o1, o2) => compareFunction!(o1.size.code, o2.size.code));
       }
 
       //构建尺码数量列
@@ -329,9 +329,9 @@ class ColorSizeEntryInputTable extends StatelessWidget {
                     color: Color.fromRGBO(250, 250, 250, 1),
                     alignment: Alignment.center,
                     child: TextField(
-                      controller: controllerMap[entry.color.code]
+                      controller: controllerMap![entry.color.code]
                           [entry.size.code],
-                      focusNode: nodeMap[entry.color.code][entry.size.code],
+                      focusNode: nodeMap![entry.color.code][entry.size.code],
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration.collapsed(hintText: '0'),

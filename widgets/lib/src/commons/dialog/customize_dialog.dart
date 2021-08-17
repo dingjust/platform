@@ -14,32 +14,45 @@ typedef void JumpAction();
 class CustomizeDialog extends StatefulWidget {
   //是否允许点击空白处关闭dialog
   bool outsideDismiss;
+
   //回调结果
   bool callbackResult;
+
   //内容的WidgetList，List越大dialog的高度要越大
-  List<Widget> contentWidgetList;
+  List<Widget>? contentWidgetList;
+
   //标题
-  String title;
+  String? title;
+
   //整个dialog的高度
-  double dialogHeight;
+  double? dialogHeight;
+
   //整个dialog的宽度
-  double dialogWidth;
+  double? dialogWidth;
+
   //标题样式
-  TextStyle titleStyle;
+  TextStyle? titleStyle;
+
   //内容样式（输入框方式不适用）
-  TextStyle contentStyle;
+  TextStyle? contentStyle;
+
   //操作成功时提示
-  String successTips;
+  String? successTips;
+
   //操作失败时提示
-  String failTips;
+  String? failTips;
+
   //是否需要确认按钮
   bool isNeedConfirmButton;
+
   //是否需要取消按钮
   bool isNeedCancelButton;
+
   //确认按钮的文本
-  String confirmButtonText;
+  String? confirmButtonText;
+
   //取消按钮的文本
-  String cancelButtonText;
+  String? cancelButtonText;
 
   ///取消按钮的文本样式
   TextStyle cancelButtonTextStyle;
@@ -48,62 +61,87 @@ class CustomizeDialog extends StatefulWidget {
   TextStyle confirmlButtonTextStyle;
 
   //确认按钮点击动作
-  ConfirmAction confirmAction;
+  ConfirmAction? confirmAction;
+
   //取消按钮点击动作
-  CancelAction cancelAction;
+  CancelAction? cancelAction;
+
   //弹窗类型样式
   DialogType dialogType;
-  //内容文本1
-  String contentText1;
-  //内容文本2
-  String contentText2;
-  //内容文本1字体样式
-  TextStyle contentTextStyle1;
-  //内容文本2字体样式
-  TextStyle contentTextStyle2;
-  //只显示用
-  TextEditingController inputController;
-  //输入框Controller 1
-  TextEditingController inputController1;
-  //输入框Controller 2
-  TextEditingController inputController2;
-  //输入框Controller 3
-  TextEditingController inputController3;
-  //只显示用
-  FocusNode focusNode;
-  //输入框焦点1
-  FocusNode focusNode1;
-  //输入框焦点2
-  FocusNode focusNode2;
-  //输入框焦点3
-  FocusNode focusNode3;
-  //输入类型1
-  TextInputType inputType1;
-  //输入类型2
-  TextInputType inputType2;
-  //跳过的动作
-  JumpAction jumpAction;
-  //预计完成时间1
-  DateTime estimatedDate1;
-  //预计完成时间2
-  DateTime estimatedDate2;
-  //预计完成时间3
-  DateTime estimatedDate3;
-  //预计完成时间4
-  DateTime estimatedDate4;
-  //预计完成时间5
-  DateTime estimatedDate5;
-  //生产订单
-  PurchaseOrderModel orderModel;
-  //当前节点序号
-  int currentNode;
-  //交货日期
-  DateTime deliveryDate;
 
-  DateTime expectedDeliveryDate;
+  //内容文本1
+  String? contentText1;
+
+  //内容文本2
+  String? contentText2;
+
+  //内容文本1字体样式
+  TextStyle? contentTextStyle1;
+
+  //内容文本2字体样式
+  TextStyle? contentTextStyle2;
+
+  //只显示用
+  TextEditingController? inputController;
+
+  //输入框Controller 1
+  TextEditingController? inputController1;
+
+  //输入框Controller 2
+  TextEditingController? inputController2;
+
+  //输入框Controller 3
+  TextEditingController? inputController3;
+
+  //只显示用
+  FocusNode? focusNode;
+
+  //输入框焦点1
+  FocusNode? focusNode1;
+
+  //输入框焦点2
+  FocusNode? focusNode2;
+
+  //输入框焦点3
+  FocusNode? focusNode3;
+
+  //输入类型1
+  TextInputType? inputType1;
+
+  //输入类型2
+  TextInputType? inputType2;
+
+  //跳过的动作
+  JumpAction? jumpAction;
+
+  //预计完成时间1
+  DateTime? estimatedDate1;
+
+  //预计完成时间2
+  DateTime? estimatedDate2;
+
+  //预计完成时间3
+  DateTime? estimatedDate3;
+
+  //预计完成时间4
+  DateTime? estimatedDate4;
+
+  //预计完成时间5
+  DateTime? estimatedDate5;
+
+  //生产订单
+  PurchaseOrderModel? orderModel;
+
+  //当前节点序号
+  int? currentNode;
+
+  //交货日期
+  DateTime? deliveryDate;
+
+  DateTime? expectedDeliveryDate;
 
   CustomizeDialog({
-    Key key,
+    Key? key,
     this.outsideDismiss = true,
     this.confirmAction,
     this.callbackResult = false,
@@ -126,7 +164,7 @@ class CustomizeDialog extends StatefulWidget {
     ),
     this.isNeedCancelButton = false,
     this.isNeedConfirmButton = false,
-    @required this.dialogType,
+    required this.dialogType,
     this.contentText1,
     this.contentTextStyle2,
     this.contentTextStyle1,
@@ -219,6 +257,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         },
       );
     }
+
+    return Container();
   }
 
   Widget buildConfirmDialog(BuildContext context) {
@@ -228,10 +268,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         type: MaterialType.transparency,
         child: Center(
           child: SizedBox(
-            width: widget.dialogWidth == null || widget.dialogWidth < 300
+            width: widget.dialogWidth == null || widget.dialogWidth! < 300
                 ? 300.0
                 : widget.dialogWidth,
-            height: widget.dialogHeight == null || widget.dialogHeight < 150
+            height: widget.dialogHeight == null || widget.dialogHeight! < 150
                 ? 180.0
                 : widget.dialogHeight,
             child: Container(
@@ -628,10 +668,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                           Radius.circular(15))),
                                   onPressed: () {
                                     if (widget.confirmAction != null) {
-                                      widget.confirmAction();
+                                      widget.confirmAction!();
                                     } else {
                                       Navigator.of(context)
-                                          .pop(widget.inputController1.text);
+                                          .pop(widget.inputController1!.text);
                                     }
                                   }),
                               decoration: BoxDecoration(
@@ -778,19 +818,19 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         ),
                                         Expanded(
                                           child: widget.expectedDeliveryDate ==
-                                              null
+                                                  null
                                               ? Text(
-                                            '请选择日期',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                          )
+                                                  '请选择日期',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                  ),
+                                                )
                                               : Text(
-                                              DateFormatUtil.formatYMD(widget
-                                                  .expectedDeliveryDate),
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                              )),
+                                                  DateFormatUtil.formatYMD(widget
+                                                      .expectedDeliveryDate!),
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                  )),
                                         ),
                                       ],
                                     ),
@@ -857,15 +897,15 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(15))),
                                       onPressed: () {
-                                        if (widget.inputController1.text ==
+                                        if (widget.inputController1!.text ==
                                             '') {
-                                          widget.inputController1.text = '￥0';
+                                          widget.inputController1!.text = '￥0';
                                         }
 //                                    if (widget.inputController2.text == '') {
 //                                      widget.inputController2.text = '￥0';
 //                                    }
                                         Navigator.of(context).pop(
-                                            widget.inputController1.text +
+                                            widget.inputController1!.text +
                                                 ',' +
                                                 widget.expectedDeliveryDate
                                                     .toString());
@@ -1070,11 +1110,11 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
                                   onPressed: () {
-                                    if (widget.inputController3.text == '') {
-                                      widget.inputController1.text = '￥0';
+                                    if (widget.inputController3!.text == '') {
+                                      widget.inputController1!.text = '￥0';
                                     }
                                     Navigator.of(context)
-                                        .pop(widget.inputController3.text);
+                                        .pop(widget.inputController3!.text);
                                   }),
                               decoration: BoxDecoration(
                                   border: Border(
@@ -1164,7 +1204,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                if (widget.currentNode <= 0) {
+                                if (widget.currentNode! <= 0) {
                                   _showDatePicker(widget.estimatedDate1, 0);
                                 }
                               },
@@ -1200,15 +1240,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                            color: Colors.grey[300],
+                                            color: Colors.grey[300]!,
                                             width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate1 == null
-                                              ? '点击选取时间'
-                                              : DateFormatUtil.formatYMD(
-                                              widget.estimatedDate1)}',
+                                          '${widget.estimatedDate1 == null ? '点击选取时间' : DateFormatUtil.formatYMD(widget.estimatedDate1!)}',
                                           style: TextStyle(),
                                         ),
                                       ),
@@ -1219,7 +1256,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (widget.currentNode <= 1) {
+                                if (widget.currentNode! <= 1) {
                                   _showDatePicker(widget.estimatedDate2, 1);
                                 }
                               },
@@ -1255,15 +1292,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                            color: Colors.grey[300],
+                                            color: Colors.grey[300]!,
                                             width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate2 == null
-                                              ? '点击选取时间'
-                                              : DateFormatUtil.formatYMD(
-                                              widget.estimatedDate2)}',
+                                          '${widget.estimatedDate2 == null ? '点击选取时间' : DateFormatUtil.formatYMD(widget.estimatedDate2!)}',
                                           style: TextStyle(),
                                         ),
                                       ),
@@ -1274,7 +1308,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (widget.currentNode <= 2) {
+                                if (widget.currentNode! <= 2) {
                                   _showDatePicker(widget.estimatedDate3, 2);
                                 }
                               },
@@ -1310,15 +1344,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                            color: Colors.grey[300],
+                                            color: Colors.grey[300]!,
                                             width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate3 == null
-                                              ? '点击选取时间'
-                                              : DateFormatUtil.formatYMD(
-                                              widget.estimatedDate3)}',
+                                          '${widget.estimatedDate3 == null ? '点击选取时间' : DateFormatUtil.formatYMD(widget.estimatedDate3!)}',
                                           style: TextStyle(),
                                         ),
                                       ),
@@ -1329,7 +1360,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (widget.currentNode <= 3) {
+                                if (widget.currentNode! <= 3) {
                                   _showDatePicker(widget.estimatedDate4, 3);
                                 }
                               },
@@ -1365,15 +1396,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                            color: Colors.grey[300],
+                                            color: Colors.grey[300]!,
                                             width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate4 == null
-                                              ? '点击选取时间'
-                                              : DateFormatUtil.formatYMD(
-                                              widget.estimatedDate4)}',
+                                          '${widget.estimatedDate4 == null ? '点击选取时间' : DateFormatUtil.formatYMD(widget.estimatedDate4!)}',
                                           style: TextStyle(),
                                         ),
                                       ),
@@ -1384,7 +1412,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (widget.currentNode <= 4) {
+                                if (widget.currentNode! <= 4) {
                                   _showDatePicker(widget.estimatedDate5, 4);
                                 }
                               },
@@ -1420,15 +1448,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                            color: Colors.grey[300],
+                                            color: Colors.grey[300]!,
                                             width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate5 == null
-                                              ? '点击选取时间'
-                                              : DateFormatUtil.formatYMD(
-                                              widget.estimatedDate5)}',
+                                          '${widget.estimatedDate5 == null ? '点击选取时间' : DateFormatUtil.formatYMD(widget.estimatedDate5!)}',
                                           style: TextStyle(),
                                         ),
                                       ),
@@ -1444,8 +1469,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                     Container(
                       child: Center(
                         child: Text(
-                          '预计交货日期：${DateFormatUtil.formatYMD(
-                              widget.expectedDeliveryDate)}',
+                          '预计交货日期：${DateFormatUtil.formatYMD(widget.expectedDeliveryDate!)}',
                           style: TextStyle(
                             color: Colors.red,
                           ),
@@ -1538,17 +1562,20 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
   }
 
   //打开日期选择器
-  void _showDatePicker(DateTime date, int index) {
+  void _showDatePicker(DateTime? date, int index) {
     _selectDate(context, date, index);
   }
 
   //生成日期选择器
-  Future<Null> _selectDate(BuildContext context, DateTime date,
-      int index) async {
+  Future<Null> _selectDate(
+      BuildContext context, DateTime? date, int index) async {
     DateTime nowTime = DateTime.now();
-    DateTime dateTime =
-    date == null ? nowTime : date.compareTo(nowTime) < 0 ? nowTime : date;
-    final DateTime _picked = await showDatePicker(
+    DateTime dateTime = date == null
+        ? nowTime
+        : date.compareTo(nowTime) < 0
+            ? nowTime
+            : date;
+    final DateTime? _picked = await showDatePicker(
         context: context,
         initialDate: dateTime,
         firstDate: dateTime,
@@ -1578,51 +1605,51 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         widget.estimatedDate4 != null &&
         widget.estimatedDate5 != null) {
       if (widget.orderModel != null) {
-        ProductionProgressModel model1 = widget.orderModel.progresses[0];
-        model1.estimatedDate = widget.estimatedDate1;
+        ProductionProgressModel model1 = widget.orderModel!.progresses[0];
+        model1.estimatedDate = widget.estimatedDate1!;
         model1.updateOnly = true;
 
-        ProductionProgressModel model2 = widget.orderModel.progresses[1];
-        model2.estimatedDate = widget.estimatedDate2;
+        ProductionProgressModel model2 = widget.orderModel!.progresses[1];
+        model2.estimatedDate = widget.estimatedDate2!;
         model2.updateOnly = true;
 
-        ProductionProgressModel model3 = widget.orderModel.progresses[2];
-        model3.estimatedDate = widget.estimatedDate3;
+        ProductionProgressModel model3 = widget.orderModel!.progresses[2];
+        model3.estimatedDate = widget.estimatedDate3!;
         model3.updateOnly = true;
 
-        ProductionProgressModel model4 = widget.orderModel.progresses[3];
-        model4.estimatedDate = widget.estimatedDate4;
+        ProductionProgressModel model4 = widget.orderModel!.progresses[3];
+        model4.estimatedDate = widget.estimatedDate4!;
         model4.updateOnly = true;
 
-        ProductionProgressModel model5 = widget.orderModel.progresses[4];
-        model5.estimatedDate = widget.estimatedDate5;
+        ProductionProgressModel model5 = widget.orderModel!.progresses[4];
+        model5.estimatedDate = widget.estimatedDate5!;
         model5.updateOnly = true;
 
-        for (int i = 0; i < widget.orderModel.progresses.length; i++) {
-          if (widget.orderModel.progresses[i].phase ==
+        for (int i = 0; i < widget.orderModel!.progresses.length; i++) {
+          if (widget.orderModel!.progresses[i].phase ==
               ProductionProgressPhase.MATERIAL_PREPARATION) {
             model1.estimatedDate =
-                widget.orderModel.progresses[i].estimatedDate;
-          } else if (widget.orderModel.progresses[i].phase ==
+                widget.orderModel!.progresses[i].estimatedDate;
+          } else if (widget.orderModel!.progresses[i].phase ==
               ProductionProgressPhase.CUTTING) {
             model2.estimatedDate =
-                widget.orderModel.progresses[i].estimatedDate;
-          } else if (widget.orderModel.progresses[i].phase ==
+                widget.orderModel!.progresses[i].estimatedDate;
+          } else if (widget.orderModel!.progresses[i].phase ==
               ProductionProgressPhase.STITCHING) {
             model3.estimatedDate =
-                widget.orderModel.progresses[i].estimatedDate;
-          } else if (widget.orderModel.progresses[i].phase ==
+                widget.orderModel!.progresses[i].estimatedDate;
+          } else if (widget.orderModel!.progresses[i].phase ==
               ProductionProgressPhase.AFTER_FINISHING) {
             model4.estimatedDate =
-                widget.orderModel.progresses[i].estimatedDate;
-          } else if (widget.orderModel.progresses[i].phase ==
+                widget.orderModel!.progresses[i].estimatedDate;
+          } else if (widget.orderModel!.progresses[i].phase ==
               ProductionProgressPhase.INSPECTION) {
             model5.estimatedDate =
-                widget.orderModel.progresses[i].estimatedDate;
+                widget.orderModel!.progresses[i].estimatedDate;
           }
         }
 
-        List<ProductionProgressModel> modelList = List();
+        List<ProductionProgressModel> modelList = [];
         modelList.add(model1);
         modelList.add(model2);
         modelList.add(model3);
@@ -1630,7 +1657,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         modelList.add(model5);
 
         PurchaseOrderRepository().progressEstimatedDateUploads(
-            widget.orderModel.code, model5.id.toString(), modelList);
+            widget.orderModel!.code, model5.id.toString(), modelList);
 //        try{
 //          showDialog(
 //              context: context,
@@ -1804,41 +1831,57 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
 class DialogAttribute {
   //是否允许点击空白处关闭dialog
   bool outsideDismiss;
+
   //回调结果
   bool callbackResult;
+
   //内容的WidgetList，List越大dialog的高度要越大
-  List<Widget> contentWidgetList;
+  List<Widget>? contentWidgetList;
+
   //标题
-  String title;
+  String? title;
+
   //整个dialog的高度
-  double dialogHeight;
+  double? dialogHeight;
+
   //整个dialog的宽度
-  double dialogWidth;
+  double? dialogWidth;
+
   //标题样式
-  TextStyle titleStyle;
+  TextStyle? titleStyle;
+
   //内容样式（输入框方式不适用）
-  TextStyle contentStyle;
+  TextStyle? contentStyle;
+
   //操作成功时提示
-  String successTips;
+  String? successTips;
+
   //操作失败时提示
-  String failTips;
+  String? failTips;
+
   //是否需要确认按钮
   bool isNeedConfirmButton;
+
   //是否需要取消按钮
   bool isNeedCancelButton;
+
   //确认按钮的文本
-  String confirmButtonText;
+  String? confirmButtonText;
+
   //取消按钮的文本
-  String cancelButtonText;
+  String? cancelButtonText;
+
   //确认按钮点击动作
-  ConfirmAction confirmAction;
+  ConfirmAction? confirmAction;
+
   //取消按钮点击动作
-  CancelAction cancelAction;
+  CancelAction? cancelAction;
+
   //弹窗类型样式
   DialogType dialogType;
 
   DialogAttribute({
-    Key key,
+    Key? key,
     this.outsideDismiss = true,
     this.confirmAction,
     this.callbackResult = false,
@@ -1855,7 +1898,7 @@ class DialogAttribute {
     this.confirmButtonText,
     this.isNeedCancelButton = false,
     this.isNeedConfirmButton = false,
-    @required this.dialogType,
+    required this.dialogType,
   });
 }
 

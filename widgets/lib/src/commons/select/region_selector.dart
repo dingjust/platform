@@ -8,8 +8,8 @@ import 'package:models/models.dart';
 
 //省级选择器
 class RegionSelector extends StatefulWidget {
-  List<RegionModel> regions;
-  List<RegionModel> regionSelects;
+  List<RegionModel>? regions;
+  List<RegionModel>? regionSelects;
   bool multiple;
 
   RegionSelector({
@@ -26,7 +26,8 @@ class _RegionSelectorState extends State<RegionSelector> {
 
   @override
   void initState() {
-    _regionCodeSelects = widget.regionSelects.map((region) => region.isocode).toList();
+    _regionCodeSelects =
+        widget.regionSelects!.map((region) => region.isocode).toList();
     // TODO: implement initState
     super.initState();
   }
@@ -52,7 +53,7 @@ class _RegionSelectorState extends State<RegionSelector> {
                     onTap: () {
                       setState(() {
                         _regionCodeSelects.clear();
-                        widget.regionSelects.clear();
+                        widget.regionSelects!.clear();
                       });
                     },
                     child: Padding(
@@ -85,43 +86,37 @@ class _RegionSelectorState extends State<RegionSelector> {
             child: ListView(
               shrinkWrap: true,
               physics: AlwaysScrollableScrollPhysics(),
-              children: widget.regions.map((region) {
+              children: widget.regions!.map((region) {
                 return InkWell(
                   onTap: () {
                     setState(() {
-                      if(region.isocode == Constants.WHOLE_COUNTRY_ISOCODE){
+                      if (region.isocode == Constants.WHOLE_COUNTRY_ISOCODE) {
                         _regionCodeSelects.clear();
-                        widget.regionSelects.clear();
-                      }else{
-                        _regionCodeSelects.remove(Constants.WHOLE_COUNTRY_ISOCODE);
-                        widget.regionSelects.removeWhere(
-                                (reg) =>
-                                reg.isocode ==
-                                Constants.WHOLE_COUNTRY_ISOCODE);
+                        widget.regionSelects!.clear();
+                      } else {
+                        _regionCodeSelects
+                            .remove(Constants.WHOLE_COUNTRY_ISOCODE);
+                        widget.regionSelects!.removeWhere((reg) =>
+                            reg.isocode == Constants.WHOLE_COUNTRY_ISOCODE);
                       }
 
                       if (_regionCodeSelects
                           .contains(region.isocode)) {
-                        _regionCodeSelects
-                            .remove(region.isocode);
-                        widget.regionSelects.removeWhere(
-                                (reg) =>
-                            region.isocode ==
-                                reg.isocode);
-                        if(!widget.multiple){
+                        _regionCodeSelects.remove(region.isocode);
+                        widget.regionSelects!.removeWhere(
+                            (reg) => region.isocode == reg.isocode);
+                        if (!widget.multiple) {
                           Navigator.pop(context);
                         }
                       } else {
-                        if(widget.multiple){
-                          widget.regionSelects.add(region);
-                          _regionCodeSelects
-                              .add(region.isocode);
-                        }else{
-                          widget.regionSelects.clear();
+                        if(widget.multiple) {
+                          widget.regionSelects!.add(region);
+                          _regionCodeSelects.add(region.isocode);
+                        } else{
+                          widget.regionSelects!.clear();
                           _regionCodeSelects.clear();
-                          widget.regionSelects.add(region);
-                          _regionCodeSelects
-                              .add(region.isocode);
+                          widget.regionSelects!.add(region);
+                          _regionCodeSelects.add(region.isocode);
                           Navigator.pop(context);
                         }
 

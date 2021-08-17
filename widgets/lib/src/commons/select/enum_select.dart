@@ -6,7 +6,7 @@ class EnumSelect<T> extends StatefulWidget {
   final String title;
 
   ///单选值
-  final T val;
+  final T? val;
 
   ///值Map
   final Map<T, String> localizedMap;
@@ -24,10 +24,10 @@ class EnumSelect<T> extends StatefulWidget {
   final double mainAxisSpacing;
 
   const EnumSelect(
-      {Key key,
-      @required this.title,
+      {Key? key,
+      required this.title,
       this.val,
-      @required this.localizedMap,
+      required this.localizedMap,
       this.crossAxisCount = 3,
       this.childAspectRatio = 4.0,
       this.crossAxisSpacing = 20.0,
@@ -129,7 +129,7 @@ class MultiEnumSelect<T> extends StatefulWidget {
   final String title;
 
   ///多选值
-  final List<T> values;
+  final List<T>? values;
 
   ///值Map
   final Map<T, String> localizedMap;
@@ -147,10 +147,10 @@ class MultiEnumSelect<T> extends StatefulWidget {
   final double mainAxisSpacing;
 
   const MultiEnumSelect(
-      {Key key,
-      @required this.title,
+      {Key? key,
+      required this.title,
       this.values,
-      @required this.localizedMap,
+      required this.localizedMap,
       this.crossAxisCount = 3,
       this.childAspectRatio = 4.0,
       this.crossAxisSpacing = 20.0,
@@ -162,7 +162,7 @@ class MultiEnumSelect<T> extends StatefulWidget {
 }
 
 class _MultiEnumSelectState extends State<MultiEnumSelect> {
-  List<dynamic> selectEnums;
+  List<dynamic>? selectEnums;
 
   @override
   void initState() {
@@ -212,7 +212,7 @@ class _MultiEnumSelectState extends State<MultiEnumSelect> {
     widget.localizedMap.forEach((t, val) {
       chips.add(Container(
           decoration: BoxDecoration(
-              color: selectEnums.contains(t)
+              color: selectEnums!.contains(t)
                   ? Color.fromRGBO(255, 214, 12, 1)
                   : Colors.grey[300],
               borderRadius: BorderRadius.circular(20)),
@@ -225,10 +225,10 @@ class _MultiEnumSelectState extends State<MultiEnumSelect> {
             ),
             onTap: () {
               setState(() {
-                if (selectEnums.contains(t)) {
-                  selectEnums.remove(t);
+                if (selectEnums!.contains(t)) {
+                  selectEnums!.remove(t);
                 } else {
-                  selectEnums.add(t);
+                  selectEnums!.add(t);
                 }
               });
             },

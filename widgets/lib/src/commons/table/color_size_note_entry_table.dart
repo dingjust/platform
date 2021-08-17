@@ -6,22 +6,22 @@ import 'color_size_entry_table.dart';
 
 ///颜色尺码表(AbstractOrderNoteEntryModel值版本)
 class ColorSizeNoteEntryTable extends StatelessWidget {
-  final List<AbstractOrderNoteEntryModel> data;
+  final List<AbstractOrderNoteEntryModel>? data;
 
   //过滤后数据
-  List<AbstractOrderNoteEntryModel> filterData;
+  List<AbstractOrderNoteEntryModel>? filterData;
 
   ///排序函数
-  final CompareFunction compareFunction;
+  final CompareFunction? compareFunction;
 
   final bool showNeed;
 
   ColorSizeNoteEntryTable(
-      {Key key, this.data, this.compareFunction, this.showNeed = true}) {
+      {Key? key, this.data, this.compareFunction, this.showNeed = true}) {
     //过滤数量为0
     if (showNeed) {
       filterData =
-          data.where((element) => (element?.needQuantity ?? -1) > 0).toList();
+          data!.where((element) => (element?.needQuantity ?? -1) > 0).toList();
     } else {
       filterData = data;
     }
@@ -87,17 +87,17 @@ class ColorSizeNoteEntryTable extends StatelessWidget {
       ])
     ];
 
-    filterData.forEach((entry) {
+    filterData!.forEach((entry) {
       if (colorRowList[entry.color] == null) {
         colorRowList[entry.color] = [];
       }
-      colorRowList[entry.color].add(entry);
+      colorRowList[entry.color]!.add(entry);
     });
 
     colorRowList.forEach((color, entries) {
       //排序
       if (compareFunction != null) {
-        entries.sort((o1, o2) => compareFunction(o1.size, o2.size));
+        entries.sort((o1, o2) => compareFunction!(o1.size, o2.size));
       }
 
       //构建尺码数量列

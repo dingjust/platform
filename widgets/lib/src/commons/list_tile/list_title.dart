@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:core/core.dart';
 
 class B2BListTitle extends StatelessWidget {
 
-  final Widget prefix;
+  final Widget? prefix;
 
-  final Widget suffix;
+  final Widget? suffix;
 
   final bool isRequired;
 
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  const B2BListTitle({Key key,
-    this.prefix,
-    this.suffix,
-    this.isRequired = false,
-    this.onTap})
+  const B2BListTitle(
+      {Key? key, this.prefix, this.suffix, this.isRequired = false, this.onTap})
       : super(key: key);
 
   @override
@@ -34,10 +30,16 @@ class B2BListTitle extends StatelessWidget {
                   Wrap(
                     children: <Widget>[
                       prefix ?? Text(''),
-                      isRequired ? Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)) : Text(''),
+                      isRequired
+                          ? Text(' *',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.red,
+                              ))
+                          : Text(''),
                     ],
                   ),
-                  Expanded(child: suffix == null? Text('') : suffix),
+                  Expanded(child: suffix == null ? Text('') : suffix!),
                   Icon(
                     Icons.chevron_right,
                     color: Colors.grey[600],

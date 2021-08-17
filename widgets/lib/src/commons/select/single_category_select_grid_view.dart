@@ -4,18 +4,18 @@ import 'package:widgets/widgets.dart';
 
 class SingleMajorCategorySelectGridView extends StatefulWidget {
   SingleMajorCategorySelectGridView(
-      {@required this.categories, this.categorySelect, this.onItemTap});
+      {required this.categories, this.categorySelect, this.onItemTap});
 
   final List<CategoryModel> categories;
-  CategoryModel categorySelect;
-  Function onItemTap;
+  CategoryModel? categorySelect;
+  Function? onItemTap;
 
   _SingleMajorCategorySelectGridViewState createState() =>
       _SingleMajorCategorySelectGridViewState();
 }
 
 class _SingleMajorCategorySelectGridViewState extends State<SingleMajorCategorySelectGridView> {
-  String _selectRight;
+  String? _selectRight;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _SingleMajorCategorySelectGridViewState extends State<SingleMajorCategoryS
       onTap: () {
         setState(() {
 //          _selectRight = category.code;
-          widget.onItemTap(category);
+          widget.onItemTap!(category);
         });
       },
       child: _selectRight == category.code ? _buildSelectedWidget(category): _buildWidget(category),

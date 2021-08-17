@@ -7,8 +7,8 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'image_picker_dialog.dart';
 
 class ImagePickerHandler {
-  ImagePickerDialog imagePicker;
-  AnimationController _controller;
+  late ImagePickerDialog imagePicker;
+  AnimationController? _controller;
   ImagePickerListener _listener;
 
   final int maxNum;
@@ -18,14 +18,14 @@ class ImagePickerHandler {
   openCamera() async {
     imagePicker.dismissDialog();
     var image = await ImagePicker().pickImage(source: ImageSource.camera);
-    _listener.userImage(File(image.path));
+    _listener.userImage(File(image?.path ?? ''));
   }
 
   openGallery(BuildContext context) async {
     if (maxNum == 1) {
       imagePicker.dismissDialog();
-      var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      _listener.userImage(File(image.path));
+      var image = await (ImagePicker().pickImage(source: ImageSource.gallery));
+      _listener.userImage(File(image?.path ?? ''));
     } else {
       openMultiGallery(context);
     }
@@ -33,7 +33,7 @@ class ImagePickerHandler {
 
   ///多选
   openMultiGallery(BuildContext context) async {
-    final List<AssetEntity> assets = await AssetPicker.pickAssets(context);
+    final List<AssetEntity>? assets = await AssetPicker.pickAssets(context);
     if (assets != null) {
       assets.forEach((element) {
         element.file.then((value) => _listener.userImage(value));
@@ -42,8 +42,8 @@ class ImagePickerHandler {
     imagePicker.dismissDialog();
   }
 
-  void build(int bgColor, int labelColor, bool isCropRequired, double ratioX,
-      double ratioY) {
+  void build(int bgColor, int labelColor, bool isCropRequired, double? ratioX,
+      double? ratioY) {
     imagePicker = new ImagePickerDialog(this, _controller, bgColor, labelColor);
     imagePicker.initState();
   }
@@ -54,5 +54,5 @@ class ImagePickerHandler {
 }
 
 abstract class ImagePickerListener {
-  userImage(File _image);
+  userImage(File? _image);
 }

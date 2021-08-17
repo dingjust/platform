@@ -14,7 +14,7 @@ class RemoteVideoItem extends StatefulWidget {
 
   const RemoteVideoItem(
     this.url, {
-    Key key,
+    Key? key,
     this.width = 60,
     this.height = 60,
   }) : super(key: key);
@@ -38,7 +38,7 @@ class _RemoteVideoItemState extends State<RemoteVideoItem> {
                 alignment: Alignment.center,
                 fit: StackFit.expand,
                 children: [
-                  snapshot.data.image,
+                  snapshot.data!.image!,
                   Container(
                     color: Colors.black26,
                   ),
@@ -65,10 +65,10 @@ class _RemoteVideoItemState extends State<RemoteVideoItem> {
 }
 
 class ThumbnailResult {
-  final Image image;
-  final int dataSize;
-  final int height;
-  final int width;
+  final Image? image;
+  final int? dataSize;
+  final int? height;
+  final int? width;
 
   const ThumbnailResult({this.image, this.dataSize, this.height, this.width});
 }

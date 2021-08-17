@@ -6,27 +6,27 @@ import 'image_picker_video_handler.dart';
 
 class ImagePickerVideoDialog extends StatelessWidget {
   ImagePickerVideoHandler _listener;
-  AnimationController _controller;
-  BuildContext context;
+  AnimationController? _controller;
+  late BuildContext context;
   int bgColor;
   int labelColor;
 
   ImagePickerVideoDialog(
       this._listener, this._controller, this.bgColor, this.labelColor);
 
-  Animation<double> _drawerContentsOpacity;
-  Animation<Offset> _drawerDetailsPosition;
+  Animation<double>? _drawerContentsOpacity;
+  Animation<Offset>? _drawerDetailsPosition;
 
   void initState() {
     _drawerContentsOpacity = new CurvedAnimation(
-      parent: new ReverseAnimation(_controller),
+      parent: new ReverseAnimation(_controller!),
       curve: Curves.fastOutSlowIn,
     );
     _drawerDetailsPosition = new Tween<Offset>(
       begin: const Offset(0.0, 1.0),
       end: Offset.zero,
     ).animate(new CurvedAnimation(
-      parent: _controller,
+      parent: _controller!,
       curve: Curves.fastOutSlowIn,
     ));
   }
@@ -37,13 +37,13 @@ class ImagePickerVideoDialog extends StatelessWidget {
         _drawerContentsOpacity == null) {
       return;
     }
-    _controller.forward();
+    _controller!.forward();
     showDialog(
       context: context,
       builder: (BuildContext context) => new SlideTransition(
-        position: _drawerDetailsPosition,
+        position: _drawerDetailsPosition!,
         child: new FadeTransition(
-          opacity: new ReverseAnimation(_drawerContentsOpacity),
+          opacity: new ReverseAnimation(_drawerContentsOpacity!),
           child: this,
         ),
       ),
@@ -51,7 +51,7 @@ class ImagePickerVideoDialog extends StatelessWidget {
   }
 
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
   }
 
   startTime() async {
@@ -64,7 +64,7 @@ class ImagePickerVideoDialog extends StatelessWidget {
   }
 
   dismissDialog() {
-    _controller.reverse();
+    _controller!.reverse();
     startTime();
   }
 

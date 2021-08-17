@@ -4,7 +4,7 @@ import 'package:models/models.dart';
 class AttributeTable extends StatelessWidget {
   final ApparelProductModel product;
 
-  const AttributeTable({Key key, @required this.product}) : super(key: key);
+  const AttributeTable({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class AttributeTable extends StatelessWidget {
           Table(
             columnWidths: {0: FlexColumnWidth(1), 1: FlexColumnWidth(2)},
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: TableBorder.all(width: 1.0, color: Colors.grey[300]),
+            border: TableBorder.all(width: 1.0, color: Colors.grey[300]!),
             children: [
               _buildRow(label: '产品货号', value: product.skuID ?? ''),
               _buildRow(label: '产品品类', value: product.category.name ?? ''),
@@ -103,7 +103,7 @@ class AttributeTable extends StatelessWidget {
     );
   }
 
-  TableRow _buildRow({String label, String value, List<String> values}) {
+  TableRow _buildRow({String? label, String? value, List<String>? values}) {
     return TableRow(
       children: <Widget>[
         TableCell(
@@ -133,7 +133,7 @@ class AttributeTable extends StatelessWidget {
     );
   }
 
-  String generateValue({String value, List<String> values}) {
+  String generateValue({String? value, List<String>? values}) {
     if (value != null && values == null) {
       return value;
     } else if (values != null && value == null) {
@@ -143,5 +143,6 @@ class AttributeTable extends StatelessWidget {
       });
       return result;
     }
+    return '';
   }
 }

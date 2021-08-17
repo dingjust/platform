@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class IncomeComparison extends StatelessWidget {
-  final double height;
+  final double? height;
 
   ///收入
-  final double income;
+  final double? income;
 
   ///支出
-  final double expenditure;
+  final double? expenditure;
 
   ///对比条高度
   final double lineHeight;
 
   IncomeComparison(
-      {Key key,
+      {Key? key,
       this.height,
       this.income,
       this.expenditure,
@@ -22,7 +22,7 @@ class IncomeComparison extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double flex2 = expenditure / income;
+    double flex2 = expenditure! / income!;
     print(flex2);
     return Container(
       height: height,
@@ -69,7 +69,7 @@ class IncomeComparison extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(
-                flex: income.toInt(),
+                flex: income!.toInt(),
                 child: Container(
                   height: lineHeight,
                   margin: EdgeInsets.only(right: 5),
@@ -85,7 +85,7 @@ class IncomeComparison extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: expenditure.toInt(),
+                flex: expenditure!.toInt(),
                 child: Container(
                     height: lineHeight,
                     decoration: BoxDecoration(

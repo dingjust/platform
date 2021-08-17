@@ -6,17 +6,17 @@ import 'package:models/models.dart';
 class FilterSelectMenu extends StatefulWidget {
   final StreamController streamController;
   final List<FilterConditionEntry> entries;
-  final double height;
-  final Color color;
-  final Color unselectedColor;
-  final ValueChanged<String> afterPressed;
-  String filterBarLabel;
+  final double? height;
+  final Color? color;
+  final Color? unselectedColor;
+  final ValueChanged<String>? afterPressed;
+  String? filterBarLabel;
   final bool multipeSelect;
 
   FilterSelectMenu({
-    Key key,
-    @required this.streamController,
-    @required this.entries,
+    Key? key,
+    required this.streamController,
+    required this.entries,
     this.height,
     this.color,
     this.unselectedColor,
@@ -74,7 +74,7 @@ class _FilterSelectMenuState extends State<FilterSelectMenu> {
                         }
                         widget.filterBarLabel = entry.label;
                       });
-                      widget.afterPressed(entry.label);
+                      widget.afterPressed!(entry.label);
                     },
                     child: Container(
                       color: Colors.white,

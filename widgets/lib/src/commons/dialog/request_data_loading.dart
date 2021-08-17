@@ -2,27 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 
 class RequestDataLoading extends StatefulWidget {
-  final bool loading;
-  Function dismissCallback;
+  final bool? loading;
+  Function? dismissCallback;
   String loadingText;
   bool outsideDismiss;
   Future<dynamic> requestCallBack;
-  bool callbackResult;
-  Future<void> callbackExecution;
+  bool? callbackResult;
+  Future<void>? callbackExecution;
   String entrance;
-  String keyword;
-  String Function() onPress;
+  String? keyword;
+  String Function()? onPress;
 
   RequestDataLoading({
-    Key key,
+    Key? key,
     this.loading,
     this.loadingText = "loading...",
     this.outsideDismiss = true,
     this.dismissCallback,
-    @required this.requestCallBack,
+    required this.requestCallBack,
     this.callbackResult,
     this.callbackExecution,
-    @required this.entrance,
+    required this.entrance,
     this.keyword,
   }) : super(key: key);
 
@@ -33,7 +33,7 @@ class RequestDataLoading extends StatefulWidget {
 class _RequestDataLoadingPageState extends State<RequestDataLoading> {
   _dismissDialog() {
     if (widget.dismissCallback != null) {
-      widget.dismissCallback();
+      widget.dismissCallback!();
     }
     Navigator.of(context).pop();
   }

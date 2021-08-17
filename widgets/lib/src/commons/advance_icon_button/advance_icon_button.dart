@@ -4,13 +4,13 @@ import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 class AdvanceIconButton extends StatelessWidget {
   final Icon icon;
   final String title;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isHot;
 
   const AdvanceIconButton({
-    Key key,
-    @required this.icon,
-    @required this.title,
+    Key? key,
+    required this.icon,
+    required this.title,
     this.onPressed,
     this.isHot = false,
   }) : super(key: key);

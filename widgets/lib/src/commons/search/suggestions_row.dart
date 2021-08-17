@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 class SuggestionsRow extends StatelessWidget {
   SuggestionsRow(
-      {Key key,
+      {Key? key,
       this.value,
-      @required this.onIconPressed,
-      @required this.onTap,
+      required this.onIconPressed,
+      required this.onTap,
       this.address,
       this.location})
       : super(key: key);
 
-  final String value;
+  final String? value;
 
-  final String address;
+  final String? address;
 
-  final String location;
+  final String? location;
 
   final VoidCallback onIconPressed;
 

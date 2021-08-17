@@ -4,15 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AlbumsAndCameras extends StatefulWidget {
-  List<String> pictureUrls;
-  List<File> images;
+  List<String>? pictureUrls;
+  List<File>? images;
   double height;
   double width;
   double iconSize;
   int count;
 
   AlbumsAndCameras(
-      {this.images, this.height = 100, this.width = 100, this.iconSize = 100, this.count = 5,this.pictureUrls});
+      {this.images,
+      this.height = 100,
+      this.width = 100,
+      this.iconSize = 100,
+      this.count = 5,
+      this.pictureUrls});
 
   AlbumsAndCamerasState createState() => AlbumsAndCamerasState();
 }
@@ -22,9 +27,14 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
 
   @override
   void initState() {
-    if(widget.pictureUrls != null){
-      List<Widget> pictures = widget.pictureUrls.map((url){
-        return Image.network(url,width: widget.width,height: widget.height,fit: BoxFit.fill,);
+    if(widget.pictureUrls != null) {
+      List<Widget> pictures = widget.pictureUrls!.map((url) {
+        return Image.network(
+          url,
+          width: widget.width,
+          height: widget.height,
+          fit: BoxFit.fill,
+        );
       }).toList();
       _list.addAll(pictures);
     }
@@ -84,7 +94,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
                     await imagePicker.pickImage(source: ImageSource.camera);
                 if (image != null) {
                   setState(() {
-                    widget.images.add(File(image.path));
+                    widget.images!.add(File(image.path));
                     _list.removeLast();
 
                     _list.add(Container(
@@ -122,7 +132,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
                     await imagePicker.pickImage(source: ImageSource.gallery);
                 if (image != null) {
                   setState(() {
-                    widget.images.add(File(image.path));
+                    widget.images!.add(File(image.path));
 
                     _list.removeLast();
 

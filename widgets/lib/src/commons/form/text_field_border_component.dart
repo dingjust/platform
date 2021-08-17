@@ -1,31 +1,31 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TextFieldBorderComponent extends StatefulWidget {
-  final Widget leadingText;
+  final Widget? leadingText;
   bool isRequired;
-  String prefix;
-  final String hintText;
-  final Text helperText;
+  String? prefix;
+  final String? hintText;
+  final Text? helperText;
   double leadingWidth;
-  TextEditingController controller;
+  TextEditingController? controller;
+
   //必传
   final FocusNode focusNode;
-  final TextInputType inputType;
-  final Widget trailing;
-  ValueChanged<String> onChanged;
-  VoidCallback onEditingComplete;
+  final TextInputType? inputType;
+  final Widget? trailing;
+  ValueChanged<String>? onChanged;
+  VoidCallback? onEditingComplete;
   final bool autofocus;
-  EdgeInsets padding;
-  bool enabled;
-  TextInputAction textInputAction;
+  EdgeInsets? padding;
+  bool? enabled;
+  TextInputAction? textInputAction;
   TextAlign textAlign;
   bool hideDivider;
-  TextStyle style;
-  List<TextInputFormatter> inputFormatters;
-  final int maxLines;
-  final int maxLength;
+  TextStyle? style;
+  List<TextInputFormatter>? inputFormatters;
+  final int? maxLines;
+  final int? maxLength;
   bool isInputBorder;
   bool isSteppedPrice;
   bool isCursorEnd;
@@ -40,7 +40,7 @@ class TextFieldBorderComponent extends StatefulWidget {
     this.helperText,
     this.leadingWidth = 85,
     this.controller,
-    @required this.focusNode,
+    required this.focusNode,
     this.inputType,
     this.trailing,
     this.onChanged,
@@ -74,24 +74,24 @@ class _TextFieldBorderComponentState extends State<TextFieldBorderComponent> {
 
   @override
   void initState() {
-
-    if(widget.prefix != null && widget.controller.text != ''){
-      if(!widget.controller.text.startsWith(widget.prefix)){
-        widget.controller.text = widget.prefix + widget.controller.text;
+    if (widget.prefix != null && widget.controller!.text != '') {
+      if (!widget.controller!.text.startsWith(widget.prefix!)) {
+        widget.controller!.text = widget.prefix! + widget.controller!.text;
       }
     }
 
     widget.focusNode.addListener(() {
       if (widget.focusNode.hasFocus) {
         setState(() {
-          if(widget.prefix != null){
-            widget.controller.text = widget.controller.text.replaceFirst(widget.prefix, '');
+          if (widget.prefix != null) {
+            widget.controller!.text =
+                widget.controller!.text.replaceFirst(widget.prefix!, '');
           }
         });
       } else {
         setState(() {
-          if(widget.prefix != null && widget.controller.text != ''){
-            widget.controller.text = widget.prefix + widget.controller.text;
+          if (widget.prefix != null && widget.controller!.text != '') {
+            widget.controller!.text = widget.prefix! + widget.controller!.text;
           }
         });
       }
@@ -116,17 +116,17 @@ class _TextFieldBorderComponentState extends State<TextFieldBorderComponent> {
   @override
   Widget build(BuildContext context) {
 //    if(widget.textAlign == TextAlign.right){
-      widget.controller.value = TextEditingValue(
-        // 设置内容
-        text: widget.controller.text,
-        // 保持光标在最后
-        selection: TextSelection.fromPosition(
-          TextPosition(
-            affinity: TextAffinity.upstream,
-            offset: widget.controller.text.length,
-          ),
+    widget.controller!.value = TextEditingValue(
+      // 设置内容
+      text: widget.controller!.text,
+      // 保持光标在最后
+      selection: TextSelection.fromPosition(
+        TextPosition(
+          affinity: TextAffinity.upstream,
+          offset: widget.controller!.text.length,
         ),
-      );
+      ),
+    );
 //    }
 
     return Column(

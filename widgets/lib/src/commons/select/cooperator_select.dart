@@ -3,9 +3,9 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 class CooperatorSelect extends StatefulWidget {
-  CooperatorModel model;
+  CooperatorModel? model;
 
-  final ValueChanged<CooperatorModel> onChanged;
+  final ValueChanged<CooperatorModel?>? onChanged;
 
   CooperatorSelect({this.model, this.onChanged});
 
@@ -14,7 +14,7 @@ class CooperatorSelect extends StatefulWidget {
 }
 
 class _CooperatorSelectState extends State<CooperatorSelect> {
-  CooperatorModel selectedCooperators = null;
+  CooperatorModel? selectedCooperators = null;
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _CooperatorSelectState extends State<CooperatorSelect> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       builder:
-          (BuildContext context, AsyncSnapshot<CooperatorResponse> snapshot) {
+          (BuildContext context, AsyncSnapshot<CooperatorResponse?> snapshot) {
         if (snapshot.data != null) {
           return Column(
             children: <Widget>[
@@ -48,7 +48,7 @@ class _CooperatorSelectState extends State<CooperatorSelect> {
                     ),
                     FlatButton(
                       onPressed: () {
-                        widget.onChanged(selectedCooperators);
+                        widget.onChanged!(selectedCooperators);
                       },
                       child: Text('确定'),
                       color: Color.fromRGBO(255, 214, 12, 1),
@@ -63,7 +63,7 @@ class _CooperatorSelectState extends State<CooperatorSelect> {
                 child: Container(
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 10),
-                  child: ListView(children: _buildItems(snapshot.data)),
+                  child: ListView(children: _buildItems(snapshot.data!)),
                 ),
               )
             ],

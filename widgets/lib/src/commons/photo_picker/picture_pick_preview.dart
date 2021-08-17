@@ -22,10 +22,10 @@ class PicturePickPreviewWidget extends StatefulWidget {
   final bool isUpload;
 
   //标题字体样式
-  final TextStyle titleFont;
+  final TextStyle? titleFont;
 
   //副标题字体样式
-  final TextStyle subtitleFont;
+  final TextStyle? subtitleFont;
 
   ///组件高度
   final double height;
@@ -37,7 +37,7 @@ class PicturePickPreviewWidget extends StatefulWidget {
   final bool primary;
 
   PicturePickPreviewWidget({
-    @required this.medias,
+    required this.medias,
     this.subtitleFont,
     this.titleFont,
     this.height = 300,
@@ -51,14 +51,15 @@ class PicturePickPreviewWidget extends StatefulWidget {
 
 class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
   ScrollController _scrollController = new ScrollController();
-  Color iconColorLeft = Colors.grey[200];
+  Color? iconColorLeft = Colors.grey[200];
   Color iconColorRight = Colors.black;
-  String userType;
+  String? userType;
 
   final StreamController _streamController =
-  StreamController<double>.broadcast();
+      StreamController<double>.broadcast();
 
-  List<MediaModel> mediaList;
+  List<MediaModel>? mediaList;
+
   @override
   void initState() {
     final bloc = BLoCProvider.of<UserBLoC>(context);
@@ -139,7 +140,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                     borderRadius: BorderRadius.circular(5),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey[200],
+                        color: Colors.grey[200]!,
                         blurRadius: 5.0,
                         spreadRadius: 2.0,
                         offset: Offset(0, 3.0),
@@ -168,7 +169,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey[200],
+                  color: Colors.grey[200]!,
                   blurRadius: 5.0,
                   spreadRadius: 2.0,
                   offset: Offset(0, 3.0),
@@ -276,7 +277,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
         return SimpleDialog(
           children: <Widget>[
             StreamBuilder<double>(
-                stream: _streamController.stream,
+                stream: _streamController.stream as Stream<double>?,
                 initialData: 0.0,
                 builder:
                     (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -300,7 +301,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('进度:', style: TextStyle(fontSize: 12)),
-                            Text('${((snapshot.data / 1) * 100).round()}%',
+                            Text('${((snapshot.data! / 1) * 100).round()}%',
                                 style: TextStyle(fontSize: 12))
                           ],
                         )
@@ -396,7 +397,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
         return SimpleDialog(
           children: <Widget>[
             StreamBuilder<double>(
-                stream: _streamController.stream,
+                stream: _streamController.stream as Stream<double>?,
                 initialData: 0.0,
                 builder:
                     (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -420,7 +421,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('进度:', style: TextStyle(fontSize: 12)),
-                            Text('${((snapshot.data / 1) * 100).round()}%',
+                            Text('${((snapshot.data! / 1) * 100).round()}%',
                                 style: TextStyle(fontSize: 12))
                           ],
                         )
@@ -459,14 +460,14 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
       Navigator.of(context).pop();
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
-        widget.medias.add(MediaModel.fromJson(response.data));
+        widget.medias.add(MediaModel.fromJson(response.data!));
       });
     } catch (e) {
       print(e);
     }
   }
 
-  Future _deleteFile(MediaModel mediaModel, {String code}) async {
+  Future _deleteFile(MediaModel mediaModel, {String? code}) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {

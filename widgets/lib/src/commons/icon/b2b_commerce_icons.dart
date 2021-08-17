@@ -216,7 +216,7 @@ class B2BIconsV2 {
 class CommonImage {
   static String _package = 'assets';
 
-  static Image pdf({double width, double height}) {
+  static Image pdf({double? width, double? height}) {
     return Image.asset(
       'temp/pdf.png',
       package: _package,
@@ -225,7 +225,7 @@ class CommonImage {
     );
   }
 
-  static Image word({double width, double height}) {
+  static Image word({double? width, double? height}) {
     return Image.asset(
       'temp/word.png',
       package: _package,
@@ -234,7 +234,7 @@ class CommonImage {
     );
   }
 
-  static Image excel({double width, double height}) {
+  static Image excel({double? width, double? height}) {
     return Image.asset(
       'temp/excel.png',
       package: _package,

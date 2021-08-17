@@ -7,7 +7,7 @@ class VideoPage extends StatefulWidget {
 
   const VideoPage(
     this.url, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -15,7 +15,7 @@ class VideoPage extends StatefulWidget {
 }
 
 class VideoPageState extends State<VideoPage> {
-  VideoPlayerController _controller;
+  VideoPlayerController? _controller;
 
   @override
   void initState() {
@@ -24,16 +24,16 @@ class VideoPageState extends State<VideoPage> {
       widget.url,
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     );
-    _controller.addListener(() {
+    _controller!.addListener(() {
       setState(() {});
     });
-    _controller.setLooping(true);
-    _controller.initialize();
+    _controller!.setLooping(true);
+    _controller!.initialize();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -53,14 +53,14 @@ class VideoPageState extends State<VideoPage> {
           color: Colors.black,
           child: Center(
             child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
+              aspectRatio: _controller!.value.aspectRatio,
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: <Widget>[
-                  VideoPlayer(_controller),
+                  VideoPlayer(_controller!),
                   // ClosedCaption(),
                   _ControlsOverlay(controller: _controller),
-                  VideoProgressIndicator(_controller, allowScrubbing: true),
+                  VideoProgressIndicator(_controller!, allowScrubbing: true),
                 ],
               ),
             ),
@@ -70,9 +70,9 @@ class VideoPageState extends State<VideoPage> {
 }
 
 class _ControlsOverlay extends StatelessWidget {
-  const _ControlsOverlay({Key key, this.controller}) : super(key: key);
+  const _ControlsOverlay({Key? key, this.controller}) : super(key: key);
 
-  final VideoPlayerController controller;
+  final VideoPlayerController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class _ControlsOverlay extends StatelessWidget {
         AnimatedSwitcher(
           duration: Duration(milliseconds: 50),
           reverseDuration: Duration(milliseconds: 200),
-          child: controller.value.isPlaying
+          child: controller!.value.isPlaying
               ? SizedBox.shrink()
               : Container(
                   color: Colors.black26,
@@ -96,7 +96,9 @@ class _ControlsOverlay extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            controller.value.isPlaying ? controller.pause() : controller.play();
+            controller!.value.isPlaying
+                ? controller!.pause()
+                : controller!.play();
           },
         ),
       ],

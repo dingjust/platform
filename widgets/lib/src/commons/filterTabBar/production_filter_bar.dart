@@ -7,15 +7,15 @@ import 'package:services/services.dart';
 class ProductionFilterBar extends StatefulWidget
     implements PreferredSizeWidget {
   const ProductionFilterBar(
-      {Key key,
+      {Key? key,
       this.itemHeight = 20,
       this.itemWidth = 75,
-      @required this.entries,
+      required this.entries,
       this.unselectedColor = Colors.black54,
       this.color = Colors.black,
-      @required this.streamController,
-      @required this.action,
-      @required this.leading,
+      required this.streamController,
+      required this.action,
+      required this.leading,
       this.height = 55,
       this.indicatorWidth = 20,
       this.indicatorHeight = 2})

@@ -27,8 +27,8 @@ import '../../../widgets.dart';
 ///横向滚动图片列表
 class Attachments extends StatefulWidget {
   Attachments({
-    Key key,
-    @required this.list,
+    Key? key,
+    required this.list,
     this.width = 320,
     this.height = 100,
     this.imageWidth = 80,
@@ -51,8 +51,8 @@ class Attachments extends StatefulWidget {
 
 class _AttachmentsState extends State<Attachments> {
   ScrollController _scrollController = new ScrollController();
-  Color iconColorLeft = Colors.grey[200];
-  Color iconColorRight = Colors.black;
+  Color? iconColorLeft = Colors.grey[200];
+  Color? iconColorRight = Colors.black;
 
   final StreamController _streamController =
       StreamController<double>.broadcast();
@@ -234,7 +234,7 @@ class _AttachmentsState extends State<Attachments> {
         return SimpleDialog(
           children: <Widget>[
             StreamBuilder<double>(
-                stream: _streamController.stream,
+                stream: _streamController.stream as Stream<double>?,
                 initialData: 0.0,
                 builder:
                     (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -258,7 +258,7 @@ class _AttachmentsState extends State<Attachments> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('进度:', style: TextStyle(fontSize: 12)),
-                            Text('${((snapshot.data / 1) * 100).round()}%',
+                            Text('${((snapshot.data! / 1) * 100).round()}%',
                                 style: TextStyle(fontSize: 12))
                           ],
                         )
@@ -306,8 +306,8 @@ class _AttachmentsState extends State<Attachments> {
 ///可编辑（上传、删除）横向滚动图片列表
 class EditableAttachments extends StatefulWidget {
   EditableAttachments({
-    Key key,
-    @required this.list,
+    Key? key,
+    required this.list,
     this.editable = true,
     this.width = 320,
     this.height = 80,
@@ -341,10 +341,10 @@ class EditableAttachments extends StatefulWidget {
   final int maxNum;
 
   ///上传URL
-  final String uploadURL;
+  final String? uploadURL;
 
   ///删除URL
-  final String deleteURL;
+  final String? deleteURL;
 
   ///是否需要截图
   final bool isCut;
@@ -353,8 +353,8 @@ class EditableAttachments extends StatefulWidget {
   final bool circleShape;
 
   ///截图的宽高比例
-  final double ratioX;
-  final double ratioY;
+  final double? ratioX;
+  final double? ratioY;
 
   //是否长按删除
   final bool loogPressDelete;
@@ -365,8 +365,8 @@ class EditableAttachments extends StatefulWidget {
 class _EditableAttachmentsState extends State<EditableAttachments>
     with TickerProviderStateMixin, ImagePickerListener {
   ScrollController _scrollController = new ScrollController();
-  Color iconColorLeft = Colors.grey[200];
-  Color iconColorRight = Colors.black;
+  Color? iconColorLeft = Colors.grey[200];
+  Color? iconColorRight = Colors.black;
 
   final StreamController _streamController =
       StreamController<double>.broadcast();
@@ -381,8 +381,8 @@ class _EditableAttachmentsState extends State<EditableAttachments>
   List<File> _uploadFileList = [];
   List<StreamController> _streamControllerList = [];
 
-  AnimationController _controller;
-  ImagePickerHandler imagePicker;
+  AnimationController? _controller;
+  late ImagePickerHandler imagePicker;
 
   @override
   void initState() {
@@ -393,21 +393,21 @@ class _EditableAttachmentsState extends State<EditableAttachments>
     );
 
     imagePicker =
-    new ImagePickerHandler(this, _controller, maxNum: widget.maxNum);
+        new ImagePickerHandler(this, _controller, maxNum: widget.maxNum);
     imagePicker.build(
         0xFFFFFFFF, 0xFF6495ED, widget.isCut, widget.ratioX, widget.ratioY);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     _streamController.close();
     _compressStreamController.close();
     super.dispose();
   }
 
   @override
-  userImage(File _image) async {
+  userImage(File? _image) async {
     if (widget.maxNum == 1) {
       widget.list.clear();
     }
@@ -495,7 +495,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                 color: Colors.black26,
               ),
               StreamBuilder<double>(
-                  stream: _streamControllerList[0].stream,
+                  stream: _streamControllerList[0].stream as Stream<double>?,
                   initialData: 0.0,
                   builder:
                       (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -571,7 +571,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
           height: widget.imageHeight,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey[300], width: 1.0)),
+              border: Border.all(color: Colors.grey[300]!, width: 1.0)),
           child: Center(
             child: Icon(
               Icons.add,
@@ -599,7 +599,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
           height: widget.imageHeight,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey[300], width: 1.0)),
+              border: Border.all(color: Colors.grey[300]!, width: 1.0)),
           child: Center(
             child: Icon(
               Icons.add,
@@ -630,7 +630,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                 color: Colors.black26,
               ),
               StreamBuilder<double>(
-                  stream: _streamControllerList[i].stream,
+                  stream: _streamControllerList[i].stream as Stream<double>?,
                   initialData: 0.0,
                   builder:
                       (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -779,7 +779,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
         return SimpleDialog(
           children: <Widget>[
             StreamBuilder<double>(
-                stream: _streamController.stream,
+                stream: _streamController.stream as Stream<double>?,
                 initialData: 0.0,
                 builder:
                     (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -803,7 +803,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('进度:', style: TextStyle(fontSize: 12)),
-                            Text('${((snapshot.data / 1) * 100).round()}%',
+                            Text('${((snapshot.data! / 1) * 100).round()}%',
                                 style: TextStyle(fontSize: 12))
                           ],
                         )
@@ -884,7 +884,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
 
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
-        widget.list.add(MediaModel.fromJson(response.data));
+        widget.list.add(MediaModel.fromJson(response.data!));
       });
     } catch (e) {
       _removeFile(sourceFile);
@@ -893,7 +893,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
   }
 
   //TODO :传入Media参数
-  Future _deleteFile(MediaModel mediaModel, {String code}) async {
+  Future _deleteFile(MediaModel mediaModel, {String? code}) async {
     if (!widget.loogPressDelete) {
       imagePicker.showDialog(context);
     } else {
@@ -970,7 +970,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
 }
 
 class SingleAttachment extends StatefulWidget {
-  final ValueChanged<MediaModel> onChanged;
+  final ValueChanged<MediaModel>? onChanged;
 
   MediaModel media;
 
@@ -984,10 +984,10 @@ class SingleAttachment extends StatefulWidget {
   final double imageHeight;
 
   ///上传URL
-  final String uploadURL;
+  final String? uploadURL;
 
   ///删除URL
-  final String deleteURL;
+  final String? deleteURL;
 
   ///是否需要截图
   final bool isCut;
@@ -996,12 +996,12 @@ class SingleAttachment extends StatefulWidget {
   final bool circleShape;
 
   ///截图的宽高比例
-  final double ratioX;
-  final double ratioY;
+  final double? ratioX;
+  final double? ratioY;
 
   SingleAttachment({
-    Key key,
-    @required this.media,
+    Key? key,
+    required this.media,
     this.width = 80,
     this.height = 80,
     this.imageWidth = 60,
@@ -1022,13 +1022,13 @@ class SingleAttachment extends StatefulWidget {
 class _SingleAttachmentState extends State<SingleAttachment>
     with TickerProviderStateMixin, ImagePickerListener {
   final StreamController _streamController =
-  StreamController<double>.broadcast();
+      StreamController<double>.broadcast();
 
   final StreamController _compressStreamController =
-  StreamController<double>.broadcast();
+      StreamController<double>.broadcast();
 
-  AnimationController _controller;
-  ImagePickerHandler imagePicker;
+  AnimationController? _controller;
+  late ImagePickerHandler imagePicker;
 
   @override
   void initState() {
@@ -1078,29 +1078,29 @@ class _SingleAttachmentState extends State<SingleAttachment>
                   SpinKitRing(
                     color: Colors.black12,
                     lineWidth: 2,
-                    size: 30,
+                      size: 30,
+                    ),
                   ),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.grey,
-            ),
-          )
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                  ),
+                )
               : Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            width: widget.imageWidth,
-            height: widget.imageHeight,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey[300], width: 1.0)),
-            child: Center(
-              child: Icon(
-                Icons.add,
-                size: widget.imageWidth,
-                color: Colors.grey,
-              ),
-            ),
-          ),
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  width: widget.imageWidth,
+                  height: widget.imageHeight,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey[300]!, width: 1.0)),
+                  child: Center(
+                    child: Icon(
+                      Icons.add,
+                      size: widget.imageWidth,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
           onTap: () {
             imagePicker.showDialog(context);
           },
@@ -1173,14 +1173,14 @@ class _SingleAttachmentState extends State<SingleAttachment>
           _streamController.sink.add(sent / total);
         },
       );
-      widget.onChanged(MediaModel.fromJson(response.data));
+      widget.onChanged!(MediaModel.fromJson(response.data!));
     } catch (e) {
       print(e);
     }
   }
 
   @override
-  userImage(File _image) async {
+  userImage(File? _image) async {
     if (_image != null) {
       await _uploadFile(_image);
     }
@@ -1188,7 +1188,7 @@ class _SingleAttachmentState extends State<SingleAttachment>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     _streamController.close();
     _compressStreamController.close();
     super.dispose();

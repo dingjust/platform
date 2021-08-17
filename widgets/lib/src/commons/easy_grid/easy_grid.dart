@@ -13,8 +13,8 @@ class EasyGrid extends StatelessWidget {
   final bool scrollable;
 
   EasyGrid({
-    Key key,
-    @required this.items,
+    Key? key,
+    required this.items,
     this.height = 100,
     this.scrollable = false,
   }) : super(key: key);
@@ -39,20 +39,20 @@ class EasyGrid extends StatelessWidget {
 }
 
 class EasyGridItem extends StatelessWidget {
-  const EasyGridItem({Key key, @required this.item}) : super(key: key);
+  const EasyGridItem({Key? key, required this.item}) : super(key: key);
 
   final GridItem item;
 
   @override
   Widget build(BuildContext context) {
-    if (item.authorizations == null || item.authorizations.isEmpty) {
+    if (item.authorizations == null || item.authorizations!.isEmpty) {
       return Container(
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey[300],
+                color: Colors.grey[300]!,
                 blurRadius: 5.0,
                 spreadRadius: 2.0,
                 offset: Offset(0, 3.0),
@@ -68,9 +68,9 @@ class EasyGridItem extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
@@ -88,24 +88,24 @@ class EasyGridItem extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 item.subTitle ?? '',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
                         ],
-                      )),
-                  item.icon != null ? item.icon : Container(),
+                      ),
+                    ],
+                  )),
+                  item.icon ?? Container(),
                 ],
               ),
             ),
           ));
     } else {
       return AuthorizationDector(
-        authorizations: item.authorizations,
+        authorizations: item.authorizations!,
         opacity: 1,
         message: '无操作权限',
         child: Container(
@@ -114,7 +114,7 @@ class EasyGridItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey[300],
+                  color: Colors.grey[300]!,
                   blurRadius: 5.0,
                   spreadRadius: 2.0,
                   offset: Offset(0, 3.0),
@@ -130,9 +130,9 @@ class EasyGridItem extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
@@ -150,17 +150,17 @@ class EasyGridItem extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   item.subTitle ?? '',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
                           ],
-                        )),
-                    item.icon != null ? item.icon : Container(),
+                        ),
+                      ],
+                    )),
+                    item.icon ?? Container(),
                   ],
                 ),
               ),
@@ -175,21 +175,21 @@ class GridItem {
   final String title;
 
   ///副标题
-  final String subTitle;
+  final String? subTitle;
 
   ///图片
-  final Image icon;
+  final Image? icon;
 
   ///触发函数
   final VoidCallback onPressed;
 
-  final List<Authorization> authorizations;
+  final List<Authorization>? authorizations;
 
   GridItem({
     this.subTitle,
     this.authorizations,
-    @required this.title,
+    required this.title,
     this.icon,
-    @required this.onPressed,
+    required this.onPressed,
   });
 }

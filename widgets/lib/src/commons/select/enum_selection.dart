@@ -4,26 +4,35 @@ import 'package:models/models.dart';
 class EnumSelection extends StatefulWidget {
   final bool multiple;
   final bool hasButton;
-  List<EnumModel> enumModels;
-  List<EnumModel> enumSelect;
+  List<EnumModel>? enumModels;
+  List<EnumModel>? enumSelect;
   final int count;
 
-  EnumSelection({this.multiple = false,this.hasButton = false,@required this.enumSelect,this.enumModels,this.count = 4,});
+  EnumSelection({
+    this.multiple = false,
+    this.hasButton = false,
+    required this.enumSelect,
+    this.enumModels,
+    this.count = 4,
+  });
 
   EnumSelectionState createState() => EnumSelectionState();
 }
 
 class EnumSelectionState extends State<EnumSelection> {
-  bool _multiple;
-  List<EnumModel> _enumModels;
-  List<String> _enumCodeSelect = [];
+  late bool _multiple;
+  List<EnumModel>? _enumModels;
+  List<String?> _enumCodeSelect = [];
 
   @override
   void initState() {
     _enumModels = widget.enumModels;
     _multiple = widget.multiple;
-    if(widget.enumSelect.isNotEmpty){
-      _enumCodeSelect = widget.enumSelect?.map<String>((enumModel) => enumModel.code)?.toList();
+    if (widget.enumSelect?.isNotEmpty ?? false) {
+      _enumCodeSelect = widget.enumSelect
+              ?.map<String>((enumModel) => enumModel.code)
+              ?.toList() ??
+          [];
     }
 
     // TODO: implement initState
@@ -32,26 +41,30 @@ class EnumSelectionState extends State<EnumSelection> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _chips = _enumModels.map((style) {
+    List<Widget> _chips = _enumModels!.map((style) {
       return Container(
         width: MediaQuery.of(context).size.width / widget.count,
         child: ChoiceChip(
-          selectedColor: Color.fromRGBO(255,214,12, 1),
-          label: Text(style.name,style: TextStyle(color: Colors.black),),
+          selectedColor: Color.fromRGBO(255, 214, 12, 1),
+          label: Text(
+            style.name,
+            style: TextStyle(color: Colors.black),
+          ),
           selected: _enumCodeSelect.contains(style.code),
-          onSelected: (select){
-            if(select){
+          onSelected: (select) {
+            if (select) {
               setState(() {
-                if(!_multiple){
-                  widget.enumSelect.clear();
+                if (!_multiple) {
+                  widget.enumSelect?.clear();
                   _enumCodeSelect.clear();
                 }
-                widget.enumSelect.add(style);
+                widget.enumSelect?.add(style);
                 _enumCodeSelect.add(style.code);
               });
-            }else{
+            } else {
               setState(() {
-                widget.enumSelect.removeWhere((enumModel) => enumModel.code == style.code);
+                widget.enumSelect
+                    ?.removeWhere((enumModel) => enumModel.code == style.code);
                 _enumCodeSelect.remove(style.code);
               });
             }
@@ -73,7 +86,7 @@ class EnumSelectionState extends State<EnumSelection> {
                   icon: Text('清除'),
                   onPressed: () {
                     setState(() {
-                      widget.enumSelect.clear();
+                      widget.enumSelect?.clear();
                       _enumCodeSelect.clear();
                     });
                   },

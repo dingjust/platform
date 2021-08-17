@@ -8,27 +8,31 @@ import 'package:models/models.dart';
 class FlutterAMap extends StatefulWidget {
     //地图定位纬度
     double locationX;
-    //地图定位经度
-    double locationY;
-    //地图缩放显示大小值
-    double locationZoom = 12.0;
-    //最大缩放值
-    double locationMaxZoom = 16.0;
-    //最小缩放值
-    double locationMinZoom = 8.0;
-    //工厂信息
-    List<FactoryModel> factoryList;
 
-    FlutterAMap({
-      @required this.locationX,
-      @required this.locationY,
+  //地图定位经度
+  double locationY;
+
+  //地图缩放显示大小值
+  double? locationZoom = 12.0;
+
+  //最大缩放值
+  double? locationMaxZoom = 16.0;
+
+  //最小缩放值
+  double? locationMinZoom = 8.0;
+
+  //工厂信息
+  List<FactoryModel> factoryList;
+
+  FlutterAMap(
+      {required this.locationX,
+      required this.locationY,
       this.locationMinZoom,
-      @required this.factoryList,
+      required this.factoryList,
       this.locationMaxZoom,
-      this.locationZoom
-    });
+      this.locationZoom});
 
-    _FlutterAMapState createState() => _FlutterAMapState();
+  _FlutterAMapState createState() => _FlutterAMapState();
 }
 
 

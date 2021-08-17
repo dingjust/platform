@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ImageNumButton extends StatelessWidget {
-  final Image image;
+  final Image? image;
 
   final int number;
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
-  final String title;
+  final String? title;
 
   final bool showNum;
 
@@ -20,7 +20,7 @@ class ImageNumButton extends StatelessWidget {
   final Color backgroundColor;
 
   const ImageNumButton(
-      {Key key,
+      {Key? key,
       this.image,
       this.number = 0,
       this.onPressed,
@@ -51,7 +51,7 @@ class ImageNumButton extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      title,
+                      title!,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12.0,

@@ -6,14 +6,14 @@ const String _name = "Your Name";
 class ChatMessage extends StatelessWidget {
   ChatMessage({this.text, this.animationController});
 
-  final String text;
-  final AnimationController animationController;
+  final String? text;
+  final AnimationController? animationController;
 
   @override
   Widget build(BuildContext context) {
     return SizeTransition(
         sizeFactor: CurvedAnimation(
-          parent: animationController,
+          parent: animationController!,
           curve: Curves.easeOut,
         ),
         axisAlignment: 0.0,
@@ -35,7 +35,7 @@ class ChatMessage extends StatelessWidget {
                     Text(_name, style: Theme.of(context).textTheme.subhead),
                     Container(
                       margin: const EdgeInsets.only(top: 5.0),
-                      child: Text(text),
+                      child: Text(text!),
                     ),
                   ],
                 ),
@@ -71,7 +71,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     setState(() {
       _messages.insert(0, message);
     });
-    message.animationController.forward();
+    message.animationController!.forward();
   }
 
   Widget _buildTextComposer() {
@@ -111,7 +111,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     for (ChatMessage message in _messages) {
-      message.animationController.dispose();
+      message.animationController!.dispose();
     }
 
     super.dispose();

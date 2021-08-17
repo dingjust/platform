@@ -3,13 +3,17 @@ import 'package:widgets/widgets.dart';
 
 
 class PopupWindowPage extends StatefulWidget {
-  String field;
-  String fieldText;
-  TextInputType inputType;
-  String text;
+  String? field;
+  String? fieldText;
+  TextInputType? inputType;
+  String? text;
 
-
-  PopupWindowPage({this.field, this.fieldText, this.inputType,this.text,});
+  PopupWindowPage({
+    this.field,
+    this.fieldText,
+    this.inputType,
+    this.text,
+  });
 
   _PopupWindowPageState createState() => _PopupWindowPageState();
 }
@@ -17,12 +21,12 @@ class PopupWindowPage extends StatefulWidget {
 class _PopupWindowPageState extends State<PopupWindowPage>{
   FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
-  String _beforeText;
+  String? _beforeText;
 
   @override
   void initState() {
-    _controller.text = widget.text;
-    _beforeText  = widget.text;
+    _controller.text = widget.text!;
+    _beforeText = widget.text;
 
     // TODO: implement initState
     super.initState();

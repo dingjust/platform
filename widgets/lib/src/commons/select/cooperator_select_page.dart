@@ -3,7 +3,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 class CooperatorSelectOnPage extends StatefulWidget {
-  CooperatorModel model;
+  CooperatorModel? model;
 
   CooperatorSelectOnPage({this.model});
 
@@ -12,7 +12,7 @@ class CooperatorSelectOnPage extends StatefulWidget {
 }
 
 class _CooperatorSelectOnPageState extends State<CooperatorSelectOnPage> {
-  CooperatorModel selectedCooperators = null;
+  CooperatorModel? selectedCooperators = null;
 
   @override
   void initState() {
@@ -32,7 +32,8 @@ class _CooperatorSelectOnPageState extends State<CooperatorSelectOnPage> {
       ),
       body: FutureBuilder(
         builder:
-            (BuildContext context, AsyncSnapshot<CooperatorResponse> snapshot) {
+            (BuildContext context,
+            AsyncSnapshot<CooperatorResponse?> snapshot) {
           if (snapshot.data != null) {
             return Column(
               children: <Widget>[
@@ -40,7 +41,7 @@ class _CooperatorSelectOnPageState extends State<CooperatorSelectOnPage> {
                   flex: 1,
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    child: ListView(children: _buildItems(snapshot.data)),
+                    child: ListView(children: _buildItems(snapshot.data!)),
                   ),
                 )
               ],

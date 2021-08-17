@@ -8,7 +8,7 @@ class B2BFloatingActionButtonLocation extends FloatingActionButtonLocation {
 
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
-    return Offset(_endOffset(scaffoldGeometry),
+    return Offset(_endOffset(scaffoldGeometry)!,
         _straddleAppBar(scaffoldGeometry, heithScale));
   }
 
@@ -16,7 +16,7 @@ class B2BFloatingActionButtonLocation extends FloatingActionButtonLocation {
   String toString() => 'FloatingActionButtonLocation.endTop';
 }
 
-double _endOffset(ScaffoldPrelayoutGeometry scaffoldGeometry,
+double? _endOffset(ScaffoldPrelayoutGeometry scaffoldGeometry,
     {double offset = 0.0}) {
   assert(scaffoldGeometry.textDirection != null);
   switch (scaffoldGeometry.textDirection) {

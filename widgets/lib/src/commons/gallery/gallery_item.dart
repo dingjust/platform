@@ -8,7 +8,7 @@ class GalleryItem {
       this.waterProcessParams =
           'image_process=watermark,text_6ZKJ5Y2V,fill_1,color_F5F5F5,t_50'});
 
-  final MediaModel model;
+  final MediaModel? model;
 
   final bool watermark;
 
@@ -17,12 +17,12 @@ class GalleryItem {
 }
 
 class GalleryItemThumbnail extends StatelessWidget {
-  const GalleryItemThumbnail({Key key, this.galleryExampleItem, this.onTap})
+  const GalleryItemThumbnail({Key? key, this.galleryExampleItem, this.onTap})
       : super(key: key);
 
-  final GalleryItem galleryExampleItem;
+  final GalleryItem? galleryExampleItem;
 
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +31,9 @@ class GalleryItemThumbnail extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Hero(
-          tag: galleryExampleItem.model.id,
-          child:
-          Image.network(galleryExampleItem.model.normalUrl(), height: 80.0),
+          tag: galleryExampleItem!.model!.id,
+          child: Image.network(galleryExampleItem!.model!.normalUrl(),
+              height: 80.0),
         ),
       ),
     );

@@ -1,11 +1,10 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class ShowSelectTile extends StatelessWidget {
-  String leadingText;
-  String tralingText;
-  TextStyle leadingTextStyle;
-  TextStyle tralingTextStyle;
+  String? leadingText;
+  String? tralingText;
+  TextStyle? leadingTextStyle;
+  TextStyle? tralingTextStyle;
   bool isRequired;
   bool isShowIcon;
 
@@ -38,16 +37,23 @@ class ShowSelectTile extends StatelessWidget {
                 child:Wrap(
                   children: <Widget>[
                   Text(
-                  leadingText,
-                  style: leadingTextStyle,
-                ) ?? Text(''),
-                    isRequired ? Text(' *',style: TextStyle(fontSize: leadingTextStyle.fontSize,color: Colors.red,)) : Text(''),
-                  ],
-                )
+                        leadingText!,
+                        style: leadingTextStyle,
+                      ) ??
+                      Text(''),
+                  isRequired
+                      ? Text(' *',
+                          style: TextStyle(
+                            fontSize: leadingTextStyle!.fontSize,
+                            color: Colors.red,
+                          ))
+                      : Text(''),
+                ],
+              )
               ),
               tralingText != null
                   ? Text(
-                      tralingText,
+                tralingText!,
                       style: tralingTextStyle,
                     )
                   : Text(''),

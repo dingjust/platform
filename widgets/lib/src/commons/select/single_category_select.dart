@@ -1,41 +1,44 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class SingleCategorySelect extends StatefulWidget {
   SingleCategorySelect({
-    @required this.categories,
+    required this.categories,
     this.categorySelect,
     this.onItemTap,
     this.selectLeft,
   });
 
   final List<CategoryModel> categories;
-  CategoryModel categorySelect;
-  Function onItemTap;
-  String selectLeft;
+  CategoryModel? categorySelect;
+  Function? onItemTap;
+  String? selectLeft;
 
   SingleCategorySelectState createState() => SingleCategorySelectState();
 }
 
 class SingleCategorySelectState extends State<SingleCategorySelect> {
-  List<Widget> _keyItem;
+  late List<Widget> _keyItem;
   List<CategoryModel> _valueItem = [];
-  String _selectLeft;
-  Color _color;
-  String _selectRights;
+  String? _selectLeft;
+  Color? _color;
+  String? _selectRights;
 
   @override
   void initState() {
     if (widget.categorySelect != null) {
-      _selectLeft = widget.categorySelect.parent?.code;
+      _selectLeft = widget.categorySelect!.parent?.code;
       _selectRights = widget.categorySelect?.code;
-      if(widget.categorySelect.parent != null){
-        _valueItem = widget.categories.firstWhere((category) => category.code == widget.categorySelect.parent.code,orElse: ()=>null).children;
-      }else{
+      if (widget.categorySelect!.parent != null) {
+        _valueItem = widget.categories
+            .firstWhereOrNull((category) =>
+                category.code == widget.categorySelect!.parent.code)!
+            .children;
+      } else {
         _valueItem = widget.categories[0].children;
       }
-
     } else {
       _selectLeft = widget.categories[0].code;
       _valueItem = widget.categories[0].children;
@@ -43,7 +46,9 @@ class SingleCategorySelectState extends State<SingleCategorySelect> {
     _color = Colors.black;
     if(widget.selectLeft != null){
       _selectLeft = widget.selectLeft;
-      _valueItem = widget.categories.firstWhere((category) => category.code == widget.selectLeft,orElse: ()=>null).children;
+      _valueItem = widget.categories
+          .firstWhereOrNull((category) => category.code == widget.selectLeft)!
+          .children;
     }
 
     super.initState();
@@ -58,10 +63,10 @@ class SingleCategorySelectState extends State<SingleCategorySelect> {
 //            widget.onItemTap(null);
 //          });
 //        } else {
-          setState(() {
-            _selectRights = category.code;
-            widget.onItemTap(category);
-          });
+        setState(() {
+          _selectRights = category.code;
+          widget.onItemTap!(category);
+        });
 //        }
       },
       child: Container(
@@ -96,9 +101,11 @@ class SingleCategorySelectState extends State<SingleCategorySelect> {
             Text(
               '${category.name}',
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 14,color: _selectRights == category.code
-                  ? Color.fromRGBO(255, 219, 0, 1)
-                  : Colors.black),
+              style: TextStyle(
+                  fontSize: 14,
+                  color: _selectRights == category.code
+                      ? Color.fromRGBO(255, 219, 0, 1)
+                      : Colors.black),
             )
           ],
         ),
@@ -170,7 +177,7 @@ class SingleCategorySelectState extends State<SingleCategorySelect> {
                         childAspectRatio: 0.6,
                       ),
                       delegate: new SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
+                            (BuildContext context, int index) {
                           //创建子widget
                           return buildValueItem(_valueItem[index]);
                         },

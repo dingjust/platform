@@ -16,13 +16,13 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
     this.backgroundDecoration,
     this.minScale,
     this.maxScale,
-    this.initialIndex,
-    @required this.galleryItems,
+    required this.initialIndex,
+    required this.galleryItems,
     this.scrollDirection = Axis.horizontal,
   }) : pageController = PageController(initialPage: initialIndex);
 
-  final Widget loadingChild;
-  final Decoration backgroundDecoration;
+  final Widget? loadingChild;
+  final Decoration? backgroundDecoration;
   final dynamic minScale;
   final dynamic maxScale;
   final int initialIndex;
@@ -37,7 +37,7 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
 }
 
 class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
-  int currentIndex;
+  late int currentIndex;
 
   @override
   void initState() {
@@ -71,7 +71,8 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
                   Center(
                     child: CircularProgressIndicator(),
                   ),
-              backgroundDecoration: widget.backgroundDecoration,
+              backgroundDecoration:
+                  widget.backgroundDecoration as BoxDecoration?,
               pageController: widget.pageController,
               onPageChanged: onPageChanged,
               scrollDirection: widget.scrollDirection,
@@ -124,9 +125,9 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     final GalleryItem item = widget.galleryItems[index];
 
-    String url = item.model.actualUrl;
+    String url = item.model!.actualUrl;
     if (item.watermark) {
-      url = item.model.imageProcessUrl(item.waterProcessParams);
+      url = item.model!.imageProcessUrl(item.waterProcessParams);
     }
 
     return
@@ -149,17 +150,17 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
         //       )
         //     :
         PhotoViewGalleryPageOptions(
-      imageProvider: NetworkImage(url),
+          imageProvider: NetworkImage(url),
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 1.1,
-      heroAttributes: PhotoViewHeroAttributes(tag: item.model.id),
+      heroAttributes: PhotoViewHeroAttributes(tag: item.model!.id),
     );
   }
 
   ///保存图片
   void onSave() async {
-    MediaModel model = widget.galleryItems[currentIndex].model;
+    MediaModel model = widget.galleryItems[currentIndex].model!;
 
     //获取应用目录路径
     String dir = (await getApplicationDocumentsDirectory()).path;

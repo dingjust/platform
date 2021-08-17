@@ -7,12 +7,12 @@ class ReportDataTable extends StatefulWidget {
 
   final double cellWidthScale;
 
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
-  ValueChanged<dynamic> onChanged;
+  ValueChanged<dynamic>? onChanged;
 
   ReportDataTable(this.data, this.index,
-      {Key key, this.cellWidthScale = 12, this.textStyle, this.onChanged})
+      {Key? key, this.cellWidthScale = 12, this.textStyle, this.onChanged})
       : super(key: key);
 
   @override
@@ -20,10 +20,10 @@ class ReportDataTable extends StatefulWidget {
 }
 
 class _ReportDataTableState extends State<ReportDataTable> {
-  ScrollController headerScrollController;
-  ScrollController bodyScrollController;
+  ScrollController? headerScrollController;
+  ScrollController? bodyScrollController;
 
-  List<String> columnsHeaderKeys;
+  late List<String> columnsHeaderKeys;
   List<DataColumn> columnsHeaders = [];
 
   @override
@@ -32,8 +32,8 @@ class _ReportDataTableState extends State<ReportDataTable> {
     bodyScrollController = ScrollController();
 
     ////同步滑动
-    bodyScrollController.addListener(() {
-      headerScrollController.jumpTo(bodyScrollController.offset);
+    bodyScrollController!.addListener(() {
+      headerScrollController!.jumpTo(bodyScrollController!.offset);
     });
 
     initColumnHeader();
@@ -108,7 +108,7 @@ class _ReportDataTableState extends State<ReportDataTable> {
   }
 
   void _handleTap(dynamic value) {
-    widget.onChanged(value);
+    widget.onChanged!(value);
   }
 
   void initColumnHeader() {

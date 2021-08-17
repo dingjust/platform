@@ -12,8 +12,8 @@ import 'package:widgets/src/commons/photo_picker/image_picker_video_handler.dart
 ///视频附件
 class VideoAttachments extends StatefulWidget {
   VideoAttachments({
-    Key key,
-    @required this.list,
+    Key? key,
+    required this.list,
     this.editable = true,
     this.maxNum = 5,
     this.uploadURL,
@@ -42,7 +42,7 @@ class VideoAttachments extends StatefulWidget {
   final int maxNum;
 
   ///上传URL
-  final String uploadURL;
+  final String? uploadURL;
 
   //是否长按删除
   final bool loogPressDelete;
@@ -53,8 +53,8 @@ class VideoAttachments extends StatefulWidget {
 class _VideoAttachmentsState extends State<VideoAttachments>
     with TickerProviderStateMixin, ImagePickerVideoListener {
   ScrollController _scrollController = new ScrollController();
-  Color iconColorLeft = Colors.grey[200];
-  Color iconColorRight = Colors.black;
+  Color? iconColorLeft = Colors.grey[200];
+  Color? iconColorRight = Colors.black;
 
   final StreamController _streamController =
       StreamController<double>.broadcast();
@@ -65,8 +65,8 @@ class _VideoAttachmentsState extends State<VideoAttachments>
   List<File> _uploadFileList = [];
   List<StreamController> _streamControllerList = [];
 
-  AnimationController _controller;
-  ImagePickerVideoHandler imagePicker;
+  AnimationController? _controller;
+  late ImagePickerVideoHandler imagePicker;
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class _VideoAttachmentsState extends State<VideoAttachments>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     _streamController.close();
     _compressStreamController.close();
     super.dispose();
@@ -170,7 +170,7 @@ class _VideoAttachmentsState extends State<VideoAttachments>
           height: widget.itemHeight,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey[300], width: 1.0)),
+              border: Border.all(color: Colors.grey[300]!, width: 1.0)),
           child: Center(
             child: Icon(
               Icons.add,
@@ -206,7 +206,7 @@ class _VideoAttachmentsState extends State<VideoAttachments>
                 color: Colors.black26,
               ),
               StreamBuilder<double>(
-                  stream: _streamControllerList[i].stream,
+                  stream: _streamControllerList[i].stream as Stream<double>?,
                   initialData: 0.0,
                   builder:
                       (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -315,7 +315,7 @@ class _VideoAttachmentsState extends State<VideoAttachments>
       //Navigator.of(context).pop();
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
-        widget.list.add(MediaModel.fromJson(response.data));
+        widget.list.add(MediaModel.fromJson(response.data!));
       });
     } catch (e) {
       print(e);
@@ -323,7 +323,7 @@ class _VideoAttachmentsState extends State<VideoAttachments>
   }
 
   //TODO :传入Media参数
-  Future _deleteFile(MediaModel mediaModel, {String code}) async {
+  Future _deleteFile(MediaModel mediaModel, {String? code}) async {
     if (!widget.loogPressDelete) {
       imagePicker.showDialog(context);
     } else {

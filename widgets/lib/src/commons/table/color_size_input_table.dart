@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,12 +11,12 @@ class ColorSizeInputTable extends StatefulWidget {
 
   final List<String> sizes;
 
-  final List<ColorSizeInputEntry> entries;
+  final List<ColorSizeInputEntry>? entries;
 
-  final ValueChanged<List<ColorSizeInputEntry>> onChanged;
+  final ValueChanged<List<ColorSizeInputEntry>?>? onChanged;
 
   ///排序函数
-  final CompareFunction compareFunction;
+  final CompareFunction? compareFunction;
 
   ///
   /// 示例：
@@ -37,7 +38,7 @@ class ColorSizeInputTable extends StatefulWidget {
   /// ),
   /// ```
   const ColorSizeInputTable(this.colors, this.sizes,
-      {Key key, this.compareFunction, this.entries, this.onChanged})
+      {Key? key, this.compareFunction, this.entries, this.onChanged})
       : super(key: key);
 
   @override
@@ -45,14 +46,14 @@ class ColorSizeInputTable extends StatefulWidget {
 }
 
 class _ColorSizeInputTableState extends State<ColorSizeInputTable> {
-  List<String> colors;
-  List<String> sizes;
+  late List<String> colors;
+  late List<String> sizes;
 
   ///颜色分组数据维护
-  Map<String, List<ColorSizeInputEntry>> colorSizeEntriesMap;
+  late Map<String, List<ColorSizeInputEntry>> colorSizeEntriesMap;
 
   ///数据维护
-  List<ColorSizeInputEntry> data;
+  List<ColorSizeInputEntry>? data;
 
   @override
   void initState() {
@@ -61,7 +62,7 @@ class _ColorSizeInputTableState extends State<ColorSizeInputTable> {
     data = [];
     //尺码排序
     if (widget.compareFunction != null) {
-      sizes.sort((o1, o2) => widget.compareFunction(o1, o2));
+      sizes.sort((o1, o2) => widget.compareFunction!(o1, o2));
     }
 
     //颜色分组
@@ -69,13 +70,13 @@ class _ColorSizeInputTableState extends State<ColorSizeInputTable> {
     colors.forEach((color) {
       colorSizeEntriesMap[color] = [];
       sizes.forEach((size) {
-        ColorSizeInputEntry entry =
+        ColorSizeInputEntry? entry =
             _getEntry(widget.entries ?? [], color, size);
         if (entry == null) {
           entry = ColorSizeInputEntry(color: color, size: size);
         }
-        colorSizeEntriesMap[color].add(entry);
-        data.add(entry);
+        colorSizeEntriesMap[color]!.add(entry);
+        data!.add(entry);
       });
     });
 
@@ -151,7 +152,7 @@ class _ColorSizeInputTableState extends State<ColorSizeInputTable> {
     if (number != null) {
       entry.quantity = number;
       if (widget.onChanged != null) {
-        widget.onChanged.call(data);
+        widget.onChanged!.call(data);
       }
     }
   }
@@ -179,13 +180,12 @@ class _ColorSizeInputTableState extends State<ColorSizeInputTable> {
     return [colorSizeInputTableHeadRow$, ...dataRowList];
   }
 
-  ColorSizeInputEntry _getEntry(
+  ColorSizeInputEntry? _getEntry(
       List<ColorSizeInputEntry> entries, String color, String size) {
-    ColorSizeInputEntry entry = entries.firstWhere(
-        (element) => element.color == color && element.size == size,
-        orElse: () => null);
+    ColorSizeInputEntry? entry = entries.firstWhereOrNull(
+        (element) => element.color == color && element.size == size);
     if (entry != null) {
-      entry.controller.text = entry.quantity?.toString() ?? '';
+      entry.controller!.text = entry.quantity?.toString() ?? '';
     }
     return entry;
   }
@@ -193,13 +193,13 @@ class _ColorSizeInputTableState extends State<ColorSizeInputTable> {
 
 ///实体
 class ColorSizeInputEntry {
-  final String color;
+  final String? color;
 
-  final String size;
+  final String? size;
 
-  int quantity;
+  int? quantity;
 
-  TextEditingController controller;
+  TextEditingController? controller;
 
   ColorSizeInputEntry({this.color, this.size, this.quantity}) {
     controller = TextEditingController(

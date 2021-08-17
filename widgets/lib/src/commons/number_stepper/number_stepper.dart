@@ -9,11 +9,11 @@ class NumberStepper extends StatefulWidget {
 
   final double step;
 
-  final double min;
+  final double? min;
 
-  final double max;
+  final double? max;
 
-  final ValueChanged<double> onChange;
+  final ValueChanged<double?>? onChange;
 
   final double iconSize;
 
@@ -23,7 +23,7 @@ class NumberStepper extends StatefulWidget {
   final int asFixedNum;
 
   NumberStepper(
-      {Key key,
+      {Key? key,
       this.initVal = 1,
       this.step = 1,
       this.min,
@@ -39,7 +39,7 @@ class NumberStepper extends StatefulWidget {
 }
 
 class _NumberStepperState extends State<NumberStepper> {
-  TextEditingController controller;
+  TextEditingController? controller;
 
   @override
   void initState() {
@@ -53,14 +53,15 @@ class _NumberStepperState extends State<NumberStepper> {
       children: [
         GestureDetector(
           onTap: () {
-            double val = double.tryParse(controller.text);
-            if (val != null && (widget.min != null ? val > widget.min : true)) {
+            double? val = double.tryParse(controller!.text);
+            if (val != null &&
+                (widget.min != null ? val > widget.min! : true)) {
               val = val - widget.step;
               setState(() {
-                controller.text = val.toStringAsFixed(widget.asFixedNum);
+                controller!.text = val!.toStringAsFixed(widget.asFixedNum);
               });
               if (widget.onChange != null) {
-                widget.onChange.call(val);
+                widget.onChange!.call(val);
               }
             }
           },
@@ -86,25 +87,25 @@ class _NumberStepperState extends State<NumberStepper> {
               FilteringTextInputFormatter.digitsOnly
             ],
             onChanged: (val) {
-              double number = double.tryParse(val);
+              double? number = double.tryParse(val);
               if (number != null) {
-                double result;
+                double? result;
 
-                if (widget.min != null && number < widget.min) {
+                if (widget.min != null && number < widget.min!) {
                   setState(() {
-                    controller.text = widget.min.toString();
+                    controller!.text = widget.min.toString();
                     result = widget.min;
                   });
-                } else if (widget.max != null && number > widget.max) {
+                } else if (widget.max != null && number > widget.max!) {
                   setState(() {
-                    controller.text = widget.max.toString();
+                    controller!.text = widget.max.toString();
                     result = widget.max;
                   });
                 } else {
                   result = number;
                 }
                 if (widget.onChange != null) {
-                  widget.onChange.call(result);
+                  widget.onChange!.call(result);
                 }
               }
             },
@@ -112,14 +113,15 @@ class _NumberStepperState extends State<NumberStepper> {
         )),
         GestureDetector(
           onTap: () {
-            double val = double.tryParse(controller.text);
-            if (val != null && (widget.max != null ? val < widget.max : true)) {
+            double? val = double.tryParse(controller!.text);
+            if (val != null &&
+                (widget.max != null ? val < widget.max! : true)) {
               val = val + widget.step;
               setState(() {
-                controller.text = val.toStringAsFixed(widget.asFixedNum);
+                controller!.text = val!.toStringAsFixed(widget.asFixedNum);
               });
               if (widget.onChange != null) {
-                widget.onChange.call(val);
+                widget.onChange!.call(val);
               }
             }
           },

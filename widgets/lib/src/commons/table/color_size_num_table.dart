@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 
 class ColorSizeNumTable extends StatelessWidget {
-  const ColorSizeNumTable({Key key, @required this.data}) : super(key: key);
+  const ColorSizeNumTable({Key? key, required this.data}) : super(key: key);
 
   final List<ApparelSizeVariantProductEntry> data;
 
@@ -68,10 +68,10 @@ class ColorSizeNumTable extends StatelessWidget {
     ];
 
     data.forEach((entry) {
-      if (colorRowList[entry.model.color.code] == null) {
-        colorRowList[entry.model.color.code] = [];
+      if (colorRowList[entry.model!.color.code] == null) {
+        colorRowList[entry.model!.color.code] = [];
       }
-      colorRowList[entry.model.color.code].add(entry);
+      colorRowList[entry.model!.color.code]!.add(entry);
     });
 
     colorRowList.forEach((color, entries) {
@@ -84,7 +84,7 @@ class ColorSizeNumTable extends StatelessWidget {
                     color: Color.fromRGBO(250, 250, 250, 1),
                     alignment: Alignment.center,
                     child: Text(
-                      '${entry.model.size.name}',
+                      '${entry.model!.size.name}',
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 16.0, color: Color(0xFF30424D)),
@@ -118,15 +118,12 @@ class ColorSizeNumTable extends StatelessWidget {
                   width: 20,
                   decoration: BoxDecoration(
                     color: Color(int.parse('0xff' +
-                        '${entries[0].model.color.colorCode == null ||
-                            entries[0].model.color.colorCode == ''
-                            ? 'fffff'
-                            : entries[0].model.color.colorCode.substring(1)}')),
+                        '${entries[0].model!.color.colorCode == null || entries[0].model!.color.colorCode == '' ? 'fffff' : entries[0].model!.color.colorCode.substring(1)}')),
                     shape: BoxShape.circle,
                   ),
                   child: Text(''),
                 ),
-                Text(entries[0].model.color.name),
+                Text(entries[0].model!.color.name),
               ],
             ),
           ),
@@ -171,24 +168,24 @@ class ColorSizeNumTable extends StatelessWidget {
 
 ///颜色尺码产品
 class ApparelSizeVariantProductEntry {
-  ApparelSizeVariantProductModel model;
+  ApparelSizeVariantProductModel? model;
 
   ///数量
-  int quantity;
+  int? quantity;
 
   ApparelSizeVariantProductEntry({this.model, this.quantity});
 }
 
 class EditApparelSizeVariantProductEntry {
-  final ApparelSizeVariantProductModel model;
+  final ApparelSizeVariantProductModel? model;
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
   EditApparelSizeVariantProductEntry({this.model, this.controller});
 }
 
 class EditColorSizeNumTable extends StatelessWidget {
-  const EditColorSizeNumTable({Key key, @required this.data}) : super(key: key);
+  const EditColorSizeNumTable({Key? key, required this.data}) : super(key: key);
 
   final List<EditApparelSizeVariantProductEntry> data;
 
@@ -253,10 +250,10 @@ class EditColorSizeNumTable extends StatelessWidget {
     ];
     if (data != null) {
       data.forEach((entry) {
-        if (colorRowList[entry.model.color.code] == null) {
-          colorRowList[entry.model.color.code] = [];
+        if (colorRowList[entry.model!.color.code] == null) {
+          colorRowList[entry.model!.color.code] = [];
         }
-        colorRowList[entry.model.color.code].add(entry);
+        colorRowList[entry.model!.color.code]!.add(entry);
       });
     }
     colorRowList.forEach((color, entries) {
@@ -269,7 +266,7 @@ class EditColorSizeNumTable extends StatelessWidget {
                     color: Color.fromRGBO(250, 250, 250, 1),
                     alignment: Alignment.center,
                     child: Text(
-                      '${entry.model.size.name}',
+                      '${entry.model!.size.name}',
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 16.0, color: Color(0xFF30424D)),
@@ -300,7 +297,7 @@ class EditColorSizeNumTable extends StatelessWidget {
       String colorCode = 'FFFFFF';
       if (entries[0]?.model?.color?.colorCode != null) {
         colorCode =
-            entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
+            entries[0].model!.color.colorCode.replaceAll(RegExp('#'), '');
       }
 
       dataRowList.add(TableRow(children: <Widget>[
@@ -318,7 +315,7 @@ class EditColorSizeNumTable extends StatelessWidget {
                   ),
                   child: Text(''),
                 ),
-                Text(entries[0].model.color.name),
+                Text(entries[0].model!.color.name),
               ],
             ),
           ),

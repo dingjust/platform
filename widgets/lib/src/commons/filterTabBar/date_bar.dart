@@ -6,11 +6,11 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class DateBar extends StatefulWidget implements PreferredSizeWidget {
   DateBar({
-    Key key,
-    @required this.streamController,
+    Key? key,
+    required this.streamController,
     this.width = 200,
     this.height = 10,
-    @required this.initeDate,
+    required this.initeDate,
   }) : super(key: key);
 
   _DateBarState createState() => _DateBarState();
@@ -24,7 +24,7 @@ class DateBar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => null;
+  Size get preferredSize => Size.zero;
 }
 
 class _DateBarState extends State<DateBar> {

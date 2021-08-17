@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 class MessageDialog extends Dialog {
   Widget title;
   Widget message;
-  String negativeText;
-  String positiveText;
+  String? negativeText;
+  String? positiveText;
   Function onCloseEvent;
-  Function onPositivePressEvent;
+  Function? onPositivePressEvent;
 
   MessageDialog({
-    Key key,
-    @required this.title,
-    @required this.message,
+    Key? key,
+    required this.title,
+    required this.message,
     this.negativeText,
     this.positiveText,
     this.onPositivePressEvent,
-    @required this.onCloseEvent,
+    required this.onCloseEvent,
   }) : super(key: key);
 
   @override
@@ -88,8 +88,10 @@ class MessageDialog extends Dialog {
 
   Widget _buildBottomButtonGroup() {
     var widgets = <Widget>[];
-    if (negativeText != null && negativeText.isNotEmpty) widgets.add(_buildBottomCancelButton());
-    if (positiveText != null && positiveText.isNotEmpty) widgets.add(_buildBottomPositiveButton());
+    if (negativeText != null && negativeText!.isNotEmpty)
+      widgets.add(_buildBottomCancelButton());
+    if (positiveText != null && positiveText!.isNotEmpty)
+      widgets.add(_buildBottomPositiveButton());
     return new Flex(
       direction: Axis.horizontal,
       children: widgets,
@@ -104,9 +106,9 @@ class MessageDialog extends Dialog {
         child: new FlatButton(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           color: Color(0xffffd60c),
-          onPressed: onCloseEvent,
+          onPressed: onCloseEvent as void Function()?,
           child: new Text(
-            negativeText,
+            negativeText!,
             style: TextStyle(
               fontSize: 16.0,
             ),
@@ -120,9 +122,9 @@ class MessageDialog extends Dialog {
     return new Flexible(
       fit: FlexFit.tight,
       child: new FlatButton(
-        onPressed: onPositivePressEvent,
+        onPressed: onPositivePressEvent as void Function()?,
         child: new Text(
-          positiveText,
+          positiveText!,
           style: TextStyle(
             color: Color(Colors.teal.value),
             fontSize: 16.0,

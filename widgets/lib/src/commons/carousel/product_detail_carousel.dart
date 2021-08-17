@@ -22,12 +22,12 @@ class _ProductCarouselState extends State<ProductCarousel> {
   int _curPageIndex = 0;
   int _curIndicatorsIndex = 0;
 
-  PageController _pageController;
+  PageController? _pageController;
 
   List<Widget> _indicators = [];
   List<MediaModel> _items = [];
 
-  Timer _timer;
+  late Timer _timer;
   Duration _duration = Duration(seconds: 3000000000);
   Duration _animationDuration = Duration(milliseconds: 500);
 
@@ -52,7 +52,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
   initTimer() {
     _timer = Timer.periodic(_duration, (timer) {
       if (_isEndScroll) {
-        _pageController.animateToPage(
+        _pageController!.animateToPage(
           _curPageIndex + 1,
           duration: _animationDuration,
           curve: Curves.linear,

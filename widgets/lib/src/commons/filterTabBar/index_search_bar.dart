@@ -3,10 +3,10 @@ import 'package:models/models.dart';
 
 class IndexSearchBar extends StatefulWidget implements PreferredSizeWidget {
   IndexSearchBar(
-      {Key key,
+      {Key? key,
       this.itemHeight = 20,
       this.itemWidth = 100,
-      @required this.entries,
+      required this.entries,
       this.unselectedColor = Colors.black54,
       this.color = Colors.black,
       this.height = 55,
@@ -25,7 +25,7 @@ class IndexSearchBar extends StatefulWidget implements PreferredSizeWidget {
   final double indicatorWidth;
   final double indicatorHeight;
   final double height;
-  String value;
+  String? value;
 
   @override
   // TODO: implement preferredSize

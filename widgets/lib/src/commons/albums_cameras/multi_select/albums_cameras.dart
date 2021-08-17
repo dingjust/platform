@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AlbumsAndCameras extends StatefulWidget {
-  List<File> images;
-  double height;
-  double width;
-  double iconSize;
-  int count;
+  List<File>? images;
+  double? height;
+  double? width;
+  double? iconSize;
+  int? count;
 
   AlbumsAndCameras(
       {this.images, this.height, this.width, this.iconSize, this.count});
@@ -40,7 +40,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
   }
 
   List<Widget> get _papersWidgetList {
-    List<Widget> list = widget.images
+    List<Widget> list = widget.images!
         .map((file) => Container(
               width: widget.width,
               height: widget.height,
@@ -52,12 +52,12 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
               ),
             ))
         .toList();
-    if (list.length < widget.count) {
+    if (list.length < widget.count!) {
       list.add(Container(
         child: IconButton(
           onPressed: selectPapersImages,
           icon: Icon(Icons.add_photo_alternate),
-          iconSize: widget.iconSize,
+          iconSize: widget.iconSize!,
           color: Colors.grey[500],
         ),
       ));
@@ -82,7 +82,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
                     await imagePicker.pickImage(source: ImageSource.camera);
                 if (image != null) {
                   setState(() {
-                    widget.images.add(File(image.path));
+                    widget.images!.add(File(image.path));
                     Navigator.pop(context);
                   });
                 }
@@ -97,7 +97,7 @@ class AlbumsAndCamerasState extends State<AlbumsAndCameras> {
                     await imagePicker.pickImage(source: ImageSource.gallery);
                 if (image != null) {
                   setState(() {
-                    widget.images.add(File(image.path));
+                    widget.images!.add(File(image.path));
                     Navigator.pop(context);
                   });
                 }

@@ -3,11 +3,11 @@ import 'package:models/models.dart';
 
 ///地址信息显示区
 class AddressInfoBlock extends StatelessWidget {
-  final AddressModel model;
+  final AddressModel? model;
 
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  const AddressInfoBlock({Key key, this.model, this.onTap}) : super(key: key);
+  const AddressInfoBlock({Key? key, this.model, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

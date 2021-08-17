@@ -10,11 +10,14 @@ class SingleEnumSelectPage extends StatefulWidget {
   });
 
   //页面title
-  final String title;
+  final String? title;
+
   //全部枚举的集合
-  final List<dynamic> items;
+  final List<dynamic>? items;
+
   //被选中的枚举的code
-  String code;
+  String? code;
+
   //一行显示多少个
   final int count;
 
@@ -22,7 +25,7 @@ class SingleEnumSelectPage extends StatefulWidget {
 }
 
 class SingleEnumSelectPageState extends State<SingleEnumSelectPage> {
-  String _code;
+  String? _code;
 
   @override
   void initState() {
@@ -33,7 +36,7 @@ class SingleEnumSelectPageState extends State<SingleEnumSelectPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> _items = widget.items.map((item) {
+    final List<dynamic> _items = widget.items!.map((item) {
       return Container(
           decoration: BoxDecoration(
               color: _code == item.code
@@ -63,7 +66,7 @@ class SingleEnumSelectPageState extends State<SingleEnumSelectPage> {
       appBar: AppBar(
         elevation: 0.5,
         centerTitle: true,
-        title: Text(widget.title),
+        title: Text(widget.title!),
         leading: IconButton(
             icon: Text(
               '取消',
@@ -94,7 +97,7 @@ class SingleEnumSelectPageState extends State<SingleEnumSelectPage> {
                 childAspectRatio: 3.0, //宽高比为1时，子widget
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 15),
-            children: _items),
+            children: _items as List<Widget>),
       ),
     );
   }
@@ -106,10 +109,10 @@ class SingleEnumSelectPageState extends State<SingleEnumSelectPage> {
 class SingleEnumSelectV2Page extends StatefulWidget {
   SingleEnumSelectV2Page({
     this.title = '',
-    @required this.items,
-    @required this.value,
+    required this.items,
+    required this.value,
     this.count = 4,
-    @required this.localizedMap,
+    required this.localizedMap,
   });
 
   ///页面title
@@ -206,7 +209,7 @@ class SingleEnumSelectV2PageState extends State<SingleEnumSelectV2Page> {
                 childAspectRatio: 3.0, //宽高比为1时，子widget
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 15),
-            children: _items),
+            children: _items as List<Widget>),
       ),
     );
   }

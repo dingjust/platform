@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HistoryTag extends StatelessWidget {
-  HistoryTag({Key key, @required this.value, @required this.onTap})
+  HistoryTag({Key? key, required this.value, required this.onTap})
       : super(key: key);
 
   final String value;

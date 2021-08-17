@@ -32,7 +32,7 @@ class _CarouselStackTextState extends State<CarouselStackText> {
   List<Widget> _indicators = [];
   List<CompanyProfileModel> _items = [];
 
-  Timer _timer;
+  late Timer _timer;
   Duration _duration = Duration(seconds: 3);
   Duration _animationDuration = Duration(milliseconds: 500);
 

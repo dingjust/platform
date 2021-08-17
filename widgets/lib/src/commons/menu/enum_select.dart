@@ -15,24 +15,29 @@ class EnumSelectPage extends StatefulWidget {
   }
 
   //页面title
-  final String title;
+  final String? title;
+
   //全部枚举的集合
-  final List<dynamic> items;
+  final List<dynamic>? items;
+
   //是否多选
   final bool multiple;
+
   //被选中的枚举的code
-  List<String> codes;
+  List<String?>? codes;
+
   //一行显示多少个
   final int count;
+
   //被选中的枚举model
-  List<dynamic> models;
+  List<dynamic>? models;
 
   EnumSelectPageState createState() => EnumSelectPageState();
 }
 
 class EnumSelectPageState extends State<EnumSelectPage> {
-  List<String> _beforeModifyCodes = [];
-  List<dynamic> _beforModifyModels;
+  List<String?> _beforeModifyCodes = [];
+  List<dynamic>? _beforModifyModels;
 
   @override
   void initState() {
@@ -42,9 +47,9 @@ class EnumSelectPageState extends State<EnumSelectPage> {
     if (widget.models != null) {
 //      widget.codes = widget.models.map((model) => model.code).toList();
       _beforModifyModels = [];
-      _beforModifyModels.addAll(widget.models);
+      _beforModifyModels!.addAll(widget.models!);
     }
-    if (widget.codes != null) _beforeModifyCodes.addAll(widget.codes);
+    if (widget.codes != null) _beforeModifyCodes.addAll(widget.codes!);
     // TODO: implement initState
     super.initState();
   }
@@ -53,14 +58,14 @@ class EnumSelectPageState extends State<EnumSelectPage> {
   Widget build(BuildContext context) {
     //当有键盘的状态进来时，widget.codes会被清空，所以在build的时候重新赋值
     if (widget.models != null)
-      widget.codes = widget.models.map<String>((model) {
+      widget.codes = widget.models!.map<String?>((model) {
         if (model is LabelModel) {
           return model.name;
         } else {
           return model.code;
         }
       }).toList();
-    final List<dynamic> _items = widget.items.map((item) {
+    final List<dynamic> _items = widget.items!.map((item) {
 //      print(widget.codes.toString() + '-----'+ item.code);
       return Container(
           decoration: BoxDecoration(
@@ -79,26 +84,26 @@ class EnumSelectPageState extends State<EnumSelectPage> {
               setState(() {
                 if (!_isContains(item)) {
                   if (!widget.multiple) {
-                    widget.codes.clear();
-                    if (widget.models != null) widget.models.clear();
+                    widget.codes!.clear();
+                    if (widget.models != null) widget.models!.clear();
                   }
                   //是否是标签对象
                   if (item is LabelModel) {
-                    widget.codes.add(item.name);
+                    widget.codes!.add(item.name);
                   } else {
-                    widget.codes.add(item.code);
+                    widget.codes!.add(item.code);
                   }
-                  if (widget.models != null) widget.models.add(item);
+                  if (widget.models != null) widget.models!.add(item);
                   print(widget.models);
                 } else {
                   //是否是标签对象
                   if (item is LabelModel) {
-                    widget.codes.remove(item.name);
+                    widget.codes!.remove(item.name);
                   } else {
-                    widget.codes.remove(item.code);
+                    widget.codes!.remove(item.code);
                   }
                   if (widget.models != null)
-                    widget.models.removeWhere((model) {
+                    widget.models!.removeWhere((model) {
                       //是否是标签对象
                       if (model is LabelModel) {
                         return item.name == model.name;
@@ -160,7 +165,7 @@ class EnumSelectPageState extends State<EnumSelectPage> {
                   childAspectRatio: 3.0, //宽高比为1时，子widget
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 15),
-              children: _items),
+              children: _items as List<Widget>),
         ),
       ),
     );
@@ -168,9 +173,9 @@ class EnumSelectPageState extends State<EnumSelectPage> {
 
   bool _isContains(item) {
     if (item is LabelModel) {
-      return widget.codes.contains(item.name);
+      return widget.codes!.contains(item.name);
     } else {
-      return widget.codes.contains(item.code);
+      return widget.codes!.contains(item.code);
     }
   }
 }

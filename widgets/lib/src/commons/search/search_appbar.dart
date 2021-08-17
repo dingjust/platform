@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 class SearchAppbarTitle extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
 
-  final VoidCallback onSearch;
+  final VoidCallback? onSearch;
 
-  final ValueChanged<String> onChange;
+  final ValueChanged<String>? onChange;
 
   final String hintText;
 
   const SearchAppbarTitle(
-      {Key key,
+      {Key? key,
       this.controller,
       this.focusNode,
       this.onSearch,
@@ -38,7 +38,8 @@ class SearchAppbarTitle extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                        border:
+                            Border.all(color: Colors.grey[300]!, width: 0.5),
                       ),
                     ),
                     Container(
@@ -64,7 +65,7 @@ class SearchAppbarTitle extends StatelessWidget {
                                 ),
                                 onChanged: (value) {
                                   if (onChange != null) {
-                                    onChange(value);
+                                    onChange!(value);
                                   }
                                 },
                               ),
@@ -72,8 +73,8 @@ class SearchAppbarTitle extends StatelessWidget {
                             Container(
                               child: GestureDetector(
                                 onTap: () {
-                                  controller.text = '';
-                                  onChange('');
+                                  controller!.text = '';
+                                  onChange!('');
                                 },
                                 child: Icon(
                                   Icons.clear,
@@ -102,9 +103,9 @@ class SearchAppbarTitle extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               onPressed: () async {
-                focusNode.unfocus();
+                focusNode!.unfocus();
                 if (onSearch != null) {
-                  this.onSearch();
+                  this.onSearch!();
                 }
               }),
         ),

@@ -5,13 +5,13 @@ import 'package:flutter/widgets.dart';
 ///
 class CountdownController {
   // Called when called `pause` method
-  VoidCallback onPause;
+  VoidCallback? onPause;
 
   // Called when called `resume` method
-  VoidCallback onResume;
+  VoidCallback? onResume;
 
   // Called when restarting the timer
-  VoidCallback onRestart;
+  VoidCallback? onRestart;
 
   ///
   /// Checks if the timer is running and enables you to take actions according to that.
@@ -23,7 +23,7 @@ class CountdownController {
   ///   _controller.isCompleted ? _controller.restart() : _controller.pause();
   /// ```
   ///
-  bool isCompleted;
+  bool? isCompleted;
 
   ///
   /// Constructor
@@ -35,7 +35,7 @@ class CountdownController {
   ///
   pause() {
     if (this.onPause != null) {
-      this.onPause();
+      this.onPause!();
     }
   }
 
@@ -48,7 +48,7 @@ class CountdownController {
   ///
   resume() {
     if (this.onResume != null) {
-      this.onResume();
+      this.onResume!();
     }
   }
 
@@ -61,7 +61,7 @@ class CountdownController {
   ///
   restart() {
     if (this.onRestart != null) {
-      this.onRestart();
+      this.onRestart!();
     }
   }
 

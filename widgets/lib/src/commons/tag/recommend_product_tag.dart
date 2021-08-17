@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class RecommendProductTag extends StatelessWidget {
   final Text text;
@@ -13,7 +13,7 @@ class RecommendProductTag extends StatelessWidget {
   final Color color;
 
   const RecommendProductTag(this.text, {
-    Key key,
+    Key? key,
     this.width = 60,
     this.height = 60,
     this.color = const Color.fromRGBO(255, 214, 12, 1),
@@ -33,7 +33,7 @@ class RecommendProductTag extends StatelessWidget {
             child: Transform.rotate(
               angle: math.atan(width / height) - math.pi / 2,
               child: Padding(
-                padding: EdgeInsets.only(bottom: text.style.fontSize + 3),
+                padding: EdgeInsets.only(bottom: text.style!.fontSize! + 3),
                 child: text,
               ),
             ),

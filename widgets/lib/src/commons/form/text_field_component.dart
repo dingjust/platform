@@ -3,33 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TextFieldComponent extends StatefulWidget {
-  final Text leadingText;
+  final Text? leadingText;
   bool isRequired;
-  String prefix;
-  final String hintText;
-  final Text helperText;
+  String? prefix;
+  final String? hintText;
+  final Text? helperText;
   double leadingWidth;
-  TextEditingController controller;
+  TextEditingController? controller;
+
   //必传
-  final FocusNode focusNode;
-  final TextInputType inputType;
-  final Widget trailing;
-  ValueChanged<String> onChanged;
-  VoidCallback onEditingComplete;
+  final FocusNode? focusNode;
+  final TextInputType? inputType;
+  final Widget? trailing;
+  ValueChanged<String>? onChanged;
+  VoidCallback? onEditingComplete;
   final bool autofocus;
-  EdgeInsets padding;
-  EdgeInsets dividerPadding;
-  bool enabled;
-  TextInputAction textInputAction;
+  EdgeInsets? padding;
+  EdgeInsets? dividerPadding;
+  bool? enabled;
+  TextInputAction? textInputAction;
   TextAlign textAlign;
   bool hideDivider;
-  TextStyle style;
-  List<TextInputFormatter> inputFormatters;
-  final int maxLines;
-  final int maxLength;
+  TextStyle? style;
+  List<TextInputFormatter>? inputFormatters;
+  final int? maxLines;
+  final int? maxLength;
   bool isInputBorder;
   bool isSteppedPrice;
-  Color dividerColor;
+  Color? dividerColor;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -41,7 +42,7 @@ class TextFieldComponent extends StatefulWidget {
     this.helperText,
     this.leadingWidth = 85,
     this.controller,
-    @required this.focusNode,
+    required this.focusNode,
     this.inputType,
     this.trailing,
     this.onChanged,
@@ -85,29 +86,29 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   void initState() {
-
-    if(widget.prefix != null && widget.controller.text != ''){
-      if(!widget.controller.text.startsWith(widget.prefix)){
-        widget.controller.text = widget.prefix + widget.controller.text;
+    if (widget.prefix != null && widget.controller!.text != '') {
+      if (!widget.controller!.text.startsWith(widget.prefix!)) {
+        widget.controller!.text = widget.prefix! + widget.controller!.text;
       }
     }
 
-    widget.focusNode.addListener(() {
-      if (widget.focusNode.hasFocus) {
+    widget.focusNode!.addListener(() {
+      if (widget.focusNode!.hasFocus) {
         setState(() {
 //          widget.dividerColor == null? widget.dividerColor = Color.fromRGBO(255,214,12, 1):widget.dividerColor = widget.dividerColor;
-          if(widget.prefix != null){
+          if (widget.prefix != null) {
 //            if(widget.prefix == '￥'){
 //              widget.controller.text = formatNum(double.parse(widget.controller.text), 2);
 //            }
-            widget.controller.text = widget.controller.text.replaceFirst(widget.prefix, '');
+            widget.controller!.text =
+                widget.controller!.text.replaceFirst(widget.prefix!, '');
           }
         });
       } else {
         setState(() {
 //          widget.dividerColor = Color(Constants.DIVIDER_COLOR);
-          if(widget.prefix != null && widget.controller.text != ''){
-            widget.controller.text = widget.prefix + widget.controller.text;
+          if (widget.prefix != null && widget.controller!.text != '') {
+            widget.controller!.text = widget.prefix! + widget.controller!.text;
           }
         });
       }
@@ -132,17 +133,17 @@ class TextFieldComponentState extends State<TextFieldComponent> {
   @override
   Widget build(BuildContext context) {
 //    if(widget.textAlign == TextAlign.right){
-      widget.controller.value = TextEditingValue(
-        // 设置内容
-        text: widget.controller.text,
-        // 保持光标在最后
-        selection: TextSelection.fromPosition(
-          TextPosition(
-            affinity: TextAffinity.upstream,
-            offset: widget.controller.text.length,
-          ),
+    widget.controller!.value = TextEditingValue(
+      // 设置内容
+      text: widget.controller!.text,
+      // 保持光标在最后
+      selection: TextSelection.fromPosition(
+        TextPosition(
+          affinity: TextAffinity.upstream,
+          offset: widget.controller!.text.length,
         ),
-      );
+      ),
+    );
 //    }
 
     return Column(
@@ -159,23 +160,42 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   child: Wrap(
                     children: <Widget>[
                       widget.leadingText ?? Text(''),
-                      widget.isRequired ? Text(' *',style: TextStyle(fontSize: widget.leadingText.style?.fontSize ?? 16,color: Colors.red,)) : Text(''),
+                      widget.isRequired
+                          ? Text(' *',
+                              style: TextStyle(
+                                fontSize:
+                                    widget.leadingText!.style?.fontSize ?? 16,
+                                color: Colors.red,
+                              ))
+                          : Text(''),
                     ],
                   ),
                 ),
               ),
               Expanded(
                 child: TextField(
-                  style: widget.style ?? TextStyle(color: Colors.grey,fontSize: widget.leadingText?.style == null ? 16 : widget.leadingText.style.fontSize,),
+                  style: widget.style ??
+                      TextStyle(
+                        color: Colors.grey,
+                        fontSize: widget.leadingText?.style == null
+                            ? 16
+                            : widget.leadingText!.style!.fontSize,
+                      ),
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
-                    border: widget.isInputBorder?UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey,width: 0.5)):InputBorder.none,
-                    hintText: widget.hintText,
-                    hintStyle: TextStyle(color: Colors.grey,),
-                    contentPadding: EdgeInsets.only()
+                      border: widget.isInputBorder
+                          ? UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.5))
+                          : InputBorder.none,
+                      hintText: widget.hintText,
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                      ),
+                      contentPadding: EdgeInsets.only()
 //                      ,prefixText: '已付定金：',prefixStyle: TextStyle(color: Colors.black87,fontSize: 16)
-                  ),
+                      ),
                   autofocus: widget.autofocus,
                   focusNode: widget.focusNode,
                   onChanged: widget.onChanged,

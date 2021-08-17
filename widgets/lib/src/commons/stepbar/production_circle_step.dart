@@ -5,9 +5,9 @@ import 'package:models/models.dart';
 
 class ProductionCircleStep extends StatelessWidget {
   const ProductionCircleStep(
-      {Key key,
+      {Key? key,
       this.size = 30,
-      @required this.currentPhase,
+      required this.currentPhase,
       this.fontSize = 15,
       this.thickness = 5,
       this.fontColor = const Color.fromRGBO(50, 50, 50, 1)})
@@ -40,7 +40,7 @@ class ProductionCircleStep extends StatelessWidget {
         painter: CircleStepPainter(
             radius: size,
             thickness: thickness,
-            color: Colors.grey[300],
+            color: Colors.grey[300]!,
             startAngle: -pi / 2,
             endAngle: -pi / 2 + 2 * pi),
       ),
@@ -52,7 +52,7 @@ class ProductionCircleStep extends StatelessWidget {
           painter: CircleStepPainter(
               radius: size,
               thickness: thickness,
-              color: ProductionStepConstants[i]['color'],
+              color: ProductionStepConstants[i]['color'] as Color,
               startAngle: (i - 1.5) * 2 * pi / ProductionStepConstants.length,
               endAngle: (i - 1.5) * 2 * pi / ProductionStepConstants.length +
                   2 * pi / ProductionStepConstants.length),
@@ -63,7 +63,7 @@ class ProductionCircleStep extends StatelessWidget {
           painter: CircleStepPainter(
               radius: size,
               thickness: thickness,
-              color: ProductionStepConstants[i]['color'],
+              color: ProductionStepConstants[i]['color'] as Color,
               startAngle: (i - 1.5) * 2 * pi / ProductionStepConstants.length,
               endAngle: (i - 1.5) * 2 * pi / ProductionStepConstants.length +
                   2 * pi / ProductionStepConstants.length),
@@ -83,16 +83,20 @@ class ProductionCircleStep extends StatelessWidget {
 }
 
 class CircleStepPainter extends CustomPainter {
-  final double radius;
+  final double? radius;
   final double thickness;
   final Color color;
-  final double startAngle;
-  final double endAngle;
+  final double? startAngle;
+  final double? endAngle;
 
   final Paint activationPaint;
 
   CircleStepPainter(
-      {this.radius, this.thickness, this.color, this.startAngle, this.endAngle})
+      {this.radius,
+      required this.thickness,
+      required this.color,
+      this.startAngle,
+      this.endAngle})
       : activationPaint = Paint()
           ..color = color
           ..strokeWidth = thickness
@@ -102,8 +106,8 @@ class CircleStepPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // TODO: implement paint
-    canvas.drawArc(Rect.fromLTWH(-radius, -radius, radius * 2, radius * 2),
-        startAngle, endAngle - startAngle, false, activationPaint);
+    canvas.drawArc(Rect.fromLTWH(-radius!, -radius!, radius! * 2, radius! * 2),
+        startAngle!, endAngle! - startAngle!, false, activationPaint);
   }
 
   @override
@@ -114,7 +118,7 @@ class CircleStepPainter extends CustomPainter {
 }
 
 class CircleStepItem {
-  CircleStepItem({@required this.phase, @required this.color});
+  CircleStepItem({required this.phase, required this.color});
 
   final ProductionProgressPhase phase;
 

@@ -9,6 +9,6 @@ class SnakeBarFactory {
   // 如果弹不出请用这个
   static buildSnakeBarByKey(final GlobalKey<ScaffoldState> key, BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
-    key.currentState.showSnackBar(snackBar);
+    key.currentState!.showSnackBar(snackBar);
   }
 }

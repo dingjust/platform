@@ -28,7 +28,7 @@ class _CarouselState extends State<Carousel> {
   List<Widget> _indicators = [];
   List<CarouselItem> _items = [];
 
-  Timer _timer;
+  late Timer _timer;
   Duration _duration = Duration(seconds: 3);
   Duration _animationDuration = Duration(milliseconds: 500);
 
@@ -148,16 +148,16 @@ class _CarouselState extends State<Carousel> {
       },
       onLongPress: () {
         if (item.onTap != null) {
-          item.onTap.call();
+          item.onTap!.call();
         }
       },
       onTap: () {
         if (item.onTap != null) {
-          item.onTap.call();
+          item.onTap!.call();
         }
       },
       child: CachedNetworkImage(
-          imageUrl: item.model.url,
+          imageUrl: item.model!.url,
           fit: BoxFit.cover,
           placeholder: (context, url) => SpinKitRing(
                 color: Colors.black12,
@@ -193,7 +193,7 @@ class CarouselV2<T extends CarouselItem> extends StatefulWidget {
   final List<T> items;
   final double height;
   final Axis scrollDirection;
-  final ValueChanged<int> onChanged;
+  final ValueChanged<int>? onChanged;
 
   @override
   _CarouselV2State createState() => _CarouselV2State();
@@ -210,7 +210,7 @@ class _CarouselV2State extends State<CarouselV2> {
   List<Widget> _indicators = [];
   List<CarouselItem> _items = [];
 
-  Timer _timer;
+  late Timer _timer;
   Duration _duration = Duration(seconds: 5);
   Duration _animationDuration = Duration(milliseconds: 500);
 
@@ -316,7 +316,7 @@ class _CarouselV2State extends State<CarouselV2> {
           itemCount: _items.length,
           onPageChanged: (index) {
             _changePage(index);
-            widget?.onChanged(index);
+            widget?.onChanged!(index);
           },
         ));
   }
@@ -332,12 +332,12 @@ class _CarouselV2State extends State<CarouselV2> {
         },
         onLongPress: () {
           if (item.onTap != null) {
-            item.onTap.call();
+            item.onTap!.call();
           }
         },
         onTap: () {
           if (item.onTap != null) {
-            item.onTap.call();
+            item.onTap!.call();
           }
         },
         child: Container(
@@ -346,7 +346,7 @@ class _CarouselV2State extends State<CarouselV2> {
             //剪裁为圆角矩形
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
-                imageUrl: item.model.url,
+                imageUrl: item.model!.url,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => SpinKitRing(
                       color: Colors.black12,
@@ -377,8 +377,8 @@ class _CarouselV2State extends State<CarouselV2> {
 }
 
 class CarouselItem {
-  final MediaModel model;
-  final VoidCallback onTap;
+  final MediaModel? model;
+  final VoidCallback? onTap;
 
   CarouselItem({this.model, this.onTap});
 }

@@ -4,19 +4,19 @@ import 'package:widgets/widgets.dart';
 
 class SingleMajorCategorySelect extends StatefulWidget {
   SingleMajorCategorySelect(
-      {@required this.categories, this.categorySelect, this.onItemTap});
+      {required this.categories, this.categorySelect, this.onItemTap});
 
   final List<CategoryModel> categories;
-  CategoryModel categorySelect;
-  Function onItemTap;
+  CategoryModel? categorySelect;
+  Function? onItemTap;
 
   _SingleMajorCategorySelectState createState() =>
       _SingleMajorCategorySelectState();
 }
 
 class _SingleMajorCategorySelectState extends State<SingleMajorCategorySelect> {
-  Color _color;
-  String _selectRights;
+  Color? _color;
+  String? _selectRights;
 
   @override
   void initState() {
@@ -34,12 +34,12 @@ class _SingleMajorCategorySelectState extends State<SingleMajorCategorySelect> {
         if (_selectRights == category.code) {
           setState(() {
             _selectRights = null;
-            widget.onItemTap(null);
+            widget.onItemTap!(null);
           });
         } else {
           setState(() {
             _selectRights = category.code;
-            widget.onItemTap(category);
+            widget.onItemTap!(category);
           });
         }
       },

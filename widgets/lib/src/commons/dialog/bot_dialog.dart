@@ -4,29 +4,30 @@ import 'package:flutter/scheduler.dart';
 
 ///确认弹窗
 void showConfirmDialog(bool blockPopup,
-    {VoidCallback cancel, VoidCallback confirm, String title, String message}) {
+    {VoidCallback? cancel,
+    VoidCallback? confirm,
+    String? title,
+    String? message}) {
   BotToast.showCustomText(
     onlyOne: true,
     duration: null,
     crossPage: false,
-    wrapToastAnimation: (controller, cancel, child) =>
-        Stack(
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                cancel();
-              },
-              //The DecoratedBox here is very important,he will fill the entire parent component
-              child: AnimatedBuilder(
-                builder: (_, child) =>
-                    Opacity(
-                      opacity: controller.value,
-                      child: child,
-                    ),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: Colors.black26),
-                  child: SizedBox.expand(),
-                ),
+    wrapToastAnimation: (controller, cancel, child) => Stack(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            cancel();
+          },
+          //The DecoratedBox here is very important,he will fill the entire parent component
+          child: AnimatedBuilder(
+            builder: (_, child) => Opacity(
+              opacity: controller.value,
+              child: child,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(color: Colors.black26),
+              child: SizedBox.expand(),
+            ),
                 animation: controller,
               ),
             ),
@@ -69,10 +70,10 @@ void showConfirmDialog(bool blockPopup,
 
 ///未认证弹窗
 void showUncertifiedDialog(bool blockPopup,
-    {VoidCallback cancel,
-    VoidCallback confirm,
-    VoidCallback backgroundReturn,
-    VoidCallback physicalBackButton}) {
+    {VoidCallback? cancel,
+    VoidCallback? confirm,
+    VoidCallback? backgroundReturn,
+    VoidCallback? physicalBackButton}) {
   BotToast.showCustomText(
     clickClose: false,
     onlyOne: false,
@@ -150,8 +151,8 @@ void showUncertifiedDialog(bool blockPopup,
 
 ///资料未完善弹窗
 void showProfileCompleteDialog(bool blockPopup, {
-  VoidCallback cancel,
-  VoidCallback confirm,
+  VoidCallback? cancel,
+  VoidCallback? confirm,
 }) {
   BotToast.showCustomText(
     onlyOne: true,
@@ -220,8 +221,8 @@ void showProfileCompleteDialog(bool blockPopup, {
 
 ///定位权限弹窗
 void showLocationDialog(bool blockPopup, {
-  VoidCallback cancel,
-  VoidCallback confirm,
+  VoidCallback? cancel,
+  VoidCallback? confirm,
 }) {
   BotToast.showCustomText(
     onlyOne: true,
@@ -289,13 +290,13 @@ void showLocationDialog(bool blockPopup, {
 }
 
 class BackgroundRoute extends StatefulWidget {
-  final Widget child;
-  final bool blockPopup;
-  final CancelFunc cancelFunc;
-  final VoidCallback physicalButtonPopCallback;
+  final Widget? child;
+  final bool? blockPopup;
+  final CancelFunc? cancelFunc;
+  final VoidCallback? physicalButtonPopCallback;
 
   const BackgroundRoute(
-      {Key key,
+      {Key? key,
       this.child,
       this.blockPopup,
       this.cancelFunc,
@@ -308,11 +309,11 @@ class BackgroundRoute extends StatefulWidget {
 
 class _BackgroundRouteState extends State<BackgroundRoute> {
   bool _needPop = false;
-  NavigatorState _navigatorState;
+  late NavigatorState _navigatorState;
 
   @override
   void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       _navigatorState = Navigator.of(context);
       _navigatorState.push(PageRouteBuilder(
           opaque: false,
@@ -323,9 +324,9 @@ class _BackgroundRouteState extends State<BackgroundRoute> {
                     if (_needPop) {
                       return true;
                     }
-                    if (!widget.blockPopup) {
+                    if (!widget.blockPopup!) {
                       widget.physicalButtonPopCallback?.call();
-                      widget.cancelFunc();
+                      widget.cancelFunc!();
                     }
                     return false;
                   },
@@ -339,22 +340,22 @@ class _BackgroundRouteState extends State<BackgroundRoute> {
   void dispose() {
     super.dispose();
     _needPop = true;
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       _navigatorState.pop();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return widget.child!;
   }
 }
 
 class CustomOffsetAnimation extends StatefulWidget {
-  final AnimationController controller;
-  final Widget child;
+  final AnimationController? controller;
+  final Widget? child;
 
-  const CustomOffsetAnimation({Key key, this.controller, this.child})
+  const CustomOffsetAnimation({Key? key, this.controller, this.child})
       : super(key: key);
 
   @override
@@ -362,10 +363,10 @@ class CustomOffsetAnimation extends StatefulWidget {
 }
 
 class _CustomOffsetAnimationState extends State<CustomOffsetAnimation> {
-  Tween<Offset> tweenOffset;
-  Tween<double> tweenScale;
+  late Tween<Offset> tweenOffset;
+  late Tween<double> tweenScale;
 
-  Animation<double> animation;
+  late Animation<double> animation;
 
   @override
   void initState() {
@@ -375,7 +376,7 @@ class _CustomOffsetAnimationState extends State<CustomOffsetAnimation> {
     );
     tweenScale = Tween<double>(begin: 0.3, end: 1.0);
     animation =
-        CurvedAnimation(parent: widget.controller, curve: Curves.decelerate);
+        CurvedAnimation(parent: widget.controller!, curve: Curves.decelerate);
     super.initState();
   }
 
@@ -383,8 +384,8 @@ class _CustomOffsetAnimationState extends State<CustomOffsetAnimation> {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       child: widget.child,
-      animation: widget.controller,
-      builder: (BuildContext context, Widget child) {
+      animation: widget.controller!,
+      builder: (BuildContext context, Widget? child) {
         return FractionalTranslation(
             translation: tweenOffset.evaluate(animation),
             child: ClipRect(

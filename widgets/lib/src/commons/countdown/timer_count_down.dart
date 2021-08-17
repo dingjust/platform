@@ -15,18 +15,18 @@ class Countdown extends StatefulWidget {
   final Widget Function(BuildContext, double) build;
 
   // Called when finished
-  final Function onFinished;
+  final Function? onFinished;
 
   // Build interval
   final Duration interval;
 
   // Controller
-  final CountdownController controller;
+  final CountdownController? controller;
 
   Countdown({
-    Key key,
-    @required this.seconds,
-    @required this.build,
+    Key? key,
+    required this.seconds,
+    required this.build,
     this.interval = const Duration(seconds: 1),
     this.onFinished,
     this.controller,
@@ -44,10 +44,10 @@ class _CountdownState extends State<Countdown> {
   final int _secondsFactor = 1000000;
 
   // Timer
-  Timer _timer;
+  Timer? _timer;
 
   // Current seconds
-  int _currentMicroSeconds;
+  int? _currentMicroSeconds;
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _CountdownState extends State<Countdown> {
   Widget build(BuildContext context) {
     return widget.build(
       context,
-      _currentMicroSeconds / _secondsFactor,
+      _currentMicroSeconds! / _secondsFactor,
     );
   }
 
@@ -114,7 +114,7 @@ class _CountdownState extends State<Countdown> {
   ///
   void _startTimer() {
     if (_timer?.isActive == true) {
-      _timer.cancel();
+      _timer!.cancel();
 
       widget.controller?.isCompleted = true;
     }
@@ -127,14 +127,14 @@ class _CountdownState extends State<Countdown> {
             timer.cancel();
 
             if (widget.onFinished != null) {
-              widget.onFinished();
+              widget.onFinished!();
             }
 
             widget.controller?.isCompleted = true;
           } else {
             setState(() {
               _currentMicroSeconds =
-                  _currentMicroSeconds - widget.interval.inMicroseconds;
+                  _currentMicroSeconds! - widget.interval.inMicroseconds;
             });
           }
         },

@@ -1,19 +1,18 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 
 class RegionCitySelector extends StatefulWidget {
-  List<RegionModel> regions;
-  RegionModel regionSelect;
-  List<CityModel> citySelects;
+  List<RegionModel>? regions;
+  RegionModel? regionSelect;
+  List<CityModel>? citySelects;
   bool multiple;
 
-  RegionCitySelector({this.regions,
-    this.regionSelect,
-    this.citySelects,
-    this.multiple = true});
+  RegionCitySelector(
+      {this.regions,
+      this.regionSelect,
+      this.citySelects,
+      this.multiple = true});
 
   _RegionCitySelectorState createState() => _RegionCitySelectorState();
 }
@@ -26,7 +25,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
   void initState() {
 //    _regionModel = widget.regions.firstWhere((region) => widget.regionSelect.isocode == region.isocode,orElse: () => null);
 
-    _cityCodeSelects = widget.citySelects.map((city) => city.code).toList();
+    _cityCodeSelects = widget.citySelects!.map((city) => city.code).toList();
     // TODO: implement initState
     super.initState();
   }
@@ -48,10 +47,10 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                   InkWell(
                     onTap: () {
                       setState(() {
-                        widget.regionSelect.isocode = null;
-                        widget.regionSelect.name = null;
-                        widget.regionSelect.id = null;
-                        widget.regionSelect.cities = null;
+                        widget.regionSelect!.isocode = null;
+                        widget.regionSelect!.name = null;
+                        widget.regionSelect!.id = null;
+                        widget.regionSelect!.cities = null;
                       });
                     },
                     child: Padding(
@@ -84,21 +83,21 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                 height: 300,
                 width: MediaQuery.of(context).size.width / 2,
                 child: ListView(
-                  children: widget.regions.map((region) {
+                  children: widget.regions!.map((region) {
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          widget.regionSelect.isocode = region.isocode;
-                          widget.regionSelect.name = region.name;
-                          widget.regionSelect.id = region.id;
-                          widget.regionSelect.cities = region.cities;
+                          widget.regionSelect!.isocode = region.isocode;
+                          widget.regionSelect!.name = region.name;
+                          widget.regionSelect!.id = region.id;
+                          widget.regionSelect!.cities = region.cities;
                           _cityCodeSelects.clear();
-                          widget.citySelects.clear();
+                          widget.citySelects!.clear();
                         });
                       },
                       child: Container(
                         color: widget.regionSelect != null &&
-                                widget.regionSelect.isocode == region.isocode
+                            widget.regionSelect!.isocode == region.isocode
                             ? Colors.white
                             : Colors.grey[350],
                         height: 30,
@@ -113,26 +112,26 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                 height: 300,
                 width: MediaQuery.of(context).size.width / 2,
                 child: ListView(
-                  children: widget.regionSelect.cities?.map((city) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (_cityCodeSelects.contains(city.code)) {
-                            _cityCodeSelects.remove(city.code);
-                            widget.citySelects.removeWhere(
+                  children: widget.regionSelect!.cities?.map((city) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (_cityCodeSelects.contains(city.code)) {
+                                _cityCodeSelects.remove(city.code);
+                                widget.citySelects!.removeWhere(
                                     (city1) => city.code == city1.code);
-                          } else {
-                            if (!widget.multiple) {
-                              widget.citySelects.clear();
-                                  widget.citySelects.add(city);
-                              _cityCodeSelects.clear();
+                              } else {
+                                if (!widget.multiple) {
+                                  widget.citySelects!.clear();
+                                  widget.citySelects!.add(city);
+                                  _cityCodeSelects.clear();
                                   _cityCodeSelects.add(city.code);
-                            } else {
-                              widget.citySelects.add(city);
-                              _cityCodeSelects.add(city.code);
-                            }
-                          }
-                        });
+                                } else {
+                                  widget.citySelects!.add(city);
+                                  _cityCodeSelects.add(city.code);
+                                }
+                              }
+                            });
                       },
                       child: Container(
                         color: _cityCodeSelects.contains(city.code)

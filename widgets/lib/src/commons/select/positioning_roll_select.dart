@@ -1,13 +1,11 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:models/models.dart';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+
 class PositioningRollPage extends StatefulWidget {
-  List<Attribute> attributes;
-  String title;
+  List<Attribute>? attributes;
+  String? title;
   double childAspectRatio;
   double mainAxisSpacing;
   double crossAxisSpacing;
@@ -30,19 +28,22 @@ class PositioningRollPage extends StatefulWidget {
 class _PositioningRollPageState extends State<PositioningRollPage> {
   ScrollController _valueController = ScrollController();
   Map<String, dynamic> map = {};
-  String _keySelect;
-  List<Attribute> _attributes;
+  String? _keySelect;
+  List<Attribute>? _attributes;
 
   @override
   void initState() {
-    _attributes = widget.attributes.map((attr) => Attribute(
-      attr.code,attr.name,attr.values,valueSelects: attr.valueSelects?.map((val) => val)?.toList(),multiple: attr.multiple,offset: attr.offset
-    )).toList();
-    widget.attributes.forEach((attr) => print(attr.valueSelects));
-    if (_attributes != null && _attributes.length > 0)
-      _keySelect = _attributes[0].code;
+    _attributes = widget.attributes!
+        .map((attr) => Attribute(attr.code, attr.name, attr.values,
+            valueSelects: attr.valueSelects?.map((val) => val)?.toList(),
+            multiple: attr.multiple,
+            offset: attr.offset))
+        .toList();
+    widget.attributes!.forEach((attr) => print(attr.valueSelects));
+    if (_attributes != null && _attributes!.length > 0)
+      _keySelect = _attributes![0].code;
     double offset = 0.0;
-    _attributes.forEach((attr) {
+    _attributes!.forEach((attr) {
       int colCount = attr.values.length % widget.crossAxisCount == 0
           ? (attr.values.length / widget.crossAxisCount).toInt()
           : (attr.values.length / widget.crossAxisCount + 1).toInt();
@@ -74,7 +75,7 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
             child: IconButton(
                 icon: Text('确定'),
                 onPressed: () {
-                  _attributes.forEach((attribute) {
+                  _attributes!.forEach((attribute) {
                     map[attribute.code] = attribute.valueSelects;
                   });
                   Navigator.pop(context, map);
@@ -105,24 +106,24 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
                         return GestureDetector(
                           onTap: () {
                             setState(() {
-                              _keySelect = _attributes[index].code;
+                              _keySelect = _attributes![index].code;
                               _valueController.animateTo(
-                                  _attributes[index].offset,
+                                  _attributes![index].offset,
                                   duration: Duration(milliseconds: 500),
                                   curve: Curves.ease);
                             });
                           },
                           child: Container(
                             height: 40,
-                            color: _keySelect == _attributes[index].code
+                            color: _keySelect == _attributes![index].code
                                 ? Colors.white
                                 : Colors.grey[200],
-                            child: Center(
-                                child: Text(_attributes[index].name)),
+                            child:
+                                Center(child: Text(_attributes![index].name)),
                           ),
                         );
                       },
-                      childCount: _attributes.length,
+                      childCount: _attributes!.length,
                     ),
                   ),
                 ],
@@ -146,12 +147,15 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
   List<Widget> buildSlivers() {
     List<Widget> _slivers = [];
 
-    _attributes.forEach((item) {
+    _attributes!.forEach((item) {
       Widget sliverTitle = SliverPadding(
         padding: EdgeInsets.symmetric(vertical: 10),
         sliver: SliverToBoxAdapter(
           child: Center(
-            child: Text(item.name, style: TextStyle(color: Colors.grey),),
+            child: Text(
+              item.name,
+              style: TextStyle(color: Colors.grey),
+            ),
           ),
         ),
       );
@@ -166,20 +170,20 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
             return GestureDetector(
               onTap: !widget.enabled ? null : () {
                 setState(() {
-                  if (item.valueSelects.contains(valueItem.code)) {
-                    item.valueSelects.remove(valueItem.code);
-                  } else {
-                    if (!item.multiple) {
-                      item.valueSelects.clear();
-                    }
-                    item.valueSelects.add(valueItem.code);
-                  }
-                });
-              },
+                        if (item.valueSelects!.contains(valueItem.code)) {
+                          item.valueSelects!.remove(valueItem.code);
+                        } else {
+                          if (!item.multiple) {
+                            item.valueSelects!.clear();
+                          }
+                          item.valueSelects!.add(valueItem.code);
+                        }
+                      });
+                    },
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: item.valueSelects.contains(valueItem.code)
+                    color: item.valueSelects!.contains(valueItem.code)
                         ? Color.fromRGBO(255, 214, 12, 1)
                         : Colors.grey[250]),
                 child: Center(
@@ -202,18 +206,19 @@ class Attribute {
   String code;
   String name;
   List<EnumModel> values;
-  List<String> valueSelects;
+  List<String?>? valueSelects;
   double offset;
   bool multiple;
 
-  Attribute(this.code,
-      this.name,
-      this.values, {
-        this.valueSelects,
-        this.offset = 0.0,
-        this.multiple = false,
-      }) {
-    if(this.valueSelects == null){
+  Attribute(
+    this.code,
+    this.name,
+    this.values, {
+    this.valueSelects,
+    this.offset = 0.0,
+    this.multiple = false,
+  }) {
+    if (this.valueSelects == null) {
       this.valueSelects = [];
     }
   }

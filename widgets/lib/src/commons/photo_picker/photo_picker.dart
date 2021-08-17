@@ -24,8 +24,8 @@ class PhotoPicker extends StatefulWidget {
   final int maxNum;
 
   PhotoPicker(
-      {Key key,
-      @required this.images,
+      {Key? key,
+      required this.images,
       this.width = 350,
       this.height = 80,
       this.imageWidth = 80,

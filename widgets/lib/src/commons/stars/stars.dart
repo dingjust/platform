@@ -4,7 +4,7 @@ import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 //星级
 class Stars extends StatelessWidget {
   const Stars(
-      {Key key,
+      {Key? key,
       this.starLevel = 1,
       this.color = const Color.fromRGBO(255, 214, 12, 1),
       this.highlightOnly = true,
@@ -62,7 +62,7 @@ class StarsRating extends StatefulWidget {
   final Color color;
   final double size;
 
-  final ValueChanged<int> onChanged;
+  final ValueChanged<int>? onChanged;
 
   StarsRating(
       {this.starRate = 1,
@@ -77,7 +77,7 @@ class StarsRating extends StatefulWidget {
 
 class _StarsRatingState extends State<StarsRating> {
   void _handleTap(int value) {
-    widget.onChanged(value);
+    widget.onChanged!(value);
   }
 
   @override

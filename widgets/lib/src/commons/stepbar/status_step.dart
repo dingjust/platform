@@ -5,19 +5,25 @@ import 'package:models/models.dart';
 class StatusStep extends StatefulWidget {
   //状态数组
   final List<OrderStatusModel> list;
+
   //当前订单状态
   final String currentStatus;
+
   //是否能滚动
-  final bool isScroll;
+  final bool? isScroll;
+
   //主键宽度
-  final double width;
+  final double? width;
+
   //主键高度
-  final double height;
+  final double? height;
+
   //未完成颜色
   final Color notActiveColor;
 
   ///未完成边颜色
   final Color notActiveBorderColor;
+
   //已完成颜色
   final Color activeBorderColor;
 
@@ -31,14 +37,14 @@ class StatusStep extends StatefulWidget {
   final Color nowActiveBorderColor;
 
   StatusStep(
-      {@required this.list,
-      @required this.currentStatus,
+      {required this.list,
+      required this.currentStatus,
       this.isScroll,
       this.width,
       this.height,
       this.notActiveColor = const Color.fromRGBO(237, 237, 237, 1.0),
       this.activeColor = const Color.fromRGBO(255, 239, 221, 1.0),
-      this.nowActiveColor =const Color.fromRGBO(255,214,12, 1),
+      this.nowActiveColor = const Color.fromRGBO(255, 214, 12, 1),
       this.notActiveBorderColor = const Color.fromRGBO(180, 180, 180, 1.0),
       this.activeBorderColor = const Color.fromRGBO(255, 161, 71, 1.0),
       this.nowActiveBorderColor = Colors.deepOrange});
@@ -47,7 +53,7 @@ class StatusStep extends StatefulWidget {
 }
 
 class _StatusStepStates extends State<StatusStep> {
-  final List<Widget> _widgetList = new List();
+  final List<Widget> _widgetList = [];
 
   @override
   Widget build(BuildContext context) {

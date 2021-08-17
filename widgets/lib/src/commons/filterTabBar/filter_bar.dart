@@ -3,14 +3,14 @@ import 'package:models/models.dart';
 
 class FilterBar extends StatefulWidget implements PreferredSizeWidget {
   FilterBar({
-    Key key,
+    Key? key,
     this.itemHeight = 20,
     this.itemWidth = 100,
     this.unselectedColor = Colors.black54,
     this.color = const Color.fromRGBO(255, 214, 12, 1),
     this.action,
-    @required this.onChanged,
-    @required this.filterConditionEntries,
+    required this.onChanged,
+    required this.filterConditionEntries,
   }) : super(key: key);
 
   _FilterBarState createState() => _FilterBarState();
@@ -19,14 +19,14 @@ class FilterBar extends StatefulWidget implements PreferredSizeWidget {
   final double itemWidth;
   final Color unselectedColor;
   final Color color;
-  final List<Widget> action;
+  final List<Widget>? action;
   final List<FilterConditionEntry> filterConditionEntries;
 
   final ValueChanged<FilterConditionEntry> onChanged;
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => null;
+  Size get preferredSize => Size.zero;
 }
 
 class _FilterBarState extends State<FilterBar> {
@@ -81,7 +81,7 @@ class _FilterBarState extends State<FilterBar> {
                       .toList(),
                 )),
             Row(
-              children: widget.action,
+              children: widget.action!,
             )
           ],
         ));
@@ -91,7 +91,7 @@ class _FilterBarState extends State<FilterBar> {
 class RequirementFilterBar extends StatefulWidget
     implements PreferredSizeWidget {
   RequirementFilterBar({
-    Key key,
+    Key? key,
     this.itemHeight = 20,
     this.itemWidth = 120,
     this.unselectedColor = Colors.black54,
@@ -107,14 +107,14 @@ class RequirementFilterBar extends StatefulWidget
   final double itemWidth;
   final Color unselectedColor;
   final Color color;
-  final Widget action;
+  final Widget? action;
   double horizontalPadding;
 
-  final List<FilterEntry> entries;
+  final List<FilterEntry>? entries;
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => null;
+  Size get preferredSize => Size.zero;
 }
 
 class _RequirementFilterBarState extends State<RequirementFilterBar> {
@@ -128,14 +128,15 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                 flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: widget.entries
+                  children: widget.entries!
                       .map((entry) => GestureDetector(
-                      onTap: entry.onPressed,
-                      child: Container(
-                    color: Colors.white,
-                          padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
-                          // width: entry.label == '最新发布' ? 116 : (MediaQuery.of(context).size.width - 116)/3,
+                          onTap: entry.onPressed,
                           child: Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widget.horizontalPadding),
+                              // width: entry.label == '最新发布' ? 116 : (MediaQuery.of(context).size.width - 116)/3,
+                              child: Container(
                                 margin: EdgeInsets.symmetric(
                                     vertical: 15, horizontal: 10),
                                 child: Row(
@@ -154,7 +155,7 @@ class _RequirementFilterBarState extends State<RequirementFilterBar> {
                               ))))
                       .toList(),
                 )),
-            widget.action
+            widget.action ?? Container()
           ],
         ));
   }

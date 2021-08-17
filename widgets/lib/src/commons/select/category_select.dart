@@ -1,10 +1,11 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class CategorySelect extends StatefulWidget {
   CategorySelect({
-    @required this.categories,
+    required this.categories,
     this.multiple = true,
     this.verticalDividerOpacity = 1,
     this.categorySelect,
@@ -19,16 +20,16 @@ class CategorySelect extends StatefulWidget {
   final bool multiple;
   final double verticalDividerOpacity;
   final bool hasButton;
-  final List<CategoryModel> categorySelect;
+  final List<CategoryModel>? categorySelect;
 
   ///分类选择动作
-  final CategoryActionType categoryActionType;
+  final CategoryActionType? categoryActionType;
 
   /// 跳转到工厂列表
-  final ValueChanged<CategoryModel> onJumpToFactories;
+  final ValueChanged<CategoryModel>? onJumpToFactories;
 
   /// 跳转到产品列表
-  final ValueChanged<CategoryModel> onJumpToProducts;
+  final ValueChanged<CategoryModel>? onJumpToProducts;
 
   final int max;
 
@@ -37,34 +38,32 @@ class CategorySelect extends StatefulWidget {
 
 class CategorySelectState extends State<CategorySelect> {
   //是否多选
-  bool _multiple;
-  List<Widget> _keyItem;
+  late bool _multiple;
+  late List<Widget> _keyItem;
   List<CategoryModel> _valueItem = [];
-  String _selectLeft;
-  Color _color;
+  String? _selectLeft;
+  Color? _color;
   List<String> _selectRights = [];
 
   void _handleJumpToFactories(CategoryModel model) {
-    widget.onJumpToFactories(model);
+    widget.onJumpToFactories!(model);
   }
 
   void _handleJumpToProducts(CategoryModel model) {
-    widget.onJumpToProducts(model);
+    widget.onJumpToProducts!(model);
   }
 
   @override
   void initState() {
     _multiple = widget.multiple;
-    if (widget.categorySelect.isNotEmpty) {
-      _selectLeft = widget.categorySelect[0].parent?.code;
+    if (widget.categorySelect!.isNotEmpty) {
+      _selectLeft = widget.categorySelect![0].parent?.code;
       _selectRights =
-          widget.categorySelect.map((category) => category.code).toList();
-      if (widget.categorySelect[0].parent != null) {
+          widget.categorySelect!.map((category) => category.code).toList();
+      if (widget.categorySelect![0].parent != null) {
         _valueItem = widget.categories
-            .firstWhere(
-                (category) =>
-                    category.code == widget.categorySelect[0].parent.code,
-                orElse: () => null)
+            .firstWhereOrNull((category) =>
+                category.code == widget.categorySelect![0].parent.code)!
             .children;
       } else {
         _valueItem = widget.categories[0].children;
@@ -92,7 +91,7 @@ class CategorySelectState extends State<CategorySelect> {
             if (_selectRights.contains(category.code)) {
               setState(() {
                 _selectRights.remove(category.code);
-                widget.categorySelect.removeWhere(
+                widget.categorySelect!.removeWhere(
                     (category1) => category1.code == category.code);
                 if (!_multiple) {
                   Navigator.pop(context, widget.categorySelect);
@@ -102,12 +101,12 @@ class CategorySelectState extends State<CategorySelect> {
               if (_multiple) {
                 setState(() {
                   _selectRights.add(category.code);
-                  widget.categorySelect.add(category);
+                  widget.categorySelect!.add(category);
                 });
               } else {
                 setState(() {
-                  widget.categorySelect.clear();
-                  widget.categorySelect.add(category);
+                  widget.categorySelect!.clear();
+                  widget.categorySelect!.add(category);
                   _selectRights.clear();
                   _selectRights.add(category.code);
                   Navigator.pop(context, widget.categorySelect);
@@ -119,21 +118,21 @@ class CategorySelectState extends State<CategorySelect> {
             if (_selectRights.contains(category.code)) {
               setState(() {
                 _selectRights.remove(category.code);
-                widget.categorySelect.removeWhere(
+                widget.categorySelect!.removeWhere(
                     (category1) => category1.code == category.code);
               });
             } else {
               if (_multiple) {
                 setState(() {
-                  if (widget.categorySelect.length < widget.max) {
+                  if (widget.categorySelect!.length < widget.max) {
                     _selectRights.add(category.code);
-                    widget.categorySelect.add(category);
+                    widget.categorySelect!.add(category);
                   }
                 });
               } else {
                 setState(() {
-                  widget.categorySelect.clear();
-                  widget.categorySelect.add(category);
+                  widget.categorySelect!.clear();
+                  widget.categorySelect!.add(category);
                   _selectRights.clear();
                   _selectRights.add(category.code);
                 });
@@ -245,7 +244,7 @@ class CategorySelectState extends State<CategorySelect> {
                         childAspectRatio: 0.6,
                       ),
                       delegate: new SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
+                            (BuildContext context, int index) {
                           //创建子widget
                           return buildValueItem(_valueItem[index]);
                         },
@@ -263,7 +262,7 @@ class CategorySelectState extends State<CategorySelect> {
                             icon: Text('取消'),
                             onPressed: () {
                               setState(() {
-                                widget.categorySelect.clear();
+                                widget.categorySelect!.clear();
                                 Navigator.pop(context);
                               });
                             },

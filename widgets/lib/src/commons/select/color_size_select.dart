@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class ColorSizeSelectPage extends StatefulWidget {
-  List<ColorModel> colors;
-  List<SizeModel> sizes;
+  List<ColorModel>? colors;
+  List<SizeModel>? sizes;
   List<ColorModel> colorFilters;
   List<SizeModel> sizeFilters;
 
   ColorSizeSelectPage(
-      {@required this.colorFilters,
-      @required this.sizeFilters,
+      {required this.colorFilters,
+      required this.sizeFilters,
       this.colors,
       this.sizes});
 
@@ -55,15 +55,15 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<ColorModel> _colors;
+    List<ColorModel>? _colors;
 
-    if(_isOpen){
+    if (_isOpen) {
       _colors = widget.colors;
-    }else{
-      _colors = widget.colors.sublist(0,25);
+    } else {
+      _colors = widget.colors!.sublist(0, 25);
     }
 
-    List<Widget> colorFilterChips = _colors.map((ColorModel color) {
+    List<Widget> colorFilterChips = _colors!.map((ColorModel color) {
       return Container(
         child: ChoiceChip(
           avatar: _colorCodes.contains(color.code)
@@ -71,10 +71,10 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
                   Icons.done,
                   size: 18,
                   color: isLightColor(
-                          int.parse(
-                            '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}',
-                          ),
-                        )
+                    int.parse(
+                      '0xFF${color.colorCode == null ? '000000' : color.colorCode.substring(1)}',
+                    ),
+                  )
                       ? Colors.black
                       : Colors.white,
                 )
@@ -115,7 +115,7 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
       );
     }).toList();
 
-    List<Widget> sizeFilterChips = widget.sizes.map((SizeModel size) {
+    List<Widget> sizeFilterChips = widget.sizes!.map((SizeModel size) {
       return FilterChip(
         labelPadding:
             _sizeCodes.contains(size.code) ? EdgeInsets.only(right: 10) : null,
