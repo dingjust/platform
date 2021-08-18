@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -31,16 +30,15 @@ class OutProductionTaskOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        // height: 120,
-        margin: const EdgeInsets.fromLTRB(5, 10, 5, 0),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        margin: const EdgeInsets.only(top: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[_header(), _main(), _foot()],
+          children: <Widget>[_header(), _date(), _main()],
         ),
         decoration: BoxDecoration(
             color: isSelected ? Constants.THEME_COLOR_MAIN : Colors.white,
-            borderRadius: BorderRadius.circular(10)),
+            borderRadius: BorderRadius.circular(12)),
       ),
       onTap: () async {
         if (isSelectList) {
@@ -58,14 +56,10 @@ class OutProductionTaskOrderItem extends StatelessWidget {
     );
   }
 
-  Widget _foot() {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text('订单数量：${model.quantity}'),
-      Text('交货时间：${DateFormatUtil.formatYMD(model.deliveryDate)}')
-    ]);
-  }
-
-  Widget _main({double height = 83.0}) {
+  Widget _main(
+      {double height = 86.0,
+      TextStyle textStyle =
+          const TextStyle(color: Color(0xff666666), fontSize: 13)}) {
     return Row(
       children: [
         Hero(
@@ -76,38 +70,47 @@ class OutProductionTaskOrderItem extends StatelessWidget {
         Expanded(
             child: Container(
           height: height,
-          padding: EdgeInsets.symmetric(horizontal: 5),
+          padding: EdgeInsets.only(left: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 model.product.name,
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF222222)),
                 overflow: TextOverflow.ellipsis,
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  '货号：${model.product.skuID}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                margin: EdgeInsets.symmetric(vertical: 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '货号：${model.product.skuID}',
+                      style: textStyle,
+                    ),
+                    Text(
+                      '品类：${model.product.category?.name}',
+                      style: textStyle,
+                    )
+                  ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 243, 243, 1),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  '品类：${model.product.category?.name}',
-                  style: TextStyle(
-                      fontSize: 15, color: Color.fromRGBO(255, 133, 148, 1)),
-                ),
-              )
-            ],
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '订单数：${model.quantity}',
+                          style: textStyle,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
           ),
         ))
       ],
@@ -118,17 +121,14 @@ class OutProductionTaskOrderItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Expanded(
-            flex: 2,
-            child: Text(
-              '单号：${model.code}',
-              textAlign: TextAlign.start,
-              style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500),
-            )),
-        // _buildTag(),
+        Text(
+          '${model.code}',
+          textAlign: TextAlign.start,
+          style: const TextStyle(
+              fontSize: 13,
+              color: Color(0xff222222),
+              fontWeight: FontWeight.w500),
+        ),
         Expanded(
             flex: 1,
             child: Container(
@@ -138,9 +138,9 @@ class OutProductionTaskOrderItem extends StatelessWidget {
                   '${ProductionTaskOrderStateLocalizedMap[model.state]}',
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                      fontSize: 18,
-                      color: getProductionTaskOrderStateColor(model.state),
-                      fontWeight: FontWeight.w500),
+                      fontSize: 13,
+                      color: Color(0xFF222222),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ))
@@ -148,35 +148,18 @@ class OutProductionTaskOrderItem extends StatelessWidget {
     );
   }
 
-  Widget _buildTag() {
-    print(model.outOrder);
-    //自创外接订单无originCompany
-    return model.outboundOrderCode == null
-        ? Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Color.fromRGBO(68, 138, 255, 1))),
-            child: Center(
+  Widget _date() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 14),
+      child: Row(
+        children: [
+          Expanded(
               child: Text(
-                '未外发',
-                style: TextStyle(
-                    color: Color.fromRGBO(68, 138, 255, 1), fontSize: 10),
-              ),
-            ),
-          )
-        : Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(color: Constants.THEME_COLOR_MAIN)),
-            child: Center(
-              child: Text(
-                '已外发',
-                style:
-                    TextStyle(color: Constants.THEME_COLOR_MAIN, fontSize: 10),
-              ),
-            ),
-          );
+                '交货日期：${DateFormatUtil.formatYMD(model.deliveryDate)}',
+                style: TextStyle(color: Color(0xffFF4D4F), fontSize: 13),
+              ))
+        ],
+      ),
+    );
   }
 }
