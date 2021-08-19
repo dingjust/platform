@@ -61,7 +61,7 @@ export default {
     },
     handleClick(tab, event) {
       this.queryFormData.state = tab.name;
-      this.onAdvancedSearch();
+      this.onAdvancedSearch(0, this.page.size);
     }
   },
   data () {

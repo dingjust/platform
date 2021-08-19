@@ -1,7 +1,8 @@
 <template>
   <div class="pend-out-view-list">
-    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id">
-      <el-table-column label="订单号" min-width="300px" fixed="left">
+    <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id" lazy
+      :load="load" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+      <el-table-column label="订单号" min-width="350px" fixed="left">
         <template slot-scope="scope">
           <el-row type="flex" justify="start" align="middle">
             <span style="margin-right:5px">{{scope.row.code}}</span>
@@ -105,14 +106,29 @@ export default {
         return index != -1;
       }
       return false;
+    },
+    async load (row, treeNode, resolve) {
+      const url = this.apis().getOutboundOrderByOutCode(row.code)
+      const result = await this.$http.get(url, {}, true);
+
+      resolve((result && result.data) ? result.data : [])
+    }
+  },
+  watch: {
+    'page': function (nval, oval) {
+      if (nval.content.length > 0) {
+        this.page.content.forEach(item => {
+          this.$set(item, 'hasChildren', true)
+        })
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-  .pend-out-view-list >>> .el-table th>.cell .el-checkbox {
-    display: none;
+  .pend-out-view-list >>> .el-table .cell {
+    display: flex;
   }
 
   .warning-icon {

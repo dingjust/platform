@@ -27,8 +27,7 @@ import { createNamespacedHelpers } from 'vuex';
 
 const {
   mapGetters,
-  mapActions,
-  mapMutations
+  mapActions
 } = createNamespacedHelpers(
   'ReconciliationOrdersV2Module'
 );
@@ -145,7 +144,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
