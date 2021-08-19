@@ -67,48 +67,40 @@ const FastReconciliationSignStateLocalizedMap = {
 /// 物流单
 @JsonSerializable()
 class LogisticsSheetModel {
-  int id;
+  int? id;
 
-  String code;
+  String? code;
 
   ///发货方
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel shipParty;
+  CompanyModel? shipParty;
 
   ///收货方
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel receiveParty;
+  CompanyModel? receiveParty;
 
   ///收货地址
-  @JsonKey(toJson: AddressModel.toJson)
-  AddressModel deliveryAddress;
+  AddressModel? deliveryAddress;
 
   ///跟单员
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel merchandiser;
+  B2BCustomerModel? merchandiser;
 
   ///负责人
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel productionLeader;
+  B2BCustomerModel? productionLeader;
 
   ///创建者
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel creator;
+  B2BCustomerModel? creator;
 
   ///单据
-  @JsonKey(toJson: mediasToJson)
-  List<MediaModel> medias;
+  List<MediaModel>? medias;
 
   ///
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel targetCooperator;
+  CooperatorModel? targetCooperator;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///创建时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime creationtime;
+  DateTime? creationtime;
 
   //TODO:LogisticsSheet 部分字段省略
 
@@ -127,43 +119,40 @@ class LogisticsSheetModel {
       this.creationtime});
 
   factory LogisticsSheetModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$LogisticsSheetModelFromJson(json);
+      _$LogisticsSheetModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LogisticsSheetModelToJson(this);
 
-  static List<Map<String, dynamic>> mediasToJson(List<MediaModel> medias) =>
-      medias == null
-          ? null
-          : medias.map((media) => MediaModel.toJson(media)).toList();
+  static List<Map<String, dynamic>?>? mediasToJson(List<MediaModel> medias) =>
+      medias == null ? null : medias.map((media) => media.toJson()).toList();
 }
 
 /// 快速发货单
 @JsonSerializable()
 class FastShippingSheetModel extends LogisticsSheetModel {
   ///标题
-  String title;
+  String? title;
 
   ///状态
-  LogisticsSheetState state;
+  LogisticsSheetState? state;
 
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel cooperator;
+  CooperatorModel? cooperator;
 
   ///对账单
-  FastReconciliationSheetModel fastReconciliationSheet;
+  FastReconciliationSheetModel? fastReconciliationSheet;
 
   FastShippingSheetModel(
-      {int id,
-      String code,
-      CompanyModel shipParty,
-      CompanyModel receiveParty,
-      AddressModel deliveryAddress,
-      B2BCustomerModel merchandiser,
-      B2BCustomerModel productionLeader,
-      B2BCustomerModel creator,
-      List<MediaModel> medias,
-      CooperatorModel targetCooperator,
-      DateTime creationtime,
+      {int? id,
+      String? code,
+      CompanyModel? shipParty,
+      CompanyModel? receiveParty,
+      AddressModel? deliveryAddress,
+      B2BCustomerModel? merchandiser,
+      B2BCustomerModel? productionLeader,
+      B2BCustomerModel? creator,
+      List<MediaModel>? medias,
+      CooperatorModel? targetCooperator,
+      DateTime? creationtime,
       this.title,
       this.state,
       this.cooperator,
@@ -182,85 +171,76 @@ class FastShippingSheetModel extends LogisticsSheetModel {
             creationtime: creationtime);
 
   factory FastShippingSheetModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$FastShippingSheetModelFromJson(json);
+      _$FastShippingSheetModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$FastShippingSheetModelToJson(this);
 
-  static List<Map<String, dynamic>> listToJson(
+  static List<Map<String, dynamic>?>? listToJson(
           List<FastShippingSheetModel> models) =>
-      models == null ? null : models.map((model) => model.toJson()).toList();
+      models?.map((model) => model.toJson())?.toList();
 }
 
 /// 快速对账单
 @JsonSerializable()
 class FastReconciliationSheetModel extends LogisticsSheetModel {
-  String title;
+  String? title;
 
   ///状态
-  FastReconciliationSheetState state;
+  FastReconciliationSheetState? state;
 
   ///发货单
-  @JsonKey(toJson: FastShippingSheetModel.listToJson)
-  List<FastShippingSheetModel> fastShippingSheets;
+  List<FastShippingSheetModel>? fastShippingSheets;
 
   ///是否审批
-  bool isApproval;
+  bool? isApproval;
 
   ///审批人
-  @JsonKey(toJson: B2BCustomerModel.listToJson)
-  List<B2BCustomerModel> approvers;
+  List<B2BCustomerModel>? approvers;
 
   ///审批单
-  @JsonKey(toJson: AuditWorkOrderModel.toJson)
-  AuditWorkOrderModel auditWorkOrder;
+  AuditWorkOrderModel? auditWorkOrder;
 
   ///对账数量
-  int reconciliationQuantity;
+  int? reconciliationQuantity;
 
   ///对账单行
-  @JsonKey(toJson: FastReconciliationSheetEntryModel.listToJson)
-  List<FastReconciliationSheetEntryModel> entries;
+  List<FastReconciliationSheetEntryModel>? entries;
 
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel cooperator;
+  CooperatorModel? cooperator;
 
   ///签署文档
-  @JsonKey(toJson: DocSignatureModel.listToJson)
-  List<DocSignatureModel> docSignatures;
+  List<DocSignatureModel>? docSignatures;
 
   ///自定义行
-  List<String> colNames;
+  List<String>? colNames;
 
   ///附加项
-  @JsonKey(toJson: ReconciliationAdditionalModel.listToJson)
-  List<ReconciliationAdditionalModel> additionalCharges;
+  List<ReconciliationAdditionalModel>? additionalCharges;
 
-  @JsonKey(toJson: _salesProductionOrderToSjon)
-  SalesProductionOrderModel salesProductionOrder;
+  SalesProductionOrderModel? salesProductionOrder;
 
   ///纸质对账单
-  @JsonKey(toJson: MediaModel.listToJson)
-  List<MediaModel> paperSheetMedias;
+  List<MediaModel>? paperSheetMedias;
 
   ///签署状态
-  FastReconciliationSignState signState;
+  FastReconciliationSignState? signState;
 
   ///创建方
-  AgreementRoleType belongRoleType;
+  AgreementRoleType? belongRoleType;
 
   FastReconciliationSheetModel(
-      {int id,
-      String code,
-      CompanyModel shipParty,
-      CompanyModel receiveParty,
-      AddressModel deliveryAddress,
-      B2BCustomerModel merchandiser,
-      B2BCustomerModel productionLeader,
-      B2BCustomerModel creator,
-      List<MediaModel> medias,
-      CooperatorModel targetCooperator,
-      DateTime creationtime,
-      String remarks,
+      {int? id,
+      String? code,
+      CompanyModel? shipParty,
+      CompanyModel? receiveParty,
+      AddressModel? deliveryAddress,
+      B2BCustomerModel? merchandiser,
+      B2BCustomerModel? productionLeader,
+      B2BCustomerModel? creator,
+      List<MediaModel>? medias,
+      CooperatorModel? targetCooperator,
+      DateTime? creationtime,
+      String? remarks,
       this.title,
       this.state,
       this.entries,
@@ -292,167 +272,166 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
             creationtime: creationtime);
 
   factory FastReconciliationSheetModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$FastReconciliationSheetModelFromJson(json);
+      _$FastReconciliationSheetModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$FastReconciliationSheetModelToJson(this);
 
-  static List<Map<String, dynamic>> mediasToJson(
+  static List<Map<String, dynamic>?>? mediasToJson(
           List<FastReconciliationSheetModel> medias) =>
-      medias == null ? null : medias.map((media) => media.toJson()).toList();
+      medias?.map((media) => media.toJson())?.toList();
 
-  static Map<String, dynamic> _salesProductionOrderToSjon(
+  static Map<String, dynamic>? _salesProductionOrderToSjon(
           SalesProductionOrderModel order) =>
-      order == null ? null : {'id': order.id, 'code': order.code};
+      {'id': order.id, 'code': order.code};
 }
 
 /// 快速对账单行
 @JsonSerializable()
 class FastReconciliationSheetEntryModel extends ItemModel {
-  String code;
+  String? code;
 
-  @JsonKey(toJson: ProductModel.toJson)
-  ProductModel product;
+  ProductModel? product;
 
   ///波段
-  String waveBand;
+  String? waveBand;
 
   ///订单款号
-  String orderItemNo;
+  String? orderItemNo;
 
   ///定作方式
-  String customizedMode;
+  String? customizedMode;
 
   ///交货时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime deliveryDate;
+  DateTime? deliveryDate;
 
   ///合同时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime contractDate;
+  DateTime? contractDate;
 
   ///订单数
-  int orderQuantity;
+  int? orderQuantity;
 
   ///裁数
-  int cutQuantity;
+  int? cutQuantity;
 
   ///装箱数
-  int packageQuantity;
+  int? packageQuantity;
 
   ///正品入库数
-  int storageQuantity;
+  int? storageQuantity;
 
   ///退货数
-  int returnQuantity;
+  int? returnQuantity;
 
   ///合同单价（不含税）
-  double unitContractPrice;
+  double? unitContractPrice;
 
   ///贷款金额
-  double loanAmount;
+  double? loanAmount;
 
   ///快递费
-  double expressFee;
+  double? expressFee;
 
   ///扣款
-  double deductionAmount;
+  double? deductionAmount;
 
   ///增款
-  double increaseAmount;
+  double? increaseAmount;
 
   ///结算金额
-  double settlementAmount;
+  double? settlementAmount;
 
   ///自定义列
-  @JsonKey(toJson: ReconciliationCustomColumnModel.listToJson)
-  List<ReconciliationCustomColumnModel> customColumns;
+  List<ReconciliationCustomColumnModel>? customColumns;
 
-  FastReconciliationSheetEntryModel({this.code,
-    this.waveBand,
-    this.orderItemNo,
-    this.customizedMode,
-    this.deliveryDate,
-    this.contractDate,
-    this.orderQuantity,
-    this.cutQuantity,
-    this.packageQuantity,
-    this.storageQuantity,
-    this.returnQuantity,
-    this.unitContractPrice,
-    this.loanAmount,
-    this.expressFee,
-    this.deductionAmount,
-    this.increaseAmount,
-    this.settlementAmount,
-    this.customColumns,
-    this.product});
+  FastReconciliationSheetEntryModel(
+      {this.code,
+      this.waveBand,
+      this.orderItemNo,
+      this.customizedMode,
+      this.deliveryDate,
+      this.contractDate,
+      this.orderQuantity,
+      this.cutQuantity,
+      this.packageQuantity,
+      this.storageQuantity,
+      this.returnQuantity,
+      this.unitContractPrice,
+      this.loanAmount,
+      this.expressFee,
+      this.deductionAmount,
+      this.increaseAmount,
+      this.settlementAmount,
+      this.customColumns,
+      this.product});
 
   factory FastReconciliationSheetEntryModel.fromJson(
-      Map<String, dynamic> json) =>
-      json == null ? null : _$FastReconciliationSheetEntryModelFromJson(json);
+          Map<String, dynamic> json) =>
+      _$FastReconciliationSheetEntryModelFromJson(json);
 
   Map<String, dynamic> toJson() =>
       _$FastReconciliationSheetEntryModelToJson(this);
 
-  static List<Map<String, dynamic>> listToJson(
-      List<FastReconciliationSheetEntryModel> models) =>
-      models == null ? null : models.map((model) => model.toJson()).toList();
+  static List<Map<String, dynamic>?>? listToJson(
+          List<FastReconciliationSheetEntryModel> models) =>
+      models?.map((model) => model.toJson())?.toList();
 }
 
 /// 快速对账单自定义列
 @JsonSerializable()
 class ReconciliationCustomColumnModel extends ItemModel {
-  String name;
+  String? name;
 
-  String value;
+  String? value;
 
   ///创建时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime creationtime;
+  DateTime? creationtime;
 
   ///修改时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime modifiedtime;
+  DateTime? modifiedtime;
 
   ReconciliationCustomColumnModel({this.name, this.value});
 
   factory ReconciliationCustomColumnModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ReconciliationCustomColumnModelFromJson(json);
+      _$ReconciliationCustomColumnModelFromJson(json);
 
   Map<String, dynamic> toJson() =>
       _$ReconciliationCustomColumnModelToJson(this);
 
   static List<Map<String, dynamic>> listToJson(
-      List<ReconciliationCustomColumnModel> models) =>
-      models == null ? null : models.map((model) => model.toJson()).toList();
+          List<ReconciliationCustomColumnModel> models) =>
+      models.map((model) => model.toJson()).toList();
 }
 
 /// 快速对账单附加项
 @JsonSerializable()
 class ReconciliationAdditionalModel extends ItemModel {
-  String remarks;
+  String? remarks;
 
-  double amount;
+  double? amount;
 
   ///创建时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime creationtime;
+  DateTime? creationtime;
 
   ///修改时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime modifiedtime;
+  DateTime? modifiedtime;
 
   ///是否固定项
-  bool isDefault;
+  bool? isDefault;
 
   ReconciliationAdditionalModel({this.remarks, this.amount, this.isDefault});
 
   factory ReconciliationAdditionalModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ReconciliationAdditionalModelFromJson(json);
+      _$ReconciliationAdditionalModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReconciliationAdditionalModelToJson(this);
 
-  static List<Map<String, dynamic>> listToJson(
-      List<ReconciliationAdditionalModel> models) =>
-      models == null ? null : models.map((model) => model.toJson()).toList();
+  static List<Map<String, dynamic>?>? listToJson(
+          List<ReconciliationAdditionalModel> models) =>
+      models.map((model) => model.toJson()).toList();
 }

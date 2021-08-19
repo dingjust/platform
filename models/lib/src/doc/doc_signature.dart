@@ -6,67 +6,60 @@ part 'doc_signature.g.dart';
 ///签署文档类
 @JsonSerializable()
 class DocSignatureModel {
-  int id;
+  int? id;
 
-  String code;
+  String? code;
 
   ///来源订单号
-  String originCode;
+  String? originCode;
 
   ///标题
-  String title;
+  String? title;
 
-  String thirdPartyDocId;
+  String? thirdPartyDocId;
 
-  String content;
+  String? content;
 
-  String partyALabel;
+  String? partyALabel;
 
-  String partyBLabel;
+  String? partyBLabel;
 
   ///签署状态
-  DocSignatureState state;
+  DocSignatureState? state;
 
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel partyA;
+  CompanyModel? partyA;
 
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel partyB;
+  CompanyModel? partyB;
 
   ///模板类型
-  DocTemplateType docType;
+  DocTemplateType? docType;
 
   ///签署类型
-  SignMethodType signMethod;
+  SignMethodType? signMethod;
 
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel partyASignBy;
+  B2BCustomerModel? partyASignBy;
 
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel partyBSignBy;
+  B2BCustomerModel? partyBSignBy;
 
-  String extraContent;
+  String? extraContent;
 
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime partyASignTime;
+  DateTime? partyASignTime;
 
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime partyBSignTime;
+  DateTime? partyBSignTime;
 
-  String partyATransactionId;
+  String? partyATransactionId;
 
-  String partyBTransactionId;
+  String? partyBTransactionId;
 
-  @JsonKey(toJson: MediaModel.toJson)
-  MediaModel docPdf;
+  MediaModel? docPdf;
 
-  @JsonKey(toJson: MediaModel.listToJson)
-  List<MediaModel> attachments;
+  List<MediaModel>? attachments;
 
-  @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime completeTime;
+  DateTime? completeTime;
 
-  String requireSignParty;
+  String? requireSignParty;
 
   DocSignatureModel({
     this.id,
@@ -96,16 +89,13 @@ class DocSignatureModel {
   });
 
   factory DocSignatureModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$DocSignatureModelFromJson(json);
+      _$DocSignatureModelFromJson(json);
 
-  static Map<String, dynamic> toJson(DocSignatureModel model) =>
-      model == null ? null : _$DocSignatureModelToJson(model);
+  Map<String, dynamic> toJson() => _$DocSignatureModelToJson(this);
 
-  static List<Map<String, dynamic>> listToJson(
+  static List<Map<String, dynamic>?>? listToJson(
           List<DocSignatureModel> models) =>
-      models == null
-          ? null
-          : models.map((e) => _$DocSignatureModelToJson(e)).toList();
+      models?.map((e) => e.toJson())?.toList();
 }
 
 ///  签署状态

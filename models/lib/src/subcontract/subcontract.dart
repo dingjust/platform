@@ -7,35 +7,33 @@ part 'subcontract.g.dart';
 @JsonSerializable()
 class SubContractModel extends ItemModel {
   /// 订单号
-  String code;
+  String? code;
 
   /// 创建时间
-  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
-  DateTime creationTime;
+  @JsonKey(name: "creationtime", fromJson: dateTimefromMilliseconds)
+  DateTime? creationTime;
 
   /// 修改时间
-  @JsonKey(name: "modifiedtime", fromJson: _dateTimefromMilliseconds)
-  DateTime modifiedTime;
+  @JsonKey(name: "modifiedtime", fromJson: dateTimefromMilliseconds)
+  DateTime? modifiedTime;
 
   //创建人
-  UserModel user;
+  UserModel? user;
 
   /// 备注
-  String remarks;
+  String? remarks;
 
   /// 取消状态
-  bool canneled;
+  bool? canneled;
 
   /// 发布者
-  @JsonKey(toJson: _companyToJson)
-  CompanyModel belongTo;
+  CompanyModel? belongTo;
 
   ///转包信息
-  @JsonKey(toJson: infoToJson)
-  SubContractInfoModel details;
+  SubContractInfoModel? details;
 
   ///需求距离
-  double distance;
+  double? distance;
 
   SubContractModel({
     this.belongTo,
@@ -50,79 +48,59 @@ class SubContractModel extends ItemModel {
   }) : super();
 
   factory SubContractModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$SubContractModelFromJson(json);
+      _$SubContractModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SubContractModel model) =>
-      model == null ? null : _$SubContractModelToJson(model);
-
-  static Map<String, dynamic> infoToJson(SubContractInfoModel detail) =>
-      detail == null ? null : SubContractInfoModel.toJson(detail);
-
-  static List<Map<String, dynamic>> _mediasToJson(
-      List<MediaModel> attachments) =>
-      attachments == null
-          ? null
-          : attachments.map((media) => MediaModel.toJson(media)).toList();
-
-  static Map<String, dynamic> _companyToJson(CompanyModel belongTo) =>
-      belongTo == null ? null : CompanyModel.toJson(belongTo);
-
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
+  Map<String, dynamic> toJson() => _$SubContractModelToJson(this);
 }
 
 ///转包信息
 @JsonSerializable()
 class SubContractInfoModel extends ItemModel {
   //类型
-  String type;
+  String? type;
 
   /// 期望交货时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
-  DateTime expectedDeliveryDate;
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime? expectedDeliveryDate;
 
   ///预计订单数量
-  int subContractQuantity;
+  int? subContractQuantity;
 
   /// 期望价格
-  double maxExpectedPrice;
+  double? maxExpectedPrice;
 
   /// 加工类型
-  String machiningType;
+  String? machiningType;
 
   /// 是否开具发票
-  bool invoiceNeeded;
+  bool? invoiceNeeded;
 
   ///图片
-  @JsonKey(toJson: _mediaToJson)
-  List<MediaModel> pictures;
+  List<MediaModel>? pictures;
 
   ///标题
-  String title;
+  String? title;
 
   ///大类
-  @JsonKey(toJson: _categoryToJson)
-  CategoryModel majorCategory;
+  CategoryModel? majorCategory;
 
   ///小类
-  @JsonKey(toJson: _categoryToJson)
-  CategoryModel category;
+  CategoryModel? category;
 
   ///联系人
-  String contactPerson;
+  String? contactPerson;
 
   ///联系电话
-  String contactPhone;
+  String? contactPhone;
 
   ///生产地区
-  @JsonKey(toJson: _regionsToJson)
-  List<RegionModel> productiveOrientations;
+  List<RegionModel>? productiveOrientations;
 
   //质量等级
-  List<String> salesMarket;
+  List<String>? salesMarket;
 
   //有效期限
-  int effectiveDays;
+  int? effectiveDays;
 
   SubContractInfoModel({
     this.type,
@@ -142,34 +120,10 @@ class SubContractInfoModel extends ItemModel {
   });
 
   factory SubContractInfoModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$SubContractInfoModelFromJson(json);
+      _$SubContractInfoModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SubContractInfoModel model) =>
-      model == null ? null : _$SubContractInfoModelToJson(model);
+  Map<String, dynamic> toJson() => _$SubContractInfoModelToJson(this);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
-
-  static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
-      model == null ? null : CategoryModel.toJson(model);
-
-  static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => MediaModel.toJson(model)).toList();
-
-  static List<Map<String, dynamic>> _regionsToJson(List<RegionModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => RegionModel.toJson(model)).toList();
-
-//  static MachiningType _machiningTypeFromJson(String machiningType) {
-//    if (machiningType == '') {
-//      return null;
-//    } else {
-//      return _$enumDecodeNullable(_$MachiningTypeEnumMap, machiningType);
-//    }
-//  }
-
-  String majorCategoryName() => majorCategory != null ? majorCategory.name : '';
+  String? majorCategoryName() =>
+      majorCategory != null ? majorCategory?.name : '';
 }

@@ -4,14 +4,14 @@ part 'wechat.g.dart';
 
 @JsonSerializable()
 class WechatPrepayModel {
-  String appId;
-  String partnerId;
-  String prepayId;
-  String packageValue;
-  String nonceStr;
-  int timeStamp;
-  String sign;
-  String signType;
+  String? appId;
+  String? partnerId;
+  String? prepayId;
+  String? packageValue;
+  String? nonceStr;
+  int? timeStamp;
+  String? sign;
+  String? signType;
 
   WechatPrepayModel(
       {this.appId,
@@ -24,8 +24,7 @@ class WechatPrepayModel {
       this.signType});
 
   factory WechatPrepayModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$WechatPrepayModelFromJson(json);
+      _$WechatPrepayModelFromJson(json);
 
-  static Map<String, dynamic> toJson(WechatPrepayModel model) =>
-      model == null ? null : _$WechatPrepayModelToJson(model);
+  Map<String, dynamic> toJson() => _$WechatPrepayModelToJson(this);
 }

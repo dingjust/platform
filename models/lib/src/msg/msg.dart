@@ -4,19 +4,18 @@ part 'msg.g.dart';
 
 @JsonSerializable()
 class BaseMsg {
-  int code;
+  int? code;
 
-  String msg;
+  String? msg;
 
-  int resultCode;
+  int? resultCode;
 
-  dynamic data;
+  dynamic? data;
 
-  BaseMsg({this.code, this.msg, this.resultCode,this.data});
+  BaseMsg({this.code, this.msg, this.resultCode, this.data});
 
   factory BaseMsg.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$BaseMsgFromJson(json);
+      _$BaseMsgFromJson(json);
 
-  static Map<String, dynamic> toJson(BaseMsg model) =>
-      model == null ? null : _$BaseMsgToJson(model);
+  Map<String, dynamic> toJson() => _$BaseMsgToJson(this);
 }

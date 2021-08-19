@@ -8,32 +8,29 @@ part 'outbound_order.g.dart';
 @JsonSerializable()
 class OutboundOrderEntryModel extends ItemModel {
   ///生产工单
-  ProductionWorkOrderModel productionWorkOrder;
+  ProductionWorkOrderModel? productionWorkOrder;
 
   ///产品
-  @JsonKey(toJson: productToJson)
-  ProductModel product;
+  ProductModel? product;
 
   ///订单颜色尺码行
-  @JsonKey(toJson: colorSizeEntriesToJson)
-  List<ColorSizeEntryModel> colorSizeEntries;
+  List<ColorSizeEntryModel>? colorSizeEntries;
 
   ///发单价格
-  double billPrice;
+  double? billPrice;
 
   ///交货日期
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime expectedDeliveryDate;
+  DateTime? expectedDeliveryDate;
 
   ///收货地址
-  @JsonKey(toJson: addressToJson)
-  AddressModel shippingAddress;
+  AddressModel? shippingAddress;
 
   ///总数量
-  int totalQuantity;
+  int? totalQuantity;
 
   ///总价
-  double totalPrice;
+  double? totalPrice;
 
   OutboundOrderEntryModel({
     this.productionWorkOrder,
@@ -47,23 +44,7 @@ class OutboundOrderEntryModel extends ItemModel {
   });
 
   factory OutboundOrderEntryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$OutboundOrderEntryModelFromJson(json);
+      _$OutboundOrderEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OutboundOrderEntryModel model) =>
-      model == null ? null : _$OutboundOrderEntryModelToJson(model);
-
-  static Map<String, dynamic> productToJson(ProductModel model) =>
-      model == null ? null : ProductModel.toJson(model);
-
-  static Map<String, dynamic> addressToJson(AddressModel model) =>
-      model == null ? null : AddressModel.toJson(model);
-
-  static List<Map<String, dynamic>> colorSizeEntriesToJson(
-          List<ColorSizeEntryModel> models) =>
-      models == null
-          ? null
-          : models.map((e) => ColorSizeEntryModel.toJson(e)).toList();
-
-  static DateTime dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
+  Map<String, dynamic> toJson() => _$OutboundOrderEntryModelToJson(this);
 }

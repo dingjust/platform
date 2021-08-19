@@ -5,82 +5,61 @@ part 'plate_products.g.dart';
 
 @JsonSerializable()
 class PlateProducts extends ItemModel {
-  String title;
+  String? title;
 
-  String subTitle;
+  String? subTitle;
 
-  SeeProductPlateType type;
+  SeeProductPlateType? type;
 
-  @JsonKey(toJson: _plateProductToJson)
-  List<PlateProductModel> sequenceProducts;
+  List<PlateProductModel>? sequenceProducts;
 
   PlateProducts({this.title, this.subTitle, this.type, this.sequenceProducts});
 
   factory PlateProducts.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$PlateProductsFromJson(json);
+      _$PlateProductsFromJson(json);
 
-  static Map<String, dynamic> toJson(PlateProducts model) =>
-      model == null ? null : _$PlateProductsToJson(model);
-
-  static List<Map<String, dynamic>> _plateProductToJson(
-          List<PlateProductModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => PlateProductModel.toJson(model)).toList();
+  Map<String, dynamic> toJson() => _$PlateProductsToJson(this);
 }
 
 @JsonSerializable()
 class PlateProductModel extends ItemModel {
   ///序号
-  int sequence;
+  int? sequence;
 
-  @JsonKey(toJson: _productToJson)
-  ApparelProductModel product;
+  ApparelProductModel? product;
 
   PlateProductModel({this.sequence, this.product});
 
   factory PlateProductModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$PlateProductModelFromJson(json);
+      _$PlateProductModelFromJson(json);
 
-  static Map<String, dynamic> toJson(PlateProductModel model) =>
-      model == null ? null : _$PlateProductModelToJson(model);
-
-  static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
-      model == null ? null : ApparelProductModel.toJson(model);
+  Map<String, dynamic> toJson() => _$PlateProductModelToJson(this);
 }
 
 @JsonSerializable()
 class PlateItem extends ItemModel {
-  String title;
+  String? title;
 
-  String subTitle;
+  String? subTitle;
 
-  SeeProductPlateType type;
+  SeeProductPlateType? type;
 
-  @JsonKey(toJson: _mediaToJson)
-  MediaModel picture;
+  MediaModel? picture;
 
   /// 创建时间
-  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
-  DateTime creationTime;
+  @JsonKey(name: "creationtime", fromJson: dateTimefromMilliseconds)
+  DateTime? creationTime;
 
   /// 修改时间
-  @JsonKey(name: "modifiedtime", fromJson: _dateTimefromMilliseconds)
-  DateTime modifiedTime;
+  @JsonKey(name: "modifiedtime", fromJson: dateTimefromMilliseconds)
+  DateTime? modifiedTime;
 
   PlateItem({this.title, this.subTitle, this.type, this.picture});
 
   factory PlateItem.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$PlateItemFromJson(json);
+      _$PlateItemFromJson(json);
 
-  static Map<String, dynamic> toJson(PlateItem model) =>
-      model == null ? null : _$PlateItemToJson(model);
-
-  static Map<String, dynamic> _mediaToJson(MediaModel model) =>
-      model == null ? null : MediaModel.toJson(model);
-
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
+  Map<String, dynamic> toJson() => _$PlateItemToJson(this);
 }
 
 ///看款板块类型

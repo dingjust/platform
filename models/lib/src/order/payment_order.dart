@@ -7,26 +7,25 @@ part 'payment_order.g.dart';
 @JsonSerializable()
 class PaymentOrderModel extends ItemModel {
   /// 当前账期
-  PayMoneyType moneyType;
+  PayMoneyType? moneyType;
 
   /// 付款金额
-  double amount;
+  double? amount;
 
   ///付款类型
-  PaymentType paymentType;
+  PaymentType? paymentType;
 
   ///支付凭证
-  MediaModel payCertificate;
+  MediaModel? payCertificate;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///剩余支付金额
-  double remainPaymentAmount;
+  double? remainPaymentAmount;
 
   ///所属账务方案子项
-  @JsonKey(toJson: _orderPayPlanItemToJson)
-  OrderPayPlanItemModel orderPayPlanItem;
+  OrderPayPlanItemModel? orderPayPlanItem;
 
   PaymentOrderModel(
       {this.moneyType,
@@ -37,42 +36,34 @@ class PaymentOrderModel extends ItemModel {
       this.remainPaymentAmount});
 
   factory PaymentOrderModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$PaymentOrderModelFromJson(json);
+      _$PaymentOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(PaymentOrderModel model) =>
-      model == null ? null : _$PaymentOrderModelToJson(model);
-
-  static Map<String, dynamic> _orderPayPlanItemToJson(
-          OrderPayPlanItemModel orderPayPlanItem) =>
-      orderPayPlanItem == null
-          ? null
-          : OrderPayPlanItemModel.toJson(orderPayPlanItem);
+  Map<String, dynamic> toJson() => _$PaymentOrderModelToJson(this);
 }
 
 /// 收款单
 @JsonSerializable()
 class ReceiptOrderModel extends ItemModel {
   /// 当前账期
-  PayMoneyType moneyType;
+  PayMoneyType? moneyType;
 
   /// 付款金额
-  double amount;
+  double? amount;
 
   ///付款类型
-  PaymentType paymentType;
+  PaymentType? paymentType;
 
   ///支付凭证
-  MediaModel payCertificate;
+  MediaModel? payCertificate;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///剩余支付金额
-  double remainPaymentAmount;
+  double? remainPaymentAmount;
 
   ///所属账务方案子项
-  @JsonKey(toJson: _orderPayPlanItemToJson)
-  OrderPayPlanItemModel orderPayPlanItem;
+  OrderPayPlanItemModel? orderPayPlanItem;
 
   ReceiptOrderModel(
       {this.moneyType,
@@ -83,32 +74,25 @@ class ReceiptOrderModel extends ItemModel {
       this.remainPaymentAmount});
 
   factory ReceiptOrderModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ReceiptOrderModelFromJson(json);
+      _$ReceiptOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ReceiptOrderModel model) =>
-      model == null ? null : _$ReceiptOrderModelToJson(model);
-
-  static Map<String, dynamic> _orderPayPlanItemToJson(
-          OrderPayPlanItemModel orderPayPlanItem) =>
-      orderPayPlanItem == null
-          ? null
-          : OrderPayPlanItemModel.toJson(orderPayPlanItem);
+  Map<String, dynamic> toJson() => _$ReceiptOrderModelToJson(this);
 }
 
 /// 支付账号
 @JsonSerializable()
 class OrderPaymentAccountData extends ItemModel {
   /// 用户名
-  String name;
+  String? name;
 
   /// 服务提供方
-  String serviceProvider;
+  String? serviceProvider;
 
   ///号码
-  String no;
+  String? no;
 
   ///类型
-  OrderPaymentAccountType type;
+  OrderPaymentAccountType? type;
 
   OrderPaymentAccountData({
     this.name,
@@ -118,7 +102,7 @@ class OrderPaymentAccountData extends ItemModel {
   });
 
   factory OrderPaymentAccountData.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$OrderPaymentAccountDataFromJson(json);
+      _$OrderPaymentAccountDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderPaymentAccountDataToJson(this);
 }
@@ -127,55 +111,53 @@ class OrderPaymentAccountData extends ItemModel {
 @JsonSerializable()
 class CmtPayOrderData extends ItemModel {
   /// 单号
-  String code;
+  String? code;
 
   /// 来源单号
-  String originCode;
+  String? originCode;
 
   ///支付批次
-  int batch;
+  int? batch;
 
   ///支付金额
-  double payAmount;
+  double? payAmount;
 
   ///支付方式
-  PaymentMethod payType;
+  PaymentMethod? payType;
 
   ///订单类型
-  String orderType;
+  String? orderType;
 
   ///备注
-  String remark;
+  String? remark;
 
   ///外部订单号
-  String outOrderNo;
+  String? outOrderNo;
 
   ///支付成功时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime paySuccessTime;
+  DateTime? paySuccessTime;
 
   ///支付状态
-  CmtPaymentState state;
+  CmtPaymentState? state;
 
   ///支持信用卡支付
-  bool supportCreditCard;
+  bool? supportCreditCard;
 
   ///归属公司
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel belongTo;
+  CompanyModel? belongTo;
 
   ///是否分账
-  bool profitSharing;
+  bool? profitSharing;
 
   ///支付用户
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel payUser;
+  B2BCustomerModel? payUser;
 
   ///内部回调已完成
-  bool systemTriggerFinished;
+  bool? systemTriggerFinished;
 
   ///事务
-  CmtPayTransactionData transactions;
+  CmtPayTransactionData? transactions;
 
   CmtPayOrderData({
     this.code,
@@ -197,7 +179,7 @@ class CmtPayOrderData extends ItemModel {
   });
 
   factory CmtPayOrderData.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CmtPayOrderDataFromJson(json);
+      _$CmtPayOrderDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$CmtPayOrderDataToJson(this);
 
@@ -212,31 +194,30 @@ class CmtPayOrderData extends ItemModel {
 @JsonSerializable()
 class CmtPayTransactionData extends ItemModel {
   /// 支付方式
-  CmtPaymentState payType;
+  CmtPaymentState? payType;
 
   /// 细分支付方式
-  CmtPaymentState subPayType;
+  CmtPaymentState? subPayType;
 
   ///支付用户
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel payUser;
+  B2BCustomerModel? payUser;
 
   ///支付签名
-  String outOrderNo;
+  String? outOrderNo;
 
   ///已支付
-  bool paid;
+  bool? paid;
 
   ///支付成功时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime paySuccessTime;
+  DateTime? paySuccessTime;
 
   ///初次回掉时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime firstCallbackTime;
+  DateTime? firstCallbackTime;
 
   ///重复支付
-  bool repeatPayment;
+  bool? repeatPayment;
 
   CmtPayTransactionData({
     this.payType,
@@ -250,7 +231,7 @@ class CmtPayTransactionData extends ItemModel {
   });
 
   factory CmtPayTransactionData.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CmtPayTransactionDataFromJson(json);
+      _$CmtPayTransactionDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$CmtPayTransactionDataToJson(this);
 }

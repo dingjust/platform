@@ -37,18 +37,15 @@ class AuditWorkOrderModel extends ItemModel {
   DateTime? revokeTime;
 
   ///撤回用户
-  @JsonKey(toJson: B2BCustomerModel.toJson)
   B2BCustomerModel? revokeUser;
 
   ///审核对象
   dynamic? auditModel;
 
   ///提交用户
-  @JsonKey(toJson: B2BCustomerModel.toJson)
   B2BCustomerModel? submitUser;
 
   ///所属公司
-  @JsonKey(toJson: CompanyModel.toJson)
   CompanyModel? belongTo;
 
   AuditWorkOrderModel({
@@ -70,11 +67,7 @@ class AuditWorkOrderModel extends ItemModel {
   factory AuditWorkOrderModel.fromJson(Map<String, dynamic> json) =>
       _$AuditWorkOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AuditWorkOrderModel model) =>
-      _$AuditWorkOrderModelToJson(model);
-
-  static Map<String, dynamic> companyToJson(CompanyModel model) =>
-      CompanyModel.toJson(model);
+  Map<String, dynamic> toJson() => _$AuditWorkOrderModelToJson(this);
 }
 
 ///审核状态

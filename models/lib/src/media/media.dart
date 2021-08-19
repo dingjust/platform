@@ -8,29 +8,25 @@ part 'media.g.dart';
 class MediaModel extends ItemModel {
   /// id
 
-  int id;
+  int? id;
 
   /// 文件名
-  String name;
+  String? name;
 
   /// URL地址
-  String url;
+  String? url;
 
   /// 文件类型
-  String mediaType;
+  String? mediaType;
 
   /// mime
-  String mime;
+  String? mime;
 
   /// mediaFormat
-  String mediaFormat;
+  String? mediaFormat;
 
   /// 多格式图片组
-  @JsonKey(
-    toJson: convertedMediasToJson,
-    // fromJson: _fromConvertedMedias
-  )
-  List<MediaModel> convertedMedias;
+  List<MediaModel>? convertedMedias;
 
   MediaModel(
       {this.id,
@@ -42,16 +38,15 @@ class MediaModel extends ItemModel {
       this.convertedMedias});
 
   factory MediaModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$MediaModelFromJson(json);
+      _$MediaModelFromJson(json);
 
-  static Map<String, dynamic> toJson(MediaModel model) =>
-      model == null ? null : _$MediaModelToJson(model);
+  Map<String, dynamic> toJson() => _$MediaModelToJson(this);
 
-  static List<Map<String, dynamic>> listToJson(List<MediaModel> models) =>
-      models == null ? null : models.map((e) => _$MediaModelToJson(e)).toList();
+  static List<Map<String, dynamic>?>? listToJson(List<MediaModel> models) =>
+      models?.map((e) => e.toJson())?.toList();
 
   static List<String> convertedMediasToJson(List<MediaModel> convertedMedias) =>
-      null;
+      [];
 
   static void populatorMedia(MediaModel source, MediaModel target) {
     source.name = target.name;
@@ -76,9 +71,9 @@ class MediaModel extends ItemModel {
   String get actualUrl => '${GlobalConfigs.MEDIA_CONTEXT_PATH}${url}';
 
   ///workingUrl
-  String workingUrl() {
-    MediaModel mediaModel = getFormatMedia(
-        MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_WORKING_FORMAT]);
+  String? workingUrl() {
+    MediaModel? mediaModel = getFormatMedia(
+        MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_WORKING_FORMAT] ?? );
 
     if (mediaModel != null) {
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
@@ -89,8 +84,8 @@ class MediaModel extends ItemModel {
 
   ///预览图
   String previewUrl() {
-    MediaModel mediaModel =
-        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
+    MediaModel? mediaModel =
+        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW] ?? );
 
     if (mediaModel != null) {
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
@@ -101,8 +96,8 @@ class MediaModel extends ItemModel {
 
   ///主图
   String thumbnailUrl() {
-    MediaModel mediaModel =
-        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_THUMBNAIL]);
+    MediaModel? mediaModel = getFormatMedia(
+        MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_THUMBNAIL] ?? );
 
     if (mediaModel != null) {
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
@@ -113,8 +108,8 @@ class MediaModel extends ItemModel {
 
   ///详情图
   String detailUrl() {
-    MediaModel mediaModel =
-        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_DETAIL]);
+    MediaModel? mediaModel =
+        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_DETAIL] ?? );
 
     if (mediaModel != null) {
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
@@ -125,7 +120,8 @@ class MediaModel extends ItemModel {
 
   ///常规图
   String normalUrl() {
-    MediaModel mediaModel = getFormatMedia(MediaFormatMap[MediaFormat.NORMAL]);
+    MediaModel? mediaModel =
+        getFormatMedia(MediaFormatMap[MediaFormat.NORMAL] ?? );
     if (mediaModel != null) {
       return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
     } else {
@@ -135,8 +131,8 @@ class MediaModel extends ItemModel {
 
   ///分享图
   String shareUrl() {
-    MediaModel mediaModel =
-        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
+    MediaModel? mediaModel =
+        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW] ?? );
 
     if (mediaModel != null) {
       return '${GlobalConfigs.CONTEXT_PATH}${mediaModel.url}';
@@ -145,12 +141,12 @@ class MediaModel extends ItemModel {
     }
   }
 
-  MediaModel getFormatMedia(String mediaFormat) {
-    MediaModel result;
-    if (convertedMedias == null || convertedMedias.isEmpty) {
+  MediaModel? getFormatMedia(String mediaFormat) {
+    MediaModel? result;
+    if (convertedMedias == null || convertedMedias?.length == 0) {
       return null;
     } else {
-      convertedMedias.forEach((media) {
+      convertedMedias?.forEach((media) {
         if (media.mediaFormat == mediaFormat) {
           result = media;
         }
@@ -169,7 +165,6 @@ class MediaModel extends ItemModel {
 enum MediaFormat {
   /// 默认
   DEFAULT_IMAGE_FORMAT,
-
   DEFAULT_PRODUCT_WORKING_FORMAT,
 
   ///详情
@@ -180,7 +175,6 @@ enum MediaFormat {
 
   ///缩略图
   DEFAULT_PRODUCT_PREVIEW,
-
   NORMAL
 }
 

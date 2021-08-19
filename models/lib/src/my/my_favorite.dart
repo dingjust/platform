@@ -6,22 +6,22 @@ part 'my_favorite.g.dart';
 
 @JsonSerializable()
 class MyFavoriteModel extends ItemModel {
-  int id;
+  int? id;
 
   /// 创建时间
   @JsonKey(name: "creationtime", fromJson: dateTimefromMilliseconds)
-  DateTime creationTime;
+  DateTime? creationTime;
 
   /// 修改时间
   @JsonKey(name: "modifiedtime", fromJson: dateTimefromMilliseconds)
-  DateTime modifiedTime;
+  DateTime? modifiedTime;
 
   /// 类型
-  String typeCode;
+  String? typeCode;
 
-  bool deleted;
+  bool? deleted;
 
-  Map<String, dynamic> item;
+  Map<String, dynamic>? item;
 
   MyFavoriteModel(
       {this.id,
@@ -31,8 +31,7 @@ class MyFavoriteModel extends ItemModel {
       this.item});
 
   factory MyFavoriteModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$MyFavoriteModelFromJson(json);
+      _$MyFavoriteModelFromJson(json);
 
-  static Map<String, dynamic> toJson(MyFavoriteModel model) =>
-      model == null ? null : _$MyFavoriteModelToJson(model);
+  Map<String, dynamic> toJson() => _$MyFavoriteModelToJson(this);
 }

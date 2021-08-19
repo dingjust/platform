@@ -8,82 +8,71 @@ part 'progress_work_sheet_order.g.dart';
 @JsonSerializable()
 class ProgressWorkSheetModel extends ItemModel {
   ///编号
-  String code;
+  String? code;
 
   ///状态
-  ProgressWorkSheetStatus status;
+  ProgressWorkSheetStatus? status;
 
   ///生产进度
-  @JsonKey(toJson: productionProgressToJson)
-  List<ProductionProgressModel> progresses;
+  List<ProductionProgressModel>? progresses;
 
   ///生产工单
-  ProductionWorkOrderModel productionWorkOrder;
+  ProductionWorkOrderModel? productionWorkOrder;
 
   ///
-  ProductionTaskOrderModel productionTaskOrder;
+  ProductionTaskOrderModel? productionTaskOrder;
 
   ///当前阶段
-  @JsonKey(toJson: _progressPhaseToJson)
-  ProgressPhaseModel currentPhase;
+  ProgressPhaseModel? currentPhase;
 
   ///所属
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel belongTo;
+  CompanyModel? belongTo;
 
   ///甲方
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel partyACompany;
+  CompanyModel? partyACompany;
 
   ///乙方
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel partyBCompany;
+  CompanyModel? partyBCompany;
 
   ///创建者
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel creator;
+  B2BCustomerModel? creator;
 
-  String skuID;
+  String? skuID;
 
   ///加工类型
-  CooperationModes machiningType;
+  CooperationModes? machiningType;
 
   ///优先级
-  int priorityLevel;
+  int? priorityLevel;
 
   ///交货日期
-  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
-  DateTime expectedDeliveryDate;
+  @JsonKey(fromJson: dateTimefromMilliseconds, toJson: dateTimetoMilliseconds)
+  DateTime? expectedDeliveryDate;
 
   ///工单负责人
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel personInCharge;
+  B2BCustomerModel? personInCharge;
 
   ///工单跟单员
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel merchandiser;
+  B2BCustomerModel? merchandiser;
 
-  ProductionTaskOrderState orderStatus;
+  ProductionTaskOrderState? orderStatus;
 
   ///订单颜色尺码行
-  @JsonKey(toJson: colorSizeEntriesToJson)
-  List<ColorSizeEntryV2Model> colorSizeEntries;
+  List<ColorSizeEntryV2Model>? colorSizeEntries;
 
   ///产品
-  @JsonKey(toJson: ProductModel.toJson)
-  ProductModel product;
+  ProductModel? product;
 
-  String orderCode;
+  String? orderCode;
 
-  int orderId;
+  int? orderId;
 
   ///合作商
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel cooperator;
+  CooperatorModel? cooperator;
 
   ///创建时间
-  @JsonKey(fromJson: dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
-  DateTime creationtime;
+  @JsonKey(fromJson: dateTimefromMilliseconds, toJson: dateTimetoMilliseconds)
+  DateTime? creationtime;
 
   ProgressWorkSheetModel({
     this.code,
@@ -111,28 +100,9 @@ class ProgressWorkSheetModel extends ItemModel {
   });
 
   factory ProgressWorkSheetModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProgressWorkSheetModelFromJson(json);
+      _$ProgressWorkSheetModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProgressWorkSheetModel model) =>
-      model == null ? null : _$ProgressWorkSheetModelToJson(model);
-
-  static List<Map<String, dynamic>> productionProgressToJson(
-          List<ProductionProgressModel> progresses) =>
-      progresses == null
-          ? null
-          : progresses.map((e) => ProductionProgressModel.toJson(e)).toList();
-
-  static List<Map<String, dynamic>> colorSizeEntriesToJson(
-          List<ColorSizeEntryV2Model> models) =>
-      models == null
-          ? null
-          : models.map((e) => e.toJson()).toList();
-
-  static Map<String, dynamic> _progressPhaseToJson(ProgressPhaseModel model) =>
-      model == null ? null : model.toJson();
-
-  static int _dateTimetoMilliseconds(DateTime date) =>
-      date == null ? null : date.millisecondsSinceEpoch;
+  Map<String, dynamic> toJson() => _$ProgressWorkSheetModelToJson(this);
 }
 
 ///进度工单状态

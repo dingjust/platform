@@ -7,43 +7,42 @@ part 'dto.g.dart';
 @JsonSerializable()
 class CompanyRegisterDTO {
   /// 手机号码
-  String mobileNumber;
+  String? mobileNumber;
 
   ///密码
-  String password;
+  String? password;
 
   ///名称
-  String name;
+  String? name;
 
   ///联系人
-  String contactPerson;
+  String? contactPerson;
 
   ///联系电话
-  String contactPhone;
+  String? contactPhone;
 
-  double longitude;
+  double? longitude;
 
-  double latitude;
+  double? latitude;
 
-  String locationAddress;
+  String? locationAddress;
 
-  String captchaCode;
+  String? captchaCode;
 
   ///地址
-  @JsonKey(toJson: _addressToJson)
-  AddressModel contactAddress;
+  AddressModel? contactAddress;
 
   ///微信openId
-  String wxOpenid;
+  String? wxOpenid;
 
   ///钉钉openId
-  String ddOpenid;
+  String? ddOpenid;
 
   ///Apple
-  String appleOpenid;
+  String? appleOpenid;
 
   ///渠道码
-  String channelCode;
+  String? channelCode;
 
   CompanyRegisterDTO(
       {this.mobileNumber,
@@ -61,19 +60,15 @@ class CompanyRegisterDTO {
       this.appleOpenid,
       this.channelCode});
 
-  static Map<String, dynamic> _addressToJson(AddressModel contactAddress) =>
-      contactAddress == null
-          ? null
-          : {
-              "region": {"isocode": contactAddress.region.isocode},
-              "city": {"code": contactAddress.city.code},
-              "cityDistrict": {"code": contactAddress.cityDistrict.code},
-              "line1": contactAddress.line1
-            };
+  Map<String, dynamic> _addressToJson(AddressModel contactAddress) => {
+        "region": {"isocode": contactAddress.region?.isocode},
+        "city": {"code": contactAddress.city?.code},
+        "cityDistrict": {"code": contactAddress.cityDistrict?.code},
+        "line1": contactAddress.line1
+      };
 
   factory CompanyRegisterDTO.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CompanyRegisterDTOFromJson(json);
+      _$CompanyRegisterDTOFromJson(json);
 
-  static Map<String, dynamic> toJson(CompanyRegisterDTO model) =>
-      model == null ? null : _$CompanyRegisterDTOToJson(model);
+  Map<String, dynamic> toJson() => _$CompanyRegisterDTOToJson(this);
 }

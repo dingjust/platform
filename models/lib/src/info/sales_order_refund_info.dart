@@ -6,31 +6,24 @@ part 'sales_order_refund_info.g.dart';
 ///销售订单退款信息
 @JsonSerializable()
 class SalesOrderRefundInfoModel extends ItemModel {
-  String code;
+  String? code;
 
   ///退款类
-  SalesOrderRefundType refundType;
+  SalesOrderRefundType? refundType;
 
   ///退款原因
-  String applyReason;
+  String? applyReason;
 
   ///凭证
-  @JsonKey(toJson: _mediasToJson)
-  List<MediaModel> applyImages;
+  List<MediaModel>? applyImages;
 
   SalesOrderRefundInfoModel(
       {this.code, this.refundType, this.applyReason, this.applyImages});
 
   factory SalesOrderRefundInfoModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$SalesOrderRefundInfoModelFromJson(json);
+      _$SalesOrderRefundInfoModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SalesOrderRefundInfoModel model) =>
-      model == null ? null : _$SalesOrderRefundInfoModelToJson(model);
-
-  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> medias) =>
-      medias == null
-          ? null
-          : medias.map((media) => MediaModel.toJson(media)).toList();
+  Map<String, dynamic> toJson() => _$SalesOrderRefundInfoModelToJson(this);
 }
 
 /// 销售订单退款类型
@@ -51,32 +44,29 @@ const SalesOrderRefundTypeLocalizedMap = {
 ///销售订单退款详情
 @JsonSerializable()
 class SalesOrderRefundDetailModel extends ItemModel {
-  String code;
+  String? code;
 
   ///退款类
-  SalesOrderRefundType refundType;
+  SalesOrderRefundType? refundType;
 
   ///退款原因
-  String applyReason;
+  String? applyReason;
 
   ///凭证
-  @JsonKey(toJson: _mediasToJson)
-  List<MediaModel> applyImages;
+  List<MediaModel>? applyImages;
 
-  SalesOrderRefundStatus status;
+  SalesOrderRefundStatus? status;
 
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
-  DateTime sellerProgressTime;
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime? sellerProgressTime;
 
-  @JsonKey(toJson: _companyToJson)
-  CompanyModel seller;
+  CompanyModel? seller;
 
-  @JsonKey(toJson: _companyToJson)
-  CompanyModel buyer;
+  CompanyModel? buyer;
 
-  double refundAmount;
+  double? refundAmount;
 
-  String auditMsg;
+  String? auditMsg;
 
   SalesOrderRefundDetailModel(
       {this.code,
@@ -91,21 +81,9 @@ class SalesOrderRefundDetailModel extends ItemModel {
       this.auditMsg});
 
   factory SalesOrderRefundDetailModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$SalesOrderRefundDetailModelFromJson(json);
+      _$SalesOrderRefundDetailModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SalesOrderRefundDetailModel model) =>
-      model == null ? null : _$SalesOrderRefundDetailModelToJson(model);
-
-  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> medias) =>
-      medias == null
-          ? null
-          : medias.map((media) => MediaModel.toJson(media)).toList();
-
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
-
-  static Map<String, dynamic> _companyToJson(CompanyModel belongTo) =>
-      belongTo == null ? null : CompanyModel.toJson(belongTo);
+  Map<String, dynamic> toJson() => _$SalesOrderRefundDetailModelToJson(this);
 }
 
 /// 销售订单退款状态
@@ -141,23 +119,18 @@ const SalesOrderRefundStatusLocalizedMap = {
 
 @JsonSerializable()
 class SalesOrderRefundResponse {
-  int code;
+  int? code;
 
-  String msg;
+  String? msg;
 
-  int resultCode;
+  int? resultCode;
 
-  @JsonKey(toJson: _dataToJson)
-  SalesOrderRefundDetailModel data;
+  SalesOrderRefundDetailModel? data;
 
   SalesOrderRefundResponse({this.code, this.msg, this.resultCode, this.data});
 
   factory SalesOrderRefundResponse.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$SalesOrderRefundResponseFromJson(json);
+      _$SalesOrderRefundResponseFromJson(json);
 
-  static Map<String, dynamic> toJson(SalesOrderRefundResponse model) =>
-      model == null ? null : _$SalesOrderRefundResponseToJson(model);
-
-  static Map<String, dynamic> _dataToJson(SalesOrderRefundDetailModel data) =>
-      data == null ? null : SalesOrderRefundDetailModel.toJson(data);
+  Map<String, dynamic> toJson() => _$SalesOrderRefundResponseToJson(this);
 }

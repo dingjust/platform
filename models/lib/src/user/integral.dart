@@ -82,55 +82,52 @@ const ActivityStateLocalizedMap = {
 @JsonSerializable()
 class IntegralHistoryModel {
   /// 分数
-  int points;
+  int? points;
 
   /// 总积分
-  int updatedTotalPoints;
+  int? updatedTotalPoints;
 
   ///日期
   @JsonKey(name: "updateTime", fromJson: dateTimefromMilliseconds)
-  DateTime updateTime;
+  DateTime? updateTime;
 
   ///事件
-  ActivityEvent event;
+  ActivityEvent? event;
 
   IntegralHistoryModel({this.points, this.updatedTotalPoints, this.updateTime});
 
   factory IntegralHistoryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$IntegralHistoryModelFromJson(json);
+      _$IntegralHistoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(IntegralHistoryModel model) =>
-      model == null ? null : _$IntegralHistoryModelToJson(model);
+  Map<String, dynamic> toJson() => _$IntegralHistoryModelToJson(this);
 }
 
 /// 积分兑换记录
 @JsonSerializable()
 class IntegralExchangeHistoryModel {
-  int id;
+  int? id;
 
   ///编号
-  String code;
+  String? code;
 
   ///积分
-  int points;
+  int? points;
 
   ///兑换数
-  double exchangeAmount;
+  double? exchangeAmount;
 
   /// 状态
-  PointsExchangeState state;
+  PointsExchangeState? state;
 
   /// 申请用户
-  @JsonKey(toJson: UserModel.toJson)
-  UserModel applyUser;
+  UserModel? applyUser;
 
   /// 兑换用户
-  @JsonKey(toJson: UserModel.toJson)
-  UserModel exchangeUser;
+  UserModel? exchangeUser;
 
   ///日期
   @JsonKey(name: "updateTime", fromJson: dateTimefromMilliseconds)
-  DateTime updateTime;
+  DateTime? updateTime;
 
   IntegralExchangeHistoryModel(
       {this.id,
@@ -143,8 +140,7 @@ class IntegralExchangeHistoryModel {
       this.state});
 
   factory IntegralExchangeHistoryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$IntegralExchangeHistoryModelFromJson(json);
+      _$IntegralExchangeHistoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(IntegralExchangeHistoryModel model) =>
-      model == null ? null : _$IntegralExchangeHistoryModelToJson(model);
+  Map<String, dynamic> toJson() => _$IntegralExchangeHistoryModelToJson(this);
 }

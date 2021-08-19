@@ -1,6 +1,6 @@
 import 'dart:core';
 
-DateTime dateTimefromMilliseconds(dynamic date) {
+DateTime? dateTimefromMilliseconds(dynamic date) {
   if (date != null) {
     if (date is int) {
       return DateTime.fromMillisecondsSinceEpoch(date);
@@ -10,4 +10,5 @@ DateTime dateTimefromMilliseconds(dynamic date) {
   }
   return null;
 }
-// date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
+
+int dateTimetoMilliseconds(DateTime? date) => date?.millisecondsSinceEpoch ?? 0;

@@ -9,34 +9,33 @@ part 'member.g.dart';
 /// 会员
 @JsonSerializable()
 class MembershipModel extends ItemModel {
-  CustomerModel customer;
-  CompanyModel company;
-  MemberRating level;
+  CustomerModel? customer;
+  CompanyModel? company;
+  MemberRating? level;
 
-  MembershipModel({@required this.customer,
-    @required this.company,
-    this.level = MemberRating.C});
+  MembershipModel(
+      {@required this.customer,
+      @required this.company,
+      this.level = MemberRating.C});
 
   factory MembershipModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$MembershipModelFromJson(json);
+      _$MembershipModelFromJson(json);
 
-  static Map<String, dynamic> toJson(MembershipModel model) =>
-      model == null ? null : _$MembershipModelToJson(model);
+  Map<String, dynamic> toJson() => _$MembershipModelToJson(this);
 }
 
 /// 会员请求
 @JsonSerializable()
 class MemberRequestModel extends ItemModel {
-  CustomerModel customer;
-  CompanyModel company;
+  CustomerModel? customer;
+  CompanyModel? company;
 
   MemberRequestModel({@required this.customer, @required this.company});
 
   factory MemberRequestModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$MemberRequestModelFromJson(json);
+      _$MemberRequestModelFromJson(json);
 
-  static Map<String, dynamic> toJson(MemberRequestModel model) =>
-      model == null ? null : _$MemberRequestModelToJson(model);
+  Map<String, dynamic> toJson() => _$MemberRequestModelToJson(this);
 }
 
 /// 会员等级

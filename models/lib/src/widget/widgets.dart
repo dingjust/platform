@@ -10,49 +10,49 @@ class FilterConditionEntry {
       this.remindNum,
       this.checked = false,
       this.isDESC = true,
-        this.type = FilterConditionEntryType.VALUE});
+      this.type = FilterConditionEntryType.VALUE});
 
   ///Tab标签
-  final String label;
+  final String? label;
 
   ///Tab筛选值
-  final dynamic value;
+  final dynamic? value;
 
   ///选中状态
-  bool checked;
+  bool? checked;
 
   ///是否降序
-  bool isDESC;
+  bool? isDESC;
 
   ///是否有数字提醒
-  bool onRemind;
+  bool? onRemind;
 
   ///数字提醒;
-  int remindNum;
+  int? remindNum;
 
   ///类型
-  final FilterConditionEntryType type;
+  final FilterConditionEntryType? type;
 }
 
 @JsonSerializable()
 class EarnestMoney {
   //定金
-  String earnestMoney;
+  String? earnestMoney;
 
   //尾款
-  String tailMoney;
+  String? tailMoney;
 
   //是否已付定金
-  bool isEarnestPayment = false;
+  bool? isEarnestPayment = false;
 
   //交付定金日期
-  DateTime estimatePaymentDate;
+  DateTime? estimatePaymentDate;
 
   //是否已付尾款
-  bool isTailPayment = false;
+  bool? isTailPayment = false;
 
   //交付尾款日期
-  DateTime tailPaymentDate;
+  DateTime? tailPaymentDate;
 
   EarnestMoney(
       {this.earnestMoney,
@@ -63,10 +63,9 @@ class EarnestMoney {
       this.estimatePaymentDate});
 
   factory EarnestMoney.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$EarnestMoneyFromJson(json);
+      _$EarnestMoneyFromJson(json);
 
-  static Map<String, dynamic> toJson(EarnestMoney model) =>
-      model == null ? null : _$EarnestMoneyToJson(model);
+  Map<String, dynamic> toJson() => _$EarnestMoneyToJson(this);
 }
 
 ///筛选条件实体类型

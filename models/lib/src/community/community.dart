@@ -6,8 +6,8 @@ part 'community.g.dart';
 
 @JsonSerializable()
 class ForumCategoryModel extends ItemModel {
-  String code;
-  String name;
+  String? code;
+  String? name;
 
   ForumCategoryModel({
     this.code,
@@ -15,20 +15,20 @@ class ForumCategoryModel extends ItemModel {
   });
 
   factory ForumCategoryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ForumCategoryModelFromJson(json);
+      _$ForumCategoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ForumCategoryModel model) =>
-      model == null ? null : _$ForumCategoryModelToJson(model);
+  Map<String, dynamic> toJson() => _$ForumCategoryModelToJson(this);
 }
 
 @JsonSerializable()
 class ForumPostModel extends ItemModel {
-  String title;
-  String content;
-  ForumCategoryModel category;
-  UserModel createdBy;
-  String createdDate;
-  String status;
+  String? title;
+  String? content;
+  ForumCategoryModel? category;
+
+  UserModel? createdBy;
+  String? createdDate;
+  String? status;
 
   ForumPostModel({
     this.title,
@@ -40,8 +40,7 @@ class ForumPostModel extends ItemModel {
   });
 
   factory ForumPostModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ForumPostModelFromJson(json);
+      _$ForumPostModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ForumPostModel model) =>
-      model == null ? null : _$ForumPostModelToJson(model);
+  Map<String, dynamic> toJson() => _$ForumPostModelToJson(this);
 }

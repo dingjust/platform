@@ -5,28 +5,27 @@ part 'carousel.g.dart';
 
 @JsonSerializable()
 class CarouselModel extends ItemModel {
-  int id;
+  int? id;
 
-  String name;
+  String? name;
 
-  String description;
+  String? description;
 
-  @JsonKey(toJson: _mediaToJson)
-  MediaModel media;
+  MediaModel? media;
 
-  bool active;
+  bool? active;
 
-  CarouselType type;
+  CarouselType? type;
 
-  String group;
+  String? group;
 
-  String url;
+  String? url;
 
   ///色值1
-  String colorValue1;
+  String? colorValue1;
 
   ///色值2
-  String colorValue2;
+  String? colorValue2;
 
   CarouselModel(
       {this.id,
@@ -41,13 +40,9 @@ class CarouselModel extends ItemModel {
       this.colorValue2});
 
   factory CarouselModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CarouselModelFromJson(json);
+      _$CarouselModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CarouselModel model) =>
-      model == null ? null : _$CarouselModelToJson(model);
-
-  static Map<String, dynamic> _mediaToJson(MediaModel model) =>
-      model == null ? null : MediaModel.toJson(model);
+  Map<String, dynamic> toJson() => _$CarouselModelToJson(this);
 }
 
 ///轮播图类型

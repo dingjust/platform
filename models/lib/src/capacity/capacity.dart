@@ -7,28 +7,27 @@ part 'capacity.g.dart';
 @JsonSerializable()
 class FactoryCapacityModel extends ItemModel {
   ///点击统计
-  @JsonKey(fromJson: statisticsFromJson, toJson: statisticsToJson)
-  StatisticsModel statistics;
+  StatisticsModel? statistics;
 
-  int id;
+  int? id;
 
   ///编码
-  String code;
+  String? code;
 
   ///标题
-  String title;
+  String? title;
 
   ///最后刷新时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
-  DateTime lastRefreshTime;
+  @JsonKey(fromJson: dateTimefromMilliseconds, toJson: dateTimetoMilliseconds)
+  DateTime? lastRefreshTime;
 
   ///空闲时间起点
-  @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
-  DateTime dateStartPoint;
+  @JsonKey(fromJson: dateTimefromMilliseconds, toJson: dateTimetoMilliseconds)
+  DateTime? dateStartPoint;
 
   ///空闲时间结束
-  @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
-  DateTime dateEndPoint;
+  @JsonKey(fromJson: dateTimefromMilliseconds, toJson: dateTimetoMilliseconds)
+  DateTime? dateEndPoint;
 
   ///是否启用
   bool enabled;
@@ -46,107 +45,71 @@ class FactoryCapacityModel extends ItemModel {
   int todayRefreshTimes;
 
   ///所属工厂
-  @JsonKey(toJson: _factoryToJson)
-  FactoryModel belongTo;
+  FactoryModel? belongTo;
 
   ///总刷新次数
   int totalRefreshTimes;
 
   ///剩余刷新次数
-  int remainRefreshTimes;
+  int? remainRefreshTimes;
 
   ///是否长期有效
   bool longTerm;
 
   ///分类产能
-  @JsonKey(toJson: _categoryCapacitiesToJson)
   List<FactoryCategoryCapacityModel> categoryCapacities;
 
-  FactoryCapacityModel({this.statistics,
-    this.id,
-    this.code,
-    this.title,
-    this.lastRefreshTime,
-    this.dateStartPoint,
-    this.dateEndPoint,
-    this.enabled = false,
-    this.deleted = false,
-    this.clickTimes = 0,
-    this.showTimes = 0,
-    this.todayRefreshTimes = 0,
-    this.belongTo,
-    this.totalRefreshTimes = 0,
-    this.longTerm = false,
-    this.remainRefreshTimes,
-    this.categoryCapacities = const []});
+  FactoryCapacityModel(
+      {this.statistics,
+      this.id,
+      this.code,
+      this.title,
+      this.lastRefreshTime,
+      this.dateStartPoint,
+      this.dateEndPoint,
+      this.enabled = false,
+      this.deleted = false,
+      this.clickTimes = 0,
+      this.showTimes = 0,
+      this.todayRefreshTimes = 0,
+      this.belongTo,
+      this.totalRefreshTimes = 0,
+      this.longTerm = false,
+      this.remainRefreshTimes,
+      this.categoryCapacities = const []});
 
   factory FactoryCapacityModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$FactoryCapacityModelFromJson(json);
+      _$FactoryCapacityModelFromJson(json);
 
-  static Map<String, dynamic> toJson(FactoryCapacityModel model) =>
-      model == null ? null : _$FactoryCapacityModelToJson(model);
+  Map<String, dynamic> toJson() => _$FactoryCapacityModelToJson(this);
 
-  static Map<String, dynamic> _factoryToJson(FactoryModel belongTo) =>
-      belongTo == null ? null : FactoryModel.toJson(belongTo);
-
-  static List<Map<String, dynamic>> _categoryCapacitiesToJson(
-      List<FactoryCategoryCapacityModel> categoryCapacities) =>
-      categoryCapacities == null
-          ? null
-          : categoryCapacities
-          .map((capacity) => FactoryCategoryCapacityModel.toJson(capacity))
-          .toList();
-
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
-
-  static int _dateTimetoMilliseconds(DateTime date) =>
+  static int? _dateTimetoMilliseconds(DateTime date) =>
       date == null ? null : date.millisecondsSinceEpoch;
-
-  static StatisticsModel statisticsFromJson(var json) {
-    if (json == null) {
-      return null;
-    } else {
-      if (json is StatisticsModel) {
-        return json;
-      } else {
-        return StatisticsModel.fromJson(json as Map<String, dynamic>);
-      }
-    }
-  }
-
-  static Map<String, dynamic> statisticsToJson(StatisticsModel model) =>
-      model == null ? null : StatisticsModel.toJson(model);
 }
 
 ///工厂产能分类产能信息
 @JsonSerializable()
 class FactoryCategoryCapacityModel extends ItemModel {
   ///id
-  int id;
+  int? id;
 
   ///分类
-  @JsonKey(toJson: _categoryToJson)
-  CategoryModel category;
+  CategoryModel? category;
 
   ///产能
-  int capacityRange;
+  int? capacityRange;
 
   ///排序
-  int sort;
+  int? sort;
 
   ///所属产程
-  FactoryCapacityModel capacity;
+  FactoryCapacityModel? capacity;
 
   FactoryCategoryCapacityModel(
       {this.id, this.capacity, this.capacityRange, this.sort, this.category});
 
   factory FactoryCategoryCapacityModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$FactoryCategoryCapacityModelFromJson(json);
+      _$FactoryCategoryCapacityModelFromJson(json);
 
-  static Map<String, dynamic> toJson(FactoryCategoryCapacityModel model) =>
-      model == null ? null : _$FactoryCategoryCapacityModelToJson(model);
-
-  static Map<String, dynamic> _categoryToJson(CategoryModel category) =>
-      category == null ? null : CategoryModel.toJson(category);
+  Map<String, dynamic> toJson() => _$FactoryCategoryCapacityModelToJson(this);
 }

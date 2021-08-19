@@ -40,31 +40,31 @@ const NoticeTypeLocalizedMap = {
 ///公告
 @JsonSerializable()
 class NotificationModel extends ItemModel {
-  String url;
+  String? url;
 
   ///内容
-  String content;
+  String? content;
 
   ///优先级
-  int level;
+  int? level;
 
   ///类型
-  NoticeType type;
+  NoticeType? type;
 
   ///状态
-  NoticeState state;
+  NoticeState? state;
 
   /// 创建时间
   @JsonKey(name: "creationtime", fromJson: dateTimefromMilliseconds)
-  DateTime creationTime;
+  DateTime? creationTime;
 
   /// 发布时间
   @JsonKey(name: "publishTime", fromJson: dateTimefromMilliseconds)
-  DateTime publishTime;
+  DateTime? publishTime;
 
   /// 过期时间
   @JsonKey(name: "expireTime", fromJson: dateTimefromMilliseconds)
-  DateTime expireTime;
+  DateTime? expireTime;
 
   NotificationModel(
       {this.url,
@@ -77,8 +77,7 @@ class NotificationModel extends ItemModel {
       this.expireTime});
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$NotificationModelFromJson(json);
+      _$NotificationModelFromJson(json);
 
-  static Map<String, dynamic> toJson(NotificationModel model) =>
-      model == null ? null : _$NotificationModelToJson(model);
+  Map<String, dynamic> toJson() => _$NotificationModelToJson(this);
 }

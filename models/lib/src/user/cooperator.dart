@@ -48,57 +48,52 @@ const CooperatorCategoryLocalizedMap = {
 @JsonSerializable()
 class CooperatorModel extends ItemModel {
   ///合作商名称
-  String name;
+  String? name;
 
   ///联系人
-  String contactPerson;
+  String? contactPerson;
 
   ///联系方式
-  String contactPhone;
+  String? contactPhone;
 
   ///所属公司
-  @JsonKey(toJson: companyToJson)
-  CompanyModel belongTo;
+  CompanyModel? belongTo;
 
   ///合作公司
-  @JsonKey(toJson: companyToJson)
-  CompanyModel partner;
+  CompanyModel? partner;
 
   ///类型
-  CooperatorType type;
+  CooperatorType? type;
 
   ///类别
-  CooperatorCategory category;
+  CooperatorCategory? category;
 
   ///详细身份
-  String detailedIdentity;
+  String? detailedIdentity;
 
   ///开户行
-  String bankOfDeposit;
+  String? bankOfDeposit;
 
   ///银行账号
-  String bankAccount;
+  String? bankAccount;
 
   ///税号
-  String taxNumber;
+  String? taxNumber;
 
   ///账务方案
-  @JsonKey(toJson: companyPayPlanToJson)
-  CompanyPayPlanModel payPlan;
+  CompanyPayPlanModel? payPlan;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///户名
-  String accountName;
+  String? accountName;
 
   ///地址
-  @JsonKey(toJson: AddressModel.toJson)
-  AddressModel address;
+  AddressModel? address;
 
   ///进度方案
-  @JsonKey(toJson: progressPlanToJson)
-  ProgressPlanModel progressPlan;
+  ProgressPlanModel? progressPlan;
 
   ///对账方案
   //TODO:
@@ -122,25 +117,13 @@ class CooperatorModel extends ItemModel {
       this.progressPlan});
 
   factory CooperatorModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CooperatorModelFromJson(json);
+      _$CooperatorModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CooperatorModel model) =>
-      model == null ? null : _$CooperatorModelToJson(model);
+  Map<String, dynamic> toJson() => _$CooperatorModelToJson(this);
 
-  static Map<String, dynamic> companyToJson(CompanyModel belongTo) =>
-      belongTo == null ? null : CompanyModel.toJson(belongTo);
-
-  static Map<String, dynamic> companyPayPlanToJson(
-      CompanyPayPlanModel payPlan) =>
-      payPlan == null ? null : CompanyPayPlanModel.toJson(payPlan);
-
-  static Map<String, dynamic> progressPlanToJson(
-      ProgressPlanModel model) =>
-      model == null ? null : model.toJson();
-
-  String getName() {
+  String? getName() {
     if (type == CooperatorType.ONLINE) {
-      return partner.name ?? '';
+      return partner?.name ?? '';
     } else {
       return name ?? '';
     }

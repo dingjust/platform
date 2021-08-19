@@ -7,17 +7,16 @@ part 'progress_plan.g.dart';
 @JsonSerializable()
 class BaseProgressPlanModel extends ItemModel {
   ///名称
-  String name;
+  String? name;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///所属公司
-  @JsonKey(toJson: companyToJson)
-  CompanyModel belongTo;
+  CompanyModel? belongTo;
 
   ///是否启用
-  bool eable;
+  bool? eable;
 
   BaseProgressPlanModel({
     this.name,
@@ -27,27 +26,23 @@ class BaseProgressPlanModel extends ItemModel {
   });
 
   factory BaseProgressPlanModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$BaseProgressPlanModelFromJson(json);
+      _$BaseProgressPlanModelFromJson(json);
 
-  static Map<String, dynamic> toJson(BaseProgressPlanModel model) =>
-      model == null ? null : _$BaseProgressPlanModelToJson(model);
-
-  static Map<String, dynamic> companyToJson(CompanyModel model) =>
-      model == null ? null : CompanyModel.toJson(model);
+  Map<String, dynamic> toJson() => _$BaseProgressPlanModelToJson(this);
 }
 
 ///节点方案
 @JsonSerializable()
 class ProgressPlanModel extends BaseProgressPlanModel {
   ProgressPlanModel({
-    String name,
-    String remarks,
-    CompanyModel belongTo,
-    bool eable,
+    String? name,
+    String? remarks,
+    CompanyModel? belongTo,
+    bool? eable,
   }) : super(name: name, remarks: remarks, belongTo: belongTo, eable: eable);
 
   factory ProgressPlanModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProgressPlanModelFromJson(json);
+      _$ProgressPlanModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProgressPlanModelToJson(this);
 }
@@ -55,27 +50,18 @@ class ProgressPlanModel extends BaseProgressPlanModel {
 ///订单节点方案
 @JsonSerializable()
 class OrderProgressPlanModel extends ProgressPlanModel {
-  @JsonKey(toJson: progressesToJson)
-  List<ProductionProgressModel> productionProgresses;
+  List<ProductionProgressModel>? productionProgresses;
 
   OrderProgressPlanModel(
-      {String name,
-      String remarks,
-      CompanyModel belongTo,
-      bool eable,
+      {String? name,
+      String? remarks,
+      CompanyModel? belongTo,
+      bool? eable,
       this.productionProgresses})
       : super(name: name, remarks: remarks, belongTo: belongTo, eable: eable);
 
   factory OrderProgressPlanModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$OrderProgressPlanModelFromJson(json);
+      _$OrderProgressPlanModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderProgressPlanModelToJson(this);
-
-  static List<Map<String, dynamic>> progressesToJson(
-          List<ProductionProgressModel> models) =>
-      models == null
-          ? null
-          : models
-              .map((model) => ProductionProgressModel.toJson(model))
-              .toList();
 }

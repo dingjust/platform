@@ -6,49 +6,47 @@ part 'user_agreement.g.dart';
 @JsonSerializable()
 class UserAgreementModel extends ContractModel {
   ///合同类型
-  AgreementTemplateType type;
+  AgreementTemplateType? type;
 
-  bool deleted;
+  bool? deleted;
 
   ///甲方
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel partyA;
+  CompanyModel? partyA;
 
   ///乙方
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel partyB;
+  CompanyModel? partyB;
 
   ///甲方签署时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime partyASignTime;
+  DateTime? partyASignTime;
 
   ///乙方签署时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime partyBSignTime;
+  DateTime? partyBSignTime;
 
   ///合同完成时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime completeSignTime;
+  DateTime? completeSignTime;
 
   ///模板编号
-  String originalTmplCode;
+  String? originalTmplCode;
 
   ///线下合作商
-  bool offlinePartner;
+  bool? offlinePartner;
 
-  bool isOffline;
+  bool? isOffline;
 
   UserAgreementModel({
-    String title,
-    String contractNumber,
-    String partner,
-    DateTime createTime,
-    ContractStatus state,
-    bool available,
-    String code,
-    String content,
-    bool isCreator,
-    bool isSigned,
+    String? title,
+    String? contractNumber,
+    String? partner,
+    DateTime? createTime,
+    ContractStatus? state,
+    bool? available,
+    String? code,
+    String? content,
+    bool? isCreator,
+    bool? isSigned,
     this.type,
     this.deleted,
     this.partyA,
@@ -73,10 +71,7 @@ class UserAgreementModel extends ContractModel {
         );
 
   factory UserAgreementModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$UserAgreementModelFromJson(json);
+      _$UserAgreementModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserAgreementModelToJson(this);
-
-  static DateTime dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 }

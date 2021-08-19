@@ -30,28 +30,25 @@ const OrderNoteStatusLocalizedMap = {
 @JsonSerializable()
 class AbstractOrderNoteModel extends ItemModel {
   /// 编号
-  String code;
+  String? code;
 
   /// 品牌
-  String brand;
+  String? brand;
 
   ///款号
-  String skuID;
+  String? skuID;
 
   ///品牌跟单人
-  @JsonKey(toJson: _b2bCustomerToJson)
-  B2BCustomerModel brandOperator;
+  B2BCustomerModel? brandOperator;
 
   ///工厂跟单人
-  @JsonKey(toJson: _b2bCustomerToJson)
-  B2BCustomerModel factoryOperator;
+  B2BCustomerModel? factoryOperator;
 
   ///状态
-  OrderNoteStatus status;
+  OrderNoteStatus? status;
 
   ///物流信息
-  @JsonKey(toJson: _consignmentToJson)
-  ConsignmentModel consignment;
+  ConsignmentModel? consignment;
 
   AbstractOrderNoteModel(
       {this.code,
@@ -63,166 +60,137 @@ class AbstractOrderNoteModel extends ItemModel {
       this.consignment});
 
   factory AbstractOrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$AbstractOrderNoteModelFromJson(json);
+      _$AbstractOrderNoteModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AbstractOrderNoteModel model) =>
-      model == null ? null : _$AbstractOrderNoteModelToJson(model);
-
-  static Map<String, dynamic> _b2bCustomerToJson(B2BCustomerModel model) =>
-      model == null ? null : B2BCustomerModel.toJson(model);
-
-  static Map<String, dynamic> _consignmentToJson(
-      ConsignmentModel consignment) =>
-      consignment == null ? null : ConsignmentModel.toJson(consignment);
+  Map<String, dynamic> toJson() => _$AbstractOrderNoteModelToJson(this);
 }
 
 /// 订单记录行抽象
 @JsonSerializable()
 class AbstractOrderNoteEntryModel extends ItemModel {
   /// 数量
-  int quantity;
+  int? quantity;
 
   /// 颜色文本
-  String color;
+  String? color;
 
   ///尺码文本
-  String size;
+  String? size;
 
   ///订单需要
-  int needQuantity;
+  int? needQuantity;
 
   AbstractOrderNoteEntryModel(
       {this.quantity, this.color, this.size, this.needQuantity});
 
   factory AbstractOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$AbstractOrderNoteEntryModelFromJson(json);
+      _$AbstractOrderNoteEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AbstractOrderNoteEntryModel model) =>
-      model == null ? null : _$AbstractOrderNoteEntryModelToJson(model);
+  Map<String, dynamic> toJson() => _$AbstractOrderNoteEntryModelToJson(this);
 }
 
 /// 订单记录
 @JsonSerializable()
 class OrderNoteModel extends AbstractOrderNoteModel {
   /// 所属订单
-  @JsonKey(toJson: orderToJson)
-  AbstractOrderModel belongOrder;
+  AbstractOrderModel? belongOrder;
 
   /// 订单行
-  @JsonKey(toJson: entriesToJson)
-  List<OrderNoteEntryModel> entries;
+  List<OrderNoteEntryModel>? entries;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   OrderNoteModel({
-    String code,
-    String brand,
-    String skuID,
-    B2BCustomerModel brandOperator,
-    B2BCustomerModel factoryOperator,
-    OrderNoteStatus status,
-    ConsignmentModel consignment,
+    String? code,
+    String? brand,
+    String? skuID,
+    B2BCustomerModel? brandOperator,
+    B2BCustomerModel? factoryOperator,
+    OrderNoteStatus? status,
+    ConsignmentModel? consignment,
     this.belongOrder,
     this.entries,
     this.remarks,
   }) : super(
-      code: code,
-      brand: brand,
-      skuID: skuID,
-      brandOperator: brandOperator,
-      factoryOperator: factoryOperator,
-      status: status,
-      consignment: consignment);
+            code: code,
+            brand: brand,
+            skuID: skuID,
+            brandOperator: brandOperator,
+            factoryOperator: factoryOperator,
+            status: status,
+            consignment: consignment);
 
   factory OrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$OrderNoteModelFromJson(json);
+      _$OrderNoteModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrderNoteModel model) =>
-      model == null ? null : _$OrderNoteModelToJson(model);
-
-  static Map<String, dynamic> orderToJson(AbstractOrderModel belongOrder) =>
-      belongOrder == null ? null : AbstractOrderModel.toJson(belongOrder);
-
-  static Map<String, dynamic> _b2bCustomerToJson(B2BCustomerModel model) =>
-      model == null ? null : B2BCustomerModel.toJson(model);
-
-  static List<Map<String, dynamic>> entriesToJson(
-          List<OrderNoteEntryModel> entries) =>
-      entries == null
-          ? null
-          : entries.map((entry) => OrderNoteEntryModel.toJson(entry)).toList();
+  Map<String, dynamic> toJson() => _$OrderNoteModelToJson(this);
 }
 
 /// 订单记录行
 @JsonSerializable()
 class OrderNoteEntryModel extends AbstractOrderNoteEntryModel {
-  @JsonKey(toJson: orderToJson)
-  OrderNoteModel order;
+  OrderNoteModel? order;
 
   OrderNoteEntryModel({
-    int quantity,
-    String color,
-    String size,
-    int needQuantity,
+    int? quantity,
+    String? color,
+    String? size,
+    int? needQuantity,
     this.order,
   }) : super(
-      quantity: quantity,
-      color: color,
-      size: size,
-      needQuantity: needQuantity);
+            quantity: quantity,
+            color: color,
+            size: size,
+            needQuantity: needQuantity);
 
   factory OrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$OrderNoteEntryModelFromJson(json);
+      _$OrderNoteEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrderNoteEntryModel model) =>
-      model == null ? null : _$OrderNoteEntryModelToJson(model);
-
-  static Map<String, dynamic> orderToJson(OrderNoteModel order) =>
-      order == null ? null : OrderNoteModel.toJson(order);
+  Map<String, dynamic> toJson() => _$OrderNoteEntryModelToJson(this);
 }
 
 /// 发货单
 @JsonSerializable()
 class ShippingOrderNoteModel extends OrderNoteModel {
   ///发货人姓名
-  String consignorName;
+  String? consignorName;
 
   ///发货人电话
-  String consignorPhone;
+  String? consignorPhone;
 
   ///收货人姓名
-  String consigneeName;
+  String? consigneeName;
 
   ///收货人电话
-  String consigneePhone;
+  String? consigneePhone;
 
   ///收货地址
-  String consigneeAddress;
+  String? consigneeAddress;
 
   ///是否线下物流
-  bool isOfflineConsignment;
+  bool? isOfflineConsignment;
 
   ///是否是全部发货
-  bool isFullShipment;
+  bool? isFullShipment;
 
   ///退料
-  String withdrawalQuality;
+  String? withdrawalQuality;
 
   ///残次品数量
-  String defectiveQuality;
+  String? defectiveQuality;
 
   ShippingOrderNoteModel({
-    String code,
-    String brand,
-    String skuID,
-    B2BCustomerModel brandOperator,
-    B2BCustomerModel factoryOperator,
-    OrderNoteStatus status,
-    ConsignmentModel consignment,
-    AbstractOrderModel belongOrder,
-    List<OrderNoteEntryModel> entries,
-    String remarks,
+    String? code,
+    String? brand,
+    String? skuID,
+    B2BCustomerModel? brandOperator,
+    B2BCustomerModel? factoryOperator,
+    OrderNoteStatus? status,
+    ConsignmentModel? consignment,
+    AbstractOrderModel? belongOrder,
+    List<OrderNoteEntryModel>? entries,
+    String? remarks,
     this.consignorName,
     this.consignorPhone,
     this.consigneeName,
@@ -233,82 +201,80 @@ class ShippingOrderNoteModel extends OrderNoteModel {
     this.withdrawalQuality,
     this.defectiveQuality,
   }) : super(
-      code: code,
-      brand: brand,
-      skuID: skuID,
-      brandOperator: brandOperator,
-      factoryOperator: factoryOperator,
-      status: status,
-      consignment: consignment,
-      belongOrder: belongOrder,
-      entries: entries,
-      remarks: remarks);
+            code: code,
+            brand: brand,
+            skuID: skuID,
+            brandOperator: brandOperator,
+            factoryOperator: factoryOperator,
+            status: status,
+            consignment: consignment,
+            belongOrder: belongOrder,
+            entries: entries,
+            remarks: remarks);
 
   factory ShippingOrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ShippingOrderNoteModelFromJson(json);
+      _$ShippingOrderNoteModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ShippingOrderNoteModel model) =>
-      model == null ? null : _$ShippingOrderNoteModelToJson(model);
+  Map<String, dynamic> toJson() => _$ShippingOrderNoteModelToJson(this);
 }
 
 /// 发货单行
 @JsonSerializable()
 class ShippingOrderNoteEntryModel extends OrderNoteEntryModel {
   ShippingOrderNoteEntryModel({
-    int quantity,
-    String color,
-    String size,
-    OrderNoteModel order,
+    int? quantity,
+    String? color,
+    String? size,
+    OrderNoteModel? order,
   }) : super(quantity: quantity, color: color, size: size, order: order);
 
   factory ShippingOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ShippingOrderNoteEntryModelFromJson(json);
+      _$ShippingOrderNoteEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ShippingOrderNoteEntryModel model) =>
-      model == null ? null : _$ShippingOrderNoteEntryModelToJson(model);
+  Map<String, dynamic> toJson() => _$ShippingOrderNoteEntryModelToJson(this);
 }
 
 /// 收货单
 @JsonSerializable()
 class DeliveryOrderNoteModel extends OrderNoteModel {
   ///发货人姓名
-  String consignorName;
+  String? consignorName;
 
   ///发货人电话
-  String consignorPhone;
+  String? consignorPhone;
 
   ///收货人姓名
-  String consigneeName;
+  String? consigneeName;
 
   ///收货人电话
-  String consigneePhone;
+  String? consigneePhone;
 
   ///收货地址
-  String consigneeAddress;
+  String? consigneeAddress;
 
   ///是否线下物流
-  bool isOfflineConsignment;
+  bool? isOfflineConsignment;
 
   ///退料
-  String withdrawalQuality;
+  String? withdrawalQuality;
 
   ///残次品数量
-  String defectiveQuality;
+  String? defectiveQuality;
 
   ///拒绝原因
-  String rejectReason;
+  String? rejectReason;
 
   DeliveryOrderNoteModel({
-    String code,
-    String brand,
-    String skuID,
-    B2BCustomerModel brandOperator,
-    B2BCustomerModel factoryOperator,
-    OrderNoteStatus status,
-    ConsignmentModel consignment,
-    AbstractOrderModel belongOrder,
-    List<OrderNoteEntryModel> entries,
-    String remarks,
+    String? code,
+    String? brand,
+    String? skuID,
+    B2BCustomerModel? brandOperator,
+    B2BCustomerModel? factoryOperator,
+    OrderNoteStatus? status,
+    ConsignmentModel? consignment,
+    AbstractOrderModel? belongOrder,
+    List<OrderNoteEntryModel>? entries,
+    String? remarks,
     this.consignorName,
     this.consignorPhone,
     this.consigneeName,
@@ -319,100 +285,99 @@ class DeliveryOrderNoteModel extends OrderNoteModel {
     this.withdrawalQuality,
     this.defectiveQuality,
   }) : super(
-      code: code,
-      brand: brand,
-      skuID: skuID,
-      brandOperator: brandOperator,
-      factoryOperator: factoryOperator,
-      status: status,
-      consignment: consignment,
-      belongOrder: belongOrder,
-      entries: entries,
-      remarks: remarks);
+            code: code,
+            brand: brand,
+            skuID: skuID,
+            brandOperator: brandOperator,
+            factoryOperator: factoryOperator,
+            status: status,
+            consignment: consignment,
+            belongOrder: belongOrder,
+            entries: entries,
+            remarks: remarks);
 
   factory DeliveryOrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$DeliveryOrderNoteModelFromJson(json);
+      _$DeliveryOrderNoteModelFromJson(json);
 
-  static Map<String, dynamic> toJson(DeliveryOrderNoteModel model) =>
-      model == null ? null : _$DeliveryOrderNoteModelToJson(model);
+  Map<String, dynamic> toJson() => _$DeliveryOrderNoteModelToJson(this);
 }
 
 /// 收货单行
 @JsonSerializable()
 class DeliveryOrderNoteEntryModel extends OrderNoteEntryModel {
   DeliveryOrderNoteEntryModel({
-    int quantity,
-    String color,
-    String size,
-    OrderNoteModel order,
+    int? quantity,
+    String? color,
+    String? size,
+    OrderNoteModel? order,
   }) : super(quantity: quantity, color: color, size: size, order: order);
 
   factory DeliveryOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$DeliveryOrderNoteEntryModelFromJson(json);
+      _$DeliveryOrderNoteEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(DeliveryOrderNoteEntryModel model) =>
-      model == null ? null : _$DeliveryOrderNoteEntryModelToJson(model);
+  Map<String, dynamic> toJson() => _$DeliveryOrderNoteEntryModelToJson(this);
 }
 
 /// 对账单
 @JsonSerializable()
 class ReconciliationOrderNoteModel extends OrderNoteModel {
   ///甲方
-  String partA;
+  String? partA;
 
   ///乙方
-  String partB;
+  String? partB;
 
   ///合作方式
-  CooperationMode cooperationMethod;
+  CooperationMode? cooperationMethod;
 
   ///确认对账日期
-  DateTime confirmDate;
+  DateTime? confirmDate;
 
   ///延期扣款
-  double delayDeduction;
+  double? delayDeduction;
 
   ///质量扣款
-  double qualityDeduction;
+  double? qualityDeduction;
 
   ///其他扣款
-  double otherDeduction;
+  double? otherDeduction;
 
   ///其他款项
-  double otherFunds;
+  double? otherFunds;
 
   ///延期扣款备注
-  String delayDeductionRemarks;
+  String? delayDeductionRemarks;
 
   ///质量扣款备注
-  String qualityDeductionRemarks;
+  String? qualityDeductionRemarks;
 
   ///其他扣款备注
-  String otherDeductionRemarks;
+  String? otherDeductionRemarks;
 
   ///其他款项备注
-  String otherFundsRemarks;
+  String? otherFundsRemarks;
 
   ///拒绝原因
-  String rejectReason;
+  String? rejectReason;
 
-  ReconciliationOrderNoteModel({String code,
-    String brand,
-    String skuID,
-    B2BCustomerModel brandOperator,
-    B2BCustomerModel factoryOperator,
-    OrderNoteStatus status,
-    ConsignmentModel consignment,
-    AbstractOrderModel belongOrder,
-    List<OrderNoteEntryModel> entries,
-    String remarks,
-    this.partA,
-    this.partB,
-    this.cooperationMethod,
-    this.confirmDate,
-    this.delayDeduction,
-    this.qualityDeduction,
-    this.otherDeduction,
+  ReconciliationOrderNoteModel(
+      {String? code,
+      String? brand,
+      String? skuID,
+      B2BCustomerModel? brandOperator,
+      B2BCustomerModel? factoryOperator,
+      OrderNoteStatus? status,
+      ConsignmentModel? consignment,
+      AbstractOrderModel? belongOrder,
+      List<OrderNoteEntryModel>? entries,
+      String? remarks,
+      this.partA,
+      this.partB,
+      this.cooperationMethod,
+      this.confirmDate,
+      this.delayDeduction,
+      this.qualityDeduction,
+      this.otherDeduction,
       this.otherFunds,
       this.delayDeductionRemarks,
       this.qualityDeductionRemarks,
@@ -420,40 +385,39 @@ class ReconciliationOrderNoteModel extends OrderNoteModel {
       this.otherFundsRemarks,
       this.rejectReason})
       : super(
-      code: code,
-      brand: brand,
-      skuID: skuID,
-      brandOperator: brandOperator,
-      factoryOperator: factoryOperator,
-      status: status,
-      consignment: consignment,
-      belongOrder: belongOrder,
-      entries: entries,
-      remarks: remarks);
+            code: code,
+            brand: brand,
+            skuID: skuID,
+            brandOperator: brandOperator,
+            factoryOperator: factoryOperator,
+            status: status,
+            consignment: consignment,
+            belongOrder: belongOrder,
+            entries: entries,
+            remarks: remarks);
 
   factory ReconciliationOrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ReconciliationOrderNoteModelFromJson(json);
+      _$ReconciliationOrderNoteModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ReconciliationOrderNoteModel model) =>
-      model == null ? null : _$ReconciliationOrderNoteModelToJson(model);
+  Map<String, dynamic> toJson() => _$ReconciliationOrderNoteModelToJson(this);
 }
 
 /// 对账单行
 @JsonSerializable()
 class ReconciliationOrderNoteEntryModel extends OrderNoteEntryModel {
   ReconciliationOrderNoteEntryModel({
-    int quantity,
-    String color,
-    String size,
-    OrderNoteModel order,
+    int? quantity,
+    String? color,
+    String? size,
+    OrderNoteModel? order,
   }) : super(quantity: quantity, color: color, size: size, order: order);
 
   factory ReconciliationOrderNoteEntryModel.fromJson(
           Map<String, dynamic> json) =>
-      json == null ? null : _$ReconciliationOrderNoteEntryModelFromJson(json);
+      _$ReconciliationOrderNoteEntryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ReconciliationOrderNoteEntryModel model) =>
-      model == null ? null : _$ReconciliationOrderNoteEntryModelToJson(model);
+  Map<String, dynamic> toJson() =>
+      _$ReconciliationOrderNoteEntryModelToJson(this);
 }
 
 ///生产进度单据状态
@@ -474,73 +438,46 @@ const ProductionProgressOrderStatusLocalizedMap = {
 /// 生产进度单据
 @JsonSerializable()
 class ProductionProgressOrderModel {
-  int id;
+  int? id;
 
   ///工厂跟单人
-  @JsonKey(toJson: _operatorToJson)
-  B2BCustomerModel operator;
+  B2BCustomerModel? operator;
 
   ///状态
-  ProductionProgressOrderStatus status;
+  ProductionProgressOrderStatus? status;
 
   ///附件
-  @JsonKey(toJson: _mediasToJson)
-  List<MediaModel> medias;
+  List<MediaModel>? medias;
 
   ///上报数量
-  int amount;
+  int? amount;
 
   ///上报时间
-  @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
-  DateTime reportTime;
+  @JsonKey(fromJson: dateTimefromMilliseconds, toJson: dateTimetoMilliseconds)
+  DateTime? reportTime;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///所属生产进度节点
-  @JsonKey(toJson: _progressToJson)
-  ProductionProgressModel belong;
+  ProductionProgressModel? belong;
 
   ///单据行
-  @JsonKey(toJson: _entriesToJson)
-  List<OrderNoteEntryModel> entries;
+  List<OrderNoteEntryModel>? entries;
 
-  ProductionProgressOrderModel({this.id,
-    this.operator,
-    this.status,
-    this.medias,
-    this.amount,
-    this.reportTime,
-    this.remarks,
-    this.belong,
-    this.entries});
+  ProductionProgressOrderModel(
+      {this.id,
+      this.operator,
+      this.status,
+      this.medias,
+      this.amount,
+      this.reportTime,
+      this.remarks,
+      this.belong,
+      this.entries});
 
   factory ProductionProgressOrderModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProductionProgressOrderModelFromJson(json);
+      _$ProductionProgressOrderModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ProductionProgressOrderModel model) =>
-      model == null ? null : _$ProductionProgressOrderModelToJson(model);
-
-  static Map<String, dynamic> _operatorToJson(B2BCustomerModel model) =>
-      model == null ? null : B2BCustomerModel.toJson(model);
-
-  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => MediaModel.toJson(model)).toList();
-
-  static Map<String, dynamic> _progressToJson(ProductionProgressModel model) =>
-      model == null ? null : ProductionProgressModel.toJson(model);
-
-  static List<Map<String, dynamic>> _entriesToJson(
-      List<OrderNoteEntryModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => OrderNoteEntryModel.toJson(model)).toList();
-
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
-
-  static int _dateTimetoMilliseconds(DateTime date) =>
-      date == null ? null : date.millisecondsSinceEpoch;
+  Map<String, dynamic> toJson() => _$ProductionProgressOrderModelToJson(this);
 }

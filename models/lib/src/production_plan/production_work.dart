@@ -10,127 +10,113 @@ part 'production_work.g.dart';
 @JsonSerializable()
 class ProductionWorkOrderModel extends OrderModel {
   ///由甲或乙负责
-  AgreementRoleType byAorB;
+  AgreementRoleType? byAorB;
 
   ///订单管理方式
-  ManagementMode managementMode;
+  ManagementMode? managementMode;
 
   ///进度工单
-  @JsonKey(toJson: progressWorkSheetToJson)
-  ProgressWorkSheetModel progressWorkSheet;
+  ProgressWorkSheetModel? progressWorkSheet;
 
   ///优先级
-  int priorityLevel;
+  int? priorityLevel;
 
   ///当前阶段
-  @JsonKey(toJson: _progressPhaseToJson)
-  ProgressPhaseModel currentPhase;
+  ProgressPhaseModel? currentPhase;
 
   ///预计交货日期
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime expectedDeliveryDate;
+  DateTime? expectedDeliveryDate;
 
   ///外发订单行
-  @JsonKey(toJson: outBoundOrderEntryToJson)
-  OutboundOrderEntryModel outboundOrderEntry;
+  OutboundOrderEntryModel? outboundOrderEntry;
 
   ///订单颜色尺码行
-  @JsonKey(toJson: colorSizeEntriesToJson)
-  List<ColorSizeEntryModel> colorSizeEntries;
+  List<ColorSizeEntryModel>? colorSizeEntries;
 
   ///甲方跟单人
-  @JsonKey(toJson: b2bCustomerToJson)
-  B2BCustomerModel partyAOperator;
+  B2BCustomerModel? partyAOperator;
 
   ///乙方跟单人
-  @JsonKey(toJson: b2bCustomerToJson)
-  B2BCustomerModel partyBOperator;
+  B2BCustomerModel? partyBOperator;
 
   ///生产负责人
-  @JsonKey(toJson: b2bCustomerToJson)
-  B2BCustomerModel headOfProduction;
+  B2BCustomerModel? headOfProduction;
 
   ///审批人
-  @JsonKey(toJson: b2bCustomersToJson)
-  List<B2BCustomerModel> approvers;
+  List<B2BCustomerModel>? approvers;
 
   ///合作方式
-  CooperationMode cooperationMode;
+  CooperationMode? cooperationMode;
 
   ///入仓方式
-  WarehouseType warehouseType;
+  WarehouseType? warehouseType;
 
   ///工艺要求
-  String productionProcessContent;
+  String? productionProcessContent;
 
   ///工艺单文件
-  @JsonKey(toJson: mediasToJson)
-  List<MediaModel> medias;
+  List<MediaModel>? medias;
 
   ///甲方公司
-  @JsonKey(toJson: companyToJson)
-  CompanyModel partyACompany;
+  CompanyModel? partyACompany;
 
   ///乙方公司
-  @JsonKey(toJson: companyToJson)
-  CompanyModel partyBCompany;
+  CompanyModel? partyBCompany;
 
   ///卖方（线下订单）
-  String companyOfSeller;
+  String? companyOfSeller;
 
   ///卖方联系人（线下订单）
-  String contactPersonOfSeller;
+  String? contactPersonOfSeller;
 
   ///卖方联系方式（线下订单）
-  String contactOfSeller;
+  String? contactOfSeller;
 
   ///加工类型
-  MachiningType machiningType;
+  MachiningType? machiningType;
 
   ///唯一码
-  String uniqueCode;
+  String? uniqueCode;
 
   ///需求单号
-  String requirementOrderCode;
+  String? requirementOrderCode;
 
   ///延期天数
-  int delayedDays;
+  int? delayedDays;
 
   ///品牌更新了订单
-  bool brandUpdateOrder;
+  bool? brandUpdateOrder;
 
   ///已更新
-  bool factoryUpdateOrder;
+  bool? factoryUpdateOrder;
 
   ///需要同步的生产进度订单号
-  String targetPurchaseOrderCode;
+  String? targetPurchaseOrderCode;
 
   ///发票税点
-  double invoiceTaxPoint;
+  double? invoiceTaxPoint;
 
   ///运费支付方
-  AgreementRoleType freightPayer;
+  AgreementRoleType? freightPayer;
 
   ///账务方案
-  @JsonKey(toJson: orderPayPlanToJson)
-  OrderPayPlanModel payPlan;
+  OrderPayPlanModel? payPlan;
 
   ///合同是否已签
-  bool userAgreementIsSigned;
+  bool? userAgreementIsSigned;
 
   ///合作商
-  @JsonKey(toJson: cooperatorToJson)
-  CooperatorModel cooperator;
+  CooperatorModel? cooperator;
 
   ///创建人
-  @JsonKey(toJson: b2bCustomerToJson)
-  B2BCustomerModel creator;
+  B2BCustomerModel? creator;
 
   ///取消状态
-  OrderCannelStatus cannelStatus;
+  OrderCannelStatus? cannelStatus;
 
   ///取消原因
-  String cannelMsg;
+  String? cannelMsg;
 
   ProductionWorkOrderModel({
     this.byAorB,
@@ -169,15 +155,15 @@ class ProductionWorkOrderModel extends OrderModel {
     this.creator,
     this.cannelStatus,
     this.cannelMsg,
-    String code,
-    int totalQuantity,
-    double totalPrice,
-    DateTime creationTime,
-    AddressModel deliveryAddress,
-    String remarks,
-    PrincipalModel supplier,
-    double unitPrice,
-    bool isOfflineConsignment,
+    String? code,
+    int? totalQuantity,
+    double? totalPrice,
+    DateTime? creationTime,
+    AddressModel? deliveryAddress,
+    String? remarks,
+    PrincipalModel? supplier,
+    double? unitPrice,
+    bool? isOfflineConsignment,
   }) : super(
             code: code,
             totalQuantity: totalQuantity,
@@ -190,69 +176,26 @@ class ProductionWorkOrderModel extends OrderModel {
             unitPrice: unitPrice);
 
   factory ProductionWorkOrderModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProductionWorkOrderModelFromJson(json);
+      _$ProductionWorkOrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductionWorkOrderModelToJson(this);
-
-  static List<Map<String, dynamic>> colorSizeEntriesToJson(
-          List<ColorSizeEntryModel> models) =>
-      models == null
-          ? null
-          : models.map((e) => ColorSizeEntryModel.toJson(e)).toList();
-
-  static DateTime dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
-
-  static Map<String, dynamic> progressWorkSheetToJson(
-          ProgressWorkSheetModel model) =>
-      model == null ? null : ProgressWorkSheetModel.toJson(model);
-
-  static Map<String, dynamic> outBoundOrderEntryToJson(
-          OutboundOrderEntryModel model) =>
-      model == null ? null : OutboundOrderEntryModel.toJson(model);
-
-  static Map<String, dynamic> b2bCustomerToJson(B2BCustomerModel model) =>
-      model == null ? null : B2BCustomerModel.toJson(model);
-
-  static List<Map<String, dynamic>> b2bCustomersToJson(
-          List<B2BCustomerModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => B2BCustomerModel.toJson(model)).toList();
-
-  static List<Map<String, dynamic>> mediasToJson(List<MediaModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => MediaModel.toJson(model)).toList();
-
-  static Map<String, dynamic> companyToJson(CompanyModel model) =>
-      model == null ? null : CompanyModel.toJson(model);
-
-  static Map<String, dynamic> orderPayPlanToJson(OrderPayPlanModel model) =>
-      model == null ? null : OrderPayPlanModel.toJson(model);
-
-  static Map<String, dynamic> cooperatorToJson(CooperatorModel model) =>
-      model == null ? null : CooperatorModel.toJson(model);
-
-  static Map<String, dynamic> _progressPhaseToJson(ProgressPhaseModel model) =>
-      model == null ? null : model.toJson();
 }
 
 ///生产进度
 @JsonSerializable()
 class ProgressPhaseModel extends ItemModel {
   ///名称
-  String name;
+  String? name;
 
   ///序号
-  int sequence;
+  int? sequence;
 
   ProgressPhaseModel({this.name, this.sequence});
 
   factory ProgressPhaseModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProgressPhaseModelFromJson(json);
+      _$ProgressPhaseModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProgressPhaseModelToJson(this);
+  Map<String, dynamic>? toJson() => _$ProgressPhaseModelToJson(this);
 }
 
 ///订单管理方式

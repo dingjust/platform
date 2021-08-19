@@ -5,45 +5,40 @@ part 'materiel_product.g.dart';
 
 @JsonSerializable()
 class MaterielProductModel extends ItemModel {
-  String code;
-  String name;
+  String? code;
+  String? name;
 
-  String skuID;
+  String? skuID;
 
-  double price;
+  double? price;
 
   ///类别
-  @JsonKey(toJson: CategoryModel.toJson)
-  CategoryModel category;
+  CategoryModel? category;
 
-  @JsonKey(toJson: MediaModel.listToJson)
-  List<MediaModel> images;
+  List<MediaModel>? images;
 
-  @JsonKey(toJson: MediaModel.listToJson)
-  List<MediaModel> details;
+  List<MediaModel>? details;
 
   ///成分
-  String basis;
+  String? basis;
 
   ///克重
-  double gramWeight;
+  double? gramWeight;
 
   ///幅宽
-  String width;
+  String? width;
 
   ///用途
-  List<String> uses;
+  List<String>? uses;
 
   ///属性
-  @JsonKey(toJson: ApparelProductAttributesModel.toJson)
-  ApparelProductAttributesModel attributes;
+  ApparelProductAttributesModel? attributes;
 
   ///描述
-  String describe;
+  String? describe;
 
   ///所属
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel belongTo;
+  CompanyModel? belongTo;
 
   MaterielProductModel(
       {this.code,
@@ -61,7 +56,7 @@ class MaterielProductModel extends ItemModel {
       this.price});
 
   factory MaterielProductModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$MaterielProductModelFromJson(json);
+      _$MaterielProductModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$MaterielProductModelToJson(this);
 }

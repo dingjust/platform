@@ -164,17 +164,16 @@ const MonthTypeLocalizedMap = {
 @JsonSerializable()
 class AbstractPayPlanModel extends ItemModel {
   /// 名称
-  String name;
+  String? name;
 
   /// 是否有定金
-  bool isHaveDeposit;
+  bool? isHaveDeposit;
 
   ///尾款期数
-  PayPlanType payPlanType;
+  PayPlanType? payPlanType;
 
   ///方案子项
-  @JsonKey(toJson: itemsToJson)
-  List<AbstractPayPlanItemModel> payPlanItems;
+  List<AbstractPayPlanItemModel>? payPlanItems;
 
   AbstractPayPlanModel({
     this.name,
@@ -184,57 +183,50 @@ class AbstractPayPlanModel extends ItemModel {
   });
 
   factory AbstractPayPlanModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$AbstractPayPlanModelFromJson(json);
+      _$AbstractPayPlanModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AbstractPayPlanModel model) =>
-      model == null ? null : _$AbstractPayPlanModelToJson(model);
-
-  static List<Map<String, dynamic>> itemsToJson(
-          List<AbstractPayPlanItemModel> items) =>
-      items == null
-          ? null
-          : items.map((item) => AbstractPayPlanItemModel.toJson(item)).toList();
+  Map<String, dynamic> toJson() => _$AbstractPayPlanModelToJson(this);
 }
 
 /// 付款方案子项抽象
 @JsonSerializable()
 class AbstractPayPlanItemModel extends ItemModel {
   /// 支付比例
-  double payPercent;
+  double? payPercent;
 
   /// 触发事件
-  TriggerEvent triggerEvent;
+  TriggerEvent? triggerEvent;
 
   /// 触发时长
-  int triggerDays;
+  int? triggerDays;
 
   ///支付类型
-  PayMoneyType moneyType;
+  PayMoneyType? moneyType;
 
   ///触发方式
-  TriggerType triggerType;
+  TriggerType? triggerType;
 
   ///序列号
-  int sequence;
+  int? sequence;
 
   ///支付状态
-  PayStatus payStatus;
+  PayStatus? payStatus;
 
-  String brandPayStatus;
+  String? brandPayStatus;
 
-  String factoryPayStatus;
+  String? factoryPayStatus;
 
-  int payDayNum;
+  int? payDayNum;
 
-  int monthlyStartDayNum;
+  int? monthlyStartDayNum;
 
-  int monthlyEndDayNum;
+  int? monthlyEndDayNum;
 
-  bool isRange;
+  bool? isRange;
 
-  bool isLast;
+  bool? isLast;
 
-  MonthType monthType;
+  MonthType? monthType;
 
   AbstractPayPlanItemModel(
       {this.payPercent,
@@ -254,74 +246,65 @@ class AbstractPayPlanItemModel extends ItemModel {
       this.monthType});
 
   factory AbstractPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$AbstractPayPlanItemModelFromJson(json);
+      _$AbstractPayPlanItemModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AbstractPayPlanItemModel model) =>
-      model == null ? null : _$AbstractPayPlanItemModelToJson(model);
+  Map<String, dynamic> toJson() => _$AbstractPayPlanItemModelToJson(this);
 }
 
 /// 付款方案
 @JsonSerializable()
 class CompanyPayPlanModel extends AbstractPayPlanModel {
   /// 激活状态
-  ArticleApprovalStatus approvalStatus;
+  ArticleApprovalStatus? approvalStatus;
 
   /// 公司
-  @JsonKey(toJson: principalToJson)
-  PrincipalModel belongTo;
+  PrincipalModel? belongTo;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///预览
-  String previewText;
+  String? previewText;
 
-  CompanyPayPlanModel({String name,
-    bool isHaveDeposit,
-    PayPlanType payPlanType,
-    List<AbstractPayPlanItemModel> payPlanItems,
-    this.approvalStatus,
-    this.remarks,
-    this.previewText})
+  CompanyPayPlanModel(
+      {String? name,
+      bool? isHaveDeposit,
+      PayPlanType? payPlanType,
+      List<AbstractPayPlanItemModel>? payPlanItems,
+      this.approvalStatus,
+      this.remarks,
+      this.previewText})
       : super(
-      name: name,
-      isHaveDeposit: isHaveDeposit,
-      payPlanType: payPlanType,
-      payPlanItems: payPlanItems);
+            name: name,
+            isHaveDeposit: isHaveDeposit,
+            payPlanType: payPlanType,
+            payPlanItems: payPlanItems);
 
   factory CompanyPayPlanModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CompanyPayPlanModelFromJson(json);
+      _$CompanyPayPlanModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CompanyPayPlanModel model) =>
-      model == null ? null : _$CompanyPayPlanModelToJson(model);
-
-  static Map<String, dynamic> principalToJson(PrincipalModel belongTo) =>
-      belongTo == null
-          ? null
-          : belongTo == null
-              ? null
-              : PrincipalModel.toJson(belongTo);
+  Map<String, dynamic> toJson() => _$CompanyPayPlanModelToJson(this);
 }
 
 /// 付款方案子项
 @JsonSerializable()
 class CompanyPayPlanItemModel extends AbstractPayPlanItemModel {
   CompanyPayPlanItemModel({
-    double payPercent,
-    TriggerEvent triggerEvent,
-    int triggerDays,
-    PayMoneyType moneyType,
-    TriggerType triggerType,
-    int sequence,
-    String brandPayStatus,
-    String factoryPayStatus,
-    int payDayNum,
-    int monthlyStartDayNum,
-    int monthlyEndDayNum,
-    bool isRange,
-    bool isLast,
-    PayStatus payStatus,
-    MonthType monthType,
+    double? payPercent,
+    TriggerEvent? triggerEvent,
+    int? triggerDays,
+    PayMoneyType? moneyType,
+    TriggerType? triggerType,
+    int? sequence,
+    String? brandPayStatus,
+    String? factoryPayStatus,
+    int? payDayNum,
+    int? monthlyStartDayNum,
+    int? monthlyEndDayNum,
+    bool? isRange,
+    bool? isLast,
+    PayStatus? payStatus,
+    MonthType? monthType,
   }) : super(
       payPercent: payPercent,
       triggerEvent: triggerEvent,
@@ -340,26 +323,25 @@ class CompanyPayPlanItemModel extends AbstractPayPlanItemModel {
       monthType: monthType);
 
   factory CompanyPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CompanyPayPlanItemModelFromJson(json);
+      _$CompanyPayPlanItemModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CompanyPayPlanItemModel model) =>
-      model == null ? null : _$CompanyPayPlanItemModelToJson(model);
+  Map<String, dynamic> toJson() => _$CompanyPayPlanItemModelToJson(this);
 }
 
 /// 订单付款方案
 @JsonSerializable()
 class OrderPayPlanModel extends AbstractPayPlanModel {
   /// 所属订单
-  AbstractOrderModel belongOrder;
+  AbstractOrderModel? belongOrder;
 
   ///已付
-  double paidAmount;
+  double? paidAmount;
 
   OrderPayPlanModel({
-    String name,
-    bool isHaveDeposit,
-    PayPlanType payPlanType,
-    List<AbstractPayPlanItemModel> payPlanItems,
+    String? name,
+    bool? isHaveDeposit,
+    PayPlanType? payPlanType,
+    List<AbstractPayPlanItemModel>? payPlanItems,
     this.paidAmount,
     this.belongOrder,
   }) : super(
@@ -369,37 +351,34 @@ class OrderPayPlanModel extends AbstractPayPlanModel {
             payPlanItems: payPlanItems);
 
   factory OrderPayPlanModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$OrderPayPlanModelFromJson(json);
+      _$OrderPayPlanModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrderPayPlanModel model) =>
-      model == null ? null : _$OrderPayPlanModelToJson(model);
+  Map<String, dynamic> toJson() => _$OrderPayPlanModelToJson(this);
 }
 
 /// 订单付款方案子项
 @JsonSerializable()
 class OrderPayPlanItemModel extends AbstractPayPlanItemModel {
   ///付款单
-  @JsonKey(toJson: _paymentOrdersToJson)
-  List<PaymentOrderModel> paymentOrders;
+  List<PaymentOrderModel>? paymentOrders;
 
   ///收款单
-  @JsonKey(toJson: _receiptOrdersToJson)
-  List<ReceiptOrderModel> receiptOrders;
+  List<ReceiptOrderModel>? receiptOrders;
 
   OrderPayPlanItemModel({
-    double payPercent,
-    TriggerEvent triggerEvent,
-    int triggerDays,
-    PayMoneyType moneyType,
-    TriggerType triggerType,
-    int sequence,
-    String brandPayStatus,
-    String factoryPayStatus,
-    int payDayNum,
-    int monthlyStartDayNum,
-    int monthlyEndDayNum,
-    bool isRange,
-    PayStatus payStatus,
+    double? payPercent,
+    TriggerEvent? triggerEvent,
+    int? triggerDays,
+    PayMoneyType? moneyType,
+    TriggerType? triggerType,
+    int? sequence,
+    String? brandPayStatus,
+    String? factoryPayStatus,
+    int? payDayNum,
+    int? monthlyStartDayNum,
+    int? monthlyEndDayNum,
+    bool? isRange,
+    PayStatus? payStatus,
   }) : super(
       payPercent: payPercent,
       triggerEvent: triggerEvent,
@@ -416,24 +395,7 @@ class OrderPayPlanItemModel extends AbstractPayPlanItemModel {
       payStatus: payStatus);
 
   factory OrderPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$OrderPayPlanItemModelFromJson(json);
+      _$OrderPayPlanItemModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrderPayPlanItemModel model) =>
-      model == null ? null : _$OrderPayPlanItemModelToJson(model);
-
-  static List<Map<String, dynamic>> _paymentOrdersToJson(
-          List<PaymentOrderModel> paymentOrders) =>
-      paymentOrders == null
-          ? null
-          : paymentOrders
-          .map((order) => PaymentOrderModel.toJson(order))
-          .toList();
-
-  static List<Map<String, dynamic>> _receiptOrdersToJson(
-          List<ReceiptOrderModel> receiptOrders) =>
-      receiptOrders == null
-          ? null
-          : receiptOrders
-          .map((order) => ReceiptOrderModel.toJson(order))
-          .toList();
+  Map<String, dynamic> toJson() => _$OrderPayPlanItemModelToJson(this);
 }

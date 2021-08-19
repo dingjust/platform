@@ -10,7 +10,6 @@ export 'src/info/sales_order_refund_info.dart';
 export 'src/media/media.dart';
 export 'src/msg/msg.dart';
 export 'src/my/guideline.dart';
-export 'src/my/wallet.dart';
 export 'src/my/my_favorite.dart';
 export 'src/order/delivery_order.dart';
 export 'src/order/finance.dart';
@@ -48,7 +47,7 @@ export 'src/widget/widgets.dart';
 part 'models.g.dart';
 
 abstract class ItemModel {
-  int id;
+  int? id;
 
 // StatisticsModel statistics;
 }
@@ -56,17 +55,16 @@ abstract class ItemModel {
 /// 统计
 @JsonSerializable()
 class StatisticsModel {
-  int viewStatistics;
+  int? viewStatistics;
 
-  int showStatistics;
+  int? showStatistics;
 
   StatisticsModel({this.viewStatistics, this.showStatistics});
 
   factory StatisticsModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$StatisticsModelFromJson(json);
+      _$StatisticsModelFromJson(json);
 
-  static Map<String, dynamic> toJson(StatisticsModel model) =>
-      model == null ? null : _$StatisticsModelToJson(model);
+  Map<String, dynamic> toJson() => _$StatisticsModelToJson(this);
 }
 
 /// 枚举
@@ -80,8 +78,7 @@ class EnumModel {
   factory EnumModel.fromJson(Map<String, dynamic> json) =>
       _$EnumModelFromJson(json);
 
-  static Map<String, dynamic> toJson(EnumModel model) =>
-      _$EnumModelToJson(model);
+  Map<String, dynamic> toJson() => _$EnumModelToJson(this);
 }
 
 ///根据code获取name
@@ -98,36 +95,36 @@ String enumMap(dynamic enumModels, dynamic code) {
   return text;
 }
 
-List<EnumModel> enumCodesToModels(List<String> codes, dynamic enumModels) {
-  return codes.map((code) {
-    return enumModels.firstWhere((enumModel) => enumModel.code == code,
-        orElse: () => null);
-    ;
-  }).toList();
-}
-
-List<String> enumCodesToNames(List<String> codes, dynamic enumModels) {
-  List<String> names = codes.map((code) {
-    EnumModel model = enumModels
-        .firstWhere((enumModel) => enumModel.code == code, orElse: () => null);
-    if (model != null) {
-      return model.name;
-    } else {
-      return null;
-    }
-  }).toList();
+// List<EnumModel>? enumCodesToModels(List<String> codes, dynamic enumModels) {
+//   // return codes.map((code) {
+//   //   return enumModels.firstWhere((enumModel) => enumModel.code == code,
+//   //       orElse: () => null);
+//   //   ;
+//   // }).toList();
+// }
+//
+// List<String> enumCodesToNames(List<String> codes, dynamic enumModels) {
+//   List<String> names = codes.map((code) {
+//     EnumModel model = enumModels
+//         .firstWhere((enumModel) => enumModel.code == code, orElse: () => null);
+//     if (model != null) {
+//       return model.name;
+//     } else {
+//       return null;
+//     }
+//   }).toList();
 //
 //  if(codes.length > count){
 //    names = names.sublist(0,count);
 //  }
 
-  return names;
-}
+// return names;
+// }
 
 //格式选中的枚举（多选）
 String formatEnumSelectsText(
     List<String> codes, List<EnumModel> enumModels, int count,
-    {String customText}) {
+    {String? customText}) {
   String text = '';
   if (customText != null && (codes == null || codes.length == 0)) {
     return customText;
@@ -547,11 +544,11 @@ const PriorityLevelEnum = [
 /// 分页数据
 @JsonSerializable()
 class PaginationData {
-  int currentPage;
-  int pageSize;
-  int numberOfPages;
-  int totalNumberOfResults;
-  bool needsTotal;
+  int? currentPage;
+  int? pageSize;
+  int? numberOfPages;
+  int? totalNumberOfResults;
+  bool? needsTotal;
 
   PaginationData({
     this.currentPage,

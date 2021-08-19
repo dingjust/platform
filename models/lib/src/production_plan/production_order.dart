@@ -15,73 +15,65 @@ part 'production_order.g.dart';
 @JsonSerializable()
 class ProductionOrderModel extends ItemModel {
   ///编码
-  String code;
+  String? code;
 
   ///原始单号
-  int originOrderId;
+  int? originOrderId;
 
   ///上级生产计划ID
-  int parentId;
+  int? parentId;
 
   /// 来源外发订单
-  ProductionOrderModel originOrder;
+  ProductionOrderModel? originOrder;
 
   ///节点方案
-  @JsonKey(toJson: progressPlanToJson)
-  OrderProgressPlanModel progressPlan;
+  OrderProgressPlanModel? progressPlan;
 
   ///名称
-  String name;
+  String? name;
 
   ///合作方式
-  CooperationMode cooperationMode;
+  CooperationMode? cooperationMode;
 
   ///项目总数
-  int itemsCount;
+  int? itemsCount;
 
   ///是否开发票
-  bool invoiceNeeded;
+  bool? invoiceNeeded;
 
   ///税点
-  double invoiceTaxPoint;
+  double? invoiceTaxPoint;
 
   ///跟单人/负责人
-  @JsonKey(toJson: b2bCustomerToJson)
-  B2BCustomerModel merchandiser;
+  B2BCustomerModel? merchandiser;
 
   ///创建人
-  @JsonKey(toJson: b2bCustomerToJson)
-  B2BCustomerModel creator;
+  B2BCustomerModel? creator;
 
   ///所属公司
-  @JsonKey(toJson: companyToJson)
-  CompanyModel belongTo;
+  CompanyModel? belongTo;
 
   ///生产负责人
-  @JsonKey(toJson: b2bCustomerToJson)
-  B2BCustomerModel productionLeader;
+  B2BCustomerModel? productionLeader;
 
   ///生产部门
-  @JsonKey(toJson: b2bDeptToJson)
-  B2BDeptModel productionDept;
+  B2BDeptModel? productionDept;
 
   ///已删除
-  bool deleted;
+  bool? deleted;
 
   ///取消中
-  bool canceling;
+  bool? canceling;
 
   ///创建时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime creationtime;
+  DateTime? creationtime;
 
   ///进度工单
-  @JsonKey(toJson: progressWorkSheetToJson)
-  ProgressWorkSheetModel progressWorkSheet;
+  ProgressWorkSheetModel? progressWorkSheet;
 
   ///附件
-  @JsonKey(toJson: mediasToJson)
-  List<MediaModel> attachments;
+  List<MediaModel>? attachments;
 
   ProductionOrderModel(
       {this.code,
@@ -105,260 +97,219 @@ class ProductionOrderModel extends ItemModel {
       this.attachments});
 
   factory ProductionOrderModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProductionOrderModelFromJson(json);
+      _$ProductionOrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductionOrderModelToJson(this);
-
-  static Map<String, dynamic> principalToJson(PrincipalModel model) =>
-      model == null ? null : PrincipalModel.toJson(model);
-
-  static Map<String, dynamic> b2bCustomerToJson(B2BCustomerModel model) =>
-      model == null ? null : B2BCustomerModel.toJson(model);
-
-  static Map<String, dynamic> companyToJson(CompanyModel model) =>
-      model == null ? null : CompanyModel.toJson(model);
-
-  static Map<String, dynamic> b2bDeptToJson(B2BDeptModel model) =>
-      model == null ? null : B2BDeptModel.toJson(model);
-
-  static Map<String, dynamic> progressWorkSheetToJson(
-          ProgressWorkSheetModel model) =>
-      model == null ? null : ProgressWorkSheetModel.toJson(model);
-
-  static List<Map<String, dynamic>> mediasToJson(List<MediaModel> models) =>
-      models == null ? null : models.map((e) => MediaModel.toJson(e)).toList();
-
-  static Map<String, dynamic> progressPlanToJson(
-          OrderProgressPlanModel model) =>
-      model == null ? null : model.toJson();
 }
 
 ///销售生产单
 @JsonSerializable()
 class SalesProductionOrderModel extends ProductionOrderModel {
   ///尾款期数
-  bool haveDeposit;
+  bool? haveDeposit;
 
   ///外发单管理模式
-  ManagementMode managementMode;
+  ManagementMode? managementMode;
 
   ///导入唯一码
-  String uniqueCode;
+  String? uniqueCode;
 
   ///标签
-  List<ProductionTaskOrderLabel> labels;
+  List<ProductionTaskOrderLabel>? labels;
 
   ///外发状态
-  ProductionOutOrderState outOrderState;
+  ProductionOutOrderState? outOrderState;
 
   ///承接状态
-  ProductionOrderAcceptState acceptState;
+  ProductionOrderAcceptState? acceptState;
 
   ///当前取消申请
-  ProductionOrderCancelApplyModel currentCancelApply;
+  ProductionOrderCancelApplyModel? currentCancelApply;
 
   ///处理时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime acceptProcessTime;
+  DateTime? acceptProcessTime;
 
   ///预计销售日期(开始)
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime salesDateStart;
+  DateTime? salesDateStart;
 
   ///预计销售日期(结束)
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime salesDateEnd;
+  DateTime? salesDateEnd;
 
   ///当前审核工单
-  @JsonKey(toJson: AuditWorkOrderModel.toJson)
-  AuditWorkOrderModel currentAuditOrder;
+  AuditWorkOrderModel? currentAuditOrder;
 
   ///付款方案
-  PayPlanType payPlanType;
+  PayPlanType? payPlanType;
 
   ///类型
-  ProductionOrderType type;
+  ProductionOrderType? type;
 
   ///运费支付方式
-  AgreementRoleType freightPayer;
+  AgreementRoleType? freightPayer;
 
   ///合作商
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel cooperator;
+  CooperatorModel? cooperator;
 
   ///付款方案
-  @JsonKey(toJson: CompanyPayPlanModel.toJson)
-  CompanyPayPlanModel payPlan;
+  CompanyPayPlanModel? payPlan;
 
   ///总负责人
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel planLeader;
+  B2BCustomerModel? planLeader;
 
   ///审批人
-  @JsonKey(toJson: b2bCutomersToJson)
-  List<B2BCustomerModel> approvers;
+  List<B2BCustomerModel>? approvers;
 
   ///生产负责人
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel purchasingLeader;
+  B2BCustomerModel? purchasingLeader;
 
   ///来源合作商
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel originCooperator;
+  CooperatorModel? originCooperator;
 
   ///外发合作商
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel targetCooperator;
+  CooperatorModel? targetCooperator;
 
   ///状态
-  SalesProductionOrderState state;
+  SalesProductionOrderState? state;
 
   ///收货地址
-  @JsonKey(toJson: AddressModel.toJson)
-  AddressModel shippingAddress;
+  AddressModel? shippingAddress;
 
   ///是否需要审核
-  bool auditNeeded;
+  bool? auditNeeded;
 
   ///审核状态
-  AuditState auditState;
+  AuditState? auditState;
 
   ///外发是否需要审核
-  bool sendAuditNeeded;
+  bool? sendAuditNeeded;
 
   ///外发审批人
-  @JsonKey(toJson: b2bCutomersToJson)
-  List<B2BCustomerModel> sendApprovers;
+  List<B2BCustomerModel>? sendApprovers;
 
   ///外发审核状态
-  AuditState sendAuditState;
+  AuditState? sendAuditState;
 
   ///甲方公司
-  @JsonKey(toJson: CompanyModel.toJson)
-  CompanyModel originCompany;
+  CompanyModel? originCompany;
 
   ///外发人
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel sendBy;
+  B2BCustomerModel? sendBy;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///当前审核工单
-  @JsonKey(toJson: AuditWorkOrderModel.toJson)
-  AuditWorkOrderModel currentSendAuditOrder;
+  AuditWorkOrderModel? currentSendAuditOrder;
 
   ///订单行
-  @JsonKey(toJson: productionTaskOrdersToList)
-  List<ProductionTaskOrderModel> taskOrderEntries;
+  List<ProductionTaskOrderModel>? taskOrderEntries;
 
   ///合同
-  @JsonKey(toJson: agreementsToJson)
-  List<UserAgreementModel> agreements;
+  List<UserAgreementModel>? agreements;
 
   ///产品数
-  int entrySize;
+  int? entrySize;
 
   ///生产总数
-  int totalQuantity;
+  int? totalQuantity;
 
   ///总金额
-  double totalAmount;
+  double? totalAmount;
 
-  @JsonKey(toJson: orderPaymentAccouontToJson)
-  OrderPaymentAccountData paymentAccount;
+  OrderPaymentAccountData? paymentAccount;
 
   ///是否为代理
-  bool agentOrder;
+  bool? agentOrder;
 
   ///服务费用比例
-  double serviceFeePercent;
+  double? serviceFeePercent;
 
   ///线上支付
-  bool payOnline;
+  bool? payOnline;
 
   ///支付订单
-  @JsonKey(toJson: paymentOrdersToList)
-  List<CmtPayOrderData> paymentOrders;
+  List<CmtPayOrderData>? paymentOrders;
 
   ///对账单
-  @JsonKey(toJson: reconciliationToList)
-  List<FastReconciliationSheetModel> reconciliationSheetList;
+  List<FastReconciliationSheetModel>? reconciliationSheetList;
 
   ///确认方
-  AgreementRoleType recipient;
+  AgreementRoleType? recipient;
 
   ///版本号
-  int version;
+  int? version;
 
   ///线下
-  bool offLine;
+  bool? offLine;
 
   SalesProductionOrderModel(
-      {String code,
-      int originOrderId,
-      int parentId,
-      ProductionOrderModel originOrder,
-      OrderProgressPlanModel progressPlan,
-      String name,
-      CooperationMode cooperationMode,
-      int itemsCount,
-      bool invoiceNeeded,
-      double invoiceTaxPoint,
-      B2BCustomerModel merchandiser,
-      B2BCustomerModel creator,
-      CompanyModel belongTo,
-      B2BCustomerModel productionLeader,
-      B2BDeptModel productionDept,
-    bool deleted,
-    bool canceling,
-    ProgressWorkSheetModel progressWorkSheet,
-    List<MediaModel> attachments,
-    this.haveDeposit,
-    this.managementMode,
-    this.uniqueCode,
-    this.labels,
-    this.outOrderState,
-    this.acceptState,
-    this.currentCancelApply,
-    this.acceptProcessTime,
-    this.salesDateStart,
-    this.salesDateEnd,
-    this.currentAuditOrder,
-    this.payPlanType,
-    this.type,
-    this.freightPayer,
-    this.cooperator,
-    this.payPlan,
-    this.planLeader,
-    this.approvers,
-    this.purchasingLeader,
-    this.originCooperator,
-    this.targetCooperator,
-    this.state,
-    this.shippingAddress,
-    this.auditNeeded,
-    this.auditState,
-    this.sendAuditNeeded,
-    this.sendApprovers,
-    this.sendAuditState,
-    this.originCompany,
-    this.sendBy,
-    this.remarks,
-    this.currentSendAuditOrder,
-    this.taskOrderEntries,
-    this.agreements,
-    this.entrySize,
-    this.totalQuantity,
-    this.totalAmount,
-    this.paymentAccount,
-    this.agentOrder,
-    this.serviceFeePercent,
-    this.payOnline,
-    this.reconciliationSheetList,
-    this.recipient,
-    this.offLine,
-    this.version})
+      {String? code,
+      int? originOrderId,
+      int? parentId,
+      ProductionOrderModel? originOrder,
+      OrderProgressPlanModel? progressPlan,
+      String? name,
+      CooperationMode? cooperationMode,
+      int? itemsCount,
+      bool? invoiceNeeded,
+      double? invoiceTaxPoint,
+      B2BCustomerModel? merchandiser,
+      B2BCustomerModel? creator,
+      CompanyModel? belongTo,
+      B2BCustomerModel? productionLeader,
+      B2BDeptModel? productionDept,
+      bool? deleted,
+      bool? canceling,
+      ProgressWorkSheetModel? progressWorkSheet,
+      List<MediaModel>? attachments,
+      this.haveDeposit,
+      this.managementMode,
+      this.uniqueCode,
+      this.labels,
+      this.outOrderState,
+      this.acceptState,
+      this.currentCancelApply,
+      this.acceptProcessTime,
+      this.salesDateStart,
+      this.salesDateEnd,
+      this.currentAuditOrder,
+      this.payPlanType,
+      this.type,
+      this.freightPayer,
+      this.cooperator,
+      this.payPlan,
+      this.planLeader,
+      this.approvers,
+      this.purchasingLeader,
+      this.originCooperator,
+      this.targetCooperator,
+      this.state,
+      this.shippingAddress,
+      this.auditNeeded,
+      this.auditState,
+      this.sendAuditNeeded,
+      this.sendApprovers,
+      this.sendAuditState,
+      this.originCompany,
+      this.sendBy,
+      this.remarks,
+      this.currentSendAuditOrder,
+      this.taskOrderEntries,
+      this.agreements,
+      this.entrySize,
+      this.totalQuantity,
+      this.totalAmount,
+      this.paymentAccount,
+      this.agentOrder,
+      this.serviceFeePercent,
+      this.payOnline,
+      this.reconciliationSheetList,
+      this.recipient,
+      this.offLine,
+      this.version})
       : super(
             code: code,
             originOrderId: originOrderId,
@@ -381,208 +332,178 @@ class SalesProductionOrderModel extends ProductionOrderModel {
             attachments: attachments);
 
   factory SalesProductionOrderModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$SalesProductionOrderModelFromJson(json);
+      _$SalesProductionOrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SalesProductionOrderModelToJson(this);
-
-  static List<Map<String, dynamic>> b2bCutomersToJson(
-      List<B2BCustomerModel> models) =>
-      models == null
-          ? null
-          : models.map((e) => B2BCustomerModel.toJson(e)).toList();
-
-  static List<Map<String, dynamic>> productionTaskOrdersToList(
-      List<ProductionTaskOrderModel> models) =>
-      models == null ? null : models.map((e) => e.toJson()).toList();
-
-  static List<Map<String, dynamic>> paymentOrdersToList(
-      List<CmtPayOrderData> datas) =>
-      datas == null ? null : datas.map((e) => e.toJson()).toList();
-
-  static List<Map<String, dynamic>> reconciliationToList(
-      List<FastReconciliationSheetModel> datas) =>
-      datas == null ? null : datas.map((e) => e.toJson()).toList();
-
-  static List<Map<String, dynamic>> agreementsToJson(
-      List<UserAgreementModel> models) =>
-      models == null ? null : models.map((e) => e.toJson()).toList();
-
-  static Map<String, dynamic> orderPaymentAccouontToJson(
-      OrderPaymentAccountData data) =>
-      data == null ? null : data.toJson();
 }
 
 ///生产任务工单
 @JsonSerializable()
 class ProductionTaskOrderModel extends ProductionOrderModel {
   ///产品
-  @JsonKey(toJson: ApparelProductModel.toJson)
-  ApparelProductModel product;
+  ApparelProductModel? product;
 
   ///收发任务
 
   ///成本预算
 
   ///外发订单
-  ProductionOrderModel outOrder;
+  ProductionOrderModel? outOrder;
 
   ///类型
-  ProductionTaskOrderType type;
+  ProductionTaskOrderType? type;
 
   ///收货地址
-  @JsonKey(toJson: AddressModel.toJson)
-  AddressModel shippingAddress;
+  AddressModel? shippingAddress;
 
   ///排序
-  int sortNum;
+  int? sortNum;
 
   ///单价
-  double unitPrice;
+  double? unitPrice;
 
   ///数量
-  int quantity;
+  int? quantity;
 
   ///总成本
-  double totalPrimeCost;
+  double? totalPrimeCost;
 
   ///总销价
-  double totalSalesPrice;
+  double? totalSalesPrice;
 
   ///总利润
-  double totalProfit;
+  double? totalProfit;
 
   ///交货日期
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime deliveryDate;
+  DateTime? deliveryDate;
 
   ///外发工厂规模
-  PopulationScale populationScale;
+  PopulationScale? populationScale;
 
   ///状态
-  ProductionTaskOrderState state;
+  ProductionTaskOrderState? state;
 
   ///进度工单已初始化
-  bool progressInit;
+  bool? progressInit;
 
   ///工艺要求
-  String productionProcessContent;
+  String? productionProcessContent;
 
   ///工艺单文件
-  List<MediaModel> medias;
+  List<MediaModel>? medias;
 
   ///备注
-  String remarks;
+  String? remarks;
 
   ///优先级
-  int priorityLevel;
+  int? priorityLevel;
 
   ///当前阶段
-  ProgressPhaseModel currentPhase;
+  ProgressPhaseModel? currentPhase;
 
   ///颜色尺码款
-  @JsonKey(toJson: ColorSizeEntryV2Model.listToJson)
-  List<ColorSizeEntryV2Model> colorSizeEntries;
+  List<ColorSizeEntryV2Model>? colorSizeEntries;
 
   /// 关联外发单号
-  String outboundOrderCode;
+  String? outboundOrderCode;
 
   ///利润百分比
-  int profitPercent;
+  int? profitPercent;
 
   ///管理模式
-  ManagementMode managementMode;
+  ManagementMode? managementMode;
 
   ///来源合作商
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel originCooperator;
+  CooperatorModel? originCooperator;
 
   ///外发合作商
-  @JsonKey(toJson: CooperatorModel.toJson)
-  CooperatorModel targetCooperator;
+  CooperatorModel? targetCooperator;
 
   ///生产工单单号
-  String productionWorkOrderCode;
+  String? productionWorkOrderCode;
 
   ///审核状态
-  String auditState;
+  String? auditState;
 
   ///发货任务
-  dynamic receiveDispatchTask;
+  dynamic? receiveDispatchTask;
 
   ///对账任务
-  dynamic reconciliationTask;
+  dynamic? reconciliationTask;
 
-  ProductionTaskOrderModel({String code,
-    int originOrderId,
-    int parentId,
-    ProductionOrderModel originOrder,
-    OrderProgressPlanModel progressPlan,
-    String name,
-    CooperationMode cooperationMode,
-    int itemsCount,
-    bool invoiceNeeded,
-    double invoiceTaxPoint,
-    B2BCustomerModel merchandiser,
-    B2BCustomerModel creator,
-    CompanyModel belongTo,
-    B2BCustomerModel productionLeader,
-    B2BDeptModel productionDept,
-    bool deleted,
-    bool canceling,
-    ProgressWorkSheetModel progressWorkSheet,
-    List<MediaModel> attachments,
-    this.product,
-    this.outOrder,
-    this.type,
-    this.shippingAddress,
-    this.sortNum,
-    this.unitPrice,
-    this.quantity,
-    this.totalPrimeCost,
-    this.totalSalesPrice,
-    this.totalProfit,
-    this.deliveryDate,
-    this.populationScale,
-    this.state,
-    this.progressInit,
-    this.productionProcessContent,
-    this.medias,
-    this.remarks,
-    this.priorityLevel,
-    this.currentPhase,
-    this.colorSizeEntries,
-    this.outboundOrderCode,
-    this.auditState,
-    this.targetCooperator,
-    this.reconciliationTask,
-    this.receiveDispatchTask,
-    this.profitPercent,
-    this.productionWorkOrderCode,
-    this.originCooperator,
-    this.managementMode})
+  ProductionTaskOrderModel(
+      {String? code,
+      int? originOrderId,
+      int? parentId,
+      ProductionOrderModel? originOrder,
+      OrderProgressPlanModel? progressPlan,
+      String? name,
+      CooperationMode? cooperationMode,
+      int? itemsCount,
+      bool? invoiceNeeded,
+      double? invoiceTaxPoint,
+      B2BCustomerModel? merchandiser,
+      B2BCustomerModel? creator,
+      CompanyModel? belongTo,
+      B2BCustomerModel? productionLeader,
+      B2BDeptModel? productionDept,
+      bool? deleted,
+      bool? canceling,
+      ProgressWorkSheetModel? progressWorkSheet,
+      List<MediaModel>? attachments,
+      this.product,
+      this.outOrder,
+      this.type,
+      this.shippingAddress,
+      this.sortNum,
+      this.unitPrice,
+      this.quantity,
+      this.totalPrimeCost,
+      this.totalSalesPrice,
+      this.totalProfit,
+      this.deliveryDate,
+      this.populationScale,
+      this.state,
+      this.progressInit,
+      this.productionProcessContent,
+      this.medias,
+      this.remarks,
+      this.priorityLevel,
+      this.currentPhase,
+      this.colorSizeEntries,
+      this.outboundOrderCode,
+      this.auditState,
+      this.targetCooperator,
+      this.reconciliationTask,
+      this.receiveDispatchTask,
+      this.profitPercent,
+      this.productionWorkOrderCode,
+      this.originCooperator,
+      this.managementMode})
       : super(
-      code: code,
-      originOrderId: originOrderId,
-      parentId: parentId,
-      originOrder: originOrder,
-      progressPlan: progressPlan,
-      name: name,
-      cooperationMode: cooperationMode,
-      itemsCount: itemsCount,
-      invoiceNeeded: invoiceNeeded,
-      invoiceTaxPoint: invoiceTaxPoint,
-      merchandiser: merchandiser,
-      creator: creator,
-      belongTo: belongTo,
-      productionLeader: productionLeader,
-      productionDept: productionDept,
-      deleted: deleted,
-      canceling: canceling,
-      progressWorkSheet: progressWorkSheet,
-      attachments: attachments);
+            code: code,
+            originOrderId: originOrderId,
+            parentId: parentId,
+            originOrder: originOrder,
+            progressPlan: progressPlan,
+            name: name,
+            cooperationMode: cooperationMode,
+            itemsCount: itemsCount,
+            invoiceNeeded: invoiceNeeded,
+            invoiceTaxPoint: invoiceTaxPoint,
+            merchandiser: merchandiser,
+            creator: creator,
+            belongTo: belongTo,
+            productionLeader: productionLeader,
+            productionDept: productionDept,
+            deleted: deleted,
+            canceling: canceling,
+            progressWorkSheet: progressWorkSheet,
+            attachments: attachments);
 
   factory ProductionTaskOrderModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProductionTaskOrderModelFromJson(json);
+      _$ProductionTaskOrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductionTaskOrderModelToJson(this);
 }
@@ -591,30 +512,28 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
 @JsonSerializable()
 class ProductionOrderCancelApplyModel extends ItemModel {
   ///原因
-  String reason;
+  String? reason;
 
   ///状态
-  CancelingApplyState state;
+  CancelingApplyState? state;
 
   ///处理时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime processTime;
+  DateTime? processTime;
 
   ///取消时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime cancelTime;
+  DateTime? cancelTime;
 
   ///处理用户
-  @JsonKey(toJson: userToJson)
-  UserModel processUser;
+  UserModel? processUser;
 
   ///申请用户
-  @JsonKey(toJson: userToJson)
-  UserModel applyUser;
+  UserModel? applyUser;
 
   ///申请时间
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime applyTime;
+  DateTime? applyTime;
 
   ProductionOrderCancelApplyModel({
     this.reason,
@@ -627,13 +546,10 @@ class ProductionOrderCancelApplyModel extends ItemModel {
   });
 
   factory ProductionOrderCancelApplyModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$ProductionOrderCancelApplyModelFromJson(json);
+      _$ProductionOrderCancelApplyModelFromJson(json);
 
   Map<String, dynamic> toJson() =>
       _$ProductionOrderCancelApplyModelToJson(this);
-
-  static Map<String, dynamic> userToJson(UserModel model) =>
-      model == null ? null : UserModel.toJson(model);
 }
 
 ///生产工单标签

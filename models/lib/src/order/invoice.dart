@@ -7,29 +7,28 @@ part 'invoice.g.dart';
 @JsonSerializable()
 class InvoiceTitleModel extends ItemModel {
   /// 公司名称
-  String company;
+  String? company;
 
   /// 税号
-  String taxNumber;
+  String? taxNumber;
 
   /// 公司地址
-  String address;
+  String? address;
 
   /// 公司电话
-  String phone;
+  String? phone;
 
   /// 开户银行
-  String bankOfDeposit;
+  String? bankOfDeposit;
 
   /// 银行账户
-  String bankAccount;
+  String? bankAccount;
 
   /// 是否默认抬头
-  bool defaultTitle;
+  bool? defaultTitle;
 
   /// 抬头归属
-  @JsonKey(toJson: principalToJson)
-  PrincipalModel belongTo;
+  PrincipalModel? belongTo;
 
   InvoiceTitleModel({
     this.company,
@@ -43,47 +42,43 @@ class InvoiceTitleModel extends ItemModel {
   });
 
   factory InvoiceTitleModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$InvoiceTitleModelFromJson(json);
+      _$InvoiceTitleModelFromJson(json);
 
-  static Map<String, dynamic> toJson(InvoiceTitleModel model) =>
-      model == null ? null : _$InvoiceTitleModelToJson(model);
-
-  static Map<String, dynamic> principalToJson(PrincipalModel model) =>
-      model == null ? null : PrincipalModel.toJson(model);
+  Map<String, dynamic> toJson() => _$InvoiceTitleModelToJson(this);
 }
 
 /// 开票信息
 @JsonSerializable()
 class TaxInvoiceModel extends ItemModel {
   /// 购方
-  String buyer;
+  String? buyer;
 
   /// 销方
-  String seller;
+  String? seller;
 
   /// 开票类型
-  InvoiceType type;
+  InvoiceType? type;
 
   /// 开票类别
-  InvoiceCategory category;
+  InvoiceCategory? category;
 
   /// 发票类型
-  InvoiceRecipientType recipientType;
+  InvoiceRecipientType? recipientType;
 
   /// 抬头
-  String recipient;
+  String? recipient;
 
   /// 开票状态
-  InvoiceStatus status;
+  InvoiceStatus? status;
 
   /// 发票代码
-  String serialCode;
+  String? serialCode;
 
   /// 发票金额
-  double amount;
+  double? amount;
 
   /// 开票日期
-  DateTime billingDate;
+  DateTime? billingDate;
 
   TaxInvoiceModel({
     this.buyer,
@@ -99,10 +94,9 @@ class TaxInvoiceModel extends ItemModel {
   });
 
   factory TaxInvoiceModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$TaxInvoiceModelFromJson(json);
+      _$TaxInvoiceModelFromJson(json);
 
-  static Map<String, dynamic> toJson(TaxInvoiceModel model) =>
-      model == null ? null : _$TaxInvoiceModelToJson(model);
+  Map<String, dynamic> toJson() => _$TaxInvoiceModelToJson(this);
 }
 
 /// 开票类别

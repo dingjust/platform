@@ -13,13 +13,13 @@ enum CompanyType {
 @JsonSerializable()
 class UserGroupModel extends PrincipalGroupModel {
   UserGroupModel({
-    MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    ArticleApprovalStatus approvalStatus,
-    String contactPhone,
-    String contactPerson,
+    MediaModel? profilePicture,
+    String? uid,
+    String? name,
+    List<PrincipalModel>? members,
+    ArticleApprovalStatus? approvalStatus,
+    String? contactPhone,
+    String? contactPerson,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -31,15 +31,12 @@ class UserGroupModel extends PrincipalGroupModel {
         );
 
   factory UserGroupModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$UserGroupModelFromJson(json);
+      _$UserGroupModelFromJson(json);
 
-  static Map<String, dynamic> toJson(UserGroupModel model) =>
-      model == null ? null : _$UserGroupModelToJson(model);
+  Map<String, dynamic> toJson() => _$UserGroupModelToJson(this);
 
-  static List<Map<String, dynamic>> listToJson(List<UserGroupModel> models) =>
-      models == null
-          ? null
-          : models.map((e) => UserGroupModel.toJson(e)).toList();
+  static List<Map<String, dynamic>?>? listToJson(List<UserGroupModel> models) =>
+      models == null ? null : models.map((e) => e.toJson()).toList();
 }
 
 ///认证状态
@@ -85,77 +82,73 @@ const FactoryReviewStateLocalizedMap = {
 @JsonSerializable()
 class CompanyModel extends UserGroupModel {
   /// 星级
-  int starLevel;
-  @JsonKey(toJson: _addressToJson)
-  AddressModel contactAddress;
-  String address;
-  String describe;
+  int? starLevel;
+  AddressModel? contactAddress;
+  String? address;
+  String? describe;
 
   //注册时间
   @JsonKey(
       name: "creationTime",
-      fromJson: _dateTimefromMilliseconds,
-      toJson: _dateTimetoMilliseconds)
-  DateTime creationTime;
+      fromJson: dateTimefromMilliseconds,
+      toJson: dateTimetoMilliseconds)
+  DateTime? creationTime;
 
   //开户税号
-  String taxNumber;
+  String? taxNumber;
 
   //开户银行
-  String bankOfDeposit;
+  String? bankOfDeposit;
 
   //工商注册号/统一社会信用代码
-  String businessRegistrationNo;
+  String? businessRegistrationNo;
 
   //法定代表人
-  String legalRepresentative;
+  String? legalRepresentative;
 
   //法定代表人证件号码
-  String certificateOfLegal;
+  String? certificateOfLegal;
 
   //认证证件
-  @JsonKey(toJson: _mediasToJson)
-  List<MediaModel> certificates;
+  List<MediaModel>? certificates;
 
   //合作品牌
-  String cooperativeBrand;
+  String? cooperativeBrand;
 
   //QQ
-  String qq;
+  String? qq;
 
   //微信
-  String wechat;
+  String? wechat;
 
   //企业类型
-  CompanyType type;
+  CompanyType? type;
 
 //认证状态
-  AuthenticationStatus authenticationStatus;
+  AuthenticationStatus? authenticationStatus;
 
   //图文详情列表
-  @JsonKey(toJson: _companyProfilesToJson)
-  List<CompanyProfileModel> profiles;
+  List<CompanyProfileModel>? profiles;
 
   //标签
-  @JsonKey(toJson: _labelsToJson)
-  List<LabelModel> labels;
+  List<LabelModel>? labels;
 
   //职务
-  String duties;
+  String? duties;
 
   // 联系人uid
-  String contactUid;
+  String? contactUid;
 
   CompanyModel(
-      {MediaModel profilePicture,
-      String uid,
-      String name,
-      List<PrincipalModel> members,
-      ArticleApprovalStatus approvalStatus,
+      {MediaModel? profilePicture,
+      String? uid,
+      String? name,
+      List<PrincipalModel>? members,
+      ArticleApprovalStatus? approvalStatus,
       //联系人
-      String contactPerson,
+      String? contactPerson,
       //联系电话
-      String contactPhone,
+      String? contactPhone,
       this.starLevel,
       this.address,
       this.describe,
@@ -185,68 +178,42 @@ class CompanyModel extends UserGroupModel {
             contactPhone: contactPhone);
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CompanyModelFromJson(json);
+      _$CompanyModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CompanyModel model) =>
-      model == null ? null : _$CompanyModelToJson(model);
-
-  static Map<String, dynamic> _addressToJson(AddressModel model) =>
-      model == null ? null : AddressModel.toJson(model);
-
-  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => MediaModel.toJson(model)).toList();
-
-  static List<Map<String, dynamic>> _companyProfilesToJson(
-          List<CompanyProfileModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => CompanyProfileModel.toJson(model)).toList();
-
-  static List<Map<String, dynamic>> _labelsToJson(List<LabelModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => LabelModel.toJson(model)).toList();
-
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
-
-  static int _dateTimetoMilliseconds(DateTime date) =>
-      date == null ? null : date.millisecondsSinceEpoch;
+  Map<String, dynamic> toJson() => _$CompanyModelToJson(this);
 }
 
 @JsonSerializable()
 class OrgUnitModel extends CompanyModel {
-  String path;
+  String? path;
 
   OrgUnitModel({
-    MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    int starLevel,
-    String address,
-    String describe,
-    AddressModel contactAddress,
-    DateTime creationTime,
-    String taxNumber,
-    String bankOfDeposit,
-    List<MediaModel> certificates,
-    String contactPerson,
-    String contactPhone,
-    String cooperativeBrand,
-    String qq,
-    String wechat,
-    String businessRegistrationNo,
-    String legalRepresentative,
-    String certificateOfLegal,
-    CompanyType type,
-    ArticleApprovalStatus approvalStatus,
-    List<CompanyProfileModel> companyProfiles,
-    List<LabelModel> labels,
-    String duties,
-    String contactUid,
+    MediaModel? profilePicture,
+    String? uid,
+    String? name,
+    List<PrincipalModel>? members,
+    int? starLevel,
+    String? address,
+    String? describe,
+    AddressModel? contactAddress,
+    DateTime? creationTime,
+    String? taxNumber,
+    String? bankOfDeposit,
+    List<MediaModel>? certificates,
+    String? contactPerson,
+    String? contactPhone,
+    String? cooperativeBrand,
+    String? qq,
+    String? wechat,
+    String? businessRegistrationNo,
+    String? legalRepresentative,
+    String? certificateOfLegal,
+    CompanyType? type,
+    ArticleApprovalStatus? approvalStatus,
+    List<CompanyProfileModel>? companyProfiles,
+    List<LabelModel>? labels,
+    String? duties,
+    String? contactUid,
     this.path,
   }) : super(
             profilePicture: profilePicture,
@@ -277,69 +244,68 @@ class OrgUnitModel extends CompanyModel {
             contactUid: contactUid);
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$OrgUnitModelFromJson(json);
+      _$OrgUnitModelFromJson(json);
 
-  static Map<String, dynamic> toJson(OrgUnitModel model) =>
-      model == null ? null : _$OrgUnitModelToJson(model);
+  Map<String, dynamic> toJson() => _$OrgUnitModelToJson(this);
 }
 
 @JsonSerializable()
 class B2BUnitModel extends OrgUnitModel {
-  bool active;
-  String email;
-  String phone;
+  bool? active;
+  String? email;
+  String? phone;
 
-  double longitude;
+  double? longitude;
 
-  double latitude;
+  double? latitude;
 
-  String locationAddress;
+  String? locationAddress;
 
-  bool profileCompleted;
+  bool? profileCompleted;
 
   ///认证类型
-  String approvalType;
+  String? approvalType;
 
   ///已托管
-  bool trusteeshipByPlatform;
+  bool? trusteeshipByPlatform;
 
   B2BUnitModel(
-      {MediaModel profilePicture,
-      String uid,
-      String name,
-      List<PrincipalModel> members,
-      String path,
-      int starLevel,
-      AddressModel contactAddress,
-      String address,
-      String describe,
-      DateTime creationTime,
-      String taxNumber,
-      String bankOfDeposit,
-      List<MediaModel> certificates,
-      String contactPerson,
-      String contactPhone,
-      String cooperativeBrand,
-      String qq,
-      String wechat,
-      String businessRegistrationNo,
-      String legalRepresentative,
-      String certificateOfLegal,
-      CompanyType type,
-      ArticleApprovalStatus approvalStatus,
-      List<CompanyProfileModel> companyProfiles,
-    List<LabelModel> labels,
-    String duties,
-    String contactUid,
-    this.approvalType,
-    this.active,
-    this.email,
-    this.phone,
-    this.profileCompleted,
-    this.locationAddress,
-    this.longitude,
-    this.latitude,
-    this.trusteeshipByPlatform})
+      {MediaModel? profilePicture,
+      String? uid,
+      String? name,
+      List<PrincipalModel>? members,
+      String? path,
+      int? starLevel,
+      AddressModel? contactAddress,
+      String? address,
+      String? describe,
+      DateTime? creationTime,
+      String? taxNumber,
+      String? bankOfDeposit,
+      List<MediaModel>? certificates,
+      String? contactPerson,
+      String? contactPhone,
+      String? cooperativeBrand,
+      String? qq,
+      String? wechat,
+      String? businessRegistrationNo,
+      String? legalRepresentative,
+      String? certificateOfLegal,
+      CompanyType? type,
+      ArticleApprovalStatus? approvalStatus,
+      List<CompanyProfileModel>? companyProfiles,
+      List<LabelModel>? labels,
+      String? duties,
+      String? contactUid,
+      this.approvalType,
+      this.active,
+      this.email,
+      this.phone,
+      this.profileCompleted,
+      this.locationAddress,
+      this.longitude,
+      this.latitude,
+      this.trusteeshipByPlatform})
       : super(
             profilePicture: profilePicture,
             uid: uid,
@@ -370,74 +336,71 @@ class B2BUnitModel extends OrgUnitModel {
             contactUid: contactUid);
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$B2BUnitModelFromJson(json);
+      _$B2BUnitModelFromJson(json);
 
-  static Map<String, dynamic> toJson(B2BUnitModel model) =>
-      model == null ? null : _$B2BUnitModelToJson(model);
+  Map<String, dynamic> toJson() => _$B2BUnitModelToJson(this);
 }
 
 @JsonSerializable()
 class BrandModel extends B2BUnitModel {
   //品牌名
-  String brand;
+  String? brand;
 
   //规模范围
-  ScaleRanges scaleRange;
+  ScaleRanges? scaleRange;
 
   //风格
-  List<String> styles;
+  List<String>? styles;
 
   //生产大类
-  @JsonKey(toJson: _categorysToJson)
-  List<CategoryModel> categories;
+  List<CategoryModel>? categories;
 
   //优势类目
-  @JsonKey(toJson: _categorysToJson)
-  List<CategoryModel> adeptAtCategories;
+  List<CategoryModel>? adeptAtCategories;
 
   //年龄段
-  List<AgeRanges> ageRanges;
+  List<AgeRanges>? ageRanges;
 
   //价位段（春秋）
-  List<PriceRanges> priceRange1s;
+  List<PriceRanges>? priceRange1s;
 
   //价位段（秋冬）
-  List<PriceRanges> priceRange2s;
+  List<PriceRanges>? priceRange2s;
 
   //价位段（秋冬）
-  List<String> salesMarket;
+  List<String>? salesMarket;
 
   BrandModel({
-    MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    String path,
-    bool active,
-    int starLevel,
-    String email,
-    String phone,
-    AddressModel contactAddress,
-    String address,
-    DateTime creationTime,
-    String taxNumber,
-    String bankOfDeposit,
-    List<MediaModel> certificates,
-    String contactPerson,
-    String contactPhone,
-    String cooperativeBrand,
-    String qq,
-    String wechat,
-    String businessRegistrationNo,
-    String legalRepresentative,
-    String certificateOfLegal,
-    CompanyType type,
-    ArticleApprovalStatus approvalStatus,
-    List<CompanyProfileModel> companyProfiles,
-    List<LabelModel> labels,
-    String duties,
-    String contactUid,
-    bool trusteeshipByPlatform,
+    MediaModel? profilePicture,
+    String? uid,
+    String? name,
+    List<PrincipalModel>? members,
+    String? path,
+    bool? active,
+    int? starLevel,
+    String? email,
+    String? phone,
+    AddressModel? contactAddress,
+    String? address,
+    DateTime? creationTime,
+    String? taxNumber,
+    String? bankOfDeposit,
+    List<MediaModel>? certificates,
+    String? contactPerson,
+    String? contactPhone,
+    String? cooperativeBrand,
+    String? qq,
+    String? wechat,
+    String? businessRegistrationNo,
+    String? legalRepresentative,
+    String? certificateOfLegal,
+    CompanyType? type,
+    ArticleApprovalStatus? approvalStatus,
+    List<CompanyProfileModel>? companyProfiles,
+    List<LabelModel>? labels,
+    String? duties,
+    String? contactUid,
+    bool? trusteeshipByPlatform,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -466,296 +429,254 @@ class BrandModel extends B2BUnitModel {
             contactPerson: contactPerson,
             contactPhone: contactPhone,
             cooperativeBrand: cooperativeBrand,
-      qq: qq,
-      wechat: wechat,
-      businessRegistrationNo: businessRegistrationNo,
-      certificateOfLegal: certificateOfLegal,
-      legalRepresentative: legalRepresentative,
-      type: type,
-      approvalStatus: approvalStatus,
-      companyProfiles: companyProfiles,
-      labels: labels,
-      duties: duties,
-      contactUid: contactUid,
-      trusteeshipByPlatform: trusteeshipByPlatform);
+            qq: qq,
+            wechat: wechat,
+            businessRegistrationNo: businessRegistrationNo,
+            certificateOfLegal: certificateOfLegal,
+            legalRepresentative: legalRepresentative,
+            type: type,
+            approvalStatus: approvalStatus,
+            companyProfiles: companyProfiles,
+            labels: labels,
+            duties: duties,
+            contactUid: contactUid,
+            trusteeshipByPlatform: trusteeshipByPlatform);
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$BrandModelFromJson(json);
+      _$BrandModelFromJson(json);
 
-  static Map<String, dynamic> toJson(BrandModel model) =>
-      model == null ? null : _$BrandModelToJson(model);
-
-  static List<Map<String, dynamic>> _categorysToJson(
-          List<CategoryModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => CategoryModel.toJson(model)).toList();
+  Map<String, dynamic> toJson() => _$BrandModelToJson(this);
 }
 
 @JsonSerializable()
 class FactoryModel extends B2BUnitModel {
   /// 历史接单数
-  int historyOrdersCount;
+  int? historyOrdersCount;
 
   /// 接单成功率
-  double orderedSuccessRate;
+  double? orderedSuccessRate;
 
   //规模范围
-  ScaleRanges scaleRange;
+  ScaleRanges? scaleRange;
 
   /// 人数规模
-  PopulationScale populationScale;
+  PopulationScale? populationScale;
 
   //生产大类
-  @JsonKey(toJson: _categoriesToJson)
-  List<CategoryModel> categories;
+  List<CategoryModel>? categories;
 
   //优势类目
-  @JsonKey(toJson: _categoriesToJson)
-  List<CategoryModel> adeptAtCategories;
+  List<CategoryModel>? adeptAtCategories;
 
   //合作方式
-  List<CooperationModes> cooperationModes;
+  List<CooperationModes>? cooperationModes;
 
   //开发能力
-  bool developmentCapacity;
+  bool? developmentCapacity;
 
   //月均产能
-  MonthlyCapacityRange monthlyCapacityRange;
+  MonthlyCapacityRange? monthlyCapacityRange;
 
   //车位数量
-  int latheQuantity;
+  int? latheQuantity;
 
   //响应报价时间
-  int responseQuotedTime;
+  int? responseQuotedTime;
 
   //现货产品
-  @JsonKey(toJson: _productToJson)
-  List<ProductModel> products;
+  List<ProductModel>? products;
 
   //经度
-  double locationX;
+  double? locationX;
 
   //纬度
-  double locationY;
+  double? locationY;
 
-  bool invited;
+  bool? invited;
 
   //距离
-  double distance;
+  double? distance;
 
   //产业集群
-  @JsonKey(toJson: _industrialClusterToJson)
-  IndustrialClusterModel industrialCluster;
+  IndustrialClusterModel? industrialCluster;
 
   //厂房数量
-  int factoryBuildingsQuantity;
+  int? factoryBuildingsQuantity;
 
   //产线数量
-  int productionLineQuantity;
+  int? productionLineQuantity;
 
   //生产模式
-  String productionMode;
+  String? productionMode;
 
   //设备
   //裁剪部
-  List<String> cuttingDepartment;
+  List<String>? cuttingDepartment;
 
   //生产车间
-  List<String> productionWorkshop;
+  List<String>? productionWorkshop;
 
   //尾部
-  List<String> lastDepartment;
+  List<String>? lastDepartment;
 
   //设计
-  String design;
+  String? design;
 
   //打板
-  String pattern;
+  String? pattern;
 
   //覆盖范围
-  String coverageArea;
+  String? coverageArea;
 
   //自营产品
-  int proprietaryProducts;
+  int? proprietaryProducts;
 
   //免费打样
-  String freeProofing;
+  String? freeProofing;
 
   //质量等级
-  List<String> qualityLevels;
+  List<String>? qualityLevels;
 
   //产能
-  @JsonKey(toJson: _capacitiesToJson)
-  List<FactoryCapacityModel> capacities;
+  List<FactoryCapacityModel>? capacities;
 
   ///厂门照片
-  @JsonKey(toJson: MediaModel.toJson)
-  MediaModel gatePhoto;
+  MediaModel? gatePhoto;
 
   ///裁床照片
-  @JsonKey(toJson: MediaModel.toJson)
-  MediaModel cuttingTablePhoto;
+  MediaModel? cuttingTablePhoto;
 
   ///车缝照片
-  @JsonKey(toJson: MediaModel.toJson)
-  MediaModel sewingWorkshopPhoto;
+  MediaModel? sewingWorkshopPhoto;
 
   ///尾部照片
-  @JsonKey(toJson: MediaModel.toJson)
-  MediaModel backEndPhoto;
+  MediaModel? backEndPhoto;
 
   ///简介
-  String intro;
+  String? intro;
 
   ///工厂资料审阅状态
-  FactoryReviewState reviewState;
+  FactoryReviewState? reviewState;
 
   ///审核原因
-  String reviewReasons;
+  String? reviewReasons;
 
   ///收藏ID
-  int favoriteId;
+  int? favoriteId;
 
-  FactoryModel({MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    String path,
-    bool active,
-    int starLevel,
-    AddressModel contactAddress,
-    String address,
-    String describe,
-    DateTime creationTime,
-    String taxNumber,
-    String bankOfDeposit,
-    List<MediaModel> certificates,
-    String contactPerson,
-    String contactPhone,
-    String cooperativeBrand,
-    String qq,
-    String wechat,
-    String businessRegistrationNo,
-    String legalRepresentative,
-    String certificateOfLegal,
-    CompanyType type,
-    ArticleApprovalStatus approvalStatus,
-    List<CompanyProfileModel> companyProfiles,
-    List<LabelModel> labels,
-    String duties,
-    String contactUid,
-    String approvalType,
-    bool trusteeshipByPlatform,
-    this.historyOrdersCount,
-    this.orderedSuccessRate,
-    this.monthlyCapacityRange,
-    this.categories,
-    this.scaleRange,
-    this.developmentCapacity,
-    this.latheQuantity,
-    this.cooperationModes,
-    this.responseQuotedTime,
-    this.products,
-    this.adeptAtCategories,
-    this.locationX,
-    this.locationY,
-    this.industrialCluster,
-    this.invited,
-    this.distance,
-    this.productionMode,
-    this.cuttingDepartment,
-    this.productionWorkshop,
-    this.lastDepartment,
-    this.qualityLevels,
-    this.design,
-    this.pattern,
-    this.freeProofing,
-    this.productionLineQuantity,
-    this.factoryBuildingsQuantity,
-    this.coverageArea,
-    this.proprietaryProducts,
-    this.capacities,
-    this.populationScale,
-    this.gatePhoto,
-    this.cuttingTablePhoto,
-    this.sewingWorkshopPhoto,
-    this.intro,
-    this.backEndPhoto,
-    this.reviewState,
-    this.reviewReasons,
-    this.favoriteId})
+  FactoryModel(
+      {MediaModel? profilePicture,
+      String? uid,
+      String? name,
+      List<PrincipalModel>? members,
+      String? path,
+      bool? active,
+      int? starLevel,
+      AddressModel? contactAddress,
+      String? address,
+      String? describe,
+      DateTime? creationTime,
+      String? taxNumber,
+      String? bankOfDeposit,
+      List<MediaModel>? certificates,
+      String? contactPerson,
+      String? contactPhone,
+      String? cooperativeBrand,
+      String? qq,
+      String? wechat,
+      String? businessRegistrationNo,
+      String? legalRepresentative,
+      String? certificateOfLegal,
+      CompanyType? type,
+      ArticleApprovalStatus? approvalStatus,
+      List<CompanyProfileModel>? companyProfiles,
+      List<LabelModel>? labels,
+      String? duties,
+      String? contactUid,
+      String? approvalType,
+      bool? trusteeshipByPlatform,
+      this.historyOrdersCount,
+      this.orderedSuccessRate,
+      this.monthlyCapacityRange,
+      this.categories,
+      this.scaleRange,
+      this.developmentCapacity,
+      this.latheQuantity,
+      this.cooperationModes,
+      this.responseQuotedTime,
+      this.products,
+      this.adeptAtCategories,
+      this.locationX,
+      this.locationY,
+      this.industrialCluster,
+      this.invited,
+      this.distance,
+      this.productionMode,
+      this.cuttingDepartment,
+      this.productionWorkshop,
+      this.lastDepartment,
+      this.qualityLevels,
+      this.design,
+      this.pattern,
+      this.freeProofing,
+      this.productionLineQuantity,
+      this.factoryBuildingsQuantity,
+      this.coverageArea,
+      this.proprietaryProducts,
+      this.capacities,
+      this.populationScale,
+      this.gatePhoto,
+      this.cuttingTablePhoto,
+      this.sewingWorkshopPhoto,
+      this.intro,
+      this.backEndPhoto,
+      this.reviewState,
+      this.reviewReasons,
+      this.favoriteId})
       : super(
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      members: members,
-      path: path,
-      active: active,
-      starLevel: starLevel,
-      describe: describe,
-      address: address,
-      contactAddress: contactAddress,
-      creationTime: creationTime,
-      taxNumber: taxNumber,
-      bankOfDeposit: bankOfDeposit,
-      certificates: certificates,
-      contactPerson: contactPerson,
-      contactPhone: contactPhone,
-      cooperativeBrand: cooperativeBrand,
-      qq: qq,
-      wechat: wechat,
-      businessRegistrationNo: businessRegistrationNo,
-      certificateOfLegal: certificateOfLegal,
-      legalRepresentative: legalRepresentative,
-      type: type,
-      approvalStatus: approvalStatus,
-      companyProfiles: companyProfiles,
-      labels: labels,
-      duties: duties,
-      contactUid: contactUid,
-      approvalType: approvalType,
-      trusteeshipByPlatform: trusteeshipByPlatform);
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            members: members,
+            path: path,
+            active: active,
+            starLevel: starLevel,
+            describe: describe,
+            address: address,
+            contactAddress: contactAddress,
+            creationTime: creationTime,
+            taxNumber: taxNumber,
+            bankOfDeposit: bankOfDeposit,
+            certificates: certificates,
+            contactPerson: contactPerson,
+            contactPhone: contactPhone,
+            cooperativeBrand: cooperativeBrand,
+            qq: qq,
+            wechat: wechat,
+            businessRegistrationNo: businessRegistrationNo,
+            certificateOfLegal: certificateOfLegal,
+            legalRepresentative: legalRepresentative,
+            type: type,
+            approvalStatus: approvalStatus,
+            companyProfiles: companyProfiles,
+            labels: labels,
+            duties: duties,
+            contactUid: contactUid,
+            approvalType: approvalType,
+            trusteeshipByPlatform: trusteeshipByPlatform);
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$FactoryModelFromJson(json);
+      _$FactoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(FactoryModel model) =>
-      model == null ? null : _$FactoryModelToJson(model);
-
-  static List<Map<String, dynamic>> _categoriesToJson(
-          List<CategoryModel> categories) =>
-      categories == null
-          ? null
-          : categories
-          .map((category) => CategoryModel.toJson(category))
-          .toList();
-
-  static List<Map<String, dynamic>> _capacitiesToJson(
-          List<FactoryCapacityModel> capacities) =>
-      capacities == null
-          ? null
-          : capacities
-          .map((capacity) => FactoryCapacityModel.toJson(capacity))
-          .toList();
-
-  static List<Map<String, dynamic>> _productToJson(
-          List<ProductModel> products) =>
-      products == null
-          ? null
-          : products.map((product) => ProductModel.toJson(product)).toList();
-
-  static Map<String, dynamic> _industrialClusterToJson(
-          IndustrialClusterModel model) =>
-      model == null ? null : IndustrialClusterModel.toJson(model);
+  Map<String, dynamic> toJson() => _$FactoryModelToJson(this);
 }
 
 @JsonSerializable()
 class LabelModel extends ItemModel {
-  String name;
-  String group;
-  List<IndustrialClusterModel> clusters;
-  int id;
+  String? name;
+  String? group;
+  List<IndustrialClusterModel>? clusters;
+  int? id;
 
   LabelModel({
     this.group,
@@ -765,19 +686,18 @@ class LabelModel extends ItemModel {
   });
 
   factory LabelModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$LabelModelFromJson(json);
+      _$LabelModelFromJson(json);
 
-  static Map<String, dynamic> toJson(LabelModel model) =>
-      model == null ? null : _$LabelModelToJson(model);
+  Map<String, dynamic> toJson() => _$LabelModelToJson(this);
 }
 
 //产业集群
 @JsonSerializable()
 class IndustrialClusterModel extends ItemModel {
-  String code;
-  String name;
-  List<LabelModel> labels;
-  int companiesCount;
+  String? code;
+  String? name;
+  List<LabelModel>? labels;
+  int? companiesCount;
 
   IndustrialClusterModel(
     this.code,
@@ -787,18 +707,16 @@ class IndustrialClusterModel extends ItemModel {
   });
 
   factory IndustrialClusterModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$IndustrialClusterModelFromJson(json);
+      _$IndustrialClusterModelFromJson(json);
 
-  static Map<String, dynamic> toJson(IndustrialClusterModel model) =>
-      model == null ? null : _$IndustrialClusterModelToJson(model);
+  Map<String, dynamic> toJson() => _$IndustrialClusterModelToJson(this);
 }
 
 //工厂图文详情
 @JsonSerializable()
 class CompanyProfileModel extends ItemModel {
-  @JsonKey(toJson: _mediasToJson)
-  List<MediaModel> medias;
-  String description;
+  List<MediaModel>? medias;
+  String? description;
 
   CompanyProfileModel({
     this.medias,
@@ -806,34 +724,28 @@ class CompanyProfileModel extends ItemModel {
   });
 
   factory CompanyProfileModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CompanyProfileModelFromJson(json);
+      _$CompanyProfileModelFromJson(json);
 
-  static Map<String, dynamic> toJson(CompanyProfileModel model) =>
-      model == null ? null : _$CompanyProfileModelToJson(model);
-
-  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => MediaModel.toJson(model)).toList();
+  Map<String, dynamic> toJson() => _$CompanyProfileModelToJson(this);
 }
 
 //供应商
 @JsonSerializable()
 class SupplierModel extends ItemModel {
   //工厂信息
-  FactoryModel factory;
+  FactoryModel? factory;
 
   //合作次数
-  int orderCount;
+  int? orderCount;
 
   //报价次数
-  int quoteCount;
+  int? quoteCount;
 
   //报价单信息（取最新一条）
-  QuoteModel quoteOrder;
+  QuoteModel? quoteOrder;
 
   //采购订单信息（取最新一条）
-  PurchaseOrderModel purchaseOrder;
+  PurchaseOrderModel? purchaseOrder;
 
   SupplierModel(
       {this.factory,
@@ -843,10 +755,9 @@ class SupplierModel extends ItemModel {
       this.quoteCount});
 
   factory SupplierModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$SupplierModelFromJson(json);
+      _$SupplierModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SupplierModel model) =>
-      model == null ? null : _$SupplierModelToJson(model);
+  Map<String, dynamic> toJson() => _$SupplierModelToJson(this);
 }
 
 //合作方式枚举
@@ -916,7 +827,7 @@ const ScaleRangesLocalizedMap = {
   ScaleRanges.SR005: "5000万以上",
 };
 
-ScaleRanges scaleRangeFromString(String val) {
+ScaleRanges? scaleRangeFromString(String val) {
   return _$enumDecodeNullable(_$ScaleRangesEnumMap, val);
 }
 
@@ -956,9 +867,7 @@ const PopulationScaleLocalizedMap = {
 //生产模式
 enum ProductionMode {
   SINGLE_PIECE_PRODUCTION_LINE,
-
   HANGING_PRODUCTION_LINE,
-
   PIPELINE_PRODUCTION_LINE
 }
 
@@ -971,19 +880,12 @@ const ProductionModeLocalizedMap = {
 //裁剪部
 enum CuttingDepartment {
   COMPUTER_AUTOMATIC_CUTTING_MACHINE,
-
   MANUAL_BED_CUTTING,
-
   FULLY_AUTOMATIC_BROACHING_MACHINE,
-
   SHRINKING_MACHINE,
-
   PRESSING_MACHINE,
-
   PLATE_CHANGING_MACHINE,
-
   LOOSENING_MACHINE,
-
   CLOTH_INSPECTING_MACHINE
 }
 
@@ -1001,29 +903,17 @@ const CuttingDepartmentLocalizedMap = {
 //生产车间
 enum ProductionWorkshop {
   COMPUTERIZED_FLATCAR,
-
   COMPUTERIZED_THREE_LINE_OVERLOCK_SEWING_MACHINE,
-
   COMPUTER_FIVE_LINE_SEWING_MACHINE,
-
   TWIN_NEEDLES_MACHINE,
-
   POCKET_HOLE_SEWING_MACHINE,
-
   KNIFE_MACHINE,
-
   FLATLOCK_MACHINE,
-
   CHAIN_STITCH_FEED_OFF_ARM_MACHINE,
-
   FOUR_LINE_FLAT_SEWING_MACHINE,
-
   FULLY_AUTOMATIC_TEMPLATE_MACHINE,
-
   AUTOMATIC_BAG_STICKING_MACHINE,
-
   WOOL_FILLING_MACHINE,
-
   ZIGZAG_SEWING_MACHINE,
 }
 
@@ -1046,23 +936,14 @@ const ProductionWorkshopLocalizedMap = {
 //尾部
 enum LastDepartment {
   EYELET_END_MACHINE,
-
   DIRECT_EYE_MACHINE,
-
   BUTTON_ATTACHING_MACHINE,
-
   JUJUBE_PRINTER_MACHINE,
-
   RIVET_MACHINE,
-
   BLINDING_MACHINE,
-
   BAHT_EDGE_MACHINE,
-
   BRACE_MACHINE,
-
   SUCTION_LINE_MACHINE,
-
   NEEDLE_INSPECTING_MACHINE
 }
 
@@ -1188,102 +1069,109 @@ const CompanyTypeStateLocalizedMap = {
 //认证状态model
 @JsonSerializable()
 class AuthenticationModel extends ItemModel {
-  AuthenticationState personalState;
-  AuthenticationState companyState;
-  CompanyTypeState companyType;
+  AuthenticationState? personalState;
+  AuthenticationState? companyState;
+  CompanyTypeState? companyType;
 
   AuthenticationModel(
       {this.personalState, this.companyState, this.companyType});
 
   factory AuthenticationModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$AuthenticationModelFromJson(json);
+      _$AuthenticationModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AuthenticationModel model) =>
-      model == null ? null : _$AuthenticationModelToJson(model);
+  Map<String, dynamic> toJson() => _$AuthenticationModelToJson(this);
 }
 
 //认证信息model
 @JsonSerializable()
 class AuthenticationInfoModel extends ItemModel {
   //个人认证code
-  String code;
+  String? code;
+
   //个人认证姓名
-  String name;
+  String? name;
+
   //个人认证身份证号码
-  String idCard;
+  String? idCard;
+
   //个人电话号码
-  String mobile;
+  String? mobile;
 
   //公司名称
-  String companyName;
+  String? companyName;
+
   //公司统一社会代码
-  String organization;
+  String? organization;
+
   //认证人角色 AGENT代理人，LEGAL法人代表
-  String role;
+  String? role;
+
   //代理人或法人名字
-  String username;
+  String? username;
+
   //身份证号码
-  String idCardNum;
+  String? idCardNum;
+
   //认证方式
-  String verifyWay;
+  String? verifyWay;
+
   //公司类型
-  String companyType;
+  String? companyType;
 
-  String bankName;
+  String? bankName;
 
-  String bankDetailName;
+  String? bankDetailName;
 
-  String bankCardNo;
+  String? bankCardNo;
 
-  AuthenUserInfo agent;
+  AuthenUserInfo? agent;
 
-  AuthenUserInfo legal;
+  AuthenUserInfo? legal;
 
-  MediaModel certImg;
+  MediaModel? certImg;
 
   ///公司编号
-  String companyCode;
+  String? companyCode;
 
-  AuthenticationInfoModel({this.code,
-    this.name,
-    this.idCard,
-    this.mobile,
-    this.companyName,
-    this.organization,
-    this.role,
-    this.username,
-    this.idCardNum,
-    this.verifyWay,
-    this.companyType,
-    this.bankName,
-    this.bankDetailName,
-    this.bankCardNo,
-    this.agent,
-    this.legal,
-    this.certImg,
-    this.companyCode});
+  AuthenticationInfoModel(
+      {this.code,
+      this.name,
+      this.idCard,
+      this.mobile,
+      this.companyName,
+      this.organization,
+      this.role,
+      this.username,
+      this.idCardNum,
+      this.verifyWay,
+      this.companyType,
+      this.bankName,
+      this.bankDetailName,
+      this.bankCardNo,
+      this.agent,
+      this.legal,
+      this.certImg,
+      this.companyCode});
 
   factory AuthenticationInfoModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$AuthenticationInfoModelFromJson(json);
+      _$AuthenticationInfoModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AuthenticationInfoModel model) =>
-      model == null ? null : _$AuthenticationInfoModelToJson(model);
+  Map<String, dynamic> toJson() => _$AuthenticationInfoModelToJson(this);
 }
 
 @JsonSerializable()
 class CertificationInfo {
-  final int code;
-  final String msg;
-  final int resultCode;
-  final AuthenticationInfoModel data;
+  final int? code;
+  final String? msg;
+  final int? resultCode;
+  final AuthenticationInfoModel? data;
 
   CertificationInfo(this.code, this.msg, this.resultCode, this.data);
 
   factory CertificationInfo.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$CertificationInfoFromJson(json);
+      _$CertificationInfoFromJson(json);
 
-  static Map<String, dynamic> toJson(CertificationInfo model) =>
-      model == null ? null : _$CertificationInfoToJson(model);
+  Map<String, dynamic> toJson() => _$CertificationInfoToJson(this);
 }
 
 enum VerifyWay {
@@ -1308,15 +1196,14 @@ const AuthenticationRoleLocalizedMap = {
 
 @JsonSerializable()
 class AuthenUserInfo {
-  String mobile;
-  String idCardNum;
-  String name;
+  String? mobile;
+  String? idCardNum;
+  String? name;
 
   AuthenUserInfo(this.mobile, this.idCardNum, this.name);
 
   factory AuthenUserInfo.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$AuthenUserInfoFromJson(json);
+      _$AuthenUserInfoFromJson(json);
 
-  static Map<String, dynamic> toJson(AuthenUserInfo model) =>
-      model == null ? null : _$AuthenUserInfoToJson(model);
+  Map<String, dynamic> toJson() => _$AuthenUserInfoToJson(this);
 }

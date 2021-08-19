@@ -7,41 +7,39 @@ enum MessageType { DEFAULT }
 
 @JsonSerializable()
 class MessageModel extends ItemModel {
-  String title;
-  String description;
-  String date;
-  MessageType type = MessageType.DEFAULT;
-  MediaModel image;
-  String code;
+  String? title;
+  String? description;
+  String? date;
+  MessageType? type = MessageType.DEFAULT;
+  MediaModel? image;
+  String? code;
 
   MessageModel(this.title,
       {this.type, this.date, this.description, this.image, this.code});
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$MessageModelFromJson(json);
+      _$MessageModelFromJson(json);
 
-  static Map<String, dynamic> toJson(MessageModel model) =>
-      model == null ? null : _$MessageModelToJson(model);
+  Map<String, dynamic> toJson() => _$MessageModelToJson(this);
 }
 
 @JsonSerializable()
 class NotifyModel extends ItemModel {
-  String title;
-  String code;
-  String body;
-  String uid;
-  String openTarget;
-  @JsonKey(toJson: _mediaToJson)
-  List<MediaModel> images;
-  String openUrl;
-  MsgModule moduleCode;
-  String params;
-  int groupCode;
-  bool read;
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
-  DateTime readTime;
-  @JsonKey(fromJson: _dateTimefromMilliseconds)
-  DateTime creationtime;
+  String? title;
+  String? code;
+  String? body;
+  String? uid;
+  String? openTarget;
+  List<MediaModel>? images;
+  String? openUrl;
+  MsgModule? moduleCode;
+  String? params;
+  int? groupCode;
+  bool? read;
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime? readTime;
+  @JsonKey(fromJson: dateTimefromMilliseconds)
+  DateTime? creationtime;
 
   NotifyModel(
       {this.title,
@@ -59,38 +57,27 @@ class NotifyModel extends ItemModel {
       this.params});
 
   factory NotifyModel.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$NotifyModelFromJson(json);
+      _$NotifyModelFromJson(json);
 
-  static Map<String, dynamic> toJson(NotifyModel model) =>
-      model == null ? null : _$NotifyModelToJson(model);
-
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
-
-  static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => MediaModel.toJson(model)).toList();
+  Map<String, dynamic> toJson() => _$NotifyModelToJson(this);
 }
 
 @JsonSerializable()
 class FeedbackData extends ItemModel {
-  String type;
+  String? type;
 
-  String content;
+  String? content;
 
-  @JsonKey(toJson: FeddbackBelongItem.toJson)
-  FeddbackBelongItem belongItem;
+  FeddbackBelongItem? belongItem;
 
   ///创建者
-  @JsonKey(toJson: B2BCustomerModel.toJson)
-  B2BCustomerModel creator;
+  B2BCustomerModel? creator;
 
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime creationtime;
+  DateTime? creationtime;
 
   @JsonKey(fromJson: dateTimefromMilliseconds)
-  DateTime modifiedtime;
+  DateTime? modifiedtime;
 
   FeedbackData(
       {this.type,
@@ -101,27 +88,25 @@ class FeedbackData extends ItemModel {
       this.modifiedtime});
 
   factory FeedbackData.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$FeedbackDataFromJson(json);
+      _$FeedbackDataFromJson(json);
 
-  static Map<String, dynamic> toJson(FeedbackData model) =>
-      model == null ? null : _$FeedbackDataToJson(model);
+  Map<String, dynamic> toJson() => _$FeedbackDataToJson(this);
 }
 
 @JsonSerializable()
 class FeddbackBelongItem extends ItemModel {
-  String code;
+  String? code;
 
-  String state;
+  String? state;
 
-  bool refunding;
+  bool? refunding;
 
   FeddbackBelongItem({this.code, this.state, this.refunding});
 
   factory FeddbackBelongItem.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : _$FeddbackBelongItemFromJson(json);
+      _$FeddbackBelongItemFromJson(json);
 
-  static Map<String, dynamic> toJson(FeddbackBelongItem model) =>
-      model == null ? null : _$FeddbackBelongItemToJson(model);
+  Map<String, dynamic> toJson() => _$FeddbackBelongItemToJson(this);
 }
 
 enum MsgModule {
