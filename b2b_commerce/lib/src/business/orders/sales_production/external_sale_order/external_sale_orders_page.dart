@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -115,10 +116,6 @@ class _AddButton extends StatelessWidget {
           }
         });
       },
-      child: Icon(
-        Icons.add,
-        color: Colors.white,
-      ),
-    );
+        child: B2BV2Image.fab());
   }
 }

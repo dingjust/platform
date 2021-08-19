@@ -168,8 +168,8 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
       ),
       NavigationMenu(
           BottomNavigationBarItem(
-              icon: B2BV2Image.tab_2_1(width: 20, height: 20),
-              activeIcon: B2BV2Image.tab_2(width: 20, height: 20),
+              icon: B2BV2Image.tab_4_1(width: 20, height: 20),
+              activeIcon: B2BV2Image.tab_4(width: 20, height: 20),
               label: '看款下单'),
           ProductsPage()),
       // NavigationMenu(
@@ -188,15 +188,15 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
           RequirementTypeSelectPage()),
       NavigationMenu(
         BottomNavigationBarItem(
-            icon: B2BV2Image.tab_3_1(width: 20, height: 20),
-            activeIcon: B2BV2Image.tab_3(width: 20, height: 20),
+            icon: B2BV2Image.tab_2_1(width: 20, height: 20),
+            activeIcon: B2BV2Image.tab_2(width: 20, height: 20),
             label: '工作台'),
         BusinessHomePage(),
       ),
       NavigationMenu(
         BottomNavigationBarItem(
-            icon: B2BV2Image.tab_4_1(width: 20, height: 20),
-            activeIcon: B2BV2Image.tab_4(width: 20, height: 20),
+            icon: B2BV2Image.tab_3_1(width: 20, height: 20),
+            activeIcon: B2BV2Image.tab_3(width: 20, height: 20),
             label: '我的'),
         MyHomePage(turnToHome: () {
           _handleNavigation(0);

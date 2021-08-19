@@ -216,7 +216,7 @@ class _Header extends StatelessWidget {
         ),
         Expanded(
             child: Text(
-          '${CooperatorHelper.getCooperatorName(model.targetCooperator, model.originCompany, model.originCooperator)}',
+          '${CooperatorHelper.getCooperatorName(model.targetCooperator, model.originCompany, model.originCooperator) ?? ''}',
           style: textStyle,
           overflow: TextOverflow.ellipsis,
         )),
