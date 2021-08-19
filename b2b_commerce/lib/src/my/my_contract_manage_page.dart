@@ -1,12 +1,11 @@
+import 'package:b2b_commerce/src/common/app_image.dart';
+import 'package:b2b_commerce/src/my/contract/contract_template.dart';
+import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:flutter/material.dart';
-
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 import 'seal/contract_seal_page.dart';
-import 'package:b2b_commerce/src/common/app_image.dart';
-import 'package:b2b_commerce/src/my/contract/contract_template.dart';
-import 'package:b2b_commerce/src/my/my_contract.dart';
 
 class MyContractManagePage extends StatefulWidget {
   _MyContractManagePageState createState() => _MyContractManagePageState();
@@ -142,7 +141,8 @@ class _MyContractManagePageState extends State<MyContractManagePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ContractSealPage(
+                      builder: (context) =>
+                          ContractSealPage(
                             isSelect: false,
                           )));
             },

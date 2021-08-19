@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -26,10 +25,14 @@ class _ContractItemPageState extends State<ContractItemPage> {
       StreamController<double>.broadcast();
 
   static Map<ContractStatus, Color> _statusColors = {
-    ContractStatus.INITIATE: Colors.red,
-    ContractStatus.SIGN: Colors.yellow,
-    ContractStatus.COMPLETE: Colors.green,
-    ContractStatus.INVALID: Colors.grey,
+    ContractStatus.INITIATE: Color(0xff222222),
+    ContractStatus.SIGN: Color(0xffFF4D4F),
+    ContractStatus.COMPLETE: Color(0xff222222),
+    ContractStatus.INVALID: Color(0xff222222),
+    ContractStatus.PARTY_A_SIGN: Color(0xffFF4D4F),
+    ContractStatus.PARTY_B_SIGN: Color(0xffFF4D4F),
+    ContractStatus.WAIT_ME_SIGN: Color(0xffFF4D4F),
+    ContractStatus.WAIT_PARTNER_SIGN: Color(0xffFF4D4F),
   };
 
   @override
@@ -42,7 +45,7 @@ class _ContractItemPageState extends State<ContractItemPage> {
             builder: (_) {
               return RequestDataLoading(
                 requestCallBack:
-                ContractRepository().getContract(widget.model.code),
+                    ContractRepository().getContract(widget.model.code),
                 outsideDismiss: false,
                 loadingText: '请稍候。。。',
                 entrance: '',
@@ -61,8 +64,8 @@ class _ContractItemPageState extends State<ContractItemPage> {
         });
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(5,5,5,0),
-        padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+        margin: EdgeInsets.only(top: 12),
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         child: Column(
           children: <Widget>[
             _buildHead(),
@@ -71,24 +74,22 @@ class _ContractItemPageState extends State<ContractItemPage> {
           ],
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8)
-        ),
+            color: Colors.white, borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
 
-  Widget _buildHead(){
+  Widget _buildHead() {
     return Container(
       child: Row(
         children: <Widget>[
           Expanded(
             child: Container(
               child: Text(
-                '${widget.model.title}',
+                '${DateFormatUtil.formatYMD(widget.model.createTime)}',
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
+                  color: Color(0xff222222),
+                  fontSize: 13,
                 ),
               ),
             ),
@@ -98,8 +99,9 @@ class _ContractItemPageState extends State<ContractItemPage> {
               '${ContractStatusLocalizedMap[widget.model.state]}',
               textAlign: TextAlign.end,
               style: TextStyle(
-                color: _statusColors[widget.model.state],
-              ),
+                  color: _statusColors[widget.model.state],
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -107,8 +109,9 @@ class _ContractItemPageState extends State<ContractItemPage> {
     );
   }
 
-  Widget _buildCenter(){
+  Widget _buildCenter() {
     return Container(
+      margin: EdgeInsets.only(top: 12, bottom: 4),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -116,16 +119,9 @@ class _ContractItemPageState extends State<ContractItemPage> {
               child: Text(
                 '合同编号：${widget.model.code}',
                 style: TextStyle(
-                  color: Colors.black26,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            child:  Text(
-              '${DateFormatUtil.formatYMD(widget.model.createTime)}',
-              style: TextStyle(
-                color: Colors.black26,
+                    color: Color(0xff222222),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -134,7 +130,7 @@ class _ContractItemPageState extends State<ContractItemPage> {
     );
   }
 
-  Widget _buildBottom(){
+  Widget _buildBottom() {
     return Container(
       child: Row(
         children: <Widget>[
@@ -153,7 +149,8 @@ class _ContractItemPageState extends State<ContractItemPage> {
 
   //文件下载打开
   _previewFile() async {
-    SearchResultModel resultModel = await ContractRepository().getContractPdfMedia(widget.model.code);
+    SearchResultModel resultModel =
+    await ContractRepository().getContractPdfMedia(widget.model.code);
     if (resultModel.code == 0) {
       BotToast.showText(text: '${resultModel.msg}');
       return false;
@@ -178,8 +175,7 @@ class _ContractItemPageState extends State<ContractItemPage> {
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:
-            dio.download(pdf.actualUrl, filePath,
+            requestCallBack: dio.download(pdf.actualUrl, filePath,
                 onReceiveProgress: (received, total) {
                   print((received / total * 100).toStringAsFixed(0) + "%");
                   _streamController.sink.add(received / total);
@@ -188,13 +184,16 @@ class _ContractItemPageState extends State<ContractItemPage> {
             loadingText: '请稍候。。。',
             entrance: '',
           );
-        }).then((_){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>
-              ContractDetailPage(
-                pathPDF: filePath, contractModel: widget.model,)),
-        );
+        }).then((_) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ContractDetailPage(
+                  pathPDF: filePath,
+                  contractModel: widget.model,
+                )),
+      );
 //        Navigator.of(context)
 //            .push(new MaterialPageRoute(builder: (_) {
 //          return new Browser(
@@ -204,5 +203,4 @@ class _ContractItemPageState extends State<ContractItemPage> {
 //        }));
     });
   }
-
 }
