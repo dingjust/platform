@@ -292,6 +292,7 @@ flutter:
     - packages/assets/img/icons/b2b-v2/money@2x.png
     - packages/assets/img/icons/b2b-v2/contract/seal@2x.png
     - packages/assets/img/icons/b2b-v2/contract/template@2x.png
+    - packages/assets/temp/index/delegation.png
 
   fonts:
     - family: b2bIcons

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
@@ -30,6 +31,7 @@ class MyContractPage extends StatefulWidget {
   String type;
 
   MyContractPage({this.keyword, this.type});
+
   _MyContractPageState createState() => _MyContractPageState();
 }
 
@@ -45,8 +47,8 @@ class _MyContractPageState extends State<MyContractPage>
       initialIndex: widget.type == 'WAIT_ME_SIGN'
           ? 1
           : widget.type == 'WAIT_PARTNER_SIGN'
-              ? 2
-              : 0,
+          ? 2
+          : 0,
       length: statuses.length,
       vsync: this, //动画效果的异步处理，默认格式
     );
@@ -67,8 +69,7 @@ class _MyContractPageState extends State<MyContractPage>
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      HistorySearch(
+                  builder: (context) => HistorySearch(
                         hintText: '请输入编号，名称，订单号，合作商名称搜索',
                         historyKey: GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
                       )));
@@ -125,6 +126,7 @@ class _MyContractPageState extends State<MyContractPage>
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                           colors: <Color>[Color(0xffFED800), Color(0xFFFEC300)],
+
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -250,8 +252,7 @@ class MyContractListPage extends StatefulWidget {
 
   final ScrollController scrollController = ScrollController();
 
-  MyContractListPage(
-      {this.keyword: '', this.status = const EnumModel('ALL', '全部')});
+  MyContractListPage({this.keyword: '', this.status = const EnumModel('ALL', '全部')});
 
   _MyContractListPageState createState() => _MyContractListPageState();
 }
@@ -261,7 +262,6 @@ class _MyContractListPageState extends State<MyContractListPage>
   @override
   void initState() {
     super.initState();
-
     var bloc = BLoCProvider.of<MyContractBLoC>(context);
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels ==

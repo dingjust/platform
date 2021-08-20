@@ -141,8 +141,7 @@ class _MyContractManagePageState extends State<MyContractManagePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ContractSealPage(
+                      builder: (context) => ContractSealPage(
                             isSelect: false,
                           )));
             },
