@@ -243,19 +243,19 @@ class _DelegationServicePageState extends State<DelegationServicePage> {
               children: [
                 Expanded(
                     child: Container(
-                      color: Colors.white,
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      child: TextFieldBorderComponentV2(
-                        padding: EdgeInsets.symmetric(horizontal: 0),
-                        hideDivider: true,
-                        isRequired: true,
-                        textAlign: TextAlign.left,
-                        hintText: '输入微信号',
-                        controller: wechatController,
-                        focusNode: wechatFocusNode,
-                        onChanged: (v) {},
-                      ),
-                    )),
+                  color: Colors.white,
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFieldBorderComponentV2(
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    hideDivider: true,
+                    isRequired: true,
+                    textAlign: TextAlign.left,
+                    hintText: '输入微信号',
+                    controller: wechatController,
+                    focusNode: wechatFocusNode,
+                    onChanged: (v) {},
+                  ),
+                )),
                 _buildIsSame()
               ],
             ),
@@ -292,28 +292,30 @@ class _DelegationServicePageState extends State<DelegationServicePage> {
   }
 
   Widget _buildSubBtn() {
-    return GestureDetector(
-      onTap: _onSubmit,
-      child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          // margin: EdgeInsets.only(top: 165, left: 12, right: 12),
-          decoration: BoxDecoration(
-              color: Color(0xFFFED800),
-              borderRadius: BorderRadius.circular(24)),
-          height: 48,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '确定',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
+    return Container(
+      color: Color(0xFFF7F7F7),
+      child: GestureDetector(
+        onTap: _onSubmit,
+        child: Container(
+            margin: EdgeInsets.fromLTRB(12, 6, 12, 14),
+            decoration: BoxDecoration(
+                color: Color(0xFFFED800),
+                borderRadius: BorderRadius.circular(24)),
+            height: 48,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '确定',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-            ],
-          )),
+              ],
+            )),
+      ),
     );
   }
 
