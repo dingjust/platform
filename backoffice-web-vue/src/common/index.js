@@ -1390,7 +1390,19 @@ let TENANT_APIS = {
   // 删除
   batchDelectRecommend () {
     return '/b2b/recommend/words/delete'
-  }
+  },
+  // 获取所有对账单
+  searchReconciliation () {
+    return '/b2b/sheets/fast/reconciliation/searchAll'
+  },
+  // 根据订单code获取相关外发单
+  getOutboundOrderByOutCode (code) {
+    return '/b2b/sales/production/order/find/by/originOrderCode/' + code
+  },
+  // 查询对账单详情
+  getReconciliationV2Detail (id) {
+    return '/b2b/sheets/fast/reconciliation/' + id;
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

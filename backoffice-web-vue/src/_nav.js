@@ -133,6 +133,10 @@ export default {
         name: '交易订单',
         url: '/order/pend-out',
         icon: 'iconNone'
+      }, {
+        name: '对账单',
+        url: '/order/reconciliation-view',
+        icon: 'iconNone'
       }
       ]
     },
