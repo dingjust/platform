@@ -72,7 +72,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       margin: EdgeInsets.only(top: 120),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
-        children: [_btnsRow()],
+        children: [_titleRow(), _btnsRow()],
       ),
     );
   }
@@ -84,22 +84,11 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       children: [
         Expanded(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-              ),
-            ),
             Text(
               '其他方式登录',
-              style: TextStyle(color: Colors.grey),
-            ),
-            Expanded(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-              ),
+              style: TextStyle(color: Colors.grey, fontSize: 10),
             ),
           ],
         ))
@@ -169,21 +158,21 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
   }
 
   Widget _buildAppleBtn(double height) {
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return FlatButton(
-        child: Container(
-          height: height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              B2BImage.apple(height: 40, width: 40),
+    // if (defaultTargetPlatform == TargetPlatform.iOS) {
+    return FlatButton(
+      child: Container(
+        height: height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            B2BImage.apple(height: 40, width: 40),
 //              Text('使用Apple登入')
-            ],
-          ),
+          ],
         ),
-        onPressed: () => authLoginHelper.handlerAppleAuthLogin(context),
-      );
-    }
+      ),
+      onPressed: () => authLoginHelper.handlerAppleAuthLogin(context),
+    );
+    // }
 
     return Container();
   }
