@@ -489,6 +489,22 @@ class UserRepositoryImpl implements UserRepository {
       return null;
     }
   }
+
+  ///一键注册
+  static Future<BaseResponse> defaultRegister(String phone, String code) async {
+    Response response;
+    try {
+      response = await http$.post(UserApis.defaultRegister(phone, code),
+          options: Options(receiveTimeout: 30000, sendTimeout: 30000));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return BaseResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
 }
 
 class ModelData<T> {

@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/my/contract/contract_select_from_page.dart';
 import 'package:b2b_commerce/src/my/contract/join_supplier_contract_page.dart';
 import 'package:connectivity/connectivity.dart';
@@ -11,8 +13,10 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'contract/contract_item_page.dart';
+import 'contract/contract_template.dart';
 import 'contract/float_select_page.dart';
 import 'contract/join_order_contract_page.dart';
+import 'seal/contract_seal_page.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -27,6 +31,7 @@ class MyContractPage extends StatefulWidget {
   String type;
 
   MyContractPage({this.keyword, this.type});
+
   _MyContractPageState createState() => _MyContractPageState();
 }
 
@@ -41,7 +46,9 @@ class _MyContractPageState extends State<MyContractPage>
     controller = TabController(
       initialIndex: widget.type == 'WAIT_ME_SIGN'
           ? 1
-          : widget.type == 'WAIT_PARTNER_SIGN' ? 2 : 0,
+          : widget.type == 'WAIT_PARTNER_SIGN'
+          ? 2
+          : 0,
       length: statuses.length,
       vsync: this, //动画效果的异步处理，默认格式
     );
@@ -62,8 +69,7 @@ class _MyContractPageState extends State<MyContractPage>
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      HistorySearch(
+                  builder: (context) => HistorySearch(
                         hintText: '请输入编号，名称，订单号，合作商名称搜索',
                         historyKey: GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
                       )));
@@ -76,59 +82,70 @@ class _MyContractPageState extends State<MyContractPage>
       key: _globalKey,
       bloc: MyContractBLoC.instance,
       child: Scaffold(
-          appBar: AppBarFactory.buildDefaultAppBar(
-            '合同管理',
-            actions: <Widget>[_buildSearchButton()],
-          ),
-          body: Scaffold(
-            appBar: TabBar(
-              controller: controller,
-              isScrollable: true,
-              unselectedLabelColor: Colors.black26,
-              labelColor: Colors.black,
-              indicatorSize: TabBarIndicatorSize.label,
-              labelStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black),
-              tabs: statuses.map((tab) {
-                return Tab(text: tab.name);
-              }).toList(),
-            ),
-            body: TabBarView(
-              controller: controller,
-              children: statuses
-                  .map((status) =>
-                  MyContractListPage(
-                    status: status,
-                    keyword: widget.keyword,
-                  ))
-                  .toList(),
-            ),
-          ),
-          bottomNavigationBar: Container(
-            color: Colors.white10,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            height: 50,
-            child: RaisedButton(
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '创建新合同',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
+          appBar: AppBar(
+              brightness: Brightness.light,
+              centerTitle: true,
+              elevation: 0,
+              title: Text('合同管理',
+                  style: TextStyle(
+                      color: Color(0xff000000),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
+              actions: <Widget>[_buildSearchButton()],
+              bottom: _buildBarBottom()),
+          body: DefaultTabController(
+            length: statuses.length,
+            child: Scaffold(
+              appBar: TabFactory.buildDefaultTabBar(statuses, scrollable: true),
+              body: TabBarView(
+                controller: controller,
+                children: statuses
+                    .map((status) =>
+                    MyContractListPage(
+                      status: status,
+                      keyword: widget.keyword,
+                    ))
+                    .toList(),
               ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ContractSelectFromItemPage()));
-              },
             ),
+          ),
+          bottomNavigationBar: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ContractSelectFromItemPage()));
+            },
+            child: Container(
+                color: Color(0xffF7F7F7),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                height: 72,
+                child: Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: <Color>[Color(0xffFED800), Color(0xFFFEC300)],
+
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(137, 124, 21, 0.16),
+                            blurRadius: 6.0,
+                            spreadRadius: 2.0,
+                            offset: Offset(0, 3.0),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(24)),
+                    child: Center(
+                      child: Text(
+                        '创建新合同',
+                        style: TextStyle(
+                          color: Color(0xff222222),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ))),
           )),
     );
   }
@@ -157,6 +174,74 @@ class _MyContractPageState extends State<MyContractPage>
         });
   }
 
+  PreferredSize _buildBarBottom({double height = 80,
+    TextStyle style =
+    const TextStyle(color: Color(0xff666666), fontSize: 12)}) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(height),
+      child: Container(
+        height: height,
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyContractTemplatePage()));
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    B2BV2Image.template(width: 36, height: 36),
+                    Container(
+                      // margin: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        '我的模板',
+                        style: style,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ContractSealPage(
+                              isSelect: false,
+                            )));
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    B2BV2Image.seal(width: 36, height: 36),
+                    Container(
+                      // margin: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        '我的印章',
+                        style: style,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   bool get wantKeepAlive => false;
 }
@@ -167,8 +252,7 @@ class MyContractListPage extends StatefulWidget {
 
   final ScrollController scrollController = ScrollController();
 
-  MyContractListPage(
-      {this.keyword: '', this.status = const EnumModel('ALL', '全部')});
+  MyContractListPage({this.keyword: '', this.status = const EnumModel('ALL', '全部')});
 
   _MyContractListPageState createState() => _MyContractListPageState();
 }
@@ -178,7 +262,6 @@ class _MyContractListPageState extends State<MyContractListPage>
   @override
   void initState() {
     super.initState();
-
     var bloc = BLoCProvider.of<MyContractBLoC>(context);
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels ==
@@ -193,7 +276,8 @@ class _MyContractListPageState extends State<MyContractListPage>
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<MyContractBLoC>(context);
     return Container(
-      decoration: BoxDecoration(color: Colors.grey[100]),
+      decoration: BoxDecoration(color: Color(0xffF7F7F7)),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       child: RefreshIndicator(
         onRefresh: () async {
           return await bloc.refreshData(widget.status.code, widget.keyword);

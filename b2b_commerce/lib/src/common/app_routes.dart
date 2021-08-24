@@ -51,7 +51,6 @@ import 'package:b2b_commerce/src/my/card/my_card.dart';
 import 'package:b2b_commerce/src/my/integral/integral_center_page.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
-import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/my/my_favorite.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
@@ -261,7 +260,8 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
-    ROUTE_MY_CONTRACT: (context) => MyContractManagePage(),
+    ROUTE_MY_CONTRACT: (context) => MyContractPage(),
+
     ROUTE_MY_CONTRACT_LIST: (context) => MyContractPage(),
     ROUTE_MY_CAPACITY: (context) => MyCapacityPage(),
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),

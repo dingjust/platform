@@ -140,25 +140,26 @@ class UserModel extends PrincipalModel {
 class CustomerModel extends UserModel {
   // String mobileNumber;
 
-  CustomerModel({int id,
-    MediaModel profilePicture,
-    String uid,
-    String name,
-    bool loginDisabled,
-    List<RoleModel> roles,
-    String mobileNumber,
-    int points,
-    bool agent})
+  CustomerModel(
+      {int id,
+      MediaModel profilePicture,
+      String uid,
+      String name,
+      bool loginDisabled,
+      List<RoleModel> roles,
+      String mobileNumber,
+      int points,
+      bool agent})
       : super(
-      id: id,
-      profilePicture: profilePicture,
-      uid: uid,
-      name: name,
-      loginDisabled: loginDisabled,
-      roles: roles,
-      mobileNumber: mobileNumber,
-      points: points,
-      agent: agent);
+            id: id,
+            profilePicture: profilePicture,
+            uid: uid,
+            name: name,
+            loginDisabled: loginDisabled,
+            roles: roles,
+            mobileNumber: mobileNumber,
+            points: points,
+            agent: agent);
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CustomerModelFromJson(json);

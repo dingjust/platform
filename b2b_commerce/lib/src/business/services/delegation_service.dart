@@ -6,6 +6,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'text_field_border_component_V2.dart';
+
 ///托管服务申请
 class DelegationServicePage extends StatefulWidget {
   const DelegationServicePage({Key key}) : super(key: key);
@@ -39,224 +41,281 @@ class _DelegationServicePageState extends State<DelegationServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('钉单托管'),
-        centerTitle: true,
-        elevation: 0,
-      ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        child: ListView(
-          children: [
-            _buildDetailCard(),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
-              child: Column(
-                children: [
-                  _buildContactPhone(),
-                  _buildInfo('钉单将通过隐私电话服务保障您的信息安全'),
-                  _buildWechat(),
-                  _buildIsSame(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomSheet: _buildSubBtn(),
-    );
-  }
-
-  Widget _buildDetailCard() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => _Explain()));
-      },
-      child: Container(
-        height: 100,
-        margin: EdgeInsets.only(top: 12, bottom: 16),
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(12)),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                width: 150,
-                child: Text(
-                  '超10年供应链管理团队为您的订单保驾护航',
-                  style: TextStyle(color: Color(0xff222222), fontSize: 14),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                // width: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      '了解详情',
-                      style: TextStyle(color: Color(0xff666666), fontSize: 10),
-                    ),
-                    Icon(
-                      Icons.chevron_right,
-                      color: Color(0xff666666),
-                    )
+        color: Color(0xffF7F7F7),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              expandedHeight: 240.0,
+              pinned: true,
+              elevation: 0,
+              brightness: Brightness.light,
+              title: Text('钉单托管'),
+              centerTitle: true,
+              flexibleSpace: FlexibleSpaceBar(
+                  background: Container(
+                color: Color(0xffF7F7F7),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    Align(
+                        alignment: Alignment.topCenter,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => _Explain()));
+                          },
+                          child: Container(
+                            child: Image.asset(
+                              'temp/index/delegation.png',
+                              package: 'assets',
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        ))
                   ],
                 ),
-              ),
+              )),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(<Widget>[
+                Container(
+                    margin: EdgeInsets.symmetric(vertical: 24),
+                    child: Text(
+                      '请留下您的联系方式',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Color(0xff222222),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    )),
+                _card1(),
+                _card2(),
+                // _buildSubBtn(),
+              ]),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: _buildSubBtn(),
+      resizeToAvoidBottomInset: true,
     );
   }
 
-  Widget _buildContactPhone() {
+  Widget _card1() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          Icon(Icons.phone),
+      margin: EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        children: [
           Container(
-            width: 100,
-            margin: EdgeInsets.only(left: 10),
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '联系电话',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+            height: 48,
+            decoration: BoxDecoration(
+                color: Color(0xffFFF5D7),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12))),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 20, right: 8),
+                  child: Icon(
+                    B2BIconsV2.phone_circle,
+                    color: Color(0xFFAA6E15),
+                    size: 24,
+                  ),
                 ),
-                TextSpan(
-                  text: ' *',
-                  style: TextStyle(fontSize: 16, color: Colors.red),
+                Text(
+                  '联系电话',
+                  style: TextStyle(
+                      color: Color(0xffAA6E15),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
                 )
-              ]),
+              ],
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: TextFieldBorderComponent(
-              padding: EdgeInsets.all(0),
-              hideDivider: true,
-              isRequired: true,
-              textAlign: TextAlign.left,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              inputType: TextInputType.number,
-              hintText: '输入手机号',
-              controller: contactController,
-              focusNode: contactPhoneFocusNode,
-              onChanged: (v) {
-                setState(() {
-                  if (isPhoneSame) {
-                    wechatController.text = v;
-                  }
-                });
-              },
+          Row(
+            children: [
+              Expanded(
+                  child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: TextFieldBorderComponentV2(
+                  padding: EdgeInsets.symmetric(horizontal: 0),
+                  hideDivider: true,
+                  isRequired: true,
+                  textAlign: TextAlign.left,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  inputType: TextInputType.number,
+                  hintText: '输入手机号',
+                  controller: contactController,
+                  focusNode: contactPhoneFocusNode,
+                  onChanged: (v) {
+                    setState(() {
+                      if (isPhoneSame) {
+                        wechatController.text = v;
+                      }
+                    });
+                  },
+                ),
+              )),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 12),
+            child: Divider(
+              color: Color(0xFFE7E7E7),
+              height: 0,
             ),
           ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                    height: 48,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(12),
+                            bottomRight: Radius.circular(12))),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          '钉单将通过隐私通话服务保障您的信息安全',
+                          style:
+                              TextStyle(color: Color(0xFFFF4D4F), fontSize: 12),
+                        ),
+                      ],
+                    )),
+              )
+            ],
+          )
         ],
       ),
     );
   }
 
-  Widget _buildInfo(String val) {
-    return Padding(
-        padding: EdgeInsets.only(right: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text('$val', style: TextStyle(fontSize: 12, color: Colors.grey))
-          ],
-        ));
+  Widget _card2() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      child: Column(
+        children: [
+          Container(
+            height: 48,
+            decoration: BoxDecoration(
+                color: Color(0xffFFF5D7),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12))),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 20, right: 8),
+                  child: Icon(
+                    B2BIconsV2.wechat_circle,
+                    color: Color(0xFFAA6E15),
+                    size: 24,
+                  ),
+                ),
+                Text(
+                  '微信号',
+                  style: TextStyle(
+                      color: Color(0xffAA6E15),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
+          Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Container(
+                  color: Colors.white,
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFieldBorderComponentV2(
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    hideDivider: true,
+                    isRequired: true,
+                    textAlign: TextAlign.left,
+                    hintText: '输入微信号',
+                    controller: wechatController,
+                    focusNode: wechatFocusNode,
+                    onChanged: (v) {},
+                  ),
+                )),
+                _buildIsSame()
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildIsSame() {
     return Padding(
-        padding: EdgeInsets.only(right: 10),
+        padding: EdgeInsets.only(right: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Checkbox(
-              value: isPhoneSame,
-              onChanged: (bool value) {
-                setState(() {
-                  isPhoneSame = value;
-                  if (value) {
-                    // widget.formState.model.details.contactWeChatNo =
-                    //     widget.formState.model.details.contactPhone;
-                    wechatController.text = contactController.text;
-                  }
-                });
-              },
+            Container(
+              margin: EdgeInsets.only(right: 4),
+              child: B2BCheckbox(
+                value: isPhoneSame,
+                onChanged: (value) {
+                  setState(() {
+                    isPhoneSame = value;
+                    if (value) {
+                      wechatController.text = contactController.text;
+                    }
+                  });
+                },
+              ),
             ),
-            Text('与手机同号'),
+            Text('与手机同号',
+                style: TextStyle(fontSize: 15, color: Color(0xFF222222)))
           ],
         ));
   }
 
-  Container _buildWechat() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          Icon(B2BIcons.wechat, color: Colors.green),
-          Container(
-            width: 100,
-            margin: EdgeInsets.only(left: 10),
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '微信号',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-              ]),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: TextFieldBorderComponent(
-              padding: EdgeInsets.all(0),
-              hideDivider: true,
-              isRequired: true,
-              textAlign: TextAlign.left,
-              hintText: '输入微信号',
-              controller: wechatController,
-              focusNode: wechatFocusNode,
-              onChanged: (v) {
-                // widget.formState.model.details.contactWeChatNo = v;
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildSubBtn() {
-    return GestureDetector(
-      onTap: _onSubmit,
-      child: Container(
-          color: Color.fromRGBO(255, 214, 12, 1),
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '确认',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
+    return Container(
+      color: Color(0xFFF7F7F7),
+      child: GestureDetector(
+        onTap: _onSubmit,
+        child: Container(
+            margin: EdgeInsets.fromLTRB(12, 6, 12, 14),
+            decoration: BoxDecoration(
+                color: Color(0xFFFED800),
+                borderRadius: BorderRadius.circular(24)),
+            height: 48,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '确定',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-            ],
-          )),
+              ],
+            )),
+      ),
     );
   }
 

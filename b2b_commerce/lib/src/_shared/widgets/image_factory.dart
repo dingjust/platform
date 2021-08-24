@@ -24,12 +24,11 @@ class ImageFactory {
     );
   }
 
-  static Widget buildThumbnailImage(
-    MediaModel media, {
-    double size = 60,
-    double containerSize = 80,
-    BoxFit fit = BoxFit.fill,
-  }) {
+  static Widget buildThumbnailImage(MediaModel media,
+      {double size = 60,
+      double containerSize = 80,
+      BoxFit fit = BoxFit.fill,
+      String processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320'}) {
     // TODO：拿media format为Thumbnail的converted图片
     return Container(
         width: containerSize,
@@ -38,7 +37,7 @@ class ImageFactory {
           width: containerSize,
           height: containerSize,
           child: CachedNetworkImage(
-            imageUrl: '${media?.previewUrl() ?? ''}',
+            imageUrl: '${media?.imageProcessUrl(processUrl)}',
             // fit: fit,
             imageBuilder: (context, imageProvider) => Container(
               width: containerSize,
@@ -48,7 +47,7 @@ class ImageFactory {
                     image: imageProvider,
                     fit: BoxFit.cover,
                   ),
-                  borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(12)),
             ),
             placeholder: (context, url) => SpinKitRing(
               color: Colors.black12,

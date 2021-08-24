@@ -72,7 +72,7 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       margin: EdgeInsets.only(top: 120),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
-        children: [_btnsRow()],
+        children: [_titleRow(), _btnsRow()],
       ),
     );
   }
@@ -84,24 +84,13 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
       children: [
         Expanded(
             child: Row(
-          children: [
-            Expanded(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-              ),
-            ),
-            Text(
-              '其他方式登录',
-              style: TextStyle(color: Colors.grey),
-            ),
-            Expanded(
-              child: Divider(
-                height: 1,
-                thickness: 1,
-              ),
-            ),
-          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '其他方式登录',
+                  style: TextStyle(color: Colors.grey, fontSize: 10),
+                ),
+              ],
         ))
       ],
     );

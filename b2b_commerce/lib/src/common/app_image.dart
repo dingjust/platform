@@ -553,4 +553,16 @@ class B2BV2Image {
     return getImage('img/icons/b2b-v2/money@2x.png',
         width: width, height: height);
   }
+
+  ///印章
+  static Image seal({double width, double height}) {
+    return getImage('img/icons/b2b-v2/contract/seal@2x.png',
+        width: width, height: height);
+  }
+
+  ///模板
+  static Image template({double width, double height}) {
+    return getImage('img/icons/b2b-v2/contract/template@2x.png',
+        width: width, height: height);
+  }
 }

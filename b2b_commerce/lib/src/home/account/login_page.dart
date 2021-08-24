@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordHide = true;
   bool _isPasswordLogin = false;
   bool validate = false;
+  bool _isAgree = false;
 
   ///倒计时间
   int countdownTime = 60;
@@ -143,13 +144,13 @@ class _LoginPageState extends State<LoginPage> {
                     margin: EdgeInsets.fromLTRB(0, 0, 56, 0),
                     child: Container(
                         child: Row(
-                          children: [
-                            Icon(
-                              Icons.lock,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        )),
+                      children: [
+                        Icon(
+                          Icons.lock,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    )),
                   ),
                   field: TextField(
                     autofocus: false,
@@ -251,14 +252,20 @@ class _LoginPageState extends State<LoginPage> {
           ),
           SliverList(
               delegate: SliverChildListDelegate([
-            _buildInputArea(),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 40),
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: OutlinedButton(
-                onPressed: () {
-                  onLogin(bloc);
-                },
+                _buildInputArea(),
+                _buildProtocolArea(),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 40),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      if (_isAgree) {
+                        onLogin(bloc);
+                      } else {
+                        BotToast.showText(
+                            text: '请先阅读并同意相关协议', align: Alignment.center);
+                      }
+                    },
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all(
                         EdgeInsets.symmetric(vertical: 10)),
@@ -268,46 +275,111 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialStateProperty.all(Constants.THEME_COLOR_MAIN),
                     side: MaterialStateProperty.all(
                         BorderSide(color: Constants.THEME_COLOR_MAIN))),
-                child: Text(
-                  _isPasswordLogin ? '登录' : '获取验证码',
-                  style: TextStyle(color: Colors.black87, fontSize: 18),
+                    child: Text(
+                      _isPasswordLogin ? '登录' : '获取验证码',
+                      style: TextStyle(color: Colors.black87, fontSize: 18),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => widget.registerPage));
-                },
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 10)),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50))),
-                ),
-                child: Text(
-                  '注册',
-                  style: TextStyle(color: Colors.black54, fontSize: 18),
-                ),
-              ),
-            ),
-            OtherAuthLoginBtnGroup(),
-          ])),
+                // Container(
+                //   padding: EdgeInsets.symmetric(horizontal: 20),
+                //   child: OutlinedButton(
+                //     onPressed: () {
+                //       Navigator.of(context).push(MaterialPageRoute(
+                //           builder: (context) => widget.registerPage));
+                //     },
+                //     style: ButtonStyle(
+                //       padding: MaterialStateProperty.all(
+                //           EdgeInsets.symmetric(vertical: 10)),
+                //       shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(50))),
+                //     ),
+                //     child: Text(
+                //       '注册',
+                //       style: TextStyle(color: Colors.black54, fontSize: 18),
+                //     ),
+                //   ),
+                // ),
+                OtherAuthLoginBtnGroup(),
+              ])),
         ],
       ),
     );
   }
 
+  Widget _buildProtocolArea() {
+    return Container(
+        padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+        child: Row(
+          children: <Widget>[
+            Checkbox(
+              onChanged: (v) {
+                setState(() {
+                  _isAgree = v;
+                  formValidate();
+                });
+              },
+              value: _isAgree,
+            ),
+            Expanded(
+              flex: 1,
+              child: Wrap(
+                alignment: WrapAlignment.start, //沿主轴方向居中
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '我已阅读并同意',
+                    style: TextStyle(color: Colors.black54, fontSize: 10),
+                  ),
+                  GestureDetector(
+                    onTap: showServiceProtocol,
+                    child: Text(
+                      '《钉单平台服务协议》',
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(color: Colors.blue, fontSize: 10),
+                    ),
+                  ),
+                  Text(
+                    '和',
+                    style: TextStyle(color: Colors.black54, fontSize: 10),
+                  ),
+                  GestureDetector(
+                    onTap: showPrivacyProtocol,
+                    child: Text(
+                      '《隐私协议》',
+                      style: TextStyle(color: Colors.blue, fontSize: 10),
+                    ),
+                  ),
+                  // GestureDetector(
+                  //   onTap: showPayProtocol,
+                  //   child: Text(
+                  //     '《钉单平台货款代收代付服务协议》',
+                  //     style: TextStyle(color: Colors.blue, fontSize: 10),
+                  //   ),
+                  // ),
+                ],
+              ),
+            )
+          ],
+        ));
+  }
+
   void formValidate() {
     setState(() {
       if (_isPasswordLogin) {
-        validate = _phoneController.text.trim().length == 11 &&
-            _passwordController.text.trim().length > 0;
+        validate = _phoneController.text
+            .trim()
+            .length == 11 &&
+            _passwordController.text
+                .trim()
+                .length > 0;
       } else {
-        validate = _phoneController.text.trim().length == 11 &&
-            _smsCaptchaController.text.trim().length > 0;
+        validate = _phoneController.text
+            .trim()
+            .length == 11 &&
+            _smsCaptchaController.text
+                .trim()
+                .length > 0;
       }
     });
   }
@@ -411,6 +483,111 @@ class _LoginPageState extends State<LoginPage> {
         _phoneController.text = oldUserName;
       });
     }
+  }
+
+  void showPayProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/paymentProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '钉单货款代收代付服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  void showServiceProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/serviceProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '钉单平台服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  void showPrivacyProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/privacyProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '隐私政策声明',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
   }
 }
 

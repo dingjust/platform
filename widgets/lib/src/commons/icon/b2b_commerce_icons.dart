@@ -211,6 +211,18 @@ class B2BIconsV2 {
   ///位置
   static const IconData location = const IconData(0xe604,
       fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///电话-圆
+  static const IconData phone_circle = const IconData(0xe605,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///微信-圆
+  static const IconData wechat_circle = const IconData(0xe606,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///勾选
+  static const IconData tick_circle = const IconData(0xe607,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
 }
 
 class CommonImage {

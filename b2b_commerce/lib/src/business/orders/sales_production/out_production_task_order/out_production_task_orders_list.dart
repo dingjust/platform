@@ -16,6 +16,8 @@ class OutProductionTaskOrdersView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OutProductionTaskOrdersState>(
       builder: (context, OutProductionTaskOrdersState state, _) => Container(
+        color: Color(0xffF7F7F7),
+        padding: EdgeInsets.symmetric(horizontal: 12),
         child: state.getEntry(status.code).totalElements > -1
             ? OutProductionTaskOrdersList(state, status)
             : Center(

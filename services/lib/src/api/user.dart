@@ -198,8 +198,7 @@ abstract class UserApis {
   static get cooperators => '/{baseSiteId}/cooperator';
 
   /// 合作商详情
-  static get cooperatorDetail =>
-          (id) {
+  static get cooperatorDetail => (id) {
         return '/{baseSiteId}/cooperator/$id';
       };
 
@@ -325,4 +324,10 @@ abstract class UserApis {
 
   /// 收藏列表
   static get favoriteSearch => '/{baseSiteId}/my/favorite/search';
+
+  /// 一键注册
+  static get defaultRegister =>
+          (phone, captcha) {
+        return '/{baseSiteId}/companies/$_clientId/oneClickRegister/$phone?captchaCode=$captcha';
+      };
 }
