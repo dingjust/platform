@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
-import 'package:b2b_commerce/src/home/product/product_detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -144,7 +143,7 @@ class ProductGridItem extends StatelessWidget {
 class ProductStaggeredGridItem extends StatelessWidget {
   final ApparelProductModel model;
 
-  static const borderRadius = 10.0;
+  static const borderRadius = 12.0;
 
   const ProductStaggeredGridItem({
     Key key,
@@ -163,12 +162,12 @@ class ProductStaggeredGridItem extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(borderRadius)),
-          padding: EdgeInsets.only(bottom: 5),
+          padding: EdgeInsets.only(bottom: 12),
           child: Column(
             children: <Widget>[
               _buildImage(context),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -178,14 +177,16 @@ class ProductStaggeredGridItem extends StatelessWidget {
                       child: Text(
                         '${model.name ?? ''}',
                         style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
+                            color: Color(0xff222222),
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: EdgeInsets.symmetric(horizontal: 12),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -194,16 +195,24 @@ class ProductStaggeredGridItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: Text(
-                              '￥${model?.minPrice ?? ''}',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
+                              margin: EdgeInsets.only(right: 10),
+                              child: RichText(
+                                text: TextSpan(
+                                    text: '￥',
+                                    style: TextStyle(
+                                        color: Color(0xFFFF4D4F),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold),
+                                    children: [
+                                      TextSpan(
+                                          text: '${model?.minPrice ?? ''}',
+                                          style: TextStyle(fontSize: 14))
+                                    ]),
+                              )),
                           Text(
                             '${getAddressStr()}',
-                            style:
-                            TextStyle(color: Colors.black54, fontSize: 10),
+                            style: TextStyle(
+                                color: Color(0xff999999), fontSize: 10),
                           ),
                         ],
                       ),
@@ -254,7 +263,7 @@ class ProductStaggeredGridItem extends StatelessWidget {
 
   void jumpToDetailPage(BuildContext context) {
     //跳转到产品详情页
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => ProductDetailPage(model.code)));
+    Navigator.of(context).pushNamed(AppRoutes.ROUTE_APPAREL_PRODUCT,
+        arguments: {'code': model.code});
   }
 }

@@ -73,7 +73,7 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
           .toDouble();
     }
 
-    if (widget.formState.product.productType.length == 1) {
+    if (widget.formState?.product?.productType?.length == 1) {
       type = widget.formState.product.productType.first;
     }
   }
@@ -212,7 +212,7 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
                               ].contains(type)) {
                                 widget.formState.model.details
                                     .maxExpectedPrice = widget.formState.product
-                                    ?.spotSteppedPrices?.first?.price ??
+                                        ?.spotSteppedPrices?.first?.price ??
                                     0;
                               }
                             });
@@ -222,8 +222,8 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
                       ],
                     ),
                   ))
-                  .toList(),
-            ))
+              .toList(),
+        ))
       ],
     );
   }

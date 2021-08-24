@@ -76,7 +76,7 @@ class ProductFilterBar extends StatelessWidget {
                         style: TextStyle(color: Colors.grey),
                       ),
                       Icon(
-                        Icons.menu,
+                        B2BIconsV2.filter,
                         size: 16,
                         color: Colors.grey,
                       )
@@ -118,18 +118,18 @@ class _FilterItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PlateProductState state = Provider.of<PlateProductState>(
-        context, listen: false);
+    PlateProductState state =
+        Provider.of<PlateProductState>(context, listen: false);
 
     return Expanded(
         child: Material(
-          color: Colors.white,
-          child: Ink(
-            child: InkWell(
-              onTap: () {
-                state.condition.sortCondition = value;
-                if (state.condition.sort == 'desc') {
-                  state.condition.sort = 'asc';
+      color: Colors.white,
+      child: Ink(
+        child: InkWell(
+          onTap: () {
+            state.condition.sortCondition = value;
+            if (state.condition.sort == 'desc') {
+              state.condition.sort = 'asc';
             } else {
               state.condition.sort = 'desc';
             }

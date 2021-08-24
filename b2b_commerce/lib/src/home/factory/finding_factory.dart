@@ -245,16 +245,15 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
               String result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      SearchModelPage(
-                        searchModel: SearchModel(
-                          historyKeywords: historyKeywords,
-                          keyword: factoryCondition.keyword,
-                          searchModelType: SearchModelType.FACTORY,
-                          factoryCondition: factoryCondition,
-                          route: GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-                        ),
-                      ),
+                  builder: (context) => SearchModelPage(
+                    searchModel: SearchModel(
+                      historyKeywords: historyKeywords,
+                      keyword: factoryCondition.keyword,
+                      searchModelType: SearchModelType.FACTORY,
+                      factoryCondition: factoryCondition,
+                      route: GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
+                    ),
+                  ),
                 ),
               );
             },
@@ -301,7 +300,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                 GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
                 GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
                 GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
-                    iconData: Icons.menu, iconSize: 18),
+                    iconData: B2BIconsV2.filter, iconSize: 18),
               ],
               stackKey: _stackKey,
               controller: _dropdownMenuController,

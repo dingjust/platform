@@ -66,7 +66,7 @@ dependencies:
   location_permissions: ^2.0.3
   city_pickers: ^0.1.29
   bot_toast: ^3.0.4
-  gzx_dropdown_menu: ^1.0.3
+  gzx_dropdown_menu: ^2.1.0
   flutter_date_pickers: ^0.0.6
   flutter_alipay: ^0.1.2
   auto_orientation: ^1.0.6
@@ -293,6 +293,8 @@ flutter:
     - packages/assets/img/icons/b2b-v2/contract/seal@2x.png
     - packages/assets/img/icons/b2b-v2/contract/template@2x.png
     - packages/assets/temp/index/delegation.png
+    - packages/assets/img/icons/b2b-v2/back@2x.png
+    - packages/assets/img/icons/b2b-v2/share_circle@2x.png
 
   fonts:
     - family: b2bIcons
