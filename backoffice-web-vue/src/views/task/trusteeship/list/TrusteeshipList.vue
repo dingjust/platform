@@ -17,6 +17,7 @@
       <el-table-column label="操作" >
         <template slot-scope="scope">
           <el-button v-if="!scope.row.isProcessed" type="text" @click="onSumbit(scope.row)">处理</el-button>
+          <el-button type="text" @click="onCancel(scope.row)">取消</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,6 +45,28 @@ export default {
     },
     async _onSumbit (row) {
       const url = this.apis().proccessedTrusteeship(row.id)
+      const result = await this.$http.put(url)
+
+      if (result.code === 1) {
+        this.$message.success('操作成功！')
+        this.$emit('onAdvancedSearch');
+      } else if (result.code === 0) {
+        this.$message.error(result.msg)
+      } else {
+        this.$message.error('操作失败！')
+      }
+    },
+    onCancel (row) {
+      this.$confirm('是否取消此托管申请?', '', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this._onCancel(row)
+      });
+    },
+    async _onCancel (row) {
+      const url = this.apis().cancelTrusteeshipApply(row.id)
       const result = await this.$http.put(url)
 
       if (result.code === 1) {
