@@ -1379,6 +1379,10 @@ let TENANT_APIS = {
   proccessedTrusteeship (id) {
     return '/b2b/trusteeship/order/proccessed/' + id
   },
+  // 取消托管申请
+  cancelTrusteeshipApply (id) {
+    return '/b2b/trusteeship/order/cancel/' + id
+  },
   // 查询热门推荐
   searchRecommendWord () {
     return '/b2b/recommend/words/list'
