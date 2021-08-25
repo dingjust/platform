@@ -565,4 +565,16 @@ class B2BV2Image {
     return getImage('img/icons/b2b-v2/contract/template@2x.png',
         width: width, height: height);
   }
+
+  ///返回
+  static Image back({double width, double height}) {
+    return getImage('img/icons/b2b-v2/back@2x.png',
+        width: width, height: height);
+  }
+
+  ///分享-圆
+  static Image share_circle({double width, double height}) {
+    return getImage('img/icons/b2b-v2/share_circle@2x.png',
+        width: width, height: height);
+  }
 }

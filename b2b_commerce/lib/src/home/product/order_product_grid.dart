@@ -11,15 +11,22 @@ class ProductStaggeredGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductState>(
-      builder: (context, ProductState state, _) => Container(
-        child: state.products != null
-            ? ProductStaggeredGridView(
-                state: state,
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ),
-      ),
+      builder: (context, ProductState state, _) =>
+          Container(child: Builder(builder: (_) {
+        if (state.products != null) {
+          if (state.products.isNotEmpty) {
+            return ProductStaggeredGridView(
+              state: state,
+            );
+          }
+          return Center(
+            child: Text('暂无数据'),
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      })),
     );
   }
 }
@@ -39,26 +46,44 @@ class ProductStaggeredGridView extends StatelessWidget {
           }
           return false;
         },
-        child: StaggeredGridView.countBuilder(
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 5),
-            crossAxisCount: 4,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            itemCount: state.products.length + 1,
-            itemBuilder: (context, index) {
-              if (index == (state.products.length)) {
-                return ProgressIndicatorFactory
+        child: RefreshIndicator(
+          onRefresh: () async {
+            state.clear();
+          },
+          child: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                sliver: SliverStaggeredGrid.countBuilder(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 13,
+                    mainAxisSpacing: 12,
+                    staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+                    itemBuilder: (context, index) {
+                      if (index == 0 || index == 1) {
+                        //第一行有上边距
+                        return Container(
+                          margin: EdgeInsets.only(top: 12),
+                          child: ProductStaggeredGridItem(
+                            model: state.products[index],
+                          ),
+                        );
+                      }
+                      return ProductStaggeredGridItem(
+                        model: state.products[index],
+                      );
+                    },
+                    itemCount: state.products.length),
+              ),
+              SliverToBoxAdapter(
+                child: ProgressIndicatorFactory
                     .buildPaddedOpacityProgressIndicator(
                   opacity: state.loadingMore ? 1.0 : 0,
-                );
-              } else {
-                return ProductStaggeredGridItem(
-                  model: state.products[index],
-                );
-              }
-            },
-            staggeredTileBuilder: (index) => StaggeredTile.fit(2)));
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
 

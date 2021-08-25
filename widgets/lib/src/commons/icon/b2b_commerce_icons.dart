@@ -223,6 +223,10 @@ class B2BIconsV2 {
   ///勾选
   static const IconData tick_circle = const IconData(0xe607,
       fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///筛选漏斗
+  static const IconData filter = const IconData(0xe837,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
 }
 
 class CommonImage {

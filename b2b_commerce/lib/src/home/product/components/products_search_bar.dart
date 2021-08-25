@@ -5,7 +5,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductsSearchBar extends StatelessWidget {
-  final double width;
+  // final double width;
   final double height;
   final String tips;
   final VoidCallback onTap;
@@ -13,8 +13,8 @@ class ProductsSearchBar extends StatelessWidget {
 
   const ProductsSearchBar({
     Key key,
-    this.width = 400,
-    this.height = 35,
+    // this.width = 400,
+    this.height = 32,
     this.tips = '搜索关键字',
     this.onTap,
     this.onSearch,
@@ -27,26 +27,22 @@ class ProductsSearchBar extends StatelessWidget {
           child: GestureDetector(
         onTap: () => _onTap(context, state),
         child: Container(
-          width: width,
+          // width: width,
           height: height,
           padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Color(0xffF0F0F0),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey[300], width: 0.5),
           ),
           child: Row(
             children: <Widget>[
-              const Icon(B2BIcons.search, color: Colors.grey, size: 18),
+              const Icon(B2BIconsV2.search, color: Color(0xff999999), size: 16),
               Container(
-                margin: EdgeInsets.only(left: 10),
-                // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-                // decoration: BoxDecoration(
-                //     color: Colors.grey[100],
-                //     borderRadius: BorderRadius.circular(5)),
+                // margin: EdgeInsets.only(left: 10),
                 child: Text(
                   state.keyword ?? tips,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  style:
+                      const TextStyle(color: Color(0xff999999), fontSize: 13),
                 ),
               )
             ],
