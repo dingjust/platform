@@ -448,6 +448,13 @@ export default {
     width: 100%;
   }
 
+  @media print {
+    #print-page p {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   .payment-application-table >>> .el-input__inner {
     border: none;
     padding: 0px;
