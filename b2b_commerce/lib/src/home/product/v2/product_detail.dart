@@ -46,10 +46,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   bool get isShrink {
     return _scrollController.hasClients &&
         _scrollController.offset >
-            (MediaQuery
-                .of(context)
-                .size
-                .width - kToolbarHeight);
+            (MediaQuery.of(context).size.width - kToolbarHeight);
   }
 
   _scrollListener() {
@@ -510,14 +507,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       RequirementOrderFormStateV2(
                           identityTypeStr: '', product: data),
                 ),
-          ],
-          child: Consumer(
-            builder: (context, RequirementOrderFormStateV2 state, _) =>
-                RequirementFormProduct(
-                  formState: state,
-                ),
-          ),
-        ),
+              ],
+              child: Consumer(
+                builder: (context, RequirementOrderFormStateV2 state, _) =>
+                    RequirementFormProduct(
+                      formState: state,
+                    ),
+              ),
+            ),
       ),
     );
   }

@@ -60,7 +60,7 @@ class ExternalSaleOrderItem extends StatelessWidget {
               ),
             ),
             _Bottom(model),
-            ..._buildPaymentInfo(context)
+            _buildPaymentInfo(context)
           ],
         ),
         decoration: BoxDecoration(
@@ -89,7 +89,43 @@ class ExternalSaleOrderItem extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildPaymentInfo(BuildContext context) {
+  Widget _buildPaymentInfo(context) {
+    return Container(
+      margin: EdgeInsets.only(top: 16),
+      child: Column(
+        children: [
+          ..._buildCMTPayOrders(context),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 56,
+                margin: EdgeInsets.only(right: 10),
+                child: Text('订单金额',
+                    style: TextStyle(color: Color(0xFF666666), fontSize: 14)),
+              ),
+              Expanded(
+                  child: RichText(
+                      text: TextSpan(
+                          text: '￥',
+                          style: TextStyle(
+                              color: Color(0xFF222222),
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
+                          children: [
+                    TextSpan(
+                        text: '${model.totalAmount.toStringAsFixed(2)}',
+                        style: TextStyle(fontSize: 14)),
+                  ]))),
+            ],
+          ),
+          _builPayBtn(context),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildCMTPayOrders(BuildContext context) {
     //判断甲乙方，乙方不支付
     if (isTarget) {
       return [];
@@ -102,70 +138,94 @@ class ExternalSaleOrderItem extends StatelessWidget {
       return [];
     }
 
+    model.paymentOrders..sort((o1, o2) => o1.batch - o2.batch);
+
     return model.paymentOrders
-        .map((e) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                    flex: 3,
-                    child: RichText(
-                        text: TextSpan(
-                            text: (e.batch == 1 ? '定金：' : '尾款：'),
-                            style: TextStyle(color: Colors.black87),
-                            children: [
-                          TextSpan(
-                              text: '￥${e.payAmount}',
-                              style: TextStyle(color: Colors.red)),
-                          TextSpan(
-                              text: '(${CmtPaymentStateLocalizedMap[e.state]})',
+        .map((e) => Container(
+              margin: EdgeInsets.only(bottom: 5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 56,
+                    margin: EdgeInsets.only(right: 10),
+                    child: Text(
+                        (e.batch == 1 && model.paymentOrders.length > 1)
+                            ? '定金'
+                            : '尾款',
+                        style:
+                            TextStyle(color: Color(0xFF666666), fontSize: 14)),
+                  ),
+                  Expanded(
+                      child: RichText(
+                          text: TextSpan(
+                              text: '￥',
                               style: TextStyle(
-                                  color: e.state == CmtPaymentState.PAID
-                                      ? Colors.green
-                                      : Colors.orange))
-                        ]))),
-                e.canPay
-                    ? GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                                  builder: (context) => OrderPaymentPageV2(e)))
-                              .then((needRefresh) {
-                            //刷新
-                            if (needRefresh != null && needRefresh) {
-                              if (type == SaleOrderItemType.IMPORT)
-                                //外接订单列表刷新
-                                Provider.of<ExternalSaleOrdersState>(context,
-                                        listen: false)
-                                    .clear();
-                              else
-                                //外发订单列表刷新
-                                Provider.of<OutOrdersState>(context,
-                                        listen: false)
-                                    .clear();
-                            }
-                          });
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 15, vertical: 2),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: Colors.orange,
-                                width: 0.5,
-                              )),
-                          child: Text(
-                            '去支付',
-                            style:
-                                TextStyle(color: Colors.orange, fontSize: 14),
-                          ),
-                        ),
-                      )
-                    : Container()
-              ],
+                                  color: Color(0xFF222222),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold),
+                              children: [
+                        TextSpan(
+                            text: '${e.payAmount.toStringAsFixed(2)}',
+                            style: TextStyle(fontSize: 14)),
+                        TextSpan(
+                            text: '  (${CmtPaymentStateLocalizedMap[e.state]})',
+                            style: TextStyle(
+                                color: e.state == CmtPaymentState.PAID
+                                    ? Color(0xFF222222)
+                                    : Color(0xFFFF4D4F),
+                                fontSize: 14))
+                      ]))),
+                ],
+              ),
             ))
         .toList();
+  }
+
+  Widget _builPayBtn(BuildContext context) {
+    CmtPayOrderData data = model.paymentOrders
+        .firstWhere((element) => element.canPay, orElse: () => null);
+    if (data != null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
+                      builder: (context) => OrderPaymentPageV2(data)))
+                  .then((needRefresh) {
+                //刷新
+                if (needRefresh != null && needRefresh) {
+                  if (type == SaleOrderItemType.IMPORT)
+                    //外接订单列表刷新
+                    Provider.of<ExternalSaleOrdersState>(context, listen: false)
+                        .clear();
+                  else
+                    //外发订单列表刷新
+                    Provider.of<OutOrdersState>(context, listen: false).clear();
+                }
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+              margin: EdgeInsets.only(top: 16),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xFFFA7E1E), Color(0xFFF53C3C)])),
+              child: Text(
+                '去支付',
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ),
+          )
+        ],
+      );
+    }
+    return Container();
   }
 
   ///来源方
@@ -342,7 +402,7 @@ class _Bottom extends StatelessWidget {
         : false;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6),
+      padding: EdgeInsets.fromLTRB(6, 0, 6, 2),
       margin: EdgeInsets.only(left: 8),
       child: Center(
         child: Text(
