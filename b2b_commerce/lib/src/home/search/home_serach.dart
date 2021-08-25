@@ -285,6 +285,7 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
             CupertinoDialogAction(
               child: Text('确认'),
               onPressed: () {
+                Navigator.of(context).pop();
                 setState(() {
                   List<String> historyKeywords = [];
                   _historyKeywords = historyKeywords;
