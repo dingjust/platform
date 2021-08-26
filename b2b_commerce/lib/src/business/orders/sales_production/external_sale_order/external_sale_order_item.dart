@@ -50,7 +50,6 @@ class ExternalSaleOrderItem extends StatelessWidget {
                 val: '${model.entrySize}',
               ),
             ),
-            _Amount(model),
             Container(
               margin: EdgeInsets.only(top: 12, bottom: 14),
               child: Divider(
@@ -315,46 +314,12 @@ class _Info extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-                '$val',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF222222),
-                    fontWeight: FontWeight.bold),
-              ))
-        ],
-      ),
-    );
-  }
-}
-
-class _Amount extends StatelessWidget {
-  final SalesProductionOrderModel model;
-
-  const _Amount(this.model, {Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          B2BV2Image.money(width: 18, height: 18),
-          Container(
-            margin: EdgeInsets.only(left: 4, right: 8),
-            child: Text('订单金额'),
-          ),
-          RichText(
-              text: TextSpan(
-                  text: '￥',
-                  style: TextStyle(
-                      fontSize: 10,
-                      color: Color(0xffFF4D4F),
-                      fontWeight: FontWeight.bold),
-                  children: [
-                    TextSpan(
-                        text: '${model.totalAmount.toStringAsFixed(2)}',
-                        style: TextStyle(fontSize: 14))
-                  ]))
+            '$val',
+            style: TextStyle(
+                fontSize: 14,
+                color: Color(0xFF222222),
+                fontWeight: FontWeight.bold),
+          ))
         ],
       ),
     );
