@@ -347,7 +347,7 @@ class _CarouselV2State extends State<CarouselV2> {
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
                 imageUrl: item.model.url,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.cover,
                 placeholder: (context, url) => SpinKitRing(
                       color: Colors.black12,
                       lineWidth: 2,

@@ -60,21 +60,19 @@ class _DelegationServicePageState extends State<DelegationServicePage> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: <Widget>[
-                        Align(
-                            alignment: Alignment.topCenter,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => _Explain()));
-                              },
-                              child: Container(
-                                child: Image.asset(
-                                  'temp/index/delegation.png',
-                                  package: 'assets',
-                                  fit: BoxFit.fitWidth,
-                                ),
-                              ),
-                            ))
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => _Explain()));
+                          },
+                          child: Container(
+                            child: Image.asset(
+                              'temp/index/delegation.png',
+                              package: 'assets',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   )),
@@ -405,8 +403,8 @@ class _Explain extends StatelessWidget {
             _Item(
               title: '如何保证资金安全?',
               val:
-              '钉单平台是生产管控型的专业平台，对委托的双方都会进行资质收集、公示、实名认证等功能配备。且相关功能和短信均链接到具备法律效力的合作企业，对生产合作中的双方确定行为、' +
-                  '签约人员均需要进行审核和认定。所以可以放心把工作交给钉单团队代为运作。',
+                  '钉单平台是生产管控型的专业平台，对委托的双方都会进行资质收集、公示、实名认证等功能配备。且相关功能和短信均链接到具备法律效力的合作企业，对生产合作中的双方确定行为、' +
+                      '签约人员均需要进行审核和认定。所以可以放心把工作交给钉单团队代为运作。',
             ),
             _Item(
               title: '托管怎么收费?',

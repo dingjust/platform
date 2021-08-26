@@ -9,23 +9,18 @@ import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:widgets/widgets.dart';
 
-class RequirementListItem extends StatefulWidget {
+class RequirementListItem extends StatelessWidget {
   final RequirementOrderModel model;
 
-  const RequirementListItem({Key key, this.model}) : super(key: key);
+  final int maxLines;
 
-  @override
-  _RequirementListItemState createState() => _RequirementListItemState();
-}
-
-class _RequirementListItemState extends State<RequirementListItem> {
-  ///文字最大行数
-  int maxLines = 3;
+  const RequirementListItem({Key key, this.model, this.maxLines = 3})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onDetail,
+      onTap: () => onDetail(context),
       child: Container(
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(8)),
@@ -34,31 +29,36 @@ class _RequirementListItemState extends State<RequirementListItem> {
           child: Column(
             children: <Widget>[
               _buildTitleRow(),
-              _buildContent(),
+              _buildContent(context),
               _buildBottom()
             ],
           )),
     );
   }
 
-  Widget _buildImages() {
+  Widget _buildImages(BuildContext iContext) {
     var pictures = getPictures();
 
     if (pictures.length == 0) {
       return Container();
     } else {
-      const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
-
       List<Widget> imageWidgets = pictures
           .map((e) => Expanded(
                   child: GestureDetector(
-                onTap: () => onPreview(e),
-                child: Container(
-                    child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) =>
-                      CachedNetworkImage(
-                    height:
-                        getImageHeight(pictures.length, constraints.maxWidth),
+                onTap: () => onPreview(e, iContext),
+                child: Container(child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
+                  double imageWidth = constraints.maxWidth;
+                  double imageHeight =
+                      getImageHeight(pictures.length, imageWidth);
+                  double ratio = MediaQuery.of(context).devicePixelRatio;
+                  String processUrl =
+                      'image_process=resize,w_${imageWidth * ratio}/crop,mid,w_${imageWidth * ratio},h_${imageHeight * ratio}';
+                  print(model.details.productName +
+                      'ratio:$ratio' +
+                      e.imageProcessUrl(processUrl));
+                  return CachedNetworkImage(
+                    height: imageHeight,
                     imageUrl: '${e.imageProcessUrl(processUrl)}',
                     placeholder: (context, url) => SpinKitRing(
                       color: Colors.grey[300],
@@ -71,8 +71,8 @@ class _RequirementListItemState extends State<RequirementListItem> {
                       size: 30,
                     ),
                     fit: BoxFit.cover,
-                  ),
-                )),
+                  );
+                })),
               )))
           .toList();
 
@@ -108,11 +108,11 @@ class _RequirementListItemState extends State<RequirementListItem> {
                     Container(
                         margin: EdgeInsets.only(right: 8),
                         child: ImageFactory.buildProcessedAvatar(
-                            widget.model.belongTo.profilePicture,
+                            model.belongTo.profilePicture,
                             processurl:
-                                'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
+                            'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
                     Expanded(
-                        child: Text('${widget.model.belongTo.name ?? ''}',
+                        child: Text('${model.belongTo.name ?? ''}',
                             style: style,
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis))
@@ -120,7 +120,10 @@ class _RequirementListItemState extends State<RequirementListItem> {
                 )),
             Expanded(
               child: Text(
-                '${RequirementOrderTypeLocalizedMap[widget.model.orderType] ?? ''}${widget.model.details.identityTypeStr != null ? '·' : ''}${widget.model.details.identityTypeStr ?? ''}',
+                '${RequirementOrderTypeLocalizedMap[model.orderType] ??
+                    ''}${model.details.identityTypeStr != null
+                    ? '·'
+                    : ''}${model.details.identityTypeStr ?? ''}',
                 style: style,
                 textAlign: TextAlign.end,
               ),
@@ -129,14 +132,14 @@ class _RequirementListItemState extends State<RequirementListItem> {
         ));
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 12, bottom: 4),
       child: Column(children: [
         Row(
           children: [
             Expanded(
-                child: Text('${widget.model.details.productName ?? ''}',
+                child: Text('${model.details.productName ?? ''}',
                     style: TextStyle(
                         fontSize: 14,
                         color: Color(0xff222222),
@@ -147,7 +150,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
           margin: EdgeInsets.only(top: 4),
           child: _buildText(),
         ),
-        _buildImages()
+        _buildImages(context)
       ]),
     );
   }
@@ -158,7 +161,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
           color: Color(0xff666666),
           fontWeight: FontWeight.w500)}) {
     return LayoutBuilder(builder: (context, constrants) {
-      final span = TextSpan(text: widget.model.remarks ?? '', style: style);
+      final span = TextSpan(text: model.remarks ?? '', style: style);
       final tp = TextPainter(
           text: span, maxLines: maxLines, textDirection: TextDirection.ltr)
         ..layout(maxWidth: constrants.maxWidth);
@@ -207,7 +210,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
           children: [
             Expanded(
                 child: Text(
-                  '${widget.model.remarks ?? ''}',
+                  '${model.remarks ?? ''}',
                   style: style,
                 ))
           ],
@@ -224,7 +227,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          widget.model.details.address != null
+          model.details.address != null
               ? Expanded(
               child: Row(children: [
                 Container(
@@ -237,15 +240,15 @@ class _RequirementListItemState extends State<RequirementListItem> {
                 ),
                 Expanded(
                     child: Text(
-                      '${widget.model.details.cityStr ?? ''}·${widget.model
-                          .details.districtStr ?? ''}',
+                      '${model.details.cityStr ?? ''}·${model.details
+                          .districtStr ?? ''}',
                       style: style,
                       overflow: TextOverflow.ellipsis,
                     ))
               ]))
               : Container(),
           Text(
-            '${DateExpress2Util.express(widget.model.creationTime)}',
+            '${DateExpress2Util.express(model.creationTime)}',
             style: style,
           )
         ],
@@ -253,22 +256,21 @@ class _RequirementListItemState extends State<RequirementListItem> {
     );
   }
 
-  void onDetail() {
+  void onDetail(BuildContext context) {
     Provider.of<CertificationStatusHelper>(context, listen: false)
         .oncheckProfile(
         context: context, onJump: () => jumpToDetailPage(context));
   }
 
   List<MediaModel> getPictures() {
-    if (widget.model?.details?.pictures == null ||
-        widget.model.details.pictures.isEmpty) {
+    if (model?.details?.pictures == null || model.details.pictures.isEmpty) {
       return [];
     }
 
-    if (widget.model.details.pictures.length > 2) {
-      return widget.model.details.pictures.getRange(0, 3).toList();
+    if (model.details.pictures.length > 2) {
+      return model.details.pictures.getRange(0, 3).toList();
     } else {
-      return widget.model.details.pictures;
+      return model.details.pictures;
     }
   }
 
@@ -292,7 +294,7 @@ class _RequirementListItemState extends State<RequirementListItem> {
 
   void jumpToDetailPage(BuildContext context) {
     Navigator.of(context).pushNamed(AppRoutes.ROUTE_REQUIREMENT,
-        arguments: {'code': widget.model.code});
+        arguments: {'code': model.code});
   }
 
   String generateDistanceStr(double distance) {
@@ -307,19 +309,19 @@ class _RequirementListItemState extends State<RequirementListItem> {
   }
 
   //图片预览
-  void onPreview(MediaModel model) {
+  void onPreview(MediaModel media, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
             GalleryPhotoViewWrapper(
-              galleryItems: widget.model.details.pictures
+              galleryItems: model.details.pictures
                   .map((model) => GalleryItem(model: model))
                   .toList(),
               backgroundDecoration: const BoxDecoration(
                 color: Colors.black,
               ),
-              initialIndex: widget.model.details.pictures.indexOf(model),
+              initialIndex: model.details.pictures.indexOf(media),
               scrollDirection: Axis.horizontal,
             ),
       ),
