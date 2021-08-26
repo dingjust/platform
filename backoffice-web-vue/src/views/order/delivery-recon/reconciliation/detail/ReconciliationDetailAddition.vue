@@ -12,7 +12,11 @@
       <el-table-column label="名称" prop="remarks"></el-table-column>
       <el-table-column label="金额" prop="amount"></el-table-column>
     </el-table>
-        <el-row type="flex" style="margin-top: 10px">
+    <el-row type="flex" justify="end" style="margin-top: 10px">
+      <h6 style="font-size: 20px;">应付金额：</h6>
+      <h6 style="font-size: 20px;">{{order.amountPayableTotal}}</h6>
+    </el-row>
+    <el-row type="flex" style="margin-top: 10px">
       <h6 class="title-text">备注：</h6>
     </el-row>
     <el-row type="flex" style="margin: 10px 0 0 23px;">
