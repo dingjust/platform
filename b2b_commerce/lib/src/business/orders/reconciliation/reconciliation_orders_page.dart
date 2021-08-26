@@ -47,10 +47,13 @@ class _ReconciliationOrdersPageState extends State<ReconciliationOrdersPage> {
           length: _statuses.length,
           child: Scaffold(
             appBar: TabFactory.buildDefaultTabBar(_statuses, scrollable: true),
-            body: TabBarView(
-              children: _statuses
-                  .map((status) => ReconciliationOrdersView(status: status))
-                  .toList(),
+            body: Container(
+              color: Color(0xFFF7F7F7),
+              child: TabBarView(
+                children: _statuses
+                    .map((status) => ReconciliationOrdersView(status: status))
+                    .toList(),
+              ),
             ),
           ),
         ),

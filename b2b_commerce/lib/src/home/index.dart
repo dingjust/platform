@@ -224,17 +224,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ///适配expandedHeight
   double get expandedHeight {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 17;
+      // return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 17;
+
+      return MediaQuery.of(context).size.width / 2.071; //2.071为UI设计上的比例
     }
-    return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 10;
+    // return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 10;
+    return MediaQuery.of(context).size.width / 2.071;
   }
 
   ///适配banner间隔
   double get bannerPadding {
+    // 0.4667为UI设计上的比例
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return 105 + 17.0;
+      return expandedHeight * 0.4667 + 17.0;
     }
-    return 105;
+    return expandedHeight * 0.4667;
   }
 
   @override

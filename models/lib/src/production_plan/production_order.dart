@@ -136,7 +136,7 @@ class ProductionOrderModel extends ItemModel {
 ///销售生产单
 @JsonSerializable()
 class SalesProductionOrderModel extends ProductionOrderModel {
-  ///尾款期数
+  ///是否有定金
   bool haveDeposit;
 
   ///外发单管理模式
