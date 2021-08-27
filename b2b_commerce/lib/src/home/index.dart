@@ -164,7 +164,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             children: <Widget>[
               AnimatedContainer(
                   duration: Duration(milliseconds: 500),
-                  // padding: EdgeInsets.only(top: bannerPadding),
                   decoration: BoxDecoration(
                       color: Color(0xffF7F7F7),
                       gradient: LinearGradient(
@@ -229,48 +228,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   ///适配expandedHeight
   double get expandedHeight {
-    print(
-        'asssssssasssssssssssssssssssss${MediaQuery
-            .of(context)
-            .padding
-            .top}');
-    // if (defaultTargetPlatform == TargetPlatform.iOS) {
-    //   // return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 17;
-
-    //   // return MediaQuery.of(context).size.width / 2.071; //2.071为UI设计上的比例
-    //   // return MediaQuery.of(context).size.width * 0.483 +
-    //   //     MediaQuery.of(context).padding.top; //2.071为UI设计上的比例
-    //   return MediaQuery.of(context).size.width * 0.6;
-    // }
-    // return ((MediaQuery.of(context).size.width - 24) * 120) / 351 + 105 - 10;
-    // return MediaQuery.of(context).size.width / 2.071;
-    // return MediaQuery.of(context).size.width * 0.483 +
-    //     MediaQuery.of(context).padding.top; //2.071为UI设计上的比例
-    // return MediaQuery.of(context).size.width * 0.6;
-
-    return (MediaQuery
+    double height = MediaQuery
         .of(context)
         .size
         .width * 0.341 +
+        34 +
         MediaQuery
             .of(context)
             .padding
-            .top +
-        17 +
-        35);
-  }
-
-  ///适配banner间隔
-  double get bannerPadding {
-    // 0.4667为UI设计上的比例
-    // if (defaultTargetPlatform == TargetPlatform.iOS) {
-    //   return expandedHeight * 0.4667 + 17.0;
-    // }
-    // return expandedHeight * 0.4667;
-    return MediaQuery
-        .of(context)
-        .padding
-        .top + 44 + 17;
+            .top;
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      height += 17;
+    }
+    return height;
   }
 
   @override
