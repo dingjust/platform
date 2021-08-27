@@ -113,7 +113,7 @@
           <span v-else>{{scope.row.storageQuantity}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="合同单价（不含税）" prop="unitContractPrice" min-width="150px" v-if="tableCol['unitContractPrice'].have">
+      <!-- <el-table-column label="合同单价（不含税）" prop="unitContractPrice" min-width="150px" v-if="tableCol['unitContractPrice'].have">
         <template slot="header">
           <span>合同单价（不含税）<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('unitContractPrice')"/></span>
         </template>
@@ -125,7 +125,7 @@
                     v-number-input.float="{ decimal: 2 }"></el-input>
           <span v-else>{{scope.row.unitContractPrice}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="快递费" prop="expressFee" min-width="120px" v-if="tableCol['expressFee'].have">
         <template slot="header">
           <span>快递费<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('expressFee')"/></span>
@@ -183,6 +183,19 @@
         </template>
         <template slot-scope="scope" v-if="!scope.row.countRow">
           <el-input v-model="scope.row.remarks" type="textarea" style="width: 200px" :rows="3" :title="scope.row.remarks"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="合同单价（不含税）" prop="unitContractPrice" min-width="150px">
+        <!-- <template slot="header">
+          <span>合同单价（不含税）<el-button type="text" icon="el-icon-error" class="column-close" @click="onDeleteOri('unitContractPrice')"/></span>
+        </template> -->
+        <template slot-scope="scope">
+          <el-input key="unitContractPrice-Key" 
+                    v-model="scope.row.unitContractPrice"
+                    v-if="!scope.row.countRow"
+                    @change="inputChange(scope.$index, 'unitContractPrice')"
+                    v-number-input.float="{ decimal: 2 }"></el-input>
+          <span v-else>{{scope.row.unitContractPrice}}</span>
         </template>
       </el-table-column>
       <el-table-column label="货款金额" prop="loanAmount" min-width="120px" key="loanAmount">

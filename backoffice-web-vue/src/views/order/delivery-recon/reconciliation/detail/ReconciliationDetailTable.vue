@@ -28,7 +28,6 @@
       <el-table-column label="裁数" prop="cutQuantity" min-width="120px" />
       <el-table-column label="装箱单数" prop="packageQuantity" min-width="120px" v-if="tableCol['packageQuantity'].have"/>
       <el-table-column label="正品入库数" prop="storageQuantity" min-width="120px" v-if="tableCol['storageQuantity'].have"/>
-      <el-table-column label="合同单价（不含税）" prop="unitContractPrice" min-width="120px" v-if="tableCol['unitContractPrice'].have"/>
       <el-table-column label="快递费" prop="expressFee" min-width="120px" v-if="tableCol['expressFee'].have"/>
       <el-table-column label="扣款" prop="deductionAmount" min-width="120px" v-if="tableCol['deductionAmount'].have"/>
       <el-table-column label="退货" prop="returnQuantity" min-width="120px" v-if="tableCol['returnQuantity'].have"/>
@@ -45,6 +44,7 @@
           </template>
         </el-table-column>
       </template>
+      <el-table-column label="合同单价（不含税）" prop="unitContractPrice" min-width="120px"/>
       <el-table-column label="货款金额" prop="loanAmount" min-width="120px" />
       <el-table-column label="结算金额" prop="settlementAmount" min-width="120px" />
     </el-table>

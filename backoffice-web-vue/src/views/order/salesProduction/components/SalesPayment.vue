@@ -9,7 +9,7 @@
     <el-table :data="formData.paymentOrders" style="margin-top: 20px">
       <el-table-column label="批次">
         <template slot-scope="scope">
-          <span>{{scope.row.batch === 1 ? '定金' : '尾款'}}</span>
+          <span>{{batchName(scope.$index)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="支付金额">
@@ -43,7 +43,17 @@ import OrderPayDetail from '@/views/order/salesProduction/components/OrderPayDet
 export default {
   name: 'SalesPayment',
   components: { OrderPayDetail },
-  props: ['formData', 'fromOut']
+  props: ['formData', 'fromOut'],
+  methods: {
+    batchName (index) {
+      const { payPlan } = this.formData
+      if (index === 0) {
+        return payPlan.isHaveDeposit ? '定金' : '1期尾款'
+      } else {
+        return payPlan.isHaveDeposit ? (index + '期尾款') : ((index + 1) + '期尾款') 
+      }
+    }
+  }
 }
 </script>
 

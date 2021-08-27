@@ -44,10 +44,10 @@ const getDefaultState = () => {
         have: true,
         name: '正品入库数'
       },
-      unitContractPrice: {
-        have: true,
-        name: '合同单价（不含税）'
-      },
+      // unitContractPrice: {
+      //   have: true,
+      //   name: '合同单价（不含税）'
+      // },
       expressFee: {
         have: true,
         name: '快递费'
