@@ -42,6 +42,8 @@ class RequirementListItem extends StatelessWidget {
     if (pictures.length == 0) {
       return Container();
     } else {
+      double ratio = MediaQuery.of(iContext).devicePixelRatio;
+
       List<Widget> imageWidgets = pictures
           .map((e) => Expanded(
                   child: GestureDetector(
@@ -51,12 +53,8 @@ class RequirementListItem extends StatelessWidget {
                   double imageWidth = constraints.maxWidth;
                   double imageHeight =
                       getImageHeight(pictures.length, imageWidth);
-                  double ratio = MediaQuery.of(context).devicePixelRatio;
                   String processUrl =
                       'image_process=resize,w_${imageWidth * ratio}/crop,mid,w_${imageWidth * ratio},h_${imageHeight * ratio}';
-                  print(model.details.productName +
-                      'ratio:$ratio' +
-                      e.imageProcessUrl(processUrl));
                   return CachedNetworkImage(
                     height: imageHeight,
                     imageUrl: '${e.imageProcessUrl(processUrl)}',
