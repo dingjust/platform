@@ -1,20 +1,18 @@
+import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 
-import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
-import 'package:b2b_commerce/src/common/app_image.dart';
-
 ///对账单
 class ReconciliationOrderItem extends StatelessWidget {
   final FastReconciliationSheetModel model;
 
-  const ReconciliationOrderItem(
-    this.model, {
+  const ReconciliationOrderItem(this.model, {
     Key key,
   }) : super(key: key);
 
@@ -35,7 +33,7 @@ class ReconciliationOrderItem extends StatelessWidget {
               ),
             ),
             _Title(model.title),
-            _Amount(100.0),
+            _Amount(model.amountPayableTotal),
             Container(
               margin: EdgeInsets.only(top: 16, bottom: 14),
               child: Divider(
@@ -269,9 +267,7 @@ class _Status extends StatelessWidget {
     return Container();
   }
 
-  Widget _buildBtn(
-    DocSignatureModel doc,
-  ) {
+  Widget _buildBtn(DocSignatureModel doc,) {
     return Expanded(
         child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
@@ -280,7 +276,7 @@ class _Status extends StatelessWidget {
                 DocSignatureHelper.getDocTypeIcon(signMethod: doc.signMethod),
                 Expanded(
                     child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
