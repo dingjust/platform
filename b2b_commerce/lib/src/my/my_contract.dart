@@ -98,13 +98,12 @@ class _MyContractPageState extends State<MyContractPage>
             child: Scaffold(
               appBar: TabFactory.buildDefaultTabBar(statuses, scrollable: true),
               body: TabBarView(
-                controller: controller,
+                // controller: controller,
                 children: statuses
-                    .map((status) =>
-                    MyContractListPage(
-                      status: status,
-                      keyword: widget.keyword,
-                    ))
+                    .map((status) => MyContractListPage(
+                          status: status,
+                          keyword: widget.keyword,
+                        ))
                     .toList(),
               ),
             ),
@@ -126,7 +125,6 @@ class _MyContractPageState extends State<MyContractPage>
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                           colors: <Color>[Color(0xffFED800), Color(0xFFFEC300)],
-
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -252,7 +250,8 @@ class MyContractListPage extends StatefulWidget {
 
   final ScrollController scrollController = ScrollController();
 
-  MyContractListPage({this.keyword: '', this.status = const EnumModel('ALL', '全部')});
+  MyContractListPage(
+      {this.keyword: '', this.status = const EnumModel('ALL', '全部')});
 
   _MyContractListPageState createState() => _MyContractListPageState();
 }
