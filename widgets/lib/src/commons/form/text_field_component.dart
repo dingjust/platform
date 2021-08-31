@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -66,28 +65,31 @@ class TextFieldComponent extends StatefulWidget {
 }
 
 class TextFieldComponentState extends State<TextFieldComponent> {
-
   @override
   void setState(fn) {
-    if(mounted){
+    if (mounted) {
       super.setState(fn);
     }
   }
 
-  String formatNum(double num,int postion){
-    if((num.toString().length-num.toString().lastIndexOf(".")-1)<postion){
+  String formatNum(double num, int postion) {
+    if ((num.toString().length - num.toString().lastIndexOf(".") - 1) <
+        postion) {
       //小数点后有几位小数
-      return num.toStringAsFixed(postion).substring(0,num.toString().lastIndexOf(".")+postion+1).toString();
-    }else{
-      return num.toString().substring(0,num.toString().lastIndexOf(".")+postion+1).toString();
+      return num.toStringAsFixed(postion)
+          .substring(0, num.toString().lastIndexOf(".") + postion + 1)
+          .toString();
+    } else {
+      return num.toString()
+          .substring(0, num.toString().lastIndexOf(".") + postion + 1)
+          .toString();
     }
   }
 
   @override
   void initState() {
-
-    if(widget.prefix != null && widget.controller.text != ''){
-      if(!widget.controller.text.startsWith(widget.prefix)){
+    if (widget.prefix != null && widget.controller.text != '') {
+      if (!widget.controller.text.startsWith(widget.prefix)) {
         widget.controller.text = widget.prefix + widget.controller.text;
       }
     }
@@ -96,17 +98,18 @@ class TextFieldComponentState extends State<TextFieldComponent> {
       if (widget.focusNode.hasFocus) {
         setState(() {
 //          widget.dividerColor == null? widget.dividerColor = Color.fromRGBO(255,214,12, 1):widget.dividerColor = widget.dividerColor;
-          if(widget.prefix != null){
+          if (widget.prefix != null) {
 //            if(widget.prefix == '￥'){
 //              widget.controller.text = formatNum(double.parse(widget.controller.text), 2);
 //            }
-            widget.controller.text = widget.controller.text.replaceFirst(widget.prefix, '');
+            widget.controller.text =
+                widget.controller.text.replaceFirst(widget.prefix, '');
           }
         });
       } else {
         setState(() {
 //          widget.dividerColor = Color(Constants.DIVIDER_COLOR);
-          if(widget.prefix != null && widget.controller.text != ''){
+          if (widget.prefix != null && widget.controller.text != '') {
             widget.controller.text = widget.prefix + widget.controller.text;
           }
         });
@@ -132,17 +135,17 @@ class TextFieldComponentState extends State<TextFieldComponent> {
   @override
   Widget build(BuildContext context) {
 //    if(widget.textAlign == TextAlign.right){
-      widget.controller.value = TextEditingValue(
-        // 设置内容
-        text: widget.controller.text,
-        // 保持光标在最后
-        selection: TextSelection.fromPosition(
-          TextPosition(
-            affinity: TextAffinity.upstream,
-            offset: widget.controller.text.length,
-          ),
+    widget.controller.value = TextEditingValue(
+      // 设置内容
+      text: widget.controller.text,
+      // 保持光标在最后
+      selection: TextSelection.fromPosition(
+        TextPosition(
+          affinity: TextAffinity.upstream,
+          offset: widget.controller.text.length,
         ),
-      );
+      ),
+    );
 //    }
 
     return Column(
@@ -159,21 +162,38 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   child: Wrap(
                     children: <Widget>[
                       widget.leadingText ?? Text(''),
-                      widget.isRequired ? Text(' *',style: TextStyle(fontSize: widget.leadingText.style?.fontSize ?? 16,color: Colors.red,)) : Text(''),
+                      widget.isRequired
+                          ? Text(' *',
+                          style: TextStyle(
+                            fontSize:
+                            widget.leadingText.style?.fontSize ?? 16,
+                            color: Colors.red,
+                          ))
+                          : Text(''),
                     ],
                   ),
                 ),
               ),
               Expanded(
                 child: TextField(
-                  style: widget.style ?? TextStyle(color: Colors.grey,fontSize: widget.leadingText?.style == null ? 16 : widget.leadingText.style.fontSize,),
+                  style: widget.style ??
+                      TextStyle(
+                        color: Colors.grey,
+                        fontSize: widget.leadingText?.style == null
+                            ? 16
+                            : widget.leadingText.style.fontSize,
+                      ),
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(
-                    border: widget.isInputBorder?UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey,width: 0.5)):InputBorder.none,
-                    hintText: widget.hintText,
-                    hintStyle: TextStyle(color: Colors.grey,),
-                    contentPadding: EdgeInsets.only()
+                      border: widget.isInputBorder
+                          ? UnderlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.grey, width: 0.5))
+                          : InputBorder.none,
+                      hintText: widget.hintText,
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                      contentPadding: EdgeInsets.only()
 //                      ,prefixText: '已付定金：',prefixStyle: TextStyle(color: Colors.black87,fontSize: 16)
                   ),
                   autofocus: widget.autofocus,
@@ -198,7 +218,8 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         Offstage(
           offstage: widget.hideDivider,
           child: Padding(
-            padding: widget.dividerPadding ?? EdgeInsets.symmetric(horizontal: 15),
+            padding:
+            widget.dividerPadding ?? EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

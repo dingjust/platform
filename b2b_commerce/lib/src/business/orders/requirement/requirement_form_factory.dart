@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/address_cascader.dart';
+import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/quantity_select.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
+import 'package:b2b_commerce/src/business/services/text_field_border_component_V2.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -35,6 +37,9 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
   GlobalKey _scaffoldKey = GlobalKey();
 
   bool isPhoneSame = false;
+
+  final TextStyle titleTextStyle =
+      const TextStyle(color: Color(0xff000000), fontSize: 14);
 
   @override
   void initState() {
@@ -75,25 +80,14 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       },
       child: Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          elevation: 0.5,
-          centerTitle: true,
-          title: Text('需求发布-找工厂'),
-          actions: <Widget>[],
-        ),
+        appBar: AppBarFactory.buildDefaultAppBar('需求发布-找工厂'),
         body: Container(
-          color: Colors.white,
+          color: Color(0xFFF7F7F7),
+          padding: EdgeInsets.symmetric(horizontal: 12),
           child: ListView(
             children: <Widget>[
-              _buildTitleName(),
-              _buildRemarks(),
-              Container(
-                color: Colors.white,
-                child: PicturesField(
-                  model: widget.formState.model,
-                  description: '（补充图片可令工厂更快了解需求）',
-                ),
-              ),
+              _buildCard1(),
+              _buildCard2(),
               _buildMajorCategory(),
               _buildCategory(),
               _buildExceptedPrice(),
@@ -122,35 +116,6 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
           ),
         ),
       ),
-    );
-  }
-
-  Container _buildRemarks() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Column(children: <Widget>[
-        Container(
-          color: Colors.grey[100],
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: TextFieldComponent(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            dividerPadding: EdgeInsets.only(),
-            focusNode: remarksFocusNode,
-            hintText: '需求描述...',
-            autofocus: false,
-            inputType: TextInputType.text,
-            textAlign: TextAlign.left,
-            hideDivider: true,
-            maxLines: null,
-            maxLength: 200,
-            controller: remarksController,
-            onChanged: (v) {
-              widget.formState.model.remarks = remarksController.text;
-            },
-          ),
-        )
-      ]),
     );
   }
 
@@ -547,7 +512,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
           ),
           Expanded(
             flex: 2,
-            child: TextFieldBorderComponent(
+            child: TextFieldBorderComponentV2(
               padding: EdgeInsets.all(0),
               hideDivider: true,
               isRequired: true,
@@ -643,24 +608,24 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
                           onTap: () {
                             setState(() {
                               widget.formState.model.details.maxExpectedPrice =
-                                  null;
+                              null;
                             });
                           },
                         ),
                       ],
                     ),
-                  )
-                : TextFieldBorderComponent(
-                    padding: EdgeInsets.all(0),
-                    hideDivider: true,
-                    isRequired: true,
-                    textAlign: TextAlign.left,
-                    prefix: '￥',
-                    inputFormatters: [
-                      DecimalInputFormat(),
-                    ],
-                    // inputType: TextInputType.number,
-                    hintText: '填写',
+            )
+                : TextFieldBorderComponentV2(
+              padding: EdgeInsets.all(0),
+              hideDivider: true,
+              isRequired: true,
+              textAlign: TextAlign.left,
+              prefix: '￥',
+              inputFormatters: [
+                DecimalInputFormat(),
+              ],
+              // inputType: TextInputType.number,
+              hintText: '填写',
                     controller: super.maxExpectedPriceController,
                     focusNode: super.maxExpectedPriceFocusNode,
                     onChanged: (value) {
@@ -829,15 +794,42 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
     );
   }
 
+  Widget _buildCard1() {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          _buildTitleName(),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 12),
+            child: Divider(
+              color: Color(0xFFE7E7E7),
+              height: 1,
+            ),
+          ),
+          _buildRemarks(),
+        ],
+      ),
+    );
+  }
+
   Container _buildTitleName() {
     return Container(
-      color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Row(
         children: <Widget>[
+          Container(
+            width: 80,
+            child: Text(
+              '标题',
+              style: titleTextStyle,
+            ),
+          ),
           Expanded(
             flex: 1,
-            child: TextFieldBorderComponent(
+            child: TextFieldBorderComponentV2(
               padding: EdgeInsets.all(0),
               hideDivider: true,
               isRequired: true,
@@ -851,6 +843,62 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
               },
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Container _buildRemarks() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 14),
+      child:
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+        Container(
+          width: 80,
+          padding: EdgeInsets.only(top: 15),
+          child: Text(
+            '需求描述',
+            style: titleTextStyle,
+          ),
+        ),
+        Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: TextFieldComponent(
+                padding: EdgeInsets.symmetric(vertical: 0),
+                dividerPadding: EdgeInsets.only(),
+                focusNode: remarksFocusNode,
+                hintText: '需求描述...',
+                autofocus: false,
+                inputType: TextInputType.text,
+                textAlign: TextAlign.left,
+                hideDivider: true,
+                maxLines: null,
+                maxLength: 200,
+                controller: remarksController,
+                onChanged: (v) {
+                  widget.formState.model.remarks = remarksController.text;
+                },
+              ),
+            ))
+      ]),
+    );
+  }
+
+  Widget _buildCard2() {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          Container(
+            color: Colors.white,
+            child: PicturesField(
+              model: widget.formState.model,
+              description: '（补充图片可令工厂更快了解需求）',
+            ),
+          )
         ],
       ),
     );
@@ -881,7 +929,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
           ),
           Expanded(
             flex: 2,
-            child: TextFieldBorderComponent(
+            child: TextFieldBorderComponentV2(
               padding: EdgeInsets.all(0),
               hideDivider: true,
               isRequired: true,
@@ -1022,7 +1070,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
           ),
           Expanded(
             flex: 1,
-            child: TextFieldBorderComponent(
+            child: TextFieldBorderComponentV2(
               padding: EdgeInsets.all(0),
               hideDivider: true,
               isRequired: true,

@@ -175,7 +175,7 @@ class _TextFieldBorderComponentV2State
                     fillColor: Colors.white,
                     contentPadding: EdgeInsets.all(10.0),
                     hintText: widget.hintText,
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                   autofocus: widget.autofocus,
                   focusNode: widget.focusNode,

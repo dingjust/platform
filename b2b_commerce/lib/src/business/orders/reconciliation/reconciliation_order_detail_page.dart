@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperator_item.dart';
 import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
@@ -56,6 +57,14 @@ class _ReconciliationOrderDetailPageState
                   title: Text('对账单详情'),
                   backgroundColor: Constants.THEME_COLOR_MAIN,
                   elevation: 0.5,
+                  actions: [
+                    IconButton(
+                        icon: Icon(
+                          B2BIconsV2.share,
+                          color: Color(0xff231815),
+                        ),
+                        onPressed: onShare),
+                  ],
                 ),
                 body: Container(
                   padding: EdgeInsets.only(bottom: 10),
@@ -311,9 +320,9 @@ class _ReconciliationOrderDetailPageState
 
   void _onConfirmByPartyB() async {
     Function cancelFunc =
-    BotToast.showLoading(crossPage: false, clickClose: false);
+        BotToast.showLoading(crossPage: false, clickClose: false);
     BaseResponse response =
-    await ReconciliationOrderRespository.confirmByPartyB(order.id);
+        await ReconciliationOrderRespository.confirmByPartyB(order.id);
     cancelFunc.call();
     if (response != null && response.code == 1) {
       BotToast.showText(text: '确认成功');
@@ -327,10 +336,14 @@ class _ReconciliationOrderDetailPageState
     }
   }
 
+  void onShare() {
+    ShareDialog.reconciliationOrderShareDialog(context, id: widget.id);
+  }
+
   ///审批中,或取消状态则禁用签署
   bool get signDisable =>
       order.state == FastReconciliationSheetState.PENDING_APPROVAL ||
-          order.state == FastReconciliationSheetState.CANCELLED;
+      order.state == FastReconciliationSheetState.CANCELLED;
 }
 
 ///订单基础信息

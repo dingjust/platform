@@ -118,12 +118,15 @@ class _OrderImportPageState extends State<OrderImportPage> {
         if (response.code == 1) {
           order = SalesProductionOrderModel.fromJson(response.data);
         } else if (response.code == 0 && response.msg != null) {
-          String orderCode = response.msg;
+          String orderId = response.msg;
           //列表筛出来ID
-          int id = await queryIdFromList(orderCode);
-          if (id != null) {
-            order = await ExternalSaleOrderRespository().getOrderDetail(id);
-          }
+          // int id = await queryIdFromList(orderCode);
+          // if (id != null) {
+          //   order = await ExternalSaleOrderRespository().getOrderDetail(id);
+          // }
+          Navigator.of(context).pushReplacementNamed(
+              AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS_DETAIL,
+              arguments: {'id': orderId, 'title': '外发订单明细'});
         }
 
         //判断是否已接单

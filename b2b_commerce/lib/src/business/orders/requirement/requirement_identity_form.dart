@@ -1,9 +1,10 @@
+import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
+import 'package:b2b_commerce/src/business/services/text_field_border_component_V2.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 import 'requirement_form_factory.dart';
 import 'requirement_form_order.dart';
@@ -11,8 +12,7 @@ import 'requirement_form_order.dart';
 class RequirementIdentityForm extends StatefulWidget {
   final RequirementOrderType type;
 
-  const RequirementIdentityForm(
-    this.type, {
+  const RequirementIdentityForm(this.type, {
     Key key,
   }) : super(key: key);
 
@@ -45,65 +45,100 @@ class _RequirementIdentityFormState extends State<RequirementIdentityForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '需求发布-找工厂',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      appBar: AppBarFactory.buildDefaultAppBar('需求发布-找工厂'),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.all(12),
+        color: Color(0xFFF7F7F7),
         child: ListView(
           children: [
             Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  children: [Text('我的身份：')],
+                height: 210,
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8)),
+                child: Column(
+                  children: [
+                    Text(
+                      '我的身份',
+                      style: TextStyle(
+                          color: Color(0xff222222),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      height: 6,
+                      width: 64,
+                      margin: EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                          color: Color(0xFFFED800),
+                          borderRadius: BorderRadiusDirectional.circular(3)),
+                    ),
+                    Expanded(
+                      child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3, //每行三列
+                                  childAspectRatio: 3, //显示区域宽高相等
+                                  mainAxisSpacing: 20,
+                                  crossAxisSpacing: 20),
+                          itemCount: types.length,
+                          itemBuilder: (context, index) {
+                            return OutlineButton(
+                              onPressed: () {
+                                toForm(types[index]);
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              child: Center(
+                                child: Text(
+                                  '${types[index]}',
+                                  style: TextStyle(
+                                      color: Color(0xff000000), fontSize: 13),
+                                ),
+                              ),
+                            );
+                          }),
+                    )
+                  ],
                 )),
             Container(
-              height: 300,
-              child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, //每行三列
-                      childAspectRatio: 3, //显示区域宽高相等
-                      mainAxisSpacing: 40,
-                      crossAxisSpacing: 30),
-                  itemCount: types.length,
-                  itemBuilder: (context, index) {
-                    return OutlineButton(
-                      onPressed: () {
-                        toForm(types[index]);
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Center(
-                        child: Text('${types[index]}'),
-                      ),
-                    );
-                  }),
-            ),
-            Container(
+              margin: EdgeInsets.only(top: 12),
+              padding: EdgeInsets.symmetric(vertical: 9, horizontal: 24),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(8)),
               child: Row(
                 children: [
-                  Text('自定义'),
+                  Text(
+                    '自定义',
+                    style: TextStyle(color: Color(0xff000000), fontSize: 14),
+                  ),
                   Expanded(
                       child: Container(
                     margin: EdgeInsets.only(left: 10),
-                    child: TextFieldBorderComponent(
+                    child: TextFieldBorderComponentV2(
                       padding: EdgeInsets.all(0),
                       hideDivider: false,
                       isRequired: true,
                       textAlign: TextAlign.left,
-                      hintText: '请输入内容',
+                      hintText: '以上都不是请输入...',
                       controller: controller,
                       focusNode: node,
                       autofocus: true,
                     ),
                   )),
-                  TextButton(onPressed: onSubmit, child: Text('确定'))
+                  TextButton(
+                    onPressed: onSubmit,
+                    child: Text(
+                      '确定',
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18))),
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0xFFFED800))),
+                  ),
                 ],
               ),
             ),
@@ -133,13 +168,13 @@ class _RequirementIdentityFormState extends State<RequirementIdentityForm> {
           ],
           child: Consumer(
             builder: (context, RequirementOrderFormStateV2 state, _) =>
-                widget.type == RequirementOrderType.FINDING_ORDER
-                    ? RequirementFormOrder(
-                        formState: state,
-                      )
-                    : RequirementFormFactory(
-                        formState: state,
-                      ),
+            widget.type == RequirementOrderType.FINDING_ORDER
+                ? RequirementFormOrder(
+              formState: state,
+            )
+                : RequirementFormFactory(
+              formState: state,
+            ),
           ),
         ),
       ),

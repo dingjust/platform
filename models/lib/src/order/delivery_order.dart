@@ -248,6 +248,9 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
   ///创建方
   AgreementRoleType belongRoleType;
 
+  ///金额
+  double amountPayableTotal;
+
   FastReconciliationSheetModel(
       {int id,
       String code,
@@ -276,7 +279,8 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
       this.salesProductionOrder,
       this.paperSheetMedias,
       this.signState,
-      this.belongRoleType})
+      this.belongRoleType,
+      this.amountPayableTotal})
       : super(
             id: id,
             code: code,
