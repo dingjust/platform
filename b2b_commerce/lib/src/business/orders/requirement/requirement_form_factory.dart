@@ -608,7 +608,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
                           onTap: () {
                             setState(() {
                               widget.formState.model.details.maxExpectedPrice =
-                              null;
+                                  null;
                             });
                           },
                         ),
@@ -626,16 +626,16 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
               ],
               // inputType: TextInputType.number,
               hintText: '填写',
-                    controller: super.maxExpectedPriceController,
-                    focusNode: super.maxExpectedPriceFocusNode,
-                    onChanged: (value) {
-                      setState(() {
-                        if (value.contains('.')) {
-                          int index = value.indexOf('.');
-                          if (value.length > index + 3) {
-                            super.maxExpectedPriceController.text =
-                                value.substring(0, index + 3);
-                          }
+              controller: super.maxExpectedPriceController,
+              focusNode: super.maxExpectedPriceFocusNode,
+              onChanged: (value) {
+                setState(() {
+                  if (value.contains('.')) {
+                    int index = value.indexOf('.');
+                    if (value.length > index + 3) {
+                      super.maxExpectedPriceController.text =
+                          value.substring(0, index + 3);
+                    }
                         }
                         widget.formState.model.details.maxExpectedPrice =
                             ClassHandleUtil.removeSymbolRMBToDouble(
@@ -817,7 +817,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
 
   Container _buildTitleName() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Row(
         children: <Widget>[
           Container(
@@ -850,7 +850,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
 
   Container _buildRemarks() {
     return Container(
-      padding: EdgeInsets.fromLTRB(15, 0, 15, 14),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 14),
       child:
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Container(
@@ -888,17 +888,29 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
   Widget _buildCard2() {
     return Container(
       margin: EdgeInsets.only(top: 12),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(8)),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: Colors.white,
-            child: PicturesField(
-              model: widget.formState.model,
-              description: '（补充图片可令工厂更快了解需求）',
+            child: Text(
+              '添加图片',
+              style: TextStyle(fontSize: 14),
             ),
-          )
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 8),
+            child: Text(
+              '补充图片，可令工厂更快了解需求',
+              style: TextStyle(color: Color(0xFF999999), fontSize: 12),
+            ),
+          ),
+          PicturesField(
+            model: widget.formState.model,
+            description: '（补充图片可令工厂更快了解需求）',
+          ),
         ],
       ),
     );
