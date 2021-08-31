@@ -20,6 +20,9 @@
           </span>
         </template>
       </el-table-column> -->
+      <el-table-column label="对账金额">
+        <template slot-scope="scope">{{scope.row.amountPayableTotal}}元</template>
+      </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
