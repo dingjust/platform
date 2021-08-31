@@ -1405,8 +1405,8 @@ let TENANT_APIS = {
   },
   // 查询对账单详情
   getReconciliationV2Detail (id) {
-    return '/b2b/sheets/fast/reconciliation/' + id;
-  },
+    return '/b2b/sheets/fast/reconciliation/platform/' + id;
+  }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
