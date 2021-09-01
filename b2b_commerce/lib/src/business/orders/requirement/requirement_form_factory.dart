@@ -4,8 +4,9 @@ import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/address_cascader.dart';
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/quantity_select.dart';
-import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
+import 'package:b2b_commerce/src/business/orders/widget/form_divider.dart';
+import 'package:b2b_commerce/src/business/orders/widget/form_row.dart';
 import 'package:b2b_commerce/src/business/services/text_field_border_component_V2.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
@@ -88,29 +89,12 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
             children: <Widget>[
               _buildCard1(),
               _buildCard2(),
-              _buildMajorCategory(),
-              _buildCategory(),
-              _buildExceptedPrice(),
-              _buildMachiningQuantity(),
-              Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: ExpectedDeliveryDateField(widget.formState.model),
-              ),
-              _buildQualityLevel(),
-              _buildMachiningType(),
-              _buildProductiveOrientations(),
-              _buildPayInfo(),
-              _buildProofingNeeded(),
-              _buildSizeType(),
-              _buildColorType(),
-              _buildInvoiceNeeded(),
-              _buildEffectiveDays(),
-              _buildLocation(),
-              _buildContactPhone(),
-              _buildInfo('钉单将通过隐私电话服务保障您的信息安全'),
-              _buildWechat(),
-              _buildIsSame(),
+              _buildCard3(),
+              _buildCard4(),
+              _buildCard5(),
+              _buildCard6(),
+              _buildCard7(),
+              _buildCard8(),
               _buildSubBtn()
             ],
           ),
@@ -120,677 +104,201 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
   }
 
   ///有效期限
-  Container _buildEffectiveDays() {
-    return Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: '有效期限',
-                    style: TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                ]),
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: GridView.count(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                crossAxisCount: 3,
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 20,
-                childAspectRatio: 4,
-                padding: EdgeInsets.zero,
-                children: List.generate(EffectiveDaysEnum.length, (index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        widget.formState.model.details.effectiveDays =
-                            int.parse(EffectiveDaysEnum[index].code);
-                      });
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Radio(
-                            value: EffectiveDaysEnum[index].code,
-                            groupValue: widget
-                                .formState.model.details.effectiveDays
-                                .toString(),
-                            onChanged: (v) {
-                              setState(() {
-                                widget.formState.model.details.effectiveDays =
-                                    int.parse(EffectiveDaysEnum[index].code);
-                              });
-                            }),
-                        Expanded(
-                            child: Text(
-                          EffectiveDaysEnum[index].name,
-                          softWrap: false,
-                          overflow: TextOverflow.visible,
-                        )),
-                      ],
-                    ),
-                  );
+  Widget _buildEffectiveDays() {
+    return Wrap(
+      spacing: 20,
+      alignment: WrapAlignment.end,
+      children: EffectiveDaysEnum.map((val) => Container(
+            width: val.name.length > 3 ? 80 : 56,
+            child: ChoiceChip(
+                label: Container(
+                  child: Center(
+                      child: Text('${val.name}',
+                          style: TextStyle(
+                              color: Color(0xff000000), fontSize: 12))),
+                ),
+                backgroundColor: Color(0xffE7E7E7),
+                selectedColor: Color(0xFFFED800),
+                selected:
+                    widget.formState.model.details.effectiveDays.toString() ==
+                        val.code,
+                onSelected: (bool selected) {
+                  setState(() {
+                    widget.formState.model.details.effectiveDays =
+                        int.parse(val.code);
+                  });
                 }),
-              ),
-            ),
-          ],
-        ));
-  }
-
-  Container _buildProductiveOrientations() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          RichText(
-            text: TextSpan(children: [
-              TextSpan(
-                text: '要求地区',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              TextSpan(
-                text: ' *',
-                style: TextStyle(fontSize: 16, color: Colors.red),
-              )
-            ]),
-          ),
-          Expanded(
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(
-                          builder: (context) => AddressCascaderPage(
-                                selected: widget.formState.model.details
-                                        ?.productiveDistricts
-                                        ?.map((e) => DistrictModel.toJson(e))
-                                        .toList() ??
-                                    [],
-                                multi: true,
-                              )))
-                      .then((values) {
-                    if (values != null) {
-                      setState(() {
-                        widget.formState.model.details.productiveDistricts =
-                            (values as List)
-                                .map((e) => DistrictModel.fromJson(e))
-                                .toList();
-                      });
-                    }
-                  });
-                },
-                child: Text(
-                  formatAreaSelectsText(
-                      widget.formState.model.details.productiveDistricts, 3),
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.end,
-                  overflow: TextOverflow.ellipsis,
-                )),
-          ),
-          Icon(
-            Icons.chevron_right,
-            color: Colors.grey,
-          ),
-        ],
-      ),
+          )).toList(),
     );
   }
 
-  Container _buildInvoiceNeeded() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '是否开票',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-              ]),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ChoiceChip(
+  Widget _buildProductiveOrientations() {
+    return FormSelectRow(
+      title: '要求地区',
+      val:
+          '${formatAreaSelectsText(widget.formState.model.details.productiveDistricts, 3)}',
+      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(
+                builder: (context) => AddressCascaderPage(
+                      selected: widget
+                              .formState.model.details?.productiveDistricts
+                              ?.map((e) => DistrictModel.toJson(e))
+                              .toList() ??
+                          [],
+                      multi: true,
+                    )))
+            .then((values) {
+          if (values != null) {
+            setState(() {
+              widget.formState.model.details.productiveDistricts =
+                  (values as List)
+                      .map((e) => DistrictModel.fromJson(e))
+                      .toList();
+            });
+          }
+        });
+      },
+    );
+  }
+
+  Widget _buildInvoiceNeeded() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [true, false]
+          .map((val) => Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: ChoiceChip(
                     label: Container(
-                      height: 20,
-                      width: 60,
-                      child: Center(child: Text('是')),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Center(
+                          child: Text(val ? '是' : '否',
+                              style: TextStyle(
+                                  color: Color(0xff000000), fontSize: 12))),
                     ),
-                    backgroundColor: Colors.grey[100],
-                    selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                    selected: widget.formState.model.details.invoiceNeeded,
+                    backgroundColor: Color(0xffE7E7E7),
+                    selectedColor: Color(0xFFFED800),
+                    selected:
+                        widget.formState.model.details.invoiceNeeded == val,
                     onSelected: (bool selected) {
                       setState(() {
-                        widget.formState.model.details.invoiceNeeded = true;
-                      });
-                    },
-                  ),
-                  ChoiceChip(
-                    label: Container(
-                      height: 20,
-                      width: 60,
-                      child: Center(child: Text('否')),
-                    ),
-                    backgroundColor: Colors.grey[100],
-                    selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                    selected: !widget.formState.model.details.invoiceNeeded,
-                    onSelected: (bool selected) {
-                      setState(() {
-                        widget.formState.model.details.invoiceNeeded = false;
-                      });
-                    },
-                  ),
-                ]),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _buildProofingNeeded() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '是否打样',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-              ]),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ChoiceChip(
-                    label: Container(
-                      height: 20,
-                      width: 60,
-                      child: Center(child: Text('是')),
-                    ),
-                    backgroundColor: Colors.grey[100],
-                    selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                    selected: widget.formState.model.details.proofingNeeded,
-                    onSelected: (bool selected) {
-                      setState(() {
-                        widget.formState.model.details.proofingNeeded = true;
-                      });
-                    },
-                  ),
-                  ChoiceChip(
-                    label: Container(
-                      height: 20,
-                      width: 60,
-                      child: Center(child: Text('否')),
-                    ),
-                    backgroundColor: Colors.grey[100],
-                    selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                    selected: !widget.formState.model.details.proofingNeeded,
-                    onSelected: (bool selected) {
-                      setState(() {
-                        widget.formState.model.details.proofingNeeded = false;
-                      });
-                    },
-                  ),
-                ]),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _buildMachiningType() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '加工类型',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-                TextSpan(
-                  text: ' *',
-                  style: TextStyle(fontSize: 16, color: Colors.red),
-                )
-              ]),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: MachiningType.values
-                  .map((type) => ChoiceChip(
-                      label: Container(
-                        height: 20,
-                        width: 60,
-                        child: Center(
-                            child: Text(MachiningTypeLocalizedMap[type])),
-                      ),
-                      backgroundColor: Colors.grey[100],
-                      selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                      selected:
-                          widget.formState.model.details.machiningType == type,
-                      onSelected: (bool selected) {
-                        setState(() {
-                          widget.formState.model.details.machiningType = type;
-                        });
-                      }))
-                  .toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _buildQualityLevel() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          RichText(
-            text: TextSpan(children: [
-              TextSpan(
-                text: '质量等级',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              TextSpan(
-                text: ' *',
-                style: TextStyle(fontSize: 16, color: Colors.red),
-              )
-            ]),
-          ),
-          Row(
-            children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(
-                          builder: (context) => SalesMarketSelectPage(
-                                values:
-                                    widget.formState.model.details.salesMarket,
-                              )))
-                      .then((values) {
-                    if (values != null) {
-                      setState(() {
-                        widget.formState.model.details.salesMarket = values;
-                      });
-                    }
-                  });
-                },
-                child: Text(
-                  // 选择质量等级
-                  formatEnumSelectsText(
-                      widget.formState.model.details.salesMarket,
-                      [
-                        EnumModel('A_CHAIN', '一线大牌'),
-                        // EnumModel('REGIONAL_CHAIN', '区域品牌'),
-                        EnumModel('STALL_WHOLESALE', '档口精品'),
-                        EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
-                        EnumModel('WHOLESALE_TRADE', '外贸批发'),
-                        EnumModel('LEVEL01', '二线品牌'),
-                        EnumModel('LEVEL02', '三线品牌'),
-                        EnumModel('LEVEL03', '三线以下'),
-                        EnumModel('LEVEL04', '档口跑量'),
-                        EnumModel('LEVEL05', '电商高品质'),
-                        EnumModel('LEVEL06', '电商跑量'),
-                        EnumModel('LEVEL07', '跨境电商'),
-                      ],
-                      2,
-                      customText: '选择质量等级'),
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.chevron_right,
-                color: Colors.grey,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _buildMachiningQuantity() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 3,
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '加工数量',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-                TextSpan(
-                  text: ' *',
-                  style: TextStyle(fontSize: 16, color: Colors.red),
-                )
-              ]),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: TextFieldBorderComponentV2(
-              padding: EdgeInsets.all(0),
-              hideDivider: true,
-              isRequired: true,
-              textAlign: TextAlign.left,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              inputType: TextInputType.number,
-              hintText: '填写',
-              controller: super.expectedMachiningQuantityController,
-              focusNode: super.expectedMachiningQuantityNode,
-              onChanged: (v) {
-                widget.formState.model.details.expectedMachiningQuantity =
-                    ClassHandleUtil.transInt(
-                        super.expectedMachiningQuantityController.text);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _buildExceptedPrice() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 3,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '期望价格',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                      TextSpan(
-                        text: ' *',
-                        style: TextStyle(fontSize: 16, color: Colors.red),
-                      )
-                    ]),
-                  ),
-                ),
-                Radio(
-                    value: widget.formState.model.details.maxExpectedPrice,
-                    groupValue: -1,
-                    onChanged: (v) {
-                      setState(() {
-                        widget.formState.model.details.maxExpectedPrice = -1;
+                        widget.formState.model.details.invoiceNeeded = val;
                       });
                     }),
-                Expanded(
-                    child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      widget.formState.model.details.maxExpectedPrice = -1;
-                    });
-                  },
-                  child: Text(
-                    '面议',
-                    softWrap: false,
-                    overflow: TextOverflow.visible,
-                  ),
-                )),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: widget.formState.model.details.maxExpectedPrice == -1
-                ? Container(
-                    padding: const EdgeInsets.all(13.0),
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      color: Colors.grey[50],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Center(
-                            child: Text(
-                          '面议',
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        )),
-                        InkWell(
-                          child: Icon(
-                            Icons.cancel,
-                            size: 20,
-                          ),
-                          onTap: () {
-                            setState(() {
-                              widget.formState.model.details.maxExpectedPrice =
-                                  null;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-            )
-                : TextFieldBorderComponentV2(
-              padding: EdgeInsets.all(0),
-              hideDivider: true,
-              isRequired: true,
-              textAlign: TextAlign.left,
-              prefix: '￥',
-              inputFormatters: [
-                DecimalInputFormat(),
-              ],
-              // inputType: TextInputType.number,
-              hintText: '填写',
-              controller: super.maxExpectedPriceController,
-              focusNode: super.maxExpectedPriceFocusNode,
-              onChanged: (value) {
-                setState(() {
-                  if (value.contains('.')) {
-                    int index = value.indexOf('.');
-                    if (value.length > index + 3) {
-                      super.maxExpectedPriceController.text =
-                          value.substring(0, index + 3);
-                    }
-                        }
-                        widget.formState.model.details.maxExpectedPrice =
-                            ClassHandleUtil.removeSymbolRMBToDouble(
-                                super.maxExpectedPriceController.text);
-                      });
-                    },
-                  ),
-          ),
-        ],
-      ),
+              ))
+          .toList(),
     );
   }
 
-  Container _buildCategory() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          RichText(
-            text: TextSpan(children: [
-              TextSpan(
-                text: '商品品类',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              TextSpan(
-                text: ' *',
-                style: TextStyle(fontSize: 16, color: Colors.red),
-              )
-            ]),
-          ),
-          Expanded(
-            child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Consumer(
-                          builder: (context, CategoryState categoryState, _) =>
-                              FutureBuilder(
-                            future: categoryState.getCascadedCategories(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<CategoryModel>> snapshot) {
-                              if (!snapshot.hasData) {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              } else {
-                                return SingleCategorySelect(
-                                  categories: snapshot.data,
-                                  categorySelect:
-                                      widget.formState.model.details.category,
-                                  onItemTap: (categoryModel) {
-                                    setState(() {
-                                      widget.formState.model.details.category =
-                                          categoryModel;
-                                      Navigator.of(context).pop();
-                                    });
-                                  },
-                                );
-                              }
-                            },
-                          ),
-                        );
+  Widget _buildProofingNeeded() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [true, false]
+            .map((val) => Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: ChoiceChip(
+                      label: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Center(
+                            child: Text(val ? '是' : '否',
+                                style: TextStyle(
+                                    color: Color(0xff000000), fontSize: 12))),
+                      ),
+                      backgroundColor: Color(0xffE7E7E7),
+                      selectedColor: Color(0xFFFED800),
+                      selected:
+                          widget.formState.model.details.proofingNeeded == val,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          widget.formState.model.details.proofingNeeded = val;
+                        });
+                      }),
+                ))
+            .toList());
+  }
+
+  Widget _buildMachiningType() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: MachiningType.values
+          .map((type) => Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: ChoiceChip(
+                    label: Container(
+                      child: Center(
+                          child: Text(MachiningTypeLocalizedMap[type],
+                              style: TextStyle(
+                                  color: Color(0xff000000), fontSize: 12))),
+                    ),
+                    backgroundColor: Color(0xffE7E7E7),
+                    selectedColor: Color(0xFFFED800),
+                    selected:
+                        widget.formState.model.details.machiningType == type,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        widget.formState.model.details.machiningType = type;
                       });
-                },
-                child: Text(
-                  '${widget.formState.model.details.category != null ? widget.formState.model.details.category.parent?.name + '-' + widget.formState.model.details.category?.name : '选择品类'}',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.end,
-                )),
-          ),
-          Icon(
-            Icons.chevron_right,
-            color: Colors.grey,
-          ),
-        ],
-      ),
+                    }),
+              ))
+          .toList(),
     );
   }
 
-  Container _buildMajorCategory() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          RichText(
-            text: TextSpan(children: [
-              TextSpan(
-                text: '面料类型',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              TextSpan(
-                text: ' *',
-                style: TextStyle(fontSize: 16, color: Colors.red),
-              )
-            ]),
+  ///期望价格
+  Widget _buildExceptedPrice() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFieldBorderComponentV2(
+            padding: EdgeInsets.all(0),
+            hideDivider: true,
+            isRequired: true,
+            textAlign: TextAlign.left,
+            prefix: '￥',
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
+            hintText: '请输入期望价格',
+            controller: super.maxExpectedPriceController,
+            focusNode: super.maxExpectedPriceFocusNode,
+            enabled: widget.formState.model.details.maxExpectedPrice != -1,
+            style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            onChanged: (value) {
+              setState(() {
+                if (value.contains('.')) {
+                  int index = value.indexOf('.');
+                  if (value.length > index + 3) {
+                    super.maxExpectedPriceController.text =
+                        value.substring(0, index + 3);
+                  }
+                }
+                widget.formState.model.details.maxExpectedPrice =
+                    ClassHandleUtil.removeSymbolRMBToDouble(
+                        super.maxExpectedPriceController.text);
+              });
+            },
           ),
-          Expanded(
-            child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          height:
-                              MediaQueryData.fromWindow(window).size.height / 2,
-                          child: Consumer(
-                            builder: (context, MajorCategoryState categoryState,
-                                    _) =>
-                                FutureBuilder(
-                              future: categoryState.getMajorCategories(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<CategoryModel>> snapshot) {
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                } else {
-                                  return SingleMajorCategorySelect(
-                                    categories: snapshot.data,
-                                    categorySelect: widget
-                                        .formState.model.details.majorCategory,
-                                    onItemTap: (categoryModel) {
-                                      setState(() {
-                                        widget.formState.model.details
-                                            .majorCategory = categoryModel;
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        );
-                      });
-                },
-                child: Text(
-                  '${widget.formState.model.details.majorCategory?.name ?? '选择面料类型'}',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.end,
-                )),
+        ),
+        Container(
+          margin: EdgeInsets.only(right: 4),
+          child: B2BCheckbox(
+            value: widget.formState.model.details.maxExpectedPrice == -1,
+            onChanged: (value) {
+              setState(() {
+                if (widget.formState.model.details.maxExpectedPrice != -1) {
+                  widget.formState.model.details.maxExpectedPrice = -1;
+                } else {
+                  widget.formState.model.details.maxExpectedPrice =
+                      ClassHandleUtil.removeSymbolRMBToDouble(
+                          super.maxExpectedPriceController.text);
+                }
+              });
+            },
           ),
-          Icon(
-            Icons.chevron_right,
-            color: Colors.grey,
-          ),
-        ],
-      ),
+        ),
+        Text('面议', style: TextStyle(fontSize: 15, color: Color(0xFF222222)))
+      ],
     );
   }
 
@@ -802,48 +310,30 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       child: Column(
         children: [
           _buildTitleName(),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 12),
-            child: Divider(
-              color: Color(0xFFE7E7E7),
-              height: 1,
-            ),
-          ),
+          FormDivider(),
           _buildRemarks(),
         ],
       ),
     );
   }
 
-  Container _buildTitleName() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 80,
-            child: Text(
-              '标题',
-              style: titleTextStyle,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: TextFieldBorderComponentV2(
-              padding: EdgeInsets.all(0),
-              hideDivider: true,
-              isRequired: true,
-              textAlign: TextAlign.left,
-              hintText: '标题',
-              controller: super.productNameController,
-              focusNode: super.productNameFocusNode,
-              onChanged: (v) {
-                widget.formState.model.details.productName =
-                    super.productNameController.text;
-              },
-            ),
-          ),
-        ],
+  Widget _buildTitleName() {
+    return FormRow(
+      title: '标题',
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: TextFieldBorderComponentV2(
+        padding: EdgeInsets.all(0),
+        hideDivider: true,
+        isRequired: true,
+        textAlign: TextAlign.left,
+        hintText: '标题',
+        style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+        controller: super.productNameController,
+        focusNode: super.productNameFocusNode,
+        onChanged: (v) {
+          widget.formState.model.details.productName =
+              super.productNameController.text;
+        },
       ),
     );
   }
@@ -852,7 +342,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 14),
       child:
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Container(
           width: 80,
           padding: EdgeInsets.only(top: 15),
@@ -863,24 +353,25 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
         ),
         Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldComponent(
-                padding: EdgeInsets.symmetric(vertical: 0),
-                dividerPadding: EdgeInsets.only(),
-                focusNode: remarksFocusNode,
-                hintText: '需求描述...',
-                autofocus: false,
-                inputType: TextInputType.text,
-                textAlign: TextAlign.left,
-                hideDivider: true,
-                maxLines: null,
-                maxLength: 200,
-                controller: remarksController,
-                onChanged: (v) {
-                  widget.formState.model.remarks = remarksController.text;
-                },
-              ),
-            ))
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 0),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: remarksFocusNode,
+            hintText: '需求描述...',
+            style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            autofocus: false,
+            inputType: TextInputType.text,
+            textAlign: TextAlign.left,
+            hideDivider: true,
+            maxLines: null,
+            maxLength: 200,
+            controller: remarksController,
+            onChanged: (v) {
+              widget.formState.model.remarks = remarksController.text;
+            },
+          ),
+        ))
       ]),
     );
   }
@@ -916,203 +407,324 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
     );
   }
 
-  Container _buildContactPhone() {
+  Widget _buildCard3() {
+    DateTime now = DateTime.now();
+    now = now.add(Duration(days: 1));
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          Icon(Icons.phone),
-          Container(
-            width: 100,
-            margin: EdgeInsets.only(left: 10),
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '联系电话',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-                TextSpan(
-                  text: ' *',
-                  style: TextStyle(fontSize: 16, color: Colors.red),
-                )
-              ]),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: TextFieldBorderComponentV2(
-              padding: EdgeInsets.all(0),
-              hideDivider: true,
-              isRequired: true,
-              textAlign: TextAlign.left,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              inputType: TextInputType.number,
-              hintText: '输入手机号',
-              controller: super.contactController,
-              focusNode: super.contactPhoneFocusNode,
-              onChanged: (v) {
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FormSelectRow(
+              title: '面料类型',
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+              onTap: _onSelectMajorCategory,
+              val: widget.formState.model.details.majorCategory?.name),
+          FormDivider(),
+          FormSelectRow(
+              title: '商品品类',
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+              onTap: _onselectCategory,
+              val: widget.formState.model.details.category != null
+                  ? '${widget?.formState?.model?.details?.category?.parent
+                  ?.name}-${widget.formState.model.details.category?.name}'
+                  : null),
+          FormDivider(),
+          FormSelectRow(
+              title: '质量等级',
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+              onTap: _onselectMarket,
+              val: marketStr()),
+          FormDivider(),
+          FormSelectRow(
+            title: '交货日期',
+            padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+            val: DateFormatUtil.formatYMD(
+                widget.formState.model.details?.expectedDeliveryDate),
+            onTap: () {
+              showDatePicker(
+                context: context,
+                initialDate:
+                widget.formState.model.details?.expectedDeliveryDate ?? now,
+                firstDate: DateTime(2019),
+                lastDate: DateTime(2999),
+              ).then((value) {
                 setState(() {
-                  widget.formState.model.details.contactPhone = v;
-                  if (isPhoneSame) {
-                    widget.formState.model.details.contactWeChatNo = v;
-                    wechatController.text = v;
+                  if (value != null) {
+                    widget.formState.model.details?.expectedDeliveryDate =
+                        value;
                   }
                 });
-              },
-            ),
+              });
+            },
           ),
         ],
       ),
     );
   }
 
-  Container _buildPayInfo() {
+  Widget _buildCard4() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          RichText(
-            text: TextSpan(children: [
-              TextSpan(
-                text: '支付条件',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              // TextSpan(
-              //   text: ' *',
-              //   style: TextStyle(fontSize: 16, color: Colors.red),
-              // )
-            ]),
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        FormRow(
+            title: '期望价格',
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: _buildExceptedPrice()),
+        FormDivider(),
+        FormRow(
+          title: '加工数量',
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: TextFieldBorderComponentV2(
+            padding: EdgeInsets.all(0),
+            hideDivider: true,
+            isRequired: true,
+            textAlign: TextAlign.left,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputType: TextInputType.number,
+            hintText: '请输入加工数量',
+            style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            controller: super.expectedMachiningQuantityController,
+            focusNode: super.expectedMachiningQuantityNode,
+            onChanged: (v) {
+              widget.formState.model.details.expectedMachiningQuantity =
+                  ClassHandleUtil.transInt(
+                      super.expectedMachiningQuantityController.text);
+            },
           ),
-          Expanded(
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(
-                          builder: (context) => RequirementPayForm(
-                                form: widget.formState.model.details.payPlan,
-                              )))
-                      .then((value) {
-                    if (value != null) {
-                      setState(() {
-                        widget.formState.model.details.payPlan = value;
-                      });
-                    }
-                  });
-                },
-                child: Text(
-                  getPayStr(),
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.end,
-                )),
-          ),
-          Icon(
-            Icons.chevron_right,
-            color: Colors.grey,
-          ),
-        ],
-      ),
+        )
+      ]),
     );
   }
 
-  Container _buildLocation() {
+  Widget _buildCard5() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 30,
-            child: Icon(Icons.location_on),
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        FormRow(
+            title: '加工类型',
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: _buildMachiningType()),
+        FormDivider(),
+        FormRow(
+          title: '是否打样',
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: _buildProofingNeeded(),
+        ),
+        FormDivider(),
+        FormRow(
+          title: '订单尺码',
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: _buildSizeType(),
+        ),
+        FormDivider(),
+        FormRow(
+          title: '订单颜色',
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: _buildColorType(),
+        ),
+        FormDivider(),
+        FormRow(
+          title: '是否开票',
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: _buildInvoiceNeeded(),
+        ),
+        FormDivider(),
+        FormRow(
+          title: '有效期限',
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: _buildEffectiveDays(),
           ),
-          Expanded(
-            child: GestureDetector(
-                onTap: () async {
-                  Tip tip = await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AmapSearchPage()));
-                  List<String> locationArray = tip.location.split(',');
-                  //设置定位信息
-                  setState(() {
-                    widget.formState.model.details
-                      ..latitude = double.parse(locationArray[1])
-                      ..longitude = double.parse(locationArray[0])
-                      ..address = tip.address;
-                  });
-                },
-                child: Text(
-                  '${widget.formState.model.details?.address ?? '所在位置'}',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.end,
-                )),
-          ),
-          Icon(
-            Icons.chevron_right,
-            color: Colors.grey,
-          ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 
-  Container _buildWechat() {
+  Widget _buildCard6() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        children: <Widget>[
-          Icon(B2BIcons.wechat, color: Colors.green),
-          Container(
-            width: 100,
-            margin: EdgeInsets.only(left: 10),
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '微信号',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-              ]),
-            ),
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        _buildLocation(),
+        FormDivider(),
+        _buildProductiveOrientations(),
+        FormDivider(),
+        _buildPayInfo()
+      ]),
+    );
+  }
+
+  Widget _buildCard7() {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        FormRow(
+          title: '联系电话',
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+          child: TextFieldBorderComponentV2(
+            padding: EdgeInsets.all(0),
+            hideDivider: true,
+            isRequired: true,
+            textAlign: TextAlign.left,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputType: TextInputType.number,
+            hintText: '输入手机号',
+            style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            controller: super.contactController,
+            focusNode: super.contactPhoneFocusNode,
+            onChanged: (v) {
+              setState(() {
+                widget.formState.model.details.contactPhone = v;
+                if (isPhoneSame) {
+                  widget.formState.model.details.contactWeChatNo = v;
+                  wechatController.text = v;
+                }
+              });
+            },
           ),
-          Expanded(
-            flex: 1,
-            child: TextFieldBorderComponentV2(
-              padding: EdgeInsets.all(0),
-              hideDivider: true,
-              isRequired: true,
-              textAlign: TextAlign.left,
-              hintText: '输入微信号',
-              controller: super.wechatController,
-              focusNode: super.wechatFocusNode,
-              onChanged: (v) {
-                widget.formState.model.details.contactWeChatNo = v;
-              },
-            ),
+        ),
+        FormDivider(),
+        Container(
+          padding: EdgeInsets.fromLTRB(20, 8, 20, 8),
+          child: Text(
+            '钉单将通过隐私电话服务保障您的信息安全',
+            style: TextStyle(color: Color(0xFF999999), fontSize: 12),
           ),
-        ],
-      ),
+        )
+      ]),
+    );
+  }
+
+  Widget _buildCard8() {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        FormRow(
+            title: '微信号',
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+            child: _buildWechat()),
+        FormDivider(),
+        Container(
+          padding: EdgeInsets.fromLTRB(20, 8, 20, 8),
+          child: Text(
+            '平台客服可以联系你匹配工厂',
+            style: TextStyle(color: Color(0xFF999999), fontSize: 12),
+          ),
+        )
+      ]),
+    );
+  }
+
+  Widget _buildPayInfo() {
+    return FormSelectRow(
+      title: '支付条件',
+      val: getPayStr(),
+      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(
+            builder: (context) =>
+                RequirementPayForm(
+                  form: widget.formState.model.details.payPlan,
+                )))
+            .then((value) {
+          if (value != null) {
+            setState(() {
+              widget.formState.model.details.payPlan = value;
+            });
+          }
+        });
+      },
+    );
+  }
+
+  Widget _buildLocation() {
+    return FormSelectRow(
+      title: '所在地区',
+      val: '${widget.formState.model.details?.address}',
+      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+      onTap: () async {
+        Tip tip = await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
+        List<String> locationArray = tip.location.split(',');
+        //设置定位信息
+        setState(() {
+          widget.formState.model.details
+            ..latitude = double.parse(locationArray[1])
+            ..longitude = double.parse(locationArray[0])
+            ..address = tip.address;
+        });
+      },
+    );
+  }
+
+  Widget _buildWechat() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFieldBorderComponentV2(
+            padding: EdgeInsets.all(0),
+            hideDivider: true,
+            isRequired: true,
+            textAlign: TextAlign.left,
+            hintText: '输入微信号',
+            style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            controller: super.wechatController,
+            focusNode: super.wechatFocusNode,
+            onChanged: (v) {
+              widget.formState.model.details.contactWeChatNo = v;
+            },
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(right: 4),
+          child: B2BCheckbox(
+            value: isPhoneSame,
+            onChanged: (value) {
+              setState(() {
+                isPhoneSame = value;
+                if (value) {
+                  widget.formState.model.details.contactWeChatNo =
+                      widget.formState.model.details.contactPhone;
+                  wechatController.text =
+                      widget.formState.model.details.contactPhone;
+                }
+              });
+            },
+          ),
+        ),
+        Text('与手机同号', style: TextStyle(fontSize: 14, color: Color(0xFF222222)))
+      ],
     );
   }
 
   Widget _buildSubBtn() {
     return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      height: 50,
-      child: RaisedButton(
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 18),
+
+      // height: 50,
+      child: FlatButton(
           color: Color.fromRGBO(255, 214, 12, 1),
+          padding: EdgeInsets.symmetric(vertical: 13),
           child: Text(
             '确认发布',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
-              fontSize: 18,
+              fontSize: 16,
             ),
           ),
           shape: RoundedRectangleBorder(
@@ -1124,137 +736,61 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
   }
 
   ///订单尺码类型
-  Container _buildSizeType() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '订单尺码',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+  Widget _buildSizeType() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [OrderSizeType.FREE_SIZE, OrderSizeType.MULTIPLE_SIZE]
+          .map((type) =>
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: ChoiceChip(
+                label: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Center(
+                      child: Text('${OrderSizeTypeLocalizedMap[type]}',
+                          style: TextStyle(
+                              color: Color(0xff000000), fontSize: 12))),
                 ),
-              ]),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [OrderSizeType.FREE_SIZE, OrderSizeType.MULTIPLE_SIZE]
-                  .map((type) => ChoiceChip(
-                      label: Container(
-                        height: 20,
-                        width: 60,
-                        child: Center(
-                            child: Text('${OrderSizeTypeLocalizedMap[type]}')),
-                      ),
-                      backgroundColor: Colors.grey[100],
-                      selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                      selected: widget.formState.model.details.sizeType == type,
-                      onSelected: (bool selected) {
-                        setState(() {
-                          widget.formState.model.details.sizeType = type;
-                        });
-                      }))
-                  .toList(),
-            ),
-          ),
-        ],
-      ),
+                backgroundColor: Color(0xffE7E7E7),
+                selectedColor: Color(0xFFFED800),
+                selected: widget.formState.model.details.sizeType == type,
+                onSelected: (bool selected) {
+                  setState(() {
+                    widget.formState.model.details.sizeType = type;
+                  });
+                }),
+          ))
+          .toList(),
     );
   }
 
   ///订单颜色类型
-  Container _buildColorType() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                  text: '订单颜色',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+  Widget _buildColorType() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [OrderColorType.SINGLE_COLOR, OrderColorType.MULTIPLE_COLOR]
+          .map((type) =>
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: ChoiceChip(
+                label: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Center(
+                      child: Text('${OrderColorTypeLocalizedMap[type]}',
+                          style: TextStyle(
+                              color: Color(0xff000000), fontSize: 12))),
                 ),
-              ]),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                OrderColorType.SINGLE_COLOR,
-                OrderColorType.MULTIPLE_COLOR
-              ]
-                  .map((type) => ChoiceChip(
-                      label: Container(
-                        height: 20,
-                        width: 60,
-                        child: Center(
-                            child: Text('${OrderColorTypeLocalizedMap[type]}')),
-                      ),
-                      backgroundColor: Colors.grey[100],
-                      selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                      selected:
-                          widget.formState.model.details.colorType == type,
-                      onSelected: (bool selected) {
-                        setState(() {
-                          widget.formState.model.details.colorType = type;
-                        });
-                      }))
-                  .toList(),
-            ),
-          ),
-        ],
-      ),
+                backgroundColor: Color(0xffE7E7E7),
+                selectedColor: Color(0xFFFED800),
+                selected: widget.formState.model.details.colorType == type,
+                onSelected: (bool selected) {
+                  setState(() {
+                    widget.formState.model.details.colorType = type;
+                  });
+                }),
+          ))
+          .toList(),
     );
-  }
-
-  Widget _buildInfo(String val) {
-    return Padding(
-        padding: EdgeInsets.only(right: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text('$val', style: TextStyle(fontSize: 12, color: Colors.grey))
-          ],
-        ));
-  }
-
-  Widget _buildIsSame() {
-    return Padding(
-        padding: EdgeInsets.only(right: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text('平台客服可以联系工厂',
-                style: TextStyle(fontSize: 12, color: Colors.grey)),
-            Checkbox(
-              value: isPhoneSame,
-              onChanged: (bool value) {
-                setState(() {
-                  isPhoneSame = value;
-                  if (value) {
-                    widget.formState.model.details.contactWeChatNo =
-                        widget.formState.model.details.contactPhone;
-                    wechatController.text =
-                        widget.formState.model.details.contactPhone;
-                  }
-                });
-              },
-            ),
-            Text('与手机同号'),
-          ],
-        ));
   }
 
   String getPayStr() {
@@ -1262,8 +798,96 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       return '选择';
     } else {
       return PayPlanTypeLocalizedMap[
-          widget.formState.model.details.payPlan.payPlanType];
+      widget.formState.model.details.payPlan.payPlanType];
     }
+  }
+
+  ///选择面料类型
+  void _onSelectMajorCategory() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: MediaQueryData
+                .fromWindow(window)
+                .size
+                .height / 2,
+            child: Consumer(
+              builder: (context, MajorCategoryState categoryState, _) =>
+                  FutureBuilder(
+                    future: categoryState.getMajorCategories(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<CategoryModel>> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(child: CircularProgressIndicator());
+                      } else {
+                        return SingleMajorCategorySelect(
+                          categories: snapshot.data,
+                          categorySelect:
+                          widget.formState.model.details.majorCategory,
+                          onItemTap: (categoryModel) {
+                            setState(() {
+                              widget.formState.model.details.majorCategory =
+                                  categoryModel;
+                              Navigator.pop(context);
+                            });
+                          },
+                        );
+                      }
+                    },
+                  ),
+            ),
+          );
+        });
+  }
+
+  ///选择商品类型
+  void _onselectCategory() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Consumer(
+            builder: (context, CategoryState categoryState, _) =>
+                FutureBuilder(
+                  future: categoryState.getCascadedCategories(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<CategoryModel>> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      return SingleCategorySelect(
+                        categories: snapshot.data,
+                        categorySelect: widget.formState.model.details.category,
+                        onItemTap: (categoryModel) {
+                          setState(() {
+                            widget.formState.model.details.category =
+                                categoryModel;
+                            Navigator.of(context).pop();
+                          });
+                        },
+                      );
+                    }
+                  },
+                ),
+          );
+        });
+  }
+
+  ///选择质量等级
+  void _onselectMarket() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+        builder: (context) =>
+            SalesMarketSelectPage(
+              values: widget.formState.model.details.salesMarket,
+            )))
+        .then((values) {
+      if (values != null) {
+        setState(() {
+          widget.formState.model.details.salesMarket = values;
+        });
+      }
+    });
   }
 
   void getLocation() async {
@@ -1307,6 +931,28 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
         ..cityStr = aMapLocation.city
         ..districtStr = aMapLocation.district;
     });
+  }
+
+  ///质量等级值
+  String marketStr() {
+    return formatEnumSelectsText(
+        widget.formState.model.details.salesMarket,
+        [
+          EnumModel('A_CHAIN', '一线大牌'),
+          // EnumModel('REGIONAL_CHAIN', '区域品牌'),
+          EnumModel('STALL_WHOLESALE', '档口精品'),
+          EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
+          EnumModel('WHOLESALE_TRADE', '外贸批发'),
+          EnumModel('LEVEL01', '二线品牌'),
+          EnumModel('LEVEL02', '三线品牌'),
+          EnumModel('LEVEL03', '三线以下'),
+          EnumModel('LEVEL04', '档口跑量'),
+          EnumModel('LEVEL05', '电商高品质'),
+          EnumModel('LEVEL06', '电商跑量'),
+          EnumModel('LEVEL07', '跨境电商'),
+        ],
+        2,
+        customText: '');
   }
 
   /// 发布
