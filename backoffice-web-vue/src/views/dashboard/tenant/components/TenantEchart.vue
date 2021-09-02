@@ -7,7 +7,7 @@
   <div class="tenant-echart">
     <div class="echart-header">
       <h6>{{chartData.name}}</h6>
-      <el-select v-model="unit" placeholder="请选择" style="width: 60px">
+      <el-select v-model="unit" placeholder="请选择" style="width: 60px" @change="handleType">
         <el-option label="日" :value="0" :key="0"/>
         <el-option label="月" :value="2" :key="2"/>
       </el-select>
@@ -20,7 +20,8 @@
         unlink-panels
         range-separator="至"
         start-placeholder="开始日期"
-        end-placeholder="结束日期">
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions">
       </el-date-picker>
       <el-button type="text" @click="downloadDetail">下载明细</el-button>
     </div>
@@ -34,8 +35,22 @@
 import { formatDate } from '@/common/js/filters';
 
 export default {
-  props: ['chartData', 'code'],
+  props: ['chartData', 'code', 'defaultTime'],
   methods: {
+    handleType (value) {
+      if (value === 2 && (new Date(this.time[0]).getMonth() === new Date(this.time[1]).getMonth())) {
+
+        let params = {
+          start: this.time[0]
+        }
+        let endDate = new Date(this.time[1])
+        params['end'] = this.handleTime(endDate.setMonth(endDate.getMonth()))
+  
+        this.$emit('getEchartData', this.code, this.unit, params)
+      } else {
+        this.handleChange(this.time)
+      }
+    },
     handleChange (value) {
       let params = {
         start: value[0]
@@ -46,7 +61,7 @@ export default {
       } else {
         params['end'] = this.handleTime(endDate.setDate(endDate.getDate() + 1))
       }
-      console.log(params)
+
       this.$emit('getEchartData', this.code, this.unit, params)
     },
     handleTime (time) {
@@ -103,8 +118,13 @@ export default {
   data () {
     return {
       main: null,
-      time: null,
-      unit: 0
+      time: [],
+      unit: 0,
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        }
+      },
     }
   },
   watch: {
@@ -118,6 +138,11 @@ export default {
   },
   created () {
     this.$set(this, 'main', this.code)
+
+    let endDate = new Date(this.defaultTime.end)
+
+    this.time[0] = this.defaultTime.start
+    this.time[1] = this.handleTime(endDate.setDate(endDate.getDate() - 1))
   }
 }
 </script>

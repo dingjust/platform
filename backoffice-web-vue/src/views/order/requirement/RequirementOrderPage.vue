@@ -90,10 +90,12 @@
     </el-dialog>
     <el-dialog title="设置代理人" :visible.sync="agentVisible" width="400px" :close-on-click-modal="false">
       <el-form :model="agentData" ref="agentForm">
-        <el-form-item label="" prop="agentContactPerson" :rules="[{ required: true, message: '请输入代理人', tigger: 'change' }]">
+        <!-- <el-form-item label="" prop="agentContactPerson" :rules="[{ required: true, message: '请输入代理人', tigger: 'change' }]"> -->
+        <el-form-item label="" prop="agentContactPerson">
           <el-input v-model="agentData.agentContactPerson" placeholder="请输入代理人"></el-input>
         </el-form-item>
-        <el-form-item label="" prop="agentContactPhone" :rules="[{ required: true, message: '请输入联系电话', tigger: 'change' }]">
+        <!-- <el-form-item label="" prop="agentContactPhone" :rules="[{ required: true, message: '请输入联系电话', tigger: 'change' }]"> -->
+        <el-form-item label="" prop="agentContactPhone">
           <el-input v-model="agentData.agentContactPhone" placeholder="请输入联系电话"></el-input>
         </el-form-item>
       </el-form>
@@ -445,13 +447,14 @@
         this.agentData.code = row.code
       },
       onSetAgent () {
-        this.$refs.agentForm.validate(valid => {
-          if (valid) {
-            this._onSetAgent();
-          } else {
-            this.$message.error('请完善表单信息')
-          }
-        })
+        // this.$refs.agentForm.validate(valid => {
+        //   if (valid) {
+        //     this._onSetAgent();
+        //   } else {
+          //     this.$message.error('请完善表单信息')
+        //   }
+        // })
+        this._onSetAgent();
       },
       async _onSetAgent () {
         const data = this.agentData
