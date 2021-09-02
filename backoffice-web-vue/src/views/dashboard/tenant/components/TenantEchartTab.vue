@@ -1,7 +1,7 @@
 <template>
   <div class="echart-cell">
     <template v-for="(value, key) in echartArr">
-      <tenant-echart :key="key" :code="key" :chartData="value" @getEchartData="getEchartData" @handleTime="handleTime"/>
+      <tenant-echart :key="key" :code="key" :chartData="value" :defaultTime="defaultTime" @getEchartData="getEchartData" @handleTime="handleTime"/>
     </template>
   </div>
 </template>
@@ -20,6 +20,11 @@ export default {
       const date = new Date();
       const end = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`).getTime() + 24*60*60*1000;
       const start = end - 7*24*60*60*1000
+
+      this.$set(this, 'defaultTime', {
+        start: this.handleTime(start), 
+        end: this.handleTime(end)
+      })
 
       for (const key in this.echartArr) {
         if (Object.hasOwnProperty.call(this.echartArr, key)) {
@@ -44,6 +49,7 @@ export default {
   },
   data () {
     return {
+      defaultTime: null,
       echartArr: {
         agreement: {
           name: '签约数',
