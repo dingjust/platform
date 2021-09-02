@@ -1,11 +1,11 @@
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
@@ -374,26 +374,31 @@ class _Card4 extends StatelessWidget {
                 children: [
                   Expanded(
                       child: _Item(
-                    height: itemHeight,
+                        height: itemHeight,
                     title: '外发订单',
                     child: B2BV2Image.order_1(width: 28, height: 28),
-                    onTap: () => _onNavigate(
-                        context, AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+                    onTap: () =>
+                        _onNavigate(context, AppRoutes.ROUTE_OUT_ORDERS),
                   )),
                   Expanded(
                       child: _Item(
-                    height: itemHeight,
-                    title: '外发生产工单',
-                    child: B2BV2Image.order_2(width: 28, height: 28),
-                    onTap: () => _onNavigate(context, AppRoutes.ROUTE_QUOTES),
+                        height: itemHeight,
+                        title: '外发生产工单',
+                        child: B2BV2Image.order_2(width: 28, height: 28),
+                        onTap: () =>
+                            _onNavigate(
+                                context,
+                                AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS),
                   )),
                   Expanded(
                       child: _Item(
-                    title: '生产工单',
-                    height: itemHeight,
-                    child: B2BV2Image.order_3(width: 28, height: 28),
-                    onTap: () => _onNavigate(
-                        context, AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS),
+                        title: '生产工单',
+                        height: itemHeight,
+                        child: B2BV2Image.order_3(width: 28, height: 28),
+                        onTap: () =>
+                            _onNavigate(
+                                context,
+                                AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
                   )),
                 ],
               ),
@@ -405,11 +410,13 @@ class _Card4 extends StatelessWidget {
                 children: [
                   Expanded(
                       child: _Item(
-                    title: '出货单',
-                    height: itemHeight,
-                    child: B2BV2Image.order_4(width: 28, height: 28),
-                    onTap: () => _onNavigate(
-                        context, AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS),
+                        title: '出货单',
+                        height: itemHeight,
+                        child: B2BV2Image.order_4(width: 28, height: 28),
+                        onTap: () =>
+                            _onNavigate(
+                                context,
+                                AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
                   )),
                   Expanded(
                     child: Container(),
@@ -517,25 +524,28 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onTap?.call();
-      },
-      child: Container(
-        height: height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            child ??
-                Text(
-                  '$val',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-            Text(
-              '$title',
-              style: TextStyle(fontSize: 12),
-            )
-          ],
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: () {
+          onTap?.call();
+        },
+        child: Container(
+          height: height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              child ??
+                  Text(
+                    '$val',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+              Text(
+                '$title',
+                style: TextStyle(fontSize: 12),
+              )
+            ],
+          ),
         ),
       ),
     );
