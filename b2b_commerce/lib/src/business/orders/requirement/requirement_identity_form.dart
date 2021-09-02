@@ -12,7 +12,8 @@ import 'requirement_form_order.dart';
 class RequirementIdentityForm extends StatefulWidget {
   final RequirementOrderType type;
 
-  const RequirementIdentityForm(this.type, {
+  const RequirementIdentityForm(
+    this.type, {
     Key key,
   }) : super(key: key);
 
@@ -124,7 +125,7 @@ class _RequirementIdentityFormState extends State<RequirementIdentityForm> {
                       hintText: '以上都不是请输入...',
                       controller: controller,
                       focusNode: node,
-                      autofocus: true,
+                      autofocus: false,
                     ),
                   )),
                   TextButton(

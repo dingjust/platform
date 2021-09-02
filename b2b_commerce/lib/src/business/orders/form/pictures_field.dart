@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
@@ -27,38 +26,12 @@ class PicturesFieldState extends State<PicturesField> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: '添加图片',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                    TextSpan(
-                      text: '${widget.description}',
-                      style: TextStyle(fontSize: 12, color: Colors.orange[800]),
-                    ),
-                  ]),
-                ),
-              )
-            ],
-          ),
-        ),
-//        PhotoPicker(images: widget.normalImages, width: 350),
-        EditableAttachments(
-          list: widget.model.details.pictures,
-          // maxNum:
-          //     widget.product == null ? 5 : widget.model.details.pictures.length,
-          // maxNum: ,
-          editable: widget.product == null && widget.enabled,
-        )
-      ],
+    return EditableAttachmentsV2(
+      list: widget.model.details.pictures,
+      // maxNum:
+      //     widget.product == null ? 5 : widget.model.details.pictures.length,
+      // maxNum: ,
+      editable: widget.product == null && widget.enabled,
     );
   }
 }
