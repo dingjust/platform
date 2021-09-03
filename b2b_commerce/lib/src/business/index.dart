@@ -1,28 +1,21 @@
-import 'package:b2b_commerce/src/_shared/widgets/authorization_dector.dart';
+import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
+import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
 import '../common/app_routes.dart';
-import '_shared/widgets/site_statistics.dart';
 
 /// 生意
 class BusinessHomePage extends StatefulWidget {
   BusinessHomePage({
     Key key,
   }) : super(key: AppKeys.businessHomePage);
-
-  final List<Widget> widgets = [
-    // FactorySiteStatisticsSection(),
-    BusinessReportSection(),
-    SliverSpacing(),
-    FactoryMenusSection()
-  ];
-
-  get widgetsByUserType => widgets;
 
   @override
   _BusinessHomePageState createState() => new _BusinessHomePageState();
@@ -31,627 +24,542 @@ class BusinessHomePage extends StatefulWidget {
 class _BusinessHomePageState extends State<BusinessHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('工作'),
-        centerTitle: true,
-        elevation: 0.5,
-      ),
-      body: Container(
-        color: Colors.white,
-        child: CustomScrollView(slivers: widget.widgetsByUserType),
-      ),
-    );
-  }
-}
-
-// class BrandSiteStatisticsSection extends StatelessWidget {
-//   final StreamController _reportsStreamController =
-//       StreamController<Reports>.broadcast();
-
-//   void queryReports() async {
-//     Reports response = await ReportsRepository().report();
-//     if (response != null) {
-//       _reportsStreamController.add(response);
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     if (UserBLoC.instance.currentUser.status == UserStatus.ONLINE) {
-//       queryReports();
-//     }
-
-//     return StreamBuilder<Reports>(
-//       stream: _reportsStreamController.stream,
-//       initialData: new Reports(),
-//       builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
-//         return SiteStatistics(<SiteStatisticsModel>[
-//           SiteStatisticsModel(
-//               label: '需求报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
-//           SiteStatisticsModel(
-//               label: '打样待付款', value: '${snapshot.data?.ordersCount2 ?? 0}'),
-//           SiteStatisticsModel(
-//               label: '生产待付款', value: '${snapshot.data?.ordersCount4 ?? 0}'),
-//           SiteStatisticsModel(
-//               label: '正在打样', value: '${snapshot.data?.ordersCount3 ?? 0}'),
-//           SiteStatisticsModel(
-//               label: '正在生产', value: '${snapshot.data?.ordersCount6 ?? 0}'),
-//         ]);
-//       },
-//     );
-//   }
-// }
-
-class BrandMenusSection extends StatelessWidget {
-  Widget _buildOrderMenu(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                '订单管理',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              crossAxisCount: 4,
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 4.0,
-              childAspectRatio: (1.3),
-              children: <Widget>[
-                buildChild(context, MenuItemImage.requirementOrder, '需求订单',
-                    AppRoutes.ROUTE_REQUIREMENT_ORDERS,
-                    authorizations: [Authorization.REQUIREMENT_ORDER]),
-                buildChild(context, MenuItemImage.priceManage, '报价管理',
-                    AppRoutes.ROUTE_QUOTES,
-                    authorizations: [Authorization.QUOTE_ORDER]),
-                //     authorizations: [Authorization.PURCHASE_ORDER]),
-                // buildChild(context, MenuItemImage.saleOrder, '销售订单',
-                //     AppRoutes.ROUTE_SALE_ORDERS,
-                //     authorizations: [Authorization.PURCHASE_ORDER]),
-                // buildChild(context, MenuItemImage.saleOrder, '面料需求',
-                //     AppRoutes.ROUTE_FABRIC_REQUIREMENT,
-                //     authorizations: [Authorization.PURCHASE_ORDER]),
-                buildChild(context, MenuItemImage.externalOrder, '外接订单',
-                    AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS,
-                    authorizations: [Authorization.PURCHASE_ORDER]),
-                buildChild(
-                  context,
-                  MenuItemImage.reconciliation,
-                  '对账单',
-                  AppRoutes.ROUTE_RECONCILIATION_ORDERS,
-                )
-              ],
-            )
-          ],
-        ));
-  }
-
-  Widget _buildCompanyMenu(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                '店铺管理',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              crossAxisCount: 4,
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 4.0,
-              childAspectRatio: (1.3),
-              children: <Widget>[
-                // buildChild(context, MenuItemImage.clothesManage, '产品管理',
-                //     AppRoutes.ROUTE_PRODUCTS,
-                //     authorizations: [Authorization.PRODUCT]),
-                //  buildChild(context, MenuItemImage.employeeManage, '员工管理',
-                //      AppRoutes.ROUTE_EMPLOYEES),
-                buildChild(context, MenuItemImage.partnerFactory, '合作商管理',
-                    AppRoutes.ROUTE_COOPERATORS,
-                    authorizations: [Authorization.COMPANY_COOPERATOR]),
-                buildChild(context, MenuItemImage.clothesManage, '款式管理',
-                    AppRoutes.ROUTE_SAMPLE_PRODUCTS),
-                // buildChild(context, MenuItemImage.productFactory, '面辅料管理',
-                //     AppRoutes.ROUTE_MATERIEL_PRODUCT_MANAGE),
-              ],
-            )
-          ],
-        ));
-  }
-
-  Widget _buildOutOrderMenu(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                '外发管理',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              crossAxisCount: 4,
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 4.0,
-              childAspectRatio: (1.3),
-              children: <Widget>[
-                buildChild(context, MenuItemImage.outboundOrder, '外发订单',
-                    AppRoutes.ROUTE_OUT_ORDERS),
-                buildChild(context, MenuItemImage.productionBlue, '外发生产工单',
-                    AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS),
-              ],
-            )
-          ],
-        ));
-  }
-
-  Widget _buildProductionOrderMenu(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                '生产管理',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              crossAxisCount: 4,
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 4.0,
-              childAspectRatio: (1.3),
-              children: <Widget>[
-                buildChild(context, MenuItemImage.productionOrange, '生产工单',
-                    AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
-                // buildChild(context, MenuItemImage.delivery, '出货单',
-                //     AppRoutes.ROUTE_DELIVERY_ORDERS),
-              ],
-            ),
-          ],
-        ));
-  }
-
-  Widget buildChild(
-      BuildContext context, Image image, String title, String routeTo,
-      {List<Authorization> authorizations}) {
-    if (authorizations != null) {
-      return AuthorizationDector(
-        show: false,
-        opacity: 0.3,
-        authorizations: authorizations,
-        child: GestureDetector(
+      color: Color(0xFFF7F7F7),
+      child: Stack(children: [
+        Positioned(
+          top: 0,
+          child: Image.asset(
+            'img/icons/b2b-v2/workspace/bg@3x.png',
+            package: 'assets',
+            fit: BoxFit.cover,
+            height: 210,
+            width: MediaQuery.of(context).size.width,
+          ),
+        ),
+        Positioned(
+            top: 56,
+            left: 0,
             child: Container(
-              color: Colors.white,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+              width: MediaQuery.of(context).size.width,
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  image,
                   Container(
-                    margin: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: Color.fromRGBO(100, 100, 100, 1),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                    margin: EdgeInsets.only(right: 8),
+                    child: Icon(B2BIconsV2.workspace),
                   ),
+                  Text('工作台',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ))
                 ],
               ),
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, routeTo);
-            }),
-      );
-    } else {
-      return GestureDetector(
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                image,
-                Container(
-                  margin: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      color: Color.fromRGBO(100, 100, 100, 1),
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            )),
+        Expanded(
+            child: Container(
+          margin: EdgeInsets.fromLTRB(12, (56.0 + 45), 12, 0),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [_Card1(), _Card2(), _Card3(), _Card4()],
           ),
-          onTap: () {
-            Navigator.pushNamed(context, routeTo);
-          });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate(<Widget>[
-        _buildOrderMenu(context),
-        Container(
-          height: 10,
-          color: Color.fromRGBO(245, 245, 245, 1),
-        ),
-        _buildCompanyMenu(context),
-        Container(
-          height: 10,
-          color: Color.fromRGBO(245, 245, 245, 1),
-        ),
-        _buildOutOrderMenu(context),
-        Container(
-          height: 10,
-          color: Color.fromRGBO(245, 245, 245, 1),
-        ),
-        _buildProductionOrderMenu(context)
+        ))
       ]),
     );
   }
 }
 
-// class FactorySiteStatisticsSection extends StatelessWidget {
-//   final StreamController _reportsStreamController =
-//       StreamController<Reports>.broadcast();
-
-//   void queryReports() async {
-//     Reports response = await ReportsRepository().report();
-//     if (response != null) {
-//       _reportsStreamController.add(response);
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     if (UserBLoC.instance.currentUser.status == UserStatus.ONLINE) {
-//       queryReports();
-//     }
-
-//     return StreamBuilder<Reports>(
-//       stream: _reportsStreamController.stream,
-//       initialData: Reports(),
-//       builder: (BuildContext context, AsyncSnapshot<Reports> snapshot) {
-//         return SiteStatistics(<SiteStatisticsModel>[
-//           SiteStatisticsModel(
-//               label: '报价中', value: '${snapshot.data?.ordersCount1 ?? 0}'),
-//           SiteStatisticsModel(
-//               label: '生产中', value: '${snapshot.data?.ordersCount6 ?? 0}'),
-//           SiteStatisticsModel(
-//               label: '已延期', value: '${snapshot.data?.ordersCount5 ?? 0}'),
-//         ]);
-//       },
-//     );
-//   }
-// }
-
-class BusinessReportSection extends StatelessWidget {
-  const BusinessReportSection({Key key}) : super(key: key);
+///生产管理
+class _Card1 extends StatelessWidget {
+  const _Card1({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Consumer<BusinessReportState>(
+    return Consumer<BusinessReportState>(
         builder: (context, BusinessReportState state, _) {
       if (state.updateTime == null) {
         state.getData();
       }
-      return SiteStatistics(<SiteStatisticsModel>[
-        SiteStatisticsModel(
-            label: '我的需求', value: '${state.requirementCount ?? 0}'),
-        SiteStatisticsModel(label: '我的报价', value: '${state.quoteCount ?? 0}'),
-        SiteStatisticsModel(label: '订单数', value: '${state.orderCount ?? 0}'),
-        SiteStatisticsModel(
-            label: '合同数', value: '${state.agreementCount ?? 0}'),
-        SiteStatisticsModel(
-            label: '待付款', value: '${state.pendingPayCount ?? 0}'),
-        SiteStatisticsModel(
-            label: '生产中', value: '${state.productionCount ?? 0}'),
-      ]);
-    }));
+      return _Card(
+        title: '生产管理',
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 24, bottom: 28),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: _Item(
+                      title: '我的需求',
+                      val: '${state.requirementCount ?? 0}',
+                      onTap: () => _onNavigate(
+                          context, AppRoutes.ROUTE_REQUIREMENT_ORDERS),
+                    )),
+                    Expanded(
+                        child: _Item(
+                      title: '我的报价',
+                      val: '${state.quoteCount ?? 0}',
+                      onTap: () => _onNavigate(context, AppRoutes.ROUTE_QUOTES),
+                    )),
+                    Expanded(
+                        child: _Item(
+                      title: '订单数',
+                      val: '${state.orderCount ?? 0}',
+                      onTap: () => _onNavigate(
+                          context, AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS),
+                    )),
+                  ],
+                ),
+              ),
+              _Divider(),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 28),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: _Item(
+                      title: '合同数',
+                      val: '${state.agreementCount ?? 0}',
+                      onTap: () =>
+                          _onNavigate(context, AppRoutes.ROUTE_MY_CONTRACT),
+                    )),
+                    Expanded(
+                        child: _Item(
+                      title: '待付款',
+                      val: '${state.pendingPayCount ?? 0}',
+                      onTap: () =>
+                          _onNavigate(context, AppRoutes.ROUTE_OUT_ORDERS),
+                    )),
+                    Expanded(
+                        child: _Item(
+                      title: '生产中',
+                      val: '${state.productionCount ?? 0}',
+                      onTap: () => _onNavigate(
+                          context, AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
+                    )),
+                  ],
+                ),
+              ),
+              _Divider(),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 28),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: _Item(
+                      title: '待收货',
+                      val: '0',
+                    )),
+                    Expanded(
+                        child: _Item(
+                      title: '代发货',
+                      val: '0',
+                    )),
+                    Expanded(
+                        child: _Item(
+                      title: '已完成',
+                      val: '0',
+                    )),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  void _onNavigate(BuildContext context, String route) {
+    Navigator.of(context).pushNamed(route);
   }
 }
 
-class FactoryMenusSection extends StatelessWidget {
-  Widget _buildOrderMenu(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                '订单管理',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              crossAxisCount: 4,
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 4.0,
-              childAspectRatio: (1.3),
-              children: <Widget>[
-                buildChild(context, MenuItemImage.requirementOrder, '需求订单',
-                    AppRoutes.ROUTE_REQUIREMENT_ORDERS,
-                    authorizations: [Authorization.REQUIREMENT_ORDER]),
-                // buildChild(context, MenuItemImage.priceManage, '报价处理',
-                //     AppRoutes.ROUTE_MY_QUOTES,
-                //     authorizations: [Authorization.QUOTE_ORDER]),
-                buildChild(context, MenuItemImage.priceOrder, '我的报价',
-                    AppRoutes.ROUTE_QUOTES,
-                    authorizations: [Authorization.QUOTE_ORDER]),
-                // buildChild(context, MenuItemImage.proofingOrder, '打样订单',
-                //     AppRoutes.ROUTE_PROOFING_ORDERS,
-                //     authorizations: [Authorization.PROOFING_ORDER]),
-                // buildChild(context, MenuItemImage.saleOrder, '销售订单',
-                //     AppRoutes.ROUTE_SALE_ORDERS,
-                //     authorizations: [Authorization.PURCHASE_ORDER]),
-                // buildChild(context, MenuItemImage.saleOrder, '面料需求',
-                //     AppRoutes.ROUTE_FABRIC_REQUIREMENT,
-                //     authorizations: [Authorization.PURCHASE_ORDER]),
-                buildChild(context, MenuItemImage.externalOrder, '外接订单',
-                    AppRoutes.ROUTE_EXTERNAL_SALE_ORDERS,
-                    authorizations: [Authorization.PURCHASE_ORDER]),
-                buildChild(context, MenuItemImage.reconciliation, '对账单',
-                    AppRoutes.ROUTE_RECONCILIATION_ORDERS),
-              ],
-            )
-          ],
-        ));
-  }
+///店铺管理
+class _Card2 extends StatelessWidget {
+  const _Card2({Key key}) : super(key: key);
 
-  Widget _buildCompanyMenu(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                '店铺管理',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              crossAxisCount: 4,
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 4.0,
-              childAspectRatio: (1.3),
-              children: <Widget>[
-                // buildChild(context, MenuItemImage.clothesManage, '产品管理',
-                //     AppRoutes.ROUTE_PRODUCTS,
-                //     authorizations: [Authorization.PRODUCT]),
-                buildChild(
-                  context,
-                  MenuItemImage.clothesManage,
-                  '款式管理',
-                  AppRoutes.ROUTE_SAMPLE_PRODUCTS,
-                ),
-                // buildChild(context, MenuItemImage.employeeManage, '员工管理',
-                //     AppRoutes.ROUTE_EMPLOYEES),
-                buildChild(context, MenuItemImage.partnerFactory, '合作商管理',
-                    AppRoutes.ROUTE_COOPERATORS,
-                    authorizations: [Authorization.COMPANY_COOPERATOR]),
-                // buildChild(
-                //     context,
-                //     B2BImage.free_capacity2(height: 25, width: 25),
-                //     '空闲产能',
-                //     AppRoutes.ROUTE_MY_CAPACITY,
-                //     authorizations: [Authorization.FACTORY_CAPACITY]),
-                // buildChild(
-                //   context,
-                //   MenuItemImage.productFactory,
-                //   '面辅料管理',
-                //   AppRoutes.ROUTE_MATERIEL_PRODUCT_MANAGE,
-                // ),
-              ],
-            )
-          ],
-        ));
-  }
+  static double itemHeight = 50;
 
-  Widget _buildOutOrderMenu(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      title: '店铺管理',
+      margin: EdgeInsets.only(top: 12),
+      child: Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                '外发管理',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              crossAxisCount: 4,
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 4.0,
-              childAspectRatio: (1.3),
-              children: <Widget>[
-                buildChild(context, MenuItemImage.outboundOrder, '外发订单',
-                    AppRoutes.ROUTE_OUT_ORDERS),
-                buildChild(context, MenuItemImage.productionBlue, '外发生产工单',
-                    AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS),
-              ],
-            )
-          ],
-        ));
-  }
-
-  Widget _buildProductionOrderMenu(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                '生产管理',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
-              crossAxisCount: 4,
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 4.0,
-              childAspectRatio: (1.3),
-              children: <Widget>[
-                buildChild(context, MenuItemImage.productionOrange, '生产工单',
-                    AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
-                // buildChild(context, MenuItemImage.delivery, '出货单',
-                //     AppRoutes.ROUTE_DELIVERY_ORDERS),
-              ],
-            )
-          ],
-        ));
-  }
-
-  Widget buildChild(
-      BuildContext context, Image image, String title, String routeTo,
-      {List<Authorization> authorizations}) {
-    if (authorizations != null) {
-      return AuthorizationDector(
-        authorizations: authorizations,
-        show: false,
-        opacity: 0.3,
-        child: GestureDetector(
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
+              margin: EdgeInsets.only(top: 24, bottom: 28),
+              child: Row(
                 children: [
-                  image,
-                  Container(
-                    margin: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: Color.fromRGBO(100, 100, 100, 1),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                  Expanded(
+                      child: _Item(
+                    height: itemHeight,
+                    title: '商品管理',
+                    child: B2BV2Image.goods(width: 28, height: 28),
+                    onTap: () =>
+                        _onNavigate(context, AppRoutes.ROUTE_SAMPLE_PRODUCTS),
+                  )),
+                  Expanded(
+                      child: _Item(
+                    height: itemHeight,
+                    title: '店铺介绍',
+                    child: B2BV2Image.shop(width: 28, height: 28),
+                    onTap: () => _onIntroduction(context),
+                  )),
+                  Expanded(
+                      child: _Item(
+                    title: '用户管理',
+                    height: itemHeight,
+                    child: B2BV2Image.user(width: 28, height: 28),
+                    onTap: () =>
+                        _onNavigate(context, AppRoutes.ROUTE_COOPERATORS),
+                  )),
+                ],
+              ),
+            ),
+            _Divider(),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 28),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: _Item(
+                    title: '店铺订单',
+                    height: itemHeight,
+                    child: B2BV2Image.order(width: 28, height: 28),
+                    onTap: () =>
+                        _onNavigate(context, AppRoutes.ROUTE_OUT_ORDERS),
+                  )),
+                  Expanded(
+                      child: _Item(
+                    title: '对账单',
+                    height: itemHeight,
+                    child: B2BV2Image.bill(width: 28, height: 28),
+                    onTap: () => _onNavigate(
+                        context, AppRoutes.ROUTE_RECONCILIATION_ORDERS),
+                  )),
+                  Expanded(
+                      child: _Item(
+                    title: '发货处理',
+                    height: itemHeight,
+                    child: B2BV2Image.delivery(width: 28, height: 28),
+                    onTap: () => _onNavigate(
+                        context, AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
+                  )),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onIntroduction(BuildContext context) {
+    UserBLoC bloc = UserBLoC.instance;
+    // 品牌详情
+    if (bloc.currentUser.type == UserType.BRAND) {
+      BotToast.showLoading(
+          duration: Duration(milliseconds: 500), clickClose: true);
+      UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyBrandBaseFormPage(brand)));
+      });
+    }
+    // 工厂详情
+    if (bloc.currentUser.type == UserType.FACTORY) {
+      BotToast.showLoading(
+          duration: Duration(milliseconds: 500), clickClose: true);
+      UserRepositoryImpl()
+          .getFactory(bloc.currentUser.companyCode)
+          .then((value) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyFactoryBaseFormPage(
+                      value,
+                    )));
+      });
+    }
+  }
+
+  void _onNavigate(BuildContext context, String route) {
+    Navigator.of(context).pushNamed(route);
+  }
+}
+
+///店铺管理
+class _Card3 extends StatelessWidget {
+  const _Card3({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<BusinessReportState>(
+        builder: (context, BusinessReportState state, _) {
+      if (state.updateTime == null) {
+        state.getData();
+      }
+      return _Card(
+        title: '外发管理',
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 24, bottom: 28),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: _Item(
+                      title: '订单数',
+                      val: '${state.requirementCount ?? 0}',
+                      onTap: () =>
+                          _onNavigate(context, AppRoutes.ROUTE_OUT_ORDERS),
+                    )),
+                    Expanded(child: _Item(title: '待发货')),
+                    Expanded(
+                        child: _Item(
+                      title: '已完成',
+                      onTap: () =>
+                          _onNavigate(context, AppRoutes.ROUTE_OUT_ORDERS),
+                    )),
+                  ],
+                ),
+              ),
+              _Divider(),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 28),
+                child: Row(
+                  children: [
+                    Expanded(child: _Item(title: '销售额')),
+                    Expanded(child: _Item(title: '销售量')),
+                    Expanded(child: Container()),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  void _onNavigate(BuildContext context, String route) {
+    Navigator.of(context).pushNamed(route);
+  }
+}
+
+///外发管理
+class _Card4 extends StatelessWidget {
+  const _Card4({Key key}) : super(key: key);
+
+  static double itemHeight = 50;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      title: '外发管理',
+      margin: EdgeInsets.only(top: 12, bottom: 27),
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 24, bottom: 28),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: _Item(
+                        height: itemHeight,
+                    title: '外发订单',
+                    child: B2BV2Image.order_1(width: 28, height: 28),
+                    onTap: () =>
+                        _onNavigate(context, AppRoutes.ROUTE_OUT_ORDERS),
+                  )),
+                  Expanded(
+                      child: _Item(
+                        height: itemHeight,
+                        title: '外发生产工单',
+                        child: B2BV2Image.order_2(width: 28, height: 28),
+                        onTap: () =>
+                            _onNavigate(
+                                context,
+                                AppRoutes.ROUTE_OUT_PRODUCTION_TASK_ORDERS),
+                  )),
+                  Expanded(
+                      child: _Item(
+                        title: '生产工单',
+                        height: itemHeight,
+                        child: B2BV2Image.order_3(width: 28, height: 28),
+                        onTap: () =>
+                            _onNavigate(
+                                context,
+                                AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
+                  )),
+                ],
+              ),
+            ),
+            _Divider(),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 28),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: _Item(
+                        title: '出货单',
+                        height: itemHeight,
+                        child: B2BV2Image.order_4(width: 28, height: 28),
+                        onTap: () =>
+                            _onNavigate(
+                                context,
+                                AppRoutes.ROUTE_PRODUCTION_TASK_ORDERS),
+                  )),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  Expanded(
+                    child: Container(),
                   ),
                 ],
               ),
             ),
-            onTap: () {
-              Navigator.pushNamed(context, routeTo);
-            }),
-      );
-    } else {
-      return GestureDetector(
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                image,
-                Container(
-                  margin: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      color: Color.fromRGBO(100, 100, 100, 1),
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          onTap: () {
-            Navigator.pushNamed(context, routeTo);
-          });
-    }
+          ],
+        ),
+      ),
+    );
   }
+
+  void _onNavigate(BuildContext context, String route) {
+    Navigator.of(context).pushNamed(route);
+  }
+}
+
+class _Card extends StatelessWidget {
+  const _Card(
+      {Key key, this.child, this.title, this.margin = const EdgeInsets.all(0)})
+      : super(key: key);
+
+  final Widget child;
+
+  final String title;
+
+  final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate(<Widget>[
-        _buildOrderMenu(context),
-        Container(
-          height: 10,
-          color: Color.fromRGBO(245, 245, 245, 1),
-        ),
-        _buildCompanyMenu(context),
-        Container(
-          height: 10,
-          color: Color.fromRGBO(245, 245, 245, 1),
-        ),
-        _buildOutOrderMenu(context),
-        Container(
-          height: 10,
-          color: Color.fromRGBO(245, 245, 245, 1),
-        ),
-        _buildProductionOrderMenu(context)
-      ]),
+    return Container(
+      margin: margin,
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, children: _body()),
+    );
+  }
+
+  List<Widget> _body() {
+    if (child != null) {
+      return [_Title('$title'), child];
+    }
+    return [_Title('$title')];
+  }
+}
+
+class _Title extends StatelessWidget {
+  final String val;
+
+  final double fontSize;
+
+  const _Title(this.val, {Key key, this.fontSize = 15}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 8),
+      child: Column(
+        children: [
+          Text(
+            '$val',
+            style: TextStyle(
+                color: Color(0xFF222222),
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Color(0xFFFED800),
+                borderRadius: BorderRadius.circular(3)),
+            height: 6,
+            width: fontSize * val.length + 4,
+          )
+        ],
+      ),
     );
   }
 }
 
-class SliverSpacing extends StatelessWidget {
+class _Item extends StatelessWidget {
+  final String val;
+
+  final Widget child;
+
+  final String title;
+
+  final double height;
+
+  final VoidCallback onTap;
+
+  const _Item(
+      {Key key,
+      this.val = '0',
+      this.title,
+      this.height = 45,
+      this.onTap,
+      this.child})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        height: 10,
-        color: Color.fromRGBO(245, 245, 245, 1),
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: () {
+          onTap?.call();
+        },
+        child: Container(
+          height: height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              child ??
+                  Text(
+                    '$val',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+              Text(
+                '$title',
+                style: TextStyle(fontSize: 12),
+              )
+            ],
+          ),
+        ),
       ),
+    );
+  }
+}
+
+class _Divider extends StatelessWidget {
+  const _Divider({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Color(0xFFE7E7E7),
     );
   }
 }

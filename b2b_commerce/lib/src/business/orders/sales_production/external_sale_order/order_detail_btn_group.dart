@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-import 'order_accept_page.dart';
-
 ///底部按钮组
 class OrderDetailBtnGroup extends StatelessWidget {
   final SalesProductionOrderModel order;
@@ -112,7 +110,9 @@ class OrderDetailBtnGroup extends StatelessWidget {
   ///支付按钮
   Widget _buildPayBtn(BuildContext context) {
     //先判断是否线上支付
-    if (order.payOnline != null && order.payOnline) {
+    if (order.state != SalesProductionOrderState.CANCELED &&
+        order.payOnline != null &&
+        order.payOnline) {
       if (!ObjectUtil.isEmptyList(order.paymentOrders)) {
         CmtPayOrderData data = order.paymentOrders
             .firstWhere((element) => element.canPay, orElse: () => null);
@@ -227,9 +227,9 @@ class OrderDetailBtnGroup extends StatelessWidget {
   ///拒单接口
   void _resuse() async {
     Function cancelFunc =
-    BotToast.showLoading(crossPage: false, clickClose: false);
+        BotToast.showLoading(crossPage: false, clickClose: false);
     BaseResponse response =
-    await ExternalSaleOrderRespository().refuse(order.id);
+        await ExternalSaleOrderRespository().refuse(order.id);
     cancelFunc.call();
     if (response != null && response.code == 1) {
       BotToast.showText(text: '拒单成功');

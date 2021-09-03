@@ -577,4 +577,64 @@ class B2BV2Image {
     return getImage('img/icons/b2b-v2/share_circle@2x.png',
         width: width, height: height);
   }
+
+  ///发货单
+  static Image delivery({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/delivery@3x.png',
+        width: width, height: height);
+  }
+
+  ///对账单
+  static Image bill({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/bill@3x.png',
+        width: width, height: height);
+  }
+
+  ///商品
+  static Image goods({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/goods@3x.png',
+        width: width, height: height);
+  }
+
+  ///订单
+  static Image order({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/order@3x.png',
+        width: width, height: height);
+  }
+
+  ///外发订单
+  static Image order_1({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/order_1@3x.png',
+        width: width, height: height);
+  }
+
+  ///外发生产工单
+  static Image order_2({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/order_2@3x.png',
+        width: width, height: height);
+  }
+
+  ///生产工单
+  static Image order_3({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/order_3@3x.png',
+        width: width, height: height);
+  }
+
+  ///出货单
+  static Image order_4({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/order_4@3x.png',
+        width: width, height: height);
+  }
+
+  ///店铺
+  static Image shop({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/shop@3x.png',
+        width: width, height: height);
+  }
+
+  ///用户
+  static Image user({double width, double height}) {
+    return getImage('img/icons/b2b-v2/workspace/user@3x.png',
+        width: width, height: height);
+  }
 }

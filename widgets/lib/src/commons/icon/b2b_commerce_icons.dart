@@ -227,6 +227,10 @@ class B2BIconsV2 {
   ///筛选漏斗
   static const IconData filter = const IconData(0xe837,
       fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///工作台
+  static const IconData workspace = const IconData(0xe60c,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
 }
 
 class CommonImage {

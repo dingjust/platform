@@ -295,6 +295,17 @@ flutter:
     - packages/assets/temp/index/delegation.png
     - packages/assets/img/icons/b2b-v2/back@2x.png
     - packages/assets/img/icons/b2b-v2/share_circle@2x.png
+    - packages/assets/img/icons/b2b-v2/workspace/bg@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/bill@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/delivery@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/goods@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/order@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/order_1@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/order_2@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/order_3@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/order_4@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/shop@3x.png
+    - packages/assets/img/icons/b2b-v2/workspace/user@3x.png
 
   fonts:
     - family: b2bIcons

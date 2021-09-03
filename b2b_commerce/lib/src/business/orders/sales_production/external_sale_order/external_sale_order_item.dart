@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/common/order_payment_page.dart';
 import 'package:b2b_commerce/src/helper/cooperator_helper.dart';
@@ -184,7 +183,7 @@ class ExternalSaleOrderItem extends StatelessWidget {
   Widget _builPayBtn(BuildContext context) {
     CmtPayOrderData data = model.paymentOrders
         .firstWhere((element) => element.canPay, orElse: () => null);
-    if (data != null) {
+    if (model.state != SalesProductionOrderState.CANCELED && data != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -192,7 +191,7 @@ class ExternalSaleOrderItem extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(
-                      builder: (context) => OrderPaymentPageV2(data)))
+                  builder: (context) => OrderPaymentPageV2(data)))
                   .then((needRefresh) {
                 //刷新
                 if (needRefresh != null && needRefresh) {
@@ -333,8 +332,7 @@ class _Bottom extends StatelessWidget {
 
   const _Bottom(this.model,
       {Key key,
-        this.textStyle = const TextStyle(
-            color: Color(0xff666666), fontSize: 13)})
+      this.textStyle = const TextStyle(color: Color(0xff666666), fontSize: 13)})
       : super(key: key);
 
   @override
