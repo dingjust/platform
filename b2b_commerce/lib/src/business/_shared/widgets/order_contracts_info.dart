@@ -170,44 +170,46 @@ class DocSignaturesBlock extends StatelessWidget {
   Widget _buildBtn(BuildContext context, FastReconciliationSheetModel model,
       {double height = 80, double width = 80}) {
     DocSignatureModel doc = model.docSignatures.firstWhere(
-            (element) => element.state != DocSignatureState.CANCELED,
+        (element) => element.state != DocSignatureState.CANCELED,
         orElse: () => null);
-
-    return Container(
-      height: height,
-      width: width,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      child: Material(
-        color: Colors.white,
-        child: InkWell(
-          onTap: () {
-            beforeTap?.call();
-            DocSignatureHelper.open(
-                context: context,
-                model: doc,
-                onEdit: (nContext) => onEdit(nContext, model),
-                disable: signDisable(model))
-                .then((value) {
-              //需要刷新
-              // if (value != null && value) {
-              callback?.call();
-              // }
-            });
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DocSignatureHelper.getDocTypeIcon(signMethod: doc.signMethod),
-              Expanded(
-                child: Text('${model.title}'),
-                flex: 1,
-              ),
-              DocSignatureTag(doc: doc)
-            ],
+    if (doc != null) {
+      return Container(
+        height: height,
+        width: width,
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        child: Material(
+          color: Colors.white,
+          child: InkWell(
+            onTap: () {
+              beforeTap?.call();
+              DocSignatureHelper.open(
+                      context: context,
+                      model: doc,
+                      onEdit: (nContext) => onEdit(nContext, model),
+                      disable: signDisable(model))
+                  .then((value) {
+                //需要刷新
+                // if (value != null && value) {
+                callback?.call();
+                // }
+              });
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                DocSignatureHelper.getDocTypeIcon(signMethod: doc.signMethod),
+                Expanded(
+                  child: Text('${model.title}'),
+                  flex: 1,
+                ),
+                DocSignatureTag(doc: doc)
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
+    return Container();
   }
 
   ///有效对账单

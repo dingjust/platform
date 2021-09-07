@@ -6,6 +6,7 @@ import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -33,6 +34,8 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
   double pSize = 120;
 
   String name;
+  CertificationInfo certInfo;
+
   TextEditingController sealNameController;
   FocusNode sealNameFocusNode;
   TextEditingController sealTitleController;
@@ -42,11 +45,6 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
 
   @override
   void initState() {
-    if (widget.type == SealType.PERSONAL) {
-      name = UserBLoC.instance.currentUser.name;
-    } else {
-      name = UserBLoC.instance.currentUser.companyName;
-    }
     sealGenerator = SealGenerator(kCanvasSize: size);
     sealNameController = TextEditingController();
     sealNameFocusNode = FocusNode();
@@ -65,22 +63,35 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
         title: Text('创建印章'),
         centerTitle: true,
       ),
-      body: Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        child: ListView(
-          children: [
-            _buildSeal(),
-            _buildRebuildBtn(),
-            Divider(),
-            _buildName(),
-            _buildSealName(),
-            for (Widget widgetItem in widget.type == SealType.OFFICAL
-                ? [_buildTitleText(), _buildNumText()]
-                : [])
-              widgetItem
-          ],
-        ),
+      body: FutureBuilder<CertificationInfo>(
+        builder:
+            (BuildContext context, AsyncSnapshot<CertificationInfo> snapshot) {
+          if (snapshot.data != null) {
+            return Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: ListView(
+                children: [
+                  _buildSeal(),
+                  _buildRebuildBtn(),
+                  Divider(),
+                  _buildName(),
+                  _buildSealName(),
+                  for (Widget widgetItem in widget.type == SealType.OFFICAL
+                      ? [_buildTitleText(), _buildNumText()]
+                      : [])
+                    widgetItem
+                ],
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+        initialData: null,
+        future: _getCertInfo(),
       ),
       bottomNavigationBar: _btn(),
     );
@@ -136,7 +147,7 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
       child: Row(
         children: <Widget>[
           Text(
-            '规范名称：$name',
+            '认证名称：$name',
             style: TextStyle(fontSize: 16, color: Colors.black),
           )
         ],
@@ -279,6 +290,23 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
     );
   }
 
+  Future<CertificationInfo> _getCertInfo() async {
+    if (certInfo == null) {
+      if (widget.type == SealType.OFFICAL) {
+        // 查询明细
+        certInfo = await ContractRepository().getAuthenticationInfoEnterprise();
+      } else {
+        // 查询明细
+        certInfo = await ContractRepository().getAuthenticationInfo();
+      }
+      setState(() {
+        name = certInfo.data.name;
+      });
+    }
+
+    return certInfo;
+  }
+
   void _onSubmit() async {
     await previewSeal();
 
@@ -293,10 +321,10 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
     }
 
     Function cancelFunc =
-    BotToast.showLoading(crossPage: false, clickClose: true);
+        BotToast.showLoading(crossPage: false, clickClose: true);
 
     BaseResponse response =
-    await SealRepository.create(imgBytes, sealNameController.text);
+        await SealRepository.create(imgBytes, sealNameController.text);
 
     cancelFunc.call();
     if (response != null && response.code == 1) {
