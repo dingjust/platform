@@ -38,18 +38,19 @@ export default {
   props: ['chartData', 'code', 'defaultTime'],
   methods: {
     handleType (value) {
-      if (value === 2 && (new Date(this.time[0]).getMonth() === new Date(this.time[1]).getMonth())) {
+      const start = new Date(this.time[0])
+      const end = new Date(this.time[1])
+      // 月->日
+      if (value === 0) {
+        let startT = this.handleTime(new Date(`${start.getFullYear()}-${start.getMonth() + 1}-01`));
 
-        let params = {
-          start: this.time[0]
-        }
-        let endDate = new Date(this.time[1])
-        params['end'] = this.handleTime(endDate.setMonth(endDate.getMonth()))
-  
-        this.$emit('getEchartData', this.code, this.unit, params)
-      } else {
-        this.handleChange(this.time)
-      }
+        const endDate = new Date(`${end.getFullYear()}-${end.getMonth() + 1}-01`);
+        let endT = this.handleTime(endDate.setMonth(endDate.getMonth() + 1) - 24*60*60*1000)
+
+        this.$set(this, 'time', [startT, endT])
+      } 
+    
+      this.handleChange(this.time)
     },
     handleChange (value) {
       let params = {
@@ -57,7 +58,8 @@ export default {
       }
       let endDate = new Date(value[1])
       if (this.unit == 2) {
-        params['end'] = this.handleTime(endDate.setMonth(endDate.getMonth() + 1))
+        const endT = new Date(`${endDate.getFullYear()}-${endDate.getMonth() + 1}-01`);
+        params['end'] = this.handleTime(endT.setMonth(endT.getMonth() + 1))
       } else {
         params['end'] = this.handleTime(endDate.setDate(endDate.getDate() + 1))
       }
@@ -65,7 +67,7 @@ export default {
       this.$emit('getEchartData', this.code, this.unit, params)
     },
     handleTime (time) {
-      return formatDate(new Date(time), 'yyyy/MM/dd hh:mm:ss');
+      return formatDate(new Date(time), 'yyyy/MM/dd 00:00:00');
     },
     downloadDetail () {
       if (this.chartData.data.length <= 0) {
@@ -100,10 +102,10 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: this.chartData.name === '销售额' ? '单位 / 千元' : '',
+          name: this.chartData.name === '销售额' ? '单位 / 万元' : '',
           axisLabel: {
             formatter: (value, index) => {
-              return this.chartData.name === '销售额' ? (value / 1000) : value
+              return this.chartData.name === '销售额' ? (value / 10000) : value
             }
           }
         },
