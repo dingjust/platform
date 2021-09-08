@@ -231,6 +231,18 @@ class B2BIconsV2 {
   ///工作台
   static const IconData workspace = const IconData(0xe60c,
       fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///切换账号
+  static const IconData user_switch = const IconData(0xe60b,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///箭头
+  static const IconData arrow = const IconData(0xe609,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///二维码
+  static const IconData qrcode = const IconData(0xe60a,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
 }
 
 class CommonImage {

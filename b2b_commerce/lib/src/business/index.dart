@@ -57,14 +57,13 @@ class _BusinessHomePageState extends State<BusinessHomePage> {
                 ],
               ),
             )),
-        Expanded(
-            child: Container(
+        Container(
           margin: EdgeInsets.fromLTRB(12, (56.0 + 45), 12, 0),
           child: ListView(
             padding: EdgeInsets.zero,
             children: [_Card1(), _Card2(), _Card3(), _Card4()],
           ),
-        ))
+        )
       ]),
     );
   }

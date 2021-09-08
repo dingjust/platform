@@ -48,7 +48,9 @@ import 'package:b2b_commerce/src/my/account/register_channel_page.dart';
 import 'package:b2b_commerce/src/my/account/register_page.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
 import 'package:b2b_commerce/src/my/card/my_card.dart';
+import 'package:b2b_commerce/src/my/feedback.dart';
 import 'package:b2b_commerce/src/my/integral/integral_center_page.dart';
+import 'package:b2b_commerce/src/my/messages/index.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
@@ -243,6 +245,10 @@ class AppRoutes with GlobalRoutes {
 
   static const ROUTE_MY_FAVORITES = '/my/favorites';
 
+  static const ROUTE_MESSAGE = '/message';
+
+  static const ROUTE_FEEDBACK = '/feedback';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -347,7 +353,9 @@ class AppRoutes with GlobalRoutes {
         ProductDetailPage(getVal('code', context)),
     ROUTE_PRODUCTS_SEARCH: (context) =>
         ProductsSearchPage(keyword: getVal('keyword', context)),
-    ROUTE_MY_FAVORITES: (context) => MyFavoritePage()
+    ROUTE_MY_FAVORITES: (context) => MyFavoritePage(),
+    ROUTE_MESSAGE: (context) => MessagePage(),
+    ROUTE_FEEDBACK: (context) => FeedbackPage()
   };
 
   static dynamic getVal(String key, BuildContext context) {
