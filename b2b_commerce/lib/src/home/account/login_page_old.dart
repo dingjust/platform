@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/business/services/text_field_border_component_V2.dart';
-import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:services/services.dart'
     show LoginResult, UserBLoC, UserRepositoryImpl, BaseResponse;
 import 'package:widgets/widgets.dart';
@@ -15,9 +14,15 @@ import 'code_login_page.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({
     Key key,
+    @required this.logo,
+    this.registerPage,
+    this.forgetPasswordPage,
     this.snackBarMessage,
   }) : super(key: key);
 
+  final Image logo;
+  final Widget registerPage;
+  final Widget forgetPasswordPage;
   final String snackBarMessage;
 
   _LoginPageState createState() => _LoginPageState();
@@ -30,286 +35,291 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _phoneController;
   TextEditingController _passwordController;
   TextEditingController _smsCaptchaController;
-  FocusNode _phoneFocusNode;
   FocusNode _passwordFocusNode;
   FocusNode _smsFocusNode;
 
   bool _isRemember = true;
   bool _isPasswordHide = true;
   bool _isPasswordLogin = false;
-
-  // bool validate = false;
+  bool validate = false;
   bool _isAgree = false;
 
   ///倒计时间
   int countdownTime = 60;
   final CountdownController controller = CountdownController();
 
-  UserBLoC bloc;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => showSnackBar(context));
     WidgetsBinding.instance.addPostFrameCallback((_) => checkLocalUserName());
-    bloc = BLoCProvider.of<UserBLoC>(context);
+
     _phoneController = TextEditingController();
     _passwordController = TextEditingController();
     _smsCaptchaController = TextEditingController();
-    _phoneFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
     _smsFocusNode = FocusNode();
+
+    _passwordController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
+
     return Material(
       child: Scaffold(
           key: _scaffoldKey,
           body: Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child: _buildBody(context),
+            child: _buildBody(context, bloc),
           )),
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildInputArea() {
     return Container(
-      margin: EdgeInsets.only(top: 38, bottom: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'img/icons/b2b-v2/logo@3x.png',
-            package: 'assets',
-            width: 96,
-            height: 117,
+      padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
+      child: Column(
+        children: <Widget>[
+          InputRow(
+            leading: Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                padding: EdgeInsets.only(top: 5),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.phone_iphone,
+                      color: Colors.grey,
+                    ),
+                    Text(
+                      '(+86)',
+                      style: TextStyle(color: Colors.grey),
+                    )
+                  ],
+                )),
+            field: TextField(
+              autofocus: false,
+              // maxLength: 11,
+
+              buildCounter: (context,
+                      {int currentLength, bool isFocused, int maxLength}) =>
+                  null,
+              maxLengthEnforced: true,
+              onChanged: (value) async {
+                formValidate();
+              },
+              // keyboardType: TextInputType.phone,
+              //只能输入数字
+              inputFormatters: <TextInputFormatter>[
+                // FilteringTextInputFormatter.digitsOnly
+              ],
+              controller: _phoneController,
+              decoration: InputDecoration(
+                  hintText: '请输入手机号',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 0)),
+            ),
+            surfix: Container(
+                child: Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    _phoneController.clear();
+                  },
+                ),
+              ],
+            )),
+          ),
+          _isPasswordLogin
+              ? InputRow(
+                  leading: Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 56, 0),
+                    child: Container(
+                        child: Row(
+                      children: [
+                        Icon(
+                          Icons.lock,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    )),
+                  ),
+                  field: TextField(
+                    autofocus: false,
+                    focusNode: _passwordFocusNode,
+                    obscureText: _isPasswordHide,
+                    onChanged: (value) {
+                      formValidate();
+                    },
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                        hintText: '请输入密码', border: InputBorder.none),
+                  ),
+                  surfix: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isPasswordHide = !_isPasswordHide;
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 20),
+                        child: Icon(
+                          _isPasswordHide
+                              ? B2BIcons.eye_not_see
+                              : Icons.remove_red_eye,
+                          color: Colors.black54,
+                        ),
+                      )))
+              : Container(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  setState(() {
+                    _isPasswordLogin = !_isPasswordLogin;
+                    if (_isPasswordLogin) {
+                      FocusScope.of(context).requestFocus(_passwordFocusNode);
+                    } else {
+                      FocusScope.of(context).requestFocus(_smsFocusNode);
+                    }
+                  });
+                  if (_isPasswordLogin) {
+                    _passwordFocusNode.requestFocus();
+                  } else {
+                    _smsFocusNode.requestFocus();
+                  }
+                },
+                child: Text(
+                  _isPasswordLogin ? '验证码登录' : '密码登录',
+                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                ),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => widget.forgetPasswordPage));
+                },
+                child: Text(
+                  '忘记密码',
+                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                ),
+              ),
+            ],
           )
         ],
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildLogo() {
+    return ClipPath(
+      clipper: MyClipper(),
+      child: Container(
+          decoration: BoxDecoration(color: Color.fromRGBO(255, 214, 12, 8)),
+          padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
+          child: widget.logo),
+    );
+  }
+
+  Widget _buildBody(BuildContext context, UserBLoC bloc) {
     return Container(
       color: Colors.white,
-      child: ListView(
-        children: <Widget>[
-          _buildLogo(),
-          _buildInputArea(),
-          _buildProtocolArea(),
-          _buildBtn(),
-          _buildInforRow(),
-          OtherAuthLoginBtnGroup(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInputArea() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        children: <Widget>[
-          _buildPhoneRow(),
-          _divider(),
-          _buildPasswordRow(),
-          _divider2()
-        ],
-      ),
-    );
-  }
-
-  ///电话输入
-  Widget _buildPhoneRow() {
-    return Container(
-      child: Row(
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 16),
-            child: Icon(
-              B2BIconsV2.phone,
-              color: Color(0xFF333333),
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 160.0,
+            pinned: true,
+            elevation: 0.5,
+            leading: Container(),
+            brightness: Brightness.light,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  _buildLogo(),
+                ],
+              ),
             ),
           ),
-          Expanded(
-            child: TextFieldBorderComponentV2(
-              padding: EdgeInsets.all(0),
-              hideDivider: true,
-              isRequired: true,
-              textAlign: TextAlign.left,
-              hintText: '请输入手机号',
-              style: TextStyle(color: Color(0xFF222222), fontSize: 16),
-              controller: _phoneController,
-              focusNode: _phoneFocusNode,
+          SliverList(
+              delegate: SliverChildListDelegate([
+            _buildInputArea(),
+            _buildProtocolArea(),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 40),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: OutlinedButton(
+                onPressed: () {
+                  if (_isAgree) {
+                    onLogin(bloc);
+                  } else {
+                    BotToast.showText(
+                        text: '请先阅读并同意相关协议', align: Alignment.center);
+                  }
+                },
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 10)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50))),
+                    backgroundColor:
+                        MaterialStateProperty.all(Constants.THEME_COLOR_MAIN),
+                    side: MaterialStateProperty.all(
+                        BorderSide(color: Constants.THEME_COLOR_MAIN))),
+                child: Text(
+                  _isPasswordLogin ? '登录' : '获取验证码',
+                  style: TextStyle(color: Colors.black87, fontSize: 18),
+                ),
+              ),
+            ),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 20),
+            //   child: OutlinedButton(
+            //     onPressed: () {
+            //       Navigator.of(context).push(MaterialPageRoute(
+            //           builder: (context) => widget.registerPage));
+            //     },
+            //     style: ButtonStyle(
+            //       padding: MaterialStateProperty.all(
+            //           EdgeInsets.symmetric(vertical: 10)),
+            //       shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(50))),
+            //     ),
+            //     child: Text(
+            //       '注册',
+            //       style: TextStyle(color: Colors.black54, fontSize: 18),
+            //     ),
+            //   ),
+            // ),
+            OtherAuthLoginBtnGroup(),
+          ])),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProtocolArea() {
+    return Container(
+        padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+        child: Row(
+          children: <Widget>[
+            Checkbox(
               onChanged: (v) {
-                setState(() {});
-              },
-            ),
-          ),
-          GestureDetector(
-              onTap: () {
                 setState(() {
-                  _phoneController.clear();
+                  _isAgree = v;
+                  formValidate();
                 });
               },
-              child: _phoneController.text.length > 0
-                  ? Container(
-                      margin: EdgeInsets.only(right: 16),
-                      child: Icon(
-                        B2BIconsV2.del,
-                        color: Color(0xFFD8D8D8),
-                        size: 18,
-                      ),
-                    )
-                  : Container())
-        ],
-      ),
-    );
-  }
-
-  ///密码输入行
-  Widget _buildPasswordRow() {
-    if (_isPasswordLogin) {
-      return Container(
-        child: Row(
-          children: [
-            Container(
-              margin: EdgeInsets.only(left: 16),
-              child: Icon(
-                B2BIconsV2.password,
-                color: Color(0xFF333333),
-              ),
-            ),
-            Expanded(
-              child: TextFieldBorderComponentV2(
-                padding: EdgeInsets.all(0),
-                hideDivider: true,
-                isRequired: true,
-                textAlign: TextAlign.left,
-                hintText: '请输入密码',
-                style: TextStyle(color: Color(0xFF222222), fontSize: 16),
-                controller: _passwordController,
-                focusNode: _passwordFocusNode,
-                obscureText: _isPasswordHide,
-                onChanged: (v) {},
-              ),
-            ),
-            GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isPasswordHide = !_isPasswordHide;
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.only(right: 16),
-                  child: Icon(
-                    _isPasswordHide ? B2BIconsV2.eye_off : B2BIconsV2.eye_on,
-                    color: Color(0xFF999999),
-                    size: 20,
-                  ),
-                ))
-          ],
-        ),
-      );
-    }
-    return Container();
-  }
-
-  Widget _divider() {
-    return Divider(
-      color: Color(0xFFE7E7E7),
-      height: 1,
-    );
-  }
-
-  Widget _divider2() {
-    if (_isPasswordLogin) {
-      return Divider(
-        color: Color(0xFFE7E7E7),
-        height: 1,
-      );
-    }
-    return Container();
-  }
-
-  Widget _buildInforRow() {
-    if (_isPasswordLogin) {
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              width: 120,
-              child: FlatButton(
-                onPressed: () {
-                  var materialPageRoute = MaterialPageRoute(
-                      builder: (context) => ResetPasswordPage());
-                  Navigator.of(context).push(materialPageRoute);
-                },
-                child: Text(
-                  '忘记密码',
-                  style: TextStyle(fontSize: 14, color: Color(0xFF222222)),
-                ),
-              ),
-            ),
-            Container(
-              width: 1,
-              height: 15,
-              color: Color(0xFF222222),
-            ),
-            Container(
-              width: 120,
-              child: FlatButton(
-                onPressed: _switchLoginType,
-                child: Text(
-                  _isPasswordLogin ? '验证码登录' : '密码登录',
-                  style: TextStyle(fontSize: 14, color: Color(0xFF222222)),
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    }
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          FlatButton(
-            onPressed: _switchLoginType,
-            child: Text(
-              '密码登录',
-              style: TextStyle(fontSize: 14, color: Color(0xFF222222)),
-            ),
-          ),
-        ],
-      ),
-    );
-    ;
-  }
-
-  Widget _buildProtocolArea({
-    TextStyle style1 = const TextStyle(color: Color(0xFF222222), fontSize: 12),
-    TextStyle style2 = const TextStyle(color: Color(0xFF077FFA), fontSize: 12),
-  }) {
-    return Container(
-        margin: EdgeInsets.fromLTRB(32, 80, 32, 12),
-        height: 18,
-        child: Row(
-          children: <Widget>[
-            Container(
-              width: 18,
-              margin: EdgeInsets.only(right: 8),
-              child: B2BCheckbox(
-                value: _isAgree,
-                onChanged: (value) {
-                  setState(() {
-                    _isAgree = value;
-                  });
-                },
-              ),
+              value: _isAgree,
             ),
             Expanded(
               flex: 1,
@@ -319,25 +329,25 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   Text(
                     '我已阅读并同意',
-                    style: style1,
+                    style: TextStyle(color: Colors.black54, fontSize: 10),
                   ),
                   GestureDetector(
                     onTap: showServiceProtocol,
                     child: Text(
                       '《钉单平台服务协议》',
                       overflow: TextOverflow.clip,
-                      style: style2,
+                      style: TextStyle(color: Colors.blue, fontSize: 10),
                     ),
                   ),
                   Text(
                     '和',
-                    style: style1,
+                    style: TextStyle(color: Colors.black54, fontSize: 10),
                   ),
                   GestureDetector(
                     onTap: showPrivacyProtocol,
                     child: Text(
                       '《隐私协议》',
-                      style: style2,
+                      style: TextStyle(color: Colors.blue, fontSize: 10),
                     ),
                   ),
                   // GestureDetector(
@@ -354,69 +364,16 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Widget _buildBtn() {
-    return Container(
-      height: 48,
-      margin: EdgeInsets.symmetric(vertical: 12),
-      padding: EdgeInsets.symmetric(horizontal: 32),
-      child: OutlinedButton(
-        onPressed: _phoneController.text.length > 0
-            ? () {
-          if (_isAgree) {
-            onLogin(bloc);
-          } else {
-            BotToast.showText(
-                text: '请先阅读并同意相关协议', align: Alignment.center);
-          }
-        }
-            : null,
-        style: ButtonStyle(
-          padding:
-          MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 13)),
-          shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(24))),
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
-              return Color(0xFFFFF5D7);
-            }
-            return Constants.THEME_COLOR_MAIN;
-          }),
-          side: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
-              return BorderSide(color: Color(0xFFFFF5D7));
-            }
-            return BorderSide(color: Constants.THEME_COLOR_MAIN);
-          }),
-          foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
-              return Color(0xFF999999);
-            }
-            return Color(0xFF222222);
-          }),
-        ),
-        child: Text(
-          _isPasswordLogin ? '登录' : '验证码登录',
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    );
-  }
-
-  ///切换登录方式
-  void _switchLoginType() {
+  void formValidate() {
     setState(() {
-      _isPasswordLogin = !_isPasswordLogin;
+      if (_isPasswordLogin) {
+        validate = _phoneController.text.trim().length == 11 &&
+            _passwordController.text.trim().length > 0;
+      } else {
+        validate = _phoneController.text.trim().length == 11 &&
+            _smsCaptchaController.text.trim().length > 0;
+      }
     });
-    if (_isPasswordLogin) {
-      FocusScope.of(context).requestFocus(_passwordFocusNode);
-    } else {
-      FocusScope.of(context).requestFocus(_smsFocusNode);
-    }
-    if (_isPasswordLogin) {
-      _passwordFocusNode.requestFocus();
-    } else {
-      _smsFocusNode.requestFocus();
-    }
   }
 
   Future<bool> validatePhone() async {
@@ -479,7 +436,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       Function cancelFunc = BotToast.showLoading();
       BaseResponse baseResponse =
-      await UserRepositoryImpl.loginByCaptcha(_phoneController.text);
+          await UserRepositoryImpl.loginByCaptcha(_phoneController.text);
       cancelFunc.call();
       if (baseResponse == null) {
         BotToast.showText(text: '未知错误');
@@ -488,8 +445,7 @@ class _LoginPageState extends State<LoginPage> {
           BotToast.showText(text: '${baseResponse.msg}');
         else
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  CodeLoginPage(
+              builder: (context) => CodeLoginPage(
                     accountNum: baseResponse.data,
                     phone: _phoneController.text,
                   )));
