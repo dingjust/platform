@@ -10,11 +10,24 @@
       <el-form-item label="渠道码" prop="name">
         <el-input placeholder="请输入合作商名称" v-model="queryFormData.channelCode"></el-input>
       </el-form-item>
+      <el-form-item label="创建时间">
+        <el-date-picker
+          v-model="datePicker"
+          value-format="timestamp"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
       <el-button-group>
         <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
         <el-button native-type="reset" @click="onReset">重置</el-button>
       </el-button-group>
     </el-form>
+    <div>
+      <el-button type="primary" @click="onExport">导出</el-button>
+    </div>
   </div>
 </template>
 
@@ -30,12 +43,37 @@ export default {
       this.queryFormData.keyword = '';
       this.queryFormData.cooperator = '';
       this.queryFormData.channelCode = '';
+      this.datePicker = null
+    },
+    onExport () {
+      this.$emit('onExport')
+    }
+  },
+  data () {
+    return {
+      datePicker: null
+    }
+  },
+  watch: {
+    datePicker: function (nval, oval) {
+      if (nval) {
+        this.queryFormData.createdDateFrom = nval[0]
+        this.queryFormData.createdDateTo = nval[1]
+      } else {
+        this.queryFormData.createdDateFrom = null
+        this.queryFormData.createdDateTo = null
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+  .pend-out-view-toolbar {
+    display: flex;
+    justify-content: space-between;
+  }
+
   .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
