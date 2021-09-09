@@ -33,37 +33,33 @@ class _CodeLoginPageState extends State<CodeLoginPage> {
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0), color: Colors.grey[100]);
+        border:
+            Border(bottom: BorderSide(color: Color(0xFF222222), width: 0.5)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.5,
+        elevation: 0,
         centerTitle: true,
-        title: Text('短信快捷登录'),
       ),
       body: Container(
         color: Colors.white,
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
-              child: Image.asset(
-                'temp/login_logo.png',
-                package: 'assets',
-                width: 60.0,
-                height: 60.0,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: Text('我们将以短信的形式将验证码发送给您'),
-            ),
+                margin: EdgeInsets.symmetric(vertical: 20),
+                child: Image.asset(
+                  'img/icons/b2b-v2/logo@3x.png',
+                  package: 'assets',
+                  width: 96,
+                  height: 117,
+                )),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 60),
+              margin: EdgeInsets.only(bottom: 21),
               child: PinPut(
                   fieldsCount: 4,
                   eachFieldWidth: 50,
@@ -73,11 +69,7 @@ class _CodeLoginPageState extends State<CodeLoginPage> {
                   controller: _pinPutController,
                   submittedFieldDecoration: _pinPutDecoration,
                   selectedFieldDecoration: _pinPutDecoration.copyWith(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                      color: Colors.yellow,
-                    ),
-                  ),
+                      border: Border(bottom: BorderSide(color: Colors.yellow))),
                   followingFieldDecoration: _pinPutDecoration),
             ),
             Countdown(
@@ -94,7 +86,7 @@ class _CodeLoginPageState extends State<CodeLoginPage> {
                   (time == 0 || time == countdownTime)
                       ? '重新获取验证码'
                       : '重新获取验证码(${time.toInt()}s)',
-                  style: TextStyle(color: Constants.THEME_COLOR_MAIN),
+                  style: TextStyle(color: Color(0xFF222222), fontSize: 14),
                 ),
               ),
               interval: Duration(milliseconds: 1000),

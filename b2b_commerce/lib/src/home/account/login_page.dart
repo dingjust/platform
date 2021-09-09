@@ -362,13 +362,13 @@ class _LoginPageState extends State<LoginPage> {
       child: OutlinedButton(
         onPressed: _phoneController.text.length > 0
             ? () {
-          if (_isAgree) {
-            onLogin(bloc);
-          } else {
-            BotToast.showText(
-                text: '请先阅读并同意相关协议', align: Alignment.center);
-          }
-        }
+                if (_isAgree) {
+                  onLogin(bloc);
+                } else {
+                  BotToast.showText(
+                      text: '请先阅读并同意相关协议', align: Alignment.center);
+                }
+              }
             : null,
         style: ButtonStyle(
           padding:
