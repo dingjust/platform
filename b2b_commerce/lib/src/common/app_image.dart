@@ -637,4 +637,58 @@ class B2BV2Image {
     return getImage('img/icons/b2b-v2/workspace/user@3x.png',
         width: width, height: height);
   }
+
+  ///明细账目
+  static Image my_account({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/account@3x.png',
+        width: width, height: height);
+  }
+
+  ///我的收藏
+  static Image my_collect({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/collect@3x.png',
+        width: width, height: height);
+  }
+
+  ///地址管理
+  static Image my_address({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/add@3x.png',
+        width: width, height: height);
+  }
+
+  ///发票管理
+  static Image my_bill({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/bill@3x.png',
+        width: width, height: height);
+  }
+
+  ///我的消息
+  static Image my_notice({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/notice@3x.png',
+        width: width, height: height);
+  }
+
+  ///意见反馈
+  static Image my_feedback({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/feedback@3x.png',
+        width: width, height: height);
+  }
+
+  ///帮助中心
+  static Image my_help({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/help@3x.png',
+        width: width, height: height);
+  }
+
+  ///联系客服
+  static Image my_kefu({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/kefu@3x.png',
+        width: width, height: height);
+  }
+
+  ///设置
+  static Image my_setting({double width, double height}) {
+    return getImage('img/icons/b2b-v2/my/set@3x.png',
+        width: width, height: height);
+  }
 }

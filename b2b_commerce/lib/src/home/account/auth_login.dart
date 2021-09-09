@@ -69,8 +69,8 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
   Widget build(BuildContext context) {
     return Container(
       height: widget.height,
-      margin: EdgeInsets.only(top: 120),
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.only(top: 148),
+      padding: EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         children: [_titleRow(), _btnsRow()],
       ),
@@ -82,16 +82,25 @@ class _OtherAuthLoginBtnGroupState extends State<OtherAuthLoginBtnGroup> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '其他方式登录',
-                  style: TextStyle(color: Colors.grey, fontSize: 10),
-                ),
-              ],
-        ))
+        Container(
+          child: Expanded(
+              child: Divider(
+            color: Color(0xFFE7E7E7),
+          )),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 14),
+          child: Text(
+            '其他方式登录',
+            style: TextStyle(color: Color(0xFF999999), fontSize: 14),
+          ),
+        ),
+        Container(
+          child: Expanded(
+              child: Divider(
+            color: Color(0xFFE7E7E7),
+          )),
+        ),
       ],
     );
   }

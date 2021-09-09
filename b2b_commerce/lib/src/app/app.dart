@@ -198,9 +198,7 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
             icon: B2BV2Image.tab_3_1(width: 28, height: 28),
             activeIcon: B2BV2Image.tab_3(width: 28, height: 28),
             label: '我的'),
-        MyHomePage(turnToHome: () {
-          _handleNavigation(0);
-        }),
+        MyHomePage(),
       ),
     ];
     return menus;

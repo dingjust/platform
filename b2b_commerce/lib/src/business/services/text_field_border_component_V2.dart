@@ -29,36 +29,37 @@ class TextFieldBorderComponentV2 extends StatefulWidget {
   bool isInputBorder;
   bool isSteppedPrice;
   bool isCursorEnd;
+  bool obscureText;
 
 //  final FormFieldValidator<String> _validator;
 
-  TextFieldBorderComponentV2({
-    this.leadingText,
-    this.isRequired = false,
-    this.prefix,
-    this.hintText,
-    this.helperText,
-    this.leadingWidth = 85,
-    this.controller,
-    @required this.focusNode,
-    this.inputType,
-    this.trailing,
-    this.onChanged,
-    this.onEditingComplete,
-    this.autofocus = false,
-    this.padding,
-    this.enabled,
-    this.textInputAction,
-    this.textAlign = TextAlign.right,
-    this.hideDivider = false,
-    this.style,
-    this.inputFormatters,
-    this.maxLength,
-    this.maxLines,
-    this.isInputBorder = false,
-    this.isSteppedPrice = false,
-    this.isCursorEnd = false,
-  });
+  TextFieldBorderComponentV2(
+      {this.leadingText,
+      this.isRequired = false,
+      this.prefix,
+      this.hintText,
+      this.helperText,
+      this.leadingWidth = 85,
+      this.controller,
+      @required this.focusNode,
+      this.inputType,
+      this.trailing,
+      this.onChanged,
+      this.onEditingComplete,
+      this.autofocus = false,
+      this.padding,
+      this.enabled,
+      this.textInputAction,
+      this.textAlign = TextAlign.right,
+      this.hideDivider = false,
+      this.style,
+      this.inputFormatters,
+      this.maxLength,
+      this.maxLines = 1,
+      this.isInputBorder = false,
+      this.isSteppedPrice = false,
+      this.isCursorEnd = false,
+      this.obscureText = false});
 
   _TextFieldBorderComponentV2State createState() =>
       _TextFieldBorderComponentV2State();
@@ -187,6 +188,7 @@ class _TextFieldBorderComponentV2State
                   inputFormatters: widget.inputFormatters,
                   maxLines: widget.maxLines,
                   maxLength: widget.maxLength,
+                  obscureText: widget.obscureText,
                 ),
               ),
               Offstage(

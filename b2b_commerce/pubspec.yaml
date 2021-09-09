@@ -306,6 +306,20 @@ flutter:
     - packages/assets/img/icons/b2b-v2/workspace/order_4@3x.png
     - packages/assets/img/icons/b2b-v2/workspace/shop@3x.png
     - packages/assets/img/icons/b2b-v2/workspace/user@3x.png
+    - packages/assets/img/icons/b2b-v2/my/account@3x.png
+    - packages/assets/img/icons/b2b-v2/my/add@3x.png
+    - packages/assets/img/icons/b2b-v2/my/bg@3x.png
+    - packages/assets/img/icons/b2b-v2/my/bg_code@3x.png
+    - packages/assets/img/icons/b2b-v2/my/bill@3x.png
+    - packages/assets/img/icons/b2b-v2/my/collect@3x.png
+    - packages/assets/img/icons/b2b-v2/my/feedback@3x.png
+    - packages/assets/img/icons/b2b-v2/my/help@3x.png
+    - packages/assets/img/icons/b2b-v2/my/kefu@3x.png
+    - packages/assets/img/icons/b2b-v2/my/notice@3x.png
+    - packages/assets/img/icons/b2b-v2/my/set@3x.png
+    - packages/assets/img/icons/b2b-v2/my/service@3x.png
+    - packages/assets/img/icons/b2b-v2/logo@3x.png
+
 
   fonts:
     - family: b2bIcons

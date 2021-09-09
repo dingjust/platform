@@ -33,7 +33,10 @@ class _ContractSealPageState extends State<ContractSealPage> {
         builder:
             (BuildContext context, AsyncSnapshot<List<SealModel>> snapshot) {
           if (sealList == null) {
-            return Center(child: CircularProgressIndicator());
+            return Container(
+              color: Colors.white,
+              child: Center(child: CircularProgressIndicator()),
+            );
           } else {
             return Scaffold(
               appBar: AppBar(

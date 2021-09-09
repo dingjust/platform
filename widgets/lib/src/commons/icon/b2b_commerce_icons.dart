@@ -231,6 +231,38 @@ class B2BIconsV2 {
   ///工作台
   static const IconData workspace = const IconData(0xe60c,
       fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///切换账号
+  static const IconData user_switch = const IconData(0xe60b,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///箭头
+  static const IconData arrow = const IconData(0xe609,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///二维码
+  static const IconData qrcode = const IconData(0xe60a,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///登录-电话
+  static const IconData phone = const IconData(0xe611,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///登录-删除
+  static const IconData del = const IconData(0xe610,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///登录-密码
+  static const IconData password = const IconData(0xe60f,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///登录-密码-开
+  static const IconData eye_on = const IconData(0xe60e,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///登录-密码-闭
+  static const IconData eye_off = const IconData(0xe60d,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
 }
 
 class CommonImage {
