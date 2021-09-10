@@ -296,20 +296,17 @@ class _LoginPageState extends State<LoginPage> {
   }) {
     return Container(
         margin: EdgeInsets.fromLTRB(32, 80, 32, 12),
-        height: 18,
+        height: 30,
         child: Row(
           children: <Widget>[
-            Container(
-              width: 18,
-              margin: EdgeInsets.only(right: 8),
-              child: B2BCheckbox(
-                value: _isAgree,
-                onChanged: (value) {
-                  setState(() {
-                    _isAgree = value;
-                  });
-                },
-              ),
+            B2BCheckbox(
+              padding: EdgeInsets.all(5),
+              value: _isAgree,
+              onChanged: (value) {
+                setState(() {
+                  _isAgree = value;
+                });
+              },
             ),
             Expanded(
               flex: 1,
@@ -372,7 +369,7 @@ class _LoginPageState extends State<LoginPage> {
             : null,
         style: ButtonStyle(
           padding:
-          MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 13)),
+              MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 13)),
           shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(24))),
           backgroundColor: MaterialStateProperty.resolveWith((states) {

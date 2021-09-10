@@ -202,24 +202,21 @@ class _MainInfo extends StatelessWidget {
 
     return cooperator != null
         ? Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      color: Colors.white,
-      child: Column(children: <Widget>[
-        Row(children: [
-          Text('合作商信息', style: TextStyle(color: Colors.grey))
-        ]),
-        buildRow('客户',
-            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner
-                .name : cooperator.name}'),
-        buildRow('联系人',
-            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner
-                .contactPerson : cooperator.contactPerson}'),
-        buildRow('联系电话',
-            '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner
-                .contactPhone : cooperator.contactPhone}'),
-      ]),
-    )
+            padding: EdgeInsets.all(15),
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            color: Colors.white,
+            child: Column(children: <Widget>[
+              Row(children: [
+                Text('合作商信息', style: TextStyle(color: Colors.grey))
+              ]),
+              buildRow('客户',
+                  '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner.name : cooperator.name}'),
+              buildRow('联系人',
+                  '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner.contactPerson : cooperator.contactPerson}'),
+              buildRow('联系电话',
+                  '${cooperator.type == CooperatorType.ONLINE ? cooperator.partner.contactPhone : cooperator.contactPhone}'),
+            ]),
+          )
         : Container();
   }
 
@@ -318,7 +315,17 @@ class _MainInfo extends StatelessWidget {
           Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text('$title'), Text('$val')],
+        children: [
+          Text(
+            '$title',
+          ),
+          Expanded(
+              child: Text(
+                '$val',
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+              ))
+        ],
       ),
     );
   }

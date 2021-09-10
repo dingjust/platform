@@ -73,10 +73,13 @@ class OrderPaymentInfo extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('$title'),
-          Text(
+          Expanded(
+              child: Text(
             '$val',
             style: valStryle,
-          )
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.right,
+          ))
         ],
       ),
     );
