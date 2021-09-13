@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -16,6 +15,8 @@ class QuoteItem extends StatefulWidget {
   /// 顶级页面context
   final BuildContext pageContext;
 
+  final VoidCallback callback;
+
   bool isSupplier;
 
   QuoteItem(
@@ -23,7 +24,8 @@ class QuoteItem extends StatefulWidget {
       this.model,
       this.isSupplier = false,
       @required this.onRefresh,
-      @required this.pageContext})
+      @required this.pageContext,
+      this.callback})
       : super(key: key);
 
   _QuoteItemState createState() => _QuoteItemState();
@@ -45,11 +47,15 @@ class _QuoteItemState extends State<QuoteItem> {
         //查询明细
 //        QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(widget.model.code);
 //        if (detailModel != null) {
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context)
+            .push(MaterialPageRoute(
             builder: (context) =>
                 QuoteOrderDetailPage(
                   widget.model.code,
-                )));
+                )))
+            .then((value) {
+          widget?.callback?.call();
+        });
 //        }
       },
       child: Container(

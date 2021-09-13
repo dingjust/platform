@@ -2,7 +2,8 @@
 class SaleProductionApis {
   /// 外接订单
   static get outOrderPendingList =>
-      '/{baseSiteId}/out/order/pending/accept/search';
+      // '/{baseSiteId}/out/order/pending/accept/search';
+  '/{baseSiteId}/sales/production/order/search/all';
 
   /// 外接订单详情
   static get outOrderPendingDetail => (id) {
@@ -38,7 +39,8 @@ class SaleProductionApis {
       };
 
   /// 外发订单列表
-  static get outOrderList => '/{baseSiteId}/out/order/search';
+  // static get outOrderList => '/{baseSiteId}/out/order/search';
+  static get outOrderList => '/{baseSiteId}/sales/production/order/search/all';
 
   /// 生产工单列表
   static get productionTaskOrderList =>

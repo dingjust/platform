@@ -6,14 +6,26 @@ class B2BCheckbox extends StatelessWidget {
 
   final bool value;
 
-  const B2BCheckbox({Key key, this.onChanged, this.value = false})
+  final EdgeInsetsGeometry padding;
+
+  final double size;
+
+  const B2BCheckbox(
+      {Key key,
+      this.onChanged,
+      this.value = false,
+      this.padding = const EdgeInsets.all(0),
+      this.size = 18})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () => onChanged?.call(!value),
-      child: value ? _selected() : _notSelected(),
+      child: Container(
+        padding: padding,
+        child: value ? _selected() : _notSelected(),
+      ),
     );
   }
 
@@ -22,15 +34,15 @@ class B2BCheckbox extends StatelessWidget {
       child: Icon(
         B2BIconsV2.tick_circle,
         color: Color(0xFFFF4D4F),
-        size: 18,
+        size: size,
       ),
     );
   }
 
   Widget _notSelected() {
     return Container(
-      width: 17,
-      height: 17,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(width: 1, color: Color(0xFF999999))),

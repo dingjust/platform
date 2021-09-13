@@ -458,7 +458,7 @@ class _RequirementOrderDetailPageState
           _InfoRow(
             label: '工厂规模',
             val:
-            PopulationScaleLocalizedMap[orderModel.details.populationScale],
+                PopulationScaleLocalizedMap[orderModel.details.populationScale],
           ),
           Divider(
             height: 0,
@@ -603,6 +603,12 @@ class _RequirementOrderDetailPageState
                   model: e,
                   onRefresh: () {
                     onRefreshData();
+                  },
+                  callback: () async {
+                    // onRefreshData();
+                    _getData().then((value) {
+                      setState(() {});
+                    });
                   },
                   pageContext: context,
                 ),

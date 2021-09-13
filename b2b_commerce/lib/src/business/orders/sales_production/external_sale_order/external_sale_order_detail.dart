@@ -315,7 +315,10 @@ class MainInfo extends StatelessWidget {
 
   ///定金值
   String _getDepositStr() {
-    return order.payPlan.isHaveDeposit
+    if (order.payPlan == null) {
+      return '';
+    }
+    return (order?.payPlan?.isHaveDeposit)
         ? '有定金'
         : '无定金' + PayPlanTypeLocalizedMap[order.payPlan.payPlanType];
   }

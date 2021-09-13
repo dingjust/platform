@@ -916,7 +916,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             dialogHeight: 180,
             confirmAction: () async {
               confirmFactory();
-              setState(() {});
               Navigator.of(context).pop();
             },
           );
