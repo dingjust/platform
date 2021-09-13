@@ -368,6 +368,19 @@
           }
         }
       },
+      totalQuality(colorSizes) {
+        var total = 0;
+        colorSizes.forEach((colorSize) => {
+          if (colorSize.sizes != null) {
+            colorSize.sizes.forEach((size) => {
+              if (size.quality != null) {
+                total += size.quality;
+              }
+            });
+          }
+        });
+        return total;
+      },
       async _batchOn () {
         const refList = this.$refs.list.find(item => item.code === this.activeName);
 
@@ -392,7 +405,22 @@
         })
 
         if (result.code === 1) {
-          this.$message.success('操作成功！')
+          if (result.data) {
+            let msgs = []
+            for (const key in result.data) {
+              if (Object.hasOwnProperty.call(result.data, key)) {
+                msgs.push(key + ':' + result.data[key]);
+              }
+            }
+
+            this.$message({
+              dangerouslyUseHTMLString: true,
+              message: msgs.join('<br/>'),
+              type: 'error'
+            });
+          } else {
+            this.$message.success('操作成功！')
+          }
         } else if (result.code === 0) {
           this.$message.error(result.msg)
         } else if (result['errors']) {
