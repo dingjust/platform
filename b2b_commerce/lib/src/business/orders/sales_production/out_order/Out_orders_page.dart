@@ -91,9 +91,9 @@ class _OutOrdersPageState extends State<OutOrdersPage> {
                         state.setKeyword(controller.text);
                       },
                     )),
-          )
-        : AppBarFactory.buildDefaultAppBar('$appBarTitle',
-            actions: <Widget>[_buildSearchButton()]);
+    )
+        : AppBarFactory.buildDefaultAppBar('我的订单',
+        actions: <Widget>[_buildSearchButton()]);
   }
 }
 

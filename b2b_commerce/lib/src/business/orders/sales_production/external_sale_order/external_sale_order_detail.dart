@@ -55,7 +55,7 @@ class _ExternalSaleOrderDetailPageState
               child: Scaffold(
                 appBar: AppBar(
                   centerTitle: true,
-                  title: Text('${isPartyA ? '外发' : '外接'}订单明细'),
+                  title: Text('订单明细'),
                   backgroundColor: Constants.THEME_COLOR_MAIN,
                   elevation: 0.5,
                   actions: [

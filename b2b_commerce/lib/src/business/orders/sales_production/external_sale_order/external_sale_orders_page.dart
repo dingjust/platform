@@ -90,13 +90,13 @@ class _ExternalSaleOrdersPageState extends State<ExternalSaleOrdersPage> {
                     });
                   }
                 },
-                onChange: (v) {
-                  state.setKeyword(controller.text);
-                },
-              ),
+                    onChange: (v) {
+                      state.setKeyword(controller.text);
+                    },
+                  ),
             ))
-        : AppBarFactory.buildDefaultAppBar('$appBarTitle',
-            actions: <Widget>[_buildSearchButton()]);
+        : AppBarFactory.buildDefaultAppBar('我的订单',
+        actions: <Widget>[_buildSearchButton()]);
   }
 }
 
