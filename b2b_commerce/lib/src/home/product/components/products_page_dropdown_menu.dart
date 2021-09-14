@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +27,7 @@ class ProductsDropDownMunu extends StatelessWidget {
           menus: menus
               .map((e) => GZXDropdownMenuBuilder(
                   dropDownHeight: 263,
+                  // dropDownHeight: 150,
                   dropDownWidget: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -65,6 +64,7 @@ class ProductsDropDownMunu extends StatelessWidget {
             crossAxisCount: 5, //每行三列
             // childAspectRatio: 0.75, //显示区域宽高相等
             crossAxisSpacing: 10.0,
+            childAspectRatio: 2,
             mainAxisSpacing: 20.0),
         itemCount: models.length,
         itemBuilder: (context, index) => _CategoryItem(
@@ -102,31 +102,31 @@ class _CategoryItem extends StatelessWidget {
       },
       child: Container(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CachedNetworkImage(
-            imageUrl: '${model?.thumbnail?.actualUrl}',
-            imageBuilder: (context, imageProvider) => Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.circular(12)),
-            ),
-            placeholder: (context, url) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: 40,
-            ),
-            errorWidget: (context, url, error) => Icon(
-              Icons.photo_outlined,
-              color: Colors.grey,
-              size: 40,
-            ),
-          ),
+          // CachedNetworkImage(
+          //   imageUrl: '${model?.thumbnail?.actualUrl}',
+          //   imageBuilder: (context, imageProvider) => Container(
+          //     width: 40,
+          //     height: 40,
+          //     decoration: BoxDecoration(
+          //         image: DecorationImage(
+          //           image: imageProvider,
+          //           fit: BoxFit.cover,
+          //         ),
+          //         borderRadius: BorderRadius.circular(12)),
+          //   ),
+          //   placeholder: (context, url) => SpinKitRing(
+          //     color: Colors.black12,
+          //     lineWidth: 2,
+          //     size: 40,
+          //   ),
+          //   errorWidget: (context, url, error) => Icon(
+          //     Icons.photo_outlined,
+          //     color: Colors.grey,
+          //     size: 40,
+          //   ),
+          // ),
           Row(
             children: [
               Expanded(
