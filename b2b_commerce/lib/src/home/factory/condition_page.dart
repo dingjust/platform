@@ -51,94 +51,31 @@ class _ConditionPageState extends State<ConditionPage> {
 //            centerTitle: true,
 //            elevation: 0.5,
 //          ),
-          body: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.only(left: 10, top: 5),
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  _buildLabel('面料类别'),
-                  _buildMajorCategoryBlock(),
-                  _buildLabel('加工方式'),
-                  _buildCooperationBlock(),
-                  _buildLabel('规模'),
-                  _buildPopulationBlock(),
-                  SliverList(
-                    delegate: SliverChildListDelegate(<Widget>[
+            body: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    _buildLabel('面料类别'),
+                    _buildMajorCategoryBlock(),
+                    _buildLabel('加工方式'),
+                    _buildCooperationBlock(),
+                    _buildLabel('规模'),
+                    _buildPopulationBlock(),
+                    SliverList(
+                      delegate: SliverChildListDelegate(<Widget>[
 //                      _buildCategoryBlock(),
 //                      _buildAddressBlock(),
-                      _buildStarsBlock(),
-                    ]),
-                  ),
-                  _buildLabel('工厂属性'),
-                  _buildLabelsBlock(),
-                  _buildLabel('质量等级'),
-                  _buildQualityBlock(),
-                ],
-              )),
-          persistentFooterButtons: <Widget>[
-            Container(
-              height: 40,
-              margin: EdgeInsets.only(right: 10),
-              child: Center(
-                child: FlatButton(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 45),
-                    color: Colors.grey,
-                    child: const Text(
-                      '重置',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                        _buildStarsBlock(),
+                      ]),
                     ),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8))),
-                    onPressed: () {
-                      setState(() {
-                        widget.factoryCondition.populationScale = null;
-                        widget.factoryCondition.cooperationModes =
-                            new List<CooperationModes>();
-                        widget.factoryCondition.adeptAtCategories =
-                            new List<CategoryModel>();
-                        widget.factoryCondition.categories = null;
-                        widget.factoryCondition.starLevel = 0;
-                        widget.factoryCondition.productiveOrientations = null;
-                        widget.factoryCondition.labels = new List<LabelModel>();
-                        widget.factoryCondition.qualityLevels = [];
-                      });
-                    }),
-              ),
-            ),
-            // Container(
-            //     height: 40,
-            //     margin: EdgeInsets.only(right: 10),
-            //     child: Center(
-            //       child: FlatButton(
-            //           padding: const EdgeInsets.symmetric(
-            //               vertical: 0, horizontal: 45),
-            //           color: Color(0xFFFFD600),
-            //           child: const Text(
-            //             '确定',
-            //             style: const TextStyle(
-            //               color: Colors.black,
-            //               fontSize: 16,
-            //             ),
-            //           ),
-            //           shape: const RoundedRectangleBorder(
-            //               borderRadius:
-            //                   const BorderRadius.all(Radius.circular(8))),
-            //           onPressed: () {
-            //             ///条件更新数据
-            //             FactoryBLoC.instance.filterByCondition(
-            //               widget.factoryCondition,
-            //               requirementCode: widget.requirementCode,
-            //             );
-            //             Navigator.pop(context, widget.factoryCondition);
-            //           }),
-            //     )),
-          ],
-        ));
+                    _buildLabel('工厂属性'),
+                    _buildLabelsBlock(),
+                    _buildLabel('质量等级'),
+                    _buildQualityBlock(),
+                  ],
+                )),
+            bottomSheet: _buildBottom()));
   }
 
   Widget _buildCategoryBlock() {
@@ -193,9 +130,9 @@ class _ConditionPageState extends State<ConditionPage> {
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, //Grid按两列显示
-          mainAxisSpacing: 5.0,
-          crossAxisSpacing: 10.0,
-          childAspectRatio: 2.0,
+          mainAxisSpacing: 14.0,
+          crossAxisSpacing: 20.0,
+          childAspectRatio: 2.4,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
@@ -203,10 +140,11 @@ class _ConditionPageState extends State<ConditionPage> {
             return ChoiceChip(
               label: Container(
                 child: Text(
-                    '${PopulationScaleLocalizedMap[PopulationScale.values[index]]}',
-                    style: TextStyle(fontSize: 14, color: Colors.black)),
+                  '${PopulationScaleLocalizedMap[PopulationScale.values[index]]}',
+                  style: TextStyle(color: Colors.black, fontSize: 12),
+                ),
               ),
-              selectedColor: Color.fromRGBO(255, 214, 12, 1),
+              selectedColor: Color(0xFFFED800),
               selected: widget.factoryCondition.populationScale ==
                   PopulationScale.values[index],
               onSelected: ((value) {
@@ -237,15 +175,15 @@ class _ConditionPageState extends State<ConditionPage> {
                   color: widget.factoryCondition.cooperationModes != null &&
                       widget.factoryCondition.cooperationModes
                           .contains(CooperationModes.values[index])
-                      ? Color.fromRGBO(255, 214, 12, 1)
-                      : Colors.grey[300],
+                      ? Color(0xFFFED800)
+                      : Color(0xFFE7E7E7),
                   borderRadius: BorderRadius.circular(20)),
               child: InkWell(
                 child: Center(
                   child: Text(
                     '${CooperationModesLocalizedMap[CooperationModes
                         .values[index]]}',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
                 ),
                 onTap: () {
@@ -324,14 +262,14 @@ class _ConditionPageState extends State<ConditionPage> {
                   color: widget.factoryCondition.qualityLevels != null &&
                       widget.factoryCondition.qualityLevels
                           .contains(FactoryQualityLevelsEnum[index].code)
-                      ? Color.fromRGBO(255, 214, 12, 1)
-                      : Colors.grey[300],
+                      ? Color(0xFFFED800)
+                      : Color(0xFFE7E7E7),
                   borderRadius: BorderRadius.circular(20)),
               child: InkWell(
                 child: Center(
                   child: Text(
                     '${FactoryQualityLevelsEnum[index].name}',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
                 ),
                 onTap: () {
@@ -426,14 +364,14 @@ class _ConditionPageState extends State<ConditionPage> {
                   color: widget.factoryCondition.categories != null &&
                       widget.factoryCondition.categories
                           .contains(widget.categories[index].code)
-                      ? Color.fromRGBO(255, 214, 12, 1)
-                      : Colors.grey[300],
+                      ? Color(0xFFFED800)
+                      : Color(0xFFE7E7E7),
                   borderRadius: BorderRadius.circular(20)),
               child: InkWell(
                 child: Center(
                   child: Text(
                     '${widget.categories[index].name}',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
                 ),
                 onTap: () {
@@ -465,24 +403,102 @@ class _ConditionPageState extends State<ConditionPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            width: 50,
-            height: 1,
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
-          ),
-          Text(
-            '$label',
-            style: TextStyle(color: Color.fromRGBO(180, 180, 180, 1)),
+          Expanded(
+            child: Divider(
+              height: 1,
+              color: Color(0xFFE7E7E7),
+              thickness: 0.5,
+            ),
           ),
           Container(
-            width: 50,
-            height: 1,
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
-          )
+            margin: EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              '$label',
+              style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            ),
+          ),
+          Expanded(
+            child: Divider(
+              height: 1,
+              color: Color(0xFFE7E7E7),
+              thickness: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottom() {
+    return Container(
+      height: 50,
+      color: Colors.white,
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              height: 40,
+              margin: EdgeInsets.only(left: 16, right: 8),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xFF999999), width: 0.5),
+                  borderRadius: BorderRadius.circular(24)),
+              child: Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(24),
+                child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        widget.factoryCondition.populationScale = null;
+                        widget.factoryCondition.cooperationModes =
+                        new List<CooperationModes>();
+                        widget.factoryCondition.adeptAtCategories =
+                        new List<CategoryModel>();
+                        widget.factoryCondition.categories = null;
+                        widget.factoryCondition.starLevel = 0;
+                        widget.factoryCondition.productiveOrientations = null;
+                        widget.factoryCondition.labels = new List<LabelModel>();
+                        widget.factoryCondition.qualityLevels = [];
+                      });
+                    },
+                    child: Center(
+                      child: Text(
+                        '重置选项',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    )),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              height: 40,
+              margin: EdgeInsets.only(left: 8, right: 16),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Color(0xffFFDB34), Color(0xffFF7C18)]),
+                  borderRadius: BorderRadius.circular(24)),
+              child: Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(24),
+                child: InkWell(
+                    onTap: () {
+                      FactoryBLoC.instance.filterByCondition(
+                        widget.factoryCondition,
+                        requirementCode: widget.requirementCode,
+                      );
+                      Navigator.pop(context, widget.factoryCondition);
+                    },
+                    child: Center(
+                      child: Text(
+                        '筛选',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    )),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -497,6 +513,7 @@ class _ConditionPageState extends State<ConditionPage> {
   @override
   void dispose() {
     super.dispose();
+
     ///条件更新数据
     FactoryBLoC.instance.filterByCondition(
       widget.factoryCondition,
@@ -567,13 +584,13 @@ class _Selector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(top: 14, bottom: 48),
       sliver: SliverGrid(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, //Grid按两列显示
-            mainAxisSpacing: 10.0,
-            crossAxisSpacing: 10.0,
-            childAspectRatio: 3.0,
+            mainAxisSpacing: 14.0,
+            crossAxisSpacing: 20.0,
+            childAspectRatio: 2.4,
           ),
           delegate: delegate),
     );
