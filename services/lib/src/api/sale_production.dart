@@ -2,16 +2,19 @@
 class SaleProductionApis {
   /// 外接订单
   static get outOrderPendingList =>
-      // '/{baseSiteId}/out/order/pending/accept/search';
-  '/{baseSiteId}/sales/production/order/search/all';
+      '/{baseSiteId}/sales/production/order/search/all';
+
+  // '/{baseSiteId}/out/order/pending/accept/search';
 
   /// 外接订单详情
-  static get outOrderPendingDetail => (id) {
+  static get outOrderPendingDetail =>
+          (id) {
         return '/{baseSiteId}/sales/production/order/$id';
       };
 
   /// 外接订单-拒单
-  static get refuse => (id) {
+  static get refuse =>
+          (id) {
         return '/{baseSiteId}/sales/production/order/reject/outboundOrder/$id';
       };
 
@@ -39,8 +42,8 @@ class SaleProductionApis {
       };
 
   /// 外发订单列表
-  // static get outOrderList => '/{baseSiteId}/out/order/search';
   static get outOrderList => '/{baseSiteId}/sales/production/order/search/all';
+  // static get outOrderList => '/{baseSiteId}/out/order/search';
 
   /// 生产工单列表
   static get productionTaskOrderList =>

@@ -120,7 +120,7 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult> {
           ),
         ),
         subtitle: Text(
-          '${authenticationModel.name}',
+          '${authenticationModel?.name}',
           style: TextStyle(
             fontSize: 16,
           ),
@@ -142,7 +142,7 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult> {
           ),
         ),
         subtitle: Text(
-          '${authenticationModel.idCard}',
+          '${authenticationModel?.idCard}',
           style: TextStyle(
             fontSize: 16,
           ),

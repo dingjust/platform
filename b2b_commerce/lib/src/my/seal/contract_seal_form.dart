@@ -217,7 +217,6 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
               controller: sealTitleController,
               focusNode: sealTitleFocusNode,
               onChanged: (v) {
-                print(v);
                 reGenerateSeal();
               },
             ),
@@ -299,9 +298,16 @@ class _ContractSealFormPageState extends State<ContractSealFormPage> {
         // 查询明细
         certInfo = await ContractRepository().getAuthenticationInfo();
       }
-      setState(() {
-        name = certInfo.data.name;
-      });
+      if (certInfo != null) {
+        setState(() {
+          name = certInfo?.data?.name ?? '';
+        });
+      } else {
+        BotToast.showText(
+            text: '获取认证信息失败',
+            align: Alignment.center,
+            duration: Duration(seconds: 3));
+      }
     }
 
     return certInfo;
