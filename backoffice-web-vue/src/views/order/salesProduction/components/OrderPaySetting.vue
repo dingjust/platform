@@ -29,8 +29,8 @@
           <el-row type="flex">
             <el-form-item label="付款方式">
               <el-radio-group v-model="formData.paymentAccount.type">
-                <el-radio v-for="item in payType" :key="item.code" :label="item.code">{{item.name}}</el-radio>
-                <!-- <el-radio label="BANK" key="BANK">银行卡</el-radio> -->
+                <!-- <el-radio v-for="item in payType" :key="item.code" :label="item.code">{{item.name}}</el-radio> -->
+                <el-radio label="BANK" key="BANK">银行卡</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-row>

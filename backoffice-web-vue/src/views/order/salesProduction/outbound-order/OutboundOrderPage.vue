@@ -183,6 +183,7 @@ export default {
         taskOrderEntries: data.taskOrderEntries.map(item => {
           return {
             id: item.id ? item.id : null,
+            originOrder: item.originOrder,
             totalPrimeCost: item.totalPrimeCost,
             deliveryDate: item.deliveryDate,
             shippingAddress: item.shippingAddress,
