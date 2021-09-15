@@ -1,13 +1,10 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/my/my_company_certificate_select.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:services/services.dart';
+import 'package:models/models.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
-import 'package:models/models.dart';
 
 class MyCompanyContactInfo extends StatefulWidget {
   CompanyModel company;
