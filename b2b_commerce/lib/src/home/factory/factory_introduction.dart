@@ -162,30 +162,33 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
           children: [
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Color(0xffFED800),
-                  label: '联系对方',
-                  info: '电话沟通协商',
-                  onTap: _onContact,
-                )),
+              color: Color(0xffFED800),
+              label: '联系对方',
+              info: '电话沟通协商',
+              onTap: _onContact,
+            )),
             Container(width: 15),
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Colors.blueAccent,
-                  gradient: LinearGradient(
-                      colors: [Color(0xffFFDB34), Color(0xffFF7C18)]),
-                  label: '发布需求',
-                  info: '邀请对方报价',
-                  onTap: () {
-                    DialogHelper.showConfirm(
-                        title: '温馨提示',
-                        content:
+              color: Colors.blueAccent,
+              gradient: LinearGradient(colors: [
+                Color(0xffFFDB34),
+                Color(0xffffbb2a),
+                Color(0xffFF7C18)
+              ]),
+              label: '发布需求',
+              info: '邀请对方报价',
+              onTap: () {
+                DialogHelper.showConfirm(
+                    title: '温馨提示',
+                    content:
                         '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
-                        confirm: () {
-                          RequirementHelper.publishToFactory(
-                              context: context, factory: data);
-                        });
-                  },
-                ))
+                    confirm: () {
+                      RequirementHelper.publishToFactory(
+                          context: context, factory: data);
+                    });
+              },
+            ))
           ],
         ),
       ),

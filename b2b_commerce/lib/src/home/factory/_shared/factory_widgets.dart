@@ -41,7 +41,7 @@ class FactoryBottomBtn extends StatelessWidget {
               info != null
                   ? Text(
                       '$info',
-                      style: TextStyle(color: Color(0xff222222), fontSize: 14),
+                      style: TextStyle(color: Color(0xff666666), fontSize: 10),
                     )
                   : Container()
             ],
