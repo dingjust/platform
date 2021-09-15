@@ -262,16 +262,8 @@
     },
     mounted () {
       this.$nextTick(() => {
-        if (!this.formData.contactAddress) {
-          this.$set(this.formData, 'contactAddress', {
-            region: {},
-            city: {},
-            cityDistrict: {},
-            line1: ''
-          })
-        }
         this.getRegions();
-        if (this.formData.contactAddress) {
+        if (this.formData.contactAddress.id) {
           this.getCities(this.formData.contactAddress.region);
           this.getCityDistricts(this.formData.contactAddress.city);
         }
