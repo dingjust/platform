@@ -7,7 +7,7 @@
   <div class="tenant-echart">
     <div class="echart-header">
       <h6>{{chartData.name}}</h6>
-      <el-select v-model="unit" placeholder="请选择" style="width: 60px" @change="handleType">
+      <!-- <el-select v-model="unit" placeholder="请选择" style="width: 60px" @change="handleType">
         <el-option label="日" :value="0" :key="0"/>
         <el-option label="月" :value="2" :key="2"/>
       </el-select>
@@ -23,7 +23,7 @@
         end-placeholder="结束日期"
         :picker-options="pickerOptions">
       </el-date-picker>
-      <el-button type="text" @click="downloadDetail">下载明细</el-button>
+      <el-button type="text" @click="downloadDetail">下载明细</el-button> -->
     </div>
     <div v-loading="chartData.loading">
       <div :id="main" :style="'width: 500px;height:300px'"></div>
