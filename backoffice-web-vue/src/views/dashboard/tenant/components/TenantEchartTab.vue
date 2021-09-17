@@ -9,6 +9,9 @@
 <script>
 import { formatDate } from '@/common/js/filters';
 import TenantEchart from './TenantEchart'
+
+import { echartData } from './echart'
+
 export default {
   name: 'TenantEchartTab',
   components: { TenantEchart },
@@ -43,7 +46,8 @@ export default {
 
       if (result.code === 1) {
         this.echartArr[type].loading = false
-        this.echartArr[type].data = result.data
+        // this.echartArr[type].data = result.data
+        this.echartArr[type].data = echartData[type].data
       }
     },
   },
