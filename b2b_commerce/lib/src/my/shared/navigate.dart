@@ -2,11 +2,11 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 import '../my_authentication.dart';
 
@@ -201,7 +201,7 @@ class NavigateCard1 extends StatelessWidget {
         title: '地址管理',
         route: AppRoutes.ROUTE_MY_ADDRESSES,
         imagePath: 'img/icons/b2b-v2/my/add@3x.png'),
-    _NavigateEnry(title: '发票管理', imagePath: 'img/icons/b2b-v2/my/bill@3x.png'),
+    // _NavigateEnry(title: '发票管理', imagePath: 'img/icons/b2b-v2/my/bill@3x.png'),
     _NavigateEnry(
         title: '我的消息',
         route: AppRoutes.ROUTE_MESSAGE,

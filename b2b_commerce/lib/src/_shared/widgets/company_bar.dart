@@ -26,9 +26,9 @@ class CompanyBar extends StatelessWidget {
           Container(
               margin: EdgeInsets.only(right: 8),
               child: ImageFactory.buildProcessedAvatar(
-                  companyModel.profilePicture,
+                  companyModel?.profilePicture,
                   processurl:
-                  'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
+                      'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
           Expanded(
             child: Container(
               child: Column(
@@ -37,13 +37,13 @@ class CompanyBar extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Text(
-                            '${companyModel.name}',
-                            style: TextStyle(
-                                color: Color(0xff222222),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                            overflow: TextOverflow.ellipsis,
-                          ))
+                        '${companyModel.name}',
+                        style: TextStyle(
+                            color: Color(0xff222222),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ))
                     ],
                   ),
                   Row(

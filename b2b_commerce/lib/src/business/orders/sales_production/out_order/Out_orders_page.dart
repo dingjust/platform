@@ -91,9 +91,9 @@ class _OutOrdersPageState extends State<OutOrdersPage> {
                         state.setKeyword(controller.text);
                       },
                     )),
-    )
+          )
         : AppBarFactory.buildDefaultAppBar('我的订单',
-        actions: <Widget>[_buildSearchButton()]);
+            actions: <Widget>[_buildSearchButton()]);
   }
 }
 
@@ -102,10 +102,16 @@ class _AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
         onPressed: () {
-          //唯一码导入
+          //创建外接订单
           Navigator.of(context)
-              .pushNamed(AppRoutes.ROUTE_OUT_ORDER_FORM)
-              .then((value) {});
+              .pushNamed(AppRoutes.ROUTE_EXTERNAL_SALE_ORDER_FORM)
+              .then((value) {
+            ExternalSaleOrdersState state =
+            Provider.of<ExternalSaleOrdersState>(context, listen: false);
+            if (state != null) {
+              state.clear();
+            }
+          });
         },
         child: B2BV2Image.fab());
   }
