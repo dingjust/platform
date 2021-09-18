@@ -47,12 +47,16 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return BLoCProvider<UserBLoC>(
       bloc: UserBLoC.instance,
-      child: StreamBuilder<UserModel>(
-          initialData: UserBLoC.instance.currentUser,
-          stream: UserBLoC.instance.stream,
-          builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-            return B2BApp();
-          }),
+      child: Consumer<LocalStorageState>(
+          builder: (context, LocalStorageState state, _) {
+        //非第一次启动应用
+        if (state.notFirstStartUp) {
+          return B2BApp();
+        }
+        return Container(
+          color: Colors.orange,
+        );
+      }),
     );
   }
 

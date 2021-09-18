@@ -20,6 +20,7 @@ class AppProvider {
     ChangeNotifierProvider(create: (_) => BusinessReportState()),
     ChangeNotifierProvider(create: (_) => MyFavoriteState()),
     ChangeNotifierProvider(create: (_) => NotificationState()),
+    ChangeNotifierProvider(create: (_) => LocalStorageState()),
     // ChangeNotifierProvider(create: (_) => HomeSectionState()),
     Provider(
       create: (_) => AddressState(),
@@ -78,6 +79,8 @@ class AppProvider {
         .getBannerData();
     Provider.of<AppVersionHelper>(context, listen: false)
         .getAppVersionInfo('nbyjy');
+    Provider.of<LocalStorageState>(context, listen: false).getNotFirstStartUp();
+
     DateTime end = DateTime.now();
     print('[nbyjy]预加载结束${DateFormatUtil.formatYMDHMS(end)}');
     print(
