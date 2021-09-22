@@ -2099,7 +2099,15 @@ let NONE_TENANT_APIS = {
 
   /** 代运营 */
   // 提交代运营申请 post data {}
-  AgentOperationSubmit: () => '/b2b/agentOperation/submit'
+  AgentOperationSubmit: () => '/b2b/agentOperation/submit',
+
+  /** 银行卡模块 */
+  // 获取公司银行卡 get
+  getBanks: () => '/b2b/bankCard',
+  // 创建公司银行卡 post
+  createBank: () => '/b2b/bankCard',
+  // 解绑公司银行卡 delete
+  deleteBank: (id) => '/b2b/bankCard/' + id
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

@@ -25,7 +25,7 @@ export default {
           requiresAuth: true,
           permissions: ['AUDIT_TASK']
         }
-      },
+      }
       // {
       //   name: '待我分配',
       //   url: '/task/assign',
@@ -62,7 +62,7 @@ export default {
         requiresAuth: true,
         permissions: ['SALES_ORDER']
       }
-    }, ]
+    } ]
   },
   {
     name: '生产管理',
@@ -249,7 +249,7 @@ export default {
       name: '物料管理',
       url: '/product/material',
       icon: 'iconNone'
-    }, ]
+    } ]
   },
   {
     name: '财务管理',
@@ -354,7 +354,7 @@ export default {
           requiresAuth: true,
           permissions: ['COMPANY_COOPERATOR']
         }
-      },
+      }
     ]
   },
   {
@@ -412,12 +412,12 @@ export default {
     }, {
       name: '对账配置',
       url: '/account/setting/reconciliation-plan',
-      icon: 'iconNone',
+      icon: 'iconNone'
       // meta: {
       //   requiresAuth: true,
       //   permissions: ['RECONCILIATION_PLAN']
       // }
-    },{
+    }, {
       name: '账务配置',
       url: '/account/setting/payPlan',
       icon: 'iconNone',
@@ -441,7 +441,11 @@ export default {
         requiresAuth: true,
         permissions: ['COMPANY_ADDRESS']
       }
-    }, ]
+    }, {
+      name: '银行卡配置',
+      url: '/account/setting/bank',
+      icon: 'iconNone'
+    }]
   },
   {
     name: '其他',
@@ -450,7 +454,7 @@ export default {
     children: [{
       name: '需求订单',
       url: '/order/requirement',
-      icon: 'iconNone',
+      icon: 'iconNone'
     }, {
       name: '报价订单',
       url: '/order/quote',

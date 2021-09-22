@@ -163,17 +163,16 @@ const router = new Router({
           return c('router-view');
         }
       },
-      children: [
-        {
-          path: 'backstage',
-          name: '合同管理',
-          component: () => import(/* webpackChunkName: 'contract-backstage' */ '@/views/contract/backManage/ContractBackPage')
-        },
-        {
-          path: 'template/backstage',
-          name: '模板管理',
-          component: () => import(/* webpackChunkName: 'contract-backstage' */ '@/views/contract/backTemp/ContractBackTemp')
-        }
+      children: [{
+        path: 'backstage',
+        name: '合同管理',
+        component: () => import(/* webpackChunkName: 'contract-backstage' */ '@/views/contract/backManage/ContractBackPage')
+      },
+      {
+        path: 'template/backstage',
+        name: '模板管理',
+        component: () => import(/* webpackChunkName: 'contract-backstage' */ '@/views/contract/backTemp/ContractBackTemp')
+      }
       ]
     },
     {
@@ -788,7 +787,8 @@ const router = new Router({
             component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/payPlan/form/PayPlanEditFormPage')
           }
           ]
-        }, {
+        },
+        {
           path: 'progress-plan',
           name: '节点配置',
           redirect: '/account/setting/progress-plan',
@@ -849,6 +849,11 @@ const router = new Router({
             component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/reconciliation-plan/form/ReconciliationPlanForm')
           }
           ]
+        },
+        {
+          path: 'bank',
+          name: '银行卡配置',
+          component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/bank/BankPage')
         }
         ]
       },
@@ -894,41 +899,39 @@ const router = new Router({
           return c('router-view');
         }
       },
-      children: [
-        {
-          path: 'handle',
-          name: '待我处理',
-          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/handle/TaskHandlePage')
-        }, {
-          path: 'approval',
-          name: '我的审批',
-          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/approval/TaskApprovalPage')
-        }, {
-          path: 'assign',
-          name: '待我分配',
-          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/assign/TaskAssignPage')
-        }, {
-          path: 'factory/review',
-          name: '工厂审阅',
-          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/factory-review/FactoryReview')
-        }, {
-          path: 'agent-operation/review',
-          name: '代运营审阅',
-          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/agent-operation/AgentOperationReview')
-        }, {
-          path: 'requirement/review',
-          name: '需求审阅',
-          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/requirement-review/RequirementReview')
-        }, {
-          path: 'account/logoff',
-          name: '账号注销审阅',
-          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/account-logoff/AccountLogoff')
-        }, {
-          path: 'trusteeship',
-          name: '托管',
-          component: () => import(/* webpackChunkName: 'task' */ '@/views/task/trusteeship/TrusteeshipPage')
-        }
-      ]
+      children: [{
+        path: 'handle',
+        name: '待我处理',
+        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/handle/TaskHandlePage')
+      }, {
+        path: 'approval',
+        name: '我的审批',
+        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/approval/TaskApprovalPage')
+      }, {
+        path: 'assign',
+        name: '待我分配',
+        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/assign/TaskAssignPage')
+      }, {
+        path: 'factory/review',
+        name: '工厂审阅',
+        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/factory-review/FactoryReview')
+      }, {
+        path: 'agent-operation/review',
+        name: '代运营审阅',
+        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/agent-operation/AgentOperationReview')
+      }, {
+        path: 'requirement/review',
+        name: '需求审阅',
+        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/requirement-review/RequirementReview')
+      }, {
+        path: 'account/logoff',
+        name: '账号注销审阅',
+        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/account-logoff/AccountLogoff')
+      }, {
+        path: 'trusteeship',
+        name: '托管',
+        component: () => import(/* webpackChunkName: 'task' */ '@/views/task/trusteeship/TrusteeshipPage')
+      }]
     },
     {
       path: '/miscs',
@@ -1269,17 +1272,16 @@ const router = new Router({
           return c('router-view');
         }
       },
-      children: [
-        {
-          path: 'points/record',
-          name: '积分记录',
-          component: () => import(/* webpackChunkName: 'activity' */ '@/views/activity/points/PointsRecordPage')
-        },
-        {
-          path: 'points/exchange',
-          name: '积分申请',
-          component: () => import(/* webpackChunkName: 'activity' */ '@/views/activity/points/PointsExchangePage')
-        }
+      children: [{
+        path: 'points/record',
+        name: '积分记录',
+        component: () => import(/* webpackChunkName: 'activity' */ '@/views/activity/points/PointsRecordPage')
+      },
+      {
+        path: 'points/exchange',
+        name: '积分申请',
+        component: () => import(/* webpackChunkName: 'activity' */ '@/views/activity/points/PointsExchangePage')
+      }
       ]
     }
     ]

@@ -276,6 +276,14 @@ export default {
     if (!this.isCreated) {
       this.formData = this.slotData
     }
+
+    if (!this.formData.id) {
+      if (this.isTenant()) {
+        this.formData.publishType = 'PUBLISH_BY_OTHERS';
+      } else {
+        this.formData.publishType = 'DEFAULT';
+      }
+    }
   }
 }
 </script>
