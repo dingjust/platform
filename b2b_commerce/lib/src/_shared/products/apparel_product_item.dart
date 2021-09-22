@@ -31,10 +31,10 @@ class ApparelProductItem extends StatelessWidget {
       onLongPress: isSelectOption ? null : onPrdouctDeleting,
       onTap: isSelectOption
           ? () {
-        if (isSelectOption) {
-          Navigator.pop(context, item);
-        }
-      }
+              if (isSelectOption) {
+                Navigator.pop(context, item);
+              }
+            }
           : onPrdouctUpdating,
       child: Card(
         margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
@@ -58,34 +58,35 @@ class ApparelProductItem extends StatelessWidget {
             width: 80,
             height: 80,
             child: CachedNetworkImage(
-                width: 100,
-                height: 100,
-                imageUrl: '${item.thumbnail.previewUrl()}',
-                fit: BoxFit.cover,
-                imageBuilder: (context, imageProvider) =>
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
+              width: 100,
+              height: 100,
+              imageUrl: '${item.thumbnail.previewUrl()}',
+              fit: BoxFit.cover,
+              imageBuilder: (context, imageProvider) =>
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
                       ),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                placeholder: (context, url) =>
-                    SpinKitRing(
-                      color: Colors.black12,
-                      lineWidth: 2,
-                      size: 30,
-                    ),
-                errorWidget: (context, url, error) =>
-                    SpinKitRing(
-                      color: Colors.black12,
-                      lineWidth: 2,
-                      size: 30,
-                    )),
+                  ),
+              placeholder: (context, url) =>
+                  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
+              errorWidget: (context, url, error) =>
+                  Icon(
+                    Icons.broken_image,
+                    size: 30,
+                    color: Colors.grey[300],
+                  ),
+            ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -147,10 +148,12 @@ class ApparelProductItem extends StatelessWidget {
               ),
             ),
           ),
-           UserBLoC.instance.currentUser.type == UserType.FACTORY ? Offstage(
-             offstage: isSelectOption,
-             child: _buildButtons(context),
-           ):Container(),
+          UserBLoC.instance.currentUser.type == UserType.FACTORY
+              ? Offstage(
+            offstage: isSelectOption,
+            child: _buildButtons(context),
+          )
+              : Container(),
         ],
       ),
     );

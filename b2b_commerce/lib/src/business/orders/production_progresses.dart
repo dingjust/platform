@@ -204,7 +204,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       _list.add(GestureDetector(
         onTap: () {
           final state =
-          Provider.of<ProductionProgressState>(context, listen: false);
+              Provider.of<ProductionProgressState>(context, listen: false);
           state.jumpToProgressDetail(
               context: context,
               materialPageRoute: MaterialPageRoute(
@@ -337,32 +337,33 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                   width: 80,
                   height: 80,
                   child: CachedNetworkImage(
-                      imageUrl: '${progress.medias[0].previewUrl()}',
-                      fit: BoxFit.cover,
-                      imageBuilder: (context, imageProvider) =>
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
+                    imageUrl: '${progress.medias[0].previewUrl()}',
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
                             ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                      placeholder: (context, url) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30.0,
-                          ),
-                      errorWidget: (context, url, error) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          )),
+                        ),
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30.0,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        Icon(
+                          Icons.broken_image,
+                          size: 30,
+                          color: Colors.grey[300],
+                        ),
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                   ))
@@ -381,8 +382,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 onPressed: () {
-                  final state = Provider.of<ProductionProgressState>(
-                      context, listen: false);
+                  final state = Provider.of<ProductionProgressState>(context,
+                      listen: false);
                   state.jumpToProgressDetail(
                       context: context,
                       materialPageRoute: MaterialPageRoute(

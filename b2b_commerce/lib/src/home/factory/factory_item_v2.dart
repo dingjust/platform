@@ -171,10 +171,10 @@ class FactoryItem extends StatelessWidget {
               lineWidth: 2,
               size: 30,
             ),
-            errorWidget: (context, url, error) => SpinKitRing(
-              color: Colors.grey[300],
-              lineWidth: 2,
+            errorWidget: (context, url, error) => Icon(
+              Icons.broken_image,
               size: 30,
+              color: Colors.grey[300],
             ),
           ),
         ),
