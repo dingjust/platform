@@ -74,6 +74,7 @@ import '../my/my_addresses.dart';
 import '../my/my_client_services.dart';
 import '../my/my_invoices.dart';
 import '../my/my_settings.dart';
+import 'privacy_guide_page.dart';
 
 class AppRoutes with GlobalRoutes {
   static const ROUTE_LOGIN = GlobalRoutes.ROUTE_LOGIN;
@@ -249,6 +250,8 @@ class AppRoutes with GlobalRoutes {
 
   static const ROUTE_FEEDBACK = '/feedback';
 
+  static const ROUTE_PRIVACY_GUIDE = '/privacy_guide';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -355,7 +358,8 @@ class AppRoutes with GlobalRoutes {
         ProductsSearchPage(keyword: getVal('keyword', context)),
     ROUTE_MY_FAVORITES: (context) => MyFavoritePage(),
     ROUTE_MESSAGE: (context) => MessagePage(),
-    ROUTE_FEEDBACK: (context) => FeedbackPage()
+    ROUTE_FEEDBACK: (context) => FeedbackPage(),
+    ROUTE_PRIVACY_GUIDE: (context) => PrivacyGuidePage()
   };
 
   static dynamic getVal(String key, BuildContext context) {

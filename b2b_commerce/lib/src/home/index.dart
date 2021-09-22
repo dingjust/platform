@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/common/qr_scan_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/helper/local_storage_helper.dart';
 import 'package:b2b_commerce/src/home/search/home_search_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void homeInit() async {
+    Provider.of<LocalStorageHelper>(context, listen: false)
+        .checkFirstStartUp(context);
     AppVersionHelper appVersionHelper =
         Provider.of<AppVersionHelper>(context, listen: false);
     bool isNew = await appVersionHelper.checkVersion(
