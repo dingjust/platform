@@ -5,12 +5,17 @@
 -->
 <template>
   <el-form ref="form" :model="formData" class="order-pay-setting" label-width="140px" hide-required-asterisk>
-    <el-form-item label="支付类型" label-width="80px">
-      <el-radio-group v-model="formData.payOnline" :disabled="readOnly">
-        <el-radio :label="true" >线上支付</el-radio>
-        <el-radio :label="false" >线下支付</el-radio>
-      </el-radio-group>
-    </el-form-item>
+    <el-row type="flex">
+      <el-form-item label="支付类型" label-width="80px">
+        <el-radio-group v-model="formData.payOnline" :disabled="readOnly">
+          <el-radio :label="true" >线上支付</el-radio>
+          <el-radio :label="false" >线下支付</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <div style="margin-left: 30px" v-if="formData.payOnline">
+        <el-button type="primary" @click="visible = true">选择银行卡配置</el-button>
+      </div>
+    </el-row>
     <!-- 外接订单才需要填写以下信息 -->
     <template v-if="from === 'SALES_ORDER'">
       <!-- 线上支付 且 登录账号为代运营账号 需要填写扣除比例 -->
@@ -66,15 +71,19 @@
         </div> 
       </collapse-transition>
     </template>
+    <el-dialog title="选择银行卡配置" :visible.sync="visible" width="500px" :close-on-click-modal="false" :close-on-press-escape="false" append-to-body>
+      <bank-select-page @onSelect="onSelect"/>
+    </el-dialog>
   </el-form>
 </template>
 
 <script>
 import CollapseTransition from '@/views/user/company/components/collapseTransition.js'
+import BankSelectPage from '@/views/user/bank/components/BankSelectPage'
 
 export default {
   name: 'OrderPaySetting',
-  components: { CollapseTransition },
+  components: { CollapseTransition, BankSelectPage },
   props: ['formData', 'from', 'readOnly'],
   methods: {
     onBlur() {
@@ -89,12 +98,22 @@ export default {
       } else {
         callback(new Error('请输入'));
       }
+    },
+    onSelect (row) {
+      if (!row) return
+
+      this.formData.paymentAccount.name = row.accountName
+      this.formData.paymentAccount.serviceProvider = row.bankName
+      this.formData.paymentAccount.no = row.accountName
+
+      this.visible = false
     }
   },
   data () {
     return {
       currentUser: this.$store.getters.currentUser,
-      payType: this.$store.state.EnumsModule['PayType']
+      payType: this.$store.state.EnumsModule['PayType'],
+      visible: false
     }
   },
   created () {
