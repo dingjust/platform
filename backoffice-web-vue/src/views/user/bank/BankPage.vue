@@ -17,7 +17,7 @@
     </el-card>
     <el-dialog title="创建银行卡配置" :visible.sync="visible" width="400px" append-to-body :close-on-click-modal="false">
       <el-form ref="form" :model="form" label-width="80px" v-if="visible">
-        <el-form-item label="银行名" prop="bankName" :rules="[{ required: true, message: '请输入', trigger: 'blur' }]">
+        <el-form-item label="银行名（含支行名称）" prop="bankName" :rules="[{ required: true, message: '请输入', trigger: 'blur' }]">
           <el-input v-model="form.bankName"></el-input>
         </el-form-item>
         <el-form-item label="卡号" prop="cardNumber" :rules="[{ required: true, message: '请输入', trigger: 'blur' }]">
@@ -26,9 +26,9 @@
         <el-form-item label="户名" prop="accountName" :rules="[{ required: true, message: '请输入', trigger: 'blur' }]">
           <el-input v-model="form.accountName"></el-input>
         </el-form-item>
-        <el-form-item label="银行网点" prop="bankOutlet" :rules="[{ required: true, message: '请输入', trigger: 'blur' }]">
+        <!-- <el-form-item label="银行网点" prop="bankOutlet" :rules="[{ required: true, message: '请输入', trigger: 'blur' }]">
           <el-input v-model="form.bankOutlet" @keyup.enter.native="onConfirm"></el-input>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <el-row type="flex" justify="end">
         <el-button type="default" @click="onCancel">取消</el-button>
@@ -99,7 +99,7 @@ export default {
         bankName: '',
         cardNumber: '',
         accountName: '',
-        bankOutlet: ''
+        // bankOutlet: ''
       }
       this.visible = false
     }

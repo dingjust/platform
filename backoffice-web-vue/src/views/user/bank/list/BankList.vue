@@ -1,11 +1,11 @@
 <template>
   <div class="pend-out-view-list">
-    <el-table ref="resultTable" stripe :data="page" :height="autoHeight">
-      <el-table-column label="银行名" prop="bankName" />
+    <el-table ref="resultTable" stripe :data="page" :height="autoHeight" :highlight-current-row="isSelect" @current-change="handleCurrentChange">
+      <el-table-column label="银行名（含支行名称）" prop="bankName" />
       <el-table-column label="卡号" prop="cardNumber" />
       <el-table-column label="户名" prop="accountName" />
-      <el-table-column label="银行网点" prop="bankOutlet" />
-      <el-table-column label="操作">
+      <!-- <el-table-column label="银行网点" prop="bankOutlet" /> -->
+      <el-table-column label="操作" v-if="!isSelect">
         <template slot-scope="scope">
           <el-button type="text" @click="onUpdate(scope.row)">修改</el-button>
           <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
@@ -18,7 +18,13 @@
 <script>
 export default {
   name: 'BankList',
-  props: ['page'],
+  props: {
+    page: Array,
+    isSelect: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     onUpdate (row) {
       this.$emit('onUpdate', row)
@@ -44,6 +50,16 @@ export default {
       } else {
         this.$message.success('操作失败！')
       }
+    },
+    handleCurrentChange(val) {
+      if (this.isSelect) {
+        this.currentRow = val;
+      }
+    }
+  },
+  data () {
+    return {
+      currentRow: null
     }
   }
 }
