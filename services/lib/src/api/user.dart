@@ -206,8 +206,7 @@ abstract class UserApis {
   static get appendCooperator => '/{baseSiteId}/cooperator/create';
 
   /// 删除合作商
-  static get deleteCooperator =>
-          (id) {
+  static get deleteCooperator => (id) {
         return '/{baseSiteId}/cooperator/delete/$id';
       };
 

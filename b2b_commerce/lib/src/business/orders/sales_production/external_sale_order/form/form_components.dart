@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/cooperator/cooperator_item.dart';
 import 'package:b2b_commerce/src/business/products/sample/sample_products.dart';
+import 'package:b2b_commerce/src/my/card/bank_card.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -832,8 +833,7 @@ class _FormPayInfoState extends State<FormPayInfo> {
                     max: 0.15,
                     divisions: 15,
                     label:
-                    '${((form.serviceFeePercent ?? 0.00) * 100).toStringAsFixed(
-                        0)}%',
+                        '${((form.serviceFeePercent ?? 0.00) * 100).toStringAsFixed(0)}%',
                     onChanged: (value) {
                       setState(() {
                         form.serviceFeePercent = value;
@@ -850,59 +850,62 @@ class _FormPayInfoState extends State<FormPayInfo> {
                 )
               ],
             )),
-        FormTitle('收款人姓名（银行卡)：'),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: TextFieldBorderComponent(
-            padding: EdgeInsets.all(0),
-            hideDivider: true,
-            isRequired: true,
-            textAlign: TextAlign.left,
-            hintText: '收款人姓名',
-            controller: payNameController,
-            focusNode: payNameNode,
-            onChanged: (value) {
-              form.paymentAccount.name = value;
-              _update();
-            },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('收款账号：'),
+              MaterialButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                        builder: (context) =>
+                            BankCardPage(
+                              selectMode: true,
+                            )))
+                        .then((value) {
+                      if (value != null) {
+                        BankCardModel card = value as BankCardModel;
+                        setState(() {
+                          form.paymentAccount
+                            ..name = card.accountName
+                            ..serviceProvider = card.bankName
+                            ..no = card.cardNumber;
+                        });
+                      }
+                    });
+                  },
+                  child: Text(
+                    '选择',
+                  ),
+                  color: Constants.THEME_COLOR_MAIN,
+                  textColor: Colors.white),
+            ],
           ),
         ),
-        Divider(),
-        FormTitle('开户行（银行卡)：'),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: TextFieldBorderComponent(
-            padding: EdgeInsets.all(0),
-            hideDivider: true,
-            isRequired: true,
-            textAlign: TextAlign.left,
-            hintText: '请输入开户行',
-            controller: payProvController,
-            focusNode: payProvNode,
-            onChanged: (value) {
-              form.paymentAccount.serviceProvider = value;
-              _update();
-            },
+        Container(
+          decoration: BoxDecoration(color: Color(0xFFF7F7F7)),
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _BankRow(
+                title: '收款人：',
+                val: form.paymentAccount.name,
+              ),
+              _BankRow(
+                title: '开户行：',
+                val: form.paymentAccount.serviceProvider,
+              ),
+              _BankRow(
+                title: '卡号：',
+                val: form.paymentAccount.no,
+              ),
+            ],
           ),
-        ),
-        Divider(),
-        FormTitle('卡号（银行卡)：'),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: TextFieldBorderComponent(
-            padding: EdgeInsets.all(0),
-            hideDivider: true,
-            isRequired: true,
-            textAlign: TextAlign.left,
-            hintText: '请输入卡号',
-            controller: payNoController,
-            focusNode: payNoNode,
-            onChanged: (value) {
-              form.paymentAccount.no = value;
-              _update();
-            },
-          ),
-        ),
+        )
       ];
     }
     return [];
@@ -912,6 +915,29 @@ class _FormPayInfoState extends State<FormPayInfo> {
     if (widget.updateForm != null) {
       widget.updateForm.call(form);
     }
+  }
+}
+
+class _BankRow extends StatelessWidget {
+  final String title;
+
+  final String val;
+
+  const _BankRow({Key key, this.title, this.val}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            width: 80,
+            child: Text(title ?? '-'),
+          ),
+          Expanded(child: Text(val ?? '-'))
+        ],
+      ),
+    );
   }
 }
 

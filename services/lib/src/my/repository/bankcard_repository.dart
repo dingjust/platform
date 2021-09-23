@@ -2,59 +2,57 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:services/src/api/user.dart';
+import 'package:services/src/my/response/bank_card_response.dart';
 import 'package:services/src/net/http_manager.dart';
 
 class BankCardRepository {
-  ///绑定银行卡
-  Future<bool> bindingBankCard(BankCardModel model) async {
+  /// 列表
+  static Future<BankCardResponse> list() async {
     Response response;
-    try {
-      response = await http$.post(UserApis.bankCard,
-          data: BankCardModel.toJson(model),
-          options: Options(headers: {'ignoreAlert': 1}));
-    } on DioError catch (e) {
-      print(e);
-    }
-    if (response != null && response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+    BankCardResponse result;
 
-  /// 查询公司银行卡
-  Future<BankCardModel> getBankCards() async {
-    Response response;
     try {
       response = await http$.get(UserApis.bankCard);
     } on DioError catch (e) {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      if (response.data.length > 0) {
-        BankCardModel model = BankCardModel.fromJson(response.data[0]);
-        return model;
-      } else {
-        return null;
-      }
+      result = BankCardResponse.fromJson(response.data);
     } else {
-      return null;
+      result = null;
     }
+    return result;
+  }
+
+  /// 查询公司银行卡
+  static Future<BaseResponse> create(dynamic data) async {
+    Response response;
+    BaseResponse result;
+    try {
+      response = await http$.post(UserApis.bankCard, data: data);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = BaseResponse.fromJson(response.data);
+    }
+    return result;
   }
 
   /// 解绑银行卡
-  Future<bool> unbindBankCards(int id) async {
+  static Future<BaseResponse> del(int id) async {
     Response response;
+    BaseResponse result;
     try {
       response = await http$.delete(UserApis.unbindBankCard(id));
     } on DioError catch (e) {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
+      result = BaseResponse.fromJson(response.data);
     }
+    return result;
   }
 }

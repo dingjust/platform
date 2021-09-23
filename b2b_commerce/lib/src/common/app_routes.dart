@@ -43,10 +43,10 @@ import 'package:b2b_commerce/src/home/requirement/nearby_requirement.dart';
 import 'package:b2b_commerce/src/home/search/home_search_result.dart';
 import 'package:b2b_commerce/src/home/search/home_serach.dart';
 import 'package:b2b_commerce/src/home/search/products_serach.dart';
-import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/account/register_channel_page.dart';
 import 'package:b2b_commerce/src/my/account/register_page.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
+import 'package:b2b_commerce/src/my/card/bank_card.dart';
 import 'package:b2b_commerce/src/my/card/my_card.dart';
 import 'package:b2b_commerce/src/my/feedback.dart';
 import 'package:b2b_commerce/src/my/integral/integral_center_page.dart';
@@ -69,7 +69,6 @@ import '../business/suppliers.dart';
 import '../home/account/login.dart';
 import '../my/account/register.dart';
 import '../my/index.dart';
-import '../my/my_account.dart';
 import '../my/my_addresses.dart';
 import '../my/my_client_services.dart';
 import '../my/my_invoices.dart';
@@ -252,6 +251,8 @@ class AppRoutes with GlobalRoutes {
 
   static const ROUTE_PRIVACY_GUIDE = '/privacy_guide';
 
+  static const ROUTE_BANK_CARD = '/bank_card';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -264,8 +265,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_SUBCONTRACTS_POOL: (context) => SubContractPoolPage(),
     ROUTE_SUBCONTRACTS_MINE: (context) => SubContractMinePage(),
     ROUTE_MY_HOME: (context) => MyHomePage(),
-    ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
-//    ROUTE_MY_BRAND: (context) => MyBrandPage(),
     ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
@@ -279,7 +278,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_INTEGRAL_CENTER: (context) => IntegralCenterPage(),
     // ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
     ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
-    ROUTE_MY_BILL: (context) => MyBillPage(),
     ROUTE_MY_HELP: (context) => MyHelpPage(),
     ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage(),
     ROUTE_PUBLISH_CENTER: (context) => PublishCenterPage(),
@@ -359,7 +357,8 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_FAVORITES: (context) => MyFavoritePage(),
     ROUTE_MESSAGE: (context) => MessagePage(),
     ROUTE_FEEDBACK: (context) => FeedbackPage(),
-    ROUTE_PRIVACY_GUIDE: (context) => PrivacyGuidePage()
+    ROUTE_PRIVACY_GUIDE: (context) => PrivacyGuidePage(),
+    ROUTE_BANK_CARD: (context) => BankCardPage()
   };
 
   static dynamic getVal(String key, BuildContext context) {

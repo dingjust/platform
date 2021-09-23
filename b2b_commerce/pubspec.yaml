@@ -318,8 +318,8 @@ flutter:
     - packages/assets/img/icons/b2b-v2/my/notice@3x.png
     - packages/assets/img/icons/b2b-v2/my/set@3x.png
     - packages/assets/img/icons/b2b-v2/my/service@3x.png
+    - packages/assets/img/icons/b2b-v2/my/card@3x.png
     - packages/assets/img/icons/b2b-v2/logo@3x.png
-
 
   fonts:
     - family: b2bIcons
