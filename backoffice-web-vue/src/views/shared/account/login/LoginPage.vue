@@ -232,6 +232,28 @@ export default {
     });
   },
   methods: {
+    requestNotifi () {
+      if (!window.Notification) {
+        console.log('浏览器不支持通知')
+      } else {
+        if (window.Notification.permission === 'default') {
+          // 用户还未选择，可以询问用户是否同意发送通知
+          window.Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              console.log('用户同意授权');
+            } else if (permission === 'default') {
+              console.warn('用户关闭授权 未刷新页面之前 可以再次请求授权');
+            } else {
+              // denied
+              console.log('用户拒绝授权 不能显示通知');
+            }
+          })
+        } else if (window.Notification.permission === 'denied') {
+          console.log('用户拒绝授权 不能显示通知');
+          alert('当前浏览器限制消息通知，请前往浏览器设置')
+        }
+      }
+    },
     async login() {
       let username = this.username.replace(/(\s*$)/g, "");
       if (this.activeTabName == "employee") {
@@ -243,6 +265,8 @@ export default {
         username,
         password,
       });
+
+      this.requestNotifi();
     },
     /// NC验证回调
     ncCallback(data) {

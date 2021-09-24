@@ -92,7 +92,7 @@ Vue.use(ElementUI, {
 Vue.use(Print);
 
 // Vue.use(directives);
-//数字输入框指令
+// 数字输入框指令
 Vue.directive('number-input', numberInput);
 
 Vue.prototype.fn = {};
@@ -104,17 +104,17 @@ import _nav_brand from '@/_nav_brand.js';
 import _nav_factory from '@/_nav_factory.js';
 
 Vue.prototype.CONFIG = {
-  nav(type = process.env.NAV) {
+  nav (type = process.env.NAV) {
     return type === 'FACTORY' ? _nav_factory : (type === 'BRAND' ? _nav_brand : _nav);
   },
-  //CDN-OSS域名,OSS资源引用路径
+  // CDN-OSS域名,OSS资源引用路径
   CDN_OSS_DOMAIN: 'https://cdn-oss.nbyjy.net'
 };
 
 Vue.mixin({
   props: ['viewMode'],
   mixins: [autoHeight],
-  data() {
+  data () {
     return {
       defaultDateValueFormat: 'yyyy-MM-dd"T"HH:mm:ssZ',
       mediaUploadUrl: '/b2b/media/file/upload',
@@ -124,23 +124,23 @@ Vue.mixin({
   },
   computed: {},
   methods: {
-    apis() {
+    apis () {
       if (this.$store.getters.currentUser != null && this.$store.getters.currentUser.type === 'TENANT') {
         return TENANT_APIS;
       }
 
       return NONE_TENANT_APIS;
     },
-    isBrand() {
+    isBrand () {
       return this.$store.getters.currentUser.type === 'BRAND';
     },
-    isFactory() {
+    isFactory () {
       return this.$store.getters.currentUser.type === 'FACTORY';
     },
-    isTenant() {
+    isTenant () {
       return this.$store.getters.currentUser.type === 'TENANT';
     },
-    compareDate(date1, date2) {
+    compareDate (date1, date2) {
       let result = false;
       if (date1.getFullYear() > date2.getFullYear()) {
         result = true;
@@ -157,7 +157,7 @@ Vue.mixin({
       return result;
     },
     // 枚举类型
-    getEnum(enumsName, code) {
+    getEnum (enumsName, code) {
       if (code !== null && code !== '') {
         const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);
         return result ? result['name'] : '';
@@ -167,10 +167,10 @@ Vue.mixin({
     },
 
     // 根据页面信息获取查询数据权限
-    getDataPerQuery(from) {
+    getDataPerQuery (from) {
       return getDataPermissionQuery(from);
     }
-  },
+  }
 });
 /* eslint-disable no-new */
 new Vue({
@@ -187,5 +187,6 @@ new Vue({
     this.$store.dispatch('GlobalCategoriesModule/getCategoriesData');
 
     // this.$store.dispatch('PointsExchangeModule/pollingSearch');
+    this.$store.dispatch('TaskApprovalModule/pollingSearch');
   }
 });
