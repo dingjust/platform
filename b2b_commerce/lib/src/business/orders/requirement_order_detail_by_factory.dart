@@ -417,51 +417,49 @@ class _RequirementOrderDetailByFactoryPageState
           children: [
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Color(0xffFED800),
-                  label: '联系对方',
-                  onTap: () {
-                    DialogHelper.showConfirm(
-                        title: '温馨提示',
-                        content:
+              color: Color(0xffFED800),
+              label: '联系对方',
+              onTap: () {
+                DialogHelper.showConfirm(
+                    title: '温馨提示',
+                    content:
                         '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
-                        confirm: () {
-                          var tel = '';
-                          if (model?.details?.agentContactPhone != null &&
-                              model?.details?.agentContactPhone != '') {
-                            //代理电话
-                            tel = model.details.agentContactPhone;
-                          } else {
-                            tel = model.details.contactPhone;
-                          }
-                          CallHelper.privacyCall(tel, context: context);
-                        });
-                  },
-                )),
+                    confirm: () {
+                      var tel = '';
+                      if (model?.details?.agentContactPhone != null &&
+                          model?.details?.agentContactPhone != '') {
+                        //代理电话
+                        tel = model.details.agentContactPhone;
+                      } else {
+                        tel = model.details.contactPhone;
+                      }
+                      CallHelper.privacyCall(tel, context: context);
+                    });
+              },
+            )),
             Container(width: 15),
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Colors.blueAccent,
-                  gradient: LinearGradient(
-                      colors: [Color(0xffFFDB34), Color(0xffFF7C18)]),
-                  label: '生产报价',
-                  onTap: () async {
-                    QuoteModel newQuote =
+              color: Colors.blueAccent,
+              gradient: LinearGradient(
+                  colors: [Color(0xffFFDB34), Color(0xffFF7C18)]),
+              label: '生产报价',
+              onTap: () async {
+                QuoteModel newQuote =
                     await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            RequirementQuoteOrderForm(
+                        builder: (context) => RequirementQuoteOrderForm(
                               model: orderModel,
                               quoteModel: QuoteModel(attachments: []),
                             )));
 
-                    if (newQuote != null) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              QuoteOrderDetailPage(
-                                newQuote.code,
-                              )));
-                    }
-                  },
-                ))
+                if (newQuote != null) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => QuoteOrderDetailPage(
+                            newQuote.code,
+                          )));
+                }
+              },
+            ))
           ],
         ),
       ),

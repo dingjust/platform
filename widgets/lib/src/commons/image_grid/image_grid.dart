@@ -61,6 +61,80 @@ class ImageSliverGrid extends StatelessWidget {
   }
 }
 
+class ImageGrid extends StatelessWidget {
+  final List<MediaModel> medias;
+
+  const ImageGrid({Key key, this.medias = const []}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // return SliverGrid(
+    //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    //     crossAxisCount: crossAxisCountMap[getImages().length], //Grid按两列显示
+    //     mainAxisSpacing: 12.0,
+    //     crossAxisSpacing: 12.0,
+    //     childAspectRatio: childAspectRatioMap[getImages().length],
+    //   ),
+    //   delegate: SliverChildBuilderDelegate(
+    //     (BuildContext context, int index) {
+    //       //创建子widget
+    //       return _ImageItem(
+    //         e: getImages()[index],
+    //         onTap: () => onPreview(index, context),
+    //       );
+    //     },
+    //     childCount: getImages().length,
+    //   ),
+    // );
+
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCountMap[getImages().length], //Grid按两列显示
+        mainAxisSpacing: 12.0,
+        crossAxisSpacing: 12.0,
+        childAspectRatio: childAspectRatioMap[getImages().length],
+      ),
+      shrinkWrap: true,
+      itemCount: getImages().length,
+      itemBuilder: (BuildContext context, int index) {
+        //创建子widget
+        return _ImageItem(
+          e: getImages()[index],
+          onTap: () => onPreview(index, context),
+        );
+      },
+    );
+  }
+
+  List<MediaModel> getImages() {
+    if (medias != null) {
+      if (medias.length > 9) {
+        return medias.getRange(0, 9).toList();
+      }
+      return medias;
+    }
+    return [];
+  }
+
+  //图片预览
+  void onPreview(int index, BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GalleryPhotoViewWrapper(
+          galleryItems:
+              getImages().map((model) => GalleryItem(model: model)).toList(),
+          backgroundDecoration: const BoxDecoration(
+            color: Colors.black,
+          ),
+          initialIndex: index,
+          scrollDirection: Axis.horizontal,
+        ),
+      ),
+    );
+  }
+}
+
 class _ImageItem extends StatelessWidget {
   final MediaModel e;
 

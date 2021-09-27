@@ -1,8 +1,7 @@
-import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
+import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/company_bar.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info_widgets.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
-import 'package:b2b_commerce/src/business/cooperator/cooperator_item.dart';
-import 'package:b2b_commerce/src/business/doc/doc_signature_tag.dart';
-import 'package:b2b_commerce/src/business/orders/sales_production/out_order/form/form_components.dart';
 import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
@@ -35,6 +34,8 @@ class _ReconciliationOrderDetailPageState
   ///是否需要回调刷新
   bool needRefresh = false;
 
+  UserModel user = UserBLoC.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
@@ -52,28 +53,36 @@ class _ReconciliationOrderDetailPageState
           return WillPopScope(
               onWillPop: onPop,
               child: Scaffold(
-                appBar: AppBar(
-                  centerTitle: true,
-                  title: Text('对账单详情'),
-                  backgroundColor: Constants.THEME_COLOR_MAIN,
-                  elevation: 0.5,
-                  actions: [
+                appBar: AppBarFactory.buildDefaultAppBar(
+                  '对账单详情',
+                  actions: <Widget>[
                     IconButton(
                         icon: Icon(
                           B2BIconsV2.share,
                           color: Color(0xff231815),
                         ),
-                        onPressed: onShare),
+                        onPressed: onShare)
                   ],
                 ),
                 body: Container(
-                  padding: EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  color: Color(0xFFF7F7F7),
                   child: ListView(
                     children: <Widget>[
-                      CooperatorItem(
-                        model: order.cooperator,
+                      InfoCard(
+                        margin: EdgeInsets.symmetric(vertical: 12),
+                        child: _buildStateRow(),
                       ),
+                      Container(
+                        margin: EdgeInsets.only(),
+                        child: CooperatorBar(
+                          model: order.cooperator,
+                        ),
+                      ),
+                      _buildContact(),
                       _main(),
+                      _buildAttachments(),
+                      _buildRemarks(),
                       _OrderInfo(
                         order: order,
                       )
@@ -98,115 +107,212 @@ class _ReconciliationOrderDetailPageState
 
   Widget _buildStateRow() {
     return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+      child: Column(
         children: [
-          Text('.${FastReconciliationSheetStateLocalizedMap[order.state]}',
+          Text('${stateStr()}',
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: getReconciliationOrderStateColor(order.state)))
+                  color: Color(0xFF222222))),
+          Container(
+            height: 6,
+            width: 72,
+            decoration: BoxDecoration(
+                color: Color(0xFFFED800),
+                borderRadius: BorderRadius.circular(4)),
+          ),
         ],
       ),
     );
   }
 
-  ///单据
-  Widget _main() {
-    return Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(top: 10),
+  Widget _buildContact() {
+    String name = '';
+    String phone = '';
+    TextAlign textAlign = TextAlign.right;
+    if (order.cooperator.partner != null) {
+      name = order.cooperator.partner.contactPerson;
+      phone = order.cooperator.partner.contactPhone;
+    } else {
+      name = order.cooperator.contactPerson;
+      phone = order.cooperator.contactPhone;
+    }
+
+    return InfoCard(
+        margin: EdgeInsets.symmetric(vertical: 12),
         child: Column(
           children: [
-            _buildStateRow(),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [FormLabel('标题：')],
-              ),
+            InfoRow(
+              label: '联系人',
+              val: '$name',
+              textAlign: textAlign,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Text(
-                    '${order.title ?? ''}',
-                  ))
-                ],
-              ),
+            InfoDivider(),
+            InfoRow(
+              label: '联系电话',
+              val: '$phone',
+              textAlign: textAlign,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [FormLabel('电子对账单：')],
-              ),
-            ),
-            _buildDocs(),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [FormLabel('附件：')],
-              ),
-            ),
-            _buildAttachments(),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [FormLabel('备注：')],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Text(
-                    '${order.remarks ?? ''}',
-                  ))
-                ],
-              ),
-            ),
+            InfoDivider(),
+            InfoRow(
+              label: '类型',
+              val: '${CooperatorTypeLocalizedMap[order.cooperator.type]}',
+              textAlign: textAlign,
+            )
           ],
         ));
   }
 
+  ///单据
+  Widget _main() {
+    return InfoCard(
+        child: GestureDetector(
+      onTap: _onSignature,
+      child: Column(children: [
+        Row(
+          children: [
+            Text(
+              '对账单',
+              style: TextStyle(color: Color(0xFF999999), fontSize: 14),
+            )
+          ],
+        ),
+        Container(
+          margin: EdgeInsets.only(
+            top: 14,
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 24,
+                margin: EdgeInsets.only(right: 4),
+                child: Image.asset(
+                  'img/icons/b2b-v2/my/account@3x.png',
+                  package: 'assets',
+                  width: 24,
+                ),
+              ),
+              Expanded(
+                  child: Text(
+                '${order.title}',
+                style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+              ))
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 28),
+          child: Row(
+            children: [
+              Text(
+                '结算金额',
+                style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+              ),
+              Expanded(
+                  child: RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                          text: '￥',
+                          style:
+                              TextStyle(color: Color(0xFFFF4D4F), fontSize: 10),
+                          children: [
+                            TextSpan(
+                                text: '${order.amountPayableTotal}',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold))
+                          ])))
+            ],
+          ),
+        ),
+      ]),
+    ));
+  }
+
+  Widget _buildRemarks(
+      {TextStyle textStyle =
+          const TextStyle(color: Color(0xFF222222), fontSize: 14)}) {
+    return InfoCard(
+      margin: EdgeInsets.only(top: 12),
+      child: Row(
+        children: [
+          Container(
+            width: 96,
+            child: Text('备注', style: textStyle),
+          ),
+          Expanded(
+            child: Text(
+              order.remarks != null && order.remarks != ''
+                  ? '${order.remarks}'
+                  : '-',
+              style: textStyle,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget _bottomSheet({double height = 55}) {
     //若对账单状态为待乙方签署，且账单为线下签署则可以确认跳过
-    if (order.state == FastReconciliationSheetState.PENDING_B_SIGN) {
-      if (order.docSignatures != null && order.docSignatures.isNotEmpty) {
-        if (order.docSignatures.first.signMethod ==
-            SignMethodType.OFFLINE_SIGN) {
-          return Container(
-            height: height,
-            child: Row(
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                      height: height,
-                      child: FlatButton(
-                          onPressed: () => _onConfirm(),
-                          color: Constants.THEME_COLOR_MAIN,
-                          child: Text('确认账单',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                              ))),
-                    ))
-              ],
-            ),
-          );
-        }
+    if (needSign()) {
+      //不签署确认
+      if (order.otherPartyNeedSigned != null &&
+          order.otherPartyNeedSigned == false) {
+        return Container(
+          height: height,
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: height,
+                    child: FlatButton(
+                        onPressed: _onConfirm,
+                        color: Color(0xFFD8D8D8),
+                        child: Text('直接确认',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF222222),
+                            ))),
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: height,
+                    child: FlatButton(
+                        onPressed: _onSignature,
+                        color: Constants.THEME_COLOR_MAIN,
+                        child: Text('签署确认',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF000000),
+                            ))),
+                  ))
+            ],
+          ),
+        );
       }
     }
 
     return Container(
-      height: 0,
+      height: height,
+      child: Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: Container(
+                height: height,
+                child: FlatButton(
+                    onPressed: _onSignature,
+                    color: Constants.THEME_COLOR_MAIN,
+                    child: Text('对账',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF000000),
+                        ))),
+              ))
+        ],
+      ),
     );
   }
 
@@ -232,52 +338,20 @@ class _ReconciliationOrderDetailPageState
 
   Widget _buildAttachments() {
     return (order?.medias != null && order.medias.isNotEmpty)
-        ? Row(
-            children: [Expanded(child: Attachments(list: order?.medias ?? []))],
-          )
+        ? InfoCard(
+        margin: EdgeInsets.symmetric(vertical: 12),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 14),
+              child: InfoTitle('附件'),
+            ),
+            ImageGrid(
+              medias: order.medias,
+            )
+          ],
+        ))
         : Container();
-  }
-
-  Widget _buildDocs() {
-    return Row(children: [
-      for (DocSignatureModel doc in (order.docSignatures ?? [])
-          .where((element) => element.state != DocSignatureState.CANCELED))
-        _buildBtn(doc)
-    ]);
-  }
-
-  Widget _buildBtn(DocSignatureModel model,
-      {double height = 65, double width = 80}) {
-    return Container(
-      height: height,
-      width: width,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      child: Material(
-        color: Colors.white,
-        child: InkWell(
-          onTap: () {
-            DocSignatureHelper.open(
-                    context: context, model: model, disable: signDisable)
-                .then((value) {
-              //需要刷新
-              if (value != null && value) {
-                setState(() {
-                  order = null;
-                  needRefresh = true;
-                });
-              }
-            });
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DocSignatureHelper.getDocTypeIcon(signMethod: model.signMethod),
-              DocSignatureTag(doc: model)
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   ///乙方确认
@@ -290,13 +364,13 @@ class _ReconciliationOrderDetailPageState
         backgroundColor: Colors.black38,
         toastBuilder: (cancelFunc) => AlertDialog(
               content: Container(
-                height: 100,
+                height: 150,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(bottom: 10),
-                      child: Text('是否确认对账单？'),
+                      child: Text('是否不进行电子签署，直接确认对账单？'),
                     ),
                     Row(
                       children: [
@@ -343,80 +417,163 @@ class _ReconciliationOrderDetailPageState
   ///审批中,或取消状态则禁用签署
   bool get signDisable =>
       order.state == FastReconciliationSheetState.PENDING_APPROVAL ||
-      order.state == FastReconciliationSheetState.CANCELLED;
+          order.state == FastReconciliationSheetState.CANCELLED;
+
+  ///获取最新状态
+  DocSignatureModel getLast() {
+    List<DocSignatureModel> datas = order.docSignatures ?? [];
+    return datas.lastWhere(
+            (element) => element.state != DocSignatureState.CANCELED,
+        orElse: () => null);
+  }
+
+  bool needSign() {
+    bool needToSign = false;
+    if ([
+      FastReconciliationSheetState.PENDING_A_SIGN,
+      FastReconciliationSheetState.PENDING_B_SIGN
+    ].contains(order.state)) {
+      DocSignatureModel doc = getLast();
+      UserModel user = UserBLoC.instance.currentUser;
+      if (doc != null) {
+        //待我签署
+        if (doc.state == DocSignatureState.WAIT_PARTYA_SIGN) {
+          if (user.companyCode == doc.partyA.uid) {
+            needToSign = true;
+          }
+        } else if (doc.state == DocSignatureState.WAIT_PARTYB_SIGN) {
+          if (user.companyCode == doc.partyB.uid) {
+            needToSign = true;
+          }
+        }
+      }
+    }
+    return needToSign;
+  }
+
+  ///状态
+  String stateStr() {
+    String stateStr = FastReconciliationSheetStateLocalizedMap[order.state];
+    if ([
+      FastReconciliationSheetState.PENDING_A_SIGN,
+      FastReconciliationSheetState.PENDING_B_SIGN
+    ].contains(order.state)) {
+      DocSignatureModel doc = getLast();
+      UserModel user = UserBLoC.instance.currentUser;
+      if (doc != null) {
+        //待我签署
+        stateStr = '${DocSignatureStateLocalizedMap[doc.state]}';
+        if (doc.state == DocSignatureState.WAIT_PARTYA_SIGN) {
+          if (user.companyCode == doc.partyA.uid) {
+            stateStr = '待我签署';
+          } else {
+            stateStr = '待对方签署';
+          }
+        } else if (doc.state == DocSignatureState.WAIT_PARTYB_SIGN) {
+          if (user.companyCode == doc.partyB.uid) {
+            stateStr = '待我签署';
+          } else {
+            stateStr = '待对方签署';
+          }
+        }
+      }
+    }
+    return stateStr;
+  }
+
+  void _onSignature() async {
+    DocSignatureModel model = getLast();
+    DocSignatureHelper.open(
+        context: context, model: model, disable: signDisable)
+        .then((value) {
+      //需要刷新
+      if (value != null && value) {
+        setState(() {
+          order = null;
+          needRefresh = true;
+        });
+      }
+    });
+  }
 }
 
 ///订单基础信息
 class _OrderInfo extends StatelessWidget {
   final FastReconciliationSheetModel order;
 
-  final TextStyle _infoStyle = const TextStyle(color: Colors.grey);
+  final TextStyle _infoStyle =
+  const TextStyle(color: Color(0xFF222222), fontSize: 14);
 
   const _OrderInfo({Key key, this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+    return InfoCard(
+      margin: EdgeInsets.symmetric(vertical: 12),
       child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: _buildInfoRow('订单编号', order.code),
-              ),
-              GestureDetector(
-                onTap: () {
-                  copyToClipboard(order.code);
-                },
-                child: Text(
-                  '复制单号',
-                  style: TextStyle(
-                    color: Colors.orangeAccent,
+        children: [
+          _buildInfoRow(
+              '订单编号',
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${order.code}',
+                      style: _infoStyle,
+                    ),
                   ),
-                ),
-              )
-            ],
+                  GestureDetector(
+                      onTap: () => copyToClipboard(order.code),
+                      child: Container(
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                            color: Color(0xFFFFEDED),
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Text(
+                          '复制',
+                          style:
+                          TextStyle(color: Color(0xFFFF4D4F), fontSize: 12),
+                        ),
+                      ))
+                ],
+              )),
+          InfoDivider(
+            height: 28,
           ),
           _buildInfoRow(
-              '创建时间', DateFormatUtil.formatYMDHMS(order.creationtime)),
+            '创建时间',
+            Text(
+              '${DateFormatUtil.formatYMDHMS(order.creationtime)}',
+              style: _infoStyle,
+            ),
+          ),
         ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
       ),
     );
   }
 
-  Widget _buildInfoRow(String title, String val) {
-    if (val == '' || val == null) {
-      return Container();
-    } else {
-      return Row(
-        children: [
-          Container(
-            width: 80,
-            child: Text(
-              '$title：',
-              style: _infoStyle,
-              textAlign: TextAlign.justify,
-            ),
-          ),
-          Expanded(
-              child: Text(
-            '$val',
-            style: _infoStyle,
-          ))
-        ],
-      );
+  Widget _buildInfoRow(String title, Widget child) {
+    {
+      return Container(
+          child: Row(
+            children: [
+              Container(
+                width: 86,
+                child: Text(
+                  '$title',
+                  style: TextStyle(color: Color(0xFF999999), fontSize: 14),
+                ),
+              ),
+              Expanded(child: child)
+            ],
+          ));
     }
   }
 
   ///复制粘贴
-  copyToClipboard(final String text) {
+  void copyToClipboard(String text) {
     if (text != null) {
       Clipboard.setData(ClipboardData(text: text));
       BotToast.showText(text: '复制到粘贴板');

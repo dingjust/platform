@@ -76,6 +76,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       body: Container(
           child: ListView(
         children: <Widget>[
+          _buildNeedSign(),
           ..._buildEntries(),
           _buildAdditional(),
           _buildRemarks(),
@@ -83,6 +84,67 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
           FormBtns(form: form, oldFormId: oldFormId),
         ],
       )),
+    );
+  }
+
+  Widget _buildNeedSign() {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '是否对方需要签署',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ]),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ChoiceChip(
+                    label: Container(
+                      height: 20,
+                      width: 60,
+                      child: Center(child: Text('是')),
+                    ),
+                    backgroundColor: Colors.grey[100],
+                    selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                    selected: form.otherPartyNeedSigned,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        // .details.invoiceNeeded = true;
+                        form.otherPartyNeedSigned = true;
+                      });
+                    },
+                  ),
+                  ChoiceChip(
+                    label: Container(
+                      height: 20,
+                      width: 60,
+                      child: Center(child: Text('否')),
+                    ),
+                    backgroundColor: Colors.grey[100],
+                    selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                    selected: !form.otherPartyNeedSigned,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        form.otherPartyNeedSigned = false;
+                      });
+                    },
+                  ),
+                ]),
+          ),
+        ],
+      ),
     );
   }
 
@@ -364,7 +426,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       additionalCharges: [],
       salesProductionOrder: widget.order,
       belongRoleType: getRoleType(),
-
+      otherPartyNeedSigned: true,
       // shipParty: widget.order.targetCooperator.partner,
       // receiveParty: widget.order.originCompany
     );
@@ -438,6 +500,9 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
     FastReconciliationSheetModel data = widget.model;
     if (data.medias == null) {
       data.medias = [];
+    }
+    if (data.otherPartyNeedSigned == null) {
+      data.otherPartyNeedSigned = true;
     }
 
     controllersMaps = {};
