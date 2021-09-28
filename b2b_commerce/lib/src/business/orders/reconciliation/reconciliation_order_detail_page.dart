@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/company_bar.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info_widgets.dart';
+import 'package:b2b_commerce/src/_shared/widgets/order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -69,9 +70,10 @@ class _ReconciliationOrderDetailPageState
                   color: Color(0xFFF7F7F7),
                   child: ListView(
                     children: <Widget>[
-                      InfoCard(
+                      OrderStateCard(
                         margin: EdgeInsets.symmetric(vertical: 12),
-                        child: _buildStateRow(),
+                        val: stateStr(),
+                        val2: '联系对方进行订单对账',
                       ),
                       Container(
                         margin: EdgeInsets.only(),
@@ -102,27 +104,6 @@ class _ReconciliationOrderDetailPageState
       },
       initialData: null,
       future: _getData(),
-    );
-  }
-
-  Widget _buildStateRow() {
-    return Container(
-      child: Column(
-        children: [
-          Text('${stateStr()}',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF222222))),
-          Container(
-            height: 6,
-            width: 72,
-            decoration: BoxDecoration(
-                color: Color(0xFFFED800),
-                borderRadius: BorderRadius.circular(4)),
-          ),
-        ],
-      ),
     );
   }
 
@@ -339,18 +320,18 @@ class _ReconciliationOrderDetailPageState
   Widget _buildAttachments() {
     return (order?.medias != null && order.medias.isNotEmpty)
         ? InfoCard(
-        margin: EdgeInsets.symmetric(vertical: 12),
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.only(bottom: 14),
-              child: InfoTitle('附件'),
-            ),
-            ImageGrid(
-              medias: order.medias,
-            )
-          ],
-        ))
+            margin: EdgeInsets.symmetric(vertical: 12),
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(bottom: 14),
+                  child: InfoTitle('附件'),
+                ),
+                ImageGrid(
+                  medias: order.medias,
+                )
+              ],
+            ))
         : Container();
   }
 
