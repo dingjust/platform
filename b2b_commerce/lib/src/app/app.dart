@@ -106,13 +106,13 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
   void initListener() {
     listenLogin();
     //粘贴板是否有值
-    Provider.of<ClipboardHelper>(context, listen: false)
-      ..setNavigatorKey(_navigatorKey)
-      ..getClipboardText(context: context);
+    // Provider.of<ClipboardHelper>(context, listen: false)
+    //   ..setNavigatorKey(_navigatorKey)
+    //   ..getClipboardText(context: context);
     //更新检测
     Future.delayed(Duration(seconds: 3)).then((r) {
       AppVersionHelper appVersionHelper =
-          Provider.of<AppVersionHelper>(context, listen: false);
+      Provider.of<AppVersionHelper>(context, listen: false);
       appVersionHelper.checkVersion(
           context, AppBLoC.instance?.packageInfo?.version, 'nbyjy');
     });
@@ -257,15 +257,15 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
     );
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    //APP状态更改
-    print('App状态:$state');
-    if (state == AppLifecycleState.resumed) {
-      Provider.of<ClipboardHelper>(context, listen: false)
-          .getClipboardText(context: context);
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   //APP状态更改
+  //   print('App状态:$state');
+  //   if (state == AppLifecycleState.resumed) {
+  //     Provider.of<ClipboardHelper>(context, listen: false)
+  //         .getClipboardText(context: context);
+  //   }
+  // }
 
   ///全局消息处理
   Future _globalChannelMethodHandler(MethodCall methodCall) {
