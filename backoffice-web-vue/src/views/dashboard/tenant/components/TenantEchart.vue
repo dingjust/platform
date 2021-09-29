@@ -78,13 +78,18 @@ export default {
       if (this.chartData.data.length <= 0) {
         return
       }
-      let echartData = this.chartData.data.map(item => item.currentDate + ': ' + (this.code == 'salesAmount' ? (item.amount + '元') : item.total))
+      let str = ''
+      this.chartData.data.forEach(item => {
+        str = str + item.currentDate + ':' + (this.code == 'salesAmount' ? (item.amount + '元') : item.total) + '\r\n'
+      })
+      // let echartData = this.chartData.data.map(item => item.currentDate + ': ' + (this.code == 'salesAmount' ? (item.amount + '元') : item.total))
 
       var urlObject = window.URL || window.webkitURL || window;
-      var export_blob = new Blob([echartData.toString().replaceAll(',', '\r\n')]);
+      // var export_blob = new Blob([echartData.toString().replaceAll(',', '\r\n')]);
+      var export_blob = new Blob([str]);
       var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
       save_link.href = urlObject.createObjectURL(export_blob);
-      save_link.download = this.chartData.name;
+      save_link.download = this.chartData.name + '.txt';
 
       var ev = document.createEvent("MouseEvents");
       ev.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
