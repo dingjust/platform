@@ -119,9 +119,9 @@ class AmapState with ChangeNotifier {
                 onPressed: () async {
                   cancelFunc();
                   bool result = await openAppSetting();
-                  if (result ?? false) {
-                    bool queryResult = await loopQueryStatus();
-                  }
+                  // if (result ?? false) {
+                  //   bool queryResult = await loopQueryStatus();
+                  // }
                 },
                 child: const Text(
                   '设置',
@@ -149,13 +149,11 @@ class AmapState with ChangeNotifier {
         _district = _aMapLocation.district;
         _latitude = _aMapLocation.latitude;
         _longitude = _aMapLocation.longitude;
+        // notifyListeners();
       }
       AMapLocationClient.stopLocation();
     } catch (e) {
       print(e);
-    } finally {
-      ///通知刷新
-      notifyListeners();
     }
   }
 
@@ -196,11 +194,12 @@ class AmapState with ChangeNotifier {
   }
 
   ///覆盖定位信息
-  void setAMapLocation({String aOIName,
-    double longitude,
-    double latitude,
-    String city,
-    String district}) {
+  void setAMapLocation(
+      {String aOIName,
+      double longitude,
+      double latitude,
+      String city,
+      String district}) {
     _aMapLocation = AMapLocation(
         city: city ?? this.city,
         district: district ?? this.district,

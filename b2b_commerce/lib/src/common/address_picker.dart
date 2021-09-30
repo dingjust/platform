@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:models/models.dart';
 
 typedef void ChangeData(Map<String, dynamic> map);
 typedef List<Widget> CreateWidgetList();

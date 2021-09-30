@@ -7,11 +7,6 @@ import 'package:services/services.dart';
 
 typedef FormValidateFunc = bool Function();
 
-const String DEFAULT_PROGRESS_PLAN_NAME = '默认节点方案';
-
-///默认警告天数
-const int DEFAULT_WARNING_DAY = 3;
-
 ///外接订单按钮
 class FormBtns extends StatelessWidget {
   final FastReconciliationSheetModel form;

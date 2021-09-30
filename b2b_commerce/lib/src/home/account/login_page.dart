@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/business/services/text_field_border_component_V2.dart';
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
@@ -476,7 +477,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       Function cancelFunc = BotToast.showLoading();
       BaseResponse baseResponse =
-      await UserRepositoryImpl.loginByCaptcha(_phoneController.text);
+          await UserRepositoryImpl.loginByCaptcha(_phoneController.text);
       cancelFunc.call();
       if (baseResponse == null) {
         BotToast.showText(text: '未知错误');
@@ -485,8 +486,7 @@ class _LoginPageState extends State<LoginPage> {
           BotToast.showText(text: '${baseResponse.msg}');
         else
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  CodeLoginPage(
+              builder: (context) => CodeLoginPage(
                     accountNum: baseResponse.data,
                     phone: _phoneController.text,
                   )));
@@ -553,73 +553,87 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void showServiceProtocol() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString("packages/assets/document/serviceProtocol.txt"),
-            initialData: null,
-            builder: (context, snapshot) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                          child: Text(
-                            '钉单平台服务协议',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      snapshot.data != null
-                          ? Text(snapshot.data)
-                          : Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                ),
-              );
-            });
-      },
-    );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WebviewPage(
+                  url: 'https://www.nbyjy.net/service.html',
+                )));
+    // showDialog<void>(
+    //   context: context,
+    //   barrierDismissible: true, // user must tap button!
+    //   builder: (context) {
+    //     return FutureBuilder(
+    //         future: DefaultAssetBundle.of(context)
+    //             .loadString("packages/assets/document/serviceProtocol.txt"),
+    //         initialData: null,
+    //         builder: (context, snapshot) {
+    //           return AlertDialog(
+    //             content: SingleChildScrollView(
+    //               child: ListBody(
+    //                 children: <Widget>[
+    //                   Container(
+    //                     margin: EdgeInsets.only(bottom: 10),
+    //                     child: Center(
+    //                       child: Text(
+    //                         '钉单平台服务协议',
+    //                         style: TextStyle(fontWeight: FontWeight.bold),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   snapshot.data != null
+    //                       ? Text(snapshot.data)
+    //                       : Center(child: CircularProgressIndicator())
+    //                 ],
+    //               ),
+    //             ),
+    //           );
+    //         });
+    //   },
+    // );
   }
 
   void showPrivacyProtocol() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString("packages/assets/document/privacyProtocol.txt"),
-            initialData: null,
-            builder: (context, snapshot) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                          child: Text(
-                            '隐私政策声明',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      snapshot.data != null
-                          ? Text(snapshot.data)
-                          : Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                ),
-              );
-            });
-      },
-    );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WebviewPage(
+                  url: 'https://www.nbyjy.net/policy.html',
+                )));
+    // showDialog<void>(
+    //   context: context,
+    //   barrierDismissible: true, // user must tap button!
+    //   builder: (context) {
+    //     return FutureBuilder(
+    //         future: DefaultAssetBundle.of(context)
+    //             .loadString("packages/assets/document/privacyProtocol.txt"),
+    //         initialData: null,
+    //         builder: (context, snapshot) {
+    //           return AlertDialog(
+    //             content: SingleChildScrollView(
+    //               child: ListBody(
+    //                 children: <Widget>[
+    //                   Container(
+    //                     margin: EdgeInsets.only(bottom: 10),
+    //                     child: Center(
+    //                       child: Text(
+    //                         '隐私政策声明',
+    //                         style: TextStyle(fontWeight: FontWeight.bold),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   snapshot.data != null
+    //                       ? Text(snapshot.data)
+    //                       : Center(child: CircularProgressIndicator())
+    //                 ],
+    //               ),
+    //             ),
+    //           );
+    //         });
+    //   },
+    // );
   }
 }
 

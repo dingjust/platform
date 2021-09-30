@@ -5,10 +5,11 @@ import 'package:umeng_common_sdk/umeng_common_sdk.dart';
 ///友盟移动统计插件
 class UmengPlugin {
   ///友盟初始化
-  static Future<dynamic> initCommon(
-      String androidAppkey, String iosAppkey, String channel) async {
-    final dynamic result =
-        UmengCommonSdk.initCommon(androidAppkey, iosAppkey, channel);
+  static Future<dynamic> initCommon() async {
+    final dynamic result = UmengCommonSdk.initCommon(
+        GlobalConfigs.UMENG_APP_KEY_ANDROID,
+        GlobalConfigs.UMENG_APP_KEY_IOS,
+        'Umeng');
     return result;
   }
 

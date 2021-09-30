@@ -1,5 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
+import 'package:b2b_commerce/src/helper/local_storage_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
 
 ///隐私同意指引页面内
 class PrivacyGuidePage extends StatefulWidget {
@@ -92,7 +95,7 @@ class _PrivacyGuidePageState extends State<PrivacyGuidePage> {
       child: Row(children: [
         Expanded(
             child: GestureDetector(
-          onTap: onAgree,
+              onTap: onDisaAgree,
           child: Container(
               height: 60,
               color: Colors.grey[100],
@@ -118,12 +121,21 @@ class _PrivacyGuidePageState extends State<PrivacyGuidePage> {
               ),
             ),
           ),
-        )),
+            )),
       ]),
     );
   }
 
-  void onAgree() {
+  void onDisaAgree() {
+    Navigator.popUntil(context, ModalRoute.withName('/'));
+  }
+
+  void onAgree() async {
+    Provider.of<LocalStorageHelper>(context, listen: false)
+        .setPrivacyAgreeTime();
+
+    //执行友盟初始化
+    UmengPlugin.initCommon();
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }
