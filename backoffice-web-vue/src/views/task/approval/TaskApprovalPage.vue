@@ -55,7 +55,7 @@
 
   import TaskApprovalToolbar from './toolbar/TaskApprovalToolbar';
   import TaskApprovalList from './list/TaskApprovalList';
-import brands from '@/store/modules/user/brands';
+  
   export default {
     name: 'TaskApprovalPage',
     components: {
