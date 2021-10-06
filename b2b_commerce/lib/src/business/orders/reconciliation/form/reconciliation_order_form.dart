@@ -347,68 +347,70 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
   List<Widget> _buildAdditionalEntries() {
     List<Widget> entries = [];
 
-    for (int i = 0; i < form.additionalCharges.length; i++) {
-      entries.add(Container(
-          margin: EdgeInsets.symmetric(vertical: 5),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextFieldBorderComponent(
-                  padding: EdgeInsets.all(0),
-                  hideDivider: true,
-                  isRequired: true,
-                  textAlign: TextAlign.left,
-                  hintText: '名称',
-                  enabled: form.additionalCharges[i].isDefault == null,
-                  controller: additionNameControllers[i],
-                  focusNode: additionNameNodes[i],
-                  onChanged: (value) {
-                    form.additionalCharges[i].remarks = value;
-                  },
-                ),
-              ),
-              Container(width: 10),
-              Expanded(
-                child: TextFieldBorderComponent(
-                  padding: EdgeInsets.all(0),
-                  hideDivider: true,
-                  isRequired: true,
-                  textAlign: TextAlign.right,
-                  hintText: '增扣款',
-                  enabled: form.additionalCharges[i].isDefault == null,
-                  inputType: TextInputType.numberWithOptions(
-                      decimal: true, signed: true),
-                  controller: additionValControllers[i],
-                  focusNode: additionValNodes[i],
-                  onChanged: (value) {
-                    double result = double.tryParse(value);
-                    setState(() {
-                      if (result != null) {
-                        form.additionalCharges[i].amount = result;
-                      }
-                    });
-                  },
-                ),
-              ),
-              Opacity(
-                opacity: form.additionalCharges[i].isDefault ?? false ? 0 : 1,
-                child: TextButton(
-                    onPressed: () {
-                      if (form.additionalCharges[i].isDefault == null ||
-                          !form.additionalCharges[i].isDefault) {
-                        setState(() {
-                          form.additionalCharges.removeAt(i);
-                          additionNameControllers.removeAt(i);
-                          additionNameNodes.removeAt(i);
-                          additionValControllers.removeAt(i);
-                          additionValNodes.removeAt(i);
-                        });
-                      }
+    if (form.additionalCharges != null) {
+      for (int i = 0; i < form.additionalCharges.length; i++) {
+        entries.add(Container(
+            margin: EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFieldBorderComponent(
+                    padding: EdgeInsets.all(0),
+                    hideDivider: true,
+                    isRequired: true,
+                    textAlign: TextAlign.left,
+                    hintText: '名称',
+                    enabled: form.additionalCharges[i].isDefault == null,
+                    controller: additionNameControllers[i],
+                    focusNode: additionNameNodes[i],
+                    onChanged: (value) {
+                      form.additionalCharges[i].remarks = value;
                     },
-                    child: Text('删除')),
-              )
-            ],
-          )));
+                  ),
+                ),
+                Container(width: 10),
+                Expanded(
+                  child: TextFieldBorderComponent(
+                    padding: EdgeInsets.all(0),
+                    hideDivider: true,
+                    isRequired: true,
+                    textAlign: TextAlign.right,
+                    hintText: '增扣款',
+                    enabled: form.additionalCharges[i].isDefault == null,
+                    inputType: TextInputType.numberWithOptions(
+                        decimal: true, signed: true),
+                    controller: additionValControllers[i],
+                    focusNode: additionValNodes[i],
+                    onChanged: (value) {
+                      double result = double.tryParse(value);
+                      setState(() {
+                        if (result != null) {
+                          form.additionalCharges[i].amount = result;
+                        }
+                      });
+                    },
+                  ),
+                ),
+                Opacity(
+                  opacity: form.additionalCharges[i].isDefault ?? false ? 0 : 1,
+                  child: TextButton(
+                      onPressed: () {
+                        if (form.additionalCharges[i].isDefault == null ||
+                            !form.additionalCharges[i].isDefault) {
+                          setState(() {
+                            form.additionalCharges.removeAt(i);
+                            additionNameControllers.removeAt(i);
+                            additionNameNodes.removeAt(i);
+                            additionValControllers.removeAt(i);
+                            additionValNodes.removeAt(i);
+                          });
+                        }
+                      },
+                      child: Text('删除')),
+                )
+              ],
+            )));
+      }
     }
     return entries;
   }
@@ -542,13 +544,16 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       nodesMaps[element.product.code] = nodesMap;
     });
 
-    data.additionalCharges.forEach((element) {
-      additionNameControllers.add(TextEditingController(text: element.remarks));
-      additionNameNodes.add(FocusNode());
-      additionValControllers
-          .add(TextEditingController(text: element.amount.toStringAsFixed(2)));
-      additionValNodes.add(FocusNode());
-    });
+    if (data.additionalCharges != null) {
+      data?.additionalCharges?.forEach((element) {
+        additionNameControllers
+            .add(TextEditingController(text: element.remarks));
+        additionNameNodes.add(FocusNode());
+        additionValControllers.add(
+            TextEditingController(text: element.amount.toStringAsFixed(2)));
+        additionValNodes.add(FocusNode());
+      });
+    }
 
     //判断是否对方修改
     if (data.belongRoleType != getRoleType()) {
