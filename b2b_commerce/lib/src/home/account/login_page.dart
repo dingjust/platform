@@ -598,8 +598,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                WebviewPage(
+            builder: (context) => WebviewPage(
                   url: 'https://www.nbyjy.net/policy.html',
                 )));
     // showDialog<void>(
