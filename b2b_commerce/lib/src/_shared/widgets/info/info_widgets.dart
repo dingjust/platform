@@ -55,10 +55,10 @@ class InfoRow extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-                (val != null && val != '') ? val : '-',
-                style: TextStyle(color: Color(0xFF222222), fontSize: 14),
-                textAlign: textAlign,
-              ))
+            (val != null && val != '') ? val : '-',
+            style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            textAlign: textAlign,
+          ))
         ],
       ),
     );
@@ -90,10 +90,11 @@ class InfoCard extends StatelessWidget {
 
   final EdgeInsetsGeometry margin;
 
-  const InfoCard({Key key,
-    this.child,
-    this.padding = const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-    this.margin = EdgeInsets.zero})
+  const InfoCard(
+      {Key key,
+      this.child,
+      this.padding = const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+      this.margin = EdgeInsets.zero})
       : super(key: key);
 
   @override

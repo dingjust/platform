@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/company_bar.dart';
-import 'package:b2b_commerce/src/_shared/widgets/info_widgets.dart';
-import 'package:b2b_commerce/src/_shared/widgets/order_info.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info/info_widgets.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info/order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/helper/doc_signature_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -11,6 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import 'form/reconciliation_order_form.dart';
 
 ///对账单详情
 class ReconciliationOrderDetailPage extends StatefulWidget {
@@ -398,7 +400,7 @@ class _ReconciliationOrderDetailPageState
   ///审批中,或取消状态则禁用签署
   bool get signDisable =>
       order.state == FastReconciliationSheetState.PENDING_APPROVAL ||
-          order.state == FastReconciliationSheetState.CANCELLED;
+      order.state == FastReconciliationSheetState.CANCELLED;
 
   ///获取最新状态
   DocSignatureModel getLast() {
@@ -465,8 +467,10 @@ class _ReconciliationOrderDetailPageState
   void _onSignature() async {
     DocSignatureModel model = getLast();
     DocSignatureHelper.open(
-        context: context, model: model, disable: signDisable)
-        .then((value) {
+        context: context,
+        model: model,
+        disable: signDisable,
+        onEdit: (nContext) => onEdit(nContext)).then((value) {
       //需要刷新
       if (value != null && value) {
         setState(() {
@@ -474,6 +478,32 @@ class _ReconciliationOrderDetailPageState
           needRefresh = true;
         });
       }
+    });
+  }
+
+  ///更新
+  void onEdit(BuildContext nContext) async {
+    //获取详情
+    Function cancelFunc =
+    BotToast.showLoading(crossPage: false, clickClose: false);
+    SalesProductionOrderModel salesProductionOrderModel =
+    await ExternalSaleOrderRespository()
+        .getOrderDetail(order.salesProductionOrder.id);
+
+    cancelFunc.call();
+
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(
+        builder: (context) =>
+            ReconciliationOrderForm(
+              order: salesProductionOrderModel,
+              model: order,
+            )))
+        .then((value) {
+      setState(() {
+        order = null;
+        needRefresh = true;
+      });
     });
   }
 }

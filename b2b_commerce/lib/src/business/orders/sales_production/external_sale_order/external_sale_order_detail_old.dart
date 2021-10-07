@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/_shared/widgets/info/reconciliation_order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
@@ -92,7 +91,7 @@ class _ExternalSaleOrderDetailPageState
                       OrderContractsBlock(
                           agreements: order?.agreements,
                           beforeTap: recordRouteInfo),
-                      ReconciliationOrderCard(
+                      DocSignaturesBlock(
                           callback: () {
                             setState(() {
                               order = null;

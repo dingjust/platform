@@ -182,6 +182,7 @@ class DocSignaturesBlock extends StatelessWidget {
           child: InkWell(
             onTap: () {
               beforeTap?.call();
+
               DocSignatureHelper.open(
                       context: context,
                       model: doc,

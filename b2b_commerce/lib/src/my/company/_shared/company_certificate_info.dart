@@ -6,7 +6,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'package:b2b_commerce/src/_shared/widgets/info_widgets.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info/info_widgets.dart';
 
 ///公司认证信息
 class CompanyCertificateInfo extends StatefulWidget {
