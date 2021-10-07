@@ -221,10 +221,10 @@ class _AuthenticationEnterpriseFromPageState
         children: <Widget>[
           Expanded(
               child: Text(
-                '填写企业营业执照上的真实信息',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.red),
-              ))
+            '填写企业营业执照上的真实信息',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.red),
+          ))
         ],
       ),
     );
@@ -303,7 +303,7 @@ class _AuthenticationEnterpriseFromPageState
       Certification certification = value;
       if (certification != null) {
         if (certification.data != null) {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => WebviewPage(url: certification.data)),

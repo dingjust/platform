@@ -1,5 +1,4 @@
-import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/home/factory/factory_item.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -18,115 +17,40 @@ class CapacityFactoryInfoItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            _buildFactoryCategoryCapacitiesWrap(context),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: _buildBottomRow(),
-            )
+            _InfoRow(label: '空闲日期', val: _buildDateStr()),
+            InfoDivider(height: 1),
+            Container(height: 14),
+            ..._buildItems(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTitleRow() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            '${model.title}',
-            style: TextStyle(fontSize: 18),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
+  List<Widget> _buildItems(BuildContext context) {
+    if (model.categoryCapacities != null) {
+      return model.categoryCapacities.map((e) {
+        String title = '';
+        String val1 = '';
+        if (model.categoryCapacities.first.id == e.id) {
+          title = '产能';
+        }
+        val1 = e.category == null
+            ? ''
+            : '${e.category.parent == null ? '' : e.category.parent.name + '-'}' +
+                '${e.category.name}';
+        return _InfoRow(
+          label: '$title',
+          val: '$val1',
+          val2: '${e.capacityRange}件/天',
+        );
+      }).toList();
+    }
+
+    return [];
   }
 
-  Widget _buildFactoryCategoryCapacitiesWrap(BuildContext context) {
-    double horizonSpacing = 10.0;
-    double verticalSpacing = 10.0;
-
-    return Wrap(
-        direction: Axis.horizontal,
-        alignment: WrapAlignment.spaceBetween,
-        //沿主轴方向居中
-        spacing: horizonSpacing,
-        runSpacing: verticalSpacing,
-        crossAxisAlignment: WrapCrossAlignment.start,
-        children: model.categoryCapacities
-            .map((capacity) => LayoutBuilder(
-                  builder: (context, constraints) => Container(
-                    width: (constraints.maxWidth - horizonSpacing) / 2,
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                    margin: EdgeInsets.only(bottom: 5),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                              child: Text(
-                                  capacity.category == null
-                                      ? ''
-                                      : '${capacity.category.parent == null
-                                      ? ''
-                                      : capacity.category.parent.name + '-'}' +
-                                      '${capacity.category.name}',
-                                  overflow: TextOverflow.ellipsis)),
-                        ),
-                        Container(
-                            child: Text(
-                          '${capacity.capacityRange}件/天',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        )),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey[100],
-                    ),
-                  ),
-                ))
-            .toList());
-  }
-
-  Widget _buildBottomRow() {
-    return _buildDateItem();
-  }
-
-  Widget _buildFactoryItem() {
-    return Expanded(
-        flex: 1,
-        child: Row(
-          children: <Widget>[
-            ImageFactory.buildThumbnailImage(model.belongTo.profilePicture,
-                size: 50, containerSize: 60),
-            Expanded(
-              flex: 1,
-              child: Container(
-                  height: 50,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '${model.belongTo.name}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      StarLevelAndOrdersCountText(
-                        model: model.belongTo,
-                      )
-                    ],
-                  )),
-            )
-          ],
-        ));
-  }
-
-  Widget _buildDateItem() {
+  String _buildDateStr() {
     String dateStr = '';
     if (model.longTerm ?? false) {
       dateStr = '长期有效';
@@ -134,26 +58,52 @@ class CapacityFactoryInfoItem extends StatelessWidget {
       dateStr = '长期有效';
     } else if (model.dateStartPoint != null && model.dateEndPoint == null) {
       dateStr =
-      '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~长期有效';
+          '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~长期有效';
     } else {
       dateStr =
-      '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~${model
-          ?.dateEndPoint?.month}.${model?.dateEndPoint?.day}';
+          '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~${model?.dateEndPoint?.month}.${model?.dateEndPoint?.day}';
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Text(
-          '空闲日期',
-          style: TextStyle(fontSize: 16),
-        ),
-        Text(
-          dateStr,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      ],
+    return dateStr;
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final String label;
+
+  final String val;
+
+  final String val2;
+
+  const _InfoRow({Key key, this.label, this.val, this.val2}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 14),
+      child: Row(
+        children: [
+          Container(
+            width: 80,
+            child: Text(
+              '$label',
+              style: TextStyle(color: Color(0xFF999999), fontSize: 14),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 5),
+            child: Text(
+              '${val ?? ''}',
+              style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            ),
+          ),
+          Expanded(
+              child: Text(
+            '${val2 ?? ''}',
+            style: TextStyle(color: Color(0xFFFF4D4F), fontSize: 14),
+          ))
+        ],
+      ),
     );
   }
 }

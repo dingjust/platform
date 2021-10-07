@@ -1,8 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
 class SingleCategorySelect extends StatefulWidget {
   SingleCategorySelect({
@@ -81,43 +78,44 @@ class SingleCategorySelectState extends State<SingleCategorySelect> {
                     ? Color.fromRGBO(255, 219, 0, 1)
                     : Colors.white)),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              // padding: EdgeInsets.all(10),
-              child: CachedNetworkImage(
-                imageUrl: '${category?.thumbnail?.actualUrl}',
-                imageBuilder: (context, imageProvider) =>
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                placeholder: (context, url) =>
-                    SpinKitRing(
-                      color: Colors.black12,
-                      lineWidth: 2,
-                      size: 40,
-                    ),
-                errorWidget: (context, url, error) =>
-                    Icon(
-                      Icons.photo_outlined,
-                      color: Colors.grey,
-                      size: 40,
-                    ),
-              ),
+            // Container(
+            //   // padding: EdgeInsets.all(10),
+            //   child: CachedNetworkImage(
+            //     imageUrl: '${category?.thumbnail?.actualUrl}',
+            //     imageBuilder: (context, imageProvider) =>
+            //         Container(
+            //           width: 40,
+            //           height: 40,
+            //           decoration: BoxDecoration(
+            //               image: DecorationImage(
+            //                 image: imageProvider,
+            //                 fit: BoxFit.cover,
+            //               ),
+            //               borderRadius: BorderRadius.circular(12)),
+            //         ),
+            //     placeholder: (context, url) =>
+            //         SpinKitRing(
+            //           color: Colors.black12,
+            //           lineWidth: 2,
+            //           size: 40,
+            //         ),
+            //     errorWidget: (context, url, error) =>
+            //         Icon(
+            //           Icons.photo_outlined,
+            //           color: Colors.grey,
+            //           size: 40,
+            //         ),
+            //   ),
 
-              // Image.network(
+            //   // Image.network(
 
-              //   '${category.thumbnail.actualUrl}',
-              //   fit: BoxFit.cover,
-              // ),
-            ),
+            //   //   '${category.thumbnail.actualUrl}',
+            //   //   fit: BoxFit.cover,
+            //   // ),
+            // ),
             Text(
               '${category.name}',
               overflow: TextOverflow.ellipsis,
@@ -195,7 +193,7 @@ class SingleCategorySelectState extends State<SingleCategorySelect> {
                         crossAxisCount: 3, //Grid按两列显示
                         mainAxisSpacing: 5.0,
                         crossAxisSpacing: 5.0,
-                        // childAspectRatio: 0.6,
+                        childAspectRatio: 2,
                       ),
                       delegate: new SliverChildBuilderDelegate(
                             (BuildContext context, int index) {

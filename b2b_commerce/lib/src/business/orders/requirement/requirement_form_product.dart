@@ -653,8 +653,7 @@ class _RequirementFormProductState extends State<RequirementFormProduct>
             children: [
               Text('价格', style: TextStyle(fontSize: 16, color: Colors.black)),
               Text(
-                '￥${widget.formState.product?.spotSteppedPrices?.first
-                    ?.minimumQuantity ?? 0}',
+                '￥${widget.formState.product?.spotSteppedPrices?.first?.minimumQuantity ?? 0}',
                 style: TextStyle(color: Colors.red, fontSize: 20),
               )
             ],

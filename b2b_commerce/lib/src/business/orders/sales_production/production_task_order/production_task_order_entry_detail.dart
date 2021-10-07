@@ -127,8 +127,7 @@ class _MainInfo extends StatelessWidget {
                 child: ColorSizeEntryTable(
                   data: order.colorSizeEntries,
                   compareFunction:
-                      Provider.of<SizeState>(context, listen: false)
-                          .compareByName,
+                      Provider.of<SizeState>(context, listen: false).compare,
                 ),
               ),
               buildRow('生产数量', '${order.quantity}'),

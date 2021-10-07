@@ -131,10 +131,10 @@ class ImageFactory {
           lineWidth: 2,
           size: 30,
         ),
-        errorWidget: (context, url, error) => SpinKitRing(
-          color: Colors.grey[300],
-          lineWidth: 2,
+        errorWidget: (context, url, error) => Icon(
+          B2BIcons.noPicture,
           size: 30,
+          color: Colors.grey[300],
         ),
       ),
     );

@@ -251,6 +251,9 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
   ///金额
   double amountPayableTotal;
 
+  ///强制需要签署
+  bool otherPartyNeedSigned;
+
   FastReconciliationSheetModel(
       {int id,
       String code,
@@ -270,17 +273,18 @@ class FastReconciliationSheetModel extends LogisticsSheetModel {
       this.fastShippingSheets,
       this.isApproval,
       this.approvers,
-      this.auditWorkOrder,
-      this.reconciliationQuantity,
-      this.cooperator,
-      this.docSignatures,
-      this.colNames,
-      this.additionalCharges,
-      this.salesProductionOrder,
-      this.paperSheetMedias,
-      this.signState,
-      this.belongRoleType,
-      this.amountPayableTotal})
+    this.auditWorkOrder,
+    this.reconciliationQuantity,
+    this.cooperator,
+    this.docSignatures,
+    this.colNames,
+    this.additionalCharges,
+    this.salesProductionOrder,
+    this.paperSheetMedias,
+    this.signState,
+    this.belongRoleType,
+    this.amountPayableTotal,
+    this.otherPartyNeedSigned})
       : super(
             id: id,
             code: code,

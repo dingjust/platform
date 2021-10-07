@@ -1,5 +1,4 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -29,12 +28,19 @@ class _CodeLoginPageState extends State<CodeLoginPage> {
 
   ///倒计时间
   int countdownTime = 60;
-  final CountdownController controller = CountdownController();
+  CountdownController controller;
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
         border:
             Border(bottom: BorderSide(color: Color(0xFF222222), width: 0.5)));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller = CountdownController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => controller.restart());
   }
 
   @override

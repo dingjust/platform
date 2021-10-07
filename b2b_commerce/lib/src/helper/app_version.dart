@@ -208,8 +208,7 @@ class AppVersionHelper {
         backButtonBehavior: BackButtonBehavior.ignore,
         allowClick: false,
         backgroundColor: Colors.black38,
-        toastBuilder: (cancelFunc) =>
-            WillPopScope(
+        toastBuilder: (cancelFunc) => WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
                 contentPadding: EdgeInsets.only(top: 10),
@@ -306,52 +305,52 @@ class AppVersionHelper {
 
   // //文件下载打开
   Future<String> updateApp(BuildContext context, String url) async {
-    final StreamController _streamController =
-        StreamController<double>.broadcast();
+    // final StreamController _streamController =
+    //     StreamController<double>.broadcast();
 
-    showDialog(
-      context: context,
-      // barrierDismissible: false,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            StreamBuilder<double>(
-                stream: _streamController.stream,
-                initialData: 0.0,
-                builder:
-                    (BuildContext context, AsyncSnapshot<double> snapshot) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                          child: Text(
-                            '下载中',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                        Center(
-                          child: LinearProgressIndicator(
-                            value: snapshot.data,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('进度:', style: TextStyle(fontSize: 12)),
-                            Text('${((snapshot.data / 1) * 100).round()}%',
-                                style: TextStyle(fontSize: 12))
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                })
-          ],
-        );
-      },
-    );
+    // showDialog(
+    //   context: context,
+    //   // barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return SimpleDialog(
+    //       children: <Widget>[
+    //         StreamBuilder<double>(
+    //             stream: _streamController.stream,
+    //             initialData: 0.0,
+    //             builder:
+    //                 (BuildContext context, AsyncSnapshot<double> snapshot) {
+    //               return Container(
+    //                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+    //                 child: Column(
+    //                   children: <Widget>[
+    //                     Container(
+    //                       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+    //                       child: Text(
+    //                         '下载中',
+    //                         style: TextStyle(fontSize: 12),
+    //                       ),
+    //                     ),
+    //                     Center(
+    //                       child: LinearProgressIndicator(
+    //                         value: snapshot.data,
+    //                       ),
+    //                     ),
+    //                     Row(
+    //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                       children: <Widget>[
+    //                         Text('进度:', style: TextStyle(fontSize: 12)),
+    //                         Text('${((snapshot.data / 1) * 100).round()}%',
+    //                             style: TextStyle(fontSize: 12))
+    //                       ],
+    //                     )
+    //                   ],
+    //                 ),
+    //               );
+    //             })
+    //       ],
+    //     );
+    //   },
+    // );
 
     //获取应用目录路径
     String dir = (await getApplicationDocumentsDirectory()).path;
@@ -365,7 +364,7 @@ class AppVersionHelper {
       Response response = await dio.download(url, filePath,
           onReceiveProgress: (received, total) {
         print((received / total * 100).toStringAsFixed(0) + "%");
-        _streamController.sink.add(received / total);
+            // _streamController.sink.add(received / total);
       });
       print(response.statusCode);
     } catch (e) {

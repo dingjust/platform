@@ -7,11 +7,6 @@ import 'package:services/services.dart';
 
 typedef FormValidateFunc = bool Function();
 
-const String DEFAULT_PROGRESS_PLAN_NAME = '默认节点方案';
-
-///默认警告天数
-const int DEFAULT_WARNING_DAY = 3;
-
 ///外接订单按钮
 class FormBtns extends StatelessWidget {
   final FastReconciliationSheetModel form;
@@ -75,9 +70,11 @@ class FormBtns extends StatelessWidget {
     form.entries.forEach((element) {
       result += element.settlementAmount ?? 0;
     });
-    form.additionalCharges.forEach((element) {
-      result += element.amount ?? 0;
-    });
+    if (form.additionalCharges != null) {
+      form.additionalCharges.forEach((element) {
+        result += element.amount ?? 0;
+      });
+    }
     return result;
   }
 
@@ -110,12 +107,14 @@ class FormBtns extends StatelessWidget {
       });
     }
 
-    form.additionalCharges.forEach((element) {
-      items.addAll([
-        FormValidateItem((element.remarks == null || element.remarks == ''),
-            '附加项${form.additionalCharges.indexOf(element) + 1}：名称不能为空'),
-      ]);
-    });
+    if (form.additionalCharges != null) {
+      form.additionalCharges.forEach((element) {
+        items.addAll([
+          FormValidateItem((element.remarks == null || element.remarks == ''),
+              '附加项${form.additionalCharges.indexOf(element) + 1}：名称不能为空'),
+        ]);
+      });
+    }
 
     FormValidateItem item =
         items.firstWhere((element) => element.result, orElse: () => null);

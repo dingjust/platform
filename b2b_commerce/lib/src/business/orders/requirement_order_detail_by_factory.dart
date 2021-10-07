@@ -10,12 +10,10 @@ import 'package:b2b_commerce/src/helper/call_helper.dart';
 import 'package:b2b_commerce/src/helper/dialog_helper.dart';
 import 'package:b2b_commerce/src/home/factory/_shared/factory_widgets.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -339,12 +337,12 @@ class _RequirementOrderDetailByFactoryPageState
               children: <Widget>[
                 Expanded(
                     child: Text(
-                      orderModel.remarks ?? '',
-                      style: TextStyle(
-                          color: Color(0xff666666),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500),
-                    )),
+                  orderModel.remarks ?? '',
+                  style: TextStyle(
+                      color: Color(0xff666666),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500),
+                )),
               ],
             ),
           )
@@ -359,33 +357,16 @@ class _RequirementOrderDetailByFactoryPageState
     }
 
     return SliverGroupBuilder(
-      // margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
       ),
       child: SliverPadding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
-        sliver: SliverGrid(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCountMap[getImages().length], //Grid按两列显示
-            mainAxisSpacing: 12.0,
-            crossAxisSpacing: 12.0,
-            childAspectRatio: childAspectRatioMap[getImages().length],
-          ),
-          delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-              //创建子widget
-              return _ImageItem(
-                e: getImages()[index],
-                onTap: () => onPreview(index),
-              );
-            },
-            childCount: getImages().length,
-          ),
-        ),
-      ),
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+          sliver: ImageSliverGrid(
+            medias: getImages(),
+          )),
     );
   }
 
@@ -436,51 +417,49 @@ class _RequirementOrderDetailByFactoryPageState
           children: [
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Color(0xffFED800),
-                  label: '联系对方',
-                  onTap: () {
-                    DialogHelper.showConfirm(
-                        title: '温馨提示',
-                        content:
+              color: Color(0xffFED800),
+              label: '联系对方',
+              onTap: () {
+                DialogHelper.showConfirm(
+                    title: '温馨提示',
+                    content:
                         '钉单平台无法保护您在电话、微信沟通和线下交易的可靠性及资金安全。请务必使用钉单平台的线上需求发布、钉单确认、合同签订、线上支付、对账单等系列功能，获得平台监督与仲裁服务。',
-                        confirm: () {
-                          var tel = '';
-                          if (model?.details?.agentContactPhone != null &&
-                              model?.details?.agentContactPhone != '') {
-                            //代理电话
-                            tel = model.details.agentContactPhone;
-                          } else {
-                            tel = model.details.contactPhone;
-                          }
-                          CallHelper.privacyCall(tel, context: context);
-                        });
-                  },
-                )),
+                    confirm: () {
+                      var tel = '';
+                      if (model?.details?.agentContactPhone != null &&
+                          model?.details?.agentContactPhone != '') {
+                        //代理电话
+                        tel = model.details.agentContactPhone;
+                      } else {
+                        tel = model.details.contactPhone;
+                      }
+                      CallHelper.privacyCall(tel, context: context);
+                    });
+              },
+            )),
             Container(width: 15),
             Expanded(
                 child: FactoryBottomBtn(
-                  color: Colors.blueAccent,
-                  gradient: LinearGradient(
-                      colors: [Color(0xffFFDB34), Color(0xffFF7C18)]),
-                  label: '生产报价',
-                  onTap: () async {
-                    QuoteModel newQuote =
+              color: Colors.blueAccent,
+              gradient: LinearGradient(
+                  colors: [Color(0xffFFDB34), Color(0xffFF7C18)]),
+              label: '生产报价',
+              onTap: () async {
+                QuoteModel newQuote =
                     await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            RequirementQuoteOrderForm(
+                        builder: (context) => RequirementQuoteOrderForm(
                               model: orderModel,
                               quoteModel: QuoteModel(attachments: []),
                             )));
 
-                    if (newQuote != null) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              QuoteOrderDetailPage(
-                                newQuote.code,
-                              )));
-                    }
-                  },
-                ))
+                if (newQuote != null) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => QuoteOrderDetailPage(
+                            newQuote.code,
+                          )));
+                }
+              },
+            ))
           ],
         ),
       ),
@@ -606,66 +585,6 @@ class _RequirementOrderDetailByFactoryPageState
     }
     return [];
   }
-
-  //图片预览
-  void onPreview(int index) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            GalleryPhotoViewWrapper(
-              galleryItems:
-              getImages().map((model) => GalleryItem(model: model)).toList(),
-              backgroundDecoration: const BoxDecoration(
-                color: Colors.black,
-              ),
-              initialIndex: index,
-              scrollDirection: Axis.horizontal,
-            ),
-      ),
-    );
-  }
-}
-
-class _ImageItem extends StatelessWidget {
-  final MediaModel e;
-
-  final VoidCallback onTap;
-
-  final String processUrl;
-
-  const _ImageItem({Key key,
-    this.e,
-    this.onTap,
-    this.processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320'})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onTap?.call();
-      },
-      child: Container(
-        child: CachedNetworkImage(
-          imageUrl: '${e.imageProcessUrl(processUrl)}',
-          placeholder: (context, url) =>
-              SpinKitRing(
-                color: Colors.grey[300],
-                lineWidth: 2,
-                size: 30,
-              ),
-          errorWidget: (context, url, error) =>
-              SpinKitRing(
-                color: Colors.grey[300],
-                lineWidth: 2,
-                size: 30,
-              ),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
 }
 
 class _Card extends StatelessWidget {
@@ -740,29 +659,3 @@ class _Divider extends StatelessWidget {
     );
   }
 }
-
-///图片列数
-const crossAxisCountMap = {
-  1: 1,
-  2: 2,
-  3: 3,
-  4: 2,
-  5: 3,
-  6: 3,
-  7: 3,
-  8: 3,
-  9: 3
-};
-
-///图片比列
-const childAspectRatioMap = {
-  1: 16 / 9,
-  2: 4 / 3,
-  3: 1.0,
-  4: 4 / 3,
-  5: 1.0,
-  6: 1.0,
-  7: 1.0,
-  8: 1.0,
-  9: 1.0
-};

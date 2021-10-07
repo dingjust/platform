@@ -20,15 +20,15 @@ class FactoryCapacities extends StatelessWidget {
       );
 
     return Container(
-      color: Colors.grey[50],
       child: ListView(
+        padding: EdgeInsets.zero,
         children: model.capacities
             .map((e) => Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                margin: EdgeInsets.fromLTRB(12, 0, 12, 12),
+                padding: EdgeInsets.fromLTRB(12, 14, 12, 0),
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(12)),
                 child: CapacityFactoryInfoItem(
                   model: e,
                 )))

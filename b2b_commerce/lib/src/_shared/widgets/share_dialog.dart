@@ -2,14 +2,11 @@ import 'dart:ui' as ui;
 
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/qr_url.dart';
-import 'package:b2b_commerce/src/helper/clipboard_helper.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -224,7 +221,7 @@ class ShareDialog {
                               RenderRepaintBoundary boundary =
                               buildContext.findRenderObject();
                               ui.Image image =
-                              await boundary.toImage(pixelRatio: 3.0);
+                                  await boundary.toImage(pixelRatio: 3.0);
                               ByteData byteData = await image.toByteData(
                                   format: ui.ImageByteFormat.png);
                               WechatServiceImpl.instance.shareImage(
@@ -234,27 +231,27 @@ class ShareDialog {
                             }
                           },
                         ),
-                        FlatButton(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.link_rounded, size: 50),
-                              Text('复制口令')
-                            ],
-                          ),
-                          onPressed: () {
-                            String text = QrUrl.orderUniqueCodeLink(uniqueCode);
+                        // FlatButton(
+                        //   child: Column(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: <Widget>[
+                        //       Icon(Icons.link_rounded, size: 50),
+                        //       Text('复制口令')
+                        //     ],
+                        //   ),
+                        //   onPressed: () {
+                        //     String text = QrUrl.orderUniqueCodeLink(uniqueCode);
 
-                            Clipboard.setData(ClipboardData(text: text))
-                                .then((value) {
-                              //粘贴板缓存更新，避免打开导入弹窗
-                              Provider.of<ClipboardHelper>(context,
-                                  listen: false)
-                                  .setText(text);
-                              BotToast.showText(text: '订单导入口令已复制，快去粘贴吧~');
-                            });
-                          },
-                        ),
+                        //     Clipboard.setData(ClipboardData(text: text))
+                        //         .then((value) {
+                        //       //粘贴板缓存更新，避免打开导入弹窗
+                        //       Provider.of<ClipboardHelper>(context,
+                        //           listen: false)
+                        //           .setText(text);
+                        //       BotToast.showText(text: '订单导入口令已复制，快去粘贴吧~');
+                        //     });
+                        //   },
+                        // ),
                       ],
                     ),
                   ),

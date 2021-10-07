@@ -101,7 +101,7 @@ class _RequirementFormOrderState extends State<RequirementFormOrder>
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 14),
       child:
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Container(
           width: 80,
           padding: EdgeInsets.only(top: 15),
@@ -112,25 +112,25 @@ class _RequirementFormOrderState extends State<RequirementFormOrder>
         ),
         Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldComponent(
-                padding: EdgeInsets.symmetric(vertical: 0),
-                dividerPadding: EdgeInsets.only(),
-                focusNode: remarksFocusNode,
-                hintText: '需求描述...',
-                autofocus: false,
-                inputType: TextInputType.text,
-                textAlign: TextAlign.left,
-                hideDivider: true,
-                maxLines: null,
-                maxLength: 200,
-                style: TextStyle(color: Color(0xFF222222), fontSize: 14),
-                controller: remarksController,
-                onChanged: (v) {
-                  widget.formState.model.remarks = remarksController.text;
-                },
-              ),
-            ))
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: TextFieldComponent(
+            padding: EdgeInsets.symmetric(vertical: 0),
+            dividerPadding: EdgeInsets.only(),
+            focusNode: remarksFocusNode,
+            hintText: '需求描述...',
+            autofocus: false,
+            inputType: TextInputType.text,
+            textAlign: TextAlign.left,
+            hideDivider: true,
+            maxLines: null,
+            maxLength: 200,
+            style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            controller: remarksController,
+            onChanged: (v) {
+              widget.formState.model.remarks = remarksController.text;
+            },
+          ),
+        ))
       ]),
     );
   }

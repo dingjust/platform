@@ -7,7 +7,7 @@ description: Hybris B2B Commerce.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.9.4+1
+version: 1.9.5+1
 
 flutter_localizations:
   sdk: flutter
@@ -318,8 +318,8 @@ flutter:
     - packages/assets/img/icons/b2b-v2/my/notice@3x.png
     - packages/assets/img/icons/b2b-v2/my/set@3x.png
     - packages/assets/img/icons/b2b-v2/my/service@3x.png
+    - packages/assets/img/icons/b2b-v2/my/card@3x.png
     - packages/assets/img/icons/b2b-v2/logo@3x.png
-
 
   fonts:
     - family: b2bIcons

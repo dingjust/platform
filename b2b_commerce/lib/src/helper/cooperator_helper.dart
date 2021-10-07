@@ -47,4 +47,14 @@ class CooperatorHelper {
       package: "assets",
     );
   }
+
+  ///获取合作商Model
+  static CompanyModel getCooperator(CompanyModel v1, CompanyModel v2) {
+    if (UserBLoC.instance.currentUser.companyCode == v1?.uid) {
+      return v2;
+    } else if (UserBLoC.instance.currentUser.companyCode == v2?.uid) {
+      return v1;
+    }
+    return null;
+  }
 }

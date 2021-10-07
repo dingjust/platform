@@ -76,6 +76,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       body: Container(
           child: ListView(
         children: <Widget>[
+          _buildNeedSign(),
           ..._buildEntries(),
           _buildAdditional(),
           _buildRemarks(),
@@ -83,6 +84,67 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
           FormBtns(form: form, oldFormId: oldFormId),
         ],
       )),
+    );
+  }
+
+  Widget _buildNeedSign() {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '是否对方需要签署',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ]),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ChoiceChip(
+                    label: Container(
+                      height: 20,
+                      width: 60,
+                      child: Center(child: Text('是')),
+                    ),
+                    backgroundColor: Colors.grey[100],
+                    selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                    selected: form.otherPartyNeedSigned,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        // .details.invoiceNeeded = true;
+                        form.otherPartyNeedSigned = true;
+                      });
+                    },
+                  ),
+                  ChoiceChip(
+                    label: Container(
+                      height: 20,
+                      width: 60,
+                      child: Center(child: Text('否')),
+                    ),
+                    backgroundColor: Colors.grey[100],
+                    selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                    selected: !form.otherPartyNeedSigned,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        form.otherPartyNeedSigned = false;
+                      });
+                    },
+                  ),
+                ]),
+          ),
+        ],
+      ),
     );
   }
 
@@ -285,68 +347,70 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
   List<Widget> _buildAdditionalEntries() {
     List<Widget> entries = [];
 
-    for (int i = 0; i < form.additionalCharges.length; i++) {
-      entries.add(Container(
-          margin: EdgeInsets.symmetric(vertical: 5),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextFieldBorderComponent(
-                  padding: EdgeInsets.all(0),
-                  hideDivider: true,
-                  isRequired: true,
-                  textAlign: TextAlign.left,
-                  hintText: '名称',
-                  enabled: form.additionalCharges[i].isDefault == null,
-                  controller: additionNameControllers[i],
-                  focusNode: additionNameNodes[i],
-                  onChanged: (value) {
-                    form.additionalCharges[i].remarks = value;
-                  },
-                ),
-              ),
-              Container(width: 10),
-              Expanded(
-                child: TextFieldBorderComponent(
-                  padding: EdgeInsets.all(0),
-                  hideDivider: true,
-                  isRequired: true,
-                  textAlign: TextAlign.right,
-                  hintText: '增扣款',
-                  enabled: form.additionalCharges[i].isDefault == null,
-                  inputType: TextInputType.numberWithOptions(
-                      decimal: true, signed: true),
-                  controller: additionValControllers[i],
-                  focusNode: additionValNodes[i],
-                  onChanged: (value) {
-                    double result = double.tryParse(value);
-                    setState(() {
-                      if (result != null) {
-                        form.additionalCharges[i].amount = result;
-                      }
-                    });
-                  },
-                ),
-              ),
-              Opacity(
-                opacity: form.additionalCharges[i].isDefault ?? false ? 0 : 1,
-                child: TextButton(
-                    onPressed: () {
-                      if (form.additionalCharges[i].isDefault == null ||
-                          !form.additionalCharges[i].isDefault) {
-                        setState(() {
-                          form.additionalCharges.removeAt(i);
-                          additionNameControllers.removeAt(i);
-                          additionNameNodes.removeAt(i);
-                          additionValControllers.removeAt(i);
-                          additionValNodes.removeAt(i);
-                        });
-                      }
+    if (form.additionalCharges != null) {
+      for (int i = 0; i < form.additionalCharges.length; i++) {
+        entries.add(Container(
+            margin: EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFieldBorderComponent(
+                    padding: EdgeInsets.all(0),
+                    hideDivider: true,
+                    isRequired: true,
+                    textAlign: TextAlign.left,
+                    hintText: '名称',
+                    enabled: form.additionalCharges[i].isDefault == null,
+                    controller: additionNameControllers[i],
+                    focusNode: additionNameNodes[i],
+                    onChanged: (value) {
+                      form.additionalCharges[i].remarks = value;
                     },
-                    child: Text('删除')),
-              )
-            ],
-          )));
+                  ),
+                ),
+                Container(width: 10),
+                Expanded(
+                  child: TextFieldBorderComponent(
+                    padding: EdgeInsets.all(0),
+                    hideDivider: true,
+                    isRequired: true,
+                    textAlign: TextAlign.right,
+                    hintText: '增扣款',
+                    enabled: form.additionalCharges[i].isDefault == null,
+                    inputType: TextInputType.numberWithOptions(
+                        decimal: true, signed: true),
+                    controller: additionValControllers[i],
+                    focusNode: additionValNodes[i],
+                    onChanged: (value) {
+                      double result = double.tryParse(value);
+                      setState(() {
+                        if (result != null) {
+                          form.additionalCharges[i].amount = result;
+                        }
+                      });
+                    },
+                  ),
+                ),
+                Opacity(
+                  opacity: form.additionalCharges[i].isDefault ?? false ? 0 : 1,
+                  child: TextButton(
+                      onPressed: () {
+                        if (form.additionalCharges[i].isDefault == null ||
+                            !form.additionalCharges[i].isDefault) {
+                          setState(() {
+                            form.additionalCharges.removeAt(i);
+                            additionNameControllers.removeAt(i);
+                            additionNameNodes.removeAt(i);
+                            additionValControllers.removeAt(i);
+                            additionValNodes.removeAt(i);
+                          });
+                        }
+                      },
+                      child: Text('删除')),
+                )
+              ],
+            )));
+      }
     }
     return entries;
   }
@@ -364,7 +428,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       additionalCharges: [],
       salesProductionOrder: widget.order,
       belongRoleType: getRoleType(),
-
+      otherPartyNeedSigned: true,
       // shipParty: widget.order.targetCooperator.partner,
       // receiveParty: widget.order.originCompany
     );
@@ -439,6 +503,9 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
     if (data.medias == null) {
       data.medias = [];
     }
+    if (data.otherPartyNeedSigned == null) {
+      data.otherPartyNeedSigned = true;
+    }
 
     controllersMaps = {};
     nodesMaps = {};
@@ -477,13 +544,16 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       nodesMaps[element.product.code] = nodesMap;
     });
 
-    data.additionalCharges.forEach((element) {
-      additionNameControllers.add(TextEditingController(text: element.remarks));
-      additionNameNodes.add(FocusNode());
-      additionValControllers
-          .add(TextEditingController(text: element.amount.toStringAsFixed(2)));
-      additionValNodes.add(FocusNode());
-    });
+    if (data.additionalCharges != null) {
+      data?.additionalCharges?.forEach((element) {
+        additionNameControllers
+            .add(TextEditingController(text: element.remarks));
+        additionNameNodes.add(FocusNode());
+        additionValControllers.add(
+            TextEditingController(text: element.amount.toStringAsFixed(2)));
+        additionValNodes.add(FocusNode());
+      });
+    }
 
     //判断是否对方修改
     if (data.belongRoleType != getRoleType()) {

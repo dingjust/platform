@@ -26,9 +26,9 @@ class CompanyBar extends StatelessWidget {
           Container(
               margin: EdgeInsets.only(right: 8),
               child: ImageFactory.buildProcessedAvatar(
-                  companyModel.profilePicture,
+                  companyModel?.profilePicture,
                   processurl:
-                  'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
+                      'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
           Expanded(
             child: Container(
               child: Column(
@@ -37,13 +37,13 @@ class CompanyBar extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Text(
-                            '${companyModel.name}',
-                            style: TextStyle(
-                                color: Color(0xff222222),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                            overflow: TextOverflow.ellipsis,
-                          ))
+                        '${companyModel.name}',
+                        style: TextStyle(
+                            color: Color(0xff222222),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ))
                     ],
                   ),
                   Row(
@@ -76,6 +76,95 @@ class CompanyBar extends StatelessWidget {
         type = '个人认证';
         icon = B2BV2Image.authPerson(width: 16, height: 16);
       }
+      return Container(
+        margin: EdgeInsets.only(right: 10),
+        child: Row(
+          children: [
+            icon,
+            Text(
+              '$type',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: Color(0xff077FFA),
+                  fontWeight: FontWeight.w500),
+            )
+          ],
+        ),
+      );
+    }
+    return Container();
+  }
+}
+
+class CooperatorBar extends StatelessWidget {
+  final CooperatorModel model;
+
+  ///收藏Id，默认收藏公司
+  final int favoriteId;
+
+  const CooperatorBar({Key key, this.model, this.favoriteId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(12)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              margin: EdgeInsets.only(right: 8),
+              child: ImageFactory.buildProcessedAvatar(
+                  model?.partner?.profilePicture,
+                  processurl:
+                      'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
+          Expanded(
+            child: Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Text(
+                        model.partner != null
+                            ? '${model.partner.name}'
+                            : '${model.name}',
+                        style: TextStyle(
+                            color: Color(0xff222222),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ))
+                    ],
+                  ),
+                  Row(
+                    children: [_authTag()],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ///认证标签
+  Widget _authTag() {
+    if (model.partner.approvalStatus == ArticleApprovalStatus.approved) {
+      // String type = '';
+      // Image icon;
+      // if (model.partner.approvalType == 'ENTERPRISE') {
+      //   type = '企业认证';
+      //   icon = B2BV2Image.authCompany(width: 16, height: 16);
+      // } else {
+      //   type = '个人认证';
+      //   icon = B2BV2Image.authPerson(width: 16, height: 16);
+      // }
+      String type = '实名认证';
+      Image icon = B2BV2Image.authCompany(width: 16, height: 16);
+
       return Container(
         margin: EdgeInsets.only(right: 10),
         child: Row(

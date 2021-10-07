@@ -8,6 +8,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'qrcode_payment_page.dart';
+
 ///统一订单支付页面V2(2021年5月31日14:07:44)
 class OrderPaymentPageV2 extends StatefulWidget {
   final CmtPayOrderData order;
@@ -19,10 +21,13 @@ class OrderPaymentPageV2 extends StatefulWidget {
 }
 
 class _OrderPaymentPageV2State extends State<OrderPaymentPageV2> {
+  String payWay;
+
   StreamSubscription wechatSubscription;
 
   @override
   void initState() {
+    payWay = 'WECHAT_PAY_APP';
     //监听微信回调
     wechatSubscription = weChatResponseEventHandler.listen((data) async {
       print('[Fluwx]支付回调：${data.isSuccessful}');
@@ -55,7 +60,14 @@ class _OrderPaymentPageV2State extends State<OrderPaymentPageV2> {
               child: Column(
                 children: <Widget>[
                   _buildAmountRow(),
-                  _PayTypeSelect(),
+                  _PayTypeSelect(
+                    groupValue: payWay,
+                    onChanged: (val) {
+                      setState(() {
+                        payWay = val;
+                      });
+                    },
+                  ),
                   Container(
                     height: 80,
                   )
@@ -127,15 +139,30 @@ class _OrderPaymentPageV2State extends State<OrderPaymentPageV2> {
         if (widget.order != null) {
           BaseResponse orderPayResponse =
               await OrderPaymentServiceImpl.orderPaySign(
-                  widget.order.originCode, widget.order.batch);
+                  widget.order.originCode, widget.order.batch,
+                  method: payWay);
           if (orderPayResponse != null) {
             if (orderPayResponse.code == 1) {
               WechatPrepayModel prepayModel =
                   WechatPrepayModel.fromJson(orderPayResponse.data);
-              bool result =
-                  await WechatServiceImpl.instance.payBySign(prepayModel);
-              if (result) {
-                cancelFunc.call();
+              if (payWay == 'WECHAT_PAY_APP') {
+                //APP支付
+                bool result =
+                    await WechatServiceImpl.instance.payBySign(prepayModel);
+                if (result) {
+                  cancelFunc.call();
+                }
+              } else if (payWay == 'WECHAT_PAY_NATIVE') {
+                // 二维码支付
+                String qrcodeUrl = orderPayResponse.data['qrcodeUrl'];
+                if (qrcodeUrl != null && qrcodeUrl != '') {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => QRCodePaymentPage(
+                            url: qrcodeUrl,
+                            order: widget.order.originCode,
+                          )));
+                }
+                showErrorText(title: '支付失败', content: '获取二维码失败');
               }
             } else {
               showErrorText(title: '支付失败', content: '${orderPayResponse.msg}');
@@ -329,7 +356,12 @@ class _OrderPaymentPageV2State extends State<OrderPaymentPageV2> {
 
 ///支付方式
 class _PayTypeSelect extends StatelessWidget {
-  const _PayTypeSelect({Key, key}) : super(key: key);
+  final String groupValue;
+
+  final ValueChanged<String> onChanged;
+
+  const _PayTypeSelect({Key, key, this.groupValue, this.onChanged})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -350,22 +382,68 @@ class _PayTypeSelect extends StatelessWidget {
               ],
             ),
           ),
-          Container(
+          _PayTypeSelectItem(
+            label: '微信支付',
+            val: 'WECHAT_PAY_APP',
+            groupValue: groupValue,
+            onChanged: onChanged,
+          ),
+          _PayTypeSelectItem(
+            label: '微信二维码支付',
+            val: 'WECHAT_PAY_NATIVE',
+            groupValue: groupValue,
+            onChanged: onChanged,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _PayTypeSelectItem extends StatelessWidget {
+  final String label;
+
+  final String val;
+
+  final String groupValue;
+
+  final Widget icon;
+
+  final ValueChanged<String> onChanged;
+
+  const _PayTypeSelectItem({Key key,
+    this.label,
+    this.val,
+    this.groupValue,
+    this.icon = const Icon(
+      B2BIcons.wechat,
+      size: 30,
+      color: Color.fromRGBO(0, 211, 12, 1),
+    ),
+    this.onChanged})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: Material(
+          color: Colors.white,
+          child: InkWell(
+            onTap: () {
+              onChanged?.call(val);
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   child: Row(
                     children: [
-                      Icon(
-                        B2BIcons.wechat,
-                        size: 30,
-                        color: Color.fromRGBO(0, 211, 12, 1),
-                      ),
+                      icon,
                       Container(
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          '微信支付',
+                          '$label',
                           style: TextStyle(fontSize: 16),
                         ),
                       )
@@ -373,14 +451,14 @@ class _PayTypeSelect extends StatelessWidget {
                   ),
                 ),
                 Icon(
-                  Icons.check_circle,
+                  val == groupValue
+                      ? Icons.check_circle
+                      : Icons.radio_button_unchecked,
                   color: Colors.orange,
                 )
               ],
             ),
-          )
-        ],
-      ),
-    );
+          ),
+        ));
   }
 }

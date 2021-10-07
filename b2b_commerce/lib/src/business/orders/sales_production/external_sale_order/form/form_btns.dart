@@ -148,7 +148,7 @@ class FormBtns extends StatelessWidget {
         BotToast.showText(text: '获取节点信息失败，请重试');
         throw Exception('获取节点信息失败');
       }
-      const phase_name_strs = ['裁剪', '车缝', '后整', '验货'];
+      const phase_name_strs = ['裁剪', '车缝', '后整', '发货'];
       //节点数组
       List<ProgressPhaseModel> phases = progressPhaseResponse.content
           .where((phase) => phase_name_strs.contains(phase.name))

@@ -80,6 +80,11 @@ class _ExternalSaleOrderDetailPageState
                   padding: EdgeInsets.only(bottom: 10),
                   child: ListView(
                     children: <Widget>[
+                      // CompanyBar(
+                      //     companyModel: B2BUnitModel.fromJson(
+                      //         CompanyModel.toJson(
+                      //             CooperatorHelper.getCooperator(
+                      //                 order.originCompany, order.belongTo)))),
                       _Header(order: order),
                       _EntriesInfo(order: order),
                       MainInfo(order: order),

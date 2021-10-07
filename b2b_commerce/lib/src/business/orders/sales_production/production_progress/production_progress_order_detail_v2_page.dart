@@ -105,9 +105,7 @@ class _ProductionProgressOrderDetailV2PageState
               val: '${DateFormatUtil.formatYMDHMS(widget.model.reportTime)}'),
           ColorSizeNoteEntryTable(
             compareFunction:
-            Provider
-                .of<SizeState>(context, listen: false)
-                .compare,
+                Provider.of<SizeState>(context, listen: false).compareByName,
             showNeed: false,
             data: widget.model.entries,
           ),

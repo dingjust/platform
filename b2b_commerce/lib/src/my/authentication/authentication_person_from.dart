@@ -79,10 +79,10 @@ class _AuthenticationPersonFromPageState
         children: <Widget>[
           Expanded(
               child: Text(
-                '填写身份证上的真实信息',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.red),
-              ))
+            '填写身份证上的真实信息',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.red),
+          ))
         ],
       ),
     );
@@ -120,11 +120,10 @@ class _AuthenticationPersonFromPageState
           );
         }).then((value) {
       Certification certification = value;
-      print(certification.msg);
       if (certification != null) {
         if (certification.data != null) {
 //          _launchURL(certification.data);
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => WebviewPage(url: certification.data)),

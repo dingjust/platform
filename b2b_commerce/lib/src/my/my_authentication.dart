@@ -105,7 +105,6 @@ class _MyAuthenticationState extends State<MyAuthentication> {
         authenticationModel.companyType == CompanyTypeState.ENTERPRISE) {
       _isCompany = true;
     }
-    print(_isCompany);
     return model;
   }
 
@@ -144,52 +143,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
 
   Widget _buildEnterpriseItem(AuthenticationModel model) {
     return GestureDetector(
-      onTap: () async {
-        if ((!_isCompany && model.companyState == AuthenticationState.CHECK) ||
-            model.personalState == AuthenticationState.CHECK) {
-          promptingDialog();
-        } else if (_isCompany || model.companyType == null) {
-          if (model.companyState == AuthenticationState.UNCERTIFIED) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AuthenticationEnterpriseFromPage()),
-            );
-          }
-          if (model.companyState == AuthenticationState.SUCCESS) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyAuthenticationEnterpriseResult(
-                        isCompany: _isCompany,
-                        authenticationModel: model,
-                      )),
-            );
-          }
-          if (model.companyState == AuthenticationState.FAILED ||
-              model.companyState == AuthenticationState.FAIL) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AuthenticationEnterpriseFromPage()),
-            );
-          }
-
-          if (model.companyState == AuthenticationState.CHECK) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MyAuthenticationEnterpriseResult(
-                        isCompany: _isCompany,
-                        authenticationModel: model,
-                      )),
-            );
-          }
-        } else {
-          null;
-        }
-      },
+      onTap: () => _onEnterprise(model),
       child: Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 5),
@@ -207,14 +161,14 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                     //     ? Colors.black
                     //     : Colors.grey),
                     color: (model.companyState ==
-                        AuthenticationState.UNCERTIFIED &&
-                        model.personalState ==
-                            AuthenticationState.UNCERTIFIED) ||
-                        (_isCompany &&
-                            (model.companyState ==
-                                AuthenticationState.CHECK ||
-                                model.companyState ==
-                                    AuthenticationState.SUCCESS))
+                                    AuthenticationState.UNCERTIFIED &&
+                                model.personalState ==
+                                    AuthenticationState.UNCERTIFIED) ||
+                            (_isCompany &&
+                                (model.companyState ==
+                                        AuthenticationState.CHECK ||
+                                    model.companyState ==
+                                        AuthenticationState.SUCCESS))
                         ? Colors.black
                         : Colors.grey),
               ),
@@ -250,29 +204,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     return GestureDetector(
-      onTap: () async {
-        if (model.companyState == AuthenticationState.CHECK) {
-          promptingDialog();
-        } else if (model.companyState != AuthenticationState.SUCCESS) {
-          if (model.personalState == AuthenticationState.CHECK ||
-              model.personalState == AuthenticationState.SUCCESS) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MyAuthenticationResult(
-                        state: model.personalState,
-                      )),
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AuthenticationPersonFromPage()),
-            );
-          }
-        }
-      },
+      onTap: () => _onPersonal(model),
       child: Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 5),
@@ -343,6 +275,65 @@ class _MyAuthenticationState extends State<MyAuthentication> {
         children: <Widget>[Expanded(child: Text('2.申请企业认证后不可以再申请个人认证'))],
       ),
     );
+  }
+
+  void _onEnterprise(AuthenticationModel model) async {
+    if ((!_isCompany && model.companyState == AuthenticationState.CHECK) ||
+        model.personalState == AuthenticationState.CHECK) {
+      promptingDialog();
+    } else if (_isCompany || model.companyType == null) {
+      Widget _target;
+
+      if (model.companyState == AuthenticationState.UNCERTIFIED) {
+        _target = AuthenticationEnterpriseFromPage();
+      } else if (model.companyState == AuthenticationState.SUCCESS) {
+        _target = MyAuthenticationEnterpriseResult(
+          isCompany: _isCompany,
+          authenticationModel: model,
+        );
+      } else if (model.companyState == AuthenticationState.FAILED ||
+          model.companyState == AuthenticationState.FAIL) {
+        _target = AuthenticationEnterpriseFromPage();
+      } else if (model.companyState == AuthenticationState.CHECK) {
+        _target = MyAuthenticationEnterpriseResult(
+          isCompany: _isCompany,
+          authenticationModel: model,
+        );
+      }
+      if (_target != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => _target),
+        ).then((value) {
+          setState(() {});
+        });
+      }
+    }
+  }
+
+  void _onPersonal(AuthenticationModel model) async {
+    if (model.companyState == AuthenticationState.CHECK) {
+      promptingDialog();
+    } else if (model.companyState != AuthenticationState.SUCCESS) {
+      Widget _target;
+
+      if (model.personalState == AuthenticationState.CHECK ||
+          model.personalState == AuthenticationState.SUCCESS) {
+        _target = MyAuthenticationResult(
+          state: model.personalState,
+        );
+      } else {
+        _target = AuthenticationPersonFromPage();
+      }
+      if (_target != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => _target),
+        ).then((value) {
+          setState(() {});
+        });
+      }
+    }
   }
 
   enterprise() {
