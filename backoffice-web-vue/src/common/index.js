@@ -2116,7 +2116,9 @@ let NONE_TENANT_APIS = {
   // 创建库存信息
   createInventory: () => '/b2b/products/stock/batchUpload',
   // 修改库存信息
-  updateInventory: (id) => '/b2b/products/stock/' + id + '/update'
+  updateInventory: (id) => '/b2b/products/stock/' + id + '/update',
+  // 删除库存信息
+  deleteInventory: (id) => '/b2b/products/stock/' + id + '/deleted'
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

@@ -183,8 +183,10 @@ export default {
       });
     },
     async _onConfirm () {
+      const formData = this.submitData.filter(item => item.variants.length > 0)
+
       const url = this.apis().createInventory()
-      const result = await this.$http.put(url, this.submitData)
+      const result = await this.$http.put(url, formData)
 
       const res = result.filter(val => val.code === 0);
 

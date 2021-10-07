@@ -3,6 +3,11 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="产品编号" prop="code"></el-table-column>
       <el-table-column label="款号" prop="skuID"></el-table-column>
+      <el-table-column label="库存数量">
+        <template slot-scope="scope">
+          <span>{{inventoryQuantity(scope.row)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.creationtime | formatDate }}</span>
@@ -28,6 +33,13 @@ export default {
   name: 'InventoryList',
   props: ['page'],
   methods: {
+    inventoryQuantity (row) {
+      let count = 0
+      if (row.variants && row.variants.length > 0) {
+        row.variants.forEach(item => count += item.quality)
+      }
+      return count;
+    },
     onPageSizeChanged (val) {
       this.$emit('onAdvancedSearch', 0, val);
 
@@ -46,7 +58,29 @@ export default {
       this.$router.push('/product/inventory/modify/' + row.id)
     },
     onDelete (row) {
+      const count = this.inventoryQuantity(row)
 
+      let msg = (count > 0 ? ('此产品还有' + count + '件库存，') : '') + '是否删除此产品？'
+
+      this.$confirm(msg, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this._onDelete(row)
+      })
+    },
+    async _onDelete (row) {
+      const url = this.apis().deleteInventory(row.id)
+      const result = await this.$http.delete(url)
+
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message)
+        return
+      }
+
+      this.$message.success('操作成功！')
+      this.$emit('onAdvancedSearch');
     }
   }
 }
