@@ -39,94 +39,124 @@ const router = new Router({
           return c('router-view');
         }
       },
-      children: [{
-        path: 'color',
-        name: '颜色',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/color/ColorPage')
-      },
-      {
-        path: 'size',
-        name: '尺码',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/size/SizePage')
-      },
-      {
-        path: 'category',
-        name: '分类',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/category/CategoryPage')
-      },
-      {
-        path: 'apparel',
-        name: 'B2B产品',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/ApparelProductPage')
-      },
-      {
-        path: 'sample',
-        name: '款式管理',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/sample/SampleProductsPage')
+      children: [
+        {
+          path: 'color',
+          name: '颜色',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/color/ColorPage')
+        },
+        {
+          path: 'size',
+          name: '尺码',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/size/SizePage')
+        },
+        {
+          path: 'category',
+          name: '分类',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/category/CategoryPage')
+        },
+        {
+          path: 'apparel',
+          name: 'B2B产品',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/ApparelProductPage')
+        },
+        {
+          path: 'sample',
+          name: '款式管理',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/sample/SampleProductsPage')
         // meta: {
         //   requiresAuth: true,
         //   permissions: ['PRODUCT']
         // }
-      },
-      {
-        name: '样衣详情',
-        path: 'sampleDetail',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/sample/details/SampleProductDetailsPage')
-      },
-      {
-        name: '产品详情',
-        path: 'apparelDetail',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/details/ApparelProductDetailsPage')
-      },
-      {
-        path: 'capacity',
-        name: '产能配置',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/capacity/capacityPage'),
-        meta: {
-          breadCrumbParentUrl: '/order/quote',
-          breadCrumbParentName: '其他'
-        }
-      }, {
-        path: 'capacityPublish',
-        name: '发布产能',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/capacity/capacityFormPage')
-      },
-      {
-        path: 'sample/sampleProduct',
-        name: '样衣管理',
-        component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/miscs/sample/sampleProduct/SampleProductPage')
-      },
-      {
-        path: 'material',
-        redirect: '/product/material',
-        name: '物料',
-        component: {
-          render (c) {
-            return c('router-view');
-          }
         },
-        children: [{
-          path: '',
-          name: '物料管理',
-          component: () => import(/* webpackChunkName: 'material' */ '@/views/product/material/MaterialPage'),
+        {
+          name: '样衣详情',
+          path: 'sampleDetail',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/sample/details/SampleProductDetailsPage')
+        },
+        {
+          name: '产品详情',
+          path: 'apparelDetail',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/details/ApparelProductDetailsPage')
+        },
+        {
+          path: 'capacity',
+          name: '产能配置',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/capacity/capacityPage'),
           meta: {
-            breadCrumbParentUrl: '/product',
-            breadCrumbParentName: '产品中心',
-            breadCrumbSkip: 1
+            breadCrumbParentUrl: '/order/quote',
+            breadCrumbParentName: '其他'
           }
+        }, {
+          path: 'capacityPublish',
+          name: '发布产能',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/capacity/capacityFormPage')
         },
         {
-          path: 'detail',
-          name: '物料详情',
-          component: () => import(/* webpackChunkName: 'material' */ '@/views/product/material/details/MaterialDetailsPage')
+          path: 'sample/sampleProduct',
+          name: '样衣管理',
+          component: () => import(/* webpackChunkName: 'tenant-products' */ '@/views/miscs/sample/sampleProduct/SampleProductPage')
         },
         {
-          path: 'create',
-          name: '添加物料',
-          component: () => import(/* webpackChunkName: 'material' */ '@/views/product/material/details/MaterialDetailsPage')
+          path: 'material',
+          redirect: '/product/material',
+          name: '物料',
+          component: {
+            render (c) {
+              return c('router-view');
+            }
+          },
+          children: [
+            {
+              path: '',
+              name: '物料管理',
+              component: () => import(/* webpackChunkName: 'material' */ '@/views/product/material/MaterialPage'),
+              meta: {
+                breadCrumbParentUrl: '/product',
+                breadCrumbParentName: '产品中心',
+                breadCrumbSkip: 1
+              }
+            },
+            {
+              path: 'detail',
+              name: '物料详情',
+              component: () => import(/* webpackChunkName: 'material' */ '@/views/product/material/details/MaterialDetailsPage')
+            },
+            {
+              path: 'create',
+              name: '添加物料',
+              component: () => import(/* webpackChunkName: 'material' */ '@/views/product/material/details/MaterialDetailsPage')
+            }
+          ]
+        },
+        {
+          path: 'inventory',
+          redirect: '/product/inventory',
+          name: '库存',
+          component: {
+            render (c) {
+              return c('router-view')
+            }
+          },
+          children: [
+            {
+              path: '',
+              name: '库存管理',
+              component: () => import(/* webpackChunkName: 'inventory' */ '@/views/product/inventory/InventoryPage')
+            },
+            {
+              path: 'modify/:id',
+              name: '库存修改',
+              props: true,
+              component: () => import(/* webpackChunkName: 'inventory' */ '@/views/product/inventory/form/InventoryForm')
+            }
+          ]
+        },
+        {
+          path: 'scan',
+          name: '扫码录入',
+          component: () => import(/* webpackChunkName: 'scan' */ '@/views/product/components/ScanForm')
         }
-        ]
-      }
       ]
     },
     {

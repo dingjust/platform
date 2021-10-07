@@ -1,44 +1,42 @@
 <template>
-  <div class="animated fadeIn image-upload">
-    <el-row :gutter="10">
-      <el-col :span="24">
-        <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData" ref="upload"
-          :disabled="disabled" :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
-          :file-list="fileList" :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit"
-          :on-remove="handleRemove" :class="{disabled:uploadDisabled,picClass:picClass}">
-          <i class="el-icon-plus" :style="custom ? 'border: 23px solid transparent;' : ''" slot="default"
-            @click="onClick"></i>
-          <div slot="tip" class="el-upload__tip">
-            <slot name="picBtn"></slot>
-          </div>
-          <div slot="file" slot-scope="{file}" style="height: 100%">
-            <template v-if="fileUrl(file) !== ''">
-              <label class="el-upload-list__item-status-label">
-                <i class="el-icon-upload-success el-icon-check" />
-              </label>
-              <img class="el-upload-list__item-thumbnail" :src="fileUrl(file)" alt="">
-            </template>
-            <template v-else>
-              <el-progress type="circle" :percentage="100"></el-progress>
-            </template>
-            <span class="el-upload-list__item-actions">
-              <span class="el-upload-list__item-preview" @click="onDetail(file)">
-                <i class="el-icon-zoom-in"></i>
-              </span>
-              <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-                <i class="el-icon-delete"></i>
-              </span>
+  <div class="image-upload">
+    <el-row>
+      <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData" ref="upload"
+        :disabled="disabled" :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
+        :file-list="fileList" :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit"
+        :on-remove="handleRemove" :class="{disabled:uploadDisabled,picClass:picClass}">
+        <i class="el-icon-plus" :style="custom ? 'border: 23px solid transparent;' : ''" slot="default"
+          @click="onClick"></i>
+        <div slot="tip" class="el-upload__tip">
+          <slot name="picBtn"></slot>
+        </div>
+        <div slot="file" slot-scope="{file}" style="height: 100%">
+          <template v-if="fileUrl(file) !== ''">
+            <label class="el-upload-list__item-status-label">
+              <i class="el-icon-upload-success el-icon-check" />
+            </label>
+            <img class="el-upload-list__item-thumbnail" :src="fileUrl(file)" alt="">
+          </template>
+          <template v-else>
+            <el-progress type="circle" :percentage="100"></el-progress>
+          </template>
+          <span class="el-upload-list__item-actions">
+            <span class="el-upload-list__item-preview" @click="onDetail(file)">
+              <i class="el-icon-zoom-in"></i>
             </span>
-          </div>
-        </el-upload>
-        <el-dialog :visible.sync="dialogVisible" width="50%" append-to-body :close-on-click-modal="false">
-          <img width="100%" :src="dialogImageUrl" alt="">
-        </el-dialog>
-        <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" append-to-body
-          :close-on-click-modal="false">
-          <pdf-preview v-if="pdfVisible" :fileUrl="pdfUrl" />
-        </el-dialog>
-      </el-col>
+            <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
+              <i class="el-icon-delete"></i>
+            </span>
+          </span>
+        </div>
+      </el-upload>
+      <el-dialog :visible.sync="dialogVisible" width="50%" append-to-body :close-on-click-modal="false">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
+      <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" append-to-body
+        :close-on-click-modal="false">
+        <pdf-preview v-if="pdfVisible" :fileUrl="pdfUrl" />
+      </el-dialog>
     </el-row>
   </div>
 </template>
