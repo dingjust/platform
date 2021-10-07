@@ -230,26 +230,35 @@ export default {
       requiresAuth: true,
       permissions: ['PRODUCT']
     },
-    children: [{
-      name: 'B2B产品',
-      url: '/product/apparel',
-      meta: {
-        requiresAuth: true,
-        permissions: ['PRODUCTION_PRODUCT']
+    children: [
+      {
+        name: 'B2B产品',
+        url: '/product/apparel',
+        meta: {
+          requiresAuth: true,
+          permissions: ['PRODUCTION_PRODUCT']
+        }
+      },
+      {
+        name: '款式管理',
+        url: '/product/sample',
+        icon: 'iconNone',
+        meta: {
+          requiresAuth: true,
+          permissions: ['SAMPLE_CLOTHES_PRODUCT']
+        }
+      },
+      {
+        name: '物料管理',
+        url: '/product/material',
+        icon: 'iconNone'
+      },
+      {
+        name: '库存管理',
+        url: '/product/inventory',
+        icon: 'iconNone'
       }
-    }, {
-      name: '款式管理',
-      url: '/product/sample',
-      icon: 'iconNone',
-      meta: {
-        requiresAuth: true,
-        permissions: ['SAMPLE_CLOTHES_PRODUCT']
-      }
-    }, {
-      name: '物料管理',
-      url: '/product/material',
-      icon: 'iconNone'
-    } ]
+    ]
   },
   {
     name: '财务管理',

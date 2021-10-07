@@ -2107,7 +2107,18 @@ let NONE_TENANT_APIS = {
   // 创建公司银行卡 post
   createBank: () => '/b2b/bankCard',
   // 解绑公司银行卡 delete
-  deleteBank: (id) => '/b2b/bankCard/' + id
+  deleteBank: (id) => '/b2b/bankCard/' + id,
+
+  // 查询库存列表
+  searchInventory: () => '/b2b/products/stock',
+  // 获取库存列表
+  getInventory: (id) => '/b2b/products/stock/' + id,
+  // 创建库存信息
+  createInventory: () => '/b2b/products/stock/batchUpload',
+  // 修改库存信息
+  updateInventory: (id) => '/b2b/products/stock/' + id + '/update',
+  // 删除库存信息
+  deleteInventory: (id) => '/b2b/products/stock/' + id + '/deleted'
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
