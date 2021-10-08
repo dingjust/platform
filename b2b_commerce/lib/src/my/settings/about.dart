@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,16 +24,16 @@ class _ProfileAboutPageState extends State<ProfileAboutPage> {
           children: <Widget>[
             Expanded(
                 child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: AppProfile(
-                      name: '钉单',
-                      version: '${AppBLoC.instance?.packageInfo?.version}'),
-                ),
-                AppActions()
-              ],
-            )),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: AppProfile(
+                          name: '钉单',
+                          version: '${AppBLoC.instance?.packageInfo?.version}'),
+                    ),
+                    AppActions()
+                  ],
+                )),
             AppProtocols(context),
             AppCopyright()
           ],
@@ -85,7 +86,7 @@ class AppActions extends StatelessWidget {
           onTap: () {
             //TODO版本检测
             AppVersionHelper appVersionHelper =
-                Provider.of<AppVersionHelper>(context, listen: false);
+            Provider.of<AppVersionHelper>(context, listen: false);
             appVersionHelper.checkVersion(
                 context, AppBLoC.instance?.packageInfo?.version, 'nbyjy',
                 showNowMessage: true);
@@ -168,73 +169,86 @@ class AppProtocols extends StatelessWidget {
   }
 
   void showServiceProtocol() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString("packages/assets/document/serviceProtocol.txt"),
-            initialData: null,
-            builder: (context, snapshot) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                          child: Text(
-                            '钉单平台服务协议',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      snapshot.data != null
-                          ? Text(snapshot.data)
-                          : Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                ),
-              );
-            });
-      },
-    );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WebviewPage(
+                  url: 'https://www.nbyjy.net/service.html',
+                )));
+    // showDialog<void>(
+    //   context: context,
+    //   barrierDismissible: true, // user must tap button!
+    //   builder: (context) {
+    //     return FutureBuilder(
+    //         future: DefaultAssetBundle.of(context)
+    //             .loadString("packages/assets/document/serviceProtocol.txt"),
+    //         initialData: null,
+    //         builder: (context, snapshot) {
+    //           return AlertDialog(
+    //             content: SingleChildScrollView(
+    //               child: ListBody(
+    //                 children: <Widget>[
+    //                   Container(
+    //                     margin: EdgeInsets.only(bottom: 10),
+    //                     child: Center(
+    //                       child: Text(
+    //                         '钉单平台服务协议',
+    //                         style: TextStyle(fontWeight: FontWeight.bold),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   snapshot.data != null
+    //                       ? Text(snapshot.data)
+    //                       : Center(child: CircularProgressIndicator())
+    //                 ],
+    //               ),
+    //             ),
+    //           );
+    //         });
+    //   },
+    // );
   }
 
   void showPrivacyProtocol() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString("packages/assets/document/privacyProtocol.txt"),
-            initialData: null,
-            builder: (context, snapshot) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                          child: Text(
-                            '隐私政策声明',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      snapshot.data != null
-                          ? Text(snapshot.data)
-                          : Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                ),
-              );
-            });
-      },
-    );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WebviewPage(
+                  url: 'https://www.nbyjy.net/policy.html',
+                )));
+    // showDialog<void>(
+    //   context: context,
+    //   barrierDismissible: true, // user must tap button!
+    //   builder: (context) {
+    //     return FutureBuilder(
+    //         future: DefaultAssetBundle.of(context)
+    //             .loadString("packages/assets/document/privacyProtocol.txt"),
+    //         initialData: null,
+    //         builder: (context, snapshot) {
+    //           return AlertDialog(
+    //             content: SingleChildScrollView(
+    //               child: ListBody(
+    //                 children: <Widget>[
+    //                   Container(
+    //                     margin: EdgeInsets.only(bottom: 10),
+    //                     child: Center(
+    //                       child: Text(
+    //                         '隐私政策声明',
+    //                         style: TextStyle(fontWeight: FontWeight.bold),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   snapshot.data != null
+    //                       ? Text(snapshot.data)
+    //                       : Center(child: CircularProgressIndicator())
+    //                 ],
+    //               ),
+    //             ),
+    //           );
+    //         });
+    //   },
+    // );
   }
 }
 

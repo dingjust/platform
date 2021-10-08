@@ -1,10 +1,9 @@
+import 'package:b2b_commerce/src/_shared/widgets/info/info_widgets.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
-
-import 'package:b2b_commerce/src/_shared/widgets/info_widgets.dart';
 
 class FactoryInfo extends StatelessWidget {
   final FactoryModel model;
@@ -86,12 +85,12 @@ class _Scale extends StatelessWidget {
             InfoRow(
                 label: '月均产能',
                 val: MonthlyCapacityRangesLocalizedMap[
-                    model?.monthlyCapacityRange]),
+                model?.monthlyCapacityRange]),
             InfoDivider(),
             InfoRow(
                 label: '厂房',
                 val:
-                    '${model.factoryBuildingsQuantity == null ? '0' : model.factoryBuildingsQuantity.toString()}㎡'),
+                '${model.factoryBuildingsQuantity == null ? '0' : model.factoryBuildingsQuantity.toString()}㎡'),
             InfoDivider(),
             InfoRow(
                 label: '产值', val: ScaleRangesLocalizedMap[model.scaleRange]),
@@ -110,13 +109,10 @@ class _Scale extends StatelessWidget {
   ///设备
   String getEquipmentStr() {
     List<String> strs = [];
-    strs
-      ..addAll((model?.cuttingDepartment ?? [])
-          .map((e) => enumMap(CuttingDepartmentsEnum, e)))
-      ..addAll((model?.productionWorkshop ?? [])
-          .map((e) => enumMap(ProductionWorkshopsEnum, e)))
-      ..addAll((model?.lastDepartment ?? [])
-          .map((e) => enumMap(LastDepartmentsEnum, e)));
+    strs..addAll((model?.cuttingDepartment ?? [])
+        .map((e) => enumMap(CuttingDepartmentsEnum, e)))..addAll((model?.productionWorkshop ?? [])
+        .map((e) => enumMap(ProductionWorkshopsEnum, e)))..addAll((model?.lastDepartment ?? [])
+        .map((e) => enumMap(LastDepartmentsEnum, e)));
     return strs.join(',');
   }
 }

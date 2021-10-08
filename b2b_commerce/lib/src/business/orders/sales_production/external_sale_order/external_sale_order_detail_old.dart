@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/_shared/widgets/info/reconciliation_order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
@@ -92,7 +91,7 @@ class _ExternalSaleOrderDetailPageState
                       OrderContractsBlock(
                           agreements: order?.agreements,
                           beforeTap: recordRouteInfo),
-                      ReconciliationOrderCard(
+                      DocSignaturesBlock(
                           callback: () {
                             setState(() {
                               order = null;
@@ -280,7 +279,7 @@ class MainInfo extends StatelessWidget {
             buildRow(
                 '合作方式', CooperationModeLocalizedMap[order.cooperationMode]),
             buildRow('是否开票', order.invoiceNeeded ? '开发票' : '不开发票'),
-            buildRow('账期', _getDepositStr()),
+            buildRow('定金', _getDepositStr()),
             buildRow(
                 '创建人', isPartyA ? order?.sendBy?.name : order?.creator?.name),
             for (B2BCustomerModel approver in isPartyA
@@ -324,20 +323,9 @@ class MainInfo extends StatelessWidget {
     if (order.payPlan == null) {
       return '';
     }
-
-    String depositStr = '无定金';
-    if (order?.payPlan?.isHaveDeposit ?? false) {
-      depositStr = '定金';
-      AbstractPayPlanItemModel item = order.payPlan.payPlanItems.firstWhere(
-          (element) => element.moneyType == PayMoneyType.DEPOSIT,
-          orElse: () => null);
-      if (item != null) {
-        depositStr =
-            '$depositStr(${(item.payPercent * 100).toStringAsFixed(2)}%)';
-      }
-    }
-
-    return '$depositStr+' + PayPlanTypeLocalizedMap[order.payPlan.payPlanType];
+    return (order?.payPlan?.isHaveDeposit)
+        ? '有定金'
+        : '无定金' + PayPlanTypeLocalizedMap[order.payPlan.payPlanType];
   }
 
   ///来源方(我是甲方)

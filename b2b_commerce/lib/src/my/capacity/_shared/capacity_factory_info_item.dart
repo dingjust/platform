@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/_shared/widgets/info_widgets.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info/info_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 

@@ -161,8 +161,9 @@ class _OrderPaymentPageV2State extends State<OrderPaymentPageV2> {
                             url: qrcodeUrl,
                             order: widget.order.originCode,
                           )));
+                } else {
+                  showErrorText(title: '支付失败', content: '获取二维码失败');
                 }
-                showErrorText(title: '支付失败', content: '获取二维码失败');
               }
             } else {
               showErrorText(title: '支付失败', content: '${orderPayResponse.msg}');

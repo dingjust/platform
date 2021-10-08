@@ -55,9 +55,9 @@ class OrderDetailBtnGroup extends StatelessWidget {
     }
 
     //付款判断
-    if (isPartyA) {
-      return _buildPayBtn(context);
-    }
+    // if (isPartyA) {
+    return _buildPayBtn(context);
+    // }
 
     return Container(
       height: 0,
@@ -133,7 +133,7 @@ class OrderDetailBtnGroup extends StatelessWidget {
                       ])),
               child: Center(
                 child: Text(
-                  '支付${data.batch == 1 ? '定金' : '尾款'}',
+                  '${isPartyA ? '支' : '代'}付${data.batch == 1 ? '定金' : '尾款'}',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
