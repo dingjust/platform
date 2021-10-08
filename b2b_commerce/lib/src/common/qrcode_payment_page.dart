@@ -87,13 +87,24 @@ class _QRCodePaymentPageState extends State<QRCodePaymentPage> {
                     ],
                   )),
               Container(
-                  height: 50,
+                  height: 20,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         '微信扫一扫上面的二维码支付订单',
                         style: TextStyle(color: Colors.grey),
+                      )
+                    ],
+                  )),
+              Container(
+                  height: 20,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '(2小时内有效，不支持微信长按识别二维码)',
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
                       )
                     ],
                   ))

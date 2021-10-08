@@ -124,10 +124,10 @@ class ExternalSaleOrderItem extends StatelessWidget {
   }
 
   List<Widget> _buildCMTPayOrders(BuildContext context) {
-    //判断甲乙方，乙方不支付
-    if (isTarget) {
-      return [];
-    }
+    // //判断甲乙方，乙方不支付
+    // if (isTarget) {
+    //   return [];
+    // }
 
     //线下支付
     if (model.payOnline == null ||
@@ -148,9 +148,7 @@ class ExternalSaleOrderItem extends StatelessWidget {
                     width: 56,
                     margin: EdgeInsets.only(right: 10),
                     child: Text(
-                        (e.batch == 1 && model.paymentOrders.length > 1)
-                            ? '定金'
-                            : '尾款',
+                        (e.batch == 1 && model.haveDeposit) ? '定金' : '尾款',
                         style:
                             TextStyle(color: Color(0xFF666666), fontSize: 14)),
                   ),
@@ -183,7 +181,9 @@ class ExternalSaleOrderItem extends StatelessWidget {
   Widget _builPayBtn(BuildContext context) {
     CmtPayOrderData data = model.paymentOrders
         .firstWhere((element) => element.canPay, orElse: () => null);
-    if (model.state != SalesProductionOrderState.CANCELED && data != null) {
+    if (model.state != SalesProductionOrderState.CANCELED &&
+        data != null &&
+        (!isTarget)) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

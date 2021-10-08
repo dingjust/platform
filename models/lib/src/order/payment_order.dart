@@ -291,7 +291,7 @@ enum PaymentMethod {
   ///微信支付
   WECHAT_PAY,
 
-  ///微信原生支付
+  ///微信扫码支付
   WECHAT_PAY_NATIVE,
 
   ///微信APP支付
@@ -311,7 +311,7 @@ const PaymentMethodLocalizedMap = {
   PaymentMethod.ACCEPTANCE: "承兑",
   PaymentMethod.ALIPAY: "支付宝",
   PaymentMethod.WECHAT_PAY: "微信支付",
-  PaymentMethod.WECHAT_PAY_NATIVE: "微信原生支付",
+  PaymentMethod.WECHAT_PAY_NATIVE: "微信扫码支付",
   PaymentMethod.WECHAT_PAY_APP: "微信APP支付",
   PaymentMethod.WECHAT_PAY_QRCODE: "微信二维码支付",
   PaymentMethod.WECHAT_PAY_MP: "微信内部支付",

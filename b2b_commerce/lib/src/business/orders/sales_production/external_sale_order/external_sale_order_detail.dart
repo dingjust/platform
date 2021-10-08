@@ -280,7 +280,7 @@ class MainInfo extends StatelessWidget {
             buildRow(
                 '合作方式', CooperationModeLocalizedMap[order.cooperationMode]),
             buildRow('是否开票', order.invoiceNeeded ? '开发票' : '不开发票'),
-            buildRow('定金', _getDepositStr()),
+            buildRow('账期', _getDepositStr()),
             buildRow(
                 '创建人', isPartyA ? order?.sendBy?.name : order?.creator?.name),
             for (B2BCustomerModel approver in isPartyA
@@ -324,9 +324,20 @@ class MainInfo extends StatelessWidget {
     if (order.payPlan == null) {
       return '';
     }
-    return (order?.payPlan?.isHaveDeposit)
-        ? '有定金'
-        : '无定金' + PayPlanTypeLocalizedMap[order.payPlan.payPlanType];
+
+    String depositStr = '无定金';
+    if (order?.payPlan?.isHaveDeposit ?? false) {
+      depositStr = '定金';
+      AbstractPayPlanItemModel item = order.payPlan.payPlanItems.firstWhere(
+          (element) => element.moneyType == PayMoneyType.DEPOSIT,
+          orElse: () => null);
+      if (item != null) {
+        depositStr =
+            '$depositStr(${(item.payPercent * 100).toStringAsFixed(2)}%)';
+      }
+    }
+
+    return '$depositStr+' + PayPlanTypeLocalizedMap[order.payPlan.payPlanType];
   }
 
   ///来源方(我是甲方)
