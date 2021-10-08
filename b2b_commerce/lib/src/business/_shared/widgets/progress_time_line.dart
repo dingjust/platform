@@ -49,8 +49,8 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
 
   @override
   Widget build(BuildContext context) {
-    return _enableEdit &&
-            widget.model.orderStatus == ProductionTaskOrderState.TO_BE_PRODUCED
+    return _enableEdit && !hasEstimatedDate()
+        // widget.model.orderStatus == ProductionTaskOrderState.TO_BE_PRODUCED
         ? IntrinsicHeight(
             child: Stack(
               alignment: Alignment.center,
@@ -110,7 +110,8 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                   }
                 }
 
-                return _buildProductionProgress(context, _index++, _currentStatus);
+                return _buildProductionProgress(
+                    context, _index++, _currentStatus);
               }).toList(),
             ),
             decoration: BoxDecoration(
@@ -127,9 +128,11 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
       color: Colors.white,
       child: InkWell(
         onTap: () {
-          widget.model.progresses[index].belong = ProgressWorkSheetModel(code: widget.model.code);
+          widget.model.progresses[index].belong =
+              ProgressWorkSheetModel(code: widget.model.code);
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ProductionProgressDetailPage(
+              builder: (context) =>
+                  ProductionProgressDetailPage(
                     colorSizeEntries: widget.model.colorSizeEntries,
                     progress: widget.model.progresses[index],
                   )));
@@ -289,11 +292,11 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
                     '完成',
                     style: TextStyle(color: Colors.white),
                   ),
-                      ),
-                      shape:
-                          CircleBorder(side: BorderSide(color: Colors.white)),
-                      color: Color(0xffffd60c),
-                    )
+                ),
+                shape:
+                CircleBorder(side: BorderSide(color: Colors.white)),
+                color: Color(0xffffd60c),
+              )
                   : Container(),
             ],
           ),
@@ -349,10 +352,20 @@ class _ProgressTimeLineState extends State<ProgressTimeLine> {
             child: progress.finishDate == null
                 ? Container()
                 : Text('${DateFormatUtil.formatYMD(progress.finishDate)}',
-                    style: TextStyle(color: _colorStateMap[currentStatus])),
+                style: TextStyle(color: _colorStateMap[currentStatus])),
           ),
         ],
       ),
     );
+  }
+
+  ///是否已经设置预计完成时间
+  bool hasEstimatedDate() {
+    bool result = false;
+    if (widget.model.progresses != null) {
+      result = widget.model.progresses
+          .every((element) => element.estimatedDate != null);
+    }
+    return result;
   }
 }
