@@ -6,8 +6,8 @@ import 'package:b2b_commerce/src/business/orders/requirement/requirement_type_se
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/common/privacy_guide_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
-import 'package:b2b_commerce/src/helper/clipboard_helper.dart';
 import 'package:b2b_commerce/src/helper/global_message_helper.dart';
 import 'package:b2b_commerce/src/home/_shared/models/navigation_menu.dart';
 import 'package:b2b_commerce/src/home/account/client_select_v2.dart';
@@ -112,7 +112,7 @@ class _B2BAppState extends State<B2BApp> with WidgetsBindingObserver {
     //更新检测
     Future.delayed(Duration(seconds: 3)).then((r) {
       AppVersionHelper appVersionHelper =
-      Provider.of<AppVersionHelper>(context, listen: false);
+          Provider.of<AppVersionHelper>(context, listen: false);
       appVersionHelper.checkVersion(
           context, AppBLoC.instance?.packageInfo?.version, 'nbyjy');
     });
@@ -328,6 +328,40 @@ class AnymouseApp extends StatelessWidget {
           child: child,
         );
       },
+    );
+  }
+}
+
+///隐私政策未授权应用入口
+class PrivacyGuideApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: AppConstants.appTitle,
+      navigatorObservers: [BotToastNavigatorObserver(), B2BNavigatorObserver()],
+      //2.注册路由观察者
+      theme: ThemeData(
+        primaryColor: Colors.white,
+        accentColor: Color.fromRGBO(255, 214, 12, 1),
+        bottomAppBarColor: Colors.grey,
+      ),
+      routes: AppRoutes.allRoutes,
+      localizationsDelegates: [
+        //此处
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        ChineseCupertinoLocalizations.delegate
+      ],
+      home: PrivacyGuidePage(),
+      builder: (context, child) {
+        final botToastBuilder = BotToastInit(); //1.调用BotToastInit
+        child = botToastBuilder(context, child);
+        return MaxScaleTextWidget(
+          max: 1.0,
+          child: child,
+        );
+      },
+      supportedLocales: AppConstants.supportedLocales(),
     );
   }
 }

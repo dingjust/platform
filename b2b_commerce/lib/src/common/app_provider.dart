@@ -20,6 +20,7 @@ class AppProvider {
     ChangeNotifierProvider(create: (_) => BusinessReportState()),
     ChangeNotifierProvider(create: (_) => MyFavoriteState()),
     ChangeNotifierProvider(create: (_) => NotificationState()),
+    ChangeNotifierProvider(create: (_) => LocalStorageHelper()),
     // ChangeNotifierProvider(create: (_) => HomeSectionState()),
     Provider(
       create: (_) => AddressState(),
@@ -57,7 +58,6 @@ class AppProvider {
     // Provider(
     //   create: (_) => ClipboardHelper(),
     // ),
-    Provider(create: (_) => LocalStorageHelper())
   ];
 
   ///预加载

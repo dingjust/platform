@@ -10,6 +10,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'src/_shared/error/b2b_error.dart';
+import 'src/helper/local_storage_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,9 +46,18 @@ void main() async {
     runApp(BLoCProvider<AppBLoC>(
       bloc: AppBLoC.instance,
       child: MultiProvider(
-        providers: AppProvider.providers,
-        child: MyApp(),
-      ),
+          providers: AppProvider.providers,
+          child: Consumer<LocalStorageHelper>(
+              builder: (context, LocalStorageHelper helper, _) {
+            //是否同意收集个人信息
+            if (helper.getPrivacyAgreeTime() == null) {
+              //不同意入口
+              return PrivacyGuideApp();
+            } else {
+              //同意入口
+              return MyApp();
+            }
+          })),
     ));
   });
 }
