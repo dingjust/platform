@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_list.dart';
-import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,7 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_) => getLocation());
+    // WidgetsBinding.instance.addPostFrameCallback((_) => getLocation());
 
     super.initState();
   }
@@ -102,38 +101,38 @@ class _NearbyRequirementPageState extends State<NearbyRequirementPage>
     ];
   }
 
-  void getLocation() async {
-    AmapState state = Provider.of<AmapState>(context, listen: false);
+// void getLocation() async {
+//   AmapState state = Provider.of<AmapState>(context, listen: false);
 
-    Widget _dialog = CustomizeDialog(
-      dialogType: DialogType.CONFIRM_DIALOG,
-      contentText2: '钉单正在请求定位权限,请设置',
-      isNeedConfirmButton: true,
-      isNeedCancelButton: true,
-      confirmButtonText: '去设置',
-      cancelButtonText: '选择城市',
-      dialogHeight: 180,
-      confirmAction: () {
-        state.openAppSetting().then((val) {
-          Navigator.of(context).pop(val);
-        });
-      },
-      cancelAction: () async {
-        Navigator.of(context).pop();
-        Tip tip = await Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
-        List<String> locationArray = tip.location.split(',');
-        //设置定位信息
-        state.setAMapLocation(
-            // aOIName: tip.district.,
-            longitude: double.parse(locationArray[0]),
-            latitude: double.parse(locationArray[1]));
-      },
-    );
+//   Widget _dialog = CustomizeDialog(
+//     dialogType: DialogType.CONFIRM_DIALOG,
+//     contentText2: '钉单正在请求定位权限,请设置',
+//     isNeedConfirmButton: true,
+//     isNeedCancelButton: true,
+//     confirmButtonText: '去设置',
+//     cancelButtonText: '选择城市',
+//     dialogHeight: 180,
+//     confirmAction: () {
+//       state.openAppSetting().then((val) {
+//         Navigator.of(context).pop(val);
+//       });
+//     },
+//     cancelAction: () async {
+//       Navigator.of(context).pop();
+//       Tip tip = await Navigator.of(context)
+//           .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
+//       List<String> locationArray = tip.location.split(',');
+//       //设置定位信息
+//       state.setAMapLocation(
+//           // aOIName: tip.district.,
+//           longitude: double.parse(locationArray[0]),
+//           latitude: double.parse(locationArray[1]));
+//     },
+//   );
 
-    Provider.of<AmapState>(context, listen: false)
-        .getAMapLocation(context: context, openDialog: _dialog);
-  }
+//   Provider.of<AmapState>(context, listen: false)
+//       .getAMapLocation(context: context, openDialog: _dialog);
+// }
 }
 
 class SearchResultDelegate extends SliverPersistentHeaderDelegate {

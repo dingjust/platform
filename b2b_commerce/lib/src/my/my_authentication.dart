@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/common/webview_page.dart';
-import 'package:b2b_commerce/src/helper/permission_helper.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_enterprise_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
 import 'package:b2b_commerce/src/my/authentication/my_authentication_enterprise_result.dart';
@@ -27,7 +26,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
     //埋点>>>我要认证
     UmengPlugin.onEvent('my_authentication');
     //权限预获取
-    PermissionHelper.check();
+    // PermissionHelper.check();
 
     super.initState();
   }

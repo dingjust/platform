@@ -52,14 +52,14 @@ class AmapState with ChangeNotifier {
     return '';
   }
 
-  AMapLocation getAMapLocation({BuildContext context, Widget openDialog}) {
+  AMapLocation getAMapLocation({BuildContext context}) {
     if (_aMapLocation != null) {
       return _aMapLocation;
-    } else if (context != null && openDialog != null) {
+    } else if (context != null) {
       //IOS进来不取定位权限
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        getLocation(context, openDialog);
-      }
+      // if (defaultTargetPlatform == TargetPlatform.android) {
+      //   getLocation(context);
+      // }
       return AMapLocation(
           city: '广州',
           AOIName: '广州',
@@ -69,7 +69,9 @@ class AmapState with ChangeNotifier {
     }
   }
 
-  void getLocation(BuildContext context, Widget openDialog) async {
+  void getLocation(
+    BuildContext context,
+  ) async {
     try {
       //权限状态获取
       PermissionStatus permission =
@@ -95,46 +97,46 @@ class AmapState with ChangeNotifier {
         print('当前定位状态--2$permission');
       }
 
-      //禁用或者询问状态去设置
-      if (permission != PermissionStatus.granted) {
-        BotToast.showCustomText(
-          onlyOne: true,
-          duration: null,
-          clickClose: false,
-          crossPage: false,
-          backgroundColor: Colors.black38,
-          toastBuilder: (cancelFunc) => AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            // title: Text('钉单正在请求定位权限,请设置'),
-            content: Text('钉单正在请求定位权限,请设置'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () async {
-                  cancelFunc();
-                },
-                child: const Text('忽略', style: TextStyle(color: Colors.grey)),
-              ),
-              TextButton(
-                onPressed: () async {
-                  cancelFunc();
-                  bool result = await openAppSetting();
-                  // if (result ?? false) {
-                  //   bool queryResult = await loopQueryStatus();
-                  // }
-                },
-                child: const Text(
-                  '设置',
-                ),
-              ),
-            ],
-          ),
-        );
-      }
+      // //禁用或者询问状态去设置
+      // if (permission != PermissionStatus.granted) {
+      //   BotToast.showCustomText(
+      //     onlyOne: true,
+      //     duration: null,
+      //     clickClose: false,
+      //     crossPage: false,
+      //     backgroundColor: Colors.black38,
+      //     toastBuilder: (cancelFunc) => AlertDialog(
+      //       shape:
+      //           RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      //       // title: Text('钉单正在请求定位权限,请设置'),
+      //       content: Text('钉单正在请求定位权限,请设置'),
+      //       actions: <Widget>[
+      //         TextButton(
+      //           onPressed: () async {
+      //             cancelFunc();
+      //           },
+      //           child: const Text('忽略', style: TextStyle(color: Colors.grey)),
+      //         ),
+      //         TextButton(
+      //           onPressed: () async {
+      //             cancelFunc();
+      //             bool result = await openAppSetting();
+      //             // if (result ?? false) {
+      //             //   bool queryResult = await loopQueryStatus();
+      //             // }
+      //           },
+      //           child: const Text(
+      //             '设置',
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   );
+      // }
 
       AMapLocationClient.startup(AMapLocationOption(
           desiredAccuracy:
-              CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
+          CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
       _aMapLocation = await AMapLocationClient.getLocation(true);
 
       if (_aMapLocation == null) {
@@ -163,27 +165,27 @@ class AmapState with ChangeNotifier {
     return isOpened;
   }
 
-  Future<bool> loopQueryStatus() async {
-    LocationPermissions().checkPermissionStatus().then((status) {
-      if (status != PermissionStatus.granted) {
-        Future.delayed(Duration(milliseconds: 1000)).then((e) {
-          loopQueryStatus();
-        });
-      } else {
-        AMapLocationClient.startup(AMapLocationOption(
-            desiredAccuracy:
-                CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
-        AMapLocationClient.getLocation(true).then((val) {
-          _aMapLocation = val;
-          AMapLocationClient.stopLocation();
+  // Future<bool> loopQueryStatus() async {
+  //   LocationPermissions().checkPermissionStatus().then((status) {
+  //     if (status != PermissionStatus.granted) {
+  //       Future.delayed(Duration(milliseconds: 1000)).then((e) {
+  //         loopQueryStatus();
+  //       });
+  //     } else {
+  //       AMapLocationClient.startup(AMapLocationOption(
+  //           desiredAccuracy:
+  //               CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
+  //       AMapLocationClient.getLocation(true).then((val) {
+  //         _aMapLocation = val;
+  //         AMapLocationClient.stopLocation();
 
-          ///通知刷新
-          notifyListeners();
-          return true;
-        });
-      }
-    });
-  }
+  //         ///通知刷新
+  //         notifyListeners();
+  //         return true;
+  //       });
+  //     }
+  //   });
+  // }
 
   void setCity(String city) {
     _city = city;

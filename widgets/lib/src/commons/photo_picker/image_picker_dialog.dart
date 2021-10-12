@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:widgets/src/helper/permission_helper.dart';
 
 import 'image_picker_handler.dart';
 
@@ -40,8 +43,7 @@ class ImagePickerDialog extends StatelessWidget {
     _controller.forward();
     showDialog(
       context: context,
-      builder: (BuildContext context) =>
-      new SlideTransition(
+      builder: (BuildContext context) => new SlideTransition(
         position: _drawerDetailsPosition,
         child: new FadeTransition(
           opacity: new ReverseAnimation(_drawerContentsOpacity),
@@ -83,7 +85,14 @@ class ImagePickerDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 new InkWell(
-                  onTap: () => _listener.openCamera(),
+                  // onTap: () => _listener.openCamera(),
+                  onTap: () async {
+                    PermissionHelper.check(Permission.camera).then((value) {
+                      if (value) {
+                        _listener.openCamera();
+                      }
+                    });
+                  },
                   child: roundedButton(
                     "拍一张",
                     EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
@@ -98,7 +107,26 @@ class ImagePickerDialog extends StatelessWidget {
                   height: 0,
                 ),
                 new GestureDetector(
-                  onTap: () => _listener.openGallery(context),
+                  onTap: () async {
+                    // Permission permission;
+                    // if (defaultTargetPlatform == TargetPlatform.android) {
+                    //   permission = Permission.storage;
+                    // }else{
+                    //   permission
+                    // }
+                    // _listener.openGallery(context);
+                    // print(object)
+                    Permission.photos.status.then((value) {
+                      print('photos: $value');
+                    });
+                    Permission.mediaLibrary.status.then((value) {
+                      print('mediaLibrary: $value');
+                    });
+                    Permission.storage.status.then((value) {
+                      print('storage: $value');
+                    });
+                    _listener.openGallery(context);
+                  },
                   child: roundedButton(
                     "从相册选择",
                     EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),

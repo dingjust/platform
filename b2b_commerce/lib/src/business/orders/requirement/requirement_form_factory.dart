@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/address_cascader.dart';
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/quantity_select.dart';
@@ -51,7 +50,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
     super.initCreate(widget.formState.model);
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => getLocation());
+    // WidgetsBinding.instance.addPostFrameCallback((_) => getLocation());
 
     widget.formState.model.orderType = RequirementOrderType.FINDING_FACTORY;
 
@@ -880,7 +879,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
         builder: (context) =>
             SalesMarketSelectPage(
               values: widget.formState.model.details.salesMarket,
-            )))
+                )))
         .then((values) {
       if (values != null) {
         setState(() {
@@ -890,48 +889,48 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
     });
   }
 
-  void getLocation() async {
-    AmapState state = Provider.of<AmapState>(context, listen: false);
+  // void getLocation() async {
+  //   AmapState state = Provider.of<AmapState>(context, listen: false);
 
-    Widget _dialog = CustomizeDialog(
-      dialogType: DialogType.CONFIRM_DIALOG,
-      contentText2: '钉单正在请求定位权限,请设置',
-      isNeedConfirmButton: true,
-      isNeedCancelButton: true,
-      confirmButtonText: '去设置',
-      cancelButtonText: '选择城市',
-      dialogHeight: 180,
-      confirmAction: () {
-        state.openAppSetting().then((val) {
-          Navigator.of(context).pop(val);
-        });
-      },
-      cancelAction: () async {
-        Navigator.of(context).pop();
-        Tip tip = await Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
-        List<String> locationArray = tip.location.split(',');
-        //设置定位信息
-        state.setAMapLocation(
-            // aOIName: tip.district.,
-            longitude: double.parse(locationArray[0]),
-            latitude: double.parse(locationArray[1]));
-      },
-    );
+  //   Widget _dialog = CustomizeDialog(
+  //     dialogType: DialogType.CONFIRM_DIALOG,
+  //     contentText2: '钉单正在请求定位权限,请设置',
+  //     isNeedConfirmButton: true,
+  //     isNeedCancelButton: true,
+  //     confirmButtonText: '去设置',
+  //     cancelButtonText: '选择城市',
+  //     dialogHeight: 180,
+  //     confirmAction: () {
+  //       state.openAppSetting().then((val) {
+  //         Navigator.of(context).pop(val);
+  //       });
+  //     },
+  //     cancelAction: () async {
+  //       Navigator.of(context).pop();
+  //       Tip tip = await Navigator.of(context)
+  //           .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
+  //       List<String> locationArray = tip.location.split(',');
+  //       //设置定位信息
+  //       state.setAMapLocation(
+  //           // aOIName: tip.district.,
+  //           longitude: double.parse(locationArray[0]),
+  //           latitude: double.parse(locationArray[1]));
+  //     },
+  //   );
 
-    AMapLocation aMapLocation = Provider.of<AmapState>(context, listen: false)
-        .getAMapLocation(context: context, openDialog: _dialog);
+  //   AMapLocation aMapLocation = Provider.of<AmapState>(context, listen: false)
+  //       .getAMapLocation(context: context, openDialog: _dialog);
 
-    setState(() {
-      widget.formState.model.details
-        ..latitude = aMapLocation.latitude
-        ..longitude = aMapLocation.longitude
-        ..address = aMapLocation.formattedAddress
-        ..provinceStr = aMapLocation.province
-        ..cityStr = aMapLocation.city
-        ..districtStr = aMapLocation.district;
-    });
-  }
+  //   setState(() {
+  //     widget.formState.model.details
+  //       ..latitude = aMapLocation.latitude
+  //       ..longitude = aMapLocation.longitude
+  //       ..address = aMapLocation.formattedAddress
+  //       ..provinceStr = aMapLocation.province
+  //       ..cityStr = aMapLocation.city
+  //       ..districtStr = aMapLocation.district;
+  //   });
+  // }
 
   ///质量等级值
   String marketStr() {

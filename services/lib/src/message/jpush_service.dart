@@ -60,6 +60,7 @@ class JPushService {
       production: true,
       debug: true, // 设置是否打印 debug 日志
     );
+    print('JPUSH初始化====================');
 
     _jpush.applyPushAuthority(
         new NotificationSettingsIOS(sound: true, alert: true, badge: true));
