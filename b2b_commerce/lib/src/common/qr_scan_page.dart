@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:b2b_commerce/src/helper/uri_helper.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_qr_reader/flutter_qr_reader.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -21,20 +24,24 @@ class _QrScanPageState extends State<QrScanPage> {
   StreamSubscription subscription;
   UriHelper uriHelper;
   bool lightOn = false;
+  bool hasCameraPermission = false;
 
   @override
   void initState() {
     uriHelper = UriHelper();
+    cameraPermissionCheck();
     super.initState();
   }
 
   @override
   void reassemble() {
     super.reassemble();
-    if (Platform.isAndroid) {
-      controller.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller.resumeCamera();
+    if (controller != null) {
+      if (Platform.isAndroid) {
+        controller.pauseCamera();
+      } else if (Platform.isIOS) {
+        controller.resumeCamera();
+      }
     }
   }
 
@@ -44,16 +51,20 @@ class _QrScanPageState extends State<QrScanPage> {
         body: Stack(
       fit: StackFit.expand,
       children: [
-        QRView(
-          key: qrKey,
-          onQRViewCreated: _onQRViewCreated,
-          overlay: QrScannerOverlayShape(
-            borderColor: Constants.THEME_COLOR_MAIN,
-            borderRadius: 10,
-            borderLength: 30,
-            borderWidth: 5,
-          ),
-        ),
+        hasCameraPermission
+            ? QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+                overlay: QrScannerOverlayShape(
+                  borderColor: Constants.THEME_COLOR_MAIN,
+                  borderRadius: 10,
+                  borderLength: 30,
+                  borderWidth: 5,
+                ),
+              )
+            : Container(
+                color: Colors.black,
+              ),
         Align(
           alignment: Alignment(0, 0.5),
           child: Text(
@@ -106,64 +117,80 @@ class _QrScanPageState extends State<QrScanPage> {
                   Navigator.of(context).pop();
                 }))
       ],
-    ));
+        ));
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    // print('[钉单]====================OnQRViewCreated=================');
-    // this.controller = controller;
-    // subscription?.cancel();
-    // subscription = controller.scannedDataStream.listen((scanData) {
-    //   bool validate = uriHelper.handleUri(
-    //       context: context,
-    //       uri: scanData.code,
-    //       controller: controller,
-    //       onCameraPause: () {
-    //         this.controller.pauseCamera();
-    //       },
-    //       onResumeCamera: () {
-    //         this.controller.resumeCamera();
-    //       });
-    // });
+  void cameraPermissionCheck() {
+    PermissionHelper.check(Permission.camera).then((value) {
+      setState(() {
+        hasCameraPermission = value;
+      });
+    });
+  }
+
+  void _onQRViewCreated(QRViewController controller) async {
+    print('[钉单]====================OnQRViewCreated=================');
+    this.controller = controller;
+    subscription?.cancel();
+    subscription = controller.scannedDataStream.listen((scanData) {
+      bool validate = uriHelper.handleUri(
+          context: context,
+          uri: scanData.code,
+          controller: controller,
+          onCameraPause: () {
+            this.controller.pauseCamera();
+          },
+          onResumeCamera: () {
+            this.controller.resumeCamera();
+          });
+    });
   }
 
   Future _scanBytes() async {
-    // this.controller.pauseCamera();
-    //权限状态获取
-    // PermissionStatus permission =
-    //     await LocationPermissions().checkPermissionStatus();
-    PermissionHelper.check(Permission.storage);
-    // PermissionHelper.check(Permission.camera);
+    this.controller?.pauseCamera();
+    // 权限状态获取
+    Permission permission;
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      permission = Permission.storage;
+    } else {
+      permission = Permission.photos;
+    }
+    if (permission != null) {
+      bool value = await PermissionHelper.check(permission);
+      if (value) {
+        ImagePicker imagePicker = ImagePicker();
 
-    ImagePicker imagePicker = ImagePicker();
+        PickedFile file =
+        await imagePicker.getImage(source: ImageSource.gallery);
+        if (file == null) {
+          this.controller.resumeCamera();
+          return;
+        }
+        final String barcode = await FlutterQrReader.imgScan(File(file.path));
+        this.controller.resumeCamera();
+        print('=======================$barcode');
+        print(barcode);
+        if (barcode == null) {
+          BotToast.showText(text: '无法识别', align: Alignment(0, 0));
+          throw Exception('二维码为空');
+        }
+        bool validate = uriHelper.handleUri(
+            context: context,
+            uri: barcode,
+            controller: controller,
+            onCameraPause: () {
+              this.controller.pauseCamera();
+            },
+            onResumeCamera: () {
+              this.controller.resumeCamera();
+            });
 
-    PickedFile file = await imagePicker.getImage(source: ImageSource.gallery);
-    // if (file == null) {
-    //   this.controller.resumeCamera();
-    //   return;
-    // }
-    // final String barcode = await FlutterQrReader.imgScan(File(file.path));
-    // this.controller.resumeCamera();
-    // print('=======================$barcode');
-    // print(barcode);
-    // if (barcode == null) {
-    //   BotToast.showText(text: '无法识别', align: Alignment(0, 0));
-    //   throw Exception('二维码为空');
-    // }
-    // bool validate = uriHelper.handleUri(
-    //     context: context,
-    //     uri: barcode,
-    //     controller: controller,
-    //     onCameraPause: () {
-    //       this.controller.pauseCamera();
-    //     },
-    //     onResumeCamera: () {
-    //       this.controller.resumeCamera();
-    //     });
-
-    // if (!validate) {
-    //   BotToast.showText(text: '二维码无效', align: Alignment(0, 0));
-    // }
+        if (!validate) {
+          BotToast.showText(text: '二维码无效', align: Alignment(0, 0));
+        }
+      }
+    }
+    this.controller?.resumeCamera();
   }
 
   @override

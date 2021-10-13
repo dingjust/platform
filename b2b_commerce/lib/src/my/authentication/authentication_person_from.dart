@@ -63,7 +63,7 @@ class _AuthenticationPersonFromPageState
               _idCardController != null &&
               _idCardController.text != null &&
               _idCardController.text != '') {
-            personal(_fddbrController.text, _idCardController.text);
+            showAgreeDialog();
           } else {
             BotToast.showText(text: '请填写信息');
           }
@@ -95,9 +95,9 @@ class _AuthenticationPersonFromPageState
         children: <Widget>[
           Expanded(
               child: Text(
-                '$AUTHENTICATION_INFO',
-                textAlign: TextAlign.center,
-              ))
+            '$AUTHENTICATION_INFO',
+            textAlign: TextAlign.center,
+          ))
         ],
       ),
     );
@@ -194,6 +194,46 @@ class _AuthenticationPersonFromPageState
           ),
         ],
       ),
+    );
+  }
+
+  ///授权提示
+  void showAgreeDialog() {
+    BotToast.showCustomText(
+      onlyOne: true,
+      duration: null,
+      crossPage: false,
+      toastBuilder: (cancelFunc) =>
+          AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5)),
+            content: Text('您将前往“法大大”申请数字证书，数字证书申请需要调用系统相机、相册的功能授权，您是否同意？'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  cancelFunc.call();
+                },
+                child: const Text(
+                  '拒绝',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              FlatButton(
+                onPressed: () {
+                  cancelFunc.call();
+                  PermissionHelper.checkCameraAndPhoto().then((value) {
+                    if (value) {
+                      personal(_fddbrController.text, _idCardController.text);
+                    }
+                  });
+                },
+                child: const Text(
+                  '同意',
+                  style: TextStyle(color: Colors.lightBlue),
+                ),
+              ),
+            ],
+          ),
     );
   }
 }

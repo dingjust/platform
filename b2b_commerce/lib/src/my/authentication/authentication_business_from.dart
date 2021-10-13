@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/common/webview_page.dart';
-import 'package:b2b_commerce/src/my/contract/webview_page.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -146,16 +146,7 @@ class _AuthenticationBusinessFromPageState
                   );
                 });
           } else {
-            Map map = {
-              'companyName': _enterpriseNameController.text,
-              'organization': _xydmController.text,
-              'role': 'LEGAL',
-              'username': _fddbrController.text,
-              'idCardNum': _idCardController.text,
-              'verifyWay': type,
-              'companyType': 'TYPE2'
-            };
-            enterprise(map);
+            showAgreeDialog();
           }
         },
       ),
@@ -288,6 +279,53 @@ class _AuthenticationBusinessFromPageState
               ],
             ));
       },
+    );
+  }
+
+  ///授权提示
+  void showAgreeDialog() {
+    BotToast.showCustomText(
+      onlyOne: true,
+      duration: null,
+      crossPage: false,
+      toastBuilder: (cancelFunc) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        content: Text('您将前往“法大大”申请数字证书，数字证书申请需要调用系统相机、相册的功能授权，您是否同意？'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              cancelFunc.call();
+            },
+            child: const Text(
+              '拒绝',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          FlatButton(
+            onPressed: () {
+              cancelFunc.call();
+              PermissionHelper.checkCameraAndPhoto().then((value) {
+                if (value) {
+                  Map map = {
+                    'companyName': _enterpriseNameController.text,
+                    'organization': _xydmController.text,
+                    'role': 'LEGAL',
+                    'username': _fddbrController.text,
+                    'idCardNum': _idCardController.text,
+                    'verifyWay': type,
+                    'companyType': 'TYPE2'
+                  };
+                  enterprise(map);
+                }
+              });
+            },
+            child: const Text(
+              '同意',
+              style: TextStyle(color: Colors.lightBlue),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

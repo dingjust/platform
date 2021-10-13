@@ -108,24 +108,19 @@ class ImagePickerDialog extends StatelessWidget {
                 ),
                 new GestureDetector(
                   onTap: () async {
-                    // Permission permission;
-                    // if (defaultTargetPlatform == TargetPlatform.android) {
-                    //   permission = Permission.storage;
-                    // }else{
-                    //   permission
-                    // }
-                    // _listener.openGallery(context);
-                    // print(object)
-                    Permission.photos.status.then((value) {
-                      print('photos: $value');
-                    });
-                    Permission.mediaLibrary.status.then((value) {
-                      print('mediaLibrary: $value');
-                    });
-                    Permission.storage.status.then((value) {
-                      print('storage: $value');
-                    });
-                    _listener.openGallery(context);
+                    Permission permission;
+                    if (defaultTargetPlatform == TargetPlatform.android) {
+                      permission = Permission.storage;
+                    } else {
+                      permission = Permission.photos;
+                    }
+                    if (permission != null) {
+                      PermissionHelper.check(permission).then((value) {
+                        if (value) {
+                          _listener.openGallery(context);
+                        }
+                      });
+                    }
                   },
                   child: roundedButton(
                     "从相册选择",

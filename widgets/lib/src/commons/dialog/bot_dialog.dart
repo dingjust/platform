@@ -223,69 +223,69 @@ void showLocationDialog(bool blockPopup, {
   VoidCallback cancel,
   VoidCallback confirm,
 }) {
-  BotToast.showCustomText(
-    onlyOne: true,
-    duration: null,
-    wrapToastAnimation: (controller, cancel, child) =>
-        Stack(
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                cancel();
-              },
-              //The DecoratedBox here is very important,he will fill the entire parent component
-              child: AnimatedBuilder(
-                builder: (_, child) =>
-                    Opacity(
-                      opacity: controller.value,
-                      child: child,
-                    ),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: Colors.black26),
-                  child: SizedBox.expand(),
-                ),
-                animation: controller,
-              ),
-            ),
-            CustomOffsetAnimation(
-              controller: controller,
-              child: child,
-            )
-          ],
-        ),
-    toastBuilder: (cancelFunc) =>
-        AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          // title: const Text('温馨提示'),
-          content: const Text('钉单正在请求定位权限，请设置'),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                cancelFunc();
-                cancel?.call();
-              },
-              child: const Text(
-                '选择城市定位',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            FlatButton(
-              onPressed: () {
-                cancelFunc();
-                BotToast.showLoading(
-                  crossPage: false,
-                  clickClose: true,
-                ); //弹出一个加载动画
-                confirm?.call();
-              },
-              child: const Text(
-                '去设置',
-                style: TextStyle(color: Colors.lightBlue),
-              ),
-            ),
-          ],
-        ),
-  );
+  // BotToast.showCustomText(
+  //   onlyOne: true,
+  //   duration: null,
+  //   wrapToastAnimation: (controller, cancel, child) =>
+  //       Stack(
+  //         children: <Widget>[
+  //           GestureDetector(
+  //             onTap: () {
+  //               cancel();
+  //             },
+  //             //The DecoratedBox here is very important,he will fill the entire parent component
+  //             child: AnimatedBuilder(
+  //               builder: (_, child) =>
+  //                   Opacity(
+  //                     opacity: controller.value,
+  //                     child: child,
+  //                   ),
+  //               child: DecoratedBox(
+  //                 decoration: BoxDecoration(color: Colors.black26),
+  //                 child: SizedBox.expand(),
+  //               ),
+  //               animation: controller,
+  //             ),
+  //           ),
+  //           CustomOffsetAnimation(
+  //             controller: controller,
+  //             child: child,
+  //           )
+  //         ],
+  //       ),
+  //   toastBuilder: (cancelFunc) =>
+  //       AlertDialog(
+  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+  //         // title: const Text('温馨提示'),
+  //         content: const Text('钉单正在请求定位权限，请设置'),
+  //         actions: <Widget>[
+  //           FlatButton(
+  //             onPressed: () {
+  //               cancelFunc();
+  //               cancel?.call();
+  //             },
+  //             child: const Text(
+  //               '选择城市定位',
+  //               style: TextStyle(color: Colors.grey),
+  //             ),
+  //           ),
+  //           FlatButton(
+  //             onPressed: () {
+  //               cancelFunc();
+  //               BotToast.showLoading(
+  //                 crossPage: false,
+  //                 clickClose: true,
+  //               ); //弹出一个加载动画
+  //               confirm?.call();
+  //             },
+  //             child: const Text(
+  //               '去设置',
+  //               style: TextStyle(color: Colors.lightBlue),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  // );
 }
 
 class BackgroundRoute extends StatefulWidget {
