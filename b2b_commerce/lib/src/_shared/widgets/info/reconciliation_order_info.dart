@@ -21,8 +21,6 @@ class ReconciliationOrderCard extends StatelessWidget {
 
   final SalesProductionOrderModel order;
 
-  // BuildContext
-
   const ReconciliationOrderCard(
       {Key key,
       this.sheets,
@@ -193,13 +191,56 @@ class _ReconciliationRow extends StatelessWidget {
                 ),
               ),
               Expanded(child: Text('${model.title}')),
-              Text(
-                '${FastReconciliationSheetStateLocalizedMap[model.state]}',
-                style: TextStyle(color: Color(0xFFFF4D4F), fontSize: 14),
-              ),
-              Icon(Icons.chevron_right, color: Color(0xFFFF4D4F))
+              ..._buildState(),
             ],
           )),
     );
+  }
+
+  List<Widget> _buildState() {
+    Color color = Color(0xFF999999);
+    String stateStr = FastReconciliationSheetStateLocalizedMap[model.state];
+    if ([
+      FastReconciliationSheetState.PENDING_A_SIGN,
+      FastReconciliationSheetState.PENDING_B_SIGN
+    ].contains(model.state)) {
+      DocSignatureModel doc = getLast();
+      UserModel user = UserBLoC.instance.currentUser;
+      if (doc != null) {
+        //待我签署
+        stateStr = '${DocSignatureStateLocalizedMap[doc.state]}';
+        if (doc.state == DocSignatureState.WAIT_PARTYA_SIGN) {
+          if (user.companyCode == doc.partyA.uid) {
+            stateStr = '待我签署';
+            color = Color(0xFFFF4D4F);
+          } else {
+            stateStr = '待对方签署';
+          }
+        } else if (doc.state == DocSignatureState.WAIT_PARTYB_SIGN) {
+          if (user.companyCode == doc.partyB.uid) {
+            stateStr = '待我签署';
+            color = Color(0xFFFF4D4F);
+          } else {
+            stateStr = '待对方签署';
+          }
+        }
+      }
+    }
+
+    return [
+      Text(
+        '$stateStr',
+        style: TextStyle(color: color, fontSize: 14),
+      ),
+      Icon(Icons.chevron_right, color: color)
+    ];
+  }
+
+  ///获取最新状态
+  DocSignatureModel getLast() {
+    List<DocSignatureModel> datas = model.docSignatures ?? [];
+    return datas.lastWhere(
+        (element) => element.state != DocSignatureState.CANCELED,
+        orElse: () => null);
   }
 }
