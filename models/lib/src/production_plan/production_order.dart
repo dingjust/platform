@@ -310,55 +310,55 @@ class SalesProductionOrderModel extends ProductionOrderModel {
       CompanyModel belongTo,
       B2BCustomerModel productionLeader,
       B2BDeptModel productionDept,
-    bool deleted,
-    bool canceling,
-    ProgressWorkSheetModel progressWorkSheet,
-    List<MediaModel> attachments,
-    this.haveDeposit,
-    this.managementMode,
-    this.uniqueCode,
-    this.labels,
-    this.outOrderState,
-    this.acceptState,
-    this.currentCancelApply,
-    this.acceptProcessTime,
-    this.salesDateStart,
-    this.salesDateEnd,
-    this.currentAuditOrder,
-    this.payPlanType,
-    this.type,
-    this.freightPayer,
-    this.cooperator,
-    this.payPlan,
-    this.planLeader,
-    this.approvers,
-    this.purchasingLeader,
-    this.originCooperator,
-    this.targetCooperator,
-    this.state,
-    this.shippingAddress,
-    this.auditNeeded,
-    this.auditState,
-    this.sendAuditNeeded,
-    this.sendApprovers,
-    this.sendAuditState,
-    this.originCompany,
-    this.sendBy,
-    this.remarks,
-    this.currentSendAuditOrder,
-    this.taskOrderEntries,
-    this.agreements,
-    this.entrySize,
-    this.totalQuantity,
-    this.totalAmount,
-    this.paymentAccount,
-    this.agentOrder,
-    this.serviceFeePercent,
-    this.payOnline,
-    this.reconciliationSheetList,
-    this.recipient,
-    this.offLine,
-    this.version})
+      bool deleted,
+      bool canceling,
+      ProgressWorkSheetModel progressWorkSheet,
+      List<MediaModel> attachments,
+      this.haveDeposit,
+      this.managementMode,
+      this.uniqueCode,
+      this.labels,
+      this.outOrderState,
+      this.acceptState,
+      this.currentCancelApply,
+      this.acceptProcessTime,
+      this.salesDateStart,
+      this.salesDateEnd,
+      this.currentAuditOrder,
+      this.payPlanType,
+      this.type,
+      this.freightPayer,
+      this.cooperator,
+      this.payPlan,
+      this.planLeader,
+      this.approvers,
+      this.purchasingLeader,
+      this.originCooperator,
+      this.targetCooperator,
+      this.state,
+      this.shippingAddress,
+      this.auditNeeded,
+      this.auditState,
+      this.sendAuditNeeded,
+      this.sendApprovers,
+      this.sendAuditState,
+      this.originCompany,
+      this.sendBy,
+      this.remarks,
+      this.currentSendAuditOrder,
+      this.taskOrderEntries,
+      this.agreements,
+      this.entrySize,
+      this.totalQuantity,
+      this.totalAmount,
+      this.paymentAccount,
+      this.agentOrder,
+      this.serviceFeePercent,
+      this.payOnline,
+      this.reconciliationSheetList,
+      this.recipient,
+      this.offLine,
+      this.version})
       : super(
             code: code,
             originOrderId: originOrderId,
@@ -386,29 +386,29 @@ class SalesProductionOrderModel extends ProductionOrderModel {
   Map<String, dynamic> toJson() => _$SalesProductionOrderModelToJson(this);
 
   static List<Map<String, dynamic>> b2bCutomersToJson(
-      List<B2BCustomerModel> models) =>
+          List<B2BCustomerModel> models) =>
       models == null
           ? null
           : models.map((e) => B2BCustomerModel.toJson(e)).toList();
 
   static List<Map<String, dynamic>> productionTaskOrdersToList(
-      List<ProductionTaskOrderModel> models) =>
+          List<ProductionTaskOrderModel> models) =>
       models == null ? null : models.map((e) => e.toJson()).toList();
 
   static List<Map<String, dynamic>> paymentOrdersToList(
-      List<CmtPayOrderData> datas) =>
+          List<CmtPayOrderData> datas) =>
       datas == null ? null : datas.map((e) => e.toJson()).toList();
 
   static List<Map<String, dynamic>> reconciliationToList(
-      List<FastReconciliationSheetModel> datas) =>
+          List<FastReconciliationSheetModel> datas) =>
       datas == null ? null : datas.map((e) => e.toJson()).toList();
 
   static List<Map<String, dynamic>> agreementsToJson(
-      List<UserAgreementModel> models) =>
+          List<UserAgreementModel> models) =>
       models == null ? null : models.map((e) => e.toJson()).toList();
 
   static Map<String, dynamic> orderPaymentAccouontToJson(
-      OrderPaymentAccountData data) =>
+          OrderPaymentAccountData data) =>
       data == null ? null : data.toJson();
 }
 
@@ -477,6 +477,7 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   int priorityLevel;
 
   ///当前阶段
+  @JsonKey(toJson: _progressPhaseModelToJson)
   ProgressPhaseModel currentPhase;
 
   ///颜色尺码款
@@ -512,79 +513,84 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   ///对账任务
   dynamic reconciliationTask;
 
-  ProductionTaskOrderModel({String code,
-    int originOrderId,
-    int parentId,
-    ProductionOrderModel originOrder,
-    OrderProgressPlanModel progressPlan,
-    String name,
-    CooperationMode cooperationMode,
-    int itemsCount,
-    bool invoiceNeeded,
-    double invoiceTaxPoint,
-    B2BCustomerModel merchandiser,
-    B2BCustomerModel creator,
-    CompanyModel belongTo,
-    B2BCustomerModel productionLeader,
-    B2BDeptModel productionDept,
-    bool deleted,
-    bool canceling,
-    ProgressWorkSheetModel progressWorkSheet,
-    List<MediaModel> attachments,
-    this.product,
-    this.outOrder,
-    this.type,
-    this.shippingAddress,
-    this.sortNum,
-    this.unitPrice,
-    this.quantity,
-    this.totalPrimeCost,
-    this.totalSalesPrice,
-    this.totalProfit,
-    this.deliveryDate,
-    this.populationScale,
-    this.state,
-    this.progressInit,
-    this.productionProcessContent,
-    this.medias,
-    this.remarks,
-    this.priorityLevel,
-    this.currentPhase,
-    this.colorSizeEntries,
-    this.outboundOrderCode,
-    this.auditState,
-    this.targetCooperator,
-    this.reconciliationTask,
-    this.receiveDispatchTask,
-    this.profitPercent,
-    this.productionWorkOrderCode,
-    this.originCooperator,
-    this.managementMode})
+  ProductionTaskOrderModel(
+      {String code,
+      int originOrderId,
+      int parentId,
+      ProductionOrderModel originOrder,
+      OrderProgressPlanModel progressPlan,
+      String name,
+      CooperationMode cooperationMode,
+      int itemsCount,
+      bool invoiceNeeded,
+      double invoiceTaxPoint,
+      B2BCustomerModel merchandiser,
+      B2BCustomerModel creator,
+      CompanyModel belongTo,
+      B2BCustomerModel productionLeader,
+      B2BDeptModel productionDept,
+      bool deleted,
+      bool canceling,
+      ProgressWorkSheetModel progressWorkSheet,
+      List<MediaModel> attachments,
+      this.product,
+      this.outOrder,
+      this.type,
+      this.shippingAddress,
+      this.sortNum,
+      this.unitPrice,
+      this.quantity,
+      this.totalPrimeCost,
+      this.totalSalesPrice,
+      this.totalProfit,
+      this.deliveryDate,
+      this.populationScale,
+      this.state,
+      this.progressInit,
+      this.productionProcessContent,
+      this.medias,
+      this.remarks,
+      this.priorityLevel,
+      this.currentPhase,
+      this.colorSizeEntries,
+      this.outboundOrderCode,
+      this.auditState,
+      this.targetCooperator,
+      this.reconciliationTask,
+      this.receiveDispatchTask,
+      this.profitPercent,
+      this.productionWorkOrderCode,
+      this.originCooperator,
+      this.managementMode})
       : super(
-      code: code,
-      originOrderId: originOrderId,
-      parentId: parentId,
-      originOrder: originOrder,
-      progressPlan: progressPlan,
-      name: name,
-      cooperationMode: cooperationMode,
-      itemsCount: itemsCount,
-      invoiceNeeded: invoiceNeeded,
-      invoiceTaxPoint: invoiceTaxPoint,
-      merchandiser: merchandiser,
-      creator: creator,
-      belongTo: belongTo,
-      productionLeader: productionLeader,
-      productionDept: productionDept,
-      deleted: deleted,
-      canceling: canceling,
-      progressWorkSheet: progressWorkSheet,
-      attachments: attachments);
+            code: code,
+            originOrderId: originOrderId,
+            parentId: parentId,
+            originOrder: originOrder,
+            progressPlan: progressPlan,
+            name: name,
+            cooperationMode: cooperationMode,
+            itemsCount: itemsCount,
+            invoiceNeeded: invoiceNeeded,
+            invoiceTaxPoint: invoiceTaxPoint,
+            merchandiser: merchandiser,
+            creator: creator,
+            belongTo: belongTo,
+            productionLeader: productionLeader,
+            productionDept: productionDept,
+            deleted: deleted,
+            canceling: canceling,
+            progressWorkSheet: progressWorkSheet,
+            attachments: attachments);
 
   factory ProductionTaskOrderModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductionTaskOrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductionTaskOrderModelToJson(this);
+
+  static Map<String, dynamic> _progressPhaseModelToJson(
+          ProgressPhaseModel model) =>
+      model == null ? null : model.toJson();
 }
 
 ///生产订单取消申请
@@ -781,6 +787,20 @@ const SalesProductionOrderStateLocalizedMap = {
   // SalesProductionOrderState.AUDIT_PASSED: "审核通过",
   SalesProductionOrderState.AUDIT_PASSED: "生产中",
   SalesProductionOrderState.ORDER_REJECTED: "外发单拒单",
+};
+
+///销售订单状态描述
+const SalesProductionOrderStateDecsMap = {
+  SalesProductionOrderState.TO_BE_SUBMITTED: "确认信息无误，即可提交订单",
+  SalesProductionOrderState.TO_BE_ACCEPTED: "暂无接单信息，请耐心等待",
+  SalesProductionOrderState.AUDITING: "订单正在审核中，请耐心等待...",
+  SalesProductionOrderState.AUDIT_REJECTED: "订单驳回",
+  SalesProductionOrderState.ACCEPTED: "订单已确认",
+  SalesProductionOrderState.CANCELED: "订单已取消",
+  SalesProductionOrderState.COMPLETED: "订单已完成~",
+  // SalesProductionOrderState.AUDIT_PASSED: "审核通过",
+  SalesProductionOrderState.AUDIT_PASSED: "正在生产中",
+  SalesProductionOrderState.ORDER_REJECTED: "订单已拒绝",
 };
 
 ///工单类型

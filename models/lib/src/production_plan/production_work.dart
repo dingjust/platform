@@ -241,18 +241,23 @@ class ProductionWorkOrderModel extends OrderModel {
 ///生产进度
 @JsonSerializable()
 class ProgressPhaseModel extends ItemModel {
+  int id;
+
   ///名称
   String name;
 
   ///序号
   int sequence;
 
-  ProgressPhaseModel({this.name, this.sequence});
+  ProgressPhaseModel({this.name, this.sequence, this.id});
 
   factory ProgressPhaseModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProgressPhaseModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProgressPhaseModelToJson(this);
+
+  static Map<String, dynamic> modelToJson(ProgressPhaseModel model) =>
+      _$ProgressPhaseModelToJson(model);
 }
 
 ///订单管理方式

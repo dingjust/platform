@@ -16,6 +16,10 @@ class CompanyBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(companyModel==null){
+      return Container();
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
@@ -37,7 +41,7 @@ class CompanyBar extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Text(
-                        '${companyModel.name}',
+                        '${companyModel?.name??''}',
                         style: TextStyle(
                             color: Color(0xff222222),
                             fontSize: 16,

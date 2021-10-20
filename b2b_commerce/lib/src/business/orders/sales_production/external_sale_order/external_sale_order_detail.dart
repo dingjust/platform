@@ -1,4 +1,9 @@
+import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/company_bar.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info/contracts_info.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info/info_widgets.dart';
+import 'package:b2b_commerce/src/_shared/widgets/info/order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info/reconciliation_order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
@@ -54,12 +59,9 @@ class _ExternalSaleOrderDetailPageState
         if (snapshot.data != null && order != null) {
           return WillPopScope(
               child: Scaffold(
-                appBar: AppBar(
-                  centerTitle: true,
-                  title: Text('订单明细'),
-                  backgroundColor: Constants.THEME_COLOR_MAIN,
-                  elevation: 0.5,
-                  actions: [
+                appBar: AppBarFactory.buildDefaultAppBar(
+                  '订单明细',
+                  actions: <Widget>[
                     Container(
                       width: 60,
                       margin: const EdgeInsets.symmetric(
@@ -78,18 +80,25 @@ class _ExternalSaleOrderDetailPageState
                   ],
                 ),
                 body: Container(
-                  padding: EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  color: Color(0xFFF7F7F7),
                   child: ListView(
                     children: <Widget>[
-                      // CompanyBar(
-                      //     companyModel: B2BUnitModel.fromJson(
-                      //         CompanyModel.toJson(
-                      //             CooperatorHelper.getCooperator(
-                      //                 order.originCompany, order.belongTo)))),
-                      _Header(order: order),
+                      OrderStateCard(
+                        margin: EdgeInsets.symmetric(vertical: 12),
+                        val:
+                            '${SalesProductionOrderStateLocalizedMap[order.state]}',
+                        val2:
+                            '${SalesProductionOrderStateDecsMap[order.state]}',
+                      ),
+                      CompanyBar(
+                          companyModel: B2BUnitModel.fromJson(
+                              CompanyModel.toJson(
+                                  CooperatorHelper.getCooperator(
+                                      order.originCompany, order.belongTo)))),
                       _EntriesInfo(order: order),
                       MainInfo(order: order),
-                      OrderContractsBlock(
+                      ContractsCard(
                           agreements: order?.agreements,
                           beforeTap: recordRouteInfo),
                       ReconciliationOrderCard(
@@ -145,9 +154,15 @@ class _ExternalSaleOrderDetailPageState
 
   List<PopupMenuItem<String>> _buildPopupMenu() {
     // 可编辑状态
-    if ((order.recipient == AgreementRoleType.PARTYA && !isPartyA) ||
-        (order.recipient == AgreementRoleType.PARTYB && isPartyA)) {
-      return [_editItem(), _shareItem()];
+    if ([
+      SalesProductionOrderState.TO_BE_SUBMITTED,
+      SalesProductionOrderState.AUDIT_REJECTED,
+      SalesProductionOrderState.AUDITING
+    ].contains(order.state)) {
+      if ((order.recipient == AgreementRoleType.PARTYA && !isPartyA) ||
+          (order.recipient == AgreementRoleType.PARTYB && isPartyA)) {
+        return [_editItem(), _shareItem()];
+      }
     }
     return [_shareItem()];
   }
@@ -261,37 +276,79 @@ class MainInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        color: Colors.white,
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(12)),
         child: Column(
           children: [
-            Row(
-              children: [
-                Text(
-                  '订单基本信息',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ],
+            InfoRow(
+              label: '订单总数量',
+              val: '${order.totalQuantity}件',
+              textAlign: TextAlign.right,
             ),
-            buildRow('订单总数量', '${order.totalQuantity}件'),
-            buildRow('订单总金额', '￥${order.totalAmount.toStringAsFixed(2)}',
-                valStryle: TextStyle(color: Color.fromRGBO(255, 102, 102, 1))),
-            buildRow(
-                '合作方式', CooperationModeLocalizedMap[order.cooperationMode]),
-            buildRow('是否开票', order.invoiceNeeded ? '开发票' : '不开发票'),
-            buildRow('账期', _getDepositStr()),
-            buildRow(
-                '创建人', isPartyA ? order?.sendBy?.name : order?.creator?.name),
+            InfoDivider(
+              height: 16,
+            ),
+            InfoRow(
+                label: '订单总金额',
+                val: '￥${order.totalAmount.toStringAsFixed(2)}',
+                textAlign: TextAlign.right,
+                style: TextStyle(color: Color(0xFFFF4D4F), fontSize: 14)),
+            InfoDivider(
+              height: 16,
+            ),
+            InfoRow(
+              label: '合作方式',
+              val: CooperationModeLocalizedMap[order.cooperationMode],
+              textAlign: TextAlign.right,
+            ),
+            InfoDivider(
+              height: 16,
+            ),
+            InfoRow(
+              label: '是否开票',
+              val: order.invoiceNeeded ? '开发票' : '不开发票',
+              textAlign: TextAlign.right,
+            ),
+            InfoDivider(
+              height: 16,
+            ),
+            InfoRow(
+              label: '账期',
+              val: _getDepositStr(),
+              textAlign: TextAlign.right,
+            ),
+            InfoDivider(
+              height: 16,
+            ),
+            InfoRow(
+              label: '创建人',
+              val: isPartyA ? order?.sendBy?.name : order?.creator?.name,
+              textAlign: TextAlign.right,
+            ),
+            InfoDivider(
+              height: 16,
+            ),
             for (B2BCustomerModel approver in isPartyA
                 ? (order?.sendApprovers ?? [])
-                : (order?.approvers ?? []))
-              buildRow('审批人', approver.name),
-            buildRow(
-                '跟单员',
-                isPartyA
-                    ? order.merchandiser?.name
-                    : order?.productionLeader?.name),
+                : (order?.approvers ?? [])) ...[
+              InfoRow(
+                label: '审批人',
+                val: approver.name,
+                textAlign: TextAlign.right,
+              ),
+              InfoDivider(
+                height: 16,
+              ),
+            ],
+            InfoRow(
+              label: '跟单员',
+              val: isPartyA
+                  ? order.merchandiser?.name
+                  : order?.productionLeader?.name,
+              textAlign: TextAlign.right,
+            ),
           ],
         ));
   }
@@ -361,8 +418,8 @@ class _OrderInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 14),
+      margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
       child: Column(
         children: <Widget>[
           Row(
@@ -384,13 +441,14 @@ class _OrderInfo extends StatelessWidget {
               )
             ],
           ),
+          InfoDivider(height: 16),
           _buildInfoRow(
               '创建时间', DateFormatUtil.formatYMDHMS(order.creationtime)),
         ],
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }
@@ -478,32 +536,33 @@ class _EntriesInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
-      margin: EdgeInsets.only(bottom: 2),
-      color: Colors.white,
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      margin: EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(12)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 15),
-            child: Text(
-              '订单明细',
-              style: TextStyle(color: Colors.grey),
-            ),
-          ),
-          for (ProductionTaskOrderModel e in order.taskOrderEntries ?? [])
-            _buildItem(context, e)
-        ],
-      ),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _children(context)),
     );
   }
 
+  List<Widget> _children(BuildContext context) {
+    List<Widget> results = [];
+    if (order.taskOrderEntries != null)
+      for (int i = 0; i < order.taskOrderEntries.length; i++) {
+        results.add(_buildItem(context, order.taskOrderEntries[i]));
+        if (i < order.taskOrderEntries.length - 1) {
+          results.add(InfoDivider(height: 32));
+        }
+      }
+    return results;
+  }
+
   Widget _buildItem(BuildContext context, ProductionTaskOrderModel entry,
-      {double height = 80.0}) {
+      {double height = 86.0}) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
       child: Material(
-          color: Colors.grey[100],
+          color: Colors.white,
           child: InkWell(
             onTap: () => onTap(context, entry),
             child: Container(
@@ -521,39 +580,46 @@ class _EntriesInfo extends StatelessWidget {
                       Expanded(
                         child: Container(
                           height: height,
-                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          padding: EdgeInsets.symmetric(horizontal: 12),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Text(
                                       '${entry.product.name}',
-                                      style: TextStyle(fontSize: 17),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  Text(
-                                      '交货：${DateFormatUtil.formatYMD(entry.deliveryDate)}')
                                 ],
                               ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     '货号：${entry.product.skuID}',
-                                    style: TextStyle(color: Colors.grey),
+                                    style: TextStyle(
+                                        color: Color(0xFF666666), fontSize: 14),
                                   ),
-                                  Text('￥${entry.unitPrice}',
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          color: Color(0xffff1744)))
+                                  // Text('￥${entry.unitPrice}',
+                                  //     style: TextStyle(
+                                  //         fontSize: 17,
+                                  //         color: Color(0xffff1744)))
                                 ],
-                              )
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '交货日期：${DateFormatUtil.formatYMD(entry.deliveryDate)}',
+                                    style: TextStyle(
+                                        color: Color(0xFF666666), fontSize: 14),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -568,25 +634,32 @@ class _EntriesInfo extends StatelessWidget {
                     children: [
                       RichText(
                           text: TextSpan(
-                              text: '数量：',
+                              text: '￥',
                               style: TextStyle(
-                                  fontSize: 14, color: Colors.black87),
+                                  fontSize: 12, color: Color(0xFFFF4D4F)),
                               children: [
                             TextSpan(
-                                text: '${entry.quantity}',
-                                style: TextStyle(color: Color(0xffff1744)))
+                                text: '${entry.unitPrice}',
+                                style: TextStyle(fontSize: 16)),
+                            TextSpan(
+                                text: ' x ${entry.quantity}件',
+                                style: TextStyle(
+                                    color: Color(0xff666666), fontSize: 14))
                           ])),
                       RichText(
+                          textAlign: TextAlign.right,
                           text: TextSpan(
-                              text: '接单总价：',
+                              text: '￥',
                               style: TextStyle(
-                                  fontSize: 14, color: Colors.black87),
+                                  fontSize: 12, color: Color(0xFFFF4D4F)),
                               children: [
-                            TextSpan(
-                                text:
-                                    '￥${(entry?.totalPrimeCost)?.toStringAsFixed(2)}',
-                                style: TextStyle(color: Color(0xffff1744)))
-                          ])),
+                                TextSpan(
+                                    text:
+                                        '${(entry?.totalPrimeCost)?.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                              ])),
                     ],
                   ),
                 ],

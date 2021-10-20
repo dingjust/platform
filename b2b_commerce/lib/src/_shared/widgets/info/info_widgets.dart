@@ -31,11 +31,14 @@ class InfoRow extends StatelessWidget {
 
   final double labelWidth;
 
+  final TextStyle style;
+
   const InfoRow(
       {Key key,
       this.label,
       this.val,
       this.textAlign = TextAlign.left,
+      this.style = const TextStyle(color: Color(0xFF222222), fontSize: 14),
       this.labelWidth = 80})
       : super(key: key);
 
@@ -56,7 +59,7 @@ class InfoRow extends StatelessWidget {
           Expanded(
               child: Text(
             (val != null && val != '') ? val : '-',
-            style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+            style: style,
             textAlign: textAlign,
           ))
         ],
