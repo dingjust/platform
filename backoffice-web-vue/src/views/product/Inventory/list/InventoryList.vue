@@ -1,11 +1,26 @@
 <template>
   <div class="inventory-list">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
+      <el-table-column label="标题" prop="name"></el-table-column>
+      <el-table-column label="品牌" prop="brand"></el-table-column>
       <el-table-column label="产品编号" prop="code"></el-table-column>
       <el-table-column label="款号" prop="skuID"></el-table-column>
-      <el-table-column label="库存数量">
+      <el-table-column label="成本价" prop="costPrice"></el-table-column>
+      <el-table-column label="吊牌价" prop="tagPrice"></el-table-column>
+      <el-table-column label="出库价" prop="checkoutPrice"></el-table-column>
+      <el-table-column label="正品数量">
         <template slot-scope="scope">
-          <span>{{inventoryQuantity(scope.row)}}</span>
+          <span>{{handleQuality(scope.row, 'quality')}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="次品数量">
+        <template slot-scope="scope">
+          <span>{{handleQuality(scope.row, 'defectiveQuality')}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="尾货数量">
+        <template slot-scope="scope">
+          <span>{{handleQuality(scope.row, 'tailQuality')}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间">
@@ -33,12 +48,18 @@ export default {
   name: 'InventoryList',
   props: ['page'],
   methods: {
-    inventoryQuantity (row) {
+    handleQuality (row, attribute) {
       let count = 0
       if (row.variants && row.variants.length > 0) {
-        row.variants.forEach(item => count += item.quality)
+        row.variants.forEach(item => {
+          if (attribute === 'all') {
+            count = count + item.quality + item.defectiveQuality + item.tailQuality
+          } else {
+            count += item[attribute]
+          }
+        })
       }
-      return count;
+      return count
     },
     onPageSizeChanged (val) {
       this.$emit('onAdvancedSearch', 0, val);
@@ -58,7 +79,7 @@ export default {
       this.$router.push('/product/inventory/modify/' + row.id)
     },
     onDelete (row) {
-      const count = this.inventoryQuantity(row)
+      const count = this.handleQuality(row, 'all')
 
       let msg = (count > 0 ? ('此产品还有' + count + '件库存，') : '') + '是否删除此产品？'
 

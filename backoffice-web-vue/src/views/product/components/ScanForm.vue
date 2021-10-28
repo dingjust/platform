@@ -193,7 +193,9 @@ export default {
       });
     },
     async _onConfirm () {
-      const formData = this.submitData.filter(item => item.variants.length > 0)
+      const formData = this.submitData.filter(item => item.variants.length > 0).forEach(item => {
+        item.variants.filter(val => val.defectiveQuality !== 0 && val.val.quality !== 0 !== 0 && val.tailQuality !== 0)
+      })
 
       const url = this.apis().createInventory()
       const result = await this.$http.put(url, formData)
