@@ -28,6 +28,9 @@ import FactoryBasicForm from '@/views/user/company/factory/form/FactoryBasicForm
 import FactoryScaleForm from '@/views/user/company/factory/form/FactoryScaleForm'
 import FactoryCapacityForm from '@/views/user/company/factory/form/FactoryCapacityForm'
 
+import { createNamespacedHelpers } from 'vuex';
+const { mapMutations } = createNamespacedHelpers('FactoriesModule');
+
 export default {
   name: 'FactoryFormByTenant',
   components: {
@@ -37,6 +40,9 @@ export default {
   },
   props: ['row'],
   methods: {
+    ...mapMutations({
+      setFactoryFormVisible: 'setFactoryFormVisible',
+    }),
     async getDetail () {
       const url = this.apis().getFactory(this.row.uid);
       const result = await this.$http.get(url);
@@ -44,6 +50,29 @@ export default {
         this.$message.error(result['errors'][0].message);
         return;
       }
+
+      if (!result.contactAddress) {
+        result['contactAddress'] = {
+          id: null,
+          fullname: '',
+          cellphone: '',
+          region: {
+            isocode: '',
+            name: ''
+          },
+          city: {
+            code: '',
+            name: ''
+          },
+          cityDistrict: {
+            code: '',
+            name: ''
+          },
+          line1: ''
+        }
+      }
+
+      this.setFactoryFormVisible(true);
       this.$set(this, 'formData', result)
     },
     async onModify () {
