@@ -108,7 +108,7 @@ class RequirementListItem extends StatelessWidget {
                         child: ImageFactory.buildProcessedAvatar(
                             model.belongTo.profilePicture,
                             processurl:
-                            'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
+                                'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
                     Expanded(
                         child: Text('${model.belongTo.name ?? ''}',
                             style: style,

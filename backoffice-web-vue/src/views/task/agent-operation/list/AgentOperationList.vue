@@ -3,6 +3,7 @@
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="公司号" prop="submittedBy.uid" min-width="120px"></el-table-column>
       <el-table-column label="申请公司" prop="submittedBy.name" min-width="200px"></el-table-column>
+      <el-table-column label="联系方式" prop="submittedBy.contactPhone" min-width="100px"></el-table-column>
       <el-table-column label="账号类型" min-width="80px">
         <template slot-scope="scope">
           <span>{{accountType[scope.row.submittedBy.type]}}</span>
@@ -20,7 +21,12 @@
       </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | timestampToTime}}</span>
+          <span>{{scope.row.creationtime | formatDate}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="审阅时间">
+        <template slot-scope="scope">
+          <span v-if="scope.row.reviewedDate">{{scope.row.reviewedDate | formatDate}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="80px">

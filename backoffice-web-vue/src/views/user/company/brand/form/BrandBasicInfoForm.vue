@@ -178,7 +178,8 @@
         this.regions = result;
       },
       onRegionChanged (current) {
-        if (!region) {
+        console.log(current)
+        if (!current) {
           return
         }
         this.formData.contactAddress.id = null;

@@ -16,15 +16,26 @@
         <el-form-item label="款号">
           <el-row type="flex" align="center" style="font-size: 14px;color: #606266;">{{detail.skuID}}</el-row>
         </el-form-item>
-        <el-form-item label="标题">
-          <el-input v-model="detail.name" style="width: 194px"></el-input>
-        </el-form-item>
-        <el-form-item label="品牌">
-          <el-input v-model="detail.brand" style="width: 194px"></el-input>
-        </el-form-item>
-        <el-form-item label="品类">
-          <el-cascader v-model="category" :options="categories" filterable :props="{ value: 'code', label: 'name' }"/>
-        </el-form-item>
+        <el-row type="flex" style="flex-wrap: wrap">
+          <el-form-item label="标题">
+            <el-input v-model="detail.name" style="width: 194px"></el-input>
+          </el-form-item>
+          <el-form-item label="品牌">
+            <el-input v-model="detail.brand" style="width: 194px"></el-input>
+          </el-form-item>
+          <el-form-item label="品类">
+            <el-cascader v-model="category" :options="categories" filterable :props="{ value: 'code', label: 'name' }"/>
+          </el-form-item>
+          <el-form-item label="成本价">
+            <el-input v-model="detail.costPrice " style="width: 194px"></el-input>
+          </el-form-item>
+          <el-form-item label="吊牌价">
+            <el-input v-model="detail.tagPrice" style="width: 194px"></el-input>
+          </el-form-item>
+          <el-form-item label="出库价">
+            <el-input v-model="detail.checkoutPrice" style="width: 194px"></el-input>
+          </el-form-item>
+        </el-row>
         <el-form-item label="主图">
           <images-upload :slot-data="detail.images" :limit="5">
             <template slot="picBtn">
@@ -44,10 +55,10 @@
               <tr :key="item.id">
                 <td>{{item.skuID}}</td>
                 <td>
-                  <el-input v-model="item.color.name" />
+                  <el-autocomplete v-model="item.color.name" :fetch-suggestions="queryColorSearch"/>
                 </td>
                 <td>
-                  <el-input v-model="item.size.name" />
+                  <el-autocomplete v-model="item.size.name" :fetch-suggestions="querySizeSearch"/>
                 </td>
                 <td>
                   <el-input v-model="item.quality">
@@ -183,18 +194,53 @@ export default {
       }
 
       this.modifyVisible = false
-    }
+    },
+    queryColorSearch (queryString, cb) {
+      this.querySearch(queryString, cb, this.colors)
+    },
+    querySizeSearch (queryString, cb) {
+      this.querySearch(queryString, cb, this.sizes)
+    },
+    querySearch(queryString, cb, restaurants) {
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
   },
   data () {
     return {
       detail: null,
       categories: [],
       category: null,
-      tableHeader: ['款号', '颜色', '尺码', '正品', '次品', '尾货'],
+      tableHeader: ['条码', '颜色', '尺码', '正品', '次品', '尾货'],
       modifyVisible: false,
       modifyPrice: null,
-      modifyPriceType: 'ALL'
+      modifyPriceType: 'ALL',
+      colors: [],
+      sizes: [
+        { value: '99' },
+        { value: 'XS' },
+        { value: 'S' },
+        { value: 'M' },
+        { value: 'L' },
+        { value: 'XL' },
+        { value: 'XXL' },
+        { value: 'XXXL' },
+        { value: 'XXXXL' },
+        { value: 'XXXXXL' },
+        { value: 'XXXXXXL' }
+      ]
     }
+  },
+  mounted () {
+    this.colors = this.$store.getters['GlobalColorsModule/colors'].map(item => {
+      return { value: item.name }
+    })
   },
   created () {
     this.getDetail()

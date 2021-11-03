@@ -37,7 +37,12 @@ dependencies:
   intl: ^0.16.0
   image_picker: ^0.6.7+7
   rxdart: ^0.24.1
-  fluwx: ^2.6.2
+  # fluwx: ^2.6.2
+  fluwx:
+    git:
+      url: https://github.com/Konoha-orz/fluwx-dd.git
+    # path: ../../fluwx-dd
+
   path_provider: ^1.6.18
   flutter_cache_manager: ^2.0.0
   open_file: ^3.0.1

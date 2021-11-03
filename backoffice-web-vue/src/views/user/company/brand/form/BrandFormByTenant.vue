@@ -43,6 +43,27 @@ export default {
         result.duties = '经理';
       }
 
+      if (!result.contactAddress) {
+        result['contactAddress'] = {
+          id: null,
+          fullname: '',
+          cellphone: '',
+          region: {
+            isocode: '',
+            name: ''
+          },
+          city: {
+            code: '',
+            name: ''
+          },
+          cityDistrict: {
+            code: '',
+            name: ''
+          },
+          line1: ''
+        }
+      }
+
       this.$set(this, 'formData', result)
     },
     async onModify () {
