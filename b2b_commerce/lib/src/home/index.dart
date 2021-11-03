@@ -136,14 +136,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ChangeNotifierProvider(create: (_) => FactoryRequirementState()),
           ChangeNotifierProvider(create: (_) => OrderRequirementState())
         ],
-        child: Container(
-          color: Color(0xffF7F7F7),
-          child: NestedScrollView(
-              key: homePageKey,
-              headerSliverBuilder: _slverBuilder,
-              controller: _scrollController,
-              body: TabBarView(
-                  controller: _tabController, children: widget.tabBarViews)),
+        child: Scaffold(
+          floatingActionButton: CustomerServiceChatFAB(),
+          body: Container(
+            color: Color(0xffF7F7F7),
+            child: NestedScrollView(
+                key: homePageKey,
+                headerSliverBuilder: _slverBuilder,
+                controller: _scrollController,
+                body: TabBarView(
+                    controller: _tabController, children: widget.tabBarViews)),
+          ),
         ));
   }
 
@@ -295,6 +298,35 @@ class _HomePoster extends StatelessWidget {
           package: 'assets',
           fit: BoxFit.fitWidth,
         ),
+      ),
+    );
+  }
+}
+
+class CustomerServiceChatFAB extends StatelessWidget {
+  const CustomerServiceChatFAB({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        WechatServiceImpl.instance.customerServiceChat('ww7f13cc3ef52db52c',
+            'https://work.weixin.qq.com/kfid/kfc261eb8463e6fde59');
+      },
+      backgroundColor: Colors.white,
+      mini: true,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            B2BIconsV2.customer_service,
+            size: 15,
+          ),
+          Text(
+            '客服',
+            style: TextStyle(fontSize: 10),
+          )
+        ],
       ),
     );
   }

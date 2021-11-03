@@ -27,7 +27,10 @@ dependencies:
   # json_annotation: ^2.0.0
   json_annotation: ^3.0.1
   shared_preferences: ^0.4.2
-  fluwx: ^2.6.2
+  # fluwx: ^2.6.2
+  fluwx:
+    git:
+      url: https://github.com/Konoha-orz/fluwx-dd.git
   rxdart: ^0.24.1
   open_file: ^3.0.1
   store_redirect: ^1.0.1
