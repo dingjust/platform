@@ -309,7 +309,9 @@ class CustomerServiceChatFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      heroTag: 'customerServiceChatFABTag',
       onPressed: () {
+        //TODO:通过接口获取客服链接
         WechatServiceImpl.instance.customerServiceChat('ww7f13cc3ef52db52c',
             'https://work.weixin.qq.com/kfid/kfc261eb8463e6fde59');
       },
