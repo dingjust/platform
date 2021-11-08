@@ -23,4 +23,7 @@ abstract class WechatService {
 
   ///检测微信是否安装
   Future<bool> isInstalled();
+
+  ///调用微信客服
+  void customerServiceChat(String corpId, String url);
 }

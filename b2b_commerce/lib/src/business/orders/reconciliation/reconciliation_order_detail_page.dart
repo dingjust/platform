@@ -520,7 +520,7 @@ class _OrderInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InfoCard(
-      margin: EdgeInsets.symmetric(vertical: 12),
+      margin: EdgeInsets.fromLTRB(0, 12, 0, 55),
       child: Column(
         children: [
           _buildInfoRow(

@@ -190,11 +190,16 @@ class _EditableAttachmentsV2State extends State<EditableAttachmentsV2>
               lineWidth: 2,
               size: 30,
             ),
-            errorWidget: (context, url, error) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: 30,
+            errorWidget: (context, url, error) => Icon(
+              B2BIcons.noPicture,
+              size: size,
+              color: Colors.grey[300],
             ),
+            // SpinKitRing(
+            //   color: Colors.black12,
+            //   lineWidth: 2,
+            //   size: 30,
+            // ),
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -281,25 +286,33 @@ class _EditableAttachmentsV2State extends State<EditableAttachmentsV2>
                 child: CachedNetworkImage(
                   imageUrl: '${model.previewUrl()}',
                   fit: BoxFit.cover,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
+                  imageBuilder: (context, imageProvider) =>
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                          color: Color(0xFFE7E7E7),
+                        ),
                       ),
-                      color: Color(0xFFE7E7E7),
-                    ),
-                  ),
-                  placeholder: (context, url) => SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: size * 2 / 3,
-                  ),
-                  errorWidget: (context, url, error) => SpinKitRing(
-                    color: Colors.black12,
-                    lineWidth: 2,
-                    size: size * 2 / 3,
-                  ),
+                  placeholder: (context, url) =>
+                      Icon(
+                        B2BIcons.noPicture,
+                        size: size,
+                        color: Colors.grey[300],
+                      ),
+                  // SpinKitRing(
+                  //   color: Colors.black12,
+                  //   lineWidth: 2,
+                  //   size: size * 2 / 3,
+                  // ),
+                  errorWidget: (context, url, error) =>
+                      SpinKitRing(
+                        color: Colors.black12,
+                        lineWidth: 2,
+                        size: size * 2 / 3,
+                      ),
                 ),
                 decoration: BoxDecoration(
                   color: Color(0xFFE7E7E7),

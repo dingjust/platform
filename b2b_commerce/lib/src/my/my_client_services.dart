@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
@@ -28,6 +29,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
             // _buildQQ(context),
             const Divider(height: 5),
             _buildQRCode(),
+            _btn()
             // _buildTips(context),
           ],
         ),
@@ -206,6 +208,20 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
           ],
         );
       },
+    );
+  }
+
+  Widget _btn() {
+    return Center(
+      child: ElevatedButton(
+          onPressed: () {
+            //TODO:通过接口获取客服链接
+            WechatServiceImpl.instance.customerServiceChat('ww7f13cc3ef52db52c',
+                'https://work.weixin.qq.com/kfid/kfc261eb8463e6fde59');
+          },
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Color(0xFF07c160))),
+          child: Text('联系客服')),
     );
   }
 }

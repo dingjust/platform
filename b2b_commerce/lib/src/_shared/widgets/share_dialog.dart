@@ -50,7 +50,7 @@ class ShareDialog {
                             ],
                           ),
                           onPressed: () {
-                            //分享好友为分享小程序
+                            // 分享好友为分享小程序
                             if (path != null) {
                               WechatServiceImpl.instance.shareMiniProgram(
                                   '$url',
@@ -150,7 +150,8 @@ class ShareDialog {
     );
   }
 
-  static void orderShareDialog(BuildContext context, {
+  static void orderShareDialog(
+    BuildContext context, {
     @required String uniqueCode,
   }) {
     GlobalKey qrKey = GlobalKey();
@@ -221,7 +222,7 @@ class ShareDialog {
                               RenderRepaintBoundary boundary =
                               buildContext.findRenderObject();
                               ui.Image image =
-                                  await boundary.toImage(pixelRatio: 3.0);
+                              await boundary.toImage(pixelRatio: 3.0);
                               ByteData byteData = await image.toByteData(
                                   format: ui.ImageByteFormat.png);
                               WechatServiceImpl.instance.shareImage(

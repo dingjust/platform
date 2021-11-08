@@ -213,7 +213,7 @@ class _AttachmentsState extends State<Attachments> {
         builder: (context) => GalleryPhotoViewWrapper(
           galleryItems: widget.list
               .map((model) =>
-              GalleryItem(model: model, watermark: widget.watermark))
+                  GalleryItem(model: model, watermark: widget.watermark))
               .toList(),
           backgroundDecoration: const BoxDecoration(
             color: Colors.black,
@@ -284,8 +284,8 @@ class _AttachmentsState extends State<Attachments> {
     try {
       Response response = await dio.download(url, filePath,
           onReceiveProgress: (received, total) {
-        print((received / total * 100).toStringAsFixed(0) + "%");
-        _streamController.sink.add(received / total);
+            print((received / total * 100).toStringAsFixed(0) + "%");
+            _streamController.sink.add(received / total);
           });
       print(response.statusCode);
     } catch (e) {
@@ -541,10 +541,10 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                   size: 30,
                 ),
             errorWidget: (context, url, error) =>
-                SpinKitRing(
-                  color: Colors.black12,
-                  lineWidth: 2,
-                  size: 30,
+                Icon(
+                    Icons.broken_image,
+                    size: 50,
+                    color: Colors.white
                 ),
           ),
           decoration: BoxDecoration(

@@ -148,4 +148,11 @@ class WechatServiceImpl implements WechatService {
         compressThumbnail: false);
     return shareToWeChat(model);
   }
+
+  @override
+  void customerServiceChat(String corpId, String url) {
+    openCustomerServiceChat(
+        corpId: 'ww7f13cc3ef52db52c',
+        url: 'https://work.weixin.qq.com/kfid/kfc261eb8463e6fde59');
+  }
 }

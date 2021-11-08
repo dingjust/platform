@@ -263,6 +263,10 @@ class B2BIconsV2 {
   ///登录-密码-闭
   static const IconData eye_off = const IconData(0xe60d,
       fontFamily: 'b2bIcons23', matchTextDirection: true);
+
+  ///客服
+  static const IconData customer_service = const IconData(0xe625,
+      fontFamily: 'b2bIcons23', matchTextDirection: true);
 }
 
 class CommonImage {
