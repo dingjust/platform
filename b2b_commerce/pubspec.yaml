@@ -40,8 +40,8 @@ dependencies:
   # fluwx: ^2.6.2
   fluwx:
     git:
-      url: https://github.com/Konoha-orz/fluwx-dd.git
-    # path: ../../fluwx-dd
+      url: git@github.com:Konoha-orz/fluwx-dd.git
+#      path: ../../fluwx-dd
 
   path_provider: ^1.6.18
   flutter_cache_manager: ^2.0.0
