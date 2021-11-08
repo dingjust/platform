@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -86,6 +87,11 @@ class IntroductionNavigateCard extends StatelessWidget {
   void onIntroduciton(BuildContext context) {
     UserBLoC bloc = UserBLoC.instance;
     BotToast.showLoading(clickClose: true, crossPage: false);
+    //没登录
+    if (bloc.currentUser.status == UserStatus.OFFLINE) {
+      Navigator.of(context)
+          .push((MaterialPageRoute(builder: (context) => B2BLoginPage())));
+    }
     // 品牌详情
     if (bloc.currentUser.type == UserType.BRAND) {
       UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
@@ -114,6 +120,11 @@ class IntroductionNavigateCard extends StatelessWidget {
   void onAuthentication(BuildContext context) {
     UserBLoC bloc = UserBLoC.instance;
     BotToast.showLoading(clickClose: true, crossPage: false);
+    //没登录
+    if (bloc.currentUser.status == UserStatus.OFFLINE) {
+      Navigator.of(context)
+          .push((MaterialPageRoute(builder: (context) => B2BLoginPage())));
+    }
     // 品牌认证
     if (bloc.currentUser.type == UserType.BRAND) {
       UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
