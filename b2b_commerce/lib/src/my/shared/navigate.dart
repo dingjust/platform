@@ -93,7 +93,7 @@ class IntroductionNavigateCard extends StatelessWidget {
           .push((MaterialPageRoute(builder: (context) => B2BLoginPage())));
     }
     // 品牌详情
-    if (bloc.currentUser.type == UserType.BRAND) {
+    else if (bloc.currentUser.type == UserType.BRAND) {
       UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
         Navigator.push(
             context,
@@ -102,7 +102,7 @@ class IntroductionNavigateCard extends StatelessWidget {
       });
     }
     // 工厂详情
-    if (bloc.currentUser.type == UserType.FACTORY) {
+    else if (bloc.currentUser.type == UserType.FACTORY) {
       UserRepositoryImpl()
           .getFactory(bloc.currentUser.companyCode)
           .then((value) {
@@ -126,7 +126,7 @@ class IntroductionNavigateCard extends StatelessWidget {
           .push((MaterialPageRoute(builder: (context) => B2BLoginPage())));
     }
     // 品牌认证
-    if (bloc.currentUser.type == UserType.BRAND) {
+    else if (bloc.currentUser.type == UserType.BRAND) {
       UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
         Navigator.push(
           context,
@@ -137,7 +137,7 @@ class IntroductionNavigateCard extends StatelessWidget {
       });
     }
     // 工厂认证
-    if (bloc.currentUser.type == UserType.FACTORY) {
+    else if (bloc.currentUser.type == UserType.FACTORY) {
       UserRepositoryImpl()
           .getFactory(bloc.currentUser.companyCode)
           .then((factory) {

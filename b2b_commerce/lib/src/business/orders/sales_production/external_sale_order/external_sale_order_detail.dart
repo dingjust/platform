@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/company_bar.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
@@ -7,8 +9,8 @@ import 'package:b2b_commerce/src/_shared/widgets/info/order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info/reconciliation_order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
-import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/helper/cooperator_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
@@ -29,8 +31,7 @@ class ExternalSaleOrderDetailPage extends StatefulWidget {
 
   final String titile;
 
-  ExternalSaleOrderDetailPage(
-      {Key key, @required this.id, this.titile = '外接订单明细'})
+  ExternalSaleOrderDetailPage({Key key, @required this.id, this.titile = '外接订单明细'})
       : super(key: key);
 
   @override
@@ -38,8 +39,7 @@ class ExternalSaleOrderDetailPage extends StatefulWidget {
       _ExternalSaleOrderDetailPageState();
 }
 
-class _ExternalSaleOrderDetailPageState
-    extends State<ExternalSaleOrderDetailPage> {
+class _ExternalSaleOrderDetailPageState extends State<ExternalSaleOrderDetailPage> {
   SalesProductionOrderModel order;
 
   ///是否需要回调
@@ -87,9 +87,9 @@ class _ExternalSaleOrderDetailPageState
                       OrderStateCard(
                         margin: EdgeInsets.symmetric(vertical: 12),
                         val:
-                            '${SalesProductionOrderStateLocalizedMap[order.state]}',
+                        '${SalesProductionOrderStateLocalizedMap[order.state]}',
                         val2:
-                            '${SalesProductionOrderStateDecsMap[order.state]}',
+                        '${SalesProductionOrderStateDecsMap[order.state]}',
                       ),
                       CompanyBar(
                           companyModel: B2BUnitModel.fromJson(
@@ -204,10 +204,37 @@ class _ExternalSaleOrderDetailPageState
             builder: (context) => ExternalOrderForm(model: order)));
         break;
       case 'share':
-        ShareDialog.orderShareDialog(context, uniqueCode: order.uniqueCode);
+        onShare();
         break;
       default:
     }
+  }
+
+  void onShare() async {
+    String title =
+        '编号：${order.code}\n数量：${order.totalQuantity}件;合计：￥${order.totalAmount}';
+    String description = "";
+    String imgUrl = '${GlobalConfigs.LOGO_URL}';
+
+    const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
+
+    if (order.taskOrderEntries.first.product.thumbnail != null) {
+      //微信小程序图片限制128KB
+      var img = await http.readBytes(order
+          .taskOrderEntries.first.product.thumbnail
+          .imageProcessUrl(processUrl));
+      if (img.length < 128 * 1024) {
+        imgUrl = order.taskOrderEntries.first.product.thumbnail
+            .imageProcessUrl(processUrl);
+      }
+    }
+    ShareDialog.orderShareDialog(context,
+        uniqueCode: order.uniqueCode,
+        url: MiniProgramPageRoutes.orderDetail(order.id),
+        title: title,
+        path: MiniProgramPageRoutes.orderDetail(order.id),
+        imageUrl: imgUrl,
+        description: description);
   }
 
   /// 查询明细
@@ -362,7 +389,7 @@ class MainInfo extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           border:
-              Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+          Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -386,11 +413,11 @@ class MainInfo extends StatelessWidget {
     if (order?.payPlan?.isHaveDeposit ?? false) {
       depositStr = '定金';
       AbstractPayPlanItemModel item = order.payPlan.payPlanItems.firstWhere(
-          (element) => element.moneyType == PayMoneyType.DEPOSIT,
+              (element) => element.moneyType == PayMoneyType.DEPOSIT,
           orElse: () => null);
       if (item != null) {
         depositStr =
-            '$depositStr(${(item.payPercent * 100).toStringAsFixed(2)}%)';
+        '$depositStr(${(item.payPercent * 100).toStringAsFixed(2)}%)';
       }
     }
 
@@ -418,7 +445,7 @@ class _OrderInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 14),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
       child: Column(
         children: <Widget>[
@@ -469,9 +496,9 @@ class _OrderInfo extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-            '$val',
-            style: _infoStyle,
-          ))
+                '$val',
+                style: _infoStyle,
+              ))
         ],
       );
     }
@@ -512,10 +539,10 @@ class _Header extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-            '${CooperatorHelper.getCooperatorName(order.targetCooperator, order.originCompany, order.originCooperator)}',
-            style: TextStyle(fontSize: 16),
-            overflow: TextOverflow.ellipsis,
-          )),
+                '${CooperatorHelper.getCooperatorName(order.targetCooperator, order.originCompany, order.originCooperator)}',
+                style: TextStyle(fontSize: 16),
+                overflow: TextOverflow.ellipsis,
+              )),
           Text('.${SalesProductionOrderStateLocalizedMap[order.state]}',
               style: TextStyle(
                   fontSize: 18,
@@ -638,14 +665,14 @@ class _EntriesInfo extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 12, color: Color(0xFFFF4D4F)),
                               children: [
-                            TextSpan(
-                                text: '${entry.unitPrice}',
-                                style: TextStyle(fontSize: 16)),
-                            TextSpan(
-                                text: ' x ${entry.quantity}件',
-                                style: TextStyle(
-                                    color: Color(0xff666666), fontSize: 14))
-                          ])),
+                                TextSpan(
+                                    text: '${entry.unitPrice}',
+                                    style: TextStyle(fontSize: 16)),
+                                TextSpan(
+                                    text: ' x ${entry.quantity}件',
+                                    style: TextStyle(
+                                        color: Color(0xff666666), fontSize: 14))
+                              ])),
                       RichText(
                           textAlign: TextAlign.right,
                           text: TextSpan(
@@ -655,7 +682,7 @@ class _EntriesInfo extends StatelessWidget {
                               children: [
                                 TextSpan(
                                     text:
-                                        '${(entry?.totalPrimeCost)?.toStringAsFixed(2)}',
+                                    '${(entry?.totalPrimeCost)?.toStringAsFixed(2)}',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
@@ -677,8 +704,8 @@ class _EntriesInfo extends StatelessWidget {
     } else {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ExternalSaleOrderEntryDetailPage(
-                entry: entry,
-              )));
+            entry: entry,
+          )));
     }
   }
 }

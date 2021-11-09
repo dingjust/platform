@@ -150,10 +150,13 @@ class ShareDialog {
     );
   }
 
-  static void orderShareDialog(
-    BuildContext context, {
-    @required String uniqueCode,
-  }) {
+  static void orderShareDialog(BuildContext context,
+      {@required String uniqueCode,
+      String url,
+      String title,
+      String description,
+      String path,
+      String imageUrl}) {
     GlobalKey qrKey = GlobalKey();
 
     showModalBottomSheet(
@@ -229,6 +232,29 @@ class ShareDialog {
                                   WeChatImage.binary(
                                       byteData.buffer.asUint8List()),
                                   WeChatScene.SESSION);
+                            }
+                          },
+                        ),
+                        FlatButton(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                child:
+                                B2BImage.miniProgram(width: 40, height: 40),
+                              ),
+                              Text('小程序')
+                            ],
+                          ),
+                          onPressed: () async {
+                            if (path != null) {
+                              WechatServiceImpl.instance.shareMiniProgram(
+                                  '$url',
+                                  '$path',
+                                  '$title',
+                                  '$description',
+                                  '$imageUrl');
                             }
                           },
                         ),
