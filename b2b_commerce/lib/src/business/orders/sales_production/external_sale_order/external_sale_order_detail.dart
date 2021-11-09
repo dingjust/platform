@@ -1,5 +1,3 @@
-import 'package:http/http.dart' as http;
-
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/company_bar.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
@@ -7,7 +5,6 @@ import 'package:b2b_commerce/src/_shared/widgets/info/contracts_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info/info_widgets.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info/order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info/reconciliation_order_info.dart';
-import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
@@ -16,6 +13,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_group_sliver/flutter_group_sliver.dart';
+import 'package:http/http.dart' as http;
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -31,7 +30,8 @@ class ExternalSaleOrderDetailPage extends StatefulWidget {
 
   final String titile;
 
-  ExternalSaleOrderDetailPage({Key key, @required this.id, this.titile = '外接订单明细'})
+  ExternalSaleOrderDetailPage(
+      {Key key, @required this.id, this.titile = '外接订单明细'})
       : super(key: key);
 
   @override
@@ -39,7 +39,8 @@ class ExternalSaleOrderDetailPage extends StatefulWidget {
       _ExternalSaleOrderDetailPageState();
 }
 
-class _ExternalSaleOrderDetailPageState extends State<ExternalSaleOrderDetailPage> {
+class _ExternalSaleOrderDetailPageState
+    extends State<ExternalSaleOrderDetailPage> {
   SalesProductionOrderModel order;
 
   ///是否需要回调
@@ -82,41 +83,49 @@ class _ExternalSaleOrderDetailPageState extends State<ExternalSaleOrderDetailPag
                 body: Container(
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   color: Color(0xFFF7F7F7),
-                  child: ListView(
-                    children: <Widget>[
-                      OrderStateCard(
-                        margin: EdgeInsets.symmetric(vertical: 12),
-                        val:
-                        '${SalesProductionOrderStateLocalizedMap[order.state]}',
-                        val2:
-                        '${SalesProductionOrderStateDecsMap[order.state]}',
-                      ),
-                      CompanyBar(
-                          companyModel: B2BUnitModel.fromJson(
-                              CompanyModel.toJson(
-                                  CooperatorHelper.getCooperator(
-                                      order.originCompany, order.belongTo)))),
-                      _EntriesInfo(order: order),
-                      MainInfo(order: order),
-                      ContractsCard(
-                          agreements: order?.agreements,
-                          beforeTap: recordRouteInfo),
-                      ReconciliationOrderCard(
-                          callback: () {
-                            setState(() {
-                              order = null;
-                              callBackPop = true;
-                            });
-                          },
-                          beforeTap: recordRouteInfo,
-                          sheets: order.reconciliationSheetList,
-                          order: order),
-                      OrderPaymentInfo(order: order),
-                      _OrderInfo(order: order),
-                      //底部占位
-                      Container(
-                        height: 80,
-                      )
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverList(
+                          delegate: SliverChildListDelegate(<Widget>[
+                        OrderStateCard(
+                          margin: EdgeInsets.symmetric(vertical: 12),
+                          val:
+                              '${SalesProductionOrderStateLocalizedMap[order.state]}',
+                          val2:
+                              '${SalesProductionOrderStateDecsMap[order.state]}',
+                        ),
+                        CompanyBar(
+                            companyModel: B2BUnitModel.fromJson(
+                                CompanyModel.toJson(
+                                    CooperatorHelper.getCooperator(
+                                        order.originCompany, order.belongTo)))),
+                        _EntriesInfo(order: order),
+                        MainInfo(order: order),
+                        ContractsCard(
+                            agreements: order?.agreements,
+                            beforeTap: recordRouteInfo),
+                        ReconciliationOrderCard(
+                            callback: () {
+                              setState(() {
+                                order = null;
+                                callBackPop = true;
+                              });
+                            },
+                            beforeTap: recordRouteInfo,
+                            sheets: order.reconciliationSheetList,
+                            order: order),
+                        OrderPaymentInfo(order: order),
+                      ])),
+                      _buildImages(),
+                      SliverList(
+                          delegate: SliverChildListDelegate(<Widget>[
+                        RemarkCard(order.remarks),
+                        _OrderInfo(order: order),
+                        //底部占位
+                        Container(
+                          height: 80,
+                        )
+                      ])),
                     ],
                   ),
                 ),
@@ -149,6 +158,25 @@ class _ExternalSaleOrderDetailPageState extends State<ExternalSaleOrderDetailPag
       },
       initialData: null,
       future: _getData(),
+    );
+  }
+
+  Widget _buildImages() {
+    if (order.attachments == null || order.attachments.isEmpty) {
+      return SliverToBoxAdapter();
+    }
+
+    return SliverGroupBuilder(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: SliverPadding(
+          padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+          sliver: ImageSliverGrid(
+            medias: order.attachments,
+          )),
     );
   }
 
@@ -513,47 +541,6 @@ class _OrderInfo extends StatelessWidget {
   }
 }
 
-///合作商信息
-class _Header extends StatelessWidget {
-  final SalesProductionOrderModel order;
-
-  const _Header({Key key, this.order}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      margin: EdgeInsets.only(bottom: 2),
-      color: Colors.white,
-      child: Row(
-        children: [
-          Container(
-            width: 30,
-            height: 30,
-            margin: EdgeInsets.only(right: 5),
-            child: CircleAvatar(
-              backgroundImage: CooperatorHelper.getCooperatorImage(
-                  order.targetCooperator, order.originCompany),
-              radius: 30,
-            ),
-          ),
-          Expanded(
-              child: Text(
-                '${CooperatorHelper.getCooperatorName(order.targetCooperator, order.originCompany, order.originCooperator)}',
-                style: TextStyle(fontSize: 16),
-                overflow: TextOverflow.ellipsis,
-              )),
-          Text('.${SalesProductionOrderStateLocalizedMap[order.state]}',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: getSalesProductionStateColor(order.state)))
-        ],
-      ),
-    );
-  }
-}
-
 ///明细行
 class _EntriesInfo extends StatelessWidget {
   final SalesProductionOrderModel order;
@@ -682,7 +669,8 @@ class _EntriesInfo extends StatelessWidget {
                               children: [
                                 TextSpan(
                                     text:
-                                    '${(entry?.totalPrimeCost)?.toStringAsFixed(2)}',
+                                    '${(entry?.totalPrimeCost)?.toStringAsFixed(
+                                        2)}',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
@@ -703,9 +691,10 @@ class _EntriesInfo extends StatelessWidget {
           arguments: entry.id);
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ExternalSaleOrderEntryDetailPage(
-            entry: entry,
-          )));
+          builder: (context) =>
+              ExternalSaleOrderEntryDetailPage(
+                entry: entry,
+              )));
     }
   }
 }
