@@ -223,9 +223,9 @@ class ShareDialog {
                             BuildContext buildContext = qrKey.currentContext;
                             if (null != buildContext) {
                               RenderRepaintBoundary boundary =
-                              buildContext.findRenderObject();
+                                  buildContext.findRenderObject();
                               ui.Image image =
-                              await boundary.toImage(pixelRatio: 3.0);
+                                  await boundary.toImage(pixelRatio: 3.0);
                               ByteData byteData = await image.toByteData(
                                   format: ui.ImageByteFormat.png);
                               WechatServiceImpl.instance.shareImage(
@@ -254,7 +254,7 @@ class ShareDialog {
                                   '$path',
                                   '$title',
                                   '$description',
-                                  '$imageUrl');
+                                  imageUrl);
                             }
                           },
                         ),

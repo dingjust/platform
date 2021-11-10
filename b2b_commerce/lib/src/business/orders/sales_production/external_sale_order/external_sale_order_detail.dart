@@ -242,19 +242,13 @@ class _ExternalSaleOrderDetailPageState
     String title =
         '编号：${order.code}\n数量：${order.totalQuantity}件;合计：￥${order.totalAmount}';
     String description = "";
-    String imgUrl = '${GlobalConfigs.LOGO_URL}';
+    String imgUrl;
 
     const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
 
     if (order.taskOrderEntries.first.product.thumbnail != null) {
-      //微信小程序图片限制128KB
-      var img = await http.readBytes(order
-          .taskOrderEntries.first.product.thumbnail
-          .imageProcessUrl(processUrl));
-      if (img.length < 128 * 1024) {
-        imgUrl = order.taskOrderEntries.first.product.thumbnail
-            .imageProcessUrl(processUrl);
-      }
+      imgUrl = order.taskOrderEntries.first.product.thumbnail
+          .imageProcessUrl(processUrl);
     }
     ShareDialog.orderShareDialog(context,
         uniqueCode: order.uniqueCode,
@@ -417,7 +411,7 @@ class MainInfo extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           border:
-          Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+              Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

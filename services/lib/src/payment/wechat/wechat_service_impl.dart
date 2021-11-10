@@ -133,20 +133,36 @@ class WechatServiceImpl implements WechatService {
 
   @override
   Future<bool> shareMiniProgram(String url, String path, String title,
-      String description, String thumbnail) {
+      String description, String thumbnail) async {
     //阿里云图片处理
     // const processUrl = 'image_process=resize,w_200/crop,mid,w_200,h_200';
+    var img = thumbnail ?? '${GlobalConfigs.LOGO_URL}';
 
     var model = WeChatShareMiniProgramModel(
+      webPageUrl: url,
+      miniProgramType: WXMiniProgramType.RELEASE,
+      userName: GlobalConfigs.MINI_PROGRAM_ID,
+      path: '$path',
+      title: '$title',
+      description: '$description',
+      thumbnail: WeChatImage.network(img),
+      // compressThumbnail: true
+    );
+    bool result = await shareToWeChat(model);
+    if (result) {
+      return result;
+    } else {
+      var model2 = WeChatShareMiniProgramModel(
         webPageUrl: url,
         miniProgramType: WXMiniProgramType.RELEASE,
         userName: GlobalConfigs.MINI_PROGRAM_ID,
         path: '$path',
         title: '$title',
         description: '$description',
-        thumbnail: WeChatImage.network('$thumbnail'),
-        compressThumbnail: false);
-    return shareToWeChat(model);
+        thumbnail: WeChatImage.network(img),
+      );
+      return shareToWeChat(model2);
+    }
   }
 
   @override
