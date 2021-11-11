@@ -27,6 +27,7 @@
     </el-form>
     <div>
       <el-button type="primary" @click="onExport">导出</el-button>
+      <el-button type="primary" @click="onExportByBill">导出流水</el-button>
     </div>
   </div>
 </template>
@@ -47,6 +48,9 @@ export default {
     },
     onExport () {
       this.$emit('onExport')
+    },
+    onExportByBill () {
+      this.$emit('onExportByBill')
     }
   },
   data () {

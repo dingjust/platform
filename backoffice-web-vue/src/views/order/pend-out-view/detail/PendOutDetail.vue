@@ -57,6 +57,14 @@
             <el-row type="flex" justify="space-between" align="center" style="margin-bottom: 12px;">
               <h6 class="preview-text">{{resultPreview}}</h6>
             </el-row>
+            <el-row type="flex" justify="space-between" align="center" style="margin-bottom: 12px;">
+              <el-col>
+                <h6>创建人：{{detail.creator ? detail.creator.name : detail.sendBy.name}}</h6>
+              </el-col>
+              <el-col>
+                <h6>创建人uid：{{detail.creator ? detail.creator.uid : detail.sendBy.uid}}</h6>
+              </el-col>
+            </el-row>
           </el-col>
           <el-col :xs="24" :sm="6">
             <div class="info-box" style="padding: 5px 0px 0px 5px;">

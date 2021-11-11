@@ -12,7 +12,7 @@
         </div>
       </el-row>
       <div class="pt-2"></div>
-      <pend-out-view-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" @onExport="onExport"/>
+      <pend-out-view-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" @onExport="onExport" @onExportByBill="onExportByBill"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="item in statuses">
           <el-tab-pane :label="item.name" :name="item.code" :key="item.code">
@@ -95,6 +95,44 @@ export default {
           创建时间: e.creationtime ? formatDate(new Date(e.creationtime), 'yyyy-MM-dd hh:mm:ss') : '',
           订单状态: this.getEnum('SalesProductionOrderState', e.state)
         }
+      })
+
+      return exportData
+    },
+    async onExportByBill () {
+      const totalElements = this.page.totalElements
+
+      const exportData = await this.getExportDataByBill(totalElements)
+      exportTable(exportData, '交易流水订单')
+    },
+    async getExportDataByBill (totalElements) {
+      const query = this.queryFormData;
+
+      const url = this.apis().searchPendOut();
+      const result = await this.$http.post(url, query, {
+        page: 0,
+        size: totalElements
+      })
+
+      let exportData = [];
+      result.content.filter(item => item.paymentOrders && item.paymentOrders.length > 0).forEach(e => {
+        e.paymentOrders.filter(i => i.state === 'PAID').forEach(paymentOrder => {
+          exportData.push({
+            订单号: e.code,
+            流水单号: paymentOrder.outOrderNo,
+            流水金额: paymentOrder.totalAmount ? paymentOrder.totalAmount : paymentOrder.payAmount,
+            流水支付时间: paymentOrder.paySuccessTime ? formatDate(new Date(paymentOrder.paySuccessTime), 'yyyy-MM-dd hh:mm:ss') : '',
+            甲方公司: e.originCooperator ? e.originCooperator.name : '',
+            乙方公司: e.belongTo ? e.belongTo.name : '',
+            款数: e.entrySize ? e.entrySize : '',
+            订单数量: e.totalQuantity ? e.totalQuantity : '',
+            服务费比例: e.serviceFeePercent ? (e.serviceFeePercent + '%') : '',
+            订单金额: e.totalPrimeCost ? e.totalPrimeCost : '',
+            结算金额: e.onlinePaidAmount ? e.onlinePaidAmount : '',
+            创建时间: e.creationtime ? formatDate(new Date(e.creationtime), 'yyyy-MM-dd hh:mm:ss') : '',
+            订单状态: this.getEnum('SalesProductionOrderState', e.state)
+          })
+        })
       })
 
       return exportData
