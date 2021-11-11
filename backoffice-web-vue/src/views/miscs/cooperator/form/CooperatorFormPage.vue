@@ -18,7 +18,7 @@
                   <el-select v-model="formData.name" multiple remote reserve-keyword @remove-tag="onRemoveTag"
                     v-if="(formData.name instanceof Array)&&formData.name.length>0" style="width:100%">
                   </el-select>
-                  <el-input v-else v-model="formData.name" :disabled="!isUpdate"></el-input>
+                  <el-input v-else v-model="formData.name" :disabled="isUpdate && formData.partner != null"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="3">
