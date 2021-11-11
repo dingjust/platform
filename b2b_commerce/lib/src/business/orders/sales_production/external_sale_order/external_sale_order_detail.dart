@@ -14,7 +14,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
-import 'package:http/http.dart' as http;
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';

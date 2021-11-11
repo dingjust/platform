@@ -116,10 +116,11 @@ class ReconciliationOrderCard extends StatelessWidget {
 
   ///能否创建对账单
   bool canCreate() {
-    if (order != null) {
-      return order.originCooperator != null && order.targetCooperator != null;
-    }
-    return false;
+    return true;
+    // if (order != null) {
+    //   return order.originCooperator != null && order.targetCooperator != null;
+    // }
+    // return false;
   }
 
   void onCreate(BuildContext context) {

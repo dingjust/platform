@@ -180,6 +180,7 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
           taskOrderEntries: [],
           attachments: [],
           payOnline: true,
+          offLine: true,
           name: '',
           type: ProductionOrderType.SALES_ORDER,
           paymentAccount:
