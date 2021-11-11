@@ -63,7 +63,7 @@ export default {
     },
     // 判断合作商双方是否都认证
     isAllApproval: function () {
-      return this.authenticated && this.formData.cooperator.approvalStatus === 'approved';
+      return this.authenticated && this.formData.cooperator && this.formData.cooperator.approvalStatus === 'approved';
     }
   },
   data () {
@@ -76,7 +76,7 @@ export default {
         title: '',
         shippingSheets: [],
         fastShippingSheets: [],
-        cooperator: '',
+        cooperator: {},
         entries: [],
         isApproval: true,
         approvers: [null],

@@ -4,7 +4,7 @@
       <el-row type="flex" justify="start" class="basic-container">
         <h6 class="basic-text">标题：{{order.title}}</h6>
       </el-row>
-      <el-row type="flex" justify="start" class="basic-container">
+      <el-row type="flex" justify="start" class="basic-container" v-if="order.cooperator">
         <h6 class="basic-text">合作商：{{order.cooperator.type === 'ONLINE' ? order.cooperator.partner.name : order.cooperator.name}}</h6>
       </el-row>
       <el-row type="flex" justify="start" class="basic-container" v-if="order.shippingSheets && order.shippingSheets.length > 0">

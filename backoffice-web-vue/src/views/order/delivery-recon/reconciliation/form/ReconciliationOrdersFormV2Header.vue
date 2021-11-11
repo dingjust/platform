@@ -128,7 +128,7 @@ export default {
         this.formData.shippingSheets = selection;
         this.appendEntries(selection);
 
-        if (!this.formData.name) {
+        if (!this.formData.name && selection[0]) {
           this.formData.cooperator = {
             partner: {
               id: selection[0].shipParty.id
@@ -141,7 +141,7 @@ export default {
       } else if (this.formData.type === 'fastShippingSheets') {
         this.formData.fastShippingSheets = selection;
 
-        if (!this.formData.name) {
+        if (!this.formData.name && selection[0]) {
           this.formData.cooperator = {
             id: selection[0].cooperator.id,
             partner: {
@@ -161,10 +161,12 @@ export default {
           showName: '外发订单'
         })
 
-        this.formData.cooperator = {
-          id: selection[0].targetCooperator.id,
-          name: selection[0].targetCooperator.partner.name,
-          approvalStatus: selection[0].targetCooperator.partner.approvalStatus
+        if (selection[0].targetCooperator) {
+          this.formData.cooperator = {
+            id: selection[0].targetCooperator.id,
+            name: selection[0].targetCooperator.partner.name,
+            approvalStatus: selection[0].targetCooperator.partner.approvalStatus
+          }
         }
 
         this.getOutboundDetail(selection[0].id)
@@ -182,7 +184,7 @@ export default {
             name: selection[0].originCooperator.partner.name,
             approvalStatus: selection[0].originCooperator.partner.approvalStatus
           }
-        } else {
+        } else if (selection[0].targetCooperator) {
           this.formData.cooperator = {
             id: selection[0].targetCooperator.id,
             name: selection[0].targetCooperator.partner.name,

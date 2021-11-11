@@ -117,6 +117,10 @@ export default {
       // this.queryFormData.partyType = 'PARTYB';
       const query = Object.assign({}, this.queryFormData);
 
+      if (query.cooperatorName === '') {
+        this.$delete(query, 'cooperatorName')
+      }
+
       const url = this.apis().getDeliveryList();
       const result = await this.$http.post(url, query, {
         page: page,
@@ -133,6 +137,10 @@ export default {
     async searchReconciliation (page, size) {
       // this.queryFormData.partyType = 'PARTYA';
       const query = Object.assign({}, this.queryFormData);
+
+      if (query.cooperatorName === '') {
+        this.$delete(query, 'cooperatorName')
+      }
 
       const url = this.apis().getReconciliationV2List();
       const result = await this.$http.post(url, query, {
@@ -188,6 +196,10 @@ export default {
       let query = Object.assign({}, this.queryFormData);
       query.states = '';
 
+      if (query.cooperatorName === '') {
+        this.$delete(query, 'cooperatorName')
+      }
+
       const url = this.apis().getDeliveryListCount();
       const result = await this.$http.post(url, query);
       if (result['errors']) {
@@ -207,6 +219,10 @@ export default {
     async getReconciliationV2ListCount () {
       let query = Object.assign({}, this.queryFormData);
       query.states = '';
+
+      if (query.cooperatorName === '') {
+        this.$delete(query, 'cooperatorName')
+      }
 
       const url = this.apis().getReconciliationV2ListCount();
       const result = await this.$http.post(url, query);
