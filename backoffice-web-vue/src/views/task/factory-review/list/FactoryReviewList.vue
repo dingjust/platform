@@ -72,6 +72,11 @@ export default {
       }
 
       this.detailsData = JSON.parse(result.data);
+
+      if (this.detailsData.contactAddress && !this.detailsData.contactAddress.id) {
+        this.detailsData.contactAddress.id = 1
+      }
+
       if (this.detailsData.profilePicture) {
         this.detailsData.profilePicture.convertedMedias = [];
       }

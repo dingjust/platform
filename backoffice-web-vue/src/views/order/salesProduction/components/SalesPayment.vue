@@ -6,7 +6,7 @@
 <template>
   <div>
     <order-pay-detail :formData="formData" :fromOut="fromOut"/>
-    <el-table :data="formData.paymentOrders" style="margin-top: 20px">
+    <el-table :data="paymentOrders" style="margin-top: 20px">
       <el-table-column label="批次">
         <template slot-scope="scope">
           <span>{{batchName(scope.$index)}}</span>
@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column label="支付金额">
         <template slot-scope="scope">
-          <span>￥{{scope.row.payAmount}}</span>
+          <span>￥{{scope.row.totalAmount ? scope.row.totalAmount : scope.row.payAmount}}</span>
         </template>
       </el-table-column>
       <el-table-column label="支付方式">
@@ -44,6 +44,11 @@ export default {
   name: 'SalesPayment',
   components: { OrderPayDetail },
   props: ['formData', 'fromOut'],
+  computed: {
+    paymentOrders: function () {
+      return this.formData.paymentOrders.reverse()
+    }
+  },
   methods: {
     batchName (index) {
       const { payPlan } = this.formData

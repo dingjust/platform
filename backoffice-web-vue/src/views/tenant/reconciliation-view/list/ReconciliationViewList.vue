@@ -5,12 +5,12 @@
       <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="甲方">
         <template slot-scope="scope">
-          {{scope.row.belongRoleType === 'PARTYA' ? scope.row.receiveParty.name : scope.row.shipParty.name}}
+          {{scope.row.belongRoleType === 'PARTYA' ? (scope.row.receiveParty ? scope.row.receiveParty.name : '') : (scope.row.shipParty ? scope.row.shipParty.name : '')}}
         </template>
       </el-table-column>
       <el-table-column label="乙方">
         <template slot-scope="scope">
-          {{scope.row.belongRoleType === 'PARTYA' ? scope.row.shipParty.name : scope.row.receiveParty.name}}
+          {{scope.row.belongRoleType === 'PARTYA' ? (scope.row.shipParty ? scope.row.shipParty.name : '') : (scope.row.receiveParty ? scope.row.receiveParty.name : '')}}
         </template>
       </el-table-column>
       <!-- <el-table-column label="合作商" min-width="200px">

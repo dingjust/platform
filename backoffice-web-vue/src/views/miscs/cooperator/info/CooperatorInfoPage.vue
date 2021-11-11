@@ -31,7 +31,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="space-between" v-if="itemData.partner.approvalStatus === 'approved'">
+          <el-row type="flex" justify="space-between" v-if="itemData.partner && itemData.partner.approvalStatus === 'approved'">
             <el-col :span="18" :offset="6">
               <el-button type="text" @click="authVisible = true">查看认证信息</el-button>
             </el-col>
