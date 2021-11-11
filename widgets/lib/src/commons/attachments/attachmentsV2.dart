@@ -192,7 +192,7 @@ class _EditableAttachmentsV2State extends State<EditableAttachmentsV2>
             ),
             errorWidget: (context, url, error) => Icon(
               B2BIcons.noPicture,
-              size: size,
+              size: 30,
               color: Colors.grey[300],
             ),
             // SpinKitRing(
@@ -299,9 +299,9 @@ class _EditableAttachmentsV2State extends State<EditableAttachmentsV2>
                   placeholder: (context, url) =>
                       Icon(
                         B2BIcons.noPicture,
-                        size: size,
-                        color: Colors.grey[300],
-                      ),
+                    size: size * 2 / 3,
+                    color: Colors.grey[300],
+                  ),
                   // SpinKitRing(
                   //   color: Colors.black12,
                   //   lineWidth: 2,
