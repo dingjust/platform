@@ -34,7 +34,7 @@
                       {{props.item.enableShow === true ? '关闭显示' : '开启显示'}}
                     </el-dropdown-item>
                     <el-dropdown-item command="SORT">修改序列值</el-dropdown-item>
-                    <el-dropdown-item command="SET_PHONE">设置代运营手机号</el-dropdown-item>
+                    <el-dropdown-item command="SET_PHONE">设置代理手机号</el-dropdown-item>
                     <el-dropdown-item command="AUTH">认证信息</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -65,7 +65,7 @@
     <el-dialog :visible.sync="modifyVisible" width="80%" :close-on-click-modal="false">
       <factory-form-by-tenant v-if="modifyVisible" :row="handleRow" @callback="modifyVisible = false"/>
     </el-dialog>
-    <el-dialog title="认证详情" :visible.sync="authDetailVisible" width="500px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false"> 
+    <el-dialog title="认证详情" :visible.sync="authDetailVisible" width="500px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <cooperator-auth-detail v-if="authDetailVisible" :uid="handleRow.uid"/>
     </el-dialog>
   </div>
