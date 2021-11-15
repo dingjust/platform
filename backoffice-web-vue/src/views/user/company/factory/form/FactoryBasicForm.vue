@@ -320,6 +320,9 @@
     mounted () {
       this.$nextTick(() => {
         this.getRegions();
+        this.formData.contactAddress.city || this.$set(this.formData.contactAddress, 'city', {})
+        this.formData.contactAddress.cityDistrict || this.$set(this.formData.contactAddress, 'cityDistrict', {})
+
         if (this.formData.contactAddress.id) {
           this.getCities(this.formData.contactAddress.region);
           this.getCityDistricts(this.formData.contactAddress.city);

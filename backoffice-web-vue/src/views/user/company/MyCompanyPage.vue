@@ -133,14 +133,14 @@
 
         this.setFormData(Object.assign({}, Object.assign(this.formData, result)));
 
-        if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
-          if (this.formData.contactAddress.region.isocode != '') {
+        if (this.formData.contactAddress.region && (this.isCitiesChanged || this.cities.length <= 0)) {
+          if (this.formData.contactAddress.region.isocode) {
             this.getCities(this.formData.contactAddress.region);
             this.setIsCitiesChanged(false);
           }
         }
-        if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
-          if (this.formData.contactAddress.city != null && this.formData.contactAddress.city.code != '') {
+        if (this.formData.contactAddress.city && (this.isDistrictsChanged || this.cities.length <= 0)) {
+          if (this.formData.contactAddress.city && this.formData.contactAddress.city.code) {
             this.getCityDistricts(this.formData.contactAddress.city);
             this.setIsDistrictsChanged(false);
           }

@@ -10,7 +10,7 @@
         <h6>编辑工厂信息</h6>
       </div>
       <div class="titleCardClass">
-        <el-form :model="formData" ref="factoryForm" label-position="left" label-width="75px" hide-required-asterisk>
+        <el-form :model="formData" ref="factoryForm" :rules="rules" label-position="left" label-width="75px" hide-required-asterisk>
           <factory-basic-form :form-data="formData" />
           <factory-scale-form :form-data="formData" />
           <factory-capacity-form :form-data="formData" />
@@ -75,7 +75,16 @@ export default {
       this.setFactoryFormVisible(true);
       this.$set(this, 'formData', result)
     },
-    async onModify () {
+    onModify () {
+      this.$refs.factoryForm.validate(valid => {
+        if (valid) {
+          this._onModify()
+        } else {
+          this.$message.error('请先完善表单信息')
+        }
+      })
+    },
+    async _onModify () {
       const data = Object.assign({}, this.formData);
       if (data.productionMode === '' || data.productionMode == null) {
         this.$delete(data, 'productionMode');
@@ -93,7 +102,54 @@ export default {
   },
   data () {
     return {
-      formData: null
+      formData: null,
+      rules: {
+        'contactAddress.region': [
+          {required: true, message: '请选择省', type: 'object', trigger: 'change'}
+        ],
+        'contactAddress.city': [
+          {required: true, message: '请选择市', type: 'object', trigger: 'change'}
+        ],
+        'contactAddress.cityDistrict': [
+          {required: true, message: '请选择区', type: 'object', trigger: 'change'}
+        ],
+        'contactAddress.line1': [
+          {required: true, message: '请填写详细地址', trigger: 'blur'}
+        ],
+        // 'name': [
+        //   {required: true, message: '请填写公司名称', trigger: 'blur'}
+        // ],
+        // 'contactPerson': [
+        //   {required: true, message: '请填写联系人', trigger: 'blur'}
+        // ],
+        // 'contactPhone': [
+        //   {validator: checkContactPhone, type: 'object', trigger: 'blur'}
+        // ],
+        // 'equipment': [
+        //   {validator: cheackEquipment, type: 'object', trigger: 'change'}
+        // ],
+        // 'adeptAtCategories': [
+        //   {required: true, message: '请选择品类', type: 'array', trigger: 'change'}
+        // ],
+        // 'categories': [
+        //   {validator: checkCategories, type: 'object', trigger: 'change'}
+        // ],
+        // 'profilePicture': [
+        //   {validator: checkProfilePicture, type: 'object', trigger: 'change'}
+        // ],
+        // 'duties': [
+        //   {required: true, message: '请填写职务', trigger: 'blur'}
+        // ],
+        // 'populationScale': [
+        //   {required: true, message: '请选择工厂人数', trigger: 'change'}
+        // ],
+        // 'cooperationModes': [
+        //   {required: true, message: '请选择合作方式', trigger: 'change'}
+        // ],
+        // 'qualityLevels': [
+        //   {required: true, message: '请选择质量等级', trigger: 'change'}
+        // ]
+      }
     }
   },
   created () {
