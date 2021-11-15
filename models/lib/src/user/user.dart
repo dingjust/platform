@@ -318,12 +318,15 @@ class AddressModel extends ItemModel {
       'fullname': model.fullname,
       'cellphone': model.cellphone,
       'line1': model.line1,
-      'defaultAddress': model.defaultAddress,
-      'region': {'isocode': model.region.isocode, 'name': model.region.name},
-      'city': {'code': model.city.code, 'name': model.city.name},
+      'defaultAddress': model?.defaultAddress,
+      'region': {
+        'isocode': model?.region?.isocode,
+        'name': model?.region?.name
+      },
+      'city': {'code': model?.city?.code, 'name': model?.city?.name},
       'cityDistrict': {
-        'code': model.cityDistrict.code,
-        'name': model.cityDistrict.name
+        'code': model?.cityDistrict?.code,
+        'name': model?.cityDistrict?.name
       }
     };
   }
