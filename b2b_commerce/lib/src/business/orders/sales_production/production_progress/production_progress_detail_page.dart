@@ -1,7 +1,9 @@
+import 'package:b2b_commerce/src/_shared/widgets/info/order_info.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/production_progress/production_progress_order_detail_v2_page.dart';
 import 'package:b2b_commerce/src/business/orders/sales_production/production_progress/production_progress_order_form_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -26,8 +28,7 @@ class ProductionProgressDetailPage extends StatefulWidget {
       _ProductionProgressDetailPageState();
 }
 
-class _ProductionProgressDetailPageState
-    extends State<ProductionProgressDetailPage> {
+class _ProductionProgressDetailPageState extends State<ProductionProgressDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,104 +52,91 @@ class _ProductionProgressDetailPageState
       body: Container(
         color: Colors.white,
         padding: EdgeInsets.only(bottom: 10),
-        child: ListView(
-          children: <Widget>[
-            _InfoRow(
-              title: '预计完成时间：',
-              val: '${DateFormatUtil.formatYMD(widget.progress.estimatedDate)}',
-            ),
-            _InfoRow(
-              title: '实际完成时间：',
-              val: '${DateFormatUtil.formatYMD(widget.progress.finishDate)}',
-            ),
-            _InfoRow(
-              title: '实际数量/预计数量：',
-              val: '$actualNum/$expectNum',
-            ),
-            ColorSizeNoteEntryTable(
-              data: totalEntries,
-              compareFunction:
-                  Provider.of<SizeState>(context, listen: false).compareByName,
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [Text('上报记录：')],
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverList(
+                delegate: SliverChildListDelegate(<Widget>[
+              _InfoRow(
+                title: '预计完成时间：',
+                val:
+                    '${DateFormatUtil.formatYMD(widget.progress.estimatedDate)}',
               ),
-            ),
-            for (ProductionProgressOrderModel order
-            in widget.progress?.productionProgressOrders ?? [])
-              _OrderItem(
-                model: order,
-                onItemTap: () => orderDeatil(context, order),
+              _InfoRow(
+                title: '实际完成时间：',
+                val: '${DateFormatUtil.formatYMD(widget.progress.finishDate)}',
               ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [Text('附件：')],
+              _InfoRow(
+                title: '实际数量/预计数量：',
+                val: '$actualNum/$expectNum',
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
-              child: Row(
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '参考图片',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                      TextSpan(
-                        text: '（若无图片可不上传）',
-                        style: TextStyle(fontSize: 16, color: Colors.red),
-                      ),
-                    ]),
-                  ),
-                ],
+              ColorSizeNoteEntryTable(
+                data: totalEntries,
+                compareFunction: Provider.of<SizeState>(context, listen: false)
+                    .compareByName,
               ),
-            ),
-            Attachments(list: widget.progress.medias),
-            Divider(),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [Text('备注：')],
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [Text('上报记录：')],
+                ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  Expanded(child: Text('${widget.progress.remarks ?? '暂无备注'}'))
-                ],
+              for (ProductionProgressOrderModel order
+                  in widget.progress?.productionProgressOrders ?? [])
+                _OrderItem(
+                  model: order,
+                  onItemTap: () => orderDeatil(context, order),
+                ),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [Text('附件：')],
+                ),
               ),
-            ),
+              RemarkCard(widget.progress.remarks),
+            ])),
+            _buildImages(),
           ],
         ),
       ),
     );
   }
 
-  void orderDeatil(BuildContext context,
-      ProductionProgressOrderModel order) async {
+  Widget _buildImages() {
+    var medias = _medias();
+    if (medias.isEmpty) {
+      return SliverToBoxAdapter();
+    }
+
+    return SliverGroupBuilder(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: SliverPadding(
+          padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+          sliver: ImageSliverGrid(
+            medias: medias,
+          )),
+    );
+  }
+
+  void orderDeatil(
+      BuildContext context, ProductionProgressOrderModel order) async {
     dynamic result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ProductionProgressOrderDetailV2Page(
+            builder: (context) => ProductionProgressOrderDetailV2Page(
                   progress: widget.progress,
                   model: order,
                   colorSizeEntries: order.entries
-                      ?.map((e) =>
-                      ColorSizeInputEntry(
-                          color: e.color,
-                          size: e.size,
-                          quantity: e.quantity))
-                      ?.toList() ??
+                          ?.map((e) => ColorSizeInputEntry(
+                              color: e.color,
+                              size: e.size,
+                              quantity: e.quantity))
+                          ?.toList() ??
                       [],
                 )));
     if (result != null && result) {
@@ -198,12 +186,12 @@ class _ProductionProgressDetailPageState
     if (widget.progress.productionProgressOrders != null) {
       widget.progress.productionProgressOrders
           .where((element) =>
-              element.status == ProductionProgressOrderStatus.PASS &&
-              element.entries != null)
+      element.status == ProductionProgressOrderStatus.PASS &&
+          element.entries != null)
           .forEach((entry) {
         entry.entries.forEach((element) {
           OrderNoteEntryModel note = result.firstWhere(
-              (val) => val.color == element.color && val.size == element.size,
+                  (val) => val.color == element.color && val.size == element.size,
               orElse: () => null);
           if (note != null) {
             note.quantity += element.quantity;
@@ -246,10 +234,10 @@ class _ProductionProgressDetailPageState
         context,
         MaterialPageRoute(
             builder: (context) => ProductionProgressOrderFormPage(
-                  progress: widget.progress,
-                  model: productionProgressOrderModel,
-                  colorSizeEntries: _colorSizeEntries,
-                )));
+              progress: widget.progress,
+              model: productionProgressOrderModel,
+              colorSizeEntries: _colorSizeEntries,
+            )));
 
     if (result != null && result) {
       await _refreshData();
@@ -268,6 +256,17 @@ class _ProductionProgressDetailPageState
       });
     }
   }
+
+  ///附件
+  List<MediaModel> _medias() {
+    List<MediaModel> medias = [];
+    widget.progress.productionProgressOrders.forEach((element) {
+      if (element.medias != null) {
+        medias.addAll(element.medias);
+      }
+    });
+    return medias;
+  }
 }
 
 class _InfoRow extends StatelessWidget {
@@ -285,7 +284,7 @@ class _InfoRow extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
           border:
-              Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
+          Border(bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [Text('$title'), Text('$val')],
@@ -331,15 +330,15 @@ class _OrderItem extends StatelessWidget {
                           text: '数量：',
                           style: TextStyle(fontSize: 16, color: Colors.black87),
                           children: [
-                        TextSpan(
-                            text: '${model.amount}',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: model.status ==
+                            TextSpan(
+                                text: '${model.amount}',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: model.status ==
                                         ProductionProgressOrderStatus.PASS
-                                    ? FontWeight.bold
-                                    : FontWeight.normal)),
-                      ])),
+                                        ? FontWeight.bold
+                                        : FontWeight.normal)),
+                          ])),
                 ),
                 Text('上报人：${model.operator.name}'),
               ],

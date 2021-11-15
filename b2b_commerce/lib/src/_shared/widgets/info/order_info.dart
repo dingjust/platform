@@ -53,3 +53,54 @@ class OrderStateCard extends StatelessWidget {
     );
   }
 }
+
+///备注卡片
+class RemarkCard extends StatelessWidget {
+  final String val;
+
+  const RemarkCard(this.val, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (val == null || val == '') {
+      return Container();
+    }
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(8)),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              margin: EdgeInsets.only(bottom: 2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '备注',
+                      style: TextStyle(color: Color(0xFF999999), fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '$val',
+                      style: TextStyle(color: Color(0xFF222222), fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+}

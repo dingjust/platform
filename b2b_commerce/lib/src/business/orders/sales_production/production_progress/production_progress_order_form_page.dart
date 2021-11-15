@@ -76,7 +76,7 @@ class _ProductionProgressOrderFormPageState
       ),
       body: Container(
         color: Colors.white,
-        padding: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: ListView(children: <Widget>[
           _InfoRow(
             title: '工单号：',
@@ -89,7 +89,7 @@ class _ProductionProgressOrderFormPageState
           _buildReportTime(context),
           _buildColorSizeInputTable(context),
           _buildMedias(),
-          EditableAttachments(
+          EditableAttachmentsV2(
             list: widget.model.medias,
             maxNum: 5,
             editable: true,
@@ -137,7 +137,7 @@ class _ProductionProgressOrderFormPageState
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
-        children: [Text('当前节点证明图片：')],
+        children: [Text('图片：')],
       ),
     );
   }

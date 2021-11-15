@@ -6,7 +6,7 @@
       <el-table-column label="登录账号" prop="contactUid" min-width="95"></el-table-column>
       <el-table-column label="联系人" prop="contactPerson" min-width="100"></el-table-column>
       <!-- <el-table-column label="积分" prop="points" min-width="60"></el-table-column> -->
-      <el-table-column label="代运营手机号" prop="agentOperationPhoneNumber" min-width="120"></el-table-column>
+      <el-table-column label="代理手机号" prop="agentOperationPhoneNumber" min-width="120"></el-table-column>
       <el-table-column label="受邀渠道码" prop="channelCode" min-width="120" show-overflow-tooltip></el-table-column>
       <el-table-column label="注册时间" prop="creationTime" min-width="120">
         <template slot-scope="scope">
@@ -84,7 +84,7 @@ export default {
     },
     onCurrentPageChanged (val) {
       this.$emit('onAdvancedSearch', val - 1, 10);
-      
+
       this.$nextTick(() => {
         this.$refs.resultTable.bodyWrapper.scrollTop = 0
       })

@@ -150,42 +150,45 @@ class ShareDialog {
     );
   }
 
-  static void orderShareDialog(
-    BuildContext context, {
-    @required String uniqueCode,
-  }) {
+  static void orderShareDialog(BuildContext context,
+      {@required String uniqueCode,
+      String url,
+      String title,
+      String description,
+      String path,
+      String imageUrl}) {
     GlobalKey qrKey = GlobalKey();
 
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-            height: 350,
+            height: 100,
             color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                RepaintBoundary(
-                  key: qrKey,
-                  child: Container(
-                      height: 250,
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          QrImage(
-                            data: "${QrUrl.orderUniqueCode(uniqueCode)}",
-                            version: QrVersions.auto,
-                            size: 200,
-                            errorCorrectionLevel: QrErrorCorrectLevel.H,
-                          ),
-                          Text(
-                            '打开钉单扫描二维码导入订单',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          )
-                        ],
-                      )),
-                ),
+                // RepaintBoundary(
+                //   key: qrKey,
+                //   child: Container(
+                //       height: 250,
+                //       color: Colors.white,
+                //       child: Column(
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         children: [
+                //           QrImage(
+                //             data: "${QrUrl.orderUniqueCode(uniqueCode)}",
+                //             version: QrVersions.auto,
+                //             size: 200,
+                //             errorCorrectionLevel: QrErrorCorrectLevel.H,
+                //           ),
+                //           Text(
+                //             '打开钉单扫描二维码导入订单',
+                //             style: TextStyle(color: Colors.grey, fontSize: 12),
+                //           )
+                //         ],
+                //       )),
+                // ),
                 Expanded(
                   flex: 3,
                   child: Container(
@@ -194,6 +197,44 @@ class ShareDialog {
                       // scrollDirection: Axis.horizontal,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
+                        // FlatButton(
+                        //   child: Column(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: <Widget>[
+                        //       Container(
+                        //         height: 50,
+                        //         child: Icon(
+                        //           B2BIcons.wechat,
+                        //           size: 40,
+                        //           color: Color.fromRGBO(0, 211, 12, 1),
+                        //         ),
+                        //       ),
+                        //       Text('微信好友')
+                        //     ],
+                        //   ),
+                        //   onPressed: () async {
+                        //     //检查是否有存储权限
+                        //     var status = await Permission.storage.status;
+                        //     if (!status.isGranted) {
+                        //       status = await Permission.storage.request();
+                        //       print(status);
+                        //       return;
+                        //     }
+                        //     BuildContext buildContext = qrKey.currentContext;
+                        //     if (null != buildContext) {
+                        //       RenderRepaintBoundary boundary =
+                        //           buildContext.findRenderObject();
+                        //       ui.Image image =
+                        //           await boundary.toImage(pixelRatio: 3.0);
+                        //       ByteData byteData = await image.toByteData(
+                        //           format: ui.ImageByteFormat.png);
+                        //       WechatServiceImpl.instance.shareImage(
+                        //           WeChatImage.binary(
+                        //               byteData.buffer.asUint8List()),
+                        //           WeChatScene.SESSION);
+                        //     }
+                        //   },
+                        // ),
                         FlatButton(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -205,30 +246,20 @@ class ShareDialog {
                                   size: 40,
                                   color: Color.fromRGBO(0, 211, 12, 1),
                                 ),
+                                // B2BImage.miniProgram(width: 40, height: 40),
                               ),
                               Text('微信好友')
                             ],
                           ),
                           onPressed: () async {
-                            //检查是否有存储权限
-                            var status = await Permission.storage.status;
-                            if (!status.isGranted) {
-                              status = await Permission.storage.request();
-                              print(status);
-                              return;
-                            }
-                            BuildContext buildContext = qrKey.currentContext;
-                            if (null != buildContext) {
-                              RenderRepaintBoundary boundary =
-                              buildContext.findRenderObject();
-                              ui.Image image =
-                              await boundary.toImage(pixelRatio: 3.0);
-                              ByteData byteData = await image.toByteData(
-                                  format: ui.ImageByteFormat.png);
-                              WechatServiceImpl.instance.shareImage(
-                                  WeChatImage.binary(
-                                      byteData.buffer.asUint8List()),
-                                  WeChatScene.SESSION);
+                            ///分享小程序
+                            if (path != null) {
+                              WechatServiceImpl.instance.shareMiniProgram(
+                                  '$url',
+                                  '$path',
+                                  '$title',
+                                  '$description',
+                                  imageUrl);
                             }
                           },
                         ),
@@ -264,7 +295,8 @@ class ShareDialog {
   }
 
   ///对账单分享
-  static void reconciliationOrderShareDialog(BuildContext context, {
+  static void reconciliationOrderShareDialog(
+    BuildContext context, {
     @required int id,
   }) {
     GlobalKey qrKey = GlobalKey();

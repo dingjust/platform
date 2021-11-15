@@ -177,24 +177,30 @@ class CmtPayOrderData extends ItemModel {
   ///事务
   CmtPayTransactionData transactions;
 
-  CmtPayOrderData({
-    this.code,
-    this.originCode,
-    this.batch,
-    this.payAmount,
-    this.payType,
-    this.orderType,
-    this.remark,
-    this.outOrderNo,
-    this.paySuccessTime,
-    this.state,
-    this.supportCreditCard,
-    this.belongTo,
-    this.profitSharing,
-    this.payUser,
-    this.systemTriggerFinished,
-    this.transactions,
-  });
+  ///金额V2
+  double totalAmount;
+
+  int totalOrder;
+
+  CmtPayOrderData(
+      {this.code,
+      this.originCode,
+      this.batch,
+      this.payAmount,
+      this.payType,
+      this.orderType,
+      this.remark,
+      this.outOrderNo,
+      this.paySuccessTime,
+      this.state,
+      this.supportCreditCard,
+      this.belongTo,
+      this.profitSharing,
+      this.payUser,
+      this.systemTriggerFinished,
+      this.transactions,
+      this.totalAmount,
+      this.totalOrder});
 
   factory CmtPayOrderData.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$CmtPayOrderDataFromJson(json);

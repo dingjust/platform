@@ -7,7 +7,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './address_picker.dart';
-import './find_factory_by_map.dart';
+// import './find_factory_by_map.dart';
 
 List<CategoryModel> _categories;
 
@@ -473,10 +473,10 @@ class _ScreenConditionsState extends State<ScreenConditions> {
                 technology);
 
             if (widget.route == '地图找厂') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FindFactoryByMap()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => FindFactoryByMap()),
+              // );
             } else {
               Navigator.push(
                 context,

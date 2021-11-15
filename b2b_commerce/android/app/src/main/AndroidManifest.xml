@@ -9,6 +9,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="钉单"
+        android:allowBackup="false"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"

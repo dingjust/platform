@@ -5,15 +5,15 @@ import 'package:b2b_commerce/src/_shared/widgets/info/contracts_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info/info_widgets.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info/order_info.dart';
 import 'package:b2b_commerce/src/_shared/widgets/info/reconciliation_order_info.dart';
-import 'package:b2b_commerce/src/_shared/widgets/order_status_color.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
-import 'package:b2b_commerce/src/business/_shared/widgets/order_contracts_info.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/common/mini_program_page_routes.dart';
 import 'package:b2b_commerce/src/helper/cooperator_helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -82,41 +82,49 @@ class _ExternalSaleOrderDetailPageState
                 body: Container(
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   color: Color(0xFFF7F7F7),
-                  child: ListView(
-                    children: <Widget>[
-                      OrderStateCard(
-                        margin: EdgeInsets.symmetric(vertical: 12),
-                        val:
-                            '${SalesProductionOrderStateLocalizedMap[order.state]}',
-                        val2:
-                            '${SalesProductionOrderStateDecsMap[order.state]}',
-                      ),
-                      CompanyBar(
-                          companyModel: B2BUnitModel.fromJson(
-                              CompanyModel.toJson(
-                                  CooperatorHelper.getCooperator(
-                                      order.originCompany, order.belongTo)))),
-                      _EntriesInfo(order: order),
-                      MainInfo(order: order),
-                      ContractsCard(
-                          agreements: order?.agreements,
-                          beforeTap: recordRouteInfo),
-                      ReconciliationOrderCard(
-                          callback: () {
-                            setState(() {
-                              order = null;
-                              callBackPop = true;
-                            });
-                          },
-                          beforeTap: recordRouteInfo,
-                          sheets: order.reconciliationSheetList,
-                          order: order),
-                      OrderPaymentInfo(order: order),
-                      _OrderInfo(order: order),
-                      //底部占位
-                      Container(
-                        height: 80,
-                      )
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverList(
+                          delegate: SliverChildListDelegate(<Widget>[
+                        OrderStateCard(
+                          margin: EdgeInsets.symmetric(vertical: 12),
+                          val:
+                              '${SalesProductionOrderStateLocalizedMap[order.state]}',
+                          val2:
+                              '${SalesProductionOrderStateDecsMap[order.state]}',
+                        ),
+                        CompanyBar(
+                            companyModel: B2BUnitModel.fromJson(
+                                CompanyModel.toJson(
+                                    CooperatorHelper.getCooperator(
+                                        order.originCompany, order.belongTo)))),
+                        _EntriesInfo(order: order),
+                        MainInfo(order: order),
+                        ContractsCard(
+                            agreements: order?.agreements,
+                            beforeTap: recordRouteInfo),
+                        ReconciliationOrderCard(
+                            callback: () {
+                              setState(() {
+                                order = null;
+                                callBackPop = true;
+                              });
+                            },
+                            beforeTap: recordRouteInfo,
+                            sheets: order.reconciliationSheetList,
+                            order: order),
+                        OrderPaymentInfo(order: order),
+                      ])),
+                      _buildImages(),
+                      SliverList(
+                          delegate: SliverChildListDelegate(<Widget>[
+                        RemarkCard(order.remarks),
+                        _OrderInfo(order: order),
+                        //底部占位
+                        Container(
+                          height: 80,
+                        )
+                      ])),
                     ],
                   ),
                 ),
@@ -149,6 +157,25 @@ class _ExternalSaleOrderDetailPageState
       },
       initialData: null,
       future: _getData(),
+    );
+  }
+
+  Widget _buildImages() {
+    if (order.attachments == null || order.attachments.isEmpty) {
+      return SliverToBoxAdapter();
+    }
+
+    return SliverGroupBuilder(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: SliverPadding(
+          padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+          sliver: ImageSliverGrid(
+            medias: order.attachments,
+          )),
     );
   }
 
@@ -204,10 +231,31 @@ class _ExternalSaleOrderDetailPageState
             builder: (context) => ExternalOrderForm(model: order)));
         break;
       case 'share':
-        ShareDialog.orderShareDialog(context, uniqueCode: order.uniqueCode);
+        onShare();
         break;
       default:
     }
+  }
+
+  void onShare() async {
+    String title =
+        '编号：${order.code}\n数量：${order.totalQuantity}件;合计：￥${order.totalAmount}';
+    String description = "";
+    String imgUrl;
+
+    const processUrl = 'image_process=resize,w_320/crop,mid,w_320,h_320';
+
+    if (order.taskOrderEntries.first.product.thumbnail != null) {
+      imgUrl = order.taskOrderEntries.first.product.thumbnail
+          .imageProcessUrl(processUrl);
+    }
+    ShareDialog.orderShareDialog(context,
+        uniqueCode: order.uniqueCode,
+        url: MiniProgramPageRoutes.orderDetail(order.id),
+        title: title,
+        path: MiniProgramPageRoutes.orderDetail(order.id),
+        imageUrl: imgUrl,
+        description: description);
   }
 
   /// 查询明细
@@ -386,11 +434,11 @@ class MainInfo extends StatelessWidget {
     if (order?.payPlan?.isHaveDeposit ?? false) {
       depositStr = '定金';
       AbstractPayPlanItemModel item = order.payPlan.payPlanItems.firstWhere(
-          (element) => element.moneyType == PayMoneyType.DEPOSIT,
+              (element) => element.moneyType == PayMoneyType.DEPOSIT,
           orElse: () => null);
       if (item != null) {
         depositStr =
-            '$depositStr(${(item.payPercent * 100).toStringAsFixed(2)}%)';
+        '$depositStr(${(item.payPercent * 100).toStringAsFixed(2)}%)';
       }
     }
 
@@ -418,7 +466,7 @@ class _OrderInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 14),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
       child: Column(
         children: <Widget>[
@@ -469,9 +517,9 @@ class _OrderInfo extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-            '$val',
-            style: _infoStyle,
-          ))
+                '$val',
+                style: _infoStyle,
+              ))
         ],
       );
     }
@@ -483,47 +531,6 @@ class _OrderInfo extends StatelessWidget {
       Clipboard.setData(ClipboardData(text: text));
       BotToast.showText(text: '复制到粘贴板');
     }
-  }
-}
-
-///合作商信息
-class _Header extends StatelessWidget {
-  final SalesProductionOrderModel order;
-
-  const _Header({Key key, this.order}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      margin: EdgeInsets.only(bottom: 2),
-      color: Colors.white,
-      child: Row(
-        children: [
-          Container(
-            width: 30,
-            height: 30,
-            margin: EdgeInsets.only(right: 5),
-            child: CircleAvatar(
-              backgroundImage: CooperatorHelper.getCooperatorImage(
-                  order.targetCooperator, order.originCompany),
-              radius: 30,
-            ),
-          ),
-          Expanded(
-              child: Text(
-            '${CooperatorHelper.getCooperatorName(order.targetCooperator, order.originCompany, order.originCooperator)}',
-            style: TextStyle(fontSize: 16),
-            overflow: TextOverflow.ellipsis,
-          )),
-          Text('.${SalesProductionOrderStateLocalizedMap[order.state]}',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: getSalesProductionStateColor(order.state)))
-        ],
-      ),
-    );
   }
 }
 
@@ -638,14 +645,14 @@ class _EntriesInfo extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 12, color: Color(0xFFFF4D4F)),
                               children: [
-                            TextSpan(
-                                text: '${entry.unitPrice}',
-                                style: TextStyle(fontSize: 16)),
-                            TextSpan(
-                                text: ' x ${entry.quantity}件',
-                                style: TextStyle(
-                                    color: Color(0xff666666), fontSize: 14))
-                          ])),
+                                TextSpan(
+                                    text: '${entry.unitPrice}',
+                                    style: TextStyle(fontSize: 16)),
+                                TextSpan(
+                                    text: ' x ${entry.quantity}件',
+                                    style: TextStyle(
+                                        color: Color(0xff666666), fontSize: 14))
+                              ])),
                       RichText(
                           textAlign: TextAlign.right,
                           text: TextSpan(
@@ -655,7 +662,8 @@ class _EntriesInfo extends StatelessWidget {
                               children: [
                                 TextSpan(
                                     text:
-                                        '${(entry?.totalPrimeCost)?.toStringAsFixed(2)}',
+                                    '${(entry?.totalPrimeCost)?.toStringAsFixed(
+                                        2)}',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
@@ -676,7 +684,8 @@ class _EntriesInfo extends StatelessWidget {
           arguments: entry.id);
     } else {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ExternalSaleOrderEntryDetailPage(
+          builder: (context) =>
+              ExternalSaleOrderEntryDetailPage(
                 entry: entry,
               )));
     }

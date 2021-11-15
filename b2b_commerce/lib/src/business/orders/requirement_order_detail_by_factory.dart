@@ -359,11 +359,10 @@ class _RequirementOrderDetailByFactoryPageState
     return SliverGroupBuilder(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: SliverPadding(
-          padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+          padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
           sliver: ImageSliverGrid(
             medias: getImages(),
           )),
@@ -484,9 +483,7 @@ class _RequirementOrderDetailByFactoryPageState
   void onShare() {
     String title = '';
     String description =
-        " ${orderModel.details.category?.name}   ${orderModel.details
-        .expectedMachiningQuantity}件\n 交货时间:${DateFormatUtil.formatYMD(
-        orderModel.details.expectedDeliveryDate)}";
+        " ${orderModel.details.category?.name}   ${orderModel.details.expectedMachiningQuantity}件\n 交货时间:${DateFormatUtil.formatYMD(orderModel.details.expectedDeliveryDate)}";
 
     if (orderModel.details.productName != null &&
         orderModel.details.productName != '') {

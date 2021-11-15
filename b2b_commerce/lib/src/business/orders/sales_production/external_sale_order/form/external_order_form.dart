@@ -130,10 +130,13 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
         FormTitle('附件：'),
         Container(
           color: Colors.white,
-          child: EditableAttachments(
+          child: EditableAttachmentsV2(
             list: form.attachments,
-            maxNum: 5,
           ),
+          // EditableAttachments(
+          //   list: form.attachments,
+          //   maxNum: 5,
+          // ),
         ),
       ],
     );
@@ -180,6 +183,7 @@ class _ExternalOrderFormState extends State<ExternalOrderForm> {
           taskOrderEntries: [],
           attachments: [],
           payOnline: true,
+          offLine: true,
           name: '',
           type: ProductionOrderType.SALES_ORDER,
           paymentAccount:

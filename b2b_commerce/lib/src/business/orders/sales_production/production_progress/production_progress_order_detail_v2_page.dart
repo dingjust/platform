@@ -77,7 +77,7 @@ class _ProductionProgressOrderDetailV2PageState
       ),
       body: Container(
         color: Colors.white,
-        padding: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: ListView(children: <Widget>[
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -111,7 +111,7 @@ class _ProductionProgressOrderDetailV2PageState
           ),
 //          _buildColorSizeInputTable(context),
           _buildMedias(),
-          EditableAttachments(
+          EditableAttachmentsV2(
             list: widget.model.medias,
             maxNum: 5,
             editable: false,

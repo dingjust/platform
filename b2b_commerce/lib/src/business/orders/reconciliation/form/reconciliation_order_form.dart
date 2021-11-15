@@ -76,7 +76,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm> {
       body: Container(
           child: ListView(
         children: <Widget>[
-          _buildNeedSign(),
+          // _buildNeedSign(),
           ..._buildEntries(),
           _buildAdditional(),
           _buildRemarks(),

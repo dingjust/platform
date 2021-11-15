@@ -16,7 +16,7 @@ class CompanyBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(companyModel==null){
+    if (companyModel == null) {
       return Container();
     }
 
@@ -41,7 +41,7 @@ class CompanyBar extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Text(
-                        '${companyModel?.name??''}',
+                            '${companyModel?.name ?? ''}',
                         style: TextStyle(
                             color: Color(0xff222222),
                             fontSize: 16,
@@ -110,6 +110,10 @@ class CooperatorBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (model == null) {
+      return Container();
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
@@ -122,7 +126,7 @@ class CooperatorBar extends StatelessWidget {
               child: ImageFactory.buildProcessedAvatar(
                   model?.partner?.profilePicture,
                   processurl:
-                      'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
+                  'image_process=resize,w_320/crop,mid,w_320,h_320,circle,320')),
           Expanded(
             child: Container(
               child: Column(
@@ -131,15 +135,15 @@ class CooperatorBar extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Text(
-                        model.partner != null
-                            ? '${model.partner.name}'
-                            : '${model.name}',
-                        style: TextStyle(
-                            color: Color(0xff222222),
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                      ))
+                            model.partner != null
+                                ? '${model.partner.name}'
+                                : '${model.name}',
+                            style: TextStyle(
+                                color: Color(0xff222222),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.ellipsis,
+                          ))
                     ],
                   ),
                   Row(

@@ -25,6 +25,11 @@ class MiniProgramPageRoutes {
   static get factoryDetail => (companyCode) {
         return 'pages/company/factory/profile/index?companyCode=$companyCode';
       };
+
+  ///订单详情
+  static get orderDetail => (id) {
+        return 'pages/order/external-sale/detail/index?id=$id';
+      };
 }
 
 ///微信小程序URL Scheme

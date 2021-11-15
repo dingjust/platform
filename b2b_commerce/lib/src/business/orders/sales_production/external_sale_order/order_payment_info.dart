@@ -9,9 +9,11 @@ class OrderPaymentInfo extends StatelessWidget {
 
   const OrderPaymentInfo({Key, key, this.order}) : super(key: key);
 
-  final TextStyle infoTextStyle = const TextStyle(color: Color(0xFF999999),fontSize: 12);
+  final TextStyle infoTextStyle =
+      const TextStyle(color: Color(0xFF999999), fontSize: 12);
 
-  final TextStyle valTextStyle = const TextStyle(color: Color(0xFFAA6E15),fontSize: 12);
+  final TextStyle valTextStyle =
+      const TextStyle(color: Color(0xFFAA6E15), fontSize: 12);
 
   @override
   Widget build(BuildContext context) {
@@ -144,67 +146,65 @@ class OrderPaymentInfo extends StatelessWidget {
     return [
       InfoRow(
         label: label,
-        val: '￥${data.payAmount}',
+        val: '￥${data.totalAmount}',
         textAlign: TextAlign.right,
         style: style,
       ),
-      Container(
+      data.state == CmtPaymentState.PAID
+          ? Container(
         padding: EdgeInsets.all(6),
         color: Color(0xFFFFFBED),
         child: Column(
           children: [
-            ...data.state == CmtPaymentState.PAID
-                ? [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '支付方式',
-                            style: infoTextStyle,
-                          ),
-                          Text(
-                            '${PaymentMethodLocalizedMap[data.payType]}',
-                            style: valTextStyle,
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '交易编号',
-                            style: infoTextStyle,
-                          ),
-                          Text(
-                            '${data.outOrderNo}',
-                            style: valTextStyle,
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '支付时间',
-                            style: infoTextStyle,
-                          ),
-                          Text(
-                            '${DateFormatUtil.formatYMDHMS(data.paySuccessTime)}',
-                            style: valTextStyle,
-                          )
-                        ],
-                      ),
-                    ),
-                  ]
-                : []
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '支付方式',
+                    style: infoTextStyle,
+                  ),
+                  Text(
+                    '${PaymentMethodLocalizedMap[data.payType]}',
+                    style: valTextStyle,
+                  )
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '交易编号',
+                    style: infoTextStyle,
+                  ),
+                  Text(
+                    '${data.outOrderNo}',
+                    style: valTextStyle,
+                  )
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '支付时间',
+                    style: infoTextStyle,
+                  ),
+                  Text(
+                    '${DateFormatUtil.formatYMDHMS(data.paySuccessTime)}',
+                    style: valTextStyle,
+                  )
+                ],
+              ),
+            ),
           ],
         ),
-      ),
+      )
+          : Container(),
     ];
   }
 
