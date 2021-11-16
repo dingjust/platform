@@ -9,13 +9,13 @@
       <div class="orders-list-title">
         <h6>编辑品牌信息</h6>
       </div>
-      <el-form :model="formData" ref="brandForm" label-position="left" label-width="75px" hide-required-asterisk >
+      <el-form :model="formData" ref="brandForm" label-position="left" label-width="75px" hide-required-asterisk :disabled="readOnly">
         <div class="titleCardClass">
-          <brand-basic-info-form :formData="formData" :readOnly="false"/>
-          <brand-capacity-form :formData="formData" :readOnly="false"/>
+          <brand-basic-info-form :formData="formData" :readOnly="readOnly"/>
+          <brand-capacity-form :formData="formData" :readOnly="readOnly"/>
         </div>
       </el-form>
-      <el-row type="flex" justify="center" style="margin-top: 20px">
+      <el-row type="flex" justify="center" style="margin-top: 20px" v-if="!readOnly">
         <el-button type="primary" @click="onModify">修改</el-button>
       </el-row>
     </el-row>
@@ -29,7 +29,16 @@ import BrandCapacityForm from '@/views/user/company/brand/form/BrandCapacityForm
 export default {
   name: 'BrandFormByTenant',
   components: { BrandBasicInfoForm, BrandCapacityForm },
-  props: ['row'],
+  props: {
+    row: {
+      type: Object,
+      default: () => {}
+    },
+    readOnly: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     async getDetail () {
       const url = this.apis().getBrand(this.row.uid);

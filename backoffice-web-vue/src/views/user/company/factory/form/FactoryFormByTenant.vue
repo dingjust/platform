@@ -10,13 +10,13 @@
         <h6>编辑工厂信息</h6>
       </div>
       <div class="titleCardClass">
-        <el-form :model="formData" ref="factoryForm" :rules="rules" label-position="left" label-width="75px" hide-required-asterisk>
-          <factory-basic-form :form-data="formData" />
-          <factory-scale-form :form-data="formData" />
-          <factory-capacity-form :form-data="formData" />
+        <el-form :model="formData" ref="factoryForm" :rules="rules" label-position="left" label-width="75px" hide-required-asterisk :disabled="readOnly">
+          <factory-basic-form :form-data="formData" :readOnly="readOnly"/>
+          <factory-scale-form :form-data="formData" :readOnly="readOnly"/>
+          <factory-capacity-form :form-data="formData" :readOnly="readOnly"/>
         </el-form>
       </div>
-      <el-row type="flex" justify="center" style="margin-top: 20px">
+      <el-row type="flex" justify="center" style="margin-top: 20px" v-if="!readOnly">
         <el-button type="primary" @click="onModify">修改</el-button>
       </el-row>
     </el-row>
@@ -38,7 +38,16 @@ export default {
     FactoryScaleForm,
     FactoryCapacityForm
   },
-  props: ['row'],
+  props: {
+    row: {
+      type: Object,
+      default: () => {}
+    },
+    readOnly: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     ...mapMutations({
       setFactoryFormVisible: 'setFactoryFormVisible',

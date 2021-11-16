@@ -41,9 +41,9 @@
         <el-button type="primary" @click="update()">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
+    <!-- <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <brand-form1 v-if="detailsDialogVisible" :slotData="detailsData" :readOnly="true"></brand-form1>
-    </el-dialog>
+    </el-dialog> -->
     <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
       <brand-forbidden-dialog  @onCancel="onCancel" @onConfirm="onConfirm"/>
     </el-dialog>
@@ -51,7 +51,7 @@
       <authentication-clear-form v-if="authVisible" :clearRow="clearRow" @onCancel="authVisible = false" @callback="callback"/>
     </el-dialog>
     <el-dialog :visible.sync="modifyVisible" width="80%" :close-on-click-modal="false">
-      <brand-form-by-tenant v-if="modifyVisible" :row="handleRow" @callback="modifyVisible=false"/>
+      <brand-form-by-tenant v-if="modifyVisible" :row="handleRow" @callback="modifyVisible=false" :readOnly="formReadOnly"/>
     </el-dialog>
     <el-dialog title="认证详情" :visible.sync="authDetailVisible" width="500px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false"> 
       <cooperator-auth-detail v-if="authDetailVisible" :uid="handleRow.uid"/>
@@ -169,20 +169,23 @@ export default {
       this.handleRow = row
       this.modifyVisible = true
     },
-    async onDetails (item) {
-      const url = this.apis().getBrand(item.uid);
+    async onDetails (row) {
+      this.formReadOnly = true
+      this.handleRow = row
+      this.modifyVisible = true
+      // const url = this.apis().getBrand(item.uid);
 
-      const result = await this.$http.get(url);
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      if (result.duties == null || result.duties == undefined) {
-        result.duties = '经理';
-      }
+      // const result = await this.$http.get(url);
+      // if (result['errors']) {
+      //   this.$message.error(result['errors'][0].message);
+      //   return;
+      // }
+      // if (result.duties == null || result.duties == undefined) {
+      //   result.duties = '经理';
+      // }
 
-      this.detailsData = result;
-      this.detailsDialogVisible = true;
+      // this.detailsData = result;
+      // this.detailsDialogVisible = true;
     },
     async onEdit (item) {
       const url = this.apis().getBrand(item.uid);
@@ -293,7 +296,8 @@ export default {
       clearRow: '',
       handleRow: null,
       modifyVisible: false,
-      authDetailVisible: false
+      authDetailVisible: false,
+      formReadOnly: false
     };
   },
   created () {

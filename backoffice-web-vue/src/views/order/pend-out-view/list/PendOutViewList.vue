@@ -14,8 +14,16 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="甲方公司" prop="originCooperator.name" show-overflow-tooltip min-width="150px"></el-table-column>
-      <el-table-column label="乙方公司" prop="belongTo.name" show-overflow-tooltip min-width="150px"></el-table-column>
+      <el-table-column label="甲方公司" prop="originCompany.name" show-overflow-tooltip min-width="150px">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.originCompany" type="text" @click="openCompanyDetail(scope.row.originCompany)">{{scope.row.originCompany.name}}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="乙方公司" prop="belongTo.name" show-overflow-tooltip min-width="150px">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.belongTo" type="text" @click="openCompanyDetail(scope.row.belongTo)">{{scope.row.belongTo.name}}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="款数" prop="entrySize" min-width="60px"></el-table-column>
       <el-table-column label="订单数量" prop="totalQuantity" min-width="70px"></el-table-column>
       <el-table-column label="服务费比例" prop="serviceFeePercent" min-width="80px">
@@ -62,14 +70,40 @@
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
       :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <el-dialog :visible.sync="factoryVisible" width="80%" :close-on-click-modal="false">
+      <factory-form-by-tenant v-if="factoryVisible" :row="handleRow" :readOnly="true"/>
+    </el-dialog>
+    <el-dialog :visible.sync="brandVisible" width="80%" :close-on-click-modal="false">
+      <brand-form-by-tenant v-if="brandVisible" :row="handleRow" :readOnly="true"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import FactoryFormByTenant from '@/views/user/company/factory/form/FactoryFormByTenant'
+import BrandFormByTenant from '@/views/user/company/brand/form/BrandFormByTenant'
+
 export default {
   name: 'PendOutViewList',
+  components: { FactoryFormByTenant, BrandFormByTenant },
   props: ['page'],
+  data () {
+    return {
+      factoryVisible: false,
+      brandVisible: false,
+      handleRow: null
+    }
+  },
   methods: {
+    openCompanyDetail (company) {
+      this.handleRow = company
+
+      if (company.type === 'FACTORY') {
+        this.factoryVisible = true
+      } else {
+        this.brandVisible = true
+      }
+    },
     orderType (row) {
       if (row.offLine != null) {
         return row.offLine

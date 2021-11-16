@@ -53,9 +53,9 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
+    <!-- <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <factory-from v-if="detailsDialogVisible" :slotData="detailsData" :readOnly="true"></factory-from>
-    </el-dialog>
+    </el-dialog> -->
     <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
       <factory-forbidden-dialog  @onCancel="onCancel" @onConfirm="onConfirm"/>
     </el-dialog>
@@ -63,7 +63,7 @@
       <authentication-clear-form v-if="authVisible" :clearRow="handleRow" @onCancel="authVisible = false" @callback="callback"/>
     </el-dialog>
     <el-dialog :visible.sync="modifyVisible" width="80%" :close-on-click-modal="false">
-      <factory-form-by-tenant v-if="modifyVisible" :row="handleRow" @callback="modifyVisible = false"/>
+      <factory-form-by-tenant v-if="modifyVisible" :row="handleRow" @callback="modifyVisible = false" :readOnly="formReadOnly"/>
     </el-dialog>
     <el-dialog title="认证详情" :visible.sync="authDetailVisible" width="500px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <cooperator-auth-detail v-if="authDetailVisible" :uid="handleRow.uid"/>
@@ -270,19 +270,22 @@ export default {
       this.$message.success('设置序列值成功！');
       this.onAdvancedSearch();
     },
-    async onDetails (item) {
-      let url = this.apis().getFactory(item.uid);
-      if (this.isTenant()) {
-        url += '?sort=creationtime,desc';
-      }
-      const result = await this.$http.get(url);
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
+    async onDetails (row) {
+      this.formReadOnly = true
+      this.handleRow = row
+      this.modifyVisible = true
+      // let url = this.apis().getFactory(item.uid);
+      // if (this.isTenant()) {
+      //   url += '?sort=creationtime,desc';
+      // }
+      // const result = await this.$http.get(url);
+      // if (result['errors']) {
+      //   this.$message.error(result['errors'][0].message);
+      //   return;
+      // }
 
-      this.detailsData = result;
-      this.detailsDialogVisible = !this.detailsDialogVisible;
+      // this.detailsData = result;
+      // this.detailsDialogVisible = !this.detailsDialogVisible;
     },
     async onEdit (item) {
       const url = this.apis().getFactory(item.uid);
@@ -451,7 +454,8 @@ export default {
       authVisible: false,
       handleRow: '',
       modifyVisible: false,
-      authDetailVisible: false
+      authDetailVisible: false,
+      formReadOnly: false
     };
   },
   created () {
