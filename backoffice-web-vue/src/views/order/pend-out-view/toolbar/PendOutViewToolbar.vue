@@ -25,7 +25,7 @@
         <el-button native-type="reset" @click="onReset">重置</el-button>
       </el-button-group>
     </el-form>
-    <div>
+    <div style="min-width: 150px">
       <el-button type="primary" @click="onExport">导出</el-button>
       <el-button type="primary" @click="onExportByBill">导出流水</el-button>
     </div>
