@@ -238,8 +238,20 @@ class _ExternalSaleOrderDetailPageState
   }
 
   void onShare() async {
-    String title =
-        '编号：${order.code}\n数量：${order.totalQuantity}件;合计：￥${order.totalAmount}';
+    String amount = '';
+    var payOrder = order.paymentOrders.firstWhere(
+            (element) =>
+        ([
+          CmtPaymentState.PAYING,
+          CmtPaymentState.WAIT_TO_PAY,
+          CmtPaymentState.PAID_PART
+        ].contains(element.state)),
+        orElse: () => null);
+    if (payOrder != null) {
+      amount = ';合计：￥${payOrder.totalAmount ?? (payOrder.payAmount ?? 0)}';
+    }
+
+    String title = '编号：${order.code}\n数量：${order.totalQuantity}件$amount';
     String description = "";
     String imgUrl;
 
@@ -438,7 +450,7 @@ class MainInfo extends StatelessWidget {
           orElse: () => null);
       if (item != null) {
         depositStr =
-        '$depositStr(${(item.payPercent * 100).toStringAsFixed(2)}%)';
+            '$depositStr(${(item.payPercent * 100).toStringAsFixed(2)}%)';
       }
     }
 
