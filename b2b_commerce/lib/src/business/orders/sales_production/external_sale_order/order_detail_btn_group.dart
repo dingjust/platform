@@ -133,7 +133,7 @@ class OrderDetailBtnGroup extends StatelessWidget {
                       ])),
               child: Center(
                 child: Text(
-                  '${isPartyA ? '支' : '代'}付${data.batch == 1 ? '定金' : '尾款'}',
+                  '${isPartyA ? '支' : '代'}付',
                   style: TextStyle(color: Colors.white),
                 ),
               ),

@@ -88,9 +88,9 @@ class FormBtns extends StatelessWidget {
           '产品${form.entries.indexOf(entry) + 1}：货款金额不能为空'),
       FormValidateItem((entry.deliveryDate == null),
           '产品${form.entries.indexOf(entry) + 1}：请选择交货日期'),
-      FormValidateItem(
-          (entry.settlementAmount == null || entry.settlementAmount <= 0),
-          '产品${form.entries.indexOf(entry) + 1}：结算金额不能为少于0'),
+      // FormValidateItem(
+      //     (entry.settlementAmount == null || entry.settlementAmount <= 0),
+      //     '产品${form.entries.indexOf(entry) + 1}：结算金额不能为少于0'),
     ];
   }
 
