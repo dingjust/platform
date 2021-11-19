@@ -732,6 +732,7 @@ class _Item extends StatelessWidget {
 
   Widget _buildRows() {
     return Container(
+      margin: EdgeInsets.only(top: 5),
       padding: EdgeInsets.all(6),
       color: Color(0xFFFFFBED),
       child: Column(
