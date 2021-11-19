@@ -488,7 +488,7 @@ class ProductionTaskOrderModel extends ProductionOrderModel {
   String outboundOrderCode;
 
   ///利润百分比
-  int profitPercent;
+  double profitPercent;
 
   ///管理模式
   ManagementMode managementMode;
