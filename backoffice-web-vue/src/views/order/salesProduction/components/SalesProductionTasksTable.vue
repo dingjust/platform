@@ -98,7 +98,8 @@
     },
     methods: {
       canModifyPrice (row) {
-        return this.isSelfCreated && row.state === 'TO_BE_PRODUCED' && !this.readOnly;
+        return true
+        // return this.isSelfCreated && row.state === 'TO_BE_PRODUCED' && !this.readOnly;
       },
       //entry detail
       onDetail(id) {

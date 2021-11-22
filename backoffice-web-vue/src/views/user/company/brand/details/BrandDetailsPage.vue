@@ -56,7 +56,7 @@
 
         this.setFormData(Object.assign({}, Object.assign(this.formData, result)));
 
-        if (this.formData.contactAddress.region (this.isCitiesChanged || this.cities.length <= 0)) {
+        if (this.formData.contactAddress.region && (this.isCitiesChanged || this.cities.length <= 0)) {
           if (this.formData.contactAddress.region.isocode) {
             this.getCities(this.formData.contactAddress.region);
             this.setIsCitiesChanged(false);

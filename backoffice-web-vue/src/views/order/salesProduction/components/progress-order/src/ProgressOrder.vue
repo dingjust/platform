@@ -79,7 +79,7 @@
       },
       isOutCollaboration: function () {
         // 判断已外发并且是协同的生产工单不能编辑
-        if (this.order.outboundOrderCode && this.order.outboundOrderType === 'COLLABORATION') {
+        if (this.order && this.order.outboundOrderCode && this.order.outboundOrderType === 'COLLABORATION') {
           return true;
         }
         return false;
