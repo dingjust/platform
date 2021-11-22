@@ -225,26 +225,25 @@ class RequirementListItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          model.details.address != null
-              ? Expanded(
-              child: Row(children: [
-                Container(
-                  margin: EdgeInsets.only(right: 2),
-                  child: Icon(
-                    B2BIconsV2.location,
-                    size: 14,
-                    color: Color(0xff999999),
-                  ),
-                ),
-                Expanded(
-                    child: Text(
-                      '${model.details.cityStr ?? ''}·${model.details
-                          .districtStr ?? ''}',
-                      style: style,
-                      overflow: TextOverflow.ellipsis,
-                    ))
-              ]))
-              : Container(),
+          // (model.details.address != null && model.details.address != "")
+          //     ? Expanded(
+          //         child: Row(children: [
+          //         Container(
+          //           margin: EdgeInsets.only(right: 2),
+          //           child: Icon(
+          //             B2BIconsV2.location,
+          //             size: 14,
+          //             color: Color(0xff999999),
+          //           ),
+          //         ),
+          //         Expanded(
+          //             child: Text(
+          //           '${model.details.cityStr ?? ''}·${model.details.districtStr ?? ''}',
+          //           style: style,
+          //           overflow: TextOverflow.ellipsis,
+          //         ))
+          //       ]))
+          //     : Container(),
           Text(
             '${DateExpress2Util.express(model.creationTime)}',
             style: style,

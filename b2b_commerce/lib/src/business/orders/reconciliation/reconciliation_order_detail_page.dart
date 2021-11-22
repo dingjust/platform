@@ -334,7 +334,7 @@ class _ReconciliationOrderDetailPageState
                       children: [
                         TextSpan(
                             text:
-                            '￥${order.amountPayableTotal.toStringAsFixed(2)}',
+                                '￥${order.amountPayableTotal.toStringAsFixed(2)}',
                             style: TextStyle(
                                 color: Colors.red,
                                 fontSize: 16,
@@ -684,7 +684,7 @@ class _Item extends StatelessWidget {
   Widget _buildProduct() {
     return Row(
       children: [
-        ImageFactory.buildThumbnailImage(order?.product?.thumbnail,
+        ImageFactory.buildThumbnailImage(order?.product?.images?.first,
             containerSize: height),
         Expanded(
           child: Container(
@@ -732,6 +732,7 @@ class _Item extends StatelessWidget {
 
   Widget _buildRows() {
     return Container(
+      margin: EdgeInsets.only(top: 5),
       padding: EdgeInsets.all(6),
       color: Color(0xFFFFFBED),
       child: Column(

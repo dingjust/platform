@@ -18,7 +18,7 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.9.7'
+    flutterVersionName = '1.9.8'
 }
 
 apply plugin: 'com.android.application'
@@ -48,7 +48,7 @@ android {
         minSdkVersion 20
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
-        versionCode 39
+        versionCode 40
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

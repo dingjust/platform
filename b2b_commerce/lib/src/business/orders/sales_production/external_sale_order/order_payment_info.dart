@@ -146,7 +146,7 @@ class OrderPaymentInfo extends StatelessWidget {
     return [
       InfoRow(
         label: label,
-        val: '￥${data.totalAmount}',
+        val: '￥${data.totalAmount ?? (data.payAmount ?? 0)}',
         textAlign: TextAlign.right,
         style: style,
       ),

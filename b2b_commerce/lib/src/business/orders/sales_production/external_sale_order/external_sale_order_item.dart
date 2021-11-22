@@ -162,7 +162,8 @@ class ExternalSaleOrderItem extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                               children: [
                         TextSpan(
-                            text: '${e.payAmount.toStringAsFixed(2)}',
+                            text: '${(e.totalAmount ?? e.payAmount)
+                                .toStringAsFixed(2)}',
                             style: TextStyle(fontSize: 14)),
                         TextSpan(
                             text: '  (${CmtPaymentStateLocalizedMap[e.state]})',

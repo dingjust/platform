@@ -88,7 +88,8 @@ class _OrderPaymentPageV2State extends State<OrderPaymentPageV2> {
             style: TextStyle(color: Colors.red, fontSize: 20),
           ),
           Text(
-            '${widget.order.payAmount?.toStringAsFixed(2)}',
+            '${widget.order.totalAmount ??
+                (widget.order.payAmount)?.toStringAsFixed(2)}',
             style: TextStyle(
                 color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold),
           )
