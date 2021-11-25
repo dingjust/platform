@@ -457,6 +457,16 @@ export default {
     }]
   },
   {
+    name: '物流管理',
+    icon: 'el-icon-truck',
+    children: [
+      {
+        name: '物流单号管理',
+        url: '/logistics/list'
+      }
+    ]
+  },
+  {
     name: '其他',
     // url: '/miscs',
     icon: 'el-icon-coin',

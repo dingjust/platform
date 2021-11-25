@@ -1054,7 +1054,13 @@ const COMMON_APIS = {
     return '/b2b/cert/enterprise/cert/info/' + uid;
   },
   // 新的外接外发接单接口
-  receivingOrder: () => '/b2b/sales/production/order/accept'
+  receivingOrder: () => '/b2b/sales/production/order/accept',
+  // 物流单号管理-列表 post
+  searchLogistics: () => '/b2b/logistics/search',
+  // 物流单号管理-保存 post
+  createLogistics: () => '/b2b/logistics/save',
+  // 物流单号管理-批量保存 post
+  createBatchLogistics: () => '/b2b/logistics/batchSave'
 };
 
 let TENANT_APIS = {
