@@ -2423,6 +2423,16 @@ const state = {
       code: 'SYSTEM_ALTERNATE',
       name: '预设公告'
     }
+  ],
+  ExpressType: [
+    {
+      code: 'RETURNED',
+      name: '退货'
+    },
+    {
+      code: 'EXCHANGED',
+      name: '换货'
+    }
   ]
 };
 

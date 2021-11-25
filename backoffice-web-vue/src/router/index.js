@@ -1313,6 +1313,28 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'activity' */ '@/views/activity/points/PointsExchangePage')
       }
       ]
+    },
+    {
+      path: 'logistics',
+      redirect: '/logistics/list',
+      name: '物流',
+      component: {
+        render (c) {
+          return c('router-view');
+        }
+      },
+      children: [
+        {
+          path: 'list',
+          name: '物流管理',
+          component: () => import(/* webpackChunkName: 'logistics' */ '@/views/logistics/LogisticsPage')
+        },
+        {
+          path: 'form',
+          name: '添加单号',
+          component: () => import(/* webpackChunkName: 'logistics' */ '@/views/logistics/form/LogisticsForm')
+        }
+      ]
     }
     ]
   },
