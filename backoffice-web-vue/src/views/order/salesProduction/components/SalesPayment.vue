@@ -5,7 +5,10 @@
 -->
 <template>
   <div>
-    <order-pay-detail :formData="formData" :fromOut="fromOut"/>
+    <order-pay-detail :formData="formData" :fromOut="fromOut" />
+    <el-row justify="center">
+      <el-button @click="addPayOrder" type="success">添加支付单</el-button>
+    </el-row>
     <el-table :data="paymentOrders" style="margin-top: 20px">
       <el-table-column label="批次">
         <template slot-scope="scope">
@@ -34,32 +37,51 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog :visible.sync="paymentOrdersShow" width="30%"  append-to-body
+      :close-on-click-modal="false">
+      <payment-order-form />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import OrderPayDetail from '@/views/order/salesProduction/components/OrderPayDetail'
+  import OrderPayDetail from '@/views/order/salesProduction/components/OrderPayDetail'
+  import PaymentOrderForm from '@/views/order/salesProduction/form/PaymentOrderForm'
 
-export default {
-  name: 'SalesPayment',
-  components: { OrderPayDetail },
-  props: ['formData', 'fromOut'],
-  computed: {
-    paymentOrders: function () {
-      return this.formData.paymentOrders.reverse()
-    }
-  },
-  methods: {
-    batchName (index) {
-      const { payPlan } = this.formData
-      if (index === 0) {
-        return payPlan.isHaveDeposit ? '定金' : '1期尾款'
-      } else {
-        return payPlan.isHaveDeposit ? (index + '期尾款') : ((index + 1) + '期尾款') 
+  export default {
+    name: 'SalesPayment',
+    components: {
+      OrderPayDetail,
+      PaymentOrderForm
+    },
+    props: ['formData', 'fromOut'],
+    computed: {
+      paymentOrders: function () {
+        return this.formData.paymentOrders.reverse()
+      }
+    },
+    data() {
+      return {
+        paymentOrdersShow: false
+      };
+    },
+    methods: {
+      batchName(index) {
+        const {
+          payPlan
+        } = this.formData
+        if (index === 0) {
+          return payPlan.isHaveDeposit ? '定金' : '1期尾款'
+        } else {
+          return payPlan.isHaveDeposit ? (index + '期尾款') : ((index + 1) + '期尾款')
+        }
+      },
+      addPayOrder() {
+        this.paymentOrdersShow=true;
       }
     }
   }
-}
+
 </script>
 
 <style scoped>
