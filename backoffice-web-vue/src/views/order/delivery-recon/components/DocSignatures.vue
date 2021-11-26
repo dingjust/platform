@@ -39,9 +39,9 @@ export default {
       }
 
       if (this.order.state === 'PENDING_B_SIGN') {
-        return this.order.shipParty.uid === this.$store.getters.currentUser.companyCode;
+        return this.order.shipParty && this.order.shipParty.uid === this.$store.getters.currentUser.companyCode;
       } else if (this.order.state === 'PENDING_A_SIGN') {
-        return this.order.receiveParty.uid === this.$store.getters.currentUser.companyCode;
+        return this.order.receiveParty && this.order.receiveParty.uid === this.$store.getters.currentUser.companyCode;
       }
     }
   },
