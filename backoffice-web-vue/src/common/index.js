@@ -1060,7 +1060,9 @@ const COMMON_APIS = {
   // 物流单号管理-保存 post
   createLogistics: () => '/b2b/logistics/save',
   // 物流单号管理-批量保存 post
-  createBatchLogistics: () => '/b2b/logistics/batchSave'
+  createBatchLogistics: () => '/b2b/logistics/batchSave',
+  // 物流单号管理-删除
+  deleteLogistics: (id) => '/b2b/logistics/delete/' + id
 };
 
 let TENANT_APIS = {
@@ -1412,7 +1414,9 @@ let TENANT_APIS = {
   // 查询对账单详情
   getReconciliationV2Detail (id) {
     return '/b2b/sheets/fast/reconciliation/platform/' + id;
-  }
+  },
+  // 添加支付单
+  appendPaymentOrder: () => '/b2b/cmt/order/pay/paid/order'
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

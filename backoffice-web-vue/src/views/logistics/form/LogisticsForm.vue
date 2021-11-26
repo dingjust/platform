@@ -33,16 +33,16 @@
             <el-input v-model="tableData[scope.$index].productName"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="颜色" >
+        <el-table-column label="颜色" min-width="200px">
           <template slot-scope="scope">
-            <el-select v-model="tableData[scope.$index].colors" multiple filterable allow-create default-first-option collapse-tags>
+            <el-select v-model="tableData[scope.$index].colors" multiple filterable allow-create default-first-option >
               <el-option v-for="item in colorOptions" :key="item" :label="item" :value="item" />
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column label="尺码" >
+        <el-table-column label="尺码" min-width="200px">
           <template slot-scope="scope">
-            <el-select v-model="tableData[scope.$index].sizes" multiple filterable allow-create default-first-option collapse-tags>
+            <el-select v-model="tableData[scope.$index].sizes" multiple filterable allow-create default-first-option >
               <el-option v-for="item in sizeOptions" :key="item" :label="item" :value="item" />
             </el-select>
           </template>
@@ -71,7 +71,7 @@
         <el-input ref="input" v-model="expressCode" @blur="getFocus" @keyup.enter.native="onInput"></el-input>
         <el-table :data="expressCodeArr" :height="autoHeight">
           <el-table-column label="快递编号" prop="code" />
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="60px">
             <template slot-scope>
               <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
             </template>

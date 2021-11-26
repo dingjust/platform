@@ -2374,7 +2374,7 @@ const state = {
       code: 'WECHAT_PAY',
       name: '微信支付'
     }, {
-      code: 'WECHAT_PAY_NATIVE,',
+      code: 'WECHAT_PAY_NATIVE',
       name: '微信原生支付'
     }, {
       code: 'WECHAT_PAY_APP',

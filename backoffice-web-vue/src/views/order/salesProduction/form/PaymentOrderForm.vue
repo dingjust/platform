@@ -5,32 +5,76 @@
         <h6 class="payment-form-title_text">添加支付单</h6>
       </div>
     </el-row>
-    <el-row type="flex" justify="center" v-if="order">
-      <el-button @click="onSure" class="submit-btn">确认导入</el-button>
+    <el-form ref="form" :model="form" :inline="true">
+      <el-form-item label="交易编号" prop="outOrderNo" :rules="[{ required: true, message: '请填写交易编号', trigger: 'blur' }]">
+        <el-input v-model="form.outOrderNo" ></el-input>
+      </el-form-item>
+      <el-form-item label="支付金额" prop="payAmount" :rules="[{ required: true, message: '请填写支付金额', trigger: 'blur' }]">
+        <el-input v-model="form.payAmount" ></el-input>
+      </el-form-item>
+      <el-form-item label="支付方式" prop="payType" :rules="[{ required: true, message: '请填写支付金额', trigger: 'blur' }]">
+        <el-select v-model="form.payType" >
+          <el-option v-for="item in PayMethod" :key="item.code" :label="item.name" :value="item.code"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <el-row type="flex" justify="end">
+      <el-button type="default" @click="onCancel" >取消</el-button>
+      <el-button type="primary" @click="onSure" >确认导入</el-button>
     </el-row>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "PaymentOrderForm",
-    components: {},
-    mixins: [],
-    computed: {
-
+export default {
+  name: "PaymentOrderForm",
+  props: ['formData', 'handleForm'],
+  methods: {
+    onSure () {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.$confirm('是否提交数据?', '提示', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            this._onSure()
+          });
+        } else {
+          this.$message.error('请先完善表单')
+        }
+      })
     },
-    methods: {
-    },
-    data() {
-      return {
+    async _onSure () {
+      const form = this.form
+      form.originCode = form.originCode ? form.originCode : this.formData.code
+      form.paySuccessTime = new Date().getTime()
 
-      };
+      this.$emit('onSure', form)
     },
-    created() {},
-    mounted() {}
-  };
-
+    onCancel () {
+      this.$emit('closeDialog')
+    }
+  },
+  data() {
+    return {
+      form: {
+        outOrderNo: '',
+        payAmount: '',
+        originCode: '',
+        payType: 'WECHAT_PAY_QRCODE'
+      },
+      PayMethod: this.$store.state.EnumsModule.PayMethod
+    };
+  },
+  created () {
+    if (this.handleForm) {
+      this.form = this.handleForm
+    }
+  }
+};
 </script>
+
 <style scoped>
   .payment-form-body {
     width: 100%;

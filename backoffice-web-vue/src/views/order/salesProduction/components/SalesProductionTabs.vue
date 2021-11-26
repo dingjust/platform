@@ -38,7 +38,7 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="支付信息" key="payment" v-if="form.paymentOrders && form.paymentOrders.length > 0">
-        <sales-payment :formData="form" :fromOut="fromOut"/>
+        <sales-payment :formData="form" :fromOut="fromOut" @callback="callback"/>
       </el-tab-pane>
       <el-tab-pane label="对账信息" key="reconciliation" v-if="form.reconciliationSheetList && form.reconciliationSheetList.length > 0">
         <sales-reconciliation :form="form" />

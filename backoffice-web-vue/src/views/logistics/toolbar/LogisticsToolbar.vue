@@ -1,16 +1,16 @@
 <template>
   <div class="logistics-toolbar">
     <el-form label-width="auto">
-      <el-row type="flex" justify="end">
-        <!-- <el-row type="flex">
+      <el-row type="flex" justify="space-between">
+        <el-row type="flex">
           <el-form-item label="">
-            <el-input v-model="queryFormData.keyword" placeholder="渠道码信息"></el-input>
+            <el-input v-model="queryFormData.keyword" placeholder="输入快递单号，产品名，产品款号"></el-input>
           </el-form-item>
           <el-button-group>
             <el-button class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
             <el-button @click="onReset">重置</el-button>
           </el-button-group>
-        </el-row> -->
+        </el-row>
         <div>
           <el-button type="primary" @click="onAdd">添加</el-button>
         </div>
@@ -22,7 +22,7 @@
 <script>
 export default {
   name: 'LogisticsToolbar',
-  props: [],
+  props: ['queryFormData'],
   methods: {
     onAdvancedSearch () {
       this.$emit('onAdvancedSearch');

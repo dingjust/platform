@@ -12,7 +12,7 @@
         </div>
       </el-row>
       <div class="pt-2"></div>
-      <logistics-toolbar @onAdvancedSearch="onAdvancedSearch" />
+      <logistics-toolbar :queryFormData="queryFormData" @onAdvancedSearch="onAdvancedSearch" />
       <logistics-list :page="page" @onAdvancedSearch="onAdvancedSearch" />
     </el-card>
   </div>
@@ -38,7 +38,8 @@ export default {
   components: { LogisticsToolbar, LogisticsList },
   computed: {
     ...mapGetters({
-      page: 'page'
+      page: 'page',
+      queryFormData: 'queryFormData'
     })
   },
   methods: {
@@ -46,7 +47,7 @@ export default {
       searchAdvanced: 'searchAdvanced'
     }),
     onAdvancedSearch (page, size) {
-      const query = {};
+      const query = this.queryFormData;
 
       const url = this.apis().searchLogistics();
       this.searchAdvanced({url, query, page, size});

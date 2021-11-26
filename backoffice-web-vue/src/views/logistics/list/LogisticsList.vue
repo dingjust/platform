@@ -25,6 +25,11 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" prop="remarks"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pt-2"></div>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
@@ -47,11 +52,33 @@ export default {
       });
     },
     onCurrentPageChanged (val) {
-      this.$emit('onAdvancedSearch', val, this.page.size);
+      this.$emit('onAdvancedSearch', val - 1, this.page.size);
 
       this.$nextTick(() => {
         this.$refs.resultTable.bodyWrapper.scrollTop = 0
       });
+    },
+    onDelete (row) {
+      this.$confirm('是否删除此信息?', '提示', {
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        type: 'warning'
+      }).then(() => {
+        this._onDelete(row)
+      });
+    },
+    async _onDelete (row) {
+      const url = this.apis().deleteLogistics(row.id)
+      const result = await this.$http.delete(url)
+
+      if (result.code === 1) {
+        this.$message.success('操作成功！')
+        this.$emit('onAdvancedSearch', this.page.number, this.page.size)
+      } else if (result.code === 0) {
+        this.$message.error(result.msg)
+      } else {
+        this.$message.error('操作失败！')
+      }
     }
   }
 }
