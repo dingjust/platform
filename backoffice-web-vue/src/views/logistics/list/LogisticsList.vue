@@ -33,6 +33,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <el-button type="text" @click="onEdit(scope.row)">编辑</el-button>
           <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -42,12 +43,18 @@
                 @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
                 :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <el-dialog title="编辑物流单号信息" :visible.sync="visible" width="500px" append-to-body :close-on-click-modal="false">
+      <logistics-edit-form v-if="visible" :handleRow="handleRow" @callback="callback" @closeDialog="visible=false" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import LogisticsEditForm from '../form/LogisticsEditForm'
+
 export default {
   name: 'LogisticsList',
+  components: { LogisticsEditForm },
   props: ['page'],
   methods: {
     onPageSizeChanged (val) {
@@ -63,6 +70,14 @@ export default {
       this.$nextTick(() => {
         this.$refs.resultTable.bodyWrapper.scrollTop = 0
       });
+    },
+    callback () {
+      this.visible = false
+      this.$emit('onAdvancedSearch', this.page.number, this.page.size)
+    },
+    onEdit (row) {
+      this.handleRow = row
+      this.visible = true
     },
     onDelete (row) {
       this.$confirm('是否删除此信息?', '提示', {
@@ -85,6 +100,12 @@ export default {
       } else {
         this.$message.error('操作失败！')
       }
+    }
+  },
+  data () {
+    return {
+      handleRow: null,
+      visible: false
     }
   }
 }
