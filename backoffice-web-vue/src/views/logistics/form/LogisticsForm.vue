@@ -16,6 +16,11 @@
       <div class="pt-4"></div>
       <el-table :data="tableData" :height="autoHeight">
         <el-table-column label="快递编号" prop="code" />
+        <el-table-column label="换货编号" prop="relationCode">
+          <template slot-scope="scope">
+            <el-input v-model="tableData[scope.$index].relationCode"></el-input>
+          </template>
+        </el-table-column>
         <el-table-column label="快递类型">
           <template slot-scope="scope">
             <el-select v-model="tableData[scope.$index].type">
@@ -72,8 +77,8 @@
         <el-table :data="expressCodeArr" :height="autoHeight">
           <el-table-column label="快递编号" prop="code" />
           <el-table-column label="操作" width="60px">
-            <template slot-scope>
-              <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
+            <template slot-scope="scope">
+              <el-button type="text" @click="onDelete(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -91,6 +96,9 @@
 export default {
   name: 'LogisticsForm',
   methods: {
+    onDelete (index) {
+      this.expressCodeArr.splice(index, 1)
+    },
     toScanning () {
       this.visible = true
       setTimeout(() => {
@@ -114,6 +122,7 @@ export default {
 
       this.expressCodeArr.push({
         code: this.expressCode,
+        relationCode: '',
         type: 'RETURNED',
         skuID: '',
         productName: '',
