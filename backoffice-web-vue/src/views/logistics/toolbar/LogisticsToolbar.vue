@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between">
         <el-row type="flex">
           <el-form-item label="">
-            <el-input v-model="queryFormData.keyword" placeholder="输入快递单号，产品名，产品款号"></el-input>
+            <el-input v-model="queryFormData.keyword" placeholder="输入快递单号，换货编号，产品名，产品款号" style="width: 300px;margin-right: 10px"></el-input>
           </el-form-item>
           <el-button-group>
             <el-button class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>

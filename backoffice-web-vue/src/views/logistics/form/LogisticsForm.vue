@@ -65,6 +65,11 @@
             <el-input v-model="tableData[scope.$index].remarks"></el-input>
           </template>
         </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" @click="onDeleteTable(scope.$index)">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="pt-3"></div>
       <el-row type="flex" justify="center" align="middle">
@@ -96,6 +101,9 @@
 export default {
   name: 'LogisticsForm',
   methods: {
+    onDeleteTable (index) {
+      this.tableData.splice(index, 1)
+    },
     onDelete (index) {
       this.expressCodeArr.splice(index, 1)
     },
