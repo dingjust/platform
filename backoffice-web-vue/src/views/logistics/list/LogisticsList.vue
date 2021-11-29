@@ -1,7 +1,8 @@
 <template>
   <div class="logistics-list">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="快递单号" prop="code"></el-table-column>
+      <el-table-column label="快递编号" prop="code"></el-table-column>
+      <el-table-column label="换货编号" prop="relationCode"></el-table-column>
       <el-table-column label="快递类型" prop="type">
         <template slot-scope="scope">
           <span>{{getEnum('ExpressType', scope.row.type)}}</span>
@@ -25,6 +26,11 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" prop="remarks"></el-table-column>
+      <el-table-column label="创建时间">
+        <template slot-scope="scope">
+          <span>{{scope.row.creationtime | formatDate}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="onDelete(scope.row)">删除</el-button>

@@ -13,6 +13,7 @@
         </el-row>
         <div>
           <el-button type="primary" @click="onAdd">添加</el-button>
+          <el-button type="primary" @click="onImport">导出</el-button>
         </div>
       </el-row>
     </el-form>
@@ -32,6 +33,9 @@ export default {
     },
     onAdd () {
       this.$router.push('/logistics/form')
+    },
+    onImport () {
+      this.$emit('onImport')
     }
   }
 }
