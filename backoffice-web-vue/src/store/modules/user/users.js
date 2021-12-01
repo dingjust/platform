@@ -95,7 +95,7 @@ const actions = {
     commit('authorized', true);
 
     // 获取当前登录用户信息
-    const userInfo = await http.get('/b2b/users/' + username + '/profile');
+    const userInfo = await http.get('/b2b/users/' + username + '/profile',null,true);
     axios.defaults.headers.common['company'] = userInfo['companyCode'];
     // 'type' : 'TENANT', 'BRAND', 'FACTORY',
     // userInfo['type'];
@@ -103,7 +103,7 @@ const actions = {
 
     // 获取认证信息
     // const url = this.apis().getAuthenticationState();
-    const result = await http.get('/b2b/cert/state');
+    const result = await http.get('/b2b/cert/state',null,true);
     if (!result['errors']) {
       commit('authenticationInfo', result.data);
     }
@@ -127,13 +127,13 @@ const actions = {
     uid
   }) {
     // 获取当前登录用户信息
-    const userInfo = await http.get('/b2b/users/' + uid + '/profile');
+    const userInfo = await http.get('/b2b/users/' + uid + '/profile',null,true);
     axios.defaults.headers.common['company'] = userInfo['companyCode'];
     commit('currentUser', userInfo);
 
     // 获取认证信息
     // const url = this.apis().getAuthenticationState();
-    const result = await http.get('/b2b/cert/state');
+    const result = await http.get('/b2b/cert/state',null,true);
     if (!result['errors']) {
       commit('authenticationInfo', result.data);
     }
