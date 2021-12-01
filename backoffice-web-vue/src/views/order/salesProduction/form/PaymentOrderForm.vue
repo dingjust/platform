@@ -17,6 +17,9 @@
           <el-option v-for="item in PayMethod" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="支付时间" prop="paySuccessTime" :rules="[{ required: true, message: '请填写支付时间', trigger: 'blur' }]">
+        <el-date-picker v-model="form.paySuccessTime" type="datetime" value-format="timestamp"></el-date-picker>
+      </el-form-item>
     </el-form>
     <el-row type="flex" justify="end">
       <el-button type="default" @click="onCancel" >取消</el-button>
@@ -48,7 +51,6 @@ export default {
     async _onSure () {
       const form = this.form
       form.originCode = form.originCode ? form.originCode : this.formData.code
-      form.paySuccessTime = new Date().getTime()
 
       this.$emit('onSure', form)
     },
@@ -62,7 +64,8 @@ export default {
         outOrderNo: '',
         payAmount: '',
         originCode: '',
-        payType: 'WECHAT_PAY_QRCODE'
+        payType: 'WECHAT_PAY_QRCODE',
+        paySuccessTime: new Date().getTime()
       },
       PayMethod: this.$store.state.EnumsModule.PayMethod
     };
