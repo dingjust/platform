@@ -1417,9 +1417,8 @@ let TENANT_APIS = {
   },
   // 添加支付单
   appendPaymentOrder: () => '/b2b/cmt/order/pay/paid/order',
-
-  // 获取全部支付订单
-  cmtOrders: () => '/b2b//cmt/order/search',
+  // 查询所有支付单
+  searchPaymentOrder: () => '/b2b/cmt/order/search'
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
