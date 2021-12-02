@@ -7,6 +7,10 @@
     formatDate
   } from '@/common/js/filters';
 
+  import {
+    accAdd,
+  } from '@/common/js/number';
+
   export default {
     name: "RevenueChart",
     methods: {
@@ -57,7 +61,7 @@
         orders.forEach(order => {
           let date = formatDate(new Date(order.paySuccessTime), 'yyyy-MM-dd');
           if (dataMap[date]) {
-            dataMap[date] += order.totalAmount;
+            dataMap[date] = accAdd(dataMap[date], order.totalAmount);
           } else {
             dataMap[date] = order.totalAmount;
           }
@@ -69,8 +73,6 @@
           category.push(formatDate(new Date(iDate), 'yyyy-MM-dd'));
           iDate += 24 * 60 * 60 * 1000;
         }
-
-        console.log(JSON.stringify(dataMap));
 
         chart.setOption({
           series: [{
@@ -92,7 +94,7 @@
 
       },
       async getOrders() {
-        const url = this.apis().cmtOrders();
+        const url = this.apis().searchPaymentOrder();
         const result = await this.$http.post(url, {
           createdDateFrom: this.startDate,
           createdDateTo: this.endDate,

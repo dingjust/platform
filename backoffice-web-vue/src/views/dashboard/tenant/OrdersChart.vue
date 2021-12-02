@@ -7,6 +7,10 @@
     formatDate
   } from '@/common/js/filters';
 
+  import {
+    accAdd,
+  } from '@/common/js/number';
+
   export default {
     name: "OrdersChart",
     methods: {
@@ -106,8 +110,8 @@
               amount
             } = dataMap[date];
             dataMap[date] = {
-              'num': num += order.totalQuantity,
-              'amount': amount += order.totalAmount
+              'num': accAdd(num, order.totalQuantity),
+              'amount': accAdd(amount, order.totalAmount)
 
             };
           } else {
