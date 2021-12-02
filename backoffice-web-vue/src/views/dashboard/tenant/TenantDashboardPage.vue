@@ -25,6 +25,14 @@
             </el-col>
           </template>
         </el-row>
+        <el-row type="flex" style="margin-top:20px">
+          <el-col :span="12">
+            <orders-chart />
+          </el-col>
+          <el-col :span="12">
+            <revenue-chart />
+          </el-col>
+        </el-row>
       </el-tab-pane>
       <el-tab-pane label="数据看板" lazy>
         <tenant-echart-tab />
@@ -34,63 +42,71 @@
 </template>
 
 <script>
-import TenantEchartTab from './components/TenantEchartTab.vue';
-export default {
-  name: 'TenantDashboardPage',
-  components: { TenantEchartTab },
-  methods: {
-    showLastStyle (tab1, key, index) {
-      return (Object.getOwnPropertyNames(tab1).length - 2) === index
-    },
-    async init () {
-      const date = new Date();
-      // 获取当天0点时间戳
-      const thisDay = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`).getTime();
-      const result = await this.getTab1({
-        start: thisDay,
-        end: thisDay + 24*60*60*1000
-      })
-      this.$set(this, 'tab1', result.data)
+  import TenantEchartTab from './components/TenantEchartTab.vue';
+  import OrdersChart from './OrdersChart.vue';
+  import RevenueChart from './RevenueChart.vue';
 
-      this.$set(this, 'tab2', await this.getTab2())
+  export default {
+    name: 'TenantDashboardPage',
+    components: {
+      TenantEchartTab,
+      OrdersChart,
+      RevenueChart
     },
-    async getTab1 (section) {
-      const url1 = this.apis().getTenantReportsTab1()
-      const tab1 = await this.$http.post(url1, {}, section)
+    methods: {
+      showLastStyle(tab1, key, index) {
+        return (Object.getOwnPropertyNames(tab1).length - 2) === index
+      },
+      async init() {
+        const date = new Date();
+        // 获取当天0点时间戳
+        const thisDay = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`).getTime();
+        const result = await this.getTab1({
+          start: thisDay,
+          end: thisDay + 24 * 60 * 60 * 1000
+        })
+        this.$set(this, 'tab1', result.data)
 
-      return {
-        section: section,
-        data: tab1
-      };
-    },
-    async getTab2 () {
-      const url2 = this.apis().getTenantReportsTab2()
-      const tab2 = await this.$http.post(url2)
+        this.$set(this, 'tab2', await this.getTab2())
+      },
+      async getTab1(section) {
+        const url1 = this.apis().getTenantReportsTab1()
+        const tab1 = await this.$http.post(url1, {}, section)
 
-      return tab2;
-    }
-  },
-  data () {
-    return {
-      tab1: {},
-      tab2: {},
-      reportsTitle: {
-        noAgreementOrder: '做单未签约',
-        noQuoteRequirementOrder: '需求未报价',
-        notAcceptRequirementOrder: '报价未确认',
-        agreementTotal: '今日签约数',
-        quoteTotal: '今日报价数',
-        requirementTotal: '今日需求数',
-        salesOrderTotal: '今日订单数',
-        orderAmount: '今日成交额',
-        registerTotal: '今日注册数'
+        return {
+          section: section,
+          data: tab1
+        };
+      },
+      async getTab2() {
+        const url2 = this.apis().getTenantReportsTab2()
+        const tab2 = await this.$http.post(url2)
+
+        return tab2;
       }
+    },
+    data() {
+      return {
+        tab1: {},
+        tab2: {},
+        reportsTitle: {
+          noAgreementOrder: '做单未签约',
+          noQuoteRequirementOrder: '需求未报价',
+          notAcceptRequirementOrder: '报价未确认',
+          agreementTotal: '今日签约数',
+          quoteTotal: '今日报价数',
+          requirementTotal: '今日需求数',
+          salesOrderTotal: '今日订单数',
+          orderAmount: '今日成交额',
+          registerTotal: '今日注册数'
+        }
+      }
+    },
+    created() {
+      this.init();
     }
-  },
-  created () {
-    this.init();
   }
-}
+
 </script>
 
 <style scoped>
@@ -108,8 +124,10 @@ export default {
     align-items: center;
     border-right: 1px solid #DCDFE6;
   }
+
   .table-cell_last {
-    border: none !important;;
+    border: none !important;
+    ;
   }
 
   .table-cell_title {
@@ -141,4 +159,5 @@ export default {
     flex-wrap: wrap;
     justify-content: space-around;
   }
+
 </style>

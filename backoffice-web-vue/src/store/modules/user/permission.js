@@ -31,7 +31,7 @@ const actions = {
     uid
   }) {
     // 获取账号权限
-    const response = await http.get('/b2b/b2bCustomers/role/' + uid);
+    const response = await http.get('/b2b/b2bCustomers/role/' + uid,null,true);
     if (!response['errors']) {
       commit('permissions', response.data.roleList);
       commit('dataPermission', response.data.dataPermissionList);
