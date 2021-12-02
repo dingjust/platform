@@ -129,13 +129,25 @@
           series: [{
               name: '生产数量',
               type: 'bar',
-              data: category.map(e => dataMap[e].num)
+              data: category.map(e => {
+                if (dataMap[e]) {
+                  return dataMap[e].num;
+                } else {
+                  return 0;
+                }
+              })
             },
             {
               name: '订单金额',
               type: 'line',
               yAxisIndex: 1,
-              data: category.map(e => dataMap[e].amount)
+              data: category.map(e => {
+                if (dataMap[e]) {
+                  return dataMap[e].amount;
+                } else {
+                  return 0;
+                }
+              })
             }
           ],
           xAxis: [{
@@ -164,10 +176,9 @@
           this.$message.error(result.msg);
           return;
         }
-        this.data = result.content;
-
-
-        return result.content;
+        //线上支付订单
+        this.data = result.content.filter(e => e.payOnline);
+        return this.data;
       },
     },
     data() {

@@ -25,6 +25,7 @@
             </el-col>
           </template>
         </el-row>
+        <h6 style="margin-top: 20px">线上订单</h6>
         <el-row type="flex" style="margin-top:20px">
           <el-col :span="12">
             <orders-chart />
@@ -151,7 +152,7 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    border-bottom: 1px solid #DCDFE6;
+    /* border-bottom: 1px solid #DCDFE6; */
   }
 
   .chart-cell {

@@ -1416,7 +1416,10 @@ let TENANT_APIS = {
     return '/b2b/sheets/fast/reconciliation/platform/' + id;
   },
   // 添加支付单
-  appendPaymentOrder: () => '/b2b/cmt/order/pay/paid/order'
+  appendPaymentOrder: () => '/b2b/cmt/order/pay/paid/order',
+
+  // 获取全部支付订单
+  cmtOrders: () => '/b2b//cmt/order/search',
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
